@@ -5450,7 +5450,7 @@ function api_check_browscap() {
  * Returns the <script> HTML tag
  */
 function api_get_js($file) {    
-    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>';
+    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -5458,7 +5458,7 @@ function api_get_js($file) {
  */
 function api_get_css($file) {
 	$media = '';
-	return '<link rel="stylesheet" href="'.$file.'" type="text/css" media="'.$media.'" />';	
+	return '<link rel="stylesheet" href="'.$file.'" type="text/css" media="'.$media.'" />'."\n";	
 }
 
 

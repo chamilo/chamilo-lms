@@ -227,26 +227,25 @@ class Template extends Smarty {
         }
 		
 		//Base CSS
-		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";
         
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";';
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";
 		
 		//Default theme CSS
-		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";';
+		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
         
 		//Course theme CSS
-		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";';
+		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";'."\n";
 		
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
+			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
 		}
 		
 		$this->assign('css_style', $style_html);
 		
-		$style_print =  '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";';
+		$style_print = '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";'."\n";
 		$this->assign('css_style_print', $style_print);
-        $this->assign('style_print',     $style_print);
-        
+        $this->assign('style_print',     $style_print);        
         
         // Header 1
         ob_start();

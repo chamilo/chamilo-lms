@@ -450,8 +450,7 @@ class Agenda {
                             ip.visibility   = '1' AND
                             agenda.c_id     = $course_id AND
                             ip.c_id         = $course_id
-                    GROUP BY id
-                    ";
+                    GROUP BY id";
 			
 		} else {
 		    if (api_is_allowed_to_edit()) {
@@ -473,12 +472,13 @@ class Agenda {
 		$result = Database::query($sql);
 		$events = array();
 		if (Database::num_rows($result)) {
+            $events_added = array();
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //to gather sent_tos
                 $sql = "SELECT to_user_id, to_group_id
                     FROM ".$tbl_property." ip
-                    WHERE   ip.tool         ='".TOOL_CALENDAR_EVENT."' AND 
-                            ref = {$row['ref']} AND
+                    WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND 
+                            ref             = {$row['ref']} AND
                             ip.visibility   = '1' AND  
                             ip.c_id         = $course_id";
                 $sent_to_result = Database::query($sql);
@@ -499,8 +499,18 @@ class Agenda {
 						continue;
 					}
 				}
+                
 				$event = array();
+                
 				$event['id'] 	  		= 'course_'.$row['id'];
+                
+                //To avoid doubles
+                if (in_array($row['id'], $events_added)) {
+                    continue;
+                }
+                
+                $events_added[]         = $row['id'];
+                
                 
                 $attachment = get_attachment($row['id'], $course_id);
                 
@@ -519,7 +529,6 @@ class Agenda {
 				$event['className'] 	= 'course';
 				$event['allDay'] 	  	= 'false';
 				
-				//	var_dump($row);
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
 				if (isset($row['session_id']) && !empty($row['session_id'])) {
 					$event['borderColor'] 	= $event['backgroundColor'] = $this->event_session_color;
@@ -581,14 +590,10 @@ class Agenda {
                 //Event sent to everyone!
                 if (empty($event['sent_to'])) {
                     $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
-                }
+                }                
                 
-                
-				$event['description'] = $row['content'];
-				
+				$event['description'] = $row['content'];				
 				$event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;					
-	
-				//$my_events[] = $event;
 	
 				$this->events[] = $event;                
 			}

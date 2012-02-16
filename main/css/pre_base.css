@@ -547,9 +547,6 @@ select,
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
-select {
-    width : auto;
-}
 .uneditable-textarea {
   width: auto;
   height: auto;
@@ -596,7 +593,7 @@ select, input[type="file"] {
   line-height: 28px;
 }
 select {
- /* width: 220px;*/
+  width: 220px;
   background-color: #ffffff;
 }
 select[multiple], select[size] {
@@ -3047,7 +3044,7 @@ a.thumbnail:hover {
 .thumbnail .caption {
   padding: 9px;
 }
-.label_tag {
+.label {
   padding: 1px 3px 2px;
   font-size: 9.75px;
   font-weight: bold;
@@ -3364,5 +3361,5 @@ a.thumbnail:hover {
   display: block;
 }
 .invisible {
-  /* visibility: hidden; */
+  visibility: hidden;
 }

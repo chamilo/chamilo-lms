@@ -881,9 +881,9 @@ class Display {
                 $width_fix = '150';
             }
             //see BT#2020
-            $json .= "$(window).bind('resize', function() {
+            /*$json .= "$(window).bind('resize', function() {
                 $('#".$div_id."').setGridWidth($(window).width() - ".$width_fix.");
-            }).trigger('resize');";
+            }).trigger('resize');";*/
         }
 
         //Creating the jqgrid element

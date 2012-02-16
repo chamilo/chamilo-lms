@@ -25,7 +25,7 @@
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 {literal}
-if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) ) {
+if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
     window.attachEvent( 'onunload', function() {
             window['__flash__removeCallback'] = function ( instance, name ) {
                 try {
@@ -40,14 +40,15 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 {/literal}
 //]]>
 
-/* global chat variables */
-var ajax_url = '{$_p.web_ajax}chat.ajax.php';
+/* Global chat variables */
+var ajax_url        = '{$_p.web_ajax}chat.ajax.php';
 var online_button   = '{$online_button}';
 var offline_button  = '{$offline_button}';
 var	connect_lang    = '{"ChatConnected"|get_lang}';
 var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
 
 </script>
+
 {$js_file_to_string}
 {$css_file_to_string}
 {$extra_headers}
@@ -57,6 +58,8 @@ var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
 
 $(document).scroll(function() {
     // If has not activated (has no attribute "data-top"
+
+    if($('body').width() > 959) {
     if (!$('.subnav').attr('data-top')) {
         // If already fixed, then do nothing
         if ($('.subnav').hasClass('subnav-fixed')) return;
@@ -69,14 +72,15 @@ $(document).scroll(function() {
         $('.subnav').addClass('subnav-fixed');
     else
         $('.subnav').removeClass('subnav-fixed');
+    }
 });
 
 
-$(document).ready(function(){
-   
-	$('.topbar').dropdown();
-
-	$('.ajax').live('click', function() {
+$(document).ready(function() {       
+	$('.dropdown-toggle').dropdown();   
+    $(".collapse").collapse();
+    
+	$('.ajax').on('click', function() {
 		var url     = this.href;
 		var dialog  = $("#dialog");
 		if ($("#dialog").length == 0) {
@@ -91,7 +95,7 @@ $(document).ready(function(){
 					dialog.dialog({
 						modal	: true, 
 						width	: 540, 
-						height	: 400,              
+						height	: 400        
 					});	                    
 		});
 		//prevent the browser to follow the link

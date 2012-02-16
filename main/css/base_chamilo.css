@@ -16,7 +16,7 @@ body {
     padding: 0;
     background-color: #fff;
     height: 100%; /* stick */
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;    
 }
 
 /* Sticky footer*/
@@ -378,42 +378,15 @@ input.link_alike:hover {
     font-style:normal;
     color:#666666;
 }
-/*****************************************************
- *  HEADER 3: TABS OF THE HEADER                     *
- *****************************************************/
+
+/* HEADER 3: TABS OF THE HEADER                     */
+ 
 #header3 {
-
-}
-
-#header3 a:hover {
-    //color:#fffc00D;
-}
-
-#header3 li {
-    //float:left; /* important for ieX*/
-}
-#header3 li a span:hover {
-    //color:#fffc00;
-}
-
-#header3 ul {
-    /*padding-left:0px;
-    list-style-type:none;
-    height:25px;
-    margin-left:0px;
-    margin: 11px 0px 0px 0px ;*/
-}
-
-#header3  a {
-
-}
-
-#current a {
     
 }
 
 #header3 li {
-    float:left;
+    //float:left; /* important for ieX*/
 }
 
 #current {
@@ -437,7 +410,7 @@ input.link_alike:hover {
     padding: 0 30px 0 0;
     background-color: transparent;
     border: none;
-    COLOR: #fff;
+    color: #fff;
     font-size: 1.0em;
     font-weight:bold;
     font-family: verdana, arial, helvetica, sans-serif;
@@ -2475,7 +2448,6 @@ span.form_required  {
     padding:20px;
 }
 
-
 #header3 {
     font-size: 14px;
     font-weight: bold;
@@ -2489,6 +2461,7 @@ span.form_required  {
     padding-top: 10px;
     position: relative;
     width: 92%;
+    min-width: 760px;
 }
 
 /* Scroll effect */
@@ -2508,8 +2481,9 @@ span.form_required  {
   
 /* Subnav */
 .subnav {
-  width: 100%;
+  width:100%;  
   height: 36px;
+
   
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;

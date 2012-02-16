@@ -1184,12 +1184,17 @@ abstract class Question
 		// 
 		// question level
 		//@todo move levles into a table
-		$select_level = array (1,2,3,4,5);
-		//$radios_results_enabled[] =
+		$select_level = array (1=>1,2=>2,3=>3,4=>4,5=>5);
+		/*
+        $radios_results_enabled = array();
 		foreach($select_level as $val) {
-			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);
+			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);            
 		}
-		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));
+		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));*/
+        
+        $form->addElement('select', 'questionLevel',get_lang('Difficulty'), $select_level);
+        
+        
 		// HUB 12-10-2011
 		// categories
 		$tabCat = array();
@@ -1203,16 +1208,18 @@ abstract class Question
 		// fhub
 		// hidden values
 		$form->addElement('hidden','myid',$_REQUEST['myid']);
-    if (!isset($_GET['fromExercise'])) {            
-  		switch($answerType) {
-  			case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
-  			case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
-  			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
-  			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
-  			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
-  			case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
-  		}
-    }
+        
+        if (!isset($_GET['fromExercise'])) {            
+            switch($answerType) {
+                case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
+                case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+                case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
+                case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
+                case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
+                case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+            }
+        }
+        
 		$form->addElement('html','</div>');
 		// default values
 		$defaults = array();		

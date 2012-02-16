@@ -228,6 +228,8 @@ class Template extends Smarty {
 		
 		//Base CSS
 		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
+        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";';
 		
 		//Default theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";';
@@ -318,7 +320,8 @@ class Template extends Smarty {
 			'jquery.menu.js',
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
-			'bootstrap/bootstrap-dropdown.js'			
+			'bootstrap/bootstrap-dropdown.js',            
+            'bootstrap/bootstrap-collapse.js'
 		);
 		
 		if (api_get_setting('allow_global_chat') == 'true') {            

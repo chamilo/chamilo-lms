@@ -6,7 +6,7 @@
 /**
  * Initialization
  */
-//$cdb is defined inside the fillDbCourse() function which is calling this script
+
 $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
 $course_id = api_get_course_int_id(); 
 $sql_course = "INSERT INTO $t_course (c_id, variable,value,category) VALUES ($course_id, 'big_blue_button_meeting_name','','plugins')";

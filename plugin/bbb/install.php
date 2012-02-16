@@ -42,7 +42,7 @@ Database::query($sql);
 
 // Update existing courses to add conference settings
 $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-$sql = "SELECT id, code, db_name FROM $t_courses ORDER BY id";
+$sql = "SELECT id, code FROM $t_courses ORDER BY id";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $t_course = Database::get_course_table(TABLE_COURSE_SETTING);

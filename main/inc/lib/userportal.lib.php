@@ -739,12 +739,10 @@ class IndexManager {
 	 * @version 1.1
 	 */
 	function display_login_form() {
-		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-stacked'));
+		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
 		$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
 		$form->addElement('password', 'password', get_lang('Pass'), array('size' => 17));
-		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button gray'));
-		$renderer =& $form->defaultRenderer();
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
+		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button gray'));		
 		$html = $form->return_form();
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';
@@ -752,8 +750,6 @@ class IndexManager {
 		}
 		return $html;
 	}
-	
-
 	
 	function return_search_block() {
 		$html = '';

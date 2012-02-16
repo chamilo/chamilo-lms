@@ -28,7 +28,9 @@ legend {
     margin-bottom: 10px;
 }
 
-
+#formLogin input {
+    width:165px;
+}
 
 /* Fixing old chamilo forms */
 

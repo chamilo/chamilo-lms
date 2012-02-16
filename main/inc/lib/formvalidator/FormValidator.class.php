@@ -57,8 +57,14 @@ class FormValidator extends HTML_QuickForm {
 
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
+        
+        //default form class
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = 'form-horizontal';
+        }
+        
 		$form_template = <<<EOT
-<form class="form-horizontal" {attributes}>
+<form {attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>

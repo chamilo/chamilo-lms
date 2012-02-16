@@ -582,7 +582,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 					'$event_value')";
 	$res = Database::query($sql);
 	
-	//Sending notofications to users
+	//Sending notifications to users
   $send_event_setting = api_get_setting('activate_send_event_by_mail');
   if (!empty($send_event_setting) && $send_event_setting == 'true') {
     global $language_file;

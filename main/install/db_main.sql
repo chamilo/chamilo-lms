@@ -857,10 +857,13 @@ VALUES
 ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
 ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
 ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
+('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
+('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
+('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16427','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
-('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
 ('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1),
 ('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1),
@@ -870,10 +873,8 @@ VALUES
 ('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
 ('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
 ('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
-('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
-('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
-('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
-('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
+('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
 ('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
 */
 UNLOCK TABLES;
@@ -1170,10 +1171,6 @@ VALUES
 ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'), 
 ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
 ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'),
-('allow_global_chat', 'true', 'Yes'),
-('allow_global_chat', 'false', 'No');
-
-/*
 ('use_custom_pages','true','Yes'),
 ('use_custom_pages','false','No'),
 ('languagePriority1','platform_lang','PlatformLanguage'),
@@ -1192,12 +1189,17 @@ VALUES
 ('languagePriority4','user_profil_lang','UserLanguage'),
 ('languagePriority4','user_selected_lang','UserSelectedLanguage'),
 ('languagePriority4','course_lang','CourseLanguage'),
+('allow_global_chat', 'true', 'Yes'),
+('allow_global_chat', 'false', 'No');
+
+UNLOCK TABLES;
+/*
 ('activate_send_event_by_mail', 'true', 'Yes'),
 ('activate_send_event_by_mail', 'false', 'No'),
 */
-UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
+
 
 --
 -- Table structure for table sys_announcement
@@ -2817,6 +2819,92 @@ CREATE TABLE skill_rel_profile (
   profile_id INTEGER  NOT NULL,
   PRIMARY KEY (id)
 );
+
+-- Custom reports
+
+
+CREATE TABLE `reports_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` integer DEFAULT NULL,
+  `tool_id` int(11) DEFAULT NULL,
+  `child_id` int(11) DEFAULT NULL,
+  `child_name` varchar(64) DEFAULT NULL,
+  `subchild_id` int(11) DEFAULT NULL,
+  `subchild_name` varchar(64) DEFAULT NULL,
+  `subsubchild_id` int(11) DEFAULT NULL,
+  `subsubchild_name` varchar(64) DEFAULT NULL,
+  `link` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `course_id` (`course_id`),
+  KEY `course_id_2` (`course_id`,`tool_id`,`child_id`,`subchild_id`,`subsubchild_id`));
+
+CREATE TABLE `reports_values` (
+  `key_id` int(11) NOT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `session_id` int(11) DEFAULT NULL,
+  `attempt` int(11) DEFAULT NULL,
+  `score` decimal(5,3) DEFAULT NULL,
+  `progress` int(11) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  KEY `uid` (`uid`),
+  PRIMARY KEY (`key_id`,`uid`,`session_id`, `attempt`));
+
+--
+-- Table structure for event email sending
+--
+CREATE TABLE `event_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `name_lang_var` varchar(40) NOT NULL,
+  `desc_lang_var` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `event_type_email_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_type_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `message` varchar(200) NOT NULL,
+  `subject` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `user_rel_event_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `event_type_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `event_type` VALUES (1, 'course_deleted','courseDeletedTitle','courseDeletedComment'),(2,'course_created','courseCreatedTitle','courseCreatedComment'),(3,'user_deleted','userDeletedTitle','userDeletedComment'),(4,'user_created','userCreatedTitle','userCreatedComment'), (5, 'session_created','sessionCreatedTitle','sessionCreatedComment'), (6,'session_deleted','sessionDeletedTitle','sessionDeletedComment'), (7,'session_category_created','sessionCategoryCreatedTitle','sessionCategoryCreatedComment'),(8,'session_category_deleted','sessionCategoryDeletedTitle','sessionCategoryDeletedComment'),(9,'settings_changed','settingsChangedTitle','settingsChangedComment'),(10,'user_subscribed','userSubscribedTitle','userSubscribedComment'), (11,'user_unsubscribed','userUnsubscribedTitle','userUnsubscribedComment');
+
+INSERT INTO `event_type_email_template` (`id`,`event_type_id`, `language_id`, `message`,`subject`) VALUES (1,4,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été créé.\r\nEmail : %mail%\r\n\r\nBien à vous.',''),(2,1,10,'Delete formation',''),(3,2,10,'Create formation',''),(4,3,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été supprimé.\r\n\r\nBien à vous.',''),(6,5,10,'Create session test',''),(7,6,10,'Delete session',''),(8,7,10,'Create category session',''),(9,8,10,'Delete category session',''),(10,9,10,'Change setting',''),(11,10,10,'Subscribe',''),(12,11,10,'Unsubscribe','');
+
+--
+-- Table structure for LP custom storage API
+--
+DROP TABLE IF EXISTS stored_value;
+CREATE TABLE stored_values (
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
+);
+ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+
+DROP TABLE IF EXISTS stored_value_stack;
+CREATE TABLE stored_values_stack (
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	stack_order INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
+);
+ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
 
 -- Course ranking

@@ -61,10 +61,9 @@ $(document).ready(function() {
                     $.ajax({
                         contentType: "application/x-www-form-urlencoded",
                         beforeSend: function(content_object) {
-                        	$("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); 
-                        },
+                        $("div#"+div_content_id).html("<img src='../../../../main/inc/lib/javascript/indicator.gif' />"); },
                         type: "POST",
-                        url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
+                        url: "../../../../main/glossary/glossary_ajax_request.php",
                         data: "glossary_id="+my_glossary_id,
                         success: function(datas) {
                             $("div#"+div_content_id).html(datas);

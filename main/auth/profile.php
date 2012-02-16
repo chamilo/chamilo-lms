@@ -278,7 +278,7 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 	//	user must enter identical password twice so we can prevent some user errors
 	$form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
 	if (CHECK_PASS_EASY_TO_FIND) {
-		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+		$form->addRule('password1', get_lang('CurrentPasswordEmptyOrIncorrect'), 'callback', 'api_check_password');
 	}
 }
 
@@ -735,10 +735,11 @@ if ($form->validate()) {
         if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
+
             $sql .= " email = '".Database::escape_string($changeemail)."',";
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
-        } elseif (isset($password) && !isset($changeemail) && in_array('password', $available_values_to_modify)) {
+        } elseif (isset($password) && in_array('password', $available_values_to_modify)) {
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } else {
@@ -770,9 +771,12 @@ if ($form->validate()) {
 	}
 
 	// re-init the system to take new settings into account
-	$uidReset = true;    
-	include api_get_path(INCLUDE_PATH).'local.inc.php';	
-	exit;
+  $_SESSION['_user']['uidReset'] = true;
+  $_SESSION['noredirection'] = true;
+  $_SESSION['profile_update'] = 'success';
+  $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
+  header("Location: ".$url);
+  exit;
 }
 
 
@@ -834,7 +838,7 @@ if (!empty($msg_is_not_password)){
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
 
-$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
+//$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
 
 //Web path
 $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);

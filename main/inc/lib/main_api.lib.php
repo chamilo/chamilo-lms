@@ -2553,8 +2553,7 @@ function api_not_allowed($print_headers = false) {
     $course     = api_get_course_id();
 
     global $this_section;
-
-    if (api_get_setting('use_custom_pages') == 'true') {
+    if (api_get_setting('use_custom_pages') == 'true' && !isset($_SESSION['_user']['user_id'])) {
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
         CustomPages::displayPage('index-unlogged');

@@ -1740,9 +1740,10 @@ function export2doc($doc_id) {
     $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
     $exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
-    $clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
-	$array_clean_wikiContents= explode('|', $clean_wikiContents);
-    //$wikiContents= $array_clean_wikiContents[1];
+    //$clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+    //$array_clean_wikiContents= explode('|', $clean_wikiContents);
+    $wikiContents = trim(preg_replace("/\[[\[]?([^\]|]*)[|]?([^|\]]*)\][\]]?/", "$1", $wikiContents));
+    //TODO: put link instead of title
 
     $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
@@ -1770,18 +1771,20 @@ function export2doc($doc_id) {
  */
 function export_to_pdf($id, $course_code) {
     $data        = get_wiki_data($id);	
+
+    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+
+    $data        = get_wiki_data($id);
+	
+	
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 	
 	//clean wiki links
+    $content_pdf=trim(preg_replace("/\[[\[]?([^\]|]*)[|]?([^|\]]*)\][\]]?/", "$1", $content_pdf));
+    //TODO: It should be better to display the link insted of the tile but it is hard for [[title]] links
 	
-	$clean_pdf_content = trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
-	
-	//@todo this line breaks the pdf export. TODO:clean compound wiki names	
-    //$array_clean_pdf_content= explode('|', $clean_pdf_content);//delete and reworking
-    //$clean_pdf_content = $array_clean_pdf_content[1];//delete and reworking
-		
-    $content_pdf= $clean_pdf_content;		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
+
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());
     $content_pdf = api_utf8_encode($content_pdf, api_get_system_encoding());
 
@@ -2197,3 +2200,4 @@ function get_wiki_data($id) {
     }
     return $data;
 }
+

@@ -48,6 +48,51 @@ lms_storage_getValue_user = function(sv_key, sv_user) {
 	return result;
 }
 
+lms_storage_getPosition_user = function(sv_key, sv_user, sv_asc) {
+	var result;
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: "storageapi.php",
+		data: {
+			action: "getposition",
+			svkey: sv_key,
+			svuser: sv_user,
+			svcourse: sv_course,
+			svsco: sv_sco,
+			svasc: sv_asc
+		},
+		success: function(data) {
+			result = data;
+		}
+	});
+	return result;
+}
+
+lms_storage_getLeaders_user = function(sv_key, sv_user, sv_asc, sv_length) {
+	var result;
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: "storageapi.php",
+		data: {
+			action: "getleaders",
+			svkey: sv_key,
+			svuser: sv_user,
+			svcourse: sv_course,
+			svsco: sv_sco,
+			svasc: sv_asc,
+			svlength: sv_length
+		},
+		success: function(data) {
+			result = eval("("+data+")");
+		}
+	});
+	return result;
+}
+
+
+
 lms_storage_getAll_user = function(sv_user) {
 	var result;
 	$.ajax({
@@ -61,7 +106,7 @@ lms_storage_getAll_user = function(sv_user) {
 			svsco: sv_sco
 		},
 		success: function(data) {
-			result = eval(data);
+			result = eval("("+data+")");
 		}
 	});
 	return result;
@@ -162,7 +207,7 @@ lms_storage_stack_getAll_user = function(sv_key, sv_user) {
 			svsco: sv_sco
 		},
 		success: function(data) {
-			result = eval(data);
+			result = eval("("+data+")");
 		}
 	});
 	return result;
@@ -178,7 +223,7 @@ lms_storage_getAllUsers = function() {
 			action: "usersgetall"
 		},
 		success: function(data) {
-			result = eval(data);
+			result = eval("("+data+")");
 		}
 	});
 	return result;
@@ -190,6 +235,14 @@ lms_storage_setValue = function(sv_key, sv_value) {
 
 lms_storage_getValue = function(sv_key) {
 	return lms_storage_getValue_user(sv_key, sv_user);
+}
+
+lms_storage_getPosition = function(sv_key, sv_asc) {
+	return lms_storage_getPosition_user(sv_key, sv_user, sv_asc);
+}
+
+lms_storage_getLeaders = function(sv_key, sv_asc, sv_length) {
+	return lms_storage_getLeaders_user(sv_key, sv_user, sv_asc, sv_length);
 }
 
 lms_storage_getAll = function() {
@@ -226,6 +279,10 @@ function STORAGEAPIobject() {
 	this.getValue_user = lms_storage_getValue_user;
 	this.getAll = lms_storage_getAll;
 	this.getAll_user = lms_storage_getAll_user;
+	this.getPosition_user = lms_storage_getPosition_user;
+	this.getPosition = lms_storage_getPosition;
+	this.getLeaders_user = lms_storage_getLeaders_user;
+	this.getLeaders = lms_storage_getLeaders;
 	this.stack_push = lms_storage_stack_push;
 	this.stack_push_user = lms_storage_stack_push_user;
 	this.stack_pop = lms_storage_stack_pop;

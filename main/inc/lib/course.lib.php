@@ -2783,7 +2783,7 @@ class CourseManager {
                         $course_title = $course['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
                     }
 
-                    echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
+                    echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><h4>'.$course_title.'</h4>';
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                         echo $course['visual_code'];
                     }
@@ -2970,7 +2970,7 @@ class CourseManager {
                 $status_icon = Display::url($status_icon, $course_title_url);
             }
             // Start displaying the course block itself.
-            echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
+            echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><h4>'.$course_title.'</h4>';
             
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 echo $course_display_code;

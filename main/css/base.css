@@ -65,93 +65,26 @@ form .formw input {
 -------------------------------------------------- */
 @media (max-width: 480px) {
 
-  /* Reduce padding above jumbotron */
-  body {
-    padding-top: 70px;
-  }
-
-  /* Change up some type stuff */
-  h2 {
-    margin-top: 27px;
-  }
-  h2 small {
-    display: block;
-    line-height: 18px;
-  }
-  h3 {
-    margin-top: 18px;
-  }
-
-  /* Adjust the jumbotron */
-  .jumbotron h1,
-  .jumbotron p {
-    text-align: center;
-    margin-right: 0;
-  }
-  .jumbotron h1 {
-    font-size: 45px;
-    margin-right: 0;
-  }
-  .jumbotron p {
-    margin-right: 0;
-    margin-left: 0;
-    font-size: 18px;
-    line-height: 24px;
-  }
-  .jumbotron .btn {
-    display: block;
-    font-size: 18px;
-    padding: 10px 14px;
-    margin: 0 auto 10px;
-  }
-  /* Masthead (home page jumbotron) */
-  .masthead {
-    padding-top: 0;
-  }
-
-  /* Don't space out quick links so much */
-  .quick-links {
-    margin: 40px 0 0;
-  }
-  /* hide the bullets on mobile since our horizontal space is limited */
-  .quick-links .divider {
-    display: none;
-  }
-
-  /* center example sites */
-  .example-sites {
-    margin-left: 0;
-  }
-  .example-sites > li {
-    float: none;
-    display: block;
-    max-width: 280px;
-    margin: 0 auto 18px;
-    text-align: center;
-  }
-  .example-sites .thumbnail > img {
-    max-width: 270px;
-  }
-
-  table code {
-    white-space: normal;
-    word-wrap: break-word;
-    word-break: break-all;
-  }
-
-  /* Modal example */
-  .modal-example .modal {
-    position: relative;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-  }
-
+    h3 {
+        font-size: 18px;
+    }
+    
+    h4 {
+        font-size: 16px;
+    }
 }
 
 
 @media (max-width: 768px) {
+    
+    h3 {
+        font-size: 18px;
+    }
+
+    h4 {
+        font-size: 16px;
+    }
+    
 
   /* Remove any padding from the body */
   body {
@@ -215,17 +148,15 @@ form .formw input {
 }
 
 
-@media (min-width: 480px) and (max-width: 768px) {
+@media (min-width: 480px) and (max-width: 768px) {    
+        
+    h3 {
+        font-size: 18px;
+    }
 
-  /* Scale down the jumbotron content */
-  .jumbotron h1 {
-    font-size: 54px;
-  }
-  .jumbotron p {
-    margin-right: 0;
-    margin-left: 0;
-  }
-
+    h4 {
+        font-size: 16px;
+    }
 }
 
 

@@ -737,7 +737,6 @@ class CourseHome {
                 $tool_link_params['id'] = 'is'.$tool_link_params['id'];
                 $item['link']       = Display::url($tool_name.$session_img, $tool_link_params['href'], $tool_link_params);                
                 
-                
                 $items[] = $item;               
 
                 $i++;
@@ -767,16 +766,13 @@ class CourseHome {
                     if ($i % $mod == 0) {
                         $html .=  '<tr valign="top">';
                     }
-                                              
+                                    
                     $html .=  '<td width="'.$row_per.'%">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
-                        //experimental changes nothing serious
-                        //$my_icon = api_get_path(WEB_CODE_PATH).'img/icons/64/'.$image;
-                        //$image = Display::tag('span', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id'],'style'=>'opacity:0'), 64),array('class'=>'image-wrap','style'=>'background:url('.$my_icon.')'));                        
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
                         $html .=  Display::div($data, array('class'=>'big_icon')); //box-image reflection
-						$html .=  Display::tag('center', Display::div($item['visibility'].$item['extra'].$item['link'], array('class'=>'content')));
+						$html .=  Display::tag('center', Display::div('<h3>'.$item['visibility'].$item['extra'].$item['link'].'</h3>', array('class'=>'content')));
                     $html .=  '</td>';
                     
                     if ($i % $mod == $mod_result) {

@@ -33,8 +33,10 @@ $form->applyFilter('title','html_filter');
 $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
 
 // Adavanced Parameters
-$form->addElement('html', '<div class="row"><div class="label"></div>');
-$form->addElement('html', '<div class="formw"><br /><a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a></div></div>');
+
+$advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
+$form -> addElement('advanced_settings',$advanced);
+
 $form->addElement('html','<div id="id_qualify" style="display:none">');
 
 // Qualify Attendance for gradebook option

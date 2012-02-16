@@ -116,7 +116,7 @@ function display_tool_options($uploadvisibledisabled, $origin) {
 		return;
 	}
 	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&action=settings">';
-	echo '<div class="row"><div class="form_header">'.get_lang('EditToolOptions').'</div></div>';
+	echo '<legend>'.get_lang('EditToolOptions').'</legend>';
 	display_default_visibility_form($uploadvisibledisabled);
 	display_studentsdelete_form();
 	echo '<div class="row">
@@ -145,7 +145,7 @@ function display_default_visibility_form($uploadvisibledisabled) {
 		<input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
 <label for="uploadvisibledisabled_1">
 				<?php echo get_lang('_new_visible'); ?></label>
-<div></div>
+
 		<input id="uploadvisibledisabled_2" class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
 <label for="uploadvisibledisabled_2">
 				<?php echo get_lang('_new_unvisible'); ?>

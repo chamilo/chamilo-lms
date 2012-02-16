@@ -542,7 +542,7 @@ function handle_search() {
             $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
             $group[] = $element;
         }
-        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '<div></div>', false);
+        $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
     
         // Search_prefilter_prefix.

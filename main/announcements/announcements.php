@@ -721,7 +721,7 @@ if ($display_form) {
 	} else {
 		$form_name = get_lang('ModifyAnnouncement');
 	}
-	echo '<div class="row"><div class="form_header">'.$form_name.'</div></div>';
+	echo '<legend>'.$form_name.'</legend>';
 
 	//this variable defines if the course administrator can send a message to a specific user / group or not
 	if (empty($_SESSION['toolgroup'])) {

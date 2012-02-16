@@ -1288,9 +1288,9 @@ class survey_question {
 		} else {
 			$tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
 		}
-
-		$this->html .= '<div class="row"><div class="form_header">'.$tool_name.'</div></div>';
+		
 		$this->html .= '<form id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.Security::remove_XSS($_GET['question_id']).'">';
+        $this->html .= '<legend>'.$tool_name.'</legend>';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
 		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.Security::remove_XSS($_GET['question_id']).'"/>';
 		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.Security::remove_XSS($form_content['shared_question_id']).'"/>';

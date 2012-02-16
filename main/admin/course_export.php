@@ -80,8 +80,7 @@ if (!empty($msg)) {
 
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1">
-    <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-    <br />
+    <legend><?php echo $tool_name; ?></legend>    
 <?php if (!empty($course_list)) { ?>
 <div>
 <input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"/>

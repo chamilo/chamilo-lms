@@ -112,11 +112,11 @@ $group[] = FormValidator::createElement('select', 'platform_teachers', '', $teac
 $group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
 
 $element_template = <<<EOT
-	<div class="row">
-		<div class="label">
+	<div class="control-group">
+		<label>
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-		</div>
-		<div class="formw">
+		</label>
+		<div class="controls">
 			<table cellpadding="0" cellspacing="0">
 				<tr>
 					<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>

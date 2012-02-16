@@ -1985,7 +1985,7 @@ function display_wiki_search_results($search_term, $search_content=0, $all_vers=
 {
     global $tbl_wiki, $groupfilter, $MonthsLong, $condition_session;
 
-    echo '<div class="row"><div class="form_header">'.get_lang('WikiSearchResults').'</div></div>';
+    echo '<legend>'.get_lang('WikiSearchResults').'</legend>';
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
     $session_id=api_get_session_id();

@@ -187,17 +187,19 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submit_link)
 	if (($_GET['action'] == 'addlink' || $_GET['action'] == 'editlink') && empty($_POST['submitLink'])) {
-		echo '<div class="row">';
-		if ($_GET['action'] == 'addlink') {
-			echo '<div class="form_header">'.get_lang('LinkAdd').'</div>';
-		} else {
-			echo '<div class="form_header">'.get_lang('LinkMod').'</div>';
-		}
-		echo '</div>';
+		
+		
+		
 		if ($category == '') {
 			$category = 0;
 		}        
 		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+        if ($_GET['action'] == 'addlink') {
+			echo '<legend>'.get_lang('LinkAdd').'</legend>';
+		} else {
+			echo '<legend>'.get_lang('LinkMod').'</legend>';
+		}
+        
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
 		if ($_GET['action'] == 'editlink') {
 		    $clean_link_id = intval($_GET['id']);

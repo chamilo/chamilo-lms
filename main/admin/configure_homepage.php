@@ -625,7 +625,7 @@ switch ($action) {
 		// Display for edit_notice case
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-		<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
+		<legend><?php echo $tool_name; ?></legend>
 		<input type="hidden" name="formSent" value="1"/>
 		<?php
 		if (!empty($errorMsg)) {

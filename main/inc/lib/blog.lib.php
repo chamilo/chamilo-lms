@@ -1198,7 +1198,7 @@ class Blog {
 			echo '<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" />';
 
 			// form title
-			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
+			echo '<legend>' . get_lang('NewPost') . '</legend>';
 
 			// article title
 			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div><br />';
@@ -1288,7 +1288,7 @@ class Blog {
 		echo '<form name="edit_post" method="post" action="blog.php?action=edit_post&post_id=' . Security::remove_XSS($_GET['post_id']) . '&blog_id=' . Security::remove_XSS($blog_id) . '&article_id='.Security::remove_XSS($_GET['article_id']).'&task_id='.Security::remove_XSS($_GET['task_id']).'">';
 
 		// form title
-		echo '<div class="row"><div class="form_header">' . get_lang('EditPost') . '</div></div>';
+		echo '<legend>' . get_lang('EditPost') . '</legend>';
 
 		// article title
 		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /></div>';
@@ -1479,7 +1479,7 @@ class Blog {
 		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
 
 		// form title
-		echo '<div class="row"><div class="form_header">'.get_lang('AddTask').'</div></div>';
+		echo '<legend>'.get_lang('AddTask').'</legend>';
 
 		// task title
 		echo '	<div class="row">
@@ -1707,7 +1707,7 @@ class Blog {
 		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
 
 		// form title
-		echo '<div class="row"><div class="form_header">'.get_lang('AssignTask').'</div></div>';
+		echo '<legend>'.get_lang('AssignTask').'</legend>';
 
 		// user
 		echo '	<div class="row">
@@ -2118,7 +2118,7 @@ class Blog {
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-		echo '<div class="row"><div class="form_header">'.get_lang('SubscribeMembers').'</div></div>';
+		echo '<legend>'.get_lang('SubscribeMembers').'</legend>';
 		$course_id = api_get_course_int_id();
 		$properties["width"] = "100%";
 
@@ -2227,7 +2227,7 @@ class Blog {
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
-		echo '<div class="row"><div class="form_header">'.get_lang('UnsubscribeMembers').'</div></div>';
+		echo '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
 
 		$properties["width"] = "100%";
 		//table column titles
@@ -2330,7 +2330,7 @@ class Blog {
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
-		echo '<div class="row"><div class="form_header">'.get_lang('RightsManager').'</div></div>';
+		echo '<legend>'.get_lang('RightsManager').'</legend>';
 		echo '<br />';
 
 		// Integration of patricks permissions system.
@@ -2347,9 +2347,9 @@ class Blog {
 		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . intval($blog_id) . '&amp;post_id=' . intval($post_id) . '">';
 
 		// form title
-		echo '<div class="row"><div class="form_header">';
+		echo '<legend>';
 		echo (isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment'));
-		echo '</div></div>';
+		echo '</legend>';
 
 		// comment title
 		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div><br />';

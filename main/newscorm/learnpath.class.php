@@ -5612,8 +5612,7 @@ class learnpath {
         $item_title			= Security::remove_XSS($item_title);        
         $item_description 	= Security::remove_XSS($item_description);
 
-        $return = '	<div class="row">
-                                <div class="form_header">';
+        $legend = '<legend>';
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
         else
@@ -5647,19 +5646,18 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheExercise') . '&nbsp;:';
-        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentExercise') . '&nbsp;:';
+            $legend .= get_lang('CreateTheExercise') . '&nbsp;:';
+        elseif ($action == 'move') $legend .= get_lang('MoveTheCurrentExercise') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentExecice') . '&nbsp;:';
-
+            $legend .= get_lang('EditCurrentExecice') . '&nbsp;:';
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $return .= Display :: return_warning_message('<p class="lp_title">' . get_lang('Warning') . ' !</p>' . get_lang('WarningEditingDocument'));
+            $legend .= Display :: return_warning_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
         }
-        $return .= '	</div>
-                                </div>';
+        $legend .= '</legend>';
         $return .= '<div class="sectioncomment">';
 
         $return .= '<form method="POST">';
+        $return .= $legend;
         $return .= '<table class="lp_form">';
 
         if ($action != 'move') {
@@ -5871,28 +5869,26 @@ class learnpath {
                 'max_time_allowed' => $row['max_time_allowed']
             );
         }        
-/*
-        $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);*/
 
+        $legend = '<legend>';        
         if ($action == 'add')
-            $return .= '<div class="row"><div class="form_header">' . get_lang('CreateTheExercise') . '&nbsp;:</div></div>';
-        elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentExercise') . '&nbsp;:</p>';
-        else
-            //$return .= '<p class="form_header">' . get_lang('EditCurrentExecice') . '&nbsp;:</p>';
-            $return .= '<div class="row"><div class="form_header">' . get_lang('EditCurrentExecice') . '&nbsp;:</div></div>';
+            $legend .= get_lang('CreateTheExercise');
+        elseif ($action == 'move') $legend .= get_lang('MoveTheCurrentExercise');
+        else            
+            $legend .= get_lang('EditCurrentExecice');
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
-            $return .= Display :: return_warning_message('<p class="lp_title">' . get_lang('Warning') . ' !</p>' . get_lang('WarningEditingDocument'));
+            $legend .= Display :: return_warning_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
         }
+        $legend .= '</legend>';  
 
         $return .= '<form method="POST">';
+        $return .= $legend;
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
         $return .= '<tr>';
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . ' :</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
         );
@@ -6043,8 +6039,7 @@ class learnpath {
             $item_description = '';
         }
 
-        $return = '	<div class="row">
-                                <div class="form_header">';
+        $legend = '<legend>';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6082,15 +6077,16 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheForum') . '&nbsp;:';
-        elseif ($action == 'move') $return .= get_lang('MoveTheCurrentForum') . '&nbsp;:';
+            $legend .= get_lang('CreateTheForum') . '&nbsp;:';
+        elseif ($action == 'move') $legend .= get_lang('MoveTheCurrentForum') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentForum') . '&nbsp;:';
+            $legend .= get_lang('EditCurrentForum') . '&nbsp;:';
 
-        $return .= '	</div>
-                                </div>';
+        $legend .= '</legend>';
+        
         $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
+        $return .= $legend;
         $return .= '<table class="lp_form">';
 
         if ($action != 'move') {
@@ -6103,8 +6099,8 @@ class learnpath {
         $return .= '<tr>';
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
         );
@@ -6435,8 +6431,7 @@ class learnpath {
             $item_path_fck = '';
         }
 
-        $return = '<div class="row">
-                        <div class="form_header">';
+        $legend = '<legend>';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6475,22 +6470,19 @@ class learnpath {
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
 
-        $return .= $title;
+        $legend .= $title;
         
-        $return .= '</div>
-                            </div>';
-        
+        $legend .= '</legend>';        
         
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $url = api_get_self() . '?' .api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;        
-        //var_dump(api_get_self() . '?' . $_SERVER['QUERY_STRING']);
-        
+                
         $form = new FormValidator('form', 'POST',  $url);
 
         $defaults['title'] = api_html_entity_decode($item_title, ENT_QUOTES, $charset);
         $defaults['description'] = $item_description;
 
-        $form->addElement('html', $return);
+        $form->addElement('html', $legend);
 
         //$arrHide = array($id);
         $arrHide[0]['value'] = Security :: remove_XSS($this->name);
@@ -6684,8 +6676,7 @@ class learnpath {
             $item_title = '';
             $item_description = '';
         }
-        $return = '<div class="row">
-                    	<div class="form_header">';
+        $return = '<legend>';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6726,8 +6717,7 @@ class learnpath {
             $return .= get_lang('EditTheCurrentDocument');
         }
 
-        $return .= '</div>
-                        </div>';
+        $return .= '</legend>';
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
@@ -6975,8 +6965,7 @@ class learnpath {
             $item_url = '';
         }
 
-        $return = '	<div class="row">
-                                <div class="form_header">';
+        $legend = '<legend>';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -7010,15 +6999,16 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('CreateTheLink') . '&nbsp;:';
-        elseif ($action == 'move') $return .= get_lang('MoveCurrentLink') . '&nbsp;:';
+            $legend .= get_lang('CreateTheLink') . '&nbsp;:';
+        elseif ($action == 'move') $legend .= get_lang('MoveCurrentLink') . '&nbsp;:';
         else
-            $return .= get_lang('EditCurrentLink') . '&nbsp;:';
+            $legend .= get_lang('EditCurrentLink') . '&nbsp;:';
 
-        $return .= '	</div>
-                                </div>';
+        $legend .= '</legend>';
+        
         $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
+        $return .= $legend;
         $return .= '<table>';
 
         if ($action != 'move') {
@@ -7186,8 +7176,7 @@ class learnpath {
             $item_title = get_lang('Student_publication');
         }
 
-        $return = '	<div class="row">
-                                <div class="form_header">';
+        $legend = '<legend>';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -7224,14 +7213,15 @@ class learnpath {
         unset ($this->arrMenu);
 
         if ($action == 'add')
-            $return .= get_lang('Student_publication') . '&nbsp;:' . "\n";
-        elseif ($action == 'move') $return .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
+            $legend .= get_lang('Student_publication') . '&nbsp;:' . "\n";
+        elseif ($action == 'move') $legend .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
         else
-            $return .= get_lang('EditCurrentStudentPublication') . '&nbsp;:' . "\n";
-        $return .= '	</div>
-                                </div>';
+            $legend .= get_lang('EditCurrentStudentPublication') . '&nbsp;:' . "\n";
+        $legend .= '</legend>';
+        
         $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
+        $return .= $legend;
         $return .= '<table class="lp_form">';
         if ($action != 'move') {
             $return .= '<tr>';
@@ -7617,12 +7607,13 @@ class learnpath {
         //$preq_max = $row['max_score'];
 
         $return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-        $return = '	<div class="row">
-                                <div class="form_header">';
-        $return .= get_lang('AddEditPrerequisites');
-        $return .= '</div></div>';
         $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
+        
+        $return = '<legend>';
+        $return .= get_lang('AddEditPrerequisites');
+        $return .= '</legend>';
+        
         $return .= '<table class="data_table" style="width:650px">';
         $return .= '<tr>';
         $return .= '<th height="24">' . get_lang('Prerequisites') . '</th>';

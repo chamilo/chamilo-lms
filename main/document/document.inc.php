@@ -127,7 +127,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     $url_path = urlencode($document_data['path']);
     
     // Add class="invisible" on invisible files
-    $visibility_class = ($visibility == false) ? ' class="invisible"' : '';
+    $visibility_class = ($visibility == false) ? ' class="muted"' : '';
 
     if (!$show_as_icon) {
         // Build download link (icon)
@@ -762,7 +762,7 @@ function create_dir_form($current_dir_id) {
     $new_folder_text .= '<input type="hidden" name="id" value="'.intval($current_dir_id).'" />';
 
     // Form title
-    $new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
+    $new_folder_text .= '<legend>'.get_lang('CreateDir').'</legend>';
 
     // Folder field
     $new_folder_text .= '<div class="row">';

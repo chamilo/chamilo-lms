@@ -58,7 +58,7 @@ class FormValidator extends HTML_QuickForm {
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
 		$form_template = <<<EOT
-<form {attributes}>
+<form class="form-horizontal" {attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>
@@ -69,24 +69,24 @@ EOT;
 		$renderer->setFormTemplate($form_template);
 		$element_template = <<<EOT
 	
-		<div class="row {error_class}">	
-			<div class="label">
+		<div class="control-group {error_class}">				
+            <label class="control-label">
 				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
 				{label}
-			</div>
-			<div class="formw">
+			</label>
+			<div class="controls">
 				{element}
 				
 				<!-- BEGIN label_3 -->
-                    <span>{label_3}</span>
+                    <p class="help-block">{label_3}</p>
                 <!-- END label_3 -->
                 
-				<!-- BEGIN label_2 -->
-					<span class="help-block">{label_2}</span>
+				<!-- BEGIN label_2 -->                    
+					<p class="help-block">{label_2}</p>
 				<!-- END label_2 -->
 				
 				<!-- BEGIN error -->
-					<span class="help-inline">{error}</span>
+					3<span class="help-inline">{error}</span>
 				<!-- END error -->	
 			</div>
 		</div>
@@ -98,9 +98,8 @@ EOT;
 		$renderer->setHeaderTemplate($header_template);
 		HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 		$required_note_template = <<<EOT
-	<div class="row">
-		<div class="label"></div>
-		<div class="formw">{requiredNote}</div>
+	<div class="control-group">		
+		<div class="controls">{requiredNote}</div>
 	</div>
 EOT;
 		$renderer->setRequiredNoteTemplate($required_note_template);

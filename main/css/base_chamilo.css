@@ -9,14 +9,12 @@ html {
 
 body {
     /* hack ignored by non-IE to enable ie to support :hover on button */
-    behavior:url("/main/css/csshover3.htc");    
-    font-size: 12px;
+    behavior:url("/main/css/csshover3.htc");        
     color: #000;
     margin: 0;
     padding: 0;
     background-color: #fff;
-    height: 100%; /* stick */
-	font-family: Arial, Helvetica, sans-serif;    
+    height: 100%; /* stick */	
 }
 
 /* Sticky footer*/
@@ -936,14 +934,7 @@ form br {
     height: 1%;
     margin-left: 0;
 }
-/* End hide from IE5/mac */
 
-.radio, .checkbox {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-}
 .required {
 /*    color: #f00;
     font-weight: bold;*/
@@ -1856,12 +1847,7 @@ Document title
     padding-right:0px;
 }
 
-.actions img {	
-	padding-right:10px;
-    border: none;
-    text-decoration: none;    
-    vertical-align:middle;
-}
+
 .actions a {
     display:inline-block;
     margin-right: 10px;

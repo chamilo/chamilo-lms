@@ -121,7 +121,7 @@ if (!empty($_GET['msg'])) {
 // the form header
 $session_info = SessionManager::fetch($id_session);
 $user_info = api_get_user_info($id_user);
-echo '<div class="row"><div class="form_header">'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete_name'].'</div></div><br />';
+echo '<legend>'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete_name'].'</legend>';
 
 $nosessionCourses = $sessionCourses = array();
 // actual user

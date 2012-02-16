@@ -125,7 +125,7 @@ if(isset($_GET['msg']) && $_GET['msg']=='ok'){
 
 // display the dokeos header
 Display::display_header($tool_name);
-echo '<div class="row"><div class="form_header">'.$tool_name.' </div></div><br />';
+
 
 $where ='';
 $rows_category_session = array();
@@ -149,6 +149,7 @@ $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+    <?php echo '<legend>'.$tool_name.'</legend>'; ?>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($errorMsg)) {

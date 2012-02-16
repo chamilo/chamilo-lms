@@ -185,12 +185,11 @@ if ($add_type == 'multiple') {
 echo '<div class="actions">';
 echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';       
 echo '</div>';
-
-echo '<div class="row"><div class="form_header">'.$tool_name.' '.$promotion_data['name'].'</div></div><br/>'; ?>
+?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
 
-<?php
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0 ) {

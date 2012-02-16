@@ -21,7 +21,7 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '
 <style>
 .formw {
-    margin-left:200px !important;
+    margin-left:180px !important;
 }
 form .label {
      width: 160px !important;

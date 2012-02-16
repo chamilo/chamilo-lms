@@ -208,27 +208,21 @@ if (count($errors) != 0) {
 }
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
-<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-<div class="row">
-    <div class="label"><?php echo get_lang('ImportCSVFileLocation'); ?></div>
-    <div class="formw">
+<legend><?php echo $tool_name; ?></legend>
+<div class="control-group">
+    <label><?php echo get_lang('ImportCSVFileLocation'); ?></label>
+    <div class="control">
         <input type="file" name="import_file"/>
     </div>
 </div>
-<div class="row">
-    <div class="label"></div>
-    <div class="formw">
+<div class="control-group ">    
+    <div class="control">
         <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
     </div>
 </div>
-
-
 <input type="hidden" name="formSent" value="1"/>
-
 </form>
-
 <div style="clear: both;"></div>
-
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
 <blockquote>

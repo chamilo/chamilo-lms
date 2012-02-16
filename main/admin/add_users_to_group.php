@@ -388,10 +388,8 @@ if ($add_type == 'multiple') {
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
 </div>
 
-<?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
-
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-
+<?php echo '<legend>'.$tool_name.' ('.$session_info['name'].')</legend>'; ?>    
 <?php if ($add_type=='multiple') { ?>
 <select name="relation" id="relation" onchange="xajax_search_users(document.getElementById('firstLetterUser').value,'multiple',this.value)">
 <?php } else { ?>

@@ -453,10 +453,8 @@ if ($add_type == 'multiple') {
 <div class="actions">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
 </div>
-<?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
-
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-
+<?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
 if ($add_type=='multiple') {
 	if (is_array($extra_field_list)) {

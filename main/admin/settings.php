@@ -107,19 +107,7 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
-    
-    $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<div class="row">
-        <div class="label">{label}</div>
-        <div class="formw">{element}
-           <!-- BEGIN label_3 -->
-                {label_3}            
-            <!-- END label_3 -->            
-            <!-- BEGIN label_2 -->
-                <span class="help-block">{label_2}</span>
-            <!-- END label_2 -->
-            </div>
-        </div>');
+   
     
     /*$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>');
     $renderer->setElementTemplate('<div class="sectionvalue">{element}</div><div class="sectioncomment">{label}</div>'."\n");*/
@@ -287,7 +275,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         $group[] = $element;
                     }
                 }
-                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), '<div></div>', false); //julio
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), '', false); //julio
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'checkbox';
@@ -328,7 +316,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     }
                     $group[] = $element;
                 }
-                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])),'<div></div>');
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])),'');
                 break;
             case 'link':
                 $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);

@@ -597,11 +597,11 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                         $user_shared_folders[]=$fold;
                     }
                 }
-                echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';                    
+                echo '<legend>'.get_lang('Move').'</legend>';                    
                 echo build_move_to_selector($user_shared_folders, $move_path, $my_get_move, $group_properties['directory']);
             } else {
                                     
-                echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
+                echo '<legend>'.get_lang('Move').'</legend>';
                 echo build_move_to_selector($folders, $move_path, $my_get_move, $group_properties['directory']);
             }
         }
@@ -949,7 +949,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         
         $is_visible = DocumentManager::is_visible_by_id($document_data['id'], $course_info, api_get_session_id(), api_get_user_id(), false);
         
-        $invisibility_span_open  = ($is_visible == 0) ? '<span class="invisible">' : '';
+        $invisibility_span_open  = ($is_visible == 0) ? '<span class="muted">' : '';
         $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
                 
         

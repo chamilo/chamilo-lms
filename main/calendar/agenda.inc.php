@@ -2330,8 +2330,7 @@ function show_add_form($id = '') {
 	} else {
 		$form_title = get_lang('AddCalendarItem');
 	}
-	echo '<div class="row"><div class="form_header">'.$form_title.'</div></div>';
-	
+	echo '<legend>'.$form_title.'</legend>';
 	
 	// the title of the agenda item
 	echo 	'<div class="row">

@@ -152,8 +152,9 @@ function delete_category($action, $id) {
 * @version march 2006
 */
 function display_move_form($part, $id, $target = array(), $extra_params) {
-	echo '<div class="row"><div class="form_header">'.get_lang('MoveFileTo').'</div></div>';
+	
 	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'&'.$extra_params.'">';
+    echo '<legend>'.get_lang('MoveFileTo').'</legend>';
 	echo '<input type="hidden" name="id" value="'.Security::remove_XSS($id).'">';
 	echo '<input type="hidden" name="part" value="'.Security::remove_XSS($part).'">';
 	echo '

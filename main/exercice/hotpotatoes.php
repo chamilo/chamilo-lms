@@ -211,7 +211,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
             "<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
     //Display::display_icon('hotpotatoes.jpg','',array('align'=> 'right', 'style' => 'position: absolute; padding-top: 30px; margin-left: 500px;'));
 
-    echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';
+    echo '<legend>'.$nameTools.'</legend>';
     echo '<div class="row">';
     echo '<div class="label" style="padding:10px">';
     echo '<span class="form_required">*</span>';

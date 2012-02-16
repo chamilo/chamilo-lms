@@ -93,9 +93,7 @@ echo '</div>';
 ?>
 
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
-
-	<div class="row"><div class="form_header"><?php echo get_lang('_slideshow_options') ?></div></div>
-
+	<legend><?php echo get_lang('_slideshow_options') ?></legend>
 	<div class="row">
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php

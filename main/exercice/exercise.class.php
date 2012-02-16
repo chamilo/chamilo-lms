@@ -901,7 +901,7 @@ class Exercise {
 				}
 
 				$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-				$form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '<div></div>');
+				$form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
 
 				//$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
@@ -910,13 +910,13 @@ class Exercise {
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-				$form->addGroup($radios, null, get_lang('QuestionsPerPage'), '<div></div>');
+				$form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
 
 				$radios_results_disabled = array();
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 				$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-				$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '<div></div>');
+				$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
@@ -944,19 +944,19 @@ class Exercise {
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-					$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<div></div>');
+					$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
 				} else {
 					//Show options freeze
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 					$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-					$result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'<div></div>');
+					$result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
 					$result_disable_group->freeze();
 
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
-					$type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '<div></div>');
+					$type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
 					$type_group->freeze();
 
 					//we force the options to the DirectFeedback exercisetype
@@ -977,7 +977,7 @@ class Exercise {
 			$radios_random_answers = array();
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('Yes'),'1');
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('No'),'0');
-			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '<div></div>');
+			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
 
 			//randow by category
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
@@ -985,14 +985,14 @@ class Exercise {
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
 			$radiocat[] = FormValidator::createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '<div></div>');
+			$form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
 			$form->addElement('html','<div class="clear">&nbsp;</div>');
 			
 			// add the radio display the category name for student 
 			$radio_display_cat_name = array();
 			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('Yes'),'1');
 			$radio_display_cat_name[] = FormValidator::createElement('radio', 'display_category_name', null, get_lang('No'),'0');
-            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '<div></div>');
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
 			
 			//Attempts
 			$attempt_option=range(0,10);

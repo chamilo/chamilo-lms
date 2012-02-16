@@ -516,7 +516,7 @@ switch ($action) {
 		    $token = Security::get_token();
 			//create the form that asks for the directory name
 			$new_folder_text = '<form name="form1" method="POST">';
-			$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateAssignment').'</div></div>';
+			$new_folder_text .= '<legend>'.get_lang('CreateAssignment').'</legend>';
 			$new_folder_text .= '<input type="hidden" name="action" value="add"/>';
 			$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($curdirpath) . '"/>';
 			$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$token.'" />';

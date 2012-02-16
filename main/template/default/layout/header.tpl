@@ -82,7 +82,8 @@
                 </div>         
             </div> <!-- /container-->
         </div><!-- /navbar-inner -->
-    </div><!-- /navbar -->    
+    </div><!-- /navbar -->
+    <div id="topbar_push"></div>
 {else}
 <style>
     body {
@@ -93,7 +94,7 @@
     }
 </style>
 {/if}
-    <div id="topbar_push"></div>
+    
 <div id="header">
     {* header *}
     {$header1}

@@ -16,14 +16,12 @@ select {
 
 .label {
   padding: 1px 3px 2px;
-  font-size: 9.75px;
-  font-weight: bold;
+  font-size: 100%;
+  font-weight: normal;
   color: #ffffff;
   text-transform: none;
-  background-color: none;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  background: none;  
+  border-radius: none;
 }
 
 legend {

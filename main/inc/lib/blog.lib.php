@@ -1577,7 +1577,7 @@ class Blog {
 
 		// Display
 		echo '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-					<div class="form_header">' . get_lang('EditTask') . '</div>
+					<legend>' . get_lang('EditTask') . '</legend>
 					<table width="100%" border="0" cellspacing="2">
 						<tr>
 					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
@@ -2585,13 +2585,10 @@ class Blog {
 	 *
 	 */
 	public static function display_new_blog_form () {
-		echo '<form name="add_blog" method="post" action="blog_admin.php?action=add">
-				<div class="row">
-					<div class="form_header">
-						' . get_lang('AddBlog') . '
-					</div>
-				</div>
-
+		echo '<form name="add_blog" method="post" action="blog_admin.php?action=add">				
+                <legend>
+                    ' . get_lang('AddBlog') . '
+                </legend>
 				<div class="row">
 					<div class="label">
 						<span class="form_required">*</span>' . get_lang('Title') . '
@@ -2642,13 +2639,10 @@ class Blog {
 			$blog['blog_name'] 		= Security::remove_XSS($_POST['blog_name']);
 			$blog['blog_subtitle'] 	= Security::remove_XSS($_POST['blog_subtitle']);
 		}
-		echo '<form name="edit_blog" method="post" action="blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']).'">
-				<div class="row">
-					<div class="form_header">
+		echo '<form name="edit_blog" method="post" action="blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']).'">				
+					<legend>
 						' . get_lang('EditBlog') . '
-					</div>
-				</div>
-
+					</legend>
 				<div class="row">
 					<div class="label">
 						<span class="form_required">*</span>' . get_lang('Title') . '

@@ -174,13 +174,13 @@ $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
         $(".link_tooltip").each(function(){            
             $(this).qtip({                
-                content: $(this).find(".tooltip"),
+                content: $(this).find(".exercise_tooltip"),
                 position: { at:"top right", my:"bottom left"},  
                 show: {
                    event: false, 
                    ready: true // ... but show the tooltip when ready
                 },
-                hide: false, //         
+                hide: true, //         
             });
         });
     });
@@ -545,7 +545,7 @@ if (!empty($exercise_list)) {
                 $class_tip = '';
                 if (!empty($count)) {
                     $results_text = $count == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
-                    $title .= '<span class="tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
+                    $title .= '<span class="exercise_tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
                     $class_tip = 'link_tooltip';
                 }
                 

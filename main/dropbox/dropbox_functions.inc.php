@@ -410,17 +410,14 @@ function display_addcategory_form($category_name = '', $id = '', $action) {
 		$text = get_lang('CreateCategory');
 		$class = 'add';
 	}
-
 	echo '<form name="add_new_category" method="post" action="'.api_get_self().'?view="'.Security::remove_XSS($_GET['view']).'">'."\n";
+    echo '<legend>'.$title.'</legend>';
 	if (isset($id) AND $id != '') {
 		echo '<input name="edit_id" type="hidden" value="'.Security::remove_XSS($id).'">';
 	}
 	echo '<input name="action" type="hidden" value="'.Security::remove_XSS($action).'">';
 	echo '<input name="target" type="hidden" value="'.$target.'">';
-
-	echo '<div class="row"><div class="form_header">'.$title.'</div></div>';
-
-	echo '	<div class="row">
+    echo '	<div class="row">
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('CategoryName').'
 				</div>
@@ -466,9 +463,8 @@ function display_add_form() {
 	$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="javascript: return checkForm(this);">
-
-	<div class="row"><div class="form_header"><?php echo get_lang('UploadNewFile'); ?></div></div>
-
+	<legend><?php echo get_lang('UploadNewFile'); ?></legend>
+    
 	<div class="row">
 		<div class="label">
 			<span class="form_required">*</span><?php echo get_lang('UploadFile'); ?>:

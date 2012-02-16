@@ -198,8 +198,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '<legend>'.get_lang('LinkAdd').'</legend>';
 		} else {
 			echo '<legend>'.get_lang('LinkMod').'</legend>';
-		}
-        
+		}        
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
 		if ($_GET['action'] == 'editlink') {
 		    $clean_link_id = intval($_GET['id']);
@@ -347,19 +346,18 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
 				</div>';		
-		echo '</form>';
-		
-	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {
-		echo '<div class="row">';
-		if ($_GET['action'] == 'addcategory') {
-			echo '<div class="form_header">'.get_lang('CategoryAdd').'</div>';
+		echo '</form>';		
+	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {        
+		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+        
+        if ($_GET['action'] == 'addcategory') {
+			echo '<legend>'.get_lang('CategoryAdd').'</legend>';
 			$my_cat_title = get_lang('CategoryAdd');
 		} else {
-			echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';
+			echo '<legend>'.get_lang('CategoryMod').'</legend>';
 			$my_cat_title = get_lang('CategoryMod');
 		}
-		echo "</div>";
-		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+        
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
 		if ($_GET['action'] == 'editcategory') {
 			echo '<input type="hidden" name="id" value="'.$id.'" />';

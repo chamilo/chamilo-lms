@@ -3507,7 +3507,7 @@ function display_forum_search_results($search_term) {
             $search_results[] = $search_results_item;
         }
     }
-    echo '<div class="row"><div class="form_header">'.count($search_results).' '.get_lang('ForumSearchResults').'</div></div>';
+    echo '<legend>'.count($search_results).' '.get_lang('ForumSearchResults').'</legend>';
     echo '<ol>';
     if ($search_results) {
         echo implode($search_results);

@@ -4586,9 +4586,9 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 	return $agendaitems;
 }
 
-function display_ical_import_form() {
-	echo '<div class="row"><div class="form_header">'.get_lang('ICalFileImport').'</div></div>';
+function display_ical_import_form() {	
 	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&action='.Security::remove_XSS($_GET['action']).'" method="post" name="frm_import_ical">';
+    echo '<legend>'.get_lang('ICalFileImport').'</legend>';
 	echo '<div class="row">
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('ICalFileImport').'

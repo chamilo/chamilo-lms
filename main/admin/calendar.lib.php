@@ -1262,9 +1262,9 @@ function show_add_form($id = '') {
 <input type="hidden" name="sort" value="asc" />
 <input type="hidden" name="submit_event" value="ok" />
 <?php
-	echo '<div class="row"><div class="form_header">';
+	echo '<legend>';
 	echo (isset($id) AND $id<>'')?get_lang('ModifyCalendarItem'):get_lang("AddCalendarItem");
-	echo '</div></div>';
+	echo '<legend>';
 	?>
 <table border="0" cellpadding="5" cellspacing="0" width="80%" id="newedit_form">
 	<!-- START date and time -->

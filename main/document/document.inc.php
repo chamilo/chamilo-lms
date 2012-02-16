@@ -757,6 +757,16 @@ function display_user_link_document($user_id, $name) {
  */
 function create_dir_form($current_dir_id) {
     global $document_id;
+    
+    $form = new FormValidator('create_dir_form', 'post', '', '', null, false);
+    $form->addElement('hidden', 'dir_id', intval($document_id));
+    $form->addElement('hidden', 'id', intval($current_dir_id));    
+    $form->addElement('header', '', get_lang('CreateDir'));    
+    $form->addElement('text', 'dirname', get_lang('NewDir'));
+    $form->addElement('style_submit_button', 'submit', get_lang('CreateFolder'), 'class="add"');
+    $new_folder_text = $form->return_form();
+    
+    /*
     $new_folder_text = '<form action="'.api_get_self().'" method="post">';
     $new_folder_text .= '<input type="hidden" name="dir_id" value="'.intval($document_id).'" />';
     $new_folder_text .= '<input type="hidden" name="id" value="'.intval($current_dir_id).'" />';
@@ -776,7 +786,7 @@ function create_dir_form($current_dir_id) {
     $new_folder_text .= '<div class="formw"><button type="submit" class="add" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
     $new_folder_text .= '</div>';
     $new_folder_text .= '</form>';
-    $new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';
+    $new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';*/
 
     return $new_folder_text;
 }

@@ -43,7 +43,6 @@ require_once '../inc/global.inc.php';
 // Including additional libraries
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'document.inc.php';
 
 // Adding extra javascript to the form
@@ -233,13 +232,10 @@ if (api_get_setting('use_document_title') == 'true') {
 	$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 	$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
 }
+
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 // Advanced parameters
-$form -> addElement('html', '<div class="row">
-			<div class="label">&nbsp;</div>
-			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
-			</div>
-			</div>');
+$form -> addElement('advanced_settings', $advanced);
 $form -> addElement('html', '<div id="options" style="display:none">');
 
 // Check box options

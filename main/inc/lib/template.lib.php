@@ -248,15 +248,20 @@ class Template extends Smarty {
         $this->assign('style_print',     $style_print);        
         
         // Header 1
-        ob_start();
-		show_header_1($language_file, $nameTools, $this->theme);
-		$header1 = ob_get_contents();        
-		ob_clean();
         
-        $this->assign('header1', $header1);
-    }    
+		$header1 = show_header_1($language_file, $nameTools, $this->theme);
+		$this->assign('header1', $header1);
+		
+        ob_start();
+        echo '<div id="plugin-header">';
+        api_plugin('header');
+        echo '</div>';
+        ob_clean();
+        
+        $plugin_header = ob_get_contents();           
+        $this->assign('plugin_header', $plugin_header);        
+    }
     
-
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
@@ -409,15 +414,10 @@ class Template extends Smarty {
 		}
 		
 		$this->assign('bug_notification_link', $bug_notification_link);
-
-		ob_start();
-		show_header_2();
-		$header2 = ob_get_contents();
-		ob_clean();
 		
+		$header2 = show_header_2();
 		$header3 = show_header_3();
 		$header4 = show_header_4($interbreadcrumb, $language_file, $nameTools);
-		
 		
 		$this->assign('header2', $header2);
 		$this->assign('header3', $header3);        

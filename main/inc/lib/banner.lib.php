@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Code
+ * @todo use globals or parameters or add this file in the template
  * @package chamilo.include
  */
 
@@ -113,34 +114,34 @@ function get_tabs() {
 function show_header_1($language_file, $nameTools, $theme) {
     global $noPHP_SELF;    
     $_course = api_get_course_info();      
-    echo '<div id="header1">';               
+    $html = '';
     $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';            
     
     $site_name = api_get_setting('siteName');
     if (file_exists($logo)) {
         $site_name = api_get_setting('Institution').' - '.$site_name;
-        echo '<div id="logo">';
+        $html .= '<div id="logo">';
             $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';           
             $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
-            echo Display::url($logo, api_get_path(WEB_PATH).'index.php');
-        echo '</div>';
+            $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
+        $html .= '</div>';
     } else {         
-        echo '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';                    
+        $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';                    
         $iurl  = api_get_setting('InstitutionUrl');
         $iname = api_get_setting('Institution');
 
         if (!empty($iname)) {
-            echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
+            $html .= '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
         }           
         // External link section a.k.a Department - Department URL          
         if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
-            echo '<span class="extLinkSeparator"> - </span>';
+            $html .= '<span class="extLinkSeparator"> - </span>';
             if ($_course['extLink']['url'] != '') {
-                echo '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
-                echo $_course['extLink']['name'];
-                echo '</a>';
+                $html .= '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
+                $html .= $_course['extLink']['name'];
+                $html .= '</a>';
             } else {
-                echo $_course['extLink']['name'];
+                $html .= $_course['extLink']['name'];
             }
         }
     }        
@@ -148,35 +149,28 @@ function show_header_1($language_file, $nameTools, $theme) {
     /*  Course title section */    
     if (!empty($_cid) and $_cid != -1 and isset($_course)) {
         //Put the name of the course in the header  
-        echo '<div id="my_courses">';     
-        echo '</div>';        
+        $html .= '<div id="my_courses">';     
+        $html .= '</div>';        
     } elseif (isset($nameTools) && $language_file != 'course_home') {
         //Put the name of the user-tools in the header
         if (!isset($_user['user_id'])) {
             //echo '<div id="my_courses"></div>';
         } elseif (!$noPHP_SELF) {
-            echo '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(), '" target="_top">'.$nameTools.'</a></div>';
+            $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
         } else {
-            echo '<div id="my_courses">'.$nameTools.'</div>';
+            $html .= '<div id="my_courses">'.$nameTools.'</div>';
         }   
-    }
-    
-    echo '<div id="plugin-header">';
-    api_plugin('header');
-    echo '</div>';
-    
-    echo '</div>';
+    }    
+    return $html;
 }
 
 function show_header_2() {
+
     $_course    = api_get_course_info(); 
     $course_id  = api_get_course_id();
     $user_id    = api_get_user_id();
-    
-    echo '<div id="header2">';
-    echo '<div id="Header2Right">';
-    
-    echo '<ul>';
+        
+    $html = '';
     
     if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
         $number = who_is_online_count(api_get_setting('time_limit_whosonline'));            
@@ -184,47 +178,43 @@ function show_header_2() {
         $number_online_in_course = 0;
         if(!empty($_course['id'])) {
             $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
-        }       
-        echo '<li>';
+        }               
         
         // Display the who's online of the platform
         if ($number) {
             if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
-                echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'members.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'members.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
             }
         }
     
         // Display the who's online for the course
         if ($number_online_in_course) {
             if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
-                echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
             }
         }
         
         // Display the who's online for the session 
         if (api_get_setting('use_session_mode') == 'true' && isset($user_id) && api_get_session_id() != 0) {
             //echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';        
-            echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array('width'=>'13px')).' </a></li>';
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array('width'=>'13px')).' </a></li>';
         }        
-        echo '</li>';
     }
     
     if ($user_id && isset($course_id)) {
         if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
-            echo '<li>&nbsp;|&nbsp;';
-            api_display_tool_view_option();
-            echo '</li>';
+            $html .= '<li>';
+            $html .= api_display_tool_view_option();
+            $html .= '</li>';
         }
     }
     
     if (api_get_setting('accessibility_font_resize') == 'true') {
-        echo '<li class="resize_font">';
-        echo '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
-        echo '</li>';
-    }   
-    echo '</ul>'; 
-    echo '</div>';
-    echo '</div>';
+        $html .= '<li class="resize_font">';
+        $html .= '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
+        $html .= '</li>';
+    }        
+    return $html;
 }
 
 function return_navigation_array() {

@@ -19,7 +19,17 @@
     </ul>    
     {include file="default/layout/header.tpl"}
 
-    <div id="main">
+    <div id="main" class="container">        
+        {* menu *}
+
+        {if $header3}
+        <div id="header3">
+            <div class="subnav">        
+                {$header3}    
+            </div>
+        </div>
+        {/if}
+
         {* breadcrumb *}
         {$header4}
-        <div id="submain">	    
+        <div id="submain">           

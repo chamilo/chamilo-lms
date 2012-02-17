@@ -2295,7 +2295,7 @@ function api_display_tool_view_option() {
     } else {
         $output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
     }
-    echo $output_string;
+    return $output_string;
 }
 
 /**

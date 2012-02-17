@@ -38,14 +38,11 @@ body {
 /* End hide from IE5-mac */
 
 #main {    
-    position: relative; /* to avoid the IE peekabo bug*/
-    margin: 0px auto;
-    width: 92%;
+    
 }
 
 #submain {
-    border: 1px solid #ccc;
-    
+    border: 1px solid #ccc;    
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
     min-height: 320px;   
@@ -289,24 +286,20 @@ input.link_alike:hover {
  *  HEADER STYLES                                    *
  *****************************************************/
 #header {
-    width: 100%;
-    padding: 0;
-    margin: 0;
+
 }
 /********************************************************
  *  HEADER 1: Title, portal, organisation, course title *
  ********************************************************/
 #header1 {
 	padding:0px;
-    font-size:12px;
-    font-family:Tahoma, Geneva, sans-serif;    
+    font-size:12px;    
     color:#666666;
     height:53px;
     background-repeat:repeat-x;
 }
 #header1 a {
-    font-size:12px;
-    font-family:Tahoma, Geneva, sans-serif;
+    font-size:12px;    
     font-weight:normal;
     color: #666666;
     text-decoration: none;
@@ -333,58 +326,12 @@ input.link_alike:hover {
  *  HEADER 2: Users online, help, student/teacher view  *
  ********************************************************/
 #header2 {
-    width:92%;
-    margin-left:auto;
-    margin-right:auto;
-    position: relative; /* to avoid the IE peekabo bug*/
-    font-size: 1.0em;
-    font-weight: normal;
-    min-height: 18px;
-    padding:  0.2em 0.5em;
-    padding-bottom: 0.2em;
-    color: #666;
+    float:right;    
 }
 #header2 a {
-    color: #666;
-    text-decoration: none;
-    font-weight:normal;
 }
 #header2 a:hover {
     text-decoration: underline;
-}
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-    position: relative; /* to avoid the IE peekabo bug*/
-    float: right;
-    width: 50%;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: right;
-}
-#Header2Right ul li {
-    display: inline;
-    font-family:Tahoma, Geneva, sans-serif;
-    font-size:12px;
-    font-style:normal;
-    color:#666666;
-}
-#Header2Right ul li a {
-    padding: 4px 6px 4px 4px;
-    font-family:Tahoma, Geneva, sans-serif;
-    font-size:12px;
-    font-style:normal;
-    color:#666666;
-}
-
-/* HEADER 3: TABS OF THE HEADER                     */
- 
-#header3 {
-    
-}
-
-#header3 li {
-    //float:left; /* important for ieX*/
 }
 
 #current {
@@ -402,25 +349,6 @@ input.link_alike:hover {
 #header3 .banner_links {
     margin: 0;
 }
-#header3 input.logout {
-    /* makes an input appear like a link in this header */
-    margin: 0 0 0 0;
-    padding: 0 30px 0 0;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.0em;
-    font-weight:bold;
-    font-family: verdana, arial, helvetica, sans-serif;
-    display: inline;
-    PADDING-RIGHT: 0px;
-    PADDING-TOP: 3px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
 #header3 input:hover {
     color: #999;
     -moz-border-radius-bottomleft:5px;
@@ -428,26 +356,6 @@ input.link_alike:hover {
     -moz-border-radius-topleft:5px;
     -moz-border-radius-topright:5px;
     border:1px solid #E1E1E0;
-}
-#header3 input {
-    PADDING-RIGHT: 15px;
-    DISPLAY: block;
-    PADDING-LEFT: 6px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-
-#logout {
-    margin-bottom:0px;
-    padding-bottom:0px;
-    display: inline;
-    float: right;
-    width: auto;
-    text-align: right;
-    height:25px;
 }
 
 /*****************************************************
@@ -495,9 +403,7 @@ input.link_alike:hover {
 }
 
 /*
-==============================================================================
     NAVIGATION MENU
-==============================================================================
 */
 #menu-wrapper {
     display: block;
@@ -514,10 +420,6 @@ input.link_alike:hover {
     margin-left: 15px;
     min-height: 20px;
     padding-bottom: 20px;
-}
-
-#menu {    
-
 }
 
 .menucaption {
@@ -540,10 +442,8 @@ input.link_alike:hover {
 }
 .menulist {
     margin: 0 20px;
-    list-style: none;
-    
+    list-style: none;    
     padding: 0;
-
     list-style-image:none;
     list-style-position:outside;
     list-style-type:none;
@@ -593,9 +493,7 @@ input.link_alike:hover {
 }
 
 /*
-------------------------------------------------------------------------------
     course navigation menu as a definition list
-------------------------------------------------------------------------------
 */
 #swap_menu_link {
     float: left;
@@ -2441,13 +2339,8 @@ span.form_required  {
     margin-left: auto;
     margin-right: auto;
     margin-top: 0;
-    padding-bottom: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-bottom: 0;    
     position: relative;
-    width: 92%;
-    min-width: 760px;
 }
 
 /* Scroll effect */
@@ -2469,7 +2362,6 @@ span.form_required  {
 .subnav {
   width:100%;  
   height: 36px;
-
   
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
@@ -2490,7 +2382,7 @@ span.form_required  {
 }
 
 .subnav .nav {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .subnav .nav > li > a {
@@ -2534,148 +2426,24 @@ span.form_required  {
      -moz-border-radius: 0 0 4px 4px;
           border-radius: 0 0 4px 4px;
 }
-
-.nav-tabs > li, .nav-pills > li {
-    float: left;
-}
-
-li {
-    line-height: 18px;
-}
-
-.nav {
-    list-style-image: none;
-    list-style-position: outside;
-    list-style-type: none;
-}
-
-.nav-tabs:before, .nav-pills:before, .nav-tabs:after, .nav-pills:after {
-    content: "";
-    display: table;
-}
-.nav-pills:after {
-    clear: both;
-}
-.nav-pills > li {
-    float: left;
-}
-.nav-pills > li > a {
-    line-height: 14px;
-    margin-right: 2px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
 .subnav .nav > li:first-child > a,
 .subnav .nav > li:first-child > a:hover {
 -webkit-border-radius: 0;
     -moz-border-radius: 0;
         border-radius: 0;
 }
-.nav-pills > li > a {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-.nav > li > a:hover {
+.subnav .nav > li > a:hover {
   text-decoration: none;
   /*background-color: #eeeeee; */
 }
 
-.nav {
+/* logout fix*/
+.subnav  .nav {
   display: block;
   float: left;
   margin: 0 10px 0 0;
   position: relative;
   left: 0;
-}
-.nav > li {
-  display: block;
-  float: left;
-}
-
-.nav a {
-  display: block;
-  float: none;
-  padding: 10px 10px 11px;
-  line-height: 19px;
-  text-decoration: none;
-}
-.nav a:hover {
-  color: #ffffff;
-  text-decoration: none;
-}
-.nav .active > a {
-  background-color: #222;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.nav.secondary-nav {
-  float: right;
-  margin-left: 10px;
-  margin-right: 0;
-}
-
-.nav.secondary-nav .menu-dropdown,
-.nav.secondary-nav .dropdown-menu {
-  right: 0;
-  border: 0;
-}
-.nav a.menu:hover,
-.nav li.open .menu,
-.nav .dropdown-toggle:hover,
-.nav .dropdown.open .dropdown-toggle {
-  background: #444;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.nav .menu-dropdown,
-.nav .dropdown-menu {
-  background-color: #333;
-}
-.nav .menu-dropdown a.menu,
-.nav .dropdown-menu a.menu,
-.nav .menu-dropdown .dropdown-toggle,
-.nav .dropdown-menu .dropdown-toggle {
-  color: #ffffff;
-}
-.nav .menu-dropdown a.menu.open,
-.nav .dropdown-menu a.menu.open,
-.nav .menu-dropdown .dropdown-toggle.open,
-.nav .dropdown-menu .dropdown-toggle.open {
-  background: #444;
-  background: rgba(255, 255, 255, 0.05);
-}
-.nav .menu-dropdown li a,
-.nav .dropdown-menu li a {
-  color: #999;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-}
-.nav .menu-dropdown li a:hover,
-.nav .dropdown-menu li a:hover {
-  background-color: #191919;
-  background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#292929), to(#191919));
-  background-image: -moz-linear-gradient(top, #292929, #191919);
-  background-image: -ms-linear-gradient(top, #292929, #191919);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #292929), color-stop(100%, #191919));
-  background-image: -webkit-linear-gradient(top, #292929, #191919);
-  background-image: -o-linear-gradient(top, #292929, #191919);
-  background-image: linear-gradient(top, #292929, #191919);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#292929', endColorstr='#191919', GradientType=0);
-  color: #ffffff;
-}
-.nav .menu-dropdown .active a,
-.nav .dropdown-menu .active a {
-  color: #ffffff;
-}
-.nav .menu-dropdown .divider,
-.nav .dropdown-menu .divider {
-  background-color: #222;
-  border-color: #444;
 }
 
 /*  New forum table */

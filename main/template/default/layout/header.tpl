@@ -2,7 +2,7 @@
 {if $show_toolbar == 1}
     <style>    
     .subnav-fixed {
-        top:39px;
+        top:44px;
     }
     </style>
     <div id="topbar" class="navbar navbar-fixed-top">
@@ -95,21 +95,19 @@
 </style>
 {/if}
     
-<div id="header">
+<div id="header" class="container">
+    
     {* header *}
-    {$header1}
+    <div id="header1">
+        {$header1}
+    </div>
+    
+    {$plugin_header}    
     
     {* header 2 *}
-    {$header2}   
-</div>    
-
-{* menu *}
-
-{if $header3}
-<div id="header3">
-    <div class="subnav">        
-        {$header3}    
+    <div id="header2">
+        <ul class="nav nav-pills">        
+            {$header2}
+        </ul>
     </div>
 </div>
-{/if}
-<div class="clear"></div>

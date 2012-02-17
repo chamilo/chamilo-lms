@@ -2887,9 +2887,7 @@ class CourseManager {
         //$number_of_courses = Database::num_rows($result);
         $key = 0;
         $status_icon = '';
-    
-        echo '<div class="row">';
-        
+            
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             // Get notifications.
@@ -2984,8 +2982,7 @@ class CourseManager {
             echo $show_notification;
             echo '</div>';
             $key++;
-        }
-        echo '</div>';
+        }        
     }
     
     /**

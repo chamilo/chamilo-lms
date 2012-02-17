@@ -42,8 +42,7 @@ body {
 }
 
 #submain {
-    border: 1px solid #ccc;    
-    position: relative; /* to avoid the IE peekabo bug*/
+    border: 1px solid #ccc;        
     margin: 0px auto;
     min-height: 320px;   
     -moz-border-radius:0px 0px 10px 10px;
@@ -283,8 +282,7 @@ input.link_alike:hover {
 #header1 {
 	padding:0px;
     font-size:12px;    
-    color:#666666;
-    height:53px;
+    color:#666666;    
     background-repeat:repeat-x;
 }
 #header1 a {
@@ -331,18 +329,6 @@ input.link_alike:hover {
     padding-bottom:6px;
     margin-right:-3px;    
 	margin-right: 2px;
-}
-
-#header3 .banner_links {
-    margin: 0;
-}
-#header3 input:hover {
-    color: #999;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
 }
 
 /* HEADER 4:      */
@@ -392,18 +378,14 @@ input.link_alike:hover {
     NAVIGATION MENU
 */
 #menu-wrapper {
-    display: block;
-    float: right;
-    width: 220px;    
-    
+    display: block;    
     background-color: #F3F4F5;
     border-bottom: 1px solid #CCCCCC;
     border-bottom-left-radius: 5px;
     border-left: 1px solid #CCCCCC;
     box-shadow: -3px 3px 32px 0 #E8E8E8;
     color: #595959;
-    margin-bottom: 1em;
-    margin-left: 15px;
+    margin-bottom: 1em;    
     min-height: 20px;
     padding-bottom: 20px;
 }
@@ -966,8 +948,7 @@ div.system_announcement {
 }
 .system_announcements {
     padding-top: 10px;
-    padding-bottom: 10px;
-    margin-left:8px;
+    padding-bottom: 10px;    
 }
 .system_announcements h3 {
     padding-left:70px;
@@ -2317,12 +2298,8 @@ span.form_required  {
 #header3 {
     font-size: 14px;
     font-weight: bold;
-    margin-bottom: 5px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    padding-bottom: 0;    
-    position: relative;
+    margin:0px;
+    
 }
 
 /* Scroll effect */

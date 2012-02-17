@@ -94,20 +94,3 @@
     }
 </style>
 {/if}
-    
-<div id="header" class="container">
-    
-    {* header *}
-    <div id="header1">
-        {$header1}
-    </div>
-    
-    {$plugin_header}    
-    
-    {* header 2 *}
-    <div id="header2">
-        <ul class="nav nav-pills">        
-            {$header2}
-        </ul>
-    </div>
-</div>

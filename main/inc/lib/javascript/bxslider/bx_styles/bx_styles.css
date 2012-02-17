@@ -29,9 +29,9 @@
 
 #container-slider {
     margin: 15px auto;
-    min-height: 310px;
+    min-height: 200px;
     padding: 0 0 0 6%;
-    width: 560px;
+    width: 500px;
     z-index: 0;
 }
 .bx-next {

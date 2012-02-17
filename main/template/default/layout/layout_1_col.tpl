@@ -1,9 +1,9 @@
 {extends file="default/layout/main.tpl"}
 
 {* Header *}
-{block name=header}
+{block name="main_header"}
 	{if $show_header == 1}
-		{include file="default/layout/header.tpl"}
+		{include file="default/layout/main_header.tpl"}
 	{/if}	
 {/block}
 
@@ -27,7 +27,7 @@
 
 {* Footer *}
 {block name=footer}
-	{if $show_header == 1}
-		{include file="default/layout/footer.tpl"}
+	{if $show_footer == 1}
+		{include file="default/layout/main_footer.tpl"}
 	{/if}	
 {/block}

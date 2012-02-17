@@ -1,7 +1,9 @@
-{* html -> skip *}
-{include file="default/layout/main_header.tpl"}
+{* header *}
 
+{block name="header"}{/block}
+
+{* body *}
 {block name="body"}{/block}
 
 {* footer *}
-{include file="default/layout/main_footer.tpl"}
+{block name="footer"}{/block}

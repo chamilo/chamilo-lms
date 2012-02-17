@@ -1,7 +1,9 @@
 {extends file="default/layout/main.tpl"}
 
 {block name=header}
-	{include file="default/layout/header.tpl"}
+    {if $show_header == 1 }
+        {include file="default/layout/main_header.tpl"}
+    {/if}
 {/block}
 
 {block name=body}	
@@ -49,7 +51,7 @@
 	</div>
 		
 	{* Right column *}
-	<div id="menu-wrapper" class="span3">
+	<div class="span3">
 		
 	    {*if user is not login show the login form*}
 		{if $_u.logged == 0}
@@ -85,6 +87,8 @@
 {/block}
 
 {* Footer *}
-{block name=footer}	
-	{include file="default/layout/footer.tpl"}	
+{block name=footer}
+    {if $show_footer == 1 }
+        {include file="default/layout/main_footer.tpl"}
+    {/if}
 {/block}

@@ -1,7 +1,8 @@
 {extends file="default/layout/main.tpl"}
 
-{block name=header}
-	{include file="default/layout/header.tpl"}
+
+{block name="header"}
+	{include file="default/layout/main_header.tpl"}
 {/block}
 
 {block name=body}
@@ -12,7 +13,7 @@
 		{$announcements_block}
 	</div>
 	
-	<div id="menu-wrapper">	
+	<div>	
 		{$login_block}
 		{$profile_block}	
 		{$account_block}

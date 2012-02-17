@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>    
+<html>
 <head>
     {include file="default/layout/head.tpl"}
 </head>
@@ -11,25 +11,41 @@
 		<li><a href="#content" accesskey="2">{"WCAGGoContent"|get_lang}</a></li>
 	</ul>
 </div>
+    
 <div id="wrapper">
     {* Bug and help notifications *}		
     <ul id="navigation">
         {$help_content}
         {$bug_notification_link}
     </ul>    
-    {include file="default/layout/header.tpl"}
-
+    
+    {*topbar*}
+    {include file="default/layout/topbar.tpl"}
+    
     <div id="main" class="container">        
-        {* menu *}
+        <header> 
+            {* header1 - logo *}
+            <div id="header1">                
+                {$header1}
+            </div> 
+            
+            {$plugin_header}    
 
-        {if $header3}
-        <div id="header3">
-            <div class="subnav">        
-                {$header3}    
+            {* header 2 - right menu (notifications) *}    
+            <div id="header2">
+                <ul class="nav nav-pills">        
+                    {$header2}
+                </ul>
             </div>
-        </div>
+        </header>
+
+        {* header 3 - menu *}
+        {if $header3}
+            <div id="header3" class="subnav">        
+                {$header3}    
+            </div>        
         {/if}
 
         {* breadcrumb *}
         {$header4}
-        <div id="submain">           
+        <div id="submain-content" class="row">

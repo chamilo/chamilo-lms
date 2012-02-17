@@ -37,12 +37,16 @@ legend {
     width:165px;
 }
 
+#header1 {
+    height: 50px;
+} 
 #header2 .nav{
     margin-bottom:0px;
 }
 
 #header2 {    
     width:100%;
+    height: 35px;
 }
 
 #header2 .nav {
@@ -291,7 +295,7 @@ footer {
 }
 
 #topbar_push {
-    height:40px;
+    height: 55px;
 }
 .actions {	
 	background:#efefef;
@@ -338,20 +342,22 @@ footer {
     margin-top:0px;
 }
 
-
 /* Begin of proper */
-
-#header3 {
-    float:none;
-    position:relative;
-}
 
 #header4 {
     height: 26px !important; /* breadcrumb fix */
+    margin-top:5px;
 }
 
-#submain {
-    padding:5px 10px 10px 10px;
+.show-grid [class*="span"] {
+    background-color: #EEEEEE;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    line-height: 30px;
+    min-height: 30px;
+    text-align: center;
 }
 
 a.tag {
@@ -1327,11 +1333,10 @@ button.next.disabled, .a_button.disabled {
     box-shadow: 0 -1px 10px 2px #CCCCCC;
     border:1px solid #CCCCCC;
     float:left;
-    margin:10px;
+    margin:10px 0px 10px 0px;
     padding:12px;
-    width:95%;
-    /* min-height:294px; */
-    color: #BBBBBB; 
+    width:90%;    
+    color: #bbb; 
 }
 
 .categories-content-course {

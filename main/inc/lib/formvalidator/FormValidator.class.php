@@ -35,7 +35,14 @@ class FormValidator extends HTML_QuickForm {
 	 * submitted by adding a special hidden field (default = true)
 	 */
 	function FormValidator($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
+                    
+        //Default form class
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = 'form-horizontal';
+        }
+        
 		$this->HTML_QuickForm($form_name, $method, $action, $target, $attributes, $track_submit);
+        
 		// Load some custom elements and rules
 		$dir = api_get_path(LIBRARY_PATH).'formvalidator/';
 		$this->registerElementType('html_editor', $dir.'Element/html_editor.php', 'HTML_QuickForm_html_editor');
@@ -57,11 +64,7 @@ class FormValidator extends HTML_QuickForm {
 
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
-        
-        //default form class
-        if (!isset($attributes['class'])) {
-            $attributes['class'] = 'form-horizontal';
-        }
+    
         
 		$form_template = <<<EOT
 <form {attributes}>

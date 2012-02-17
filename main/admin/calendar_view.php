@@ -90,7 +90,7 @@ table.calendar .monthyear a:hover
 	background-color: #ffff00;
 }
 </style>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 <!--
     /* added 2004-06-10 by Michael Keck
      *       we need this for Backwards-Compatibility and resolving problems

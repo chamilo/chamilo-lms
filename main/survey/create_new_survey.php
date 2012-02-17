@@ -28,7 +28,7 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';

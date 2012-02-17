@@ -193,7 +193,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 /*
 	DISPLAY
 */
-$htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript"></script>';
 
 // Set bredcrumb
 switch ($current_page)

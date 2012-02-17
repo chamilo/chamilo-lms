@@ -39,7 +39,7 @@ $quote_simple = "'";
 
 $htmlHeadXtra[] = api_get_jquery_ui_js();
 
-$htmlHeadXtra[] = '<script src="slider.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
 
 $htmlHeadXtra[] = '<script type="text/javascript">

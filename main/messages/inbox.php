@@ -25,7 +25,7 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();	
 }
 
-$htmlHeadXtra[]='<script language="javascript">
+$htmlHeadXtra[]='<script type="text/javascript">
 
 function show_icon_edit(element_html) {	
 	ident="#edit_image";

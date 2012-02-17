@@ -45,7 +45,7 @@ $dir = $document_data['path'];
 //jquery textareaCounter
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/textareacounter/jquery.textareaCounter.plugin.js" type="text/javascript"></script>';
 //need jquery for hide menus
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
         document.getElementById(\'options\').style.display = \'block\';

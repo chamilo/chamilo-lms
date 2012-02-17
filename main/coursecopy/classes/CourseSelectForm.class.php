@@ -35,7 +35,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_ATTENDANCE]			= get_lang('Attendance');
 
 ?>
-		<script language="JavaScript" type="text/javascript">
+		<script type="text/javascript">
 			function exp(item) {
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
@@ -89,7 +89,7 @@ class CourseSelectForm
 		echo get_lang('SelectResources');
 		echo '</p>';
 
-		echo '<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
+		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
@@ -351,7 +351,7 @@ class CourseSelectForm
 	 */
 	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize=false) {
 ?>
-		<script language="JavaScript" type="text/javascript">
+		<script type="text/javascript">
 			function exp(item) {
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
@@ -401,7 +401,7 @@ class CourseSelectForm
 			echo '</h3>';
 		}
 
-		echo '<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
+		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
@@ -424,7 +424,7 @@ class CourseSelectForm
 					}
 					echo '</blockquote>';
 					echo '</div>';
-					echo '<script language="javascript">exp('."'$course->code'".')</script>';
+					echo '<script type="text/javascript">exp('."'$course->code'".')</script>';
 				}
 			}
 		}

@@ -5456,11 +5456,9 @@ function api_get_js($file) {
 /**
  * Returns the <link> HTML tag
  */
-function api_get_css($file) {
-	$media = '';
-	return '<link rel="stylesheet" href="'.$file.'" type="text/css" media="'.$media.'" />'."\n";	
+function api_get_css($file) {	
+	return '<link rel="stylesheet" href="'.$file.'" type="text/css" />'."\n";	
 }
-
 
 
 /**

@@ -13,7 +13,7 @@
  */
 $config['survey']['debug'] = false;
 
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
 		function setFocus(){
 		  $("#search_title").focus();
 		}

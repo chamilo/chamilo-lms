@@ -12,7 +12,7 @@
  */
 if(!empty($_user['user_id']) AND string_2_boolean(api_get_setting('allow_email_editor'))){
 ?>
-<script language="javascript" version="1.3" type="text/javascript">
+<script type="text/javascript">
 /**
  * Assigns any event handler to any element
  * @param	object	Element on which the event is added

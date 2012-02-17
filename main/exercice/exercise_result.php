@@ -236,9 +236,9 @@ if ($origin != 'learnpath') {
 	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$safe_lp_id.'&lp_item_id='.$safe_lp_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$feed;
 	//echo $total_score.','.$total_weight;	exit;	
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+	echo '<script type="text/javascript">'.$href.'</script>'."\n";
 	//record the results in the learning path, using the SCORM interface (API)
-	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$total_score.','.$total_weight.');</script>'."\n";
+	echo '<script type="text/javascript">window.parent.API.void_save_asset('.$total_score.','.$total_weight.');</script>'."\n";
 	echo '</body></html>';
 }
 

@@ -80,7 +80,7 @@ $htmlHeadXtra[] = api_get_jquery_ui_js();
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event 
  
 	
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
 	
 $(document).ready(function() {
 	//Second col
@@ -155,7 +155,7 @@ $(document).ready(function() {
 </script>';
 
  
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
 
 function datetime_by_attendance(selected_value) {
 	$.ajax({

@@ -132,7 +132,7 @@ if ($origin != 'learnpath') {
 	Display::display_reduced_header();
 }
 ?>
-<script language="javascript">
+<script type="text/javascript">
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
 	document.getElementById(marksid).style.display='block';
@@ -659,10 +659,10 @@ if ($origin != 'learnpath') {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-		echo '<script language="javascript" type="text/javascript">'.$href.'</script>';		
+		echo '<script type="text/javascript">'.$href.'</script>';		
 		
 		//Record the results in the learning path, using the SCORM interface (API)		
-		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+		echo '<script type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	} else {
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));

@@ -27,7 +27,7 @@ $group_id 	= intval($_SESSION['_gid']);
 // Juan Carlos Raña inserted smileys and self-closing window.
 
 ?>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 function insert_smile(text) {
 	if (text.createTextRange) {
 		text.smile = document.selection.createRange().duplicate();

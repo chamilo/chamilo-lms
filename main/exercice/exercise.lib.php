@@ -560,9 +560,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		}        
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
         
-		$s .= '<script language="JavaScript" type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
-						<script src="../plugin/hotspot/hotspot.js" type="text/javascript" language="JavaScript"></script>
-						<script language="JavaScript" type="text/javascript">
+		$s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
+						<script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
+						<script type="text/javascript">
 						<!--
 						// Globals
 						// Major version of Flash required

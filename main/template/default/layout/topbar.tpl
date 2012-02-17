@@ -18,13 +18,11 @@
                 {if $_u.logged}
                     
                 <div class="nav-collapse">
-                    
                     <ul class="nav">
                         <li class="active"><a href="{$_p.web}user_portal.php">{"MyCourses"|get_lang}</a></li>
-
                         {if 0}
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Teaching'|get_lang}</a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Teaching'|get_lang}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{$_p.web_main}create_course/add_course.php">{"AddCourse"|get_lang}</a></li>
                                 <li><a href="{$_p.web_main}auth/courses.php">{"Catalog"|get_lang}</a></li>
@@ -32,7 +30,7 @@
                         </li>
                         {/if}
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Tracking'|get_lang}</a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Tracking'|get_lang}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{$_p.web_main}mySpace/">{"CoursesReporting"|get_lang}</a></li>
                                 <li><a href="{$_p.web_main}mySpace/index.php?view=admin">{"AdminReports"|get_lang}</a></li>
@@ -43,7 +41,7 @@
                         </li>
                         {if $_u.is_admin == 1}
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Administration'|get_lang}</a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{'Administration'|get_lang}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{$_p.web_main}admin/">{"Home"|get_lang}</a></li>
                                 <li><a href="{$_p.web_main}admin/user_list.php">{"UserList"|get_lang}</a></li>
@@ -58,7 +56,7 @@
 
                     {if $_u.is_admin == 1}
                     <form class="navbar-search pull-left" action="{$_p.web_main}admin/user_list.php" method="get">
-                        <input type="text" placeholder="{'SearchUsers'|get_lang}" name="keyword">
+                        <input type="text" class="search-query span2" placeholder="{'SearchUsers'|get_lang}" name="keyword">
                     </form>
                     {/if}
 
@@ -66,7 +64,7 @@
                     <ul class="nav pull-right">
                         <li><a href="{$_p.web_main}social/home.php"><img src="{$_u.avatar_small}"/></a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown"  href="#">{$_u.complete_name}</a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"  href="#">{$_u.complete_name}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{$_p.web_main}social/home.php">{"Profile"|get_lang}</a></li>
                                 <li><a href="{$_p.web_main}calendar/agenda_js.php?type=personal">{"MyAgenda"|get_lang}</a></li>

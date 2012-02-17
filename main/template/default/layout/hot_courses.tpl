@@ -1,7 +1,5 @@
 <script type="text/javascript">
 $(document).ready( function() {
-	
-		
 	$('.star-rating li a').live('click', function(event) {
         var id = $(this).parents('ul').attr('id');                      
            $('#vote_label2_' + id).html("{'Loading'|get_lang}");           
@@ -18,13 +16,13 @@ $(document).ready( function() {
                    }
                }
            })
-       });
-	
+       });	
 });
 </script>
 
-{if !(empty($hot_courses)) }	
-	 <h3>{"HottestCourses"|get_lang}</h3>
+{if !(empty($hot_courses)) }		 
+    <div class="span8">
+    <h3>{"HottestCourses"|get_lang}</h3>
 	{foreach $hot_courses as $hot_course}										
 		<div class="categories-block-course">
 			<div class="categories-content-course">
@@ -58,6 +56,7 @@ $(document).ready( function() {
 					</div>
 				{/if}				
 			</div>
-		</div>
+		</div>            
 	{/foreach}
+     </div>
 {/if}

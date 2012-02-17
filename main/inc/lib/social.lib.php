@@ -824,7 +824,7 @@ class SocialManager extends UserManager {
                     }                    
                     $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);                        
                 }                
-				$table_row[] = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br><br><a class="a_button medium white">Send message</a>';
+				$table_row[] = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br>';
 				$table_data[] = $table_row;
 			}
 			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');

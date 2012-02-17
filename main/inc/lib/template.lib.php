@@ -229,7 +229,7 @@ class Template extends Smarty {
 		//Base CSS
 		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";
         
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";
+        
 		
 		//Default theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
@@ -240,6 +240,11 @@ class Template extends Smarty {
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
 		}
+        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";
+        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'responsive.css";'."\n";
+        
 		
 		$this->assign('css_style', $style_html);
 		

@@ -322,9 +322,7 @@ input.link_alike:hover {
 #current {
     color:#FFFFFF;
     cursor:pointer;
-    display:block;
-    float:left;
-
+    display:block;    
     overflow:hidden;
     padding-bottom:6px;
     margin-right:-3px;    
@@ -2395,14 +2393,6 @@ span.form_required  {
   /*background-color: #eeeeee; */
 }
 
-/* logout fix*/
-.subnav  .nav {
-  display: block;
-  float: left;
-  margin: 0 10px 0 0;
-  position: relative;
-  left: 0;
-}
 
 /*  New forum table */
 

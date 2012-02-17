@@ -1,28 +1,29 @@
 {extends file="default/layout/main.tpl"}
 
 {* Header *}
-{block name="main_header"}
-	{if $show_header == 1}
+{block name="header"}
+	{if $show_header}
 		{include file="default/layout/main_header.tpl"}
 	{/if}	
 {/block}
 
 {* 1 column *}
 {block name=body}
+	<div class="span12">
+        {* Actions *}
+        {if (!empty($actions) ) }
+            <div class="actions">
+            {$actions}	
+            </div>
+        {/if}
 
-	{* Actions *}
-	{if (!empty($actions) ) }
-		<div class="actions">
-		{$actions}	
-		</div>
-	{/if}
-	
-	{* Notifications*}	
-	{$message}
-	<section id="main_content">
-	{* Main content *}
-	{$content}
-    </section>
+        {* Notifications*}	
+        {$message}
+        <section id="main_content">
+        {* Main content *}
+        {$content}
+        </section>
+    </div>
 {/block}
 
 {* Footer *}

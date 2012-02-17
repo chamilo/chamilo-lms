@@ -50,7 +50,7 @@ if ($description_type >= ADD_BLOCK) {
 }
 
 // display form
-$form = new FormValidator('course_description','POST','index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
+$form = new FormValidator('course_description','POST','index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq());
 
 $form->addElement('header','',$header);
 $form->addElement('hidden', 'id', $original_id);

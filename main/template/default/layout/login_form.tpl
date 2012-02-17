@@ -1,9 +1,9 @@
-<div id="menu" class="menu">
+<div id="menu" class="menu well">
 	<div class="menusection">
 		<span class="menusectioncaption">
 		{"Login"|get_lang}
 		</span>	
-	</div>	
+	</div>
 	{$login_language_form}
 	{$login_form}
 	{$login_failed}	

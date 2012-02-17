@@ -2829,7 +2829,7 @@ class CourseManager {
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
-            echo '<div class="userportal-catalog-item">';
+            echo '<div class="userportal-catalog-item span8">';
                 echo '<ul class="catalog_box">';
                     echo '<li>';
                         echo Display::return_icon('folder_yellow.png', get_lang('Category'), array('width' => '48px', 'align' => 'absmiddle'));

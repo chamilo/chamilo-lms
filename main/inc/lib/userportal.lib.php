@@ -718,12 +718,11 @@ class IndexManager {
 	        $courses[$row['k']] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);
 	    }
 		return $courses;
-	}
-	
+	}	
 	
 	function show_right_block($title, $content, $class = '') {
 	    $html = '';  
-		$html.= '<div id="menu" class="menu">';
+		$html.= '<div class="well">';
 		$html.= '<div class="menusection '.$class.' ">';
 		if (!empty($title)) {
 			$html.= '<span class="menusectioncaption">'.$title.'</span>';
@@ -1217,7 +1216,7 @@ class IndexManager {
 						}
 		
 						if ($count_courses_session > 0) {
-							echo '<div class="userportal-session-item"><ul class="session_box">';
+							echo '<div class="userportal-session-item span8"><ul class="session_box">';
 							echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
 							echo Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 		
@@ -1295,7 +1294,7 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
 		
-							echo '<div class="userportal-session-category-item" id="session_category_'.$category['details']['id'].'">';
+							echo '<div class="userportal-session-category-item span8" id="session_category_'.$category['details']['id'].'">';
 							echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
 		
 							echo Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array('width'=>'48px', 'align' => 'absmiddle'));

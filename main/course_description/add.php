@@ -50,7 +50,7 @@ if (!$error) {
 	$token = Security::get_token();
 }
 // display form
-$form = new FormValidator('course_description','POST','index.php?action=add&'.api_get_cidreq(),'','style="width: 100%;"');
+$form = new FormValidator('course_description','POST','index.php?action=add&'.api_get_cidreq());
 $form->addElement('header', '', $header);
 $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);

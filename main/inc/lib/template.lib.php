@@ -46,7 +46,7 @@ class Template extends Smarty {
 		$this->set_user_parameters();
 		
 		//header and footer are showed by default
-		$this->set_footer($show_footer);
+		$this->set_footer($show_footer);        
 		$this->set_header($show_header);
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 

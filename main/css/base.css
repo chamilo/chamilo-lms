@@ -3301,11 +3301,6 @@ form .formw .freeze {
 }
 
 
-#formLogin {
-    margin-left:20px;    
-}
-
-
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
@@ -3313,8 +3308,8 @@ form .formw .freeze {
 #lang_form {
     text-align: left;
     font-size: 12px;
-    margin: 2px 0 10px 20px;
-        width: 50px !important;
+    margin: 2px 0 10px 0px;
+    width: 50px !important;
 }
 #lang_form input, #lang_form select {
     font-size: 12px;

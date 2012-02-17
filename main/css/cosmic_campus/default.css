@@ -130,8 +130,7 @@ input[type=button], input[type=submit] {
 	border-bottom: 1px solid #aeaeae;
 	height:25px;
 	margin-bottom: 1px;
-	background-image: url(images/fondoHeader3.jpg);
-	float:left;
+	background-image: url(images/fondoHeader3.jpg);	
     width:99%;
 }
 #header3 a {

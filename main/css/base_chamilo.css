@@ -314,9 +314,7 @@ input.link_alike:hover {
 /********************************************************
  *  HEADER 2: Users online, help, student/teacher view  *
  ********************************************************/
-#header2 {
-    float:right;    
-}
+
 #header2 a {
 }
 #header2 a:hover {
@@ -347,9 +345,8 @@ input.link_alike:hover {
     border:1px solid #E1E1E0;
 }
 
-/*****************************************************
- *  HEADER 4:       
- *****************************************************/
+/* HEADER 4:      */
+
 #header4 {
 	height:26px;
     padding:0px;
@@ -1741,10 +1738,6 @@ Document title
     vertical-align:middle;
 }
 .actions span {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions form {
     margin-right: 10px;
     vertical-align:middle;
 }

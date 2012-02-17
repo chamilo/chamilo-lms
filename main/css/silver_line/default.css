@@ -440,8 +440,7 @@ ul#navigation .student-connect a {
 #header3 {
     width: 100%;
     margin: 5;
-    padding: 0;
-    float: left;
+    padding: 0;    
     height:41px;
 }
 #header3 input.logout {

@@ -429,8 +429,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
 	height:41px;
-    width:100%;
-    float:left;
+    width:100%;    
 }
 #header3 a {
 	DISPLAY: block;

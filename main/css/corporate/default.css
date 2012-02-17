@@ -113,11 +113,9 @@ input[type=button], input[type=submit] {
 	border-bottom: 1px solid #aeaeae;
 	color: #333;
 	height:auto;
-	font-weight: bold;
-	float:left;
+	font-weight: bold;	
     width:100%;
 }
-
 
 #header3 UL {
 	PADDING-RIGHT: 2px;

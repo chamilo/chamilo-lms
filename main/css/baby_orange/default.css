@@ -4,14 +4,16 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
+/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */        
     behavior:url("/main/css/csshover3.htc");
 	font-family: arial, verdana, helvetica, sans-serif;
-	font-size: 12px; 
+	font-size: 12px;
 	color: #000;
 	background-color: #fff;
 	margin: 0;
@@ -110,7 +112,7 @@ input[type=button], input[type=submit] {
 /* header 3 styles */
 #header3 {
 	border-bottom: 1px solid #aeaeae;
-	height:26px;
+	height:50px;
 	font-weight: bold;
 	margin: 0;
 	padding: 0;	

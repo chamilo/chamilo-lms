@@ -281,13 +281,10 @@ input[text] {font-size: 12px; }
     padding: 0.8em 0.5em 0.4em 0.5em;
     background: #fff;
     color: #006;
-
     height:25px;
     margin-bottom: 1px;
-    background-image: url(Images/fondoHeader3.jpg);
-	float:left;
+    background-image: url(Images/fondoHeader3.jpg);	
     width:100%;
-
 }
 #header3 A {
     PADDING-RIGHT: 15px;

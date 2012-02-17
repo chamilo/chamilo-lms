@@ -183,12 +183,6 @@ ul#navigation .student-connect a {
 
 
 /* for content section in main index.php file */
-/*
-|----------------------------------------------------------------------------
-| modified: to fit img and blocks in home page
-|----------------------------------------------------------------------------
-|
-*/
 .maincontent {
     float: left;
     width: 65%;
@@ -342,14 +336,6 @@ select, textarea {
     color : #000;
     border: 1px solid #000;
 }
-input.checkbox {
-    border-width: 0;
-}
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-    cursor:	pointer;
-    font-size: 12px;
-}
-
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;
@@ -436,13 +422,14 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
  *  HEADER 2: Users online, help, student/teacher view	*
  ********************************************************/
 #header2 {
-    position: relative; /* to avoid the IE peekabo bug*/
     font-size: 1.0em;
     font-weight: normal;
-    min-height:20px;
+    min-height:35px;
     padding:  0.2em 0.5em;    
     background: #2A4B74;
     color: #666;
+    width:100%;
+    color:#fff;
 }
 #header2 a {
     color: #666;
@@ -452,24 +439,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 #header2 a:hover {
     text-decoration: underline;
 }
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-    position: relative; /* to avoid the IE peekabo bug*/
-    float: right;
-    width: 70%;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: right;
-}
-#Header2Right ul li {
-    display: inline;
-    color:#ffffff;
-}
-#Header2Right ul li a {
-    padding: 4px 6px 4px 4px;
-    color:#f1d40d;
-}
+
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
@@ -481,8 +451,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
     border-bottom: 1px solid #aeaeae;
     height:25px;
     margin-bottom: 1px;
-    background-image: url(images/fondoHeader3.jpg);
-	float:left;
+    background-image: url(images/fondoHeader3.jpg);	
     width:100%;
 }
 #header3 A {
@@ -497,6 +466,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 }
 #header3 A:hover {
     COLOR: #9ba408;
+    background: none;
 }
 #header3 UL {
     PADDING-RIGHT: 2px;

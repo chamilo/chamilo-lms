@@ -445,8 +445,7 @@ input[text] {
 	color: #006;
 	border-bottom: 1px solid #4171b5;
 	height:auto;
-	margin-bottom: 1px;
-	float:left;
+	margin-bottom: 1px;	
     width:99%;
 }
 #header3 a {

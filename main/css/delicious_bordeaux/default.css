@@ -4,9 +4,11 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
+/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
      behavior:url("/main/css/csshover3.htc");
@@ -293,13 +295,6 @@ a:active {
 	font-weight : bold;
 	color : #975b5b;
 }
-select, textarea, input{
-	color : #000;
-	border: 1px solid #000;
-}
-input.checkbox {
-	border-width: 0;
-}
 /* form elements */
 
 select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
@@ -393,7 +388,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  HEADER 2: Users online, help, student/teacher view	*
  ********************************************************/
 #header2 {
-	position: relative; /* to avoid the IE peekabo bug*/
 	color: #636363;/*border: 1px solid red;*/
 }
 #header2 a {
@@ -404,23 +398,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #header2 a:hover {
 	text-decoration: underline;
 }
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-	position: relative; /* to avoid the IE peekabo bug*/
-	float: right;
-	width: 70%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header2Right ul li {
-	display: inline;
-}
-#Header2Right ul li a {
-	padding: 4px 6px 4px 4px;
-	color:#636363;
-}
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
@@ -428,8 +405,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image: url(images/tab-repeat.png);
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
-	height:41px;
-	float:left;
+	height:41px;	
     padding-left:0px;
     padding-right:0px; 
     width: 100%;
@@ -444,6 +420,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #header3 a:hover {
 	color: #a8a7a7;
+    background: none;
 }
 #header3 ul {
 	PADDING-RIGHT: 10px;

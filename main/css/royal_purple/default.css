@@ -4,9 +4,11 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
+/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
      behavior:url("/main/css/csshover3.htc");
@@ -201,8 +203,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height:
- 0px;
+	line-height: 0px;
 	height: 0;
 }
 
@@ -293,13 +294,6 @@ a:active {
 	text-decoration: none;
 	font-weight : bold;
 	color : #8e5b97;
-}
-select, textarea, input{
-	color : #000;
-	border: 1px solid #000;
-}
-input.checkbox {
-	border-width: 0;
 }
 /* form elements */
 
@@ -394,7 +388,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  HEADER 2: Users online, help, student/teacher view	*
  ********************************************************/
 #header2 {
-	position: relative; /* to avoid the IE peekabo bug*/
 	color: #636363;/*border: 1px solid red;*/
 }
 #header2 a {
@@ -405,23 +398,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #header2 a:hover {
 	text-decoration: underline;
 }
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-	position: relative; /* to avoid the IE peekabo bug*/
-	float: right;
-	width: 70%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header2Right ul li {
-	display: inline;
-}
-#Header2Right ul li a {
-	padding: 4px 6px 4px 4px;
-	color:#636363;
-}
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
@@ -429,8 +405,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image: url(images/tab-repeat.png);
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
-	height:41px;
-	float:left;
+	height:41px;	
     width:100%;
 }
 #header3 a {
@@ -443,6 +418,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #header3 a:hover {
 	color: #a8a7a7;
+    background: none;
 }
 #header3 ul {
 	PADDING-RIGHT: 10px;
@@ -474,23 +450,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #header3 .banner_links {
 	margin: 0;
 }
-#header3 input.logout {
-	/* makes an input appear like a link in this header */
-	margin: 0 0 0 0;
-	padding: 0;
-	background-color: transparent;
-	border: none;
-	COLOR: rgb(39,84,175);
-	font-weight:bold;
-	display: inline;
-	background:  url(../../img/tab_right.gif) no-repeat right top;
-	PADDING-RIGHT: 10px;
-	PADDING-TOP: 3px;
-}
-#header3 input:hover {
-	color: #333;
-	background:  url(../../img/tab_right_hover.gif) no-repeat right top;
-}
+
 #header3 input {
 	padding-right: 15px;
 	display: block;
@@ -507,9 +467,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	width: auto;
 	text-align: right;
 }
-#header3 .clear {
-	display: none;
-}
+
 /*****************************************************
  *  HEADER 4
  *****************************************************/

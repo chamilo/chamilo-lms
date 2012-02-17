@@ -11,7 +11,7 @@ html {
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
@@ -113,7 +113,7 @@ input[type=button], input[type=submit] {
 /* header 3 styles */
 #header3 {
 	border-bottom: 1px solid #aeaeae;
-	height:26px;
+	height:50px;
 	font-weight: bold;
 	margin: 0;
 	padding: 0;	

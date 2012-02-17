@@ -116,22 +116,24 @@ a:active {
     /*background-image:url(images/bg-header4.png);*/
 }
 
-#header3  a {
+#header3 li {    
     background:transparent url(images/tab_left.png) no-repeat scroll left top;
+    border:none;
+    margin-right: 2px;
 }
 
-#header3 li a span {
+#header3 li a {
     background:transparent url(images/tab_right.png) no-repeat scroll right top;
+    margin-left: 5px;
+    border:none;
+    color:#ffffff;
 }
 
-#current a {
+#header3 li#current {
     background:transparent url(images/tab_left-active.png) no-repeat scroll left top;
+     height: 30px;
 }
-#current {
-    /*background:transparent url(images/tab_center-active.png) no-repeat scroll right top;*/
-}   
-
-#current #tab_active {
+#header3 #current a {
     background:transparent url(images/tab_right-active.png) no-repeat scroll right top;
 }
 .maincontent {

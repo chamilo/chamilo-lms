@@ -193,17 +193,6 @@ ul#navigation .student-connect a {
     padding: 6px 0 8px 6px;
 }
 
-/* for content section in main index.php file modified: to fit img and blocks in home page */
-.maincontent {
-    width: 60%;
-    float: left;
-     padding: 0 20px 0 20px;
-    /* padding: 0px;*/
-    min-height: 333px;
-    margin-top:8px;
-    margin-bottom:30px;
-}
-
 #center {
     margin: 0 190px 0 0;
     padding: 10px 0 40px 0;

@@ -24,7 +24,7 @@ a:active {
 }
 
 #header1 {
-    background-image:url(images/bg-header1.gif);
+    /* background-image:url(images/bg-header1.gif); */
 }
 
 .subnav-fixed {

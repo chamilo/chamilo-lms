@@ -12,7 +12,6 @@
  * @package chamilo.main
  * @todo Shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
- * @todo move display_courses and some other functions to a more appripriate place course.lib.php or user.lib.php
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
@@ -214,7 +213,7 @@ $controller->return_courses_and_sessions($personal_course_list);
 $courses_and_sessions = ob_get_contents();
 ob_get_clean();
 
-$controller->tpl->assign('content', 					$courses_and_sessions);
+$controller->tpl->assign('content', $courses_and_sessions);
 
 if($_SESSION['sniff_navigator']!="checked") {
 	$controller->tpl->assign('show_sniff', 					1);
@@ -235,7 +234,6 @@ if(!empty($some_activex) || !empty($some_plugins)){
 		$controller->tpl->assign('sniff_notification',  $sniff_notification);
 	}  
 }
-//$controller->tpl->assign('hot_courses',                 $controller->return_hot_courses());
 
 $controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());
@@ -249,8 +247,6 @@ $controller->tpl->assign('classes_block', 				$controller->return_classes_block(
 //if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block',            $controller->return_skills_links());
 //}
-
-
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

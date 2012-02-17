@@ -19,9 +19,10 @@
 	
 	{* Notifications*}	
 	{$message}
-	
+	<section id="main_content">
 	{* Main content *}
 	{$content}
+    </section>
 {/block}
 
 {* Footer *}

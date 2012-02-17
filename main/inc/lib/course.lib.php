@@ -2805,6 +2805,7 @@ class CourseManager {
             }
         }
     }
+    
     /**
      * Display courses (without special courses) as several HTML divs
      * of course categories, as class userportal-catalog-item.
@@ -2814,20 +2815,17 @@ class CourseManager {
      * @return void
      */
     function display_courses($user_id, $load_dirs = false) {
-    
-        global $_user, $_configuration;
-    
-        // Building an array that contains all the id's of the user defined course categories.
-        // Initially this was inside the display_courses_in_category function but when we do it here we have fewer
-        // sql executions = performance increase.
-        $all_user_categories = self :: get_user_course_categories();
+        $user_id = intval($user_id);
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
     
         // Step 0: We display the course without a user category.
         self :: display_courses_in_category(0, $load_dirs);
     
         // Step 1: We get all the categories of the user.
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT id, title FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
+        $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
@@ -2844,7 +2842,7 @@ class CourseManager {
             echo '</ul>';
             echo '</div>';
         }
-    }    
+    }
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
@@ -2852,14 +2850,13 @@ class CourseManager {
      * @param bool      Whether to show the document quick-loader or not
      *  @return void
      */
-    function display_courses_in_category($user_category_id, $load_dirs = false) {
-    
+    function display_courses_in_category($user_category_id, $load_dirs = false) {    
         global $_user;
         // Table definitions
         $TABLECOURS                  = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER              = Database :: get_main_table(TABLE_MAIN_COURSE_USER);                
         $TABLE_ACCESS_URL_REL_COURSE = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $TABLE_USER_COURSE_CATEGORY  = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        //$TABLE_USER_COURSE_CATEGORY  = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $current_url_id = api_get_current_access_url_id();
     
         // Get course list auto-register
@@ -2887,10 +2884,12 @@ class CourseManager {
         // Use user's classification for courses (if any).
         $sql_select_courses .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql_select_courses);
-        $number_of_courses = Database::num_rows($result);
+        //$number_of_courses = Database::num_rows($result);
         $key = 0;
         $status_icon = '';
     
+        echo '<div class="row">';
+        
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             // Get notifications.
@@ -2905,7 +2904,7 @@ class CourseManager {
             // New code displaying the user's status in respect to this course.
             $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width' => '48px'));
     
-            echo '<div class="userportal-course-item">';
+            echo '<div class="userportal-course-item span8">';
     
             if (api_is_platform_admin()) {
                 echo '<div style="float:right;">';
@@ -2928,8 +2927,7 @@ class CourseManager {
             		echo '<a id="document_preview_'.$course['id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
             		echo Display::div('', array('id' => 'document_result_'.$course['id'].'_0', 'class'=>'document_preview_container'));
             	}
-            	echo '</div>';
-            	
+            	echo '</div>';            	
             }
     
             // Function logic - act on the data (check if the course is virtual, if yes change the link).
@@ -2987,7 +2985,9 @@ class CourseManager {
             echo '</div>';
             $key++;
         }
+        echo '</div>';
     }
+    
     /**
      * Retrieves the user defined course categories
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University

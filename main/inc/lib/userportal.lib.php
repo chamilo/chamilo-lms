@@ -1083,13 +1083,12 @@ class IndexManager {
 		}
 		
 		$list = '';
-		foreach ($personal_course_list as $my_course) {
-			
-			$thisCourseDbName 		= $my_course['db'];
+		foreach ($personal_course_list as $my_course) {			
+			//$thisCourseDbName 		= $my_course['db'];
 			$thisCourseSysCode 		= $my_course['k'];
 			$thisCoursePublicCode 	= $my_course['c'];
 			$thisCoursePath 		= $my_course['d'];
-			$sys_course_path 		= api_get_path(SYS_COURSE_PATH);
+			//$sys_course_path 		= api_get_path(SYS_COURSE_PATH);
 			$dbname 				= $my_course['k'];
 			$status 				= array();
 			$status[$dbname] 		= $my_course['s'];

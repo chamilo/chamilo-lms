@@ -361,18 +361,12 @@ p, blockquote, ol, ul {
     border-radius: 10px;
     background-color:#F9F9F9;
     padding:5px 10px 5px 10px;
-    height:40px;
-    margin:5px;
-    padding:15px;
+    margin:0px 0px 10px 0px;
+    
 }
 
 .session_box_title {
     margin-bottom: 7px;
-}
-
-
-.userportal-course-item-title {
-    font-size:135%;
 }
 
 .session_course_item .item_closed, .userportal-course-item-title .item_closed {
@@ -1134,14 +1128,13 @@ button.next.disabled, .a_button.disabled {
 .bread li {
     color: #777777;
     float: left;
-    line-height: 25px;    
-/*line-height: 20px; might show better in IE7 & 8 */
+    
 }
 
 .bread span {
     display: block;
     font-size:11px;
-    padding: 0px 15px 0 9px;
+    padding: 4px 15px 0 9px;
 }
 
 .bread a {
@@ -1167,9 +1160,8 @@ button.next.disabled, .a_button.disabled {
 }
 
 .bread .home {
-    padding:5px 15px 4px 8px;
-    height: 17px;
-/* padding:0px 15px 4px 8px; might show better in IE7 & 8 */
+    padding:0px 15px 4px 8px;
+    height: 22px;
 }    
 
 /* Warning and error messages to the user */

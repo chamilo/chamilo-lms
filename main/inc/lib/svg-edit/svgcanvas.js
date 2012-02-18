@@ -4308,8 +4308,8 @@ var pathActions = canvas.pathActions = function() {
 							last_x += (last_x - last.x2);
 							last_y += (last_y - last.y2);
 						} else if(firstCtrl) {
-							last_x = firstCtrl[0];
-							last_y = firstCtrl[1];
+							last_x = firstCtrl[0]/current_zoom;
+							last_y = firstCtrl[1]/current_zoom;
 						}
 						svgedit.path.replacePathSeg(6, index, [pt_x, pt_y, last_x, last_y, alt_x, alt_y], drawn_path);
 					}
@@ -8602,6 +8602,14 @@ this.updateCanvas = function(w, h) {
 		y: y
 	});
 	
+	var bg_img = getElem('background_image');
+	if (bg_img) {
+		assignAttributes(bg_img, {
+			'width': '100%',
+			'height': '100%'
+		});
+	}
+
 	selectorManager.selectorParentGroup.setAttribute("transform","translate(" + x + "," + y + ")");
 	
 	return {x:x, y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y};

@@ -564,7 +564,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         // is the latest logout_date still relevant?
         $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
         $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = convert_mysql_date(Database::result($q_logout_date,0,'logout_date'));
+        $res_logout_date = convert_sql_date(Database::result($q_logout_date,0,'logout_date'));
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry

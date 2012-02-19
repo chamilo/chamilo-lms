@@ -1,27 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This is the main database library for Chamilo.
- *	Include/require it in your code to use its functionality.
- *   Because this library contains all the basic database calls, it could be
- *   replaced by another library for say, PostgreSQL, to actually use Chamilo
- *   with another database (this is not ready yet because a lot of code still
- *   uses the MySQL database functions extensively).
+ *  This is the main database library for Chamilo.
+ *  Include/require it in your code to use its functionality.
+ *  Because this library contains all the basic database calls, it could be
+ *  replaced by another library for say, PostgreSQL, to actually use Chamilo
+ *  with another database (this is not ready yet because a lot of code still
+ *  uses the MySQL database functions extensively).
  *
- *	@package chamilo.library
- * 	@todo the table constants have all to start with TABLE_
- * 		  This is because of the analogy with the tool constants TOOL_
+ *  If trying to replicate the database layer, don't forget to look for "sql"
+ *  named functions in main_api.lib.php
+ *
+ *  @package chamilo.library
  */
 /**
- * Code
+ * Constants definition
  */
-/*	CONSTANTS */
 require_once 'database.constants.inc.php';
-
-/*		DATABASE CLASS
-        The class and its methods
-*/
-
+/**
+ * Database class definition
+ * @package chamilo.database
+ */
 class Database {
 
     /*
@@ -106,7 +105,7 @@ class Database {
      *	Returns the database prefix.
      *	All created COURSE databases are prefixed with this string.
      *
-     *	TIP: This can be convenient e.g. if you have multiple system installations
+     *	TIP: This can be convenient if you have multiple system installations
      *	on the same physical server.
      */
     public static function get_database_name_prefix() {
@@ -143,22 +142,24 @@ class Database {
 
     /**
      * A more generic method than the other get_main_xxx_table methods,
-     * This one returns the correct complete name of any table of the main database of which you pass
-     * the short name as a parameter.
+     * This one returns the correct complete name of any table of the main 
+     * database of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
      *
      * @param string $short_table_name, the name of the table
      */
     public static function get_main_table($short_table_name) {
-        return self::format_table_name(self::get_main_database(), $short_table_name);
+        return self::format_table_name(
+          self::get_main_database(), 
+          $short_table_name);
     }
 
     /**
 
      * A more generic method than the older get_course_xxx_table methods,
-     * This one can return the correct complete name of any course table of which you pass
-     * the short name as a parameter.
+     * This one can return the correct complete name of any course table of 
+     * which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
      *
@@ -166,9 +167,8 @@ class Database {
      * @param string $database_name, optional, name of the course database
      * - if you don't specify this, you work on the current course.
      */
-    //public static function get_course_table($short_table_name, $database_name = '') {
-    //forces fatal errors so we can debug more easily        
     public static function get_course_table($short_table_name, $extra = null) {
+        //forces fatal errors so we can debug more easily        
         if (!empty($extra)) {
             var_dump($extra);
             //@todo remove this
@@ -184,7 +184,8 @@ class Database {
      *
      * @param string $course_code
      * @param string $table the name of the table
-     * @todo this function should be deprecated use api_get_course_info() and then get_course_table() 
+     * @todo this function should be deprecated use api_get_course_info()  
+     *   and then get_course_table() 
      */
     public static function get_course_table_from_code($course_code, $table) {
         $course_table = self::get_main_table(TABLE_MAIN_COURSE);
@@ -201,8 +202,8 @@ class Database {
     }
 
     /**
-     * This generic method returns the correct and complete name of any statistic table
-     * of which you pass the short name as a parameter.
+     * This generic method returns the correct and complete name of any 
+     * statistic table of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
      *
@@ -257,7 +258,7 @@ class Database {
     /**
      *	Returns an array with all database fields for the specified course.
      *
-     *	@param the real (system) code of the course (ID from inside the main course table)
+     *	@param string The real (system) course code (main course table ID)
      * 	@todo shouldn't this be in the course.lib.php script?
      */
     public static function get_course_info($course_code) {
@@ -269,13 +270,14 @@ class Database {
     }
 
     /**
-     *	@param $user_id (integer): the id of the user
-     *	@return $user_info (array): user_id, lastname, firstname, username, email, ...
-     *	@author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
-     *	@author Roan Embrechts, first version + converted to Database API
-     *	@version 30 September 2004
-     *	@desc find all the information about a specified user. Without parameter this is the current user.
-     * 	@todo shouldn't this be in the user.lib.php script?
+     * Gets user details from the "user" table
+     * @param $user_id (integer): the id of the user
+     * @return $user_info (array): user_id, lname, fname, username, email, ...
+     * @author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
+     * @author Roan Embrechts, first version + converted to Database API
+     * @version 30 September 2004
+     * @desc find all the information about a specified user. Without parameter this is the current user.
+     * @todo shouldn't this be in the user.lib.php script?
      */
     public static function get_user_info_from_id($user_id = '') {
         if (empty($user_id)) {
@@ -309,8 +311,10 @@ class Database {
      *	@author	Roan Embrechts
      *
      * 	@todo What's the use of this method. I think this is better removed.
-     * 		  There should be consistency in the variable names and the use throughout the scripts
-     * 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
+     * 		  There should be consistency in the variable names and the 
+     *            use throughout the scripts
+     * 		  for the database name we should consistently use or db_name 
+     *            or database (db_name probably being the better one)
      */
     public static function generate_abstract_course_field_names($result_array) {
         $visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
@@ -441,18 +445,19 @@ class Database {
     }
 
     /**
-     * Returns the error number from the last operation done on the database server.
-     * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
-     * @return int								Returns the error number from the last database (operation, or 0 (zero) if no error occurred.
+     * Returns error number from the last operation done on the database server.
+     * @param resource $connection (optional)	The database server connection, 
+     * for detailed description see the method query().
+     * @return int Returns the error number from the last database (operation, or 0 (zero) if no error occurred.
      */
     public static function errno($connection = null) {
         return self::use_default_connection($connection) ? mysql_errno() : mysql_errno($connection);
     }
 
     /**
-     * Returns the error text from the last operation done on the database server.
+     * Returns error text from the last operation done on the database server.
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
-     * @return string							Returns the error text from the last database operation, or '' (empty string) if no error occurred.
+     * @return string Returns the error text from the last database operation, or '' (empty string) if no error occurred.
      */
     public static function error($connection = null) {
         return self::use_default_connection($connection) ? mysql_error() : mysql_error($connection);

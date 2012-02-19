@@ -2414,8 +2414,8 @@ class learnpathItem {
 							$res = Database::query($sql);
 							$row_dates = Database::fetch_array($res);
 
-							$time_start_date = convert_mysql_date($row_dates['start_date']);
-							$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
+							$time_start_date = convert_sql_date($row_dates['start_date']);
+							$time_exe_date 	 = convert_sql_date($row_dates['exe_date']);
 							$mytime = ((int)$time_exe_date-(int)$time_start_date);
 							$total_time =" total_time = ".$mytime.", ";
 		 				}

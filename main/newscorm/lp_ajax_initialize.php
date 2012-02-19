@@ -116,8 +116,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
 		FROM ".$mycoursedb."
 		WHERE lp_iv_id = ".$mylp_iv_id."
 		ORDER BY id ASC;";
-	$res = mysql_query($sql);
-	while ($row = mysql_fetch_row($res)) {
+	$res = Database::query($sql);
+	while ($row = Database::fetch_row($res)) {
 		$phpobjectives[] = $row;	
 	}
 	$myobjectives = json_encode($phpobjectives);

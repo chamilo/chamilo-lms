@@ -729,9 +729,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         case TOOL_DOCUMENT:
         case 'Document':
             $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-            $mysql = "SELECT * FROM $dbTable WHERE c_id = $course_id AND id=$id";
-            //error_log('New LP - Querying document table: '.$mysql,0);
-            $result = Database::query($mysql);
+            $my_sql = "SELECT * FROM $dbTable WHERE c_id = $course_id AND id=$id";
+            //error_log('New LP - Querying document table: '.$my_sql,0);
+            $result = Database::query($my_sql);
             $myrow = Database::fetch_array($result);
 
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.

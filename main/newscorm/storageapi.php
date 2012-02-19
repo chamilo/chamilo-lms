@@ -7,8 +7,7 @@ require_once('../inc/global.inc.php');
 
 // variable cleaning...
 foreach (Array("svkey", "svvalue") as $key)
-	//FIXME use chamilo api
-	$_REQUEST[$key] = mysql_escape_string($_REQUEST[$key]);
+	$_REQUEST[$key] = Database::escape_string($_REQUEST[$key]);
 
 foreach (Array("svuser", "svcourse", "svsco", "svlength", "svasc") as $key)
 	$_REQUEST[$key] = intval($_REQUEST[$key]);
@@ -79,7 +78,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 		and course_id = '$sv_course'
 		and sv_key = '$sv_key'";
 	$res = Database::query($sql);
-	if (mysql_num_rows($res) > 0) {
+	if (Database::num_rows($res) > 0) {
 		$row = Database::fetch_assoc($res);
 		if (get_magic_quotes_gpc()) {
 			return stripslashes($row['sv_value']);
@@ -141,7 +140,7 @@ function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $
 		and list.sv_key = search.sv_key
 		order by list.sv_value" ;
 	$res = Database::query($sql);
-	if (mysql_num_rows($res) > 0) {
+	if (Database::num_rows($res) > 0) {
 		$row = Database::fetch_assoc($res);
 		return $row['position'];
 	}
@@ -151,13 +150,13 @@ function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $
 }
 
 function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
-	$sv_value = mysql_real_escape_string($sv_value);
+	$sv_value = Database::escape_string($sv_value);
 	$sql = "replace into ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)."
 		(user_id, sco_id, course_id, sv_key, sv_value)
 		values
 		('$sv_user','$sv_sco','$sv_course','$sv_key','$sv_value')";
 	$res = Database::query($sql);
-	return mysql_affected_rows();
+	return Database::affected_rows();
 }
 
 function storage_getall($sv_user, $sv_course, $sv_sco) {
@@ -178,7 +177,7 @@ function storage_getall($sv_user, $sv_course, $sv_sco) {
 }
 
 function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
-	$sv_value = mysql_real_escape_string($sv_value);
+	$sv_value = Database::escape_string($sv_value);
 	Database::query("start transaction");
 	$sqlorder = "select ifnull((select max(stack_order) 
 		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
@@ -261,7 +260,7 @@ function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key) {
 		and course_id='$sv_course'
 		and sv_key='$sv_key'";
 	$res = Database::query($sql);
-	return mysql_num_rows($res);
+	return Database::num_rows($res);
 }
 
 function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {

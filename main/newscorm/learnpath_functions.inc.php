@@ -1485,7 +1485,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 $content = text_filter($content);
 
                 // 3.3 Get a UNIX(?<-mktime) Timestamp of the end_date for this announcement.
-                $last_post_datetime = $myrow['end_date']; // post time format  datetime de mysql
+                $last_post_datetime = $myrow['end_date']; // post time format  datetime of database layer (MySQL is assumed)
                 list ($last_post_date, $last_post_time) = split(' ', $last_post_datetime);
                 list ($year, $month, $day) = explode('-', $last_post_date);
                 list ($hour, $min) = explode(':', $last_post_time);

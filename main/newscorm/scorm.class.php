@@ -378,7 +378,7 @@ class scorm extends learnpath {
                         ")";
 
                 $res_item = Database::query($sql_item);
-                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(), 0); }
+                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.Database::error(), 0); }
                 $item_id = Database::insert_id();
                 // Now update previous item to change next_item_id.
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";

@@ -13,6 +13,8 @@ set_time_limit(0);
 require_once '../inc/global.inc.php';
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
 $path          = $document_data['path'];
+
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
  
 if (empty($path)) {
 	$path = '/';
@@ -40,6 +42,7 @@ $doc_table      = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $course_id      = api_get_course_int_id();
+$session_id     = api_get_session_id();
 
 //$to_group_id = api_get_group_id(); variable loaded in document.php
 
@@ -88,15 +91,30 @@ if (api_is_allowed_to_edit()) {
 	// 1st: Get all files that are visible in the given path
 	$querypath = Database::escape_string($querypath);
 	$query = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props 
-						      WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility='1' AND docs.filetype='file' AND props.to_group_id=".$to_group_id);
+						      WHERE docs.c_id               = $course_id AND 
+                                    props.c_id              = $course_id AND 
+                                    props.tool              = '".TOOL_DOCUMENT."' AND 
+                                    docs.id                 = props.ref AND 
+                                    docs.path               LIKE '".$querypath."/%' AND 
+                                    props.visibility        = '1' AND 
+                                    docs.filetype           = 'file' AND 
+                                    props.id_session        IN ('0', '$session_id') AND
+                                    props.to_group_id       = ".$to_group_id);
 	// Add them to an array
 	while ($all_visible_files = Database::fetch_assoc($query)) {
 		$all_visible_files_path[] = $all_visible_files['path'];
 	}
 
 	// 2nd: Get all folders that are invisible in the given path
-	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props 
-							   WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility<>'1' AND docs.filetype='folder'");
+	$query2 = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props 
+							   WHERE    docs.c_id           = $course_id AND 
+                                        props.c_id          = $course_id AND 
+                                        props.tool          = '".TOOL_DOCUMENT."' AND 
+                                        docs.id             = props.ref AND 
+                                        docs.path             LIKE '".$querypath."/%' AND 
+                                        props.visibility    <> '1' AND 
+                                        props.id_session    IN ('0', '$session_id') AND
+                                        docs.filetype       = 'folder'");
 	// If we get invisible folders, we have to filter out these results from all visible files we found
 	if (Database::num_rows($query2) > 0) {
 		// Add tem to an array
@@ -104,7 +122,14 @@ if (api_is_allowed_to_edit()) {
 		//3rd: Get all files that are in the found invisible folder (these are "invisible" too)
 			//echo "<br /><br />invisible folders: ".$sys_course_path.$_course['path'].'/document'.$invisible_folders['path'].'<br />';
 			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  
-			                           WHERE docs.c_id = $course_id AND props.c_id = $course_id AND props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$invisible_folders['path']."/%' AND docs.filetype='file' AND props.visibility='1'");
+			                           WHERE    docs.c_id           = $course_id AND 
+                                                props.c_id          = $course_id AND 
+                                                props.tool          ='".TOOL_DOCUMENT."' AND 
+                                                docs.id             = props.ref AND 
+                                                docs.path           LIKE '".$invisible_folders['path']."/%' AND 
+                                                docs.filetype       ='file' AND 
+                                                props.id_session    IN ('0', '$session_id') AND
+                                                props.visibility    ='1'");
 			// Add tem to an array
 			while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
 				$files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];

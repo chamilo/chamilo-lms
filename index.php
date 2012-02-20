@@ -38,12 +38,8 @@ $htmlHeadXtra[] ='
 			pause			: 10000
 		});
 	});
-
 </script>
-
-<noscript>
-	'.Display::return_message(get_lang("NoJavascript"), 'error').'
-</noscript>';
+<noscript>'.get_lang("NoJavascript").'</noscript>';
 
 //set cookie for check if client browser are cookies enabled
 setcookie("TestCookie", "cookies_yes", time()+3600);

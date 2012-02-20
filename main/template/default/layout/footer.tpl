@@ -1,23 +1,39 @@
-<div id="footer"> <!-- start of #footer section -->
-	<div id="bottom_corner"></div>
-	<div class="copyright">		
-	    {if $show_administrator_data == 'true'}
-	        <div align="right">
-	            {$administrator_name}            
-	        </div>
-	    {/if}    
-	    <div align="right">	    	
-	    	{"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$_s.software_name} {$_s.system_version}</a> &copy; {$smarty.now|date_format:"%Y"}	    	
-	    </div>    
-	</div>	
-	<div class="footer_emails">		
-		{*  Plugins for footer section *}		
-		<div id="plugin-footer">
-			{$plugin_footer}
-		</div>		
-		<div style="clear:both"></div>
-	</div>
-</div> <!-- end of #footer -->
+<div id="footer"> <!-- start of #footer section -->	
+    <div class="container">
+        
+        <div class="copyright">		
+            {if $administrator_name }
+                <div class="admin_name">
+                    {$administrator_name}            
+                </div>
+            {/if}            
+            <div align="software_name">	    	
+                {"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$_s.software_name} {$_s.system_version}</a>
+                &copy; {$smarty.now|date_format:"%Y"}	    	
+            </div> 
+        </div>
+            
+        <div class="footer_emails">	
+            {if $session_teachers}
+                <div class="session_teachers">
+                    {$session_teachers}            
+                </div>
+            {/if} 
+            
+            {if $teachers }
+                <div class="teachers">
+                    {$teachers}            
+                </div>
+            {/if} 
+            
+            {*  Plugins for footer section *}		
+            <div id="plugin-footer">
+                {$plugin_footer}
+            </div>		
+            <div style="clear:both"></div>
+        </div>
+    </div><!-- end of #container -->
+</div><!-- end of #footer -->
 {$footer_extra_content}
 {literal}
 <script type="text/javascript">

@@ -445,30 +445,93 @@ class Template extends Smarty {
 	private function set_footer_parameters() {
 		//Footer plugin
 		global $_plugins, $_configuration;
+        
 		ob_start();
 		api_plugin('footer');
 		$plugin_footer = ob_get_contents();
 		ob_clean();
+        
+        //Plugin footer
 		$this->assign('plugin_footer', $plugin_footer);
+        
+        //Show admin data
+		//$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
+        
+        if (api_get_setting('show_administrator_data') == 'true') {
+             //Administrator name
+            $administrator_data = get_lang('Manager'). ' : '. Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))); 
+            $this->assign('administrator_name', $administrator_data);
+        }
+        
+         //Loading footer extra content
+        if (!api_is_platform_admin()) {
+            $extra_footer = trim(api_get_setting('footer_extra_content'));
+            if (!empty($extra_footer)) {				
+                $this->assign('footer_extra_content', $extra_footer);
+            }
+        }       
+        
+        //Tutor name
+        if (api_get_setting('show_tutor_data') == 'true') {
+            // Course manager
+            $id_course  = api_get_course_id();
+            $id_session = api_get_session_id();
+            if (isset($id_course) && $id_course != -1) {
+                $tutor_data = '';
+                if ($id_session != 0) {
+                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
+                    $email_link = array();
+                    foreach ($coachs_email as $coach_email) {
+                        foreach ($coach_email as $email => $username) {
+                                $email_link[] = Display::encrypted_mailto_link($email, $username);
+                        }
+                    }
+                    if (count($coachs_email) > 1) {
+                            $tutor_data .= get_lang('Coachs').' : <ul>';
+                            $tutor_data .= '<li>'.implode("<li>", $email_link);
+                            $tutor_data .= '</ul>';
+                    } elseif (count($coachs_email) == 1) {
+                            $tutor_data .= get_lang('Coach').' : ';
+                            $tutor_data .= implode("&nbps;", $email_link);
+                    } elseif (count($coachs_email) == 0) {
+                            $tutor_data .= '';
+                    }
+                }
+                $this->assign('session_teachers', $tutor_data);                    
+            }            
+        }
+        
+        if (api_get_setting('show_teacher_data') == 'true') {     
+            // course manager
+            $id_course = api_get_course_id();
+            if (isset($id_course) && $id_course != -1) {
+                $teacher_data = '';
+                $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
+                if (!empty($mail)) {
+                    if (count($mail) > 1) {
+                        $teacher_data .= get_lang('Teachers').' : <ul>';
+                        foreach ($mail as $value => $key) {
+                            foreach ($key as $email => $name) {
+                                    $teacher_data .= '<li>'.Display::encrypted_mailto_link($email, $name).'</li>';
+                            }
+                        }
+                        $teacher_data .= '</ul>';
+                    } else {
+                        $teacher_data .= get_lang('Teacher').' : ';
+                        foreach ($mail as $value => $key) {
+                                foreach ($key as $email => $name) {
+                                        $teacher_data .= Display::encrypted_mailto_link($email, $name).'<br />';
+                                }
+                        }
+                    }
+                }
+                $teacher_data .= '</div>';
+                $this->assign('teachers', $teacher_data);     
+            }
+        }
 		
-		$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
-		
-		//$platform = get_lang('Platform').' <a href="'.$_configuration['software_url'].'" target="_blank">'.$_configuration['software_name'].' '.$_configuration['system_version'].'</a> &copy; '.date('Y');		
-		//$this->assign('platform_name', $platform);
-
-		if (!api_is_platform_admin()) {
-			$extra_footer = trim(api_get_setting('footer_extra_content'));
-			if (!empty($extra_footer)) {				
-				$this->assign('footer_extra_content', $extra_footer);
-			}		
-		}
-		
-		$administrator_data = get_lang('Manager'). ' : '. Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))); 
-		$this->assign('administrator_name', $administrator_data);
-		
-		$stats = '';
-	
-		$this->assign('execution_stats', $stats);		
+		/*$stats = '';	
+		$this->assign('execution_stats', $stats);		*/
 	}
     
     function show_header_template() {        

@@ -1,10 +1,9 @@
 {extends file="default/layout/main.tpl"}
-
 {* Header *}
 {block name="header"}
-	{if $show_header}
-		{include file="default/layout/main_header.tpl"}
-	{/if}	
+{if $show_header}
+{include file="default/layout/main_header.tpl"}
+{/if}	
 {/block}
 
 {* 1 column *}

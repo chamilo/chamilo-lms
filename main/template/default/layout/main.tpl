@@ -1,5 +1,3 @@
-{* header *}
-
 {block name="header"}{/block}
 
 {* body *}

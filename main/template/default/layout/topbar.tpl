@@ -1,10 +1,5 @@
 <!-- Topbar -->
 {if $show_toolbar == 1}
-    <style>    
-    .subnav-fixed {
-        top:44px;
-    }
-    </style>
     <div id="topbar" class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
@@ -82,13 +77,4 @@
         </div><!-- /navbar-inner -->
     </div><!-- /navbar -->
     <div id="topbar_push"></div>
-{else}
-<style>
-    body {
-        padding-top: 0px;
-    }
-    .subnav-fixed {
-        top:-2px;
-    }
-</style>
 {/if}

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="{$document_language}">
 <head>
     {include file="default/layout/head.tpl"}
 </head>
 <body dir="{$text_direction}" class="{$section_name}">
 
 <div class="skip">
-	<ul>
-		<li><a href="#menu">{"WCAGGoMenu"|get_lang}</a></li>
-		<li><a href="#content" accesskey="2">{"WCAGGoContent"|get_lang}</a></li>
-	</ul>
+    <ul>
+        <li><a href="#menu">{"WCAGGoMenu"|get_lang}</a></li>
+        <li><a href="#content" accesskey="2">{"WCAGGoContent"|get_lang}</a></li>
+    </ul>
 </div>
     
 <div id="wrapper">
@@ -27,8 +27,7 @@
             {* header1 - logo *}
             <div id="header1">                
                 {$header1}
-            </div> 
-            
+            </div>            
             {$plugin_header}    
 
             {* header 2 - right menu (notifications) *}    

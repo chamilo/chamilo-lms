@@ -328,7 +328,7 @@ class Display {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());        	
             //$message = Security::remove_XSS($message);
         }
-        $class = "  ";
+        $class = "";
         switch($type) {
             case 'warning':
                $class .= 'warning-message';
@@ -345,7 +345,7 @@ class Display {
             default:
                 $class .= 'normal-message';
         }
-        return self::div($message, array('class'=>$class));
+        return self::div($message, array('class'=> $class));
     }
 
     /**

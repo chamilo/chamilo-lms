@@ -3681,7 +3681,7 @@ class CourseManager {
 				$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';				
 				
 				$point_info = self::get_course_ranking($course_info['real_id'], 0);				
-				$my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&course_id='.$course_info['real_id'], $point_info);
+				$my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&amp;course_id='.$course_info['real_id'], $point_info);
 			}
 		}		
 		return $courses;

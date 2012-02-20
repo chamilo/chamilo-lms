@@ -22,7 +22,7 @@ switch ($action) {
 		
 		$point_info = CourseManager::get_course_ranking($course_id, 0); 		
 		$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';		
-	    $rating = Display::return_rating_system('star_'.$course_id, $ajax_url.'&course_id='.$course_id, $point_info, false);
+	    $rating = Display::return_rating_system('star_'.$course_id, $ajax_url.'&amp;course_id='.$course_id, $point_info, false);
 		echo $rating;
 		
         break;

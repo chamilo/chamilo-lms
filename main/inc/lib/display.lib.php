@@ -1271,8 +1271,8 @@ class Display {
 	 * @todo	use smarty
      **/
     public function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
-		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;		
-		
+		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
+        		
 		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 		
 		if (!empty($percentage)) {
@@ -1284,13 +1284,12 @@ class Display {
 		
         $html = '<ul id = "'.$id.'" class="star-rating">
 					<li class="current-rating" style="width:'.$percentage.'px;"></li>
-					<li><a href="javascript:void(0)" rel="'.$url.'&star=1" title="'.$star_label.'"  class="one-star">1</a></li>
-					<li><a href="javascript:void(0)" rel="'.$url.'&star=2" title="'.$star_label.'" class="two-stars">2</a></li>
-					<li><a href="javascript:void(0)" rel="'.$url.'&star=3" title="'.$star_label.'" class="three-stars">3</a></li>
-					<li><a href="javascript:void(0)" rel="'.$url.'&star=4" title="'.$star_label.'" class="four-stars">4</a></li>
-					<li><a href="javascript:void(0)" rel="'.$url.'&star=5" title="'.$star_label.'" class="five-stars">5</a></li>
+					<li><a href="javascript:void(0);" rel="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
+					<li><a href="javascript:void(0);" rel="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
+					<li><a href="javascript:void(0);" rel="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
+					<li><a href="javascript:void(0);" rel="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
+					<li><a href="javascript:void(0);" rel="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
 				</ul>';        
-        
 		$labels = array();
 		
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');

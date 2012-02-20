@@ -156,7 +156,7 @@ $stok = Security::get_token();
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
                 
-                $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
+                $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
 
                 //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
                 //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
@@ -172,13 +172,10 @@ $stok = Security::get_token();
                     echo '<img src="'.$course_medium_image.'" />';
                 }                
                 echo '</center></div>';
-				
-				
 				echo '<div class="categories-course-description">
 						<div class="course-block-title">'.cut($title, 60).'</div>
 						'.$rating.'
 					 </div>';
-				
 				echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                 echo '</div>';
                 

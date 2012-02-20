@@ -1,4 +1,4 @@
-<!--  head start -->
+<meta charset="{$system_charset}" />
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
@@ -8,7 +8,12 @@
 <link rel="profil"  href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/> -->
 
 <meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" />
-<meta charset="{$system_charset}" />		
+
+{* Use the latest engine in ie8/ie9 use google chrome engine if available *}
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+{* Improve usability in portal devices*}
+<meta name="viewport" content="width=device-width">
 <title>{$title_string}</title>
 
 <style type="text/css" media="screen, projection">

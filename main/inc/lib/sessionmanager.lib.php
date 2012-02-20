@@ -1755,5 +1755,5 @@ class SessionManager {
     		return true;
     	}
     	return false;
-    }    
+    }
 }

@@ -481,22 +481,20 @@ class Template extends Smarty {
                 if ($id_session != 0) {
                     $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
                     $email_link = array();
-                    foreach ($coachs_email as $coach_email) {
-                        foreach ($coach_email as $email => $username) {
-                                $email_link[] = Display::encrypted_mailto_link($email, $username);
-                        }
+                    foreach ($coachs_email as $coach) {                        
+                        $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
                     if (count($coachs_email) > 1) {
-                            $tutor_data .= get_lang('Coachs').' : <ul>';
-                            $tutor_data .= '<li>'.implode("<li>", $email_link);
-                            $tutor_data .= '</ul>';
+                        $tutor_data .= get_lang('Coachs').' : <ul>';
+                        $tutor_data .= '<li>'.implode("<li>", $email_link);
+                        $tutor_data .= '</ul>';
                     } elseif (count($coachs_email) == 1) {
-                            $tutor_data .= get_lang('Coach').' : ';
-                            $tutor_data .= implode("&nbps;", $email_link);
+                        $tutor_data .= get_lang('Coach').' : ';
+                        $tutor_data .= implode(" ", $email_link);
                     } elseif (count($coachs_email) == 0) {
-                            $tutor_data .= '';
+                        $tutor_data .= '';
                     }
-                }
+                }             
                 $this->assign('session_teachers', $tutor_data);                    
             }            
         }

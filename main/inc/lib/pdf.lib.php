@@ -33,10 +33,10 @@ class PDF {
         //$this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
         
-        $params['left']     = isset($params['left']) ? $params['left'] : 15;
-        $params['right']    = isset($params['right']) ? $params['right'] :15;
-        $params['top']      = isset($params['top']) ? $params['top'] : 20;
-        $params['bottom']   = isset($params['bottom']) ? $params['bottom'] : 15;        
+        $params['left']     = isset($params['left'])    ? $params['left']   : 15;
+        $params['right']    = isset($params['right'])   ? $params['right']  : 15;
+        $params['top']      = isset($params['top'])     ? $params['top']    : 20;
+        $params['bottom']   = isset($params['bottom'])  ? $params['bottom'] : 15;        
         
         $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
     } 

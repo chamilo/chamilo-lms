@@ -1368,6 +1368,22 @@ class CourseManager {
     	}
     	return $teacher_string;
     }
+    
+    function get_coach_list_from_course_code_to_string($course_code, $session_id) {
+        $tutor_data = '';
+        if ($session_id != 0) {
+            $coaches = self::get_email_of_tutor_to_session($session_id, $course_code);
+            $coach_list = array();
+            foreach ($coaches as $coach) {                
+                $coach_list[] = $coach['complete_name'];                
+            }
+            if (!empty($coach_list)) {
+    			$tutor_data = implode (', ', $coach_list);
+    		}    
+        }
+        return $tutor_data;
+    }
+    
 
     /**
      *	Return user info array of all users registered in the specified course
@@ -2160,7 +2176,7 @@ class CourseManager {
      * @return array  array(email => name_tutor)  by coach
      * @author Carlos Vargas <carlos.vargas@dokeos.com>
      */
-    public static function get_email_of_tutor_to_session($session_id,$course_code) {
+    public static function get_email_of_tutor_to_session($session_id, $course_code) {
 
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -2179,16 +2195,15 @@ class CourseManager {
                 $user_ids[] = $row['id_user'];
             }
 
-            $sql = "SELECT firstname,lastname,email FROM $tbl_user WHERE user_id IN (".implode(",",$user_ids).")";
+            $sql = "SELECT firstname, lastname, email FROM $tbl_user WHERE user_id IN (".implode(",",$user_ids).")";
             $rs_user = Database::query($sql);
 
             while ($row_emails = Database::fetch_array($rs_user)) {
-                $name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                $mail_tutor = array($row_emails['email'] => $name_tutor);
+                //$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                $mail_tutor = array('email' => $row_emails['email'], 'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname']));
                 $coachs_emails[] = $mail_tutor;
             }
         }
-
         return $coachs_emails;
     }
 

@@ -80,4 +80,5 @@ if ($action == 'list') {
         }
         print json_encode($files);
         exit;
+    }
 }

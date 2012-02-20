@@ -38,8 +38,7 @@ $htmlHeadXtra[] ='
 			pause			: 10000
 		});
 	});
-</script>
-<noscript>'.get_lang("NoJavascript").'</noscript>';
+</script>';
 
 //set cookie for check if client browser are cookies enabled
 setcookie("TestCookie", "cookies_yes", time()+3600);
@@ -85,7 +84,6 @@ if (!api_get_user_id() && api_get_setting('use_custom_pages') == 'true' ){
   require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
   CustomPages::displayPage('index-unlogged');
 }
-
 
 /**
  * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.

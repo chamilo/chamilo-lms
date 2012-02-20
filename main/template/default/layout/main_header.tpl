@@ -4,6 +4,7 @@
     {include file="default/layout/head.tpl"}
 </head>
 <body dir="{$text_direction}" class="{$section_name}">
+<noscript>{"NoJavascript"|get_lang}</noscript>
 
 <div class="skip">
     <ul>

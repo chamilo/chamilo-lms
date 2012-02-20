@@ -36,7 +36,7 @@ function addEvent(elm, evType, fn, useCapture)
  * Adds the event listener
  */
 function addListeners(e) {
-	var my_links = document.getElementsByName('clickable_email_link');
+	var my_links = document.getElementsById('clickable_email_link');
 	for(var i=0;i < my_links.length;i++)
 	{
 		addEvent(my_links[i],'click',loadEmailEditor,false);

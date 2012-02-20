@@ -7,7 +7,7 @@
                     {$administrator_name}            
                 </div>
             {/if}            
-            <div align="software_name">	    	
+            <div class="software_name">	    	
                 {"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$_s.software_name} {$_s.system_version}</a>
                 &copy; {$smarty.now|date_format:"%Y"}	    	
             </div> 

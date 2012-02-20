@@ -385,7 +385,7 @@ class Display {
             $hclickable_text = @htmlspecialchars($clickable_text, ENT_QUOTES, api_get_system_encoding());
         }
         // Return encrypted mailto hyperlink
-        return '<a href="'.$hmail.'"'.$style_class.' name="clickable_email_link">'.$hclickable_text.'</a>';
+        return '<a href="'.$hmail.'"'.$style_class.' id="clickable_email_link">'.$hclickable_text.'</a>';
     }
     
     /**
@@ -415,7 +415,7 @@ class Display {
         // icon html code
         $icon_html_source = Display::return_icon($icon_file, $hmail, '', $icon_size);
         // Return encrypted mailto hyperlink
-        return '<a href="'.$hmail.'"'.$style_class.' name="clickable_email_link">'.$icon_html_source.'</a>';
+        return '<a href="'.$hmail.'"'.$style_class.' id="clickable_email_link">'.$icon_html_source.'</a>';
     }
 
     /**

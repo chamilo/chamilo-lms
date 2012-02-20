@@ -200,12 +200,7 @@ if($_SESSION['sniff_navigator']!="checked") {
 
 $controller = new IndexManager(get_lang('MyCourses'));
 
-//if (!$$controllerl->tpl->isCached($tpl, api_get_user_id())) {
-
 //@todo all this could be moved in the IndexManager
-
-$courses_list 			= $controller->return_courses_main_plugin();
-
 
 // Main courses and session list
 ob_start();
@@ -215,12 +210,14 @@ ob_get_clean();
 
 $controller->tpl->assign('content', $courses_and_sessions);
 
-if($_SESSION['sniff_navigator']!="checked") {
+/*
+ * 
+if ($_SESSION['sniff_navigator']!="checked") {
 	$controller->tpl->assign('show_sniff', 					1);
-}
-else{
+} else{
 	$controller->tpl->assign('show_sniff', 					0);
 }
+*/
 
 
 //check for flash and message

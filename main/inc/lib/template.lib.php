@@ -323,6 +323,7 @@ class Template extends Smarty {
 		//Extra JS files
 		
 		$js_files = array(
+            'modernizr.js',
 			'jquery.min.js',
 			'chosen/chosen.jquery.min.js',
 			'thickbox.js',

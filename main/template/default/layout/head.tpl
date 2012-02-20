@@ -2,14 +2,13 @@
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
+
 <!-- <link rel="top"		href="{$_p.web_main}index.php" title="" />
 <link rel="courses" href="{$_p.web_main}auth/courses.php" title="{"OtherCourses"|get_lang}"/>
 <link rel="profil"  href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/> -->
 
 <meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" />
-<meta charset="{$system_charset}" />
-<meta http-equiv="content-language" content="{$document_language}">
-		
+<meta charset="{$system_charset}" />		
 <title>{$title_string}</title>
 
 <style type="text/css" media="screen, projection">
@@ -47,7 +46,6 @@ var online_button   = '{$online_button}';
 var offline_button  = '{$offline_button}';
 var	connect_lang    = '{"ChatConnected"|get_lang}';
 var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
-
 </script>
 
 {$js_file_to_string}

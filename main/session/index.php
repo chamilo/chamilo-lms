@@ -11,6 +11,7 @@
 // Language files that should be included.
 $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -29,6 +30,11 @@ $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 $course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
 
 $_SESSION['id_session'] = $session_id;
+
+// Clear the exercise session just in case
+if (isset ($_SESSION['objExercise'])) {
+	api_session_unregister('objExercise');
+}
 
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
@@ -182,8 +188,7 @@ $now = time();
 foreach($final_array as $session_data) {
     $my_course_list = isset($session_data['data']) ? $session_data['data']: array();    
     if (!empty($my_course_list))     
-    foreach ($my_course_list as $my_course_code=>$course_data) {
-        //echo '<pre>';        print_r($course_data);
+    foreach ($my_course_list as $my_course_code=>$course_data) {        
         if (isset($course_id) && !empty($course_id)) {
             if ($course_id != $course_data['id']) {
                 continue;
@@ -222,7 +227,7 @@ foreach($final_array as $session_data) {
                             $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             
                             $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
-                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'',ICON_SIZE_SMALL), 
+                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'', ICON_SIZE_SMALL), 
                             							'date'        => $start_date,
                             							'course'      => $course_data['name'], 
                             						    'exercise'    => $exercise_info->exercise,

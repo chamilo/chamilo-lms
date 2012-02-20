@@ -12,8 +12,14 @@
 $language_file = 'exercice';
 require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';
-
 require_once 'exercise.lib.php';
+
+
+// Clear the exercise session just in case
+if (isset ($_SESSION['objExercise'])) {
+	api_session_unregister('objExercise');
+}
+
 $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
@@ -180,9 +186,7 @@ if ($objExercise->selectAttempts()) {
 	if ($is_allowed_to_edit) {
 		//$options.= Display::div(get_lang('ExerciseAttempts').' '.$objExercise->selectAttempts(), array('class'=>'right_option'));
 	} else {		
-	}
-	
-	$red_class = '';
+	}	
 	if ($counter == $objExercise->selectAttempts()) {
 		$class = 'red_alert';
 	}

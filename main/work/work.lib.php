@@ -1444,8 +1444,10 @@ function count_dir($path_dir, $recurse) {
  * validation when you create a work
  * this goes into the $htmlHeadXtra[] array
  */
-function to_javascript_work() {
-	return '<script>
+function to_javascript_work() {        
+    $origin = isset($_REQUEST['origin']) && !empty($_REQUEST['origin']) ? api_get_tools_lists($_REQUEST['origin']) : '';
+    
+	$js = '<script>
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
@@ -1514,11 +1516,10 @@ function to_javascript_work() {
 			            }
 			        }
 			    }
-
 			    return Math.floor(d.getTime()/1000);
 			}
 
-			function validate(){
+			function validate() {
 				var expires_day = document.form1.expires_day.value;
 				var expires_month = document.form1.expires_month.value;
 				var expires_year = document.form1.expires_year.value;
@@ -1531,7 +1532,7 @@ function to_javascript_work() {
 				var ends_year = document.form1.ends_year.value;
 				var ends_hour = document.form1.ends_hour.value;
 				var ends_minute = document.form1.ends_minute.value;
-				var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year)
+				var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year);
 
 				var new_dir = document.form1.new_dir.value;
 
@@ -1541,50 +1542,38 @@ function to_javascript_work() {
 				msg_id4 = document.getElementById("msg_error4");
 				msg_id5	= document.getElementById("msg_error_weight");
 
-
-				if(new_dir==""){
-
+				if(new_dir=="") {
 					msg_id1.style.display ="block";
 					msg_id1.innerHTML="'.get_lang('FieldRequired', '').'";
 					msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				}
-				else if(document.form1.type1.checked && document.form1.type2.checked && expires_date > ends_date) {
+				} else if(document.form1.type1.checked && document.form1.type2.checked && expires_date > ends_date) {
 						msg_id2.style.display ="block";
 						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate', '').'";
 						msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				}
-				else if (!checkDate(expires_month,expires_day,expires_year))
-				{
+				} else if (!checkDate(expires_month,expires_day,expires_year)) {
 					msg_id3.style.display ="block";
 					msg_id3.innerHTML="'.get_lang('InvalidDate', '').'";
 					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				}
-				else if (!checkDate(ends_month,ends_day,ends_year))
-				{
-
+				} else if (!checkDate(ends_month,ends_day,ends_year)) {
 					msg_id4.style.display ="block";
 					msg_id4.innerHTML="'.get_lang('InvalidDate', '').'";
 					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id5.innerHTML="";
-				}
-				else
-				{
-
-					if (document.form1.make_calification.checked)
-				 	{
+				} else {
+					if (document.form1.make_calification.checked) {
 					 	var weight = document.form1.weight.value;
-						 	if(weight==""){
+						 	if(weight=="") {
 								msg_id5.style.display ="block";
 								msg_id5.innerHTML="'.get_lang('WeightNecessary', '').'";
 								msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";
 							    return false;
-							}
+                        }
 				 	}
-
-					document.form1.action = "work.php?origin='.api_get_tools_lists($_REQUEST['origin']).'&gradebook='.(empty($_GET['gradebook'])?'':'view').'";
+					document.form1.action = "work.php?'.  api_get_cidreq().'&origin='.$origin.'&gradebook='.(empty($_GET['gradebook'])?'':'view').'";
 					document.form1.submit();
 				}
 			}
-			</script>';
+			</script>';    
+    return $js;
 }
 
 /**

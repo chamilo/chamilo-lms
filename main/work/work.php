@@ -75,9 +75,8 @@ if (!empty($my_folder_data)) {
 		} 
 	}
 }
-
-
 $htmlHeadXtra[] = to_javascript_work();
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#work_title").focus();

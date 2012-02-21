@@ -264,7 +264,7 @@ if (!in_array($action, array('send_mail','add', 'upload'))) {
     $token = Security::get_token();
 }
 
-$show_tool_options = $action == 'list' ? true : false;
+$show_tool_options = (in_array($action, array('list', 'add'))) ? true : false;
 
 $display_upload_link = $action == 'upload_form' ? false : true;
 if ($is_special) {    
@@ -386,9 +386,7 @@ switch ($action) {
 			$defaults['document'] = '<a href="' . format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
 			$text_document->freeze();
 		} elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
-			$workUrl = $currentCourseRepositoryWeb . $workUrl;
-			
-            $form->addElement('html', $html);
+			$workUrl = $currentCourseRepositoryWeb . $workUrl;			
 		} else {
 			// else standard upload option
 			$form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
@@ -598,9 +596,9 @@ switch ($action) {
 		}
 		break;
 	case 'add':
-		
+        /*		
 		$fexpire 		= get_date_from_select('expires');
-		$fend 	 		= get_date_from_select('ends');
+		$fend 	 		= get_date_from_select('ends');*/
 		
 		$directory 		= Security::remove_XSS($_POST['new_dir']);
 		$directory 		= replace_dangerous_char($directory);
@@ -956,7 +954,7 @@ switch ($action) {
 	case 'move':
 	case 'move_to':
 	case 'list':
-		if ($action == 'mark_work') {			
+		if ($action == 'mark_work') {		
 		}
 		/*	Move file command */
 		if ($is_allowed_to_edit && $action == 'move_to') {      

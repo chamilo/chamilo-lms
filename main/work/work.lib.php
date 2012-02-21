@@ -17,7 +17,6 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -34,8 +33,7 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
     }
     
 	$display_output = '';
-	$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
-    
+	$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';    
 	
 	if (!empty($cur_dir_path)) {		
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';

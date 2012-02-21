@@ -1,4 +1,4 @@
-<?
+<?php
 /* This file contains all the configuration variable for the cas module
  * In the future, these will be in the database
 */

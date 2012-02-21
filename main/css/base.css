@@ -104,6 +104,12 @@ form .formw input {
     padding: 19px 0px 19px 0px;
 }
 
+.well3 {            
+    margin-bottom: 10px;
+    min-height: 20px;
+    padding: 19px 0px 19px 0px;
+}
+
 #progress_bar img {
     height:26px;
 }
@@ -1187,7 +1193,7 @@ button.next.disabled, .a_button.disabled {
     float:left;
     margin:10px 0px 10px 0px;
     padding:12px;
-    width:90%;    
+    width:95%;    
     color: #bbb; 
 }
 
@@ -3448,4 +3454,23 @@ a:active{
 
 .audio_preview_container {
     margin-left: 50px;	
+}
+
+
+/* ie fixes */
+
+.lt-ie7 #navigation {
+    display:none;
+}
+
+.lt-ie7 #topbar {
+    display:none
+}
+
+.lt-ie7 .subnav .nav > li {
+    float:left !important;
+}
+
+.lt-ie7 #announcements_page {  
+    width:450px !important;    
 }

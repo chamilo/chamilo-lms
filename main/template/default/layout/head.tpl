@@ -2,23 +2,16 @@
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
-
 {* This fires some HTML5 errors *}
-
 <!-- <link rel="top"	href="{$_p.web_main}index.php" title="" />
 <link rel="courses" href="{$_p.web_main}auth/courses.php" title="{"OtherCourses"|get_lang}"/>
 <link rel="profil"  href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/> -->
-
 <meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" />
-
 {* Use the latest engine in ie8/ie9 or use google chrome engine if available *}
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
-
 {* Improve usability in portal devices*}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>{$title_string}</title>
-
 <style type="text/css" media="screen">
 	/*<![CDATA[*/
 	{$css_style}

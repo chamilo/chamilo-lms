@@ -21,10 +21,13 @@ $(document).ready( function() {
 </script>
 
 {if !(empty($hot_courses)) }		 
-    <div class="span12">
-    <h3>{"HottestCourses"|get_lang}</h3>
+    <div class="span11">
+        <h3>{"HottestCourses"|get_lang}</h3>
+    </div>
+    <div class="row">    
 	{foreach $hot_courses as $hot_course}										
-		<div class="categories-block-course">
+		<div class="span11">
+            <div class="categories-block-course ">            
 			<div class="categories-content-course">
 				
 				<div class="categories-course-picture">
@@ -56,6 +59,7 @@ $(document).ready( function() {
 					</div>
 				{/if}				
 			</div>
+            </div>
 		</div>            
 	{/foreach}
      </div>

@@ -413,12 +413,7 @@ function show_header_3() {
     // Logout    
     if ($show_bar) {
         
-          if (!empty($lis)) {
-            $header3 .= '<ul class="nav nav-pills">';
-            $header3 .= $lis;
-            $header3 .= '</ul>';
-        }
-        
+ 
         if (api_get_user_id()) {
             $login = '';
             if (api_is_anonymous()) {
@@ -428,18 +423,25 @@ function show_header_3() {
                 $login = $uinfo['username'];
             }            
             //start user section line with name, my course, my profile, scorm info, etc            
-            $header3 .= '<ul class="nav nav-pills secondary-nav">';
+            $header3 .= '<ul class="nav nav-pills pull-right">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
                 //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
                 $header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
             $header3 .= '</ul>';    
         }      
+        
+               if (!empty($lis)) {
+            $header3 .= '<ul class="nav nav-pills">';
+            $header3 .= $lis;
+            $header3 .= '</ul>';
+        }
+        
+        
     }
     return $header3;
 }
 
-//Header 4
-function show_header_4($interbreadcrumb, $language_file, $nameTools) {  
+function show_breadcrumb($interbreadcrumb, $language_file, $nameTools) {  
 	 
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
@@ -539,27 +541,46 @@ function show_header_4($interbreadcrumb, $language_file, $nameTools) {
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
             if ($navigation_info['url'] == '#') {
-                $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
+                
+                
+                    $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
+                
             } else {
                 $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top"><span>'.$navigation_info['title'].'</span></a>';
             }
             $counter++;
         }
     }
+    
     $html = '';
-    if (!empty($final_navigation)) {
-        $html .= '<div id="header4">';
+    if (!empty($final_navigation)) {        
         $lis = '';
         $i = 0;
-        $lis.= Display::tag('li', Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home')));        
-        foreach ($final_navigation as $bread) {       
-            $lis.= Display::tag('li', $bread);
-            $i++;
+        $home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
+       
+        //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));        
+        $final_navigation_count = count($final_navigation);
+        
+        if (!empty($final_navigation)) {
+            
+            $home_link.= '<span class="divider">/</span>';
+            
+            $lis.= Display::tag('li', $home_link);
+            foreach ($final_navigation as $bread) {  
+                $bread_check = trim(strip_tags($bread));                
+                if (!empty($bread_check)) {
+                    if ($final_navigation_count-1 > $i) {
+                        $bread .= '<span class="divider">/</span>';
+                    }
+                    
+                    $lis.= Display::tag('li', $bread);
+                    $i++;
+                }
+            }
+        } else {
+            $lis.= Display::tag('li', $home_link);    
         }
-        $html .= Display::tag('ul',$lis, array('class'=>'bread'));
-        $html .= '</div>';        
-    } else {
-        //$html .= '<div id="header4"></div>';        
-    }   
+        $html .= Display::tag('ul',$lis, array('class'=>'breadcrumb'));        
+    }
     return $html ;
 }

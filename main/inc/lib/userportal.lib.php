@@ -722,11 +722,12 @@ class IndexManager {
 	
 	function show_right_block($title, $content, $class = '') {
 	    $html = '';  
-		$html.= '<div class="well">';
+		$html.= '<div class="well sidebar-nav">';
 		$html.= '<div class="menusection '.$class.' ">';
 		if (!empty($title)) {
-			$html.= '<span class="menusectioncaption">'.$title.'</span>';
+			$html.= '<h4>'.$title.'</h4>';
 		}
+        //<li class="nav-header">List header</li>
 		$html.= $content;
 	    $html.= '</div>';        
 	    $html.= '</div>';   
@@ -739,9 +740,10 @@ class IndexManager {
 	 */
 	function display_login_form() {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-		$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
-		$form->addElement('password', 'password', get_lang('Pass'), array('size' => 17));
-		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'a_button gray'));		
+        // 'placeholder'=>get_lang('UserName')
+		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2'));
+		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));		
 		$html = $form->return_form();
 		if (api_get_setting('openid_authentication') == 'true') {
 			include_once 'main/auth/openid/login.php';
@@ -843,6 +845,7 @@ class IndexManager {
 			$profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 		}
 		$profile_content .= ' </div></div>';
+        $profile_content .= ' <div class="clear"></div>';
 		
 		//  @todo Add a platform setting to add the user image.
 		if (api_get_setting('allow_message_tool') == 'true') {
@@ -861,8 +864,8 @@ class IndexManager {
 			$cant_msg  = '';
 			if ($number_of_new_messages > 0) {
 				$cant_msg = ' ('.$number_of_new_messages.')';
-			}
-			$profile_content .= '<div class="clear"></div>';
+			}            
+			
 			$profile_content .= '<ul class="menulist">';
 			$link = '';
 			if (api_get_setting('allow_social_tool') == 'true') {
@@ -1080,10 +1083,8 @@ class IndexManager {
 				}
 			}
 		}
-		
-		$list = '';
-		foreach ($personal_course_list as $my_course) {			
-			//$thisCourseDbName 		= $my_course['db'];
+	
+		foreach ($personal_course_list as $my_course) {						
 			$thisCourseSysCode 		= $my_course['k'];
 			$thisCoursePublicCode 	= $my_course['c'];
 			$thisCoursePath 		= $my_course['d'];
@@ -1169,6 +1170,7 @@ class IndexManager {
 			}
 		} // End while mycourse...
 		
+        $html = '';
 		
 		if (is_array($courses_tree)) {
 			foreach ($courses_tree as $key => $category) {
@@ -1176,8 +1178,8 @@ class IndexManager {
 					// Sessions and courses that are not in a session category.
 					if (!isset($_GET['history'])) {
 						// If we're not in the history view...
-						CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);
-						CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
+						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);
+						$html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
 					}
 					// Independent sessions.
 					foreach ($category['sessions'] as $session) {
@@ -1207,8 +1209,7 @@ class IndexManager {
 							if ($session_now > $allowed_time) {
 								//read only and accesible
 								if (api_get_setting('hide_courses_in_sessions') == 'false') {
-									$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $this->load_directories_preview);
-									//$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
+									$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $this->load_directories_preview);									
 									$html_courses_session .= $c[1];
 								}
 								$count_courses_session++;
@@ -1216,27 +1217,25 @@ class IndexManager {
 						}
 		
 						if ($count_courses_session > 0) {
-							echo '<div class="userportal-session-item span8"><ul class="session_box">';
-							echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
-							echo Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+							$params = array();                            							
+							$params['icon'] =  Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
 		
 							$s = Display :: get_session_title_box($session['details']['id']);
-							$extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
-							/*if ($session['details']['visibility'] == 3) {
-							 $session_link = $s['title'];
-							} else {*/
+							$extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];							
 							$session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
-							//}
-							echo Display::tag('span',$session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info);
+							
+							$params['title'] = $session_link.$extra_info;
+                            
+                            $params['right_actions'] = '';
 							if (api_is_platform_admin()) {
-								echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.
-								Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
+								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">';
+								$params['right_actions'] .= Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
 							}
-							echo '</li>';
+							
 							if (api_get_setting('hide_courses_in_sessions') == 'false') {
-								echo $html_courses_session;
-							}
-							echo '</ul></div>';
+							//	$params['extra'] .=  $html_courses_session;
+							}                            
+                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_courses_session);
 						}
 					}
 				} else {
@@ -1268,58 +1267,61 @@ class IndexManager {
 									$count++;
 								}
 							}
-		
+                            $params = array();
+                            
 							if ($count > 0) {
 								$s = Display :: get_session_title_box($session['details']['id']);
-								$html_sessions .= '<ul class="sub_session_box" id="session_'.$session['details']['id'].'">';
-								$html_sessions .= '<li class="sub_session_box_title" id="session_'.$session['details']['id'].'">';
-								//$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-								$html_sessions .= Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+								//$html_sessions .= '<ul class="sub_session_box" id="session_'.$session['details']['id'].'">';
+								//$html_sessions .= '<li class="sub_session_box_title" id="session_'.$session['details']['id'].'">';								
+								//$html_sessions .= Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+                                $params['icon'] = Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 		
 								$session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
-								$html_sessions .=  '<span>' . $session_link. ' </span> ';
-								$html_sessions .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
-								$html_sessions .=  (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
-								$html_sessions .=  '</span>';
+								$params['title'] .=  $session_link;
+								$params['title'] .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
+								$params['title'] .=  (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
+								$params['title'] .=  '</span>';
 		
 								if (api_is_platform_admin()) {
-									$html_sessions .=  '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
-								}
-		
-								$html_sessions .= '</li>';
-								$html_sessions .= $html_courses_session;
-								$html_sessions .= '</ul>';
+									$params['title'] .=  '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
+								}                                
+                                $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_courses_session);
+                                 
+								//$html_sessions .= '</li>';
+								//$html_sessions .= $html_courses_session;
+                                
+								//$html_sessions .= '</ul>';
 							}
 						}
 		
 						if ($count_courses_session > 0) {
+                            $params = array();
 		
-							echo '<div class="userportal-session-category-item span8" id="session_category_'.$category['details']['id'].'">';
-							echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
+							//$html .=  '<div class="userportal-session-category-item span8" id="session_category_'.$category['details']['id'].'">';
+							//$html .=  '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
 		
-							echo Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array('width'=>'48px', 'align' => 'absmiddle'));
+							$params['icon'] = Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array(), ICON_SIZE_LARGE);
 		
 							if (api_is_platform_admin()) {
-								echo'<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a></div>';
+								$params['right_actions'] .= '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a></div>';
 							}
+                            
+							$params['title'] .=  $category['details']['name'];							
 		
-							echo '<span id="session_category_title">';
-							echo $category['details']['name'];
-							echo '</span>';
-		
-							echo '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
+							
 							if ($category['details']['date_end'] != '0000-00-00') {
-								printf(get_lang('FromDateXToDateY'),$category['details']['date_start'],$category['details']['date_end']);
+								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);
 							}
-							echo '</span></div>';
-		
-							echo $html_sessions;
-							echo '</div>';
+							//$html .=  $html_sessions;
+							//$html .=  '</div>';
+                            
+                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_sessions);
 						}
 					}
 				}
 			}
 		}
+        return $html;
 	}
 
 	function return_hot_courses() {

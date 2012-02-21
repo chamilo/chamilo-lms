@@ -423,11 +423,11 @@ class Template extends Smarty {
 		
 		$header2 = show_header_2();
 		$header3 = show_header_3();
-		$header4 = show_header_4($interbreadcrumb, $language_file, $nameTools);
+		$breadcrumb = show_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('header2', $header2);
 		$this->assign('header3', $header3);        
-		$this->assign('header4', $header4);
+		$this->assign('breadcrumb', $breadcrumb);
 		
 		if (!api_is_platform_admin()) {
 			$extra_header = trim(api_get_setting('header_extra_content'));

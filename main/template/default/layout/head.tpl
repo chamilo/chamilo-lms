@@ -15,7 +15,8 @@
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 
 {* Improve usability in portal devices*}
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>{$title_string}</title>
 
 <style type="text/css" media="screen">
@@ -66,18 +67,20 @@ $(document).scroll(function() {
     // If has not activated (has no attribute "data-top"
 
     if($('body').width() > 959) {
-    if (!$('.subnav').attr('data-top')) {
-        // If already fixed, then do nothing
-        if ($('.subnav').hasClass('subnav-fixed')) return;
-        // Remember top position
-        var offset = $('.subnav').offset()
-        $('.subnav').attr('data-top', offset.top);
-    }
+    if ($('.subnav').length) {
+        if (!$('.subnav').attr('data-top')) {
+            // If already fixed, then do nothing
+            if ($('.subnav').hasClass('subnav-fixed')) return;
+            // Remember top position
+            var offset = $('.subnav').offset()
+            $('.subnav').attr('data-top', offset.top);
+        }
 
-    if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop())
-        $('.subnav').addClass('subnav-fixed');
-    else
-        $('.subnav').removeClass('subnav-fixed');
+        if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop())
+            $('.subnav').addClass('subnav-fixed');
+        else
+            $('.subnav').removeClass('subnav-fixed');
+        }
     }
 });
 

@@ -1,18 +1,8 @@
 <?php
-/* For licensing terms, see /license.txt */
-
-/**
- *  This script contains the actual html code to display the "header"
- *  or "banner" on top of every Chamilo page.
- *  @todo this should be remove we should only use header.inc.php
- *
- *  @package chamilo.include
- */
-
-
-/* This page is now unused use check the template.lib.php */
-
+/* This page is now unused check the template.lib.php and main/template/ files  */
 exit;
+
+
 
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 

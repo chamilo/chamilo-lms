@@ -21,7 +21,7 @@ define('MAX_LENGTH_BREADCRUMB', 100);
 define('ICON_SIZE_TINY',    16);
 define('ICON_SIZE_SMALL',   22);
 define('ICON_SIZE_MEDIUM',  32);
-//define('ICON_SIZE_XXXX',  48); ??
+define('ICON_SIZE_LARGE',   48);
 define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 

@@ -33,10 +33,6 @@ legend {
     margin-bottom: 10px;
 }
 
-#formLogin input {
-    width:165px;
-}
-
 #header1 {
     height: 50px;
 } 
@@ -91,6 +87,22 @@ form .formw input {
 }
 
 /* end chamilo forms fixes */
+
+/* New changes Chamilo 1.9 */
+
+.sidebar-nav {
+    padding: 20px 0px 0px 20px;
+}
+
+.well2 {
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 19px 0px 19px 0px;
+}
 
 * {
     /* outline :none; */
@@ -236,9 +248,8 @@ img {
     -moz-border-radius: 10px;
     border-radius: 10px;
     background-color:#F9F9F9;
-    padding:5px 10px 5px 10px;
-    margin:0px 0px 10px 0px;
-    
+    /*padding:5px 10px 5px 10px;
+    margin:0px 0px 10px 0px;    */
 }
 
 .session_box_title {
@@ -1034,10 +1045,14 @@ button.next.disabled, .a_button.disabled {
     padding:0px 0px 0px 0px;
 }
 
-.bread .home {
-    padding:0px 15px 4px 8px;
+.breadcrumb .home {
+    padding:0px;
     height: 22px;
 }    
+
+.breadcrumb .home img {
+    float:left;
+}
 
 /* Warning and error messages to the user */
 
@@ -3123,9 +3138,9 @@ form .formw .freeze {
 }
 
 #language_list {
-    width:100px !important;
+    width:80px !important;
+    min-width: 140px !important;
 }
-
 
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
@@ -3133,20 +3148,9 @@ form .formw .freeze {
 
 #lang_form {
     text-align: left;
-    font-size: 12px;
-    margin: 2px 0 10px 0px;
-    width: 50px !important;
 }
-#lang_form input, #lang_form select {
-    font-size: 12px;
-    /* width:100%; */
-}
-.menu #lang_form { /* in the menu box, give a bit more space */
-    margin-top: 15px;
-}
-#formLogin label {
-    font-size: 12px;
-    font-family:Tahoma, Geneva, sans-serif;
+
+#formLogin label {    
     color:#666666;
 }
 

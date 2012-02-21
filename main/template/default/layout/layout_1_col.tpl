@@ -22,7 +22,7 @@
         {* Main content *}
         {$content}
         </section>
-    </div>
+    </div>       
 {/block}
 
 {* Footer *}

@@ -86,7 +86,14 @@
 
 
 @media (min-width: 480px) and (max-width: 768px) {    
-
+    
+    .notification-panel {
+        display:none;
+    }
+    
+    #header2 .nav-pills {
+        display:none;
+    }
 }
 
 

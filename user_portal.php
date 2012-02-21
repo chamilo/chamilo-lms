@@ -203,11 +203,8 @@ $controller = new IndexManager(get_lang('MyCourses'));
 //@todo all this could be moved in the IndexManager
 
 // Main courses and session list
-ob_start();
-$controller->return_courses_and_sessions($personal_course_list);
-$courses_and_sessions = ob_get_contents();
-ob_get_clean();
 
+$courses_and_sessions = $controller->return_courses_and_sessions($personal_course_list);
 $controller->tpl->assign('content', $courses_and_sessions);
 
 /*

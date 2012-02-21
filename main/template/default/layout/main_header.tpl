@@ -52,5 +52,5 @@
 
         {* breadcrumb *}
         {$breadcrumb}
-        <div id="submain-content" class="row">
+        <div id="submain-content" class="row-fluid">
 {/if}          

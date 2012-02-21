@@ -4,6 +4,9 @@
 /* Responsive Docs
 -------------------------------------------------- */
 @media (max-width: 480px) {
+    .resize_font {
+        display:none;
+    }
     
     h3 {
         font-size: 18px;

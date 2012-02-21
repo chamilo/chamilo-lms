@@ -3459,10 +3459,12 @@ a:active{
 
 /* ie fixes */
 
+/* Disabling help/bug notifications */
 .lt-ie7 #navigation {
     display:none;
 }
 
+/* Disabling top bar */
 .lt-ie7 #topbar {
     display:none
 }
@@ -3471,6 +3473,11 @@ a:active{
     float:left !important;
 }
 
+
 .lt-ie7 #announcements_page {  
     width:450px !important;    
+}
+/* Disabling chat */
+.lt-ie7 #chatmain {
+    display:none;
 }

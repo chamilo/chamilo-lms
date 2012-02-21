@@ -1137,14 +1137,7 @@ abstract class Question
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
-		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="80"');
-		//$form->applyFilter('questionName','html_filter');
-
-		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
-		//$test=FormValidator :: createElement ('text', 'questionName');
-
-		//$radios_results_enabled[]=$test;
-
+		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'), array('class' => 'span6'));
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		// 

@@ -87,12 +87,12 @@ class UniqueAnswerNoOption extends Question {
 						<th width="10px" >
 							'.get_lang('True').'
 						</th>
-						<th width="38%">
+						<th width="50%">
 							'.get_lang('Answer').'
 						</th>
 							'.$comment_title.'
 							'.$feedback_title.'
-						<th width="20px">
+						<th width="60px">
 							'.get_lang('Weighting').'
 						</th>        
 					</tr>';
@@ -259,12 +259,10 @@ class UniqueAnswerNoOption extends Question {
 
 			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-			$form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
-			$form->addElement('html', '</tr>');      
-
+			$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span9", 'value' => '0'));
+			$form->addElement('html', '</tr>');
             $i++;				
-		}
-		
+		}	
 		
 		if (empty($this -> id)) {
 		    $form->addElement('hidden', 'new_question', 1);
@@ -311,7 +309,7 @@ class UniqueAnswerNoOption extends Question {
     
             //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
     
-            $form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0" readonly="readonly" ');
+            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span9", 'value' => '0', 'readonly' =>'readonly'));
             $form->addElement ('html', '</tr>');
         
          //}

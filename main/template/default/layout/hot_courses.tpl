@@ -21,7 +21,7 @@ $(document).ready( function() {
 </script>
 
 {if !(empty($hot_courses)) }		 
-    <div class="span8">
+    <div class="span12">
     <h3>{"HottestCourses"|get_lang}</h3>
 	{foreach $hot_courses as $hot_course}										
 		<div class="categories-block-course">

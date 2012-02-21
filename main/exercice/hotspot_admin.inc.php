@@ -647,7 +647,9 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 															
 							  	<td align="left">
 							  	<br />
-				 					<textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea>
+				 					<textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%">
+                                        <?php echo stripslashes(htmlentities($comment[$i])); ?>
+                                    </textarea>
 				 					<input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="delineation" />
 				 					<input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 				 				<br/>
@@ -843,14 +845,14 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 				//if ($answerType==HOT_SPOT_DELINEATION && $i!=2)
 				if ($answerType==HOT_SPOT_DELINEATION) {					
 					if ($_SESSION['tmp_answers']['hotspot_type'][$i]=='oar') { ?>
-						<input type="hidden" name="weighting[<?php echo $i; ?>]" size="3" value="0" />
+						<input type="hidden" name="weighting[<?php echo $i; ?>]" class="span3" value="0" />
 					<?php } else { ?>
-						<input type="text" name="weighting[<?php echo $i; ?>]" size="3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+						<input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
 					<?php }				
 				}							
 				if ($answerType==HOT_SPOT) {
 				?>
-			  		<input type="text" name="weighting[<?php echo $i; ?>]" size="3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+			  		<input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
 				 	<input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 				 	<input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" />
 				<?php	

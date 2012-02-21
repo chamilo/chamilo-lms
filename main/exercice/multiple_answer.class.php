@@ -53,24 +53,23 @@ class MultipleAnswer extends Question {
 			</div>
 			<div class="formw">
 				<table class="data_table">
-					<tr style="text-align: center;">
-						<th>
+					<tr>
+						<th width="10px">
 							'.get_lang('Number').'
 						</th>
-						<th>
+						<th width="10px">
 							'.get_lang('True').'
 						</th>
-						<th>
+						<th width="50%">
 							'.get_lang('Answer').'
 						</th>';
 				// show column comment when feedback is enable
 				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
-				$html .='<th>
-							'.get_lang('Comment').'
-						</th>';
+                    $html .='<th>
+                                '.get_lang('Comment').'
+                            </th>';
 				}
-
-				$html .= '<th>
+				$html .= '<th width="50px">
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
@@ -128,7 +127,7 @@ class MultipleAnswer extends Question {
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
 
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
+			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span9", 'value' => '0'));
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');

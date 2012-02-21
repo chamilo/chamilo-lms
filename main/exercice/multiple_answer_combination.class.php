@@ -44,12 +44,6 @@ class MultipleAnswerCombination extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		$obj_ex = $_SESSION['objExercise'];
-/*
- * 
- * 	<th>
-							'.get_lang('Weighting').'
-						</th>
- */
 		$html='
 		<div class="row">
 			<div class="label">
@@ -58,13 +52,13 @@ class MultipleAnswerCombination extends Question {
 			<div class="formw">
 				<table class="data_table">
 					<tr style="text-align: center;">
-						<th>
+						<th width="10px">
 							'.get_lang('Number').'
 						</th>
-						<th>
+						<th width="10px">
 							'.get_lang('True').'
 						</th>
-						<th>
+						<th width="50%">
 							'.get_lang('Answer').'
 						</th>';				
 						// show column comment when feedback is enable						
@@ -141,7 +135,7 @@ class MultipleAnswerCombination extends Question {
 		$form -> addElement ('html', $html_total_score);
 				
 		//only 1 answer the all deal ...
-		$form->addElement('text', 'weighting[1]',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+		$form->addElement('text', 'weighting[1]',null, array('class' => "span1", 'value' => '10'));
 		$form -> addElement ('html', '<br /><br />');
 		
 		$navigator_info = api_get_navigator();

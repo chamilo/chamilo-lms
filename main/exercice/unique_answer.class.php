@@ -68,7 +68,7 @@ class UniqueAnswer extends Question {
 		} elseif ($obj_ex->selectFeedbackType()==1) {
 			$editor_config['Width'] = '250';
 			$editor_config['Height'] = '110';
-			$comment_title = '<th width="500" >'.get_lang('Comment').'</th>';
+			$comment_title = '<th width="500px" >'.get_lang('Comment').'</th>';
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
 		}
 
@@ -86,12 +86,12 @@ class UniqueAnswer extends Question {
 						<th width="10px" >
 							'.get_lang('True').'
 						</th>
-						<th width="38%">
+						<th width="50%">
 							'.get_lang('Answer').'
 						</th>
 							'.$comment_title.'
 							'.$feedback_title.'
-						<th width="20px">
+						<th width="50px">
 							'.get_lang('Weighting').'
 						</th>        
 					</tr>';
@@ -228,11 +228,8 @@ class UniqueAnswer extends Question {
 
 				//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-				$form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
-                   
-                    
-				$form->addElement ('html', '</tr>');
-                
+				$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span9", 'value' => '0'));                    
+				$form->addElement ('html', '</tr>');                
 			}
 
 		$form -> addElement ('html', '</table>');

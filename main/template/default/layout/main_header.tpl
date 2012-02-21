@@ -4,6 +4,7 @@
 <!--[if IE 8]>    <html lang="{$document_language}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="{$document_language}" class="no-js"> <!--<![endif]-->
 <head>    
+{* <script type="text/javascript" src="http://fbug.googlecode.com/svn/lite/branches/firebug1.4/content/firebug-lite-dev.js"></script> *}
 {include file="default/layout/head.tpl"}
 </head>
 <body dir="{$text_direction}" class="{$section_name}">

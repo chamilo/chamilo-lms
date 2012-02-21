@@ -35,7 +35,7 @@ class FreeAnswer extends Question {
 	 */
 	function createAnswersForm ($form)
 	{
-		$form -> addElement('text','weighting',get_lang('Weighting'),'size="5"');
+		$form -> addElement('text','weighting',get_lang('Weighting'), array('class' => 'span1'));
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');

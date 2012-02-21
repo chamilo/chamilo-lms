@@ -664,8 +664,8 @@ if ($gidReq && $gidReq != $gid) {
             
             // If request_uri is setted we have to go further to have course permissions
             if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-                if ($_SESSION['noredirection']) {
-                    //If we just want to reser  info without redirecting user
+                if (isset($_SESSION['noredirection'])) {
+                    //If we just want to reset info without redirecting user
                     unset($_SESSION['noredirection']);
                 } else {
                     require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';

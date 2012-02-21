@@ -619,7 +619,7 @@ if ($gidReq && $gidReq != $gid) {
       $is_platformAdmin = false; 
       $is_allowedCreateCourse = false;
 
-	if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) // a uid is given (log in succeeded)
+	if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
         // a uid is given (log in succeeded)
 		$user_table     = Database::get_main_table(TABLE_MAIN_USER);
 		$admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -661,16 +661,17 @@ if ($gidReq && $gidReq != $gid) {
 			UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
 			api_session_register('is_platformAdmin');
 			api_session_register('is_allowedCreateCourse');
-
-      // If request_uri is setted we have to go further to have course permissions
-      if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-        if( $_SESSION['noredirection'] ) {//If we just want to reser  info without redirecting user
-          unset($_SESSION['noredirection']);
-        } else {
-          require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
-          LoginRedirection::redirect();
-      }
-
+            
+            // If request_uri is setted we have to go further to have course permissions
+            if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
+                if ($_SESSION['noredirection']) {
+                    //If we just want to reser  info without redirecting user
+                    unset($_SESSION['noredirection']);
+                } else {
+                    require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+                    LoginRedirection::redirect();
+                }
+            }
 		} else {
 			header('location:'.api_get_path(WEB_PATH));
 			//exit("WARNING UNDEFINED UID !! ");

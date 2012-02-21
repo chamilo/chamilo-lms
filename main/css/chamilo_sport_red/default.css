@@ -104,9 +104,9 @@ a:active {
 }
 
 #header1 {
-    background-image: url("images/bg-header1.gif");
-    border-top: 5px solid #900217;
-    height: 47px;
+    /* background-image: url("images/bg-header1.gif");
+    border-top: 5px solid #900217; */
+    /* height: 47px; */
     margin-bottom: 43px;
 }
 #header3 {

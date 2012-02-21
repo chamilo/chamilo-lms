@@ -407,7 +407,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image: url(images/tab-repeat.png);
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
-	height:41px;	
+	
     padding-left:0px;
     padding-right:0px; 
     width: 100%;
@@ -424,9 +424,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	color: #a8a7a7;
     background: none;
 }
-#header3 ul {
-	PADDING-RIGHT: 10px;
-	PADDING-LEFT: 10px;
+#header3 ul {	
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
 	LIST-STYLE-TYPE: none;

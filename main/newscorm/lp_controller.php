@@ -101,7 +101,7 @@ $lp_found = false;
 if (isset($_SESSION['lpobject'])) {
     if ($debug > 0) error_log('New LP - SESSION[lpobject] is defined', 0);
     $oLP = unserialize($_SESSION['lpobject']);
-    if (is_object($oLP)) {
+    if (isset($oLP) && is_object($oLP)) {
         if ($debug > 0) error_log('New LP - oLP is object', 0);
         if ($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id() OR $oLP->lp_view_session_id != $session_id) {
             if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);

@@ -21,11 +21,12 @@ class Template extends Smarty {
 	var $show_footer;
     var $help;
     var $menu_navigation = array();
+    var $show_learnpath = false;
 	
-	function __construct($title = '', $show_header = true, $show_footer = true) {
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
         parent::__construct();
 		$this->title = $title;
-		
+		$this->show_learnpath = $show_learnpath;
 		//Smarty 3 configuration
         $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
         $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
@@ -277,7 +278,7 @@ class Template extends Smarty {
         $navigation            = return_navigation_array();        
         $this->menu_navigation = $navigation['menu_navigation'];
          
-		global $_configuration, $show_learn_path;
+		global $_configuration;
 		
 		$this->assign('system_charset', api_get_system_encoding());
 			
@@ -333,7 +334,7 @@ class Template extends Smarty {
 			'bootstrap/bootstrap-dropdown.js',            
             'bootstrap/bootstrap-collapse.js'
 		);
-		
+	
 		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
                 $js_files[] = 'chat/js/chat.js';
@@ -353,7 +354,7 @@ class Template extends Smarty {
 		foreach($js_files as $js_file) {
 			$js_file_to_string .= api_get_js($js_file);
 		}
-		
+        		
 		//Extra CSS files
 		
 		$css_files = array (
@@ -362,8 +363,9 @@ class Template extends Smarty {
 			api_get_path(WEB_LIBRARY_PATH).'javascript/dtree/dtree.css',
 		);
 		
-		if ($show_learn_path) {
+		if ($this->show_learnpath) {
 			$css_files[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
+            $css_files[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
 		}
 		
 		if (api_get_setting('allow_global_chat') == 'true') {

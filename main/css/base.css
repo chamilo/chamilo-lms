@@ -104,6 +104,15 @@ form .formw input {
     padding: 19px 0px 19px 0px;
 }
 
+#progress_bar img {
+    height:26px;
+}
+
+#lp_navigation_elem .buttons,
+#lp_navigation_elem #progress_bar {
+    width:130px;
+}
+
 * {
     /* outline :none; */
 }

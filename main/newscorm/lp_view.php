@@ -30,10 +30,11 @@ require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 
-api_protect_course_script();
-//if (!$is_allowed_in_course) api_not_allowed(); 
+//To prevent the template class
+$show_learnpath = true;
 
-$oLearnpath     = false;
+api_protect_course_script();
+
 $course_code    = api_get_course_id();
 $course_id      = api_get_course_int_id();
 $user_id        = api_get_user_id();
@@ -93,7 +94,7 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 unset($_SESSION['objExercise']);
 unset($_SESSION['questionList']);
 
-///// additional APIs
+// additional APIs
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 chamilo_courseCode = "'.$course_code.'";
 </script>';
@@ -183,7 +184,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     
     $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-    $TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
+    //$TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
     $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
     $safe_id                = $lp_id;
@@ -245,7 +246,8 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 }
 
 // Not in fullscreen mode.
-require_once '../inc/reduced_header.inc.php';
+//require_once '../inc/reduced_header.inc.php';
+Display::display_reduced_header($nameTools);
 //$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
 // Check if audio recorder needs to be in studentview.
 //$course_id = $_SESSION['_course']['id'];
@@ -264,89 +266,96 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
     $display_none = ';display:none;';
     $margin_left = '12px';
 }
+
+//Media player code
+
+$display_mode = $_SESSION['oLP']->mode;
+$scorm_css_header = true;
+$lp_theme_css = $_SESSION['oLP']->get_theme();
+
+// Setting up the CSS theme if exists.
+if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+    global $lp_theme_css;
+} else {
+    $lp_theme_css = $my_style;
+}
+
+$progress_bar   = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
+$mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
+
+$tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
+$show_audioplayer = false;
+// Getting all the information about the item.
+$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
+$res_media= Database::query($sql);
+
+if (Database::num_rows($res_media) > 0) {
+    while ($row_media= Database::fetch_array($res_media)) {
+        if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
+    }
+}
+                
 ?>
-<body dir="<?php echo api_get_text_direction(); ?>">
-    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
-        <!-- header -->
-        <div id="header">
-            <div id="learning_path_header" style="font-size:14px;">
-                <table>
-                    <tr>
-                        <td>
-                            <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
-                        </td>
-                        <td>
-                            <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <?php echo get_lang('CourseHomepageLink'); ?></a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+
+<div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
+    <!-- header -->
+    <div id="header">
+        <div id="learning_path_header" style="font-size:14px;">
+            <table>
+                <tr>
+                    <td>
+                        <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                            <img src="../img/lp_arrow.gif" />
+                        </a>
+                    </td>
+                    <td>
+                        <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                        <?php echo get_lang('CourseHomepageLink'); ?></a>
+                    </td>
+                </tr>
+            </table>
         </div>
+    </div>
         <!-- end header -->
 
         <!-- Image preview Layout -->
         <!-- hub 26-50-2010 for lp toc height
         <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
         -->
-        <div id="author_image" name="author_image" class="lp_author_image" style="width:100%;margin-left:5px;">
-            <?php $image = '../img/lp_author_background.gif'; ?>
-            <div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-                   <div style="width:100; float:left;height:105;margin:5px">
-                       <span style="width:104px; height:96px; float:left; vertical-align:bottom;">
-                    <center>
-                    <?php
-                    if ($_SESSION['oLP']->get_preview_image()!='') {
-                        $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                        if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
-                        $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                        $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
-                        echo '<img '.$size.' src="'.$my_path.'">';
-                    } else {
-                        echo Display :: display_icon('unknown_250_100.jpg', ' ');
-                    }
-                    ?>
-                    </center>
-                    </span>
-                   </div>
-
-                <div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;height:90">
-                    <?php
-                        $display_mode = $_SESSION['oLP']->mode;
-                        $scorm_css_header = true;
-                        $lp_theme_css = $_SESSION['oLP']->get_theme();
-
-                        // Setting up the CSS theme if exists.
-                        if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
-                            global $lp_theme_css;
+        <div id="author_image" name="author_image" class="row-fluid">        
+            <div class="span12">
+                <div class="row-fluid well2">     
+                    <div class="span4">
+                        <?php
+                        if ($_SESSION['oLP']->get_preview_image()!='') {
+                            $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
+                            if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
+                            $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
+                            $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+                            echo '<img src="'.$my_path.'">';
                         } else {
-                            $lp_theme_css = $my_style;
+                            echo Display :: display_icon('unknown_250_100.jpg');
                         }
-
-                        $progress_bar   = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
-                        $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-                        $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
-
-                        $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
-                        $show_audioplayer = false;
-                        // Getting all the information about the item.
-                        $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
-                        $res_media= Database::query($sql);
-
-                        if (Database::num_rows($res_media) > 0) {
-                            while ($row_media= Database::fetch_array($res_media)) {
-                                 if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
-                            }
-                        }
-                    ?>
-
-                    <div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:130px;margin-top:9px;">
-                        <div style="padding-top:15px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div>
-                        <div id="progress_bar" style="height:20px"><?php echo $progress_bar; ?></div>
+                        ?>                                           
                     </div>
-                </div>
+                    <div id="lp_navigation_elem" class="span8">
+                        <div class="row">                        
+                            <div class="span7">
+                                <?php echo $navigation_bar; ?>
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div id="progress_bar" class="span7">
+                                <?php echo $progress_bar; ?>
+                            </div>                        
+                        </div>
+                    </div>
+                    </div>
             </div>
        </div>
+        
+        
        <!-- end image preview Layout -->
         <div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
             <?php echo $_SESSION['oLP']->get_author(); ?>
@@ -452,7 +461,6 @@ if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_fram
     window.onresize = updateContentHeight;
 -->
 </script>
-</body>
 <?php
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;

@@ -5435,8 +5435,7 @@ function api_browser_support($format="") {
  * @author Juan Carlos Raña Trabado
  */
 function api_check_browscap() {
-    $setting = ini_get('browscap');
-    
+    $setting = ini_get('browscap');    
     if ($setting) {
         $browser = get_browser($_SERVER['HTTP_USER_AGENT'], true);
 	    if (strpos($setting, 'browscap.ini') && !empty($browser)) {

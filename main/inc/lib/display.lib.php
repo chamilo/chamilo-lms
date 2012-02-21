@@ -67,13 +67,14 @@ class Display {
     /**
      * Displays the reduced page header (without banner)
      */
-    public static function display_reduced_header () {
+    public static function display_reduced_header() {
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
         global $menu_navigation;
+        global $show_learnpath;
         //require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-        self::$global_template = new Template($tool_name, false);
-        self::$global_template->show_header = false;
+        
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
         echo self::$global_template ->show_header_template();        
     }
 

@@ -294,12 +294,12 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                      preg_match('/htm$/i',  urldecode($url))  //|| (preg_match('/wav$/', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
 					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';
 				} else {			
-					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';
 				}          
         	} else {			
-            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';
 			}						
         } else {
 			if ($filetype == 'file') {
@@ -429,7 +429,7 @@ function build_document_icon_tag($type, $path) {
         }
     }
 
-    return Display::return_icon($icon, $basename, array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22));
+    return Display::return_icon($icon, $basename, array());
 }
 
 /**

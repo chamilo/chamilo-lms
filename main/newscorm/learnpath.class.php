@@ -1658,7 +1658,6 @@ class learnpath {
      * @return	string	The HTML string to use as a navigation bar
      */
     public function get_navigation_bar() {
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
         }
@@ -2099,18 +2098,18 @@ class learnpath {
             $progress_height = '16';
         $size = str_replace('%', '', $percentage);
 
-        $output ='<div style="width:135px">' .
-            '<img id="progress_img_limit_left" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '">' .
-            '<img id="progress_img_full" src="' . $css_path . 'bar_1u.gif" width="' . $size * $factor . 'px" height="' . $progress_height . '" id="full_portion">' .
-            '<img id="progress_img_limit_middle" src="' . $css_path . 'bar_1m.gif" width="1" height="' . $progress_height . '">';
+        $output ='<div>' .
+            '<img id="progress_img_limit_left" src="' . $css_path . 'bar_1.gif" width="1px" height="' . $progress_height . '">' .
+            '<img id="progress_img_full" src="' . $css_path . 'bar_1u.gif" width="' . $size * $factor . 'px" height="' . $progress_height . 'px" id="full_portion">' .
+            '<img id="progress_img_limit_middle" src="' . $css_path . 'bar_1m.gif" width="1px" height="' . $progress_height . '">';
 
         if ($percentage <= 98) {
-            $output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="' . (100 - $size) * $factor . 'px" height="' . $progress_height . '" id="empty_portion">';
+            $output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="' . (100 - $size) * $factor . 'px" height="' . $progress_height . 'px" id="empty_portion">';
         } else {
-            $output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="0" height="' . $progress_height . '" id="empty_portion">';
+            //$output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="0px" height="' . $progress_height . '" id="empty_portion">';
         }
 
-        $output .= '<img id="progress_bar_img_limit_right" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '"></div>' .
+        $output .= '<img id="progress_bar_img_limit_right" src="' . $css_path . 'bar_1.gif" width="1px" height="' . $progress_height . '"></div>' .
         '<div class="progresstext" id="progress_text">' . $text . '</div>';
 
         return $output;
@@ -2784,9 +2783,9 @@ class learnpath {
             }
 
             // The anchor will let us center the TOC on the currently viewed item &^D
-            if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
-                $html .= '<a name="atoc_' . $item['id'] . '" />';
+            if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {                
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
+                $html .= '<a name="atoc_' . $item['id'] . '" />';
             } else {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 2) . 'em; padding-right:' . ($item['level'] * 1.5) . 'em"             title="' . $item['description'] . '" >';
             }

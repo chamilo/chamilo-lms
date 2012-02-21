@@ -4,13 +4,15 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
+/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
-	font-family: bold arial, verdana, helvetica, sans-serif;
+    behavior:url("/main/css/csshover3.htc");
+	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
 	margin: 0;
@@ -28,9 +30,6 @@ body {
 	position: relative;  /* do not remove, fixes a bug in IE */
 	background-color: #fff;
 	background-repeat:no-repeat;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
 }
 /* Hides from IE5-mac \*/
 * html #outerframe {
@@ -184,12 +183,7 @@ ul#navigation .student-connect a {
 
 
 /* for content section in main index.php file */
-/*
-|----------------------------------------------------------------------------
-| modified: to fit img and blocks in home page
-|----------------------------------------------------------------------------
-|
-*/
+
 .maincontent {
 	float: left;
 	width: 68%;
@@ -199,13 +193,6 @@ ul#navigation .student-connect a {
 	margin-top:0;
 	background-color: #ffffff;
 }
-/* only use in gradebook
-.maincontent td {
-	float: left;
-	width: 100%;
-	padding: 4px;
-}*/
-
 #center {
 	margin: 0 190px 0 0;
 	padding: 10px 0 40px 0;
@@ -335,20 +322,6 @@ a:active {
 	font-weight : bold;
 	color : #f00;
 }
-select, textarea {
-	color : #000;
-	border: 1px solid #000;
-}
-input.checkbox {
-	border-width: 0;
-}
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-	cursor:	pointer;
-	font-size: 12px;
-}
-input[text] {
-	font-size: 12px;
-}
 /* user_portal course status icon */
 .coursestatusicons {
 	border: 0px solid #000;
@@ -450,24 +423,6 @@ input[text] {
 }
 #header2 a:hover {
 	text-decoration: underline;
-}
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-	position: relative; /* to avoid the IE peekabo bug*/
-	float: right;
-	width: 70%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header2Right ul li {
-	display: inline;
-	color:#fff;
-}
-#Header2Right ul li a {
-	padding: 4px 6px 4px 4px;
-	color:#fff;
 }
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *

@@ -4,12 +4,14 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
+/* the sticky effect */
 html {
 	height: 100%;
 }
+/* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-     behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
@@ -293,41 +295,6 @@ a:active {
 	font-weight : bold;
 	color : #a8a7a7;
 }
-select, textarea, input {
-	color : #000;
-	border: 1px solid #000;
-}
-input.checkbox {
-	border-width: 0;
-}
-/* form elements */
-
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-	cursor:	pointer;
-}
-input[text] {
-}
-input.link_alike {
-	background-color: #FFFFFF;
-	border-width: 0px;
-	color: #4171b5;
-	font-weight: bold;
-	text-align: left;
-	padding: 0px;
-	margin: 0px;
-}
-input.link_alike:hover {
-	background-color: #FFFFFF;
-	border-width: 0px;
-	color: #FF0000;
-	font-weight: bold;
-	text-align: left;
-	padding: 0px;
-	margin: 0px;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
-}
 /* user_portal course status icon */
 .coursestatusicons {
 	border: 0px solid #000;
@@ -403,23 +370,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #header2 a:hover {
 	text-decoration: underline;
-}
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-	position: relative; /* to avoid the IE peekabo bug*/
-	float: right;
-	width: 70%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header2Right ul li {
-	display: inline;
-}
-#Header2Right ul li a {
-	padding: 4px 6px 4px 4px;
-	color:#636363;
 }
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *

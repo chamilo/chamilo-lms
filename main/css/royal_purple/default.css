@@ -11,7 +11,7 @@ html {
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-     behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
@@ -203,7 +203,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height: 0px;
+	line-height:0px;
 	height: 0;
 }
 
@@ -295,34 +295,7 @@ a:active {
 	font-weight : bold;
 	color : #8e5b97;
 }
-/* form elements */
 
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-	cursor:	pointer;
-}
-input[text] {
-}
-input.link_alike {
-	background-color: #FFFFFF;
-	border-width: 0px;
-	color: #4171b5;
-	font-weight: bold;
-	text-align: left;
-	padding: 0px;
-	margin: 0px;
-}
-input.link_alike:hover {
-	background-color: #FFFFFF;
-	border-width: 0px;
-	color: #FF0000;
-	font-weight: bold;
-	text-align: left;
-	padding: 0px;
-	margin: 0px;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
-}
 /* user_portal course status icon */
 .coursestatusicons {
 	border: 0px solid #000;
@@ -388,6 +361,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  HEADER 2: Users online, help, student/teacher view	*
  ********************************************************/
 #header2 {
+	position: relative; /* to avoid the IE peekabo bug*/
 	color: #636363;/*border: 1px solid red;*/
 }
 #header2 a {
@@ -413,16 +387,14 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	PADDING-RIGHT: 15px;
 	PADDING-LEFT: 6px;
 	COLOR: #fff;
+    float:left;
 	PADDING-TOP: 10px;
-	float: left;
 }
 #header3 a:hover {
 	color: #a8a7a7;
     background: none;
 }
 #header3 ul {
-	PADDING-RIGHT: 10px;
-	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
 	LIST-STYLE-TYPE: none;

@@ -8,6 +8,7 @@
 html {
     height: 100%;
 }
+/* Redefining html styles */
 body {
     /* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -38,14 +39,10 @@ body {
 /* End hide from IE5-mac */
 
 #main {
-	float: left;
-    margin: 0px auto;
-    margin-top: 10px;
-    width: 98%;
-    padding: 0px 10px 0px 10px;
-    background-color: transparent;
-    min-height: 320px;
-    background-repeat: no-repeat;
+	margin: 0p;
+	width: 100%;
+	padding: 0px;
+	min-height: 320px;
 }
 
 /*
@@ -305,37 +302,6 @@ a:active {
     color : #f00;
 }
 
-/* form elements */
-
-input[text] {
-    font-size: 12px;
-}
-
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    background-image:url(images/shadow.gif);
-}
-input.link_alike {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #4171b5;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
-}
-input.link_alike:hover {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #f3840d;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
-}
-select, textarea {
-    color : #000;
-    border: 1px solid #000;
-}
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;
@@ -377,7 +343,6 @@ select, textarea {
  ********************************************************/
 #header1 {
     font-size: 12px;
-    padding: 4px;
     background-color: #4475B0;
     color: #fff;
     height: 35px;
@@ -425,7 +390,6 @@ select, textarea {
     font-size: 1.0em;
     font-weight: normal;
     min-height:35px;
-    padding:  0.2em 0.5em;    
     background: #2A4B74;
     color: #666;
     width:100%;
@@ -469,8 +433,6 @@ select, textarea {
     background: none;
 }
 #header3 UL {
-    PADDING-RIGHT: 2px;
-    PADDING-LEFT: 10px;
     PADDING-BOTTOM: 0px;
     MARGIN: 0px;
     LIST-STYLE-TYPE: none;

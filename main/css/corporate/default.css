@@ -141,9 +141,8 @@ input[type=button], input[type=submit] {
 	background:url(images/tab_left.gif) no-repeat left top;
 	text-decoration:none;
 	cursor: pointer;
-	color: #333;
-	padding-right: 1px;
-	padding-left: 9px;
+	color: #333;	
+    padding: 0px 9px 0px 9px;
 	height:25px;
 }
 #header3 li a:hover {

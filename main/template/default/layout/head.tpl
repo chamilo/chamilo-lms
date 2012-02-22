@@ -45,8 +45,8 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 var ajax_url        = '{$_p.web_ajax}chat.ajax.php';
 var online_button   = '{$online_button}';
 var offline_button  = '{$offline_button}';
-var	connect_lang    = '{"ChatConnected"|get_lang}';
-var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
+var connect_lang    = '{"ChatConnected"|get_lang}';
+var disconnect_lang = '{"ChatDisconnected"|get_lang}';
 </script>
 
 {$js_file_to_string}
@@ -79,30 +79,30 @@ $(document).scroll(function() {
 
 
 $(document).ready(function() {       
-	$('.dropdown-toggle').dropdown();   
+    $('.dropdown-toggle').dropdown();   
     $(".collapse").collapse();
     
-	$('.ajax').on('click', function() {
-		var url     = this.href;
-		var dialog  = $("#dialog");
-		if ($("#dialog").length == 0) {
-			dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
-		}
+    $('.ajax').on('click', function() {
+            var url     = this.href;
+            var dialog  = $("#dialog");
+            if ($("#dialog").length == 0) {
+                    dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
+            }
 
-		// load remote content
-		dialog.load(
-				url,                    
-				{},
-				function(responseText, textStatus, XMLHttpRequest) {
-					dialog.dialog({
-						modal	: true, 
-						width	: 540, 
-						height	: 400        
-					});	                    
-		});
-		//prevent the browser to follow the link
-		return false;
-	});
+            // load remote content
+            dialog.load(
+                            url,                    
+                            {},
+                            function(responseText, textStatus, XMLHttpRequest) {
+                                    dialog.dialog({
+                                            modal	: true, 
+                                            width	: 540, 
+                                            height	: 400        
+                                    });	                    
+            });
+            //prevent the browser to follow the link
+            return false;
+    });
 });
 </script>
 {$header_extra_content}

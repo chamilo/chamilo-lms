@@ -25,7 +25,7 @@ a:active {
 
 .subnav-fixed {
     position: fixed;
-    top: 38px;
+    top: 0px;
     left: 0;
     right: 0;
     z-index: 1030;
@@ -34,9 +34,6 @@ a:active {
     -webkit-border-radius: 0;
         -moz-border-radius: 0;
             border-radius: 0;
-    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
 }
 
 

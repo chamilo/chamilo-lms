@@ -1,6 +1,6 @@
 <?php
 /* Integrate svg-edit libraries with Chamilo default documents
- * @author Juan Carlos Ra�a Trabado
+ * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
 //Chamilo load libraries
@@ -67,24 +67,17 @@ if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager
 		echo '<ul>';
 		foreach($png_svg_files as $filename) {			
 			$image = $group_disk_path.$filename;			
-			//$new_sizes = api_resize_image($image, 60, 60); Bug when trying to load svg files
-			$new_sizes['width'] = 60;
-			$new_sizes['height'] = 60;
 			
-			$pos = strpos($filename, "svg");						
-			if ($pos === false) {
-				//no svg			
+			if (strpos($filename, "svg")){
+				$new_sizes['width'] = 60;
+				$new_sizes['height'] = 60;
+			}
+			else {
+				$new_sizes = api_resize_image($image, 60, 60);
+			}	
 				echo '<li style="display:inline; padding:8px;">';
 				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
-				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';				
-			} else {	
-				//svg			
-				echo '<li style="display:inline; padding:8px;">';
-				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
-				echo '<img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0">';
-				echo '</a></li>';
-				
-			}		
+				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';	
 		}
 		echo '</ul>';
 	}

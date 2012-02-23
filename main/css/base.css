@@ -3481,3 +3481,67 @@ a:active{
 .lt-ie7 #chatmain {
     display:none;
 }
+
+
+
+#timeline {
+    
+    background: url("dot.gif") repeat-x scroll left 45px;
+    height: 350px;
+    margin: 0px auto;
+    overflow: hidden;
+    position: relative;
+    width: 600px;
+}
+
+#dates {
+    
+    /* height: 60px; */
+    overflow: hidden;
+    width: 800px;
+}
+
+
+#dates .selected {
+    font-size: 22px;
+    font-weight: bold;
+    font-color: #E06B04;
+}
+
+#dates li {
+    background: url("biggerdot.png") no-repeat scroll center bottom transparent;
+    float: left;
+    font-size: 14px;
+    height: 50px;
+    list-style: none outside none;
+    text-align: center;
+    width: 130px;
+}
+
+#issues {
+    height: 350px;
+    overflow: hidden;
+    width: 800px;
+}
+
+#issues li {
+    float: left;
+    height: 350px;
+    list-style: none outside none;
+    width: 800px;
+}
+
+#issues li h3 {
+    color: #FFCC00;
+    font-size: 48px;
+    margin: 0px;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+#issues li p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 22px;
+    margin-right: 70px;
+    text-shadow: 1px 1px 2px #000000;
+}

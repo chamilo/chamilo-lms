@@ -731,3 +731,5 @@ function get_number_of_courses() {
 	global $courses;
 	return count($courses);
 }
+
+

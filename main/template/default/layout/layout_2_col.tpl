@@ -47,7 +47,10 @@
 		{* Hot courses template *}
 		<section id="hot_courses">
 		{include file="default/layout/hot_courses.tpl"}
+        {* fix the bug where the login is at the left side*}
+        &nbsp;
         </section>
+        
 	</div>
 		
 	{* Right column *}

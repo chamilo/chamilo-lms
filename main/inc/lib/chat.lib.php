@@ -19,15 +19,12 @@ class Chat extends Model {
 	}    
     
     function get_user_status() {
-        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'chat_user_status', false, true);
-        return $status['chat_user_status'];        
-        //return isset($_SESSION['chat_user_status']) ? intval($_SESSION['chat_user_status']) : 0;
-        
+        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'user_chat_status', false, true);
+        return $status['user_chat_status'];
     }
     
     function set_user_status($status) {
-        //$_SESSION['chat_user_status'] = intval($status);
-        UserManager::update_extra_field_value(api_get_user_id(), 'chat_user_status', $status);
+        UserManager::update_extra_field_value(api_get_user_id(), 'user_chat_status', $status);
     }
 	
 	public function start_session() {				
@@ -35,7 +32,7 @@ class Chat extends Model {
 		if (isset($_SESSION['chatHistory'])) {
 			$items = $_SESSION['chatHistory'];
 		}                
-		$return = array('user_status' => $this->get_user_status(),  'me' => get_lang('Me'), 'items' => $items);		
+		$return = array('user_status' => $this->get_user_status(), 'me' => get_lang('Me'), 'items' => $items);		
 		echo json_encode($return);           
 		exit;
 	}

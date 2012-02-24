@@ -173,7 +173,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Initialize the object.
-    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
+    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'&'.  api_get_cidreq());
 
     // The header for the form
     if (!empty($inputvalues)) {

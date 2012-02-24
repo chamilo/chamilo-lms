@@ -95,7 +95,7 @@ EOT;
 				<!-- END label_2 -->
 				
 				<!-- BEGIN error -->
-					3<span class="help-inline">{error}</span>
+					<span class="help-inline">{error}</span>
 				<!-- END error -->	
 			</div>
 		</div>

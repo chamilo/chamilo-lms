@@ -107,29 +107,28 @@ function confirmation(name)
 /* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-    echo '<tr>';
 
-        echo '<td class="tree">';
-            echo '<div class="lp_tree">';
-                // Build the tree with the menu items in it.
-                echo $_SESSION['oLP']->build_tree();
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
 
-            echo '</div>';
-        echo '</td>';
-        echo '<td class="workspace">';
 
-            if (isset($is_success) && $is_success === true) {
-                echo '<div class="lp_message" style="margin:3px 10px;">';
-                echo get_lang("PrerequisitesAdded");
-                echo '</div>';
-            } else {
-                echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
-                echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
-            }
-        echo '</td>';
-    echo '</tr>';
-echo '</table>';
+echo '<div class="lp_tree">';
+    // Build the tree with the menu items in it.
+    echo $_SESSION['oLP']->build_tree();
+echo '</div>';
+
+echo '</div>';
+echo '<div class="span9">';
+
+if (isset($is_success) && $is_success === true) {
+    echo '<div class="lp_message" style="margin:3px 10px;">';
+    echo get_lang("PrerequisitesAdded");
+    echo '</div>';
+} else {
+    echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
+    echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
+}
+echo '</div>';
 
 /* FOOTER */
 Display::display_footer();

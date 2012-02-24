@@ -4920,7 +4920,7 @@ class learnpath {
                     }
                 }
             }
-            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>'text-align:right'));
+            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>''));
             $return_audio .= '</td>';
 			$move_icon = '';
 			$edit_icon = '';
@@ -5044,7 +5044,7 @@ class learnpath {
         	$return .= print_recursive($elements, $default_data, $default_content);
         	$return .='</ul></div>';
         	
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button white medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
         } else {
         
         	$return .= $return_audio.'</table>';
@@ -6237,7 +6237,7 @@ class learnpath {
             $item_description = '';
         }
 
-        $return = '<div style="margin:3px 12px;">';
+        $return = '<div style="">';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6900,7 +6900,7 @@ class learnpath {
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
-                        $form->addElement('html', '<div style="margin:3px 12px">');
+                        $form->addElement('html', '<div>');
                         $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;

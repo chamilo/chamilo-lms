@@ -132,49 +132,51 @@ function confirmation(name) {
 /* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-        echo '<tr>';
-        echo '<td class="tree">';
 
-        $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
-        $path_item = Database::escape_string($path_item);
-        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-        $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = $course_id AND id = '". $path_item."' ";
-        $res_doc = Database::query($sql_doc);
-        $path_file = Database::result($res_doc, 0, 0);
-        $path_parts = pathinfo($path_file);
 
-        if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
-            $count_items = count($_SESSION['oLP']->ordered_items);
-            $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ' : ' class="lp_tree" ';
-            echo '<div '.$style.'>';
-            // Build the tree with the menu items in it.
-            echo $_SESSION['oLP']->build_tree();
-            echo '</div>';
-            // Show the template list
-            echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
-            echo '<br />';
-            echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
-        } else {
-            echo '<div class="lp_tree" style="height:90%" >';
-            // Build the tree with the menu items in it.
-            echo $_SESSION['oLP']->build_tree();
-            echo '</div>';
-        }
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
 
-        echo '</td>';
-        echo '<td class="workspace">';
-            if (isset($is_success) && $is_success === true) {
-                $msg = '<div class="lp_message" style="margin-bottom:10px;">';
-                $msg .= 'The item has been edited.';
-                $msg .= '</div>';
-                echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
-            } else {
-                echo $_SESSION['oLP']->display_edit_item($_GET['id']);
-            }
-        echo '</td>';
-    echo '</tr>';
-echo '</table>';
+$path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
+$path_item = Database::escape_string($path_item);
+$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = $course_id AND id = '". $path_item."' ";
+$res_doc = Database::query($sql_doc);
+$path_file = Database::result($res_doc, 0, 0);
+$path_parts = pathinfo($path_file);
+
+if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
+    $count_items = count($_SESSION['oLP']->ordered_items);
+    $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ' : ' class="lp_tree" ';
+    echo '<div '.$style.'>';
+    // Build the tree with the menu items in it.
+    echo $_SESSION['oLP']->build_tree();
+    echo '</div>';
+    // Show the template list
+    echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
+    echo '<br />';
+    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+} else {
+    echo '<div class="lp_tree" style="height:90%" >';
+    // Build the tree with the menu items in it.
+    echo $_SESSION['oLP']->build_tree();
+    echo '</div>';
+}
+        
+echo '</div>';
+echo '<div class="span9">';
+
+if (isset($is_success) && $is_success === true) {
+    $msg = '<div class="lp_message" style="margin-bottom:10px;">';
+    $msg .= 'The item has been edited.';
+    $msg .= '</div>';
+    echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
+} else {
+    echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+}
+
+echo '</div>';
+echo '</div>';
 
 /* FOOTER */
 

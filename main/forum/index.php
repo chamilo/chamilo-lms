@@ -82,7 +82,11 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
 
-if (isset($_GET['action']) && $_GET['action'] == 'add') {
+/* ACTIONS */
+
+$actions = isset($_GET['action']) ? $_GET['action'] : '';
+
+if ($actions == 'add') {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => get_lang('ForumCategories'));
@@ -106,9 +110,6 @@ Display::display_introduction_section(TOOL_FORUM);
 
 $form_count = 0;
 
-/* ACTIONS */
-
-$get_actions = isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false, true)) {
 	
 	//if is called from a learning path lp_id	
@@ -117,7 +118,7 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 // Notification
-if (isset($_GET['action']) && $_GET['action'] == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
+if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
     if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false, true) == false) {
         api_not_allowed();
     }
@@ -140,9 +141,7 @@ event_access_tool(TOOL_FORUM);
 */
 
 // Step 1: We store all the forum categories in an array $forum_categories.
-$forum_categories = array();
 $forum_categories_list = get_forum_categories();
-
 
 // Step 2: We find all the forums (only the visible ones if it is a student).
 $forum_list	= array();
@@ -173,7 +172,7 @@ if (isset($_SESSION['_gid'])) {
 
 /* ACTION LINKS */
 
-$session_id = isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
+$session_id = api_get_session_id();
 
 echo '<div class="actions">';
 
@@ -198,7 +197,7 @@ echo '</div>';
 
 // Step 3: We display the forum_categories first.
 if (is_array($forum_categories_list)) {
-    foreach ($forum_categories_list as $forum_category_key => $forum_category) {
+    foreach ($forum_categories_list as $forum_category) {
 
          // The forums in this category.
         $forums_in_category = get_forums_in_category($forum_category['cat_id']);
@@ -247,9 +246,8 @@ if (is_array($forum_categories_list)) {
             echo '</tr>';
 
             // Step 5: We display all the forums in this category.
-            $forum_count = 0;
-
-            foreach ($forum_list as $key => $forum) {
+            
+            foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
                 if (!empty($whatsnew_post_info)) {
@@ -282,36 +280,11 @@ if (is_array($forum_categories_list)) {
                         $show_forum = true;
                     } else {
                         // you are not a teacher
-                        //echo 'student';
                         // it is not a group forum => show forum (invisible forums are already left out see get_forums function)
-                        if ($forum['forum_of_group'] == '0') {
-                            //echo '-gewoon forum';
+                        if ($forum['forum_of_group'] == '0') {    
                             $show_forum = true;
                         } else {
-                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GROUP_TOOL_FORUM);                                   
-                            //var_dump($forum['forum_id'].' -  '.$show_forum);
-                            /*
-                            // it is a group forum
-                            //echo '-groepsforum';
-                            // it is a group forum but it is public => show
-                            if ($forum['forum_group_public_private'] == 'public') {
-                                $show_forum = true;
-                                //echo '-publiek';
-                            } elseif ($forum['forum_group_public_private'] == 'private') {
-                                // it is a group forum and it is private
-                                //echo '-prive';
-                                // it is a group forum and it is private but the user is member of the group
-                                if (in_array($forum['forum_of_group'], $groups_of_user)) {
-                                    //echo '-is lid';
-                                    $show_forum = true;
-                                } else {
-                                    //echo '-is GEEN lid';
-                                    $show_forum = false;
-                                }
-                            } else {
-                                $show_forum = false;
-                            }*/
-
+                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GROUP_TOOL_FORUM); 
                         }
                     }
 
@@ -439,5 +412,4 @@ if (is_array($forum_categories_list)) {
         echo '</table>';
     }
 }
-
 Display :: display_footer();

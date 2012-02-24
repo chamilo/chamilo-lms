@@ -614,10 +614,10 @@ if ($gidReq && $gidReq != $gid) {
 
 /* USER INIT */
   
-  if (isset($uidReset) && $uidReset) {    // session data refresh requested
-      unset($_SESSION['_user']['uidReset']);
-      $is_platformAdmin = false; 
-      $is_allowedCreateCourse = false;
+if (isset($uidReset) && $uidReset) {    // session data refresh requested
+    unset($_SESSION['_user']['uidReset']);
+    $is_platformAdmin = false; 
+    $is_allowedCreateCourse = false;
 
 	if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
         // a uid is given (log in succeeded)
@@ -691,7 +691,8 @@ if ($gidReq && $gidReq != $gid) {
 
 /*  COURSE INIT */
 
-if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data    
+if (isset($cidReset) && $cidReset) {
+    // Course session data refresh requested or empty data        
 	if ($cidReq) {
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -706,7 +707,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			$course_data = Database::fetch_array($result);
 			//@TODO real_cid should be cid, for working with numeric course id
 			$_real_cid                      = $course_data['id'];
-
+			
 			$_cid                           = $course_data['code'];
 			$_course = array();
 			$_course['real_id']             = $course_data['id'];
@@ -783,13 +784,14 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             api_session_unregister('session_name');
         }   
     }
-} else { // continue with the previous values
+} else {
+    // Continue with the previous values    
     if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
         $_cid         = -1;        //set default values that will be caracteristic of being unset
         $_course      = -1;
     } else {
-        $_cid         = $_SESSION['_cid'   ];
-           $_course   = $_SESSION['_course'];
+        $_cid      = $_SESSION['_cid'   ];
+        $_course   = $_SESSION['_course'];
 
            // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
            // Moreover, if we want to track a course with another session it can be usefull        
@@ -1021,10 +1023,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
         $is_sessionAdmin     = false;
         api_session_unregister('_courseUser');
     }
-
-	//DEPRECATED
-	//$is_courseAllowed=($_cid && ($_course['visibility'] || $is_courseMember || $is_platformAdmin))?true:false;
-
+    
 	//NEW
 	if (isset($_course)) {
 		if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)
@@ -1058,7 +1057,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
                 //checking date
 			}
         }
-
 	}
 
 	// save the states
@@ -1069,7 +1067,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	api_session_register('is_courseTutor');
 	api_session_register('is_allowed_in_course'); //new permission var
 	api_session_register('is_courseCoach');
-	api_session_register('is_sessionAdmin');
+	api_session_register('is_sessionAdmin');    
 } else { // continue with the previous values
 
 	if (isset($_SESSION ['_courseUser'])) {

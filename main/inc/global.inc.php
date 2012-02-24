@@ -62,19 +62,19 @@ if (!$already_installed) {
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
-  $GLOBALS['_configuration'] = $_configuration;
+    $GLOBALS['_configuration'] = $_configuration;
 }
 
 // Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
 if (empty($_configuration['system_version'])) {
-    $_configuration['system_version'] = $_configuration['dokeos_version'];
-    $_configuration['system_stable'] = $_configuration['dokeos_stable'];
-    $_configuration['software_url'] = 'http://www.chamilo.org/';
+    $_configuration['system_version']   = $_configuration['dokeos_version'];
+    $_configuration['system_stable']    = $_configuration['dokeos_stable'];
+    $_configuration['software_url']     = 'http://www.chamilo.org/';
 }
 
 // For backward compatibility.
-$_configuration['dokeos_version'] = $_configuration['system_version'];
-$_configuration['dokeos_stable'] = $_configuration['system_stable'];
+$_configuration['dokeos_version']       = $_configuration['system_version'];
+$_configuration['dokeos_stable']        = $_configuration['system_stable'];
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
@@ -128,10 +128,10 @@ global $database_connection;
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
     array(
-        'server' => $_configuration['db_host'],
-        'username' => $_configuration['db_user'],
-        'password' => $_configuration['db_password'],
-        'persistent' => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+        'server'        => $_configuration['db_host'],
+        'username'      => $_configuration['db_user'],
+        'password'      => $_configuration['db_password'],
+        'persistent'    => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
     )))) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
@@ -194,6 +194,7 @@ api_set_internationalization_default_encoding($charset);
 // Initialization of the database encoding to be used.
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
+
 if (api_is_utf8($charset)) {
     // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
     Database::query("SET NAMES 'utf8';");
@@ -207,7 +208,7 @@ api_session_start($already_installed);
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
  
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {	
-	array_walk_recursive_limited($_GET, 	'stripslashes', true);	
+	array_walk_recursive_limited($_GET,     	'stripslashes', true);	
 	array_walk_recursive_limited($_POST, 	'stripslashes', true);
 	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
 	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);

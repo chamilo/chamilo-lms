@@ -44,12 +44,16 @@ function addlinkcategory($type) {
 		$selectcategory   = Security :: remove_XSS($_POST['selectcategory']);
 
 		if ($_POST['onhomepage'] == '') {
-			$onhomepage = 0;
-			$target = '_self'; // Default target.
+			$onhomepage = 0;			
 		} else {
 			$onhomepage  = Security :: remove_XSS($_POST['onhomepage']);			
-			$target      = Security :: remove_XSS($_POST['target_link']);
 		}
+        
+        if (empty($_POST['target_link'])) {
+            $target = '_self'; // Default target.
+        } else {
+            $target      = Security :: remove_XSS($_POST['target_link']);
+        }
 
 		$urllink      = trim($urllink);
 		$title        = trim($title);

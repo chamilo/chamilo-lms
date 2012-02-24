@@ -341,15 +341,13 @@ if (Database::num_rows($res_media) > 0) {
                     </div>
                     <div id="lp_navigation_elem" class="span8">
                         <div class="row">                        
-                            <div class="span7">
+                            <div class="span8">
                                 <?php echo $navigation_bar; ?>
+                                 <div id="progress_bar">
+                                    <?php echo $progress_bar; ?>
+                                 </div>    
                             </div>
-                        </div>
-                        <div class="row">                            
-                            <div id="progress_bar" class="span7">
-                                <?php echo $progress_bar; ?>
-                            </div>                        
-                        </div>
+                        </div>              
                     </div>
                     </div>
             </div>

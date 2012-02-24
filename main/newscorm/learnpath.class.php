@@ -1671,33 +1671,21 @@ class learnpath {
         $RequestUri = '';
         $mycurrentitemid = $this->get_current_item_id();
         if ($this->mode == 'fullscreen') {
-            $navbar = '<table cellpadding="0" cellspacing="0" align="left">' . "\n" .
-            '  <tr> ' . "\n" .
-            '    <td>' . "\n" .
-            '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
-            //'        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
-            //'        <a href="lp_controller.php?action=list" target="_top" title="learnpaths list"><img border="0" src="../img/exit.png" title="Exit"></a>'."\n" .
-            '      </div>' . "\n" .
-            '    </td>' . "\n" .
-            '  </tr>' . "\n" .
-            '</table>';
+            $navbar = '
+                  <div class="buttons">
+                    <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>.
+                    <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>            
+                  </div>';
 
         } else {
-            $navbar = '<table cellpadding="0" cellspacing="0" align="left">' . "\n" .
-            '  <tr> ' . "\n" .
-            '    <td>' . "\n" .
-            '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
-            // '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
-            '      </div>' . "\n" .
-            '    </td>' . "\n" .
-            '  </tr>' . "\n" .
-            '</table>';
+            $navbar = '
+                  <div class="buttons">
+                    <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>            
+                  </div>';
         }
         return $navbar;
     }

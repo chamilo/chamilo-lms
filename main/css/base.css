@@ -117,6 +117,7 @@ form .formw input {
 #lp_navigation_elem .buttons,
 #lp_navigation_elem #progress_bar {
     width:130px;
+    margin-left:15px;
 }
 
 * {

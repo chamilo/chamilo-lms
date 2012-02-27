@@ -278,6 +278,7 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 
+$content = '<div id="course_tools">'.$content.'</div>';
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);

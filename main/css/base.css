@@ -3535,3 +3535,8 @@ a:active{
     margin-right: 70px;
     text-shadow: 1px 1px 2px #000000;
 }
+
+
+#course_tools .row h3 {
+    margin-top:10px;
+}

@@ -87,38 +87,35 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         </div>';
 	}
 
-	$content .= '<div class="courseadminview"><span class="viewcaption">'.get_lang('Authoring').'</span>';
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);    
-	$content .= CourseHome::show_tools_category($my_list).'</div>';
+	$items = CourseHome::show_tools_category($my_list);    
+    $content .= return_block(get_lang('Authoring'),  $items);
     
-	$content .= '<div class="courseadminview"><span class="viewcaption">'.get_lang('Interaction').'</span>';
-
+	
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
     $my_list = array_merge($my_list,$list2);
-    $content .= CourseHome::show_tools_category($my_list);
-	$content .= '</div>
+    $items =  CourseHome::show_tools_category($my_list);
+	
+    $content .= return_block(get_lang('Interaction'),  $items);
         
-	<div class="courseadminview"><span class="viewcaption">'.get_lang('Administration').'</span>';
-        $theme = api_get_setting('homepage_view');
-        $rows = false;
-        if ($theme  == 'activity_big') {
-            $rows = 4;
-        }
-        $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-        $content .= CourseHome::show_tools_category($my_list, $rows);
-	$content .=  '</div>';
+	
+    $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
+    $items = CourseHome::show_tools_category($my_list);	
+        
+    $content .= return_block(get_lang('Administration'),  $items);
+    
 } elseif (api_is_coach()) {
 	if (api_get_setting('show_session_data') == 'true' && $id_session > 0) {
 
-		$content .= '<div class="courseadminview">
+		$content .= '<div class="row">
 			<span class="viewcaption">'.get_lang('SessionData').'</span>
 			<table class="course_activity_home">';
 				$content .= CourseHome::show_session_data($id_session);
              $content .=  '</table></div>';
 	}
 
-    $content .=  '<div class="Authoringview">';
+    $content .=  '<div class="row">';
 				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 				$content .= CourseHome::show_tools_category($my_list);
     $content .= '</div>';
@@ -127,8 +124,13 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 } else {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 	if (count($my_list) > 0) {
-        $content .= '<div class="Authoringview">';
+        $content .= '<div class="row">';
         $content .= CourseHome::show_tools_category($my_list);
         $content .= '</div>'; 
 	}
+}
+
+function return_block($title, $content) {    
+    $html = '<div class="row"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row">'.$content.'</div>';
+    return $html;
 }

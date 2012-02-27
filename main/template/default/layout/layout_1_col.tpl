@@ -7,8 +7,8 @@
 {/block}
 
 {* 1 column *}
-{block name=body}
-	<div class="span12">
+{block name=body}    
+    <div class="span12">
         {* Actions *}
         {if (!empty($actions) ) }
             <div class="actions">
@@ -22,7 +22,7 @@
         {* Main content *}
         {$content}
         </section>
-    </div>       
+    </div>    
 {/block}
 
 {* Footer *}

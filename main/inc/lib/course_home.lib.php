@@ -747,78 +747,53 @@ class CourseHome {
         
         $html = '';
          
-        if (!empty($items))    
-        foreach($items as $item) {        
-            switch($theme) {
-                case 'activity_big':
-                    $data = '';                    
-                    if ($i == 0) {
-                         $html .= '<table style="width:100%">';
-                    }
-                    $row_per = 33;
-                    $mod = 3;                    
-                    if (isset($rows) && is_numeric($rows)) {
-                        $row_per = 25;
-                        $mod = $rows;          
-                    }
-                    $mod_result = $mod - 1;
-                    
-                    if ($i % $mod == 0) {
-                        $html .=  '<tr valign="top">';
-                    }
-                                    
-                    $html .=  '<td width="'.$row_per.'%">';
+        if (!empty($items)) { 
+            
+            foreach($items as $item) {     
+                switch($theme) {
+                    case 'activity_big':
+                        $data = '';                
+                        
+                        $html .=  '<div class="span4">';
+                        
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
                         $html .=  Display::div($data, array('class'=>'big_icon')); //box-image reflection
-						$html .=  Display::tag('center', Display::div('<h3>'.$item['visibility'].$item['extra'].$item['link'].'</h3>', array('class'=>'content')));
-                    $html .=  '</td>';
-                    
-                    if ($i % $mod == $mod_result) {
-                        $html .=  '</tr>';
-                    }
-                    if ($i == count($items) -1) {
-                        $html .=  '</table>';
-                    }               
-                    break;
-                case 'activity':  
-                    if ($i == 0) {
-                         $html .=  '<table class="course_activity_home">';
-                    }                    
-                    if (!($i % 2)) {
-                        $html .=   '<tr valign="top">';
-                    }                                        
-                    $html .=  '<td width="50%">';
-                        $html .=  $item['extra']; 
-                        $html .=  $item['visibility'];
-                        $html .=  $item['icon'];
-                        $html .=  $item['link'];                        
-                    $html .=  '</td>';                    
-                    if ($i % 2) {
-                        $html .=  '</tr>';
-                    }
-                    if ($i == count($items) -1) {
-                        $html .=  '</table>';
-                    }               
-                    break;
-                case 'vertical_activity':
-                    if ($i == 0) {
-                        $html .=  '<ul>';
-                    }                    
-                    $html .=  '<li>';
-                        $html .=  $item['extra']; 
-                        $html .=  $item['visibility'];
-                        $html .=  $item['icon'];
-                        $html .=  $item['link'];  
-                    $html .=  '</li>';
-                    
-                    if ($i == count($items) -1) {
-                        $html .=  '</ul>';
-                    }
-                    break;    
-            }   
-            $i++;         
+                        $html .=  Display::tag('center', Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content')));
+                        
+                        $html .=  '</div>';
+                        
+                        break;
+                    case 'activity':  
+                        $html .=  '<div class="span6">';
+                        
+                            $html .=  $item['extra']; 
+                            $html .=  $item['visibility'];
+                            $html .=  $item['icon'];
+                            $html .=  $item['link'];                        
+                        $html .=  '</div>';                        
+                                       
+                        break;
+                    case 'vertical_activity':
+                        if ($i == 0) {
+                            $html .=  '<ul>';
+                        }                    
+                        $html .=  '<li>';
+                            $html .=  $item['extra']; 
+                            $html .=  $item['visibility'];
+                            $html .=  $item['icon'];
+                            $html .=  $item['link'];  
+                        $html .=  '</li>';
+
+                        if ($i == count($items) -1) {
+                            $html .=  '</ul>';
+                        }
+                        break;    
+                }   
+                $i++;         
+            }
+            
         }
         return $html;
     }

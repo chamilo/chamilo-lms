@@ -102,19 +102,13 @@ a:active {
 #footer .copyright {
     float: right;
     padding-top:60px;
-    margin-right:5%;
-    background-color: #037fb2;
-    background-image: url(images/bg-footer.gif);
-    background-repeat:repeat-x;
+    margin-right:5%;    
 }
 
 .footer_emails{
     float: left;
     padding-top:60px;
-    margin-right:5%;
-    background-color: #037fb2;
-    background-image: url(images/bg-footer.gif);
-    background-repeat:repeat-x;
+    margin-right:5%;    
 }
 
 /*****************************************************

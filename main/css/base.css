@@ -130,7 +130,7 @@ html, body {
 }
 
 #topbar {
-    z-index:20000;
+    z-index:9000; /* bug when using full area fckeditor */
 }
 
 footer {

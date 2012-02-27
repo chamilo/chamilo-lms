@@ -389,5 +389,5 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div id='loading' style='left:240px;position:absolute;display:none'>{"Loading"|get_lang}...</div>
+<div id='loading' style='margin-left:150px;position:absolute;display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

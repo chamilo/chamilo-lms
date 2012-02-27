@@ -11,6 +11,9 @@
 set_time_limit(0);
 
 require_once '../inc/global.inc.php';
+
+api_protect_course_script();
+
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
 $path          = $document_data['path'];
 

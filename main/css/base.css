@@ -683,10 +683,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     margin-top: 10px;
 }
 
-.social-background-content {
-    width:auto; 
-}
-
 .group_social_item {
     float:left;
     width:95%;  
@@ -1873,18 +1869,14 @@ div.image-social-content center.friend {
     font-size:12px;
     font-weight:bold;
 }
-.social-menu-text4 {
-    font-family:Verdana, Geneva, sans-serif;
+.social-menu-text4 {    
     color:#000;
-    font-weight:normal;
-    font-size:10px;
+    font-weight:normal;    
     vertical-align:bottom;
 }
-.social-menu-text-active {
-    font-family:Verdana, Geneva, sans-serif;
+.social-menu-text-active {    
     color:#000;
-    font-weight:bold;
-    font-size:10px;
+    font-weight:bold;    
     vertical-align:bottom;
 }
 .social-menu-title-right {
@@ -2061,10 +2053,7 @@ border-top: 1px solid #E2E2E2;
 
 .social-background-content {
     z-index:5;
-    position:relative;
-    width:185px;
-    left:-10px;
-    overflow:hidden;
+    text-align: center;
 }
 
 .social-background-content .hidden_message {

@@ -69,7 +69,7 @@ $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
 $social_left_content = SocialManager::show_social_menu('home');
 	
-        $social_right_content .= '<div class="social_user_information" style="width:280px">';
+        $social_right_content .= '<div class="row"><div class="social_user_information span5">';
             
             $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
@@ -90,7 +90,7 @@ $social_left_content = SocialManager::show_social_menu('home');
             $skill = new Skill();
             $skills =  $skill->get_user_skills(api_get_user_id(), true);
             
-            $social_right_content .= '<div class="left" style="width:280px">';            
+            $social_right_content .= '<div class="clear"></div>';            
                 $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
                 $lis = '';
                 if (!empty($skills)) {
@@ -102,11 +102,11 @@ $social_left_content = SocialManager::show_social_menu('home');
                 $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
                 $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);                
             $social_right_content .= '</div>';
-        $social_right_content .= '</div>'; // end social_user_information
+        
         
                  
             //Search box
-			$social_right_content .= '<div class="social-box-right">';	
+			$social_right_content .= '<div class="span6">';	
 					
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
@@ -165,6 +165,7 @@ $social_left_content = SocialManager::show_social_menu('home');
     				$social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
     			}
 			$social_right_content .= '</div>';
+            $social_right_content .= '</div>';
             
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

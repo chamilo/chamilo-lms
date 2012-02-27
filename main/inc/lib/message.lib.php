@@ -213,8 +213,7 @@ class MessageManager
      * @param bool    sent an email or not (@todo)
 	 * @return bool
 	 */
-	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $topic_id = 0) {
-        global $charset;
+	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $topic_id = 0) {        
 		$table_message      = Database::get_main_table(TABLE_MESSAGE);
         $group_id           = intval($group_id);
         $receiver_user_id   = intval($receiver_user_id);
@@ -243,8 +242,7 @@ class MessageManager
 		//Just in case we replace the and \n and \n\r while saving in the DB
 		$content = str_replace(array("\n", "\n\r"), '<br />', $content);		
 
-		$now = api_get_utc_datetime();
-		
+		$now = api_get_utc_datetime();		
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
         	// message for user friend        	
@@ -263,7 +261,9 @@ class MessageManager
 					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".$now."','$clean_subject','$clean_content','$group_id','$parent_id', '".$now."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
-			}        
+			}   
+            
+            
 
 			// Save attachment file for inbox messages
 			if (is_array($file_attachments)) {
@@ -299,7 +299,7 @@ class MessageManager
 			$notification = new Notification();
 			$sender_info = api_get_user_info($user_sender_id);
 			
-		    if (empty($group_id)) {		    	
+		    if (empty($group_id)) {	    	
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);

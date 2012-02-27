@@ -321,15 +321,15 @@ class SocialManager extends UserManager {
 		
 		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
 			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message); 
+            
 			if ($send_message) {
 				echo Display::display_confirmation_message($succes,true);
 			} else {
-				echo Display::display_error_message($succes,true);
+				echo Display::display_error_message(get_lang('ErrorSendingMessage'),true);
 			}
 			return false;
 		} elseif (isset($userfriend_id) && !isset($subject_message)) {
-			$count_is_true=false;
-			$count_number_is_true=0;
+			$count_is_true = false;			
 			if (isset($userfriend_id) && $userfriend_id>0) {
 				$message_title = get_lang('Invitation');
 				$count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
@@ -563,7 +563,6 @@ class SocialManager extends UserManager {
 		}       
         $user_info = api_get_user_info($user_id, true);  
         
-
 		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
 		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 
@@ -599,12 +598,12 @@ class SocialManager extends UserManager {
 			//$original	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_ORIGINAL);            
 	
 			$html .= '<div class="social-content-image">';                
-				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';				
+				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';				
 				$html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
 				if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
 					$html .= '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
 				}
-	    		$html .= '</center></div>';
+	    		$html .= '</div>';
 		  	$html .= '</div>';
 		  	
 	  	} else {
@@ -614,8 +613,8 @@ class SocialManager extends UserManager {
 			$normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
 
 	  		//--- User image
-			$html .= '<div class="social-content-image">';
-				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
+			
+				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';
 
 					if ($img_array['file'] != 'unknown.jpg') {
 		    	  		$html .= '<a class="thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
@@ -626,8 +625,8 @@ class SocialManager extends UserManager {
 						$html .= '<div id="edit_image" class="hidden_message" style="display:none">';
 						$html .= '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
 					}
-	    	  	$html .= '</center></div>';
-		  	$html .= '</div>';
+	    	  	$html .= '</div>';
+		  	
 	  	}
 
 		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {

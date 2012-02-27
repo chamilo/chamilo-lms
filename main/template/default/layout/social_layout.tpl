@@ -1,15 +1,11 @@
-<div id="social-content">    
-    <div id="social-content-left">
-        {$social_left_content}
-    </div>
+<div class="row-fluid">    
     
-    <div class="social-menu">
+    <div class="span3">
+        {$social_left_content}
         {$social_left_menu}
     </div>
     
-    <div id="social-content-right">
+    <div class="span9">
         {$social_right_content}        
     </div>
 </div>
-
-<div class="clear">&nbsp;</div>

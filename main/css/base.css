@@ -2242,9 +2242,13 @@ input.maininput:focus {
 }
 
 /* Big icons course home page styles */ 
-.big_icon {
-    /*width:205px; */
+#course_tools .big_icon {    
     padding:10px;   
+    text-align:center;
+}
+
+#course_tools .content {
+    text-align:center;
 }
 
 .big_icon img {     

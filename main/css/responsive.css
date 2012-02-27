@@ -109,9 +109,22 @@
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
         float: left;     
+    }    
+}
+
+@media (min-width: 980px) and (max-width: 1024px) {
+    /* fixes tabs */
+    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+        padding-left: 6px;
+        padding-right: 6px;
     }
     
+    /* only for the course tools */
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
+        float: left;     
+    }    
 }
+
 
 
 @media (max-width: 980px) {

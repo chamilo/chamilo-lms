@@ -96,7 +96,7 @@ if ($intro_editAllowed) {
 			if (!empty($intro_content)) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET c_id = $course_id, id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";				
 				Database::query($sql);
-				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
+				$introduction_section .= Display::return_message(get_lang('IntroductionTextUpdated'),'confirmation', false);
 			} else {
 				$intro_cmdDel = true;	// got to the delete command
 			}
@@ -108,7 +108,7 @@ if ($intro_editAllowed) {
 	/* Delete Command */
 	if ($intro_cmdDel) {
 		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
-		$introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'),'confirmation');
+		$introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
 	}
 }
 

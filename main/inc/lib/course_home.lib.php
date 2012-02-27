@@ -752,28 +752,23 @@ class CourseHome {
             foreach($items as $item) {     
                 switch($theme) {
                     case 'activity_big':
-                        $data = '';                
-                        
-                        $html .=  '<div class="span4">';
-                        
+                        $data = '';                                        
+                        $html .=  '<div class="span4">';                        
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                        $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
+                        $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64);
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
-                        $html .=  Display::div($data, array('class'=>'big_icon')); //box-image reflection
-                        $html .=  Display::tag('center', Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content')));
-                        
+                        $html .= Display::div($data, array('class'=>'big_icon')); //box-image reflection
+                        $html .= Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content'));                        
                         $html .=  '</div>';
                         
                         break;
                     case 'activity':  
-                        $html .=  '<div class="span6">';
-                        
+                        $html .=  '<div class="span6">';                        
                             $html .=  $item['extra']; 
                             $html .=  $item['visibility'];
                             $html .=  $item['icon'];
                             $html .=  $item['link'];                        
-                        $html .=  '</div>';                        
-                                       
+                        $html .=  '</div>';
                         break;
                     case 'vertical_activity':
                         if ($i == 0) {
@@ -792,8 +787,7 @@ class CourseHome {
                         break;    
                 }   
                 $i++;         
-            }
-            
+            }            
         }
         return $html;
     }

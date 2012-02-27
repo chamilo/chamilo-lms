@@ -18,6 +18,7 @@
     </ul>
 </div>    
 <div id="wrapper">
+    
     {* Bug and help notifications *}		
     <ul id="navigation" class="notification-panel">
         {$help_content}
@@ -26,7 +27,8 @@
     
     {* topbar *}
     {include file="default/layout/topbar.tpl"}    
-    <div id="main" class="container">        
+    
+    <div id="main" class="container">     
         <header> 
             {* header1 - logo *}
             <div id="header1">                
@@ -51,6 +53,5 @@
 
         {* breadcrumb *}
         {$breadcrumb}
-        <div class="row">
-            
+        <div class="row">            
 {/if}          

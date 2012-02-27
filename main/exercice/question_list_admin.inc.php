@@ -195,7 +195,7 @@ if (!$inATest) {
 				$actions     = Display::tag('div',$edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 	
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
              
                 // Question name
 	      

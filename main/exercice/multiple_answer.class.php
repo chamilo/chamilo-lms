@@ -127,7 +127,7 @@ class MultipleAnswer extends Question {
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
 
-			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span9", 'value' => '0'));
+			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span1", 'value' => '0'));
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');

@@ -128,7 +128,7 @@ class Matching extends Question {
 
 			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="60" style="margin-left: 0em;"');
 			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);
-			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, array('class' => 'span9', 'value' => 10));
+			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, array('class' => 'span1', 'value' => 10));
 			$form -> addGroup($group, null, null, '</td><td>');
 			$form -> addElement ('html', '</td></tr>');
 		}

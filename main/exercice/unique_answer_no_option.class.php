@@ -259,7 +259,7 @@ class UniqueAnswerNoOption extends Question {
 
 			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-			$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span9", 'value' => '0'));
+			$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));
 			$form->addElement('html', '</tr>');
             $i++;				
 		}	
@@ -309,7 +309,7 @@ class UniqueAnswerNoOption extends Question {
     
             //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
     
-            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span9", 'value' => '0', 'readonly' =>'readonly'));
+            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0', 'readonly' =>'readonly'));
             $form->addElement ('html', '</tr>');
         
          //}

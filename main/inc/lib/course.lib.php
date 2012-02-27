@@ -2722,8 +2722,8 @@ class CourseManager {
         return $html;
     }
     
-    public function course_item_parent($main_content, $sub_content) {
-        return '<div class="well2">'.$main_content.$sub_content.'</div>';
+    public function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
+        return '<div class="well2">'.$main_content.$sub_content.$sub_sub_content.'</div>';
     }
 
     /**

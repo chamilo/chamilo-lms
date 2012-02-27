@@ -1030,14 +1030,6 @@ class IndexManager {
 		define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 		
 		
-		if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-			echo Display::tag('h2', get_lang('HistoryTrainingSession'));
-			//if (empty($courses_tree[0]['sessions'])){
-			if (empty($courses_tree)) {
-				echo get_lang('YouDoNotHaveAnySessionInItsHistory');
-			}
-		}		
-		
 		/* PERSONAL COURSE LIST */
 		
 		if (!isset ($maxValvas)) {
@@ -1083,6 +1075,18 @@ class IndexManager {
 				}
 			}
 		}
+        
+                
+        $html = '';
+		
+		
+		if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+			$html .= Display::tag('h2', get_lang('HistoryTrainingSession'));
+			//if (empty($courses_tree[0]['sessions'])){
+			if (empty($courses_tree)) {
+				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+			}
+		}        
 	
 		foreach ($personal_course_list as $my_course) {						
 			$thisCourseSysCode 		= $my_course['k'];
@@ -1170,7 +1174,7 @@ class IndexManager {
 			}
 		} // End while mycourse...
 		
-        $html = '';
+
 		
 		if (is_array($courses_tree)) {
 			foreach ($courses_tree as $key => $category) {
@@ -1283,38 +1287,25 @@ class IndexManager {
 								$params['title'] .=  '</span>';
 		
 								if (api_is_platform_admin()) {
-									$params['title'] .=  '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
+									$params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
 								}                                
-                                $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_courses_session);
-                                 
-								//$html_sessions .= '</li>';
-								//$html_sessions .= $html_courses_session;
-                                
-								//$html_sessions .= '</ul>';
+                                $html_sessions .= CourseManager::course_item_html($params).$html_courses_session;                         
 							}
 						}
 		
 						if ($count_courses_session > 0) {
-                            $params = array();
-		
-							//$html .=  '<div class="userportal-session-category-item span8" id="session_category_'.$category['details']['id'].'">';
-							//$html .=  '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
-		
+                            $params = array();				
 							$params['icon'] = Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array(), ICON_SIZE_LARGE);
-		
-							if (api_is_platform_admin()) {
-								$params['right_actions'] .= '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a></div>';
-							}
                             
+							if (api_is_platform_admin()) {
+								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';
+							}                            
 							$params['title'] .=  $category['details']['name'];							
 		
 							
 							if ($category['details']['date_end'] != '0000-00-00') {
 								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);
 							}
-							//$html .=  $html_sessions;
-							//$html .=  '</div>';
-                            
                             $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_sessions);
 						}
 					}

@@ -227,7 +227,7 @@ if (is_array($personal_course_list)) {
 }
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
-$social_right_content = '<div class="rounded_div" style="width:280px">';
+$social_right_content = '<div class="row"><div class="rounded_div span5">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	$social_right_content .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -341,16 +341,15 @@ $social_right_content .=  '</div>';	// close div tag rounded
 
 if ($show_full_profile) {
 
-	$social_right_content .=  '<div class="rounded_div" style="width:288px">';	
-	$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
+	$social_right_content .=  '<div class="rounded_div span4">';	
+	$list_path_normal_friends = $list_path_parents = array();
 
 	//SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
 	$friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
 
 	$friend_html		= '';
 	$number_of_images	= 6;
-	$number_friends		= 0;
-	$list_friends_id	= array();
+	$number_friends		= 0;	
 	$number_friends  	= count($friends);
 
 	if ($number_friends != 0) {
@@ -380,8 +379,7 @@ if ($show_full_profile) {
 			if (isset($friends[$k])) {
 				$friend = $friends[$k];
 				$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
-                $user_info = api_get_user_info($friend['friend_user_id'], true);
-                
+                $user_info = api_get_user_info($friend['friend_user_id'], true);                
                          
                 if ($user_info['user_is_online']) {
                     $status_icon = Display::div('', array('class' => 'online_user'));
@@ -394,12 +392,7 @@ if ($show_full_profile) {
 
 				// the height = 92 must be the sqme in the image_friend_network span style in default.css
 				$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
-       
-
-				$friend_html.= '<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
-                
-            
-                
+				$friend_html.= '<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';                
 				$friend_html.= '<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
 				$friend_html.= '</center></span>';
 				$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
@@ -465,7 +458,7 @@ if ($show_full_profile) {
 	}
 
     if (count($grid_my_groups) > 0) {
-		$social_right_content .=  '<div class="rounded_div" style="width:90%">';    		
+		$social_right_content .=  '<div class="rounded_div span10" >';    		
     		$count_groups = 0;
     		if (count($results) == 1 ) {
     			$count_groups = count($results);
@@ -496,7 +489,7 @@ if ($show_full_profile) {
 
 	// COURSES LIST
 	if ( is_array($list) ) {
-		$social_right_content .=  '<div class="rounded_div" style="width:90%">';			
+		$social_right_content .=  '<div class="rounded_div span10">';			
 			$social_right_content .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
 			$social_right_content .=  '<div class="social-content-training">';
 			//Courses whithout sessions
@@ -639,8 +632,10 @@ if ($show_full_profile) {
 		}		
 		$social_right_content .=  '</div>'; //rounded     
 	}	
-	$social_right_content .=  '</div>'; // close social-box-main1
+	$social_right_content .=  '</div>'; // 
+    
 }
+$social_right_content .=  '</div>'; // 
 
 
 $tpl = new Template(get_lang('Social'));

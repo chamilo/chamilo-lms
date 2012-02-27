@@ -96,7 +96,8 @@ class Template extends Smarty {
     function set_actions($actions) {
         $action_string = '';
         if (!empty($actions)) {
-            foreach($actions as $action) {                
+            foreach($actions as $action) { 
+                $action_string .= $action;
             }
         }
         $this->assign('actions', $actions);        
@@ -237,15 +238,15 @@ class Template extends Smarty {
         
 		//Course theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";'."\n";
-		
+        
+        $navigator_info = api_get_navigator();
+        
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
 		}
         
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";
-        
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'responsive.css";'."\n";
-        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'responsive.css";'."\n";   
 		
 		$this->assign('css_style', $style_html);
 		

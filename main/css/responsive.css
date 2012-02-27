@@ -19,72 +19,72 @@
 
 @media (max-width: 768px) {
 
-  /* Remove any padding from the body */
-  body {
-    padding-top: 0;
-  }
-  
-  #topbar_push {
-      height: 0px;
-  }
-  
-  /* Removing just for now*/
-  #header4{
-      display:none;
-  }
-  
-  #header2 {
-        
-  }
-  
-  /* Subnav */
-  .subnav {           
-    border:1px solid #fff;
-    position: static;
-    top: auto;
-    z-index: auto;
-    width: 100%;
-    height: auto;    
-    -webkit-box-shadow: none;
-       -moz-box-shadow: none;
-            box-shadow: none;
-  }
-  .subnav .nav > li {
-    float: none;    
-  }
-  .subnav .nav > li > a {
-    border: 0;
-  }
-  .subnav .nav > li + li > a {
-    border-top: 1px solid #e5e5e5;
-  }
-  .subnav .nav > li:first-child > a,
-  .subnav .nav > li:first-child > a:hover {
-      -webkit-border-radius: 4px 4px 0 0;
-         -moz-border-radius: 4px 4px 0 0;
-              border-radius: 4px 4px 0 0;
-  }
+    /* Remove any padding from the body */
+    body {
+        padding-top: 0;
+    }
 
-  /* Popovers */
-  .large-bird {
-    display: none;
-  }
-  .popover-well .popover-wrapper {
-    margin-left: 0;
-  }
+    #topbar_push {
+        height: 0px;
+    }
 
-  /* Space out the show-grid examples */
-  .show-grid [class*="span"] {
-    margin-bottom: 5px;
-  }
+    /* Removing just for now*/
+    #header4{
+        display:none;
+    }
 
-  /* Unfloat the back to top link in footer */
-  .footer .pull-right {
-    float: none;
-  }
-  .footer p {
-    margin-bottom: 9px;
-  }
+    #header2 {
+
+    }
+
+    /* Subnav */
+    .subnav {           
+        border:1px solid #fff;
+        position: static;
+        top: auto;
+        z-index: auto;
+        width: 100%;
+        height: auto;    
+        -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+                box-shadow: none;
+        }
+    .subnav .nav > li {
+        float: none;    
+    }
+    .subnav .nav > li > a {
+        border: 0;
+    }
+    .subnav .nav > li + li > a {
+        border-top: 1px solid #e5e5e5;
+    }
+    .subnav .nav > li:first-child > a,
+    .subnav .nav > li:first-child > a:hover {
+        -webkit-border-radius: 4px 4px 0 0;
+            -moz-border-radius: 4px 4px 0 0;
+                border-radius: 4px 4px 0 0;
+    }
+
+    /* Popovers */
+    .large-bird {
+        display: none;
+    }
+    .popover-well .popover-wrapper {
+        margin-left: 0;
+    }
+
+    /* Space out the show-grid examples */
+    .show-grid [class*="span"] {
+        margin-bottom: 5px;
+    }
+
+    /* Unfloat the back to top link in footer */
+    .footer .pull-right {
+        float: none;
+    }
+    .footer p {
+        margin-bottom: 9px;
+    }
 }
 
 
@@ -99,9 +99,12 @@
     }
 }
 
-
 @media (min-width: 768px) and (max-width: 980px) {
-   
+    /* fixes tabs */
+    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+        padding-left: 6px;
+        padding-right: 6px;
+    }   
 }
 
 

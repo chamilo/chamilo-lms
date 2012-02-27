@@ -9,24 +9,25 @@ require_once '../global.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'array.lib.php';
-
 // 1. Setting variables needed by jqgrid
-$action= $_GET['a'];
-$page  = intval($_REQUEST['page']); //page
-$limit = intval($_REQUEST['rows']); //quantity of rows
-$sidx  = $_REQUEST['sidx'];         //index to filter         
-$sord  = $_REQUEST['sord'];         //asc or desc
+
+$action = $_GET['a'];
+$page   = intval($_REQUEST['page']); //page
+$limit  = intval($_REQUEST['rows']); //quantity of rows
+$sidx   = $_REQUEST['sidx'];         //index (field) to filter         
+$sord   = $_REQUEST['sord'];         //asc or desc
+
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
 
-if ($action != 'get_exercise_results')
+if ($action != 'get_exercise_results') {
 	api_protect_admin_script(true);
+}
 
 //Search features
 
-$ops = array(
+$ops = array (
     'eq' => '=',        //equal
     'ne' => '<>',       //not equal
     'lt' => '<',        //less than
@@ -43,7 +44,7 @@ $ops = array(
     'nc' => 'NOT LIKE'  //doesn't contain
 );
 
-//@todo move this in the display_class
+//@todo move this in the display_class or somewhere else
 
 function get_where_clause($col, $oper, $val) {
     global $ops;
@@ -86,6 +87,7 @@ if ($_REQUEST['_search'] == 'true') {
         $where_condition .= ' ) ';
     }        
 }
+//var_dump($where_condition);
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
@@ -157,7 +159,9 @@ switch ($action) {
 		$course                     = api_get_course_info();
 		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 		$is_tutor                   = api_is_allowed_to_edit(true);
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; //used inside get_exam_results_data()
+        
+        //used inside get_exam_results_data()
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 
 		
 		if ($is_allowedToEdit || $is_tutor) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
@@ -199,9 +203,7 @@ switch ($action) {
             } else {
                 $item['certificates'] = Display::return_icon('warning.png', get_lang('NoCertificate'), array(), ICON_SIZE_SMALL);
                 $item['has_certificates'] = '0';
-            }
-            
-            $skills_string = '';
+            }            
             if (!empty($skills)) {
                 foreach($skills as $skill) {
                     $item['skills'] .= Display::span($skill['name'], array('class' => 'label_tag skill'));  
@@ -280,16 +282,15 @@ if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', '
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
             if ($row['id'] == "") {
                 $response->rows[$i]['id']=$i;
-            }
-            else {
+            } else {
                 $response->rows[$i]['id']=$row['id'];
             }             
-             $array = array();
-             foreach($columns as $col) {
-             	$array[] = $row[$col];
-             }                   
-             $response->rows[$i]['cell']=$array;
-             $i++; 
+            $array = array();
+            foreach($columns as $col) {
+                $array[] = $row[$col];
+            }                   
+            $response->rows[$i]['cell']=$array;
+            $i++; 
         }
     } 
     echo json_encode($response);       

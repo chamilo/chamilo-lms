@@ -4857,21 +4857,9 @@ class learnpath {
                 $oddclass = 'row_even';
             }
             $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';            
-            
-            // "lp_item_'.$i.' is important for the drag and drop otherwise the LP will not work
-                        
+                      
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-            /*
-            if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>';
-            } else {
-                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>';
-                } else {
-                    //$return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>';
-                    $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />' . $title . '</td>';
-                }
-            }*/
+
             $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
             	$icon = '<img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />';
@@ -4913,9 +4901,9 @@ class learnpath {
 			$move_icon = '';
 			$edit_icon = '';
 			$delete_icon = '';
+            
             if ($is_allowed_to_edit) {
-                if (!$update_audio OR $update_audio <> 'true') {
-					
+                if (!$update_audio OR $update_audio <> 'true') {					
                     $move_icon .= '<a class="moved" href="#">';
 					$move_icon .= Display::return_icon('move.png', get_lang('Move'), array(), 24);
                     $move_icon .= '</a>';
@@ -5009,8 +4997,8 @@ class learnpath {
 	        		$sub_list = Display::tag('li', '', array('class'=>'sub_item empty')); // empty value
 	        	}	        	 
 	        	if (empty($item['children'])) {
-	        		$sub_list = Display::tag('ul', $sub_list, array('id'=>'UL_'.$key, 'class'=>'record container'));
-	        		$return  .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        		$sub_list = Display::tag('ul', $sub_list, array('id'=>'UL_'.$key, 'class'=>'record li_container'));
+	        		$return  .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
 	        	} else {
 	        		//sections	  
 	        		if (isset($item['children'])) {	        			
@@ -5019,8 +5007,8 @@ class learnpath {
 	        		/*foreach($item['children'] as $my_key => $sub_item) {
 	        			$sub_list .= Display::tag('li', $sub_item['data'], array('id'=>$my_key,'class'=>'record item'));
 	        		}*/
-	        		$sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record container'));
-	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        		$sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record li_container'));
+	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
 	        	}	        
         	}
         	return $return;
@@ -5028,13 +5016,12 @@ class learnpath {
         
         
         if ($update_audio != 'true') {
-        	$return .= '<div style="width:90%;"><ul id="lp_item_list">';
+        	$return .= '<div class="span12"><ul id="lp_item_list">';
         	$return .= print_recursive($elements, $default_data, $default_content);
         	$return .='</ul></div>';
         	
         	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button white medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
-        } else {
-        
+        } else {        
         	$return .= $return_audio.'</table>';
         }
         

@@ -138,10 +138,10 @@ $(function() {
 					newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
 					
 					//Determine if this child is a containter
-					if ($(this).is(".container")) {
+					if ($(this).is(".li_container")) {
 						  //Process the child elements of the container
-						  processChildren($(this).attr("id"));
-						}
+                        processChildren($(this).attr("id"));
+					}
 				}
 			
 		}); //end of lp_item_list children loop

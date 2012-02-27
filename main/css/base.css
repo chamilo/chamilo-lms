@@ -2595,10 +2595,6 @@ div.admin_section h4 {
 #lp_item_list .empty {
     height:20px;
 }
-#lp_item_list .button_actions {
-    position: absolute;
-    right: 20px;
-}
 
 #lp_item_list .item_data {
     padding:5px 0px 5px 0px;

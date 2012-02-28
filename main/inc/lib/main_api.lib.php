@@ -993,11 +993,11 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false) {
             $user_online_in_chat = 0;
             
             if ($use_status_in_platform) {
-                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'chat_user_status', false, true);                                                
-                if (intval($user_status['chat_user_status']) == 1) {
+                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'user_chat_status', false, true);                                                
+                if (intval($user_status['user_chat_status']) == 1) {
                     $user_online_in_chat = 1;
                 }                
-            }            
+            }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
         $user =  _api_format_user($result_array);        

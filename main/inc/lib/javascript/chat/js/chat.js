@@ -136,15 +136,16 @@ function startChatSession() {
                 startChatHeartBeat();   
             } else {
                 stopChatHeartBeat();   
-            }            
+            }
+            
 			$.each(data.items, function(my_user_id, user_items) {
-				//received_messages[item.f][item.id] = true;				
-				$.each(user_items, function(i, item) {
+                my_items = user_items['items'];                
+				$.each(my_items, function(i, item) {
 				
 					if (item)	{ // fix strange ie bug						
-						//my_user_id		= item.f;
-						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, item.username, 1, item.online);
+						//my_user_id		= item.f;                        
+						if ($("#chatbox_"+my_user_id).length <= 0) {                            
+							createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
 						}
 
 						if (item.s == 1) {
@@ -235,15 +236,15 @@ function chatHeartbeat() {
 		dataType: "json",
 		success: function(data) {			
 		
-			$.each(data.items, function(my_user_id, user_items) {				
-				
-				$.each(user_items, function(i, item) {
+			$.each(data.items, function(my_user_id, user_items) {
+                my_items = user_items['items'];				
+                
+				$.each(my_items, function(i, item) {
 					if (item)	{ // fix strange ie bug
 
 						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, item.username, 0, item.online);
+							createChatBox(my_user_id, my_items.user_info.user_name, 0, my_items.user_info.online);
 						}
-
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');
 							restructureChatBoxes();
@@ -253,19 +254,18 @@ function chatHeartbeat() {
 							//item.f = username;
 						}
 
-						update_online_user(my_user_id, item.online);
+						update_online_user(my_user_id, user_items.user_info.online);
 
 						if (item.s == 2) {
 							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
 						} else {
-							newMessages[my_user_id]		= {'status':true,'username':item.username};
-							newMessagesWin[my_user_id]	= {'status':true,'username':item.username};						
+							newMessages[my_user_id]		= {'status':true, 'username':item.username};
+							newMessagesWin[my_user_id]	= {'status':true, 'username':item.username};						
 
 							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage">\n\
 																				 <span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>\n\
 																				 <span class="chatboxmessagecontent">'+item.m+'</span></div>');
 						}
-
 						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop($("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight);
 						itemsfound += 1;
 					}

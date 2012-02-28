@@ -595,8 +595,7 @@ class SocialManager extends UserManager {
 			//--- Group image
 			$group_info = GroupPortalManager::get_group_data($group_id);
 			$big		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_BIG);
-			//$original	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_ORIGINAL);            
-	
+			
 			$html .= '<div class="social-content-image">';                
 				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';				
 				$html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
@@ -629,11 +628,7 @@ class SocialManager extends UserManager {
 		  	
 	  	}
 
-		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {
-			//echo Display::div(get_lang('Actions') ,array('class' => 'social_menu_option'));
-			/*echo '<div align="center" class="social-menu-title">';
-			echo '<span>'.get_lang('Option').'</span>';
-			echo '</div>';*/
+		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {			
 
 	        $html .= '<div class="social_menu_items"><ul>';	        	                	
             $html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="'.($show=='home'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Home').'</span></a></li>';
@@ -707,22 +702,6 @@ class SocialManager extends UserManager {
 			}
 	  		$html .= '</ul></div>';
 
-        	/*
-        	// ---- My Agenda Items
-			$my_agenda_items = show_simple_personal_agenda($user_id);
-			if (!empty($my_agenda_items)) {
-				echo '<div class="sectiontitle">';
-					echo get_lang('MyAgenda');
-				echo '</div>';
-				$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
-				echo '<div class="social-content-agenda">';
-					echo '<div class="social-background-content">';
-					echo $my_agenda_items;
-					echo '</div>';
-				echo '<br /><br />';
-				echo '</div>';
-			}
-			*/
 			if ($show_full_profile && $user_id == intval(api_get_user_id())) {
 				$personal_course_list = UserManager::get_personal_session_course_list($user_id);
 				$course_list_code = array();

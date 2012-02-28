@@ -36,8 +36,7 @@ var chatBoxes           = new Array();
 
 var timer;
 var user_status         = 0;
-//var ajax_url = 'chat.php'; // This variable is loaded in header.inc.php/ template/layout/head.tpl
-
+//var ajax_url = 'chat.php'; // This variable is loaded in the template/layout/head.tpl file
 
 function set_user_status(status) {
     $.ajax({
@@ -53,9 +52,7 @@ function set_user_status(status) {
 $(document).ready(function() {
 	originalTitle = document.title;
     
-	startChatSession();
-    //startChatHeartBeat();
-    //stopChatHeartBeat();
+	startChatSession();    
 
 	$([window, document]).blur(function() {
 		windowFocus = false;
@@ -243,7 +240,7 @@ function chatHeartbeat() {
 					if (item)	{ // fix strange ie bug
 
 						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, my_items.user_info.user_name, 0, my_items.user_info.online);
+							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online);
 						}
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');
@@ -267,6 +264,11 @@ function chatHeartbeat() {
 																				 <span class="chatboxmessagecontent">'+item.m+'</span></div>');
 						}
 						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop($("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight);
+                        
+                        if ($('#chatbox_'+my_user_id+' .chatboxcontent').css('display') == 'none') {
+                            $('#chatbox_'+my_user_id+' .chatboxhead').toggleClass('chatboxblink');
+                            
+                        }
 						itemsfound += 1;
 					}
 				});
@@ -448,7 +450,7 @@ function update_online_user(user_id, status) {
 
 
 function toggleChatBoxGrowth(user_id) {		
-	if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') == 'none') {  
+	if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') == 'none') {
 		
 		var minimizedChatBoxes = new Array();
 		

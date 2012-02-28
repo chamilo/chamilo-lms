@@ -756,7 +756,9 @@ if (isset($cidReset) && $cidReset) {
 
             if (!isset($_SESSION['login_as'])) {
 				//Course login
-				event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                if (isset($_user['user_id'])) {
+                    event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                }
             }
         } else {
             //exit("WARNING UNDEFINED CID !! ");
@@ -865,7 +867,7 @@ if (isset($cidReset) && $cidReset) {
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
-$user_id    = $_user['user_id']; 
+$user_id    = isset($_user['user_id']) ? $_user['user_id'] : null; 
 
 //Course permissions
 $is_courseAdmin     = false; //course teacher
@@ -905,7 +907,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 
                 //Checking if the user filled the course legal agreement
                 if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {                    
-                    $user_is_subscribed = CourseManager::is_user_accepted_legal($_user['user_id'], $_course['id'], $session_id);                    
+                    $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id);                    
                     if (!$user_is_subscribed) {
                         $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
                         header('Location: '.$url);

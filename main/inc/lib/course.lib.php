@@ -2711,10 +2711,10 @@ class CourseManager {
             $class = "";
         }
         $html .= '<div class="row-fluid">';         
-            $html .= '<div class="span12">';         
+            $html .= '<div class="span10">';         
                 $html .= '<div class="well3">'; 
                     $html .= '<div class="span1">'.$params['icon'].'</div>';
-                    $html .= '<div class="span8"><h4>'.$params['title'].'</h4></div>';                        
+                    $html .= '<div class="span5"><h4>'.$params['title'].'</h4></div>';                        
                     $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
                 $html .= '</div>';
             $html .= '</div>';

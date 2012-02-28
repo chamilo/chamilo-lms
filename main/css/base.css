@@ -6,6 +6,10 @@
 
 /* some changes to the pre_base */
 
+pre {
+    margin-top:40px;
+}
+
 select {
     width : auto;
 }

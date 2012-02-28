@@ -710,10 +710,14 @@ class Database {
             $connection = null;
         }        
         //error_log($query);
+        
+        //@todo remove this before the stable release
+        
         //Check if the table contains a c_ (means a course id)
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
-        	if (
+        	if (    
+                strpos($query, 'wcag_anysurfer_public_pages') === false &&
                 strpos($query, 'specific_field') === false &&
         	    strpos($query, 'down_doc_path') === false &&
         		strpos($query, 'INNER JOIN') === false &&  

@@ -56,7 +56,6 @@ if (isset($_GET['u'])) {
 } else {
 	$user_info	= UserManager::get_user_info_by_id($user_id);
 }
-
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
@@ -227,7 +226,7 @@ if (is_array($personal_course_list)) {
 }
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
-$social_right_content = '<div class="row"><div class="rounded_div span5">';
+$social_right_content = '<div class="row"><div class="rounded_div span4">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	$social_right_content .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -379,9 +378,9 @@ if ($show_full_profile) {
 			if (isset($friends[$k])) {
 				$friend = $friends[$k];
 				$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
-                $user_info = api_get_user_info($friend['friend_user_id'], true);                
+                $user_info_friend = api_get_user_info($friend['friend_user_id'], true);                
                          
-                if ($user_info['user_is_online']) {
+                if ($user_info_friend['user_is_online']) {
                     $status_icon = Display::div('', array('class' => 'online_user'));
                 } else {
                     $status_icon = Display::div('', array('class' => 'offline_user'));
@@ -458,7 +457,7 @@ if ($show_full_profile) {
 	}
 
     if (count($grid_my_groups) > 0) {
-		$social_right_content .=  '<div class="rounded_div span10" >';    		
+		$social_right_content .=  '<div class="rounded_div span8" >';    		
     		$count_groups = 0;
     		if (count($results) == 1 ) {
     			$count_groups = count($results);
@@ -489,7 +488,7 @@ if ($show_full_profile) {
 
 	// COURSES LIST
 	if ( is_array($list) ) {
-		$social_right_content .=  '<div class="rounded_div span10">';			
+		$social_right_content .=  '<div class="rounded_div span8">';			
 			$social_right_content .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
 			$social_right_content .=  '<div class="social-content-training">';
 			//Courses whithout sessions
@@ -513,10 +512,11 @@ if ($show_full_profile) {
 			$social_right_content .=  '</div>';		//social-content-training		
 		$social_right_content .=  '</div>'; //close rounded
 	}
+    
 	// user feeds
 	$user_feeds = SocialManager::get_user_feeds($user_id);
 	if (!empty($user_feeds)) {
-		$social_right_content .=  '<div class="rounded_div" style="width:90%">';				
+		$social_right_content .=  '<div class="rounded_div span8">';				
 			$social_right_content .=  '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
 			$social_right_content .=  '<div class="social-content-training">'.$user_feeds.'</div>';	
 		$social_right_content .=  '</div>';
@@ -540,14 +540,13 @@ if ($show_full_profile) {
 		$count_pending_invitations = count($pending_invitations);
 	}
 
-	$social_right_content .=  '<div class="social-box-main1">';	
 
 	if (!empty($production_list) || !empty($file_list) || $count_pending_invitations > 0) {
 		
 		//Pending invitations
 		if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 			if ($count_pending_invitations > 0) {				
-				$social_right_content .=  '<div class="rounded_div" style="width:280px">';
+				$social_right_content .=  '<div class="rounded_div span4">';
 				$social_right_content .=  '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					$user_invitation_id = $pending_invitations[$i]['user_sender_id'];
@@ -575,59 +574,53 @@ if ($show_full_profile) {
 		//--Productions
 		$production_list =  UserManager::build_production_list($user_id);
 		$product_content  = '';
-		if (!empty($production_list)) {
-			$product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
-			$product_content .=  '<div class="rounded1">';
+		if (!empty($production_list)) {			
+			$product_content .=  '<div class="rounded_div span4">';
+            $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
 			$product_content .=  $production_list;
 			$product_content .=  '</div>';
 		}
 		// Images uploaded by course
 		if (!empty($file_list)) {
+            $product_content .=  '<div class="rounded_div span4">';
 			$product_content .=  '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
 			$product_content .=  '<div class="social-content-information">';
 			$product_content .=  $file_list;
 			$product_content .=  '</div>';
-		}
-		if (!empty($product_content)) {
-			$social_right_content .=  '<div class="rounded_div" style="width:280px">';
-			$social_right_content .=  $product_content;
-			$social_right_content .=  '</div>'; // close rounded
-		}				
+            $product_content .=  '</div>';
+		}		
+        
+        $social_right_content .= $product_content;
 	}
 	
 	 
 	if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
 		
-		$social_right_content .=  '<div class="rounded_div" style="width:280px">';
+		$social_right_content .=  '<div class="rounded_div span4">';
 		$social_right_content .=  '<div><h3>'.get_lang('MoreInformation').'</h3></div>';		
 		$cut_size = 220;
 		if (!empty($user_info['competences'])) {
-			$social_right_content .=  '<br />';
-			$social_right_content .=  '<div class="social-background-content" style="width:100%;">';
+			$social_right_content .=  '<br />';			
     			$social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
-    			$social_right_content .=  '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
-			$social_right_content .=  '</div>';
+    			$social_right_content .=  '<div class="social-profile-extended">'.$user_info['competences'].'</div>';			
 			$social_right_content .=  '<br />';
 		}
-		if (!empty($user_info['diplomas'])) {
-			$social_right_content .=  '<div class="social-background-content" style="width:100%;" >';
-    			$social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
-    			$social_right_content .=  '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
-			$social_right_content .=  '</div>';
+		if (!empty($user_info['diplomas'])) {			
+            $social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
+            $social_right_content .=  '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';			
 			$social_right_content .=  '<br />';
 		}
 		if (!empty($user_info['openarea'])) {
-			$social_right_content .=  '<div class="social-background-content" style="width:100%;" >';
-    			$social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
-    			$social_right_content .=  '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
-			$social_right_content .=  '</div>';
+			
+            $social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
+            $social_right_content .=  '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
+
 			$social_right_content .=  '<br />';
 		}
-		if (!empty($user_info['teach'])) {
-			$social_right_content .=  '<div class="social-background-content" style="width:100%;" >';
-    			$social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
-    			$social_right_content .=  '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
-			$social_right_content .=  '</div>';
+		if (!empty($user_info['teach'])) {			
+    		$social_right_content .=  '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
+    		$social_right_content .=  '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
+			
 			$social_right_content .=  '<br />';
 		}		
 		$social_right_content .=  '</div>'; //rounded     

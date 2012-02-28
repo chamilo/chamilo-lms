@@ -1358,8 +1358,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
         $form->addElement('html', '</div>');
         $form->setDefaults($default_values); 
     }
-
-    
     return $form;
     
 }

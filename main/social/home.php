@@ -69,7 +69,7 @@ $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
 $social_left_content = SocialManager::show_social_menu('home');
 	
-        $social_right_content .= '<div class="row"><div class="social_user_information span5">';
+        $social_right_content .= '<div class="row"><div class="social_user_information span4">';
             
             $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
@@ -102,11 +102,9 @@ $social_left_content = SocialManager::show_social_menu('home');
                 $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
                 $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);                
             $social_right_content .= '</div>';
-        
-        
                  
             //Search box
-			$social_right_content .= '<div class="span6">';	
+			$social_right_content .= '<div class="span4">';	
 					
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
@@ -129,8 +127,8 @@ $social_left_content = SocialManager::show_social_menu('home');
         				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
         				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
         				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-        				$actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
-        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$actions);
+        				$group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
+        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$group_actions);
         			}
     			}
     
@@ -151,8 +149,8 @@ $social_left_content = SocialManager::show_social_menu('home');
     				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
     				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
     				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-    				$actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
-    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$actions);
+    				$group_actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
+    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$group_actions);
     			}
                 
     			if (count($groups_newest) > 0) {

@@ -136,8 +136,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     }
     
     if (isset($_GET['category']) && $_GET['category'] == 'search_setting') {  
-        if (!empty($_REQUEST['search_field']))
-            $settings = search_setting($_REQUEST['search_field']);                   
+        if (!empty($_REQUEST['search_field'])) {
+            $settings = search_setting($_REQUEST['search_field']);                               
+        }
     }
     
     $form = generate_settings_form($settings, $settings_by_access_list);    
@@ -360,7 +361,7 @@ echo "</div>";
 $form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'vertical'));
 $form_search->addElement('text', 'search_field');
 $form_search->addElement('hidden', 'category', 'search_setting');
-$form_search->addElement('style_submit_button', 'submit_button', get_lang('Search'), 'value="submit_button", class="save"');         
+$form_search->addElement('style_submit_button', 'submit_button', get_lang('Search'), 'value="submit_button", class="search"');         
 $form_search->setDefaults(array('search_field' => $_REQUEST['search_field']));
 $form_search->display();
 

@@ -599,8 +599,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 .agenda_day {
-    float:left;
-        
+    float:left;        
     width:100%; 
     background-color: #F8F9FF;    
     color: #666666;

@@ -2694,9 +2694,9 @@ div.admin_section h4 {
     -moz-border-radius: 10px;
     border-radius: 10px;
 
-    height: 40px;
-    /* margin: 5px; */
-    padding: 15px;
+    /*height: 40px;
+    margin: 5px; */
+    padding: 15px 0px 15px 0px; 
 }
 
 .exercise_overview_options .left_option {

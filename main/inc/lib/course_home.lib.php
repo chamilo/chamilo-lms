@@ -763,7 +763,7 @@ class CourseHome {
                         
                         break;
                     case 'activity':  
-                        $html .=  '<div class="span6">';                        
+                        $html .=  '<div class="offset2 span4">';                        
                             $html .=  $item['extra']; 
                             $html .=  $item['visibility'];
                             $html .=  $item['icon'];

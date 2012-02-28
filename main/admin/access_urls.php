@@ -135,9 +135,9 @@ foreach($sortable_data as $row)  {
     }    
     //Actions
     $url_id = $row['id'];
-    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_MEDIUM), "access_url_edit.php?url_id='.$url_id.'");
+    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
     if ($url_id != '1') {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
     }    
     $urls[] = array($url, $description, $status, $actions);
 }

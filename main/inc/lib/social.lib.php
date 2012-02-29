@@ -11,9 +11,9 @@
  * Code
  */
 //PLUGIN PLACES
-define('SOCIAL_LEFT_PLUGIN',	1);
-define('SOCIAL_CENTER_PLUGIN',	2);
-define('SOCIAL_RIGHT_PLUGIN',	3);
+define('SOCIAL_LEFT_PLUGIN',        1);
+define('SOCIAL_CENTER_PLUGIN',      2);
+define('SOCIAL_RIGHT_PLUGIN',       3);
 
 define('CUT_GROUP_NAME', 50);
 
@@ -130,10 +130,7 @@ class SocialManager extends UserManager {
 	 * @param array
 	 * @author isaac flores paz 
 	 */
-	public static function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {
-		$list_paths=array();
-		$list_path_friend=array();
-		$array_path_user=array();
+	public static function get_list_path_web_by_user_id ($user_id,$id_group=null,$search_name=null) {		
 		$combine_friend = array();
 		$list_ids = self::get_friends($user_id,$id_group,$search_name);
 		if (is_array($list_ids)) {
@@ -351,9 +348,7 @@ class SocialManager extends UserManager {
 	 */
 	public static function get_user_feeds($user, $limit=5) {
 	    if (!function_exists('fetch_rss')) { return '';}
-		$fields = UserManager::get_extra_fields();
-	    $feed_fields = array();
-	    $feeds = array();
+		$feeds = array();
 	    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
 	    if(empty($feed)) { return ''; }
 	    $feeds = explode(';',$feed['rssfeeds']);
@@ -465,7 +460,7 @@ class SocialManager extends UserManager {
 			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 		}
 		$result .= '</h3>';
-		$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
+		//$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 		// display the what's new icons
 		if ($nbDigestEntries > 0) {
 			reset($digest);
@@ -562,7 +557,7 @@ class SocialManager extends UserManager {
         $user_info = api_get_user_info($user_id, true);  
         
 		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
-		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
+		//$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 
 		// get count unread message and total invitations
 		$count_unread_message = MessageManager::get_number_of_messages(true);
@@ -750,8 +745,7 @@ class SocialManager extends UserManager {
 	 * Displays a sortable table with the list of online users.
 	 * @param array $user_list
 	 */
-	public static function display_user_list($user_list, $query_vars = array()) {
-		global $charset;
+	public static function display_user_list($user_list, $query_vars = array()) {		
 		if ($_GET['id'] == '') {
 			$extra_params = array();
 			$course_url = '';
@@ -812,8 +806,7 @@ class SocialManager extends UserManager {
                 $params['per_page'] = 10;                
             }            
             $params['hide_navigation'] = true;
-			return Display::return_sortable_grid('online', $table_header, $table_data, $params, $query_vars);
-			//Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 10), $extra_params, array(),'grid');
+			return Display::return_sortable_grid('online', $table_header, $table_data, $params, $query_vars);			
 		}
 	}
 	/**
@@ -828,8 +821,7 @@ class SocialManager extends UserManager {
 		$sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
 		$result = Database::query($sql);
 		if (Database::num_rows($result) == 1) {
-			$user_object = Database::fetch_object($result);
-			$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<strong>('.get_lang('Me').')</strong>' : '' );
+			$user_object = Database::fetch_object($result);			
 			$alt  = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
 
 			$status = get_status_from_code($user_object->status);
@@ -952,7 +944,7 @@ class SocialManager extends UserManager {
 		if (count($productions) > 0) {
 			echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
 			echo '<dd><ul>';
-			foreach ($productions as $index => $file) {
+			foreach ($productions as $file) {
 				// Only display direct file links to avoid browsing an empty directory
 				if (is_file($sysdir.$file) && $file != $webdir_array['file']) {
 					echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';

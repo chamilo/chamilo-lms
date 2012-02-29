@@ -671,7 +671,7 @@ class SocialManager extends UserManager {
     	  	// My friend profile
     	  	
 	  		if ($user_id != api_get_user_id()) {
-	  			$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=470&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
+	  			$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=470&user_friend='.$user_id.'&view=profile&view_panel=1" class="ajax" title="'.get_lang('SendMessage').'">';
 	  			$html .=  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';						
 	  		}
 
@@ -682,7 +682,7 @@ class SocialManager extends UserManager {
 	  			$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
 	  		} else {
 	  			if (!$show_full_profile) {
-	  				$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=230&width=500&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+	  				$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=230&width=500&user_friend='.$user_id.'" class="ajax" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
 	  			}
 	  		}
 			
@@ -881,10 +881,10 @@ class SocialManager extends UserManager {
 					if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
 						$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
 						if ($user_relation == 0 || $user_relation == 6) {
-							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).'&nbsp;'.get_lang('SendInvitation').'</a></p>
-								   <p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
+							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).'&nbsp;'.get_lang('SendInvitation').'</a></p>
+								   <p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
 						} else {
-							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
+							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
 						}
 					}
 				}

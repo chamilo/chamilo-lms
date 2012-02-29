@@ -25,7 +25,7 @@ define('ICON_SIZE_LARGE',   48);
 define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 
-define('SHOW_TEXT_NEAR_ICONS', true);
+define('SHOW_TEXT_NEAR_ICONS', false);
 
         
 /**

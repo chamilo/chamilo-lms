@@ -24,6 +24,7 @@ if (isset($_REQUEST['user_friend']) ) {
  	$panel=intval($_REQUEST['view_panel']);
  	$info_user_friend=api_get_user_info($userfriend_id); 	
 }
+
 ?>
 <div id="id_content_panel_init">
 <?php

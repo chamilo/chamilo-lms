@@ -130,6 +130,15 @@ if (api_is_platform_admin()) {
     $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM);
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     
+    
+    $search_form = ' <form method="get" action="settings.php" class="form-search">
+							<input type="text" name="search_field" value="">
+                            <input type="hidden" value="search_setting" name="category">
+							<button class="search" type="submit">'.get_lang('Search').'</button>
+	            		</form>';
+	$blocks['platform']['search_form'] = $search_form;
+    
+    
     $items = array();
     $items[] = array('url'=>'settings.php', 				'label' => get_lang('PlatformConfigSettings'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));

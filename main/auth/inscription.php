@@ -11,8 +11,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
@@ -237,9 +235,9 @@ if ($display_all_form) {
                 break;
         }
     }
-
 }
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="save"');
+
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="btn"');
 
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
@@ -301,8 +299,7 @@ if (api_get_setting('use_custom_pages') != 'true') {
 
   $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
   Display :: display_header($tool_name);
-
-  echo Display::tag('h1', $tool_name);
+  $form->addElement('header', $tool_name);
 
   $home = api_get_path(SYS_PATH).'home/';
   if ($_configuration['multiple_access_urls']) {
@@ -609,18 +606,5 @@ if ($form->validate()) {
   } else {
     $form->display();
   }
-}
-?>
-<br />
-<?php
-if (!isset($_POST['username'])) {
-/*    
-    <div class="actions">
-<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
-</div>
-*/
-?>
-
-<?php
 }
 Display :: display_footer();

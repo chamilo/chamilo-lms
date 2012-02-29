@@ -31,8 +31,6 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
     api_not_allowed(true);
 }
 
-//jquery thickbox already called from main/inc/header.inc.php
-
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -790,19 +788,18 @@ if (api_get_setting('allow_social_tool') != 'true') {
 		echo '<div class="actions">';
 
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
 		}
 		if (api_get_setting('allow_message_tool') == 'true') {
-			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
 		}
 		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 
 		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'</a>';
 		} else {
-			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'</a>';
 		}
-
 		echo '</div>';
 	}
 }
@@ -862,11 +859,11 @@ $big_image_height   = $big_image_size['height'];
 $url_big_image      = $big_image.'?rnd='.time();
 
 if (api_get_setting('allow_social_tool') == 'true') {
-	echo '<div id="social-content">';
-		echo '<div id="social-content-left">';
+	echo '<div class="row-fluid">';
+		echo '<div class="span3">';
 		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false);
 		echo '</div>';
-		echo '<div id="social-content-right">';
+		echo '<div class="span9">';
         $form->display();			
 	echo '</div>';
 } else {

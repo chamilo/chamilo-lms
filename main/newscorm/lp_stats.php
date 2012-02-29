@@ -41,7 +41,7 @@ if ($origin != 'tracking') {
         @import "../css/public_admin/scorm.css";
         /*]]>*/
     </style>';
-    include_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    Display::display_reduced_header();
     echo '<body dir="'.api_get_text_direction().'">';
 }
 

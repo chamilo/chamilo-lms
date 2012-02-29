@@ -16,6 +16,7 @@
 /**
  * Code
  */
+
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
@@ -245,7 +246,6 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 }
 
 // Not in fullscreen mode.
-//require_once '../inc/reduced_header.inc.php';
 Display::display_reduced_header($nameTools);
 //$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
 // Check if audio recorder needs to be in studentview.

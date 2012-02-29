@@ -26,7 +26,7 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 	$htmlHeadXtra[] = api_get_jquery_ui_js();
     $htmlHeadXtra[] = '
     <script type="text/javascript">
-    	$(document).ready(function() {    
+    	$(document).ready(function() {
 	        $(\'.ajax\').live(\'click\', function() {
 	            var url     = this.href;
 	            var dialog  = $("#dialog");

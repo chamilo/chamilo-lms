@@ -55,7 +55,7 @@ $blocks = array();
 
 /* Users */
 
-$blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'));
+$blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
 if (api_is_platform_admin()) {	
@@ -90,7 +90,7 @@ $blocks['users']['items'] = $items;
 
 if (api_is_platform_admin()) {
 	/* Courses */
-	$blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'));
+	$blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
 	$blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
 	
 	$search_form = ' <form method="get" action="course_list.php">
@@ -124,9 +124,8 @@ if (api_is_platform_admin()) {
     }
     $blocks['courses']['items'] = $items;
     
-    /* Platform */ 
-    
-    $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM);
+    /* Platform */    
+    $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     
     
@@ -165,7 +164,7 @@ if (api_is_platform_admin()) {
 
 if (api_get_setting('use_session_mode') == 'true') {
 	
-	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL);
+	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 	
 	$search_form = ' <form method="POST" action="session_list.php">
@@ -196,7 +195,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 } elseif (api_is_platform_admin()) {
 
 	$blocks['classes']['items'] = $items;	
-	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'));
+	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'), array(), ICON_SIZE_SMALL, false);
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	
 	$search_form = ' <form method="POST" action="class_list.php">
@@ -217,7 +216,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 /* Settings */
 if (api_is_platform_admin()) {	
 	
-	$blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'));
+	$blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'), array(), ICON_SIZE_SMALL, false);
 	$blocks['settings']['label'] = api_ucfirst(get_lang('System'));
 	
 	$items = array();
@@ -236,7 +235,7 @@ if (api_is_platform_admin()) {
 
 	/* Extensions */
 	
-	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'));
+	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
 	
 	$items = array();
@@ -251,7 +250,7 @@ if (api_is_platform_admin()) {
     
     //Skills
     
-    $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'));
+    $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
     $blocks['skills']['label'] = get_lang('Skills');
     
     $items = array();
@@ -265,7 +264,7 @@ if (api_is_platform_admin()) {
 	
 	/* Chamilo.org */
 	
-	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org');
+	$blocks['chamilo']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['chamilo']['label'] = 'Chamilo.org';
 	
 	$items = array();

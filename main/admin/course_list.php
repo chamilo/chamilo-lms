@@ -273,7 +273,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
 
     //$table->set_header(7, get_lang('Teacher'));
-    $table->set_header(7, get_lang('Action'), false, 'width="160px"');
+    $table->set_header(7, get_lang('Action'), false, 'width="160px"', array('class'=>'td_actions'));
     $table->set_column_filter(7, 'modify_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
     $content .= $table->return_table();

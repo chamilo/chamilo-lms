@@ -146,9 +146,11 @@ class CourseHome {
                 if (strpos($tool['name'], 'visio_') !== false) {
                     $cell_content .= '<a  href="javascript: void(0);" onclick="javascript: window.open(\'' . $tool['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-                    $cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+                    $cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; 
+                    // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
                 } else {
-                    $cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+                    $cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; 
+                    // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
                 }
             }
             // INVISIBLE
@@ -157,12 +159,15 @@ class CourseHome {
                     if (strpos($tool['name'], 'visio_') !== false) {
                         $cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $tool['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
                     } elseif (strpos($tool['name'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-                        $cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+                        $cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'; 
+                        // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
                     } else {
-                        $cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';// don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+                        $cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
+                        // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
                     }
                 } else {
-                    $cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+                    $cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'; 
+                    // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
                     $cell_content .= '<span class="invisible">'.$tool_name.'</span>';
                 }
             }
@@ -321,7 +326,7 @@ class CourseHome {
                 }
 
                 $tool_name = self::translate_tool_name($tool);
-                $html .=  Display::return_icon($tool['image'], $tool_name).'&nbsp;'.$tool_name.'</a>';
+                $html .=  Display::return_icon($tool['image'], $tool_name, array(), null, ICON_SIZE_MEDIUM).'&nbsp;'.$tool_name.'</a>';
 
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
@@ -637,15 +642,13 @@ class CourseHome {
                 $item['extra'] = null;
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
-                    if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                        //$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']));
-                        $link['name'] = Display::return_icon('visible.gif', null, array('id' => 'linktool_'.$tool['id']));
+                    if ($tool['visibility'] == '1' && $tool['admin'] != '1') {                        
+                        $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
                     }
-                    if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                        //$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
-                        $link['name'] = Display::return_icon('invisible.gif', null, array('id' => 'linktool_'.$tool['id']));
+                    if ($tool['visibility'] == '0' && $tool['admin'] != '1') {                                                
+                        $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
                     }                    
@@ -666,7 +669,7 @@ class CourseHome {
                 if (isset($lnk) && is_array($lnk)) {                    
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            $item['visibility'] .=  '<a class="make_visible_and_invisible"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+                            $item['visibility'] .=  '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
                     }
                 } else {
@@ -726,9 +729,8 @@ class CourseHome {
                         
                     }
                 }                
-                $tool_name = self::translate_tool_name($tool);
-                //$icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
-                $icon = Display::return_icon($tool['image'], null, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
+                $tool_name = self::translate_tool_name($tool);                
+                $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);
 
                 // Validacion when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);
@@ -750,15 +752,14 @@ class CourseHome {
         
         $html = '';
          
-        if (!empty($items)) { 
-            
+        if (!empty($items)) {            
             foreach($items as $item) {     
                 switch($theme) {
-                    case 'activity_big':
+                    case 'activity_big':                        
                         $data = '';                                        
                         $html .=  '<div class="span4">';                        
-                        $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                        $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64);
+                        $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';                        
+                        $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
                         $html .= Display::div($data, array('class'=>'big_icon')); //box-image reflection
                         $html .= Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content'));                        

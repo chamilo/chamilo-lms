@@ -556,7 +556,7 @@ class Display {
      * @author Yannick Warnier 2011 Added size handler
      * @version Feb 2011
     */
-    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL) {
+    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL, $show_text = true) {
         
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
@@ -583,7 +583,9 @@ class Display {
         }        
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
-            $img = "$img $alt_text";
+            if ($show_text) {
+                $img = "$img $alt_text";
+            }
         }
         return $img;
     }

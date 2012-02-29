@@ -384,8 +384,7 @@ class Template extends Smarty {
                 .td_actions a {
                     float:left;
                     width:100%;
-                }
-                }
+                }                
                 </style>';
         }
 	

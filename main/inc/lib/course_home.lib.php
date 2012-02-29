@@ -638,12 +638,14 @@ class CourseHome {
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
                     if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                        $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']));
+                        //$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']));
+                        $link['name'] = Display::return_icon('visible.gif', null, array('id' => 'linktool_'.$tool['id']));
                         $link['cmd'] = 'hide=yes';
                         $lnk[] = $link;
                     }
                     if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                        $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
+                        //$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
+                        $link['name'] = Display::return_icon('invisible.gif', null, array('id' => 'linktool_'.$tool['id']));
                         $link['cmd'] = 'restore=yes';
                         $lnk[] = $link;
                     }                    
@@ -725,7 +727,8 @@ class CourseHome {
                     }
                 }                
                 $tool_name = self::translate_tool_name($tool);
-                $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
+                //$icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
+                $icon = Display::return_icon($tool['image'], null, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
 
                 // Validacion when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);

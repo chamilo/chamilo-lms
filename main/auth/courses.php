@@ -22,8 +22,6 @@ require_once 'courses_controller.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-
-	$htmlHeadXtra[] = api_get_jquery_ui_js();
     $htmlHeadXtra[] = '
     <script type="text/javascript">
     	$(document).ready(function() {

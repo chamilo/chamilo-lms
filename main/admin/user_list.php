@@ -21,8 +21,6 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
 
 $iam_a_global_admin = api_is_global_platform_admin(); 
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({

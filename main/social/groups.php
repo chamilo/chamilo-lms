@@ -33,7 +33,6 @@ if (isset($_GET['anchor_topic'])) {
 	}
 	$anchor = 'topic_'.$match[1];
 }
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script type="text/javascript"> 
 
 var counter_image = 1;
@@ -362,10 +361,7 @@ if ($group_id != 0 ) {
 				} else {
 					$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
 					$item_3 = '<div class="box_description_group_content" ></div>';
-				}
-				
-                /*$join_url = '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('group_join.png', get_lang('JoinGroup'), array('hspace'=>'6')).''.get_lang('JoinGroup').'</a> ';                
-				$item_4 = '<div class="box_description_group_actions" >'.$join_url. $url_open.get_lang('SeeMore').$url_close.'</div>';*/				
+				}							
 				$grid_item_2 = $item_0.$item_1.$item_2.$item_3;
 				$grid_my_groups[]= array($grid_item_2);
 			}

@@ -1222,7 +1222,7 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
 							$params = array();                            							
-							$params['icon'] =  Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
+							$params['icon'] =  Display::return_icon('window_list.png', null, array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
 		
 							$s = Display :: get_session_title_box($session['details']['id']);
 							$extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];							
@@ -1274,11 +1274,8 @@ class IndexManager {
                             $params = array();
                             
 							if ($count > 0) {
-								$s = Display :: get_session_title_box($session['details']['id']);
-								//$html_sessions .= '<ul class="sub_session_box" id="session_'.$session['details']['id'].'">';
-								//$html_sessions .= '<li class="sub_session_box_title" id="session_'.$session['details']['id'].'">';								
-								//$html_sessions .= Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-                                $params['icon'] = Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+								$s = Display :: get_session_title_box($session['details']['id']);								
+                                $params['icon'] = Display::return_icon('window_list.png', null, array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 		
 								$session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
 								$params['title'] .=  $session_link;
@@ -1295,7 +1292,7 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
                             $params = array();				
-							$params['icon'] = Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array(), ICON_SIZE_LARGE);
+							$params['icon'] = Display::return_icon('folder_blue.png', null, array(), ICON_SIZE_LARGE);
                             
 							if (api_is_platform_admin()) {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';

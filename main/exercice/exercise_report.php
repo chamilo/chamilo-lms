@@ -22,7 +22,7 @@ require_once '../gradebook/lib/be.inc.php';
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = api_get_jquery_ui_js(true);
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Access control
 api_protect_course_script(true);

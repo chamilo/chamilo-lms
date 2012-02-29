@@ -240,9 +240,8 @@ if ($intro_dispCommand) {
 		// Displays "Add intro" commands
 		$introduction_section .=  "<div id=\"courseintro_empty\">";
 		if (!empty ($GLOBALS['_cid'])) {			
-			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
-			$introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
-			$introduction_section .=  get_lang('AddIntro');			
+			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";            
+            $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';            		
 			$introduction_section .=  "</a>";
 		} else {
 			$introduction_section .= "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>";

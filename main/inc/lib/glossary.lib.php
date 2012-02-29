@@ -308,7 +308,7 @@ class GlossaryManager {
 			$table->set_header(0, get_lang('TermName'), true);
 			$table->set_header(1, get_lang('TermDefinition'), true);			
 			if (api_is_allowed_to_edit(null,true)) {			         
-				$table->set_header(2, get_lang('Actions'), false, 'width=90px');
+				$table->set_header(2, get_lang('Actions'), false, 'width=90px', array('class' => 'td_actions'));
 				$table->set_column_filter(2, array('GlossaryManager','actions_filter'));
 			}
 			$table->display();

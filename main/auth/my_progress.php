@@ -22,7 +22,6 @@ $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
 
 $htmlHeadXtra[] = '

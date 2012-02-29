@@ -48,8 +48,6 @@ api_protect_course_script(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight

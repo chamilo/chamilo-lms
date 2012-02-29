@@ -91,8 +91,6 @@ if (isset($_REQUEST['updateaudio'])) {
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 Display::display_header(null, 'Path');
 //api_display_tool_title($therow['name']);
 

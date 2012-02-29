@@ -319,7 +319,7 @@ if ($action_forums != 'add') {
                     echo $forum['last_post_date'].' '.get_lang('By').' '.display_user_link($poster_id, $name);
                 }
                 echo '</td>';
-                echo '<td nowrap align="center">';
+                echo '<td class="td_actions">';
 
                 if (api_is_allowed_to_edit(false, true) && !($forum['session_id'] == 0 && intval(isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null) != 0)) {
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=edit&amp;content=forum&amp;id='.$forum['forum_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';

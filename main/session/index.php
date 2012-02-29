@@ -20,7 +20,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 $this_section = SECTION_COURSES;
-$htmlHeadXtra[] = api_get_jquery_ui_js(true);
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (empty($_GET['session_id'])) {
 	api_not_allowed();

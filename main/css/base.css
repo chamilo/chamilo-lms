@@ -2087,7 +2087,6 @@ border-top: 1px solid #E2E2E2;
     font-size:130%;
     font-weight:bold;
     padding: 0px 8px 0px 8px;
-
 }
 
 #social-thread {
@@ -3542,4 +3541,65 @@ a:active{
 
 #course_tools .row h3 {
     margin-top:10px;
+}
+
+.td_actions {
+ 	background:#efefef;
+    border:1px solid #ccc; 
+    margin-bottom: 5px;    
+    padding:2px;     
+    vertical-align:middle;        
+    width: 250px;
+}
+
+/*
+ This is set in the template
+.td_actions a {
+    float:left;
+    width:100%;
+}
+*/
+.forum_message_left {
+    width: 150px;
+    vertical-align: top;    
+    border-right: 1px solid #aaa;
+    background-color: #F7F7F7;
+}
+
+.forum_message_left a {
+    float:left;
+    width:100%;
+}
+                      
+.forum_message_left_2_be_approved {
+    width: 150px;
+    vertical-align: top;    
+    border-right: 1px solid #aaa;
+    background-color: #F7F7F7;
+    color: #999;
+}
+.forum_message_post_title {
+    /*border-bottom: 1px solid #666666;*/
+    font-weight: bold;
+    background-color: #F7F7F7;
+    height: 20px;
+    font-size:20px;
+}
+.forum_message_post_title_2_be_approved {
+    /*border-bottom: 1px solid #666666;*/
+    color: #999;
+    font-weight: bold;
+    background-color: #F7F7F7;
+    height: 20px;
+}
+.forum_message_post_text {
+    /*border-bottom: 1px solid #666666;*/
+    margin-bottom: 10px;
+    vertical-align: top;
+}
+.forum_message_post_text_2_be_approved {
+    /*border-bottom: 1px solid #666666;*/
+    color: #999;
+    margin-bottom: 10px;
+    vertical-align: top;
 }

@@ -267,7 +267,7 @@ if (!empty($flat_list)) {
         }   
         
         
-        $dsp_edit = '<td align="center">';
+        $dsp_edit = '<td class="td_actions">';
         $dsp_edit_close = '</td>';
         
         if ($is_allowed_to_edit) {
@@ -362,19 +362,18 @@ if (!empty($flat_list)) {
       */
             if ($current_session == $details['lp_session']) {
               if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
-                  '<img src="../img/gamepad.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
-                  '</a>&nbsp;';
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
+                    Display::return_icon('kaboodleloop.gif', get_lang('PreventMultipleAttempts'),'',ICON_SIZE_SMALL).
+                  '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
-                  '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
-                  '</a>&nbsp;';
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
+                   Display::return_icon('kaboodleloop_gray.gif', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).
+                  '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
-                  '<img src="../img/kaboodleloop.gif" border="0" alt="Serious game mode" title="'.get_lang("SeriousGameMode").'"/>' .
-                  '</a>&nbsp;';
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .Display::return_icon('kaboodleloop.gif', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).                  
+                  '</a>';
               }
             } else {
                 $dsp_reinit = Display::return_icon('kaboodleloop_gray.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL);

@@ -83,7 +83,7 @@ $social_left_content = SocialManager::show_social_menu('home');
                   </div>
                   <div class="box_description_group_actions">
                     <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-                        '.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'
+                        '.Display::return_icon('profile_edit.png', null, array('hspace'=>'6')).get_lang('EditProfile').'
                    </a>
                   </div>';
                   

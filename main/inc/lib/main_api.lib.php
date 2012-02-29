@@ -5459,7 +5459,6 @@ function api_get_css($file) {
 	return '<link rel="stylesheet" href="'.$file.'" type="text/css" />'."\n";	
 }
 
-
 /**
  * Returns the js header to include the jquery library
  */
@@ -5480,6 +5479,10 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
 	   $libraries[]='jqgrid';	
 	}
     return api_get_jquery_libraries_js($libraries);
+}
+
+function api_get_jqgrid_js() {    
+    return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
 /**

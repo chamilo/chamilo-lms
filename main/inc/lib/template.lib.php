@@ -334,9 +334,9 @@ class Template extends Smarty {
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
 			'bootstrap/bootstrap-dropdown.js',            
-            'bootstrap/bootstrap-collapse.js'
+            'bootstrap/bootstrap-collapse.js'            
 		);
-	
+        
 		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
                 $js_files[] = 'chat/js/chat.js';
@@ -378,15 +378,28 @@ class Template extends Smarty {
 		foreach ($css_files  as $css_file) {
 			$css_file_to_string .= api_get_css($css_file);
 		}
+        
+        if (SHOW_TEXT_NEAR_ICONS == true) {
+            $css_file_to_string .= '<style>
+                .td_actions a {
+                    float:left;
+                    width:100%;
+                }
+                }
+                </style>';
+        }
 	
 		global $this_section;        
         
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);		
 		$this->assign('text_direction',	    api_get_text_direction());					
-		$this->assign('section_name',       'section-'.$this_section);
+		$this->assign('section_name',       'section-'.$this_section);        
+        
+        //Adding jquery ui by default
+        $extra_headers = api_get_jquery_ui_js();
 		
-		$extra_headers = '';		
+		//$extra_headers = '';		
 		if (isset($htmlHeadXtra) && $htmlHeadXtra) {
 		    foreach ($htmlHeadXtra as & $this_html_head) {
 		        $extra_headers .= $this_html_head;

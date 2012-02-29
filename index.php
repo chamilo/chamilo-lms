@@ -25,7 +25,6 @@ if (!api_is_anonymous()) {
 	$header_title = " ";
 }
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">

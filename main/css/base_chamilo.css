@@ -1012,46 +1012,7 @@ tr.forum_threadheader td {
 .quote {
     background-color: #a0e5fc;
 }
-.forum_message_left {
-    width: 150px;
-    vertical-align: top;
-    /*border-bottom: 1px solid #666666;*/
-    border-right: 1px solid #aaa;
-    background-color: #F7F7F7;
-}
-.forum_message_left_2_be_approved {
-    width: 150px;
-    vertical-align: top;
-    /*border-bottom: 1px solid #666666;*/
-    border-right: 1px solid #aaa;
-    background-color: #F7F7F7;
-    color: #999;
-}
-.forum_message_post_title {
-    /*border-bottom: 1px solid #666666;*/
-    font-weight: bold;
-    background-color: #F7F7F7;
-    height: 20px;
-    font-size:20px;
-}
-.forum_message_post_title_2_be_approved {
-    /*border-bottom: 1px solid #666666;*/
-    color: #999;
-    font-weight: bold;
-    background-color: #F7F7F7;
-    height: 20px;
-}
-.forum_message_post_text {
-    /*border-bottom: 1px solid #666666;*/
-    margin-bottom: 10px;
-    vertical-align: top;
-}
-.forum_message_post_text_2_be_approved {
-    /*border-bottom: 1px solid #666666;*/
-    color: #999;
-    margin-bottom: 10px;
-    vertical-align: top;
-}
+
 .current {
     font-weight: bold;
 }

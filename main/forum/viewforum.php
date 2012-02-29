@@ -418,7 +418,7 @@ if (is_array($threads)) {
             }
 
             echo '<td>'.$last_post.'</td>';
-            echo '<td>';
+            echo '<td class="td_actions">';
             // Get attachment id.
             $attachment_list = get_attachment($row['post_id']);
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';

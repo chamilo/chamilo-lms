@@ -28,7 +28,7 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name"
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
 //Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jquery_ui_js(true);
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 // The header.
 Display::display_header($tool_name);

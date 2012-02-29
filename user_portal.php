@@ -34,8 +34,6 @@ if (isset($_SESSION['this_section']))
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 /* Constants and CONFIGURATION parameters */

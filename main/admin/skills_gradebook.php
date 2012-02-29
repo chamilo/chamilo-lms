@@ -17,7 +17,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 //Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jquery_ui_js(true);
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 

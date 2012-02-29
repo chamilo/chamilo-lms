@@ -25,6 +25,8 @@ define('ICON_SIZE_LARGE',   48);
 define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 
+define('SHOW_TEXT_NEAR_ICONS', true);
+
         
 /**
  * Display class
@@ -427,7 +429,7 @@ class Display {
             $i }).';';
         }
         // icon html code
-        $icon_html_source = Display::return_icon($icon_file, $hmail, '', $icon_size);
+        $icon_html_source = self::return_icon($icon_file, $hmail, '', $icon_size);
         // Return encrypted mailto hyperlink
         return '<a href="'.$hmail.'"'.$style_class.' id="clickable_email_link">'.$icon_html_source.'</a>';
     }
@@ -565,10 +567,7 @@ class Display {
         $size_extra = '';
         
         if (isset($size)) {
-            $size = intval($size);
-            /*if (in_array($size,array(16, 22, 32, 48, 64,128))) {
-                $size_extra = $size.'/';
-            }*/
+            $size = intval($size);            
             $size_extra = $size.'/';
         }
         
@@ -581,8 +580,12 @@ class Display {
         } else {
             //Checking the img/ folder
             $icon = $w_code_path.'img/'.$image;
+        }        
+        $img = self::img($icon, $alt_text, $additional_attributes);
+        if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
+            $img = "$img $alt_text";
         }
-        return self::img($icon, $alt_text, $additional_attributes);
+        return $img;
     }
 
     /**
@@ -1325,7 +1328,10 @@ class Display {
         if ($add_div_wrapper) {
 			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
-        return $html;
-        
+        return $html;        
+    }
+    
+    function return_default_table_class() {
+        return 'data_table';
     }
 } //end class Display

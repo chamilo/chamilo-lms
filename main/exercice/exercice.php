@@ -22,7 +22,6 @@ require_once '../gradebook/lib/be.inc.php';
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
@@ -417,7 +416,7 @@ while ($row = Database :: fetch_array($result,'ASSOC')) {
     $exercise_list[] = $row;
 } 
 
-echo '<table class="data_table">';    
+echo '<table class="'.Display::return_default_table_class().'">';    
 if (!empty($exercise_list)) {  
     /*  Listing exercises  */
     
@@ -745,8 +744,9 @@ if (!empty($exercise_list)) {
                 $class = 'row_odd';
             }
             
-            if ($is_allowedToEdit)
-                $item .=  Display::tag('td', $actions);                    
+            if ($is_allowedToEdit) {
+                $item .=  Display::tag('td', $actions, array('class' => 'td_actions'));                    
+            }
             echo Display::tag('tr',$item, array('class'=>$class));
                    
             $count++;

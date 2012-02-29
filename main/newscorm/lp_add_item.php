@@ -132,8 +132,6 @@ $(function() {
     });        
 });
 </script>';
-        
-$htmlHeadXtra[] =  api_get_jquery_ui_js(); //jQuery
 
 /* Constants and variables */
 

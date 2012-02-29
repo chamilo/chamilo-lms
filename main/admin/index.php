@@ -24,7 +24,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 // Displaying the header
 $message = '';
@@ -132,7 +131,7 @@ if (api_is_platform_admin()) {
     
     
     $search_form = ' <form method="get" action="settings.php" class="form-search">
-							<input type="text" name="search_field" value="">
+							<input type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
 							<button class="search" type="submit">'.get_lang('Search').'</button>
 	            		</form>';

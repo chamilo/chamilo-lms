@@ -77,8 +77,6 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 	}
 }
 
-
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script type="text/javascript"> 
 
 var counter_image = 1;

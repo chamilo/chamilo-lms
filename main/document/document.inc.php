@@ -429,7 +429,8 @@ function build_document_icon_tag($type, $path) {
         }
     }
 
-    return Display::return_icon($icon, $basename, array());
+    //return Display::return_icon($icon, $basename, array());
+    return Display::return_icon($icon, null, array());
 }
 
 /**
@@ -765,29 +766,6 @@ function create_dir_form($current_dir_id) {
     $form->addElement('text', 'dirname', get_lang('NewDir'));
     $form->addElement('style_submit_button', 'submit', get_lang('CreateFolder'), 'class="add"');
     $new_folder_text = $form->return_form();
-    
-    /*
-    $new_folder_text = '<form action="'.api_get_self().'" method="post">';
-    $new_folder_text .= '<input type="hidden" name="dir_id" value="'.intval($document_id).'" />';
-    $new_folder_text .= '<input type="hidden" name="id" value="'.intval($current_dir_id).'" />';
-
-    // Form title
-    $new_folder_text .= '<legend>'.get_lang('CreateDir').'</legend>';
-
-    // Folder field
-    $new_folder_text .= '<div class="row">';
-    $new_folder_text .= '<div class="label"><span class="form_required">*</span>'.get_lang('NewDir').'</div>';
-    $new_folder_text .= '<div class="formw"><input type="text" name="dirname" /></div>';
-    $new_folder_text .= '</div>';
-
-    // Submit button
-    $new_folder_text .= '<div class="row">';
-    $new_folder_text .= '<div class="label">&nbsp;</div>';
-    $new_folder_text .= '<div class="formw"><button type="submit" class="add" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
-    $new_folder_text .= '</div>';
-    $new_folder_text .= '</form>';
-    $new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';*/
-
     return $new_folder_text;
 }
 
@@ -934,6 +912,5 @@ function is_browser_viewable($file_extension) {
 	elseif ($file_extension=="webm"){
 		return api_browser_support('webm');
 	}
-
     return $result;
 }

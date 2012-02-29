@@ -59,8 +59,7 @@ var disconnect_lang = '{"ChatDisconnected"|get_lang}';
 <script type="text/javascript">
 
 $(document).scroll(function() {
-    // If has not activated (has no attribute "data-top"
-
+    // Top bar scroll effect
     if($('body').width() > 959) {
     if ($('.subnav').length) {
         if (!$('.subnav').attr('data-top')) {
@@ -79,9 +78,11 @@ $(document).scroll(function() {
     }
 });
 
-
 $(document).ready(function() {       
+    //Dropdown effect
     $('.dropdown-toggle').dropdown();   
+    
+    //Responsive effect 
     $(".collapse").collapse();
     
     $('.ajax').on('click', function() {
@@ -105,6 +106,22 @@ $(document).ready(function() {
             //prevent the browser to follow the link
             return false;
     });
+    
+    /*
+    $(".td_actions").hide();    
+    
+    $(".td_actions").parent('tr').mouseover(function() {
+       $(".td_actions").show();
+    });
+    
+    $(".td_actions").parent('tr').mouseout(function() {
+        $(".td_actions").hide();
+    });*/
+    
+    
+    
+    
+    
 });
 </script>
 {$header_extra_content}

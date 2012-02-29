@@ -2779,7 +2779,7 @@ class CourseManager {
                         $course['status'] = $user_info['status'];
                     }
 
-                    $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array(), ICON_SIZE_LARGE);
+                    $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
                     
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
@@ -2861,7 +2861,7 @@ class CourseManager {
             $params = array();
             
             // We simply display the title of the category.
-            $params['icon'] = Display::return_icon('folder_yellow.png', get_lang('Category'), array(), ICON_SIZE_LARGE);
+            $params['icon'] = Display::return_icon('folder_yellow.png', null, array(), ICON_SIZE_LARGE);
             $params['title'] = $row['title'];            
             $html .= self::course_item_parent(self::course_item_html($params), self :: display_courses_in_category($row['id'], $load_dirs));
         }
@@ -2924,7 +2924,7 @@ class CourseManager {
             // (something that would have changed since the user's last visit).
             $show_notification = Display :: show_notification($my_course);
             // New code displaying the user's status in respect to this course.
-            $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array(), ICON_SIZE_LARGE);
+            $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
             
             $params = array();
             $params['right_actions'] = '';
@@ -3140,7 +3140,7 @@ class CourseManager {
         $s_course_status = $my_course['status'];
         $is_coach = api_is_coach($my_course['id_session'], $course['code']);
             
-        $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', get_lang('Course'), array(), ICON_SIZE_LARGE);
+        $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', null, array(), ICON_SIZE_LARGE);
         
         // Display course entry.        
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.

@@ -81,7 +81,7 @@ if ($origin == 'group') {
 
 // Display the header.
 if ($origin == 'learnpath') {
-    include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    Display::display_reduced_header();
 } else {
     Display :: display_header($nameTools);
 }

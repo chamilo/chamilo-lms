@@ -22,6 +22,8 @@
  * @package chamilo.forum
  */
 
+exit;
+
 // Language file that need to be included.
 $language_file = array('forum', 'document');
 
@@ -153,7 +155,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
 /* Header */
 
 if ($origin == 'learnpath') {
-    require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    Display::display_reduced_header();
 } else {
     Display :: display_header(null);
     //api_display_tool_title($nameTools);

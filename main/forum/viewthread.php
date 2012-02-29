@@ -74,7 +74,7 @@ if ($origin == 'group') {
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
     if ($origin == 'learnpath') {
-        require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+        Display::display_reduced_header();
     } else {    	
         $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => $nameTools);
         $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum_category['cat_title']));

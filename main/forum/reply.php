@@ -133,12 +133,9 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     exit;
 }
 
-
-
 /* Header */
 
-if ($origin == 'learnpath') {
-    //include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+if ($origin == 'learnpath') {    
     Display :: display_reduced_header('');
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.

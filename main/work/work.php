@@ -238,7 +238,7 @@ if (!empty($group_id)) {
 
 	} else {
 		//we are in the learnpath tool
-		require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+		require Display::display_reduced_header();
 	}
 }
 

@@ -839,10 +839,8 @@ class SocialManager extends UserManager {
 			$status = get_status_from_code($user_object->status);
 			
 			$interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
-			Display::display_header($alt);
-			echo '<div class="actions-title">';
-			echo $alt;
-			echo '</div><br />';
+			Display::display_header($alt, null, $alt);            
+			
 			echo '<div>';
 
 			echo '<div style="margin:0 auto; width:350px; border:1px;">';

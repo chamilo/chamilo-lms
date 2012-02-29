@@ -14,8 +14,7 @@
 	 	{include file="default/layout/sniff.tpl"}
 	{/if}
 	
-	<div class="span9">
-		
+	<div class="span9">	
 		{* Course plugin block*}
         <section id="courses_plugin">
 		{$plugin_courses_block}

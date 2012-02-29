@@ -9,15 +9,8 @@
 {* 1 column *}
 {block name=body}    
     <div class="span12">
-        {* Actions *}
-        {if (!empty($actions) ) }
-            <div class="actions">
-            {$actions}	
-            </div>
-        {/if}
-
-        {* Notifications*}	
-        {$message}
+        {include file="default/layout/page_body.tpl"}
+        
         <section id="main_content">
         {* Main content *}
         {$content}

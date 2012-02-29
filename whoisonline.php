@@ -175,16 +175,19 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				    $query = isset($_GET['q']) ? $_GET['q']: null;				    
 					$social_right_content .= UserManager::get_search_form($query);
 				}
-			}
-			$social_right_content .= Display::tag('h2', get_lang('UsersOnLineList'));
+			}			
 			$social_right_content .= SocialManager::display_user_list($user_list);							
 		}
 	}
     
     if (isset($_GET['id'])) {
-        //SocialManager::display_individual_user($_GET['id']);
-        header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=?".$_GET['id']);
-        exit;            
+        
+        if (api_get_setting('allow_social_tool') == 'true') {	
+            header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=?".$_GET['id']);
+            exit;            
+        } else {
+            SocialManager::display_individual_user($_GET['id']);    
+        }
     }
 } else {	
 	api_not_allowed();
@@ -205,5 +208,6 @@ if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
+$tpl->assign('header', get_lang('UsersOnLineList'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

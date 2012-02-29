@@ -53,5 +53,5 @@
 
         {* breadcrumb *}
         {$breadcrumb}
-        <div class="row">            
-{/if}          
+        <div class="row">   
+{/if}

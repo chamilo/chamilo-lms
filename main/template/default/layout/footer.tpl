@@ -1,6 +1,5 @@
 <div id="footer"> <!-- start of #footer section -->	
-    <div class="container">
-        
+    <div class="container">        
         <div class="copyright">		
             {if $administrator_name }
                 <div class="admin_name">
@@ -51,5 +50,3 @@ $(document).ready( function() {
 </script>
 {/literal}
 {$execution_stats}
-
-

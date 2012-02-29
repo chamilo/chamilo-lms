@@ -26,6 +26,7 @@ class Template extends Smarty {
 	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
         parent::__construct();
 		$this->title = $title;
+        //$this->assign('header', $title);
 		$this->show_learnpath = $show_learnpath;
 		//Smarty 3 configuration
         $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');

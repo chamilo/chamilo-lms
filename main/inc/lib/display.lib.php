@@ -48,21 +48,36 @@ class Display {
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
      */
-    public static function display_header($tool_name ='', $help = null) {
+    public static function display_header($tool_name ='', $help = null, $page_header = null) {
         $nameTools = $tool_name;
+        /*
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
         global $menu_navigation;        
-		global $htmlCSSXtra;        
+		global $htmlCSSXtra;        */
         self::$global_template = new Template($tool_name);      
         self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {                        
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_theme();
         }
+        if (!empty($page_header)) {
+            self::$global_template->assign('header', $page_header);
+        }
         echo self::$global_template->show_header_template();
-
     }
+    
+    /*
+     * 
+    public static function assign_template_variable($variable, $content) {
+        if (isset(self::$global_template)) {            
+            self::$global_template->assign($variable, $content);
+        } else {
+            //Dev message
+            echo 'You need to called the display_header first';
+            exit;
+        }
+    }*/
 
     /**
      * Displays the reduced page header (without banner)
@@ -81,12 +96,10 @@ class Display {
     /**
      * Display the page footer
      */
-    public static function display_footer () {
+    public static function display_footer() {
         global $_plugins, $global_tpl;
         echo self::$global_template ->show_footer_template();        
     }
-    
-    
 
     /**
      * Displays the tool introduction of a tool.

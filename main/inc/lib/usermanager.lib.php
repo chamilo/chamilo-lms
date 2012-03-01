@@ -795,8 +795,6 @@ class UserManager {
 
 		if (api_get_setting('split_users_upload_directory') === 'true') {
 			if (!empty($picture_filename) or $preview) {
-//				$dir = $base.'upload/users/'.substr($picture_filename, 0, 1).'/'.$user_id.'/';
-//			} elseif ($preview) {
 				$dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
 			} else {
 				$dir = $base.'upload/users/'.$user_id.'/';
@@ -807,7 +805,6 @@ class UserManager {
 		if (empty($picture_filename) && $anonymous) {
 			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 		}		
-		
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 
@@ -2318,15 +2315,12 @@ class UserManager {
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
-
-    	$patch_profile = 'upload/users/';
     	$picture = array();
     	$picture['style'] = $style;
     	if ($picture_file == 'unknown.jpg') {
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
-
     	switch ($size_picture) {
     		case USER_IMAGE_SIZE_ORIGINAL :
     			$size_picture = '';
@@ -2359,8 +2353,7 @@ class UserManager {
 				$picture['original_height'] = $dimension['width'];
 				$picture['original_width']  = $dimension['height'];
 			}
-		} else {
-			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+		} else {		
             $file = $image_array_sys['dir'].$picture_file;
 			if (file_exists($file) && !is_dir($file)) {
 				$picture['file'] = $image_array['dir'].$picture_file;

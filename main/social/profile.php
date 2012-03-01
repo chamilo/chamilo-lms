@@ -226,7 +226,7 @@ if (is_array($personal_course_list)) {
 }
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
-$social_right_content = '<div class="row"><div class="rounded_div span4">';
+$social_right_content = '<div class="rounded_div span4">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	$social_right_content .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -625,11 +625,8 @@ if ($show_full_profile) {
 		}		
 		$social_right_content .=  '</div>'; //rounded     
 	}	
-	$social_right_content .=  '</div>'; // 
-    
+	$social_right_content .=  '</div>';    
 }
-$social_right_content .=  '</div>'; // 
-
 
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

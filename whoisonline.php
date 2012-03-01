@@ -16,8 +16,9 @@ if (!isset($_GET['cidReq'])) {
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
-$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
+$_SESSION['who_is_online_counter'] = 2;
 
+$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
 //social tab
 $this_section = SECTION_SOCIAL;
 // table definitions
@@ -105,17 +106,11 @@ function hide_icon_edit(element_html)  {
     $(ident).hide();
 }       
 
+$(document).ready(function() {
 
-
-$(document).ready(function() {    
-    $(document).endlessScroll({
-        fireOnce: false,
-        fireDelay: false,
-        loader: "<div class=\'loading\'>Loading<div>",
-        callback: function(page) {    
-            page = page;            
-                
-            $.ajax({                
+    $("#link_load_more_items").live("click", function() {
+        page = $("#link_load_more_items").attr("data_link");
+        $.ajax({
                 beforeSend: function(objeto) {
                     $("#display_response_id").html("Loading"); 
                 },
@@ -123,15 +118,19 @@ $(document).ready(function() {
                 url: "main/inc/ajax/online.ajax.php?a=load_online_user",
                 data: "online_page_nr="+page,
                 success: function(data) {   
+                    $("#display_response_id").html("");
                     if (data != "end") {
-                        var last = $(".online_grid_container .online_grid_item:last");
+                        $("#link_load_more_items").remove();
+                        var last = $("#online_grid_container li:last");
                         last.after(data);
+                    } else {
+                        $("#link_load_more_items").remove();
                     }
                 }
-            });
-          
-       }    
+            });           
     });
+
+  
 });        
 </script>';
 
@@ -139,7 +138,7 @@ if ($_GET['chatid'] != '') {
 	//send out call request
 	$time = time();
 	$time = date("Y-m-d H:i:s", $time);
-	$chatid = addslashes($_GET['chatid']);
+	$chatid = intval($_GET['chatid']);
 	if ($_GET['chatid'] == strval(intval($_GET['chatid']))) {
 		$sql = "update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
 		$result = Database::query($sql);
@@ -148,7 +147,6 @@ if ($_GET['chatid'] != '') {
 		exit;
 	}
 }
-
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
@@ -173,15 +171,14 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 			if (api_get_setting('allow_social_tool') == 'true') {				
 				if (!api_is_anonymous()) {
 				    $query = isset($_GET['q']) ? $_GET['q']: null;				    
-					$social_right_content .= UserManager::get_search_form($query);
+					$social_right_content .= '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 				}
 			}			
 			$social_right_content .= SocialManager::display_user_list($user_list);							
 		}
 	}
     
-    if (isset($_GET['id'])) {
-        
+    if (isset($_GET['id'])) {        
         if (api_get_setting('allow_social_tool') == 'true') {	
             header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=?".$_GET['id']);
             exit;            

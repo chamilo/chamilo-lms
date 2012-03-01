@@ -745,18 +745,19 @@ class SocialManager extends UserManager {
 	 * Displays a sortable table with the list of online users.
 	 * @param array $user_list
 	 */
-	public static function display_user_list($user_list, $query_vars = array()) {		
+	public static function display_user_list($user_list) {		
 		if ($_GET['id'] == '') {
 			$extra_params = array();
 			$course_url = '';
 			if (strlen($_GET['cidReq']) > 0) {
 				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-			}
+			}                        
+            $html .= '<div class="span9">';
+            $html .= '<ul id="online_grid_container" class="thumbnails">';            
 			foreach ($user_list as $user) {
 				$uid = $user[0];
-				$user_info = api_get_user_info($uid);
-				$table_row = array();
+				$user_info = api_get_user_info($uid);				
 				//Anonymous users can't have access to the profile
 				if (!api_is_anonymous()) {
 					if (api_get_setting('allow_social_tool')=='true') {
@@ -775,40 +776,21 @@ class SocialManager extends UserManager {
                 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
                     $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';                                                                             
-                    $table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-anonymous-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
-                } else {
-                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                    
-                    
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-                    
-                    $clip = 'clip_vertical';                    
-                    if ($friends_profile['original_height'] > $friends_profile['original_width']) {
-                        $clip = 'clip_horizontal';    
-                    }
-                    
-                    //A really tiny image                    
-                    if ($friends_profile['original_height'] < 50 || $friends_profile['original_height']< 50) {
-                        $clip = '';   
-                    }                    
-                    $table_row[] = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);                        
-                }                
-				$table_row[] = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br>';
-				$table_data[] = $table_row;
-			}
-			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
-			
-			if (api_get_setting('show_email_addresses') == 'true') {
-				//$table_header[] = array(get_lang('Email'), true);
-			}
-            
-            $params = array();
-            if (!isset($params['per_page'])) {
-                $params['per_page'] = 10;                
-            }            
-            $params['hide_navigation'] = true;
-			return Display::return_sortable_grid('online', $table_header, $table_data, $params, $query_vars);			
+                } else {
+                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                                        
+                    $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';                                                                        
+                }           
+				$name = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br>';
+                $html .= '<li class="span9"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
+			}			
+            $counter = $_SESSION['who_is_online_counter'];
+            $html .= '</ul></div>';
+            $html .= '<div class="span9"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
 		}
-	}
+        return $html;
+	}    
+    
 	/**
 	 * Displays the information of an individual user
 	 * @param int $user_id
@@ -840,11 +822,9 @@ class SocialManager extends UserManager {
 					$webdir = $webdir_array['dir'];
 					$fullurl = $webdir.$user_object->picture_uri;
 					$system_image_path = $sysdir.$user_object->picture_uri;
-					list($width, $height, $type, $attr) = @getimagesize($system_image_path);
-					$resizing = (($height > 200) ? 'height="200"' : '');
+					list($width, $height, $type, $attr) = @getimagesize($system_image_path);					
 					$height += 30;
-					$width += 30;
-					$window_name = 'window'.uniqid('');
+					$width += 30;					
 					// get the path,width and height from original picture
 					$big_image = $webdir.'big_'.$user_object->picture_uri;
 					$big_image_size = api_getimagesize($big_image);

@@ -67,25 +67,23 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_left_content = SocialManager::show_social_menu('home');
-	
-        $social_right_content .= '<div class="row"><div class="social_user_information span4">';
-            
-            $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
+$social_left_content = SocialManager::show_social_menu('home');	
+$social_right_content .= '<div class="social_user_information span4">';            
+$social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
-		    // information current user		       
-            $social_right_content .= '<div>
-                    <p><strong>'.get_lang('Name').'</strong><br />
-                    <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
-                  </div>
-                  <div>
-                    <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
-                  </div>
-                  <div class="box_description_group_actions">
-                    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-                        '.Display::return_icon('profile_edit.png', null, array('hspace'=>'6')).get_lang('EditProfile').'
-                   </a>
-                  </div>';
+// information current user		       
+$social_right_content .= '<div>
+    <p><strong>'.get_lang('Name').'</strong><br />
+    <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
+    </div>
+    <div>
+    <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
+    </div>
+    <div class="box_description_group_actions">
+    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+        '.Display::return_icon('profile_edit.png', null, array('hspace'=>'6')).get_lang('EditProfile').'
+    </a>
+    </div>';
                   
             $skill = new Skill();
             $skills =  $skill->get_user_skills(api_get_user_id(), true);
@@ -162,8 +160,7 @@ $social_left_content = SocialManager::show_social_menu('home');
     				$social_right_content .= '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
     				$social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
     			}
-			$social_right_content .= '</div>';
-            $social_right_content .= '</div>';
+$social_right_content .= '</div>';            
             
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

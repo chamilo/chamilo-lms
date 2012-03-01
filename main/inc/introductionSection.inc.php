@@ -178,16 +178,6 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	if (!empty($thematic_advance_info)) {
 		
-		if ($is_allowed_to_edit) {			
-			$style_introduction_section = 'style="margin-left:10%;margin-right:10%; margin-top:30px;" ';			
-		} else {
-			if (empty($intro_content)) {
-				$style_introduction_section = 'style="margin-left:10%;margin-right:10%; "';
-			} else {
-				$style_introduction_section = 'style="margin-left:10%;margin-right:10%;" margin-top:30px;';
-			}	
-		}
-		
 		$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';		
 		if (api_is_allowed_to_edit(null, true)) {
 			//$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
@@ -197,7 +187,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
 		$thematic_advance_info['start_date'] = api_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG);
 		
-		$thematic_description_html = '<div '.$style_introduction_section.'>
+		$thematic_description_html = '
 									  <div class="thematic-postit">
 								  	  <div class="thematic-postit-top"><h3><a class="thematic-postit-head" style="" href="#"> '.$thematic_advance.'</h3></a></div>						 
 								  	  <div class="thematic-postit-center" style="display:none">';
@@ -205,7 +195,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html .= '<div style="font-size:8pt;"><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
-		$thematic_description_html .= '<br />';
+		
         
 		if (!empty($thematic_advance_info2)){
 			$thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
@@ -221,24 +211,27 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		}								  	
 		$thematic_description_html .= '</div>
 								  <div class="thematic-postit-bottom"></div>
-								  </div></div>';
-
+								  </div>';
 	} 
 }
-$style_introduction_section = 'style="margin-left:10%; margin-right:10%;"';
-$introduction_section .= '<div '.$style_introduction_section.'>';
-if ($intro_dispDefault) {
-	//$intro_content = make_clickable($intro_content); // make url in text clickable
+
+$introduction_section .= '<div class="row"><div class="span12">';
+$introduction_section .=  $thematic_description_html;
+$introduction_section .=  '</div>';
+
+$introduction_section .=  '<div class="span12">';
+if ($intro_dispDefault) {	
 	$intro_content = text_filter($intro_content); // parse [tex] codes
 	if (!empty($intro_content))	{
-		$introduction_section .=  "<table align=\"center\"><tr><td>$intro_content</td></tr></table>";
+		$introduction_section .=  $intro_content;
 	}
 }
+$introduction_section .=  '</div>';
 
 if ($intro_dispCommand) {    
 	if (empty($intro_content)) {
 		// Displays "Add intro" commands
-		$introduction_section .=  "<div id=\"courseintro_empty\">";
+		$introduction_section .=  '<div id="courseintro_empty">';
 		if (!empty ($GLOBALS['_cid'])) {			
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";            
             $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';            		
@@ -250,7 +243,7 @@ if ($intro_dispCommand) {
 
 	} else {
 		// Displays "edit intro && delete intro" commands
-		$introduction_section .=  "<div id=\"courseintro_icons\"><p>";
+		$introduction_section .=  '<div id="courseintro_empty">';
 		if (!empty ($GLOBALS['_cid'])) {
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',ICON_SIZE_SMALL)."</a>";			
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL)."</a>";
@@ -258,10 +251,7 @@ if ($intro_dispCommand) {
 			$introduction_section .=  "<a href=\"".api_get_self()."?intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',ICON_SIZE_SMALL)."</a>";			
 			$introduction_section .=  "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL)."</a>";
 		}
-		$introduction_section .=  "</p></div>";
+		$introduction_section .=  "</div>";
 	}
 }
 $introduction_section .=  '</div>';
-$introduction_section .=  $thematic_description_html;
-$introduction_section .=  '<div class="clear"></div>';
-

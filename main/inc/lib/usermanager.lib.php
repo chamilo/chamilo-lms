@@ -650,7 +650,7 @@ class UserManager {
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false) {
+    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND') {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -667,7 +667,7 @@ class UserManager {
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= implode(' AND ', $temp_conditions);
+                $sql_query .= implode(' '.$condition.' ', $temp_conditions);
             }
         }
         if (count($order_by) > 0) {

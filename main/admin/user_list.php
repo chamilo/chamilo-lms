@@ -884,7 +884,7 @@ if ($table->get_total_number_of_items() ==0) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {        
         $keyword = Database::escape_string($_REQUEST['keyword']);
         $conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
-        $user_list = UserManager::get_user_list_like($conditions);        
+        $user_list = UserManager::get_user_list_like($conditions, array(), false, ' OR ');        
         if (!empty($user_list)) {
             
             $extra_search_options = '<h3>'.get_lang('UsersFoundInOtherPortals').'</h3>';
@@ -909,7 +909,7 @@ if ($table->get_total_number_of_items() ==0) {
                         if ($current_access_url_id == $url_info['access_url_id']) {
                             $add_user = false;                            
                         }
-                        $access_info_to_string .= $url_info['url'];
+                        $access_info_to_string .= $url_info['url'].' ';
                     }
                 }
                 if ($add_user) {                    

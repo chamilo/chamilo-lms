@@ -214,18 +214,17 @@ class Result
 	 */
 	public function save() {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-		$sql = 'UPDATE '.$tbl_grade_results
-				.' SET user_id = '.$this->get_user_id()
+		$sql = 'UPDATE '.$tbl_grade_results.' 
+                SET user_id = '.$this->get_user_id()
 				.', evaluation_id = '.$this->get_evaluation_id()
 				.', score = ';
-
 		if (isset($this->score)) {
 			$sql .= $this->get_score();
 		} else {
 			$sql .= 'null';
 		}
 		$sql .= ' WHERE id = '.$this->id;
-		// no need to update creation date
+		// no need to update creation date        
 		Database::query($sql);
 	}
 

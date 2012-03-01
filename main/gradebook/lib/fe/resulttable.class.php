@@ -129,7 +129,9 @@ class ResultTable extends SortableTable
 				$row[] = $item['lastname'];
 				$row[] = $item['firstname'];
 			}
+            
 			$row[] = $item['score'];
+            
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];
 			}

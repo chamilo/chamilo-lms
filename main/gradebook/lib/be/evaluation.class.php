@@ -139,8 +139,7 @@ class Evaluation implements GradebookItem
 	 * @param $category_id parent category
 	 * @param $visible visible
 	 */
-	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null, $locked = null)
-	{
+	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null, $locked = null) {
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql='SELECT id,name,description,user_id,course_code,category_id,created_at,weight,max,visible,type,locked FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
@@ -178,7 +177,7 @@ class Evaluation implements GradebookItem
 			$sql .= ' visible = '.intval($locked);
 			$paramcount ++;
 		}
-		//echo $sql;
+		//var_dump($sql);
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
 		return $alleval;

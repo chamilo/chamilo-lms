@@ -24,13 +24,7 @@ switch($action) {
             } else {                
                 $page_rows = $page*10;
                 $user_list = who_is_online($page_rows, $page_rows + 10);		
-            }  
-            /*
-            if ($page == 1) {            
-                $_SESSION['online_user_items'] = array();
-            }*/
-        
-            //$_SESSION['online_user_items'][] = $page;         
+            } 
             if (!empty($user_list)) {
                 echo SocialManager::display_user_list($user_list);
                 exit;

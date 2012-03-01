@@ -3374,22 +3374,22 @@ a:active{
 }
 
 .online_user_in_text {
-    background: url("online.png") no-repeat scroll right center transparent;
-    float: left;
-    height: 16px;
-    left: 0;
+    background: url("online.png") no-repeat scroll right center transparent;    
+    height: 16px;    
     width: 17px;
-    display:block;
+    display: inline-block;    
     margin-right: 4px;    
+}
+
+.thumbnail .caption {
+    text-align:center;
 }
 
 .offline_user_in_text {
     background: url("offline.png") no-repeat scroll right center transparent;
-    float: left;
-    height: 16px;
-    left: 0;
+    height: 16px;    
     width: 17px;
-    display:block;
+    display: inline-block;    
     margin-right: 4px;    
 }
 

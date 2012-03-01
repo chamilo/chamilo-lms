@@ -7,7 +7,7 @@
     <div class="span9">
         <div class="row">
         {$social_right_content}        
-        <div id="display_response_id"></div>        
+        <div class="span9" id="display_response_id"></div>        
         </div>
     </div>
 </div>

@@ -781,7 +781,7 @@ class SocialManager extends UserManager {
                     $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                                        
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';                                                                        
                 }           
-				$name = Display::div($status_icon).'<a href="'.$url.'">'.$name.'</a><br>';
+				$name = '<a href="'.$url.'">'.$status_icon.$name.'</a><br>';
                 $html .= '<li class="span9"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
 			}			
             $counter = $_SESSION['who_is_online_counter'];

@@ -2811,17 +2811,11 @@ class UserManager {
 	 *
 	 */
 	public static function get_search_form($query) {
-		return '<div class="social-groups-home-title"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')</div>
-		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-		<table cellspacing="0" cellpadding="0">
-		<tr>
-		<td>			
+		return '<div class="span9"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
+		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
 				<input type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
-			</div>
-		</td>
-		</tr>
-		</table></form>';
+		</form></div>';
 	}
 	//deprecated
 	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {

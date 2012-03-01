@@ -67,23 +67,20 @@ class document_processor extends search_processor {
      */
     private function get_information($course_id, $doc_id) {
         $course_information     = api_get_course_info($course_id);
+        $course_id = $course_information['real_id'];
         if (!empty($course_information)) {
-            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);
-            $doc_table              = Database::get_course_table(TABLE_DOCUMENT, $course_information['db_name']);               
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY);
+            $doc_table              = Database::get_course_table(TABLE_DOCUMENT);               
             
     		$doc_id = Database::escape_string($doc_id);
-            $sql = "SELECT *
-              FROM       $doc_table
-              WHERE      $doc_table.id = $doc_id
-              LIMIT 1";
+            $sql = "SELECT * FROM       $doc_table
+                    WHERE      $doc_table.id = $doc_id AND c_id = $course_id 
+                    LIMIT 1";
             $dk_result = Database::query ($sql);
     
-            $sql = "SELECT insert_user_id
-              FROM       $item_property_table
-              WHERE      ref = $doc_id
-                         AND tool = '". TOOL_DOCUMENT ."'
-              LIMIT 1";
-    
+            $sql = "SELECT insert_user_id FROM       $item_property_table
+                    WHERE   ref = $doc_id AND tool = '". TOOL_DOCUMENT ."' AND c_id = $course_id 
+                    LIMIT 1";    
             $name = '';
             if ($row = Database::fetch_array ($dk_result)) {
                 $name = $row['title'];

@@ -86,31 +86,36 @@ class learnpath_processor extends search_processor {
     /**
      * Get learning path information
      */
-    private function get_information($course_id, $lp_id, $has_document_id=TRUE) {
-        
+    private function get_information($course_id, $lp_id, $has_document_id=TRUE) {        
         $course_information     = api_get_course_info($course_id);
+        $course_id = $course_information['real_id'];
+        
         if (!empty($course_information)) {
-            $lpi_table  = Database::get_course_table(TABLE_LP_ITEM, $course_information['db_name']);
-            $lp_table   = Database::get_course_table_from_code(TABLE_LP_MAIN, $course_information['db_name']);
-            $doc_table  = Database::get_course_table_from_code(TABLE_DOCUMENT, $course_information['db_name']);
+            $lpi_table  = Database::get_course_table(TABLE_LP_ITEM);
+            $lp_table   = Database::get_course_table_from_code(TABLE_LP_MAIN);
+            $doc_table  = Database::get_course_table_from_code(TABLE_DOCUMENT);
             
             $lp_id = Database::escape_string($lp_id);
 
             if ($has_document_id) {
     	        $sql = "SELECT $lpi_table.id, $lp_table.name, $lp_table.author, $doc_table.path
                     FROM       $lp_table, $lpi_table
-                    INNER JOIN $doc_table ON $lpi_table.path = $doc_table.id
-                    WHERE      $lpi_table.lp_id = $lp_id
-                    AND        $lpi_table.display_order = 1
-                    AND        $lp_table.id = $lpi_table.lp_id
+                    INNER JOIN $doc_table ON $lpi_table.path = $doc_table.id  AND $lpi_table.c_id = $course_id
+                    WHERE       $lpi_table.c_id = $course_id AND 
+                                $doc_table.c_id = $course_id AND 
+                                $lpi_table.lp_id = $lp_id  AND        
+                                $lpi_table.display_order = 1 AND        
+                                $lp_table.id = $lpi_table.lp_id
                     LIMIT 1";
-            }
-            else {
+            } else {
     	        $sql = "SELECT $lpi_table.id, $lp_table.name, $lp_table.author
                     FROM       $lp_table, $lpi_table
-                    WHERE      $lpi_table.lp_id = $lp_id
-                    AND        $lpi_table.display_order = 1
-                    AND        $lp_table.id = $lpi_table.lp_id
+                    WHERE      
+                                $lpi_table.c_id = $course_id AND 
+                                $lp_table.c_id = $course_id AND 
+                                $lpi_table.lp_id = $lp_id AND        
+                                $lpi_table.display_order = 1 AND      
+                                $lp_table.id = $lpi_table.lp_id
                     LIMIT 1";
             }
     

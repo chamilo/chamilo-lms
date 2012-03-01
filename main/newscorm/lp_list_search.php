@@ -12,7 +12,6 @@
 /**
  * Code 
  */
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';

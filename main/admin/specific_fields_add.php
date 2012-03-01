@@ -29,7 +29,7 @@ $table_uf_opt = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 $table_uf_val = Database :: get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('DokeosConfigSettings'));
+$interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
 $interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 if ($_GET['action']<>'edit') {
   $tool_name = get_lang('AddSpecificSearchField');

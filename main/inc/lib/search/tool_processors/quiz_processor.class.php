@@ -106,16 +106,18 @@ class quiz_processor extends search_processor {
      */
     private function get_information($course_id, $exercise_id) {
         $course_information     = api_get_course_info($course_id);
+        $course_id = $course_information['real_id'];
+        
         if (!empty($course_information)) {
-            $exercise_table         = Database::get_course_table(TABLE_QUIZ_TEST,     $course_information['db_name']);
-            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);
+            $exercise_table         = Database::get_course_table(TABLE_QUIZ_TEST);
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY);
     		$exercise_id            = intval($exercise_id);
-            $sql                    = "SELECT * FROM $exercise_table WHERE id = $exercise_id LIMIT 1";
+            $sql                    = "SELECT * FROM $exercise_table WHERE id = $exercise_id AND c_id = $course_id LIMIT 1";
             $dk_result              = Database::query($sql);
     
             //actually author isn't saved on exercise tool, but prepare for when it's ready
             $sql = "SELECT insert_user_id FROM $item_property_table
-                    WHERE ref = $doc_id AND tool = '". TOOL_DOCUMENT ."'
+                    WHERE ref = $doc_id AND tool = '". TOOL_DOCUMENT ."' AND c_id = $course_id 
                     LIMIT 1";
     
             $name = '';

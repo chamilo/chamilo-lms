@@ -152,15 +152,7 @@ class TestDatabase extends UnitTestCase {
 		$res=$this->dbase->get_course_table($short_table_name,$database_name);
 		$this->assertTrue(is_string($res));
 	}
-
-	function testGetCourseTableFromCode() {
-		$course_code='AYDD';
-		$table='course';
-		$ret = NULL;
-		$res=$this->dbase->get_course_table_from_code($course_code, $table);
-		$this->assertTrue(is_string($res));
-	}
-
+    
 	function testGetCourseTablePrefix() {
 		global $_configuration;
 		$res=$this->dbase->get_course_table_prefix($_configuration);

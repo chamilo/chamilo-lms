@@ -92,8 +92,8 @@ class learnpath_processor extends search_processor {
         
         if (!empty($course_information)) {
             $lpi_table  = Database::get_course_table(TABLE_LP_ITEM);
-            $lp_table   = Database::get_course_table_from_code(TABLE_LP_MAIN);
-            $doc_table  = Database::get_course_table_from_code(TABLE_DOCUMENT);
+            $lp_table   = Database::get_course_table(TABLE_LP_MAIN);
+            $doc_table  = Database::get_course_table(TABLE_DOCUMENT);
             
             $lp_id = Database::escape_string($lp_id);
 

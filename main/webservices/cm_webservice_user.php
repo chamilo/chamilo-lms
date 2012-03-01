@@ -138,6 +138,7 @@ class WSCMUser extends WSCM {
     * @param array $order_by a list of fields on which sort
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
+     *@todo Use the UserManager class
     */
     private static function get_user_list_like_start($conditions = array(), $order_by = array()) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);

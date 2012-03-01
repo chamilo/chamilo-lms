@@ -10,9 +10,12 @@
 $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';            
 
 global $_configuration;
+
+$current_access_url_id = api_get_current_access_url_id();
+
 // Blocks the possibility to delete a user
 $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
@@ -130,35 +133,9 @@ function load_calendar(user_id, month, year) {
 	$("#dialog").load( url    	 	
 	);    	
 }
-    
-
 </script>';
-$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-.blackboard_show {
-	float:left;
-	position:absolute;
-	border:1px solid black;
-	width: 200px;
-	background-color:white;
-	z-index:99; padding: 3px;
-	display: inline;
-}
-.blackboard_hide {
-	display: none;
-}
-</style>';
-
-$htmlHeadXtra[] = '<style>
-.tooltipLinkInner {
-	position:relative;
-	float:left;
-	color:blue;
-	text-decoration:none;
-}
-</style>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script(true);
 
 /**
@@ -290,14 +267,14 @@ function get_number_of_users() {
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
 
-        if (isset($_GET['keyword_extra_data'])) {
-            $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
-            if (!empty($keyword_extra_data)) {
-                $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-                $field_id = $extra_info['id'];
-                $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
-            }
+    if (isset($_GET['keyword_extra_data'])) {
+        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
+        if (!empty($keyword_extra_data)) {
+            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
+            $field_id = $extra_info['id'];
+            $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
         }
+    }
 
 	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
@@ -651,13 +628,7 @@ function status_filter($status) {
 
 /**	INIT SECTION  */
 
-$action = $_GET["action"];
-$login_as_user_id = $_GET["user_id"];
-
-// Login as ...
-if ($_GET['action'] == "login_as" && isset ($login_as_user_id)) {
-	login_user($login_as_user_id);
-}
+$action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
     $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -670,10 +641,25 @@ if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
 
 $message = '';
 
-if (isset ($_GET['action'])) {
-	$check = Security::check_token('get');
+if (!empty($action)) {
+	$check = Security::check_token('get');    
 	if ($check) {
-		switch ($_GET['action']) {
+		switch ($action) {
+            case 'add_user_to_my_url':
+                $user_id = $_REQUEST["user_id"];
+                $result = UrlManager::add_user_to_url($user_id, $current_access_url_id);
+                if ($result ) {
+                    $user_info = api_get_user_info($user_id);
+                    $message = get_lang('UserAdded').' '.$user_info['firstname'].' '.$user_info['lastname'].' ('.$user_info['username'].')';
+                    $message  = Display::return_message($message, 'confirmation');
+                }                
+                break;
+            case 'login_as':
+                $login_as_user_id = $_GET["user_id"];
+                if (isset ($login_as_user_id)) {
+                    login_user($login_as_user_id);
+                }
+                break;
 			case 'show_message' :
                 if (!empty($_GET['warn'])) {
                 	// to prevent too long messages
@@ -851,6 +837,7 @@ $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '</table>');
 
+$defaults = array();
 $defaults['keyword_active'] = 1;
 $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
@@ -886,12 +873,69 @@ $table->set_column_filter(9, 'modify_filter');
 
 if (api_is_platform_admin())
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
-$table = $table->return_table();
+$table_result = $table->return_table();
 
+/* */
+
+$extra_search_options = '';
+//Try to search the user everywhere
+if ($table->get_total_number_of_items() ==0) {
+    
+    if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {        
+        $keyword = Database::escape_string($_REQUEST['keyword']);
+        $conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
+        $user_list = UserManager::get_user_list_like($conditions);        
+        if (!empty($user_list)) {
+            
+            $extra_search_options = '<h3>'.get_lang('UsersFoundInOtherPortals').'</h3>';
+            
+            $table = new HTML_Table(array('class' => 'data_table'));
+            $column = 0;
+            $row = 0;            
+            $headers = array(get_lang('User'), 'URL', get_lang('Actions'));
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            $column=0;
+            
+            foreach($user_list as $user) {      
+                $access_info = UrlManager::get_access_url_from_user($user['user_id']);
+                $access_info_to_string = '';
+                $add_user = true;
+                if (!empty($access_info)) {
+                    foreach ($access_info as $url_info) {
+                        if ($current_access_url_id == $url_info['access_url_id']) {
+                            $add_user = false;                            
+                        }
+                        $access_info_to_string .= $url_info['url'];
+                    }
+                }
+                if ($add_user) {                    
+                    $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
+                    $row_table[] =  $access_info_to_string;
+                    $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];
+                    $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url);
+                    	
+                    foreach ($row_table as $cell) {
+                        $table->setCellContents($row, $column, $cell);
+                        $table->updateCellAttributes($row, $column, 'align="center"');
+                        $column++;
+                    }
+                    $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+                    $row++;
+                }
+            }
+            $extra_search_options .= $table->toHtml();
+            $table_result = '';
+        }
+    }    
+}
 
 $tpl = new Template($tool_name);
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $form.$table);
+$tpl->assign('content', $form.$table_result.$extra_search_options);
 $tpl->display_one_col_template();

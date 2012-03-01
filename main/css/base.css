@@ -3603,3 +3603,18 @@ a:active{
     margin-bottom: 10px;
     vertical-align: top;
 }
+
+/* User list */
+
+.blackboard_show {
+	float:left;
+	position:absolute;
+	border:1px solid black;
+	width: 200px;
+	background-color:white;
+	z-index:99; padding: 3px;
+	display: inline;
+}
+.blackboard_hide {
+	display: none;
+}

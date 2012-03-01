@@ -655,20 +655,24 @@ class UserManager {
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
         if (count($conditions) > 0) {
-            $sql_query .= ' WHERE ';
+            $sql_query .= ' WHERE ';            
+            $temp_conditions = array();
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
-                    $sql_query .= $field." LIKE '$value%'";
+                    $temp_conditions[]= $field." LIKE '$value%'";
                 } else {
-                    $sql_query .= $field.' LIKE \'%'.$value.'%\'';
+                    $temp_conditions[]= $field.' LIKE \'%'.$value.'%\'';
                 }
+            }
+            if (!empty($temp_conditions)) {
+                $sql_query .= implode(' AND ', $temp_conditions);
             }
         }
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
-        }
+        }        
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
             $return_array[] = $result;

@@ -18,17 +18,16 @@ $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
 	$delete_user_available = false;
 }
-
-$iam_a_global_admin = api_is_global_platform_admin(); 
-
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
+        
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+            $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
-		url: "course_user_list.php",
+		url: "'.$url.'",
 		data: "user_id="+my_user_id,
 		success: function(datos) {
 			$("div#"+div_course).html(datos);
@@ -149,69 +148,6 @@ $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 }
 </style>';
 
-// xajax
-$xajax = new xajax();
-$xajax->registerFunction('courses_of_user');
-//$xajax->registerFunction('empty_courses_of_user');
-$xajax->processRequests();
-
-/**
- * Get a formatted list of courses for given user
- * @param   int     User ID
- * @return  resource    XAJAX response
- */
-function courses_of_user($arg) {
-	// do some stuff based on $arg like query data from a database and
-	// put it into a variable like $newContent
-    //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';
-    $personal_course_list = UserManager::get_personal_session_course_list($arg);
-    $newContent = '';
-    if(count($personal_course_list)>0) {
-	    foreach ($personal_course_list as $key=>$course) {
-	    	$newContent .= $course['i'].'<br />';
-	    }
-    } else {
-    	$newContent .= '- '.get_lang('None').' -<br />';
-    }
-    $newContent = api_convert_encoding($newContent,'utf-8',api_get_system_encoding());
-
-	// Instantiate the xajaxResponse object
-	$objResponse = new xajaxResponse();
-
-	// add a command to the response to assign the innerHTML attribute of
-	// the element with id="SomeElementId" to whatever the new content is
-	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
-	$objResponse->addReplace("coursesofuser".$arg,"alt", $newContent);
-	$objResponse->addReplace("coursesofuser".$arg,"title", $newContent);
-
-	$objResponse->addAssign("user".$arg,"style.display", "block");
-
-	//return the  xajaxResponse object
-	return $objResponse;
-}
-/**
- * Empties the XAJAX object representing the courses list
- * @param   int     User ID
- * @return  resource    XAJAX object
- */
-function empty_courses_of_user($arg)
-{
-	// do some stuff based on $arg like query data from a database and
-	// put it into a variable like $newContent
-    $newContent = '';
-	// Instantiate the xajaxResponse object
-	$objResponse = new xajaxResponse();
-	// add a command to the response to assign the innerHTML attribute of
-	// the element with id="SomeElementId" to whatever the new content is
-	$objResponse->addAssign("user".$arg,"innerHTML", $newContent);
-
-
-	//return the  xajaxResponse object
-	return $objResponse;
-}
-
-
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<style>
 .tooltipLinkInner {
 	position:relative;
@@ -574,7 +510,7 @@ function user_filter($name, $params, $row) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $charset, $_user, $_admins_list, $delete_user_available, $iam_a_global_admin;
+	global $charset, $_user, $_admins_list, $delete_user_available;
     
 	$is_admin   = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
@@ -584,8 +520,8 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 	$result = '';
 	if (!$user_is_anonymous) {
-		$result .= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
-					<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+		$result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
+					<img onmouseout="clear_course_list (\'div_'.$user_id.'\')" src="../img/course.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					<div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
 	} else {

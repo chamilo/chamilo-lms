@@ -101,7 +101,8 @@ $form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('Only
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
 
-//$form->add_textfield('tutor_name', get_lang('CourseTitular'));
+//$form->addElement('text', tutor_name', get_lang('CourseTitular'));
+
 //$form->addElement('select', 'tutor_name', get_lang('CourseTitular'), $platform_teachers, array('style'=>'width:350px','id'=>'tutor_name_id', 'class'=>'chzn-select'));
 //$form->applyFilter('tutor_name','html_filter');
 

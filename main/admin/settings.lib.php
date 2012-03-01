@@ -1390,7 +1390,7 @@ function search_setting($search) {
                         continue;                        
                     } else {
                         $found = true;       
-                    }                    
+                    }                 
                 } else {
                     $found = true;   
                 }

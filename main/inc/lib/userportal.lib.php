@@ -991,81 +991,30 @@ class IndexManager {
 	 * The most important function here, prints the session and course list
 	 *  
 	 * */
-	function return_courses_and_sessions($personal_course_list) {
+	function return_courses_and_sessions() {		       
+        $courses_tree = array();        
+        $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		
-		// Don't change these settings
-		define('SCRIPTVAL_No', 0);
-		define('SCRIPTVAL_InCourseList', 1);
-		define('SCRIPTVAL_UnderCourseList', 2);
-		define('SCRIPTVAL_Both', 3);
-		define('SCRIPTVAL_NewEntriesOfTheDay', 4);
-		define('SCRIPTVAL_NewEntriesOfTheDayOfLastLogin', 5);
-		define('SCRIPTVAL_NoTimeLimit', 6);
-		// End 'don't change' section	
-		
-		// ---- Course list options ----
-		define('CONFVAL_showCourseLangIfNotSameThatPlatform', true);
-		// Preview of course content
-		// to disable all: set CONFVAL_maxTotalByCourse = 0
-		// to enable all: set e.g. CONFVAL_maxTotalByCourse = 5
-		// by default disabled since what's new icons are better (see function display_digest() )
-		define('CONFVAL_maxValvasByCourse', 2); // Maximum number of entries
-		define('CONFVAL_maxAgendaByCourse', 2); // collected from each course
-		define('CONFVAL_maxTotalByCourse', 0); //  and displayed in summary.
-		define('CONFVAL_NB_CHAR_FROM_CONTENT', 80);
-		// Order to sort data
-		$orderKey = array('keyTools', 'keyTime', 'keyCourse'); // default "best" Choice
-		//$orderKey = array('keyTools', 'keyCourse', 'keyTime');
-		//$orderKey = array('keyCourse', 'keyTime', 'keyTools');
-		//$orderKey = array('keyCourse', 'keyTools', 'keyTime');
-		define('CONFVAL_showExtractInfo', SCRIPTVAL_UnderCourseList);
-		// SCRIPTVAL_InCourseList        // best choice if $orderKey[0] == 'keyCourse'
-		// SCRIPTVAL_UnderCourseList    // best choice
-		// SCRIPTVAL_Both // probably only for debug
-		//define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatShort'));
-		define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
-		//define("CONFVAL_limitPreviewTo",SCRIPTVAL_NewEntriesOfTheDay);
-		//define("CONFVAL_limitPreviewTo",SCRIPTVAL_NoTimeLimit);
-		define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
-		
-		
-		/* PERSONAL COURSE LIST */
-		
-		if (!isset ($maxValvas)) {
-			$maxValvas = CONFVAL_maxValvasByCourse; // Maximum number of entries
-		}
-		if (!isset ($maxAgenda)) {
-			$maxAgenda = CONFVAL_maxAgendaByCourse; // collected from each course
-		}
-		if (!isset ($maxCourse)) {
-			$maxCourse = CONFVAL_maxTotalByCourse; // and displayed in summary.
-		}
-		
-		$maxValvas = (int) $maxValvas;
-		$maxAgenda = (int) $maxAgenda;
-		$maxCourse = (int) $maxCourse; // 0 if invalid.
-		
-		/* DISPLAY COURSES */
-		
-		// Compose a structured array of session categories, sessions and courses
-		// for the current user.
-		
-		if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);
+		if ($load_history) {
+            //Load courses history 
+			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);            
 			if (empty($courses_tree[0]) && count($courses_tree) == 1) {
 				$courses_tree = null;
 			}
 		} else {
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, false, true);
+            //Load current courses
+			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, false, true);            
 		}
-		
+        
 		if (!empty($courses_tree)) {
-			foreach ($courses_tree as $cat => $sessions) {
+			foreach ($courses_tree as $cat => $sessions) {                
 				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-				if ($cat == 0) {
-					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);
+                //Get courses
+				if ($cat == 0) {                    
+					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);                    
 				}
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
+                //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
 					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {
 						$courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
@@ -1074,116 +1023,26 @@ class IndexManager {
 				}
 			}
 		}
-        
                 
-        $html = '';
+        $html = '';		
 		
-		
-		if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-			$html .= Display::tag('h2', get_lang('HistoryTrainingSession'));
-			//if (empty($courses_tree[0]['sessions'])){
+		if ($load_history) {
+			$html .= Display::tag('h2', get_lang('HistoryTrainingSession'));			
 			if (empty($courses_tree)) {
 				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
-		}        
-	
-		foreach ($personal_course_list as $my_course) {						
-			$thisCourseSysCode 		= $my_course['k'];
-			$thisCoursePublicCode 	= $my_course['c'];
-			$thisCoursePath 		= $my_course['d'];
-			//$sys_course_path 		= api_get_path(SYS_COURSE_PATH);
-			$dbname 				= $my_course['k'];
-			$status 				= array();
-			$status[$dbname] 		= $my_course['s'];
-		
-			$nbDigestEntries = 0; // Number of entries already collected.
-			if ($maxCourse < $maxValvas) {
-				$maxValvas = $maxCourse;
-			}
-			if ($maxCourse > 0) {
-				$courses[$thisCourseSysCode]['coursePath'] = $thisCoursePath;
-				$courses[$thisCourseSysCode]['courseCode'] = $thisCoursePublicCode;
-			}
-		
-			/*  Announcements */
-			
-            $course_id = $my_course['course_id'];
-            
-			$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-			$query = "SELECT visibility FROM $course_tool_table WHERE c_id = $course_id AND link = 'announcements/announcements.php' AND visibility = 1";
-			$result = Database::query($query);
-            
-			// Collect from announcements, but only if tool is visible for the course.
-			if ($result && $maxValvas > 0 && Database::num_rows($result) > 0) {
-				// Search announcements table.
-				// Take the entries listed at the top of advalvas/announcements tool.
-				$course_announcement_table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-				$sqlGetLastAnnouncements = "SELECT end_date publicationDate, content
-		                                            FROM ".$course_announcement_table." WHERE c_id = $course_id ";
-				switch (CONFVAL_limitPreviewTo) {
-					case SCRIPTVAL_NewEntriesOfTheDay :
-						$sqlGetLastAnnouncements .= " AND DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d')."'";
-						break;
-					case SCRIPTVAL_NoTimeLimit :
-						break;
-					case SCRIPTVAL_NewEntriesOfTheDayOfLastLogin :
-						// take care mysql -> DATE_FORMAT(time,format) php -> date(format,date)
-						$sqlGetLastAnnouncements .= " AND  DATE_FORMAT(end_date,'%Y %m %d') >= '".date('Y m d', $_user['lastLogin'])."'";
-				}
-				$sqlGetLastAnnouncements .= "ORDER BY end_date DESC LIMIT ".$maxValvas;
-				$resGetLastAnnouncements = Database::query($sqlGetLastAnnouncements);
-				if ($resGetLastAnnouncements) {
-					while ($annoncement = Database::fetch_array($resGetLastAnnouncements)) {
-						$keyTools = 'valvas';
-						$keyTime = $annoncement['publicationDate'];
-						$keyCourse = $thisCourseSysCode;
-						$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = @htmlspecialchars(api_substr(strip_tags($annoncement['content']), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
-						$nbDigestEntries ++; // summary has same order as advalvas
-					}
-				}
-			}
-		
-			/* Agenda */		
-			$course_tool_table = Database :: get_course_table(TABLE_TOOL_LIST);
-			$query = "SELECT visibility FROM $course_tool_table WHERE c_id = $course_id AND link = 'calendar/agenda.php' AND visibility = 1";
-			$result = Database::query($query);
-			$thisAgenda = $maxCourse - $nbDigestEntries; // New max entries for agenda.
-			if ($maxAgenda < $thisAgenda) {
-				$thisAgenda = $maxAgenda;
-			}
-			// Collect from agenda, but only if tool is visible for the course.
-			if ($result && $thisAgenda > 0 && Database::num_rows($result) > 0) {
-				//$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue'].'calendar_event';
-                $course_table_agenda = Database::get_course_table(TABLE_AGENDA);
-				$sqlGetNextAgendaEvent = "SELECT start_date, title content, start_time
-                                            FROM $course_table_agenda
-                                            WHERE c_id = $course_id AND start_date >= CURDATE()
-                                            ORDER BY start_date, start_time
-                                            LIMIT $maxAgenda";
-				$resGetNextAgendaEvent = Database::query($sqlGetNextAgendaEvent);
-				if ($resGetNextAgendaEvent) {
-					while ($agendaEvent = Database::fetch_array($resGetNextAgendaEvent)) {
-						$keyTools = 'agenda';
-						$keyTime = $agendaEvent['start_date'];
-						$keyCourse = $thisCourseSysCode;
-						$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = @htmlspecialchars(api_substr(strip_tags($agendaEvent['content']), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
-						$nbDigestEntries ++; // Summary has same order as advalvas.
-					}
-				}
-			}
-		} // End while mycourse...
-		
-
+		}	
 		
 		if (is_array($courses_tree)) {
-			foreach ($courses_tree as $key => $category) {
-				if ($key == 0) {
+            foreach ($courses_tree as $key => $category) {
+                if ($key == 0) {
 					// Sessions and courses that are not in a session category.
 					if (!isset($_GET['history'])) {
 						// If we're not in the history view...
 						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);
-						$html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
+                        $html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
 					}
+                    
 					// Independent sessions.
 					foreach ($category['sessions'] as $session) {
 		
@@ -1242,6 +1101,7 @@ class IndexManager {
 						}
 					}
 				} else {
+                    
 					// All sessions included in.
 					if (!empty($category['details'])) {
 						$count_courses_session = 0;

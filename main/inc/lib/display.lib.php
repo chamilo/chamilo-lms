@@ -1016,25 +1016,22 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    function show_notification($my_course) {        
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        
+    function show_notification($course_info) {        
+        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);        
         $user_id = api_get_user_id();
-        $course_database 			= $my_course['db'];
-        $course_tool_table			= Database::get_course_table(TABLE_TOOL_LIST);
-        $tool_edit_table 			= Database::get_course_table(TABLE_ITEM_PROPERTY);
-                
-        $course_code 	= Database::escape_string($my_course['k']);
-        $course_info	= api_get_course_info($course_code);
-        $course_id 		= $course_info['real_id'];
         
-        $my_course['id_session'] = intval($my_course['id_session']);
+        $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
+        $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+                
+        $course_code        = Database::escape_string($course_info['code']);        
+        $course_id          = $course_info['real_id'];
+        
+        $course_info['id_session'] = intval($course_info['id_session']);
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access ".
-                                         " USE INDEX (access_cours_code, access_user_id) ".
-                                         "WHERE access_cours_code = '".$course_code."' AND 
-        										access_user_id = '$user_id' AND 
-        										access_session_id ='".$my_course['id_session']."'";
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id) 
+                                 WHERE  access_cours_code = '".$course_code."' AND 
+                                        access_user_id = '$user_id' AND 
+                                        access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
@@ -1068,11 +1065,11 @@ class Display {
                         		tet.lastedit_date > '$oldestTrackDate' ".
                         " AND ctt.name = tet.tool ".
                         " AND ctt.visibility = '1' ".
-                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."' ".
+                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."' ".
                         " ORDER BY tet.lastedit_date";
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($my_course['real_id'], $user_id);
+        $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
@@ -1092,7 +1089,7 @@ class Display {
                   )
                 // Take only what's visible or invisible but where the user is a teacher or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
-                    || ($my_course['s'] == '1' && $item_property['visibility'] == '0')
+                    || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility'])))
             {
                 // Also drop announcements and events that are not for the user or his group.
@@ -1125,10 +1122,12 @@ class Display {
         while (list($key, $notification) = each($notifications)) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
             $type = $notification['lastedit_type'];
-            if (empty($my_course['id_session'])) {
+            if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;
             }
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
+                         '<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" />
+                          </a>&nbsp;';
         }
         return $retvalue;
     }

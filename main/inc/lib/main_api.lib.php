@@ -1152,6 +1152,7 @@ function api_get_course_info($course_code = null) {
             $_course['id'           ]         = $course_data['code'           ];
             $_course['code'         ]         = $course_data['code'           ];
             $_course['name'         ]         = $course_data['title'          ];
+            $_course['title'         ]        = $course_data['title'          ];
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
@@ -1222,6 +1223,7 @@ function api_get_course_info_by_id($id = null) {
             // Added
             $_course['code'         ]         = $course_data['code'           ];
             $_course['name'         ]         = $course_data['title'          ];
+            $_course['title'         ]        = $course_data['title'          ];
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
@@ -1857,7 +1859,6 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
     $rs = Database::query($sql);
 
     if (Database::num_rows($rs) > 0) {
-
         while ($row = Database::fetch_array($rs)) {
             $coaches[] = $row;
         }

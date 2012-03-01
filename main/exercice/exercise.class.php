@@ -1057,11 +1057,11 @@ class Exercise {
 			if (api_get_setting('search_enabled') === 'true') {
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
-				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-				$form->addElement ('html','<br /><div class="row">');
-				$form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
-				$form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
-				$form->addElement ('html','</div><div class="sub-form">');
+				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));				
+				//$form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+				//$form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+                $form->addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));
+				//$form->addElement ('html','</div><div class="sub-form">');
 
 				$specific_fields = get_specific_field_list();
 
@@ -1077,7 +1077,7 @@ class Exercise {
 						$defaults[$specific_field['code']] = implode(', ', $arr_str_values);
 					}
 				}
-				$form->addElement ('html','</div>');
+				//$form->addElement ('html','</div>');
 			}
 
 			$form->addElement('html','</div>');  //End advanced setting

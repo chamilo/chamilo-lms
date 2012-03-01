@@ -1385,10 +1385,16 @@ function search_setting($search) {
                 $comment = api_strtolower(get_lang($setting['comment']));
                 //Try the comment
                 if (strpos($comment, $search) === false) {
-                    continue;
+                    //Try the variable name
+                    if (strpos($setting['variable'], $search) === false) {
+                        continue;                        
+                    } else {
+                        $found = true;       
+                    }                    
                 } else {
                     $found = true;   
-                }         
+                }
+                
             } else {                
                 $found = true;    
             }          

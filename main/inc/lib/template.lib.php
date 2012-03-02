@@ -22,7 +22,8 @@ class Template extends Smarty {
 	var $show_footer;
     var $help;
     var $menu_navigation = array();
-    var $show_learnpath = false;
+    var $show_learnpath = false;    
+    var $plugin = null;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
         parent::__construct();
@@ -72,10 +73,14 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);
         
         //Chamilo plugins
-        $plugin = new AppPlugin();
-        foreach($plugin->plugin_list as $plugin) {
-            $this->set_plugin($plugin);
+        $this->plugin = new AppPlugin();
+        $plugin_blocks = $this->plugin->get_plugin_blocks();
+        foreach ($plugin_blocks as $block) {
+            $this->set_plugin_block($block);
         }
+        
+        $this->load_plugin_template();       
+       
 	}
     
     function set_help($help_input = null) {        
@@ -550,17 +555,17 @@ class Template extends Smarty {
     }
     
     /* Sets the plugin content in a Smarty variable */
-    function set_plugin($plugin_name) {
-        if (!empty($plugin_name)) {
-            if (api_number_of_plugins($plugin_name) > 0) {
-                ob_start();		
-                api_plugin($plugin_name);		
-                $plugin_content = ob_get_contents();
-                ob_end_clean();
-            }
-            $this->assign('plugin_'.$plugin_name, $plugin_content);
-            //return $plugin_content;
+    function set_plugin_block($plugin_block) {
+        if (!empty($plugin_block)) {          
+            $block_content = $this->plugin->load_block($plugin_block, $this);   
+            //Assigning the plugin with the smarty template
+            $this->assign('plugin_'.$plugin_block, $block_content);            
         }
         return null;
+    }
+    
+    function load_plugin_template() {
+     
+        
     }
 }

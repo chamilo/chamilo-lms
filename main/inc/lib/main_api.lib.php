@@ -3378,6 +3378,7 @@ function api_number_of_plugins($location) {
 /**
  * Including the necessary plugins.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @deprecated use AppPlugin::get_all_plugin_contents_by_block function
  */
 function api_plugin($location) {
     global $_plugins;

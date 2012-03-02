@@ -62,13 +62,12 @@ function handle_plugins() {
     echo '</th>';
     echo '</tr>';
     
-    //$usedplugins = $plugin_obj->get_installed_plugins();  
-    $usedplugins = $plugin_obj->get_installed_plugins();  
+    $usedplugins = $plugin_obj->get_installed_plugins_by_block();  
 
     /* We display all the possible plugins and the checkboxes */
     
     $plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_list();
+    $my_plugin_list = $plugin_obj->get_plugin_blocks();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }

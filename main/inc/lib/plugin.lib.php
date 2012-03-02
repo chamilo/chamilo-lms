@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 class AppPlugin {
-    var $plugin_list = array ( 
+    var $plugin_blocks = array ( 
  //           'loginpage_main',
             'login',
             'menu', 
@@ -50,7 +50,8 @@ class AppPlugin {
         return $possible_plugins;
     }
     
-    function get_installed_plugins() {
+    
+    function get_installed_plugins_by_block(){
         $usedplugins = array();
         /* We retrieve all the active plugins. */    
         $result = api_get_settings('Plugins');    
@@ -58,6 +59,18 @@ class AppPlugin {
             $usedplugins[$row['variable']][] = $row['selected_value'];
         }
         return $usedplugins;
+    }
+    
+    function get_installed_plugins() {
+        $installed_plugins = array();
+        $result = api_get_settings('Plugins'); 
+        if (!empty($result)) {
+            foreach ($result as $row) {
+                $installed_plugins[$row['selected_value']] = true;
+            }
+            $installed_plugins = array_keys($installed_plugins);
+        }
+        return $installed_plugins;
     }
     
     function get_areas_by_plugin($plugin_name) {
@@ -84,8 +97,79 @@ class AppPlugin {
         return false;
     }
     
-    function get_plugin_list() {
-        sort($this->plugin_list);
-        return $this->plugin_list;
+    function get_plugin_blocks() {
+        sort($this->plugin_blocks);
+        return $this->plugin_blocks;
+    }
+    
+    function load_block($block, $main_template) {
+        ob_start();		
+        $this->get_all_plugin_contents_by_block($block, $main_template);		
+        $block_content = ob_get_contents();
+        ob_end_clean();
+        return $block_content;
+    }
+    
+    function get_all_plugin_contents_by_block($block, $main_template) {
+        global $_plugins;
+        if (isset($_plugins[$block]) && is_array($_plugins[$block])) {
+            foreach ($_plugins[$block] as $plugin_name) {
+                //Load the plugin information
+                //
+                //The plugin_info variable is available inside the plugin index
+                $plugin_info = $this->get_plugin_info($plugin_name);
+                //We also where the plugin is
+                $plugin_info['current_block'] = $block;                
+                
+                // Loading the plugin/XXX/index.php file                
+                include api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                
+                //Loading the smarty template files if exists
+                $template_list = array();
+                if (isset($plugin_info) && isset($plugin_info['templates'])) {
+                    $template_list =  $plugin_info['templates'];
+                }
+                
+                //We set the $template variable in order to use smarty
+                if (isset($_template) && !empty($_template)) {                    
+                    foreach($_template as $key =>$value) {
+                        $main_template->assign($key, $value);  
+                    }                    
+                }
+                if (!empty($template_list)) {
+                    foreach($template_list as $plugin_tpl) {
+                        if (!empty($plugin_tpl)) {
+                            $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";
+                            $main_template->display($template_plugin_file);                                                
+                        }
+                    }                
+                }               
+            }
+        }
+        return false;
+    }
+    
+    function get_plugin_info($plugin_name) {
+        static $plugin_data = array();
+        if (isset($plugin_data[$plugin_name])) {
+            return $plugin_data[$plugin_name]; 
+        } else {
+            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
+            $plugin_info = array();
+            if (file_exists($plugin_file)) {
+                require $plugin_file;            
+            }
+            $plugin_data[$plugin_name] = $plugin_info;
+            return $plugin_data;
+        }
+    }
+    
+    function get_templates_list($plugin_name) {
+        $plugin_info = $this->get_plugin_info($plugin_name);        
+        if (isset($plugin_info) && isset($plugin_info['templates'])) {
+            return $plugin_info['templates'];
+        } else {
+            return false;
+        }
     }
 }

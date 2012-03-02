@@ -9,7 +9,6 @@
 </head>
 <body dir="{$text_direction}" class="{$section_name}">
 <noscript>{"NoJavascript"|get_lang}</noscript>
-
 {if $show_header}    
 <div class="skip">
     <ul>
@@ -29,18 +28,51 @@
     {include file="default/layout/topbar.tpl"}    
     
     <div id="main" class="container">     
-        <header> 
-            {* header1 - logo *}
-            <div id="header1">                
-                {$header1}
-            </div>            
-            {$plugin_header}    
-
-            {* header 2 - right menu (notifications) *}    
-            <div id="header2">
-                <ul class="nav nav-pills">        
-                    {$header2}
-                </ul>
+        <header>
+            <div class="row">
+                {* header1 - logo *}
+                <div id="header_left" class="span4">                
+                    {$header1}                    
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_left)}
+                        <div id="plugin_header_left">
+                            {$plugin_header_left}
+                        </div>
+                    {/if}
+                </div>
+                
+                <div id="header_center" class="span4">                
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_center)}
+                        <div id="plugin_header_center">
+                            {$plugin_header_center}
+                        </div>
+                    {/if}
+                    &nbsp;
+                </div>
+                
+                {* header right (notifications) *}    
+                <div id="header_right" class="span4">
+                    <ul class="nav nav-pills pull-right">        
+                        {$header2}
+                    </ul>
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_right)}
+                        <div id="plugin_header_right">
+                            {$plugin_header_right}
+                        </div>
+                    {/if}
+                    &nbsp;
+                </div>
+                    
+                    
+                {if !empty($plugin_header_main)}
+                    <div id="plugin_header_main">
+                        {$plugin_header_main}
+                    </div>
+                {/if}
+                
+            
             </div>
         </header>
 

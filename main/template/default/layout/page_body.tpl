@@ -9,8 +9,10 @@
 {if !empty($header) }
     <div class="page-header">
         <h1>{$header}</h1>
-    </div>            
+    </div>
 {/if}
 
-{* Notifications*}	
+{* Show messages*}
+<section id="messages">
 {$message}
+</section>

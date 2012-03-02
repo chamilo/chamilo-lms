@@ -7,6 +7,11 @@
 	{$login_language_form}
 	{$login_form}
 	{$login_failed}	
-	{$login_options}
-	{$login_plugin_menu}
+	{$login_options}	
+    
+    {if !empty($plugin_login)}                
+        <div id="plugin_login">
+            {$plugin_login}
+        </div>
+    {/if}
 </div>

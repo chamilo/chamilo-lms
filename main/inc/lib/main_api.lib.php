@@ -3386,6 +3386,7 @@ function api_plugin($location) {
             include api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
         }
     }
+    return false;
 }
 
 /**
@@ -3393,7 +3394,7 @@ function api_plugin($location) {
  * @return boolean true if the plugin is installed, false otherwise.
  */
 function api_is_plugin_installed($plugin_list, $plugin_name) {
-    if(is_array($plugin_list)) {
+    if (is_array($plugin_list)) {
         foreach ($plugin_list as $plugin_location) {
             if (array_search($plugin_name, $plugin_location) !== false) { return true; }
         }

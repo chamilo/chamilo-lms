@@ -10,6 +10,7 @@
 // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
+require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 
 class Template extends Smarty {
 	
@@ -28,6 +29,7 @@ class Template extends Smarty {
 		$this->title = $title;
         //$this->assign('header', $title);
 		$this->show_learnpath = $show_learnpath;
+        
 		//Smarty 3 configuration
         $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
         $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
@@ -68,6 +70,12 @@ class Template extends Smarty {
 		$this->set_footer_parameters();
         
 		$this->assign('style', $this->style);
+        
+        //Chamilo plugins
+        $plugin = new AppPlugin();
+        foreach($plugin->plugin_list as $plugin) {
+            $this->set_plugin($plugin);
+        }
 	}
     
     function set_help($help_input = null) {        
@@ -259,22 +267,13 @@ class Template extends Smarty {
         
 		$header1 = show_header_1($language_file, $nameTools, $this->theme);
 		$this->assign('header1', $header1);
-		
-        ob_start();
-        echo '<div id="plugin-header">';
-        api_plugin('header');
-        echo '</div>';
-        ob_clean();
-        
-        $plugin_header = ob_get_contents();           
-        $this->assign('plugin_header', $plugin_header);        
     }
     
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
-		global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, 
+		global $lp_theme_css, $mycoursetheme, $user_theme;
+		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $_user, 
 				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
         $navigation            = return_navigation_array();        
@@ -465,16 +464,7 @@ class Template extends Smarty {
 	}
 
 	private function set_footer_parameters() {
-		//Footer plugin
-		global $_plugins, $_configuration;
-        
-		ob_start();
-		api_plugin('footer');
-		$plugin_footer = ob_get_contents();
-		ob_clean();
-        
-        //Plugin footer
-		$this->assign('plugin_footer', $plugin_footer);
+		global $_configuration;   
         
         //Show admin data
 		//$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
@@ -544,8 +534,7 @@ class Template extends Smarty {
                                 }
                         }
                     }
-                }
-                $teacher_data .= '</div>';
+                }                
                 $this->assign('teachers', $teacher_data);     
             }
         }
@@ -562,5 +551,20 @@ class Template extends Smarty {
     function show_footer_template() {
         $tpl = $this->get_template('layout/show_footer.tpl');
 		$this->display($tpl);	
+    }
+    
+    /* Sets the plugin content in a Smarty variable */
+    function set_plugin($plugin_name) {
+        if (!empty($plugin_name)) {
+            if (api_number_of_plugins($plugin_name) > 0) {
+                ob_start();		
+                api_plugin($plugin_name);		
+                $plugin_content = ob_get_contents();
+                ob_end_clean();
+            }
+            $this->assign('plugin_'.$plugin_name, $plugin_content);
+            //return $plugin_content;
+        }
+        return null;
     }
 }

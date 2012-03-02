@@ -714,15 +714,26 @@ class Display {
         if ($show_blank_item) {
             $html .= self::tag('option', '-- '.get_lang('Select').' --', array('value'=>'-1'));
         }
-        if($values) {
-            foreach($values as $key => $value) {
+        if ($values) {            
+            foreach ($values as $key => $value) {
                 if(is_array($value) && isset($value['name'])) {
                     $value = $value['name'];
                 }
                 $html .= '<option value="'.$key.'"';
-                if($default == $key) {
-                    $html .= 'selected="selected"';
+                
+                if (is_array($default)) {
+                    foreach($default as $item) {
+                        if ($item == $key) {
+                            $html .= 'selected="selected"';
+                            break;
+                        }
+                    }
+                } else {
+                    if ($default == $key) {
+                        $html .= 'selected="selected"';
+                    }
                 }
+                
                 $html .= '>'.$value.'</option>';
             }
         }

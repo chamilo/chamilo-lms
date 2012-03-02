@@ -5,7 +5,6 @@ require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
-
 class IndexManager {
 	var $tpl 	= false; //An instance of the template engine
 	var $name 	= '';
@@ -25,8 +24,7 @@ class IndexManager {
 		if (api_get_setting('show_documents_preview') == 'true') {
 			$this->load_directories_preview = true;
 		}		
-	}
-	
+	}	
 	
 	function set_login_form() {
 		global $loginFailed;
@@ -54,16 +52,6 @@ class IndexManager {
 				$login_form .= '</ul>';
 			}
 			$this->tpl->assign('login_options',  $login_form);
-	
-			if (api_number_of_plugins('loginpage_menu') > 0) {
-				$login_form = '<div class="note" style="background: none">';
-				ob_start();
-				api_plugin('loginpage_menu');
-				$plugin_login = ob_get_contents();
-				$login_form .= $plugin_login;
-				$login_form .= '</div>';
-				$this->tpl->assign('login_plugin_menu',  $login_form);
-			}			
 		}
 	}
 	
@@ -215,23 +203,16 @@ class IndexManager {
 	 * @todo does $_plugins need to be global?
 	 */
 	function display_anonymous_right_menu() {
-		global $loginFailed, $_plugins, $_user;
+		global $loginFailed, $_user;
 	
 		$platformLanguage       	= api_get_setting('platformLanguage');		
 		$display_add_course_link	= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');	
 		$current_user_id        	= api_get_user_id();
 	
-		echo self::set_login_form(false);		
-		
-		echo self::return_teacher_link();
-		
-		echo self::return_notice();
-		
-		//Plugin
-		echo self::return_plugin_campushomepage();	
-	}
-	
-	
+		echo self::set_login_form(false);				
+		echo self::return_teacher_link();		
+		echo self::return_notice();		
+	}	
 	
 	function return_teacher_link() {
 		$html = '';
@@ -380,7 +361,7 @@ class IndexManager {
 		return $html;
 	}
 	
-	function return_plugin_campushomepage() {
+	/*function return_plugin_campushomepage() {
 		$html = '';
 		if (api_get_user_id() && api_number_of_plugins('campushomepage_menu') > 0) {
 			ob_start();
@@ -390,7 +371,7 @@ class IndexManager {
 			$html = self::show_right_block('', $plugin_content);
 		}
 		return $html;
-	}
+	}*/
     
     function return_skills_links() {
         $content = '<ul class="menulist">';      
@@ -753,15 +734,13 @@ class IndexManager {
 	}
 	
 	function return_search_block() {
-		$html = '';
-		
+		$html = '';		
 		if (api_get_setting('search_enabled') == 'true') {
 			$html .= '<div class="searchbox">';
-			$search_btn = get_lang('Search');
-			$search_text_default = get_lang('YourTextHere');
+			$search_btn = get_lang('Search');			
 			$search_content = '<br />
 		    	<form action="main/search/" method="post">
-		    	<input type="text" id="query" size="15" name="query" value="" />
+		    	<input type="text" id="query" class="span2" name="query" value="" />
 		    	<button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
 		    	</form></div>';    
 			$html .= self::show_right_block(get_lang('Search'), $search_content);
@@ -803,18 +782,6 @@ class IndexManager {
 			$html .= self::show_right_block(get_lang('Booking'), $booking_content);
 		}
 		return $html;
-	}
-	
-	function return_plugin_courses_block() {
-		global $_plugins;
-		// Plugins for the my courses menu.
-		if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
-			ob_start();
-			api_plugin('mycourses_menu');
-			$plugin_content = ob_get_contents();
-			ob_end_clean();
-			echo self::show_right_block('', $plugin_content);
-		}
 	}
 	
 	function return_profile_block() {
@@ -977,16 +944,6 @@ class IndexManager {
 		return $html;
 	}
 	
-	function return_courses_main_plugin() {
-		ob_start();
-		echo '<div id="plugin-mycourses_main">';
-		api_plugin('mycourses_main');
-		echo '</div>';
-		$plugin_content = ob_get_contents();
-		ob_end_clean();
-		return $plugin_content;
-	}
-	
 	/**
 	 * The most important function here, prints the session and course list
 	 *  
@@ -1097,7 +1054,7 @@ class IndexManager {
 							if (api_get_setting('hide_courses_in_sessions') == 'false') {
 							//	$params['extra'] .=  $html_courses_session;
 							}                            
-                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_courses_session);
+                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
 						}
 					}
 				} else {
@@ -1145,7 +1102,7 @@ class IndexManager {
 								if (api_is_platform_admin()) {
 									$params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
 								}                                
-                                $html_sessions .= CourseManager::course_item_html($params).$html_courses_session;                         
+                                $html_sessions .= CourseManager::course_item_html($params, true).$html_courses_session;                         
 							}
 						}
 		
@@ -1162,7 +1119,7 @@ class IndexManager {
 							if ($category['details']['date_end'] != '0000-00-00') {
 								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);
 							}
-                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params), $html_sessions);
+                            $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
 						}
 					}
 				}

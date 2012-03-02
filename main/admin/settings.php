@@ -30,6 +30,7 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once 'settings.lib.php';
 
 // Setting the section (for the tabs).

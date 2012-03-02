@@ -2706,11 +2706,11 @@ class CourseManager {
     
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well";
+        $class = "well2";
         if ($is_sub_content) {
             $class = "";
-        }
-        $html .= '<div class="row-fluid">';         
+        }        
+        $html .= '<div class="row-fluid '.$class.'">';         
             $html .= '<div class="span10">';         
                 $html .= '<div class="well3">'; 
                     $html .= '<div class="span1">'.$params['icon'].'</div>';
@@ -2824,7 +2824,7 @@ class CourseManager {
                     
                     $params['image'] = $course_title;
                     $params['notifications'] = $show_notification;                    
-                    $html .= self::course_item_html($params);
+                    $html .= self::course_item_html($params, false);
                     $key++;
                 }
             }            
@@ -2858,7 +2858,7 @@ class CourseManager {
             // We simply display the title of the category.
             $params['icon'] = Display::return_icon('folder_yellow.png', null, array(), ICON_SIZE_LARGE);
             $params['title'] = $row['title'];               
-            $html .= self::course_item_parent(self::course_item_html($params), self :: display_courses_in_category($row['id'], $load_dirs));
+            $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
         }
         return $html;
     }
@@ -2938,36 +2938,6 @@ class CourseManager {
             		$params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class'=>'document_preview_container'));
             	}            		
             }
-    
-            // Function logic - act on the data (check if the course is virtual, if yes change the link).
-            /*
-             * no virtual courses
-            $is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course['code']);
-            
-            if ($is_virtual_course) {
-                // If the current user is also subscribed in the real course to which this
-                // virtual course is linked, we don't need to display the virtual course entry in
-                // the course list - it is combined with the real course entry.
-                $target_course_code = CourseManager :: get_target_of_linked_course($course['code']);
-                $is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-                if ($is_subscribed_in_target_course) {
-                    return; // Do not display this course entry.
-                }
-            }*/
-            
-            // Check if the course has virtual courses attached. If yes change the course title and display code.
-            /*
-            $has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course['code'], api_get_user_id());
-            if ($has_virtual_courses) {
-                $course_info = api_get_course_info($course['code']);
-                $return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
-                $course_title = $return_result['title'];
-                $course_display_code = $return_result['code'];
-            } else {
-                $course_title = $course['title'];
-                $course_display_code = $course['visual_code'];
-            }*/
-
             $course_title = $course_info['title'];
                         
             $course_title_url = '';
@@ -2993,7 +2963,12 @@ class CourseManager {
             $params['title'] = $course_title;
             $params['teachers'] = $teachers;
             $params['notifications'] = $show_notification;
-            $html .= self::course_item_html($params);
+            $is_subcontent = true;
+            if (empty($user_category_id)) {
+                $is_subcontent = false;
+            }
+            $html .= self::course_item_html($params, $is_subcontent);
+            
             $key++;
         }
         return $html; 
@@ -3142,11 +3117,9 @@ class CourseManager {
         $params['title'] = $session_title;
         
         $params['right_actions'] = '';
-        if ($load_dirs) {        	
-        	$params['right_actions'] .= '<div style="float:right;">';
+        if ($load_dirs) {        	        	
             $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
-            $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'], 'class'=>'document_preview_container'));
-			$params['right_actions'] .= '</div>';
+            $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'], 'class'=>'document_preview_container'));			
         }        
     
         if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -3187,7 +3160,7 @@ class CourseManager {
         $params['title'] = $session_title;
         $params['extra'] = '';
                
-        $html = self::course_item_html($params);
+        $html = self::course_item_html($params, true);
         
         $session_category_id = null;
         if (api_get_setting('use_session_mode') == 'true' && !$nosession) {

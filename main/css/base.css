@@ -37,16 +37,16 @@ legend {
     margin-bottom: 10px;
 }
 
-#header1 {
-    height: 50px;
-} 
+#header_right {
+    text-align: right;
+}
+
 #header2 .nav{
     margin-bottom:0px;
 }
 
 #header2 {    
-    width:100%;
-    height: 35px;
+    
 }
 
 #header2 .nav {
@@ -142,6 +142,13 @@ footer {
   padding-top: 17px;
   border-top: 1px solid #eee;
 }
+ #footer .container .row{
+    padding-top: 60px;
+ }
+ #footer_right #admin_name, #footer_right #software_name{
+     text-align:right;     
+ }
+ 
 .page-header {
   margin-bottom: 17px;
   border-bottom: 1px solid #ddd;

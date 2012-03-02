@@ -279,12 +279,7 @@ input.link_alike:hover {
 /********************************************************
  *  HEADER 1: Title, portal, organisation, course title *
  ********************************************************/
-#header1 {
-	padding:0px;
-    font-size:12px;    
-    color:#666666;    
-    background-repeat:repeat-x;
-}
+
 #header1 a {
     font-size:12px;    
     font-weight:normal;

@@ -31,101 +31,80 @@ function handle_plugins() {
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
+    
+    $plugin_obj = new AppPlugin();
+    $possible_plugins = $plugin_obj->read_plugins_from_path();    
 
-    //echo get_lang('AvailablePlugins').'<br />';
-    echo '<br />';
-
-    /* We scan the plugin directory. Each folder is a potential plugin. */
-    $pluginpath = api_get_path(SYS_PLUGIN_PATH);
-
-    $handle = @opendir($pluginpath);
-    while (false !== ($file = readdir($handle))) {
-        if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-            $possibleplugins[] = $file;
-        }
-    }
-    @closedir($handle);
-
-    /*  For each of the possible plugin directories we check whether a file named "plugin.php" exists
-        (it contains all the needed information about this plugin).
-        This "plugin.php" file looks like:
-        $plugin_info['title'] = 'The title of the plugin';
-        $plugin_info['comment'] = 'Some comment about the plugin';
-        $plugin_info['location'] = array('loginpage_menu', 'campushomepage_menu', 'banner'); // The possible locations where the plugins can be used.
-        $plugin_info['version'] = '0.1 alpha'; // The version number of the plugin.
-        $plugin_info['author'] = 'Patrick Cool'; // The author of the plugin.
-    */
-    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
+    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
-    echo '<th>';
+    echo '<th width="300px">';
     echo get_lang('Plugin');
     echo '</th><th>';
-    echo get_lang('LoginPageMainArea');
+    echo get_lang('PluginArea').'';
+    echo '</th>';
+    /*
+    echo get_lang('LoginPageMenu').'<br />(loginpage_menu)';
     echo '</th><th>';
-    echo get_lang('LoginPageMenu');
+    echo get_lang('CampusHomepageMainArea').'<br />(campushomepage_main)';
     echo '</th><th>';
-    echo get_lang('CampusHomepageMainArea');
+    echo get_lang('CampusHomepageMenu').'<br />(campushomepage_menu)';
     echo '</th><th>';
-    echo get_lang('CampusHomepageMenu');
+    echo get_lang('MyCoursesMainArea').'<br />(mycourses_main)';
     echo '</th><th>';
-    echo get_lang('MyCoursesMainArea');
+    echo get_lang('MyCoursesMenu').'<br />(mycourses_menu)';
     echo '</th><th>';
-    echo get_lang('MyCoursesMenu');
+    echo get_lang('Header').'<br />(header)';
     echo '</th><th>';
-    echo get_lang('Header');
+    echo get_lang('Footer').'<br />(footer)';
     echo '</th><th>';
-    echo get_lang('Footer');
-    echo '</th><th>';
-    echo get_lang('CourseTool');
+    echo get_lang('CourseTool').'';*/
     echo '</th>';
     echo '</tr>';
-
-    /* We retrieve all the active plugins. */
-    //$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
-    //$result = Database::query($sql);
-    $result = api_get_settings('Plugins');
-    //while ($row = Database::fetch_array($result))
-    foreach ($result as $row) {
-        $usedplugins[$row['variable']][] = $row['selected_value'];
-    }
+    
+    //$usedplugins = $plugin_obj->get_installed_plugins();  
+    $usedplugins = $plugin_obj->get_installed_plugins();  
 
     /* We display all the possible plugins and the checkboxes */
-    foreach ($possibleplugins as $testplugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$testplugin.'/plugin.php';
+    
+    $plugin_list = array();
+    $my_plugin_list = $plugin_obj->get_plugin_list();
+    foreach($my_plugin_list as $plugin_item) {
+        $plugin_list[$plugin_item] = $plugin_item;
+    }
+
+    foreach ($possible_plugins as $plugin) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
+        
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
-            include ($plugin_info_file);
-
+            require $plugin_info_file;
             echo '<tr>';
-            echo '<td>';
-            foreach ($plugin_info as $key => $value) {
-                if ($key != 'location') {
-                    if ($key == 'title') {
-                        $value = '<strong>'.$value.'</strong>';
-                    }
-                    echo get_lang(ucwords($key)).': '.$value.'<br />';
-                }
+            echo '<td>';            
+            echo '<h3>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
+            echo '<p>'.$plugin_info['comment'].'</p>';
+            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+            
+            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
+                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt'>readme.txt</a>";
             }
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$testplugin.'/readme.txt')) {
-                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$testplugin."/readme.txt'>readme.txt</a>";
-            }
-            echo '</td>';
-
-            // column: LoginPageMainArea
-            if (empty($usedplugins)) {
-                $usedplugins = array();
-            }
-            display_plugin_cell('loginpage_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('loginpage_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('campushomepage_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('campushomepage_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('mycourses_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('mycourses_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('header', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('footer', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('course_tool_plugin', $plugin_info, $testplugin, $usedplugins);
-            echo '</tr>';
+            echo '</td><td>';            
+            
+            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
+            
+            
+            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));
+            
+          /*  display_plugin_cell('loginpage_main', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('loginpage_menu', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('campushomepage_main', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('campushomepage_menu', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('mycourses_main', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('mycourses_menu', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('header', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('footer', $plugin_info, $plugin, $usedplugins);
+            display_plugin_cell('course_tool_plugin', $plugin_info, $plugin, $usedplugins);*/
+            echo '</td></tr>';
         }
     }
     echo '</table>';
@@ -388,38 +367,37 @@ function upload_stylesheet($values, $picture) {
  * @todo: A similar function needs to be written to activate or inactivate additional tools.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+function store_plugins() {    
     global $_configuration;
+    
+    $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $installed_plugins = api_get_settings('Plugins','list',$_configuration['access_url']);
+    $installed_plugins = api_get_settings('Plugins','list', $_configuration['access_url']);
     $shortlist_installed = array();
     foreach ($installed_plugins as $plugin) {
         $shortlist_installed[] = $plugin['subkey'];
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
-    // Step 1 : We remove all the plugins.
-    //$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
-    //Database::query($sql);
+
     $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
-    $shortlist_required = array();
-    // Step 2: Looping through all the post values we only store these which are really a valid plugin location.
-    foreach ($_POST as $form_name => $formvalue) {
-        $form_name_elements = explode('-', $form_name);
-        if (is_valid_plugin_location($form_name_elements[1])) {
-            $shortlist_required[] = $form_name_elements[0];
-            //$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
-            //Database::query($sql);
-            api_add_setting($form_name_elements['0'], $form_name_elements['1'], $form_name_elements['0'], null, 'Plugins', $form_name_elements['0'], null, null, null, $_configuration['access_url'], 1);
-            // check if there is an install procedure
-            $pluginpath = api_get_path(SYS_PLUGIN_PATH).$form_name_elements[0].'/install.php';
-            if (is_file($pluginpath) && is_readable($pluginpath)) {
-                //execute the install procedure
-            	include $pluginpath;
+    
+    $plugin_list = $plugin_obj->read_plugins_from_path();
+    
+    foreach ($plugin_list as $plugin) {
+        if (isset($_POST['plugin_'.$plugin])) {
+            $areas_to_installed = $_POST['plugin_'.$plugin];
+            foreach ($areas_to_installed as $area) {                
+                api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);        
+                $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/install.php';
+                if (is_file($pluginpath) && is_readable($pluginpath)) {
+                    //execute the install procedure
+                    require $pluginpath;
+                }                
             }
-        }
-    }
+        }        
+    }    
+    
     foreach ($shortlist_installed as $plugin) {
         // if one plugin was really deleted, execute the uninstall script
     	if (!in_array($plugin,$shortlist_required)) {
@@ -427,19 +405,10 @@ function store_plugins() {
             $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/uninstall.php';
             if (is_file($pluginpath) && is_readable($pluginpath)) {
                 //execute the install procedure
-                include $pluginpath;
-            }    		
+                require $pluginpath;
+            }
     	}
     }
-}
-
-/**
- * Check if the post information is really a valid plugin location.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function is_valid_plugin_location($location) {
-    static $valid_locations = array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu', 'header', 'footer', 'course_tool_plugin');
-    return in_array($location, $valid_locations);
 }
 
 
@@ -496,9 +465,7 @@ function handle_search() {
     //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
     //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
     $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
-    
-    
-    
+       
     $values = api_get_settings_options('search_enabled');   
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
      

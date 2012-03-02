@@ -1,2 +1,2 @@
 <?php
-/* Script to install the plugin */
+/* PHP code to uninstall the plugin */

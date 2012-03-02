@@ -110,6 +110,13 @@ class AppPlugin {
         return $block_content;
     }
     
+    /** 
+     *
+     *
+     * @param string $block
+     * @param smarty obj      
+     * @todo improve this function
+     */
     function get_all_plugin_contents_by_block($block, $main_template) {
         global $_plugins;
         if (isset($_plugins[$block]) && is_array($_plugins[$block])) {
@@ -119,27 +126,30 @@ class AppPlugin {
                 //The plugin_info variable is available inside the plugin index
                 $plugin_info = $this->get_plugin_info($plugin_name);
                 //We also where the plugin is
-                $plugin_info['current_block'] = $block;                
+                $plugin_info['current_block'] = $block;    
                 
                 // Loading the plugin/XXX/index.php file                
-                include api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                require api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                
+                //We set the $template variable in order to use smarty
+                if (isset($_template) && !empty($_template)) {                        
+                    foreach($_template as $key =>$value) {
+                        $main_template->assign($key, $value);                          
+                    }
+                }                
                 
                 //Loading the smarty template files if exists
                 $template_list = array();
                 if (isset($plugin_info) && isset($plugin_info['templates'])) {
-                    $template_list =  $plugin_info['templates'];
+                    $template_list = $plugin_info['templates'];
                 }
                 
-                //We set the $template variable in order to use smarty
-                if (isset($_template) && !empty($_template)) {                    
-                    foreach($_template as $key =>$value) {
-                        $main_template->assign($key, $value);  
-                    }                    
-                }
+                //var_dump($plugin_info);                
+               
                 if (!empty($template_list)) {
                     foreach($template_list as $plugin_tpl) {
                         if (!empty($plugin_tpl)) {
-                            $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";
+                            $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";                            
                             $main_template->display($template_plugin_file);                                                
                         }
                     }                
@@ -160,7 +170,7 @@ class AppPlugin {
                 require $plugin_file;            
             }
             $plugin_data[$plugin_name] = $plugin_info;
-            return $plugin_data;
+            return $plugin_info;
         }
     }
     

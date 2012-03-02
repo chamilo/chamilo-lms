@@ -38,7 +38,7 @@ function handle_plugins() {
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
-    echo '<th width="300px">';
+    echo '<th width="400px">';
     echo get_lang('Plugin');
     echo '</th><th>';
     echo get_lang('PluginArea').'';
@@ -62,8 +62,6 @@ function handle_plugins() {
     echo '</th>';
     echo '</tr>';
     
-    $usedplugins = $plugin_obj->get_installed_plugins_by_block();  
-
     /* We display all the possible plugins and the checkboxes */
     
     $plugin_list = array();
@@ -87,22 +85,11 @@ function handle_plugins() {
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
                 echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt'>readme.txt</a>";
             }
-            echo '</td><td>';            
-            
-            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
-            
+            echo '</td><td>';                        
+            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
             
             echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));
-            
-          /*  display_plugin_cell('loginpage_main', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('loginpage_menu', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('campushomepage_main', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('campushomepage_menu', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('mycourses_main', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('mycourses_menu', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('header', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('footer', $plugin_info, $plugin, $usedplugins);
-            display_plugin_cell('course_tool_plugin', $plugin_info, $plugin, $usedplugins);*/
+    
             echo '</td></tr>';
         }
     }

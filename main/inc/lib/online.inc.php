@@ -284,7 +284,7 @@ function who_is_online_count($valid = null, $friends = false) {
     
     //dev purposes show all users online
     
-    /*$table_user			= Database::get_main_table(TABLE_MAIN_USER);
+    /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
     $query = "SELECT count(*)  as count FROM ".$table_user ."   ";*/
     
 	$result = Database::query($query);

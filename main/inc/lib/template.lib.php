@@ -238,10 +238,7 @@ class Template extends Smarty {
         }
 		
 		//Base CSS
-		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";
-        
-        
-		
+		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";        
 		//Default theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
         

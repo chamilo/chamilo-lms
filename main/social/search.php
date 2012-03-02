@@ -40,7 +40,7 @@ $social_right_content = UserManager::get_search_form($query);
             $social_right_content .= get_lang('SorryNoResults');	
         }
         
-        $results .= '<div class="span9">';
+        $results .= '<div id="online_grid_container"><div class="span9">';
         
         if (is_array($users) && count($users)> 0) {
             $results .=  '<h2>'.get_lang('Users').'</h2>';			
@@ -63,9 +63,9 @@ $social_right_content = UserManager::get_search_form($query);
                 }                    
                 $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
                 $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];                
-                $results .= '<li class="span9"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';				
+                $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';				
             }	
-            $results .='</ul></div>';
+            $results .='</ul></div></div>';
             $social_right_content .=  $results;                        
         }
 

@@ -4,6 +4,15 @@
 /* Responsive Docs
 -------------------------------------------------- */
 @media (max-width: 479px) {
+    /* No chat in mobiles*/
+    #chatmain {
+        display:none;
+    }
+    
+    #footer .container .row {
+        padding-top:25px;
+    }
+    
     .resize_font {
         display:none;
     }
@@ -26,6 +35,13 @@
 }
 
 @media (max-width: 767px) {
+    /* No chat in mobiles*/
+    #chatmain {
+        display:none;
+    }
+    #footer .container .row {
+        padding-top:25px;
+    }
     
     .notification-panel {
         display:none;

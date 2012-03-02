@@ -3551,8 +3551,9 @@ a:active{
 }
 
 .td_actions {
- 	background:#efefef;
-    border:1px solid #ccc; 
+ 	/* background:#efefef;*/
+    background:#F9F9F9;    
+    border:1px solid #eee; 
     margin-bottom: 5px;    
     padding:2px;     
     vertical-align:middle;        
@@ -3765,4 +3766,8 @@ a.forum_group_link {
 }
 .blackboard_hide {
 	display: none;
+}
+
+#online_grid_container li img {
+    height: 100px;
 }

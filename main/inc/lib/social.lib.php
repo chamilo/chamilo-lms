@@ -782,7 +782,7 @@ class SocialManager extends UserManager {
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';                                                                        
                 }           
 				$name = '<a href="'.$url.'">'.$status_icon.$name.'</a><br>';
-                $html .= '<li class="span9"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
+                $html .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
 			}			
             $counter = $_SESSION['who_is_online_counter'];
             $html .= '</ul></div>';

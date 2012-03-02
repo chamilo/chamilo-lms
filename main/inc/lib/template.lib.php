@@ -380,11 +380,17 @@ class Template extends Smarty {
 		}
         
         if (SHOW_TEXT_NEAR_ICONS == true) {
+            //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>
+                
                 .td_actions a {
                     float:left;
                     width:100%;
                 }                
+                .forum_message_left a {
+                    float:left;
+                    width:100%;
+                }
                 </style>';
         }
 	

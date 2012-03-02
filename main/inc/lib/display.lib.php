@@ -50,8 +50,7 @@ class Display {
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null) {
-        $nameTools = $tool_name;
+    public static function display_header($tool_name ='', $help = null, $page_header = null) {        
         /*
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;

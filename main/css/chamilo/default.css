@@ -87,30 +87,15 @@ a:active {
 #footer {
     background-color: #037fb2;
     background-image: url(images/bg-footer.gif);
-    background-repeat:repeat-x;
-    font-size: 12px;
+    background-repeat:repeat-x;    
     color:#ffffff;
-    /*height: 10em;*/	 /* Do not change this value */
-    overflow:hidden;
-    width: 100%;
-    padding-bottom:18px;
+    height: 9em;    
+    width: 100%;    
 }
 /* Sticky footer*/
 .push {
     height: 9em; /* Very important */
 }
-#footer .copyright {
-    float: right;
-    padding-top:60px;
-    margin-right:5%;    
-}
-
-.footer_emails{
-    float: left;
-    padding-top:60px;
-    margin-right:5%;    
-}
-
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/

@@ -24,7 +24,7 @@ body {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -4em;
+    margin: 0 auto -9em;
 }
 
 a {
@@ -36,9 +36,6 @@ a:hover, a:focus {
 }
 blockquote {
     font: 1.1em arial, sans, sans-serif;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    background-image:url(images/shadow.gif);
 }
 h3 {
     font: bold 1.3em Arial, sans-serif, sans;
@@ -522,55 +519,16 @@ ul#navigation .student-connect a {
 ==============================================================================
 */
 #footer {
-    font-family: Arial, sans-serif, sans;
+	background-image: url(images/bg.jpg);
 	background-repeat:repeat-x;
+    background-color:#E4E2E5;
     font-weight: bold;
     font-size: 12px;
     color:#000;
-    min-height: 100px;
-    overflow:hidden;
-    background: url('images/headerbg.jpg');
     width: 100%;
-    padding-bottom:10px;
 }
 .push {
-    height: 4em; /* Very important */
-}
-#footer .copyright {
-    float: right;
-    padding-top:25px;
-    margin-right:10px;
-	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;
-}
-.footer_emails{
-    float: left;
-    margin-right:5%;
-    background: url('images/headerbg.jpg');
-    padding-top:25px;
-}
-
-#footer #platformmanager {
-    float: left;
-    margin-left:10px;
-}
-#footer #coursemanager {
-    float: left;
-    margin-left: 10px;
-}
-#bottom_corner {
-}
-/*
-==============================================================================
-    NAVIGATION MENU
-==============================================================================
-*/
-
-#lang_form select {
-    font-family: sans-serif, sans, arial;
-    margin: 1em 18px;
-    width: 179px;
-    text-align: center;
+    height: 9em; /* Very important */
 }
 .menu {
     background: url('images/bglogin.jpg') repeat-y top center;
@@ -752,39 +710,7 @@ float:right;
 .document_owner {
     text-align: right;
 }
-/*
-==============================================================================
-    FORM STYLES
-==============================================================================
-*/
 
-div.row {
-    clear: both;
-    padding-top: 8px;
-    margin-left: 1em;
-}
-div.row div.formw {
-    width: 73%;
-    margin: 0;
-    float:left;
-}
-div.row div.label {
-    float: left;
-    text-align: left;
-    font: bold 115% Arial, sans-serif, sans;
-    width: 25%;
-    margin: 0;
-}
-.formw {
-    margin-top: .2em;
-    padding-left: .6em;
-}
-.label {
-    margin-right: 1em;
-}
-.row .formw input {
-    margin: 0;
-}
 /* Solves the IE inherited margin bug */
 /* IE-7*/
 *:first-child+html .row .formw input {

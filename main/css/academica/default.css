@@ -22,10 +22,7 @@ body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -22em;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
+	margin: 0 auto -9em;
 }
 img {
 	border: none;
@@ -46,69 +43,10 @@ a:hover {
 }
 a:active {
 }
-input, input[type=file], select, textarea {
-	border:1px solid #4171b5;
-	padding:1px 2px;
-}
-input[type=button], input[type=submit] {
-	border:1px solid #4171b5;
-	background:#F0F0F0;
-	padding-left:10px;
-	padding-right:10px;
-	font-weight:bold;
-	color:#4171b5;
-}
-/* header 1 styles */
-#header {
-	background-color: #4171b5;
-	color: #b0c8eb;
-	font-weight: bold;
-}
-#header1 {
-	padding:  0.2em 0.5em;
-	height:35px;
-}
-#header1 a {
-	color: #d6e3f5;
-	text-decoration: none;
-}
-#header1 a:hover {
-}
+
 #my_courses {
 	float: right;
 	font-weight: bold;
-}
-#header1 img {
-	border: 0px;
-}
-/* header 2 styles */
-#header2 {
-	position: relative; /* to avoid the IE peekabo bug*/
-	font-size: 1.0em;
-	font-weight: normal;
-	min-height:25px;
-	padding:  0.2em 0.5em;
-	padding-bottom: 0.2em;
-}
-#header2 a {
-	color: #d6e3f5;
-	text-decoration: none;
-}
-#header2 a:hover {
-}
-#Header2Right ul {
-	float: right;
-	list-style-type: none;
-	text-align: right;
-	margin: 0;
-	padding: 0;
-}
-#Header2Right ul li {
-	display: inline;
-}
-#Header2Right ul li a {
-}
-#Header2Right ul li a:hover {
 }
 /* header 3 styles */
 #header3 {
@@ -167,22 +105,6 @@ input[type=button], input[type=submit] {
 	float:left;
 }
 
-#header3 #logout {
-	margin-top: 0px;
-}
-#logout {
-	display: inline;
-	float: right;
-	width: auto;
-	text-align: right;
-	font-size: 1.0em;
-}
-
-/* header 4 styles */
-#header4 {
-    width:100%;
-	background-color: #fff;	
-}
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
@@ -199,42 +121,15 @@ input[type=button], input[type=submit] {
 	background-repeat:repeat-x;
 	color: #B0C8EB;
 	font-weight:bold;
-	min-height: 100px;	
 	overflow:hidden;
 	width: 100%;
 	padding-bottom:10px;
 }
-.footer_emails{
-	float: left;
-	margin-right:5%;
-	padding-top:40px;
-	padding-top:235px;	
-}
 
 .push {
-	height: 22em; /* Very important */
+	height: 9em; /* Very important */
 }
-#footer .copyright {
-	float: right;
-	padding-top:290px;
-	margin-right:10px;
-}
-#footer #platformmanager {
-	float: left;
-	margin-left:10px;
-}
-#footer #coursemanager {
-	float: left;
-	margin-left: 10px;
-}
-#footerright {
-	margin-top: 10px;
-	float: right;
-	margin-right:20px;
-}
-#footerleft {
-	padding-top: 10px;
-}
+
 #footer a {
 	color: #fff;
 }

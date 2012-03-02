@@ -6,7 +6,7 @@
 {/if}	
 {/block}
 {* 1 column *}
-{block name=body}    
+{block name=body}
     <div class="span12">
         {if !empty($plugin_content_top)}         
             <div id="plugin_content_top">

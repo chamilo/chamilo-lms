@@ -263,8 +263,7 @@ class Template extends Smarty {
 		$this->assign('css_style_print', $style_print);
         $this->assign('style_print',     $style_print);        
         
-        // Header 1
-        
+        // Header 1        
 		$header1 = show_header_1($language_file, $nameTools, $this->theme);
 		$this->assign('header1', $header1);
     }

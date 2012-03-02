@@ -41,6 +41,10 @@ legend {
     text-align: right;
 }
 
+#header_right #notifications {
+    padding:40px 0px 0px 0px;
+}
+
 #header2 .nav{
     margin-bottom:0px;
 }
@@ -142,7 +146,7 @@ footer {
   padding-top: 17px;
   border-top: 1px solid #eee;
 }
- #footer .container .row{
+ #footer .container .row {
     padding-top: 60px;
  }
  #footer_right #admin_name, #footer_right #software_name{
@@ -2378,12 +2382,7 @@ table.lp_build td.tree {
     min-height:380px;
 }
 
-
 #logo {    
-    /* height:85px; */
-    padding-top: 4px;
-    overflow:hidden;    
-    float:left;
 }
 
 div.system_announcement {

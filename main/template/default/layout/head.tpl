@@ -117,11 +117,6 @@ $(document).ready(function() {
     $(".td_actions").parent('tr').mouseout(function() {
         $(".td_actions").hide();
     });*/
-    
-    
-    
-    
-    
 });
 </script>
 {$header_extra_content}

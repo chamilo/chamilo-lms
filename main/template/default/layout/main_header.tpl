@@ -26,7 +26,6 @@
     
     {* topbar *}
     {include file="default/layout/topbar.tpl"}    
-    
     <div id="main" class="container">     
         <header>
             <div class="row">
@@ -49,13 +48,13 @@
                         </div>
                     {/if}
                     &nbsp;
-                </div>
-                
-                {* header right (notifications) *}    
-                <div id="header_right" class="span4">
-                    <ul class="nav nav-pills pull-right">        
+                </div>                                
+                <div id="header_right" class="span4">   
+                     {* header right (notifications) *}    
+                    <ul id="notifications" class="nav nav-pills pull-right">        
                         {$header2}
                     </ul>
+
                     {* plugin_header *}        
                     {if !empty($plugin_header_right)}
                         <div id="plugin_header_right">
@@ -64,18 +63,18 @@
                     {/if}
                     &nbsp;
                 </div>
-                    
-                    
-                {if !empty($plugin_header_main)}
-                    <div id="plugin_header_main">
-                        {$plugin_header_main}
-                    </div>
-                {/if}
-                
-            
             </div>
+                
+            {if !empty($plugin_header_main)}
+                <div class="row">
+                    <div class="span12">
+                        <div id="plugin_header_main">
+                            {$plugin_header_main}
+                        </div>
+                    </div>
+                </div>
+            {/if}
         </header>
-
         {* header 3 - menu *}
         {if $header3}
             <div id="header3" class="subnav">        

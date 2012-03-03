@@ -353,9 +353,9 @@ function upload_stylesheet($values, $picture) {
  * @todo: A similar function needs to be written to activate or inactivate additional tools.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {    
+function store_plugins() { 
     global $_configuration;
-    
+
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -367,30 +367,30 @@ function store_plugins() {
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
 
     $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
-    
+
     $plugin_list = $plugin_obj->read_plugins_from_path();
-    
+
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
             $areas_to_installed = $_POST['plugin_'.$plugin];
-            foreach ($areas_to_installed as $area) {                
-                api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);        
+            foreach ($areas_to_installed as $area) {
+                api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
                 $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/install.php';
                 if (is_file($pluginpath) && is_readable($pluginpath)) {
                     //execute the install procedure
                     require $pluginpath;
-                }                
+                }
             }
-        }        
-    }    
-    
+        }
+    }
+
     foreach ($shortlist_installed as $plugin) {
         // if one plugin was really deleted, execute the uninstall script
     	if (!in_array($plugin,$shortlist_required)) {
-            // check if there is an install procedure
+            // check if there is an uninstall procedure
             $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/uninstall.php';
             if (is_file($pluginpath) && is_readable($pluginpath)) {
-                //execute the install procedure
+                //execute the uninstall procedure
                 require $pluginpath;
             }
     	}
@@ -409,7 +409,7 @@ function store_stylesheets() {
 
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
-    
+
     if (is_style($style)) {
         api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
     }
@@ -444,7 +444,7 @@ function handle_search() {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
     $search_enabled = api_get_setting('search_enabled');
-    
+ 
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
         
     $renderer = & $form->defaultRenderer();

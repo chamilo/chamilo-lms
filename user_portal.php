@@ -34,23 +34,21 @@ if (isset($_SESSION['this_section']))
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 /* Constants and CONFIGURATION parameters */
-
-
-//$load_dirs = api_get_setting('courses_list_document_dynamic_dropdown');
-$load_dirs = true;
-// Get the courses list
-$personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
+$load_dirs = api_get_setting('show_documents_preview');
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
+    
+    // Get the courses list
+    $personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
+    
     $my_session_list = array();
     $count_of_courses_no_sessions = 0;
     $count_of_courses_with_sessions = 0;
+    
     foreach($personal_course_list as $course) {       
         if (!empty($course['id_session'])) {
             $my_session_list[$course['id_session']] = true;
@@ -61,8 +59,6 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     }
     $count_of_sessions = count($my_session_list);    
 
-    //echo $count_of_sessions.' '.$count_of_courses_with_sessions.' '.$count_of_courses_no_sessions;
-    //!isset($_SESSION['coursesAlreadyVisited'])
     if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
      
         $key              = array_keys($personal_course_list);
@@ -79,63 +75,16 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
         $key              = array_keys($personal_course_list);
         $course_info      = $personal_course_list[$key[0]];
-        $course_directory = $course_info['d'];
+        $course_directory = $course_info['course_info']['path'];
         $id_session       = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
        
         $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
         header('location:'.$url);            
         exit;
-    }
-   /*
-        if (api_get_setting('hide_courses_in_sessions') == 'true') {
-            //Check sessions
-            $session_list = array();
-            $only_session_id = 0;
-            foreach($personal_course_list as $course_item) {
-                $session_list[$course_item['id_session']] = $course_item;
-                $only_session_id = $course_item['id_session'];
-            }        
-            if (count($session_list) == 1 && !empty($only_session_id)) {            
-                header('Location:'.api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_list[$only_session_id]['id_session']);    
-            }
-        }
-    */    
+    } 
 }
-/*
-$nosession = false;
-if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
-    $display_actives = !isset($_GET['inactives']);
-}*/
-
 $nameTools = get_lang('MyCourses');
 $this_section = SECTION_COURSES;
-
-/* Check configuration parameters integrity */
-/*
-if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != 'keyCourse') {
-    // CONFVAL_showExtractInfo must be SCRIPTVAL_UnderCourseList to accept $orderKey[0] != 'keyCourse'
-    if (DEBUG || api_is_platform_admin()){ // Show bug if admin. Else force a new order.
-        die('
-                    <strong>config error:'.__FILE__.'</strong><br />
-                    set
-                    <ul>
-                        <li>
-                            CONFVAL_showExtractInfo = SCRIPTVAL_UnderCourseList
-                            (actually : '.CONFVAL_showExtractInfo.')
-                        </li>
-                    </ul>
-                    or
-                    <ul>
-                        <li>
-                            $orderKey[0] != \'keyCourse\'
-                            (actually : '.$orderKey[0].')
-                        </li>
-                    </ul>');
-    } else {
-        $orderKey = array('keyCourse', 'keyTools', 'keyTime');
-    }
-}*/
-
 
 /*
     Header
@@ -204,7 +153,7 @@ $controller = new IndexManager(get_lang('MyCourses'));
 
 // Main courses and session list
 
-$courses_and_sessions = $controller->return_courses_and_sessions($personal_course_list);
+$courses_and_sessions = $controller->return_courses_and_sessions();
 $controller->tpl->assign('content', $courses_and_sessions);
 
 /*
@@ -229,11 +178,9 @@ if(!empty($some_activex) || !empty($some_plugins)){
 	}  
 }
 
-$controller->tpl->assign('plugin_courses_block', 		$controller->return_courses_main_plugin());
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());
 $controller->tpl->assign('account_block',				$controller->return_account_block());
 $controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_course_links());
-$controller->tpl->assign('plugin_courses_right_block', 	$controller->return_plugin_courses_block());
 $controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
 $controller->tpl->assign('search_block', 				$controller->return_search_block());
 $controller->tpl->assign('classes_block', 				$controller->return_classes_block());

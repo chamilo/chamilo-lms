@@ -144,11 +144,10 @@ if ($origin == 'group') {
 }
 
 if ($origin == 'learnpath') {
-    include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+    Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
-    Display :: display_header('');
-    //api_display_tool_title($nameTools);
+    Display :: display_header('');    
 }
 
 /* Actions */
@@ -418,7 +417,7 @@ if (is_array($threads)) {
             }
 
             echo '<td>'.$last_post.'</td>';
-            echo '<td>';
+            echo '<td class="td_actions">';
             // Get attachment id.
             $attachment_list = get_attachment($row['post_id']);
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';

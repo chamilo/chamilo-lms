@@ -3,10 +3,12 @@
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
 {* This fires some HTML5 errors *}
-<!-- <link rel="top"	href="{$_p.web_main}index.php" title="" />
+
+{* <link rel="top"	href="{$_p.web_main}index.php" title="" />
 <link rel="courses" href="{$_p.web_main}auth/courses.php" title="{"OtherCourses"|get_lang}"/>
-<link rel="profil"  href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/> -->
-<meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" />
+<link rel="profil"  href="{$_p.web_main}auth/profile.php" title="{"ModifyProfile"|get_lang}"/>  *}
+
+<meta name="Generator" content="{$_s.software_name} {$_s.system_version|substr:0:1}" /> 
 {* Use the latest engine in ie8/ie9 or use google chrome engine if available *}
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 {* Improve usability in portal devices*}
@@ -45,8 +47,8 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 var ajax_url        = '{$_p.web_ajax}chat.ajax.php';
 var online_button   = '{$online_button}';
 var offline_button  = '{$offline_button}';
-var	connect_lang    = '{"ChatConnected"|get_lang}';
-var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
+var connect_lang    = '{"ChatConnected"|get_lang}';
+var disconnect_lang = '{"ChatDisconnected"|get_lang}';
 </script>
 
 {$js_file_to_string}
@@ -57,8 +59,7 @@ var	disconnect_lang = '{"ChatDisconnected"|get_lang}';
 <script type="text/javascript">
 
 $(document).scroll(function() {
-    // If has not activated (has no attribute "data-top"
-
+    // Top bar scroll effect
     if($('body').width() > 959) {
     if ($('.subnav').length) {
         if (!$('.subnav').attr('data-top')) {
@@ -77,32 +78,45 @@ $(document).scroll(function() {
     }
 });
 
-
 $(document).ready(function() {       
-	$('.dropdown-toggle').dropdown();   
+    //Dropdown effect
+    $('.dropdown-toggle').dropdown();   
+    
+    //Responsive effect 
     $(".collapse").collapse();
     
-	$('.ajax').on('click', function() {
-		var url     = this.href;
-		var dialog  = $("#dialog");
-		if ($("#dialog").length == 0) {
-			dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
-		}
+    $('.ajax').on('click', function() {
+            var url     = this.href;
+            var dialog  = $("#dialog");
+            if ($("#dialog").length == 0) {
+                    dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
+            }
 
-		// load remote content
-		dialog.load(
-				url,                    
-				{},
-				function(responseText, textStatus, XMLHttpRequest) {
-					dialog.dialog({
-						modal	: true, 
-						width	: 540, 
-						height	: 400        
-					});	                    
-		});
-		//prevent the browser to follow the link
-		return false;
-	});
+            // load remote content
+            dialog.load(
+                            url,                    
+                            {},
+                            function(responseText, textStatus, XMLHttpRequest) {
+                                    dialog.dialog({
+                                            modal	: true, 
+                                            width	: 540, 
+                                            height	: 400        
+                                    });	                    
+            });
+            //prevent the browser to follow the link
+            return false;
+    });
+    
+    /*
+    $(".td_actions").hide();    
+    
+    $(".td_actions").parent('tr').mouseover(function() {
+       $(".td_actions").show();
+    });
+    
+    $(".td_actions").parent('tr').mouseout(function() {
+        $(".td_actions").hide();
+    });*/
 });
 </script>
 {$header_extra_content}

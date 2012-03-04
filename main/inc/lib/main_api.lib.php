@@ -993,11 +993,11 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false) {
             $user_online_in_chat = 0;
             
             if ($use_status_in_platform) {
-                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'chat_user_status', false, true);                                                
-                if (intval($user_status['chat_user_status']) == 1) {
+                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'user_chat_status', false, true);                                                
+                if (intval($user_status['user_chat_status']) == 1) {
                     $user_online_in_chat = 1;
                 }                
-            }            
+            }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
         $user =  _api_format_user($result_array);        
@@ -1152,6 +1152,7 @@ function api_get_course_info($course_code = null) {
             $_course['id'           ]         = $course_data['code'           ];
             $_course['code'         ]         = $course_data['code'           ];
             $_course['name'         ]         = $course_data['title'          ];
+            $_course['title'         ]        = $course_data['title'          ];
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
@@ -1222,6 +1223,7 @@ function api_get_course_info_by_id($id = null) {
             // Added
             $_course['code'         ]         = $course_data['code'           ];
             $_course['name'         ]         = $course_data['title'          ];
+            $_course['title'         ]        = $course_data['title'          ];
             $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
             $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
@@ -1857,7 +1859,6 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
     $rs = Database::query($sql);
 
     if (Database::num_rows($rs) > 0) {
-
         while ($row = Database::fetch_array($rs)) {
             $coaches[] = $row;
         }
@@ -3377,6 +3378,7 @@ function api_number_of_plugins($location) {
 /**
  * Including the necessary plugins.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @deprecated use AppPlugin::get_all_plugin_contents_by_block function
  */
 function api_plugin($location) {
     global $_plugins;
@@ -3385,6 +3387,7 @@ function api_plugin($location) {
             include api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
         }
     }
+    return false;
 }
 
 /**
@@ -3392,7 +3395,7 @@ function api_plugin($location) {
  * @return boolean true if the plugin is installed, false otherwise.
  */
 function api_is_plugin_installed($plugin_list, $plugin_name) {
-    if(is_array($plugin_list)) {
+    if (is_array($plugin_list)) {
         foreach ($plugin_list as $plugin_location) {
             if (array_search($plugin_name, $plugin_location) !== false) { return true; }
         }
@@ -4130,13 +4133,14 @@ function api_add_access_url($u, $d = '', $a = 1) {
 function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
-    $url_changeable_where = '';
+    $where_condition = '';
     if ($url_changeable == 1) {
-        $url_changeable_where= " AND access_url_changeable= '1' ";
-    }
+        $where_condition = " AND access_url_changeable= '1' ";
+    }    
     if (empty($access_url) or $access_url == -1) { $access_url = 1; }
     $sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
-            " FROM $t_cs WHERE access_url = $access_url  $url_changeable_where ";
+            " FROM $t_cs WHERE access_url = $access_url  $where_condition ";
+    
     if (!empty($cat)) {
         $cat = Database::escape_string($cat);
         $sql .= " AND category='$cat' ";
@@ -4147,8 +4151,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
         $sql .= " ORDER BY 1,2 ASC";
     }
     $result = Database::store_result(Database::query($sql));
-    return $result;
-    
+    return $result;    
 }
 
 /**
@@ -5459,7 +5462,6 @@ function api_get_css($file) {
 	return '<link rel="stylesheet" href="'.$file.'" type="text/css" />'."\n";	
 }
 
-
 /**
  * Returns the js header to include the jquery library
  */
@@ -5480,6 +5482,10 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
 	   $libraries[]='jqgrid';	
 	}
     return api_get_jquery_libraries_js($libraries);
+}
+
+function api_get_jqgrid_js() {    
+    return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
 /**

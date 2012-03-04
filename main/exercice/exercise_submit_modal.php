@@ -10,8 +10,9 @@
 $language_file=array('exercice');
 require_once '../inc/global.inc.php';
 api_protect_course_script(false);
-require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
+
+Display::display_reduced_header();
 
 $dbg_local = 0;
 require_once 'exercise.class.php';

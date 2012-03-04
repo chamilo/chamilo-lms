@@ -1057,11 +1057,11 @@ class Exercise {
 			if (api_get_setting('search_enabled') === 'true') {
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
-				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-				$form->addElement ('html','<br /><div class="row">');
-				$form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
-				$form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
-				$form->addElement ('html','</div><div class="sub-form">');
+				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));				
+				//$form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+				//$form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+                $form->addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));
+				//$form->addElement ('html','</div><div class="sub-form">');
 
 				$specific_fields = get_specific_field_list();
 
@@ -1077,7 +1077,7 @@ class Exercise {
 						$defaults[$specific_field['code']] = implode(', ', $arr_str_values);
 					}
 				}
-				$form->addElement ('html','</div>');
+				//$form->addElement ('html','</div>');
 			}
 
 			$form->addElement('html','</div>');  //End advanced setting
@@ -3353,15 +3353,16 @@ class Exercise {
 	 * @return bool true if is active
 	 */
 		
-	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0) {
+	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0, $filter_by_admin = true) {
 		//1. By default the exercise is visible
 		$is_visible = true;		
 		
-		//1.1 Admins and teachers can access to the exercise
-		
-		if (api_is_platform_admin() || api_is_course_admin()) {
-			return array('value' => true, 'message' => '');            
-		}
+		//1.1 Admins and teachers can access to the exercise		
+        if ($filter_by_admin) {
+            if (api_is_platform_admin() || api_is_course_admin()) {
+                return array('value' => true, 'message' => '');            
+            }
+        }
 		
 		//2. If the exercise is not active 
 		if ($this->active == 0) {
@@ -3399,6 +3400,7 @@ class Exercise {
 		if ($is_visible) {
 			if ($this->selectAttempts() > 0) {
 				$attempt_count = get_attempt_count_not_finished(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+                
 				if ($attempt_count >= $this->selectAttempts()) {					
                     $message = sprintf(get_lang('ReachedMaxAttempts'), $this->name, $this->selectAttempts());
 					$is_visible = false;

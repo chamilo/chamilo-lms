@@ -6,43 +6,26 @@
 * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
 * @package chamilo.auth
 */
-
 $stok = Security::get_token();
-// Actions: The menu with the different options in cathe course management 
-
-/*
-<?php if ($action != 'subscribe') { ?>
-        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('user_subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
-    <?php } ?>
-
-    <?php if ($action != 'sortmycourses' && isset($action)) { ?>
-            &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'); ?></a>
-    <?php } ?>
-*/
-
 ?>
 <script type="text/javascript">
     $(document).ready( function() {
-       $('.star-rating li a').live('click', function(event) {
-           
-           var id = $(this).parents('ul').attr('id');
-                      
-           $('#vote_label2_' + id).html('<?php echo get_lang('Loading');?>');
-           
-           $.ajax({
-               url: $(this).attr('rel'),
-               success: function(data) {
-				   $("#rating_wrapper_"+id).html(data);
-                   if(data == 'added') {                                                
-                        //$('#vote_label_' + id).html('Saved');
-                        //$('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
-                   }
-                   if(data == 'updated') {
-                        //$('#vote_label2_' + id).html("<?php echo get_lang('Saved')?>");
-                   }
-               }
-           })
-       });
+        $('.star-rating li a').live('click', function(event) {        
+        var id = $(this).parents('ul').attr('id');        
+        $('#vote_label2_' + id).html("<?php echo get_lang('Loading'); ?>");           
+            $.ajax({
+                url: $(this).attr('data-link'),
+                success: function(data) {
+                    $("#rating_wrapper_"+id).html(data);
+                    if(data == 'added') {                                                                        
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
+                    }
+                    if(data == 'updated') {
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
+                    }
+                }
+            });        
+        });
     });
 </script>
 

@@ -182,9 +182,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 				  WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' 
                   ORDER BY $column $direction 
                   LIMIT $from, $number_of_items";
-	} else {
-		// all users online
-		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'
+	} else {		
 		$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  
                   WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
                   ORDER BY $column $direction 
@@ -218,9 +216,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
             LIMIT $from, $number_of_items";	
     */
 	$result = Database::query($query);
-	if ($result) {
-		$rtime = time();
-		$rdate = date("Y-m-d H:i:s",$rtime);
+	if ($result) {				
 		$validtime = mktime(date("H"),date("i")-$time_limit,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
@@ -257,8 +253,7 @@ function who_is_online_count($valid = null, $friends = false) {
     }
 	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
+	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);	
 	$query = '';
 	if ($friends) {
 		// 	who friends from social network is online
@@ -287,8 +282,10 @@ function who_is_online_count($valid = null, $friends = false) {
 		}
 	}
     
-    //dev purposes    
-    //$query = "SELECT count(u.user_id)  as count FROM ".$track_online_table ."  e , $table_user u    ";
+    //dev purposes show all users online
+    
+    /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $query = "SELECT count(*)  as count FROM ".$table_user ."   ";*/
     
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
@@ -327,7 +324,6 @@ function GetFullUserName($uid) {
  * @return  string  An HTML-formatted message
  */
 function chatcall() {
-
 	global $_user, $_cid;
 
 	if (!$_user['user_id']) {
@@ -366,10 +362,8 @@ function chatcall() {
 				."</p>";
 
 		return($message);
-	}
-	else
-	{
-		return(false);
+	} else {
+		return false;
 	}
 
 }
@@ -395,9 +389,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $valid, $co
               LIMIT $from, $number_of_items
              ";
 	$result = Database::query($query);
-	if (count($result)>0) {
-		$rtime = time();
-		$rdate = date("Y-m-d H:i:s",$rtime);
+	if (count($result)>0) {		
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 

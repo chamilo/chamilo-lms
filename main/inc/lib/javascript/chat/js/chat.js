@@ -36,8 +36,7 @@ var chatBoxes           = new Array();
 
 var timer;
 var user_status         = 0;
-//var ajax_url = 'chat.php'; // This variable is loaded in header.inc.php/ template/layout/head.tpl
-
+//var ajax_url = 'chat.php'; // This variable is loaded in the template/layout/head.tpl file
 
 function set_user_status(status) {
     $.ajax({
@@ -53,9 +52,7 @@ function set_user_status(status) {
 $(document).ready(function() {
 	originalTitle = document.title;
     
-	startChatSession();
-    //startChatHeartBeat();
-    //stopChatHeartBeat();
+	startChatSession();    
 
 	$([window, document]).blur(function() {
 		windowFocus = false;
@@ -136,15 +133,16 @@ function startChatSession() {
                 startChatHeartBeat();   
             } else {
                 stopChatHeartBeat();   
-            }            
+            }
+            
 			$.each(data.items, function(my_user_id, user_items) {
-				//received_messages[item.f][item.id] = true;				
-				$.each(user_items, function(i, item) {
+                my_items = user_items['items'];                
+				$.each(my_items, function(i, item) {
 				
 					if (item)	{ // fix strange ie bug						
-						//my_user_id		= item.f;
-						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, item.username, 1, item.online);
+						//my_user_id		= item.f;                        
+						if ($("#chatbox_"+my_user_id).length <= 0) {                            
+							createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
 						}
 
 						if (item.s == 1) {
@@ -235,15 +233,15 @@ function chatHeartbeat() {
 		dataType: "json",
 		success: function(data) {			
 		
-			$.each(data.items, function(my_user_id, user_items) {				
-				
-				$.each(user_items, function(i, item) {
+			$.each(data.items, function(my_user_id, user_items) {
+                my_items = user_items['items'];				
+                
+				$.each(my_items, function(i, item) {
 					if (item)	{ // fix strange ie bug
 
 						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, item.username, 0, item.online);
+							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online);
 						}
-
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');
 							restructureChatBoxes();
@@ -253,20 +251,24 @@ function chatHeartbeat() {
 							//item.f = username;
 						}
 
-						update_online_user(my_user_id, item.online);
+						update_online_user(my_user_id, user_items.user_info.online);
 
 						if (item.s == 2) {
 							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
 						} else {
-							newMessages[my_user_id]		= {'status':true,'username':item.username};
-							newMessagesWin[my_user_id]	= {'status':true,'username':item.username};						
+							newMessages[my_user_id]		= {'status':true, 'username':item.username};
+							newMessagesWin[my_user_id]	= {'status':true, 'username':item.username};						
 
 							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage">\n\
 																				 <span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>\n\
 																				 <span class="chatboxmessagecontent">'+item.m+'</span></div>');
 						}
-
 						$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop($("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight);
+                        
+                        if ($('#chatbox_'+my_user_id+' .chatboxcontent').css('display') == 'none') {
+                            $('#chatbox_'+my_user_id+' .chatboxhead').toggleClass('chatboxblink');
+                            
+                        }
 						itemsfound += 1;
 					}
 				});
@@ -448,7 +450,7 @@ function update_online_user(user_id, status) {
 
 
 function toggleChatBoxGrowth(user_id) {		
-	if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') == 'none') {  
+	if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') == 'none') {
 		
 		var minimizedChatBoxes = new Array();
 		

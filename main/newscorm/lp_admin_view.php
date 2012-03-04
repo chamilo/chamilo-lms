@@ -91,8 +91,6 @@ if (isset($_REQUEST['updateaudio'])) {
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 Display::display_header(null, 'Path');
 //api_display_tool_title($therow['name']);
 
@@ -138,10 +136,10 @@ $(function() {
 					newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
 					
 					//Determine if this child is a containter
-					if ($(this).is(".container")) {
+					if ($(this).is(".li_container")) {
 						  //Process the child elements of the container
-						  processChildren($(this).attr("id"));
-						}
+                        processChildren($(this).attr("id"));
+					}
 				}
 			
 		}); //end of lp_item_list children loop

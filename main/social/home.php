@@ -67,30 +67,28 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_left_content = SocialManager::show_social_menu('home');
-	
-        $social_right_content .= '<div class="social_user_information" style="width:280px">';
-            
-            $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
+$social_left_content = SocialManager::show_social_menu('home');	
+$social_right_content .= '<div class="social_user_information span4">';            
+$social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
-		    // information current user		       
-            $social_right_content .= '<div>
-                    <p><strong>'.get_lang('Name').'</strong><br />
-                    <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
-                  </div>
-                  <div>
-                    <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
-                  </div>
-                  <div class="box_description_group_actions">
-                    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-                        '.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'
-                   </a>
-                  </div>';
+// information current user		       
+$social_right_content .= '<div>
+    <p><strong>'.get_lang('Name').'</strong><br />
+    <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
+    </div>
+    <div>
+    <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
+    </div>
+    <div class="box_description_group_actions">
+    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+        '.Display::return_icon('profile_edit.png', null, array('hspace'=>'6')).get_lang('EditProfile').'
+    </a>
+    </div>';
                   
             $skill = new Skill();
             $skills =  $skill->get_user_skills(api_get_user_id(), true);
             
-            $social_right_content .= '<div class="left" style="width:280px">';            
+            $social_right_content .= '<div class="clear"></div>';            
                 $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
                 $lis = '';
                 if (!empty($skills)) {
@@ -102,11 +100,9 @@ $social_left_content = SocialManager::show_social_menu('home');
                 $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
                 $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);                
             $social_right_content .= '</div>';
-        $social_right_content .= '</div>'; // end social_user_information
-        
                  
             //Search box
-			$social_right_content .= '<div class="social-box-right">';	
+			$social_right_content .= '<div class="span4">';	
 					
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
@@ -129,8 +125,8 @@ $social_left_content = SocialManager::show_social_menu('home');
         				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
         				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
         				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-        				$actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
-        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$actions);
+        				$group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
+        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$group_actions);
         			}
     			}
     
@@ -151,8 +147,8 @@ $social_left_content = SocialManager::show_social_menu('home');
     				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
     				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
     				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-    				$actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
-    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$actions);
+    				$group_actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
+    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$group_actions);
     			}
                 
     			if (count($groups_newest) > 0) {
@@ -164,7 +160,7 @@ $social_left_content = SocialManager::show_social_menu('home');
     				$social_right_content .= '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
     				$social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
     			}
-			$social_right_content .= '</div>';
+$social_right_content .= '</div>';            
             
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

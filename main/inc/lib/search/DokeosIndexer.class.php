@@ -38,7 +38,7 @@ class DokeosIndexer extends XapianIndexer {
 		if ( (count(array_diff($terms, $stored_terms))==0) && (count(array_diff($stored_terms, $terms))==0) )
 			return FALSE;
 
-		require_once(api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php');
+		require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
 
 		// compare terms
 		$doc = $this->get_document($search_did);
@@ -77,8 +77,7 @@ class DokeosIndexer extends XapianIndexer {
 		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 		$terms = get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_id, $ref_id);
 		$prefix_terms = array();
-		foreach($terms as $term)
-		{
+		foreach($terms as $term) {
 			$prefix_terms[] = $term['value'];
 		}
 		return $prefix_terms;

@@ -299,10 +299,6 @@ if($modifyIn == 'thisExercise') {
 		$noPHP_SELF=true;
 	}
 }
-
-
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 $htmlHeadXtra[] = '<script type="text/javascript"> 
         
 function multiple_answer_true_false_onchange(variable) {

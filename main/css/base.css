@@ -6,6 +6,10 @@
 
 /* some changes to the pre_base */
 
+pre {
+    margin-top:40px;
+}
+
 select {
     width : auto;
 }
@@ -33,16 +37,20 @@ legend {
     margin-bottom: 10px;
 }
 
-#header1 {
-    height: 50px;
-} 
+#header_right {
+    text-align: right;
+}
+
+#header_right #notifications {
+    padding:40px 0px 0px 0px;
+}
+
 #header2 .nav{
     margin-bottom:0px;
 }
 
 #header2 {    
-    width:100%;
-    height: 35px;
+    
 }
 
 #header2 .nav {
@@ -117,6 +125,7 @@ form .formw input {
 #lp_navigation_elem .buttons,
 #lp_navigation_elem #progress_bar {
     width:130px;
+    margin-left:15px;
 }
 
 * {
@@ -129,7 +138,7 @@ html, body {
 }
 
 #topbar {
-    z-index:20000;
+    z-index:9000; /* bug when using full area fckeditor */
 }
 
 footer {
@@ -137,6 +146,13 @@ footer {
   padding-top: 17px;
   border-top: 1px solid #eee;
 }
+ #footer .container .row {
+    padding-top: 60px;
+ }
+ #footer_right #admin_name, #footer_right #software_name{
+     text-align:right;     
+ }
+ 
 .page-header {
   margin-bottom: 17px;
   border-bottom: 1px solid #ddd;
@@ -598,8 +614,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 
 .agenda_day {
-    float:left;
-        
+    float:left;        
     width:100%; 
     background-color: #F8F9FF;    
     color: #666666;
@@ -680,10 +695,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .menulist li {
     margin-top: 10px;
-}
-
-.social-background-content {
-    width:auto; 
 }
 
 .group_social_item {
@@ -1872,18 +1883,14 @@ div.image-social-content center.friend {
     font-size:12px;
     font-weight:bold;
 }
-.social-menu-text4 {
-    font-family:Verdana, Geneva, sans-serif;
+.social-menu-text4 {    
     color:#000;
-    font-weight:normal;
-    font-size:10px;
+    font-weight:normal;    
     vertical-align:bottom;
 }
-.social-menu-text-active {
-    font-family:Verdana, Geneva, sans-serif;
+.social-menu-text-active {    
     color:#000;
-    font-weight:bold;
-    font-size:10px;
+    font-weight:bold;    
     vertical-align:bottom;
 }
 .social-menu-title-right {
@@ -2060,10 +2067,7 @@ border-top: 1px solid #E2E2E2;
 
 .social-background-content {
     z-index:5;
-    position:relative;
-    width:185px;
-    left:-10px;
-    overflow:hidden;
+    text-align: center;
 }
 
 .social-background-content .hidden_message {
@@ -2094,7 +2098,6 @@ border-top: 1px solid #E2E2E2;
     font-size:130%;
     font-weight:bold;
     padding: 0px 8px 0px 8px;
-
 }
 
 #social-thread {
@@ -2252,9 +2255,14 @@ input.maininput:focus {
 }
 
 /* Big icons course home page styles */ 
-.big_icon {
-    /*width:205px; */
+#course_tools .big_icon {    
     padding:10px;   
+    text-align:center;
+}
+
+#course_tools .content {
+    text-align:center;
+    margin-bottom: 20px;
 }
 
 .big_icon img {     
@@ -2374,12 +2382,7 @@ table.lp_build td.tree {
     min-height:380px;
 }
 
-
 #logo {    
-    /* height:85px; */
-    padding-top: 4px;
-    overflow:hidden;    
-    float:left;
 }
 
 div.system_announcement {
@@ -2601,10 +2604,6 @@ div.admin_section h4 {
 #lp_item_list .empty {
     height:20px;
 }
-#lp_item_list .button_actions {
-    position: absolute;
-    right: 20px;
-}
 
 #lp_item_list .item_data {
     padding:5px 0px 5px 0px;
@@ -2705,9 +2704,9 @@ div.admin_section h4 {
     -moz-border-radius: 10px;
     border-radius: 10px;
 
-    height: 40px;
-    /* margin: 5px; */
-    padding: 15px;
+    /*height: 40px;
+    margin: 5px; */
+    padding: 15px 0px 15px 0px; 
 }
 
 .exercise_overview_options .left_option {
@@ -3382,22 +3381,22 @@ a:active{
 }
 
 .online_user_in_text {
-    background: url("online.png") no-repeat scroll right center transparent;
-    float: left;
-    height: 16px;
-    left: 0;
+    background: url("online.png") no-repeat scroll right center transparent;    
+    height: 16px;    
     width: 17px;
-    display:block;
+    display: inline-block;    
     margin-right: 4px;    
+}
+
+.thumbnail .caption {
+    text-align:center;
 }
 
 .offline_user_in_text {
     background: url("offline.png") no-repeat scroll right center transparent;
-    float: left;
-    height: 16px;
-    left: 0;
+    height: 16px;    
     width: 17px;
-    display:block;
+    display: inline-block;    
     margin-right: 4px;    
 }
 
@@ -3480,4 +3479,295 @@ a:active{
 /* Disabling chat */
 .lt-ie7 #chatmain {
     display:none;
+}
+
+
+
+#timeline {
+    
+    background: url("dot.gif") repeat-x scroll left 45px;
+    height: 350px;
+    margin: 0px auto;
+    overflow: hidden;
+    position: relative;
+    width: 600px;
+}
+
+#dates {
+    
+    /* height: 60px; */
+    overflow: hidden;
+    width: 800px;
+}
+
+
+#dates .selected {
+    font-size: 22px;
+    font-weight: bold;
+    font-color: #E06B04;
+}
+
+#dates li {
+    background: url("biggerdot.png") no-repeat scroll center bottom transparent;
+    float: left;
+    font-size: 14px;
+    height: 50px;
+    list-style: none outside none;
+    text-align: center;
+    width: 130px;
+}
+
+#issues {
+    height: 350px;
+    overflow: hidden;
+    width: 800px;
+}
+
+#issues li {
+    float: left;
+    height: 350px;
+    list-style: none outside none;
+    width: 800px;
+}
+
+#issues li h3 {
+    color: #FFCC00;
+    font-size: 48px;
+    margin: 0px;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+#issues li p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 22px;
+    margin-right: 70px;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+
+#course_tools .row h3 {
+    margin-top:10px;
+}
+
+.td_actions {
+ 	/* background:#efefef;*/
+    background:#F9F9F9;    
+    border:1px solid #eee; 
+    margin-bottom: 5px;    
+    padding:2px;     
+    vertical-align:middle;        
+    width: 250px;
+}
+
+/*
+ This is set in the template
+.td_actions a {
+    float:left;
+    width:100%;
+}
+*/
+
+
+/*****************************************************
+ *  THE NEW FORUM                        *
+ *****************************************************/
+/* **** FORUM CATEGORY **** */
+.forum_category {
+    background-color: #0066CC;
+    color: #fff;
+}
+.forum_category a {
+    color: #fff;
+}
+.forum_category_header {
+    background-color: #0066CC;
+    color: #fff;
+}
+tr.forum_category_header a {
+    color: #fff;
+}
+/* **** FORUM **** */
+.forum_header {
+    background-color: #EEF;
+}
+/* **** THREAD **** */
+.forum_threadheader {
+    color: #aaa;
+    background-color: #F7F7F7;
+}
+
+.forum-thread-header {
+    color: #000000;
+    background-color: #F7F7F7;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+.forum-thread-body {
+    color: #000000;
+    background-color: #FFFFFF;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+/* **** POST **** */
+.quote {
+    background-color: #a0e5fc;
+}
+
+.current {
+    font-weight: bold;
+}
+.structure {
+    /*border-bottom: 1px solid #666666;*/
+    font-weight: bold;
+    background-color: #F7F7F7;
+    height: 20px;
+}
+a.forum_group_link {
+    font-weight: lighter;
+    display:inline;
+}
+.forum_description {
+    color: #000;
+    font-weight: normal;
+    font-size: 11px;
+}
+.forum_description p{
+    font-size: 11px;
+}
+.forum_title {
+    color: #000;
+    font-size: 14px;
+}
+.forum_low_description {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+}
+.forum_attach_comment {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.forum_message_left {
+    width: 150px;
+    vertical-align: top;    
+    border-right: 1px solid #aaa;
+    background-color: #F7F7F7;
+}
+
+
+                      
+.forum_message_left_2_be_approved {
+    width: 150px;
+    vertical-align: top;    
+    border-right: 1px solid #aaa;
+    background-color: #F7F7F7;
+    color: #999;
+}
+.forum_message_post_title {
+    /*border-bottom: 1px solid #666666;*/
+    font-weight: bold;
+    background-color: #F7F7F7;
+    height: 20px;
+    font-size:20px;
+}
+.forum_message_post_title_2_be_approved {
+    /*border-bottom: 1px solid #666666;*/
+    color: #999;
+    font-weight: bold;
+    background-color: #F7F7F7;
+    height: 20px;
+}
+.forum_message_post_text {
+    /*border-bottom: 1px solid #666666;*/
+    margin-bottom: 10px;
+    vertical-align: top;
+}
+.forum_message_post_text_2_be_approved {
+    /*border-bottom: 1px solid #666666;*/
+    color: #999;
+    margin-bottom: 10px;
+    vertical-align: top;
+}
+
+/*  New forum table */
+
+.forum_table_title {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding:5px;
+}
+
+.forum_table_title th {
+    padding-right: 12px;
+    /*border: 1px solid gray;*/
+    background-color: #E5EDF9;
+}
+.forum_table {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin-bottom:15px;
+}
+
+.forum_table .forum_head{
+    padding:5px;
+    text-align: left;
+    font-size:14px;
+}
+
+.forum_table th {
+    padding-right: 12px;
+    background-color: #E5EDF9;
+}
+.forum_table tr.row_odd {
+    background-color: #F2F2F2;
+}
+.forum_table tr.row_odd:hover, .data_table tr.row_even:hover {
+    background-color: #E5EDF9;
+}
+.forum_table tr.row_even {
+    background-color: #fff;
+}
+.forum_table td {
+    padding: 5px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px dotted #e1e1e1;
+    border-left: 1px dotted #e1e1e1;
+    border-top: 1px solid #ccc;
+}
+.post {
+    border: 1px solid #ccc;
+    margin-bottom:5px;
+}
+
+/* User list */
+
+.blackboard_show {
+	float:left;
+	position:absolute;
+	border:1px solid black;
+	width: 200px;
+	background-color:white;
+	z-index:99; padding: 3px;
+	display: inline;
+}
+.blackboard_hide {
+	display: none;
+}
+
+#online_grid_container li img {
+    height: 100px;
 }

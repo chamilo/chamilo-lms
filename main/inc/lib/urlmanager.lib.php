@@ -483,11 +483,10 @@ class UrlManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	public static function delete_url_rel_session($session_id, $url_id)
-	{
+	public static function delete_url_rel_session($session_id, $url_id) {
 		$table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$sql= "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string($session_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
-		$result = Database::query($sql);
+		$result = Database::query($sql,'ASSOC');
 		return $result;
 	}
 
@@ -620,7 +619,7 @@ class UrlManager
 			    ON (url_rel_user.access_url_id = u.id)
 			    WHERE user_id = ".Database::escape_string($user_id);
 		$result = Database::query($sql);
-		$url_list = Database::store_result($result);
+		$url_list = Database::store_result($result,'ASSOC');
 		return $url_list;
 	}
 	

@@ -51,8 +51,7 @@ class EvalForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	function EvalForm($form_type, $evaluation_object, $result_object, $form_name, $method= 'post', $action= null, $extra1 = null, $extra2 = null)
-	{
+	function EvalForm($form_type, $evaluation_object, $result_object, $form_name, $method= 'post', $action= null, $extra1 = null, $extra2 = null) {
 		parent :: __construct($form_name, $method, $action);
 
 		if (isset ($evaluation_object)) {
@@ -112,11 +111,8 @@ class EvalForm extends FormValidator
 			}
 		}
 		$this->addElement('submit', 'submit_button', get_lang('AddUserToEval'));
-//		$this->setDefaults(array (
-//			'formSent' => '1'
-//		));
-
 	}
+    
 	/**
 	 * This function builds a form to edit all results in an evaluation
 	 */
@@ -180,7 +176,7 @@ class EvalForm extends FormValidator
 			$this->add_textfield('score[' . $result->get_id() . ']',
 								 $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
 								 false,
-								 array ('size' => 4,
+								 array ('class' => "span2",
 										'maxlength' => 5));
 
 			$this->addRule('score[' . $result->get_id() . ']', get_lang('OnlyNumbers'), 'numeric');
@@ -188,7 +184,7 @@ class EvalForm extends FormValidator
 			'score[' . $result->get_id() . ']', 'maxvalue'), get_lang('OverMax'), 'compare', '<=');
 			$this->addRule(array (
 			'score[' . $result->get_id() . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
-			$defaults['score[' . $result->get_id() . ']']= $result->get_score();
+			$defaults['score[' . $result->get_id() . ']'] = $result->get_score();
 			
             if (api_is_western_name_order() ) {
             	$user_info = '<td align="left" >'.$user['firstname'].'</td>';

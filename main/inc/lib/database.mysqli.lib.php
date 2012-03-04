@@ -169,25 +169,6 @@ class Database {
     }
 
     /**
-     * Gets a complete course table name from a course code
-     *
-     * @param string $course_code
-     * @param string $table the name of the table
-     */
-    public static function get_course_table_from_code($course_code, $table) {
-        $course_table = self::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = self::get_main_table(TABLE_MAIN_CATEGORY);
-        $result = self::fetch_array(self::query(
-            "SELECT $course_table.db_name, $course_cat_table.code
-            FROM $course_table
-                LEFT JOIN $course_cat_table
-                    ON $course_table.category_code =  $course_cat_table.code
-            WHERE $course_table.code = '$course_code'
-            LIMIT 1"));
-        return sprintf("%s.%s", $result[0], $table);
-    }
-
-    /**
      * This generic method returns the correct and complete name of any statistic table
      * of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them

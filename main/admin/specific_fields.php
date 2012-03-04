@@ -17,7 +17,7 @@ api_protect_admin_script();
 
 // Breadcrumb
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('DokeosConfigSettings'));
+$interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
 $interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 
 $libpath = api_get_path(LIBRARY_PATH);

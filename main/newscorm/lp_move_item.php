@@ -157,26 +157,28 @@ function confirmation(name)
 /* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-    echo '<tr>';
-        echo '<td class="tree">';
-            echo '<div class="lp_tree">';
-                // Build the tree with the menu items in it.
-                echo $_SESSION['oLP']->build_tree();
-            echo '</div>';
-        echo '</td>';
-        echo '<td class="workspace">';
-            if (isset($is_success) && $is_success === true) {
-                $msg = '<div class="lp_message" style="margin-bottom:10px;">';
-                    $msg .= 'The item has been moved.';
-                $msg .= '</div>';
-                echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
-            } else {
-                echo $_SESSION['oLP']->display_move_item($_GET['id']);
-            }
-        echo '</td>';
-    echo '</tr>';
-echo '</table>';
+
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
+
+    echo '<div class="lp_tree">';
+        // Build the tree with the menu items in it.
+        echo $_SESSION['oLP']->build_tree();
+    echo '</div>';
+echo '</div>';
+
+echo '<div class="span9">';
+
+if (isset($is_success) && $is_success === true) {
+    $msg = '<div class="lp_message" style="margin-bottom:10px;">';
+        $msg .= 'The item has been moved.';
+    $msg .= '</div>';
+    echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
+} else {
+    echo $_SESSION['oLP']->display_move_item($_GET['id']);
+}
+echo '</div>';
+echo '</div>';
 
 /* FOOTER */
 

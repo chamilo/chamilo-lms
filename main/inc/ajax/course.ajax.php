@@ -25,6 +25,20 @@ switch ($action) {
 		echo $rating;
 		
         break;
+    case  'get_user_courses':
+        if (api_is_platform_admin()) {
+            $user_id = intval($_POST['user_id']);            
+            $list_course_all_info = CourseManager::get_courses_list_by_user_id($user_id, false);
+            if (!empty($list_course_all_info)) {
+                foreach($list_course_all_info as $course_item) {                
+                    $course_info = api_get_course_info($course_item['code']);                    
+                    echo $course_info['title'].'<br />';
+                }
+            } else {            
+                echo get_lang('HaveNoCourse');
+            } 
+        }
+        break;
     default:
         echo '';
 }

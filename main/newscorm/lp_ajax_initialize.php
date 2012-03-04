@@ -17,7 +17,6 @@ $use_anonymous = true;
 
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
-
 require_once 'back_compat.inc.php';
 
 /**
@@ -111,10 +110,11 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
 	// Obtention des donnees d'objectifs
 	$phpobjectives = array();
 	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+    $course_id = api_get_course_int_id();
 	$mylp_iv_id = $mylpi->db_item_view_id;
 	$sql = "SELECT objective_id, status, score_raw, score_max, score_min
 		FROM ".$mycoursedb."
-		WHERE lp_iv_id = ".$mylp_iv_id."
+		WHERE lp_iv_id = ".$mylp_iv_id." AND c_id = $course_id
 		ORDER BY id ASC;";
 	$res = Database::query($sql);
 	while ($row = Database::fetch_row($res)) {
@@ -136,7 +136,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
             "olms.interactions = new Array(".$myistring.");" .
             //"olms.item_objectives = new Array();" .
             "olms.item_objectives = ".$myobjectives.";" .
-	    "olms.G_lastError = 0;" .
+            "olms.G_lastError = 0;" .
             "olms.G_LastErrorMessage = 'No error';" ;
     /*
      * and re-initialise the rest (proper to the LMS)
@@ -189,5 +189,4 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     //$_SESSION['lpobject'] = serialize($mylp);
     return $return;
 }
-
 echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);

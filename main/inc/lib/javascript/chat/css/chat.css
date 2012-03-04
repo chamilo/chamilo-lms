@@ -79,9 +79,19 @@
 }
 
 .chatboxblink {
-	background-color: #176689;
-	border-right:1px solid #176689;
-	border-left:1px solid #176689;
+	background-color: #FF921F;
+	border-right:1px solid #EF7A00;
+	border-left:1px solid #EF7A00;
+    
+    background-repeat: repeat-x;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#FF921F), to(#FF921F));
+	background-image: -moz-linear-gradient(top, #FF921F, #FFAC55);
+	background-image: -ms-linear-gradient(top, #FF921F, #FF921F);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FF921F), color-stop(100%, #FF921F));
+	background-image: -webkit-linear-gradient(top, #FF921F, #FF921F);
+	background-image: -o-linear-gradient(top, #FF921F, #FF921F);
+	background-image: linear-gradient(top, #FF921F, #FF921F);
+    
 }
 
 .chatboxcontent {

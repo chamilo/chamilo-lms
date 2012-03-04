@@ -609,7 +609,7 @@ class SystemAnnouncementManager {
 		if (Database::num_rows($announcements) > 0) {				
 			$html .= '<div class="span12">';
 			$html .=  '<h3>'.get_lang('SystemAnnouncements').'</h3>';
-			$html .=  '<div id="container-slider" class="span8"><ul id="slider">';
+			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
 			while ($announcement = Database::fetch_object($announcements)) {                
                 $content = $announcement->content;
                 $url = api_get_path(WEB_PATH).'news_list.php?id='.$announcement->id;

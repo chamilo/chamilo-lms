@@ -476,8 +476,6 @@ if ($form->validate() && is_settings_editable()) {
 
 /*	Header */
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
     Display :: display_normal_message(get_lang('FileDeleted'));

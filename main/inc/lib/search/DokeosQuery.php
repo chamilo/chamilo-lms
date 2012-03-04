@@ -74,5 +74,3 @@ function dokeos_preprocess_results($results) {
 function dokeos_join_queries($query1, $query2=NULL, $op='or') {
 	return xapian_join_queries($query1, $query2, $op);
 }
-
-?>

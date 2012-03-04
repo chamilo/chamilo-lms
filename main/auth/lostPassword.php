@@ -99,11 +99,11 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 } else {
 	$form = new FormValidator('lost_password');
-    $form->addElement('header', '', $tool_name);
+    $form->addElement('header', $tool_name);
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
 
 	//$form->applyFilter('email','strtolower');
-	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="a_button gray"');
+	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="btn"');
 
 	// setting the rules
 	$form->addRule('user', get_lang('ThisFieldIsRequired'), 'required');

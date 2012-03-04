@@ -25,6 +25,8 @@ define('ICON_SIZE_LARGE',   48);
 define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 
+define('SHOW_TEXT_NEAR_ICONS', false);
+
         
 /**
  * Display class
@@ -48,21 +50,35 @@ class Display {
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
      */
-    public static function display_header($tool_name ='', $help = null) {
-        $nameTools = $tool_name;
+    public static function display_header($tool_name ='', $help = null, $page_header = null) {        
+        /*
         global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
         global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
         global $menu_navigation;        
-		global $htmlCSSXtra;        
+		global $htmlCSSXtra;        */
         self::$global_template = new Template($tool_name);      
         self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {                        
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_theme();
         }
+        if (!empty($page_header)) {
+            self::$global_template->assign('header', $page_header);
+        }
         echo self::$global_template->show_header_template();
-
     }
+    
+    /*
+     * 
+    public static function assign_template_variable($variable, $content) {
+        if (isset(self::$global_template)) {            
+            self::$global_template->assign($variable, $content);
+        } else {
+            //Dev message
+            echo 'You need to called the display_header first';
+            exit;
+        }
+    }*/
 
     /**
      * Displays the reduced page header (without banner)
@@ -81,12 +97,10 @@ class Display {
     /**
      * Display the page footer
      */
-    public static function display_footer () {
+    public static function display_footer() {
         global $_plugins, $global_tpl;
         echo self::$global_template ->show_footer_template();        
     }
-    
-    
 
     /**
      * Displays the tool introduction of a tool.
@@ -414,7 +428,7 @@ class Display {
             $i }).';';
         }
         // icon html code
-        $icon_html_source = Display::return_icon($icon_file, $hmail, '', $icon_size);
+        $icon_html_source = self::return_icon($icon_file, $hmail, '', $icon_size);
         // Return encrypted mailto hyperlink
         return '<a href="'.$hmail.'"'.$style_class.' id="clickable_email_link">'.$icon_html_source.'</a>';
     }
@@ -541,7 +555,7 @@ class Display {
      * @author Yannick Warnier 2011 Added size handler
      * @version Feb 2011
     */
-    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL) {
+    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL, $show_text = true) {
         
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
@@ -552,10 +566,7 @@ class Display {
         $size_extra = '';
         
         if (isset($size)) {
-            $size = intval($size);
-            /*if (in_array($size,array(16, 22, 32, 48, 64,128))) {
-                $size_extra = $size.'/';
-            }*/
+            $size = intval($size);            
             $size_extra = $size.'/';
         }
         
@@ -568,8 +579,14 @@ class Display {
         } else {
             //Checking the img/ folder
             $icon = $w_code_path.'img/'.$image;
+        }        
+        $img = self::img($icon, $alt_text, $additional_attributes);
+        if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
+            if ($show_text) {
+                $img = "$img $alt_text";
+            }
         }
-        return self::img($icon, $alt_text, $additional_attributes);
+        return $img;
     }
 
     /**
@@ -696,15 +713,26 @@ class Display {
         if ($show_blank_item) {
             $html .= self::tag('option', '-- '.get_lang('Select').' --', array('value'=>'-1'));
         }
-        if($values) {
-            foreach($values as $key => $value) {
+        if ($values) {            
+            foreach ($values as $key => $value) {
                 if(is_array($value) && isset($value['name'])) {
                     $value = $value['name'];
                 }
                 $html .= '<option value="'.$key.'"';
-                if($default == $key) {
-                    $html .= 'selected="selected"';
+                
+                if (is_array($default)) {
+                    foreach($default as $item) {
+                        if ($item == $key) {
+                            $html .= 'selected="selected"';
+                            break;
+                        }
+                    }
+                } else {
+                    if ($default == $key) {
+                        $html .= 'selected="selected"';
+                    }
                 }
+                
                 $html .= '>'.$value.'</option>';
             }
         }
@@ -998,25 +1026,22 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    function show_notification($my_course) {        
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        
+    function show_notification($course_info) {        
+        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);        
         $user_id = api_get_user_id();
-        $course_database 			= $my_course['db'];
-        $course_tool_table			= Database::get_course_table(TABLE_TOOL_LIST);
-        $tool_edit_table 			= Database::get_course_table(TABLE_ITEM_PROPERTY);
-                
-        $course_code 	= Database::escape_string($my_course['k']);
-        $course_info	= api_get_course_info($course_code);
-        $course_id 		= $course_info['real_id'];
         
-        $my_course['id_session'] = intval($my_course['id_session']);
+        $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
+        $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+                
+        $course_code        = Database::escape_string($course_info['code']);        
+        $course_id          = $course_info['real_id'];
+        
+        $course_info['id_session'] = intval($course_info['id_session']);
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access ".
-                                         " USE INDEX (access_cours_code, access_user_id) ".
-                                         "WHERE access_cours_code = '".$course_code."' AND 
-        										access_user_id = '$user_id' AND 
-        										access_session_id ='".$my_course['id_session']."'";
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id) 
+                                 WHERE  access_cours_code = '".$course_code."' AND 
+                                        access_user_id = '$user_id' AND 
+                                        access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
@@ -1050,11 +1075,11 @@ class Display {
                         		tet.lastedit_date > '$oldestTrackDate' ".
                         " AND ctt.name = tet.tool ".
                         " AND ctt.visibility = '1' ".
-                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."' ".
+                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."' ".
                         " ORDER BY tet.lastedit_date";
         $res = Database::query($sql);
         // Get the group_id's with user membership.
-        $group_ids = GroupManager :: get_group_ids($my_course['real_id'], $user_id);
+        $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
@@ -1074,7 +1099,7 @@ class Display {
                   )
                 // Take only what's visible or invisible but where the user is a teacher or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
-                    || ($my_course['s'] == '1' && $item_property['visibility'] == '0')
+                    || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility'])))
             {
                 // Also drop announcements and events that are not for the user or his group.
@@ -1107,10 +1132,12 @@ class Display {
         while (list($key, $notification) = each($notifications)) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
             $type = $notification['lastedit_type'];
-            if (empty($my_course['id_session'])) {
+            if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;
             }
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
+                         '<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" />
+                          </a>&nbsp;';
         }
         return $retvalue;
     }
@@ -1312,7 +1339,10 @@ class Display {
         if ($add_div_wrapper) {
 			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
-        return $html;
-        
+        return $html;        
+    }
+    
+    function return_default_table_class() {
+        return 'data_table';
     }
 } //end class Display

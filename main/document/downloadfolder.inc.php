@@ -11,6 +11,9 @@
 set_time_limit(0);
 
 require_once '../inc/global.inc.php';
+
+api_protect_course_script();
+
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
 $path          = $document_data['path'];
 
@@ -72,6 +75,7 @@ if (api_is_allowed_to_edit()) {
 					docs.filetype		= 'file' AND props.visibility<>'2' AND 
 					props.to_group_id	= ".$to_group_id." AND 
 					props.c_id          = ".$course_id." AND
+                    props.id_session    IN ('0', '$session_id') AND
 					docs.c_id 			= ".$course_id." ";
 	$query = Database::query($sql);
 	// Add tem to the zip file

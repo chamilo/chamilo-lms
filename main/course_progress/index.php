@@ -75,11 +75,8 @@ if (!empty($thematic_id)) {
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event 
  
-	
 $htmlHeadXtra[] = '<script type="text/javascript">
 	
 $(document).ready(function() {

@@ -96,12 +96,13 @@ class link_processor extends search_processor {
      */
     private function get_information($course_id, $link_id) {
         $course_information     = api_get_course_info($course_id);
+        $course_id = $course_information['real_id'];
         if (!empty($course_information)) {            
-            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);            
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY);            
         
     		$link_id = Database::escape_string($link_id);
             $sql = "SELECT insert_user_id FROM $item_property_table
-              		WHERE ref = $link_id AND tool = '". TOOL_LINK ."'
+              		WHERE ref = $link_id AND tool = '". TOOL_LINK ."' AND c_id = $course_id
               		LIMIT 1";
     
             $name = get_lang('Links');

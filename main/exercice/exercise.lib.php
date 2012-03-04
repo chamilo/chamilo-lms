@@ -859,10 +859,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id().")
                 INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
             )";
-        }        
-                
-        if (strpos($extra_where_conditions, 'group_all')) {
+        }
+           
+        if (strpos($extra_where_conditions, 'group_all')) {        
             $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);
+            $extra_where_conditions = str_replace("AND group_id = 'group_all'", '', $extra_where_conditions);
+            
             $sql_inner_join_tbl_user = " 
             (
                 SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name
@@ -872,6 +874,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         
         if (strpos($extra_where_conditions, 'group_none')) {
             $extra_where_conditions = str_replace("AND (  group_id = 'group_none'  )", "AND (  group_id is null  )", $extra_where_conditions);
+            $extra_where_conditions = str_replace("AND group_id = 'group_none'", "AND (  group_id is null  )", $extra_where_conditions);
             $sql_inner_join_tbl_user = " 
             (
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
@@ -924,7 +927,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND orig_lp_item_id = 0
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
-         //var_dump($sql );
+         
          // sql for hotpotatoes tests for teacher / tutor view
     
         $hpsql = "SELECT 

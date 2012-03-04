@@ -57,6 +57,7 @@ function handle_forum_and_forumcategories($lp_id = null) {
     $post_submit_cat    = isset($_POST['SubmitForumCategory']) ?  true : false;
     $post_submit_forum  = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
+    
     // Adding a forum category
     if (($action_forum_cat == 'add' && $_GET['content'] == 'forumcategory') || $post_submit_cat) {
         show_add_forumcategory_form(array(), $lp_id);//$lp_id when is called from learning path
@@ -81,7 +82,7 @@ function handle_forum_and_forumcategories($lp_id = null) {
         $list_threads = get_threads($id_forum);
 
         for ($i = 0; $i < count($list_threads); $i++) {
-            $messaje = delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);         
+            delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);         
             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
             $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($list_threads[$i]['thread_id']), api_get_session_id());
             if ($link_id !== false) {
@@ -118,11 +119,11 @@ function handle_forum_and_forumcategories($lp_id = null) {
  * @author Juan Carlos Raña Trabado (return to lp_id)
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
+function show_add_forumcategory_form($inputvalues = array(), $lp_id) {
     $gradebook = Security::remove_XSS($_GET['gradebook']);
 
     // Initialize the object.
-    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
+    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'&'.  api_get_cidreq());
    	// hidden field if from learning path
    	
 	$form->addElement('hidden', 'lp_id', $lp_id);
@@ -143,7 +144,7 @@ function show_add_forumcategory_form($inputvalues = array(),$lp_id) {
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();            
+            $values = $form->exportValues();
             store_forumcategory($values);
         }
         Security::clear_token();
@@ -172,7 +173,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Initialize the object.
-    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'');
+    $form = new FormValidator('forumcategory', 'post', 'index.php?gradebook='.$gradebook.'&'.  api_get_cidreq());
 
     // The header for the form
     if (!empty($inputvalues)) {

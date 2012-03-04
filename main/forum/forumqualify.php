@@ -66,7 +66,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 }
 
 if ($origin=='learnpath') {
-    include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+    Display::display_reduced_header();
 } else {
     if (!empty($_SESSION['toolgroup'])) {
 

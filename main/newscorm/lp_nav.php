@@ -48,7 +48,6 @@ if (isset($_SESSION['lpobject'])) {
     
    
     //Setting up the CSS theme if exists
-    //require_once '../inc/reduced_header.inc.php'; //fixes js bug in ie8 -> "src" not found see #3750
     
     $mycourselptheme = null;
     if (api_get_setting('allow_course_theme') == 'true') {

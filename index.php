@@ -25,7 +25,6 @@ if (!api_is_anonymous()) {
 	$header_title = " ";
 }
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
@@ -123,17 +122,6 @@ if (!empty($_POST['submitAuth'])) {
 	event_open();
 }
 
-
-
-//@todo add this in the template
-// Plugins for loginpage_main AND campushomepage_main.
-if (!api_get_user_id()) {
-	api_plugin('loginpage_main');
-} else {
-	api_plugin('campushomepage_main');
-}
-
-
 //@todo add this in the template
 if (api_get_setting('display_categories_on_homepage') == 'true') {
 	echo '<div class="home_cats">';
@@ -158,7 +146,6 @@ $controller->tpl->assign('hot_courses',             $controller->return_hot_cour
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 $controller->tpl->assign('notice_block',			$controller->return_notice());
-$controller->tpl->assign('plugin_campushomepage', 	$controller->return_plugin_campushomepage());
 
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block',            $controller->return_skills_links());

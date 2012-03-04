@@ -650,25 +650,29 @@ class UserManager {
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false) {
+    public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND') {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
         if (count($conditions) > 0) {
-            $sql_query .= ' WHERE ';
+            $sql_query .= ' WHERE ';            
+            $temp_conditions = array();
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
-                    $sql_query .= $field." LIKE '$value%'";
+                    $temp_conditions[]= $field." LIKE '$value%'";
                 } else {
-                    $sql_query .= $field.' LIKE \'%'.$value.'%\'';
+                    $temp_conditions[]= $field.' LIKE \'%'.$value.'%\'';
                 }
+            }
+            if (!empty($temp_conditions)) {
+                $sql_query .= implode(' '.$condition.' ', $temp_conditions);
             }
         }
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
-        }
+        }        
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
             $return_array[] = $result;
@@ -795,8 +799,6 @@ class UserManager {
 
 		if (api_get_setting('split_users_upload_directory') === 'true') {
 			if (!empty($picture_filename) or $preview) {
-//				$dir = $base.'upload/users/'.substr($picture_filename, 0, 1).'/'.$user_id.'/';
-//			} elseif ($preview) {
 				$dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
 			} else {
 				$dir = $base.'upload/users/'.$user_id.'/';
@@ -807,7 +809,6 @@ class UserManager {
 		if (empty($picture_filename) && $anonymous) {
 			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 		}		
-		
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 
@@ -1752,13 +1753,12 @@ class UserManager {
 	public static function get_sessions_by_category ($user_id, $fill_first = false, $is_time_over = false, $sort_by_session_name = false) {
 		// Database Table Definitions
 		$tbl_session_user			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_course			= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);		
 		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
-                $names = array();
+        $names = array();
 		if ($fill_first) {
 			$categories[0] = array();
 		}
@@ -1821,8 +1821,7 @@ class UserManager {
             if (!empty($categories)) {
                 foreach ($categories as $cat_id => $category) {
                     // inside each category, prepare a new empty array to sort sessions
-                    $new_cat = array();
-                    
+                    $new_cat = array();                    
                     if (is_array($category) && !empty($category)) {
                 	    foreach ($category as $session) {
                 	       $new_cat[$names[$session]] = $session;
@@ -1833,7 +1832,6 @@ class UserManager {
                 }
             }
         }
-        
 		return $categories;
 	}
 
@@ -1849,8 +1847,7 @@ class UserManager {
 		$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_user			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);		
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		if ($user_id != strval(intval($user_id))) return array();
@@ -1867,15 +1864,10 @@ class UserManager {
 			}
 		}
 
-		// variable initialisation
-		$personal_course_list_sql = '';
-
 		//Courses in which we suscribed out of any session
 		$tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
-		$personal_course_list_sql = "SELECT   course.code, course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, 
-		                                      course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, 
-		                                      course.id as course_id
+		$personal_course_list_sql = "SELECT course.code, course_rel_user.status course_rel_status, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat		                                      
 			                         FROM ".$tbl_course_user." course_rel_user
 				                     LEFT JOIN ".$tbl_course." course
 					                 ON course.code = course_rel_user.course_code
@@ -1883,14 +1875,16 @@ class UserManager {
 					                 ON course_rel_user.user_course_cat = user_course_category.id
 				                     $join_access_url
 			                         WHERE   course_rel_user.user_id = '".$user_id."' AND 
-			                                 course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."  $where_access_url
+			                                 course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."  $where_access_url
 								     ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
 		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		$personal_course_list = array();
 		if (Database::num_rows($course_list_sql_result) > 0 ) {
-			while ($result_row = Database::fetch_array($course_list_sql_result)) {
+			while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
+                $course_info = api_get_course_info($result_row['code']);
+                $result_row['course_info'] = $course_info;
 				$personal_course_list[] = $result_row;
 			}
 		}
@@ -1898,42 +1892,41 @@ class UserManager {
 		// get the list of sessions where the user is subscribed as student
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
 						FROM $tbl_session_user, $tbl_session
-						WHERE id_session=id AND id_user=$user_id AND relation_type<>".SESSION_RELATION_TYPE_RRHH."
-						AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
+						WHERE   id_session=id AND 
+                                id_user=$user_id AND 
+                                relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                                (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 						ORDER BY date_start, date_end, name";
 		$result     = Database::query($sessions_sql);
-		$sessions   = Database::store_result($result);
-		$sessions   = array_merge($sessions , Database::store_result($result));
-
+		$sessions   = Database::store_result($result, 'ASSOC');
 
 		// get the list of sessions where the user is subscribed as student where visibility = SESSION_VISIBLE_READ_ONLY = 1  SESSION_VISIBLE = 2
 		$sessions_out_date_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session_user, $tbl_session
-								WHERE
-								id_session=id AND id_user=$user_id AND 
-								relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
-								(date_end <= CURDATE() AND date_end<>'0000-00-00') AND (visibility = ".SESSION_VISIBLE_READ_ONLY." || visibility = ".SESSION_VISIBLE.")
+								WHERE   id_session=id AND id_user=$user_id AND 
+                                        relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                                        (date_end <= CURDATE() AND date_end<>'0000-00-00') AND (visibility = ".SESSION_VISIBLE_READ_ONLY." || visibility = ".SESSION_VISIBLE.")
 								ORDER BY date_start, date_end, name";
         
 		$result_out_date    = Database::query($sessions_out_date_sql);
-		$sessions_out_date  = Database::store_result($result_out_date);
+		$sessions_out_date  = Database::store_result($result_out_date, 'ASSOC');
 		$sessions           = array_merge($sessions , $sessions_out_date);
 
 		// get the list of sessions where the user is subscribed as coach in a course
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end, DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY), ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
-			FROM $tbl_session as session
-				INNER JOIN $tbl_session_course_user as session_rel_course_user
-				ON session_rel_course_user.id_session = session.id
-				AND session_rel_course_user.id_user = $user_id AND session_rel_course_user.status = 2
-			WHERE (
-                    CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY) AND
-				    CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY) OR 
-				    date_start='0000-00-00'
-                  )
-			ORDER BY date_start, date_end, name";
+                        FROM $tbl_session as session
+                            INNER JOIN $tbl_session_course_user as session_rel_course_user
+                            ON session_rel_course_user.id_session = session.id
+                            AND session_rel_course_user.id_user = $user_id AND session_rel_course_user.status = 2
+                        WHERE (
+                                CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY) AND
+                                CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY) OR 
+                                date_start='0000-00-00'
+                            )
+                        ORDER BY date_start, date_end, name";
 
 		$result = Database::query($sessions_sql);
-		$session_is_coach = Database::store_result($result);
+		$session_is_coach = Database::store_result($result, 'ASSOC');
 		$sessions = array_merge($sessions, $session_is_coach);
 
 		// get the list of sessions where the user is subscribed as coach
@@ -1946,14 +1939,14 @@ class UserManager {
 			ORDER BY date_start, date_end, name";
 		$result = Database::query($sessions_sql);
 
-		$sessions = array_merge($sessions, Database::store_result($result));
+		$sessions = array_merge($sessions, Database::store_result($result,'ASSOC'));
 
 		if (api_is_allowed_to_create_course()) {
 			foreach($sessions as $enreg) {
 				$id_session = $enreg['id'];
-				$personal_course_list_sql = "SELECT DISTINCT course.code, course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, 
+				$personal_course_list_sql = "SELECT DISTINCT course.code,
 				                            ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, 
-				                               category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name,  course.id as course_id
+				                               category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
 					FROM $tbl_session_course_user as session_course_user
 						INNER JOIN $tbl_course AS course
 							ON course.code = session_course_user.course_code
@@ -1967,8 +1960,9 @@ class UserManager {
 
 				$course_list_sql_result = Database::query($personal_course_list_sql);
 
-				while ($result_row = Database::fetch_array($course_list_sql_result)) {					
-					$key = $result_row['id_session'].' - '.$result_row['k'];
+				while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {			
+                    $result_row['course_info'] = api_get_course_info($result_row['code']);
+					$key = $result_row['id_session'].' - '.$result_row['code'];
 					$personal_course_list[$key] = $result_row;
 				}
 			}
@@ -1977,7 +1971,7 @@ class UserManager {
 		foreach ($sessions as $enreg) {
 			$id_session = $enreg['id'];
 			// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-			$personal_course_list_sql = "SELECT DISTINCT course.code, course.id as course_id, course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, 
+			$personal_course_list_sql = "SELECT DISTINCT course.code CONCAT(user.lastname,' ',user.firstname) t, email, 
 			                             course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, " .
                                         "IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
 										FROM $tbl_session_course_user as session_course_user
@@ -1989,15 +1983,14 @@ class UserManager {
 
 			$course_list_sql_result = Database::query($personal_course_list_sql);
 
-			while ($result_row = Database::fetch_array($course_list_sql_result)) {
+			while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
+                $result_row['course_info'] = api_get_course_info($result_row['code']);
 				$key = $result_row['id_session'].' - '.$result_row['k'];
 				if (!isset($personal_course_list[$key])) {
 					$personal_course_list[$key] = $result_row;
 				}
 			}
 		}
-		//print_r($personal_course_list);
-
 		return $personal_course_list;
 	}
 	/**
@@ -2007,8 +2000,7 @@ class UserManager {
 	 */
 	public static function get_courses_list_by_session($user_id, $session_id) {
 		// Database Table Definitions
-		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);		
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		$user_id    = intval($user_id);
@@ -2318,15 +2310,12 @@ class UserManager {
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
-
-    	$patch_profile = 'upload/users/';
     	$picture = array();
     	$picture['style'] = $style;
     	if ($picture_file == 'unknown.jpg') {
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
-
     	switch ($size_picture) {
     		case USER_IMAGE_SIZE_ORIGINAL :
     			$size_picture = '';
@@ -2359,8 +2348,7 @@ class UserManager {
 				$picture['original_height'] = $dimension['width'];
 				$picture['original_width']  = $dimension['height'];
 			}
-		} else {
-			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
+		} else {		
             $file = $image_array_sys['dir'].$picture_file;
 			if (file_exists($file) && !is_dir($file)) {
 				$picture['file'] = $image_array['dir'].$picture_file;
@@ -2818,17 +2806,11 @@ class UserManager {
 	 *
 	 */
 	public static function get_search_form($query) {
-		return '<div class="social-groups-home-title"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')</div>
-		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-		<table cellspacing="0" cellpadding="0">
-		<tr>
-		<td>			
+		return '<div class="span9"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
+		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
 				<input type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
-			</div>
-		</td>
-		</tr>
-		</table></form>';
+		</form></div>';
 	}
 	//deprecated
 	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {

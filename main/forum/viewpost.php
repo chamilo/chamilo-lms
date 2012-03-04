@@ -63,7 +63,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if ($origin == 'learnpath') {
-    include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+    Display::display_reduced_header();
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($_GET['search'])), 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;search='.Security::remove_XSS(urlencode($_GET['search'])), 'name' => prepare4display($current_forum_category['cat_title']));

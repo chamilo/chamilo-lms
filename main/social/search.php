@@ -39,43 +39,34 @@ $social_right_content = UserManager::get_search_form($query);
         if (empty($users) && empty($groups)) {
             $social_right_content .= get_lang('SorryNoResults');	
         }
-
-        $results = array();
+        
+        $results .= '<div id="online_grid_container"><div class="span9">';
+        
         if (is_array($users) && count($users)> 0) {
-            $social_right_content .=  '<h2>'.get_lang('Users').'</h2>';			
+            $results .=  '<h2>'.get_lang('Users').'</h2>';			
+            $results .= '<ul class="thumbnails">';   
             foreach($users as $user) {
                 $user_info = api_get_user_info($user['user_id'], true);
                 $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 
                 if (empty($user['picture_uri'])) {
                     $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                    $img = Display::url('<img title class="social-home-anonymous-online" src="'.$picture['file'].'">', $url); 
+                    $img = '<img src="'.$picture['file'].'">'; 
                 } else {
                     $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );
-
-                    $img = '<img src="'.$picture['file'].'">';                        
-                    $clip = 'clip_vertical';                    
-                    if ($picture['original_height'] > $picture['original_width']) {
-                        $clip = 'clip_horizontal';    
-                    }                    
-                    $img = Display::url(Display::div(Display::div($img, array('class'=>$clip)), array('class'=>'clip-wrapper')) , $url);
+                    $img = '<img src="'.$picture['file'].'">';                    
                 }                             
                 if ($user_info['user_is_online']) {
                     $status_icon = Display::span('', array('class' => 'online_user_in_text'));
                 } else {
                     $status_icon = Display::span('', array('class' => 'offline_user_in_text'));    
                 }                    
-                $img = $img;
-                
                 $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
-                $user_info['complete_name'] = Display::url($user_info['complete_name'], $url).'<br >'.$user['tag'];                
-                
-                $results[] = array($img, $status_icon.$user_info['complete_name'], $user['tag']);			
-            }					
-
-            $social_right_content .=  '<div id="div_content_table">';				
-            $social_right_content .= Display::return_sortable_grid('online', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
-            $social_right_content .=  '</div>';											
+                $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];                
+                $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';				
+            }	
+            $results .='</ul></div></div>';
+            $social_right_content .=  $results;                        
         }
 
         //Get users from tags this loop does not make sense for now ... 
@@ -121,6 +112,7 @@ $social_right_content = UserManager::get_search_form($query);
 
         $grid_groups = array();
         if (is_array($groups) && count($groups)>0) {
+            $social_right_content .= '<div class="span9">';
             $social_right_content .=  '<h2>'.get_lang('Groups').'</h2>';
             foreach($groups as $group) {	
                 $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
@@ -161,6 +153,7 @@ $social_right_content = UserManager::get_search_form($query);
         $visibility = array(true,true,true,true,true);
         $social_right_content .= Display::return_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false, $visibility);
     }									
+    $social_right_content .= '</div>';
 $social_right_content .= '</div>';
 
 $tpl = new Template($tool_name);

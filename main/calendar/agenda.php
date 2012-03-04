@@ -103,7 +103,6 @@ if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
 	api_session_unregister("group");
 }*/
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
 

@@ -29,7 +29,7 @@ if (isset($_SESSION['lpobject'])) {
 
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 $scorm_css_header = true;
-require_once '../inc/reduced_header.inc.php';
+Display::display_reduced_header();
 
 echo '<body dir="'.api_get_text_direction().'">';
 

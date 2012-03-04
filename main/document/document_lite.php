@@ -22,9 +22,7 @@ require_once $lib_path.'tablesort.lib.php';
 
 api_protect_course_script(true);
 
-$htmlHeadXtra[] = api_get_jquery_ui_js(true);
-
-
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 $course_info 	 = api_get_course_info();
 $course_dir      = $course_info['path'].'/document';
@@ -245,8 +243,6 @@ if (empty($document_data['parents'])) {
 if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
 /*
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'yoxview/yox.js"></script>';

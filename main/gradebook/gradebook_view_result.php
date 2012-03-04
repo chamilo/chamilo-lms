@@ -79,7 +79,7 @@ if (isset ($_GET['editres'])) {
 		$result->set_id($edit_res_xml);
 		$result->set_user_id($values['hid_user_id']);
 		$result->set_evaluation_id($select_eval_edit);
-		$row_value=isset($values['score']) ? (float)$values['score'] : 0 ;
+		$row_value = isset($values['score']) ? (float)$values['score'] : 0 ;
 		if ((!empty ($row_value)) || ($row_value == 0)) {
 			$result->set_score(floatval(number_format($row_value, api_get_setting('gradebook_number_decimals'))));
 		}
@@ -151,7 +151,7 @@ if (isset ($_GET['import'])) {
 					$result= new Result();
 					$result->set_user_id($importedresult['user_id']);
 					if (!empty ($importedresult['score'])) {
-						$result->set_score($importedresult['score']);
+						$result->set_score(floatval(number_format($importedresult['score'], api_get_setting('gradebook_number_decimals'))));
 					}
 					if (!empty ($importedresult['date'])) {
 						$result->set_date(api_get_utc_datetime($importedresult['date']));
@@ -285,7 +285,7 @@ if (isset($_GET['export'])) {
                 	if (empty($data['score']) && !is_numeric($data['score'])) {
                 		$result[] = get_lang('DidNotTakeTheExamAcronym');
                 	} else {
-                		$result[] = $data['score'];
+                		$result[] = $data['score'];                        
                 	}	
                 }
                 if ($scoredisplay->is_custom()) {

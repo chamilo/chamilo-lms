@@ -1671,33 +1671,21 @@ class learnpath {
         $RequestUri = '';
         $mycurrentitemid = $this->get_current_item_id();
         if ($this->mode == 'fullscreen') {
-            $navbar = '<table cellpadding="0" cellspacing="0" align="left">' . "\n" .
-            '  <tr> ' . "\n" .
-            '    <td>' . "\n" .
-            '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
-            //'        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
-            //'        <a href="lp_controller.php?action=list" target="_top" title="learnpaths list"><img border="0" src="../img/exit.png" title="Exit"></a>'."\n" .
-            '      </div>' . "\n" .
-            '    </td>' . "\n" .
-            '  </tr>' . "\n" .
-            '</table>';
+            $navbar = '
+                  <div class="buttons">
+                    <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>.
+                    <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>            
+                  </div>';
 
         } else {
-            $navbar = '<table cellpadding="0" cellspacing="0" align="left">' . "\n" .
-            '  <tr> ' . "\n" .
-            '    <td>' . "\n" .
-            '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
-            // '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
-            '      </div>' . "\n" .
-            '    </td>' . "\n" .
-            '  </tr>' . "\n" .
-            '</table>';
+            $navbar = '
+                  <div class="buttons">
+                    <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>            
+                  </div>';
         }
         return $navbar;
     }
@@ -4869,21 +4857,9 @@ class learnpath {
                 $oddclass = 'row_even';
             }
             $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';            
-            
-            // "lp_item_'.$i.' is important for the drag and drop otherwise the LP will not work
-                        
+                      
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-            /*
-            if (file_exists('../img/lp_' . $icon_name . '.png')) {
-                $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />' . $title . '</td>';
-            } else {
-                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-                    $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />' . $title . '</td>';
-                } else {
-                    //$return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;">' . Display::display_icon('folder_document.gif','',array('style'=>'margin-right:3px;')) . $title . '</td>';
-                    $return .= '<td style="padding-left:' . $arrLP[$i]['depth'] * 10 . 'px;"><img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />' . $title . '</td>';
-                }
-            }*/
+
             $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
             	$icon = '<img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />';
@@ -4920,14 +4896,14 @@ class learnpath {
                     }
                 }
             }
-            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>'text-align:right'));
+            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>''));
             $return_audio .= '</td>';
 			$move_icon = '';
 			$edit_icon = '';
 			$delete_icon = '';
+            
             if ($is_allowed_to_edit) {
-                if (!$update_audio OR $update_audio <> 'true') {
-					
+                if (!$update_audio OR $update_audio <> 'true') {					
                     $move_icon .= '<a class="moved" href="#">';
 					$move_icon .= Display::return_icon('move.png', get_lang('Move'), array(), 24);
                     $move_icon .= '</a>';
@@ -5021,8 +4997,8 @@ class learnpath {
 	        		$sub_list = Display::tag('li', '', array('class'=>'sub_item empty')); // empty value
 	        	}	        	 
 	        	if (empty($item['children'])) {
-	        		$sub_list = Display::tag('ul', $sub_list, array('id'=>'UL_'.$key, 'class'=>'record container'));
-	        		$return  .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        		$sub_list = Display::tag('ul', $sub_list, array('id'=>'UL_'.$key, 'class'=>'record li_container'));
+	        		$return  .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
 	        	} else {
 	        		//sections	  
 	        		if (isset($item['children'])) {	        			
@@ -5031,8 +5007,8 @@ class learnpath {
 	        		/*foreach($item['children'] as $my_key => $sub_item) {
 	        			$sub_list .= Display::tag('li', $sub_item['data'], array('id'=>$my_key,'class'=>'record item'));
 	        		}*/
-	        		$sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record container'));
-	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record container'));
+	        		$sub_list = Display::tag('ul', $sub_list.$data, array('id'=>'UL_'.$key, 'class'=>'record li_container'));
+	        		$return .= Display::tag('li', Display::div($item['data'], array('class'=>'item_data')).$sub_list, array('id'=>$key, 'class'=>'record li_container'));
 	        	}	        
         	}
         	return $return;
@@ -5040,13 +5016,12 @@ class learnpath {
         
         
         if ($update_audio != 'true') {
-        	$return .= '<div style="width:90%;"><ul id="lp_item_list">';
+        	$return .= '<div class="span12"><ul id="lp_item_list">';
         	$return .= print_recursive($elements, $default_data, $default_content);
         	$return .='</ul></div>';
         	
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button orange medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
-        } else {
-        
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button white medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
+        } else {        
         	$return .= $return_audio.'</table>';
         }
         
@@ -6237,7 +6212,7 @@ class learnpath {
             $item_description = '';
         }
 
-        $return = '<div style="margin:3px 12px;">';
+        $return = '<div style="">';
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6900,7 +6875,7 @@ class learnpath {
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
-                        $form->addElement('html', '<div style="margin:3px 12px">');
+                        $form->addElement('html', '<div>');
                         $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;

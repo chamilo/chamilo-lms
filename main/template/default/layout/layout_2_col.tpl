@@ -14,12 +14,14 @@
 	 	{include file="default/layout/sniff.tpl"}
 	{/if}
 	
-	<div class="span9">
-		
-		{* Course plugin block*}
-        <section id="courses_plugin">
-		{$plugin_courses_block}
-        </section>
+	<div class="span9">	
+		{* Content top*}
+        
+        {if !empty($plugin_content_top)}         
+            <div id="plugin_content_top">
+                {$plugin_content_top}
+            </div>
+        {/if}        
 		
 		{* ?? *}
         <section id="home_page">
@@ -29,10 +31,7 @@
 		{* ?? *}
 		{$sniff_notification}
 		
-		{* Show messages*}
-        <section id="messages">
-		{$message}
-        </section>
+        {include file="default/layout/page_body.tpl"}		
 		
 		{* Main content*}
         <section id="main_content">
@@ -47,7 +46,15 @@
 		{* Hot courses template *}
 		<section id="hot_courses">
 		{include file="default/layout/hot_courses.tpl"}
+        {* fix the bug where the login is at the left side*}
+        &nbsp;
         </section>
+        
+        {if !empty($plugin_content_bottom)}            
+            <div id="plugin_content_bottom" class="span12">
+                {$plugin_content_bottom}
+            </div>
+        {/if}        
 	</div>
 		
 	{* Right column *}
@@ -69,9 +76,6 @@
 		{* Links that are not added in the tabs*}
 		{$navigation_course_links}
 		
-		{* Plugin courses sidebar *}
-		{$plugin_courses_right_block}
-		
 		{* Reservation block *}
 		{$reservation_block}
 		
@@ -82,7 +86,15 @@
 		{$classes_block}
 		
 		{* Skills*}
-		{$skills_block}
+		{$skills_block}        
+        	
+		{* Plugin courses sidebar *}		
+        {*  Plugins for footer section *}		
+        {if !empty($plugin_menu)}
+            <div id="plugin_menu">
+                {$plugin_menu}
+            </div>
+        {/if}        
 	</div>
 {/block}
 

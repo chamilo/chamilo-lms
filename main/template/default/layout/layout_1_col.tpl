@@ -5,24 +5,26 @@
 {include file="default/layout/main_header.tpl"}
 {/if}	
 {/block}
-
 {* 1 column *}
 {block name=body}
-	<div class="span12">
-        {* Actions *}
-        {if (!empty($actions) ) }
-            <div class="actions">
-            {$actions}	
+    <div class="span12">
+        {if !empty($plugin_content_top)}         
+            <div id="plugin_content_top">
+                {$plugin_content_top}
             </div>
         {/if}
-
-        {* Notifications*}	
-        {$message}
+        {include file="default/layout/page_body.tpl"}        
         <section id="main_content">
         {* Main content *}
-        {$content}
+        {$content}        
         </section>
-    </div>       
+        {if !empty($plugin_content_bottom)}   
+            <div class="clear"></div>
+            <div id="plugin_content_bottom" class="span12">
+                {$plugin_content_bottom}
+            </div>
+        {/if}
+    </div>    
 {/block}
 
 {* Footer *}

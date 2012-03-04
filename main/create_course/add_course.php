@@ -124,15 +124,15 @@ $titular = & $form->add_textfield('tutor_name', array(get_lang('Professor'), nul
 if ($course_validation_feature) {
 
     // Description of the requested course.
-    $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'description', get_lang('Description'), array('class' => 'span6', 'rows' => '3'));
     //$form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
 
     // Objectives of the requested course.
-    $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('class' => 'span6', 'rows' => '3'));
     //$form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
 
     // Target audience of the requested course.
-    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('class' => 'span6', 'rows' => '3'));
     //$form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 }
 

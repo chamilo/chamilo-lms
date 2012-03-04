@@ -9,7 +9,6 @@
 </head>
 <body dir="{$text_direction}" class="{$section_name}">
 <noscript>{"NoJavascript"|get_lang}</noscript>
-
 {if $show_header}    
 <div class="skip">
     <ul>
@@ -18,6 +17,7 @@
     </ul>
 </div>    
 <div id="wrapper">
+    
     {* Bug and help notifications *}		
     <ul id="navigation" class="notification-panel">
         {$help_content}
@@ -26,22 +26,55 @@
     
     {* topbar *}
     {include file="default/layout/topbar.tpl"}    
-    <div id="main" class="container">        
-        <header> 
-            {* header1 - logo *}
-            <div id="header1">                
-                {$header1}
-            </div>            
-            {$plugin_header}    
+    <div id="main" class="container">     
+        <header>
+            <div class="row">
+                {* header1 - logo *}
+                <div id="header_left" class="span4">                
+                    {$header1}                    
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_left)}
+                        <div id="plugin_header_left">
+                            {$plugin_header_left}
+                        </div>
+                    {/if}
+                </div>
+                
+                <div id="header_center" class="span4">                
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_center)}
+                        <div id="plugin_header_center">
+                            {$plugin_header_center}
+                        </div>
+                    {/if}
+                    &nbsp;
+                </div>                                
+                <div id="header_right" class="span4">   
+                     {* header right (notifications) *}    
+                    <ul id="notifications" class="nav nav-pills pull-right">        
+                        {$header2}
+                    </ul>
 
-            {* header 2 - right menu (notifications) *}    
-            <div id="header2">
-                <ul class="nav nav-pills">        
-                    {$header2}
-                </ul>
+                    {* plugin_header *}        
+                    {if !empty($plugin_header_right)}
+                        <div id="plugin_header_right">
+                            {$plugin_header_right}
+                        </div>
+                    {/if}
+                    &nbsp;
+                </div>
             </div>
+                
+            {if !empty($plugin_header_main)}
+                <div class="row">
+                    <div class="span12">
+                        <div id="plugin_header_main">
+                            {$plugin_header_main}
+                        </div>
+                    </div>
+                </div>
+            {/if}
         </header>
-
         {* header 3 - menu *}
         {if $header3}
             <div id="header3" class="subnav">        
@@ -51,5 +84,5 @@
 
         {* breadcrumb *}
         {$breadcrumb}
-        <div id="submain-content" class="row-fluid">
-{/if}          
+        <div class="row">   
+{/if}

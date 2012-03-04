@@ -132,8 +132,6 @@ $(function() {
     });        
 });
 </script>';
-        
-$htmlHeadXtra[] =  api_get_jquery_ui_js(); //jQuery
 
 /* Constants and variables */
 
@@ -234,108 +232,109 @@ function confirmation(name) {
 /* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
-echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-    echo '<tr>';
-        echo '<td class="tree">';
-            // Show the template list.
-            if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])) {
-                $count_items = count($_SESSION['oLP']->ordered_items);
-                $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ' : ' class="lp_tree" ';
-                echo '<div  '.$style.'>';
-                // Build the tree with the menu items in it.
-                echo $_SESSION['oLP']->build_tree();
-                echo '</div>';
-                // Show the template list.
-                echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
-                echo '<br />';
-                echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
-            } else {
-                echo '<div class="lp_tree">';
-                // Build the tree with the menu items in it.
-                echo $_SESSION['oLP']->build_tree();
-                echo '</div>';
-            }
 
-        echo '</td>';
-        echo '<td class="workspace">';
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
 
-        if (isset($new_item_id) && is_numeric($new_item_id)) {
-            switch($_GET['type']) {
-                case 'chapter':
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);
-                    Display::display_confirmation_message(get_lang('NewChapterCreated'));
-                    break;
-                case TOOL_LINK:
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewLinksCreated'));
-                    break;
-                case TOOL_STUDENTPUBLICATION:
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
-                    break;
-                case 'module':
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewModuleCreated'));
-                    break;
-                case TOOL_QUIZ:
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewExerciseCreated'));
-                    break;
-                case TOOL_DOCUMENT:
-                    Display::display_confirmation_message(get_lang('NewDocumentCreated'));
-                    echo $_SESSION['oLP']->display_item($new_item_id, true);
-                    break;
-                case TOOL_FORUM:
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewForumCreated'));
-                    break;
-                case 'thread':
-                    echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-                    Display::display_confirmation_message(get_lang('NewThreadCreated'));
-                    break;
-            }
-        } else {
-            switch($_GET['type']) {
-                case 'chapter':
-                    echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewChapter'));
-                    break;
-                case 'module':
-                    echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewModule'));
-                    break;
-                case 'document':
-                    if (isset($_GET['file']) && is_numeric($_GET['file'])) {
-                        echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
-                    } else {
-                        echo $_SESSION['oLP']->display_document_form('add', 0);
-                    }
-                    break;
-                case 'hotpotatoes':
-                    echo $_SESSION['oLP']->display_hotpotatoes_form('add', 0, $_GET['file']);
-                    break;
-                case 'quiz':
-                    echo Display::display_warning_message(get_lang('ExerciseCantBeEditedAfterAddingToTheLP'));
-                    echo $_SESSION['oLP']->display_quiz_form('add', 0, $_GET['file']);
-                    break;
-                case 'forum':
-                    echo $_SESSION['oLP']->display_forum_form('add', 0, $_GET['forum_id']);
-                    break;
-                case 'thread':
-                    echo $_SESSION['oLP']->display_thread_form('add', 0, $_GET['thread_id']);
-                    break;
-                case 'link':
-                    echo $_SESSION['oLP']->display_link_form('add', 0, $_GET['file']);
-                    break;
-                case 'student_publication':
-                    echo $_SESSION['oLP']->display_student_publication_form('add', 0, $_GET['file']);
-                    break;
-                case 'step':
-                    $_SESSION['oLP']->display_resources();
-                    break;
-            }
+// Show the template list.
+if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])) {
+    $count_items = count($_SESSION['oLP']->ordered_items);
+    $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ' : ' class="lp_tree" ';
+    echo '<div  '.$style.'>';
+    // Build the tree with the menu items in it.
+    echo $_SESSION['oLP']->build_tree();
+    echo '</div>';
+    // Show the template list.
+    echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
+    echo '<br />';
+    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+} else {
+    echo '<div class="lp_tree">';
+    // Build the tree with the menu items in it.
+    echo $_SESSION['oLP']->build_tree();
+    echo '</div>';
+}
+
+echo '</div>';
+
+echo '<div class="span9">';
+
+    if (isset($new_item_id) && is_numeric($new_item_id)) {
+        switch($_GET['type']) {
+            case 'chapter':
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);
+                Display::display_confirmation_message(get_lang('NewChapterCreated'));
+                break;
+            case TOOL_LINK:
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewLinksCreated'));
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
+                break;
+            case 'module':
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewModuleCreated'));
+                break;
+            case TOOL_QUIZ:
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewExerciseCreated'));
+                break;
+            case TOOL_DOCUMENT:
+                Display::display_confirmation_message(get_lang('NewDocumentCreated'));
+                echo $_SESSION['oLP']->display_item($new_item_id, true);
+                break;
+            case TOOL_FORUM:
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewForumCreated'));
+                break;
+            case 'thread':
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                Display::display_confirmation_message(get_lang('NewThreadCreated'));
+                break;
         }
-        echo '</td>';
-    echo '</tr>';
-echo '</table>';
+    } else {
+        switch($_GET['type']) {
+            case 'chapter':
+                echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewChapter'));
+                break;
+            case 'module':
+                echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewModule'));
+                break;
+            case 'document':
+                if (isset($_GET['file']) && is_numeric($_GET['file'])) {
+                    echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
+                } else {
+                    echo $_SESSION['oLP']->display_document_form('add', 0);
+                }
+                break;
+            case 'hotpotatoes':
+                echo $_SESSION['oLP']->display_hotpotatoes_form('add', 0, $_GET['file']);
+                break;
+            case 'quiz':
+                echo Display::display_warning_message(get_lang('ExerciseCantBeEditedAfterAddingToTheLP'));
+                echo $_SESSION['oLP']->display_quiz_form('add', 0, $_GET['file']);
+                break;
+            case 'forum':
+                echo $_SESSION['oLP']->display_forum_form('add', 0, $_GET['forum_id']);
+                break;
+            case 'thread':
+                echo $_SESSION['oLP']->display_thread_form('add', 0, $_GET['thread_id']);
+                break;
+            case 'link':
+                echo $_SESSION['oLP']->display_link_form('add', 0, $_GET['file']);
+                break;
+            case 'student_publication':
+                echo $_SESSION['oLP']->display_student_publication_form('add', 0, $_GET['file']);
+                break;
+            case 'step':
+                $_SESSION['oLP']->display_resources();
+                break;
+        }
+    }
+echo '</div>';
+echo '</div>';
 
 /* FOOTER */
 Display::display_footer();

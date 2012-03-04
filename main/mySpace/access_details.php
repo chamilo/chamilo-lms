@@ -37,8 +37,6 @@ $connections = MySpace::get_connections_to_course($user_id, $course_code, $sessi
 
 $quote_simple = "'";
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
-
 $htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
 

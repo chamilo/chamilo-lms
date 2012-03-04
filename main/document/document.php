@@ -469,7 +469,6 @@ if (empty($document_data['parents'])) {
 if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
 /*
@@ -909,7 +908,7 @@ if (!$is_certificate_mode) {
     $form = new FormValidator('search_document', 'get', '', '', null, false);
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false);
+    $form->add_textfield('keyword', '', false, array('class'=>'span2'));
     $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
     $form->display();
     echo '</span>';
@@ -1186,7 +1185,6 @@ if (count($row) == 12) {
 $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 
-//var_dump($column_show,$column_order);
 $table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC', true);
 
 if(isset($_GET['keyword'])) {
@@ -1212,7 +1210,7 @@ $table->set_header($column++, get_lang('Size'),true, array('style' => 'width:50p
 $table->set_header($column++, get_lang('Date'),true, array('style' => 'width:105px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
-    $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:160px;'));
+    $table->set_header($column++, get_lang('Actions'), false, array ('style' => 'width:160px;'), array('class' => 'td_actions'));
 }
 
 // Actions on multiple selected documents

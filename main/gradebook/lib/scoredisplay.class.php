@@ -258,8 +258,7 @@ class ScoreDisplay
 		} else {
 			// if no custom display set, use default display
 			$display = $this->display_default($my_score, $type);
-		}
-		
+		}		
 		if ($this->coloring_enabled && $no_color == false) {
 		    $my_score_denom = ($score[1]==0)?1:$score[1];		
 		    if (($score[0] / $my_score_denom) < ($this->color_split_value / 100)) {

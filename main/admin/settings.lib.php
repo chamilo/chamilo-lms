@@ -31,101 +31,66 @@ function handle_plugins() {
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
+    
+    $plugin_obj = new AppPlugin();
+    $possible_plugins = $plugin_obj->read_plugins_from_path();    
 
-    //echo get_lang('AvailablePlugins').'<br />';
-    echo '<br />';
-
-    /* We scan the plugin directory. Each folder is a potential plugin. */
-    $pluginpath = api_get_path(SYS_PLUGIN_PATH);
-
-    $handle = @opendir($pluginpath);
-    while (false !== ($file = readdir($handle))) {
-        if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-            $possibleplugins[] = $file;
-        }
-    }
-    @closedir($handle);
-
-    /*  For each of the possible plugin directories we check whether a file named "plugin.php" exists
-        (it contains all the needed information about this plugin).
-        This "plugin.php" file looks like:
-        $plugin_info['title'] = 'The title of the plugin';
-        $plugin_info['comment'] = 'Some comment about the plugin';
-        $plugin_info['location'] = array('loginpage_menu', 'campushomepage_menu', 'banner'); // The possible locations where the plugins can be used.
-        $plugin_info['version'] = '0.1 alpha'; // The version number of the plugin.
-        $plugin_info['author'] = 'Patrick Cool'; // The author of the plugin.
-    */
-    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
+    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
-    echo '<th>';
+    echo '<th width="400px">';
     echo get_lang('Plugin');
     echo '</th><th>';
-    echo get_lang('LoginPageMainArea');
+    echo get_lang('PluginArea').'';
+    echo '</th>';
+    /*
+    echo get_lang('LoginPageMenu').'<br />(loginpage_menu)';
     echo '</th><th>';
-    echo get_lang('LoginPageMenu');
+    echo get_lang('CampusHomepageMainArea').'<br />(campushomepage_main)';
     echo '</th><th>';
-    echo get_lang('CampusHomepageMainArea');
+    echo get_lang('CampusHomepageMenu').'<br />(campushomepage_menu)';
     echo '</th><th>';
-    echo get_lang('CampusHomepageMenu');
+    echo get_lang('MyCoursesMainArea').'<br />(mycourses_main)';
     echo '</th><th>';
-    echo get_lang('MyCoursesMainArea');
+    echo get_lang('MyCoursesMenu').'<br />(mycourses_menu)';
     echo '</th><th>';
-    echo get_lang('MyCoursesMenu');
+    echo get_lang('Header').'<br />(header)';
     echo '</th><th>';
-    echo get_lang('Header');
+    echo get_lang('Footer').'<br />(footer)';
     echo '</th><th>';
-    echo get_lang('Footer');
-    echo '</th><th>';
-    echo get_lang('CourseTool');
+    echo get_lang('CourseTool').'';*/
     echo '</th>';
     echo '</tr>';
-
-    /* We retrieve all the active plugins. */
-    //$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
-    //$result = Database::query($sql);
-    $result = api_get_settings('Plugins');
-    //while ($row = Database::fetch_array($result))
-    foreach ($result as $row) {
-        $usedplugins[$row['variable']][] = $row['selected_value'];
+    
+    /* We display all the possible plugins and the checkboxes */
+    
+    $plugin_list = array();
+    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    foreach($my_plugin_list as $plugin_item) {
+        $plugin_list[$plugin_item] = $plugin_item;
     }
 
-    /* We display all the possible plugins and the checkboxes */
-    foreach ($possibleplugins as $testplugin) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$testplugin.'/plugin.php';
+    foreach ($possible_plugins as $plugin) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
+        
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
-            include ($plugin_info_file);
-
+            require $plugin_info_file;
             echo '<tr>';
-            echo '<td>';
-            foreach ($plugin_info as $key => $value) {
-                if ($key != 'location') {
-                    if ($key == 'title') {
-                        $value = '<strong>'.$value.'</strong>';
-                    }
-                    echo get_lang(ucwords($key)).': '.$value.'<br />';
-                }
+            echo '<td>';            
+            echo '<h3>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
+            echo '<p>'.$plugin_info['comment'].'</p>';
+            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+            
+            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
+                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt'>readme.txt</a>";
             }
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$testplugin.'/readme.txt')) {
-                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$testplugin."/readme.txt'>readme.txt</a>";
-            }
-            echo '</td>';
-
-            // column: LoginPageMainArea
-            if (empty($usedplugins)) {
-                $usedplugins = array();
-            }
-            display_plugin_cell('loginpage_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('loginpage_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('campushomepage_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('campushomepage_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('mycourses_main', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('mycourses_menu', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('header', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('footer', $plugin_info, $testplugin, $usedplugins);
-            display_plugin_cell('course_tool_plugin', $plugin_info, $testplugin, $usedplugins);
-            echo '</tr>';
+            echo '</td><td>';                        
+            $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
+            
+            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));
+    
+            echo '</td></tr>';
         }
     }
     echo '</table>';
@@ -388,58 +353,48 @@ function upload_stylesheet($values, $picture) {
  * @todo: A similar function needs to be written to activate or inactivate additional tools.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+function store_plugins() { 
     global $_configuration;
 
+    $plugin_obj = new AppPlugin();
+
     // Get a list of all current 'Plugins' settings
-    $installed_plugins = api_get_settings('Plugins','list',$_configuration['access_url']);
+    $installed_plugins = api_get_settings('Plugins','list', $_configuration['access_url']);
     $shortlist_installed = array();
     foreach ($installed_plugins as $plugin) {
         $shortlist_installed[] = $plugin['subkey'];
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
-    // Step 1 : We remove all the plugins.
-    //$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
-    //Database::query($sql);
+
     $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
-    $shortlist_required = array();
-    // Step 2: Looping through all the post values we only store these which are really a valid plugin location.
-    foreach ($_POST as $form_name => $formvalue) {
-        $form_name_elements = explode('-', $form_name);
-        if (is_valid_plugin_location($form_name_elements[1])) {
-            $shortlist_required[] = $form_name_elements[0];
-            //$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
-            //Database::query($sql);
-            api_add_setting($form_name_elements['0'], $form_name_elements['1'], $form_name_elements['0'], null, 'Plugins', $form_name_elements['0'], null, null, null, $_configuration['access_url'], 1);
-            // check if there is an install procedure
-            $pluginpath = api_get_path(SYS_PLUGIN_PATH).$form_name_elements[0].'/install.php';
-            if (is_file($pluginpath) && is_readable($pluginpath)) {
-                //execute the install procedure
-            	include $pluginpath;
+
+    $plugin_list = $plugin_obj->read_plugins_from_path();
+
+    foreach ($plugin_list as $plugin) {
+        if (isset($_POST['plugin_'.$plugin])) {
+            $areas_to_installed = $_POST['plugin_'.$plugin];
+            foreach ($areas_to_installed as $area) {
+                api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
+                $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/install.php';
+                if (is_file($pluginpath) && is_readable($pluginpath)) {
+                    //execute the install procedure
+                    require $pluginpath;
+                }
             }
         }
     }
+
     foreach ($shortlist_installed as $plugin) {
         // if one plugin was really deleted, execute the uninstall script
     	if (!in_array($plugin,$shortlist_required)) {
-            // check if there is an install procedure
+            // check if there is an uninstall procedure
             $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/uninstall.php';
             if (is_file($pluginpath) && is_readable($pluginpath)) {
-                //execute the install procedure
-                include $pluginpath;
-            }    		
+                //execute the uninstall procedure
+                require $pluginpath;
+            }
     	}
     }
-}
-
-/**
- * Check if the post information is really a valid plugin location.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function is_valid_plugin_location($location) {
-    static $valid_locations = array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu', 'header', 'footer', 'course_tool_plugin');
-    return in_array($location, $valid_locations);
 }
 
 
@@ -454,7 +409,7 @@ function store_stylesheets() {
 
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
-    
+
     if (is_style($style)) {
         api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
     }
@@ -489,16 +444,14 @@ function handle_search() {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
     $search_enabled = api_get_setting('search_enabled');
-    
+ 
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
         
     $renderer = & $form->defaultRenderer();
     //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
     //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
     $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
-    
-    
-    
+       
     $values = api_get_settings_options('search_enabled');   
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
      
@@ -757,6 +710,7 @@ function get_template_data($from, $number_of_items, $column, $direction) {
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $result = Database::query($sql);
+    $return = array();
     while ($row = Database::fetch_array($result)) {
         $row['1'] = get_lang($row['1']);
         $return[] = $row;
@@ -1014,4 +968,393 @@ function update_gradebook_score_display_custom_values($values) {
         }
     }
     $scoredisplay->update_custom_score_display_settings($final);
+}
+
+function generate_settings_form($settings, $settings_by_access_list) {
+    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
+    
+    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
+    $form ->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
+    
+    $default_values = array();
+    $count_settings = count($settings);
+    
+    foreach ($settings as $row) {
+        
+    	if (in_array($row['variable'], $settings_to_avoid)) { continue; }
+
+        $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
+        $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
+
+        ($count_settings % 10) < 5 ? $b = $count_settings - 10 : $b = $count_settings;
+        if ($i % 10 == 0 and $i < $b AND $i != 0) {
+            $form->addElement('html', '<div align="right">');
+            $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+            $form->addElement('html', '</div>');
+        }
+
+        $i++;
+
+        if ($row['access_url_changeable'] == '1' && $_configuration['multiple_access_urls']) {
+            $form->addElement('html', '<div style="float: right;">'.Display::return_icon('shared_setting.png', get_lang('SharedSettingIconComment')).'</div>');
+        }
+
+        $hideme = array();
+        $hide_element = false;
+        if ($_configuration['access_url'] != 1) {
+            if ($row['access_url_changeable'] == 0) {
+                // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
+                $hide_element = true;
+                $hideme = array('disabled');
+            } elseif ($url_info['active'] == 1) {
+                // We show the elements.
+                if (empty($row['variable']))
+                    $row['variable'] = 0;
+                if (empty($row['subkey']))
+                    $row['subkey'] = 0;
+                if (empty($row['category']))
+                    $row['category'] = 0;
+
+                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
+                    // We are sure that the other site have a selected value.
+                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')
+                        $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
+                }
+                // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
+            }
+        }		
+		        
+        switch ($row['type']) {
+            case 'textfield':
+                if (in_array($row['variable'], $convert_byte_to_mega_list)) {                    
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '8'));
+                    $form->applyFilter($row['variable'], 'html_filter');
+                    $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);                    
+                } elseif ($row['variable'] == 'account_valid_duration') {
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
+                    $form->applyFilter($row['variable'], 'html_filter');
+                    $default_values[$row['variable']] = $row['selected_value'];
+
+                    // For platform character set selection: Conversion of the textfield to a select box with valid values.
+                } elseif ($row['variable'] == 'platform_charset') {
+                    $current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
+                    $valid_encodings = array_flip(api_get_valid_encodings());
+                    if (!isset($valid_encodings[$current_system_encoding])) {
+                        $is_alias_encoding = false;
+                        foreach ($valid_encodings as $encoding) {
+                            if (api_equal_encodings($encoding, $current_system_encoding)) {
+                                $is_alias_encoding = true;
+                                $current_system_encoding = $encoding;
+                                break;
+                            }
+                        }
+                        if (!$is_alias_encoding) {
+                            $valid_encodings[$current_system_encoding] = $current_system_encoding;
+                        }
+                    }
+                    foreach ($valid_encodings as $key => &$encoding) {
+                        if (api_is_encoding_supported($key) && Database::is_encoding_supported($key)) {
+                            $encoding = $key;
+                        } else {                            
+                            unset($valid_encodings[$key]);
+                        }
+                    }                    
+                    $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $valid_encodings);
+                    $default_values[$row['variable']] = $current_system_encoding;                                
+                } else {                    
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);                    
+                    $form->applyFilter($row['variable'],'html_filter');
+                    $default_values[$row['variable']] = $row['selected_value'];
+                }
+                break;
+            case 'textarea':            	
+                if ($row['variable'] == 'header_extra_content') {
+      	            $file = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
+                    $value = '';
+                    if (file_exists($file)) {
+                        $value = file_get_contents($file);
+                    }
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $default_values[$row['variable']] = $value;            	        
+                } elseif ($row['variable'] == 'footer_extra_content') {
+            		$file = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
+            		$value = '';
+            		if (file_exists($file)) {
+						$value = file_get_contents($file);
+            		}
+            	    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $default_values[$row['variable']] = $value;            	        
+            	} else {
+                	$form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+                	$default_values[$row['variable']] = $row['selected_value'];
+            	}
+                break;
+            case 'radio':
+                $values = api_get_settings_options($row['variable']);
+                $group = array ();
+                if (is_array($values )) {
+                    foreach ($values as $key => $value) {
+                        $element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
+                        if ($hide_element) {
+                            $element->freeze();
+                        }
+                        $group[] = $element;
+                    }
+                }
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), '', false); //julio
+                $default_values[$row['variable']] = $row['selected_value'];
+                break;
+            case 'checkbox';
+                // 1. We collect all the options of this variable.
+                $sql = "SELECT * FROM $table_settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
+
+                $result = Database::query($sql);
+                $group = array ();
+                while ($rowkeys = Database::fetch_array($result)) {
+                     //if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
+
+                     // Profile tab option should be hidden when the social tool is enabled.
+                     if (api_get_setting('allow_social_tool') == 'true') {
+                         if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') { continue; }
+                     }
+
+                     // Hiding the gradebook option.
+                     if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') { continue; }
+
+                    $element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
+                    if ($row['access_url_changeable'] == 1) {
+                        // 2. We look into the DB if there is a setting for a specific access_url.
+                        $access_url = $_configuration['access_url'];
+                        if (empty($access_url )) $access_url = 1;
+                        $sql = "SELECT selected_value FROM $table_settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";
+                        $result_access = Database::query($sql);
+                        $row_access = Database::fetch_array($result_access);
+                        if ($row_access['selected_value'] == 'true' && !$form->isSubmitted()) {
+                            $element->setChecked(true);
+                        }
+                    } else {
+                        if ($rowkeys['selected_value'] == 'true' && !$form->isSubmitted()) {
+                            $element->setChecked(true);
+                        }
+                    }
+                    if ($hide_element) {
+                        $element->freeze();
+                    }
+                    $group[] = $element;
+                }
+                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])),'');
+                break;
+            case 'link':
+                $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
+                break;
+            /*
+             * To populate its list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
+             * The functions being called must be added to the file settings.lib.php.
+             */
+            case 'select':
+                $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
+                $default_values[$row['variable']] = $row['selected_value'];
+                break;
+
+            case 'custom_gradebook':
+            case 'custom':
+            	$values = api_get_settings_options($row['variable']);
+            	
+            	//$renderer = & $form->defaultRenderer();
+            	//$renderer->setElementTemplate('{label} - {element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 -->');
+            	
+            	$numbers = array();
+            	for($j=1;$j<=20;$j++) {
+            		$numbers[$j] = $j;
+            	}
+            	
+            	if (!empty($values)) {            		
+            		foreach($values as $option) {
+            			$group = array();
+            			$id = $option['id'];            			            			
+            			$option_id = $row['variable']."[$id]";            			
+            			$group[] = $form->createElement('text', $option_id.'[display_text]', array(get_lang($row['title']), get_lang($row['comment'])),'class="begin_model"');
+            			
+            			$default_values[$option_id.'[display_text]'] = $option['display_text'];
+            			$parts = api_grading_model_functions($option['value'], 'to_array');            			
+            			$denominator = $parts['denominator'];            			
+            			$j = 1;            			
+            			foreach($parts['items'] as $item) {  
+            				$letter = $item['letter'];
+            				$value  = $item['value'];
+            				$group[] =$form->createElement('static','<div>');
+            				$class = 'number';
+            				if ($j == 1) {
+            					$class = 'first_number'; 
+            				}
+            				$group[] = $form->createElement('select', $option_id.'[items]['.$j.']', array('dd'), $numbers, array('class'=>$class));
+            				$sum = ' ';
+            				if ($j != count($parts['items'])) {
+            					$sum = ' + ';
+            				}
+            				//$group[] =$form->createElement('static',' * '.$letter.$sum);
+            				
+            				$default_values[$option_id.'[items]['.$j.']'] = $value;            				
+            				$j++;            				
+            			}
+            			
+            			$group[] = $form->createElement('select', $option_id.'[denominator]', array('/'), $numbers,'class="denominator"');            			
+            			$group[] = $form->createElement('button', "delete", get_lang('Delete'), array('type'=>'button', 'id'=>$id, 'onclick'=>"delete_grading_model('$id');"));
+            			
+            			$default_values[$option_id.'[denominator]'] = $denominator;
+            			$form->addGroup($group, '', get_lang($row['title']), ' ');
+            		}     		
+            	}
+            	
+            	//New Grading Model form
+            	$group = array();
+            	
+            	$group[] = $form->createElement('text',   'new_model', array(get_lang('AddNewModel')));            	
+            	$group[] = $form->createElement('select', 'number_evaluations', array(''), $numbers,''); 
+            	
+            	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvaluations')."&nbsp;");
+            	
+            	$form->addElement('style_submit_button', null, get_lang('Add'), 'class="add"');
+            	
+            	
+            	break;
+            /*
+             * Used to display custom values for the gradebook score display
+             */
+            /* this configuration is moved now inside gradebook tool
+            case 'gradebook_score_display_custom':
+                if(api_get_setting('gradebook_score_display_custom', 'my_display_custom') == 'false') {
+                    $form->addElement('static', null, null, get_lang('GradebookActivateScoreDisplayCustom'));
+                } else {
+                    // Get score displays.
+                    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
+                    $scoredisplay = ScoreDisplay::instance();
+                    $customdisplays = $scoredisplay->get_custom_score_display_settings();
+                    $nr_items = (count($customdisplays)!='0') ? count($customdisplays) : '1';
+                    $form->addElement('hidden', 'gradebook_score_display_custom_values_maxvalue', '100');
+                    $form->addElement('hidden', 'gradebook_score_display_custom_values_minvalue', '0');
+                    $form->addElement('static', null, null, get_lang('ScoreInfo'));
+                    $scorenull[] = $form->CreateElement('static', null, null, get_lang('Between'));
+                    $form->setDefaults(array (
+                        'beginscore' => '0'
+                    ));
+                    $scorenull[] = $form->CreateElement('text', 'beginscore', null, array (
+                        'size' => 5,
+                        'maxlength' => 5,
+                        'disabled' => 'disabled'
+                    ));
+                    $scorenull[] = $form->CreateElement('static', null, null, ' %');
+                    $form->addGroup($scorenull, '', '', ' ');
+                    for ($counter= 1; $counter <= 20; $counter++) {
+                        $renderer = $form->defaultRenderer();
+                        $elementTemplateTwoLabel =
+                        '<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';">
+                        <p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+                        <div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --> <b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
+
+                        $elementTemplateTwoLabel2 =
+                        '<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
+                        <a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter >= $nr_items && $counter != 1) ? 'inline' : 'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>
+                        <a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
+                        </div></p></div>';
+
+                        $scorebetw= array ();
+                        $form->addElement('text', 'gradebook_score_display_custom_values_endscore[' . $counter . ']', null, array (
+                            'size' => 5,
+                            'maxlength' => 5,
+                            'id' => 'txta-'.$counter
+                        ));
+                        $form->addElement('text', 'gradebook_score_display_custom_values_displaytext[' . $counter . ']', null,array (
+                            'size' => 40,
+                            'maxlength' => 40,
+                            'id' => 'txtb-'.$counter
+                        ));
+                        $renderer->setElementTemplate($elementTemplateTwoLabel,'gradebook_score_display_custom_values_endscore[' . $counter . ']');
+                        $renderer->setElementTemplate($elementTemplateTwoLabel2,'gradebook_score_display_custom_values_displaytext[' . $counter . ']');
+                        $form->addRule('gradebook_score_display_custom_values_endscore[' . $counter . ']', get_lang('OnlyNumbers'), 'numeric');
+                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_maxvalue'), get_lang('Over100'), 'compare', '<=');
+                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_minvalue'), get_lang('UnderMin'), 'compare', '>');
+                        if ($customdisplays[$counter - 1]) {
+                            $default_values['gradebook_score_display_custom_values_endscore['.$counter.']'] = $customdisplays[$counter - 1]['score'];
+                            $default_values['gradebook_score_display_custom_values_displaytext['.$counter.']'] = $customdisplays[$counter - 1]['display'];
+                        }
+                    }
+                }
+                break;
+                */
+        }        
+        
+        if ($row['variable'] == 'pdf_export_watermark_enable') {
+        	$url =  PDF::get_watermark($course_code);
+            $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+            if ($url != false) {                
+                $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+                $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
+            }   
+            $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+            $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+        }
+        
+        if ($row['variable'] == 'timezone_value') {
+            $timezone = $row['selected_value'];
+            if (empty($timezone)) {
+                $timezone = _api_get_timezone();
+            }
+            $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
+        }        
+    }
+    
+    if (!empty($settings)) {
+        $form->addElement('html', '<div style="text-align: right; clear: both;">');
+        $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+        $form->addElement('html', '</div>');
+        $form->setDefaults($default_values); 
+    }
+    return $form;
+    
+}
+
+/**
+ * Searchs a platform setting
+ * @param string $search
+ * @return array
+ */
+function search_setting($search) {
+    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
+    $sql = "SELECT * FROM $table_settings_current GROUP BY variable ORDER BY id ASC ";
+    $result = Database::store_result(Database::query($sql), 'ASSOC');
+    $settings = array();
+    
+    $search = api_strtolower($search);
+    
+    if (!empty($result)) {
+        foreach ($result as $setting) {
+            $found = false;
+            
+            $title = api_strtolower(get_lang($setting['title']));
+            //try the title
+            if (strpos($title, $search) === false) {                
+                $comment = api_strtolower(get_lang($setting['comment']));
+                //Try the comment
+                if (strpos($comment, $search) === false) {
+                    //Try the variable name
+                    if (strpos($setting['variable'], $search) === false) {
+                        continue;                        
+                    } else {
+                        $found = true;       
+                    }                 
+                } else {
+                    $found = true;   
+                }
+                
+            } else {                
+                $found = true;    
+            }          
+            if ($found) {                
+                $settings[] = $setting;
+            }
+        }    
+    }    
+    return $settings;    
 }

@@ -18,24 +18,32 @@ class Chat extends Model {
 		$this->window_list = $_SESSION['window_list'] = isset($_SESSION['window_list']) ? $_SESSION['window_list'] : array();
 	}    
     
+    /**
+     * Get user chat status
+     * @return type 
+     */
     function get_user_status() {
-        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'chat_user_status', false, true);
-        return $status['chat_user_status'];        
-        //return isset($_SESSION['chat_user_status']) ? intval($_SESSION['chat_user_status']) : 0;
-        
+        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'user_chat_status', false, true);
+        return $status['user_chat_status'];
     }
     
+    /*
+     * Set user chat status
+     */
     function set_user_status($status) {
-        //$_SESSION['chat_user_status'] = intval($status);
-        UserManager::update_extra_field_value(api_get_user_id(), 'chat_user_status', $status);
+        UserManager::update_extra_field_value(api_get_user_id(), 'user_chat_status', $status);
     }
 	
+    /* 
+     * Starts a chat session
+     */
 	public function start_session() {				
 		$items = array();		
 		if (isset($_SESSION['chatHistory'])) {
 			$items = $_SESSION['chatHistory'];
-		}                
-		$return = array('user_status' => $this->get_user_status(),  'me' => get_lang('Me'), 'items' => $items);		
+		}             
+        //print_r($items);
+		$return = array('user_status' => $this->get_user_status(), 'me' => get_lang('Me'), 'items' => $items);		
 		echo json_encode($return);           
 		exit;
 	}
@@ -55,17 +63,9 @@ class Chat extends Model {
 		
 		while ($chat = Database::fetch_array($result,'ASSOC')) {	
 			$chat_list[$chat['from_user']]['items'][] = $chat;
-		}		
-		
+		}		        
+        
 		$items = array();
-		
-		if (isset($_SESSION['chatHistory'])) {
-			foreach($_SESSION['chatHistory'] as $user_id => $data) {
-				if (!empty($data)) {							
-					//$items[$user_id] = $data;					
-				}
-			}
-		}	
 		
 		foreach ($chat_list as $from_user_id => $rows) {
 			$rows = $rows['items'];
@@ -79,16 +79,18 @@ class Chat extends Model {
 				
 				$item = array(	's'			=> '0', 
 								'f'			=> $from_user_id, 
-								'm'			=> $chat['message'], 
-								'online'	=> $user_info['user_is_online'], 
+								'm'			=> $chat['message'], 								
 								'username'	=> $user_info['complete_name'],							
 								'id'		=> $chat['id']								
 							);
-				$items[$from_user_id][] = $item;				
+				$items[$from_user_id]['items'][] = $item;				
+                $items[$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
+                $items[$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
 				$_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent'],'UTC');				
 			}
-			$_SESSION['chatHistory'][$from_user_id][] = $item;					
-			
+			$_SESSION['chatHistory'][$from_user_id]['items'][] = $item;					
+            $_SESSION['chatHistory'][$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];	
+            $_SESSION['chatHistory'][$from_user_id]['user_info']['online'] = $user_info['user_is_online'];            
 		}
 		
 		if (!empty($_SESSION['openChatBoxes'])) {
@@ -102,17 +104,16 @@ class Chat extends Model {
 						$item = array('s' => '2', 'f' => $user_id, 'm' => $message);			
 						
 						if (isset($_SESSION['chatHistory'][$user_id])) {
-							$_SESSION['chatHistory'][$user_id][] = $item;					
-						}		
-						//$_SESSION['chatHistory'][$user_id][] = $item;
+							$_SESSION['chatHistory'][$user_id]['items'][] = $item;					                            			
+						}						
 						$_SESSION['tsChatBoxes'][$user_id] = 1;
-					}			
+					}
 				}
 			}
 		}
-		
-		
-
+        
+        //print_r($_SESSION['chatHistory']);
+        
 		/*
 		var_dump($_SESSION['openChatBoxes']);
 		var_dump($_SESSION['tsChatBoxes']);
@@ -121,7 +122,7 @@ class Chat extends Model {
 		*/
 		//print_r($_SESSION['chatHistory']);
 		$sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
-		$query = Database::query($sql);
+		Database::query($sql);
 		
 		if ($items != '') {
 			//$items = substr($items, 0, -1);
@@ -146,7 +147,7 @@ class Chat extends Model {
 	}
 	
 	function send($from_user_id, $to_user_id, $message) {
-		
+        $user_info = api_get_user_info($to_user_id, true);
 		$this->save_window($to_user_id);
 	
 		$_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
@@ -155,16 +156,14 @@ class Chat extends Model {
 		if (!isset($_SESSION['chatHistory'][$to_user_id])) {
 			$_SESSION['chatHistory'][$to_user_id] = array();
 		}
-		/*
-		$user_info = api_get_user_info($to_user_id);		
-		$complete_name = $user_info['complete_name'];
-		*/
 		$item = array (	"s"			=> "1", 
 						"f"			=> $from_user_id,
 						"m"			=> $messagesan,
 						"username"	=> get_lang('Me')
 					);
-		$_SESSION['chatHistory'][$to_user_id][] = $item;	
+		$_SESSION['chatHistory'][$to_user_id]['items'][] = $item;	
+        $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];	
+        $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];	
 				
 		unset($_SESSION['tsChatBoxes'][$to_user_id]);
 		
@@ -177,6 +176,7 @@ class Chat extends Model {
 		if (!empty($from_user_id) && !empty($to_user_id)) {		
 			$this->save($params);
 		}
+        //print_r($_SESSION['chatHistory']);
 		echo "1";
 		exit;
 	}

@@ -1131,18 +1131,9 @@ abstract class Question
 				}
 			}
 		}		
-		</script>';
-
-
-		$renderer = $form->defaultRenderer();
-		$form->addElement('html','<div class="form">');
+		</script>';		
 		// question name
-		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'), array('class' => 'span6'));
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
-		// 
-		// Enrich question		
-		// 
+		$form->addElement('text','questionName', get_lang('Question'), array('class' => 'span6'));		
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// default content
@@ -1159,31 +1150,20 @@ abstract class Question
 		}
 		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
-		$form -> addElement('html','<div class="row">
-		<div class="label"></div>
-		<div class="formw" style="height:50px">
-			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
-		</div>
-		</div>');
+		$form -> addElement('advanced_settings','
+			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>		
+		');
 
 		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
 		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
 
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionDescription');
-
-		// 
 		// Advanced parameters
-		// 
-		// question level
-		//@todo move levles into a table
-		$select_level = array (1=>1,2=>2,3=>3,4=>4,5=>5);
-		/*
-        $radios_results_enabled = array();
-		foreach($select_level as $val) {
-			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);            
-		}
-		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));*/
+		$form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
+        
+		$select_level = array (1=>1,2=>2,3=>3,4=>4,5=>5);	
+        
+        $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
         
         $form->addElement('select', 'questionLevel',get_lang('Difficulty'), $select_level);
         
@@ -1193,12 +1173,7 @@ abstract class Question
 		$tabCat = array();
 		$tabCat = Testcategory::getCategoriesIdAndName(); 
 		$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
-		// note always positive for multiple answer questions
-		// Form's style
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>&nbsp;','questionName');
-		$renderer->setElementTemplate('<div style="margin-left:0%;float:right;text-align:left;width:89%" class=""><a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a><div id="id_advancedOption" style="background-color:#EFEFEF;display:none;"><div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
-		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div><br/></div></div><div style="clear:both">&nbsp;</div>','questionCategory');
-		// fhub
+		
 		// hidden values
 		$form->addElement('hidden','myid',$_REQUEST['myid']);
         
@@ -1214,18 +1189,19 @@ abstract class Question
         }
         
 		$form->addElement('html','</div>');
+        
 		// default values
 		$defaults = array();		
-		$defaults['questionName']          = $this -> question;
-		$defaults['questionDescription']   = $this -> description;
-		$defaults['questionLevel']         = $this -> level;
-		$defaults['questionCategory'] = $this->category; // hub 12-10-2011
+		$defaults['questionName']           = $this -> question;
+		$defaults['questionDescription']    = $this -> description;
+		$defaults['questionLevel']          = $this -> level;
+		$defaults['questionCategory']       = $this->category; // hub 12-10-2011
 		
-    //Came from he question pool        
-    if (isset($_GET['fromExercise'])) {   
-        $form->setDefaults($defaults);   
-    }
-        
+        //Came from he question pool        
+        if (isset($_GET['fromExercise'])) {   
+            $form->setDefaults($defaults);   
+        }
+
 		if (!empty($_REQUEST['myid'])) {
 			$form->setDefaults($defaults);
 		} else {
@@ -1233,7 +1209,9 @@ abstract class Question
 				$form->setDefaults($defaults);
 			}
 		}
+        
 	}
+    
 
 	/**
 	 * function which process the creation of questions

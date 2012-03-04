@@ -80,14 +80,14 @@ EOT;
 	
 		<div class="control-group {error_class}">				
             <label class="control-label">
-				<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+				<!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
 				{label}
 			</label>
 			<div class="controls">
 				{element}
 				
 				<!-- BEGIN label_3 -->
-                    <p class="help-block">{label_3}</p>
+                    {label_3}
                 <!-- END label_3 -->
                 
 				<!-- BEGIN label_2 -->                    
@@ -95,7 +95,7 @@ EOT;
 				<!-- END label_2 -->
 				
 				<!-- BEGIN error -->
-					3<span class="help-inline">{error}</span>
+					<span class="help-inline">{error}</span>
 				<!-- END error -->	
 			</div>
 		</div>

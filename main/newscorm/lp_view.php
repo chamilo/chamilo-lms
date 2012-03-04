@@ -16,6 +16,7 @@
 /**
  * Code
  */
+
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
@@ -41,7 +42,6 @@ $user_id        = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
 
-$htmlHeadXtra[] = api_get_jquery_ui_js();
 $htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
@@ -246,7 +246,6 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 }
 
 // Not in fullscreen mode.
-//require_once '../inc/reduced_header.inc.php';
 Display::display_reduced_header($nameTools);
 //$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
 // Check if audio recorder needs to be in studentview.
@@ -341,15 +340,13 @@ if (Database::num_rows($res_media) > 0) {
                     </div>
                     <div id="lp_navigation_elem" class="span8">
                         <div class="row">                        
-                            <div class="span7">
+                            <div class="span8">
                                 <?php echo $navigation_bar; ?>
+                                 <div id="progress_bar">
+                                    <?php echo $progress_bar; ?>
+                                 </div>    
                             </div>
-                        </div>
-                        <div class="row">                            
-                            <div id="progress_bar" class="span7">
-                                <?php echo $progress_bar; ?>
-                            </div>                        
-                        </div>
+                        </div>              
                     </div>
                     </div>
             </div>

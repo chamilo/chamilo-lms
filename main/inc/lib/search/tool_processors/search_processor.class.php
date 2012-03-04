@@ -26,4 +26,3 @@ abstract class search_processor {
      */
     abstract protected function process();
 }
-?>

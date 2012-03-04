@@ -14,7 +14,6 @@ require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 
-
 // Clear the exercise session just in case
 if (isset ($_SESSION['objExercise'])) {
 	api_session_unregister('objExercise');
@@ -33,7 +32,7 @@ if (!$result) {
 	api_not_allowed(true);
 }
 
-$gradebook 			= isset($_GET['gradebook']) 			? Security :: remove_XSS($_GET['gradebook']) : null;
+$gradebook 			= isset($_GET['gradebook'])             ? Security :: remove_XSS($_GET['gradebook']) : null;
 $learnpath_id       = isset($_REQUEST['learnpath_id']) 		? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id  = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $origin  			= isset($_REQUEST['origin']) 			? Security::remove_XSS($_REQUEST['origin']) : null;
@@ -70,7 +69,10 @@ if ($is_allowed_to_edit ) {
 	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
 }
 
+//Exercise name
 $html .= Display::tag('h1', $objExercise->name .' '.$edit_link);
+
+//Exercise description
 $html .= Display::div($objExercise->description, array('class'=>'exercise_description'));
 
 $extra_params = '';
@@ -78,6 +80,7 @@ if (isset($_GET['preview'])) {
 	$extra_params = '&preview=1';	
 }
 
+//Exercise button
 //Notice we not add there the lp_item_view__id because is not already generated 
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
 $label = get_lang('StartTest');
@@ -85,38 +88,48 @@ if ($time_control && !empty($clock_expired_time)) {
 	$label = get_lang('ContinueTest');
 }
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
+$attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
 	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
 }
-$message = '';
-if (!empty($attempt_list)) {
-	$message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
-	$label = get_lang('ContinueTest');
-}
-$html .= $message;
+
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
 
-$visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id);
+$visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, null, false);
         
 if ($visible_return['value'] == false) {
 	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id;	
 	$exercise_url_button = $visible_return['message'];    
 }
 
-$options  = Display::div('', array('class'=>'left_option'));
+
+//Message "you already try this exercise"
+
+$message = '';
+if (!empty($attempt_list)) {
+	$message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
+	$label = get_lang('ContinueTest');
+}
+$html .= $message;
+
+$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
+$counter = count($attempts);
+
+$options = '';
 if (!empty($exercise_url_button)) {
 	$options .= $exercise_url_button;
 }
+$options  = Display::div($options, array('class'=>'offset4 span3'));
 
-$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
+
 
 $my_attempt_array = array();
-$counter = count($attempts)+1;
 $table_content = '';
 
 if (!empty($attempts)) {
-	foreach ($attempts as $attempt_result) {	
-		$counter--;
+    $i = $counter;
+	foreach ($attempts as $attempt_result) {		
+        
 		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
 		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$attempt_result['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
 		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'));
@@ -126,9 +139,8 @@ if (!empty($attempts)) {
 			//$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), ICON_SIZE_SMALL);
 		if ($attempt_result['attempt_revised'] == 0) {
 			$teacher_revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));
-		}
-				
-		$row = array('count'	 	=> $counter,
+		}				
+		$row = array('count'	 	=> $i,
 					 'date'	 		=> api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG)
 				);
 		$attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
@@ -141,6 +153,7 @@ if (!empty($attempts)) {
 			$row['attempt_link'] = $attempt_link;			
 		}									
 		$my_attempt_array[] = $row;
+        $i--;
 	}
 	
 	$table = new HTML_Table(array('class' => 'data_table'));
@@ -185,23 +198,27 @@ if (!empty($attempts)) {
 if ($objExercise->selectAttempts()) {
 	if ($is_allowed_to_edit) {
 		//$options.= Display::div(get_lang('ExerciseAttempts').' '.$objExercise->selectAttempts(), array('class'=>'right_option'));
-	} else {		
 	}	
+    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts();
+    
 	if ($counter == $objExercise->selectAttempts()) {
-		$class = 'red_alert';
-	}
-	$options.= Display::div(get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts(), array('class'=>"right_option $class"));
-	
+		$attempt_message = Display::return_message($attempt_message, 'error');
+	} else {
+        $attempt_message = Display::return_message($attempt_message, 'info');
+    }
+	$options.= Display::div($attempt_message, array('class'=>"offset2 span2"));	
 }
+
 if ($time_control) {
 	$html.=  '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
 }
-$html.=  Display::div($options, array('class'=>'exercise_overview_options'));
+
+$html.=  Display::div(Display::div($options, array('class'=>'exercise_overview_options span12')), array('class'=>' row'));
 
 
 $html .= $table_content;
 
-echo Display::div($html, array('class'=>'rounded_div', 'style'=>'width:96%'));
+echo $html;
 
 if ($origin != 'learnpath') {
 	Display::display_footer();

@@ -8,7 +8,7 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find.
-//TODO: DocProps, fckeditor_wiris_openFormulaEditor,fckeditor_wiris_openCAS don't run ok here.
+//TODO: DocProps  don't run ok here.
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
@@ -37,7 +37,7 @@ $config['ToolbarSets']['Maximized'] = array(
     array('Cut','Copy','Paste','PasteText','PasteWord'),
     array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
     array('Link','Unlink','Anchor','Glossary'),
-    array('Image','imgmapPopup','flvPlayer','Flash','YouTube','EmbedMovies','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg'),
+    array('Image','imgmapPopup','flvPlayer','Flash','YouTube','EmbedMovies','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 '/',
     array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
     array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

@@ -1,4 +1,10 @@
-<?php 
+<?php
+/**
+ * Licence: GPL
+ * Please contact CBlue regarding any licences issues.
+ * Author: noel@cblue.be
+ *  Copyright: CBlue SPRL, 20XX
+ **/
 require_once('language.php');
 require_once('../inc/global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -14,7 +20,58 @@ $content['form']->removeElement('phone');
 $content['form']->removeElement('submit');
 $content['form']->removeElement('status');
 $content['form']->removeElement('status');
+/**
+ * Code to change the way QuickForm render html
+ **/
+/*
+$renderer = & $content['form']->defaultRenderer();
+$form_template = <<<EOT
 
+<form {attributes}>
+{content}
+  <div class="clear">
+    &nbsp;
+  </div>
+  <p><a href="#" class="btn" onclick="$('#registration-form').submit()"><span>S'inscrire</span></a></p>
+</form>
+
+EOT;
+$renderer->setFormTemplate($form_template);
+
+$element_template = <<<EOT
+  <div class="field decalle">
+    <label>
+      <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+    </label>
+    <div class="formw">
+      <!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --> {element}
+    </div>
+  </div>
+
+EOT;
+$element_template_wimage = <<<EOT
+  <div class="field decalle display">
+    <label>
+      <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+    </label>
+    <div class="formw">
+      <!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --> {element}
+      <img src="/custompages/images/perso.jpg" alt="" />
+    </div>
+  </div>
+
+EOT;
+$renderer->setElementTemplate($element_template_wimage,'pass1');
+$renderer->setElementTemplate($element_template);
+
+$header_template = <<<EOT
+  <div class="row">
+    <div class="form_header">{header}</div>
+  </div>
+
+EOT;
+
+ */
 ?>
 <html>
 <head>

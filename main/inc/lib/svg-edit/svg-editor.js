@@ -7,10 +7,11 @@
  * Copyright(c) 2010 Pavol Rusnak
  * Copyright(c) 2010 Jeff Schiller
  * Copyright(c) 2010 Narendra Sisodiya
- *
+ * 
  * Integrate  with Chamilo
  * Author Juan Carlos Raña Trabado
  * Since 25/september/2010
+ *
  */
 
 // Dependencies:
@@ -37,7 +38,8 @@
 			// Note: Difference between Prefs and Config is that Prefs can be
 			// changed in the UI and are stored in the browser, config can not
 			
-			// added 'ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'(MathML) extensions  for Chamilo
+			// Chamilo added 'ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'(MathML) extensions
+			
 			curConfig = {
 				canvas_expansion: 3,
 				dimensions: [640,480],
@@ -56,11 +58,11 @@
 				extPath: 'extensions/',
 				jGraduatePath: 'jgraduate/images/',
 				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js', 'ext-shapes.js', 'ext-imagelib.js','ext-grid.js','ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'],
-
 				initTool: 'select',
 				wireframe: false,
 				colorPickerCSS: null,
 				gridSnapping: false,
+				gridColor: "#000",
 				baseUnit: 'px',
 				snappingStep: 10,
 				showRulers: true
@@ -183,7 +185,7 @@
 					svgCanvas.open = opts.open;
 				}
 				if(opts.save) {
-					show_save_warning = false;
+					Editor.show_save_warning = false;
 					svgCanvas.bind("saved", opts.save);
 				}
 				if(opts.pngsave) {
@@ -484,7 +486,7 @@
 			});
 
 			Editor.canvas = svgCanvas = new $.SvgCanvas(document.getElementById("svgcanvas"), curConfig);
-			
+			Editor.show_save_warning = false;
 			var palette = ["#000000", "#3f3f3f", "#7f7f7f", "#bfbfbf", "#ffffff",
 			           "#ff0000", "#ff7f00", "#ffff00", "#7fff00",
 			           "#00ff00", "#00ff7f", "#00ffff", "#007fff",
@@ -506,7 +508,6 @@
 				workarea = $("#workarea"),
 				canv_menu = $("#cmenu_canvas"),
 				layer_menu = $("#cmenu_layers"),
-				show_save_warning = false, 
 				exportWindow = null, 
 				tool_scale = 1,
 				zoomInIcon = 'crosshair',
@@ -604,7 +605,7 @@
 			var orig_title = $('title:first').text();
 			
 			var saveHandler = function(window,svg) {
-				show_save_warning = false;
+				Editor.show_save_warning = false;
 			
 				// by default, we add the XML prolog back, systems integrating SVG-edit (wikis, CMSs) 
 				// can just provide their own custom save handler and might not want the XML prolog
@@ -759,8 +760,8 @@
 					}
 				}
 				
-				show_save_warning = false; //Hack for Chamilo, change true by false
-
+				Editor.show_save_warning = false; //Hack for Chamilo, change true by false
+		
 				// we update the contextual panel with potentially new
 				// positional/sizing information (we DON'T want to update the
 				// toolbar here as that creates an infinite loop)
@@ -2144,6 +2145,7 @@
 			Editor.addDropDown = function(elem, callback, dropUp) {
 				if ($(elem).length == 0) return; // Quit if called on non-existant element
 				var button = $(elem).find('button');
+				
 				var list = $(elem).find('ul').attr('id', $(elem)[0].id + '-list');
 				
 				if(!dropUp) {
@@ -3283,15 +3285,13 @@
 			
 			(function() {
 				workarea.scroll(function() {
-					
 					// TODO:  jQuery's scrollLeft/Top() wouldn't require a null check
- 
- 						if ($('#ruler_x').length != 0) {
- 							$('#ruler_x')[0].scrollLeft = workarea[0].scrollLeft;
- 						}
- 						if ($('#ruler_y').length != 0) {
- 							$('#ruler_y')[0].scrollTop = workarea[0].scrollTop;
- 						}
+					if ($('#ruler_x').length != 0) {
+						$('#ruler_x')[0].scrollLeft = workarea[0].scrollLeft;
+					}
+					if ($('#ruler_y').length != 0) {
+						$('#ruler_y')[0].scrollTop = workarea[0].scrollTop;	
+					}
 				});
 
 			}());
@@ -4139,7 +4139,7 @@
 								});
 								
 								// Put shortcut in title
-								if(opts.sel && !opts.hidekey) {
+								if(opts.sel && !opts.hidekey && btn.attr('title')) {
 									var new_title = btn.attr('title').split('[')[0] + ' (' + keyval + ')';
 									key_assocs[keyval] = opts.sel;
 									// Disregard for menu items
@@ -4240,9 +4240,11 @@
 				}
 				
 				$('#rulers').toggle(!!curConfig.showRulers);
-				if(curConfig.showRulers) {
-				    $('#show_rulers')[0].checked = true;
+				
+				if (curConfig.showRulers) {
+					$('#show_rulers')[0].checked = true;	
 				}
+
 				if(curConfig.gridSnapping) {
 					$('#grid_snapping_on')[0].checked = true;
 				}
@@ -4305,7 +4307,11 @@
 						case 'move_back':
 							moveToBottomSelected();
 							break;
-
+  						default:
+ 							if(svgedit.contextmenu && svgedit.contextmenu.hasCustomHandler(action)){
+ 								svgedit.contextmenu.getCustomHandler(action).call();
+  							}
+  							break;
 					}
 					
 					if(svgCanvas.clipBoard.length) {
@@ -4357,11 +4363,11 @@
 			window.onbeforeunload = function() { 
 				// Suppress warning if page is empty 
 				if(undoMgr.getUndoStackSize() === 0) {
-					show_save_warning = false;
+					Editor.show_save_warning = false;
 				}
 
 				// show_save_warning is set to "false" when the page is saved.
-				if(!curConfig.no_save_warning && show_save_warning) {
+				if(!curConfig.no_save_warning && Editor.show_save_warning) {
 					// Browser already asks question about closing the page
 					return uiStrings.notification.unsavedChanges; 
 				}
@@ -4651,7 +4657,7 @@
 				updateCanvas(true);
 // 			});
 			
-		//	var revnums = "svg-editor.js ($Rev: 2028 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2056 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute("title", revnums);
 		

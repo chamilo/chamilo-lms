@@ -54,13 +54,14 @@ if(!isset($_SESSION['draw_dir'])){
   <script type="text/javascript" src="svgcanvas.js"></script>
   <script type="text/javascript" src="svg-editor.js"></script>
   <script type="text/javascript" src="locale/locale.js"></script>
+  <script type="text/javascript" src="contextmenu.js"></script>
 <!--{endif}-->
 
 <!-- you can load extensions here -->
 <!-- <script type="text/javascript" src="extensions/ext-helloworld.js"></script> -->
 
 <!-- always minified scripts -->
-<script type="text/javascript" src="jquery-ui/jquery-ui-1.8.custom.min.js"></script>
+<script type="text/javascript" src="jquery-ui/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript" src="jgraduate/jpicker.min.js"></script>
 
 <!-- feeds -->

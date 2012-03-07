@@ -1,4 +1,4 @@
-﻿/*
+/*
  * svgcanvas.js
  *
  * Licensed under the Apache License, Version 2
@@ -2516,10 +2516,25 @@ var getMouseTarget = this.getMouseTarget = function(evt) {
 					tlist.appendItem(svgroot.createSVGTransform());
 					
 					if(svgedit.browser.supportsNonScalingStroke()) {
+						//Handle crash for newer Chrome + Windows: https://code.google.com/p/svg-edit/issues/detail?id=904
+						// TODO: Remove this workaround (all isChromeWindows blocks) once vendor fixes the issue
+						var isChromeWindows = svgedit.browser.isChrome() && svgedit.browser.isWindows();
+						if(isChromeWindows) {
+							var delayedStroke = function(ele) {
+								var _stroke = ele.getAttributeNS(null, 'stroke');
+								ele.removeAttributeNS(null, 'stroke');
+								//Re-apply stroke after delay. Anything higher than 1 seems to cause flicker
+								setTimeout(function() { ele.setAttributeNS(null, 'stroke', _stroke) }, 1);
+							}
+						}
 						mouse_target.style.vectorEffect = 'non-scaling-stroke';
-						var all = mouse_target.getElementsByTagName('*'), len = all.length;
-						for(var i = 0; i < all.length; i++) {
+						if(isChromeWindows) delayedStroke(mouse_target);
+
+						var all = mouse_target.getElementsByTagName('*'),
+						    len = all.length;
+						for(var i = 0; i < len; i++) {
 							all[i].style.vectorEffect = 'non-scaling-stroke';
+							if(isChromeWindows) delayedStroke(all[i]);
 						}
 					}
 				}
@@ -5239,6 +5254,13 @@ this.svgToString = function(elem, indent) {
 						out.push(toXml(str) + "");
 					}
 					break;
+				case 4: // cdata node
+					out.push("\n");
+					out.push(new Array(indent+1).join(" "));
+					out.push("<![CDATA[");
+					out.push(child.nodeValue);
+					out.push("]]>");
+					break;
 				case 8: // comment
 					out.push("\n");
 					out.push(new Array(indent+1).join(" "));
@@ -5719,8 +5741,15 @@ this.setSvgString = function(xmlString) {
 		batchCmd.addSubCommand(new RemoveElementCommand(oldzoom, nextSibling, svgroot));
 	
 		// set new svg document
-		svgcontent = svgroot.appendChild(svgdoc.importNode(newDoc.documentElement, true));
+		// If DOM3 adoptNode() available, use it. Otherwise fall back to DOM2 importNode()
+		if(svgdoc.adoptNode) {
+			svgcontent = svgdoc.adoptNode(newDoc.documentElement);
+		}
+		else {
+			svgcontent = svgdoc.importNode(newDoc.documentElement, true);
+		}
 		
+		svgroot.appendChild(svgcontent);
 		var content = $(svgcontent);
 		
 		canvas.current_drawing_ = new svgedit.draw.Drawing(svgcontent, idprefix);
@@ -5907,7 +5936,14 @@ this.importSvgString = function(xmlString) {
 			this.prepareSvg(newDoc);
 	
 			// import new svg document into our document
-			var svg = svgdoc.importNode(newDoc.documentElement, true);
+			var svg;
+			// If DOM3 adoptNode() available, use it. Otherwise fall back to DOM2 importNode()
+			if(svgdoc.adoptNode) {
+				svg = svgdoc.adoptNode(newDoc.documentElement);
+			}
+			else {
+				svg = svgdoc.importNode(newDoc.documentElement, true);
+			}
 			
 			uniquifyElems(svg);
 			
@@ -6423,7 +6459,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return "svgcanvas.js ($Rev: 2028 $)";
+	return "svgcanvas.js ($Rev: 2059 $)";
 };
 
 // Function: setUiStrings
@@ -8601,7 +8637,7 @@ this.updateCanvas = function(w, h) {
 		x: x,
 		y: y
 	});
-	
+
 	var bg_img = getElem('background_image');
 	if (bg_img) {
 		assignAttributes(bg_img, {
@@ -8609,7 +8645,7 @@ this.updateCanvas = function(w, h) {
 			'height': '100%'
 		});
 	}
-
+	
 	selectorManager.selectorParentGroup.setAttribute("transform","translate(" + x + "," + y + ")");
 	
 	return {x:x, y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y};

@@ -125,6 +125,7 @@ function extldap_authenticate($username, $password)
   }
   else {
     error_log('EXTLDAP : Wrong password for '.$user['dn']);
+    return false;
   }
 }
 

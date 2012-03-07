@@ -105,6 +105,11 @@ $form->applyFilter('official_code', 'trim');
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
+if (api_get_setting('login_is_email') == 'true') { 
+  $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+  $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
+}
+
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 // Picture
@@ -113,11 +118,13 @@ $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 // Username
-$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
-$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-$form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+if (api_get_setting('login_is_email') != 'true') { 
+  $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+  $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+  $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+  $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+  $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+}
 // Password
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
@@ -349,6 +356,10 @@ if( $form->validate()) {
 			$expiration_date = '0000-00-00 00:00:00';
 		}
 		$active = intval($user['active']);
+    
+    if(api_get_setting('login_is_email') == 'true') {
+      $username = $email;
+    }
 
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
 

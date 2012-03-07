@@ -861,6 +861,7 @@ VALUES
 ('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
 ('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
 ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsemailComment', NULL, NULL, 0),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16427','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1190,7 +1191,9 @@ VALUES
 ('languagePriority4','user_selected_lang','UserSelectedLanguage'),
 ('languagePriority4','course_lang','CourseLanguage'),
 ('allow_global_chat', 'true', 'Yes'),
-('allow_global_chat', 'false', 'No');
+('allow_global_chat', 'false', 'No'),
+('login_is_email','true','Yes'),
+('login_is_email','false','No');
 
 UNLOCK TABLES;
 /*

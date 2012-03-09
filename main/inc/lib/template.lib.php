@@ -77,10 +77,8 @@ class Template extends Smarty {
         $plugin_blocks = $this->plugin->get_plugin_blocks();
         foreach ($plugin_blocks as $block) {
             $this->set_plugin_block($block);
-        }
-        
-        $this->load_plugin_template();       
-       
+        }        
+        $this->load_plugin_template();      
 	}
     
     function set_help($help_input = null) {        

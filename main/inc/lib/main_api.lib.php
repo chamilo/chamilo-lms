@@ -1137,7 +1137,6 @@ function api_get_cidreq() {
  */
 function api_get_course_info($course_code = null) {
     if (!empty($course_code)) {
-        //global $_course;var_dump($_course);
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table   = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -1912,6 +1911,25 @@ function api_get_setting($variable, $key = null) {
     }
     return $value;
 }
+
+/**
+ * Returns the value of a setting from the web-adjustable admin config settings.
+ **/
+function api_get_settings_params($params) {
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $result = Database::select('*', $table, array('where' => $params));
+    return $result;
+}
+
+/**
+ * Returns the value of a setting from the web-adjustable admin config settings.
+ **/
+function api_delete_settings_params($params) {
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $result = Database::delete($table, $params);
+    return $result;
+}
+
 
 /**
  * Returns an escaped version of $_SERVER['PHP_SELF'] to avoid XSS injection
@@ -4181,6 +4199,7 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
  * @param int       Access URL
  * @return boolean  False on failure, true on success
  */
+
 function api_delete_setting($v, $s = null, $a = 1) {
     if (empty($v)) { return false; }
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -4200,17 +4219,16 @@ function api_delete_setting($v, $s = null, $a = 1) {
 
 /**
  * Deletes all the settings from one category
- * @param string    Category
+ * @param string    Subkey
  * @param int       Access URL
  * @return boolean  False on failure, true on success
  */
-function api_delete_category_settings($c, $a = 1) {
-    if (empty($c)) { return false; }
+function api_delete_category_settings_by_subkey($subkey, $access_url_id = 1) {
+    if (empty($subkey)) { return false; }
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $c = Database::escape_string($c);
-    $a = (int) $a;
-    if (empty($a)) { $a = 1; }
-    $sql = "DELETE FROM $t_cs WHERE category = '$c' AND access_url = $a";
+    $subkey = Database::escape_string($subkey);
+    $access_url_id = intval($access_url_id);
+    $sql = "DELETE FROM $t_cs WHERE subkey = '$subkey' AND access_url = $access_url_id";
     $r = Database::query($sql);
     return $r;
 }

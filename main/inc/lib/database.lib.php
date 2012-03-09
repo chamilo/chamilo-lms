@@ -1141,7 +1141,10 @@ class Database {
     /**
      * Experimental useful database finder
      * @todo lot of stuff to do here
-     * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
+     * @todo known issues, it doesn't work when using LIKE conditions 
+     * @example array('where'=> array('course_code LIKE "?%"'))
+     * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
+     * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
 
     public static function select($columns, $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
@@ -1195,10 +1198,11 @@ class Database {
             }
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
-                case 'where':                                       
-                    foreach ($condition_data as $condition => $value_array) {                        
+                case 'where':            
+                    
+                    foreach ($condition_data as $condition => $value_array) {                       
                         if (is_array($value_array)) {
-                            $clean_values = array();
+                            $clean_values = array();                       
                             foreach($value_array as $item) {
                                 $item = Database::escape_string($item);
                                 $clean_values[]= $item;
@@ -1207,22 +1211,24 @@ class Database {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = $value_array;                            
                         }
-                       
+
                         if (!empty($condition) && $clean_values != '') {                                                                                      
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'","%s", $condition);
                             $condition = str_replace("?","%s", $condition);
-                            
+
                             $condition = str_replace("@%s@","@-@", $condition);
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
-                            
+
                             //Treat conditons as string                            
                             $condition = vsprintf($condition, $clean_values);                                                        
                             $condition = str_replace('@percentage@','%', $condition); //replace "%"                            
                             $where_return .= $condition;
-                        }
+                        }                       
                     }
+                                         
+                        
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
                     }

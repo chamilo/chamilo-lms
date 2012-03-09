@@ -1,5 +1,5 @@
-<?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53 +0000 (lun., 25 sept. 2006) bmol $
-/* For licensing terms, see /chamilo_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file='admin';
@@ -244,6 +244,7 @@ Display::display_header($nameTool);
 - please fill free to improve the global display of the document
 -->
 	<!-- VISIOCONFERENCE -->
+   
 	<div id="main_visio">
 		<div id="extension_header_visio" class="accordion_header">
 			<a href="#"><?php echo get_lang('Visioconf') ?></a>

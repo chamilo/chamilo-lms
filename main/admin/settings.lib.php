@@ -11,20 +11,14 @@
  * @package chamilo.admin
  */
 
-
-
 /**
- * This function allows easy activating and inactivating of plugins
- * @todo: a similar function needs to be written to activate or inactivate additional tools.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * This function allows easy activating and inactivating of regions
+ * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins() {
-    global $SettingsStored;
-    $userplugins = array();
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
+function handle_regions() {
+    
     if (isset($_POST['submit_plugins'])) {
-        store_plugins();
+        store_regions();
         // Add event to the system log.        
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -33,32 +27,22 @@ function handle_plugins() {
     }
     
     $plugin_obj = new AppPlugin();
-    $possible_plugins = $plugin_obj->read_plugins_from_path();    
+    $possible_plugins  = $plugin_obj->read_plugins_from_path();
+    $installed_plugins = $plugin_obj->get_installed_plugins(); 
 
+    if (!empty($installed_plugins)) {
+        $not_installed = array_diff($possible_plugins, $installed_plugins);
+    } else {
+        $not_installed = $possible_plugins;
+    }
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');
     echo '</th><th>';
-    echo get_lang('PluginArea').'';
+    echo get_lang('Blocks');
     echo '</th>';
-    /*
-    echo get_lang('LoginPageMenu').'<br />(loginpage_menu)';
-    echo '</th><th>';
-    echo get_lang('CampusHomepageMainArea').'<br />(campushomepage_main)';
-    echo '</th><th>';
-    echo get_lang('CampusHomepageMenu').'<br />(campushomepage_menu)';
-    echo '</th><th>';
-    echo get_lang('MyCoursesMainArea').'<br />(mycourses_main)';
-    echo '</th><th>';
-    echo get_lang('MyCoursesMenu').'<br />(mycourses_menu)';
-    echo '</th><th>';
-    echo get_lang('Header').'<br />(header)';
-    echo '</th><th>';
-    echo get_lang('Footer').'<br />(footer)';
-    echo '</th><th>';
-    echo get_lang('CourseTool').'';*/
     echo '</th>';
     echo '</tr>';
     
@@ -70,7 +54,7 @@ function handle_plugins() {
         $plugin_list[$plugin_item] = $plugin_item;
     }
 
-    foreach ($possible_plugins as $plugin) {
+    foreach ($installed_plugins as $plugin) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
         
         if (file_exists($plugin_info_file)) {
@@ -78,12 +62,12 @@ function handle_plugins() {
             require $plugin_info_file;
             echo '<tr>';
             echo '<td>';            
-            echo '<h3>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
+            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
             
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt'>readme.txt</a>";
+                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt' class='ajax'>readme.txt</a>";
             }
             echo '</td><td>';                        
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
@@ -97,21 +81,89 @@ function handle_plugins() {
     echo '<br />';
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
     echo '<br />';
+    
 }
 
 
-function display_plugin_cell($location, $plugin_info, $current_plugin, $active_plugins) {
-    echo '<td align="center">';
-    if (in_array($location, $plugin_info['location'])) {
-        if (isset($active_plugins[$location]) && is_array($active_plugins[$location])
-            && in_array($current_plugin, $active_plugins[$location])) {
-            $checked = 'checked';
-        } else {
-            $checked = '';
-        }
-        echo '<input type="checkbox" name="'.$current_plugin.'-'.$location.'" value="true" '.$checked.'/>';
+/**
+ * This function allows easy activating and inactivating of plugins
+ * @todo: a similar function needs to be written to activate or inactivate additional tools.
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
+ */
+function handle_plugins() {
+    $plugin_obj = new AppPlugin();
+    
+     if (isset($_POST['submit_plugins'])) {
+        store_plugins();
+        // Add event to the system log.        
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
-    echo "</td>";
+    
+    $all_plugins = $plugin_obj->read_plugins_from_path(); 
+    $installed_plugins = $plugin_obj->get_installed_plugins(); 
+    $not_installed = array_diff($all_plugins, $installed_plugins);    
+    
+    //Plugins NOT installed
+    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<table class="data_table">';
+    echo '<tr>';
+    echo '<th width="20px">';
+    echo get_lang('Plugin');
+    echo '</th><th>';
+    echo get_lang('InstallPlugin');
+    echo '</th>';    
+
+    echo '</th>';
+    echo '</tr>';
+
+    
+    $plugin_list = array();
+    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    foreach($my_plugin_list as $plugin_item) {
+        $plugin_list[$plugin_item] = $plugin_item;
+    }
+
+    foreach ($all_plugins as $plugin) {
+        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/plugin.php';
+        
+        if (file_exists($plugin_info_file)) {
+            $plugin_info = array();
+            require $plugin_info_file;
+            echo '<tr>';
+            echo '<td>';
+            //Checkbox
+            if (in_array($plugin, $installed_plugins)) {              
+                echo '<input type="checkbox" name="plugin_'.$plugin.'[]" checked="checked">';
+               
+            } else {            
+                echo '<input type="checkbox" name="plugin_'.$plugin.'[]">';
+            }
+            echo '</td><td>';
+            
+            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            echo '<p>'.$plugin_info['comment'].'</p>';
+            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+            
+            echo '<div class="btn-group">';
+            if (in_array($plugin, $installed_plugins)) {     
+                 echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn'));
+            }
+            
+            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
+                 echo Display::url("readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn ajax', '_target' => '_blank'));
+            }
+            echo '</div>';
+            echo '</td></tr>';        
+        }
+    }
+    echo '</table>';
+    echo '<br />';
+    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
+    echo '<br />';
 }
 
 /**
@@ -348,53 +400,60 @@ function upload_stylesheet($values, $picture) {
     return $result;
 }
 
-/**
- * This function allows easy activating and inactivating of plugins
- * @todo: A similar function needs to be written to activate or inactivate additional tools.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function store_plugins() { 
-    global $_configuration;
-
-    $plugin_obj = new AppPlugin();
+function store_regions() {
+     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $installed_plugins = api_get_settings('Plugins','list', $_configuration['access_url']);
+    $installed_plugins = $plugin_obj->get_installed_plugins();
+    
     $shortlist_installed = array();
     foreach ($installed_plugins as $plugin) {
         $shortlist_installed[] = $plugin['subkey'];
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
-
-    $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
-
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
             $areas_to_installed = $_POST['plugin_'.$plugin];
-            foreach ($areas_to_installed as $area) {
-                api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
-                $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/install.php';
-                if (is_file($pluginpath) && is_readable($pluginpath)) {
-                    //execute the install procedure
-                    require $pluginpath;
-                }
+            $plugin_obj->remove_all_regions($plugin);
+            foreach ($areas_to_installed as $region) {
+                $plugin_obj->add_to_region($plugin, $region);
             }
         }
     }
+}
 
-    foreach ($shortlist_installed as $plugin) {
-        // if one plugin was really deleted, execute the uninstall script
-    	if (!in_array($plugin,$shortlist_required)) {
-            // check if there is an uninstall procedure
-            $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/uninstall.php';
-            if (is_file($pluginpath) && is_readable($pluginpath)) {
-                //execute the uninstall procedure
-                require $pluginpath;
-            }
-    	}
+/**
+ * This function allows easy activating and inactivating of plugins
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*/
+function store_plugins() {
+
+    $plugin_obj = new AppPlugin();
+
+    // Get a list of all current 'Plugins' settings
+   
+    $plugin_list = $plugin_obj->read_plugins_from_path();
+    
+    $installed_plugins = array();
+    
+    foreach ($plugin_list as $plugin) {
+        if (isset($_POST['plugin_'.$plugin])) {
+            $plugin_obj->install($plugin);
+            $installed_plugins[] = $plugin;
+        }
     }
+    
+    if (!empty($installed_plugins)) {
+        $remove_plugins = array_diff($plugin_list, $installed_plugins);
+    } else {
+        $remove_plugins = $plugin_list;
+    }    
+    foreach ($remove_plugins as $plugin) {
+        $plugin_obj->uninstall($plugin);
+    }
+  
 }
 
 
@@ -404,8 +463,6 @@ function store_plugins() {
 */
 function store_stylesheets() {
     global $_configuration;
-    // Database table definitions.
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);

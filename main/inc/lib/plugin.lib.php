@@ -50,7 +50,6 @@ class AppPlugin {
         return $possible_plugins;
     }
     
-    
     function get_installed_plugins_by_block(){
         $usedplugins = array();
         /* We retrieve all the active plugins. */    
@@ -63,14 +62,39 @@ class AppPlugin {
     
     function get_installed_plugins() {
         $installed_plugins = array();
-        $result = api_get_settings('Plugins'); 
-        if (!empty($result)) {
-            foreach ($result as $row) {
-                $installed_plugins[$row['selected_value']] = true;
+        $plugin_array = api_get_settings_params(array("variable = ? AND selected_value = ? AND category = ? " =>
+                                                array('status', 'installed', 'Plugins'))); 
+     
+        if (!empty($plugin_array)) {
+            foreach ($plugin_array as $row) {
+                $installed_plugins[$row['subkey']] = true;
             }
             $installed_plugins = array_keys($installed_plugins);
         }
         return $installed_plugins;
+    }
+    
+    function install($plugin_name, $access_url_id) {
+        $access_url_id = api_get_current_access_url_id();
+        api_add_setting('installed', 'status', $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $access_url_id, 1);
+        
+        //api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
+        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/install.php';
+        if (is_file($pluginpath) && is_readable($pluginpath)) {
+            //execute the install procedure
+            require $pluginpath;
+        }    
+    }
+    
+    function uninstall($plugin_name) {
+        $access_url_id = api_get_current_access_url_id();
+        api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? ' =>
+                                   array('Plugins', $access_url_id, $plugin_name)));
+        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/uninstall.php';
+        if (is_file($pluginpath) && is_readable($pluginpath)) {
+            //execute the uninstall procedure
+            require $pluginpath;
+        }
     }
     
     function get_areas_by_plugin($plugin_name) {
@@ -117,16 +141,18 @@ class AppPlugin {
      * @param smarty obj      
      * @todo improve this function
      */
-    function get_all_plugin_contents_by_block($block, $main_template) {
+    function get_all_plugin_contents_by_block($block, $template) {
         global $_plugins;
         if (isset($_plugins[$block]) && is_array($_plugins[$block])) {
             foreach ($_plugins[$block] as $plugin_name) {
                 //Load the plugin information
-                //
+                
                 //The plugin_info variable is available inside the plugin index
+                
                 $plugin_info = $this->get_plugin_info($plugin_name);
+                
                 //We also where the plugin is
-                $plugin_info['current_block'] = $block;    
+                $plugin_info['current_region'] = $block;    
                 
                 // Loading the plugin/XXX/index.php file                
                 require api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
@@ -134,7 +160,7 @@ class AppPlugin {
                 //We set the $template variable in order to use smarty
                 if (isset($_template) && !empty($_template)) {                        
                     foreach($_template as $key =>$value) {
-                        $main_template->assign($key, $value);                          
+                        $template->assign($key, $value);                          
                     }
                 }                
                 
@@ -142,26 +168,33 @@ class AppPlugin {
                 $template_list = array();
                 if (isset($plugin_info) && isset($plugin_info['templates'])) {
                     $template_list = $plugin_info['templates'];
-                }
-                
-                //var_dump($plugin_info);                
+                }           
                
                 if (!empty($template_list)) {
                     foreach($template_list as $plugin_tpl) {
                         if (!empty($plugin_tpl)) {
                             $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";                            
-                            $main_template->display($template_plugin_file);                                                
+                            $template->display($template_plugin_file);                                                
                         }
                     }                
                 }               
             }
         }
-        return false;
+        return true;
     }
     
-    function get_plugin_info($plugin_name) {
+    /**
+     *
+     * Loads plugin info 
+     * @staticvar array $plugin_data
+     * @param type $plugin_name
+     * @param type bool
+     * @todo filter setting_form
+     * @return array 
+     */
+    function get_plugin_info($plugin_name, $forced = false) {
         static $plugin_data = array();
-        if (isset($plugin_data[$plugin_name])) {
+        if (isset($plugin_data[$plugin_name]) && $forced == false) {
             return $plugin_data[$plugin_name]; 
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
@@ -170,10 +203,22 @@ class AppPlugin {
                 require $plugin_file;            
             }
             $plugin_data[$plugin_name] = $plugin_info;
+           
+            //extra options
+            $plugin_settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " =>
+                                            array($plugin_name, 'Plugins','setting')));
+            $settings_filtered = array();
+            foreach ($plugin_settings as $item) {
+                $settings_filtered[$item['variable']] = $item['selected_value'];
+            }
+            $plugin_info['settings'] = $settings_filtered;            
             return $plugin_info;
         }
     }
     
+    /*
+     * Get the template list
+     */
     function get_templates_list($plugin_name) {
         $plugin_info = $this->get_plugin_info($plugin_name);        
         if (isset($plugin_info) && isset($plugin_info['templates'])) {
@@ -181,5 +226,25 @@ class AppPlugin {
         } else {
             return false;
         }
+    }
+    
+    /* *
+     * Remove all regions of an specific plugin
+     */
+    function remove_all_regions($plugin) {
+        $access_url_id = api_get_current_access_url_id();
+        if (!empty($plugin)) {
+            api_delete_settings_params(array('category = ? AND variable = ? AND access_url = ? AND subkey = ? ' =>
+                                array('Plugins', 'region', $access_url_id, $plugin)));
+    
+        }
+    }
+    
+    /* 
+     * Add a plugin to a region
+     */
+    function add_to_region($plugin, $region) {
+        $access_url_id = api_get_current_access_url_id();
+        api_add_setting($plugin, $region, $plugin, 'region', 'Plugins', $plugin, null, null, null, $access_url_id, 1);      
     }
 }

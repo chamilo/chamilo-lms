@@ -17,3 +17,15 @@ $plugin_info['comment']     = "Shows a hello world message";
 $plugin_info['version']     = '1.0';
 //the plugin author
 $plugin_info['author']      = 'Julio Montoya';
+
+
+//More complex options for the plugin (optional)
+
+$form = new FormValidator();
+
+//A simple select
+$options = array('hello_world' => 'Hello World', 'hello' =>'Hello', 'hi' =>'Hi!');
+$form->addElement('select', 'show_type', 'Hello world types', $options);
+$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));  
+
+$plugin_info['settings_form'] = $form;

@@ -126,8 +126,7 @@ if (api_is_platform_admin()) {
     
     /* Platform */    
     $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
-    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
-    
+    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));    
     
     $search_form = ' <form method="get" action="settings.php" class="form-search">
 							<input type="text" name="search_field" value="" >
@@ -139,6 +138,8 @@ if (api_is_platform_admin()) {
     
     $items = array();
     $items[] = array('url'=>'settings.php', 				'label' => get_lang('PlatformConfigSettings'));
+    $items[] = array('url'=>'settings.php?category=Plugins','label' => get_lang('Plugins'));
+    $items[] = array('url'=>'settings.php?category=Regions','label' => get_lang('Regions'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
     $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));

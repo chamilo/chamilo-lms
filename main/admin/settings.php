@@ -386,6 +386,9 @@ if (isset($form) && $form->validate()) {
 
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
+        case 'Regions':
+            handle_regions();
+            break;
         case 'Plugins':
             // Displaying the extensions: Plugins.
             // This will be available to all the sites (access_urls).
@@ -401,7 +404,6 @@ if (!empty($_GET['category'])) {
             }
             handle_plugins();
             DashboardManager::handle_dashboard_plugins();
-
             break;
         case 'stylesheets':
             // Displaying the extensions: Stylesheets.

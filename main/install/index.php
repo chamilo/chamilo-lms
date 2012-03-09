@@ -472,7 +472,7 @@ if ($encryptPassForm == '1') {
 	</div>
 
 <div id="main">
-<form id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <div id="installation_steps" style="width:220px">	
 	<br />
 	<ol>
@@ -857,11 +857,6 @@ if ($_POST['step2']) {
 </div><!-- wrapper end-->
 
 <div id="footer">
-	<div id="bottom_corner"></div>
-	<div class="copyright">
-		<?php echo get_lang('Platform'); ?> <a href="<?php echo $software_url; ?>" target="_blank"><?php echo $software_name; ?> <?php echo $new_version; ?></a> &copy; <?php echo date('Y'); ?>
-	</div>
-	<div class="footer_emails"><div style="clear:both"></div></div>	
 </div>
 </body>
 </html>

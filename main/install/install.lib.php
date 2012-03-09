@@ -1404,14 +1404,16 @@ function display_license_agreement() {
     <table>
 		<tr><td>
             <p style="font-size:90%">
-            <textarea cols="90" rows="7" readonly>
+            <textarea cols="90" rows="7" class="span6">
             	<?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
             </textarea></p>
         </td>
         </tr>
         <tr><td>
-        	<input type="checkbox" name="accept" id="accept_licence" value="1" />
-            <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
+              <label class="checkbox">  
+                <input type="checkbox" name="accept" id="accept_licence" value="1" />
+                <?php echo get_lang('IAccept'); ?>
+              </label>
             </td>
 		</tr>
         <tr><td><p style="color:#666"><br /><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
@@ -1456,25 +1458,24 @@ function display_license_agreement() {
 function get_contact_registration_form() {
 
     $html ='
-   <form>    
+   <form class="form-horizontal">    
    <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
-    <div id="div_sent_information"></div>
-  
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('Name').'</div>
-            <div class="formw"><input id="person_name" type="text" name="person_name" size="30" /></div>
+    <div id="div_sent_information"></div>  
+    <div class="control-group">
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('Name').'</label>
+            <div class="controls"><input id="person_name" type="text" name="person_name" size="30" /></div>
     </div>
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('Email').'</div>
-            <div class="formw"><input id="person_name" type="text" name="person_email" size="30" /></div>
+    <div class="control-group">
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('Email').'</label>
+            <div class="controls"><input id="person_name" type="text" name="person_email" size="30" /></div>
     </div>
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyName').'</div>
-            <div class="formw"><input id="company_name" type="text" name="company_name" size="30" /></div>
+    <div class="control-group">
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>
+            <div class="controls"><input id="company_name" type="text" name="company_name" size="30" /></div>
     </div>
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</div>
-            <div class="formw">
+    <div class="control-group">
+            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</div>
+            <div class="controls">
                     <select name="company_activity" id="company_activity" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
@@ -1496,9 +1497,9 @@ function get_contact_registration_form() {
             </div>
     </div>
 
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
-            <div class="formw">
+    <div class="control-group">
+            <div class="control-label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
+            <div class="controls">
                     <select name="person_role" id="person_role" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
@@ -1516,19 +1517,19 @@ function get_contact_registration_form() {
             </div>
     </div>
     
-    <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
-            <div class="formw">'.get_countries_list_from_array(true).'</div>
+    <div class="control-group">
+            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
+            <div class="controls">'.get_countries_list_from_array(true).'</div>
     </div>
-    <div class="row">
-            <div class="label">'.get_lang('CompanyCity').'</div>
-            <div class="formw">
+    <div class="control-group">
+            <div class="control-label">'.get_lang('CompanyCity').'</div>
+            <div class="controls">
                     <input type="text" id="company_city" name="company_city" size="30" />
             </div>
     </div>
-    <div class="row">
-            <div class="label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
-            <div class="formw">
+    <div class="control-group">
+            <div class="control-label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
+            <div class="controls">
                     <select id="language" name="language">
                             <option value="bulgarian">Bulgarian</option>
                             <option value="indonesian">Bahasa Indonesia</option>
@@ -1547,21 +1548,21 @@ function get_contact_registration_form() {
             </div>
     </div>
     
-    <div class="row">
-            <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
-            <div class="formw">
+    <div class="control-group">
+            <div class="control-label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
+            <div class="controls">
                     <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
                     <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
             </div>
     </div>
     <div class="clear"></div>
-    <div class="row">
-            <div class="label">&nbsp;</div>
-            <div class="formw"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>
+    <div class="control-group">
+            <div class="control-label">&nbsp;</div>
+            <div class="controls"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>
     </div>
-    <div class="row">
-            <div class="label">&nbsp;</div>
-            <div class="formw"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
+    <div class="control-group">
+            <div class="control-label">&nbsp;</div>
+            <div class="controls"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div>    
 </fieldset></form>';
 
@@ -1938,10 +1939,21 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
       <?php } else { ?>
       <td>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
-      </td>
+          <div class="control-group">
+              <label class="checkbox inline">
+                <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
+              </label>
+       
+              <label class="checkbox inline">  
+                <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
+              </label>
+            
+                <label class="checkbox inline">
+                    <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
+                </label>
+           
+          </div>
+          </td>
       <?php } ?>
     </tr>
     <tr>
@@ -1951,8 +1963,14 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg ? get_lang('Yes') : get_lang('No'); ?></td>
       <?php else: ?>
       <td>
-        <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfReg1"><?php echo get_lang('Yes'); ?></label>
-        <input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/> <label for="allowSelfReg0"><?php echo get_lang('No'); ?></label>
+          <div class="control-group">
+            <label class="checkbox inline">
+                <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
+            </label>
+            <label class="checkbox inline">
+                <input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
+            </label>
+          </div>
       </td>
       <?php endif; ?>
 
@@ -1964,10 +1982,16 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <td><input type="hidden" name="allowSelfRegProf" value="<?php echo $allowSelfRegProf; ?>" /><?php echo $allowSelfRegProf? get_lang('Yes') : get_lang('No'); ?></td>
       <?php else: ?>
       <td>
-        <input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
-            <label for="allowSelfRegProf1"><?php echo get_lang('Yes'); ?></label>
-        <input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
-            <label for="allowSelfRegProf0"><?php echo get_lang('No'); ?></label>
+          <div class="control-group">
+            <label class="checkbox inline">
+                <input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
+            <?php echo get_lang('Yes'); ?>
+            </label>
+            <label class="checkbox inline">
+                <input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
+            <?php echo get_lang('No'); ?>
+            </label>
+          </div>
       </td>
       <?php endif; ?>
 

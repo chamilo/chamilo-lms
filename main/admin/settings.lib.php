@@ -62,13 +62,8 @@ function handle_regions() {
             require $plugin_info_file;
             echo '<tr>';
             echo '<td>';            
-            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
-            
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt' class='ajax'>readme.txt</a>";
-            }
+            echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
+            echo '<p>'.$plugin_info['comment'].'</p>';              
             echo '</td><td>';                        
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
             

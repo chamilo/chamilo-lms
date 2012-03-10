@@ -21,7 +21,7 @@ $plugin_info['author']      = 'Julio Montoya';
 
 //More complex options for the plugin (optional)
 
-$form = new FormValidator();
+$form = new FormValidator('hello_world_form');
 
 //A simple select
 $options = array('hello_world' => 'Hello World', 'hello' =>'Hello', 'hi' =>'Hi!');

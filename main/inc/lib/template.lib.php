@@ -9,6 +9,7 @@
 
 // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 
@@ -77,8 +78,7 @@ class Template extends Smarty {
         $plugin_blocks = $this->plugin->get_plugin_blocks();
         foreach ($plugin_blocks as $block) {
             $this->set_plugin_block($block);
-        }        
-        $this->load_plugin_template();      
+        }  
 	}
     
     function set_help($help_input = null) {        
@@ -164,6 +164,8 @@ class Template extends Smarty {
 		$this->show_header = $status;
 		$this->assign('show_header', $status);
         
+        //Tool bar
+        
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
         $show_toolbar = 0;
         
@@ -185,6 +187,19 @@ class Template extends Smarty {
                 break;                               
         }        
         $this->assign('show_toolbar', $show_toolbar);
+        
+        if (api_get_setting('show_toolshortcuts') != 'false') {
+            //Course toolbar
+            $course_tool = CourseHome::show_navigation_tool_shortcuts();
+            $this->assign('show_course_shortcut', $course_tool);
+        }
+        
+        if (api_get_setting('show_navigation_menu') != 'false') {
+            //Course toolbar
+            $course_tool = CourseHome::show_navigation_menu();
+            $this->assign('show_course_navigation_menu', $course_tool);
+        }
+        
 	}
 		
 	function get_template($name) {
@@ -560,10 +575,5 @@ class Template extends Smarty {
             $this->assign('plugin_'.$plugin_block, $block_content);            
         }
         return null;
-    }
-    
-    function load_plugin_template() {
-     
-        
     }
 }

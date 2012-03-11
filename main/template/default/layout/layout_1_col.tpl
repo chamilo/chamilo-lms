@@ -20,7 +20,7 @@
         </section>
         {if !empty($plugin_content_bottom)}   
             <div class="clear"></div>
-            <div id="plugin_content_bottom" class="span12">
+            <div id="plugin_content_bottom">
                 {$plugin_content_bottom}
             </div>
         {/if}

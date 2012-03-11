@@ -13,15 +13,16 @@ $debug = 0;
 
 function compare_data($result_message) {
   foreach ($result_message as $table=>$data) {
+      
         $title = $table;                                
         if ($table == 'TRACK_E_EXERCISES') {
             $title = get_lang('Exercises');
         } elseif ($table == 'TRACK_E_EXERCISES_IN_LP') {
             $title = get_lang('ExercisesInLp');
           } elseif ($table == 'LP_VIEW') {
-            $title = get_lang('LearningPath');
+            $title = get_lang('LearningPaths');
         }                                
-        echo '<br / ><h2>'.get_lang($title).' </h2><hr />';
+        echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
         
         if (is_array($data)) {    
             foreach ($data as $id => $item) {
@@ -44,9 +45,9 @@ function compare_data($result_message) {
                             echo "$key =  $value <br />";
                         }   
                     }
-                } else  {
+                } else  {                    
                     echo "<br /><h3>".get_lang('Id')." #$id</h3>";                                            
-                           //process data
+                    //process data
                     foreach($item as $key=> $value) {
                         echo "$key =  $value <br />";   
                     }
@@ -57,6 +58,7 @@ function compare_data($result_message) {
         }                           
     }
 }
+
 if (isset($_REQUEST['load_ajax'])) {
     //Checking the variable $_SESSION['combination'] that has all the information of the selected course (instead of using a lots of hidden variables ... )
     if (isset($_SESSION['combination']) && !empty($_SESSION['combination'])) {
@@ -65,7 +67,7 @@ if (isset($_REQUEST['load_ajax'])) {
         if (empty($combination_result)) {
         	echo get_lang('ThereWasAnError');
         } else {
-            $origin_course_code     = $combination_result['course_code'];            
+            $origin_course_code     = $combination_result['course_code'];                        
             $origin_session_id      = intval($combination_result['session_id']);            
             $new_session_id         = intval($_REQUEST['session_id']);
             
@@ -78,18 +80,25 @@ if (isset($_REQUEST['load_ajax'])) {
             $user_id                = intval($_REQUEST['user_id']);
      
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
-           
+            
+            $course_founded = false;
+            foreach ($new_course_list as $course_item) {                
+                if ($origin_course_code == $course_item['code']) {
+                    $course_founded = true;
+                }
+            }
+            
+            
             $result_message         = array();            
             $result_message_compare = array();
             
-            $view_stat = false;
             $update_database = true;
             if (isset($_REQUEST['view_stat']) && $_REQUEST['view_stat'] == 1 ) {                
                 $update_database = false;
             }
            
             //Check if the same course exist in the session destination 
-            if (isset($new_course_list[$origin_course_code])) {
+            if ($course_founded) {
               
                 //Check if the user is registered in the session otherwise we will add it                
                 $result = SessionManager::get_users_by_session($new_session_id);
@@ -256,7 +265,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 
                 //CHECk DESTINY
                 if (!$update_database) {
-                         $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
+                        $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
                         $res = Database::query($sql);
                         
                         //Getting the list of LPs in the new session 
@@ -273,10 +282,9 @@ if (isset($_REQUEST['load_ajax'])) {
                         if (!empty($list))
                         foreach ($list as $id=>$data) {                    
                               //Getting all information of that lp_item_id
-                              $score    = Tracking::get_avg_student_score($user_id, $origin_course_code,        array($data['lp_id']),$new_session_id);
-                              $progress = Tracking::get_avg_student_progress($user_id, $origin_course_code,     array($data['lp_id']),  $new_session_id);                         
-                              $result_message_compare['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);                          
-                                  
+                              $score    = Tracking::get_avg_student_score($user_id, $origin_course_code,        array($data['lp_id']), $new_session_id);
+                              $progress = Tracking::get_avg_student_progress($user_id, $origin_course_code,     array($data['lp_id']), $new_session_id);                         
+                              $result_message_compare['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);
                         }
                 }
                 
@@ -289,7 +297,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                      $id = $row['ref'];
                      if ($update_database) {                    
-                        $sql = "UPDATE $TBL_AGENDA SET session_id = '$new_session_id' WHERE id = $id ";
+                        $sql = "UPDATE $TBL_AGENDA SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id ";
                         if ($debug) var_dump($sql); 
                         $res_update = Database::query($sql);
                         if ($debug) var_dump($res_update);    
@@ -464,16 +472,18 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['id'];
                     if ($update_database) {
-                    $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id";
-                    if ($debug) var_dump($sql); 
-                    $res = Database::query($sql);
-                    if ($debug) var_dump($res);
+                        $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id";
+                        if ($debug) var_dump($sql); 
+                            $res = Database::query($sql);
+                        if ($debug) var_dump($res);
                     
-                    $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = '$new_session_id' WHERE file_id = $id";
-                    if ($debug) var_dump($sql); 
-                    $res = Database::query($sql);
-                    if ($debug) var_dump($res); 
-                    $result_message[$TBL_DROPBOX_FILE]++;
+                        $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = '$new_session_id' WHERE file_id = $id";
+                        if ($debug) 
+                            var_dump($sql); 
+                        $res = Database::query($sql);
+                        if ($debug) 
+                            var_dump($res); 
+                        $result_message[$TBL_DROPBOX_FILE]++;
                     }                        
                 }                
                 
@@ -487,8 +497,8 @@ if (isset($_REQUEST['load_ajax'])) {
                     $id = $row['notebook_id'];        
                     if ($update_database) {            
                         $sql = "UPDATE $TBL_NOTEBOOK SET session_id = '$new_session_id' WHERE c_id = $course_id AND notebook_id = $id";                    
-                        if ($debug) var_dump($sql); 
-                            $res = Database::query($sql);
+                        if ($debug) var_dump($sql);     
+                        $res = Database::query($sql);
                         if ($debug) var_dump($res); 
                    }
                 }
@@ -500,8 +510,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             echo 'Table '.$table.' - '.$times.' records updated <br />';
                         }    
                 } else {
-                	   echo '<h1>'.get_lang('UserInformationOfThisCourse').'</h1>';
-                        //var_dump($result_message);                     
+                	    echo '<h2>'.get_lang('UserInformationOfThisCourse').'</h2>';                        
                         	
                         echo '<br />';
                         echo '<table width="100%">';
@@ -509,24 +518,22 @@ if (isset($_REQUEST['load_ajax'])) {
                         echo '<td width="50%" valign="top">';
                         
                         if ($origin_session_id == 0 ) {
-                            echo '<h1>'.get_lang('OriginCourse').'</h1>';
+                            echo '<h4>'.get_lang('OriginCourse').'</h4>';
                         } else {
-                        	echo '<h1>'.get_lang('OriginSession').' #'.$origin_session_id.'</h1>';
+                        	echo '<h4>'.get_lang('OriginSession').' #'.$origin_session_id.'</h4>';
                         }
                         compare_data($result_message);
                         echo '</td>';
                         echo '<td width="50%" valign="top">';
                         if ($new_session_id == 0 ) {
-                            echo '<h1>'.get_lang('DestinyCourse').'</h1>';                                
+                            echo '<h4>'.get_lang('DestinyCourse').'</h4>';                                
                         } else {
-                        	echo '<h1>'.get_lang('DestinySession').' #'.$new_session_id.'</h1>';
+                        	echo '<h4>'.get_lang('DestinySession').' #'.$new_session_id.'</h4>';
                         }                        
                         compare_data($result_message_compare);
                         echo '</td>';
                         echo '</tr>';
-                        echo '</table>';                  
-                 
-                        
+                        echo '</table>';
                 }
             } else {
                 echo get_lang('CourseDoesNotExistInThisSession');            	
@@ -662,12 +669,11 @@ if (!empty($user_list)) {
 
         $course_list  = $course_list_registered;
                
-        echo '<div>';
-        
+        echo '<div>';        
         echo '<table class="data_table">';
             echo '<tr>';    
             echo '<th style="text-align:left;" colspan="'.count($course_list).'">';
-               echo "<h3> $name #$user_id </h3>  ";
+               echo "<h3>$name #$user_id </h3>  ";
             echo '</th>';   
             echo '</tr>';     
         
@@ -708,12 +714,8 @@ if (!empty($user_list)) {
                 //KK(\''.$unique_id.'\', \''.$user_id.'\')
                 //echo '<input type="submit" class="thickbox"  value="'.get_lang('ViewStats').'" alt="user_move_stats.php?height=520&width=500&load_ajax=1&view_stat=1&unique_id='.$unique_id.'&user_id='.$user_id.'" >';
                 //echo '<input type="submit" class="thickbox"  value="'.get_lang('ViewStats').'" alt="user_move_stats.php?height=520&width=500&load_ajax=1&view_stat=1&unique_id='.$unique_id.'&user_id='.$user_id.'" >';
-                echo '<button type="submit" class="save" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';
-                
-                echo '<button type="submit" class="save" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
-                
-                
-                
+                echo '<button type="submit" class="save" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';                
+                echo '<button type="submit" class="save" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';                
                 echo '<div id ="reponse_'.$unique_id.'"></div>';                                 
                 echo '</td>';
             }

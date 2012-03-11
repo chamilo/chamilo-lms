@@ -9,6 +9,8 @@
  * Plugin details (must be present)
  */
 
+/* Plugin config */
+
 //the plugin title
 $plugin_info['title']       = 'Hello world';
 //the comments that go with the plugin
@@ -19,7 +21,12 @@ $plugin_info['version']     = '1.0';
 $plugin_info['author']      = 'Julio Montoya';
 
 
-//More complex options for the plugin (optional)
+/* Plugin optional settings */ 
+
+/* 
+ * This form will be showed in the plugin settings once the plugin was installed 
+ * in the plugin/hello_world/index.php you can have access to the value: $plugin_info['settings']['hello_world_show_type']
+*/
 
 $form = new FormValidator('hello_world_form');
 

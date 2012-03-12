@@ -174,9 +174,6 @@ $gidReset = isset($gidReset) ? $gidReset : '';
 // parameters passed via POST
 $login = isset($_POST["login"]) ? $_POST["login"] : '';
 
-// passed through other means
-//$cidReq -- passed from course folder index.php
-
 /*
 	 MAIN CODE
  */
@@ -184,11 +181,11 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	// uid is in session => login already done, continue with this value
 	$_user['user_id'] = $_SESSION['_user']['user_id'];
-  //Check if we have to reset user data
-  //This param can be used to reload user data if user has been logged by external script
-  if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']){
-    $uidReset=true;
-  }
+    //Check if we have to reset user data
+    //This param can be used to reload user data if user has been logged by external script
+    if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']){
+        $uidReset=true;
+    }
 } else {
 	if (isset($_user['user_id'])) {
 		unset($_user['user_id']);
@@ -199,7 +196,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	//$_SESSION['update_term_and_condition'][1] is current user id, of user in session
 	if (api_get_setting('allow_terms_conditions')=='true') {
 		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
-			$user_id=$_SESSION['update_term_and_condition'][1];    // user id
+			$user_id = $_SESSION['update_term_and_condition'][1];    // user id
 			// update the terms & conditions
 
 			//verify type of terms and conditions
@@ -333,8 +330,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 											ConditionalLogin::check_conditions($uData);
                                             
 											$_user['user_id'] = $uData['user_id'];
-											$_user['status']  = $uData['status'];
-                                            session_regenerate_id();
+											$_user['status']  = $uData['status'];                                            
 											api_session_register('_user');
 											event_login();
 										} else {
@@ -354,16 +350,14 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 									if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
 										ConditionalLogin::check_conditions($uData);
 										$_user['user_id'] = $uData['user_id'];
-										$_user['status']  = $uData['status'];
-										session_regenerate_id();
+										$_user['status']  = $uData['status'];										
 										api_session_register('_user');
 										event_login();
 									} else {
 										//This means a secondary admin wants to login so we check as he's a normal user
 										if (in_array($current_access_url_id, $my_url_list)) {
 											$_user['user_id'] = $uData['user_id'];
-											$_user['status']  = $uData['status'];
-											session_regenerate_id();
+											$_user['status']  = $uData['status'];											
 											api_session_register('_user');
 											event_login();
 										} else {
@@ -377,9 +371,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                             } else {
 								ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
-                                $_user['status']  = $uData['status'];
+                                $_user['status']  = $uData['status'];                                
                                 
-                                session_regenerate_id();                                                           
                                 api_session_register('_user');
                                 event_login();                                
 							}
@@ -539,7 +532,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 								if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 									$_user['user_id'] = $uData['user_id'];
 									$_user['status']  = $uData['status'];
-									session_regenerate_id();
+									
 									api_session_register('_user');
 									event_login();
 								} else {
@@ -691,6 +684,9 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
 /*  COURSE INIT */
 
+
+
+
 if (isset($cidReset) && $cidReset) {
     // Course session data refresh requested or empty data        
 	if ($cidReq) {
@@ -718,8 +714,8 @@ if (isset($cidReset) && $cidReset) {
 			$_course['sysCode']             = $course_data['code']; // use as key in db
 			$_course['path']                = $course_data['directory']; // use as key in path
 			$_course['dbName']              = $course_data['db_name']; // use as key in db list
-			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.8
-			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.8
+			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.9
+			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
 			$_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
 			$_course['language']            = $course_data['course_language'];
 			$_course['extLink']['url' ]     = $course_data['department_url'];
@@ -733,6 +729,7 @@ if (isset($cidReset) && $cidReset) {
 
 			api_session_register('_cid');
 			api_session_register('_course');
+            
 			//@TODO real_cid should be cid, for working with numeric course id
 			api_session_register('_real_cid');
 
@@ -768,7 +765,7 @@ if (isset($cidReset) && $cidReset) {
         api_session_unregister('_cid');
         api_session_unregister('_real_cid');
         api_session_unregister('_course');
-        
+                
         if (!empty($_SESSION)) {
                 foreach($_SESSION as $key=>$session_item) {
                 if (strpos($key,'lp_autolunch_') === false) {
@@ -1147,5 +1144,5 @@ if (isset($_SESSION['request_uri']) && !empty($_SESSION['request_uri'])){
     $req= $_SESSION['request_uri'];
     unset($_SESSION['request_uri']);
     header('Location: '.$req);
-  exit;
+    exit;
 }

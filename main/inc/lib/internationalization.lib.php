@@ -3894,7 +3894,7 @@ function setting_gettext() {
     $locale = 'en_US';
     putenv("LC_ALL=$locale");
     setlocale(LC_ALL, $locale);
-    bindtextdomain($domain, api_get_path(SYS_LANG_PATH)); // /var/www/bnpanel/locale    
+    bindtextdomain($domain, api_get_path(SYS_LANG_PATH));
     bind_textdomain_codeset($domain, 'UTF-8');    
     textdomain($domain);
 }

@@ -95,6 +95,13 @@ if ($region_value == 'en') {
 $tpl->assign('region_value', 	$region_value);
 
 
+     $export_icon = '../img/export.png';
+            $export_icon_low = '../img/export_low_fade.png';
+            $export_icon_high = '../img/export_high_fade.png';
+            
+$tpl->assign('export_ical_confidential_icon', 	Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
+
+
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
     if ($type == 'course') {
         $actions = display_courseadmin_links();

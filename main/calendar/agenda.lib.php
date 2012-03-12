@@ -32,6 +32,10 @@ class Agenda {
 		$this->event_session_color 	= '#000080'; // blue
 		$this->event_personal_color = 'steel blue'; //steel blue
 	}
+    
+    function set_course($course_info) {
+        $this->course = $course_info;	
+    }
 	
 	/**
 	 * 
@@ -342,20 +346,25 @@ class Agenda {
 				$result = Database::query($sql);				
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
+                    $event['description'] = $event['text'];
 				}
 				break;
 			case 'course':
-				$sql = " SELECT * FROM ".$this->tbl_course_agenda." WHERE c_id = ".$this->course['real_id']." AND id = ".$id;
-				$result = Database::query($sql);
-				if (Database::num_rows($result)) {
-					$event = Database::fetch_array($result, 'ASSOC');
-				}
+                if (!empty($this->course['real_id'])) {
+                    $sql = " SELECT * FROM ".$this->tbl_course_agenda." WHERE c_id = ".$this->course['real_id']." AND id = ".$id;
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result)) {
+                        $event = Database::fetch_array($result, 'ASSOC');
+                        $event['description'] = $event['content'];
+                    }
+                }
 				break;
 			case 'admin':
 				$sql = " SELECT * FROM ".$this->tbl_global_agenda." WHERE id=".$id;
 				$result = Database::query($sql);
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
+                    $event['description'] = $event['content'];
 				}
 			break;
 		}
@@ -527,6 +536,8 @@ class Agenda {
 				$event['title'] 		= $row['title'];
 				$event['className'] 	= 'course';
 				$event['allDay'] 	  	= 'false';
+                
+                $event['course_id'] 	= $course_id;
 				
 				$event['borderColor'] 	= $event['backgroundColor'] = $this->event_course_color;
 				if (isset($row['session_id']) && !empty($row['session_id'])) {

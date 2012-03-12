@@ -103,6 +103,11 @@
     border-collapse: separate !important;
 }
 
+/* Fixes the input size in the jqgrid pagination */
+.ui-jqgrid .ui-pg-input {
+    width:30px;
+}
+
 
 /*  cupertino */
 

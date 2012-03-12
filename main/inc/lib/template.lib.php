@@ -75,7 +75,7 @@ class Template extends Smarty {
         
         //Chamilo plugins
         $this->plugin = new AppPlugin();
-        $plugin_blocks = $this->plugin->get_plugin_blocks();
+        $plugin_blocks = $this->plugin->get_plugin_blocks();        
         foreach ($plugin_blocks as $block) {
             $this->set_plugin_block($block);
         }  
@@ -394,8 +394,7 @@ class Template extends Smarty {
         
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
-            $css_file_to_string .= '<style>
-                
+            $css_file_to_string .= '<style>                
                 .td_actions a {
                     float:left;
                     width:100%;
@@ -570,9 +569,11 @@ class Template extends Smarty {
     /* Sets the plugin content in a Smarty variable */
     function set_plugin_block($plugin_block) {
         if (!empty($plugin_block)) {          
-            $block_content = $this->plugin->load_block($plugin_block, $this);   
-            //Assigning the plugin with the smarty template
-            $this->assign('plugin_'.$plugin_block, $block_content);            
+            $block_content = $this->plugin->load_block($plugin_block, $this);    
+            if (!empty($block_content)) {
+                //Assigning the plugin with the smarty template
+                $this->assign('plugin_'.$plugin_block, $block_content);                
+            }
         }
         return null;
     }

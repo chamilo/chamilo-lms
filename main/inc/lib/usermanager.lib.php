@@ -2807,7 +2807,7 @@ class UserManager {
 	 *
 	 */
 	public static function get_search_form($query) {
-		return '<div class="span9"><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
+		return '<div><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
 		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
 				<input type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>

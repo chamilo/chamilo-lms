@@ -459,26 +459,28 @@ function show_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
     	
-        $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : ''); 
+        $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $navigation_item['title'] = get_lang('CourseHomepageLink');
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).get_lang('CourseHomepageLink');
                 break;
             case 'course_code':
-                $navigation_item['title'] = $_course['official_code'];
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = $_course['name'].$my_session_name;
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).$_course['name'].$my_session_name;
                 break;
             default:
                 if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) { 
-                    $navigation_item['title'] = $_course['name'].$my_session_name;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).$_course['name'].$my_session_name;
                 } else {
-                    $navigation_item['title'] = $_course['name'];
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).$_course['name'];
                 }
                 break;
         }
         /*
+
          * @todo could be useful adding the My courses in the breadcrumb
         $navigation_item_my_courses['title'] = get_lang('MyCourses');
         $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';        
@@ -553,17 +555,18 @@ function show_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     }
     
     $html = '';
+
     if (!empty($final_navigation)) {        
         $lis = '';
         $i = 0;
-        $home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
+        //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
        
-        //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));        
+        //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));      
         $final_navigation_count = count($final_navigation);
         
         if (!empty($final_navigation)) {
             
-            $home_link.= '<span class="divider">/</span>';
+           // $home_link.= '<span class="divider">/</span>';
             
             $lis.= Display::tag('li', $home_link);
             foreach ($final_navigation as $bread) {  

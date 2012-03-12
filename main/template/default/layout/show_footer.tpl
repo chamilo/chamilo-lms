@@ -7,9 +7,8 @@
 {/if}
 {* Content bottom *}
 
-{if !empty($plugin_content_bottom)}   
-    <div class="clear"></div>
-    <div id="plugin_content_bottom">
+{if !empty($plugin_content_bottom)}       
+    <div id="plugin_content_bottom" class="span12">
         {$plugin_content_bottom}
     </div>
 {/if}

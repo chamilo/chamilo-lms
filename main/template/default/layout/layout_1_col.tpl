@@ -7,17 +7,25 @@
 {/block}
 {* 1 column *}
 {block name=body}
-    <div class="span12">        
-        {include file="default/layout/page_body.tpl"}
-        {* Content bottom *}
+    {* Content top *}
 
-        {if !empty($plugin_content_bottom)}   
-            <div class="clear"></div>
-            <div id="plugin_content_bottom">
-                {$plugin_content_bottom}
-            </div>
-        {/if}
-    </div>    
+    {if !empty($plugin_content_top)}         
+        <div id="plugin_content_top" class="span12">
+            {$plugin_content_top}
+        </div>
+    {/if}
+    
+    <div class="span12">        
+        {include file="default/layout/page_body.tpl"}        
+    </div>
+    
+    {* Content bottom *}
+
+    {if !empty($plugin_content_bottom)}               
+        <div id="plugin_content_bottom" class="span12">
+            {$plugin_content_bottom}
+        </div>
+    {/if}
 {/block}
 
 {* Footer *}

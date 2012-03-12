@@ -13,8 +13,16 @@
 	{if $show_sniff == 1 }
 	 	{include file="default/layout/sniff.tpl"}
 	{/if}
-	
+    	
 	<div class="span9">		
+        {* Content bottom *}
+
+        {if !empty($plugin_content_top)}           
+            <div id="plugin_content_top">
+                {$plugin_content_top}
+            </div>
+        {/if}
+        
 		{* ?? *}
         <section id="home_page">
 		{$home_page_block}
@@ -39,8 +47,7 @@
         
         {* Content bottom *}
 
-        {if !empty($plugin_content_bottom)}   
-            <div class="clear"></div>
+        {if !empty($plugin_content_bottom)}               
             <div id="plugin_content_bottom">
                 {$plugin_content_bottom}
             </div>

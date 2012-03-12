@@ -41,7 +41,14 @@ $(document).ready(function() {
 		width	: 550, 
 		height	: 450,
         zIndex: 20000 // added because of qtip2
-
+   	});
+    
+    $("#simple-dialog-form").dialog({
+		autoOpen: false,
+		modal	: false, 
+		width	: 550, 
+		height	: 450,
+        zIndex: 20000 // added because of qtip2
    	});
 
 	var title = $( "#title" ),
@@ -89,6 +96,15 @@ $(document).ready(function() {
 			center: 'title',
 			right: 'month,agendaWeek,agendaDay',	
 		},	
+        {if $use_google_calendar == 1 }
+            eventSources: [
+                '{$google_calendar_url}',  //if you want to add more just add URL in this array
+                {
+                    className: 'gcal-event',           // an option!                    
+                }
+            ],
+        {/if}
+        
 		buttonText: 	{$button_text}, 
 		monthNames: 	{$month_names},
 		monthNamesShort:{$month_names_short},
@@ -205,14 +221,19 @@ $(document).ready(function() {
 	        
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
+             
+            var start_date 	= Math.round(calEvent.start.getTime() / 1000);
+            if (calEvent.allDay == 1) {				
+                var end_date 	= '';				
+            } else {			
+                var end_date 	= '';	
+                if (calEvent.end && calEvent.end != '') {
+                    var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
+                }
+            }
+
 			//edit event
-			if (calEvent.editable) {									
-				var start_date 	= Math.round(calEvent.start.getTime() / 1000);
-				if (calEvent.allDay == 1) {				
-					var end_date 	= '';				
-				} else {			
-					var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
-				}
+			if (calEvent.editable) {	       
 				
 				$('#visible_to_input').hide();                
                 $('#add_as_announcement_div').hide();
@@ -222,23 +243,22 @@ $(document).ready(function() {
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{/if}
                     
-				$('#color_calendar').html('{$type_label}');
-				$('#color_calendar').addClass('label_tag');
-								
-				$('#color_calendar').removeClass('course_event');
-				$('#color_calendar').removeClass('personal_event');
-				$('#color_calendar').removeClass('group_event');
-				
-				$('#color_calendar').addClass(calEvent.type+'_event');
-				
-				$('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
-				
-				if (end_date != '') {
-					$('#end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
-				}			
-	
-				$("#title").attr('value', calEvent.title);
-				$("#content").attr('value', calEvent.description);
+                $('#color_calendar').html('{$type_label}');            
+                $('#color_calendar').addClass('label_tag');								
+                $('#color_calendar').removeClass('course_event');
+                $('#color_calendar').removeClass('personal_event');
+                $('#color_calendar').removeClass('group_event');				
+                $('#color_calendar').addClass(calEvent.type+'_event');	
+                
+                $('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
+
+                if (end_date != '') {
+                    $('#end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
+                }
+
+                $("#title").attr('value', calEvent.title);
+                $("#content").attr('value', calEvent.description);			
+                
 				allFields.removeClass( "ui-state-error" );
 				
 				$("#dialog-form").dialog("open");
@@ -246,7 +266,7 @@ $(document).ready(function() {
 				var url = '{$web_agenda_ajax_url}&a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
 				var delete_url = '{$web_agenda_ajax_url}&a=delete_event&id='+calEvent.id;
 				
-				$("#dialog-form").dialog({				
+				$("#dialog-form").dialog({
 					buttons: {
 						{"Edit"|get_lang} : function() {
 							
@@ -292,7 +312,64 @@ $(document).ready(function() {
 						$("#content").attr('value', '');				
 					}
 				});
-			}
+			} else { //simple form    
+            
+                $('#simple_start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
+
+                if (end_date != '') {
+                    $('#simple_start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
+                    $('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
+                }
+                
+                $("#simple_title").html(calEvent.title);
+                $("#simple_content").html(calEvent.description);	                
+                $("#simple-dialog-form").dialog("open");
+                
+                
+                $("#simple-dialog-form").dialog({
+					buttons: {
+						{"Export"|get_lang} : function() {
+							
+						
+							var params = $("#add_event_form").serialize();						
+							$.ajax({
+								url: url+'&'+params,
+								success:function() {
+									calEvent.title 			= $("#title").val();
+									calEvent.start 			= calEvent.start;
+									calEvent.end 			= calEvent.end;									
+									calEvent.allDay         = calEvent.allDay;
+									calEvent.description 	= $("#content").val();
+																	
+									calendar.fullCalendar('updateEvent', 
+											calEvent,
+											true // make the event "stick"
+									);
+									
+									$("#dialog-form").dialog("close");										
+								}							
+							});
+						},
+						{"Export"|get_lang}: function() { 
+							$.ajax({
+								url: delete_url,
+								success:function() {
+									calendar.fullCalendar('removeEvents',										
+										calEvent										
+									);								
+									calendar.fullCalendar("refetchEvents");
+									calendar.fullCalendar("rerenderEvents");
+									$("#dialog-form").dialog( "close" );		
+								}
+							});
+						}
+					},				
+					close: function() {		
+							
+					}
+				});
+                
+            }
 		},
 		editable: true,		
 		events: "{$web_agenda_ajax_url}&a=get_events",
@@ -314,71 +391,82 @@ $(document).ready(function() {
 });
 </script>
 
+<div id="simple-dialog-form" style="display:none;">
+    <div style="width:500px">
+        <form name="form-simple" class="form-vertical" >        
+            <div class="control-group">
+                <label class="control-label"><b>{"Date"|get_lang}</b></label>			
+                <div class="controls">
+                    <span id="simple_start_date"></span><span id="simple_end_date"></span>                
+                </div>					
+            </div>
+            <div class="control-group">			
+                <label class="control-label"><b>{"Title"|get_lang}</b></label>
+                <div class="controls">				
+                    <div id="simple_title"></div>
+                </div>
+            </div>
+
+            <div class="control-group">			
+                <label class="control-label"><b>{"Description"|get_lang}</b></label>			
+                <div class="controls">
+                    <div id="simple_content"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
-	<form id="add_event_form" name="form">
+	<form class="form-horizontal" id="add_event_form" name="form">
 	      
 	    {if !empty($visible_to) } 
-    	    <div id="visible_to_input" class="row">      
-                <div class="label">
-                    <label for="date">{"To"|get_lang}</label>
-                </div>
-                <div class="formw">
+    	    <div id="visible_to_input" class="control-group">                      
+                <label class="control-label" for="date">{"To"|get_lang}</label>                
+                <div class="controls">
                     {$visible_to}                    
                 </div>                  
             </div>
         {/if}
         
-         <div id="visible_to_read_only" class="row" style="display:none">      
-                <div class="label">
-                    <label for="date">{"To"|get_lang}</label>
-                </div>
-                <div class="formw">
+         <div id="visible_to_read_only" class="control-group" style="display:none">                      
+                <label class="control-label" for="date">{"To"|get_lang}</label>                
+                <div class="controls">
                     <div id="visible_to_read_only_users"></div>                  
                 </div>                  
          </div>        	
-		<div class="row">		
-			<div class="label">
-				<label for="date">{"Agenda"|get_lang}</label>
-			</div>
-			<div class="formw">
+		<div class="control-group">					
+            <label class="control-label" for="date">{"Agenda"|get_lang}</label>			
+			<div class="controls">
 				<div id="color_calendar"></div>
 			</div>					
 		</div>
-		<div class="row">		
-			<div class="label">
-				<label for="date">{"Date"|get_lang}</label>
-			</div>
-			<div class="formw">
-				<span id="start_date"></span><span id="end_date"></span>
-                <!-- <input type="text" id="start_date_input" class="datetime"/>
-                <input type="text" id="end_date_input" class="datetime"/> -->
+		<div class="control-group">					
+			<label class="control-label" for="date">{"Date"|get_lang}</label>			
+			<div class="controls">
+				<span id="start_date"></span><span id="end_date"></span>                
 			</div>					
 		</div>
-		<div class="row">
-			<div class="label">
-				<label for="name">{"Title"|get_lang}</label>
-			</div>		
-			<div class="formw">
+		<div class="control-group">			
+			<label class="control-label" for="name">{"Title"|get_lang}</label>			
+			<div class="controls">
 				<input type="text" name="title" id="title" size="40" />				
 			</div>
 		</div>
 				
-		<div class="row">
-			<div class="label">
-				<label for="name">{"Description"|get_lang}</label>
-			</div>		
-			<div class="formw">
+		<div class="control-group">			
+			<label class="control-label" for="name">{"Description"|get_lang}</label>			
+			<div class="controls">
 				<textarea name="content" id="content" cols="40" rows="7"></textarea>
 			</div>
 		</div>	
 		
 		{if $type == 'course'}
 		<div id="add_as_announcement_div">
-    		 <div class="row">
-                <div class="label">                    
-                </div>
-                <div class="formw">
+    		 <div class="control-group">
+                <label class="control-label" for="name"></label>
+                <div class="controls">
                     <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
                     <label for="add_as_annonuncement">{"AddAsAnnouncement"|get_lang}</label>
                 </div>

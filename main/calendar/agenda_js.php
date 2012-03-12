@@ -20,6 +20,7 @@ require_once 'agenda.inc.php';
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'));
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
+$htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
@@ -31,6 +32,11 @@ if (api_is_platform_admin() && $type == 'admin') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
 	$type = 'course';
 }
+
+$tpl	= new Template(get_lang('Agenda'));
+
+$tpl->assign('use_google_calendar', 0);
+
 switch($type) {
 	case 'admin':		
 		$this_section = SECTION_PLATFORM_ADMIN;
@@ -42,11 +48,15 @@ switch($type) {
         if (api_is_anonymous()) {
             api_not_allowed();
         }
+        $extra_field_data = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'google_calendar_url');
+        if (!empty($extra_field_data) && isset($extra_field_data['google_calendar_url']) && !empty($extra_field_data['google_calendar_url'])) {            
+            $tpl->assign('use_google_calendar', 1);
+            $tpl->assign('google_calendar_url', $extra_field_data['google_calendar_url']);
+        }
 		$this_section = SECTION_MYAGENDA;
 		break;
 }
 
-$tpl	= new Template(get_lang('Agenda'));
 $can_add_events = 0;
 if (api_is_platform_admin() && $type == 'admin') {
 	$can_add_events = 1;
@@ -89,7 +99,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
     if ($type == 'course') {
         $actions = display_courseadmin_links();
     }
-
 	$tpl->assign('actions', $actions);
 }
 
@@ -107,7 +116,6 @@ $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
 $course_code  = api_get_course_id();
-
 
 if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
     $order = 'lastname';

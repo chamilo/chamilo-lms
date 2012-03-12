@@ -136,6 +136,8 @@ CREATE TABLE chat (id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, from_user INTEGE
 ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
 ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'google_calendar_url','Google Calendar URL',0,0);
+
 -- Course ranking
 
 CREATE TABLE track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);

@@ -240,7 +240,7 @@ class Agenda {
 				break;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Get agenda events
@@ -262,7 +262,7 @@ class Agenda {
 				$this->get_course_events($start, $end, $course_info, $group_id);
 				break;
 			case 'personal':
-			default:
+			default:                
                 //Getting personal events
 				$this->get_personal_events($start, $end);
                 
@@ -509,8 +509,7 @@ class Agenda {
                     continue;
                 }
                 
-                $events_added[]         = $row['id'];
-                
+                $events_added[]         = $row['id'];                
                 
                 $attachment = get_attachment($row['id'], $course_id);
                 
@@ -542,7 +541,7 @@ class Agenda {
 				
 				if (api_is_allowed_to_edit() && $this->type == 'course') {
 					$event['editable'] 		= true;
-				}	
+				}
 	
 				if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
 					$event['start'] = $this->format_event_date($row['start_date']);

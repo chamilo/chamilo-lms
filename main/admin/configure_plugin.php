@@ -39,7 +39,7 @@ if (isset($plugin_info['settings_form'])) {
     }
 }
 
-if ($form->validate()) {
+if (isset($form) && $form->validate()) {
     $values = $form->exportValues();
     //api_delete_category_settings_by_subkey($plugin_name);
     $access_url_id = api_get_current_access_url_id();
@@ -49,6 +49,8 @@ if ($form->validate()) {
         $key = Database::escape_string($plugin_name.'_'.$key);
         api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);        
     }
+} else {
+    $content = Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning');
 }
 
 $tpl = new Template($tool_name);

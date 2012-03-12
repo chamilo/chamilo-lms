@@ -114,12 +114,12 @@ function display_form() {
 	$html .= '</tr></table>';
 	
 	$html .= '<h3>'.get_lang('TypeOfCopy').'</h3>';
-    $html .= '<input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $html .= '<label for="copy_option_1"> '.get_lang('FullCopy').'</label><br/>';
-    $html .= '<input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa"> '.get_lang('LetMeSelectItems').'</span></label><br/>';
+    $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
+    $html .= get_lang('FullCopy').'</label><br/>';
+    $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
+    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';
     
-    $html .= '<input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" /><label for="copy_base_content_id">'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
+    $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
 	
 	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button>';
     $html .= '</form>';

@@ -294,7 +294,7 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 			    
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-				$dirs = explode('/', dirname($document->path));
+				//$dirs = explode('/', dirname($document->path));
 				      
                 if (empty($document->item_properties[0]['id_session'])) {
                     $my_session_id = 0;
@@ -326,10 +326,7 @@ class CourseRestorer
                         
                     if (!is_dir($path.dirname($document->path))) {
                         continue;
-                        //echo '! is dir'; var_dump($path.dirname($document->path));
-                        $visibility = $document->item_properties[0]['visibility'];
-                        //$new        = $path.dirname($document->path);                        
-                        //$new        = substr($new, 8);                  
+                        $visibility = $document->item_properties[0]['visibility'];                    
                         $new        = substr($document->path, 8);            
                         if (!empty($document->title))  {
                             $title      = $document->title;
@@ -433,12 +430,12 @@ class CourseRestorer
 
 										$dest_document_path = $new_base_path.'/'.$document_path[2];		// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
 										$basedir_dest_path 	= dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
-										$dest_filename 		= basename($dest_document_path);  				// e.g: "collaborative.png"
+										//$dest_filename 		= basename($dest_document_path);  				// e.g: "collaborative.png"
 										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
 										
 										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
-										copy_folder_course_session($basedir_dest_path, $base_path_document, $session_id, $course_info, $document);
+										copy_folder_course_session($basedir_dest_path, $base_path_document, $session_id, $course_info, $document, $this->course_origin_id);
 							
                                         if (file_exists($course_path.$document->path)) {
                                             copy($course_path.$document->path, $dest_document_path);
@@ -450,7 +447,7 @@ class CourseRestorer
                                             if (in_array($file_info['extension'], array('html','htm'))) {
                                                 $content    = file_get_contents($dest_document_path);                                    
                                                 if (UTF8_CONVERT) $content = utf8_encode($content);
-                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
+                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content, $this->course->code, $this->course->destination_path);                                   
                                                 $result     = file_put_contents($dest_document_path,$content);                                   
                                             }
                                         }                                        

@@ -2783,10 +2783,10 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     }
     
     $course_id	 = $_course['real_id'];
-    $filter = "c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
+    $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
-        $filter = "c_id = $course_id  AND tool='$tool' AND visibility<>'2' $condition_session"; // For all (not deleted) items of the tool
+        $filter = " c_id = $course_id  AND tool='$tool' AND visibility<>'2' $condition_session"; // For all (not deleted) items of the tool
     }
     // Check whether $to_user_id and $to_group_id are passed in the function call.
     // If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
@@ -3629,9 +3629,11 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
-function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document) {
+function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document, $source_course_id) {
     $table = Database :: get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
+    $source_course_id = intval($source_course_id);
+    
     // Check whether directory already exists.
     if (is_dir($pathname) || empty($pathname)) {
         return true;
@@ -3657,7 +3659,7 @@ function copy_folder_course_session($pathname, $base_path_document, $session_id,
         if (!file_exists($new_pathname)) {
             $path = Database::escape_string($path);
 
-            $sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
+            $sql = "SELECT * FROM $table WHERE c_id = $source_course_id AND path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
             $rs1  = Database::query($sql);
             $num_rows = Database::num_rows($rs1);
 

@@ -18,21 +18,21 @@ class CourseSelectForm
 	 */
 	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
         global $charset;
-		$resource_titles[RESOURCE_EVENT] 				= get_lang('Events');
+		$resource_titles[RESOURCE_EVENT] 			= get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
 		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
 		$resource_titles[RESOURCE_LINK] 				= get_lang('Links');
 		$resource_titles[RESOURCE_COURSEDESCRIPTION]	= get_lang('CourseDescription');
-		$resource_titles[RESOURCE_FORUM] 				= get_lang('Forums');
+		$resource_titles[RESOURCE_FORUM] 			= get_lang('Forums');
 		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
-		$resource_titles[RESOURCE_LEARNPATH] 			= get_lang('Learnpaths');
-		$resource_titles[RESOURCE_SCORM] 				= 'SCORM';
-		$resource_titles[RESOURCE_TOOL_INTRO] 			= get_lang('ToolIntro');
-		$resource_titles[RESOURCE_SURVEY] 				= get_lang('Survey');
+		$resource_titles[RESOURCE_LEARNPATH] 		= get_lang('Learnpaths');
+		$resource_titles[RESOURCE_SCORM] 			= 'SCORM';
+		$resource_titles[RESOURCE_TOOL_INTRO] 		= get_lang('ToolIntro');
+		$resource_titles[RESOURCE_SURVEY] 			= get_lang('Survey');
 		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
-		$resource_titles[RESOURCE_WIKI]					= get_lang('Wiki');
-		$resource_titles[RESOURCE_THEMATIC]				= get_lang('Thematic');
-		$resource_titles[RESOURCE_ATTENDANCE]			= get_lang('Attendance');
+		$resource_titles[RESOURCE_WIKI]				= get_lang('Wiki');
+		$resource_titles[RESOURCE_THEMATIC]			= get_lang('Thematic');
+		$resource_titles[RESOURCE_ATTENDANCE]		= get_lang('Attendance');
 
 ?>
 		<script type="text/javascript">
@@ -133,11 +133,10 @@ class CourseSelectForm
 						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
 						echo '<br />';
 						foreach ($resources as $id => $resource) {
-							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
-							echo ' <label for="resource['.$type.']['.$id.']">';
+                            echo ' <label class="checkbox">';
+							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';							
 							$resource->show();
-							echo '</label>';
-							echo '<br />';
+							echo '</label>';							
 						}
 						echo '</blockquote>';
 						echo '</div>';

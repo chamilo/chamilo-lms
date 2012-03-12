@@ -2,9 +2,9 @@
  * Common CSS for all themes
  */
 
-@import url('pre_base.css');
+@import url('bootstrap.min.css');
 
-/* some changes to the pre_base */
+/* some changes to the bootstrap.min.css */
 
 pre {
     margin-top:40px;

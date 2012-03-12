@@ -101,8 +101,7 @@
 
                     /* <![CDATA[ */
                     function createCookie(name, value, days) {
-                        if (days)
-                        {
+                        if (days) {
                             var date = new Date();
                             date.setTime(date.getTime()+(days*24*60*60*1000));
                             var expires = "; expires="+date.toGMTString();
@@ -110,8 +109,7 @@
                         else var expires = "";
                         document.cookie = name+"="+value+expires+"; path=/";
                     }
-                    function readCookie(name)
-                    {
+                    function readCookie(name) {
                         var nameEQ = name + "=";
                         var ca = document.cookie.split(';');
                         for (var i = 0; i < ca.length; i++)
@@ -122,14 +120,12 @@
                         }
                         return null;
                     }
-                    function swap_menu()
-                    {
+                    function swap_menu() {
                         toolnavlist_el = document.getElementById('toolnavlist');
                         center_el = document.getElementById('center');
                         swap_menu_link_el = document.getElementById('swap_menu_link');
 
-                        if (toolnavlist_el.style.display == 'none')
-                        {
+                        if (toolnavlist_el.style.display == 'none') {
                             toolnavlist_el.style.display = '';
                             if (center_el)
                             {
@@ -137,9 +133,7 @@
                             }
                             swap_menu_link_el.innerHTML = '<?php echo get_lang('Hide'); ?> &raquo;&raquo;';
                             createCookie('dokeos_menu_state',1,10);
-                        }
-                        else
-                        {
+                        } else {
                             toolnavlist_el.style.display = 'none';
                             if (center_el)
                             {
@@ -154,7 +148,6 @@
                     </script>
                     <div class="span12">
                         {$show_course_navigation_menu}
-                    </div>
-                        
+                    </div>                        
             {/if}            
 {/if}

@@ -14,15 +14,7 @@
 	 	{include file="default/layout/sniff.tpl"}
 	{/if}
 	
-	<div class="span9">	
-		{* Content top*}
-        
-        {if !empty($plugin_content_top)}         
-            <div id="plugin_content_top">
-                {$plugin_content_top}
-            </div>
-        {/if}        
-		
+	<div class="span9">		
 		{* ?? *}
         <section id="home_page">
 		{$home_page_block}
@@ -31,12 +23,7 @@
 		{* ?? *}
 		{$sniff_notification}
 		
-        {include file="default/layout/page_body.tpl"}		
-		
-		{* Main content*}
-        <section id="main_content">
-		{$content}
-        </section>
+        {include file="default/layout/page_body.tpl"}	
 		
 		{* Announcements *}
         <section id="announcements_page">
@@ -48,13 +35,16 @@
 		{include file="default/layout/hot_courses.tpl"}
         {* fix the bug where the login is at the left side*}
         &nbsp;
-        </section>
+        </section>      
         
-        {if !empty($plugin_content_bottom)}            
+        {* Content bottom *}
+
+        {if !empty($plugin_content_bottom)}   
+            <div class="clear"></div>
             <div id="plugin_content_bottom">
                 {$plugin_content_bottom}
             </div>
-        {/if}        
+        {/if}
 	</div>
 		
 	{* Right column *}

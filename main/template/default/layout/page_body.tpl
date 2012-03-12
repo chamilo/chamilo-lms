@@ -1,3 +1,11 @@
+{* Content top *}
+
+{if !empty($plugin_content_top)}         
+    <div id="plugin_content_top">
+        {$plugin_content_top}
+    </div>
+{/if}
+        
 {* Actions *}
 {if (!empty($actions)) }
     <div class="actions">
@@ -16,3 +24,9 @@
 <section id="messages">
 {$message}
 </section>
+
+{* Main content*}
+<section id="main_content">
+{$content}
+</section>
+

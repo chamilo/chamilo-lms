@@ -268,11 +268,23 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({
 					buttons: {
-						{"Edit"|get_lang} : function() {
+                        						'{"ExportiCalConfidential"|get_lang}' : function() {                                            
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";			
+                                window.location.href = url;
+                                
+						},
+						'{"ExportiCalPrivate"|get_lang}': function() { 
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
+                                window.location.href = url;
+						},
+                        '{"ExportiCalPublic"|get_lang}': function() { 
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
+                                window.location.href = url;
+						},                        
+						'{"Edit"|get_lang}' : function() {
 							
 							var bValid = true;
-							bValid = bValid && checkLength( title, "title", 1, 255 );
-							//bValid = bValid && checkLength( content, "content", 1, 255 );
+							bValid = bValid && checkLength( title, "title", 1, 255 );							
 							
 							var params = $("#add_event_form").serialize();						
 							$.ajax({
@@ -293,7 +305,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						{"Delete"|get_lang}: function() { 
+						'{"Delete"|get_lang}': function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {
@@ -325,47 +337,21 @@ $(document).ready(function() {
                 $("#simple_content").html(calEvent.description);	                
                 $("#simple-dialog-form").dialog("open");
                 
-                
                 $("#simple-dialog-form").dialog({
 					buttons: {
-						{"Export"|get_lang} : function() {
-							
-						
-							var params = $("#add_event_form").serialize();						
-							$.ajax({
-								url: url+'&'+params,
-								success:function() {
-									calEvent.title 			= $("#title").val();
-									calEvent.start 			= calEvent.start;
-									calEvent.end 			= calEvent.end;									
-									calEvent.allDay         = calEvent.allDay;
-									calEvent.description 	= $("#content").val();
-																	
-									calendar.fullCalendar('updateEvent', 
-											calEvent,
-											true // make the event "stick"
-									);
-									
-									$("#dialog-form").dialog("close");										
-								}							
-							});
+						'{"ExportiCalConfidential"|get_lang}' : function() {                                            
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";			
+                                window.location.href = url;
+                                
 						},
-						{"Export"|get_lang}: function() { 
-							$.ajax({
-								url: delete_url,
-								success:function() {
-									calendar.fullCalendar('removeEvents',										
-										calEvent										
-									);								
-									calendar.fullCalendar("refetchEvents");
-									calendar.fullCalendar("rerenderEvents");
-									$("#dialog-form").dialog( "close" );		
-								}
-							});
+						'{"ExportiCalPrivate"|get_lang}': function() { 
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
+                                window.location.href = url;
+						},
+                        '{"ExportiCalPublic"|get_lang}': function() { 
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
+                                window.location.href = url;
 						}
-					},				
-					close: function() {		
-							
 					}
 				});
                 

@@ -5,4 +5,12 @@
 {if $show_header}
 </div>
 {/if}
+{* Content bottom *}
+
+{if !empty($plugin_content_bottom)}   
+    <div class="clear"></div>
+    <div id="plugin_content_bottom">
+        {$plugin_content_bottom}
+    </div>
+{/if}
 {include file="default/layout/main_footer.tpl"}

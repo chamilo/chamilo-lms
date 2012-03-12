@@ -3855,6 +3855,50 @@ function api_is_valid_ascii(&$string) {
     return !preg_match('/[^\x00-\x7F]/S', $string);
 }
 
+/**
+ * 
+ * Experimental translation feature for Chamilo
+ * 
+ * Install this in Ubuntu
+ * 
+ * sudo locale-gen es_ES
+ * sudo apt-get install php-gettext
+ * 
+ * Install Spanish locale: $ sudo locale-gen es_ES
+ * Install English locale: $ sudo locale-gen en_US
+ * 
+ * To view the list of locales installed in ubuntu
+ * locale -a
+ * 
+ * In Debian check this file More info: http://algorytmy.pl/doc/php/ref.gettext.php
+ * sudo vim /etc/locale.gen 
+ *  
+ * Translate po files using this GUI 
+ * sudo apt-get install poedit 
+ * 
+ * Some help here:
+ * 
+ * Config getext
+ * http://zez.org/article/articleview/42/3/
+ *  * 
+ * Using getext in ubuntu
+ * http://www.sourcerally.net/regin/49-How-to-get-PHP-and-gettext-working-%28ubuntu,-debian%29
+ * 
+ * Getext tutorial
+ * http://mel.melaxis.com/devblog/2005/08/06/localizing-php-web-sites-using-gettext/
+ *  
+ */
+function setting_gettext() {
+    $domain = 'default';
+    $locale = api_get_language_isocode();
+    $locale = 'en_US';
+    putenv("LC_ALL=$locale");
+    setlocale(LC_ALL, $locale);
+    bindtextdomain($domain, api_get_path(SYS_LANG_PATH)); // /var/www/bnpanel/locale    
+    bind_textdomain_codeset($domain, 'UTF-8');    
+    textdomain($domain);
+}
+
 
 /**
  * Functions for internal use behind this API

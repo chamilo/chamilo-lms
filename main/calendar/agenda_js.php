@@ -39,6 +39,9 @@ switch($type) {
 		$this_section = SECTION_COURSES;
 		break;
 	case 'personal':
+        if (api_is_anonymous()) {
+            api_not_allowed();
+        }
 		$this_section = SECTION_MYAGENDA;
 		break;
 }
@@ -120,7 +123,10 @@ if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
 }
 
 //Loading Agenda template
-$content = $tpl->fetch('default/agenda/month.tpl');
+//$content .= gettext('Hello');
+//$content .= gettext('Admin');
+$content .= $tpl->fetch('default/agenda/month.tpl');
+
 $tpl->assign('content', $content);
 
 //Loading main Chamilo 1 col template

@@ -760,6 +760,7 @@ function create_dir_form($current_dir_id) {
     global $document_id;
     
     $form = new FormValidator('create_dir_form', 'post', '', '', null, false);
+    $form->addElement('hidden', 'create_dir', 1);
     $form->addElement('hidden', 'dir_id', intval($document_id));
     $form->addElement('hidden', 'id', intval($current_dir_id));    
     $form->addElement('header', '', get_lang('CreateDir'));    

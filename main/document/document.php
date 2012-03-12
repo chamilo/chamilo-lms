@@ -725,6 +725,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folde
 //Only teacher and all users into their group and any user into his/her shared folder
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
     // Create directory with $_POST data
+      
     if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         // Needed for directory creation        
         $post_dir_name = $_POST['dirname'];

@@ -1251,17 +1251,22 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
     logit_lms('could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
 
-        if(mode == ''){mode='%';}
-        if(nbr_total == 0){nbr_total=1;}
-        var percentage = (nbr_complete/nbr_total)*100;
-        percentage = Math.round(percentage);
+    if(mode == ''){mode='%';}
+    if(nbr_total == 0){nbr_total=1;}
+    var percentage = (nbr_complete/nbr_total)*100;
+    percentage = Math.round(percentage);
 
     var pr_text  = $("#progress_text");
+    var progress_bar  = $("#progress_bar_value");
+    progress_bar.css('width', percentage);
+    
+    /*
     var pr_full  = $("#progress_img_full");
     var pr_empty = $("#progress_img_empty");
-
     pr_full.attr('width',percentage*1.2);
     pr_empty.attr('width',(100-percentage)*1.2);
+    
+    */
 
         var mytext = '';
         switch(mode){

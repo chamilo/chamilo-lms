@@ -17,7 +17,6 @@ if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
 require_once 'back_compat.inc.php';
 $courseDir   = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
-$display_progress_bar = true;
 
 require_once 'learnpathList.class.php';
 require_once 'learnpath.class.php';
@@ -256,15 +255,24 @@ if (!empty($flat_list)) {
 
         $lp_theme_css = $mystyle;
 
-        if ($display_progress_bar) {
-            if ($is_allowed_to_edit) {            
-                $dsp_progress = '<td>'.learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id()).'</td>';
-            } else {
-                $dsp_progress = '<td><div style="width:125px;">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
-            }
+        
+        $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
+
+          
+          
+          
+        if ($is_allowed_to_edit) {            
+            $dsp_progress = '<td>'.$progress.'</td>';
         } else {
-            $dsp_progress = '<td style="padding-top:1em;"><div style="width:125px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
-        }   
+            //$dsp_progress = '<td><div style="width:125px;">'.learnpath::get_progress_bar('%',$progress)).'</div></td>';
+            $dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
+            /*$dsp_progress = '<td align="center">                                    
+                                <div class="progress progress-striped">                                    
+                                    <div class="bar" style="width: '.$progress.';"></div>                                            
+                                </div>
+                                '.$progress.'                                    
+                            </td>';*/
+        }
         
         
         $dsp_edit = '<td class="td_actions">';

@@ -2077,28 +2077,10 @@ class learnpath {
         }
         $text = $percentage . $text_add;
 
-        // Default progress bar config
-        // times that will be greater or shorter
-        $factor = 1.2;
-        if ($from_lp)
-            $progress_height = '26';
-        else
-            $progress_height = '16';
-        $size = str_replace('%', '', $percentage);
-
-        $output ='<div>' .
-            '<img id="progress_img_limit_left" src="' . $css_path . 'bar_1.gif" width="1px" height="' . $progress_height . '">' .
-            '<img id="progress_img_full" src="' . $css_path . 'bar_1u.gif" width="' . $size * $factor . 'px" height="' . $progress_height . 'px" id="full_portion">' .
-            '<img id="progress_img_limit_middle" src="' . $css_path . 'bar_1m.gif" width="1px" height="' . $progress_height . '">';
-
-        if ($percentage <= 98) {
-            $output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="' . (100 - $size) * $factor . 'px" height="' . $progress_height . 'px" id="empty_portion">';
-        } else {
-            //$output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="0px" height="' . $progress_height . '" id="empty_portion">';
-        }
-
-        $output .= '<img id="progress_bar_img_limit_right" src="' . $css_path . 'bar_1.gif" width="1px" height="' . $progress_height . '"></div>' .
-        '<div class="progresstext" id="progress_text">' . $text . '</div>';
+        $output .= '<div class="progress progress-striped">                                    
+                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>                                            
+                    </div>
+                    <div class="progresstext" id="progress_text">' . $text . '</div>';
 
         return $output;
     }

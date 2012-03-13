@@ -541,12 +541,19 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
         if(nbr_total == 0){nbr_total=1;}
         var percentage = (nbr_complete/nbr_total)*100;
         percentage = Math.round(percentage);
+        
+        var progress_bar  = $("#progress_bar_value");
+        progress_bar.css('width', percentage);
+        
+    /*
         var pr_text  = myframe.document.getElementById('progress_text');
         var pr_full  = myframe.document.getElementById('progress_img_full');
 
         var pr_empty = myframe.document.getElementById('progress_img_empty');
         pr_full.width = percentage;
         pr_empty.width = 100-percentage;
+        */
+        
         var mytext = '';
         switch(mode){
             case 'abs':

@@ -97,19 +97,6 @@ list($connected_new) = Database::fetch_row($result);
 /*disconnected user of chat*/
 disconnect_user_of_chat ();
 require 'header_frame.inc.php';
-
-// Navigation menu
-if (api_get_setting('show_navigation_menu') != 'false') {
-   $course_id = api_get_course_id();
-   if (!empty($course_id) && ($course_id != -1)) {
-   		if (api_get_setting('show_navigation_menu') != 'icons') {
-	    	echo '</div> <!-- end #center -->';
-    		echo '</div> <!-- end #centerwrap -->';
-		}
-      	require_once api_get_path(INCLUDE_PATH).'tool_navigation_menu.inc.php';
-      	show_navigation_menu();
-   }
-}
 ?>
 <form name="formHidden" method="post" action="<?php echo api_get_self().'?cidReq='.$_GET['cidReq']; ?>">
 <input type="hidden" name="chat_size_old" value="<?php echo $chat_size_new; ?>">

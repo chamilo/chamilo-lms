@@ -99,8 +99,7 @@ class TestsSuite extends TestSuite {
     	//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/blog.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/urlmanager.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/stats.lib.inc.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/course_document.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/tool_navigation_menu.inc.test.php');
+        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/course_document.lib.test.php');        
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/display.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/document.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/events.lib.inc.test.php');

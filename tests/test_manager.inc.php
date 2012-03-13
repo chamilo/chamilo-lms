@@ -82,7 +82,6 @@ require_once $libdir.'main_api.lib.php';
 require_once $libdir.'course_document.lib.php';
 require_once $libdir.'banner.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
-require_once $incdir.'tool_navigation_menu.inc.php';
 require_once $incdir.'banner.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();

@@ -64,7 +64,8 @@ class FormValidator extends HTML_QuickForm {
 
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
-    
+        
+        //Form template
         
 		$form_template = <<<EOT
 <form {attributes}>
@@ -73,9 +74,11 @@ class FormValidator extends HTML_QuickForm {
 	<div class="clear"></div>
 </fieldset>
 </form>
-
 EOT;
 		$renderer->setFormTemplate($form_template);
+                
+        //Element template
+        
 		$element_template = <<<EOT
 	
 		<div class="control-group {error_class}">				
@@ -101,10 +104,15 @@ EOT;
 		</div>
 EOT;
 		$renderer->setElementTemplate($element_template);
+        
+        //Set Header template
+        
 		$header_template = <<<EOT
 	<legend>{header}</legend>
 EOT;
 		$renderer->setHeaderTemplate($header_template);
+        
+        //Set required field template
 		HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 		$required_note_template = <<<EOT
 	<div class="control-group">		
@@ -123,7 +131,6 @@ EOT;
 	 * @param array $attributes (optional)		List of attributes for the form-element
 	 */
 	function add_textfield($name, $label, $required = true, $attributes = array()) {
-
 		$this->addElement('text', $name, $label, $attributes);
 		$this->applyFilter($name, 'trim');
 		if ($required) {
@@ -253,8 +260,7 @@ EOT;
 	 */
 	function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false) {
 
-		if (!function_exists('uploadprogress_get_info')) {
-		    
+		if (!function_exists('uploadprogress_get_info')) {		    
 			$this -> add_progress_bar($delay);
 			return;
 		}
@@ -292,7 +298,6 @@ EOT;
 					<img src="'.api_get_path(WEB_IMG_PATH).'real_upload_frame.gif" />
 				</div>
 			</div>
-
 		');
 		}
 

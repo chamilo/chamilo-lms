@@ -238,7 +238,7 @@ if (api_is_platform_admin()) {
 	$blocks['settings']['items'] = $items;
 
 	/* Extensions */
-	
+	/*
 	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
 	
@@ -250,7 +250,7 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
 	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));	
 	$blocks['extensions']['items'] = $items;	
-    
+    */
     
     //Skills
     

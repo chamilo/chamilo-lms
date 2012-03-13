@@ -32,8 +32,8 @@ class DashboardManager {
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
-		$table_cols = array('name', 'version', 'description');
-		echo '<h3>'.get_lang('DashboardPlugins').'</h3>';
+		$table_cols = array('name', 'version', 'description');		
+        echo '<div class="page-header"><h2>'.get_lang('DashboardPlugins').'</h2></div>';
 		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 		echo '<table class="data_table">';
 		echo '<tr>';

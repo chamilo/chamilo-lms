@@ -34,14 +34,14 @@ function handle_regions() {
         $not_installed = array_diff($possible_plugins, $installed_plugins);
     } else {
         $not_installed = $possible_plugins;
-    }
+    }    
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');
     echo '</th><th>';
-    echo get_lang('Blocks');
+    echo get_lang('Regions');
     echo '</th>';
     echo '</th>';
     echo '</tr>';
@@ -79,7 +79,11 @@ function handle_regions() {
     
 }
 
-
+function handle_extensions() {    
+    echo '<div class="page-header"><h2>'.get_lang('ConfigureExtensions').'</h2></div>';
+    echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';    
+    
+}
 /**
  * This function allows easy activating and inactivating of plugins
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
@@ -103,15 +107,14 @@ function handle_plugins() {
     $not_installed = array_diff($all_plugins, $installed_plugins);    
     
     //Plugins NOT installed
+    echo '<div class="page-header"><h2>'.get_lang('Plugins').'</h2></div>';
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="20px">';
     echo get_lang('Plugin');
     echo '</th><th>';
-    echo get_lang('InstallPlugin');
-    echo '</th>';    
-
+    echo get_lang('InstallPlugin');    
     echo '</th>';
     echo '</tr>';
 

@@ -241,6 +241,10 @@ a.tag {
 
 /* User portal */
 
+#settings h4 {
+    margin-bottom:10px;
+}
+
 .course_item {
     padding-bottom: 40px;
 }

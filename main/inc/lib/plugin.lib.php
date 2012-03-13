@@ -234,7 +234,7 @@ class AppPlugin {
     function remove_all_regions($plugin) {
         $access_url_id = api_get_current_access_url_id();
         if (!empty($plugin)) {
-            api_delete_settings_params(array('category = ? AND variable = ? AND access_url = ? AND subkey = ? ' =>
+            api_delete_settings_params(array('category = ? AND type = ? AND access_url = ? AND subkey = ? ' =>
                                 array('Plugins', 'region', $access_url_id, $plugin)));
     
         }

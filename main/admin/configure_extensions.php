@@ -86,14 +86,9 @@ if (isset($_POST['activeExtension'])) {
 					AND subkey="visio_use_rtmpt"';
 			$rs = Database::query($sql);
 
-			if(empty($message))
-			{
+			if(empty($message)) {
 				$message = get_lang('ServiceReconfigured');
 			}
-
-
-
-
 			break;
 
 		case 'ppt2lp' :
@@ -233,8 +228,6 @@ Display::display_header($nameTool);
 
 <div id="content" align="center">
 
-
-
 <!-- INSTRUCTIONS TO ADD AN EXTENSION HERE
 - copy paste a "main_*" div
 - set the names of the subdiv to extension_header_yourextension and extension_content_yourextension
@@ -244,7 +237,7 @@ Display::display_header($nameTool);
 - please fill free to improve the global display of the document
 -->
 	<!-- VISIOCONFERENCE -->
-   
+   <?php /*
 	<div id="main_visio">
 		<div id="extension_header_visio" class="accordion_header">
 			<a href="#"><?php echo get_lang('Visioconf') ?></a>
@@ -299,6 +292,8 @@ Display::display_header($nameTool);
 		</div>
 	</div>
 
+ */ ?>
+    
 	<!-- PPT2LP -->
 	<div id="main_ppt2lp">
 		<div id="extension_header_ppt2lp" class="accordion_header">
@@ -439,7 +434,9 @@ Display::display_header($nameTool);
 		</div>
 	</div>
 	*/
-	?>
+    /*
+	
+    
 	<!-- SEARCH -->
 	<div id="main_search">
 		<div id="extension_header_search" class="accordion_header">
@@ -509,16 +506,9 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-
+     */ ?>
 </div><!-- /content -->
 
 
 <?php
-
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

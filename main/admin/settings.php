@@ -20,6 +20,7 @@ if (isset($_GET['category']) && $_GET['category'] == 'Templates') {
 } else {
     $language_file = array('admin', 'document');
 }
+$language_file[] = 'tracking';
 
 // Resetting the course id.
 $cidReset = true;
@@ -404,6 +405,7 @@ if (!empty($_GET['category'])) {
             }
             handle_plugins();
             DashboardManager::handle_dashboard_plugins();
+            handle_extensions();
             break;
         case 'stylesheets':
             // Displaying the extensions: Stylesheets.

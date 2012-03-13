@@ -1817,16 +1817,20 @@ function api_get_session_image($session_id, $status_id) {
  * @param bool      optional, true to accept content with session=0 as well, false for strict session condition
  * @return string   condition of the session
  */
-function api_get_session_condition($session_id, $and = true, $with_base_content = false) {
+function api_get_session_condition($session_id, $and = true, $with_base_content = false, $session_field = "session_id") {
     $session_id = intval($session_id);
+    
+    if (empty($session_field)) {
+        $session_field = "session_id";
+    }
     //condition to show resources by session
     $condition_session = '';
     $condition_add = $and ? " AND " : " WHERE ";
 
     if ($with_base_content) {
-        $condition_session = $condition_add." (session_id = $session_id OR session_id = 0) ";
+        $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0) ";
     } else {
-        $condition_session = $condition_add." session_id = $session_id ";
+        $condition_session = $condition_add." $session_field = $session_id ";
     }
     return $condition_session;
 }
@@ -2755,8 +2759,9 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
-         $session_id = api_get_session_id();
+        $session_id = api_get_session_id();
     }
+    
 
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);

@@ -88,9 +88,10 @@ class AnnouncementManager  {
 	* @return   bool    False on failure, True on success
 	*/
 	public static function change_visibility_announcement($_course, $id) {
-		$item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id);
+        $session_id = api_get_session_id();
+		$item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id, $session_id);                        
 		if ($item_visibility == '1') {
-			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'invisible', api_get_user_id());
+			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'invisible', api_get_user_id());            
 		} else {
 			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'visible', api_get_user_id());
 		}	

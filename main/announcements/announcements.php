@@ -196,8 +196,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 				api_not_allowed();
 			}
-			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
+			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {                
 				if ($ctok == $_GET['sec_token']) {
+                    
 					AnnouncementManager::change_visibility_announcement($_course, $_GET['id']);
 					$message = get_lang('VisibilityChanged');
 				}
@@ -539,27 +540,26 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 //condition for the session
 $session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id,true,true);
+$condition_session = api_get_session_condition($session_id, true, true);
 
-if(api_is_allowed_to_edit(false,true))  {
+if (api_is_allowed_to_edit(false,true))  {
  	// check teacher status
   	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 
   		if (api_get_group_id() == 0) {
 			$group_condition = "";
 		} else {
-			$group_condition = "AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0)";
+			$group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0)";
 		}
 		$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
-				WHERE
-				announcement.c_id = $course_id AND
-				ip.c_id = $course_id AND				
-				announcement.id = ip.ref AND 
-				ip.tool='announcement' AND 
-				ip.visibility<>'2'
-				$group_condition
-				$condition_session
+				WHERE   announcement.c_id   = $course_id AND
+                        ip.c_id             = $course_id AND				
+                        announcement.id     = ip.ref AND 
+                        ip.tool             = 'announcement' AND 
+                        ip.visibility       <> '2'
+                        $group_condition
+                        $condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC
 				LIMIT 0,$maximum";
@@ -914,9 +914,9 @@ if ($display_announcement_list) {
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
-		if (!empty($_SESSION['user'])) {
-			
-			if (is_array($group_memberships) && count($group_memberships)>0) {
+		if (!empty($_SESSION['user'])) {	
+            
+			if (is_array($group_memberships) && count($group_memberships) > 0 ) {
 				$sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE 	announcement.c_id = $course_id AND
@@ -976,7 +976,7 @@ if ($display_announcement_list) {
 			} else {
 				// A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
 				// => see all the messages of all the users and groups with editing possibilities
-				$sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
+				 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE 	announcement.c_id = $course_id AND
 							ip.c_id = $course_id AND	
@@ -1113,6 +1113,9 @@ if ($display_announcement_list) {
     			/* DATE */    
     			$last_post_datetime = $myrow['end_date'];    
     		
+                $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);  
+                $myrow['visibility'] = $item_visibility;
+                
     			// the styles
     			if ($myrow['visibility'] == '0') {
     				$style='invisible';
@@ -1126,7 +1129,6 @@ if ($display_announcement_list) {
                 $attachment_list = array();
                 $attachment_list = AnnouncementManager::get_attachment($myrow['id']);                
                 
-                $attachment = '';
                 $attachment_icon = '';
                 if (count($attachment_list)>0) {
                     $attachment_icon = ' '.Display::return_icon('attachment.gif',get_lang('Attachment'));                    

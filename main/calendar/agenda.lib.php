@@ -360,6 +360,7 @@ class Agenda {
                 }
 				break;
 			case 'admin':
+            case 'platform':
 				$sql = " SELECT * FROM ".$this->tbl_global_agenda." WHERE id=".$id;
 				$result = Database::query($sql);
 				if (Database::num_rows($result)) {

@@ -44,8 +44,11 @@ $agenda = new Agenda();
 $agenda->type = $type; //course,admin or personal
 if (isset($_GET['course_id'])) {
     $course_info = api_get_course_info_by_id($_GET['course_id']);
-    $agenda->set_course($course_info);
+    if (!empty($course_info)) {
+        $agenda->set_course($course_info);
+    }
 }
+
 $event = $agenda->get_event($id);
 
 if (!empty($event)) {
@@ -75,10 +78,11 @@ if (!empty($event)) {
     $event['start_date'] = api_get_local_time($event['start_date']);
     $event['end_date'] = api_get_local_time($event['end_date']);
     
-    //var_dump($event);
+    
     
     switch($type) {
         case 'personal':        
+        case 'platform':
             $vevent->setProperty( 'summary', api_convert_encoding($event['title'],'UTF-8', $charset));
             if(empty($event['start_date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
             list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$event['start_date']);

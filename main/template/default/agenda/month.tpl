@@ -268,8 +268,8 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({
 					buttons: {
-                        						'{"ExportiCalConfidential"|get_lang}' : function() {                                            
-                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";			
+                        '{"ExportiCalConfidential"|get_lang}' : function() {                                            
+                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";                                
                                 window.location.href = url;
                                 
 						},

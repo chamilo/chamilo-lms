@@ -25,6 +25,7 @@ class Template extends Smarty {
     var $menu_navigation = array();
     var $show_learnpath = false;    
     var $plugin = null;
+    var $course_id = null;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
         parent::__construct();
@@ -70,6 +71,10 @@ class Template extends Smarty {
         
 		$this->set_header_parameters();
 		$this->set_footer_parameters();
+        
+        //Setting course id
+        $course_id = api_get_course_int_id();
+        $this->course_id = $course_id;
         
 		$this->assign('style', $this->style);
         
@@ -188,8 +193,8 @@ class Template extends Smarty {
         }        
         $this->assign('show_toolbar', $show_toolbar);
         
-        //Only if course is available
-        if (api_get_cidreq()) {        
+        //Only if course is available        
+        if (!empty($this->course_id)) {        
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $course_tool = CourseHome::show_navigation_tool_shortcuts();

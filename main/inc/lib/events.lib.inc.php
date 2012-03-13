@@ -551,6 +551,22 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 
 	$event_type         = Database::escape_string($event_type);
 	$event_value_type   = Database::escape_string($event_value_type);
+    
+    //Clean the user_info
+    if ($event_value_type == LOG_USER_OBJECT) {
+        if (is_array($event_value)) {
+            unset($event_value['complete_name']);
+            unset($event_value['firstName']);
+            unset($event_value['lastName']);
+            unset($event_value['avatar_small']);
+            unset($event_value['avatar']);
+            unset($event_value['password']);
+            unset($event_value['lastLogin']);  
+            unset($event_value['picture_uri']);  
+            
+            $event_value = serialize($event_value);
+        }
+    }
 	$event_value        = Database::escape_string($event_value);
 	$datetime           = Database::escape_string($datetime);
 	$user_id            = Database::escape_string($user_id);

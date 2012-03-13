@@ -171,7 +171,8 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 $htmlHeadXtra[] = '<script>
 
     $(document).ready(function() {
-        $(".link_tooltip").each(function(){            
+        //this makes google chrome to crash ...
+       /* $(".link_tooltip").each(function(){            
             $(this).qtip({                
                 content: $(this).find(".exercise_tooltip"),
                 position: { at:"top right", my:"bottom left"},  
@@ -181,7 +182,7 @@ $htmlHeadXtra[] = '<script>
                 },
                 hide: true, //         
             });
-        });
+        });*/
     });
 </script>';
 

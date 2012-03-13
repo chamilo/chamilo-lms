@@ -308,6 +308,8 @@ class CourseManager {
         } else {        
         	$session_id = intval($_SESSION['id_session']);
         }
+        
+        $user_list = array();
 
         //Cleaning the $user_id variable
         if (is_array($user_id)) {
@@ -316,9 +318,11 @@ class CourseManager {
                 $new_user_id_list[]= intval($my_user_id);
             }
             $new_user_id_list = array_filter($new_user_id_list);
+            $user_list = $new_user_id_list;
             $user_ids = implode(',', $new_user_id_list);
         } else {
             $user_ids = intval($user_id);
+            $user_list[] = $user_id;
         }
 
         
@@ -392,6 +396,11 @@ class CourseManager {
             // add event to system log            
             $user_id = api_get_user_id();
             event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
+            
+            foreach ($user_list as $user_id_to_delete) {
+                $user_info = api_get_user_info($user_id_to_delete);
+                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
+            }
         }
     }
 
@@ -489,9 +498,11 @@ class CourseManager {
                         status      = '".$status."',
                         sort        = '". ($course_sort)."'");
 
-            // Add event to the system log            
-            $user_id = api_get_user_id();
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
+            // Add event to the system log                        
+            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
+            
+            $user_info = api_get_user_info($user_id);
+            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
         }
         return (bool)$result;
     }

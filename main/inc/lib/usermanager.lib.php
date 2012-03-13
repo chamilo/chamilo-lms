@@ -303,15 +303,7 @@ class UserManager {
 		// Add event to system log		
 		$user_id_manager = api_get_user_id();
 		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-        
-        unset($user_info['password']);
-        unset($user_info['complete_name']);
-        unset($user_info['firstName']);
-        unset($user_info['lastName']);
-        unset($user_info['lastLogin']);
-        unset($user_info['avatar']);
-        unset($user_info['avatar_small']);        
-        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, serialize($user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager, null, $user_info);
 		return true;
 	}
 

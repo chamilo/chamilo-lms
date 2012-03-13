@@ -46,6 +46,16 @@ switch ($action) {
 		$id 		= $id_list[1];		
 		$agenda->delete_event($id);		
 		break;
+    case 'resize_event':
+        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+            break;
+        }
+		$day_delta 		= $_REQUEST['day_delta'];
+		$minute_delta 	= $_REQUEST['minute_delta'];
+		$id 			= explode('_', $_REQUEST['id']);
+		$id				= $id[1];
+		$agenda->resize_event($id, $day_delta, $minute_delta);		
+		break;
 	case 'move_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
             break;

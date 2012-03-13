@@ -297,6 +297,35 @@ class Agenda {
 		}
 		return '';	
 	}
+    
+    function resize_event($id, $day_delta, $minute_delta) {
+        // we convert the hour delta into minutes and add the minute delta
+		$delta = ($day_delta * 60 * 24) + $minute_delta;
+		$delta = intval($delta);
+		
+		$event = $this->get_event($id);
+        if (!empty($event)) {
+			switch($this->type) {
+				case 'personal':
+					$sql = "UPDATE $this->tbl_personal_agenda SET all_day = 0, enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE) 
+							WHERE id=".intval($id);					
+					$result = Database::query($sql);				
+					break;
+				case 'course':
+					$sql = "UPDATE $this->tbl_course_agenda SET all_day = 0,  end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
+					$result = Database::query($sql);					
+					break;
+				case 'admin':
+					$sql = "UPDATE $this->tbl_global_agenda SET all_day = 0, end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+							WHERE id=".intval($id);
+					$result = Database::query($sql);
+					break;
+			}
+		}	
+		return 1;
+        
+    }
 	
 	function move_event($id, $day_delta, $minute_delta) {		
 		// we convert the hour delta into minutes and add the minute delta

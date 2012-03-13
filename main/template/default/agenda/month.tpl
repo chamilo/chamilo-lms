@@ -367,6 +367,14 @@ $(document).ready(function() {
 				}
 			});
 		},
+        eventResize: function(event, day_delta, minute_delta, revert_func) {
+            $.ajax({
+				url: '{$web_agenda_ajax_url}',
+				data: {
+					a:'resize_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
+				}
+			});        
+        },
 		axisFormat: 'HH(:mm)',
 		timeFormat: 'HH:mm{ - HH:mm}',		
 		loading: function(bool) {

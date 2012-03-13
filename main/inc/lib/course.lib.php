@@ -2706,13 +2706,13 @@ class CourseManager {
     
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well2";
+        $class = "well course_item";
         if ($is_sub_content) {
             $class = "";
         }        
-        $html .= '<div class="row-fluid '.$class.'">';         
-            $html .= '<div class="span10">';         
-                $html .= '<div class="well3">'; 
+        $html .= '<div class="row-fluid">';         
+            //$html .= '<div class="span9">';         
+                $html .= '<div class="'.$class.'">'; 
                     $html .= '<div class="span1">'.$params['icon'].'</div>';
                     $html .= '<div class="span5">';
                     $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';
@@ -2726,13 +2726,13 @@ class CourseManager {
                     $html .= '</div>';                        
                     $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
                 $html .= '</div>';
-            $html .= '</div>';
+            //$html .= '</div>';
         $html .= '</div>';
         return $html;
     }
     
     public function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
-        return '<div class="well2">'.$main_content.$sub_content.$sub_sub_content.'</div>';
+        return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
     }
 
     /**

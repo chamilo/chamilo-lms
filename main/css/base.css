@@ -102,20 +102,14 @@ form .formw input {
     padding: 20px 0px 0px 20px;
 }
 
-.well2 {
-    background-color: #F5F5F5;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+.well_border {            
+    /* border: 1px solid rgba(0, 0, 0, 0.05);*/
+    border: 1px solid #E1E1E0;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
     margin-bottom: 20px;
     min-height: 20px;
-    padding: 19px 0px 19px 0px;
-}
-
-.well3 {            
-    margin-bottom: 10px;
-    min-height: 20px;
-    padding: 19px 0px 19px 0px;
+    padding: 19px;
 }
 
 #progress_bar img {
@@ -245,11 +239,11 @@ a.tag {
     white-space: nowrap;
 }
 
-img {
-    border: none;
-}
-
 /* User portal */
+
+.course_item {
+    padding-bottom:40px;
+}
 
 /* user_portal course status icon */
 .coursestatusicons {
@@ -3408,12 +3402,6 @@ a:active{
     width:90%;
     margin-left: 14px;    
     margin-bottom: 10px;
-}
-
-
-/* Portal administration input text width */
-#settings input[type="text"] {
-    width:250px;
 }
 
 .welcome_course li {

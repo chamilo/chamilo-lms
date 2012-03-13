@@ -60,7 +60,7 @@ $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
 if (api_is_platform_admin()) {	
 	$search_form = ' <form method="get" action="user_list.php">
-						<input type="text" name="keyword" value="">
+						<input class="span3" type="text" name="keyword" value="">
 						<button class="search" type="submit">'.get_lang('Search').'</button>
             		</form>';
 	$blocks['users']['search_form'] = $search_form;	
@@ -94,7 +94,7 @@ if (api_is_platform_admin()) {
 	$blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
 	
 	$search_form = ' <form method="get" action="course_list.php">
-							<input type="text" name="keyword" value="">
+							<input class="span3" type="text" name="keyword" value="">
 							<button class="search" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
 	$blocks['courses']['search_form'] = $search_form;
@@ -129,7 +129,7 @@ if (api_is_platform_admin()) {
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));    
     
     $search_form = ' <form method="get" action="settings.php" class="form-search">
-							<input type="text" name="search_field" value="" >
+							<input class="span3" type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
 							<button class="search" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
@@ -169,7 +169,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 	
 	$search_form = ' <form method="POST" action="session_list.php">
-								<input type="text" name="keyword" value="">
+								<input class="span3" type="text" name="keyword" value="">
 								<button class="search" type="submit">'.get_lang('Search').'</button>
 		            		</form>';
 	$blocks['sessions']['search_form'] = $search_form;	
@@ -200,7 +200,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	
 	$search_form = ' <form method="POST" action="class_list.php">
-									<input type="text" name="keyword" value="">
+									<input class="span3" type="text" name="keyword" value="">
 									<button class="search" type="submit">.'.get_lang('Search').'</button>
 			            		</form>';
 	$blocks['classes']['search_form'] = $search_form;
@@ -231,7 +231,10 @@ if (api_is_platform_admin()) {
 	}
 	if (api_is_global_platform_admin()) {
 		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-	}	
+	}
+    
+    //$items[] = array('url'=>'statistics/index.php?action=activities', 	'label' => get_lang('ImportantActivities'));
+    
 	$blocks['settings']['items'] = $items;
 
 	/* Extensions */

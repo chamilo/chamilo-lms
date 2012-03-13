@@ -324,8 +324,9 @@ if (Database::num_rows($res_media) > 0) {
         -->
         <div id="author_image" name="author_image" class="row-fluid">        
             <div class="span12">
-                <div class="row-fluid well2">     
-                    <div class="span4">
+                <div class="well">
+                <div class="row-fluid">                         
+                    <div class="span5">                        
                         <?php
                         if ($_SESSION['oLP']->get_preview_image()!='') {
                             $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
@@ -336,17 +337,18 @@ if (Database::num_rows($res_media) > 0) {
                         } else {
                             echo Display :: display_icon('unknown_250_100.jpg');
                         }
-                        ?>                                           
+                        ?>                              
                     </div>
-                    <div id="lp_navigation_elem" class="span8">
+                    <div id="lp_navigation_elem" class="span7">
                         <div class="row">                        
-                            <div class="span8">
+                            <div class="span7">
                                 <?php echo $navigation_bar; ?>
                                  <div id="progress_bar">
                                     <?php echo $progress_bar; ?>
                                  </div>    
                             </div>
                         </div>              
+                    </div>
                     </div>
                     </div>
             </div>

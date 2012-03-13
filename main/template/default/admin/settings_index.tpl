@@ -17,19 +17,23 @@ $(function() {
         <li><a href="#tabs-8">Aenean lacinia</a></li>        
     </ul>
     -->        
+    <div class="row">
     {foreach $blocks as $key => $block name=block_loop  }        
-        <div id="tabs-{$smarty.foreach.block_loop.index +1}" class="admin_section">
-    	   <h4>{$block.icon} {$block.label}</h4>
-    	   <div style="list-style-type:none">
-    			{$block.search_form}
-    	   </div>
-    		{if $block.items}
-    	    	<ul>
+        <div id="tabs-{$smarty.foreach.block_loop.index +1}" class="span6">
+            <div class="well_border">
+                <h4>{$block.icon} {$block.label}</h4>
+                <div style="list-style-type:none">
+                    {$block.search_form}
+                </div>
+                {if $block.items}
+                    <ul>
     		    	{foreach $block.items as $url}
     		    		<li><a href="{$url.url}">{$url.label}</a></li>	    	
     				{/foreach}
-    			</ul>    	
-        	{/if}
-        </div>
+                    </ul>    	
+                {/if}
+            </div>
+        </div>        
     {/foreach}
+    </div>
 </div>

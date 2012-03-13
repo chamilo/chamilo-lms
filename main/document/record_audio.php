@@ -195,7 +195,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 echo '</applet>';
  
 echo '<form name="form_nanogong">';	
-	echo '<input type="text" id="audio_title">';
+	echo '<input placeholder="'.get_lang('Filename').'" type="text" id="audio_title">';
 	echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
 	echo '<input type="hidden" name="id" value="'.$document_id.'">';
 	echo '<input id="status" type="hidden" name="status" value="0">';

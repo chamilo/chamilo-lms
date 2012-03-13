@@ -269,7 +269,7 @@ class Template extends Smarty {
 			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
 		}
         
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.min.css";'."\n";        
+        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";        
         $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'responsive.css";'."\n";   
 		
 		$this->assign('css_style', $style_html);
@@ -346,8 +346,7 @@ class Template extends Smarty {
 			'jquery.menu.js',
 			'dtree/dtree.js',
 			'email_links.lib.js.php',
-			'bootstrap/bootstrap-dropdown.js',            
-            'bootstrap/bootstrap-collapse.js'            
+			'bootstrap/bootstrap.js',
 		);
         
 		if (api_get_setting('allow_global_chat') == 'true') {            

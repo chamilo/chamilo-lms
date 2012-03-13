@@ -434,14 +434,16 @@ input.link_alike:hover {
     float:right;
     margin:-7px 0 0 -5%;
     overflow:hidden;
-    padding:0;
-    width:180px;
+    padding:0;    
+    position:absolute;
+    right:0px;
+    
 }
 #toolnav img {
     float: left;
     width: 25px;
     height: 25px;
-    margin: 0 4px 0 0;
+    margin: 0 4px 0 0;    
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {

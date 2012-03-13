@@ -188,16 +188,19 @@ class Template extends Smarty {
         }        
         $this->assign('show_toolbar', $show_toolbar);
         
-        if (api_get_setting('show_toolshortcuts') != 'false') {
-            //Course toolbar
-            $course_tool = CourseHome::show_navigation_tool_shortcuts();
-            $this->assign('show_course_shortcut', $course_tool);
-        }
-        
-        if (api_get_setting('show_navigation_menu') != 'false') {
-            //Course toolbar
-            $course_tool = CourseHome::show_navigation_menu();
-            $this->assign('show_course_navigation_menu', $course_tool);
+        //Only if course is available
+        if (api_get_cidreq()) {        
+            if (api_get_setting('show_toolshortcuts') != 'false') {
+                //Course toolbar
+                $course_tool = CourseHome::show_navigation_tool_shortcuts();
+                $this->assign('show_course_shortcut', $course_tool);
+            }
+
+            if (api_get_setting('show_navigation_menu') != 'false') {
+                //Course toolbar
+                $course_tool = CourseHome::show_navigation_menu();
+                $this->assign('show_course_navigation_menu', $course_tool);
+            }
         }
         
 	}

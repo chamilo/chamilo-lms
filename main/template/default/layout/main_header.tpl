@@ -25,7 +25,8 @@
     </ul>    
     
     {* topbar *}
-    {include file="default/layout/topbar.tpl"}    
+    {include file="default/layout/topbar.tpl"}
+    
     <div id="main" class="container">     
         <header>
             <div class="row">
@@ -93,10 +94,14 @@
             
             {if !empty($show_course_navigation_menu) }
                  <script type="text/javascript">
+                     
                     /* <![CDATA[ */
-                    if (readCookie('dokeos_menu_state') == 0) {
-                        swap_menu();
-                    }
+                    $(document).ready( function() {
+                        if (readCookie('menu_state') == 0) {
+                            swap_menu();
+                        }
+                    });
+                    
                     /* ]]> */
 
                     /* <![CDATA[ */
@@ -121,33 +126,29 @@
                         return null;
                     }
                     function swap_menu() {
-                        toolnavlist_el = document.getElementById('toolnavlist');
+                        toolnavlist_el = document.getElementById('toolnav');
                         center_el = document.getElementById('center');
                         swap_menu_link_el = document.getElementById('swap_menu_link');
 
                         if (toolnavlist_el.style.display == 'none') {
                             toolnavlist_el.style.display = '';
-                            if (center_el)
-                            {
+                            if (center_el) {
                                 center_el.style.margin = '0 190px 0 0';
                             }
-                            swap_menu_link_el.innerHTML = '<?php echo get_lang('Hide'); ?> &raquo;&raquo;';
-                            createCookie('dokeos_menu_state',1,10);
+                            swap_menu_link_el.innerHTML = '{'Hide'|get_lang}';
+                            createCookie('menu_state',1,10);
                         } else {
                             toolnavlist_el.style.display = 'none';
-                            if (center_el)
-                            {
+                            if (center_el) {
                                 center_el.style.margin = '0 0 0 0';
                             }
-                            swap_menu_link_el.innerHTML = '&laquo;&laquo; <?php echo get_lang('Show'); ?>';
-                            createCookie('dokeos_menu_state',0,10);
+                            swap_menu_link_el.innerHTML = '{'Show'|get_lang}';
+                            createCookie('menu_state',0,10);
                         }
                     }
-                    document.write('<a href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{'Hide'|get_lang} &raquo;&raquo;<\/a>');
+                    document.write('<div class="span12 pull-right"> <a class="btn" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{'Hide'|get_lang}<\/a></div>');
                     /* ]]> */
-                    </script>
-                    <div class="span12">
-                        {$show_course_navigation_menu}
-                    </div>                        
+                    </script>                    
+                    {$show_course_navigation_menu}                    
             {/if}            
 {/if}

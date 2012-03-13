@@ -973,14 +973,11 @@ class CourseHome {
     function show_navigation_menu() {
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
-        $html = '';
-        if (api_get_setting('show_navigation_menu') == 'icons') {
-            $html .= '<div style="float:right;width: 40px;position:absolute;right:10px;top:10px;">';
-            $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
-            $html .= '</div>';
+        
+        $html = '<div id="toolnav"> <!-- start of #toolnav -->';
+        if (api_get_setting('show_navigation_menu') == 'icons') {            
+            $html .= self::show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);            
         } else {
-            $html .= '<div id="toolnav"> <!-- start of #toolnav -->';
-       
             $html .= '<div id="toolnavbox">';
             $html .= '<div id="toolnavlist"><dl>';
             foreach ($navigation_items as $key => $navigation_item) {
@@ -1011,12 +1008,11 @@ class CourseHome {
                     $html .= $navigation_item['name'];
                 }
                 $html .= '</a>';
-                $html .= '</dd>';
-            
+                $html .= '</dd>';            
             }
-            $html .= '</dl></div></div>';
-            $html .= '</div> <!-- end "#toolnav" -->';
+            $html .= '</dl></div></div>';            
         }
+        $html .= '</div><!-- end "#toolnav" -->';
         return $html;
     }
 

@@ -2317,7 +2317,7 @@ function show_add_form($id = '') {
 
 	<!-- START OF THE FORM  -->
 
-	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$origin.'&'.api_get_cidreq()."&sort=asc&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
+	<form class="form-horizontal" enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$origin.'&'.api_get_cidreq()."&sort=asc&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
 	<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 	<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 	<input type="hidden" name="id_attach" value="<?php echo isset($_REQUEST['id_attach']) ? intval($_REQUEST['id_attach']) : null; ?>" />
@@ -2333,11 +2333,11 @@ function show_add_form($id = '') {
 	echo '<legend>'.$form_title.'</legend>';
 	
 	// the title of the agenda item
-	echo 	'<div class="row">
-							<div class="label">
+	echo 	'<div class="control-group">
+							<label class="control-label">
 								<span class="form_required">*</span>'.get_lang('ItemTitle').'
-							</div>
-							<div class="formw">
+							</label>
+							<div class="controls">
 								<div id="err_title" style="display:none;color:red"></div>
 								<input type="text" id="agenda_title" size="50" name="title" value="';
 	if (isset($title)) echo $title;
@@ -2353,11 +2353,11 @@ function show_add_form($id = '') {
 		echo '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
 	} else {
-		echo '<div class="row">
-					<div class="label">
+		echo '<div class="control-group">
+					<label class="control-label">
 						'.Display::return_icon('group.png', get_lang('To'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).' '.get_lang('To').'</a>
-					</div>
-					<div class="formw">';
+					</label>
+					<div class="controls">';
 		/*if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])) {
 			echo get_lang('Everybody').'&nbsp;';
 		}*/
@@ -2370,9 +2370,9 @@ function show_add_form($id = '') {
 	}
 	
 	// start date and time
-	echo '<div class="row">';
-	echo '<div class="label">'.get_lang('StartDate').'</div>
-				<div class="formw">
+	echo '<div class="control-group">';
+	echo '<label class="control-label">'.get_lang('StartDate').'</label>
+				<div class="controls">
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>';
 	?>		
@@ -2473,11 +2473,11 @@ function show_add_form($id = '') {
 
 	// end date and time
 	echo '<span id="end_date_span">';
-	echo 	'<div class="row">
-				<div class="label">
+	echo 	'<div class="control-group">
+				<label class="control-label">
 					'.get_lang('EndDate').'
-				</div>
-				<div class="formw">
+				</label>
+				<div class="controls">
 					<div id="err_end_date" style="display:none;color:red"></div>';
 	?>	
 	
@@ -2560,18 +2560,21 @@ function show_add_form($id = '') {
 	// Repeating the calendar item
 	if (empty($id)) {
 		//only show repeat fields when adding, not for editing an calendar item
-		echo '<div class="row">
-					<div class="label">					
-					</div>
-					<div class="formw">
+		echo '<div class="control-group">
+					<label class="control-label"></label>										
+					<div class="controls">
 					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
 	                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
 	                    </a>';
 		?>
 						<table id="options2" style="display: none;">
 						<tr>
-							<td><input id="repeat_id" type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/>
-                                <label for="repeat_id"><?php echo get_lang('RepeatEvent');?></label></td>
+							<td>
+                                <label for="repeat_id">
+                                    <input id="repeat_id" type="checkbox" name="repeat" <?php echo ($repeat?'checked="checked"':'');?>/>
+                                    <?php echo get_lang('RepeatEvent');?>
+                                    
+                                </label></td>
 							<td>                                
                             </td>
 				    	</tr>
@@ -2639,11 +2642,11 @@ function show_add_form($id = '') {
 	    }//only show repeat fields if adding, not if editing
 	    
 	// the main area of the agenda item: the wysiwyg editor
-	echo '	<div class="row">
-				<div class="label" >
+	echo '	<div class="control-group">
+				<label class="control-label">
 					<span class="form_required">*</span>'.get_lang('Description').'
-				</div>
-				<div class="formw">';
+				</label>
+				<div class="controls">';
 			/*require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->Width		= '100%';
@@ -2665,7 +2668,7 @@ function show_add_form($id = '') {
 				<div class="label">
 					'.get_lang('AddedResources').'
 				</div>
-				<div class="formw">';
+				<div class="controls">';
 			if ($_SESSION['allow_individual_calendar']=='show')
 				show_addresource_button('onclick="selectAll(this.form.elements[6],true)"');
 			else
@@ -2678,9 +2681,10 @@ function show_add_form($id = '') {
 			*/
 
 	// File attachment
-	echo '	<div class="row">
-				<div class="label"><label for="file_name">'.get_lang('AddAnAttachment').'&nbsp;</label></div>
-				<div class="formw">							      
+	echo '	<div class="control-group">
+				<label class="control-label">
+                    '.get_lang('AddAnAttachment').'&nbsp;</label>
+				<div class="controls">							      
                     <input type="file" name="user_upload"/>  '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
                 </div>
              </div>';
@@ -2690,10 +2694,10 @@ function show_add_form($id = '') {
 
 
     // the submit button for storing the calendar item
-    echo '		<div class="row">
-					<div class="label">
-			 </div>
-					<div class="formw">';
+    echo '		<div class="control-group">
+					<label class="control-label">
+                    </label>
+					<div class="controls">';
 		if(isset($_GET['id']) ) {
 		$class='save';
 			$text=get_lang('ModifyEvent');
@@ -4593,13 +4597,13 @@ function display_ical_import_form() {
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('ICalFileImport').'
 				</div>
-				<div class="formw"><input type="file" name="ical_import"/>
+				<div class="controls"><input type="file" name="ical_import"/>
 				</div>
 			</div>';
 	echo '<div class="row">
 				<div class="label">
 				</div>
-				<div class="formw">
+				<div class="controls">
 					<button class="save" type="submit" name="ical_submit" value="'.get_lang('Import').'">'.get_lang('Import').'</button>
 				</div>
 			</div>';

@@ -111,9 +111,15 @@ class MultipleAnswer extends Question {
 				$defaults['weighting[2]'] = -5;
 			}
 			$renderer = & $form->defaultRenderer();
-			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+			
+            
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
 
-			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
+			$answer_number=$form->addElement('text', 'counter',null,'value="'.$i.'"');
 			$answer_number->freeze();
 
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
@@ -149,9 +155,7 @@ class MultipleAnswer extends Question {
                 // setting the save button here and not in the question class.php                
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');			
-
-				
+                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');				
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
@@ -168,7 +172,6 @@ class MultipleAnswer extends Question {
 				$form -> setDefaults($defaults);
 			}
 		}
-
 		$form->setConstants(array('nb_answers' => $nb_answers));
 	}
 

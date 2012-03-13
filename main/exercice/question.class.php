@@ -1081,11 +1081,10 @@ abstract class Question
 	 * A subclass can redifine this function to add fields...
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm (&$form,$fck_config=0) {
+	function createForm (&$form, $fck_config=0) {
 		echo '	<style>					
 					.media { display:none;}
 				</style>';
-
 		echo '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
@@ -1131,9 +1130,10 @@ abstract class Question
 				}
 			}
 		}		
-		</script>';		
+		</script>';
+        
 		// question name
-		$form->addElement('text','questionName', get_lang('Question'), array('class' => 'span6'));		
+		$form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));		        
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// default content
@@ -1150,7 +1150,7 @@ abstract class Question
 		}
 		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
-		$form -> addElement('advanced_settings','
+		$form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>		
 		');
 
@@ -1208,8 +1208,7 @@ abstract class Question
 			if ($isContent == 1) {
 				$form->setDefaults($defaults);
 			}
-		}
-        
+		}        
 	}
     
 

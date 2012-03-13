@@ -835,18 +835,22 @@ class Exercise {
 	 */
 	function createForm ($form, $type='full') {
 		global $id;
+        
 		if (empty($type)){
 			$type='full';
 		}
+        
 		// form title
 		if (!empty($_GET['exerciseId'])) {
 			$form_title = get_lang('ModifyExercise');
 		} else {
 			$form_title = get_lang('NewEx');
 		}
+        
 		$form->addElement('header', '', $form_title);
+        
 		// title
-		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), ' size="60" id="exercise_title"');
+		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
 		//$form->applyFilter('exerciseTitle','html_filter');
 
 		$form->addElement('html','<div class="row">

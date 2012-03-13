@@ -102,13 +102,17 @@ class MultipleAnswerCombination extends Question {
 
 				$defaults['answer[2]']  = get_lang('langDefaultMultipleAnswer1');
 				$defaults['comment[2]'] = get_lang('langDefaultMultipleComment1');
-				$defaults['correct[2]'] = false;
-				//$defaults['weighting[2]'] = -5;
+				$defaults['correct[2]'] = false;				
 			}
 			$renderer = & $form->defaultRenderer();
-			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+			
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+                    
 
-			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
+			$answer_number=$form->addElement('text', 'counter', null,'value="'.$i.'"');
 			$answer_number->freeze();
 
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
@@ -136,7 +140,7 @@ class MultipleAnswerCombination extends Question {
 				
 		//only 1 answer the all deal ...
 		$form->addElement('text', 'weighting[1]',null, array('class' => "span1", 'value' => '10'));
-		$form -> addElement ('html', '<br /><br />');
+		$form -> addElement ('html', '<br />');
 		
 		$navigator_info = api_get_navigator();
 		global $text, $class, $show_quiz_edition;

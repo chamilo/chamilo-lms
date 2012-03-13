@@ -257,7 +257,7 @@ if (isset($clone_question) && !empty($objExercise->id)) {
 }
 
 // if cancelling answer creation/modification
-if($cancelAnswers) {
+if ($cancelAnswers) {
 	// goes back to the question viewing
 	$editQuestion=$modifyAnswers;
 	unset($modifyAnswers);
@@ -287,12 +287,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
 }
 
 // shows a link to go back to the question pool
-if(!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
+if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
 	$interbreadcrumb[]=array("url" => "question_pool.php?fromExercise=$fromExercise","name" => get_lang('QuestionPool'));
 }
 
 // if the question is duplicated, disable the link of tool name
-if($modifyIn == 'thisExercise') {
+if ($modifyIn == 'thisExercise') {
 	if($buttonBack)	{
 		$modifyIn='allExercises';
 	} else {
@@ -437,7 +437,7 @@ $course_id = api_get_course_int_id();
 $show_quiz_edition = true;
 if (isset($exerciseId) && !empty($exerciseId)) {
 	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-	$sql="SELECT max_score FROM $TBL_LP_ITEM
+	$sql = "SELECT max_score FROM $TBL_LP_ITEM
 		  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 	$result = Database::query($sql);
 	if (Database::num_rows($result) > 0) {
@@ -449,39 +449,36 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
-echo '<div class="actions">';
-if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-    echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<div class="actions">';
+    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
+        echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 
-if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
-    echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
-}
-echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_MEDIUM).'</a>';
+    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
+        echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    }
+    echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
+    echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
 
-if ($show_quiz_edition) {
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
-} else {
-    echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
-}
+    if ($show_quiz_edition) {
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
+    } else {
+        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
+    }
 
-$maxScoreAllQuestions = 0;
-foreach ($objExercise->questionList as $q) {
-  $oQ = Question::read($q);
-  $maxScoreAllQuestions += $oQ->selectWeighting();
-}
-echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'),$objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
-
-echo '</div>';
-}
-else if (isset($_GET['newQuestion'])) {
+    $maxScoreAllQuestions = 0;
+    foreach ($objExercise->questionList as $q) {
+    $oQ = Question::read($q);
+    $maxScoreAllQuestions += $oQ->selectWeighting();
+    }
+    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'),$objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
+    echo '</div>';
+} else if (isset($_GET['newQuestion'])) {
 	// we are in create a new question from question pool not in a test
 	echo '<div class="actions">';
 	echo '<a href="admin.php?'.api_get_cidreq().'">.'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
-}
-else {
+} else {
 	// If we are in question_poolbut not in an test, go back to question create in pool
 	echo '<div class="actions">';
 	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -493,6 +490,7 @@ if (isset($_GET['message'])) {
 		Display::display_confirmation_message(get_lang($_GET['message']));
 	}
 }
+
 if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = Security::remove_XSS($_REQUEST['answerType']);
@@ -507,7 +505,8 @@ if (isset($_GET['hotspotadmin'])) {
     if (!$objQuestion) {
         api_not_allowed();
     }    
-	require 'hotspot_admin.inc.php';}
+	require 'hotspot_admin.inc.php';    
+}
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	// question list management

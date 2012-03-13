@@ -109,36 +109,6 @@ class UniqueAnswerNoOption extends Question {
 				$nb_answers = $answer->nbrAnswers;				
 			}
 		}
-		
-
-		//Feedback SELECT
-        //Not needed right now
-        /*
-		$question_list=$obj_ex->selectQuestionList();
-		$select_question=array();
-		$select_question[0]=get_lang('SelectTargetQuestion');
-
-		require_once '../newscorm/learnpathList.class.php';        
-		if (is_array($question_list)) {
-			foreach ($question_list as $key=>$questionid) {
-				//To avoid warning messages
-				if (!is_numeric($questionid)) {
-					continue;
-				}
-				$question = Question::read($questionid);
-				$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);
-			}
-		}
-		$select_question[-1]=get_lang('ExitTest');
-
-		$list = new LearnpathList(api_get_user_id());
-		$flat_list = $list->get_flat_list();
-		$select_lp_id=array();
-		$select_lp_id[0]=get_lang('SelectTargetLP');
-
-		foreach ($flat_list as $id => $details) {
-			$select_lp_id[$id] = cut($details['lp_name'],20);
-		}*/
 
 		$temp_scenario = array();
 	    	    
@@ -214,51 +184,31 @@ class UniqueAnswerNoOption extends Question {
     				$temp_scenario['lp'.$i]         = $lp;
     				$temp_scenario['destination'.$i]= $list_dest;
 			    }
-
-				/*$pre_list_destination=explode(';',$list_dest);
-				$list_destination=array();
-				foreach($pre_list_destination as $value)
-				{
-					$list_destination[]=$value;
-				}
-				$defaults['destination'.$i]=$list_destination;
-				*/
-				//$defaults['destination'.$i] = $list_destination;
 			}
 			
 			$defaults['scenario']=$temp_scenario;
 			$renderer = & $form->defaultRenderer();
-			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
-			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
+            
+			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
+          
+            
+			$answer_number=$form->addElement('text', 'counter', null,'value="'.$i.'"');
 			$answer_number->freeze();
-			
-          //  $form->addElement('hidden', 'position['.$i.']', $answer->position[$i]);
+		
         
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
 			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-			//$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-
+			
 			if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 				// feedback
 				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 			} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {     
-                /*               
-				// direct feedback
-				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				//Adding extra feedback fields
-				$group = array();
-				$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-				$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-				$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-				$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
-
-				$form -> addGroup($group, 'scenario', 'scenario');
-				$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');*/
+         
 			}
-
-			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-
 			$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));
 			$form->addElement('html', '</tr>');
             $i++;				
@@ -277,9 +227,14 @@ class UniqueAnswerNoOption extends Question {
             $defaults['weighting['.$i.']']  = 0;
             $defaults['scenario']=$temp_scenario;
             $renderer = & $form->defaultRenderer();
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
-            $answer_number=$form->addElement('text', null,null,'value="-"');
+            
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']'); 
+             
+            $answer_number=$form->addElement('text', 'counter',null,'value="-"');
             $answer_number->freeze();
             
             $form->addElement('hidden', 'position['.$i.']', '666');
@@ -294,17 +249,7 @@ class UniqueAnswerNoOption extends Question {
                 // feedback
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
             } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
-    /*            // direct feedback
-                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-                //Adding extra feedback fields
-                $group = array();
-                $group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-                $group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-                $group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-                $group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
-    
-                $form -> addGroup($group, 'scenario', 'scenario');
-                $renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');*/
+
             }
     
             //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');

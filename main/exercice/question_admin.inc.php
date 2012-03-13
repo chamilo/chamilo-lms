@@ -38,10 +38,9 @@ if (isset($_GET['editQuestion'])) {
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
-
-if(is_object($objQuestion)) {
+if (is_object($objQuestion)) {
 	//INIT FORM    
-	$form = new FormValidator('question_admin_form','post',$action);
+	$form = new FormValidator('question_admin_form','post', $action);
     //FORM CREATION
     
 	if(isset($_GET['editQuestion'])) {
@@ -58,10 +57,10 @@ if(is_object($objQuestion)) {
 	$form_title_extra = get_lang($types_information[$type][1]);
 
 	// form title
-	$form->addElement('header', '', $text.': '.$form_title_extra);
+	$form->addElement('header', $text.': '.$form_title_extra);
     
 	// question form elements
-	$objQuestion->createForm ($form,array('Height'=>150));
+	$objQuestion->createForm ($form);
 
 	// answer form elements
 	$objQuestion->createAnswersForm ($form);
@@ -78,7 +77,7 @@ if(is_object($objQuestion)) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 	
 	// FORM VALIDATION
-	if (isset($_POST['submitQuestion']) && $form->validate()) {	    
+	if (isset($_POST['submitQuestion']) && $form->validate()) { 
 
 		// question
 	    $objQuestion->processCreation($form,$objExercise);

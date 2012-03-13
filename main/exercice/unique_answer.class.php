@@ -126,9 +126,6 @@ class UniqueAnswer extends Question {
 			}
 		}
 		$select_question[-1]=get_lang('ExitTest');
-		
-		//require_once('../newscorm/learnpath.class.php');
-		//require_once('../newscorm/learnpathItem.class.php');
 
 		$list = new LearnpathList(api_get_user_id());
 		$flat_list = $list->get_flat_list();
@@ -140,97 +137,95 @@ class UniqueAnswer extends Question {
 		}
 
 		$temp_scenario = array();
-			if ($nb_answers < 1) {
-				$nb_answers = 1;
-				Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-			}
+        
+        if ($nb_answers < 1) {
+            $nb_answers = 1;
+            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+        }
+                        
 
-			for($i = 1 ; $i <= $nb_answers ; ++$i) {
-				$form -> addElement ('html', '<tr>');                
-				if (isset($answer) && is_object($answer)) {
-					if ($answer -> correct[$i]) {
-						$correct = $i;
-					}
-					$defaults['answer['.$i.']']    = $answer -> answer[$i];
-					$defaults['comment['.$i.']']   = $answer -> comment[$i];
-					$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
+        for ($i = 1 ; $i <= $nb_answers ; ++$i) {
+            $form -> addElement ('html', '<tr>');                
+            if (isset($answer) && is_object($answer)) {
+                if ($answer -> correct[$i]) {
+                    $correct = $i;
+                }
+                $defaults['answer['.$i.']']    = $answer -> answer[$i];
+                $defaults['comment['.$i.']']   = $answer -> comment[$i];
+                $defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
 
-					$item_list=explode('@@',$answer -> destination[$i]);
+                $item_list=explode('@@',$answer -> destination[$i]);
 
-					$try       = $item_list[0];
-					$lp        = $item_list[1];
-					$list_dest = $item_list[2];
-					$url       = $item_list[3];
+                $try       = $item_list[0];
+                $lp        = $item_list[1];
+                $list_dest = $item_list[2];
+                $url       = $item_list[3];
 
-					if ($try==0)
-						$try_result=0;
-					else
-						$try_result=1;
+                if ($try==0)
+                    $try_result=0;
+                else
+                    $try_result=1;
 
-					if ($url==0)
-						$url_result='';
-					else
-						$url_result=$url;
+                if ($url==0)
+                    $url_result='';
+                else
+                    $url_result=$url;
 
-					$temp_scenario['url'.$i]        = $url_result;
-					$temp_scenario['try'.$i]        = $try_result;
-					$temp_scenario['lp'.$i]         = $lp;
-					$temp_scenario['destination'.$i]= $list_dest;
+                $temp_scenario['url'.$i]        = $url_result;
+                $temp_scenario['try'.$i]        = $try_result;
+                $temp_scenario['lp'.$i]         = $lp;
+                $temp_scenario['destination'.$i]= $list_dest;
+            } else {
+                $defaults['answer[1]']     = get_lang('langDefaultUniqueAnswer1');
+                $defaults['weighting[1]']  = 10;
+                $defaults['answer[2]']     = get_lang('langDefaultUniqueAnswer2');
+                $defaults['weighting[2]']  = 0;
 
+                $temp_scenario['destination'.$i] = array('0');
+                $temp_scenario['lp'.$i] = array('0');
+            }
+            $defaults['scenario'] = $temp_scenario;
 
-					/*$pre_list_destination=explode(';',$list_dest);
-					$list_destination=array();
-					foreach($pre_list_destination as $value)
-					{
-						$list_destination[]=$value;
-					}
-					$defaults['destination'.$i]=$list_destination;
-					*/
-					//$defaults['destination'.$i] = $list_destination;
-				} else {
-					$defaults['answer[1]']     = get_lang('langDefaultUniqueAnswer1');
-					$defaults['weighting[1]']  = 10;
-					$defaults['answer[2]']     = get_lang('langDefaultUniqueAnswer2');
-					$defaults['weighting[2]']  = 0;
+            $renderer =& $form->defaultRenderer();
+            
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
+            
+            $answer_number = $form->addElement('text', 'counter',null,' value = "'.$i.'"');
+            $answer_number->freeze();
 
-					$temp_scenario['destination'.$i] = array('0');
-					$temp_scenario['lp'.$i] = array('0');
-					//$defaults['scenario']
-				}
+            $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            
+            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-				$defaults['scenario']=$temp_scenario;
-				$renderer = & $form->defaultRenderer();
-				$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
-				$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
-				$answer_number->freeze();
+            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+                // feedback
+                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
+                // direct feedback
+                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+                //Adding extra feedback fields
+                $group = array();
+                $group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
+                $group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
+                $group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
+                $group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
+                
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'url'.$i);    
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'lp'.$i);
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'try'.$i);
+                
 
-				$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-				$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-
-				if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-					// feedback
-					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
-					// direct feedback
-					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-					//Adding extra feedback fields
-					$group = array();
-					$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-					$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-					$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-					$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
-
-					$form -> addGroup($group, 'scenario', 'scenario');
-					$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
-				}
-
-				//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-
-				$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
-				$form->addElement ('html', '</tr>');                
-			}
+                $form -> addGroup($group, 'scenario', 'scenario');
+                $renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
+            }
+            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
+            $form->addElement ('html', '</tr>');                
+        }
 
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
@@ -287,8 +282,7 @@ class UniqueAnswer extends Question {
 		$objAnswer = new Answer($this->id);
 		$nb_answers = $form -> getSubmitValue('nb_answers');
 
-		for($i=1 ; $i <= $nb_answers ; $i++)
-        {
+		for ($i=1 ; $i <= $nb_answers ; $i++) {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment = trim($form -> getSubmitValue('comment['.$i.']'));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
@@ -326,8 +320,7 @@ class UniqueAnswer extends Question {
 
         	$goodAnswer= ($correct == $i) ? true : false;
 
-        	if($goodAnswer)
-        	{
+        	if($goodAnswer) {
         		$nbrGoodAnswers++;
         		$weighting = abs($weighting);
         		if($weighting > 0)
@@ -344,25 +337,19 @@ class UniqueAnswer extends Question {
  				$lp=0;
  			}
 
- 			if (empty($destination))
- 			{
+ 			if (empty($destination)) {
  				$destination=0;
  			}
-
-
-
- 			if ($url=='')
- 			{
+            
+ 			if ($url=='') {
  				$url=0;
  			}
 
  			//1@@1;2;@@2;4;4;@@http://www.dokeos.com
 			$dest= $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
         	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i,NULL,NULL,$dest);
-
         }
-
-
+        
     	// saves the answers into the data base
         $objAnswer -> save();
 
@@ -416,4 +403,3 @@ class UniqueAnswer extends Question {
   }
 }
 endif;
-?>

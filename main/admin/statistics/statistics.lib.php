@@ -227,30 +227,30 @@ class Statistics {
         $data = Statistics::rescale($stats);
 
         echo '<table class="data_table" cellspacing="0" cellpadding="3">
-                        <tr><th colspan="'.($show_total ? '4' : '3').'">'.$title.'</th></tr>';
+                <tr><th colspan="'.($show_total ? '4' : '3').'">'.$title.'</th></tr>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
             $total += $number;
         }
-        foreach ($stats as $subtitle => $number) {
-            //$i = $i % 13;
-            /*if (api_strlen($subtitle) > 30) {
-                $subtitle = '<acronym title="'.$subtitle.'">'.$subtitle.'</acronym>';
-            }*/
+        
+        foreach ($stats as $subtitle => $number) {            
             if (!$is_file_size) {
                 $number_label = number_format($number, 0, ',', '.');
             } else {
                 $number_label = Statistics::make_size_string($number);
-            }
+            }            
+            $percentage = ($total>0?number_format(100*$number/$total, 1, ',', '.'):'0');
 
             echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
-                                <td width="150">'.$subtitle.'</td>
-                                <td width="550">
-                                     '.Display::return_icon('bar_1u.gif', get_lang('Statistics') ,array('width' => $data[$subtitle], 'height' => '10')).'
-                                </td>
+                    <td width="150">'.$subtitle.'</td>
+                    <td width="550">
+                        <div class="progress progress-striped">
+                            <div class="bar" style="width: '.round($percentage).'%;"></div>
+                        </div>                            
+                    </td>
                                 <td align="right">'.$number_label.'</td>';
             if ($show_total) {
-                echo '<td align="right"> '.($total>0?number_format(100*$number/$total, 1, ',', '.'):'0').'%</td>';
+                echo '<td align="right"> '.$percentage.'%</td>';
             }
             echo '</tr>';
             $i ++;

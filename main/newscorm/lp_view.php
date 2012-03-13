@@ -325,35 +325,34 @@ if (Database::num_rows($res_media) > 0) {
         <div id="author_image" name="author_image" class="row-fluid">        
             <div class="span12">
                 <div class="well">
-                <div class="row-fluid">                         
-                    <div class="span5">                        
-                        <?php
-                        if ($_SESSION['oLP']->get_preview_image()!='') {
-                            $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                            if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
-                            $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                            $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
-                            echo '<img src="'.$my_path.'">';
-                        } else {
-                            echo Display :: display_icon('unknown_250_100.jpg');
-                        }
-                        ?>                              
+                    <div class="row-fluid">                         
+                        <div class="span5">                        
+                            <?php
+                            if ($_SESSION['oLP']->get_preview_image()!='') {
+                                $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
+                                if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
+                                $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
+                                $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+                                echo '<img src="'.$my_path.'">';
+                            } else {
+                                echo Display :: display_icon('unknown_250_100.jpg');
+                            }
+                            ?>                              
+                        </div>
+                        <div id="lp_navigation_elem" class="span7">
+                            <div class="row">                        
+                                <div class="span7">
+                                    <?php echo $navigation_bar; ?>
+                                    <div id="progress_bar">
+                                        <?php echo $progress_bar; ?>
+                                    </div>    
+                                </div>
+                            </div>              
+                        </div>
                     </div>
-                    <div id="lp_navigation_elem" class="span7">
-                        <div class="row">                        
-                            <div class="span7">
-                                <?php echo $navigation_bar; ?>
-                                 <div id="progress_bar">
-                                    <?php echo $progress_bar; ?>
-                                 </div>    
-                            </div>
-                        </div>              
-                    </div>
-                    </div>
-                    </div>
+                </div>
             </div>
-       </div>
-        
+       </div>       
         
        <!-- end image preview Layout -->
         <div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">

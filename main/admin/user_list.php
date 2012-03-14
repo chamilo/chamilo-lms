@@ -910,7 +910,7 @@ if ($table->get_total_number_of_items() ==0) {
                         if ($current_access_url_id == $url_info['access_url_id']) {
                             $add_user = false;                            
                         }
-                        $access_info_to_string .= $url_info['url'].' ';
+                        $access_info_to_string .= $url_info['url'].'<br />';
                     }
                 }
                 if ($add_user) {   

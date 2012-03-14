@@ -193,7 +193,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		if ($category == '') {
 			$category = 0;
 		}        
-		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
         if ($_GET['action'] == 'addlink') {
 			echo '<legend>'.get_lang('LinkAdd').'</legend>';
 		} else {
@@ -217,35 +217,35 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             
 			echo '<input type="hidden" name="id" value="'.$clean_link_id.'" />';
 		}
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span> URL
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<input type="text" name="urllink" size="50" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
 					</div>
 				</div>';
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						'.get_lang('LinkName').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<input type="text" name="title" size="50" value="' . Security::remove_XSS($title) . '" />
 					</div>
 				</div>';
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						'.get_lang('Metadata').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<a href="../metadata/index.php?eid='.urlencode('Link.'.$clean_link_id).'">'.get_lang('AddMetadata').'</a>
 					</div>
 				</div>';
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						'.get_lang('Description').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<textarea rows="3" cols="50" name="description">' .	Security::remove_XSS($description) . '</textarea>
 					</div>
 				</div>';
@@ -254,11 +254,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		$resultcategories = Database::query($sqlcategories);
 
 		if (Database::num_rows($resultcategories)) {
-			echo '	<div class="row">
-						<div class="label">
+			echo '	<div class="control-group">
+						<label class="control-label">
 							'.get_lang('Category').'
-						</div>
-						<div class="formw">';
+						</label>
+						<div class="controls">';
 			echo '			<select name="selectcategory">';
 			echo '			<option value="0">--</option>';
 			while ($myrow = Database::fetch_array($resultcategories)) {
@@ -272,18 +272,18 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '		</div>
 					</div>';
 		}
-		echo '	<div class="row">
-					<div class="label">						
-					</div>
-					<div class="formw">
+		echo '	<div class="control-group">
+					<label class="control-label">						
+					</label>
+					<div class="controls">
 						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('OnHomepage').'?</label>
 					</div>
 				</div>';
-		echo '	<div class="row" id="div_target">
-					<div class="label">
+		echo '	<div class="control-group" id="div_target">
+					<label class="control-label">
 						'.get_lang('LinkTarget').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<select  name="target_link" id="target_link">';
         $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
 		foreach ($targets as $target_id => $target) {
@@ -304,13 +304,17 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 			$specific_fields = get_specific_field_list();
             
-			echo '	<div class="row">
-						<div class="label">
-							'.get_lang('SearchFeatureDoIndexLink').'?
+			echo '	<div class="control-group">
+						<label class="control-label">
+							'.get_lang('SearchFeatureDoIndexLink').'
+						</label>
+						<div class="controls">
+                            <label for="index_document"> 
+							<input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked">
+                            '.get_lang('Yes').'
+                            </label>
 						</div>
-						<div class="formw">
-							<input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked"><label for="index_document"> '.get_lang('Yes').'</label>
-						</div>';
+                    </div>';
 
 			foreach ($specific_fields as $specific_field) {
 				$default_values = '';
@@ -327,9 +331,9 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 				}
 
 				$sf_textbox = '
-						<div class="row">
-							<div class="label">%s</div>
-							<div class="formw">
+						<div class="control-group">
+							<label class="control-label">%s</label>
+							<div class="controls">
 								<input name="%s" type="text" value="%s"/>
 							</div>
 						</div>';
@@ -339,16 +343,16 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		}
 		//echo '<input type="hidden" name="origin"  value="' . Security::remove_XSS($_GET['origin']) . '" />';
 		echo '<input type="hidden" name="lp_id"  value="' . Security::remove_XSS($_GET['lp_id']) . '" />';
-		echo '<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
+		echo '<div class="control-group">
+					<label class="control-label">
+					</label>
+					<div class="controls">
 						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
 				</div>';		
 		echo '</form>';		
 	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {        
-		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
         
         if ($_GET['action'] == 'addcategory') {
 			echo '<legend>'.get_lang('CategoryAdd').'</legend>';
@@ -362,28 +366,28 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		if ($_GET['action'] == 'editcategory') {
 			echo '<input type="hidden" name="id" value="'.$id.'" />';
 		}
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span> '.get_lang('CategoryName').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<input type="text" name="category_title" size="50" value="'.Security::remove_XSS($category_title).'" />
 					</div>
 				</div>';
 
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						'.get_lang('Description').'
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<textarea rows="3" cols="50" name="description">'.Security::remove_XSS($description).'</textarea>
 					</div>
 				</div>';
 
-		echo '	<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
+		echo '	<div class="control-group">
+					<label class="control-label">
+					</label>
+					<div class="controls">
 						<button class="save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
 					</div>
 				</div>';

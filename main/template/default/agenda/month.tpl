@@ -458,11 +458,13 @@ $(document).ready(function() {
 		
 		{if $type == 'course'}
 		<div id="add_as_announcement_div">
-    		 <div class="control-group">
-                <label class="control-label" for="name"></label>
-                <div class="controls">
-                    <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />
-                    <label for="add_as_annonuncement">{"AddAsAnnouncement"|get_lang}</label>
+    		 <div class="control-group">                
+                <label></label>
+                <div class="controls">                    
+                    <label class="checkbox inline" for="add_as_annonuncement">
+                        {"AddAsAnnouncement"|get_lang}
+                        <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />                    
+                    </label>                    
                 </div>
             </div>
         </div>

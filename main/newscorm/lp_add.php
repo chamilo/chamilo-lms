@@ -36,11 +36,23 @@ $language_file = 'learnpath';
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#learnpath_title").focus();
+    $("#learnpath_title").focus();
 }
+
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
+
+
+function advanced_parameters() {
+    if(document.getElementById(\'options\').style.display == \'none\') {
+        document.getElementById(\'options\').style.display = \'block\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+    } else {
+        document.getElementById(\'options\').style.display = \'none\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+    }
+}
 
 
 function activate_start_date() {
@@ -134,6 +146,10 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
+$form -> addElement('advanced_settings',$advanced);
+$form -> addElement('html','<div id="options" style="display:none">');
+
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
@@ -144,6 +160,9 @@ $form->addElement('html','</div>');
 $form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));    
 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('html','</div>');
+
+
 $form->addElement('html','</div>');
 
 $defaults['activate_start_date_check']  = 1;

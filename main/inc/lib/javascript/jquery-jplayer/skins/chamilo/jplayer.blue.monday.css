@@ -29,6 +29,7 @@ div.jp-video {
 /*	border:1px solid #009be3;
 	background-color:#eee;*/
 	position:relative;
+    margin:-8px;
 }
 div.jp-audio {
 /*	width:420px;*/

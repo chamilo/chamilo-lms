@@ -883,8 +883,9 @@ if ($table->get_total_number_of_items() ==0) {
     
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {        
         $keyword = Database::escape_string($_REQUEST['keyword']);
-        $conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
-        $user_list = UserManager::get_user_list_like($conditions, array(), false, ' OR ');        
+        //$conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
+        $conditions = array('username' => $keyword);
+        $user_list = UserManager::get_user_list($conditions, array(), false, ' OR ');        
         if (!empty($user_list)) {
             
             $extra_search_options = '<h3>'.get_lang('UsersFoundInOtherPortals').'</h3>';
@@ -898,9 +899,9 @@ if ($table->get_total_number_of_items() ==0) {
                 $column++;
             }
             $row++;
-            $column=0;
             
-            foreach($user_list as $user) {      
+            foreach ($user_list as $user) {      
+                $column = 0;
                 $access_info = UrlManager::get_access_url_from_user($user['user_id']);
                 $access_info_to_string = '';
                 $add_user = true;
@@ -912,7 +913,8 @@ if ($table->get_total_number_of_items() ==0) {
                         $access_info_to_string .= $url_info['url'].' ';
                     }
                 }
-                if ($add_user) {                    
+                if ($add_user) {   
+                    $row_table = array();
                     $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] =  $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];

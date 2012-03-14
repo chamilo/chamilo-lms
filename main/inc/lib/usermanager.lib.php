@@ -617,7 +617,7 @@ class UserManager {
 			foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
-				$sql_query .= $field.' = '.$value;
+				$sql_query .= "$field = '$value'";
 			}
 		}
 		if (count($order_by) > 0) {

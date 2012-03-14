@@ -2787,8 +2787,11 @@ class CourseManager {
                     
                     $params = array();
                     // Get notifications.
-                    $course['id_session']   = null;
-                    $course['status']       = $course['status'];
+                    //$course['id_session']   = null;
+                    //$course['status']       = $course['status'];
+                    
+                    $course_info['id_session']  = null;
+                    $course_info['status']      = $course['status'];
                     $show_notification = Display::show_notification($course_info);
 
                     if (empty($course['user_id'])) {
@@ -2920,7 +2923,9 @@ class CourseManager {
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {   
             $course_info = api_get_course_info($course['code']);            
-            $course['id_session'] = null;            
+            //$course['id_session'] = null;     
+            $course_info['id_session'] = null;
+            $course_info['status'] = $course['status'];
             
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).

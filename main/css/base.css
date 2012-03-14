@@ -3197,9 +3197,9 @@ input.liteoption {
 
 .row_selected { 
     border-color: #478ced #1f6fe2 #1f6fe2; 
-    background-color: #2d7ceb; 
+    background-color: #FFFFCC; 
     background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFFCC)); 
-    background-image: -webkit-linear-gradient(top, #2d7ceb, #2978e6); 
+    background-image: -webkit-linear-gradient(top, #FFFFCC, #FFFFCC); 
     background-image: -moz-linear-gradient(top, #FFFFCC, #FFFFCC); 
     background-image: -ms-linear-gradient(top, #FFFFCC, #FFFFCC); 
     background-image: -o-linear-gradient(top, #FFFFCC, #FFFFCC); 

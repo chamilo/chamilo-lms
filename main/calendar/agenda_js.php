@@ -25,6 +25,7 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcal
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
 $type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
+
 if (api_is_platform_admin() && $type == 'admin') {	
 	$type = 'admin';
 }
@@ -39,9 +40,11 @@ $tpl->assign('use_google_calendar', 0);
 
 switch($type) {
 	case 'admin':		
-		$this_section = SECTION_PLATFORM_ADMIN;
+        api_protect_admin_script();
+		$this_section = SECTION_PLATFORM_ADMIN;        
 		break;
 	case 'course':
+        api_protect_course_script();
 		$this_section = SECTION_COURSES;
 		break;
 	case 'personal':

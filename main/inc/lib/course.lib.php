@@ -2789,7 +2789,7 @@ class CourseManager {
                     // Get notifications.
                     $course['id_session']   = null;
                     $course['status']       = $course['status'];
-                    $show_notification = Display::show_notification($course);
+                    $show_notification = Display::show_notification($course_info);
 
                     if (empty($course['user_id'])) {
                         $course['status'] = STUDENT;
@@ -2924,7 +2924,7 @@ class CourseManager {
             
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $show_notification = Display :: show_notification($course);
+            $show_notification = Display :: show_notification($course_info);
             // New code displaying the user's status in respect to this course.
             $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
             

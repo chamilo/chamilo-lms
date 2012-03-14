@@ -1,6 +1,7 @@
 <?php
 /**
  * HTML class for static data
+ * @example  $form->addElement('label', 'My label', 'Content');
  */
 require_once 'HTML/QuickForm/static.php';
 

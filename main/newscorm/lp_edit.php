@@ -147,14 +147,8 @@ $form->applyFilter('lp_author', 'html_filter');
 // LP image
 $form->add_progress_bar();
 if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
-    $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
-    $div = '<div class="row">
-    <div class="label">'.get_lang('ImagePreview').'</div>
-    <div class="formw">
-    '.$show_preview_image.'
-    </div>
-    </div>';
-    $form->addElement('html', $div .'<br />');
+    $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';    
+    $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
 $label = ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
@@ -179,13 +173,6 @@ if (api_get_setting('search_enabled') === 'true') {
     }
 }
 
-// Default values
-//$content_proximity_select -> setSelected($s_selected_proximity);
-//$origin_select -> setSelected($s_selected_origin);
-
-/* // Chamilo 1.8.8: Deprecated code.
-$encoding_select -> setSelected($s_selected_encoding);
-*/
 $defaults['lp_encoding']    = Security::remove_XSS($_SESSION['oLP']->encoding);
 $defaults['lp_name']        = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author']      = Security::remove_XSS($_SESSION['oLP']->get_author());
@@ -195,10 +182,8 @@ $expired_on     = $_SESSION['oLP'] ->expired_on;
 $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div>
-<div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
-
-
+$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('Prerequisites').'</label>
+<div class="controls">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
 
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));

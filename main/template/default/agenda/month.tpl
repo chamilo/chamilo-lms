@@ -452,7 +452,7 @@ $(document).ready(function() {
 		<div class="control-group">			
 			<label class="control-label" for="name">{"Description"|get_lang}</label>			
 			<div class="controls">
-				<textarea name="content" id="content" cols="40" rows="7"></textarea>
+				<textarea name="content" id="content" class="span3" rows="5"></textarea>
 			</div>
 		</div>	
 		
@@ -470,6 +470,5 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
-
 <div id='loading' style='margin-left:150px;position:absolute;display:none'>{"Loading"|get_lang}...</div>
 <div id='calendar'></div>

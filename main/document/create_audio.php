@@ -168,6 +168,10 @@ $(document).ready(function(){
 	$('#textarea').textareaCount(options, function(data){
 		$('#textareaCallBack').html(data);				
 	});	
+    
+    $("#option1").show();
+    $("#checktext2voiceid").attr('checked',true);
+    
 });
 
 </script>		        
@@ -202,144 +206,80 @@ $(document).ready(function(){
 <div id="textareaCallBack"></div>
 <?php
 
-    downloadMP3_google($filepath, $dir);
-    
+    downloadMP3_google($filepath, $dir);    
     downloadMP3_pediaphone($filepath, $dir);
-    
-    
-
-    $lang_html = '<div class="row">';                
-    $lang_html .= '<div class="label">'.get_lang('Language').': </div>';        
-    $lang_html .=  '<div class="formw">';
     
     $tbl_admin_languages    = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
     $sql_select = "SELECT * FROM $tbl_admin_languages";
     $result_select = Database::query($sql_select);              
-    $lang_html .=  '<select name="lang" id="select">';
+
+    $options = $options_pedia = array();
+    $selected_language = null;
+    
     while ($row = Database::fetch_array($result_select)) {          
-        if (api_get_setting('platformLanguage')==$row['english_name']){
-            $lang_html .=  '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-        } else {                   
-            $lang_html .=  '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-        }   
+        if (api_get_setting('platformLanguage')==$row['english_name']) {        
+            $selected_language = $row['isocode'];
+        }
+        $options[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
+        if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){		
+            $options_pedia[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
+        }        
     }
-    $lang_html .=  '</select>';
-    $lang_html .=  '</div>';
-    $lang_html .=  '</div>';
     
 	$icon = Display::return_icon('sound.gif', get_lang('CreateAudio')); 
-	echo Display::tag('h2', $icon.get_lang('HelpText2Audio')); 
+	echo '<div class="page-header"><h2>'.$icon.get_lang('HelpText2Audio').'</h2></div>'; 
 	
-	//Google services
-	echo '<input type="radio" value="1" id="checktext2voice1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'none\'; document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;
-	<img src="../img/file_sound.gif" title="'.get_lang('HelpGoogleAudio').'" alt="'.get_lang('GoogleAudio').'"/><label for="checktext2voice1">'.get_lang('GoogleAudio').'</label>';
-	echo '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';
+    $form = new FormValidator('');
+    //Google services
+    $form->addElement('radio', 'checktext2voice', '<img src="../img/file_sound.gif" title="'.get_lang('HelpGoogleAudio').'" alt="'.get_lang('GoogleAudio').'"/>', get_lang('GoogleAudio'), null, 
+            array('id'=>'checktext2voiceid', 'onclick' => "javascript: if(this.checked){document.getElementById('option2').style.display='none'; document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}",
+        ));
     
+    //Pediaphone
+    $form->addElement('radio', 'checktext2voice', '<img src="../img/file_sound.gif" title="'.get_lang('HelpPediaphon').'" alt="'.get_lang('Pediaphon').'"/>', get_lang('Pediaphon'), null,  
+            array('value'=>'2','onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='none'; document.getElementById('option2').style.display='block';}else{document.getElementById('option2').style.display='none';}",
+        ));
     
-    
-        //Pediaphon services
-    echo '<input type="radio" value="1" id="checktext2voice2" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'none\'; document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;
-        <img src="../img/file_sound.gif" title="'.get_lang('HelpPediaphon').'" alt="'.get_lang('Pediaphon').'"/>&nbsp;<label for="checktext2voice2">'.get_lang('Pediaphon').'</label>';
-    echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
-    
-    
+    $form ->display();
+
+    echo '<span id="msg_error2" style="display:none;color:red"></span>';
     
 	echo '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
     
-	echo '<form id="form1" name="form1" method="post" action="">';
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('Title').': </div>';        
-        echo '<div class="formw">';
-        echo '<input name="title" type="text" size="40" maxlength="40" />';
-        echo '</div></div>';        
-        
-        echo $lang_html;
-        
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('InsertText2Audio').': </div>';        
-        echo '<div class="formw">';
-		echo '<textarea name="text" id="textarea" cols="70" rows="2"></textarea>';         
-		echo '</div>';
-		echo '</div>';
-        
-        echo '<div class="row">';
-        echo '<div class="formw">';
-        echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';         
-        echo '</div></div>';
-        
-	echo '</form>';
-	echo '</div>';
-	
+    $form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
+    $form->addElement('text', 'title', get_lang('Title'));
+    $form->addElement('select', 'lang', get_lang('Language'), $options);    
+    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea', 'class' =>'span6' ));
+    
+    $form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+    $defaults = array();
+    $defaults['lang'] = $selected_language;    
+    $form->setDefaults($defaults);        
+    $form->display();
 
+    echo '</div>';
     
 	echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-	echo '<form id="form2" name="form2" method="post" action="">';
     
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('Title').': </div>';        
-        echo '<div class="formw">';
-        echo '<input name="title" type="text" size="40" maxlength="40" />';
-        echo '</div></div>';     
-                   
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('Language').': </div>';        
-        echo '<div class="formw">';
-		
-		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql_select = "SELECT * FROM $tbl_admin_languages";
-		$result_select = Database::query($sql_select);		
-		echo '<select name="lang" id="select" onClick="update_voices(this.selectedIndex)">';
-		while ($row = Database::fetch_array($result_select)) {			
-			if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){					
-				if (api_get_setting('platformLanguage')==$row['english_name']){
-					echo '<option value="'.$row['isocode'].'" selected="selected">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-				} else {					
-					echo '<option value="'.$row['isocode'].'">'.$row['original_name'].' ('.$row['english_name'].')</option>';
-				}
-			}
-		}		
-		echo '</select>';
-        echo '</div></div>';    
-        
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('Voice').': </div>';        
-        echo '<div class="formw">';
-		echo '<select name="voices">';
-		echo '<option selected>'.get_lang('FirstSelectALanguage').'</option>';
-		echo '</select>';
-        echo '</div></div>';
-        
-        
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('Speed').': </div>';        
-        echo '<div class="formw">';
-        
-        
-		
-		
-		echo '<select name="speed">';
-		echo '<option value="0.75">'.get_lang('GoFaster').'';
-		echo '<option value="0.8">'.get_lang('Fast').'';
-		echo '<option value="1" selected>'.get_lang('Normal').'';
-		echo '<option value="1.2">'.get_lang('Slow').'';
-		echo '<option value="1.6">'.get_lang('SlowDown').'';
-		echo '</select>';
-		echo '</div></div>';
-        
-        
-        echo '<div class="row">';                
-        echo '<div class="label">'.get_lang('InsertText2Audio').': </div>';        
-        echo '<div class="formw">';
-        echo '<textarea name="text" id="textarea" cols="70" rows="2"></textarea>';         
-        echo '</div>';
-        echo '</div>';
-        
-        echo '<div class="row">';              
-        
-        echo '<div class="formw">';
-        echo '<button class="save" type="submit" name="SendText2Audio">'.get_lang('SaveMP3').'</button>';         
-        echo '</div></div>';
-	echo '</form>';
+    $form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
+    $form->addElement('text', 'title', get_lang('Title'));
+    $form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
+    $form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
+    $speed_options = array();
+    $speed_options['0.75']  = get_lang('GoFaster');
+    $speed_options['0.8']   = get_lang('Fast');
+    $speed_options['1']     = get_lang('Normal');
+    $speed_options['1.2']   = get_lang('Slow');
+    $speed_options['1.6']   = get_lang('SlowDown');
+    
+    $form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());        
+    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea', 'class' =>'span6' ));    
+    $form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+    $defaults = array();
+    $defaults['lang'] = $selected_language;    
+    $form->setDefaults($defaults);        
+    $form->display();
+    echo '</div>';
 	
 	?>
     
@@ -553,5 +493,3 @@ function downloadMP3_pediaphone($filepath, $dir){
         Display::display_confirmation_message(get_lang('DocumentCreated'));
 	}	
 }
-
-?>

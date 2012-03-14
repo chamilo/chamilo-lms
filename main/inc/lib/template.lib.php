@@ -429,7 +429,7 @@ class Template extends Smarty {
 		//$extra_headers = '';		
 		if (isset($htmlHeadXtra) && $htmlHeadXtra) {
 		    foreach ($htmlHeadXtra as & $this_html_head) {
-		        $extra_headers .= $this_html_head;
+		        $extra_headers .= $this_html_head."\n";
 		    }
 		}
 		$this->assign('extra_headers', $extra_headers);	

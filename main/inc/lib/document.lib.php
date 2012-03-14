@@ -2436,45 +2436,19 @@ return 'application/octet-stream';
      */
     function generate_media_preview($i) {
         $i = intval($i);      
-        
-        /*//shows all the player
-        $html = '<div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
-                  <div class="jp-audio">
-                    <div class="jp-type-single">
-                      <div id="jp_interface_'.$i.'" class="jp-interface">
-                        <ul class="jp-controls">
-                          <li><a href="#" class="jp-play"   tabindex="'.$i.'">play</a></li>
-                          <li><a href="#" class="jp-pause"  tabindex="'.$i.'">pause</a></li>
-                          <li><a href="#" class="jp-stop"   tabindex="'.$i.'">stop</a></li>
-                          <li><a href="#" class="jp-mute"   tabindex="'.$i.'">mute</a></li>
-                          <li><a href="#" class="jp-unmute" tabindex="'.$i.'">unmute</a></li>
-                        </ul>
-                        <div class="jp-progress">
-                          <div class="jp-seek-bar">
-                            <div class="jp-play-bar"></div>
-                          </div>
-                        </div>
-                        <div class="jp-volume-bar">
-                          <div class="jp-volume-bar-value"></div>
-                        </div>
-                        <div class="jp-current-time"></div>
-                        <div class="jp-duration"></div>
-                      </div>
-                    </div>
-                  </div>';*/
-        
         //Shows only the play button
-        $html = '  <div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
-                  <div class="jp-audio">
+        $html = '<div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>                        
+                <div id="jp_container_'.$i.'" class="jp-audio">
                     <div class="jp-type-single">
-                      <div id="jp_interface_'.$i.'" class="jp-interface">
-                        <ul class="jp-controls">
-                          <li><a href="#" class="jp-play" tabindex="1">play</a></li>
-                          <li><a href="#" class="jp-pause" tabindex="1">pause</a></li>                          
-                        </ul>
-                      </div>
+                        <div class="jp-gui jp-interface">
+                            <ul class="jp-controls">
+                                <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+                                <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+                            </ul>                         
+                        </div>           
                     </div>
-                  </div>';
+                </div>';
+        //<div id="jplayer_inspector_'.$i.'"></div>
         return $html;
     }
     

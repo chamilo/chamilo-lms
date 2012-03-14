@@ -478,6 +478,7 @@ $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
+//$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.inspector.js"></script>';
 
 
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
@@ -493,7 +494,7 @@ $file_list = $format_list = '';
 $count = 1;
 
 if (!empty($docs_and_folders))
-foreach ($docs_and_folders  as $file) {    
+foreach ($docs_and_folders  as $file) {
     if ($file['filetype'] == 'file') {
         $path_info = pathinfo($file['path']);  
         $extension = strtolower($path_info['extension']);
@@ -504,17 +505,24 @@ foreach ($docs_and_folders  as $file) {
             if ($extension == 'ogg') {
                 $extension = 'oga';
             }            
+            //$("#jplayer_inspector_'.$count.'").jPlayerInspector({jPlayer:$("#jquery_jplayer_'.$count.'")});
             $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
                                 ready: function() {                    
                                     $(this).jPlayer("setMedia", {                                        
                                         '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
                                     });
+                                },  
+                                play: function() { // To avoid both jPlayers playing together.
+                                    $(this).jPlayer("pauseOthers");
                                 },                                
+                                //errorAlerts: true,
+                                //warningAlerts: true,
                                 swfPath: "'.$js_path.'jquery-jplayer",
-                                supplied: "mp3, m4a, oga, ogv, wav",          
-                                solution: "flash, html",  // Do not change this setting otherwise 
-                                cssSelectorAncestor: "#jp_interface_'.$count.'", 
-                            });'."\n\n";
+                                supplied: "m4a, oga, mp3, ogg, wav",
+                                wmode: "window",
+                                //solution: "flash, html",  // Do not change this setting otherwise 
+                                cssSelectorAncestor: "#jp_container_'.$count.'", 
+                            });  	 '."\n\n";
             $count++;      
         }        
     }
@@ -531,13 +539,7 @@ $(document).ready( function() {
     });*/
         
     //Experimental changes to preview mp3, ogg files        
-     '.$jquery.'              
-    //Keep this down otherwise the jquery player will not work
-    for (i=0;i<$(".actions").length;i++) {
-        if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
-            $(".actions:eq("+i+")").hide();
-        }
-    }
+     '.$jquery.'            
 });
 </script>';
 

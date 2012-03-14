@@ -2625,17 +2625,13 @@ function api_not_allowed($print_headers = false) {
         $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
         $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
         $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="a_button gray"');
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="btn"');
 
         $content = Display::return_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', 'error', false);
 
-        $content .= '<div style="margin: 0 auto; width: 200px;" class="menu-wrapper"><div class="menu" id="menu">';
-		
-        $renderer =& $form->defaultRenderer();
-        //$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
-        $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>');
+        $content .= '<div style="margin: 0 auto; width: 200px;">';		
         $content .= $form->return_form();
-        $content .='</div></div>';
+        $content .='</div>';
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();	
         exit;

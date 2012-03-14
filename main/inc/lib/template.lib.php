@@ -359,7 +359,10 @@ class Template extends Smarty {
         
 		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
-                $js_files[] = 'chat/js/chat.js';
+                //Do not include the global chat in LP
+                if ($this->show_learnpath == false) {
+                    $js_files[] = 'chat/js/chat.js';
+                }
             }
 		}
 		

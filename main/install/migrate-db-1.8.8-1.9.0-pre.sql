@@ -138,6 +138,13 @@ ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'google_calendar_url','Google Calendar URL',0,0);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '3', 'OpenToTheWorld');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '2', 'OpenToThePlatform');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '1', 'Private');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed');
+
+
 -- Course ranking
 
 CREATE TABLE track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);
@@ -159,7 +166,7 @@ ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'user_chat_status','User chat status', 0, 0);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.16427' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17051' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

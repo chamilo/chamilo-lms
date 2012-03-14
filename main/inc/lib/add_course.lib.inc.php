@@ -2592,7 +2592,7 @@ function string2binary($variable) {
  * @todo use an array called $params instead of lots of params
  */
 function register_course($params) {
-    global $defaultVisibilityForANewCourse, $error_msg, $firstExpirationDelay;
+    global $error_msg, $firstExpirationDelay;
             
     $title              = $params['title'];
     $code               = $params['code'];
@@ -2609,11 +2609,21 @@ function register_course($params) {
     $disk_quota         = $params['disk_quota'];
     $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : 0;
     $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
-    $visibility         = $params['visibility'];
+    
+    if (!isset($params['visibility'])) {
+        $default_course_visibility = api_get_setting('courses_default_creation_visibility');
+        if (isset($default_course_visibility)) {
+            $visibility         = $default_course_visibility;    
+        } else {
+            $visibility         = COURSE_VISIBILITY_OPEN_PLATFORM;
+        }
+    } else {
+        $visibility         = $params['visibility'];
+    }
+    
     $expiration_date    = $params['expiration_date'];
     $teachers           = $params['teachers'];
-    $status             = $params['status'];
-    
+    $status             = $params['status'];    
 
     $TABLECOURSE		 	= Database :: get_main_table(TABLE_MAIN_COURSE);
     $TABLECOURSUSER 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);    
@@ -2637,8 +2647,7 @@ function register_course($params) {
     if (empty($title)) {
         $error_msg[] = 'title is missing';
         $ok_to_register_course = false;
-    }
-    
+    }    
 
     if (empty($expiration_date)) {
         $expiration_date = api_get_utc_datetime(time() + $firstExpirationDelay);
@@ -2646,13 +2655,9 @@ function register_course($params) {
         $expiration_date = api_get_utc_datetime($expiration_date);
     }
 
-    if ($visibility == '') {
-        $visibility = $defaultVisibilityForANewCourse;
-    } else {
-        if ($visibility < 0 || $visibility > 3) {
-            $error_msg[] = 'visibility is invalid';
-            $ok_to_register_course = false;
-        }
+    if ($visibility < 0 || $visibility > 3) {
+        $error_msg[] = 'visibility is invalid';
+        $ok_to_register_course = false;
     }
 
     if (empty($disk_quota)) {

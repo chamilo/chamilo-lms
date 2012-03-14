@@ -862,7 +862,8 @@ VALUES
 ('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
 ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
 ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsemailComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.16427','DokeosDatabaseVersion','', NULL, NULL, 0);
+('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17051','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1193,7 +1194,11 @@ VALUES
 ('allow_global_chat', 'true', 'Yes'),
 ('allow_global_chat', 'false', 'No'),
 ('login_is_email','true','Yes'),
-('login_is_email','false','No');
+('login_is_email','false','No'),
+('courses_default_creation_visibility', '3', 'OpenToTheWorld'),
+('courses_default_creation_visibility', '2', 'OpenToThePlatform'),
+('courses_default_creation_visibility', '1', 'Private'),
+('courses_default_creation_visibility', '0', 'CourseVisibilityClosed');
 
 UNLOCK TABLES;
 /*

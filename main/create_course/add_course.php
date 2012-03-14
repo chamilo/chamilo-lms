@@ -234,8 +234,8 @@ if ($form->validate()) {
             $params['wanted_code']          = $wanted_code;
             //$params['tutor_name']           = $tutor_name;
             $params['category_code']        = $category_code;
-            $params['course_language']      = $course_language;
-            
+            $params['course_language']      = $course_language;            
+             
             $course_info = CourseManager::create_course($params); 
      
             if (!empty($course_info)) {

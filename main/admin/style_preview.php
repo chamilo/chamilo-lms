@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
+// @deprecated This page is not used
+
 exit;
 $language_file = array('create_course', 'courses', 'admin');
 

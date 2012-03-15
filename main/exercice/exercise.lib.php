@@ -1338,7 +1338,6 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         $best_attempts[$user_id]= get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id);   
     }
 
-    $position_data = array();
     if (empty($best_attempts)) {
     	return 1;
     } else {

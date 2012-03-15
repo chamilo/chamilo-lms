@@ -11,6 +11,11 @@
  * Code
  */
 define('SESSION_LINK_TARGET','_self');
+
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+
 /**
  * Class
  * @package chamilo.library
@@ -610,10 +615,7 @@ class Tracking {
 			}
 
 			if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';
-			// get global tables names
-			$course_table               = Database :: get_main_table(TABLE_MAIN_COURSE);
-			$course_user_table          = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$table_session_course_user  = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+			// get global tables names			
 			$tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -698,8 +700,7 @@ class Tracking {
 					$global_result = 0;
 
 					if (Database::num_rows($rs_last_lp_view_id) > 0) {
-						// Cycle through each line of the results (grouped by lp_id, user_id)
-						$exe_list = array();
+						// Cycle through each line of the results (grouped by lp_id, user_id)						
 						while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
 							$count_items = 0;
 							$lp_partial_total = 0;
@@ -711,8 +712,7 @@ class Tracking {
 							$user_id    = $row_lp_view['user_id'];
 							if ($debug) echo '<h2>LP id '.$lp_id.'</h2>';
 
-							if ($get_only_latest_attempt_results) {
-								//if (1) {
+							if ($get_only_latest_attempt_results) {								
 								//Getting lp_items done by the user
 								$sql  = "SELECT DISTINCT lp_item_id FROM $lp_item_view_table 
 										WHERE c_id = $course_id AND lp_view_id = $lp_view_id ORDER BY lp_item_id";
@@ -750,8 +750,7 @@ class Tracking {
 								while ($row_max_score = Database::fetch_array($res_max_score,'ASSOC')) {
 									$list[]= $row_max_score;
 								}
-							}
-							$count_total_loop = 0;
+							}							
 
 							// Go through each scorable element of this view
 							 
@@ -855,7 +854,7 @@ class Tracking {
 
 					$lp_with_quiz = 0;
 					if ($debug) var_dump($lp_list);
-					foreach($lp_list as $lp_id) {
+					foreach ($lp_list as $lp_id) {
 						//Check if LP have a score we asume that all SCO have an score
 						$sql = "SELECT count(id) as count FROM $lp_item_table WHERE c_id = $course_id AND  (item_type = 'quiz' OR item_type = 'sco') AND lp_id = ".$lp_id;
 						if ($debug) echo $sql;
@@ -2110,9 +2109,7 @@ class Tracking {
 		 * @param   int     user id
 		 * @return  string  html code
 		 */
-		function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {			
-			require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
-
+		function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
 			global $_configuration;
 			$tbl_course		            = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$tbl_session		        = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2179,8 +2176,7 @@ class Tracking {
 				}
 				$course_in_session[$my_session_id]['course_list'] = $final_course_data;
 				$course_in_session[$my_session_id]['name'] = $session_name;
-			}		
-            
+			}            
 			 
 			$html = '';
 
@@ -2253,7 +2249,7 @@ class Tracking {
 					$session_graph = array();
 					
 					$all_exercise_graph_name_list = array();
-					$all_user_results = array();
+					$my_results = array();
 					$all_exercise_graph_list = array();
 					
 					$all_exercise_start_time = array();
@@ -2266,18 +2262,21 @@ class Tracking {
 						$user_count = count(SessionManager::get_users_by_session($my_session_id));
 												
 						$exercise_graph_name_list = array();
-						$user_results = array();
+						//$user_results = array();
 						$exercise_graph_list = array();
 						
 						foreach ($course_list as $course_data) {
 							 
 							$exercise_list = get_all_exercises($course_data, $my_session_id);
 							
-							foreach($exercise_list as $exercise_data) {							    
+							foreach ($exercise_list as $exercise_data) {							    
 								$exercise_obj = new Exercise($course_data['id']);
 								$exercise_obj->read($exercise_data['id']);
-                                $visible_return = $exercise_obj->is_visible();
-								if ($visible_return['value'] == true) {
+                                //Exercise is not necessary to be visible to show results check the result_disable configuration instead
+                                //$visible_return = $exercise_obj->is_visible();
+                                
+                                if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
+								//if ($visible_return['value'] == true) {
 									$best_average = intval(get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));
 									$exercise_graph_list[] 		= $best_average;
 									$all_exercise_graph_list[] 	= $best_average;
@@ -2286,12 +2285,11 @@ class Tracking {
 									$score = 0;
 									if (!empty($user_result_data['exe_weighting']) && intval($user_result_data['exe_weighting']) != 0) {
 										$score = intval($user_result_data['exe_result']/$user_result_data['exe_weighting'] * 100);
-									}
-									//$user_results[] = 100;
-									$user_results[] = $score;
+									}									
+									//$user_results[] = $score;
 									$time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time'], 'UTC') : 0;
-									$all_exercise_start_time[] = $time ;
-									$all_user_results[] = $score;
+									$all_exercise_start_time[] = $time;
+									$my_results[] = $score;
 									if (count($exercise_list)<=10) {
 										$title = cut($course_data['title'], 30)." \n ".cut($exercise_data['title'], 30);
 										$exercise_graph_name_list[]= $title;
@@ -2306,33 +2304,32 @@ class Tracking {
 							}			
 						}
 						//Graph per session
-						if (!empty($user_results) && !empty($exercise_graph_list)) {						
+						//if (!empty($user_results) && !empty($exercise_graph_list)) {						
 							//$session_graph[$my_session_id] = self::generate_session_exercise_graph($exercise_graph_name_list, $user_results, $exercise_graph_list);
-						}
-					}
-				
+						//}
+					}				
 				
 					//Complete graph
-					if (!empty($all_user_results) && !empty($all_exercise_graph_list)) {						
+					if (!empty($my_results) && !empty($all_exercise_graph_list)) {						
 						asort($all_exercise_start_time);
 												
 						//Fix exams order
 						$final_all_exercise_graph_name_list = array();
-						$final_all_user_results = array();
+						$my_results_final = array();
 						$final_all_exercise_graph_list = array();
 						
-						foreach($all_exercise_start_time as $key => $time) {
+						foreach ($all_exercise_start_time as $key => $time) {
 							$label_time = '';
 							if (!empty($time)) {
 								$label_time = date('d-m-y', $time);
-								//$label_time = api_format_date($time, DATE_FORMAT_NUMBER);
+                                //$label_time = api_format_date($time, DATE_FORMAT_NUMBER);
 							}
 							$final_all_exercise_graph_name_list[] 	= $all_exercise_graph_name_list[$key].' '.$label_time;
-							$final_all_user_results[] 				= $all_user_results[$key];
+							$my_results_final[]                     = $my_results[$key];
 							$final_all_exercise_graph_list[] 		= $all_exercise_graph_list[$key];
 						}
 						//var_dump($final_all_exercise_graph_name_list, $final_all_user_results, $final_all_exercise_graph_list);
-						$main_session_graph = self::generate_session_exercise_graph($final_all_exercise_graph_name_list, $final_all_user_results, $final_all_exercise_graph_list);
+						$main_session_graph = self::generate_session_exercise_graph($final_all_exercise_graph_name_list, $my_results_final, $final_all_exercise_graph_list);
 					}
 				}
 				
@@ -2360,8 +2357,7 @@ class Tracking {
 					}
 					 
 					$all_exercises = 0;
-					$all_unanswered_exercises_by_user = 0;
-					$all_done_exercise = 0;
+					$all_unanswered_exercises_by_user = 0;					
 					$all_average = 0;
 
 					$stats_array = array();
@@ -2563,11 +2559,7 @@ class Tracking {
 		 */
 		function show_course_detail($user_id, $course_code, $session_id) {
 			$html = '';
-			if (isset($course_code)) {
-				require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-                require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
-                require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-                
+			if (isset($course_code)) {				
 
 				$user_id                    = intval($user_id);
 				$session_id                 = intval($session_id);
@@ -2597,7 +2589,9 @@ class Tracking {
                     $user_list  = SessionManager::get_users_by_session($session_id);        
                 }
                 
-                $exercise_list = get_all_exercises($course_info, $session_id, true);
+                //$exercise_list = get_all_exercises($course_info, $session_id, true);                
+                // Show exercise results of invisible exercises? see BT#4091
+                $exercise_list = get_all_exercises($course_info, $session_id, false);
                 
                 $to_graph_exercise_result = array();                
                                 
@@ -2609,26 +2603,31 @@ class Tracking {
                         $exercise_obj->read($exercices['id']);
                         $visible_return = $exercise_obj->is_visible();
                         
-                        //just in case
-                        if ($visible_return['value'] == false) {
+                        //user can see the exercise results even if the exercise was set to invisible?
+                        /*if ($visible_return['value'] == false) {
                             continue;
-                        }
+                        }*/
                         						
 						$score = $weighting = $attempts = 0;
                         
 						//Getting count of attempts by user
 						$attempts      = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
-						//For graphics
-						$best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
-						$to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
-				
+                        
 						$html .= '<tr class="row_even">';
 						$url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
-						$exercices['title'] = Display::url($exercices['title'], $url, array('target'=>SESSION_LINK_TARGET));
+                        
+                        if ($visible_return['value'] == true) {
+                            $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>SESSION_LINK_TARGET));
+                        }
+                        
 						$html .= Display::tag('td', $exercices['title']);
 				
-						//Exercise configuration show results show results or show only score
+						//Exercise configuration show results or show only score
 						if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
+                            //For graphics
+                            $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
+                            $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
+
 							$latest_attempt_url = '';
 							$best_score = $position = $percentage_score_result  = '-';
 							$graph = $normal_graph = null;
@@ -2977,7 +2976,7 @@ class Tracking {
 			require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
-			$exercise_title = $attempts['title'];
+			$exercise_title = strip_tags($attempts['title']);
 			$attempts       = $attempts['data'];
 			$my_exercise_result_array = $exercise_result = array();
 			if (empty($attempts)) {

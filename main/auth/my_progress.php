@@ -48,12 +48,7 @@ $(function() {
     });
 });
 </script>';
-
-
-
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
-
-
 
 $user_id = api_get_user_id();
 
@@ -95,8 +90,6 @@ $content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_G
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
-
-
 
 $tpl = new Template($tool_name);
 

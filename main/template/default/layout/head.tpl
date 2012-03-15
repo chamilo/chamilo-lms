@@ -76,7 +76,8 @@ $(document).scroll(function() {
     }
 });
 
-$(document).ready(function() {       
+$(document).ready(function() {
+
     //Dropdown effect
     $('.dropdown-toggle').dropdown();   
     
@@ -104,6 +105,24 @@ $(document).ready(function() {
             //prevent the browser to follow the link
             return false;
     });
+    
+    //old jquery.menu.js
+    $('#navigation a').stop().animate({
+        'marginLeft':'50px'
+    },1000);
+ 
+    $('#navigation> li').hover(
+        function () {
+            $('a',$(this)).stop().animate({
+                'marginLeft':'1px'
+            },200);
+        },
+        function () {
+            $('a',$(this)).stop().animate({
+                'marginLeft':'50px'
+            },200);
+        }
+    );
     
     /*
     $(".td_actions").hide();    

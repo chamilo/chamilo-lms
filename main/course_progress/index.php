@@ -80,11 +80,11 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 $htmlHeadXtra[] = '<script type="text/javascript">
 	
 $(document).ready(function() {
-	//Second col
-	
-    $("#add_plan").live("click", function() {
+
+	//Second col	
+    $("#thematic_plan_add").live("submit", function() {
                    
-		var serialize_form_content = $("#thematic_plan_add").serialize();
+		var serialize_form_content = $(this).serialize();
 
 		//Getting FCK content								
 		var oEditor = FCKeditorAPI.GetInstance("description[1]");
@@ -108,21 +108,19 @@ $(document).ready(function() {
 				var thematic_id = $("input[name=\"thematic_id\"]").val();
 				$("#thematic_plan_"+thematic_id).html(data);				
 				$("#thematic_plan_add").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
-					
+                //location.reload(true);					
 			}
 		});
 		//prevent the browser to follow the link
         return false;				
 	});
-        
-    
     
    // Third col
    
-	$("#update_button, #add_button").click(function() {
+	$("#thematic_advance").live("submit", function() {
 	   	var url = this.href;        
         var my_id = this.id;
-		var serialize_form_content = $("#thematic_advance").serialize();
+		var serialize_form_content = $(this).serialize();
 		
 		//Getting FCK content								
 		var oEditor = FCKeditorAPI.GetInstance("content");
@@ -133,45 +131,21 @@ $(document).ready(function() {
 				data: "real_content=" + content + "&" +serialize_form_content,
 				success: function(data) {										
 					var thematic_advance_id = $("input[name=\"thematic_advance_id\"]").val();
-					$("#thematic_advance_"+thematic_advance_id).html(data);
-					
+					$("#thematic_advance_"+thematic_advance_id).html(data);					
 					$("#thematic_advance").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
 					
 					//Only refresh if the parent is to add
 					if (my_id == "add_button") {
-						location.reload(true);
+						//location.reload(true);
 					}
 				}
 		});								
 		//prevent the browser to follow the link
         return false;	
 	});
-        
     
-});   	
-</script>';
 
- 
-$htmlHeadXtra[] = '<script type="text/javascript">
-
-function datetime_by_attendance(selected_value) {
-	$.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {},
-		type: "POST",
-		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
-		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
-		success: function(datos) {
-			$("#div_datetime_attendance").html(datos);			
-			$("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
-			// $("#duration_in_hours_element").focus();
-
-		}
-	});
-}
-
-$(document).ready(function() {
-	$(".thematic_advance_actions, .thematic_tools ").hide();	
+    $(".thematic_advance_actions, .thematic_tools ").hide();	
 	
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);
@@ -191,11 +165,37 @@ $(document).ready(function() {
 	$(".thematic_advance_content").mouseleave(function() {
 		var id = parseInt(this.id.split("_")[4]);
 		$("#thematic_advance_tools_"+id ).hide();
-	});
-	
-	  
-});    
+	});    
+    /*
+    $("#custom_date").live("click", function() {         
+        $("#div_custom_datetime").css("display", "none");
+        $("#div_datetime_by_attendance").hide();		
+    });
+    
+    $("#from_attendance").live("click", function() {         
+        $("#div_custom_datetime").css("display", "block");
+        $("#div_custom_datetime").show();
+        $("#div_datetime_by_attendance").show();		
+    });*/
+});   	
+</script>';
 
+ 
+$htmlHeadXtra[] = '<script type="text/javascript">
+
+function datetime_by_attendance(selected_value) {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {},
+		type: "POST",
+		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
+		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
+		success: function(datos) {
+			$("#div_datetime_attendance").html(datos);			
+			$("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
+		}
+	});
+}
 
 function update_done_thematic_advance(selected_value) {
 	$.ajax({
@@ -224,26 +224,25 @@ function update_done_thematic_advance(selected_value) {
 			break;
 		}
 	}
-
 }
 
 function check_per_attendance(obj) {
 	if (obj.checked) {
-		document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
-		document.getElementById(\'div_custom_datetime\').style.display=\'none\';
+        $("#div_datetime_by_attendance").show();        
+        $("#div_custom_datetime").hide();
 	} else {
-		document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
-		document.getElementById(\'div_custom_datetime\').style.display=\'block\';
+        $("#div_datetime_by_attendance").hide();
+        $("#div_custom_datetime").show();        
 	}
 }
 
 function check_per_custom_date(obj) {
 	if (obj.checked) {
-		document.getElementById(\'div_custom_datetime\').style.display=\'block\';
-		document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
+        $("#div_custom_datetime").show();
+        $("#div_datetime_by_attendance").hide();		        
 	} else {
-		document.getElementById(\'div_custom_datetime\').style.display=\'none\';
-		document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
+        $("#div_custom_datetime").hide();
+        $("#div_datetime_by_attendance").show();		
 	}
 }
 

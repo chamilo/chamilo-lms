@@ -28,14 +28,14 @@ switch ($action) {
 		$thematic_plan_data = $thematic->get_thematic_plan_data();
 		$return = $thematic->get_thematic_plan_div($thematic_plan_data);
 		echo $return[$_REQUEST['thematic_id']];
-		break;
-		
-	case 'save_thematic_advance':
-		
+		break;		
+        
+	case 'save_thematic_advance':		
 		if (!api_is_allowed_to_edit(null, true)) {
 			echo '';
 			exit;
-        }        
+        }
+        
 		if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) ) {	    			
 			if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
         		$start_date_error = true;
@@ -55,7 +55,7 @@ switch ($action) {
     			$thematic_advance_data = $thematic->get_thematic_advance_list($_REQUEST['thematic_advance_id']);
     			$data['thematic_advance_data'] = $thematic_advance_data;		
     		}	    			
-		} else {    				
+		} else {   				
 			if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] && api_is_allowed_to_edit(null, true)) {    	    			
     	    	$thematic_advance_id 	= $_REQUEST['thematic_advance_id'];
     	    	$thematic_id 			= $_REQUEST['thematic_id'];	    			
@@ -80,12 +80,11 @@ switch ($action) {
 				}
 			}
 		}
-		$thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
+		$thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);        
 		$return = $thematic->get_thematic_advance_div($thematic_advance_data);
 		
 		echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];
-	break;
-		
+        break;		
 	case 'get_datetime_by_attendance':							
 		$attendance_id = intval($_POST['attendance_id']);
         
@@ -136,13 +135,12 @@ switch ($action) {
 			}
 		} 
 		?>			
-		<div class="row">
-			<div class="label"><?php echo $label ?></div>
-			<div class="formw"><?php echo $input_select ?></div>
+		<div class="control-group">
+			<label class="control-label"><?php echo $label ?></label>
+			<div class="controls"><?php echo $input_select ?></div>
 		</div>			
 		<?php				
-	    break;
-	    
+	    break;	    
 	case 'update_done_thematic_advance':	
 		$thematic_advance_id = intval($_GET['thematic_advance_id']);
 		$total_average = 0;			

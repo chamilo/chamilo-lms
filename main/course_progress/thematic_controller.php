@@ -253,7 +253,7 @@ class ThematicController
         
 		//render to the view
     	$this->view->set_data($data);
-    	$this->view->set_layout('layout_no_header'); 
+    	$this->view->set_layout('layout'); 
     	$this->view->set_template('thematic_plan');		       
     	$this->view->render();
         exit;
@@ -316,7 +316,7 @@ class ThematicController
 		
 		// render to the view
 		$this->view->set_data($data);
-		$this->view->set_layout('layout_no_header'); 
+		$this->view->set_layout('layout'); 
 		$this->view->set_template('thematic_advance');		       
 		$this->view->render();		
 	}

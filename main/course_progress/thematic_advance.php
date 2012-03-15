@@ -56,11 +56,10 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		$form->addElement('html', '<div id="div_datetime_by_attendance" style="display:block">');	
 	}
 
-	if (count($attendance_select) > 1) {
-		
+	if (count($attendance_select) > 1) {		
 		$form->addElement('select', 'attendance_select', get_lang('Attendances'), $attendance_select, array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)'));
 	} else {
-		$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Attendances').'</div><div class="formw"><strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong></div></div>');
+		$form->addElement('label', get_lang('Attendances'), '<strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong>');
 	}
 	
 	$form->addElement('html', '<div id="div_datetime_attendance">');
@@ -75,9 +74,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
 	//$form->addElement('textarea', 'content', get_lang('Content'));
-	
-	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
-	
+		
 	if ($action == 'thematic_advance_add') {
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_button" class="save"');
 	} else {
@@ -138,8 +135,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$form->display();
 	
 } else if ($action == 'thematic_advance_list') {
-
-	
 	// thematic advance list		
 	$table = new SortableTable('thematic_advance_list', array('Thematic', 'get_number_of_thematic_advances'), array('Thematic', 'get_thematic_advance_data'));
 	$table->set_additional_parameters($parameters);

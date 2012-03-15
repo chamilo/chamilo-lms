@@ -65,6 +65,7 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
             'xbutton'           =>array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
             'advanced_settings' =>array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
             'label'             =>array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
+            'email'             =>array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
             
         );
 

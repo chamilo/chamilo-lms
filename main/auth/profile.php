@@ -191,7 +191,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
 }
 
 //	EMAIL
-$form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+$form->addElement('email', 'email', get_lang('Email'), array('size' => 40));
 if (api_get_setting('profile', 'email') !== 'true') {
 	$form->freeze('email');
 }

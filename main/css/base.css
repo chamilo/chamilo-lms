@@ -149,14 +149,11 @@ footer .container .row {
 }
  
 .page-header {
-  margin-bottom: 17px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-.page-header h1 {
-  margin-bottom: 8px;
 }
 
 #topbar_push {

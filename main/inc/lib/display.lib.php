@@ -1345,4 +1345,13 @@ class Display {
     function return_default_table_class() {
         return 'data_table';
     }
+    
+    function page_header($title) {
+        return '<div class="page-header"><h1>'.Security::remove_XSS($title).'</h1></div>';
+    }
+    
+    function page_subheader($title) {
+        return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
+    }
+    
 } //end class Display

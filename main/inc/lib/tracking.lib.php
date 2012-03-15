@@ -2539,16 +2539,11 @@ class Tracking {
 
 					if (!empty($session_graph[$session_id_from_get])) {
 						//$html .= Display::div($session_graph[$session_id_from_get], array('id'=>'session_graph','class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
-					}
-					
+					}					
 				}
-			}
-			if (!empty($html)) {
-				$html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
-			}
+			}			
 			return $html;
 		}
-
 
 		/**
 		 * Shows the user detail progress (when clicking in the details link)
@@ -2566,10 +2561,10 @@ class Tracking {
 				$course                     = Database::escape_string($course_code);
 				$course_info                = CourseManager::get_course_information($course);
                 
-                $course_id                  = $course_info['real_id'];              				
-				$session_name               = api_get_session_name($session_id);
+                //$course_id                  = $course_info['real_id'];              				
+				//$session_name               = api_get_session_name($session_id);
                 
-				$html .= Display::tag('h2', $course_info['title']);
+				$html .= Display::page_subheader($course_info['title']);
 				
 				$html .= '<table class="data_table" width="100%">';
 						
@@ -2742,10 +2737,7 @@ class Tracking {
 						  </tr>';
 				}
 				$html .='</table>';
-			}
-			if (!empty($html)) {
-				$html = Display::div($html, array('class'=>'rounded_div', 'style'=>'position:relative; float:none; width:95%'));
-			}
+			}			
 			return $html;
 		}
 

@@ -116,8 +116,7 @@ switch ($action) {
         } else {
             echo '<div class="actions">';        
             echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
-            echo '</div>';
-            $token = Security::get_token();
+            echo '</div>';            
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
@@ -144,8 +143,7 @@ switch ($action) {
         } else {
             echo '<div class="actions">';        
             echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
-            echo '</div>';
-            $token = Security::get_token();
+            echo '</div>';            
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();

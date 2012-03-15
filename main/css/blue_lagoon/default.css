@@ -489,19 +489,21 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
 	background-repeat:repeat-x;	
-	color:#ffffff;			
+	color:#ffffff;		
+    height: 9em;
+    overflow:hidden;
+    width: 100%;   
+}
+footer a:link, footer a:visited {
+    color:#fff;
 }
 .push {
 	height: 9em; /* Very important */
 }
-#footer a {
-	color:#fff;
-}
-
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/

@@ -1,5 +1,5 @@
-<div id="footer"> <!-- start of #footer section -->	    
-    <div class="container">  
+<footer> <!-- start of #footer section -->	    
+    <div class="container">
         <div class="row">            
             <div id="footer_left" class="span4">
                 {if $session_teachers}
@@ -54,7 +54,7 @@
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->        
     </div><!-- end of #container -->
-</div><!-- end of #footer -->
+</footer>
 
 {$footer_extra_content}
 

@@ -573,7 +573,7 @@ html>body #header4 { clear: none; }
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
 	border-top: 1px solid #4171B5;
 	background-color: #E5EDF9;
 	background-color: #E5EDF9;
@@ -581,36 +581,12 @@ html>body #header4 { clear: none; }
 	color:#000;
 	min-height: 50px;	
 	overflow:hidden;	
-	width: 100%;
-	padding-bottom:10px;
+	width: 100%;	
 }
 .push {
 	height: 4em; /* Very important */
 }
 
-#footer .copyright {
-	float: right;
-	padding-top:10px;
-	margin-right:10px;
-}
-.footer_emails{
-	float: left;
-	margin-right:5%;
-	padding-top:10px;	
-}
-#footer #platformmanager {
-	float: left;
-	margin-left:10px;
-}
-#footer #coursemanager {
-	float: left;
-	margin-left: 10px;
-}
-#footer .copyright {
-	float: right;
-}
-#bottom_corner {
-}
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/

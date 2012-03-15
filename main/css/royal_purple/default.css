@@ -465,7 +465,7 @@ a:active {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
 	background-repeat:repeat-x;
@@ -478,37 +478,6 @@ a:active {
 }
 .push {
 	height: 3em; /* Very important */
-}
-#footer .copyright {
-	float: right;
-	padding-top:18px;
-	margin-right:10px;
-	background-color: #434343;
-	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;
-}
-.footer_emails{
-	float: left;
-	margin-right:5%;	
-	background-color: #434343;
-	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;	
-}
-#footer #platformmanager {
-	float: left;
-	margin-left:10px;
-}
-#footer #coursemanager {
-	float: left;
-	margin-left: 10px;
-}
-#footer a {
-	color:#fff;
-}
-#footer #coursemanager {
-	margin-left: 10px;
-}
-#bottom_corner {
 }
 /*****************************************************
  *  NAVIGATION MENU                                  *

@@ -17,16 +17,18 @@
 	<div class="span9">		
         {* Content bottom *}
 
-        {if !empty($plugin_content_top)}           
+        {if !empty($plugin_content_top)}         
             <div id="plugin_content_top">
                 {$plugin_content_top}
             </div>
         {/if}
         
 		{* ?? *}
-        <section id="home_page">
-		{$home_page_block}
-        </section>
+        {if !empty($home_page_block)}
+            <section id="home_page">
+            {$home_page_block}
+            </section>
+        {/if}
 		
 		{* ?? *}
 		{$sniff_notification}
@@ -34,19 +36,16 @@
         {include file="default/layout/page_body.tpl"}	
 		
 		{* Announcements *}
-        <section id="announcements_page">
-		{$announcements_block}
-        </section>
+        {if !empty($announcements_page_block)}
+            <section id="announcements_page">
+            {$announcements_block}
+            </section>
+        {/if}
 		
-		{* Hot courses template *}
-		<section id="hot_courses">
+		{* Hot courses template *}		
 		{include file="default/layout/hot_courses.tpl"}
-        {* fix the bug where the login is at the left side*}
-        &nbsp;
-        </section>      
         
         {* Content bottom *}
-
         {if !empty($plugin_content_bottom)}               
             <div id="plugin_content_bottom">
                 {$plugin_content_bottom}
@@ -55,8 +54,7 @@
 	</div>
 		
 	{* Right column *}
-	<div class="span3">
-		
+	<div class="span3">		
 	    {*if user is not login show the login form*}
 		{if $_u.logged == 0}
 			{include file="default/layout/login_form.tpl"}

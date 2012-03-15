@@ -118,16 +118,14 @@ a:active {
 
 /* footer styles */
 
-#footer {
+footer {
 	background-color: #e26200;
 	background-image: url(images/bg.jpg);
 	background-repeat:repeat-x;
 	color: #F7D77E;
 	font-weight:bold;
-	min-height: 100px;	
-	
-	width: 100%;
-	padding-bottom:10px;
+	min-height: 100px;		
+	width: 100%;	
 }
 .push {
 	height: 9em; /* Very important */

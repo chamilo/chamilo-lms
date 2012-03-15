@@ -7,11 +7,6 @@
 /**********************/
 /*** ADICIONAL CODE ***/
 /**********************/
-#logo {
- padding-top:25px;
- width: 420px;
- float:left;
-}
 div#header3 ul li a span {
     font-size:13px;
 }
@@ -24,7 +19,6 @@ div#header3 ul#logout {
 .subnav {
     background: none;
 }
-
 
 #current #tab_active {
     color: #EDDD00;
@@ -149,24 +143,25 @@ color: #9E0000;
 font-family: helvetica;
 font-size: 15px;
 }
-#footer a {
-    color:#FFC721;
-}
+
+
 
 
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
     background-color: #000;
     background-image: url(images/bg-footer.gif);
     background-repeat:repeat-x;
     font-size: 12px;
     color:#ffffff;
-    /*height: 10em;*/	 /* Do not change this value */
+    height: 10em;
     overflow:hidden;
-    width: 100%;
-    padding-bottom:18px;
+    width: 100%;    
+}
+footer a {
+    color:#FFC721;
 }
 /* Sticky footer*/
 .push {

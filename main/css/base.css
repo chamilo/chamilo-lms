@@ -136,16 +136,17 @@ html, body {
 }
 
 footer {
-  margin-top: 17px;
-  padding-top: 17px;
-  border-top: 1px solid #eee;
+    margin-top: 17px;
+    padding-top: 17px;  
 }
- #footer .container .row {
-    padding-top: 60px;
- }
- #footer_right #admin_name, #footer_right #software_name{
+
+footer .container .row {
+    padding-top: 50px;
+}
+
+#footer_right #admin_name, #footer_right #software_name{
      text-align:right;     
- }
+}
  
 .page-header {
   margin-bottom: 17px;

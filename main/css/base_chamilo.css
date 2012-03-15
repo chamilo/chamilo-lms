@@ -351,21 +351,9 @@ input.link_alike:hover {
     text-align:right;
     width:92%;
 }
-
-#footer #platformmanager {
-    float: left;
-    margin-left: 10px;
-}
-#footer #coursemanager {
-    float: left;
-    margin-left: 10px;
-}
-#footer a {
+footer a:link, footer a:visited {
     color:#f1d40d;
 }
-#bottom_corner {
-}
-
 /*
     NAVIGATION MENU
 */

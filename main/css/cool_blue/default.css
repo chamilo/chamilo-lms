@@ -481,7 +481,7 @@ a:active {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
 	background-image: url(images/tab-repeat.png);
 	background-repeat: repeat-x;
 	background-color: #434343;
@@ -491,14 +491,6 @@ a:active {
 	overflow:hidden;	
 	width: 100%;
 	padding-bottom:10px;
-}
-.footer_emails{
-	float: left;
-	margin-right:5%;	
-	background-image: url(images/tab-repeat.png);
-	background-repeat: repeat-x;
-	background-color: #434343;
-	padding-top:18px;
 }
 .push {
 	height: 3em; /* Very important */

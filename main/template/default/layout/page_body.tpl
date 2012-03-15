@@ -13,9 +13,11 @@
 {/if}
 
 {* Show messages*}
-<section id="messages">
-{$message}
-</section>
+{if !empty($message) }
+    <section id="messages">
+    {$message}
+    </section>
+{/if}
 
 {* Main content*}
 <section id="main_content">

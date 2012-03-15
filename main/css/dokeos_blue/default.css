@@ -485,58 +485,23 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
 	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
-	//height: 4em;	 /* Do not change this value */ 
+	
 	overflow:hidden;	
-	width: 100%;
-	padding-bottom:10px;
+	width: 100%;	
+}
+footer a:link, footer a:visited {
+    color:#fff;
 }
 .push {
 	height: 5em; /* Very important */
 }
-#footer .copyright {
-	float: right;
-	padding-top:18px;
-	margin-right:10px;
-	background-color: #434343;
-	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;
-}
-.footer_emails{
-	float: left;
-	margin-right:5%;	
-	background-color: #434343;
-	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;
-	padding-top:20px;	
-}
-#footer #platformmanager {
-	float: left;
-	margin-left:10px;
-}
-#footer #coursemanager {
-	float: left;
-	margin-left: 10px;
-}
-#footer a {
-	color:#fff;
-}
-#footer #coursemanager {
-	float: left;
-	margin-left: 10px;
-}
-.copyright {
-	display: inline;
-	float: right;
-	padding-right: 5px;
-}
-#bottom_corner {
-}
+
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/

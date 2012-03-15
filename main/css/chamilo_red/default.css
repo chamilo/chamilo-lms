@@ -27,7 +27,6 @@ a:active {
     /* background-image:url(images/bg-header1.gif); */
 }
 
-
 .subnav-fixed {
     position: fixed;
     top: 0px;
@@ -80,17 +79,17 @@ a:active {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
+footer {
     background-color: #a90a0e;
     background-image: url(images/bg-footer.gif);
     background-repeat:repeat-x;
     font-size: 12px;
     color:#ffffff;
-    /*height: 10em;*/	 /* Do not change this value */
+    height: 9em;
     overflow:hidden;
-    width: 100%;
-    padding-bottom:18px;
+    width: 100%;    
 }
+
 /* Sticky footer*/
 .push {
     height: 9em; /* Very important */

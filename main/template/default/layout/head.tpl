@@ -1,7 +1,8 @@
 <meta charset="{$system_charset}" />
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
-<link href="http://www.chamilo.org/team.php" rel="Author" />
+<link href="http://www.chamilo.org/team.php" rel="author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
+{$favico}
 {* This fires some HTML5 errors *}
 {* <link rel="top"	href="{$_p.web_main}index.php" title="" />
 <link rel="courses" href="{$_p.web_main}auth/courses.php" title="{"OtherCourses"|get_lang}"/>
@@ -52,7 +53,6 @@ var disconnect_lang = '{"ChatDisconnected"|get_lang}';
 {$js_file_to_string}
 {$css_file_to_string}
 {$extra_headers}
-{$favico}
 
 <script type="text/javascript">
 

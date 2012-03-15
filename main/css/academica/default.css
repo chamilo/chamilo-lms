@@ -115,24 +115,23 @@ a:active {
 }
 
 /* footer styles */
-#footer {
+footer {
 	background-color: #4171b5;
 	background-image: url(images/bg.jpg);
 	background-repeat:repeat-x;
 	color: #B0C8EB;
 	font-weight:bold;
 	overflow:hidden;
-	width: 100%;
-	padding-bottom:10px;
+	width: 100%;	
 }
-
+footer a:link, footer a:visited {
+    color:#fff;
+}
 .push {
 	height: 9em; /* Very important */
 }
 
-#footer a {
-	color: #fff;
-}
+
 /* main styles */
 #main {
 	padding-left: 30px;

@@ -53,18 +53,18 @@ $form = new FormValidator('export_users');
 $form->addElement('header', '', $tool_name);
 $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML','xml');
 $form->addElement('radio', 'file_type', null, 'CSV','csv');
+
 $form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
 $form->addElement('style_submit_button', 'submit',get_lang('Export'),'class="save"');
 $form->setDefaults(array('file_type'=>'csv'));
 
-if ($form->validate())
-{
+if ($form->validate()) {
 	global $_configuration;
 
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
-	$course_code = $export['course_code'];
+	$course_code = Database::escape_string($export['course_code']);
 
 	$sql = "SELECT  u.user_id 	AS UserId,
 					u.lastname 	AS LastName,

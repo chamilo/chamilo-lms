@@ -7,7 +7,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking');
+$language_file = array('admin', 'tracking','coursebackup');
 
 // Resetting the course id.
 $cidReset = true;
@@ -32,6 +32,10 @@ if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
         $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');        
     }
+    if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');           
+    }
+    
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
         register_site();

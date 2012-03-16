@@ -8,7 +8,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-
 $course_code    = isset($_REQUEST['course_code'])  ? $_REQUEST['course_code'] : null;
 $session_id     = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 $user_id        = api_get_user_id();
@@ -17,14 +16,13 @@ if (empty($course_code)) {
     api_not_allowed();
 }
 
-
 $course_info = CourseManager::get_course_information($course_code);
 $course_legal = $course_info['legal'];
 
-
 // Build the form
-
 $form = new FormValidator('legal', 'GET', api_get_self().'?course_code='.$course_code.'&session_id='.$session_id);
+$form->addElement('header', get_lang('CourseLegalAgreement'));
+$form->addElement('label', null, $course_legal);
 $form->addElement('hidden', 'course_code', $course_code);
 $form->addElement('hidden', 'session_id', $session_id);
 $form->addElement('checkbox', 'accept_legal', null, get_lang('AcceptLegal'));
@@ -70,7 +68,5 @@ if (empty($session_id)) {
 }
 
 Display :: display_header($nameTools);
-echo '<h2>'.get_lang('CourseLegalAgreement').'</h2>';
-echo $course_legal;
 $form->display();
 Display :: display_footer();

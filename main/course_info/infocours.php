@@ -45,8 +45,7 @@ function is_settings_editable() {
 	return $GLOBALS['course_info_is_editable'];
 }
 
-/*		MAIN CODE */
-
+/* MAIN CODE */
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
@@ -149,7 +148,6 @@ $prof -> setSelected($s_selected_tutor);
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');*/
 
-
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
@@ -203,12 +201,10 @@ $form->addGroup($group, '', array(get_lang("Unsubscription")), '');
 $form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
 $form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
-$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('cols'=>75, 'rows' => 10));
-
+$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('class'=>'span6', 'rows' => 8));
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
-
 
 // EMAIL NOTIFICATIONS
 $form->addElement('html', '<div> <h3>'.Display::return_icon('mail.png', Security::remove_XSS(get_lang('EmailNotifications')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('EmailNotifications')).'</h3><div>');

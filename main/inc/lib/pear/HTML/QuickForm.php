@@ -290,9 +290,11 @@ class HTML_QuickForm extends HTML_Common
      * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a special hidden field
      * @access   public
      */
-    function HTML_QuickForm($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
+    public function __construct($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
     {
         HTML_Common::HTML_Common($attributes);
+        
+        
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         // Modified by Chamilo team, 16-MAR-2010
         //$action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
@@ -338,7 +340,7 @@ class HTML_QuickForm extends HTML_Common
                 default:
                     $this->_maxFileSize = $matches['1'];
             }
-        }
+        }     
     } // end constructor
 
     // }}}
@@ -1693,8 +1695,7 @@ class HTML_QuickForm extends HTML_Common
     * @access public
     * @return void
     */
-    function accept(&$renderer)
-    {
+    function accept(&$renderer) {
         $renderer->startForm($this);
         foreach (array_keys($this->_elements) as $key) {
             $element =& $this->_elements[$key];
@@ -1716,15 +1717,13 @@ class HTML_QuickForm extends HTML_Common
     * @since 3.0
     * @return object a default renderer object
     */
-    function &defaultRenderer()
-    {
+    function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
-            include_once('HTML/QuickForm/Renderer/Default.php');
+            include_once 'HTML/QuickForm/Renderer/Default.php';
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
-            //
-        }
+        }        
         return $GLOBALS['_HTML_QuickForm_default_renderer'];
     } // end func defaultRenderer
 
@@ -1741,12 +1740,12 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access   public
      */
-    function toHtml ($in_data = null)
-    {
+    function toHtml ($in_data = null) {
+         
         if (!is_null($in_data)) {
             $this->addElement('html', $in_data);
         }
-        $renderer =& $this->defaultRenderer();
+        $renderer =& $this->defaultRenderer();             
         $this->accept($renderer);
         return $renderer->toHtml();
     } // end func toHtml
@@ -2081,7 +2080,6 @@ class HTML_QuickForm_Error extends PEAR_Error {
             $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
-
     // }}}
 } // end class HTML_QuickForm_Error
 ?>

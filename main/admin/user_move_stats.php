@@ -710,10 +710,7 @@ if (!empty($user_list)) {
                 echo '<select id="'.$unique_id.'" name="'.$unique_id.'">';
                 echo $options;
                 echo '</select>';
-                echo '<br />';
-                //KK(\''.$unique_id.'\', \''.$user_id.'\')
-                //echo '<input type="submit" class="thickbox"  value="'.get_lang('ViewStats').'" alt="user_move_stats.php?height=520&width=500&load_ajax=1&view_stat=1&unique_id='.$unique_id.'&user_id='.$user_id.'" >';
-                //echo '<input type="submit" class="thickbox"  value="'.get_lang('ViewStats').'" alt="user_move_stats.php?height=520&width=500&load_ajax=1&view_stat=1&unique_id='.$unique_id.'&user_id='.$user_id.'" >';
+                echo '<br />';                
                 echo '<button type="submit" class="save" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';                
                 echo '<button type="submit" class="save" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';                
                 echo '<div id ="reponse_'.$unique_id.'"></div>';                                 

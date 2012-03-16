@@ -1125,7 +1125,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         }
                     } else {
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
-                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'thickbox a_button white small'));                    	
+                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));                    	
                     	$actions .= $attempt_link;
                     }                    
                     

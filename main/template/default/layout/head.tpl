@@ -88,7 +88,7 @@ $(document).ready(function() {
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {
-                    dialog  = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');
+                    dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
             }
 
             // load remote content
@@ -98,8 +98,8 @@ $(document).ready(function() {
                             function(responseText, textStatus, XMLHttpRequest) {
                                     dialog.dialog({
                                             modal	: true, 
-                                            width	: 540, 
-                                            height	: 400        
+                                            width	: 580, 
+                                            height	: 450        
                                     });	                    
             });
             //prevent the browser to follow the link

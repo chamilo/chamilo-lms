@@ -276,10 +276,13 @@ foreach ($array as $row_table) {
 	$row++;
 }
 
+	
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace"><img align="absbottom" src="../img/back.png">&nbsp;'.get_lang('Back').'</a> ';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('CurrentCoursesReport').'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('CurrentCoursesReport'), array(), 32).'</a> ';
 echo '</div>';
+echo '<div style="overflow:auto;">';
 echo $table->toHtml();
+echo '</div>';
  
 Display::display_footer();

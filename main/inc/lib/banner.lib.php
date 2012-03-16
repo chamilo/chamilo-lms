@@ -463,19 +463,19 @@ function show_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).get_lang('CourseHomepageLink');
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
                 break;
             case 'course_code':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).$_course['official_code'];
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).$_course['name'].$my_session_name;
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
                 break;
             default:
                 if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) { 
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).$_course['name'].$my_session_name;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
                 } else {
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).$_course['name'];
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$_course['name'];
                 }
                 break;
         }

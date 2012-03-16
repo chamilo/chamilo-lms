@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-// Copyright (c) 2010 Chamilo.org
-// Copyright (c) 2004-2005 Dokeos S.A.
-// Copyright (c) Bart Mollet, Hogeschool Gent
-
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm.php';
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm/advmultiselect.php';
 
@@ -34,14 +30,14 @@ class FormValidator extends HTML_QuickForm {
 	 * @param bool $track_submit (optional)		Whether to track if the form was
 	 * submitted by adding a special hidden field (default = true)
 	 */
-	function FormValidator($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
+	function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
                     
         //Default form class
         if (!isset($attributes['class'])) {
             $attributes['class'] = 'form-horizontal';
         }
         
-		$this->HTML_QuickForm($form_name, $method, $action, $target, $attributes, $track_submit);
+		parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
         
 		// Load some custom elements and rules
 		$dir = api_get_path(LIBRARY_PATH).'formvalidator/';
@@ -65,22 +61,19 @@ class FormValidator extends HTML_QuickForm {
 		// Modify the default templates
 		$renderer = & $this->defaultRenderer();
         
-        //Form template
-        
-		$form_template = <<<EOT
-<form {attributes}>
+        //Form template        
+		$form_template = '<form{attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>
 </fieldset>
-</form>
-EOT;
+{hidden}
+</form>';
 		$renderer->setFormTemplate($form_template);
                 
         //Element template
         
-		$element_template = <<<EOT
-	
+		$element_template = '   
 		<div class="control-group {error_class}">				
             <label class="control-label">
 				<!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
@@ -101,16 +94,12 @@ EOT;
 					<span class="help-inline">{error}</span>
 				<!-- END error -->	
 			</div>
-		</div>
-EOT;
+		</div>';
+        
 		$renderer->setElementTemplate($element_template);
         
-        //Set Header template
-        
-		$header_template = <<<EOT
-	<legend>{header}</legend>
-EOT;
-		$renderer->setHeaderTemplate($header_template);
+        //Set Header template        
+		$renderer->setHeaderTemplate('<legend>{header}</legend>');
         
         //Set required field template
 		HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
@@ -120,7 +109,7 @@ EOT;
 	</div>
 EOT;
 		$renderer->setRequiredNoteTemplate($required_note_template);
-	}
+	}    
 
 	/**
 	 * Adds a textfield to the form.
@@ -347,7 +336,7 @@ EOT;
 	 */
 	function return_form() {
 		$error = false;
-		foreach ($this->_elements as $index => $element) {
+		foreach ($this->_elements as $element) {
 			if (!is_null(parent::getElementError($element->getName()))) {
 				$error = true;
 				break;
@@ -356,8 +345,8 @@ EOT;
 		$return_value = '';
 		if ($error) {
 			$return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'),'warning');
-		}
-		$return_value .= parent::toHtml();
+		}           
+		$return_value .= parent::toHtml();           
 		// Add div-element which is to hold the progress bar
 		if (isset($this->with_progress_bar) && $this->with_progress_bar) {
 			$return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';

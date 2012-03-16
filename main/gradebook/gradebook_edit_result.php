@@ -25,6 +25,7 @@ if (empty($select_eval)) {
 $resultedit = Result :: load (null,null,$select_eval);
 $evaluation = Evaluation :: load ($select_eval);
 $edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval='.$select_eval);
+$table = $edit_result_form->toHtml();
 if ($edit_result_form->validate()) {
 	$values = $edit_result_form->exportValues();
 	$scores = ($values['score']);
@@ -40,6 +41,7 @@ if ($edit_result_form->validate()) {
 	header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=');
 	exit;
 }
+
 $interbreadcrumb[] = array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
@@ -50,7 +52,5 @@ $interbreadcrumb[]= array (
 ));
 Display :: display_header(get_lang('EditResult'));
 DisplayGradebook :: display_header_result ($evaluation[0],null,0,0);
-echo '<div class="main">';
-echo $edit_result_form->toHtml();
-echo '</div>';
+echo $table;
 Display :: display_footer();

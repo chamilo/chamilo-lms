@@ -478,7 +478,7 @@ if ($file_type == null) { //show the result header
     		echo '</div>';
     	}
     	if (isset ($edit_res_form)) {
-    		Display :: display_normal_message($edit_res_form->toHtml(),false);
+    		echo $edit_res_form->toHtml();
     	}
     	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     }

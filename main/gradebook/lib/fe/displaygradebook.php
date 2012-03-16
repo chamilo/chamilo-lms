@@ -61,7 +61,7 @@ class DisplayGradebook
 			if ($score != null) {
                 $average= get_lang('Average') . ' :<b> ' .$scoredisplay->display_score($score, SCORE_AVERAGE) . '</b>';
                 $student_score = $evalobj->calc_score(api_get_user_id());
-                $student_score = Display::tag('h3', get_lang('Result').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT));                            
+                $student_score = Display::tag('h3', get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT));                            
             }				
 		}
 		
@@ -76,7 +76,7 @@ class DisplayGradebook
 		}
     
 		$evalinfo= '<table width="100%" border="0"><tr><td>';
-		$evalinfo .= '<h2>'.$evalobj->get_name().'</h2>'; 
+		$evalinfo .= '<h2>'.$evalobj->get_name().'</h2><hr>'; 
 		$evalinfo .= $description;
 		$evalinfo .= get_lang('Course') . ' :<b> ' . $course . '</b><br />';
 		//'<br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('Visible') . ' :<b> ' . $visible . '</b>
@@ -85,9 +85,7 @@ class DisplayGradebook
         if (!api_is_allowed_to_edit()) {
             $evalinfo .= $student_score;
         }
-        
-        
-        
+                
 		if (!$evalobj->has_results()) {
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		} elseif ($scoredisplay->is_custom() && api_get_self() != '/main/gradebook/gradebook_statistics.php') {
@@ -102,12 +100,11 @@ class DisplayGradebook
                 $evalinfo .= '<br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.png'),get_lang('ViewStatistics'),'','32').'</a>';
             }
         }
-        $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
-        
+        $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></td></table>';        
 		echo $evalinfo;
 		echo $header;
-
 	}
+    
 	/**
 	* Displays the header for the flatview page containing filters
 	* @param $catobj

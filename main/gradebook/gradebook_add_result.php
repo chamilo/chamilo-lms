@@ -22,6 +22,7 @@ $resultadd = new Result();
 $resultadd->set_evaluation_id($_GET['selecteval']);
 $evaluation = Evaluation :: load($_GET['selecteval']);
 $add_result_form = new EvalForm(EvalForm :: TYPE_RESULT_ADD, $evaluation[0], $resultadd, 'add_result_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']) . '&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+$table = $add_result_form->toHtml();
 if ($add_result_form->validate()) {
 	$values = $add_result_form->exportValues();
 	$nr_users = $values['nr_users'];
@@ -44,8 +45,6 @@ if ($add_result_form->validate()) {
 }
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
 Display :: display_header(get_lang('AddResult'));
-DisplayGradebook :: display_header_result ($evaluation[0], null, 0,0);
-echo '<div class="main">';
-echo $add_result_form->toHtml();
-echo '</div>';
+DisplayGradebook :: display_header_result ($evaluation[0], null, 0,0);      
+echo $table;
 Display :: display_footer();

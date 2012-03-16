@@ -31,10 +31,8 @@ $interbreadcrumb[] = array (
 );
 $this_section = SECTION_COURSES;
 Display :: display_header('');
-echo '<div class="clear"></div>';
-echo '<div class="actions">';
-api_display_tool_title(get_lang('GradebookQualifyLog'));
-echo '</div>';
+
+echo Display::page_subheader(get_lang('GradebookQualifyLog'));
 
 
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);

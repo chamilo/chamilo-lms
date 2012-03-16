@@ -155,7 +155,7 @@ class Category implements GradebookItem
      * @param int      session id (in case we are in a session)
      * @param bool     Whether to show all "session" categories (true) or hide them (false) in case there is no session id
 	 */
-	public function load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session = null, $show_session_categories = true) {
+	public function load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $show_session_categories = true) {
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
 		if ( isset($id) && (int)$id === 0 ) {
@@ -187,8 +187,9 @@ class Category implements GradebookItem
 			else { $sql .= ' WHERE'; }
 			if ($course_code == '0') { $sql .= ' course_code is null '; }
 			else { $sql .= " course_code = '".Database::escape_string($course_code)."'"; }
-            if (!empty($session)) {
-            	$sql .= ' AND session_id = '.(int) $session.' ';
+            
+            if (!empty($session_id)) {
+            	$sql .= ' AND session_id = '.(int) $session_id.' ';
             } else {
             	// a query on the course should show all
                 // the categories inside sessions for this course
@@ -219,7 +220,7 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
-		
+		//var_dump($sql);
 		$result = Database::query($sql);
         $allcat = array();		
 		if (Database::num_rows($result) > 0) {

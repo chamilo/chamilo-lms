@@ -95,7 +95,8 @@ class LinkAddEditForm extends FormValidator
         
         $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
-            'maxlength' => '5'
+            'maxlength' => '5',
+            'class' => 'span1'
         ));
         
 		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');

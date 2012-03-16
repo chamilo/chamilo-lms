@@ -14,6 +14,7 @@ require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/linkform.class.php';
 require_once 'lib/fe/linkaddeditform.class.php';
+
 api_block_anonymous_users();
 block_students();
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -33,6 +34,10 @@ $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'e
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$link->set_weight($values['weight']);
+    
+    if (!empty($values['select_gradebook'])) {
+        $link->set_category_id($values['select_gradebook']);
+    }
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
 
@@ -60,8 +65,6 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$linkcat,'name' => get_lang('Gradebook'));
-
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 

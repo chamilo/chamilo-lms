@@ -416,33 +416,43 @@ class EvalForm extends FormValidator
 			'id' => 'evaluation_title'
 		));
         
+        $this->evaluation_object->get_category_id();
+        
         $select_gradebook = $this->addElement('select', 'hid_category_id', get_lang('SelectGradebook'), array(), array('id' => 'hid_category_id'));
         
-        $all_categories = Category :: load();
+        $session_id  = api_get_session_id();
+        
+        $course_code = api_get_course_id();
+        
+        //$all_categories = Category :: load();        
+        $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);                
+        // load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session = null, $show_session_categories = true) {
         
         $default_weight = 0;
         
-        if (!empty($all_categories)) {
-            foreach($all_categories as $my_cat) {
-                if ($my_cat->get_course_code() == api_get_course_id()) {
+        if (!empty($all_categories)) {            
+            foreach ($all_categories as $my_cat) {
+                if ($my_cat->get_course_code() == api_get_course_id()) {                    
                     if ($my_cat->get_parent_id() == 0 ) {
                         $default_weight = $my_cat->get_weight();
                         $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                        $cats_added[] = $my_cat->get_id();
                     } else {
                         $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                        $cats_added[] = $my_cat->get_id();
                     }
-                    
                     if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
                         $default_weight = $my_cat->get_weight();                        
-                    }
-                    
+                    }                                        
                 }           
             }
         }
+        
 
 		$this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
 			'size' => '4',
-			'maxlength' => '5'
+			'maxlength' => '5',
+            'class' => 'span1'
 		));
         
 		if ($edit) {

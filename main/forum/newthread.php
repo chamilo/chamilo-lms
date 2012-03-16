@@ -22,14 +22,11 @@
  * @package chamilo.forum
  */
 
-exit;
-
 // Language file that need to be included.
 $language_file = array('forum', 'document');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-
 require_once '../gradebook/lib/gradebook_functions.inc.php';
 
 // The section (tabs).
@@ -39,7 +36,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools = get_lang('ToolForum');

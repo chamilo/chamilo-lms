@@ -233,9 +233,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
                 document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;".get_lang('AddAnAttachment')."';
                 }*/
 
-    $form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
-    $form->addElement('html', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>','');
-    $form->addElement('html', '</div></div>');
+    $form->addElement('advanced_settings', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>','');
     $form->addElement('html', '<div id="options" style="display:none">');
 
     $group = '';
@@ -306,17 +304,9 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
                 $img_attributes = 'width="100" height="100"';
             }
             $show_preview_image='<img src="'.$image_path.'" '.$img_attributes.'>';
-            $div = '<div class="row">
-            <div class="label">'.get_lang('PreviewImage').'</div>
-            <div class="formw">
-            '.$show_preview_image.'
-            </div>
-            </div>';
-
-            $form->addElement('html', $div .'<br/>');
+            $form->addElement('label', get_lang('PreviewImage'), $show_preview_image);
             $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
         }
-
     }
     $forum_image = isset($inputvalues['forum_image']) ? $inputvalues['forum_image'] : '';
     $form->addElement('file', 'picture', ($forum_image != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
@@ -2067,10 +2057,9 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     //$form->applyFilter('post_text', 'html_filter');
-
-    $form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">');
-    $form->addElement('html', '<a href="javascript://" onclick="return advanced_parameters()">
-    						  <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a></div></div>');
+    
+    $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()">
+    						  <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>');
     
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
 
@@ -2103,7 +2092,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     }
 
     // User upload
-    $form->addElement('html', '<b><div class="row"><div class="label">'.get_lang('AddAnAttachment').'</div></div></b><br /><br />');
+    $form->addElement('label', null, get_lang('AddAnAttachment'));
     $form->addElement('file', 'user_upload',get_lang('FileName'),'');
     $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array ('rows' => 4, 'cols' => 34));
     $form->applyFilter('file_comment', 'html_filter');
@@ -2498,10 +2487,9 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     );
     //$form->applyFilter('post_text', 'html_filter');
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-
-    $form->addElement('html', '<div class="row"><div class="label">');
-    $form->addElement('html', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>','');
-    $form->addElement('html', '</div><div class="formw"></div></div>');
+    
+    $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>');
+    
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
 
     if (!isset($_GET['edit'])) {

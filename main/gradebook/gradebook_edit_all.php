@@ -52,8 +52,6 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	}
 }
 
-
-
 $course_id			  =	get_course_id_by_link_id($my_selectcat);
 
 $table_link           = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -85,7 +83,7 @@ if($submitted==1) {
 
 $category_id = (int)$_GET['selectcat'];
 $output='';
-$sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
+$sql = 'SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
 $result = Database::query($sql);
 	while($row = Database ::fetch_array($result)) {
 		//update only if value changed
@@ -114,7 +112,7 @@ $result = Database::query($sql);
 			Database::query($sql_t);
 		}
 
-		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE c_id = '.$course_id.' AND  '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
+		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type']).' WHERE c_id = '.$course_id.' AND  '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
 		$resource_name = Database ::fetch_array($tempsql);
 		//var_dump($resource_name['lp_type']);
 		if (isset($resource_name['lp_type'])) {
@@ -146,7 +144,9 @@ if ($my_api_cidreq=='') {
 }
 ?>
 <div class="actions">
-<a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM); ?></a>
+<a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>">
+    <?php echo Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM); ?>
+</a>
 </div>
 <?php
 $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $my_category['weight']);
@@ -154,12 +154,12 @@ Display::display_normal_message($warning_message,false);
 ?>
 <form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
-		 <tr class="row_odd">
-		  <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
-		  <th><?php echo get_lang('Resource'); ?></th>
-		  <th><?php echo get_lang('Weight'); ?></th>
-		 </tr>
-		 <?php echo $output; ?>
+    <tr class="row_odd">
+        <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
+        <th><?php echo get_lang('Resource'); ?></th>
+        <th><?php echo get_lang('Weight'); ?></th>
+    </tr>
+    <?php echo $output; ?>
  </table>
  <input type="hidden" name="submitted" value="1" />
  <br />

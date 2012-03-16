@@ -196,7 +196,6 @@ function get_icon_file_name ($type) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_cat($cat, $selectcat) {
-
 	$show_message=$cat->show_message_resource_delete($cat->get_course_code());
 	if ($show_message===false) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
@@ -212,6 +211,9 @@ function build_edit_icons_cat($cat, $selectcat) {
 		} else {
 			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 		}
+        
+        $modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
+                Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            
 
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';
 
@@ -387,10 +389,10 @@ function get_course_id_by_link_id($id_link) {
 	return $array['id'];
 }
 
-function get_table_type_course($type,$course) {
+function get_table_type_course($type) {
 	global $_configuration;
 	global $table_evaluated;
-	return Database::get_course_table($table_evaluated[$type][0],$_configuration['db_prefix'].$course);
+	return Database::get_course_table($table_evaluated[$type][0]);
 }
 
 function get_printable_data($cat, $users, $alleval, $alllinks) {

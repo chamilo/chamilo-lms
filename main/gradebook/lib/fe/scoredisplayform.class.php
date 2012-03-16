@@ -25,10 +25,10 @@ class ScoreDisplayForm extends FormValidator
 		$customdisplays= $displayscore->get_custom_score_display_settings();
 		$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
 		$this->setDefaults(array (
-		'enablescorecolor' => $displayscore->is_coloring_enabled(),
-		'scorecolpercent' => $displayscore->get_color_split_value(),
-		'enablescore' => $displayscore->is_custom(),
-		'includeupperlimit' => $displayscore->is_upperlimit_included()
+            'enablescorecolor' => $displayscore->is_coloring_enabled(),
+            'scorecolpercent' => $displayscore->get_color_split_value(),
+            'enablescore' => $displayscore->is_custom(),
+            'includeupperlimit' => $displayscore->is_upperlimit_included()
 		));
 		$this->addElement('hidden', 'maxvalue', '100');
 		$this->addElement('hidden', 'minvalue', '0');
@@ -50,22 +50,13 @@ class ScoreDisplayForm extends FormValidator
 		//settings for the colored score
 		$this->addElement('header', '', get_lang('ScoreEdit'));
 		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
-		$renderer = $this->defaultRenderer();
-		$elementTemplateColor = '<div class="row">
-			<div class="label">
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-			</div>
-			<div class="formw">
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	'.get_lang('Below').'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % '.get_lang('WillColorRed').'
-			</div>
-			</div>';
-
-		$this->AddElement('checkbox', 'enablescorecolor', null, get_lang('EnableScoreColor'), null);
-		$this->AddElement('text', 'scorecolpercent', null, array (
+		$this->addElement('checkbox', 'enablescorecolor', null, get_lang('EnableScoreColor'), null);
+		$this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
 			'size' => 5,
-			'maxlength' => 5
-		));
-		$renderer->setElementTemplate($elementTemplateColor,'scorecolpercent');
+			'maxlength' => 5,
+            'class'=>'span1',
+            
+		));		
 		$this->addRule('scorecolpercent', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array('scorecolpercent','maxvalue'), get_lang('Over100'), 'compare', '<=');
 		$this->addRule(array('scorecolpercent','minvalue'), get_lang('UnderMin'), 'compare', '>');
@@ -90,12 +81,13 @@ class ScoreDisplayForm extends FormValidator
 			$scorenull[]= & $this->CreateElement('static', null, null, ' %');
 			$this->addGroup($scorenull, '', '', ' ');
 			for ($counter= 1; $counter <= 20; $counter++) {
-
 				$renderer =& $this->defaultRenderer();
 				$elementTemplateTwoLabel =
-				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';" class="row">
-				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<br /><b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
+				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';" class="control-group">
+				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+                
+                <label class="control-label">{label}</label>
+				<div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<br /><b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
 
 				$elementTemplateTwoLabel2 =
 				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
@@ -104,15 +96,17 @@ class ScoreDisplayForm extends FormValidator
 				</div></p></div>';
 
 				$scorebetw= array ();
-				$this->AddElement('text', 'endscore[' . $counter . ']', null, array (
+				$this->addElement('text', 'endscore[' . $counter . ']', null, array (
 					'size' => 5,
 					'maxlength' => 5,
-					'id' => 'txta-'.$counter
+					'id' => 'txta-'.$counter,
+                    'class' => 'span1',
 				));
-				$this->AddElement('text', 'displaytext[' . $counter . ']', null,array (
+				$this->addElement('text', 'displaytext[' . $counter . ']', null,array (
 					'size' => 40,
 					'maxlength' => 40,
-					'id' => 'txtb-'.$counter
+					'id' => 'txtb-'.$counter,
+                    'class' => 'span3',
 				));
 				$renderer->setElementTemplate($elementTemplateTwoLabel,'endscore[' . $counter . ']');
 				$renderer->setElementTemplate($elementTemplateTwoLabel2,'displaytext[' . $counter . ']');

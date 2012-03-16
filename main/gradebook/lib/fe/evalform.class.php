@@ -466,8 +466,7 @@ class EvalForm extends FormValidator
 					'size' => '4',
 					'maxlength' => '5',
 					'disabled' => 'disabled'
-				));
-				//$this->addElement('static','label','','<small>'.get_lang('CannotChangeTheMaxNote').'</small>');
+				));				
 			}
 		} else {
 			$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (

@@ -56,7 +56,7 @@ class DataForm extends FormValidator {
 	protected function build_pdf_export_form() {
 		$renderer =& $this->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span>');
-		$this->addElement('static','label','',get_lang('ChooseOrientation'));
+		$this->addElement('header', get_lang('ChooseOrientation'));
 		$this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
 		$this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
 		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
@@ -67,7 +67,7 @@ class DataForm extends FormValidator {
 
 
 	protected function build_export_form() {
-		$this->addElement('header','label', get_lang('ChooseFormat'));
+		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
 		$this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');
@@ -78,7 +78,7 @@ class DataForm extends FormValidator {
 	}
 
 	protected function build_export_form_option($show_pdf=true) {
-		$this->addElement('header','label',get_lang('ChooseFormat'));
+		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
 		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));			
@@ -90,7 +90,7 @@ class DataForm extends FormValidator {
 
 	protected function build_import_form() {
 		$this->addElement('hidden', 'formSent');
-		$this->addElement('header','label',get_lang('ImportFileLocation'));
+		$this->addElement('header', get_lang('ImportFileLocation'));
 		$this->addElement('file', 'import_file',get_lang('Location'));
 		$allowed_file_types = array (
 			'xml',

@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Script
@@ -71,24 +71,23 @@ if ($scoreform->validate()) {
 	$endscore= isset($values['endscore']) ? $values['endscore'] : null;
 	$displaytext=isset($values['displaytext']) ? $values['displaytext'] : null;
 	for ($counter= 1; $ranges_ok && $counter <= 20; $counter++) {
-			$setting= array ();
-			$setting['score']= $endscore[$counter];
-			$setting['display']= $displaytext[$counter];
-			if (!empty($setting['score'])) {
-				foreach ($scoringdisplay as $passed_entry) {
-					if ($passed_entry['score'] == $setting['score']) {
-						$ranges_ok = false;
-					}
-				}
-			$scoringdisplay[]= $setting;
-			}
-		}
+        $setting= array ();
+        $setting['score']= $endscore[$counter];
+        $setting['display']= $displaytext[$counter];
+        if (!empty($setting['score'])) {
+            foreach ($scoringdisplay as $passed_entry) {
+                if ($passed_entry['score'] == $setting['score']) {
+                    $ranges_ok = false;
+                }
+            }
+        $scoringdisplay[]= $setting;
+        }
+    }
 
 	if (!$ranges_ok) {
 		header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat);
 		exit;
 	}
-
 
 	// update color settings
 	$val_enablescorecolor=isset($values['enablescorecolor']) ? $values['enablescorecolor'] : null;

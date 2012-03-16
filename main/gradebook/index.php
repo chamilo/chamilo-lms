@@ -33,8 +33,38 @@ require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
+/*
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
+$htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
+$htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
+
 $htmlHeadXtra[] = '<script type="text/javascript">
+    
 $(document).ready( function() {
+
+/*
+  var s1 = [["a",25]];
+  var s2 = [["a", 0], ["a", 10], ["a", 10], ["a", 5]];
+     
+  var plot3 = $.jqplot("chart3", [s1, s2], {        
+  colors: ["#000", "#fff"],
+    seriesDefaults: {
+      // make this a donut chart.
+      renderer:$.jqplot.DonutRenderer,
+      rendererOptions:{
+        // Donuts can be cut into slices like pies.
+        sliceMargin: 3 ,
+        // Pies and donuts can start at any arbitrary angle.
+        startAngle: -90,
+        showDataLabels: true,
+        // By default, data labels show the percentage of the donut/pie.
+        // You can show the data "value" or data "label" instead.
+        dataLabels: "value"
+        
+      }
+    }
+  });*/
+
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();
@@ -56,7 +86,7 @@ function confirmation() {
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance   = Database :: get_course_table(TABLE_ATTENDANCE);
 $tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-$status           = CourseManager::get_user_in_course_status($stud_id, $course_code);
+//$status           = CourseManager::get_user_in_course_status($stud_id, $course_code);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
@@ -111,7 +141,6 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 	}
 }
 
-
 // ACTIONS
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {
@@ -135,11 +164,13 @@ if (isset ($_GET['createallcategories'])) {
 	header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
 	exit;
 }
+
 //show logs evaluations
 if (isset ($_GET['visiblelog'])) {
 	header('Location: ' . api_get_self().'/gradebook_showlog_eval.php');
 	exit;
 }
+
 //move a category
 if (isset ($_GET['movecat'])) {
 	block_students();
@@ -170,6 +201,7 @@ if (isset ($_GET['movecat'])) {
 		}
 	unset ($cats);
 }
+
 //move an evaluation
 if (isset ($_GET['moveeval'])) {
 	block_students();
@@ -203,6 +235,7 @@ if (isset ($_GET['moveeval'])) {
 	}
 	unset ($evals);
 }
+
 //move a link
 if (isset ($_GET['movelink'])) {
 	block_students();
@@ -217,6 +250,7 @@ if (isset ($_GET['movelink'])) {
 		exit;
 	}
 }
+
 //parameters for categories
 if (isset ($_GET['visiblecat'])) {
 	block_students();
@@ -811,8 +845,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 		
-	if (!empty($cats)) {
-	    
+	if (!empty($cats)) {	    
 		$items = $grading_contents['items'];
 		$i = 0;
 		foreach ($cats as $cat) {
@@ -834,10 +867,11 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
 					}
 				}				
-				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);
+				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);                
 				$gradebooktable->display();				
 			}
 		}
 	}
 }
+echo '<div id="chart3"></div>';
 Display :: display_footer();

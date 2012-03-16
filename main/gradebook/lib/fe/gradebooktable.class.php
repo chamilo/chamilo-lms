@@ -27,7 +27,6 @@ class GradebookTable extends SortableTable {
 	 * Constructor
 	 */
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
-
   		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
     	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
 		$this->evals_links = array_merge($evals, $links);
@@ -78,6 +77,10 @@ class GradebookTable extends SortableTable {
 	 	    }
 		}
     }
+    
+    function get_data() {
+        return $this->datagen;
+    }
 
 
 	/**
@@ -86,7 +89,6 @@ class GradebookTable extends SortableTable {
 	function get_total_number_of_items() {
 		return $this->datagen->get_total_items_count();
 	}
-
 
 	/**
 	 * Function used by SortableTable to generate the data to display
@@ -133,11 +135,12 @@ class GradebookTable extends SortableTable {
 		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
         
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
-		
 
 		// generate the data to display
 		$sortable_data = array();
-		$weight_total_links = 0;		
+		$weight_total_links = 0;
+        
+        $main_categories = array();
 		
 		foreach ($data_array as $data) {		
 			
@@ -160,10 +163,13 @@ class GradebookTable extends SortableTable {
 			//Name
 			if (get_class($item) == 'Category') {
 				$row[] = $invisibility_span_open.'<h2>'.$item->get_name().'</h2>'.$invisibility_span_close;
+                $main_categories[$item->get_id()]['name'] = $item->get_name();                
 			} else {
 				$row[] = $invisibility_span_open.$this->build_name_link($item) . $invisibility_span_close;
+                $main_categories[$item->get_id()] = $this->build_name_link($item);                
 			}
-			
+            $main_categories[$item->get_id()]['weight'] = $item->get_weight();
+            
 			//Description
 			//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 			
@@ -211,8 +217,8 @@ class GradebookTable extends SortableTable {
 				$stud_id		= api_get_user_id();
 				$course_code	= api_get_course_id();
 				$session_id		= api_get_session_id();
-				
-				$cats = Category :: load ($item->get_id(), null, null, null, null, null, true);
+				$parent_id      = $item->get_id();
+				$cats = Category :: load ($parent_id, null, null, null, null, null, true);
 			
 				$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);				
 				$alleval = $cats[0]->get_evaluations($stud_id);			
@@ -230,6 +236,10 @@ class GradebookTable extends SortableTable {
 					$invisibility_span_open  = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 					$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
 		
+                    
+                    $main_categories[$parent_id]['children'][$item->get_id()]['name'] = $item->get_name();
+                    $main_categories[$parent_id]['children'][$item->get_id()]['weight'] = $item->get_weight();
+                    
 					if (api_is_allowed_to_edit(null, true)) {
 						$row[] = $this->build_id_column($item);
 					}
@@ -354,7 +364,8 @@ class GradebookTable extends SortableTable {
 					}
 				}
 			}
-		}
+		}        
+        //var_dump($main_categories);
 		return $sortable_data;
 	}
 

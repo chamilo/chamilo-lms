@@ -19,7 +19,7 @@
 --
 
 DROP TABLE IF EXISTS user;
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS user (
   user_id int unsigned NOT NULL auto_increment,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
@@ -69,7 +69,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS admin;
-CREATE TABLE admin (
+CREATE TABLE IF NOT EXISTS admin (
   user_id int unsigned NOT NULL default '0',
   UNIQUE KEY user_id (user_id)
 );
@@ -90,7 +90,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS class;
-CREATE TABLE class (
+CREATE TABLE IF NOT EXISTS class (
   id mediumint unsigned NOT NULL auto_increment,
   code varchar(40) default '',
   name text NOT NULL,
@@ -112,7 +112,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS class_user;
-CREATE TABLE class_user (
+CREATE TABLE IF NOT EXISTS class_user (
   class_id mediumint unsigned NOT NULL default '0',
   user_id int unsigned NOT NULL default '0',
   PRIMARY KEY  (class_id,user_id)
@@ -133,7 +133,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS course;
-CREATE TABLE course (
+CREATE TABLE IF NOT EXISTS course (
   id int auto_increment,
   code varchar(40) NOT NULL,
   directory varchar(40) default NULL,
@@ -179,7 +179,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS course_category;
-CREATE TABLE course_category (
+CREATE TABLE IF NOT EXISTS course_category (
   id int unsigned NOT NULL auto_increment,
   name varchar(100) NOT NULL default '',
   code varchar(40) NOT NULL default '',
@@ -210,7 +210,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS course_field;
-CREATE TABLE course_field (
+CREATE TABLE IF NOT EXISTS course_field (
     id  int NOT NULL auto_increment,
     field_type int NOT NULL default 1,
     field_variable  varchar(64) NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE course_field (
 --
 
 DROP TABLE IF EXISTS course_field_values;
-CREATE TABLE course_field_values(
+CREATE TABLE IF NOT EXISTS course_field_values(
     id  int NOT NULL auto_increment,
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
@@ -244,7 +244,7 @@ CREATE TABLE course_field_values(
 --
 
 DROP TABLE IF EXISTS course_module;
-CREATE TABLE course_module (
+CREATE TABLE IF NOT EXISTS course_module (
   id int unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL,
   link varchar(255) NOT NULL,
@@ -301,7 +301,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS course_rel_class;
-CREATE TABLE course_rel_class (
+CREATE TABLE IF NOT EXISTS course_rel_class (
   course_code char(40) NOT NULL,
   class_id mediumint unsigned NOT NULL,
   PRIMARY KEY  (course_code,class_id)
@@ -322,7 +322,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS course_rel_user;
-CREATE TABLE course_rel_user (
+CREATE TABLE IF NOT EXISTS course_rel_user (
   course_code varchar(40) NOT NULL,
   user_id int unsigned NOT NULL default '0',
   status tinyint NOT NULL default '5',
@@ -352,7 +352,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS language;
-CREATE TABLE language (
+CREATE TABLE IF NOT EXISTS language (
   id tinyint unsigned NOT NULL auto_increment,
   original_name varchar(255) default NULL,
   english_name varchar(255) default NULL,
@@ -438,7 +438,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS php_session;
-CREATE TABLE php_session (
+CREATE TABLE IF NOT EXISTS php_session (
   session_id varchar(32) NOT NULL default '',
   session_name varchar(10) NOT NULL default '',
   session_time int NOT NULL default '0',
@@ -451,7 +451,7 @@ CREATE TABLE php_session (
 -- Table structure for table session
 --
 DROP TABLE IF EXISTS session;
-CREATE TABLE session (
+CREATE TABLE IF NOT EXISTS session (
   id smallint unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
   name char(50) NOT NULL default '',
@@ -477,7 +477,7 @@ CREATE TABLE session (
 -- Table structure for table session_rel_course
 --
 DROP TABLE IF EXISTS session_rel_course;
-CREATE TABLE session_rel_course (
+CREATE TABLE IF NOT EXISTS session_rel_course (
   id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
   nbr_users smallint unsigned NOT NULL default '0',
@@ -491,7 +491,7 @@ CREATE TABLE session_rel_course (
 -- Table structure for table session_rel_course_rel_user
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
-CREATE TABLE session_rel_course_rel_user (
+CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
   id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
   id_user int unsigned NOT NULL default '0',
@@ -509,7 +509,7 @@ CREATE TABLE session_rel_course_rel_user (
 -- Table structure for table session_rel_user
 --
 DROP TABLE IF EXISTS session_rel_user;
-CREATE TABLE session_rel_user (
+CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
@@ -518,7 +518,7 @@ CREATE TABLE session_rel_user (
 
 
 DROP TABLE IF EXISTS session_field;
-CREATE TABLE session_field (
+CREATE TABLE IF NOT EXISTS session_field (
     id  int NOT NULL auto_increment,
     field_type int NOT NULL default 1,
     field_variable  varchar(64) NOT NULL,
@@ -533,7 +533,7 @@ CREATE TABLE session_field (
 );
 
 DROP TABLE IF EXISTS session_field_values;
-CREATE TABLE session_field_values(
+CREATE TABLE IF NOT EXISTS session_field_values(
     id  int NOT NULL auto_increment,
     session_id int NOT NULL,
     field_id int NOT NULL,
@@ -547,7 +547,7 @@ CREATE TABLE session_field_values(
 --
 
 DROP TABLE IF EXISTS settings_current;
-CREATE TABLE settings_current (
+CREATE TABLE IF NOT EXISTS settings_current (
   id int unsigned NOT NULL auto_increment,
   variable varchar(255) default NULL,
   subkey varchar(255) default NULL,
@@ -887,7 +887,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS settings_options;
-CREATE TABLE settings_options (
+CREATE TABLE IF NOT EXISTS settings_options (
   id int unsigned NOT NULL auto_increment,
   variable varchar(255) default NULL,
   value varchar(255) default NULL,
@@ -1214,7 +1214,7 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS sys_announcement;
-CREATE TABLE sys_announcement (
+CREATE TABLE IF NOT EXISTS sys_announcement (
   id int unsigned NOT NULL auto_increment,
   date_start datetime NOT NULL default '0000-00-00 00:00:00',
   date_end datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1233,7 +1233,7 @@ CREATE TABLE sys_announcement (
 --
 
 DROP TABLE IF EXISTS shared_survey;
-CREATE TABLE shared_survey (
+CREATE TABLE IF NOT EXISTS shared_survey (
   survey_id int unsigned NOT NULL auto_increment,
   code varchar(20) default NULL,
   title text default NULL,
@@ -1256,7 +1256,7 @@ CREATE TABLE shared_survey (
 --
 
 DROP TABLE IF EXISTS shared_survey_question;
-CREATE TABLE shared_survey_question (
+CREATE TABLE IF NOT EXISTS shared_survey_question (
   question_id int NOT NULL auto_increment,
   survey_id int NOT NULL default '0',
   survey_question text NOT NULL,
@@ -1276,7 +1276,7 @@ CREATE TABLE shared_survey_question (
 --
 
 DROP TABLE IF EXISTS shared_survey_question_option;
-CREATE TABLE shared_survey_question_option (
+CREATE TABLE IF NOT EXISTS shared_survey_question_option (
   question_option_id int NOT NULL auto_increment,
   question_id int NOT NULL default '0',
   survey_id int NOT NULL default '0',
@@ -1293,7 +1293,7 @@ CREATE TABLE shared_survey_question_option (
 --
 
 DROP TABLE IF EXISTS templates;
-CREATE TABLE templates (
+CREATE TABLE IF NOT EXISTS templates (
   id int NOT NULL auto_increment,
   title varchar(100) NOT NULL,
   description varchar(250) NOT NULL,
@@ -1332,7 +1332,7 @@ CREATE TABLE IF NOT EXISTS openid_association (
 -- Tables for gradebook
 --
 DROP TABLE IF EXISTS gradebook_category;
-CREATE TABLE gradebook_category (
+CREATE TABLE IF NOT EXISTS gradebook_category (
   id int NOT NULL auto_increment,
   name text NOT NULL,
   description text,
@@ -1347,7 +1347,7 @@ CREATE TABLE gradebook_category (
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
-CREATE TABLE gradebook_evaluation (
+CREATE TABLE IF NOT EXISTS gradebook_evaluation (
   id int unsigned NOT NULL auto_increment,
   name text NOT NULL,
   description text,
@@ -1363,7 +1363,7 @@ CREATE TABLE gradebook_evaluation (
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_link;
-CREATE TABLE gradebook_link (
+CREATE TABLE IF NOT EXISTS gradebook_link (
   id int NOT NULL auto_increment,
   type int NOT NULL,
   ref_id int NOT NULL,
@@ -1376,7 +1376,7 @@ CREATE TABLE gradebook_link (
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_result;
-CREATE TABLE gradebook_result (
+CREATE TABLE IF NOT EXISTS gradebook_result (
   id int NOT NULL auto_increment,
   user_id int NOT NULL,
   evaluation_id int NOT NULL,
@@ -1385,7 +1385,7 @@ CREATE TABLE gradebook_result (
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_score_display;
-CREATE TABLE gradebook_score_display (
+CREATE TABLE IF NOT EXISTS gradebook_score_display (
   id int NOT NULL auto_increment,
   score float unsigned NOT NULL,
   display varchar(40) NOT NULL,
@@ -1396,7 +1396,7 @@ CREATE TABLE gradebook_score_display (
 ALTER TABLE gradebook_score_display ADD INDEX(category_id);
 
 DROP TABLE IF EXISTS user_field;
-CREATE TABLE user_field (
+CREATE TABLE IF NOT EXISTS user_field (
     id	INT NOT NULL auto_increment,
     field_type int NOT NULL DEFAULT 1,
     field_variable	varchar(64) NOT NULL,
@@ -1410,7 +1410,7 @@ CREATE TABLE user_field (
     PRIMARY KEY(id)
 );
 DROP TABLE IF EXISTS user_field_options;
-CREATE TABLE user_field_options (
+CREATE TABLE IF NOT EXISTS user_field_options (
     id	int NOT NULL auto_increment,
     field_id int	NOT NULL,
     option_value	text,
@@ -1420,7 +1420,7 @@ CREATE TABLE user_field_options (
     PRIMARY KEY (id)
 );
 DROP TABLE IF EXISTS user_field_values;
-CREATE TABLE user_field_values(
+CREATE TABLE IF NOT EXISTS user_field_values(
     id	bigint	NOT NULL auto_increment,
     user_id	int	unsigned NOT NULL,
     field_id int NOT NULL,
@@ -1461,7 +1461,7 @@ INSERT INTO user_field_options (field_id, option_value, option_display_text, opt
 
 
 DROP TABLE IF EXISTS gradebook_result_log;
-CREATE TABLE gradebook_result_log (
+CREATE TABLE IF NOT EXISTS gradebook_result_log (
     id int NOT NULL auto_increment,
     id_result int NOT NULL,
     user_id int NOT NULL,
@@ -1472,7 +1472,7 @@ CREATE TABLE gradebook_result_log (
 );
 
 DROP TABLE IF EXISTS gradebook_linkeval_log;
-CREATE TABLE gradebook_linkeval_log (
+CREATE TABLE IF NOT EXISTS gradebook_linkeval_log (
     id int NOT NULL auto_increment,
     id_linkeval_log int NOT NULL,
     name text,
@@ -1492,7 +1492,7 @@ CREATE TABLE gradebook_linkeval_log (
 --
 
 DROP TABLE IF EXISTS access_url;
-CREATE TABLE access_url(
+CREATE TABLE IF NOT EXISTS access_url(
     id	int	unsigned NOT NULL auto_increment,
     url	varchar(255) NOT NULL,
     description text,
@@ -1505,7 +1505,7 @@ CREATE TABLE access_url(
 INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
 
 DROP TABLE IF EXISTS access_url_rel_user;
-CREATE TABLE access_url_rel_user (
+CREATE TABLE IF NOT EXISTS access_url_rel_user (
   access_url_id int unsigned NOT NULL,
   user_id int unsigned NOT NULL,
   PRIMARY KEY (access_url_id, user_id)
@@ -1516,7 +1516,7 @@ ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(acc
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
 
 DROP TABLE IF EXISTS access_url_rel_course;
-CREATE TABLE access_url_rel_course (
+CREATE TABLE IF NOT EXISTS access_url_rel_course (
   access_url_id int unsigned NOT NULL,
   course_code char(40) NOT NULL,
   PRIMARY KEY (access_url_id, course_code)
@@ -1524,7 +1524,7 @@ CREATE TABLE access_url_rel_course (
 
 
 DROP TABLE IF EXISTS access_url_rel_session;
-CREATE TABLE access_url_rel_session (
+CREATE TABLE IF NOT EXISTS access_url_rel_session (
   access_url_id int unsigned NOT NULL,
   session_id int unsigned NOT NULL,
   PRIMARY KEY (access_url_id, session_id)
@@ -1533,6 +1533,7 @@ CREATE TABLE access_url_rel_session (
 --
 -- Table structure for table sys_calendar
 --
+DROP TABLE IF EXISTS sys_calendar;
 CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
   title varchar(255) NOT NULL,
@@ -1544,6 +1545,7 @@ CREATE TABLE IF NOT EXISTS sys_calendar (
   PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS system_template;
 CREATE TABLE IF NOT EXISTS system_template (
   id int UNSIGNED NOT NULL auto_increment,
   title varchar(250) NOT NULL,
@@ -2330,7 +2332,8 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 -- Table structure for table reservation category
 --
 
-CREATE TABLE reservation_category (
+DROP TABLE IF EXISTS reservation_category;
+CREATE TABLE IF NOT EXISTS reservation_category (
    id  int unsigned NOT NULL auto_increment,
    parent_id  int NOT NULL default 0,
    name  varchar(128) NOT NULL default '',
@@ -2343,7 +2346,8 @@ CREATE TABLE reservation_category (
 -- Table structure for table reservation category_rights
 --
 
-CREATE TABLE  reservation_category_rights  (
+DROP TABLE IF EXISTS reservation_category_rights;
+CREATE TABLE IF NOT EXISTS  reservation_category_rights  (
    category_id  int NOT NULL default 0,
    class_id  int NOT NULL default 0,
    m_items  tinyint NOT NULL default 0
@@ -2355,7 +2359,8 @@ CREATE TABLE  reservation_category_rights  (
 -- Table structure for table  item reservation
 --
 
-CREATE TABLE  reservation_item  (
+DROP TABLE IF EXISTS reservation_item;
+CREATE TABLE IF NOT EXISTS  reservation_item  (
    id  int unsigned NOT NULL auto_increment,
    category_id  int unsigned NOT NULL default 0,
    course_code  varchar(40) NOT NULL default '',
@@ -2373,7 +2378,8 @@ CREATE TABLE  reservation_item  (
 -- Table structure for table reservation item_rights
 --
 
-CREATE TABLE  reservation_item_rights  (
+DROP TABLE IF EXISTS reservation_item_rights;
+CREATE TABLE IF NOT EXISTS  reservation_item_rights  (
    item_id  int unsigned NOT NULL default 0,
    class_id  int unsigned NOT NULL default 0,
    edit_right  tinyint unsigned NOT NULL default 0,
@@ -2389,7 +2395,8 @@ CREATE TABLE  reservation_item_rights  (
 -- Table structure for main reservation table
 --
 
-CREATE TABLE  reservation_main  (
+DROP TABLE IF EXISTS reservation_main;
+CREATE TABLE IF NOT EXISTS  reservation_main  (
    id  int unsigned NOT NULL auto_increment,
    subid  int unsigned NOT NULL default 0,
    item_id  int unsigned NOT NULL default 0,
@@ -2413,7 +2420,8 @@ CREATE TABLE  reservation_main  (
 -- Table structure for reservation subscription table
 --
 
-CREATE TABLE  reservation_subscription  (
+DROP TABLE IF EXISTS reservation_subscription;
+CREATE TABLE IF NOT EXISTS  reservation_subscription  (
    dummy  int unsigned NOT NULL auto_increment,
    user_id  int unsigned NOT NULL default 0,
    reservation_id  int unsigned NOT NULL default 0,
@@ -2428,7 +2436,8 @@ CREATE TABLE  reservation_subscription  (
 --
 -- Table structure for table user_rel_user
 --
-CREATE TABLE user_rel_user (
+DROP TABLE IF EXISTS user_rel_user;
+CREATE TABLE IF NOT EXISTS user_rel_user (
   id bigint unsigned not null auto_increment,
   user_id int unsigned not null,
   friend_user_id int unsigned not null,
@@ -2444,7 +2453,8 @@ ALTER TABLE user_rel_user ADD INDEX idx_user_rel_user__user_friend_user(user_id,
 --
 -- Table structure for table user_friend_relation_type
 --
-CREATE TABLE user_friend_relation_type(
+DROP TABLE IF EXISTS user_friend_relation_type;
+CREATE TABLE IF NOT EXISTS user_friend_relation_type(
   id int unsigned not null auto_increment,
   title char(20),
   PRIMARY KEY(id)
@@ -2455,7 +2465,8 @@ CREATE TABLE user_friend_relation_type(
 -- Table structure for MD5 API keys for users
 --
 
-CREATE TABLE user_api_key (
+DROP TABLE IF EXISTS user_api_key;
+CREATE TABLE IF NOT EXISTS user_api_key (
     id int unsigned NOT NULL auto_increment,
     user_id int unsigned NOT NULL,
     api_key char(32) NOT NULL,
@@ -2467,7 +2478,8 @@ ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
 --
 -- Table structure for table message
 --
-CREATE TABLE message(
+DROP TABLE IF EXISTS message;
+CREATE TABLE IF NOT EXISTS message(
     id bigint unsigned not null auto_increment,
     user_sender_id int unsigned not null,
     user_receiver_id int unsigned not null,
@@ -2499,7 +2511,8 @@ VALUES
 -- Table structure for table legal (Terms & Conditions)
 --
 
-CREATE TABLE legal (
+DROP TABLE IF EXISTS legal;
+CREATE TABLE IF NOT EXISTS legal (
   legal_id int NOT NULL auto_increment,
   language_id int NOT NULL,
   date int NOT NULL default 0,
@@ -2514,7 +2527,8 @@ CREATE TABLE legal (
 -- Table structure for certificate with gradebook
 --
 
-CREATE TABLE gradebook_certificate (
+DROP TABLE IF EXISTS gradebook_certificate;
+CREATE TABLE IF NOT EXISTS gradebook_certificate (
     id bigint unsigned not null auto_increment,
     cat_id int unsigned not null,
     user_id int unsigned not null,
@@ -2534,13 +2548,15 @@ ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_i
 --
 
 -- specific fields tables
-CREATE TABLE specific_field (
+DROP TABLE IF EXISTS specific_field;
+CREATE TABLE IF NOT EXISTS specific_field (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     code char(1) NOT NULL,
     name VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE specific_field_values (
+DROP TABLE IF EXISTS specific_field_values;
+CREATE TABLE IF NOT EXISTS specific_field_values (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     course_code VARCHAR(40) NOT NULL ,
     tool_id VARCHAR(100) NOT NULL ,
@@ -2552,7 +2568,8 @@ ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (co
 
 -- search engine references to map dokeos resources
 
-CREATE TABLE search_engine_ref (
+DROP TABLE IF EXISTS search_engine_ref;
+CREATE TABLE IF NOT EXISTS search_engine_ref (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     course_code VARCHAR( 40 ) NOT NULL,
     tool_id VARCHAR( 100 ) NOT NULL,
@@ -2565,7 +2582,8 @@ CREATE TABLE search_engine_ref (
 -- Table structure for table sessions categories
 --
 
-CREATE TABLE session_category (
+DROP TABLE IF EXISTS session_category;
+CREATE TABLE IF NOT EXISTS session_category (
     id int NOT NULL auto_increment,
     name varchar(100) default NULL,
     date_start date default NULL,
@@ -2579,7 +2597,8 @@ CREATE TABLE session_category (
 -- Table structure for table user tag
 --
 
-CREATE TABLE tag (
+DROP TABLE IF EXISTS tag;
+CREATE TABLE IF NOT EXISTS tag (
     id int NOT NULL auto_increment,
     tag char(255) NOT NULL,
     field_id int NOT NULL,
@@ -2587,8 +2606,8 @@ CREATE TABLE tag (
     PRIMARY KEY  (id)
 );
 
-
-CREATE TABLE user_rel_tag (
+DROP TABLE IF EXISTS user_rel_tag;
+CREATE TABLE IF NOT EXISTS user_rel_tag (
     id int NOT NULL auto_increment,
     user_id int NOT NULL,
     tag_id int NOT NULL,
@@ -2599,7 +2618,8 @@ CREATE TABLE user_rel_tag (
 -- Table structure for user platform groups
 --
 
-CREATE TABLE groups (
+DROP TABLE IF EXISTS groups;
+CREATE TABLE IF NOT EXISTS groups (
     id int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
@@ -2611,7 +2631,8 @@ CREATE TABLE groups (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE group_rel_tag (
+DROP TABLE IF EXISTS group_rel_tag;
+CREATE TABLE IF NOT EXISTS group_rel_tag (
     id int NOT NULL AUTO_INCREMENT,
     tag_id int NOT NULL,
     group_id int NOT NULL,
@@ -2621,7 +2642,8 @@ CREATE TABLE group_rel_tag (
 ALTER TABLE group_rel_tag ADD INDEX ( group_id );
 ALTER TABLE group_rel_tag ADD INDEX ( tag_id );
 
-CREATE TABLE group_rel_user (
+DROP TABLE IF EXISTS group_rel_user;
+CREATE TABLE IF NOT EXISTS group_rel_user (
     id int NOT NULL AUTO_INCREMENT,
     group_id int NOT NULL,
     user_id int NOT NULL,
@@ -2632,7 +2654,8 @@ ALTER TABLE group_rel_user ADD INDEX ( group_id );
 ALTER TABLE group_rel_user ADD INDEX ( user_id );
 ALTER TABLE group_rel_user ADD INDEX ( relation_type );
 
-CREATE TABLE group_rel_group (
+DROP TABLE IF EXISTS group_rel_group;
+CREATE TABLE IF NOT EXISTS group_rel_group (
 	id int NOT NULL AUTO_INCREMENT,
 	group_id int NOT NULL,
 	subgroup_id int NOT NULL,
@@ -2643,7 +2666,8 @@ ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
-CREATE TABLE announcement_rel_group (
+DROP TABLE IF EXISTS announcement_rel_group;
+CREATE TABLE IF NOT EXISTS announcement_rel_group (
 	group_id int NOT NULL,
 	announcement_id int NOT NULL,
 	PRIMARY KEY (group_id, announcement_id)
@@ -2652,6 +2676,7 @@ CREATE TABLE announcement_rel_group (
 -- Table structure for table message attachment
 --
 
+DROP TABLE IF EXISTS message_attachment;
 CREATE TABLE IF NOT EXISTS message_attachment (
     id int NOT NULL AUTO_INCREMENT,
     path varchar(255) NOT NULL,
@@ -2670,6 +2695,7 @@ INSERT INTO course_field (field_type, field_variable, field_display_text, field_
 -- Table structure for table block
 --
 
+DROP TABLE IF EXISTS block;
 CREATE TABLE IF NOT EXISTS block (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NULL,
@@ -2686,7 +2712,7 @@ ALTER TABLE block ADD UNIQUE(path);
 --
 
 DROP TABLE IF EXISTS course_request;
-CREATE TABLE course_request (
+CREATE TABLE IF NOT EXISTS course_request (
   id int NOT NULL AUTO_INCREMENT,
   code varchar(40) NOT NULL,
   user_id int unsigned NOT NULL default '0',
@@ -2712,7 +2738,8 @@ CREATE TABLE course_request (
 -- Structure for Careers, Promotions and Usergroups
 --
 
-CREATE TABLE career (
+DROP TABLE IF EXISTS career;
+CREATE TABLE IF NOT EXISTS career (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL ,
     description TEXT NOT NULL,
@@ -2722,7 +2749,8 @@ CREATE TABLE career (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE promotion (
+DROP TABLE IF EXISTS promotion;
+CREATE TABLE IF NOT EXISTS promotion (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL ,
     description TEXT NOT NULL,
@@ -2733,25 +2761,28 @@ CREATE TABLE promotion (
     PRIMARY KEY(id)
 );
 
-
-CREATE TABLE usergroup (
+DROP TABLE IF EXISTS usergroup;
+CREATE TABLE IF NOT EXISTS usergroup (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE usergroup_rel_user    (
+DROP TABLE IF EXISTS usergroup_rel_user;
+CREATE TABLE IF NOT EXISTS usergroup_rel_user    (
     usergroup_id INT NOT NULL,
     user_id 	INT NOT NULL
 );
 
-CREATE TABLE usergroup_rel_course  (
+DROP TABLE IF EXISTS usergroup_rel_course;
+CREATE TABLE IF NOT EXISTS usergroup_rel_course  (
     usergroup_id INT NOT NULL,
     course_id 	INT NOT NULL
 );
 
-CREATE TABLE usergroup_rel_session (
+DROP TABLE IF EXISTS usergroup_rel_session;
+CREATE TABLE IF NOT EXISTS usergroup_rel_session (
     usergroup_id INT NOT NULL,
     session_id  INT NOT NULL
 );
@@ -2761,7 +2792,8 @@ CREATE TABLE usergroup_rel_session (
 -- Structure for Mail notifications
 --
 
-CREATE TABLE notification (
+DROP TABLE IF EXISTS notification;
+CREATE TABLE IF NOT EXISTS notification (
 	id 			BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	dest_user_id INT NOT NULL,
  	dest_mail 	CHAR(255),
@@ -2777,7 +2809,8 @@ ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, c
 
 -- Skills management
 
-CREATE TABLE skill (
+DROP TABLE IF EXISTS skill;
+CREATE TABLE IF NOT EXISTS skill (
   id int NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   short_code varchar(100) NOT NULL,
@@ -2789,7 +2822,8 @@ CREATE TABLE skill (
 
 INSERT INTO skill (name) VALUES ('Root');
 
-CREATE TABLE skill_rel_gradebook (
+DROP TABLE IF EXISTS skill_rel_gradebook;
+CREATE TABLE IF NOT EXISTS skill_rel_gradebook (
   id int NOT NULL AUTO_INCREMENT,
   gradebook_id int NOT NULL,
   skill_id int NOT NULL,
@@ -2797,7 +2831,8 @@ CREATE TABLE skill_rel_gradebook (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE skill_rel_skill (
+DROP TABLE IF EXISTS skill_rel_skill;
+CREATE TABLE IF NOT EXISTS skill_rel_skill (
   skill_id int NOT NULL,
   parent_id int NOT NULL,
   relation_type int NOT NULL,
@@ -2806,7 +2841,8 @@ CREATE TABLE skill_rel_skill (
 
 INSERT INTO skill_rel_skill VALUES(1, 0, 0, 0);
 
-CREATE TABLE skill_rel_user (
+DROP TABLE IF EXISTS skill_rel_user;
+CREATE TABLE IF NOT EXISTS skill_rel_user (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   skill_id int NOT NULL,
@@ -2815,14 +2851,16 @@ CREATE TABLE skill_rel_user (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE skill_profile (
+DROP TABLE IF EXISTS skill_profile;
+CREATE TABLE IF NOT EXISTS skill_profile (
   id INTEGER  NOT NULL AUTO_INCREMENT,
   name VARCHAR(255)  NOT NULL,
   description TEXT  NOT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE skill_rel_profile (
+DROP TABLE IF EXISTS skill_rel_profile;
+CREATE TABLE IF NOT EXISTS skill_rel_profile (
   id INTEGER  NOT NULL AUTO_INCREMENT,
   skill_id INTEGER  NOT NULL,
   profile_id INTEGER  NOT NULL,
@@ -2831,8 +2869,8 @@ CREATE TABLE skill_rel_profile (
 
 -- Custom reports
 
-
-CREATE TABLE reports_keys (
+DROP TABLE IF EXISTS reports_keys;
+CREATE TABLE IF NOT EXISTS reports_keys (
   id int unsigned NOT NULL AUTO_INCREMENT,
   course_id int DEFAULT NULL,
   tool_id int DEFAULT NULL,
@@ -2848,7 +2886,8 @@ CREATE TABLE reports_keys (
   KEY course_id_2 (course_id,tool_id,child_id,subchild_id,subsubchild_id)
 );
 
-CREATE TABLE reports_values (
+DROP TABLE IF EXISTS reports_values;
+CREATE TABLE IF NOT EXISTS reports_values (
   key_id int unsigned NOT NULL,
   uid int DEFAULT NULL,
   session_id int unsigned DEFAULT NULL,
@@ -2863,7 +2902,8 @@ CREATE TABLE reports_values (
 --
 -- Table structure for event email sending
 --
-CREATE TABLE event_type (
+DROP TABLE IF EXISTS event_type;
+CREATE TABLE IF NOT EXISTS event_type (
   id smallint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   name_lang_var varchar(50) NOT NULL,
@@ -2873,7 +2913,8 @@ CREATE TABLE event_type (
 );
 ALTER TABLE event_type ADD INDEX ( name );
 
-CREATE TABLE event_type_email_template (
+DROP TABLE IF EXISTS event_type_email_template;
+CREATE TABLE IF NOT EXISTS event_type_email_template (
   id int unsigned NOT NULL AUTO_INCREMENT,
   event_type_id int unsigned NOT NULL,
   language_id smallint unsigned NOT NULL,
@@ -2887,7 +2928,7 @@ ALTER TABLE event_type_email_template ADD INDEX ( language_id );
 -- Table structure for LP custom storage API
 --
 DROP TABLE IF EXISTS stored_value;
-CREATE TABLE stored_values (
+CREATE TABLE IF NOT EXISTS stored_values (
 	user_id INT NOT NULL,
 	sco_id INT NOT NULL,
 	course_id CHAR(40) NOT NULL,
@@ -2898,7 +2939,7 @@ ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
 ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
 
 DROP TABLE IF EXISTS stored_value_stack;
-CREATE TABLE stored_values_stack (
+CREATE TABLE IF NOT EXISTS stored_values_stack (
 	user_id INT NOT NULL,
 	sco_id INT NOT NULL,
 	stack_order INT NOT NULL,
@@ -2912,7 +2953,8 @@ ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, 
 
 -- Course ranking
 
-CREATE TABLE track_course_ranking (
+DROP TABLE IF EXISTS track_course_ranking;
+CREATE TABLE IF NOT EXISTS track_course_ranking (
  id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
  c_id  int unsigned not null,
  session_id  int unsigned not null default 0,
@@ -2928,7 +2970,8 @@ ALTER TABLE track_course_ranking ADD INDEX idx_tcc_sid (session_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_urlid (url_id);
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date);
 
-CREATE TABLE user_rel_course_vote (
+DROP TABLE IF EXISTS user_rel_course_vote;
+CREATE TABLE IF NOT EXISTS user_rel_course_vote (
   id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
   c_id int unsigned not null,
   user_id int unsigned not null,  
@@ -2942,7 +2985,8 @@ ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 -- Global chat
-CREATE TABLE chat (
+DROP TABLE IF EXISTS chat;
+CREATE TABLE IF NOT EXISTS chat (
 	id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	from_user	INTEGER,
 	to_user		INTEGER,

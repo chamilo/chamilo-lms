@@ -2832,52 +2832,54 @@ CREATE TABLE skill_rel_profile (
 -- Custom reports
 
 
-CREATE TABLE `reports_keys` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` integer DEFAULT NULL,
-  `tool_id` int(11) DEFAULT NULL,
-  `child_id` int(11) DEFAULT NULL,
-  `child_name` varchar(64) DEFAULT NULL,
-  `subchild_id` int(11) DEFAULT NULL,
-  `subchild_name` varchar(64) DEFAULT NULL,
-  `subsubchild_id` int(11) DEFAULT NULL,
-  `subsubchild_name` varchar(64) DEFAULT NULL,
-  `link` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `course_id` (`course_id`),
-  KEY `course_id_2` (`course_id`,`tool_id`,`child_id`,`subchild_id`,`subsubchild_id`));
+CREATE TABLE reports_keys (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  course_id int DEFAULT NULL,
+  tool_id int DEFAULT NULL,
+  child_id int DEFAULT NULL,
+  child_name varchar(64) DEFAULT NULL,
+  subchild_id int unsigned DEFAULT NULL,
+  subchild_name varchar(64) DEFAULT NULL,
+  subsubchild_id int unsigned DEFAULT NULL,
+  subsubchild_name varchar(64) DEFAULT NULL,
+  link varchar(256) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY course_id (course_id),
+  KEY course_id_2 (course_id,tool_id,child_id,subchild_id,subsubchild_id)
+);
 
-CREATE TABLE `reports_values` (
-  `key_id` int(11) NOT NULL,
-  `uid` int(11) DEFAULT NULL,
-  `session_id` int(11) DEFAULT NULL,
-  `attempt` int(11) DEFAULT NULL,
-  `score` decimal(5,3) DEFAULT NULL,
-  `progress` int(11) DEFAULT NULL,
-  `time` int(11) DEFAULT NULL,
-  KEY `uid` (`uid`),
-  PRIMARY KEY (`key_id`,`uid`,`session_id`, `attempt`));
+CREATE TABLE reports_values (
+  key_id int unsigned NOT NULL,
+  uid int DEFAULT NULL,
+  session_id int unsigned DEFAULT NULL,
+  attempt int DEFAULT NULL,
+  score decimal(5,3) DEFAULT NULL,
+  progress int DEFAULT NULL,
+  `time` int DEFAULT NULL,
+  KEY uid (uid),
+  PRIMARY KEY (key_id,uid,session_id,attempt)
+);
 
 --
 -- Table structure for event email sending
 --
-CREATE TABLE `event_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE event_type (
+  id smallint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `name_lang_var` varchar(50) NOT NULL,
-  `desc_lang_var` varchar(50) NOT NULL,
-  `extendable_variables` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  name_lang_var varchar(50) NOT NULL,
+  desc_lang_var varchar(50) NOT NULL,
+  extendable_variables varchar(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 ALTER TABLE event_type ADD INDEX ( name );
 
-CREATE TABLE `event_type_email_template` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `event_type_id` int(11) NOT NULL,
-  `language_id` int(11) NOT NULL,
-  `message` text NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE event_type_email_template (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  event_type_id int unsigned NOT NULL,
+  language_id smallint unsigned NOT NULL,
+  message text NOT NULL,
+  subject varchar(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 ALTER TABLE event_type_email_template ADD INDEX ( language_id );
 

@@ -1520,4 +1520,11 @@ $AllowGlobalChatComment = "Los usuarios pueden conversar entre ellos, gracias a 
 $FooterExtraContentComment = "Puede incluir contenido HTML como meta tags";
 $CopyOnlySessionItems = "Copiar solo los elementos de una sesión";
 $FirstLetterCourseTitle = "Primera letra del título del curso";
+$UsersFoundInOtherPortals = "Usuarios encontrados en otros portales";
+$AddUserToMyURL = "Añadir usuario a mi portal";
+$UsersDeleted = "Usuarios eliminados";
+$UsersAdded = "Usuarios añadidos";
+$NoConfigurationSettingsForThisPlugin = "No hay opciones de configuración para este plugin";
+$CoursesDefaultCreationVisibilityTitle = "Visibilidad del curso por defecto";
+$CoursesDefaultCreationVisibilityComment = "Visibilidad por defecto del curso cuando se está creando un curso";
 ?>

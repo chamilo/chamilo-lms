@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Acceso denegado - nombre de usuario o contraseña no válidos.";
+$langInvalidId = "Acceso denegado - nombre de usuario o contraseña incorrectos.";
 $langWelcome = "Bienvenido";
 $langPass = "Contraseña";
 $langEnter = "Volver a mi lista de cursos";
@@ -42,7 +42,7 @@ $langSystemAnnouncements = "Anuncios de la plataforma";
 $langHelpMaj = "Ayuda";
 $langNotRegistered = "No registrado";
 $langAdmin = "Administración de la plataforma";
-$Login = "Nombre de usuario";
+$Login = "Identificación";
 $langRegisterForCourse = "Inscribirse en un curso";
 $langUnregisterForCourse = "Anular mi inscripción en un curso";
 $langCombinedCourse = "Curso combinado";

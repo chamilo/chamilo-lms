@@ -252,7 +252,7 @@ $YouHaveNotEnabledBlocks = "No ha habilitado ningún bloque";
 $BlocksHaveBeenUpdatedSuccessfully = "Los bloques han sido actualizados";
 $AttendanceSheetDescription = "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.
 Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas.";
-$AttendanceSheetReport = "Reporte de hojas de asistencias";
+$AttendanceSheetReport = "Informe de hojas de asistencia";
 $YouDoNotHaveDoneAttendances = "No tiene asistencias";
 $GoToAttendanceCalendarList = "Ir a la vista calendario de las asistencias";
 $AddADateTime = "Añadir un tiempo y fecha";
@@ -315,7 +315,7 @@ $NumberOfLinksInLearnpath = "Número de enlaces en la lección";
 $NumberOfForumsInLearnpath = "Número de foros en la lección";
 $NumberOfAssignmentsInLearnpath = "Número de tareas en la lección";
 $NumberOfAnnouncementsInCourse = "Número de anuncios en el curso";
-$CurrentCoursesReport = "Reportes de cursos actuales";
+$CurrentCoursesReport = "Informes de cursos actuales";
 $NumberOfPublishedExercises = "Nro de ejercicios publicados";
 $NumberOfPublishedLps = "Nro de Lecciones publicadas";
 ?>

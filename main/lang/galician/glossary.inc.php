@@ -25,4 +25,10 @@ $GlossaryManagement = "Administración do glosario";
 $TermMoved = "Moveuse o termo";
 $ShowGlossaryInExtraToolsTitle = "Amosar os termos do glosario nas ferramentas:leccións(scorm) e exercicios.";
 $ShowGlossaryInExtraToolsComment = "Desde aquí vostede pode configurar como engadir os termos do glosario en ferramentas como leccións(scorm) e exercicios.";
+$ImportGlossary = "Importar glosario";
+$ReplaceGlossary = "Reemplazar glosario";
+$CannotDeleteGlossary = "No pode borrar o glosario";
+$TermsImported = "Importar termos";
+$TermsNotImported = "Termos non importados";
+$ExportGlossaryAsCSV = "Exportar o glosario como un arquivo CSV";
 ?>

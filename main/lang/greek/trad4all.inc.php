@@ -225,7 +225,6 @@ $DocumentAdded = "Το έγγραφο προστέθηκε";
 $DocumentUpdated = "Το έγγραφο τροποποιήθηκε";
 $DocumentInFolderUpdated = " Το έγγραφο τροποποιήθηκε στο φάκελο";
 $Course_description = "Περιγραφή Μαθήματος";
-$Calendar_event = "Ατζέντα";
 $Document = "Document";
 $Learnpath = "Μονοπάτι γνώσης";
 $Link = "Link";

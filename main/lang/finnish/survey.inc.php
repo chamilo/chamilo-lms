@@ -174,6 +174,7 @@ $Conditional = "Ehdollinen";
 $ParentSurvey = "Ylempi kysely";
 $OneQuestionPerPage = "Yksi kysymys sivulla";
 $ActivateShuffle = "Salli sekoitus";
+$ShowFormProfile = "Näytä profiili lomake";
 $PersonalityQuestion = "Muokkaa kysymystä";
 $YouNeedToCreateGroups = "Sinun täytyy tehdä ryhmiä";
 $ManageGroups = "Hallitse ryhmiä";

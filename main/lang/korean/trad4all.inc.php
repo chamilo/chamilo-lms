@@ -235,7 +235,6 @@ $DocumentAdded = "문서가 추가되었습니다";
 $DocumentUpdated = "문서가 업데이트 되었습니다";
 $DocumentInFolderUpdated = "폴더의 문서가 업데이트 되었습니다";
 $Course_description = "과정 설명";
-$Calendar_event = "일정";
 $Document = "문서";
 $Learnpath = "Learnpath";
 $Link = "링크";

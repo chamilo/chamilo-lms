@@ -48,4 +48,5 @@ $DocumentsWillBeAddedToo = "Dokumentit lisätään myös";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jos haluat siirtää oppimispolun joka sisältää testin, sinun täytyy varmistaa että vastaavat testit on valittu siirtoon, joten sinun täytyy valita ne testien listalta.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Varmistus kansioon ei voi kirjoittaa. Ota yhteyttä ympäristön ylläpitäjään.";
 $DestinationCourse = "Kohde kurssi";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Jos oppimispolkusi sisältää äänitiedostoja muista valita ne dokumenteista";
 ?>

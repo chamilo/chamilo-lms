@@ -241,7 +241,7 @@ $OriginalName = "Nome orixinal";
 $EnglishName = "Nome inglés";
 $DokeosFolder = "carpeta Chamilo";
 $Properties = "Propiedades";
-$DokeosConfigSettings = "Opcións de configuración de Chamilo";
+$PlatformConfigSettings = "Opcións de configuración de Chamilo";
 $SettingsStored = "Gardáronse as opcións";
 $InstitutionTitle = "Título da institución";
 $InstitutionComment = "Nome da institución (aparece na cabeceira á dereita)";
@@ -1468,4 +1468,6 @@ $ArchiveDirCleanupProceedButton = "Executar limpeza";
 $ArchiveDirCleanupSucceeded = "Os contidos do cartafol archive/ foron eliminados satisfactoriamente.";
 $ArchiveDirCleanupFailed = "Por algunha razón, non se puido limpar o cartafol archive/. Probablemente debido aos permisos. Pode limpar manualmente conectandose  ao servidor e eliminando todos os contidos do cartafol chamilo/archive/, excepto o ficherio htaccess.";
 $LocalTimeUsingPortalTimezoneXIsY = "A hora local usando a zona horaria do portal (%s) é %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Los docentes pueden escoger el modelo de evaluación";
+$AllowTeacherChangeGradebookGradingModelComment = "Activar esta opción,permitirá que cada profesor poda escoller o modelo de cualificación que utilizará no seu curso. Este cambio terá que facelo o profesor dentro da ferramenta de cualificacións do curso.";
 ?>

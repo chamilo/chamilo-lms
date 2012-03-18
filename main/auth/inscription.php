@@ -106,7 +106,7 @@ if ($display_all_form) {
     }
     //	STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
-        $form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
+        $form->addElement('radio', 'status', get_lang('Profile'), get_lang('RegStudent'), STUDENT);
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
     }
 

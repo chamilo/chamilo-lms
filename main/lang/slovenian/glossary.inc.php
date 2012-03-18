@@ -21,8 +21,14 @@ $YouMustEnterATermName = "Vstaviti morate vsebino termina";
 $YouMustEnterATermDefinition = "Vstaviti morate definicijo termina";
 $TableView = "Pogled tabele";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ta termin je že dodan. Izberite drugo ime termina.";
-$GlossaryManagement = "Upravljanje glosarija";
+$GlossaryManagement = "Upravljanje slovarčka";
 $TermMoved = "Izraz je bil premaknjen";
-$ShowGlossaryInExtraToolsTitle = "Prikaži termine besednjaka v dodatnih orodjih";
+$ShowGlossaryInExtraToolsTitle = "Prikaži termine slovarja v dodatnih orodjih";
 $ShowGlossaryInExtraToolsComment = "Od tu lahko nastavite način dodajanja terminov slovarja v dodatnih orodjih, kot so npr. učna pot, testi, ...";
+$ImportGlossary = "Uvozi slovar";
+$ReplaceGlossary = "Zamenjaj slovar";
+$CannotDeleteGlossary = "Ne morem odstraniti slovarja";
+$TermsImported = "Termini so bili uvoženi";
+$TermsNotImported = "Termini niso bili uvoženi";
+$ExportGlossaryAsCSV = "Izvozi slovar v CSV datoteko";
 ?>

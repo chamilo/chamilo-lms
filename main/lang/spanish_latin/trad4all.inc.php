@@ -259,7 +259,6 @@ $DocumentAdded = "Documento añadido";
 $DocumentUpdated = "Documento actualizado";
 $DocumentInFolderUpdated = "Documento actualizado en la carpeta";
 $Course_description = "Descripción del curso";
-$Calendar_event = "Agenda";
 $Document = "Documentos";
 $Learnpath = "Itinerario formativo";
 $Link = "Enlaces";

@@ -1517,4 +1517,14 @@ $AllowGlobalChatComment = "Users can chat with each other";
 $FooterExtraContentComment = "You can add HTML code like meta tags";
 $CopyOnlySessionItems = "Copy only session items";
 $FirstLetterCourseTitle = "First letter of course title";
+$UsersFoundInOtherPortals = "Users found in other portals";
+$AddUserToMyURL = "Add user to my portal";
+$UsersDeleted = "Users deleted";
+$UsersAdded = "Users added";
+$PluginArea = "Plugin area";
+$NoConfigurationSettingsForThisPlugin = "No configuration settings found for this plugin";
+$Regions = "Regions";
+$CoursesDefaultCreationVisibilityTitle = "Default course visibility";
+$CoursesDefaultCreationVisibilityComment = "Default course visibility while creating a new course";
+$YouHaveEnteredTheCourseXInY = "You have entered the course <b>%s</b> in <b>%s</b>";
 ?>

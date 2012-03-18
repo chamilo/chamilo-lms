@@ -210,7 +210,6 @@ $DocumentAdded = "Dokument přidán";
 $DocumentUpdated = "Dokument zaktualizován";
 $DocumentInFolderUpdated = "Dokument byl zaktualizován ve složce";
 $Course_description = "Popis kurzu";
-$Calendar_event = "Agenda";
 $Document = "Dokumenty";
 $Learnpath = "Kurzy";
 $Link = "Odkazy";

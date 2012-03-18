@@ -258,7 +258,6 @@ $DocumentAdded = "Dokument je dodat";
 $DocumentUpdated = "Dokument je ažuriran";
 $DocumentInFolderUpdated = "Dokument je ažuriran u folderu";
 $Course_description = "Opis kursa";
-$Calendar_event = "Agenda";
 $Document = "Dokument";
 $Learnpath = "Putanja učenja";
 $Link = "Link";

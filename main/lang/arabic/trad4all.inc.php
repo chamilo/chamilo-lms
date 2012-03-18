@@ -289,7 +289,6 @@ $DocumentAdded = "لقد تم إضافة المستند بنجاح";
 $DocumentUpdated = "لقد تم تحديث المستند بنجاح";
 $DocumentInFolderUpdated = "تم تحميل المستند  في المجلد";
 $Course_description = "وصف المقرر";
-$Calendar_event = "الأجندة";
 $Document = "مستند";
 $Learnpath = " مسار تعليمي";
 $Link = "رابط";

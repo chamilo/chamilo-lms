@@ -250,7 +250,6 @@ $DocumentAdded = "Dokumentas sukurtas";
 $DocumentUpdated = "Dokumentas atnaujintas";
 $DocumentInFolderUpdated = "Dokumentas atnaujintas kataloge";
 $Course_description = "Kurso aprašymas";
-$Calendar_event = "Darbotvarkė";
 $Document = "Dokumentai";
 $Learnpath = "Teorinė medžiaga";
 $Link = "Nuorodos";

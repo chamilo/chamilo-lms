@@ -419,4 +419,7 @@ $QuestionWithNoAnswer = "Preguntas sen resposta";
 $ValidateAnswers = "Respostas válidas";
 $ReviewQuestions = "Revisar as pregunta seleccionadas";
 $YouTriedToResolveThisExerciseEarlier = "Tentaches resolver esta pregunta doadamente";
+$ThereAreNoQuestionsForThisExercise = "Neste exercicio non hai preguntas dispoñibles";
+$ContinueTest = "Continuar o exercicio";
+$XQuestionsWithTotalScoreY = "%d preguntas, para una puntuación (todas as preguntas) de %s";
 ?>

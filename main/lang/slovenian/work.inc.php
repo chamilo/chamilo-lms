@@ -94,4 +94,8 @@ $IncludedInEvaluation = "Vključeno v ocenjevanje";
 $DateExpiredNotBeLessDeadLine = "Datum poteka ne more manjši od končnega datuma";
 $NotRevised = "Nepregledano";
 $MaxWeightNeedToBeProvided = "Največja vrednost uteži mora biti podana";
+$ContainsAfile = "Vsebuje datoteko";
+$AllowTextAssignments = "Dovoli izdelku, da je upravljan preko spletnega urejevalnika";
+$YouAlreadySentAPaperYouCantUpload = "Nalogo ste že odposlali. Ne morete naložiti nove.";
+$CantUploadDeleteYourPaperFirst = "Te naloge ne morete naložiti. Najprej morate odstraniti predhodno naloženo nalogo.";
 ?>

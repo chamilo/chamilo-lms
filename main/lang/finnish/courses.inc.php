@@ -83,4 +83,5 @@ $Collapse = "Pienennä";
 $CourseDetails = "Kurssin kuvaus";
 $GroupPendingInvitations = "Ryhmän odottavat kutsut";
 $Compose = "Laadi";
+$ThereAreNoCoursesInThisCategory = "Tässä kategoriassa ei ole kursseja";
 ?>

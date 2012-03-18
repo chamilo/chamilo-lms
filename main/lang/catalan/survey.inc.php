@@ -202,4 +202,14 @@ $BackToSurvey = "Tornar a l'enquesta";
 $UpdateInformation = "Actualització de l'informació";
 $PleaseFillSurvey = "Per favor, ompli l'enquesta";
 $ReportingOverview = "Sumari d'informes";
+$ThereAreNotQuestionsForthisSurvey = "No hi ha preguntes per aquesta enquesta";
+$Multipleresponse = "Resposta múltiple";
+$ErrorSurveyTypeUnknown = "Tipus d'enquesta desconeguda";
+$SurveyUndetermined = "Enquesta no definida";
+$QuestionComment = "Comentari de la pregunta";
+$UnknowQuestion = "Pregunta desconeguda";
+$Lastname = "Cognom";
+$Firstname = "Nom";
+$DeleteSurveyGroup = "Elimina un grup d'enquestes";
+$ErrorOccurred = "Ha ocorregut un error";
 ?>

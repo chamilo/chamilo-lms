@@ -289,7 +289,6 @@ $DocumentAdded = "Dokument dodan";
 $DocumentUpdated = "Dokument ažuriran";
 $DocumentInFolderUpdated = "Dokument ažuriran u mapi";
 $Course_description = "Opis kolegija";
-$Calendar_event = "Raspored";
 $Document = "Dokument";
 $Learnpath = "Put učenja";
 $Link = "Poveznica";

@@ -295,7 +295,6 @@ $DocumentAdded = "Dokument wurde hinzugefügt";
 $DocumentUpdated = "Dokument wurde aktualisiert";
 $DocumentInFolderUpdated = "Dokument im Verzeichnis wurde aktualisiert";
 $Course_description = "Beschreibung";
-$Calendar_event = "Agenda";
 $Document = "Dokumente";
 $Learnpath = "Lernpfad";
 $Link = "Links";

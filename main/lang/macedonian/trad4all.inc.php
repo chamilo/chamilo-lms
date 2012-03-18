@@ -287,7 +287,6 @@ $DocumentAdded = "Документот е додаден";
 $DocumentUpdated = "Документот е ажуриран";
 $DocumentInFolderUpdated = "Документот е качен во папката";
 $Course_description = "Опис на Курсот";
-$Calendar_event = "Календар";
 $Document = "Документ";
 $Learnpath = "Патека_на_учење";
 $Link = "Врска";

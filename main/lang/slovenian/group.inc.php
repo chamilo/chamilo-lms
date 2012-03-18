@@ -94,4 +94,6 @@ $Group = "Skupina";
 $ForumOfGroup = "Forum skupine:";
 $BackToGroupList = "Nazaj na seznam skupin";
 $EditGroupCategory = "Uredi kategorijo skupine";
+$NoStudents = "Ni tečajnikov";
+$NoData = "Noben podatek ni na voljo";
 ?>

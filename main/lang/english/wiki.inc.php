@@ -11,7 +11,7 @@ $RecentChanges = "Latest changes";
 $AllPages = "All pages";
 $AddNew = "Add new page";
 $ChangesStored = "Audio added";
-$NewWikiSaved = "The wiki page has been saved. You can see it clicking on:";
+$NewWikiSaved = "The wiki page has been saved.";
 $DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>";
 $CourseWikiPages = "Wiki pages";
 $GroupWikiPages = "Group wiki pages";

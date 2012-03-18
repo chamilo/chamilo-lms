@@ -57,4 +57,5 @@ $AdditionalProfileField = "Dodaj polje uporabniškega profila";
 $ScormUnknownPackageFormat = "Paket, ki ga poskušate naložiti, je neprepoznane oblike. Preverite, prosim, da je oblika paketa ena izmed podprtih oblik.";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "V okviru tečaja ni več dovolj prostora za dekomprimiranje trenutnega paketa.";
 $ScormPackageFormatNotScorm = "Paket, ki ga skušate naložiti, ni prepoznane SCORM oblike. Preverite manifest.xml datoteko znotraj ZIP datoteke, ki jo skušate naložiti.";
+$HideTocFrame = "Skrij okvir kazala vsebine";
 ?>

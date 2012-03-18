@@ -249,7 +249,6 @@ $DocumentAdded = "เพิ่มเอกสารแล้ว";
 $DocumentUpdated = "เอกสารได้ปรับให้เป็นปัจจุบันแล้ว";
 $DocumentInFolderUpdated = "เอกสารในแฟ้มได้ปรับเป็นปัจจุบันแล้ว";
 $Course_description = "คำอธิบายรายวิชา";
-$Calendar_event = "กำหนดการ";
 $Document = "เอกสาร";
 $Learnpath = "แผนการเรียน";
 $Link = "การเชื่อมโยง";

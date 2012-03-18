@@ -224,4 +224,8 @@ $SumOfActivitiesWeightMustBeEqualToTotalWeight = "Vsota uteži vseh aktivnosti m
 $TotalSumOfWeights = "Vrednost mora biti enaka vsoti uteži vseh aktivnosti znotraj tega ocenjevanja.";
 $TotalWeightMustBeX = "Vsota vseh uteži aktivnosti mora biti %s";
 $ExportAsDOC = "Izvozi kot .doc";
+$SelectGradebook = "Izberi ocenjevanje";
+$CheckYourGradingModelValues = "Preverite vrednosti modela ocenjevanja";
+$SkillsAchievedWhenAchievingThisGradebook = "Spretnosti pridobljene s tem ocenjevanjem";
+$AddGradebook = "Dodaj ocenjevanje";
 ?>

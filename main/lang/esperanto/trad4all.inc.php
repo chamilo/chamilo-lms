@@ -251,7 +251,6 @@ $DocumentAdded = "Dokumento aldonita";
 $DocumentUpdated = "Dokumento adaptita";
 $DocumentInFolderUpdated = "Dosiero adaptita en dosierujo";
 $Course_description = "Priskribo de la kurso";
-$Calendar_event = "Agendo";
 $Document = "Dokumento";
 $Learnpath = "Lernopado";
 $Link = "Ligilo";

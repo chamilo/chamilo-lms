@@ -294,7 +294,6 @@ $DocumentAdded = "Document adaugat";
 $DocumentUpdated = "Document actualizat";
 $DocumentInFolderUpdated = "Document actualizat in director";
 $Course_description = "Descrierea cursului";
-$Calendar_event = "Agenda";
 $Document = "Document";
 $Learnpath = "Cale";
 $Link = "Link";

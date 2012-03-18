@@ -213,7 +213,6 @@ $DocumentAdded = "已加入文件";
 $DocumentUpdated = "已更新文件";
 $DocumentInFolderUpdated = "已於檔案夾中更新文件";
 $Course_description = "課程描述";
-$Calendar_event = "日程";
 $Document = "文件";
 $Learnpath = "學習路徑";
 $Link = "連結";

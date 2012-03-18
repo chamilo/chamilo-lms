@@ -121,4 +121,14 @@ $NewHomeworkEmailAlert = "Lähetä käyttäjille sähköpostia tehtävästä";
 $NewHomeworkEmailAlertEnable = "Aktivoi sähköposti käyttäjille tehtävän annosta";
 $NewHomeworkEmailAlertDisable = "Estä sähköposti käyttäjille tehtävän annosta";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Näytä viimein tehty askel ja seuraava ei tehty askel";
+$AddPicture = "lisää kuva";
+$LPAutoLaunch = "Aktivoi oppimispolun automaattikäynnistys";
+$ConfigLearnpath = "Oppimispolun asetukset";
+$PDFWaterMarkHeader = "Ylätunnisteen vesileima PDF-tiedostoissa";
+$RedirectToALearningPath = "Ohjaa valittuun oppimispolkuun";
+$RedirectToTheLearningPathList = "Ohjaa oppimispolkujen listaukseen";
+$ActivateLegal = "Aktivoi lakiteksti";
+$ShowALegalNoticeWhenEnteringTheCourse = "Näytä lakiteksti kurssille tultaessa";
+$CourseLegalAgreement = "Lakiteksti tälle kurssille";
+$AcceptLegal = "Hyväksy ehdot";
 ?>

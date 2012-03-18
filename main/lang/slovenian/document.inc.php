@@ -265,4 +265,6 @@ $UplUploadFailedSizeIsZero = "Prenos datoteke dolžine 0 zlogov ni možen.";
 $NewImage = "Nova slika";
 $DirExists = "Operacija ni možna. Mapa z istim imenom že obstaja.";
 $DocMv = "Dokument je bil premaknjen";
+$NoSVGImagesInImagesGalleryPath = "V vaši galeriji slik ni SVG slik";
+$NoSVGImages = "Ni SVG slik";
 ?>

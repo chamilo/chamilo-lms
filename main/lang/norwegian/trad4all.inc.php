@@ -239,7 +239,6 @@ $DocumentAdded = "Dokument lagt til";
 $DocumentUpdated = "Dokument oppdatert";
 $DocumentInFolderUpdated = "Dokument oppdatert i mappe";
 $Course_description = "Kursbeskrivelse";
-$Calendar_event = "Agenda";
 $Document = "Dokument";
 $Learnpath = "Læringssti";
 $Link = "Lenke";

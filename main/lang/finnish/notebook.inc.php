@@ -22,4 +22,10 @@ $NoteComment = "Muistiinpanon yksityiskohdat";
 $NoteAdded = "Muistiinpano lisätty";
 $NoteConfirmDelete = "Haluatko varmasti poistaa tämän muistiinpanon?";
 $AddNote = "Lisää muistiinpano";
+$ModifyNote = "Muokkaa henkilökohtaista muistiinpanoa";
+$BackToNoteList = "Palaa muistio listaan";
+$NotebookManagement = "Muistion hallinta";
+$BackToNotesList = "Takaisin muistio listaan";
+$NotesSortedByTitleAsc = "Muistiot järjestettynä nimen mukaan (a-z)";
+$NotesSortedByTitleDESC = "Muistiot järjestettynä nimen mukaan (z-a)";
 ?>

@@ -53,4 +53,5 @@ $LinkOpenSelf = "Open self";
 $LinkOpenBlank = "Open blank";
 $LinkOpenParent = "Open parent";
 $LinkOpenTop = "Odpri na vrhu (open top)";
+$LinkTarget = "Cilj povezave";
 ?>

@@ -250,7 +250,6 @@ $DocumentAdded = "فایل مورد نظر اضافه گردید";
 $DocumentUpdated = "فایل مورد نظر به روز گرید";
 $DocumentInFolderUpdated = "فایل مورد نظر در پرونده به روز گردید";
 $Course_description = "توضیحات";
-$Calendar_event = "تقویم آموزشی";
 $Document = "مدارک آموزشی";
 $Learnpath = "خط سیرآموزشی";
 $Link = "پیوند ها";

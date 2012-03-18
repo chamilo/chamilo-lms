@@ -127,4 +127,8 @@ $ConfigLearnpath = "Nastavitve učne poti";
 $PDFWaterMarkHeader = "Zaglavje z vodnim žigom v PDF izvozu";
 $RedirectToALearningPath = "Preusmeri na izbrano učno pot";
 $RedirectToTheLearningPathList = "Preusmeri na seznam učnih poti";
+$ActivateLegal = "Omogoči pogoje rabe";
+$ShowALegalNoticeWhenEnteringTheCourse = "Prikaži pogoje rabe in pravni poduk ob vstopu v tečaj";
+$CourseLegalAgreement = "Pogoji rabe za ta tečaj";
+$AcceptLegal = "Sprejmi pogoje rabe";
 ?>

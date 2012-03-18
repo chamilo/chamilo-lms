@@ -17,4 +17,5 @@ $CourseDescriptionUpdated = "Kurssin kuvaus on päivitetty";
 $CourseDescriptionDeleted = "Kurssin kuvaus on poistettu";
 $CourseDescriptionIntro = "Luodaksesi kurssikuvauksen, klikkaa otsikkoa ja täytä oikea kenttä.Klikkaa sitten OK ja täytä seuraava otsikko.";
 $langSaveDescription = "Tallenna kuvaus";
+$AddCourseDescription = "Lisää kurssin kuvaus";
 ?>

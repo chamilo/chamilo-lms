@@ -29,4 +29,6 @@ $SessionIdentifier = "Session tunniste";
 $SessionName = "Session nimi";
 $SessionCategory = "Session kategoria";
 $SessionData = "Session tiedot";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Oppimispolun automaattikäynnistys on kytketty päälle. Kun opiskelija avaa kurssin hänet ohjataan automaattisesti oppimispolulle,joka on merkitty automaattisesti käynnistyväksi.";
+$ToolSearch = "Haku";
 ?>

@@ -26,4 +26,9 @@ $Administration = "Verwaltung";
 $IntroductionTextUpdated = "Der Einleitungstext wurde aktualisiert";
 $IntroductionTextDeleted = "Einleitungstext wurde gelöscht";
 $SessionIdentifier = "SizungsID";
+$SessionName = "Sitzungsname";
+$SessionCategory = "Sitzungsrubriken";
+$SessionData = "Sitzungsdaten";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Die Einstellung des LPA ist ON. Falls Studenten den Kurs betreten werden diese zum genannten Lernpfad weitergeleitet.";
+$ToolSearch = "Suche";
 ?>

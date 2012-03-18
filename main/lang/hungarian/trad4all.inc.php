@@ -295,7 +295,6 @@ $DocumentAdded = "Dokumentum hozzáadva";
 $DocumentUpdated = "Dokumentum frissítve";
 $DocumentInFolderUpdated = "Dokumentum frissítve a mappában";
 $Course_description = "Kurzus ismertetése";
-$Calendar_event = "Naptár";
 $Document = "Dokumentum";
 $Learnpath = "Tanulási programok";
 $Link = "Link";

@@ -288,7 +288,6 @@ $DocumentAdded = "Dokument tilføjet";
 $DocumentUpdated = "Dokument opdateret";
 $DocumentInFolderUpdated = "Dokument opdateret i mappe";
 $Course_description = "Kursusbeskrivelse";
-$Calendar_event = "Kalender";
 $Document = "Dokument";
 $Learnpath = "Læringssti";
 $Link = "Links";

@@ -139,4 +139,9 @@ $EditForum = "Forum bearbeiten";
 $BackToForum = "Zurück zum Forum";
 $BackToForumOverview = "Zurück zur Forums-Übersicht";
 $BackToThread = "Zurück zum Thread";
+$ForumcategoryLocked = "Forenrubrik gesperrt";
+$PreviewImage = "Bildvorschau";
+$UpdateImage = "Bild aktualisieren";
+$EnableTimeLimits = "Zeitbeschränkungen anschalten";
+$RemoveSearchResults = "Suchergebnisse löschen";
 ?>

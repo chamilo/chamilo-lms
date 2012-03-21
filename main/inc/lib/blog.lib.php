@@ -1214,46 +1214,42 @@ class Blog {
 			}
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 
-			echo '<div class="formw">';
+			echo '<div class="control-group">';
 			$oFCKeditor->Create();
 			echo '</div>';
 
 			// attachment
-			echo '<div class="row">
-						<div class="label">
+			echo '<div class="control-group">
+						<label class="control-label">
 							' . get_lang('AddAnAttachment') . '
 						</div>
-						<div class="formw">
+						<div class="controls">
 							<input type="file" name="user_upload"/>
 						</div>
 					</div>';
 
 			// comment
-			echo '<div class="row">
-						<div class="label">
+			echo '<div class="control-group">
+						<label class="control-label">
 							' . get_lang('FileComment') . '
-						</div>
-						<div class="formw">
+						</label>
+						<div class="controls">
 							<textarea name="post_file_comment" cols="34" /></textarea>
 						</div>
 					</div>';
 
 			// submit
-			echo '<div class="row">
-						<div class="label">
-						</div>
-						<div class="formw">
+			echo '<div class="control-group">
+						<label class="control-label">
+						</label>
+						<div class="controls">
 								 <input type="hidden" name="action" value="" />
 								 <input type="hidden" name="new_post_submit" value="true" />
 								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 						</div>
 					</div>';
-
-
 			echo '</form>';
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 	}
@@ -2585,40 +2581,20 @@ class Blog {
 	 *
 	 */
 	public static function display_new_blog_form () {
-		echo '<form name="add_blog" method="post" action="blog_admin.php?action=add">				
-                <legend>
-                    ' . get_lang('AddBlog') . '
-                </legend>
-				<div class="row">
-					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Title') . '
-					</div>
-					<div class="formw">
-						<input name="blog_name" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_name']).'" />
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="label">
-						' . get_lang('Subtitle') . '
-					</div>
-					<div class="formw">
-						<textarea name="blog_subtitle" cols="45">'.Security::remove_XSS($_POST['blog_subtitle']).'</textarea>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
-							<input type="hidden" name="action" value="" />
-							<input type="hidden" name="new_blog_submit" value="true" />
-						<button class="save" type="submit" name="Submit">' . get_lang('SaveProject') . '</button>
-					</div>
-				</div>
-			</form>
-			<div style="clear: both; margin-bottom:10px;"></div>';
-
+        
+        $form = new FormValidator('add_blog', 'post','blog_admin.php?action=add');
+        $form->addElement('header', get_lang('AddBlog'));
+        $form->addElement('text', 'blog_name', get_lang('Title'));
+        $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
+        
+        $form->addElement('hidden', 'new_blog_submit', 'true');        
+        $form->addElement('style_submit_button', null, get_lang('SaveProject'));
+        
+        $defaults = array();
+        $defaults['blog_name'] = Security::remove_XSS($_POST['blog_name']);
+        $defaults['blog_subtitle'] = Security::remove_XSS($_POST['blog_subtitle']);
+        $form->setDefaults($defaults);        
+        $form->display();
 	}
 
 	/**
@@ -2634,46 +2610,25 @@ class Blog {
 		$blog = Database::fetch_array($result);
 
 		// the form contained errors but we do not want to lose the changes the user already did
-		if ($_POST)
-		{
+		if ($_POST) {
 			$blog['blog_name'] 		= Security::remove_XSS($_POST['blog_name']);
 			$blog['blog_subtitle'] 	= Security::remove_XSS($_POST['blog_subtitle']);
 		}
-		echo '<form name="edit_blog" method="post" action="blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']).'">				
-					<legend>
-						' . get_lang('EditBlog') . '
-					</legend>
-				<div class="row">
-					<div class="label">
-						<span class="form_required">*</span>' . get_lang('Title') . '
-					</div>
-					<div class="formw">
-						<input name="blog_name" type="text" size="50" value="' . $blog['blog_name'] . '" />
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="label">
-						' . get_lang('Subtitle') . '
-					</div>
-					<div class="formw">
-						<textarea name="blog_subtitle" type="text" cols="45">' . $blog['blog_subtitle'] . '</textarea>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
-							<input type="hidden" name="action" value="" />
-							<input type="hidden" name="edit_blog_submit" value="true" />
-							<input type="hidden" name="blog_id" value="' . $blog['blog_id'] . '" />
-						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-					</div>
-				</div>
-			</form>
-			<div style="clear: both; margin-bottom:10px;"></div>
-			';
+        
+        $form = new FormValidator('edit_blog', 'post','blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']));
+        $form->addElement('header', get_lang('EditBlog'));
+        $form->addElement('text', 'blog_name', get_lang('Title'));
+        $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
+        
+        $form->addElement('hidden', 'edit_blog_submit', 'true');
+        $form->addElement('hidden', 'blog_id', $blog['blog_id']);        
+        $form->addElement('style_submit_button', null, get_lang('Save'));
+        
+        $defaults = array();
+        $defaults['blog_name'] = $blog['blog_name'];
+        $defaults['blog_subtitle'] = $blog['blog_subtitle'];
+        $form->setDefaults($defaults);        
+        $form->display();    
 	}
 
 	/**

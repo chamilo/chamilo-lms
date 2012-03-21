@@ -27,7 +27,7 @@ if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
 }
 
 if (api_is_allowed_to_edit()) { 
-	require_once(api_get_path(LIBRARY_PATH) . "blog.lib.php");
+	require_once api_get_path(LIBRARY_PATH) . "blog.lib.php";
 	$nameTools = get_lang("blog_management");
 
 	// showing the header if we are not in the learning path, if we are in
@@ -114,7 +114,7 @@ if (api_is_allowed_to_edit()) {
 			if ($_POST) {
 				Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 			}
-		Blog::display_edit_blog_form(Database::escape_string((int)$_GET['blog_id']));
+            Blog::display_edit_blog_form(Database::escape_string((int)$_GET['blog_id']));
 		}
 	}
 	Blog::display_blog_list();

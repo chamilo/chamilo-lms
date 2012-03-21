@@ -23,14 +23,16 @@ class Template extends Smarty {
 	var $show_footer;
     var $help;
     var $menu_navigation = array();
-    var $show_learnpath = false;    
+    var $show_learnpath = false; // This is a learnpath section or not?
     var $plugin = null;
     var $course_id = null;
+    var $user_is_logged_in = false;
 	
 	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
         parent::__construct();
-		$this->title = $title;
-        //$this->assign('header', $title);
+        
+        //Page title
+		$this->title = $title;        
 		$this->show_learnpath = $show_learnpath;
         
 		//Smarty 3 configuration
@@ -169,8 +171,7 @@ class Template extends Smarty {
 		$this->show_header = $status;
 		$this->assign('show_header', $status);
         
-        //Tool bar
-        
+        //Toolbar                
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
         $show_toolbar = 0;
         
@@ -193,8 +194,8 @@ class Template extends Smarty {
         }        
         $this->assign('show_toolbar', $show_toolbar);
         
-        //Only if course is available                
-        if (!empty($this->course_id)) {        
+        //Only if course is available        
+        if (!empty($this->course_id) && $this->user_is_logged_in) {        
             
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
@@ -227,9 +228,11 @@ class Template extends Smarty {
             }
             
 			$user_info['messages_count'] = MessageManager::get_new_messages();
+            $this->user_is_logged_in = true;
 		}		
         //Setting the $_u array that could be use in any template 
 		$this->assign('_u', $user_info);
+        $this->user_is_logged_in = false;
 	}	
 	
 	private function set_system_parameters() {
@@ -240,8 +243,7 @@ class Template extends Smarty {
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
-                    'web_img' 		=> api_get_path(WEB_IMG_PATH),
-					
+                    'web_img' 		=> api_get_path(WEB_IMG_PATH)					
 					);
 		$this->assign('_p', $_p);
 		
@@ -250,7 +252,7 @@ class Template extends Smarty {
 				'software_name' 	=> $_configuration['software_name'],
 				'system_version' 	=> $_configuration['system_version'],
 				'site_name'			=> api_get_setting('siteName'),
-				'institution'		=> api_get_setting('Institution'),		
+				'institution'		=> api_get_setting('Institution')
 		);
 		$this->assign('_s', $_s);	
 	}

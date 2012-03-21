@@ -26,17 +26,14 @@ $htmlHeadXtra[] = '
 $language_file='exercice';
 $nameTools= "";
 
-include('question.class.php');
-include('testcategory.class.php');
-include('../inc/global.inc.php');
-include('exercise.lib.php');
-
-//Library already added in global.inc.php
-//require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
+require_once 'question.class.php';
+require_once 'testcategory.class.php';
 
 $this_section=SECTION_COURSES;
 
-if(!api_is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 
@@ -226,36 +223,32 @@ function display_categories() {
 		echo $row['description'];
 		echo '</div>';
 		echo '<div>';
-		echo '<a href="'.api_get_self().'?action=editcategory&amp;category_id='.$row['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+		echo '<a href="'.api_get_self().'?action=editcategory&amp;category_id='.$row['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
 		if ($nb_question > 0) {
 			echo '<a href="javascript:void(0)" onclick="alert(\''.protectJSDialogQuote(get_lang('CannotDeleteCategory')).'\')">';
-			echo Display::return_icon('delete_na.gif', get_lang('CannotDeleteCategory'));
+			echo Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
 			echo '</a>';
 		}
 		else {
 			$rowname = protectJSDialogQuote($row['title']);
-			echo '<a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$row['id'].'" ';
+			echo ' <a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$row['id'].'" ';
 			echo 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$row['id'].'\');">';
-			echo Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+			echo Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 		}
 		echo '</div>';
 	}
 }
 
 
-// ------------------------------------------------------------------------
 // display goback to category list page link
-// ------------------------------------------------------------------------
 function display_goback() {
 	echo '<div class="actions">';
 	echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('BackToCategoryList'), array(),  32).'</a>';
 	echo '</div>';
 }
 
-// ------------------------------------------------------------------------
 // To allowed " in javascript dialog box without bad surprises
 // replace " with two '
-// ------------------------------------------------------------------------
 function protectJSDialogQuote($in_txt) {
 	$res = $in_txt;
 	$res = str_replace("'", "\'", $res);

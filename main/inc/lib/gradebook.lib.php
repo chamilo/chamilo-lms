@@ -8,20 +8,15 @@
 /**
  * Code
  */
-
-
-    
-    
+   
 class Gradebook extends Model {    
     var $columns = array('id', 'name','description', 'course_code', 'parent_id');
     
     public function __construct() {
         $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
-        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);                    
+        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK); 
     }
-    
-    
     
     public function get_all($options = array()) {
         $gradebooks = parent::get_all($options);
@@ -72,8 +67,6 @@ class Gradebook extends Model {
         return false;     
     }
     
-    
-    
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
@@ -91,8 +84,7 @@ class Gradebook extends Model {
         $form->addElement('header', '', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-        
-        //$status_list = $this->get_status_list();       
+                
         $skill = new Skill();
         $skills = $skill->get_all();
         $clean_skill_list = array();
@@ -131,14 +123,6 @@ class Gradebook extends Model {
      */
     public function display() {
         // action links
-        /*
-        echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';        
-      //  echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_career.png',get_lang('Add'),'','32').'</a>';                      
-        echo '</div>';   
-        */
         echo Display::grid_html('gradebooks');  
     }
-    
-    
 }

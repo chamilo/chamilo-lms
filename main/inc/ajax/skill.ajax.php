@@ -14,7 +14,6 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $skill           = new Skill();
 $gradebook       = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
-$skill_rel_skill = new SkillRelSkill();
 
 switch ($action) {
     case 'add':  
@@ -24,8 +23,7 @@ switch ($action) {
             $skill->add($_REQUEST);    
         }        
         break;      
-    case 'find_skills':
-        $tag    = Database::escape_string($_REQUEST['tag']);
+    case 'find_skills':        
         $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
         $return_skills = array();    
         foreach($skills as $skill) {
@@ -36,12 +34,12 @@ switch ($action) {
         echo json_encode($return_skills);
         break;
     case 'get_gradebooks':        
-        $gradebooks = $gradebook_list = $gradebook->get_all();
+        $gradebooks = $gradebook_list = $gradebook->get_all();        
         $gradebook_list = array();
-        //only course gradebook
+        //Only course gradebook with certificate
         if (!empty($gradebooks)) {
-            foreach($gradebooks as $gradebook) {
-                if ($gradebook['parent_id'] == 0) {
+            foreach ($gradebooks as $gradebook) {
+                if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) && !empty($gradebook['document_id'])) {
                     $gradebook_list[]  = $gradebook;
                     //$gradebook['name'] = $gradebook['name'];
                     //$gradebook_list[]  = $gradebook;

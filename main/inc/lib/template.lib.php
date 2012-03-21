@@ -51,6 +51,10 @@ class Template extends Smarty {
 		
 		//Setting user variables 
 		$this->set_user_parameters();
+                        
+        //Setting course id
+        $course_id = api_get_course_int_id();
+        $this->course_id = $course_id;
 		
 		//header and footer are showed by default
 		$this->set_footer($show_footer);        
@@ -71,10 +75,6 @@ class Template extends Smarty {
         
 		$this->set_header_parameters();
 		$this->set_footer_parameters();
-        
-        //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
         
 		$this->assign('style', $this->style);
         
@@ -193,11 +193,12 @@ class Template extends Smarty {
         }        
         $this->assign('show_toolbar', $show_toolbar);
         
-        //Only if course is available        
+        //Only if course is available                
         if (!empty($this->course_id)) {        
+            
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
-                $course_tool = CourseHome::show_navigation_tool_shortcuts();
+                $course_tool = CourseHome::show_navigation_tool_shortcuts();                
                 $this->assign('show_course_shortcut', $course_tool);
             }
 
@@ -206,8 +207,7 @@ class Template extends Smarty {
                 $course_tool = CourseHome::show_navigation_menu();
                 $this->assign('show_course_navigation_menu', $course_tool);
             }
-        }
-        
+        }        
 	}
 		
 	function get_template($name) {

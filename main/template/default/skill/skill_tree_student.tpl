@@ -256,34 +256,28 @@ $(document).ready( function() {
 
 {$html}
 
-<div id="dialog-form" style="display:none;">
-    
-    <form id="add_item" name="form">
+<div id="dialog-form" style="display:none;">    
+    <form id="add_item" class="form-horizontal"  name="form">
+        <fieldset>
         <input type="hidden" name="id" id="id"/>
-        <div class="row">
-            <div class="label">
-                <label for="name">Name</label>
-            </div>      
-            <div class="formw">                
+        <div class="control-group">            
+            <label class="control-label" for="name">Name</label>            
+            <div class="controls">                
                 <span id="name"></span>             
             </div>
         </div>
-         <div class="row">
-            <div class="label">
-                <label for="name">Description</label>
-            </div>      
-            <div class="formw">
+         <div class="control-group">            
+            <label class="control-label" for="name">Description</label>            
+            <div class="controls">
                 <span id="description"></span>                
             </div>
         </div>  
-        <div class="row">
-            <div class="label">
-                <label for="name">Gradebook</label>
-            </div>      
-            <div class="formw">
+        <div class="control-group">            
+            <label class="control-label" for="name">Gradebook</label>            
+            <div class="controls">
                 <div id="gradebook_id"></div>                
             </div>
-        </div>
-       
+        </div>      
+        </fieldset>
     </form>    
 </div>

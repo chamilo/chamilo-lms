@@ -95,15 +95,12 @@ function checkLength( o, n, min, max ) {
     }
 }    
 </script>
-<h2>{"SearchSkills"|get_lang}</h2>
-
 {$form}
-
 
 {if !empty($search_skill_list) }
     <div class="skills-skills">
         <h3>{"Skills"|get_lang}</h3>
-        <ul class="holder">
+        <ul class="holder">             
             {foreach $search_skill_list as $search_skill_id}        
                 <li class="bit-box">
                     {$skill_list[$search_skill_id].name}
@@ -111,7 +108,7 @@ function checkLength( o, n, min, max ) {
                 </li>        
             {/foreach}
         </ul>
-        <a id="add_profile" class="a_button gray small" href="#"> {"SaveThisSearch"|get_lang}</a>
+        <a id="add_profile" class="btn" href="#"> {"SaveThisSearch"|get_lang}</a>
     </div>
 {/if}
 
@@ -167,22 +164,20 @@ function checkLength( o, n, min, max ) {
 {/if}
 
 <div id="dialog-form" style="display:none;">    
-    <form id="save_profile_form" name="form">        
-        <div class="row">
-            <div class="label">
-                <label for="name">{"Name"|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <input type="text" name="name" id="name" size="40" />             
-            </div>
-        </div>        
-        <div class="row">
-            <div class="label">
-                <label for="name">{"Description"|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <textarea name="description" id="description" cols="40" rows="7"></textarea>
-            </div>
-        </div>  
+    <form id="save_profile_form" class="form-horizontal" name="form">       
+        <fieldset>
+            <div class="control-group">            
+                <label class="control-label" for="name">{"Name"|get_lang}</label>            
+                <div class="controls">
+                    <input type="text" name="name" id="name" size="40" />             
+                </div>
+            </div>        
+            <div class="control-group">            
+                <label class="control-label" for="name">{"Description"|get_lang}</label>            
+                <div class="controls">
+                    <textarea name="description" id="description" class="span2"  rows="7"></textarea>
+                </div>
+            </div>  
+        </fieldset>
     </form>    
 </div>

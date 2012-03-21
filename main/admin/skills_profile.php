@@ -30,8 +30,10 @@ $tpl = new Template(get_lang('Skills'));
 
 $form = new FormValidator('profile_search');
 
+
+$form->addElement('header', get_lang('SearchSkills'));
 $form->addElement('select', 'skills', null, null, array('id'=>'skills'));
-$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="a_button blue "');
+$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="btn"');
 
 $profiles = $skill_profile->get_all();
 
@@ -66,7 +68,7 @@ $count_skills = count($skills);
 $users  = $skill_rel_user->get_user_by_skills($skills);
 
 if (!empty($users)) {
-    foreach($users as $user) {            
+    foreach ($users as $user) {            
         $user_info = api_get_user_info($user['user_id']);
         $user_list[$user['user_id']]['user'] = $user_info;
         $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
@@ -115,10 +117,7 @@ if (!empty($skills)) {
 }
 
 $total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
-$skill_list = array();
-foreach($total_skills_to_search as $skill_info) {
-    $skill_list[$skill_info['id']] = $skill_info;        
-}
+
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
@@ -132,15 +131,18 @@ switch ($action) {
             }            
         }  
         $skills = $_SESSION['skills'] = $new_skill;
-        break;
-    
+        break;    
     case 'load_profile':
         $skill_profile = new SkillRelProfile();
         $skills = $skill_profile->get_skills_by_profile($id);        
-        
+        $total_skills_to_search = $skill->get_skills_info($skills);        
         break;
 }
 
+$skill_list = array();
+foreach ($total_skills_to_search as $skill_info) {
+    $skill_list[$skill_info['id']] = $skill_info;        
+}
 
 $tpl->assign('skill_list', $skill_list);   
 $tpl->assign('search_skill_list', $skills);

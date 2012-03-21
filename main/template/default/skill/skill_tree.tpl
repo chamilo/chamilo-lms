@@ -359,44 +359,38 @@ $(document).ready( function() {
 
 <div id="dialog-form" style="display:none; z-index:6000;">    
     <p class="validateTips"></p>
-    <form id="add_item" name="form">
-        <input type="hidden" name="id" id="id"/>
-        <div class="row">
-            <div class="label">
-                <label for="name">{'Name'|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <input type="text" name="name" id="name" size="40" />             
+    <form class="form-horizontal" id="add_item" name="form">
+        <fieldset>
+            <input type="hidden" name="id" id="id"/>
+            <div class="control-group">            
+                <label class="control-label" for="name">{'Name'|get_lang}</label>            
+                <div class="controls">
+                    <input type="text" name="name" id="name" size="40" />             
+                </div>
+            </div>        
+            <div class="control-group">            
+                <label class="control-label" for="name">{'Parent'|get_lang}</label>            
+                <div class="controls">
+                    <select id="parent_id" name="parent_id" />
+                    </select>                  
+                </div>
+            </div>                
+            <div class="control-group">            
+                <label class="control-label" for="name">{'Gradebook'|get_lang}</label>            
+                <div class="controls">
+                    <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
+                    </select>             
+                    <span class="help-block">
+                    {'WithCertificate'|get_lang}
+                    </span>           
+                </div>
             </div>
-        </div>        
-        <div class="row">
-            <div class="label">
-                <label for="name">{'Parent'|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <select id="parent_id" name="parent_id" />
-                </select>                  
-            </div>
-        </div>                
-        <div class="row">
-            <div class="label">
-                <label for="name">{'Gradebook'|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
-                </select>             
-                <span class="help-block">
-                {'WithCertificate'|get_lang}
-                </span>           
-            </div>
-        </div>
-        <div class="row">
-            <div class="label">
-                <label for="name">{'Description'|get_lang}</label>
-            </div>      
-            <div class="formw">
-                <textarea name="description" id="description" cols="40" rows="7"></textarea>
-            </div>
-        </div>  
+            <div class="control-group">            
+                <label class="control-label" for="name">{'Description'|get_lang}</label>            
+                <div class="controls">
+                    <textarea name="description" id="description" class="span3" rows="7"></textarea>
+                </div>
+            </div>  
+        </fieldset>
     </form>    
 </div>

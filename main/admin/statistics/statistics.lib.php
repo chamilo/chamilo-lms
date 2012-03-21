@@ -243,12 +243,8 @@ class Statistics {
 
             echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
                     <td width="150">'.$subtitle.'</td>
-                    <td width="550">
-                        <div class="progress progress-striped">
-                            <div class="bar" style="width: '.round($percentage).'%;"></div>
-                        </div>                            
-                    </td>
-                                <td align="right">'.$number_label.'</td>';
+                    <td width="550">'.Display::bar_progress($percentage, false).'</td>
+                    <td align="right">'.$number_label.'</td>';
             if ($show_total) {
                 echo '<td align="right"> '.$percentage.'%</td>';
             }

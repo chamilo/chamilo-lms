@@ -1354,4 +1354,14 @@ class Display {
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
     }
     
+    function bar_progress($percentage, $show_percentage = false) {
+        $percentage = intval($percentage);
+        $div = '<div class="progress progress-striped">                                    
+                    <div class="bar" style="width: '.$percentage.'%;"></div>                                            
+                </div>';        
+        if ($show_percentage)
+            $div .= '<div class="progresstext">'.$percentage.'%</div>';
+        return $div;
+    }
+    
 } //end class Display

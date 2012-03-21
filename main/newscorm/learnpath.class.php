@@ -2076,7 +2076,7 @@ class learnpath {
             list($percentage, $text_add) = $this->get_progress_bar_text($mode);
         }
         $text = $percentage . $text_add;
-
+        //@todo use Display::display_progress();
         $output .= '<div class="progress progress-striped">                                    
                         <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>                                            
                     </div>

@@ -8,7 +8,7 @@
  * Init
  */
 
-$language_file= 'gradebook';
+$language_file= array('gradebook','tracking');
 
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
@@ -42,17 +42,15 @@ $displayscore = ScoreDisplay :: instance();
 Display::display_header(get_lang('EvaluationStatistics'));
 DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 0, 'statistics');
 
-if (!$displayscore->is_custom()) {
+//Bad, Regular, Good  - User definitions
+$displays = $displayscore->get_custom_score_display_settings();
+    
+if (!$displayscore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
 	   Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
     }
-} else {
-
-    //Bad, Regular, Good  - User definitions
-	$displays = $displayscore->get_custom_score_display_settings();
-	
-	$allresults = Result::load(null,null,$eval[0]->get_id());
-	
+} else {    	
+	$allresults = Result::load(null,null,$eval[0]->get_id());	
 	$nr_items = array();
 	foreach ($displays as $itemsdisplay) {
 		$nr_items[$itemsdisplay['display']] = 0;
@@ -80,18 +78,22 @@ if (!$displayscore->is_custom()) {
 	}
 
 
-	// generate table
+	// Generate table
 
 	$stattable= '<table class="data_table" cellspacing="0" cellpadding="3">';
-	$stattable .= '<tr><th colspan="4">' . get_lang('Statistics') . '</th></tr>';
-	$counter=0;
+	$stattable .= '<tr><th>' . get_lang('ScoringSystem') . '</th>';
+    $stattable .= '<th>' . get_lang('Percentage') . '</th>';
+    $stattable .= '<th>' . get_lang('CountUsers') . '</th>';
+    //$stattable .= '<th>' . get_lang('Statistics') . '</th></tr>';
+	$counter=0;    
 	foreach ($keys as $key) {
 		$bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
 		$stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
 		$stattable .= '<td width="150">' . $key . '</td>';
-		$stattable .= '<td width="550"><img src="../img/bar_1u.gif" width="' . $bar . '%" height="10"/></td>';
+        
+		$stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
 		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';
+		//$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

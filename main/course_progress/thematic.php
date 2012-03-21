@@ -119,7 +119,7 @@ if ($action == 'thematic_list') {
     			$actions_first_col = Display::div($actions_first_col, array('style'=>'height:20px'));
 			}
 			                        
-			echo Display::tag('td', Display::tag('h2', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col, array('id'=>'thematic_td_content_'.$thematic['id'], 'class'=>'thematic_content'));
+			echo Display::tag('td', Display::tag('h3', Security::remove_XSS($thematic['title'], STUDENT).$session_star).Security::remove_XSS($thematic['content'], STUDENT).$actions_first_col, array('id'=>'thematic_td_content_'.$thematic['id'], 'class'=>'thematic_content'));
 			
 			// Display 2nd column - thematic plan data
 			 
@@ -135,8 +135,7 @@ if ($action == 'thematic_list') {
 				echo Display::div('', array('id' => "thematic_plan_".$thematic['id']));
 			} else {
 				echo $thematic_plan_div[$thematic['id']];
-			}
-						
+			}						
 			echo '</td>';
 			
 			// Display 3rd column - thematic advance data						
@@ -144,7 +143,6 @@ if ($action == 'thematic_list') {
 			
 			//if (api_is_allowed_to_edit(null, true) &&  api_get_session_id() == $thematic['session_id']) {					
 			if (api_is_allowed_to_edit(null, true)) {
-				//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].'">'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle'),ICON_SIZE_SMALL).'</a></div><br />';
 				echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic['id'].'">'.Display::return_icon('add.png',get_lang('NewThematicAdvance'),'',ICON_SIZE_MEDIUM).'</a></div>';
 			}						
 			

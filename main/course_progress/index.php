@@ -82,8 +82,9 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function() {
 
 	//Second col	
+     /*
     $("#thematic_plan_add").live("submit", function() {
-                   
+   
 		var serialize_form_content = $(this).serialize();
 
 		//Getting FCK content								
@@ -113,10 +114,10 @@ $(document).ready(function() {
 		});
 		//prevent the browser to follow the link
         return false;				
-	});
+	});*/
     
    // Third col
-   
+   /*
 	$("#thematic_advance").live("submit", function() {
 	   	var url = this.href;        
         var my_id = this.id;
@@ -142,7 +143,7 @@ $(document).ready(function() {
 		});								
 		//prevent the browser to follow the link
         return false;	
-	});
+	});*/
     
 
     $(".thematic_advance_actions, .thematic_tools ").hide();	

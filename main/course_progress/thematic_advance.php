@@ -25,7 +25,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
 	// display form
 	$form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(),'','style="width: 100%;"');
-	$form->addElement('header', '', $header_form);	
+	$form->addElement('header',  $header_form);	
 	$form->addElement('hidden', 'thematic_advance_token',$token);
 	$form->addElement('hidden', 'action', $action);
 	

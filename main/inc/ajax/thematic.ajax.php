@@ -15,7 +15,7 @@ $thematic = new Thematic();
 
 switch ($action) {		
 	case 'save_thematic_plan':
-		$title_list         = $_REQUEST['title'];
+		/*$title_list         = $_REQUEST['title'];
 		$description_list   = $_REQUEST['desc'];
 		//$description_list   = $_REQUEST['description'];
 		$description_type   = $_REQUEST['description_type'];
@@ -27,9 +27,8 @@ switch ($action) {
 		}	
 		$thematic_plan_data = $thematic->get_thematic_plan_data();
 		$return = $thematic->get_thematic_plan_div($thematic_plan_data);
-		echo $return[$_REQUEST['thematic_id']];
-		break;		
-        
+		echo $return[$_REQUEST['thematic_id']];*/
+		break;        
 	case 'save_thematic_advance':		
 		if (!api_is_allowed_to_edit(null, true)) {
 			echo '';

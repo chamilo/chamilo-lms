@@ -770,8 +770,7 @@ class Thematic
 		$title 		 = Database::escape_string($this->thematic_plan_title);
 		$description = Database::escape_string($this->thematic_plan_description);
 		$description_type = intval($this->thematic_plan_description_type);		
-		$user_id     = api_get_user_id();
-        $session_id  = api_get_session_id();
+		$user_id     = api_get_user_id();        
         $course_id   = api_get_course_int_id();
 	
 		$list        = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
@@ -785,8 +784,7 @@ class Thematic
 		    $condition = "AND id IN (".implode(',', $elements_to_show).") ";
 		}
 		// check thematic plan type already exists
-		$sql = "SELECT id FROM $tbl_thematic_plan WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = $description_type ";
-		
+		$sql = "SELECT id FROM $tbl_thematic_plan WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = '$description_type'";		
 		$rs	 = Database::query($sql);
 		
 		$affected_rows = 0;
@@ -801,8 +799,7 @@ class Thematic
             $update = false;            
             if (in_array($thematic_plan_id, $elements_to_show)) {
                 $update = true;
-            }
-           
+            }           
             
             if ($update) {
     			// update
@@ -901,7 +898,6 @@ class Thematic
 		return $next_description_type;
 	}
 
-
 	/**
 	 * update done thematic advances from thematic details interface
 	 * @param 	int		Thematic id
@@ -916,8 +912,7 @@ class Thematic
 		$affected_rows = 0;
         $user_id       = api_get_user_id();
         
-        $all = array();
-        //var_dump($thematic_advance_data);
+        $all = array();        
         if (!empty($thematic_data)) {
             foreach ($thematic_data as $thematic) {
                 $thematic_id = $thematic['id'];

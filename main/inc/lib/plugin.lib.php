@@ -155,29 +155,32 @@ class AppPlugin {
                 $plugin_info['current_region'] = $block;    
                 
                 // Loading the plugin/XXX/index.php file                
-                require api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
-                
-                //We set the $template variable in order to use smarty
-                if (isset($_template) && !empty($_template)) {                        
-                    foreach($_template as $key =>$value) {
-                        $template->assign($key, $value);                          
-                    }
-                }                
-                
-                //Loading the smarty template files if exists
-                $template_list = array();
-                if (isset($plugin_info) && isset($plugin_info['templates'])) {
-                    $template_list = $plugin_info['templates'];
-                }           
-               
-                if (!empty($template_list)) {
-                    foreach($template_list as $plugin_tpl) {
-                        if (!empty($plugin_tpl)) {
-                            $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";                            
-                            $template->display($template_plugin_file);                                                
+                $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                if (file_exists($plugin_file)) {
+                    require $plugin_file;
+
+                    //We set the $template variable in order to use smarty
+                    if (isset($_template) && !empty($_template)) {                        
+                        foreach($_template as $key =>$value) {
+                            $template->assign($key, $value);                          
                         }
                     }                
-                }               
+
+                    //Loading the smarty template files if exists
+                    $template_list = array();
+                    if (isset($plugin_info) && isset($plugin_info['templates'])) {
+                        $template_list = $plugin_info['templates'];
+                    }           
+
+                    if (!empty($template_list)) {
+                        foreach($template_list as $plugin_tpl) {
+                            if (!empty($plugin_tpl)) {
+                                $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";                            
+                                $template->display($template_plugin_file);                                                
+                            }
+                        }                
+                    }
+                }                
             }
         }
         return true;

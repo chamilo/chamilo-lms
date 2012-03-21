@@ -472,10 +472,8 @@ if ($file_type == null) { //show the result header
     	echo $export_result_form->display();
     	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     } else {
-    	if (isset ($import_result_form)){
-    		echo '<div class ="normal-message">';
-    		echo $import_result_form->display();
-    		echo '</div>';
+    	if (isset ($import_result_form)) {    		
+    		echo $import_result_form->display();    		
     	}
     	if (isset ($edit_res_form)) {
     		echo $edit_res_form->toHtml();

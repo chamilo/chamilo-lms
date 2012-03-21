@@ -23,7 +23,6 @@ class DataForm extends FormValidator {
 	const TYPE_EXPORT = 2;
 	const TYPE_EXPORT_PDF = 3;
 
-
 	/**
 	 * Builds a form containing form items based on a given parameter
 	 * @param int form_type 1=import, 2=export
@@ -101,7 +100,7 @@ class DataForm extends FormValidator {
 		$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank">' . get_lang('ExampleXMLFile') . '</a>)', 'xml');
 		$this->addElement('checkbox','overwrite', null,get_lang('OverwriteScores'));
 		$this->addElement('checkbox','ignoreerrors',null,get_lang('IgnoreErrors'));
-		$this->addElement('submit', 'submit', get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Ok'));
 		$this->setDefaults(array(
 		'formSent' => '1',
 		'file_type' => 'csv'

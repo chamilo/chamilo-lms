@@ -72,7 +72,6 @@ class ResultTable extends SortableTable
 		return $this->datagen->get_total_results_count();
 	}
 
-
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
@@ -113,8 +112,7 @@ class ResultTable extends SortableTable
 		}
 
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
-
-
+        
 		// generate the data to display
 		$sortable_data = array();		
 		foreach ($data_array as $item) {
@@ -130,8 +128,8 @@ class ResultTable extends SortableTable
 				$row[] = $item['firstname'];
 			}
             
-			$row[] = $item['score'];
-            
+			$row[] =  Display::bar_progress($item['percentage_score'], false, $item['score']);
+            //$row[] =  Display::bar_progress($item['percentage_score'], true);                        
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];
 			}

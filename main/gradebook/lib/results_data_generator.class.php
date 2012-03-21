@@ -86,10 +86,10 @@ class ResultsDataGenerator
 			} else {
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
+            $user['percentage_score'] = intval($scoredisplay->display_score(array($result->get_score(), $this->evaluation->get_max()), SCORE_PERCENT, SCORE_BOTH, true));
 			if ($pdf && $number_decimals == null){				
 				$user['scoreletter'] = $result->get_score();
-			}
-			
+			}			
 			if ($scoredisplay->is_custom()) {				
 				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);				
 			}			

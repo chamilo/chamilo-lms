@@ -162,7 +162,7 @@ class GradebookTable extends SortableTable {
 			
 			//Name
 			if (get_class($item) == 'Category') {
-				$row[] = $invisibility_span_open.'<h2>'.$item->get_name().'</h2>'.$invisibility_span_close;
+				$row[] = $invisibility_span_open.'<h3>'.$item->get_name().'</h3>'.$invisibility_span_close;
                 $main_categories[$item->get_id()]['name'] = $item->get_name();                
 			} else {
 				$row[] = $invisibility_span_open.$this->build_name_link($item) . $invisibility_span_close;

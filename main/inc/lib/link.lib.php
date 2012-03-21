@@ -32,8 +32,7 @@ function addlinkcategory($type) {
 
 	$ok = true;
     
-    $course_id = api_get_course_int_id();
-    
+    $course_id = api_get_course_int_id();   
 
 	if ($type == 'link') {
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
@@ -966,8 +965,7 @@ function get_youtube_video_id($url) {
     
     //If false try other options
     if ($pos === false) {         
-        $url_parsed = parse_url($url);        
-        
+        $url_parsed = parse_url($url);
         
         //Youtube shortener
         //http://youtu.be/ID   

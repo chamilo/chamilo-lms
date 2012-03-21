@@ -608,7 +608,6 @@ class DisplayGradebook
 		echo $header;
 	}
 
-
 	function display_header_user($userid) {
 		$select_cat   = intval($_GET['selectcat']);
 		$user_id      = $userid;
@@ -635,8 +634,7 @@ class DisplayGradebook
 		$item_value = number_format($item_value, 2, '.', ' ');
 		$total_score=array($item_value,$item_total);
 		$scorecourse_display = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
-		//----------------------
-
+		
 		//$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 		$cattotal = Category :: load(0);
 		$scoretotal= $cattotal[0]->calc_score($user_id);
@@ -659,12 +657,10 @@ class DisplayGradebook
 		$info.= '</td><td>';
 		$info.= '<img ' . $img_attributes . '/></td></tr></table>';
 
-
-	//--------------
-		//$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['lastname'], $user['firstname']).'</b><br />';
+    	//$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['lastname'], $user['firstname']).'</b><br />';
 		//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scorecourse_display . '</b>';
 
 		//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
-		Display :: display_normal_message($info,false);
+        echo $info;		
 	}
 }

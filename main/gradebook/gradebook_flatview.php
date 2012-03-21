@@ -306,10 +306,8 @@ if (isset($_GET['search'])) {
 
 $this_section = SECTION_COURSES;
 
-if (isset($_GET['exportpdf'])) {
-	echo '<div class="normal-message">';
-	$export_pdf_form->display();
-	echo '</div>';
+if (isset($_GET['exportpdf'])) {	
+	$export_pdf_form->display();	
 } else {
 	Display :: display_header(get_lang('FlatView'));
 }

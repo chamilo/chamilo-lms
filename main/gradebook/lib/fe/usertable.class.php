@@ -139,5 +139,4 @@ class UserTable extends SortableTable
 						. '&nbsp;[' . $item->get_type_name() . ']';
 		}
 	}
-
 }

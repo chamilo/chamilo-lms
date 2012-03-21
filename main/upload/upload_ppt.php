@@ -17,26 +17,15 @@ $language_file[] = "scormdocument";
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
 require_once '../inc/global.inc.php';
-require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 
 
 $form_style= '
 <style>
-.row {
-	width: 200px;
-}
 .convert_button{
 	background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
 	padding: 2px 0px 2px 22px;
-}
-.sub-form{
-	width: 25em;
-}
-.sub-form input{
-    float:right;
-    margin-top:-1.2em;
 }
 #dynamic_div_container{float:left;margin-right:10px;}
 #dynamic_div_waiter_container{float:left;}
@@ -50,11 +39,9 @@ $htmlHeadXtra[] = $form_style;
 
 if(isset($_POST['convert'])){
 	$cwdir = getcwd();
-	if(isset($_FILES['user_file']))
-	{
+	if(isset($_FILES['user_file'])) {
 		$allowed_extensions = array('odp','sxi','ppt','pps','sxd','pptx');
-		if(in_array(strtolower(pathinfo($_FILES['user_file']['name'],PATHINFO_EXTENSION)),$allowed_extensions))
-		{
+		if(in_array(strtolower(pathinfo($_FILES['user_file']['name'],PATHINFO_EXTENSION)),$allowed_extensions)) {
 			require('../newscorm/lp_upload.php');
 			if(isset($o_ppt) && $first_item_id != 0){
 				if (api_get_setting('search_enabled')=='true') {
@@ -73,23 +60,19 @@ if(isset($_POST['convert'])){
     				}
                 }
 				header('Location: ../newscorm/lp_controller.php?'.api_get_cidreq().'&lp_id='.$o_ppt->lp_id.'&action=view_item&id='.$first_item_id);
-			}
-			else {
+			} else {
 				if(!empty($o_ppt->error))
 					$errorMessage = $o_ppt->error;
 				else
 					$errorMessage = get_lang('OogieUnknownError');
 			}
-		}
-		else
-		{
+		} else {
 			$errorMessage = get_lang('OogieBadExtension');
 		}
 	}
 }
 
 event_access_tool(TOOL_UPLOAD);
-
 
 // check access permissions (edit permission is needed to add a document or a LP)
 $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -101,18 +84,7 @@ if(!$is_allowed_to_edit){
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
 $nameTools = get_lang("OogieConversionPowerPoint");
 Display :: display_header($nameTools);
-
-
-?>
-
-<img src="../img/mascot.png"><br>
-<span style="color: #ff6434; font-size: 16px; font-family: Arial; margin-left: 10px;"><?php echo get_lang("WelcomeOogieSubtitle");?></span><br>
-
-<?php
-
-$message=get_lang("WelcomeOogieConverter");
-
-echo '<br>';
+$message = get_lang("WelcomeOogieConverter");
 
 $s_style="border-width: 1px;
 		 border-style: solid;
@@ -140,67 +112,32 @@ $s_style_error="border-width: 1px;
 		 border-color: #FF0000;
 		 color: #000;";
 
-//Display::display_normal_message($message);
-
 $alt_text = '';
 $attribute_list = '';
 echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_normal.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
 
-if(!empty($errorMessage)){
-	//Display::display_error_message($errorMessage);
+if(!empty($errorMessage)) {	
 	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
 }
 
-
 $form = new FormValidator('upload_ppt', 'POST', '', '');
+$form->addElement('header',get_lang("WelcomeOogieSubtitle"));
 
 // build the form
-
-$form -> addElement ('html','<br />');
-
-$div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
-
-$renderer = & $form->defaultRenderer();
-
-
-
-// set template for user_file element
-$user_file_template =
-<<<EOT
-<div class="row" style="margin-top:10px;width:100%">
-		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}$div_upload_limit
-		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
-</div>
-EOT;
-$renderer->setElementTemplate($user_file_template,'user_file');
-
-// set template for other elements
-$user_file_template =
-<<<EOT
-<div class="row" style="margin-top:10px;width:100%">
-		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}
-		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
-</div>
-EOT;
-$renderer->setElementTemplate($user_file_template);
-
-$form -> addElement ('file', 'user_file','<img src="../img/powerpoint_big.gif" align="absbottom" />&nbsp;&nbsp;');
+$div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
+$form -> addElement ('file', 'user_file', array('<img src="../img/powerpoint_big.gif" />', $div_upload_limit));
 $form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
 if (api_get_setting('search_enabled')=='true') {
     require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
     $specific_fields = get_specific_field_list();
-    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-    //$form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
-    $form -> addElement ('html','<br />');
-    $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. api_get_languages_combo());
-    $form -> addElement ('html','<div class="sub-form">');
+    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));        
+    $form -> addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));    
     foreach ($specific_fields as $specific_field) {
         $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
     }
-    $form -> addElement ('html','</div>');
 }
 
-$form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
+$form -> addElement ('style_submit_button', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 
 $form -> addElement ('hidden', 'ppt2lp', 'true');
 
@@ -214,4 +151,3 @@ $form -> display();
   FOOTER
 */
 Display::display_footer();
-?>

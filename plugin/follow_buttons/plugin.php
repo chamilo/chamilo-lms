@@ -9,15 +9,15 @@
  * Plugin details (must be present)
  */
 
-//the plugin title
-$plugin_info['title']      = 'Show user information';
+/* Plugin config */
 
+//the plugin title
+$plugin_info['title']       = 'Follow icons';
 //the comments that go with the plugin
-$plugin_info['comment']     = "Shows a welcome message, (this is an example to uses smarty)";
+$plugin_info['comment']     = "Add social icons (implemented using addthis.com)";
 //the plugin version
 $plugin_info['version']     = '1.0';
 //the plugin author
 $plugin_info['author']      = 'Julio Montoya';
 
-//set the smarty templates that are going to be used
 $plugin_info['templates']   = array('template.tpl');

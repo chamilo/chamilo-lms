@@ -13,6 +13,6 @@ if (!api_is_anonymous()) {
     $user_info = api_get_user_info($user_id);
             
     //You can also use smarty setting variables in the special variable called template
-    $_template['my_user_info']   = $user_info;
-    $_template['my_username']    = $user_info['username'];
+    $_template['user_info']   = $user_info;
+    $_template['username']    = $user_info['username'];
 }

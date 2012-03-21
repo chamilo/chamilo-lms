@@ -24,9 +24,9 @@
     4. Read more
         You can also see more examples in the the main/template/default/layout files
 *}
-{if $show_message}
+{if $show_user_info.show_message}
 <div class="well">
-    {"Welcome"|get_lang} {$my_user_info.complete_name} ({$my_username})
+    {"Welcome"|get_lang} {$show_user_info.user_info.complete_name} ({$show_user_info.username})
     <br />
     The administrator - {"siteName"|api_get_setting}
 </div>

@@ -144,26 +144,29 @@ class AppPlugin {
     function get_all_plugin_contents_by_block($block, $template) {
         global $_plugins;
         if (isset($_plugins[$block]) && is_array($_plugins[$block])) {
+        //if (1) {
             foreach ($_plugins[$block] as $plugin_name) {
                 //Load the plugin information
                 
-                //The plugin_info variable is available inside the plugin index
-                
+                //The plugin_info variable is available inside the plugin index                
                 $plugin_info = $this->get_plugin_info($plugin_name);
                 
                 //We also where the plugin is
                 $plugin_info['current_region'] = $block;    
                 
                 // Loading the plugin/XXX/index.php file                
-                $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";                
                 if (file_exists($plugin_file)) {
                     require $plugin_file;
 
-                    //We set the $template variable in order to use smarty
-                    if (isset($_template) && !empty($_template)) {                        
-                        foreach($_template as $key =>$value) {
-                            $template->assign($key, $value);                          
+                    //We set the $template variable in order to use smarty                    
+                    if (isset($_template) && !empty($_template)) {   
+                        /*
+                        foreach ($_template as $key =>$value) {                            
+                            $template->assign($plugin_name[$key], $value);                          
                         }
+                        */
+                        $template->assign($plugin_name, $_template);
                     }                
 
                     //Loading the smarty template files if exists
@@ -173,14 +176,14 @@ class AppPlugin {
                     }           
 
                     if (!empty($template_list)) {
-                        foreach($template_list as $plugin_tpl) {
+                        foreach ($template_list as $plugin_tpl) {
                             if (!empty($plugin_tpl)) {
                                 $template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl";                            
                                 $template->display($template_plugin_file);                                                
                             }
                         }                
                     }
-                }                
+                }      
             }
         }
         return true;

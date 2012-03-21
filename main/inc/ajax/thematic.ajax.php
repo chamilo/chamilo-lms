@@ -34,7 +34,7 @@ switch ($action) {
 			echo '';
 			exit;
         }
-        
+        /*
 		if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours'])) ) {	    			
 			if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
         		$start_date_error = true;
@@ -80,14 +80,12 @@ switch ($action) {
 			}
 		}
 		$thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);        
-		$return = $thematic->get_thematic_advance_div($thematic_advance_data);
-		
-		echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];
+		$return = $thematic->get_thematic_advance_div($thematic_advance_data);		
+		echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
         break;		
 	case 'get_datetime_by_attendance':							
-		$attendance_id = intval($_POST['attendance_id']);
-        
-		$thematic_advance_id = intval($_POST['thematic_advance_id']);
+		$attendance_id       = intval($_REQUEST['attendance_id']);        
+		$thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
 		
 		$label = '';
 		$input_select = '';			
@@ -97,7 +95,7 @@ switch ($action) {
             $thematic_list = $thematic->get_thematic_list();
             
             $my_list = $thematic_list_temp = array();
-            foreach($thematic_list as $item) {                    	
+            foreach ($thematic_list as $item) {                    	
                 $my_list = $thematic->get_thematic_advance_by_thematic_id($item['id']);                    
                 $thematic_list_temp = array_merge($my_list, $thematic_list_temp);
             }     
@@ -107,25 +105,30 @@ switch ($action) {
 				if (!empty($item['attendance_id']) ) {
 					$new_thematic_list[$item['id']] = array('attendance_id' =>$item['attendance_id'], 'start_date'=>$item['start_date']);
 				}
-			}      
+			}            
 			          
-			$attendance_calendar = $attendance->get_attendance_calendar($attendance_id);		
-			$calendar_select = array();
+			$attendance_calendar = $attendance->get_attendance_calendar($attendance_id);	
+            
 			$label = get_lang('StartDate');
 			if (!empty($attendance_calendar)) {
 				$input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" UNIQUE size="5">';				
 				foreach ($attendance_calendar as $calendar) {
+                    $selected = null;
 					$insert = true;
 					//checking if was already taken						
-					foreach($new_thematic_list as $thematic_item) {
+					foreach ($new_thematic_list as $key => $thematic_item) {
 						//if ($calendar['db_date_time'] == $thematic_item['start_date'] && $calendar['attendance_id'] == $thematic_item['attendance_id'] ) {
                         if ($calendar['db_date_time'] == $thematic_item['start_date'] ) {
-							$insert = false;
+							$insert = false;                            
+                            if ($thematic_advance_id == $key) {
+                                $insert = true; 
+                                $selected = 'selected';
+                            }
 							break;	
 						}						
 					}
 					if ($insert == true) {
-						$input_select .= '<option value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';
+						$input_select .= '<option '.$selected.' value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';
 					}
 				}
 				$input_select .= '</select>';

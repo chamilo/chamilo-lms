@@ -321,10 +321,11 @@ class ThematicController
                             $data['thematic_advance_data'] = $thematic_advance_data;		
                         }	    			
                     } else {   				
-                        if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] && api_is_allowed_to_edit(null, true)) {    	    			
+                        if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] && api_is_allowed_to_edit(null, true)) {    	
+
                             $thematic_advance_id 	= $_REQUEST['thematic_advance_id'];
                             $thematic_id 			= $_REQUEST['thematic_id'];	    			
-                            $content 				= $_REQUEST['real_content'];
+                            $content 				= $_REQUEST['content'];
                             $duration				= $_REQUEST['duration_in_hours'];
                             if (isset($_REQUEST['start_date_type']) && $_REQUEST['start_date_type'] == 2) {
                                 $start_date 	= $thematic->build_datetime_from_array($_REQUEST['custom_start_date']);

@@ -184,16 +184,19 @@ $(document).ready(function() {
  
 $htmlHeadXtra[] = '<script type="text/javascript">
 
-function datetime_by_attendance(selected_value) {
+function datetime_by_attendance(attendance_id, thematic_advance_id) {
+    
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {},
-		type: "POST",
+		type: "GET",
 		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
-		data: "attendance_id="+selected_value+"&thematic_advance_id='.$thematic_id.'",
-		success: function(datos) {
-			$("#div_datetime_attendance").html(datos);			
-			$("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
+		data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
+		success: function(data) {
+			$("#div_datetime_attendance").html(data);            
+            if (thematic_advance_id == 0) {
+                $("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
+            }            
 		}
 	});
 }

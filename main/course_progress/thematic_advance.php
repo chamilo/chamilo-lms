@@ -63,7 +63,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	}
 	
 	$form->addElement('html', '<div id="div_datetime_attendance">');
-	if (!empty($calendar_select)) {
+	if (!empty($calendar_select)) {        
 		$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select, array('id'=>'start_date_select_calendar'));
 	}
 	$form->addElement('html', '</div>');
@@ -82,24 +82,29 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	}
 	//$form->addElement('html', '<a href="#" id="save_button" onclick="save();">Save</a>');
 	$attendance_select_item_id = null;
+    
 	if (count($attendance_select) > 1) {
 		$i = 1;
-		foreach($attendance_select as $key => $attendance_select_item) {
+		foreach ($attendance_select as $key => $attendance_select_item) {
 			if ($i == 2) {
 				$attendance_select_item_id = $key;
 				break;
 			}
 			$i++;
-		}
+		}        
 		if (!empty($attendance_select_item_id)) {
-			$default['attendance_select'] = $attendance_select_item_id;
-			echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'"); </script>';
+			$default['attendance_select'] = $attendance_select_item_id;            
+            if ($thematic_advance_id) {                
+                echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'", "'.$thematic_advance_id.'"); </script>';
+            } else {
+                echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'", 0); </script>';
+            }
 			
 		}
 	}
 	
 	$default['start_date_type'] = 1;	
-	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));
+	$default['custom_start_date'] = date('d-F-Y H:i', api_strtotime(api_get_local_time()));
 	
 	if (!empty($thematic_advance_data)) {
 

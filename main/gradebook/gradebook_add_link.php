@@ -41,9 +41,12 @@ if ($typeform->validate() && isset($_GET['newtypeselected'])) {
 if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 	$url = api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&typeselected=' . Security::remove_XSS($_GET['typeselected']) . '&course_code=' . Security::remove_XSS($_GET['course_code']);
 	$addform = new LinkAddEditForm(LinkAddEditForm :: TYPE_ADD, $all_categories, intval($_GET['typeselected']),null, 'add_link', $url);
+    
 	if ($addform->validate()) {
 		$addvalues = $addform->exportValues();
+        
 		$link= LinkFactory :: create($_GET['typeselected']);
+        
 		$link->set_user_id(api_get_user_id());
 		/*
 		if ($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
@@ -74,7 +77,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		//update view_properties		
 		if (isset($_GET['typeselected']) && 5 == $_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 
-			$sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
+			echo $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
 					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
 			$res1	= Database::query($sql1);
 			$rowtit	= Database::fetch_row($res1);
@@ -89,6 +92,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 				Database::query($sql);
 			}
 		}
+        
 		$link->add();
 				
 		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();
@@ -109,8 +113,7 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 
-    $("#hide_category_id").change(function(){
-        
+    $("#hide_category_id").change(function() {        
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();
             $.ajax({ 

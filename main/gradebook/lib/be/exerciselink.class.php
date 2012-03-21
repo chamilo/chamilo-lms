@@ -62,8 +62,18 @@ class ExerciseLink extends AbstractLink
     	if (empty($this->course_code)) {
     		die('Error in get_not_created_links() : course code not set');
     	}    	    	
+        /*$session_id = api_get_session_id();
+        if (empty($session_id)) {
+            $session_condition = api_get_session_condition(0, true);
+        } else {
+            $session_condition = api_get_session_condition($session_id, true, true);
+        }        
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().' 
+				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;        
+        */
+        $sql = 'SELECT id,title from '.$this->get_exercise_table().' 
 				WHERE c_id = '.$this->course_id.' AND active=1 AND session_id='.api_get_session_id().'';
+		
 		$result = Database::query($sql);
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {

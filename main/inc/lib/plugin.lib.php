@@ -74,20 +74,29 @@ class AppPlugin {
         return $installed_plugins;
     }
     
-    function install($plugin_name, $access_url_id) {
-        $access_url_id = api_get_current_access_url_id();
+    function install($plugin_name, $access_url_id = null) {
+        if (empty($access_url_id)) {
+            $access_url_id = api_get_current_access_url_id();
+        } else {
+            $access_url_id = intval($access_url_id);
+        }
         api_add_setting('installed', 'status', $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $access_url_id, 1);
         
         //api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
         $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/install.php';
+        
         if (is_file($pluginpath) && is_readable($pluginpath)) {
             //execute the install procedure
             require $pluginpath;
         }    
     }
     
-    function uninstall($plugin_name) {
-        $access_url_id = api_get_current_access_url_id();
+    function uninstall($plugin_name, $access_url_id = null) {
+        if (empty($access_url_id)) {
+            $access_url_id = api_get_current_access_url_id();
+        } else {
+            $access_url_id = intval($access_url_id);
+        }
         api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? ' =>
                                    array('Plugins', $access_url_id, $plugin_name)));
         $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/uninstall.php';

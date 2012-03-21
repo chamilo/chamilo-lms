@@ -2939,6 +2939,10 @@ class learnpath {
                     } else {
                         require_once 'resourcelinker.inc.php';
                         $file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
+                        
+                        if ($this->debug > 0) {
+                            error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
+                        }
 
                         if ($lp_item_type == 'link') {
                             require_once api_get_path(LIBRARY_PATH).'link.lib.php';

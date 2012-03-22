@@ -371,20 +371,20 @@ if (!empty($flat_list)) {
             if ($current_session == $details['lp_session']) {
               if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
                 $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
-                    Display::return_icon('kaboodleloop.gif', get_lang('PreventMultipleAttempts'),'',ICON_SIZE_SMALL).
+                    Display::return_icon('reload.png', get_lang('PreventMultipleAttempts'),'',ICON_SIZE_SMALL).
                   '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
                 $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
-                   Display::return_icon('kaboodleloop_gray.gif', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).
+                   Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).
                   '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .Display::return_icon('kaboodleloop.gif', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).                  
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .Display::return_icon('reload.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).                  
                   '</a>';
               }
             } else {
-                $dsp_reinit = Display::return_icon('kaboodleloop_gray.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL);
+                $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL);
             }
 
 

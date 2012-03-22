@@ -363,6 +363,7 @@ function return_menu() {
     $ext      = '.html';
     $menutabs = 'home_tabs';
     $home_top = '';
+    
     if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
         $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);    
     } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
@@ -372,8 +373,7 @@ function return_menu() {
     }
         
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
-    
-    //if (api_get_self() != '/main/admin/configure_homepage.php') {        
+   
     $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     
@@ -407,7 +407,7 @@ function return_menu() {
         $show_bar = true;
     }
         
-    $header3 = '';
+    $menu = '';
     
     // Logout    
     if ($show_bar) {
@@ -416,24 +416,34 @@ function return_menu() {
             if (api_is_anonymous()) {
                 $login = get_lang('Anonymous');
             } else {
-                $uinfo = api_get_user_info(api_get_user_id());
-                $login = $uinfo['username'];
+                $user_info = api_get_user_info(api_get_user_id());                
             }            
             //start user section line with name, my course, my profile, scorm info, etc            
-            $header3 .= '<ul class="nav nav-pills pull-right">';
+            $menu .= '<ul class="nav nav-pills pull-right">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
                 //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
-                $header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
-            $header3 .= '</ul>';    
+                
+                //$header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
+                //$menu .= '<li><a href=""><img src="'.$user_info['avatar_small'].'"/></a></li>';
+                $menu .= '<li class="dropdown">';                
+                $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="'.$user_info['avatar_small'].'"/> '.$user_info['complete_name'].'<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                    <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>
+                                    <a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'">'.get_lang('Logout').'</a>
+                                    </li>
+                                </ul>';
+                $menu .= '</li>';
+            $menu .= '</ul>';    
         }      
         
         if (!empty($lis)) {
-            $header3 .= '<ul class="nav nav-pills">';
-            $header3 .= $lis;
-            $header3 .= '</ul>';
+            $menu .= '<ul class="nav nav-pills">';
+            $menu .= $lis;
+            $menu .= '</ul>';
         }
     }
-    return $header3;
+    return $menu;
 }
 
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {  

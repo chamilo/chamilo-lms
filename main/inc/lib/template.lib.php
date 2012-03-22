@@ -466,9 +466,9 @@ class Template extends Smarty {
 		
 		$this->assign('bug_notification_link', $bug_notification_link);
 		
-		$notification = return_notification_menu();
-		$menu = return_menu();
-		$breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
+		$notification   = return_notification_menu();
+		$menu           = return_menu();
+		$breadcrumb     = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('notification_menu', $notification);
 		$this->assign('menu', $menu);        

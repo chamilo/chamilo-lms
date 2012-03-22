@@ -49,8 +49,16 @@ legend {
     margin-bottom:0px;
 }
 
-#header2 {    
-    
+/* menu dropdown fixes */
+#header3 .nav .open > .dropdown-toggle, #header3 .nav .active > .dropdown-toggle, #header3 .nav .open.active > .dropdown-toggle {
+    background-color: transparent;
+}
+#header3 .dropdown-menu li a {
+    color:#333;
+}
+
+#header3 .dropdown-toggle {
+    height: 15px;
 }
 
 #header2 .nav {

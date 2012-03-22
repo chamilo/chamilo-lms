@@ -487,6 +487,7 @@ class Answer {
 			$sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
 		$sql = api_substr($sql,0,-1);
+        
 		Database::query($sql);
 
 		// moves $new_* arrays
@@ -526,7 +527,7 @@ class Answer {
                            
             //Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $course_info['real_id']);
-            //var_dump($origin_options);
+            
             if (!empty($origin_options)) {
                 foreach($origin_options as $item) {
             	   $new_option_list[]=$item['id'];
@@ -541,8 +542,7 @@ class Answer {
                     $fixed_list[$new_option_list[$i]] = $item['id'];
                     $i++;
                 }
-            }
-            //var_dump($fixed_list);
+            }            
         }
 
 		// if at least one answer

@@ -83,12 +83,12 @@ function import_exercise($file) {
 	// set some default values for the new exercise
 	$exercise_info = array ();
 	$exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
-	$exercise_info['question'] = array ();
+	$exercise_info['question'] = array();
 	$element_pile = array ();
 
 	// create parser and array to retrieve info from manifest
 	$element_pile = array (); //pile to known the depth in which we are
-	$module_info = array (); //array to store the info we need
+	//$module_info = array (); //array to store the info we need
 
 	// if file is not a .zip, then we cancel all
 	if (!preg_match('/.zip$/i', $file)) {
@@ -107,7 +107,7 @@ function import_exercise($file) {
 	//$question_number = 0;
 	$file_found = false;
 	$operation = false;
-
+    $result = false;
 	// parse every subdirectory to search xml question files
 	while (false !== ($file = readdir($exerciseHandle))) {
 		if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
@@ -115,30 +115,32 @@ function import_exercise($file) {
 			$questionHandle = opendir($baseWorkDir . '/' . $file);
 			while (false !== ($questionFile = readdir($questionHandle))) {
 				if (preg_match('/.xml$/i', $questionFile)) {
-					parse_file($baseWorkDir, $file, $questionFile);
+					$result = parse_file($baseWorkDir, $file, $questionFile);
 					$file_found = true;
 				}
 			}
-		}
-		elseif (preg_match('/.xml$/i', $file)) {
-			parse_file($baseWorkDir, '', $file);
+		} elseif (preg_match('/.xml$/i', $file)) {
+			$result = parse_file($baseWorkDir, '', $file);
 			$file_found = true;
 		} // else ignore file
 	}
-
 	if (!$file_found) {
-		Display :: display_error_message(get_lang('No XML file found in the zip'));
+		Display :: display_error_message(get_lang('No XML file found in the zip'));        
 		return false;
 	}
+    if ($result == false ) {        
+        return false;
+    }
 
 	//add exercise in tool
 
 	//1.create exercise
 	$exercise = new Exercise();
 	$exercise->exercise = $exercise_info['name'];
+    
 	$exercise->save();
 	$last_exercise_id = $exercise->selectId();
-	if (!empty ($last_exercise_id)) {
+	if (!empty($last_exercise_id)) {
 		//For each question found...
 		foreach ($exercise_info['question'] as $key => $question_array) {
 			//2.create question
@@ -172,7 +174,7 @@ function import_exercise($file) {
 		// delete the temp dir where the exercise was unzipped
 		my_delete($baseWorkDir . $uploadPath);
 		$operation = true;
-	}
+	}    
 	return $operation;
 }
 
@@ -414,12 +416,12 @@ function startElement($parser, $name, $attributes) {
 			//retrieve answers id for MCUA and MCMA questions
 
 		case 'SIMPLECHOICE' :
-			{
-				$current_answer_id = $attributes['IDENTIFIER'];
-				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = array ();
-				}
-			}
+			
+            $current_answer_id = $attributes['IDENTIFIER'];
+            if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = array ();
+            }
+			
 			break;
 
 		case 'MAPENTRY' :
@@ -526,16 +528,15 @@ function elementData($parser, $data) {
 	if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
 		$current_question_item_body .= $data;
 	}
-
+    
 	switch ($current_element) {
 		case 'SIMPLECHOICE' :
-			{
+			
 				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
 					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
 				} else {
 					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
-				}
-			}
+				}    		
 			break;
 
 		case 'FEEDBACKINLINE' :
@@ -594,4 +595,3 @@ function elementData($parser, $data) {
 			break;
 	}
 }
-?>

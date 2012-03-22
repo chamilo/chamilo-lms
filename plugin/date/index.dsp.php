@@ -6,4 +6,4 @@
 /**
  * Display
  */
-echo "  ".strip_tags($date); ?>
+echo '<div class="well">'.strip_tags($date).'</div>';

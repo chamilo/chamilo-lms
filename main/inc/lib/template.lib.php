@@ -218,6 +218,7 @@ class Template extends Smarty {
 	private function set_user_parameters() {
 		$user_info = array();
 		$user_info['logged'] = 0;
+        $this->user_is_logged_in = false;
 		if (api_get_user_id() && !api_is_anonymous()) {
 			$user_info = api_get_user_info();			
 			$user_info['logged'] = 1;
@@ -231,8 +232,7 @@ class Template extends Smarty {
             $this->user_is_logged_in = true;
 		}		
         //Setting the $_u array that could be use in any template 
-		$this->assign('_u', $user_info);
-        $this->user_is_logged_in = false;
+		$this->assign('_u', $user_info); 
 	}	
 	
 	private function set_system_parameters() {

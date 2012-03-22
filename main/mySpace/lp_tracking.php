@@ -65,26 +65,7 @@ if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 }
 
 $interbreadcrumb[] = array("url" => "myStudents.php?student=".Security::remove_XSS($_GET['student_id'])."&course=".$cidReq."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
-
 $nameTools = get_lang('LearningPathDetails');
-
-$htmlHeadXtra[] = '
-<style>
-div.title {
-	font-weight : bold;
-	text-align : left;
-}
-div.mystatusfirstrow {
-	font-weight : bold;
-	text-align : left;
-}
-div.description {
-	font-family : Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	color: Silver;
-}
-</style>';
-
 Display :: display_header($nameTools);
 
 $lp_id = intval($_GET['lp_id']);
@@ -106,7 +87,7 @@ $session_name = api_get_session_name($session_id);
 $table_title = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':' ').
                 Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].' '.
                 Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
-echo '<h2>'.$table_title.'</h2>';
+echo Display::page_subheader($table_title);
 echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>';
     
 $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);

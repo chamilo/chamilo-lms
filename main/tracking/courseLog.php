@@ -231,7 +231,7 @@ if ($_GET['studentlist'] == 'false') {
         
         // learning path tracking
         echo '<div class="report_section">
-                <h2>'.Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h2>
+                '.Display::page_subheader(Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath')).'
                 <table class="data_table">';
     
         $list = new LearnpathList('', $course_code, $session_id);
@@ -281,7 +281,7 @@ if ($_GET['studentlist'] == 'false') {
     
     // Exercices tracking.
     echo '<div class="report_section">
-                <h2>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'</h2>
+               '.Display::page_subheader(Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices')).'
             <table class="data_table">';
 
     $course_id = api_get_course_int_id();
@@ -327,8 +327,8 @@ if ($_GET['studentlist'] == 'false') {
 
     // Forums tracking.
     echo '<div class="report_section">
-            <h2>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h2>
-            <table class="data_table">';
+            '.Display::page_subheader(Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>').
+            '<table class="data_table">';
     $count_number_of_posts_by_course    = Tracking :: count_number_of_posts_by_course($course_code, $session_id);
     $count_number_of_forums_by_course   = Tracking :: count_number_of_forums_by_course($course_code, $session_id);
     $count_number_of_threads_by_course  = Tracking :: count_number_of_threads_by_course($course_code, $session_id);
@@ -347,7 +347,7 @@ if ($_GET['studentlist'] == 'false') {
     // Chat tracking.
 
     echo '<div class="report_section">
-            <h2>'.Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat').'</h2>
+            '.Display::page_subheader(Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat')).'
             <table class="data_table">';
     $chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($course_code, 7, $session_id);
     if ($export_csv) {
@@ -361,7 +361,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // Tools tracking.
     echo '<div class="report_section">
-                <h2>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h2>
+                '.Display::page_subheader(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
             <table class="data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
@@ -398,7 +398,7 @@ if ($_GET['studentlist'] == 'false') {
     }
 
      echo '<a name="documents_tracking" id="a"></a><div class="report_section">
-                <h2>'.Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'</h2>
+                '.Display::page_subheader(Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link).'
             <table class="data_table">';
 
     $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($course_code, $session_id, $num);
@@ -433,7 +433,7 @@ if ($_GET['studentlist'] == 'false') {
 
     // links tracking
      echo '<div class="report_section">
-                <h2>'.Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked').'</h2>
+                '.Display::page_subheader(Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked')).'
             <table class="data_table">';
 
     $links_most_visited = Tracking::get_links_most_visited_by_course($course_code, $session_id);
@@ -503,10 +503,10 @@ if ($_GET['studentlist'] == 'false') {
         $course_name = get_lang('Course').' '.$course_info['name'];
         
         if ($session_id) {    	
-            echo '<h2>'.Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
-                        Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name.'</h2>';
+            echo Display::page_subheader(Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
+                 Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name);
         } else {
-        	echo '<h2>'.Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].'</h2>';
+        	echo Display::page_subheader(Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name']);
         }
         
         $extra_field_select = TrackingCourseLog::display_additional_profile_fields();

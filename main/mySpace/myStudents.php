@@ -261,6 +261,7 @@ while ($row = Database :: fetch_array($rs)) {
 }
 
 if (empty($courses_in_session)) {
+    Display :: display_header($nameTools);
 	echo '<div class="actions">';
 	echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
@@ -270,7 +271,6 @@ if (empty($courses_in_session)) {
 }
 
 Display :: display_header($nameTools);
-
 
 if (!empty($student_id)) {
 	
@@ -398,7 +398,7 @@ if (!empty($student_id)) {
     $info_course  = CourseManager :: get_course_information($get_course_code);
     $table_title = Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).api_get_person_name($info_user['firstname'], $info_user['lastname']);
     
-    echo '<h2>'.$table_title.'</h2>';
+    echo Display::page_subheader($table_title);
 
 ?>
 <table width="100%" border="0">
@@ -538,7 +538,7 @@ if (!empty($info_course['title'])) {
 	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
 }
 
-echo Display::tag('h2', $table_title);
+echo Display::page_subheader($table_title);
 
 if (empty($_GET['details'])) {
 		

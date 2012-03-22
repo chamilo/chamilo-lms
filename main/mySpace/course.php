@@ -7,7 +7,6 @@ $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking'
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
@@ -98,15 +97,10 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 		echo '</span>';
 	}
 	echo '</div>';
-	echo '<h2>'.$title.'</h2>';
+	echo Display::page_subheader($title);
 }
 
 // Database Table Definitions
-$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 if (isset($_GET['action'])) {
@@ -126,15 +120,7 @@ if ($show_import_icon) {
 }
 
 if (!api_is_drh() && !api_is_session_admin() && !api_is_platform_admin()) {
-	/*if (api_is_platform_admin()) {
-		if (empty($id_session)) {
-			$courses = CourseManager::get_real_course_list();
-		} else {
-			$courses = Tracking::get_courses_list_from_session($id_session);
-		}
-	} else {*/
-		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $id_session);
-	//}
+	$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $id_session);
 	$a_courses = array_keys($courses);
 }
 

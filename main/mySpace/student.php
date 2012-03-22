@@ -118,7 +118,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 			  </div></div>';			 
-		echo '<h2>'.$title.'</h2>';
+		echo Display::page_subheader($title);
 	}
 
 	if (isset($_GET['id_coach'])) {

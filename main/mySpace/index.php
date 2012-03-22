@@ -259,7 +259,7 @@ if (empty($session_id)) {
 
 	if ($nb_students > 0 && $view != 'admin') {
 		
-		echo Display::tag('h2', '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Students').' ('.$nb_students.')');
+		echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Students').' ('.$nb_students.')');
 		
 		// average progress
 		$avg_total_progress = $avg_total_progress / $nb_students;
@@ -352,14 +352,12 @@ if ($count_courses || $count_sessions) {
 	}
 }
 
-
-
 if (api_is_allowed_to_create_course() && $view == 'teacher') {
 	
 	//Courses
 	if ($count_courses) {
 		
-		echo Display::tag('h2', $title);		
+		echo Display::page_subheader($title);		
 		
 		$table = new SortableTable('courses_my_space', 'get_number_of_courses', array('MySpace','get_course_data'));
 		$parameters['view'] = 'teacher';
@@ -390,7 +388,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 
 	// Display list of sessions
 	if ($count_sessions > 0 && !isset($_GET['session_id'])) {
-		echo '<h2><img src="'.api_get_path(WEB_IMG_PATH).'session.png">&nbsp;'.get_lang('Sessions').' ('.$count_sessions.')'.'</h2>';
+		echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'session.png">&nbsp;'.get_lang('Sessions').' ('.$count_sessions.')');
 		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached');
 		$table->set_header(0, get_lang('Title'), false);
 		$table->set_header(1, get_lang('Date'), false);
@@ -731,5 +729,3 @@ function get_number_of_courses() {
 	global $courses;
 	return count($courses);
 }
-
-

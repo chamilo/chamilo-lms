@@ -6,13 +6,12 @@
 @import url('../base_chamilo.css');
 
 /* the following for regular <a> elements */
-a:link {
+a {
     text-decoration: none;
     color :#3757f7
 }
 a:visited {
-    text-decoration: none;
-    color : #3757f7;
+    text-decoration: none;    
 }
 a:hover {
     text-decoration: none;
@@ -21,10 +20,6 @@ a:hover {
 a:active {
     text-decoration: none;
     color : #3757f7;
-}
-
-#header1 {
-    /* background-image:url(images/bg-header1.gif); */
 }
 
 .subnav-fixed {

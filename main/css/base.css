@@ -1298,8 +1298,8 @@ button.next.disabled, .a_button.disabled {
 
 .categories-course-links {
     float:left;
-    margin-top:0px;
-    height:16px;
+    margin-top:15px;
+    height:26px;
     padding:2px;
     width:100%;
 }

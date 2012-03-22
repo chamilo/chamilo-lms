@@ -80,13 +80,12 @@ ul.medios li {
 }
 
 /* the following for regular <a> elements */
-a:link {
+a {
     text-decoration: none;
     color :#B50018;
 }
 a:visited {
-    text-decoration: none;
-    color : #ff0000;
+    text-decoration: none; 
 }
 a:hover {
     text-decoration: none;

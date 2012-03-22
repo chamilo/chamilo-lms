@@ -6,13 +6,12 @@
 @import url('../base_chamilo.css');
 
 /* the following for regular <a> elements */
-a:link {
+a {
     text-decoration: none;
     color :#0D21E2
 }
 a:visited {
-    text-decoration: none;
-    color : #0D21E2;
+    text-decoration: none;    
 }
 a:hover {
     text-decoration: none;

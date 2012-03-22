@@ -297,11 +297,15 @@ if ($group_id != 0) {
 //LEFT COLUMN	
 
 if (api_get_setting('allow_social_tool') == 'true') {			
-    $social_left_content = SocialManager::show_social_menu('messages');				
+    $social_left_content = SocialManager::show_social_menu('messages');			
+    $social_right_content .= '<div class="span9">';
     $social_right_content .= '<div class="actions">';              
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .=  '</div>';
+    $social_right_content .=  '</div>';
+    $social_right_content .= '<div class="span9">';
 }
+
 //MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if(isset($_GET['re_id'])) {
@@ -344,7 +348,9 @@ if (!isset($_POST['compose'])) {
         }
     }
 }
-$social_right_content .=  '</div>';
+if (api_get_setting('allow_social_tool') == 'true') {			
+    $social_right_content .=  '</div>';
+}
 
 $tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {

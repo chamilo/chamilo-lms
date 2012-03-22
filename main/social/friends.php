@@ -85,8 +85,6 @@ function clear_form () {
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
-//Display :: display_header($tool_name, 'Groups');
-
 $social_left_content = SocialManager::show_social_menu('friends');	
 	
 $user_id	= api_get_user_id();
@@ -105,38 +103,38 @@ if (count($friends) == 0 ) {
 	$social_right_content = get_lang('NoFriendsInYourContactList').'<br /><br />';
 	$social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
 } else {
-	$social_right_content = get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
-	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
+	$social_right_content = '<div class="span8">'.get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
+	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" /></div>';
     
-		$friend_html = '';
-		$number_of_images = 8;
-		
-		$number_friends = count($friends);
-		$j=0;		
-							
-		$friend_html.= '<table  id="friend_table" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
-		for ($k=0;$k<$number_friends;$k++) {
-			$friend_html.='<tr><td valign="top">';
-		
-			while ($j<$number_friends) {
-				if (isset($friends[$j])) {
-					$friend = $friends[$j];
-					$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
-					$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
-					$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-					$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
-					$friend_html.='<img onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
-				}
-				$j++;
-			}
-			$friend_html.='</td></tr>';
-		}
-		$friend_html.='<br/></table>';
-		$social_right_content .=  $friend_html;
-	}
-	$social_right_content .=  '</div>';
-	$social_right_content .=  '</div>';	
-    $social_right_content .=  '</div>';	
+    $friend_html = '';
+
+    $number_friends = count($friends);
+    $j=0;		
+
+    $friend_html.= '<table  id="friend_table" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+    for ($k=0;$k<$number_friends;$k++) {
+        $friend_html.='<tr><td valign="top">';
+
+        while ($j<$number_friends) {
+            if (isset($friends[$j])) {
+                $friend = $friends[$j];
+                $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
+                $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
+                $friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+                $friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+                $friend_html.='<img onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
+            }
+            $j++;
+        }
+        $friend_html.='</td></tr>';
+    }
+    $friend_html.='<br/></table>';
+    $social_right_content .=  $friend_html;
+}
+
+$social_right_content .=  '</div>';
+$social_right_content .=  '</div>';	
+$social_right_content .=  '</div>';	
 
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

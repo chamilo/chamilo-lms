@@ -712,8 +712,7 @@ class MessageManager
 	 * @return string html with the message content
 	 */
 	public static function show_message_box($message_id, $source = 'inbox') {
-		$table_message 		= Database::get_main_table(TABLE_MESSAGE);
-		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		$table_message 		= Database::get_main_table(TABLE_MESSAGE);		
 		$message_id 		= intval($message_id);
 
 		if ($source == 'outbox') {
@@ -739,8 +738,7 @@ class MessageManager
 		$files_attachments = self::get_links_message_attachment_files($message_id,$source);
 
 		$user_con = self::users_connected_by_id();
-		$band=0;
-		$reply='';
+		$band= 0;		
 		for ($i=0;$i<count($user_con);$i++)
 			if ($user_sender_id == $user_con[$i])
 				$band=1;
@@ -760,7 +758,7 @@ class MessageManager
 		      	<table>
 		            <tr>
 		              <td valign="top" width="100%">
-		               <h1>'.str_replace("\\","",$title).'</h1>
+		               '.Display::page_subheader(str_replace("\\","",$title)).'
 		              </td>';
 		if (api_get_setting('allow_social_tool') == 'true') {
             $message_content .='<td width="100%">'.$user_image.'</td>';

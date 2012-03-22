@@ -107,10 +107,8 @@ if ($_GET['f']=='social') {
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	//$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
 }
 
-//Display::display_header('');
 $social_parameter = '';
 
 if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
@@ -137,13 +135,16 @@ if (api_get_setting('allow_social_tool') == 'true') {
 //Right content
 
 if (api_get_setting('allow_social_tool') == 'true') {
+    $social_right_content .= '<div class="span9">';
     $social_right_content .=  '<div class="actions">';				
         $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
         $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
     $social_right_content .=  '</div>';
-
-}	
+    $social_right_content .=  '</div>';
+    $social_right_content .= '<div class="span9">';
+}
 //MAIN CONTENT
+
 if (!isset($_GET['del_msg'])) {
     $social_right_content .= inbox_display();
 } else {
@@ -155,8 +156,11 @@ if (!isset($_GET['del_msg'])) {
         }
     }
     $social_right_content .= inbox_display();
-}    
-$social_right_content .=  '</div>';	
+}
+
+if (api_get_setting('allow_social_tool') == 'true') {
+    $social_right_content .= '</div>';
+}
 
 $tpl = new Template($tool_name);
 if (api_get_setting('allow_social_tool') == 'true') {

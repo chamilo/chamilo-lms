@@ -23,51 +23,50 @@ $tool_name 	  = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
 $query_vars = array();
-
 $query  = isset($_GET['q']) ? $_GET['q'] : null;
 
 $social_left_content = SocialManager::show_social_menu('search');
 		
-$social_right_content = UserManager::get_search_form($query);
-			
-    //I'm searching something
-    if ($query !='') {	
-        //get users from tags
-        $users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
-        $groups = GroupPortalManager::get_all_group_tags($_GET['q']);
+$social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
-        if (empty($users) && empty($groups)) {
-            $social_right_content .= get_lang('SorryNoResults');	
-        }
-        
-        $results .= '<div id="online_grid_container"><div class="span9">';
-        
-        if (is_array($users) && count($users)> 0) {
-            $results .=  '<h2>'.get_lang('Users').'</h2>';			
-            $results .= '<ul class="thumbnails">';   
-            foreach($users as $user) {
-                $user_info = api_get_user_info($user['user_id'], true);
-                $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
+//I'm searching something
+if ($query !='') {
+    //get users from tags
+    $users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
+    $groups = GroupPortalManager::get_all_group_tags($_GET['q']);
 
-                if (empty($user['picture_uri'])) {
-                    $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                    $img = '<img src="'.$picture['file'].'">'; 
-                } else {
-                    $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );
-                    $img = '<img src="'.$picture['file'].'">';                    
-                }                             
-                if ($user_info['user_is_online']) {
-                    $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-                } else {
-                    $status_icon = Display::span('', array('class' => 'offline_user_in_text'));    
-                }                    
-                $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
-                $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];                
-                $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';				
-            }	
-            $results .='</ul></div></div>';
-            $social_right_content .=  $results;                        
-        }
+    if (empty($users) && empty($groups)) {
+        $social_right_content .= get_lang('SorryNoResults');	
+    }
+
+    $results .= '<div id="online_grid_container"><div class="span9">';
+
+    if (is_array($users) && count($users)> 0) {
+        $results .=  Display::page_subheader(get_lang('Users'));			
+        $results .= '<ul class="thumbnails">';   
+        foreach($users as $user) {
+            $user_info = api_get_user_info($user['user_id'], true);
+            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
+
+            if (empty($user['picture_uri'])) {
+                $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                $img = '<img src="'.$picture['file'].'">'; 
+            } else {
+                $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );
+                $img = '<img src="'.$picture['file'].'">';                    
+            }                             
+            if ($user_info['user_is_online']) {
+                $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+            } else {
+                $status_icon = Display::span('', array('class' => 'offline_user_in_text'));    
+            }                    
+            $user['tag'] = isset($user['tag']) ? $user['tag'] : null;
+            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url).'<br />'.$user['tag'];                
+            $results .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$user_info['complete_name'].$user['tag'].'</div</div></li>';				
+        }	
+        $results .='</ul></div></div>';
+        $social_right_content .=  $results;                        
+    }
 
         //Get users from tags this loop does not make sense for now ... 
         /*
@@ -113,12 +112,12 @@ $social_right_content = UserManager::get_search_form($query);
         $grid_groups = array();
         if (is_array($groups) && count($groups)>0) {
             $social_right_content .= '<div class="span9">';
-            $social_right_content .=  '<h2>'.get_lang('Groups').'</h2>';
+            $social_right_content .=  Display::page_subheader(get_lang('Groups'));
             foreach($groups as $group) {	
                 $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
                 $$group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
                 $id = $group['id'];
-                $url_open  = '<a href="groups.php?id='.$id.'">';
+                $url_open  = '<a href="groups.php?id='.$id.'" >';
                 $url_close = '</a>';						
                 $name = cut($group['name'],25,true);
                 $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
@@ -153,8 +152,7 @@ $social_right_content = UserManager::get_search_form($query);
         $visibility = array(true,true,true,true,true);
         $social_right_content .= Display::return_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false, $visibility);
     }									
-    $social_right_content .= '</div>';
-$social_right_content .= '</div>';
+
 
 $tpl = new Template($tool_name);
 $tpl->assign('social_left_content', $social_left_content);

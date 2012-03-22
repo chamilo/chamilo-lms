@@ -40,10 +40,7 @@ if ($_GET['f']=='social') {
 		    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
             $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
-			
 		}	
-		//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-		
 		$social_right_content .= '</div>';
 	}
 }
@@ -58,12 +55,19 @@ if (empty($_GET['id'])) {
     $show_menu = 'messages_inbox';
 }
 
+$message  = '';
+
 //LEFT COLUMN
 if (api_get_setting('allow_social_tool') == 'true') { 
-    $social_left_content = SocialManager::show_social_menu($show_menu);        
+    $social_left_content = SocialManager::show_social_menu($show_menu);    
+    $message .='<div class="span9">';
 }	
 //MAIN CONTENT
-$message = MessageManager::show_message_box($id_message,$source);
+$message .= MessageManager::show_message_box($id_message,$source);
+
+if (api_get_setting('allow_social_tool') == 'true') { 
+    $message .='</div>';
+}
 
 if (!empty($message)) {
     $social_right_content .= $message;

@@ -226,7 +226,7 @@ if (is_array($personal_course_list)) {
 }
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
-$social_right_content = '<div class="rounded_div span4">';
+$social_right_content = '<div class="well_border span4">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	$social_right_content .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -340,7 +340,7 @@ $social_right_content .=  '</div>';	// close div tag rounded
 
 if ($show_full_profile) {
 
-	$social_right_content .=  '<div class="rounded_div span4">';	
+	$social_right_content .=  '<div class="well_border span4">';	
 	$list_path_normal_friends = $list_path_parents = array();
 
 	//SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
@@ -457,7 +457,7 @@ if ($show_full_profile) {
 	}
 
     if (count($grid_my_groups) > 0) {
-		$social_right_content .=  '<div class="rounded_div span8" >';    		
+		$social_right_content .=  '<div class="well_border span8" >';    		
     		$count_groups = 0;
     		if (count($results) == 1 ) {
     			$count_groups = count($results);
@@ -488,7 +488,7 @@ if ($show_full_profile) {
 
 	// COURSES LIST
 	if ( is_array($list) ) {
-		$social_right_content .=  '<div class="rounded_div span8">';			
+		$social_right_content .=  '<div class="well_border span8">';			
 			$social_right_content .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
 			$social_right_content .=  '<div class="social-content-training">';
 			//Courses whithout sessions
@@ -516,7 +516,7 @@ if ($show_full_profile) {
 	// user feeds
 	$user_feeds = SocialManager::get_user_feeds($user_id);
 	if (!empty($user_feeds)) {
-		$social_right_content .=  '<div class="rounded_div span8">';				
+		$social_right_content .=  '<div class="well_border span8">';				
 			$social_right_content .=  '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
 			$social_right_content .=  '<div class="social-content-training">'.$user_feeds.'</div>';	
 		$social_right_content .=  '</div>';
@@ -546,7 +546,7 @@ if ($show_full_profile) {
 		//Pending invitations
 		if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 			if ($count_pending_invitations > 0) {				
-				$social_right_content .=  '<div class="rounded_div span4">';
+				$social_right_content .=  '<div class="well_border span4">';
 				$social_right_content .=  '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					$user_invitation_id = $pending_invitations[$i]['user_sender_id'];
@@ -561,7 +561,7 @@ if ($show_full_profile) {
         					$social_right_content .=  '<br />';
         					$social_right_content .=  Security::remove_XSS(cut($pending_invitations[$i]['content'], 50), STUDENT, true);
         					$social_right_content .=  '<br />';
-        					$social_right_content .=  '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+        					$social_right_content .=  '<a id="btn_accepted_'.$user_invitation_id.'" class="btn" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
         					$social_right_content .=  '<div id="id_response"></div>';
 					    $social_right_content .=  '</div>';
 				    $social_right_content .=  '</div>';								
@@ -575,14 +575,14 @@ if ($show_full_profile) {
 		$production_list =  UserManager::build_production_list($user_id);
 		$product_content  = '';
 		if (!empty($production_list)) {			
-			$product_content .=  '<div class="rounded_div span4">';
+			$product_content .=  '<div class="well_border span4">';
             $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
 			$product_content .=  $production_list;
 			$product_content .=  '</div>';
 		}
 		// Images uploaded by course
 		if (!empty($file_list)) {
-            $product_content .=  '<div class="rounded_div span4">';
+            $product_content .=  '<div class="well_border span4">';
 			$product_content .=  '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
 			$product_content .=  '<div class="social-content-information">';
 			$product_content .=  $file_list;
@@ -596,7 +596,7 @@ if ($show_full_profile) {
 	 
 	if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
 		
-		$social_right_content .=  '<div class="rounded_div span4">';
+		$social_right_content .=  '<div class="well_border span4">';
 		$social_right_content .=  '<div><h3>'.get_lang('MoreInformation').'</h3></div>';		
 		$cut_size = 220;
 		if (!empty($user_info['competences'])) {

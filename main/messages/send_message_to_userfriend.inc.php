@@ -32,7 +32,7 @@ if (api_get_setting('allow_message_tool')=='true') {
     if ($panel == 1) {
         //normal message
    		$user_info=api_get_user_info($userfriend_id);
-        echo '<div id="display_response_id" style="height:200px;">';
+        echo '<div id="display_response_id">';
         $form = new FormValidator('add_user', null, null, null, array('class'=>'form-vertical'));
         //$username = api_xml_http_response_encode(get_lang('To')).api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
         $form->addElement('label', get_lang('To'), api_get_person_name($user_info['firstName'], $user_info['lastName']));        

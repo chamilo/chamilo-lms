@@ -66,9 +66,6 @@ function register_friend(element_input) {
 
 </script>';
 
-
-//Display :: display_header($tool_name, 'Groups');
-
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
 	foreach($_GET as $key => $value) { 
@@ -99,12 +96,10 @@ if (isset($_GET['cidReq'])){
 	$social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;id='.Security::remove_XSS($_GET['parent_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Documents').' ('.get_lang('Course').')').get_lang('BackTo').' '.get_lang('Documents').' ('.get_lang('Course').')</a>';
 	$social_right_content .= '</div>';
 }
-else{
-	$social_right_content .= '<br />';
-}							
+$social_right_content .=  '<div class="span9">';	
 $social_right_content .= '<iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:100%; float:left"></iframe>';
 $social_right_content .= '</div>';
-$social_right_content .=  '</div>';	
+
 
 
 $tpl = new Template(get_lang('Social'));

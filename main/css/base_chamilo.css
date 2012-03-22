@@ -1982,12 +1982,11 @@ a.read {
     vertical-align:middle;
 }
 
-
-
 /* INVITATIONS */
 
 .invitation_confirm {
-    border-top:1px solid #D8DFEA;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #D8DFEA;    
 }
 .invitation_image {
     width:110px;

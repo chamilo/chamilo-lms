@@ -62,7 +62,7 @@ if (!empty($course_user_list)) {
             $course_info = api_get_course_info($course['code']);
             $course_image = '<img src="'.$course_info['course_image'].'">';
             $dates .= '<li><a href="#'.$login.'">'.  api_get_utc_datetime($login).'</a></li>';
-            $issues .= '<li id ="'.$login.'"><div class="row"><div class="span1">'.$course_image.'</div>
+            $issues .= '<li id ="'.$login.'"><div class="row"><div class="span2"><div class="thumbnail">'.$course_image.'</div></div>
                     <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY') , $course['code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div></li>';
         }    
     }

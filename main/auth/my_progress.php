@@ -26,10 +26,8 @@ $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
 
 $htmlHeadXtra[] = '
 <script language="javascript">
-$(function() {
-    
+$(function() {    
     $().timelinr();
-
     $(".dialog").dialog("destroy");        
     $(".dialog").dialog({
             autoOpen: false,
@@ -55,6 +53,7 @@ $user_id = api_get_user_id();
 // Code to 
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
+
 if (!empty($course_user_list)) {
     foreach ($course_user_list as $course) {    
         $items = MySpace::get_connections_to_course($user_id, $course['code']);
@@ -72,21 +71,23 @@ if (!empty($course_user_list)) {
 $content .= Tracking::show_user_progress(api_get_user_id());
 $content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
-if (!empty($content)) {
-    $content .= '<br /><br />';
-}
-$content .= '<div class="row"><div class="span12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
+if (!empty($dates)) {
+    if (!empty($content)) {
+        $content .= '<br /><br />';
+    }
+    $content .= '<div class="row"><div class="span12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
 
-$content .= '<div id="timeline">
-   <ul id="dates">
-    '.$dates.'  
+    $content .= '<div id="timeline">
+    <ul id="dates">
+        '.$dates.'  
+        </ul>
+    <ul id="issues">
+        '.$issues.'
     </ul>
-   <ul id="issues">
-      '.$issues.'
-   </ul>
-   <a href="#" id="next">+</a> <!-- optional -->
-   <a href="#" id="prev">-</a> <!-- optional -->
-   </div></div>';
+    <a href="#" id="next">+</a> <!-- optional -->
+    <a href="#" id="prev">-</a> <!-- optional -->
+    </div></div>';
+}
 
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');

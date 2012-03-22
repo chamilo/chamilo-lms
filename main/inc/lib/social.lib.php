@@ -608,7 +608,7 @@ class SocialManager extends UserManager {
 			
             $html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';
                 if ($img_array['file'] != 'unknown.jpg') {
-                    $html .= '<a class="thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
+                    $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
                 } else {
                     $html .= '<img src='.$normal_image.' width="110px" />';
                 }
@@ -747,13 +747,27 @@ class SocialManager extends UserManager {
 	 */
 	public static function display_user_list($user_list) {		
 		if ($_GET['id'] == '') {
+            
+            $column_size = '9'; 
+            $add_row = false;
+            if (api_is_anonymous()) {
+                $column_size = '12';                   
+                $add_row = true;
+            }
+            
 			$extra_params = array();
 			$course_url = '';
 			if (strlen($_GET['cidReq']) > 0) {
 				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-			}                        
-            $html .= '<div class="span9">';
+			}          
+            
+            if ($add_row) {
+                $html .='<div class="row">';
+            }
+            
+            $html .= '<div class="span'.$column_size.'">';            
+            
             $html .= '<ul id="online_grid_container" class="thumbnails">';            
 			foreach ($user_list as $user) {
 				$uid = $user[0];
@@ -782,11 +796,14 @@ class SocialManager extends UserManager {
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';                                                                        
                 }           
 				$name = '<a href="'.$url.'">'.$status_icon.$name.'</a><br>';
-                $html .= '<li class="span3"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
+                $html .= '<li class="span'.($column_size/3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
 			}			
             $counter = $_SESSION['who_is_online_counter'];
             $html .= '</ul></div>';
-            $html .= '<div class="span9"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            if ($add_row) {
+                $html .= '</div>';    
+            }
 		}
         return $html;
 	}    

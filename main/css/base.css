@@ -1961,8 +1961,7 @@ div.image-social-content center.friend {
 }
 
 #social_widget_image {
-    float:left;
-    width:150px;
+    float:left;    
     margin-bottom:10px;
     padding:2px;
 }
@@ -3760,4 +3759,8 @@ a.forum_group_link {
 
 #online_grid_container li img {
     height: 100px;
+}
+
+#online_grid_container .thumbnail .caption {
+    height: 30px;
 }

@@ -168,7 +168,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 			if (api_get_setting('allow_social_tool') == 'true') {				
 				if (!api_is_anonymous()) {
 				    $query = isset($_GET['q']) ? $_GET['q']: null;				    
-					$social_right_content .= UserManager::get_search_form($query);
+					$social_right_content .= '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 				}
 			}			
 			$social_right_content .= SocialManager::display_user_list($user_list);							

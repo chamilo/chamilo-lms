@@ -210,11 +210,11 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	}	
 	
 	//This query will show all registered users. Only for dev purposes.
-	/*$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u             
+	$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u             
             GROUP by u.user_id  
             ORDER BY $column $direction  
             LIMIT $from, $number_of_items";	
-    */
+    
 	$result = Database::query($query);
 	if ($result) {				
 		$validtime = mktime(date("H"),date("i")-$time_limit,date("s"),date("m"),date("d"),date("Y"));
@@ -284,8 +284,8 @@ function who_is_online_count($valid = null, $friends = false) {
     
     //dev purposes show all users online
     
-    /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $query = "SELECT count(*)  as count FROM ".$table_user ."   ";*/
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $query = "SELECT count(*)  as count FROM ".$table_user ."   ";
     
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {

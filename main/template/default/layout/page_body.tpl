@@ -21,5 +21,6 @@
 
 {* Main content*}
 <section id="main_content">
-{$content}
+    {$content}
+    &nbsp;
 </section>

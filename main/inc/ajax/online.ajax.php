@@ -17,13 +17,13 @@ switch($action) {
         }
         $page = intval($_REQUEST['online_page_nr']);        
         $max_page = round(who_is_online_count()/10);
+        $page_rows = $page*10;
         
         if (!empty($max_page) && $page <= $max_page) {
             if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-                $user_list = who_is_online_in_this_course($page_rows, $page_rows + 10, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
-            } else {                
-                $page_rows = $page*10;
-                $user_list = who_is_online($page_rows, $page_rows + 10);		
+                $user_list = who_is_online_in_this_course($page_rows, 10, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+            } else {                                
+                $user_list = who_is_online($page_rows, 10);		
             } 
             if (!empty($user_list)) {
                 echo SocialManager::display_user_list($user_list);

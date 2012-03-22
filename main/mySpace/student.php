@@ -8,6 +8,8 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
+api_block_anonymous_users();
+
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if ($export_csv) {
 	ob_start();
@@ -27,8 +29,6 @@ if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
 
 $this_section = SECTION_TRACKING;
 
-api_block_anonymous_users();
-
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
@@ -39,19 +39,7 @@ if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $
  	$interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
-$isCoach = api_is_coach();
-
 Display :: display_header($nameTools);
-
-// Database Table Definitions
-$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-
 /*
   	FUNCTION
   */
@@ -70,8 +58,7 @@ function sort_users($a, $b) {
 	}
 }
 
-function rsort_users($a, $b)
-{
+function rsort_users($a, $b) {
 	global $tracking_column;
 	if ($b[$tracking_column] > $a[$tracking_column]) {
 		return 1;
@@ -91,7 +78,8 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 	}
 	$sort_by_first_name = api_sort_by_first_name();
 
-	if (api_is_drh()) {		
+	if (api_is_drh()) {	
+        $menu_items = array();
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::return_icon('user_na.png', get_lang('Students'), array(), 32);
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
@@ -105,6 +93,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				echo $item;			
 			}
 		}
+        
 		//if (count($students) > 0) {		//
 			echo '<span style="float:right">';
 			echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
@@ -112,7 +101,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			echo '</span>';	
 		//}
 		echo '</div>';
-		echo '<h2>'.$title.'</h2>';
+		echo Display::page_subheader($title);
 	} else {		
 		echo '<div class="actions"><div style="float:right;">
 				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>

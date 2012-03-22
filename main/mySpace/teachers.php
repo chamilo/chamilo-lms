@@ -25,12 +25,12 @@ if (api_is_drh() || api_is_platform_admin()) {
 
 	// followed teachers by drh
 	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
+    $menu_items = array();
 	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );	 
 	$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 	$menu_items[] = Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), 32);
 	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
-	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
-	
+	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');	
 		
 	echo '<div class="actions">';
 	$nb_menu_items = count($menu_items);
@@ -46,21 +46,12 @@ if (api_is_drh() || api_is_platform_admin()) {
 		echo '</span>';			
 	}
 	echo '</div>';
-	echo '<h2>'.get_lang('YourTeachers').'</h2>';
-	echo '<br />';
+	echo Display::page_subheader(get_lang('YourTeachers'));	
 }
 
 if (!api_is_drh()) {
 	api_display_tool_title($nameTools);
 }
-
-// Database Table Definitions
-$tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user 				= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-
 
 /**
  * MAIN PART
@@ -173,11 +164,4 @@ echo "<br /><br />";
 if (!api_is_drh()) {
 	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
 }
-
-/*
-==============================================================================
-	FOOTER
-==============================================================================
-*/
-
 Display::display_footer();

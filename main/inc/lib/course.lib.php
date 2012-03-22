@@ -2626,21 +2626,21 @@ class CourseManager {
      * @param int 		human resources manager id
      * @return array	courses
      */
-    public static function get_courses_followed_by_drh($hr_dept_id) {        
+    public static function get_courses_followed_by_drh($user_id) {        
         // Database Table Definitions
         $tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-        $hr_dept_id = intval($hr_dept_id);
+        $user_id = intval($user_id);
         $assigned_courses_to_hrm = array();
 
         if (api_get_multiple_access_url()) {
            $sql = "SELECT * FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$hr_dept_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT * FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$hr_dept_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+                    INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
         }
         $rs_assigned_courses = Database::query($sql);
         if (Database::num_rows($rs_assigned_courses) > 0) {

@@ -21,12 +21,6 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 Display :: display_header($nameTools);
 
-// Database Table Definitions
-$tbl_course_user 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_sessions 			= Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
-
 $export_csv = false;
 
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
@@ -95,7 +89,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 		
 	}
 	echo '</div>';
-	echo '<h2>'.get_lang('YourSessionsList').'</h2>';
+	echo Display::page_subheader(get_lang('YourSessionsList'));
 
 } else {
 	/*if (api_is_platform_admin()) {
@@ -123,8 +117,7 @@ if ($nb_sessions > 0) {
 	foreach ($a_sessions as $session) {
 		$row = array();
 		$row[] = $session['name'];
-		//$row[] = $session['status'];
-
+		
 		if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
 			$row[] = get_lang('From').' '. api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
 		} else {

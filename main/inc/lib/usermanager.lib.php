@@ -3136,12 +3136,11 @@ class UserManager {
 		$hr_dept_id = intval($hr_dept_id);
 		$result = false;
 
-		$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE user_id='$user_id' AND friend_user_id='$hr_dept_id' AND relation_type=".USER_RELATION_TYPE_RRHH." ";
+		$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE user_id='$user_id' AND friend_user_id='$hr_dept_id' AND relation_type = ".USER_RELATION_TYPE_RRHH." ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 			$result = true;
 		}
-
 		return $result;
 
 	}

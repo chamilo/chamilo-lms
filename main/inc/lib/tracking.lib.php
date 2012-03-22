@@ -1207,8 +1207,7 @@ class Tracking {
 		 * @param    int        Session id (optional)
 		 * @return    array    Courses list
 		 */
-		public static function get_courses_followed_by_coach($coach_id, $id_session = '')
-		{
+		public static function get_courses_followed_by_coach($coach_id, $id_session = '') {
 
 			$coach_id = intval($coach_id);
 			if (!empty ($id_session))
@@ -1278,8 +1277,7 @@ class Tracking {
 				$sql .=  ' WHERE access_url_id = '.$access_url_id;
 			}
 
-			$result = Database::query($sql);
-
+			$result = Database::query($sql);            
 			while ($row = Database::fetch_array($result)) {
 				$a_courses[$row['course_code']] = $row['course_code'];
 			}

@@ -41,19 +41,12 @@ function ch_qti2_display_form() {
 	$form  = '<div class="actions">';
 	$form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 	$form .= '</div>';
-	$form .= '<form action='.api_get_self()."?".api_get_cidreq().' method="post" enctype="multipart/form-data">';
-	$form .= '<div class="row"><div class="form_header">'.$name_tools.'</div></div>';
-	$form .= '<div class="row">';
-	$form .= '<div class="label" style="padding:10px">';
-	$form .= '<span class="form_required">*</span>';
-	$form .= get_lang('DownloadFile').' :';
-	$form .= '</div>';
-	$form .= '<div class="formw">';
-	$form .= '<div style="padding:10px">
-			  <input type="file" name="userFile"><br /><br />
-			  <button type="submit" class="upload" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
-		 	  </div>';
-	$form .= '</div></div>';
+    $form_validator  = new FormValidator('qti_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
+    $form_validator->addElement('header', $name_tools);    
+    $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));    
+    $form_validator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');    
+    $form .= $form_validator->return_form();	
+
 	echo $form;
 }
 

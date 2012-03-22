@@ -45,22 +45,26 @@
                 </div>
 
                 <div class="categories-course-links">
+                    
+                    {* World *}
+                    {if ($hot_course.extra_info.visibility == 3)}
+                        <div class="course-link-desc right">
+                            <a class="btn btn-primary" title="" href="{$_p.web_course}{$hot_course.extra_info.path}/index.php">
+                                {"GoToCourse"|get_lang}
+                            </a>
+                        </div>
+                    {/if}
+                    
+                    {* Description *}
                     <div class="course-link-desc right">
                     {if ($hot_course.extra_info.visibility == 3)} 
-                        <a class="ajax a_button white small" title="" href="{$_p.web_ajax}course_home.ajax.php?a=show_course_information&code={$hot_course.course_code}">
+                        <a class="ajax btn" title="" href="{$_p.web_ajax}course_home.ajax.php?a=show_course_information&code={$hot_course.course_code}">
                             {"Description"|get_lang}
                         </a>
                     {/if}								
                     </div>
 
-                    {* World *}
-                    {if ($hot_course.extra_info.visibility == 3)}
-                        <div class="course-link-desc right">
-                            <a class="a_button gray small" title="" href="{$_p.web_course}{$hot_course.extra_info.path}/index.php">
-                                {"GoToCourse"|get_lang}
-                            </a>
-                        </div>
-                    {/if}				
+              			
                 </div>
                 </div>
             </div>            

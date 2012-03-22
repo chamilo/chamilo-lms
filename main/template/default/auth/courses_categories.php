@@ -167,11 +167,11 @@ $stok = Security::get_token();
                     if (!in_array($course['code'], $user_coursecodes)) {
                         if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
                             echo '<div class="course-link-desc right">
-								<a class="a_button gray small" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
+								<a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a></div>';
                         }
                     }
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '<div class="course-link-desc right"><a class="ajax a_button white small" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a></div>';
+                        echo '<div class="course-link-desc right"><a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a></div>';
                     }
                 echo  '</div>';
                 echo '</div>';

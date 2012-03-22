@@ -836,8 +836,8 @@ class IndexManager {
 			if (api_get_setting('allow_social_tool') == 'true') {
 				$link = '?f=social';
 			}
-			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
-			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';            
+			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
+			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';            
 		
 			if (api_get_setting('allow_social_tool') == 'true') {
 				if ($total_invitations == 0) {
@@ -845,7 +845,7 @@ class IndexManager {
 				} else {
 					$total_invitations = ' ('.$total_invitations.')';
 				}
-				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
+				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
 			}
             $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
 			$profile_content .= '</ul>';			

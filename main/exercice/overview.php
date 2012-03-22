@@ -70,7 +70,7 @@ if ($is_allowed_to_edit ) {
 }
 
 //Exercise name
-$html .= Display::tag('h1', $objExercise->name .' '.$edit_link);
+$html .= Display::page_header( $objExercise->name .' '.$edit_link);
 
 //Exercise description
 $html .= Display::div($objExercise->description, array('class'=>'exercise_description'));

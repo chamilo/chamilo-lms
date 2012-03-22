@@ -24,7 +24,9 @@
     <section id="hot_courses">
         <div class="row">    
             <div class="span9">
-                <h3>{"HottestCourses"|get_lang}</h3>
+                <div class="page-header">
+                    <h3>{"HottestCourses"|get_lang}</h3>
+                </div>
             </div>
         {foreach $hot_courses as $hot_course}										
             <div class="span9">

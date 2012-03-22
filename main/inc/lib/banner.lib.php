@@ -164,7 +164,7 @@ function show_header_1($language_file, $nameTools, $theme) {
     return $html;
 }
 
-function show_header_2() {
+function return_notification_menu() {
 
     $_course    = api_get_course_info(); 
     $course_id  = api_get_course_id();
@@ -324,12 +324,11 @@ function return_navigation_array() {
     }
     return array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);    
 }
-function show_header_3() {
+
+function return_menu() {
     $navigation         = return_navigation_array();    
-    //$menu_navigation    = $navigation['menu_navigation'];
     $navigation         = $navigation['navigation'];
-    //$possible_tabs      = $navigation['possible_tabs'];    
-    
+   
     // Displaying the tabs
     
     $lang = ''; //el for "Edit Language"
@@ -412,8 +411,6 @@ function show_header_3() {
     
     // Logout    
     if ($show_bar) {
-        
- 
         if (api_get_user_id()) {
             $login = '';
             if (api_is_anonymous()) {
@@ -430,18 +427,16 @@ function show_header_3() {
             $header3 .= '</ul>';    
         }      
         
-               if (!empty($lis)) {
+        if (!empty($lis)) {
             $header3 .= '<ul class="nav nav-pills">';
             $header3 .= $lis;
             $header3 .= '</ul>';
         }
-        
-        
     }
     return $header3;
 }
 
-function show_breadcrumb($interbreadcrumb, $language_file, $nameTools) {  
+function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {  
 	 
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);

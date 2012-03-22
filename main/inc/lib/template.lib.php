@@ -466,12 +466,12 @@ class Template extends Smarty {
 		
 		$this->assign('bug_notification_link', $bug_notification_link);
 		
-		$header2 = show_header_2();
-		$header3 = show_header_3();
-		$breadcrumb = show_breadcrumb($interbreadcrumb, $language_file, $nameTools);
+		$notification = return_notification_menu();
+		$menu = return_menu();
+		$breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
-		$this->assign('header2', $header2);
-		$this->assign('header3', $header3);        
+		$this->assign('notification_menu', $notification);
+		$this->assign('menu', $menu);        
 		$this->assign('breadcrumb', $breadcrumb);
 		
 		if (!api_is_platform_admin()) {

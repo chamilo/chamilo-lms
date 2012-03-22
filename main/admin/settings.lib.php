@@ -112,9 +112,9 @@ function handle_plugins() {
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="20px">';
-    echo get_lang('Plugin');
+    echo get_lang('Action');
     echo '</th><th>';
-    echo get_lang('InstallPlugin');    
+    echo get_lang('Description');    
     echo '</th>';
     echo '</tr>';
 

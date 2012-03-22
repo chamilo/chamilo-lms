@@ -53,7 +53,7 @@
                 <div id="header_right" class="span4">   
                      {* header right (notifications) *}    
                     <ul id="notifications" class="nav nav-pills pull-right">        
-                        {$header2}
+                        {$notification_menu}
                     </ul>
 
                     {* plugin_header *}        
@@ -77,9 +77,9 @@
             {/if}
         </header>
         {* header 3 - menu *}
-        {if $header3}
+        {if $menu}
             <div id="header3" class="subnav">        
-                {$header3}    
+                {$menu} 
             </div>        
         {/if}
 

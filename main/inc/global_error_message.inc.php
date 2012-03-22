@@ -51,10 +51,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$theme = 'chamilo/';
 	$css_path = 'main/css/';
-	$css_file = $css_path.$theme.'default.css';
-	
-	$css_base_file         = $css_path.'base.css';	
+    $css_file              = $css_path.$theme.'default.css';    
+    $bootstrap_file        = $css_path.'bootstrap.css';
+	$css_base_file         = $css_path.'base.css';
 	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
+    
+    $css_list = array($css_file, $css_base_file, $css_base_chamilo_file, $bootstrap_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -80,20 +82,13 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
 	
 	$css_def = '';
-	$css_base_chamilo_file = $root_sys.$css_base_chamilo_file;
-    if (file_exists($css_base_chamilo_file)) {
-        $css_def .= @file_get_contents($css_base_chamilo_file);
-    }    
-    $css_base_file = $root_sys.$css_base_file;
-    if (file_exists($css_base_file)) {
-        $css_def .= @file_get_contents($css_base_file);
+    foreach ($css_list as $css_item) {
+        $css_base_chamilo_file = $root_sys.$css_item;
+        if (file_exists($css_base_chamilo_file)) {
+            $css_def .= @file_get_contents($css_base_chamilo_file);
+        }        
     }
-
-	$css_file = $root_sys.$css_file;
-	if (file_exists($css_file)) {
-		$css_def .= @file_get_contents($css_file);
-	}
-
+    
 	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
 	$css_def = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css_def);
@@ -169,7 +164,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 // {ORGANISATION}	moved from the header
 	$global_error_message_page =
 <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
 		<head>
 			<title>{TITLE}</title>
@@ -209,10 +204,14 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			<div class="push"/></div>
 		</div>
 
-		<div id="footer">
-			<div class="copyright">&nbsp;<br />{POWERED_BY}</div>
-			&nbsp;
-		</div>
+		<footer>
+            <div class="container">
+                <div class="row">
+                &nbsp;<br />{POWERED_BY}
+                </div>
+                </div>
+			
+		</footer>
 		</body>
 </html>
 EOM;

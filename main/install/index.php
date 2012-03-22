@@ -299,16 +299,12 @@ if ($encryptPassForm == '1') {
 } elseif ($encryptPassForm == '0') {
 	$encryptPassForm = 'none';
 }
-
 ?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <head>
 	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
-		/*<![CDATA[*/
+		/*<![CDATA[*/        
 		@import "../css/base.css";
 		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";        
 		/*]]>*/
@@ -463,12 +459,7 @@ if ($encryptPassForm == '1') {
 			<div id="logo">	   
 	        	<img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
 			</div>	
-		</div>	
-		<div id="header3">
-			<ul>
-				<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation'); ?></span></a></li>
-			</ul>
-		</div>
+        </div>
 	</div>
 
 <div id="main">
@@ -497,7 +488,7 @@ if ($encryptPassForm == '1') {
 <tr>
   <td>
     <?php
-    echo '<h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1>';
+    echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     
     $instalation_type_label = '';
     if ($installType == 'new') 
@@ -856,7 +847,6 @@ if ($_POST['step2']) {
 <div class="push"></div>
 </div><!-- wrapper end-->
 
-<div id="footer">
-</div>
+<footer></footer>
 </body>
 </html>

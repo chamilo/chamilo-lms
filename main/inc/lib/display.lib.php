@@ -1131,9 +1131,11 @@ class Display {
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
-            $type = $notification['lastedit_type'];
+            $type = $notification['lastedit_type'];            
             if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;
+            } else {
+                $my_course['id_session'] = $course_info['id_session'];
             }
             $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
                          '<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" />

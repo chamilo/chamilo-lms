@@ -1268,7 +1268,7 @@ class SessionManager {
 	public static function get_session_category ($id) {
 		$id = intval($id);
 		$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-		$sql = 'SELECT id, name, date_start, date_end FROM '.$tbl_session_category.' WHERE id="'.$id.'"';
+		$sql = "SELECT id, name, date_start, date_end FROM $tbl_session_category WHERE id= $id";
 		$result = Database::query($sql);
 		$num = Database::num_rows($result);
 		if ($num>0){

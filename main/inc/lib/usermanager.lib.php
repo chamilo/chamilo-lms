@@ -1767,7 +1767,7 @@ class UserManager {
 		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
                         ." FROM $tbl_session_user, $tbl_session "
                         ." WHERE id_session=id AND id_user=$user_id " 
-                        ." AND relation_type<>".SESSION_RELATION_TYPE_RRHH." $condition_date_end "
+                        ." $condition_date_end "
                         ." ORDER BY session_category_id, date_start, date_end";
         $result = Database::query($sessions_sql);
         if (Database::num_rows($result) > 0) {
@@ -1777,7 +1777,7 @@ class UserManager {
             }
         }
 
-	// get the list of sessions where the user is subscribed as coach in a 
+        // get the list of sessions where the user is subscribed as coach in a 
         // course, from table session_rel_course_rel_user
 
 		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
@@ -1809,6 +1809,7 @@ class UserManager {
                 $names[$row['id']] = $row['name'];
 			}
 		}
+        
         if ($sort_by_session_name) {
             // reorder sessions alphabetically inside categories
             if (!empty($categories)) {
@@ -1824,7 +1825,7 @@ class UserManager {
                     }                    
                 }
             }
-        }
+        }        
 		return $categories;
 	}
 
@@ -2019,24 +2020,24 @@ class UserManager {
 		$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu $join_access_url
 									WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
 									ORDER BY code";
-	
+        
 		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		if (Database::num_rows($course_list_sql_result) > 0) {
-			while ($result_row = Database::fetch_array($course_list_sql_result)) {
+			while ($result_row = Database::fetch_array($course_list_sql_result)) {                
 				$result_row['status'] = 5;
 				if (!in_array($result_row['code'], $courses)) {
 					$personal_course_list[] = $result_row;
 					$courses[] = $result_row['code'];
 				}
 			}
-		}		
+		}
 
 		if (api_is_allowed_to_create_course()) {
 			$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
 										WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
 										$where_access_url
-										ORDER BY code";										  
+										ORDER BY code";						            
             $course_list_sql_result = Database::query($personal_course_list_sql);
 
 			if (Database::num_rows($course_list_sql_result)>0) {
@@ -2049,6 +2050,19 @@ class UserManager {
 				}
 			}
 		}
+        
+        if (api_is_drh()) {
+            $session_list = SessionManager::get_sessions_followed_by_drh($user_id);    
+            $session_list = array_keys($session_list);
+            if (in_array($session_id, $session_list)) {                
+                $course_list = SessionManager::get_course_list_by_session_id($session_id);                
+                if (!empty($course_list)) {
+                    foreach ($course_list as $course) {                        
+                        $personal_course_list[] = $course;
+                    }
+                }
+            }
+        }
 		return $personal_course_list;
 	}
 

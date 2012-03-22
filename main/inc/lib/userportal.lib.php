@@ -12,8 +12,7 @@ class IndexManager {
 	var $home			= '';
 	var $default_home 	= 'home/';
 	
-	function __construct($title, $load_template = true) {
-		
+	function __construct($title, $load_template = true) {		
 		if ($load_template) {		
 			$this->tpl = new Template($title);					
 		}
@@ -968,12 +967,12 @@ class IndexManager {
 				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
                 //Get courses
 				if ($cat == 0) {                    
-					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);                    
+					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);                            
 				}
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
                 //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
-					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {
+					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {                        
 						$courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
 						$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session(api_get_user_id(), $s_id);
 					}
@@ -984,7 +983,7 @@ class IndexManager {
         $html = '';		
 		
 		if ($load_history) {
-			$html .= Display::tag('h2', get_lang('HistoryTrainingSession'));			
+			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));			
 			if (empty($courses_tree)) {
 				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
@@ -994,13 +993,16 @@ class IndexManager {
             foreach ($courses_tree as $key => $category) {
                 if ($key == 0) {
 					// Sessions and courses that are not in a session category.
-					if (!isset($_GET['history'])) {
-						// If we're not in the history view...
-						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);
+                    
+                    // If we're not in the history view...
+					if (!isset($_GET['history'])) {						                        // 
+                        //Display special courses
+						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);                        
+                        //Display courses
                         $html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
 					}
                     
-					// Independent sessions.
+					// Independent sessions
 					foreach ($category['sessions'] as $session) {
 		
 						// Don't show empty sessions.
@@ -1039,9 +1041,13 @@ class IndexManager {
 							$params = array();                            							
 							$params['icon'] =  Display::return_icon('window_list.png', null, array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
 		
-							$s = Display :: get_session_title_box($session['details']['id']);
-							$extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];							
-							$session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+							$session_box = Display :: get_session_title_box($session['details']['id']);
+							$extra_info = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];		
+                            if (api_is_drh()) {
+                                $session_link = $session_box['title'];
+                            } else {
+                                $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                            }
 							
 							$params['title'] = $session_link.$extra_info;
                             
@@ -1062,7 +1068,7 @@ class IndexManager {
 					// All sessions included in.
 					if (!empty($category['details'])) {
 						$count_courses_session = 0;
-						$html_sessions = '';
+						$html_sessions = '';                        
 						foreach ($category['sessions'] as $session) {
 							// Don't show empty sessions.
 							if (count($session['courses']) < 1) {
@@ -1073,6 +1079,7 @@ class IndexManager {
 							$session_now = time();
 							$html_courses_session = '';
 							$count = 0;
+                            
 							foreach ($session['courses'] as $course) {
 								$is_coach_course = api_is_coach($session['details']['id'], $course['code']);
 								if ($is_coach_course) {
@@ -1090,13 +1097,18 @@ class IndexManager {
                             $params = array();
                             
 							if ($count > 0) {
-								$s = Display :: get_session_title_box($session['details']['id']);								
+								$session_box = Display :: get_session_title_box($session['details']['id']);                                
                                 $params['icon'] = Display::return_icon('window_list.png', null, array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-		
-								$session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                
+                                if (api_is_drh()) {
+                                    $session_link = $session_box['title'];
+                                } else {
+                                    $session_link = Display::tag('a',$session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                }
+                                
 								$params['title'] .=  $session_link;
 								$params['title'] .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
-								$params['title'] .=  (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
+								$params['title'] .=  (!empty($s['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
 								$params['title'] .=  '</span>';
 		
 								if (api_is_platform_admin()) {

@@ -2099,7 +2099,7 @@ class CourseManager {
         $sql = "SELECT DISTINCT(course.code), course.id as real_id
                 FROM $tbl_course course
                 INNER JOIN $tbl_course_user cru ON course.code=cru.course_code
-                WHERE  cru.user_id='$user_id' $without_special_courses";
+                WHERE cru.user_id='$user_id' $without_special_courses";
 
         $result = Database::query($sql);
 
@@ -2769,13 +2769,13 @@ class CourseManager {
 
         if (!empty($with_special_courses)) {
             $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                            course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id
-                            FROM $tbl_course course
-                            LEFT JOIN $tbl_course_user course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
-                            WHERE $with_special_courses group by course.code";
+                           course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id
+                    FROM $tbl_course course
+                    LEFT JOIN $tbl_course_user course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
+                    WHERE $with_special_courses group by course.code";
 
             $rs_special_course = Database::query($sql);
-            $number_of_courses = Database::num_rows($rs_special_course);
+            $number_of_courses = Database::num_rows($rs_special_course);            
             $key = 0;
             $status_icon = '';
             
@@ -2876,6 +2876,7 @@ class CourseManager {
         }
         return $html;
     }
+    
     /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
@@ -2899,17 +2900,17 @@ class CourseManager {
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
         }
     
+        //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
         $sql_select_courses = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
                                         course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                                         FROM    $TABLECOURS      course,
                                                 $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                                        WHERE course.code = course_rel_user.course_code AND url.course_code = course.code
-                                        AND   course_rel_user.user_id = '".$user_id."'
-                                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
+                                        WHERE   course.code = course_rel_user.course_code AND url.course_code = course.code AND
+                                                course_rel_user.user_id = '".$user_id."' AND
+                                                course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
-        if (api_get_multiple_access_url() && $current_url_id != -1){
+        if (api_get_multiple_access_url() && $current_url_id != -1) {
             $sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
         }
         // Use user's classification for courses (if any).
@@ -3050,8 +3051,7 @@ class CourseManager {
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
     function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
-        global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
-        $charset = api_get_system_encoding();    
+        global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;        
         $user_id  = api_get_user_id();
         $course_info = api_get_course_info($course['code']);
         $status_course = CourseManager::get_user_in_course_status($user_id, $course_info['code']);
@@ -3069,12 +3069,14 @@ class CourseManager {
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category       = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         
-        $course_access_settings = CourseManager :: get_access_settings($course_info['code']);        
-        $course_visibility = $course_access_settings['visibility'];
+        $course_access_settings     = CourseManager :: get_access_settings($course_info['code']);        
+        $course_visibility          = $course_access_settings['visibility'];
     
-        $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
+        $user_in_course_status      = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
+        
     
         // Function logic - act on the data.
+        /*
         $is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course_info['code']);
         if ($is_virtual_course) {
             // If the current user is also subscribed in the real course to which this
@@ -3094,7 +3096,7 @@ class CourseManager {
         } else {
             $course_display_title = $course_info['name'];
             $course_display_code = $course_info['official_code'];
-        }
+        }*/
     
         $is_coach = api_is_coach($course_info['id_session'], $course['code']);
             
@@ -3104,6 +3106,7 @@ class CourseManager {
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
         $session_title = '';
+        
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
                 if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
@@ -3112,17 +3115,17 @@ class CourseManager {
                     }
                     if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
                         $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
-                        $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_display_title.'</a>';
+                        $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
                     }
                 } else {
                     $session_url   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/';
-                    $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/">'.$course_display_title.'</a>';
+                    $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/">'.$course_info['name'].'</a>';
                 }
             } else {
-                $session_title = $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));                
+                $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));                
             }
         } else {
-        	$session_title = $course_display_title;
+        	$session_title = $course_info['name'];
         }
         
         if (!empty($session_url)) {
@@ -3139,7 +3142,7 @@ class CourseManager {
         }        
     
         if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-            $session_title .= $course_display_code;
+            $session_title .= $course_info['official_code'];
         }
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
@@ -3154,23 +3157,23 @@ class CourseManager {
                         $course_coachs[] = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
                     }
                 }
-                if ($course_info['status'] == 1 || ($course_info['status'] == 5 && empty($course_info['id_session'])) || empty($course_info['status'])) {
+                if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
                     $params['teachers'] = $teacher_list;
                 }    
-                if (($course_info['status'] == 5 && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != 1)) {
+                if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
                     if (is_array($course_coachs) && count($course_coachs)> 0 ) {                       
                         $params['coaches'] = implode(', ',$course_coachs);
                     }
                 }    
             } else {                
-                $params['teachers'] = $teacher_list;
-                
+                $params['teachers'] = $teacher_list;                
             }
         }
     
         $session_title .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
     
-        // Display the "what's new" icons.
+        // Display the "what's new" icons
+        
         $session_title .= Display :: show_notification($course_info);
         
         $params['title'] = $session_title;

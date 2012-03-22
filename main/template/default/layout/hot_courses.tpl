@@ -44,10 +44,9 @@
                     </div>			
                 </div>
 
-                <div class="categories-course-links">
-                    
+                <div class="categories-course-links">                    
                     {* World *}
-                    {if ($hot_course.extra_info.visibility == 3)}
+                    {if ($hot_course.extra_info.visibility == 3 OR ($hot_course.extra_info.visibility == 2 AND $_u.logged == 1 ))}
                         <div class="course-link-desc right">
                             <a class="btn btn-primary" title="" href="{$_p.web_course}{$hot_course.extra_info.path}/index.php">
                                 {"GoToCourse"|get_lang}

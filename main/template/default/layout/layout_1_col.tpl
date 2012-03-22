@@ -16,7 +16,7 @@
     {/if}
     
     <div class="span12">        
-        {include file="default/layout/page_body.tpl"}        
+        {include file="default/layout/page_body.tpl"}    
     </div>
     
     {* Content bottom *}

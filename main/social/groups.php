@@ -211,12 +211,10 @@ if ($group_id != 0 ) {
     $is_group_member = GroupPortalManager::is_group_member($group_id);    
 
 	// details about the current group
-	$social_right_content = '<div class="head_group">';    
+	$social_right_content = '<div class="span9">';    
 	$social_right_content .=  '<div id="social-group-details">';
             //Group's title
             $social_right_content .=  Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
-
-            //echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
 
             //Privacy
             if (!$is_group_member) {
@@ -249,11 +247,10 @@ if ($group_id != 0 ) {
                 $social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
             }
 		$social_right_content .=  '</div>';
-	$social_right_content .=  '</div>';
-	$social_right_content .=  '<div class="clear"></div>';
+	$social_right_content .=  '</div>';	
 
 	//-- Show message groups
-	$social_right_content .=  '<div class="messages" style="width:700px">';	    
+	$social_right_content .=  '<div class="span9">';
 	     
 		if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 		    if (!$is_group_member) {		        
@@ -352,7 +349,7 @@ if ($group_id != 0 ) {
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 				$item_0  = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
 				$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-				$item_1  = Display::div(Display::tag('h2', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+				$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 				
 				$item_2 = '';
 				$item_3 = '';
@@ -389,7 +386,7 @@ if ($group_id != 0 ) {
 			
 			$item_0 = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
 			$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-			$item_1  = Display::div(Display::tag('h2', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+			$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 			
 
 			if ($result['description'] != '') {
@@ -435,7 +432,7 @@ if ($group_id != 0 ) {
 				
 	            $item_0 = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
 			    $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-			    $item_1  = Display::div(Display::tag('h2', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+			    $item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 			
 				if ($result['description'] != '') {					
 					$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
@@ -520,12 +517,11 @@ if ($group_id != 0 ) {
 	   	}
 	   	
 	   	if (!empty($create_group_item)) {
-	   		$social_right_content .=  Display::div($create_group_item, array('style'=>'padding-top:12px;height:30px'));
+	   		$social_right_content .=  Display::div($create_group_item, array('class'=>'span9'));
 	   	}	   	
 	   	$headers = array(get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups'));	   	
-		$social_right_content .=  Display::tabs($headers, array($newest_content, $popular_content, $my_group_content),'tab_browse');
-    }
-	$social_right_content .=  '</div>';
+		$social_right_content .=  '<div class="span9">'.Display::tabs($headers, array($newest_content, $popular_content, $my_group_content),'tab_browse').'</div>';
+    }	
 
 //Display :: display_footer();
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {

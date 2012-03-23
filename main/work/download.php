@@ -33,7 +33,6 @@ if (empty($course_info)) {
 	api_not_allowed(true);
 }
 
-
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 if (!empty($course_info['real_id'])) {    
@@ -41,13 +40,13 @@ if (!empty($course_info['real_id'])) {
 	$result = Database::query($sql);
 	if ($result && Database::num_rows($result)) {
 	    $row = Database::fetch_array($result, 'ASSOC');        
-        $full_file_name          = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
+        $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
            
-        $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);        
+        $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);           
         if (empty($item_info)) {
             exit;
         }          	    
-	    if ($item_info['visibility'] == 1 && $row['accepted'] == 1 && ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())) {
+	    if ($course_info['show_score'] == 0 || $item_info['visibility'] == 1 && $row['accepted'] == 1 && ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())) {
 		    $title = str_replace(' ', '_', $row['title']);
             event_download($title);
 		    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {

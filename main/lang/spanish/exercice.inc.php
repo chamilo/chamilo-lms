@@ -490,4 +490,6 @@ $UseTheMessageBelowToAddSomeComments = "Utilizar el siguiente campo de texto par
 $SendRecord = "Enviar grabación";
 $DownloadLatestRecord = "Descargar grabación";
 $OralExpression = "Expresión Oral";
+$CongratulationsYouPassedTheTest = "Felicitaciones ha aprobado el ejercicio.";
+$YouDidNotReachTheMinimumScore = "No ha alcanzado el puntaje mínimo.";
 ?>

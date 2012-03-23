@@ -1527,4 +1527,6 @@ $Regions = "Regions";
 $CoursesDefaultCreationVisibilityTitle = "Default course visibility";
 $CoursesDefaultCreationVisibilityComment = "Default course visibility while creating a new course";
 $YouHaveEnteredTheCourseXInY = "You have entered the course <b>%s</b> in <b>%s</b>";
+$LoginIsEmailTitle = "Use the email as username";
+$LoginIsEmailComment = "Use the email in order to login to the system";
 ?>

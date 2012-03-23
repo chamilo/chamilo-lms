@@ -1524,7 +1524,12 @@ $UsersFoundInOtherPortals = "Usuarios encontrados en otros portales";
 $AddUserToMyURL = "Añadir usuario a mi portal";
 $UsersDeleted = "Usuarios eliminados";
 $UsersAdded = "Usuarios añadidos";
+$PluginArea = "Área de plugins";
 $NoConfigurationSettingsForThisPlugin = "No hay opciones de configuración para este plugin";
+$Regions = "Regiones";
 $CoursesDefaultCreationVisibilityTitle = "Visibilidad del curso por defecto";
 $CoursesDefaultCreationVisibilityComment = "Visibilidad por defecto del curso cuando se está creando un curso";
+$YouHaveEnteredTheCourseXInY = "Ud. ha ingresado al curso <b>%s</b> el <b>%s</b>";
+$LoginIsEmailTitle = "Usar el correo electrónico como nombre de usuario";
+$LoginIsEmailComment = "El correo electrónico será usado para ingresar al sistema";
 ?>

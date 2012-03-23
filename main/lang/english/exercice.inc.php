@@ -490,4 +490,6 @@ $UseTheMessageBelowToAddSomeComments = "Use the message below to add a comment";
 $SendRecord = "Send record";
 $DownloadLatestRecord = "Download record";
 $OralExpression = "Oral expression";
+$CongratulationsYouPassedTheTest = "Congratulations you passed the test!";
+$YouDidNotReachTheMinimumScore = "You didn't reach the minimum score";
 ?>

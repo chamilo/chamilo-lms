@@ -9,7 +9,7 @@
                 {$plugin_content_top}
             </div>
         {/if}        
-        <div class="span12">
+        <div class="span12">            
+            {include file="default/layout/page_body.tpl"}
             <section id="main_content">
-                {include file="default/layout/page_body.tpl"}
 {/if}

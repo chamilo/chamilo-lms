@@ -31,12 +31,16 @@
         {/if}
 		
 		{* ?? *}
-		{$sniff_notification}
+		{$sniff_notification}        
+		
+        {include file="default/layout/page_body.tpl"}
         
-		<section id="main_content">
-        {include file="default/layout/page_body.tpl"}	        
+        {if !empty($content)}
+        <section id="main_content">
         {$content}
+        &nbsp;
         </section>
+        {/if}
 		
 		{* Announcements *}
         {if !empty($announcements_page_block)}

@@ -112,8 +112,8 @@ switch($action) {
         }
         break;
 }
-
 Display::display_header($tool_name);
+
 if (!empty($_GET['warn'])) {
     Display::display_warning_message(urldecode($_GET['warn']));
 }
@@ -122,7 +122,7 @@ if (!empty($message)) {
     echo $message;
 }
 
-echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
+echo Display::page_subheader(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
 ?>
 <!-- General properties -->
 <table class="data_table" width="100%">
@@ -167,7 +167,6 @@ echo Display::tag('h1', Display::return_icon('session.png', get_lang('Session'))
         ?>
 	</td>
 </tr>
-
 <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
 <tr>
 	<td>

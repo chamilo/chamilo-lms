@@ -16,11 +16,14 @@
     {/if}
     
     
-    <div class="span12">        
-        <section id="main_content">
-            {include file="default/layout/page_body.tpl"}
+    <div class="span12">            
+        {include file="default/layout/page_body.tpl"}
+        {if !empty($content)}
+            <section id="main_content">
             {$content}
-        </section>
+            &nbsp;
+            </section>
+        {/if}        
     </div>    
     
     {* Plugin bottom *}

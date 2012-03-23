@@ -3,8 +3,8 @@
     for backward compatibility we suppose that the default layout is one column which means using a div with class span12
 *}
 {if $show_header}
+    </section>
 </div>
-</section>
 {/if}
 
 {* Plugin bottom *}

@@ -260,8 +260,8 @@ if ($origin == 'learnpath') {
 
 /*	Display links to upload form and tool options */
 
-if (!in_array($action, array('send_mail','add', 'upload'))) {
-    $token = Security::get_token();
+if (!in_array($action, array('send_mail','add','create_dir','upload'))) {
+    $token = Security::get_token();    
 }
 
 $show_tool_options = (in_array($action, array('list', 'add'))) ? true : false;
@@ -507,109 +507,78 @@ switch ($action) {
 		/*	Display of tool options */
 		display_tool_options($uploadvisibledisabled, $origin);		
 		break;		
-	case 'create_dir':				
-		//show them the form for the directory name
-		if ($is_allowed_to_edit) {
-		    $token = Security::get_token();
-			//create the form that asks for the directory name
-			$new_folder_text = '<form name="form1" method="POST">';
-			$new_folder_text .= '<legend>'.get_lang('CreateAssignment').'</legend>';
-			$new_folder_text .= '<input type="hidden" name="action" value="add"/>';
-			$new_folder_text .= '<input type="hidden" name="curdirpath" value="' . Security :: remove_XSS($curdirpath) . '"/>';
-			$new_folder_text .= '<input type="hidden" name="sec_token" value="'.$token.'" />';
-			$new_folder_text .= '<div class="row">
-										<div class="label">
-											<span class="form_required">*</span> '.get_lang('AssignmentName').'
-										</div>
-										<div class="formw">
-											<div id="msg_error1" style="display:none;color:red"></div>
-											<input type="text" id="work_title" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
-										</div>
-									</div>';
-		
-			//new additional fields inside the "if condition" just to agroup
-			$new_folder_text .= '<div class="row">
-										<div class="label">
-											'.get_lang('Description').'
-										</div>
-										<div class="formw">';
-			$oFCKeditor = new FCKeditor('description') ;
-			$oFCKeditor->ToolbarSet = 'work';
-			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '200';
-			$oFCKeditor->Value		= isset($message) ? $message : null;
-			$return =	$oFCKeditor->CreateHtml();
-			$new_folder_text .= $return;
-			$new_folder_text .= '</div>
-									</div>';
-		
-			// Advanced parameters
-			$addtext  = '<div id="options" style="display: none;">';
-			$addtext .= '<div style="padding:10px">';
-			$addtext .= '<b>'.get_lang('QualificationOfAssignment').'</b>';
-			$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
-			$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumeric').'&nbsp;';
-			$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td><tr><td colspan="2">';
-			$addtext .= '<input type="checkbox" value="1" id="make_calification_id" name="make_calification" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>
-			             <label for="make_calification_id">'.get_lang('MakeQualifiable').'</label></td></tr><tr>';
-			$addtext .= '<td colspan="2"><div id="option1" style="display:none">';
-			$addtext .= '<div id="msg_error_weight" style="display:none;color:red"></div>';
-			$addtext .=	'&nbsp;&nbsp;'.get_lang('WeightInTheGradebook').'&nbsp;';
-			$addtext .= '<input type="text" name="weight" value="" size="5" onfocus="document.getElementById(\'msg_error_weight\').style.display=\'none\';"/></div></td></tr>';
-			$addtext .= '</tr></table>';
-			$addtext .= '<br />';
-			$addtext .= '<b>'.get_lang('DatesAvailables').'</b><br />';
-			$addtext .= '<input type="checkbox" value="1" id="type1_id" name="type1" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>
-			             <label for="type1_id">'.get_lang('EnableExpiryDate').'</label>';
-			$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
-			$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
-			$addtext .= '<div id="option2" style="padding:4px;display:none">&nbsp;&nbsp;';
-			$addtext .= draw_date_picker('expires').'</div>';
-			$addtext .= '<br /><input type="checkbox" value="1" id="type2_id" name="type2" onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>
-			              <label for="type2_id">'.get_lang('EnableEndDate').'</label>';
-			$addtext .= '<div id="option3" style="padding:4px;display:none">';
-			$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
-			$addtext .= draw_date_picker('ends').'<br />';
-			$addtext .= '</div>';
-			$addtext .= '<br /><br /><b>'.get_lang('Agenda').'</b><br />';
-			$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar', false, get_lang('AddToCalendar'));			
-			
-			$addtext .= '<br /><br /><b>'.get_lang('AllowTextAssignments').'</b><br />';
-			$addtext .= '&nbsp;&nbsp;'.make_checkbox('allow_text_assignment', false, get_lang('AllowTextAssignments')).'</div>';						
-			$addtext .= '</div>';		
-						
-			$new_folder_text .= '<div class="row">
-										<div class="label"></div>
-										<div class="formw"><a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a><br />
-											'.$addtext.'
-										</div>
-									</div>';
-			$new_folder_text .= '<div class="row">
-										<div class="label"></div>
-										<div class="formw">
-											<button type="button" class="add" name="create_dir" onClick="javascript: validate();" value="' . addslashes(get_lang('CreateDirectory')) . '"/>' . addslashes(get_lang('ButtonCreateAssignment')) . '</button>
-										</div>
-									</div>';
-			$new_folder_text .= '</form>';
-			//show the form
-			echo $new_folder_text;
-		}
-		break;
+    case 'create_dir':	
 	case 'add':
-        /*		
-		$fexpire 		= get_date_from_select('expires');
-		$fend 	 		= get_date_from_select('ends');*/
-		
-		$directory 		= Security::remove_XSS($_POST['new_dir']);
-		$directory 		= replace_dangerous_char($directory);
-		$directory 		= disable_dangerous_file($directory);
-		$dir_name 		= $curdirpath.$directory;
-		$created_dir 	= create_unexisting_work_directory($base_work_dir, $dir_name);
-	
-		// we insert here the directory in the table $work_table
-		$dir_name_sql = '';
-	
-		if ($is_allowed_to_edit && Security::check_token('post')) {
+        //$check = Security::check_token('post');                
+        //show them the form for the directory name
+        
+		if ($is_allowed_to_edit) {            		    
+			//create the form that asks for the directory name
+            $form = new FormValidator('form1', 'post', api_get_self().'?action=create_dir&'. api_get_cidreq());
+            
+            $form->addElement('header', get_lang('CreateAssignment').$token);
+            $form->addElement('hidden', 'action', 'add');
+            $form->addElement('hidden', 'curdirpath', Security :: remove_XSS($curdirpath));            
+           // $form->addElement('hidden', 'sec_token', $token);
+      
+            
+            $form->addElement('text', 'new_dir', get_lang('AssignmentName'));                        
+            $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
+            
+            $form->addElement('html_editor', 'description', get_lang('Description'));
+            
+            $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
+            
+            $form->addElement('html', '<div id="options" style="display: none;">');
+            
+            //QualificationOfAssignment
+            $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
+            
+            $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
+            
+            $form->addElement('html', '<div id="option1" style="display: none;">');
+            $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
+            $form->addElement('html', '</div>');
+            
+            
+            $form->addElement('checkbox', 'type1', null, get_lang('EnableExpiryDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option2').style.display='block';}else{document.getElementById('option2').style.display='none';}"));
+            
+            $form->addElement('html', '<div id="option2" style="display: none;">');
+            $form->addElement('advanced_settings',draw_date_picker('expires'));
+            $form->addElement('html', '</div>');
+            
+            
+            $form->addElement('checkbox', 'type2', null, get_lang('EnableEndDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option3').style.display='block';}else{document.getElementById('option3').style.display='none';}"));
+            
+            $form->addElement('html', '<div id="option3" style="display: none;">');
+            $form->addElement('advanced_settings', draw_date_picker('ends'));
+            $form->addElement('html', '</div>');
+               
+            $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));            
+            $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+            
+/*            
+            $addtext .= '<input type="checkbox" value="1" id="make_calification_id" name="make_calification" onclick=/>
+			             <label for="make_calification_id">'.get_lang('MakeQualifiable').'</label></td></tr><tr>';
+*/            
+            $form->addElement('html', '</div>');            
+            $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
+		}
+        
+		if ($is_allowed_to_edit && $form->validate()) {
+                    
+            /*		
+            $fexpire 		= get_date_from_select('expires');
+            $fend 	 		= get_date_from_select('ends');*/
+
+            $directory 		= Security::remove_XSS($_POST['new_dir']);
+            $directory 		= replace_dangerous_char($directory);
+            $directory 		= disable_dangerous_file($directory);
+            $dir_name 		= $curdirpath.$directory;
+            $created_dir 	= create_unexisting_work_directory($base_work_dir, $dir_name);
+
+            // we insert here the directory in the table $work_table
+            $dir_name_sql = '';
 			
 			if (!empty($created_dir)) {
 				if ($curdirpath == '/') {
@@ -722,7 +691,9 @@ switch ($action) {
 			} else {
 				Display :: display_error_message(get_lang('CannotCreateDir'));
 			}
-		}
+		} else {
+            $form->display();     
+        }        
 	case 'upload':
 		if ($student_can_edit_in_session && isset($_POST['sec_token']) && Security::check_token('post')) {
 			

@@ -113,7 +113,7 @@ function display_tool_options($uploadvisibledisabled, $origin) {
 	if (!$is_allowed_to_edit) {
 		return;
 	}
-	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&action=settings">';
+	echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&action=settings">';
 	echo '<legend>'.get_lang('EditToolOptions').'</legend>';
 	display_default_visibility_form($uploadvisibledisabled);
 	display_studentsdelete_form();
@@ -135,19 +135,19 @@ function display_tool_options($uploadvisibledisabled, $origin) {
  */
 function display_default_visibility_form($uploadvisibledisabled) {
 	?>
-	<div class="row">
-		<div class="label">
+	<div class="control-group">
+		<label class="control-label">
 		<?php echo get_lang('_default_upload'); ?>
-		</div>
-		<div class="formw">
-		<input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
-<label for="uploadvisibledisabled_1">
-				<?php echo get_lang('_new_visible'); ?></label>
-
-		<input id="uploadvisibledisabled_2" class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
-<label for="uploadvisibledisabled_2">
-				<?php echo get_lang('_new_unvisible'); ?>
-</label>
+		</label>
+		<div class="controls">
+            <label class="radio" for="uploadvisibledisabled_1">
+                <input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
+				<?php echo get_lang('_new_visible'); ?>
+            </label>
+        <label class="radio" for="uploadvisibledisabled_2">
+            <input id="uploadvisibledisabled_2" class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
+            <?php echo get_lang('_new_unvisible'); ?>
+        </label>
 		</div>
 	</div>
 	<?php
@@ -169,17 +169,16 @@ function display_studentsdelete_form() {
 		$current_course_setting_value = 0;
 	}
 	?>
-	<div class="row">
-	<div class="label"><?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?></div>
-	<div class="formw">
-<input id="student_delete_own_publication_2" class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
-<label for="student_delete_own_publication_2">
-				<?php echo get_lang('Yes'); ?>
-</label>
-<div></div>
+	<div class="control-group">
+        <label class="control-label"><?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?></label>
+	<div class="controls">
+    <label class="radio" for="student_delete_own_publication_2">
+        <input id="student_delete_own_publication_2" class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
+                    <?php echo get_lang('Yes'); ?>
+    </label>
+        <label class="radio" for="student_delete_own_publication_1">
 		<input id="student_delete_own_publication_1" class="checkbox" type="radio" name="student_delete_own_publication" value="0"		
 			<?php if ($current_course_setting_value == 0) echo 'checked'; ?> />
-<label for="student_delete_own_publication_1">
 				<?php echo get_lang('No'); ?>
 </label>
 

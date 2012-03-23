@@ -171,8 +171,6 @@ UPDATE settings_current SET selected_value = '1.9.0.17051' WHERE variable = 'cha
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
 --CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);
-CREATE TABLE reports_keys ( id int unsigned NOT NULL AUTO_INCREMENT, course_id int unsigned DEFAULT NULL, tool_id int DEFAULT NULL, child_id int DEFAULT NULL, child_name varchar(64) DEFAULT NULL, subchild_id int DEFAULT NULL, subchild_name varchar(64) DEFAULT NULL, subsubchild_id int DEFAULT NULL, subsubchild_name varchar(64) DEFAULT NULL, link varchar(256) DEFAULT NULL, PRIMARY KEY (id), KEY course_id (course_id), KEY course_id_2 (course_id,tool_id,child_id,subchild_id,subsubchild_id));
-CREATE TABLE reports_values ( key_id int unsigned NOT NULL, user_id int unsigned DEFAULT NULL, session_id int DEFAULT NULL, attempt int DEFAULT NULL, score decimal(5,3) DEFAULT NULL, progress int DEFAULT NULL, report_time int DEFAULT NULL, KEY user_id (user_id), PRIMARY KEY (key_id,user_id,session_id,attempt));
 CREATE TABLE stored_values (user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
 ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
 ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);

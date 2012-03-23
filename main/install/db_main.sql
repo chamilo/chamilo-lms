@@ -2867,38 +2867,6 @@ CREATE TABLE IF NOT EXISTS skill_rel_profile (
   PRIMARY KEY (id)
 );
 
--- Custom reports
-
-DROP TABLE IF EXISTS reports_keys;
-CREATE TABLE IF NOT EXISTS reports_keys (
-  id int unsigned NOT NULL AUTO_INCREMENT,
-  course_id int DEFAULT NULL,
-  tool_id int DEFAULT NULL,
-  child_id int DEFAULT NULL,
-  child_name varchar(64) DEFAULT NULL,
-  subchild_id int unsigned DEFAULT NULL,
-  subchild_name varchar(64) DEFAULT NULL,
-  subsubchild_id int unsigned DEFAULT NULL,
-  subsubchild_name varchar(64) DEFAULT NULL,
-  link varchar(256) DEFAULT NULL,
-  PRIMARY KEY (id),
-  KEY course_id (course_id),
-  KEY course_id_2 (course_id,tool_id,child_id,subchild_id,subsubchild_id)
-);
-
-DROP TABLE IF EXISTS reports_values;
-CREATE TABLE IF NOT EXISTS reports_values (
-  key_id int unsigned NOT NULL,
-  uid int DEFAULT NULL,
-  session_id int unsigned DEFAULT NULL,
-  attempt int DEFAULT NULL,
-  score decimal(5,3) DEFAULT NULL,
-  progress int DEFAULT NULL,
-  `time` int DEFAULT NULL,
-  KEY uid (uid),
-  PRIMARY KEY (key_id,uid,session_id,attempt)
-);
-
 --
 -- Table structure for event email sending
 --

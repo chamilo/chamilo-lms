@@ -126,11 +126,11 @@ class MultipleAnswerTrueFalse extends Question {
 		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']'); 
             
-            $answer_number=$form->addElement('text', 'counter',null,'value="'.$i.'"');
+            $answer_number=$form->addElement('text', 'counter['.$i.']',null,'value="'.$i.'"');
             $answer_number->freeze();            
             
 			if (is_object($answer)) {               

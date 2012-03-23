@@ -183,13 +183,14 @@ ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
 -- xxUSERxx
 
 -- xxCOURSExx
-ALTER TABLE lp ADD COLUMN hide_toc_frame TINYINT NOT NULL DEFAULT 0;
-ALTER TABLE lp ADD COLUMN seriousgame_mode TINYINT NOT NULL DEFAULT 0;
+ALTER TABLE lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
+ALTER TABLE lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;
-INSERT INTO course_setting(variable,value,category) VALUES ('course_grading_model','','gradebook');
+INSERT INTO course_setting(variable, value, category) VALUES ('course_grading_model','','gradebook');
 ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
 ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
-ALTER TABLE quiz ADD text_when_finished TEXT default NULL;
-ALTER TABLE quiz ADD display_category_name TINYINT NOT NULL DEFAULT 1;
+ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
+ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
+ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;

@@ -149,7 +149,7 @@ if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
 
-Display :: display_confirmation_message(get_lang('Saved').'<br />',false);
+Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display text when test is finished #4074
 // Don't display the text when finished message if we are from a LP #4227
@@ -161,6 +161,8 @@ if (!empty($end_of_message) && ($origin != 'learnpath')) {
 }
 
 $counter = 1;
+$total_score = $total_weight = 0;
+
 // Loop over all question to show results for each of them, one by one
 if (!empty($question_list)) {
 	foreach ($question_list as $questionId) {
@@ -200,7 +202,7 @@ if ($origin != 'learnpath') {
         if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
     	    $total_score = 0;
         }     
-        echo show_score($total_score, $total_weight, false);	
+        echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
         echo '</div>';
     }
     /* <button type="submit" class="save"><?php echo get_lang('Finish');?></button> */
@@ -216,7 +218,6 @@ $feed = $objExercise->feedbacktype;
 if (api_is_allowed_to_session_edit()) {	
 	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');	
 }
-
 
 //If is not valid
 $session_control_key = get_session_time_control_key($objExercise->id);

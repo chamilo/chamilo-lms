@@ -705,7 +705,7 @@ function update_Db_course($course_db_name = null) {
         random smallint(6) NOT NULL default 0,
         random_answers tinyint unsigned NOT NULL default 0,
         active tinyint NOT NULL default 0,
-        results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
+        results_disabled INT UNSIGNED NOT NULL DEFAULT 0,
         access_condition TEXT DEFAULT NULL,
         max_attempt int NOT NULL default 0,
         start_time datetime NOT NULL default '0000-00-00 00:00:00',
@@ -717,7 +717,8 @@ function update_Db_course($course_db_name = null) {
         review_answers INT NOT NULL DEFAULT 0,
         random_by_category INT NOT NULL DEFAULT 0,
         text_when_finished TEXT default NULL,
-        display_category_name TINYINT NOT NULL DEFAULT 1,
+        display_category_name INT NOT NULL DEFAULT 1,
+        pass_percentage INT DEFAULT NULL,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);

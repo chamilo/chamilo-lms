@@ -1187,7 +1187,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param	bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
+function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_success_message = false, $pass_percentage = null) {
     if (is_null($score) && is_null($weight)) {
         return '-';
     }
@@ -1205,15 +1205,25 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
             }            
             $weight         = $max_note;
         }
-    }    
+    }
     $score_rounded = float_format($score, 1);    
     $weight = float_format($weight, 1);    
+    
+    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
     if ($show_percentage) {        
         $parent = '(' . $score_rounded . ' / ' . $weight . ')';
-        $html = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1) . "%  $parent";	
+        $html = $percentage." %  $parent";	
     } else {    
     	$html = $score_rounded . ' / ' . $weight;
     }    
+    
+    if ($show_success_message && isset($pass_percentage) && $pass_percentage != '') {        
+        if ($percentage >= $pass_percentage) {
+            $html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+        } else {
+            $html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
+        }
+    }
     return $html;	
 }
 

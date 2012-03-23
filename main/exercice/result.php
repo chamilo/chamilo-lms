@@ -341,8 +341,7 @@ if (!empty($question_list)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
 				echo '<div id="question_feedback">'.$comnt.'</div>';
 			}		
-		}
-		
+		}		
 		
 		$my_total_score  = $questionScore;
 		$my_total_weight = $questionWeighting;   
@@ -370,7 +369,7 @@ if ($show_results || $show_only_total_score) {
 	if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 		$my_total_score_temp = 0;
 	}          
-    echo show_score($my_total_score_temp, $totalWeighting, false);	
+    echo show_score($my_total_score_temp, $totalWeighting, false, true, true, $objExercise->selectPassPercentage());	
 	echo '</div>';
 }
 

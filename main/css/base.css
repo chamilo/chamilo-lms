@@ -4,12 +4,13 @@
 
 @import url('bootstrap.css');
 
-/* some changes to the bootstrap.min.css */
+/* some changes to the bootstrap.css */
 
+/* when doing a var_dump*/
 pre {
     margin-top:40px;
 }
-
+/* chzn-select fix */
 select {
     width : auto;
 }
@@ -19,13 +20,13 @@ select {
 }
 
 .label {
-  padding: 1px 3px 2px;
-  font-size: 100%;
-  font-weight: normal;
-  color: #ffffff;
-  text-transform: none;
-  background: none;  
-  border-radius: none;
+    padding: 1px 3px 2px;
+    font-size: 100%;
+    font-weight: normal;
+    color: #ffffff;
+    text-transform: none;
+    background: none;  
+    border-radius: none;
 }
 
 .secondary-nav {
@@ -61,24 +62,16 @@ legend {
     height: 15px;
 }
 
-#header2 .nav {
-    float:right;
-}
-
 #header3 li a {
     margin:0px;
 }
 
-/* Fixing old chamilo forms */
-#header4 {
-	height:26px;
-    padding:0px;
-    background:none;                    
-    width: 100%;	
-    /*margin-top:35px;*/
-    margin-bottom:5px;    
-    background-repeat:repeat-x;        
+/* To fix the increase/decrease buttons */
+label, input, button, select, textarea, p {
+    font-size: inherit;
 }
+
+/* Fixing old chamilo forms */
 
 form .label {
     color: #404040;
@@ -103,6 +96,8 @@ form .formw input {
 }
 
 /* end chamilo forms fixes */
+
+
 
 /* New changes Chamilo 1.9 */
 
@@ -135,8 +130,8 @@ form .formw input {
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #topbar {

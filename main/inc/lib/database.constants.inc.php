@@ -310,10 +310,6 @@ define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');
 
-//Custom reports table
-define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
-define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
-
 //Storage api tables
 define('TABLE_MAIN_STORED_VALUES',			'stored_values');
 define('TABLE_MAIN_STORED_VALUES_STACK',		'stored_values_stack');

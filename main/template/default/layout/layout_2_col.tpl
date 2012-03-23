@@ -37,8 +37,7 @@
         
         {if !empty($content)}
         <section id="main_content">
-        {$content}
-        &nbsp;
+        {$content}        
         </section>
         {/if}
 		
@@ -58,6 +57,7 @@
                 {$plugin_content_bottom}
             </div>
         {/if}
+        &nbsp;
 	</div>
 		
 	{* Right column *}

@@ -20,10 +20,10 @@
         {include file="default/layout/page_body.tpl"}
         {if !empty($content)}
             <section id="main_content">
-            {$content}
-            &nbsp;
+            {$content}            
             </section>
         {/if}        
+        &nbsp;
     </div>    
     
     {* Plugin bottom *}

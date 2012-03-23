@@ -21,11 +21,11 @@ function reports_loadTemplates() {
 
 
 // clear all reporting data
-function reports_clearAll() {
 /*
-	Database::query('DELETE FROM '.Database::get_main_table(TABLE_MAIN_REPORTS_KEYS));
-	Database::query('DELETE FROM '.Database::get_main_table(TABLE_MAIN_REPORTS_VALUES));
-*/	
+function reports_clearAll() {
+
+	//Database::query('DELETE FROM '.Database::get_main_table(TABLE_MAIN_REPORTS_KEYS));
+	//Database::query('DELETE FROM '.Database::get_main_table(TABLE_MAIN_REPORTS_VALUES));
 	Database::query('DROP TABLE '.Database::get_main_table(TABLE_MAIN_REPORTS_KEYS));
 	Database::query('DROP TABLE '.Database::get_main_table(TABLE_MAIN_REPORTS_VALUES));
 	Database::query('
@@ -70,7 +70,6 @@ function reports_addDBKeys() {
 		Database::get_main_table(TABLE_MAIN_REPORTS_VALUES).
 		' add primary key(key_id,user_id,session_id,attempt)');
 }
-
 // build all reporting data
 function reports_build() {
 	global $reports_enabled_modules, $reports_modules;
@@ -147,7 +146,7 @@ function reports_addValueQuery($query) {
 		' (key_id, user_id, session_id, attempt, score, '.
 		'progress, report_time, ts) ('.$query.')');
 }
-
+ */
 // return tools ID (parametre is a constant from main_api
 function reports_getToolId($tool) {
 	$tools = array_flip(api_get_tools_lists());
@@ -180,6 +179,7 @@ function reports_getVisibilitySQL () {
 //  this sql stateuement MUST include a field key_id with the value given
 //  to the function as parametre. This statement will be passed to 
 //  reports_addValueQuery
+/*
 function reports_automaticAdd($keys_query, $values_query_function) {
 	$keys_result = Database::query($keys_query);
 	if (!$keys_query) {
@@ -213,4 +213,4 @@ function reports_automaticAdd($keys_query, $values_query_function) {
 		else
 			reports_addValueQuery($values['sql']);
 	}
-}
+}*/

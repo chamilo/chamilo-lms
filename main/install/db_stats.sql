@@ -270,32 +270,6 @@ ALTER TABLE track_e_downloads ADD INDEX (down_session_id);
 ALTER TABLE track_e_links ADD INDEX (links_session_id); 
 ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);  
 
-CREATE TABLE reports_keys (
-  id int unsigned NOT NULL AUTO_INCREMENT,
-  course_id int unsigned DEFAULT NULL,
-  tool_id int DEFAULT NULL,
-  child_id int DEFAULT NULL,
-  child_name varchar(64) DEFAULT NULL,
-  subchild_id int DEFAULT NULL,
-  subchild_name varchar(64) DEFAULT NULL,
-  subsubchild_id int DEFAULT NULL,
-  subsubchild_name varchar(64) DEFAULT NULL,
-  link varchar(256) DEFAULT NULL,
-  PRIMARY KEY (id),
-  KEY course_id (course_id),
-  KEY course_id_2 (course_id,tool_id,child_id,subchild_id,subsubchild_id));
-
-CREATE TABLE reports_values (
-  key_id int unsigned NOT NULL,
-  user_id int unsigned DEFAULT NULL,
-  session_id int DEFAULT NULL,
-  attempt int DEFAULT NULL,
-  score decimal(5,3) DEFAULT NULL,
-  progress int DEFAULT NULL,
-  report_time int DEFAULT NULL,
-  KEY user_id (user_id),
-  PRIMARY KEY (key_id,user_id,session_id,attempt));
-
 --
 -- Table structure for LP custom storage API
 --

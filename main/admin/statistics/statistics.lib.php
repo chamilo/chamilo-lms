@@ -115,8 +115,7 @@ class Statistics {
     function get_activities_data($from, $number_of_items, $column, $direction) {
         global $dateTimeFormatLong, $_configuration;
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
-        $table_course 				= Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);        
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id 			= api_get_current_access_url_id();
 
@@ -172,10 +171,10 @@ class Statistics {
                     }
                 }
             }
-        	if (!empty($row[4]) && $row[4] != '0000-00-00 00:00:00') {        	
-            	$row[4] = api_get_local_time($row[4]);
+        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
+            	$row['default_date'] = api_get_local_time($row['default_date']);
         	} else {
-        		$row[4] = '-';
+        		$row['default_date'] = '-';
         	}
             $activities[] = $row;
         }

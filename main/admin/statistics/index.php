@@ -82,6 +82,7 @@ switch ($_GET['action']) {
 				get_lang('Students') => statistics::count_users(5,null,$_GET['count_invisible_courses'])
 			)
 		);
+        $teachers = $students = array();
 		foreach ($course_categories as $code => $name) {
 			$name = str_replace(get_lang('Department'),"",$name);
 			$teachers[$name] = statistics::count_users(1,$code,$_GET['count_invisible_courses']);

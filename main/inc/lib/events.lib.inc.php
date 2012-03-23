@@ -567,14 +567,15 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
             $event_value = serialize($event_value);
         }
     }
-	$event_value        = Database::escape_string($event_value);
-	$datetime           = Database::escape_string($datetime);
+	$event_value        = Database::escape_string($event_value);	
 	$user_id            = Database::escape_string($user_id);
 	$course_code        = Database::escape_string($course_code);
     
-	if(!isset($datetime)) {
+	if (!isset($datetime)) {
 		$datetime = api_get_utc_datetime();
 	}
+    $datetime           = Database::escape_string($datetime);
+    
 	if(!isset($user_id)) {
 		$user_id = 0;
 	}

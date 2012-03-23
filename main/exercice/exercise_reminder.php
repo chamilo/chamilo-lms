@@ -207,12 +207,12 @@ foreach ($question_list as $questionId) {
 	    $attributes['checked'] = 1;
 	}
 	$label_attributes = array();
-	$label_attributes['class'] = '';
+	$label_attributes['class'] = 'checkbox';
 	$label_attributes['for'] = $check_id;
 	
 	//Check if the question doesn't have an answer
 	if (!in_array($questionId, $exercise_result)) {
-	    $label_attributes['class'] = "question_no_answer";
+	    $label_attributes['class'] = "checkbox question_no_answer";
 	}
 	
 	$checkbox          = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
@@ -225,20 +225,19 @@ foreach ($question_list as $questionId) {
 	} else {
 	    $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
 	}
-	$question_title    = Display::tag('label', $question_title, $label_attributes);	
-	$table            .= Display::div($checkbox.$question_title, array('class'=>'exercise_reminder_item'));		
+	$question_title    = Display::tag('label', $checkbox.$question_title, $label_attributes);	
+	$table            .= Display::div($question_title, array('class'=>'exercise_reminder_item'));		
 } // end foreach() block that loops over all questions
 
 
-echo Display::div($table, array('class'=>'exercise_reminder_container'));
+echo Display::div($table, array('class'=>'span10'));
 
-$exercise_actions = Display::url(get_lang('ValidateAnswers'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'a_button green'));
-$exercise_actions .=  Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'a_button white medium '));
+$exercise_actions = Display::url(get_lang('ValidateAnswers'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-success'));
+$exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn'));
 
 echo Display::div('', array('class'=>'clear'));
 
-
-echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
+echo Display::div($exercise_actions, array('class'=>'form-actions'));
 
 
 if ($origin != 'learnpath') {

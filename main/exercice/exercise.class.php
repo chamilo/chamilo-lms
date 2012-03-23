@@ -1570,65 +1570,50 @@ class Exercise {
 		$all_button = '';
 	
 		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {			
-			$html .='<script>
-	            $(function() {
-	                $(".button").button();
-	            });
-	            </script>';	
 			$html .='<a href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
 			$html .= get_lang('ValidateAnswer').'</a>';
-			$html .='<br />';
-			 
+			$html .='<br />';			 
 		} else {
 			//User
 			if (api_is_allowed_to_session_edit()) {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
 					if ($this->review_answers) {
 						$label = get_lang('ReviewQuestions');
-						$class = 'a_button blue medium';
+						$class = 'btn btn-primary';
 					} else {
 						$label = get_lang('ValidateAnswers');
-						$class = 'a_button green';
+						$class = 'btn btn-sucess';
 					}
 				} else {
 					$label = get_lang('NextQuestion');
-					$class = 'a_button blue medium';
+					$class = 'btn btn-primary';
 				}
 				if ($this->type == ONE_PER_PAGE) {	
 
 					if ($questionNum != 1) {
 						$prev_question = $questionNum - 2;
-						$all_button .= '<a href="javascript://" class="a_button white medium" onclick="previous_question('.$prev_question.'); ">'.get_lang('PreviousQuestion').'</a>';
+						$all_button .= '<a href="javascript://" class="btn" onclick="previous_question('.$prev_question.'); ">'.get_lang('PreviousQuestion').'</a>';
 					}
 					
 					//Next question
-					$all_button .= '<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
-					
-					//$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+					$all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';					
 					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
-					
-					
 					$html .= $all_button;
 				} else {					
 					if ($this->review_answers) {
 						$all_label = get_lang('ReviewQuestions');
-						$class = 'a_button blue medium';
+						$class = 'btn btn-primary';
 					} else {
 						$all_label = get_lang('ValidateAnswers');
-						$class = 'a_button green';
+						$class = 'btn btn-sucess';
 					}
-					$all_button = '<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
-					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
-					
+					$all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
+					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';					
 					$html .= $all_button;
-				}
-	
+				}	
 			}
 		}		
-		
-		$html =  Display::span($html, array('class'=>'exercise_button'));
-		return $html;
-		
+		return $html;		
 	}
 
 	/**

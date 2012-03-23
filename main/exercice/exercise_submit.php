@@ -1012,17 +1012,14 @@ if (!empty($error)) {
 	        if ($objExercise->type == ALL_ON_ONE_PAGE) {
 	            $button  = '<a href="javascript://" class="a_button orange medium" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
 	            $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
-	            $exercise_actions  .= Display::span($button, array('class'=>'exercise_save_now_button'));                			      
+	            $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));                			      
 			}
 					
-			if ($objExercise->review_answers) {
-				$remind_question_div  = Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes);
-				$remind_question_div .= Display::tag('label', get_lang('ReviewQuestionLater'), array('for' =>'remind_list['.$questionId.']'));
-				$exercise_actions    .= Display::span($remind_question_div, array('class'=>'exercise_save_now_button'));		
-			}
-			
-			echo Display::div($exercise_actions, array('class'=>'exercise_actions'));		
-		
+			if ($objExercise->review_answers) {				
+				$remind_question_div .= Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
+				$exercise_actions    .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));		                
+			}			
+			echo Display::div($exercise_actions, array('class'=>'form-actions'));		
 		echo '</div>';			    
 		    
         $i++;

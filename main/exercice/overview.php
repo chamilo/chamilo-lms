@@ -93,7 +93,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
 }
 
-$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'a_button blue bigger round'));
+$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'btn btn-primary btn-large'));
 
 $visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, null, false);
         

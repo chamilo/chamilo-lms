@@ -2662,12 +2662,8 @@ div.admin_section h4 {
 
 .question_no_answer {
     background-color: #FFF7C0;
-    padding: 5px 0px 5px 0px;
-    margin: 5px 0px 5px 0px;
-}
-
-.exercise_reminder_container {
-    
+   /* padding: 5px 0px 5px 0px; */
+    margin: 10px 0px 5px 0px;
 }
 
 .question_answer {
@@ -2687,26 +2683,16 @@ div.admin_section h4 {
     width: 88%;
 }
 
-.exercise_actions {
-    background: #f5f5f5;
-    margin-top: 18px;
-    margin-bottom: 18px;
-    padding: 17px 20px 18px 50px;
-    border-top: 1px solid #ddd;
-    -webkit-border-radius: 0 0 3px 3px;
-    -moz-border-radius: 0 0 3px 3px;
-    border-radius: 0 0 3px 3px;
-}
-
 .exercise_save_now_button img {
    position: relative;
-    top: 4px;
+   top: 4px;
 }
-.exercise_actions a,   .exercise_actions div  {
-    margin-right:10px;
+
+.exercise_save_now_button {
+    margin-top:10px;
 }
 .exercise_save_now_button, .exercise_button{
-    /* padding:10px; */
+    /* padding:5px; */
 }
 
 .red_alert {
@@ -2714,7 +2700,6 @@ div.admin_section h4 {
     font-weight: bold;
     color:red;
 }
-
 
 #question_feedback {
     -webkit-border-radius: 10px;

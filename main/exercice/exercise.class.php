@@ -3355,7 +3355,7 @@ class Exercise {
 		
 		//2. If the exercise is not active 
 		if ($this->active == 0) {
-			return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotAvailable'), 'warning', false));            
+			return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));            
 		}        
 		
 		//3. We check if the time limits are on

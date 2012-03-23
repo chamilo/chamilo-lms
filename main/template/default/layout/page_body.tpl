@@ -18,9 +18,3 @@
         {$message}
     </section>
 {/if}
-
-{* Main content*}
-<section id="main_content">
-    {$content}
-    &nbsp;
-</section>

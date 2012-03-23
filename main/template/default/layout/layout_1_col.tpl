@@ -7,7 +7,7 @@
 {/block}
 {* 1 column *}
 {block name=body}
-    {* Content top *}
+    {* Plugin top *}
 
     {if !empty($plugin_content_top)}         
         <div id="plugin_content_top" class="span12">
@@ -15,11 +15,15 @@
         </div>
     {/if}
     
-    <div class="span12">        
-        {include file="default/layout/page_body.tpl"}    
-    </div>
     
-    {* Content bottom *}
+    <div class="span12">        
+        <section id="main_content">
+            {include file="default/layout/page_body.tpl"}
+            {$content}
+        </section>
+    </div>    
+    
+    {* Plugin bottom *}
 
     {if !empty($plugin_content_bottom)}               
         <div id="plugin_content_bottom" class="span12">

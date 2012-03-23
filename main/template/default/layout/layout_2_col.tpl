@@ -13,10 +13,10 @@
 	{if $show_sniff == 1 }
 	 	{include file="default/layout/sniff.tpl"}
 	{/if}
-    	
-	<div class="span9">		
-        {* Content bottom *}
-
+   
+	<div class="span9">
+        
+        {* Plugin bottom *}
         {if !empty($plugin_content_top)}         
             <div id="plugin_content_top">
                 {$plugin_content_top}
@@ -32,8 +32,11 @@
 		
 		{* ?? *}
 		{$sniff_notification}
-		
-        {include file="default/layout/page_body.tpl"}	
+        
+		<section id="main_content">
+        {include file="default/layout/page_body.tpl"}	        
+        {$content}
+        </section>
 		
 		{* Announcements *}
         {if !empty($announcements_page_block)}

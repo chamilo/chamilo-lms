@@ -122,8 +122,7 @@ $(document).ready(function() {
                 'marginLeft':'50px'
             },200);
         }
-    );
-    
+    );    
     /*
     $(".td_actions").hide();    
     

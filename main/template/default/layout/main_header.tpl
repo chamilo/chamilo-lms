@@ -85,6 +85,7 @@
 
         {* breadcrumb *}
         {$breadcrumb}
+        
         <div class="row">
             {if !empty($show_course_shortcut) }
                 <div class="span12">

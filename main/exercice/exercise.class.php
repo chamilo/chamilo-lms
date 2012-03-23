@@ -853,16 +853,13 @@ class Exercise {
 		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
 		//$form->applyFilter('exerciseTitle','html_filter');
 
-		$form->addElement('html','<div class="row">
-		<div class="label"></div>
-		<div class="formw" style="height:50px">
+		$form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()"> 
 				<span id="media_icon">
 					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
 					</span>
-			</a>
-		</div>
-		</div>');
+			</a>		
+		');
 
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($type)){
@@ -873,13 +870,8 @@ class Exercise {
 		$form->add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
 		$form->addElement ('html','</div>');
 
-		$form->addElement('html','<div class="row">
-			<div class="label">&nbsp;</div>
-			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
-				<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div></span></a>
-			</div>
-			</div>');
+		$form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
+                            <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div></span></a>');
 
 		// Random questions
 		// style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
@@ -1008,20 +1000,22 @@ class Exercise {
 			$form->addElement('checkbox', 'activate_start_date_check',null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 				
 			$var = Exercise::selectTimeLimit();
+            
 			if (($this->start_time!='0000-00-00 00:00:00'))
-			$form->addElement('html','<div id="start_date_div" style="display:block;">');
+                $form->addElement('html','<div id="start_date_div" style="display:block;">');
 			else
-			$form->addElement('html','<div id="start_date_div" style="display:none;">');
+                $form->addElement('html','<div id="start_date_div" style="display:none;">');
 
 			$form->addElement('datepicker', 'start_time', '', array('form_name'=>'exercise_admin'), 5);
 
 			$form->addElement('html','</div>');
 
 			$form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
+            
 			if (($this->end_time!='0000-00-00 00:00:00'))
-			$form->addElement('html','<div id="end_date_div" style="display:block;">');
+                $form->addElement('html','<div id="end_date_div" style="display:block;">');
 			else
-			$form->addElement('html','<div id="end_date_div" style="display:none;">');
+                $form->addElement('html','<div id="end_date_div" style="display:none;">');
 
 			$form->addElement('datepicker', 'end_time', '', array('form_name'=>'exercise_admin'), 5);
 			$form->addElement('html','</div>');
@@ -1035,20 +1029,20 @@ class Exercise {
 			$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
 			//Timer control
-			$time_hours_option = range(0,12);
-			$time_minutes_option = range(0,59);
+			//$time_hours_option = range(0,12);
+			//$time_minutes_option = range(0,59);
 			$form->addElement('checkbox', 'enabletimercontrol', null, get_lang('EnableTimerControl'), array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
 			$expired_date = (int)$this->selectExpiredTime();
 
-			if(($expired_date!='0')) {
-				
-				$form->addElement('html','<div id="timercontrol" style="display:block;">');
+			if (($expired_date!='0')) {				
+                $form->addElement('html','<div id="timercontrol" style="display:block;">');
 			} else {
 				$form->addElement('html','<div id="timercontrol" style="display:none;">');
 			}
-
 			$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
-			
+            
+            //$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
+            
 
 			$form->addElement('html','</div>');
 			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));

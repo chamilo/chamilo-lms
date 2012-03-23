@@ -124,9 +124,10 @@ $form->applyFilter('official_code', 'trim');
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
+
 if (api_get_setting('login_is_email') == 'true') { 
-  $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-  $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
+    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
 // OpenID
@@ -147,17 +148,16 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 if (api_get_setting('login_is_email') == 'true') {
-  $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
-  $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-  $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-  $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-  $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+    $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
-if (count($extAuthSource) > 0)
-{
+if (count($extAuthSource) > 0) {
 	$group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
 	$auth_sources = array();
 	foreach($extAuthSource as $key => $info) {
@@ -315,6 +315,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation')
 // Set default values
 $user_data['reset_password'] = 0;
 $expiration_date = $user_data['expiration_date'];
+
 if ($expiration_date == '0000-00-00 00:00:00') {
 	$user_data['radio_expiration_date'] = 0;
 	$user_data['expiration_date'] = array();
@@ -346,8 +347,7 @@ if ( $form->validate()) {
 		$picture_uri = $user_data['picture_uri'];
 		if ($user['delete_picture']) {
 			$picture_uri = UserManager::delete_user_picture($user_id);
-			}
-		elseif (!empty($picture['name'])) {
+		} elseif (!empty($picture['name'])) {
 			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 		}
 
@@ -373,22 +373,19 @@ if ( $form->validate()) {
 		if ($reset_password == 0) {
 			$password = null;
 			$auth_source = $user_data['auth_source'];
-		}
-		elseif($reset_password == 1) {
+		} elseif($reset_password == 1) {
 			$password = api_generate_password();
 			$auth_source = PLATFORM_AUTH_SOURCE;
-		}
-		elseif($reset_password == 2) {
+		} elseif($reset_password == 2) {
 			$password = $user['password'];
 			$auth_source = PLATFORM_AUTH_SOURCE;
-		}
-		elseif($reset_password == 3) {
+		} elseif($reset_password == 3) {
 			$password = $user['password'];
 			$auth_source = $user['auth_source'];
 		}
-    if (api_get_setting('login_is_email') == 'true') { 
-      $username = $email;
-    }
+        if (api_get_setting('login_is_email') == 'true') { 
+            $username = $email;
+        }
 		UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
 		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
 			$up = UserManager::update_openid($user_id,$user['openid']);

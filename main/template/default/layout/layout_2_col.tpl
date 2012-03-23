@@ -42,7 +42,7 @@
         {/if}
 		
 		{* Announcements *}
-        {if !empty($announcements_page_block)}
+        {if !empty($announcements_block)}
             <section id="announcements_page">
             {$announcements_block}
             </section>

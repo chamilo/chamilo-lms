@@ -418,6 +418,13 @@ function return_menu() {
             } else {
                 $user_info = api_get_user_info(api_get_user_id());                
             }            
+            $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id();
+            
+            $message_link  = null;
+            if (api_get_setting('allow_message_tool') == 'true') {
+                $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
+            }
+            
             //start user section line with name, my course, my profile, scorm info, etc            
             $menu .= '<ul class="nav nav-pills pull-right">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
@@ -425,15 +432,18 @@ function return_menu() {
                 
                 //$header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
                 //$menu .= '<li><a href=""><img src="'.$user_info['avatar_small'].'"/></a></li>';
+            
+                //<a href="'.$logout_link.'">'.get_lang('Logout').'</a>
                 $menu .= '<li class="dropdown">';                
                 $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="'.$user_info['avatar_small'].'"/> '.$user_info['complete_name'].'<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                    <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>
-                                    <a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'">'.get_lang('Logout').'</a>
+                                        <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>
+                                        '.$message_link.'                                        
                                     </li>
                                 </ul>';
                 $menu .= '</li>';
+                $menu .= '<li><a class="close" title="'.get_lang('Logout').'" href="'.$logout_link.'">&times;</a></li>'; 
             $menu .= '</ul>';    
         }      
         

@@ -1154,39 +1154,10 @@ button.next.disabled, .a_button.disabled {
     border:1pt solid #ccc;
 }
 
-#categories-content-first {
-    width:290px;
-    float:left;
-}
-
 #categories-search {
     text-align:center;
     /*height:55px; */
     float: left;
-}
-
-#categories-list {
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-    -webkit-border-top-left-radius: 8px;
-    -webkit-border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    -moz-box-shadow:0 -1px 10px 2px #CCCCCC;
-    -Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
-    box-shadow: 0 -1px 10px 2px #CCCCCC;
-    border:1px solid #CCCCCC;
-    float:left;
-    margin:8px;
-    width:240px;
-    min-height:132px;
-    padding:18px;
-    font-size:11pt;
-}
-
-#categories-content-second {
-    margin-left: 308px;    
-    margin-top:5px;
 }
 
 .course-block-main-item {    
@@ -1194,86 +1165,10 @@ button.next.disabled, .a_button.disabled {
     padding: 5px 0px;    
 }
 
-.categories-block-course {
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-    -webkit-border-top-left-radius: 8px;
-    -webkit-border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    -moz-box-shadow:0 -1px 10px 2px #CCCCCC;
-    -Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
-    box-shadow: 0 -1px 10px 2px #CCCCCC;
-    border:1px solid #CCCCCC;
-    float:left;
-    margin:10px 0px 10px 0px;
-    padding:12px;
-    width:95%;    
-    color: #bbb; 
-}
-
-.categories-content-course {
-    float:left;
-    width:100%;
-}
-
-.categories-course-picture {
-    width:95px;
-    height:95px;
-    float:left;
-    overflow:hidden;
-    
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    
-    box-shadow:0 -1px 5px 2px #CCCCCC;
-    -moz-box-shadow:0 -1px 5px 2px #CCCCCC;
-    -Webkit-box-shadow: 0 -1px 5px 2px  #CCCCCC;
-    box-shadow: 0 -1px 5px 2px #CCCCCC;
-    margin-left: 8px;
-}
-
-.categories-course-picture img {    
-    height: 95px;       
-    background-color: #eeeeee;
-}
-
 .categories-course-description {
-    margin-left:18px;
-    font-family:arial;
-    font-size:11px;
-    margin-bottom: 10px;
-	float:left;
+    padding-bottom: 10px;
 }
 
-.categories-course-links div {
-	padding-left:10px;
-}
-
-.categories-course-description .course-block-title {
-    font-family: arial;
-    font-size: medium;
-    margin-bottom: 10px;
-    color: #222222;
-}
-
-.categories-course-description .course-block-teacher {
-    font-size: large;
-    font-style: italic;
-    text-align: right;
-    color: #444444;    
-    float: right;
-    text-align: right;
-    width: 197px;    
-}
-.categories-course-description .course-block-date {
-    font-size: large;
-    font-style: italic;
-    text-align: right;
-    color: #444444;
-    line-height: 10px;
-}
 .course-block-popularity {
     width: 90px;
     float: right;
@@ -1282,8 +1177,7 @@ button.next.disabled, .a_button.disabled {
     text-align: right;
     background-color: #eeeeee;
     min-height:95px;
-    padding-right: 5px;
-    
+    padding-right: 5px;    
     -moz-border-radius-topleft:4px;
     -moz-border-radius-topright:4px;
     -webkit-border-top-left-radius: 4px;    
@@ -1302,18 +1196,6 @@ button.next.disabled, .a_button.disabled {
     color: #000000;
     padding-top: 10px;
     text-shadow: gray 3px 3px 2px;
-}
-
-.categories-course-links {
-    float:left;
-    margin-top:15px;
-    height:26px;
-    padding:2px;
-    width:100%;
-}
-
-.course-link-desc {    
-    float:left;
 }
 
 /* THEMATIC ADVANCE */

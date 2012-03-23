@@ -30,41 +30,37 @@
             </div>
         {foreach $hot_courses as $hot_course}										
             <div class="span9">
-                <div class="categories-block-course ">            
-                <div class="categories-content-course">
-
-                    <div class="categories-course-picture">
-                        <img src="{$hot_course.extra_info.course_image}" />
-                        {* html_image file=$hot_course.extra_info.course_image *}
-                    </div>
-
-                    <div class="categories-course-description">
-                        <div class="course-block-title">{$hot_course.extra_info.name|truncate:60}</div>							
-                        {$hot_course.extra_info.rating_html}					
-                    </div>			
-                </div>
-
-                <div class="categories-course-links">                    
-                    {* World *}
-                    {if ($hot_course.extra_info.visibility == 3 OR ($hot_course.extra_info.visibility == 2 AND $_u.logged == 1 ))}
-                        <div class="course-link-desc right">
-                            <a class="btn btn-primary" title="" href="{$_p.web_course}{$hot_course.extra_info.path}/index.php">
-                                {"GoToCourse"|get_lang}
-                            </a>
+                <div class="well_border">               
+                    <div class="row">
+                        <div class="span2">                    
+                            <div class="thumbnail">
+                                <img src="{$hot_course.extra_info.course_image}" />
+                                {* html_image file=$hot_course.extra_info.course_image *}
+                            </div>		
                         </div>
-                    {/if}
-                    
-                    {* Description *}
-                    <div class="course-link-desc right">
-                    {if ($hot_course.extra_info.visibility == 3)} 
-                        <a class="ajax btn" title="" href="{$_p.web_ajax}course_home.ajax.php?a=show_course_information&code={$hot_course.course_code}">
-                            {"Description"|get_lang}
-                        </a>
-                    {/if}								
-                    </div>
 
-              			
-                </div>
+                        <div class="span6">
+                            <div class="categories-course-description">
+                                <h3>{$hot_course.extra_info.name|truncate:60}</h3>
+                                {$hot_course.extra_info.rating_html}					
+                            </div>	
+                            <p>
+                            {* World *}
+                            {if ($hot_course.extra_info.visibility == 3 OR ($hot_course.extra_info.visibility == 2 AND $_u.logged == 1 ))}
+                                <a class="btn btn-primary" title="" href="{$_p.web_course}{$hot_course.extra_info.path}/index.php">
+                                    {"GoToCourse"|get_lang}
+                                </a>
+                            {/if}
+
+                            {* Description *}
+                            {if ($hot_course.extra_info.visibility == 3)} 
+                                <a class="ajax btn" title="" href="{$_p.web_ajax}course_home.ajax.php?a=show_course_information&code={$hot_course.course_code}">
+                                    {"Description"|get_lang}
+                                </a>
+                            {/if}								
+                            </p>              			
+                        </div>
+                    </div>
                 </div>
             </div>            
         {/foreach}

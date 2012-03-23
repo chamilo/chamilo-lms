@@ -91,6 +91,7 @@ class CoursesController { // extends Controller {
             }            
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
         }
+        
         $data['browse_course_categories'] = $browse_course_categories;
         $data['code'] = Security::remove_XSS($category_code);
 
@@ -105,6 +106,7 @@ class CoursesController { // extends Controller {
                 $user_coursecodes[] = $value['code'];
             }
         }
+        
         $data['user_coursecodes'] = $user_coursecodes;
         $data['action']           = $action;
         $data['message']          = $message;

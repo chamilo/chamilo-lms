@@ -520,23 +520,23 @@ class Auth
     */
     public function search_courses($search_term) {
             $TABLECOURS                 = Database::get_main_table(TABLE_MAIN_COURSE);
-            $TABLE_COURSE_FIELD 	= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+            $TABLE_COURSE_FIELD         = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
             $TABLE_COURSE_FIELD_VALUE	= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
             // get course list auto-register
-            $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                            " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+            $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id 
+                    WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
             $special_course_result = Database::query($sql);
-            if(Database::num_rows($special_course_result)>0) {
-                    $special_course_list = array();
-                    while ($result_row = Database::fetch_array($special_course_result)) {
-                            $special_course_list[] = '"'.$result_row['course_code'].'"';
-                    }
+            if (Database::num_rows($special_course_result)>0) {
+                $special_course_list = array();
+                while ($result_row = Database::fetch_array($special_course_result)) {
+                        $special_course_list[] = '"'.$result_row['course_code'].'"';
+                }
             }
             $without_special_courses = '';
             if (!empty($special_course_list)) {
-                    $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+                $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
             }
 
             $search_term_safe = Database::escape_string($search_term);
@@ -553,27 +553,26 @@ class Auth
                     }
             }
             $result_find = Database::query($sql_find);
+            $courses = array();
             while ($row = Database::fetch_array($result_find)) {
-
-
                 $row['registration_code'] = !empty($row['registration_code']);
                 $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
                 $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time()-(30*86400)));
                 $courses[] = array(
-                                    'code' => $row['code'],
-                                    'directory' => $row['directory'],
-                                    'db' => $row['db_name'],
-                                    'visual_code' => $row['visual_code'],
-                                    'title' => $row['title'],
-                                    'tutor' => $row['tutor_name'],
-                                    'subscribe' => $row['subscribe'],
-                                    'unsubscribe' => $row['unsubscribe'],
+                                    'code'              => $row['code'],
+                                    'directory'         => $row['directory'],
+                                    'db'                => $row['db_name'],
+                                    'visual_code'       => $row['visual_code'],
+                                    'title'             => $row['title'],
+                                    'tutor'             => $row['tutor_name'],
+                                    'subscribe'         => $row['subscribe'],
+                                    'unsubscribe'       => $row['unsubscribe'],
                                     'registration_code' => $row['registration_code'],
-                                    'creation_date' => $row['creation_date'],
-                                    'count_users' => $count_users,
+                                    'creation_date'     => $row['creation_date'],
+                                    'visibility'        => $row['visibility'],
+                                    'count_users'       => $count_users,
                                     'count_connections' => $count_connections_last_month
                                   );
-                   // $courses[] = array('code' => $row['code'], 'directory' => $row['directory'], 'db' => $row['db_name'], 'visual_code' => $row['visual_code'], 'title' => $row['title'], 'tutor' => $row['tutor_name'], 'subscribe' => $row['subscribe'], 'unsubscribe' => $row['unsubscribe']);
             }
             return $courses;
     }

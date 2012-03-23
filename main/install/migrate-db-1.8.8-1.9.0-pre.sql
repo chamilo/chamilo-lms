@@ -164,6 +164,7 @@ ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
 
 --User chat status
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'user_chat_status','User chat status', 0, 0);
+UPDATE settings_current SET selected_value = 'true' WHERE variable = 'more_buttons_maximized_mode';
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.17051' WHERE variable = 'chamilo_database_version';

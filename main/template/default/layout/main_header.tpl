@@ -41,7 +41,7 @@
                     {/if}
                 </div>
                 
-                <div id="header_center" class="span4">                
+                <div id="header_center" class="span3">                
                     {* plugin_header *}        
                     {if !empty($plugin_header_center)}
                         <div id="plugin_header_center">
@@ -50,7 +50,7 @@
                     {/if}
                     &nbsp;
                 </div>                                
-                <div id="header_right" class="span4">   
+                <div id="header_right" class="span5">   
                      {* header right (notifications) *}    
                     <ul id="notifications" class="nav nav-pills pull-right">        
                         {$notification_menu}

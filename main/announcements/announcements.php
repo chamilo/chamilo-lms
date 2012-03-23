@@ -47,17 +47,11 @@ $maximum 	= '12';
 $length 	= '36';
 
 // Database Table Definitions
-$tbl_course_user   		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_user          		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
-$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
 
 /*	Libraries	*/
 
@@ -68,7 +62,6 @@ require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
 require_once 'announcements.inc.php';
-
 
 $course_id = api_get_course_int_id();
 
@@ -237,9 +230,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 AnnouncementManager::delete_announcement_attachment_file($id);
             }
         }
-    }    
-    
-	
+    }
   
 	/*
 		Delete all announcements
@@ -372,11 +363,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($ctok == $_POST['sec_token']) {
 				$file_comment = $_POST['file_comment'];
 				$file = $_FILES['user_upload'];
-				$edit_id = AnnouncementManager::edit_announcement($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
-				/*
-				if (!$delete) {
-				    update_added_resources("Ad_Valvas", $id);
-				}*/
+				AnnouncementManager::edit_announcement($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
+                
+                /*		MAIL FUNCTION	*/
+                if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {                    
+                    AnnouncementManager::send_email($id);				  	
+                }				
 				$message = get_lang('AnnouncementModified');
 			}
 		} else {
@@ -397,121 +389,13 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					}
 				    //store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
-				    $message = get_lang('AnnouncementAdded');
-				
+				    $message = get_lang('AnnouncementAdded');				
 
-				/*		MAIL FUNCTION	*/
-
-				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-
-				  	$sent_to	= AnnouncementManager::sent_to("announcement", $insert_id);
-				    $userlist   = $sent_to['users'];
-				    $grouplist  = $sent_to['groups'];
-
-			        // groepen omzetten in users
-			        if ($grouplist) {
-						$grouplist = "'".implode("', '",$grouplist)."'";	//protect individual elements with surrounding quotes
-						$sql = "SELECT user_id
-								FROM $tbl_groupUser gu
-								WHERE c_id = $course_id AND gu.group_id IN (".$grouplist.")";
-						$groupMemberResult = Database::query($sql);
-						if ($groupMemberResult) {
-							while ($u = Database::fetch_array($groupMemberResult)) {
-								$userlist [] = $u ['user_id']; // complete the user id list ...
-							}
-						}
-					}
-
-				    if (is_array($userlist)) {
-				    	$userlist = "'".implode("', '", array_unique($userlist) )."'";
-
-				    	// send to the created 'userlist'
-					    $sqlmail = "SELECT user_id, lastname, firstname, email
-									FROM $tbl_user
-						       		WHERE active = 1 AND user_id IN (".$userlist.")";
-				    } else if (empty($_POST['not_selected_form'])) {
-			    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false') {
-				    		// send to everybody
-				    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-					                    FROM $tbl_course_user, $tbl_user
-					                    WHERE  active = 1 AND 
-					                           course_code='".Database::escape_string($_course['sysCode'])."' AND
-					                           course_rel_user.user_id = user.user_id AND 
-					                           relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
-			    		} else {
-			    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-					                    FROM $tbl_user INNER JOIN $tbl_session_course_user
-										ON $tbl_user.user_id = $tbl_session_course_user.id_user AND
-										active = 1 AND
-										$tbl_session_course_user.course_code = '".$_course['id']."' AND
-										$tbl_session_course_user.id_session = ".api_get_session_id();
-			    		}
-			    	}
-					if ($sqlmail != '') {
-						$rs_mail = Database::query($sqlmail);
-
-				    	/*	Send email one by one to avoid antispam */
-
-						$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
-						while ($myrow = Database::fetch_array($rs_mail)) {
-
-							$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
-
-                            // intro of the email: receiver name and subject
-                            $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
-
-	                        // Main part of the email
-	                        $mail_body .= trim(stripslashes(AnnouncementManager::parse_content($newContent, api_get_course_id())));
-                            // Signature of email: sender name and course URL after -- line
-	                        $mail_body .= "<br />-- <br />";
-	                        $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
-	                        $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()."\">";
-	                        $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
-
-                            $recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-                            $mailid = $myrow["email"];
-                            $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-                            $sender_email = $_SESSION['_user']['mail'];
-
-                            // send attachment file
-                            $data_file = array();
-                            $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE c_id = '.$course_id.' AND announcement_id = "'.$insert_id.'"';
-                            $rs_attach = Database::query($sql);
-                            if (Database::num_rows($rs_attach) > 0) {
-                            	$row_attach  = Database::fetch_array($rs_attach);
-                            	$path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
-                            	$filename_attach = $row_attach['filename'];
-                            	$data_file = array('path' => $path_attach,'filename' => $filename_attach);
-                            }
-                            @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
-                            
-                            //@todo who uses the $table_reminder??
-                            
-                            /*
-							if ($_REQUEST['reminder']=="1") {
-								$time=getdate();
-								$time = $time['yday'];
-								$time = $time+7;
-								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								Database::query($sql);
-							} else if ($_REQUEST['reminder']=="2") {
-								$time=getdate();
-								$time = $time['yday'];
-								$time = $time+14;
-								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								Database::query($sql);
-							} else if ($_REQUEST['reminder']=="3") {
-								$time=getdate();
-								$time = $time['yday'];
-								$time = $time+30;
-								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								Database::query($sql);
-							}*/
-						}
-						AnnouncementManager::update_mail_sent($insert_id);
-						$message = $added_and_sent;
-					}
-				} // $email_ann*/
+                    /*		MAIL FUNCTION	*/
+                    if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
+                        AnnouncementManager::send_email($insert_id);				  	
+                    }
+                    
 			} // end condition token
 		}	// isset
 
@@ -715,7 +599,7 @@ if ($display_form) {
 	// DISPLAY ADD ANNOUNCEMENT COMMAND
 	//echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">';
 	$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-	echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
+	echo '<form class="form-horizontal" method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
 	if (empty($_GET['id'])) {
 		$form_name = get_lang('AddAnnouncement');
 	} else {
@@ -724,12 +608,14 @@ if ($display_form) {
 	echo '<legend>'.$form_name.'</legend>';
 
 	//this variable defines if the course administrator can send a message to a specific user / group or not
+    //@todo use formvalidator
+    
 	if (empty($_SESSION['toolgroup'])) {
-		echo '	<div class="row">
-					<div class="label">'.
+		echo '	<div class="control-group">
+					<label class="control-label">'.
 						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
-					</div>
-					<div class="formw">';
+					</label>
+					<div class="controls">';
 		if (isset($_GET['id']) && is_array($to)) {
 			echo '&nbsp;';
 		} elseif (isset($_GET['remind_inactive'])) {
@@ -769,47 +655,41 @@ if ($display_form) {
 					</div>';
 
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ='';
-		if ($announcement_to_modify=='') {
-			($email_ann=='1')?$checked='checked':$checked='';
-            
-			echo '	<div class="row">
-						<div class="label">							
-						</div>
-						<div class="formw">
-						<input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked>
-						<label for="email_ann">'.get_lang('EmailOption').'</label>
-						</div>
-					</div>';
+        		
+        ($email_ann=='1')?$checked='checked':$checked='';            
+        echo '	<div class="control-group">						
+                    <div class="controls">						
+                        <label class="checkbox" for="email_ann">
+                            <input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked> '.get_lang('EmailOption').'</label>
+                    </div>
+                </div>';
 
-		}
+		
 	} else {
-
 		if (!isset($announcement_to_modify) ) {
 			$announcement_to_modify ="";
 		}
-		if ($announcement_to_modify=='') {
+		
 			($email_ann=='1' || !empty($surveyid))?$checked='checked':$checked='';
-			echo '<div class="row">
-				  <div class="label">					
-				  </div>
-				  <div class="formw">
+			echo '<div class="control-group">
+                    <label>							
+						</label>
+				  <div class="controls">
 				  <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
 				  '.get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;
 				  <a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
 			      AnnouncementManager::show_to_form_group($_SESSION['toolgroup']);
-			echo '</div></div>';
-		}
-
+			echo '</div></div>';		
 	}
 
 	// the announcement title
-	echo '	<div class="row">
+	echo '	<div class="control-group">
 				<div id="msg_error" style="display:none;color:red;margin-left:20%"></div>
-				<div class="label">
+				<label class="control-label">
 					<span class="form_required">*</span> '.get_lang('EmailTitle').'
-				</div>
-				<div class="formw">
-					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
+				</label>
+				<div class="controls">
+					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" class="span4">
 				</div>
 			</div>';
 

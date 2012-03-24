@@ -20,7 +20,7 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyFiles'));
 
 $htmlHeadXtra[] = '
@@ -101,8 +101,7 @@ $social_right_content .= '<iframe name="fileManager" id="fileManager" src="'.api
 $social_right_content .= '</div>';
 
 
-
-$tpl = new Template(get_lang('Social'));
+$tpl = new Template();
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);

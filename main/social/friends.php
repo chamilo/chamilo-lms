@@ -82,7 +82,7 @@ function clear_form () {
 	
 </script>';
 
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
 $social_left_content = SocialManager::show_social_menu('friends');	

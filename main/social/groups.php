@@ -117,7 +117,7 @@ jQuery(document).ready(function() {
 </script>';
 
 $allowed_views = array('mygroups','newest','pop');
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork'));
 
 if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	if ($_GET['view'] == 'mygroups') {

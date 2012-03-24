@@ -20,7 +20,7 @@ if (api_get_setting('allow_social_tool') !='true') {
 
 $this_section = SECTION_SOCIAL;
 $tool_name 	  = get_lang('Search');
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 
 $query_vars = array();
 $query  = isset($_GET['q']) ? $_GET['q'] : null;

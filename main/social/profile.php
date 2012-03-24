@@ -186,7 +186,7 @@ if (isset($_GET['shared'])) {
 	$my_link='../social/profile.php';
 	$link_shared='';
 }
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social') );
+$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork') );
 
 if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
 	$info_user =   api_get_user_info($_GET['u']);

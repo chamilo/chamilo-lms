@@ -102,7 +102,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;

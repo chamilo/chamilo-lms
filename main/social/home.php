@@ -162,7 +162,7 @@ $social_right_content .= '<div>
     			}
 $social_right_content .= '</div>';            
             
-$tpl = new Template(get_lang('Social'));
+$tpl = new Template(get_lang('SocialNetwork'));
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);

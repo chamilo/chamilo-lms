@@ -156,14 +156,14 @@ $controller = new IndexManager(get_lang('MyCourses'));
 $courses_and_sessions = $controller->return_courses_and_sessions();
 $controller->tpl->assign('content', $courses_and_sessions);
 
-/*
- * 
-if ($_SESSION['sniff_navigator']!="checked") {
-	$controller->tpl->assign('show_sniff', 					1);
-} else{
-	$controller->tpl->assign('show_sniff', 					0);
+ 
+if (api_get_setting('allow_browser_sniffer') == 'true') {
+	if ($_SESSION['sniff_navigator']!="checked") {
+		$controller->tpl->assign('show_sniff', 	1);
+	} else{
+		$controller->tpl->assign('show_sniff', 	0);
+	}
 }
-*/
 
 
 //check for flash and message

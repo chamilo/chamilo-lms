@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Title = "Título";
 $UsersOnline = "Usuarios en línea";
 $Remove = "Eliminar";
@@ -153,7 +154,7 @@ $UnSelectAll = "deseleccionar todos";
 $WithSelected = "Con lo seleccionado";
 $langOnLine = "En línea";
 $langUsers = "Usuarios";
-$langPlatformAdmin = "Administrador de la plataforma";
+$langPlatformAdmin = "Administración";
 $langNameOfLang['hungarian'] = "húngaro";
 $langNameOfLang['indonesian'] = "indonesio";
 $langNameOfLang['malay'] = "malayo";

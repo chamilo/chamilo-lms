@@ -652,5 +652,5 @@ $NoticeWillBeNotDisplayed = "The notice will be not displayed on the homepage";
 $LetThoseFieldsEmptyToHideTheNotice = "Let those fields empty to hide the notice";
 $Ppt2lpVoiceRecordingNeedsRed5 = "The voice recording feature in the learning path editor relies on a Red5 streaming server. This server's parameters can be configured in the videoconference section on the current page.";
 $PlatformCharsetTitle = "Character set";
-$PlatformCharsetComment = "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default iso-8859-15 should be alright.";
+$PlatformCharsetComment = "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright.";
 ?>

@@ -1529,4 +1529,6 @@ $CoursesDefaultCreationVisibilityComment = "Default course visibility while crea
 $YouHaveEnteredTheCourseXInY = "You have entered the course <b>%s</b> in <b>%s</b>";
 $LoginIsEmailTitle = "Use the email as username";
 $LoginIsEmailComment = "Use the email in order to login to the system";
+$AllowBrowserSnifferTitle = "Activate the browser sniffer";
+$AllowBrowserSnifferComment = "This will enable an investigator of the capabilities that support browsers that connect to Chamilo. Therefore will improve user experience by adapting responses to the type of browser platform that connects, but will slow initial page load of users every time that they enter to the platform.";
 ?>

@@ -144,7 +144,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_de
 INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '1', 'Private');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_browser_sniffer', NULL, 'radio', 'Platform', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_browser_sniffer', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_browser_sniffer', 'false', 'No');
 

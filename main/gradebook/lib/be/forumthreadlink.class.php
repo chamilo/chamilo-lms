@@ -195,7 +195,7 @@ class ForumThreadLink extends AbstractLink
     }
 
     public function get_name() {
-    	$this->get_exercise_data();
+    	$this->get_exercise_data();        
     	$thread_title=isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
     	$thread_title_qualify=isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
     	if ( isset($thread_title_qualify) && $thread_title_qualify!="") {
@@ -237,8 +237,8 @@ class ForumThreadLink extends AbstractLink
 	}
 	private function get_exercise_data() {
 		if (!isset($this->exercise_data)) {
-    		$sql = 'SELECT * FROM '.$this->get_forum_thread_table()." 
-    				WHERE c_id = '.$this->course_id.' AND  thread_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+    		$sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
+                    WHERE c_id = '.$this->course_id.' AND  thread_id = '.$this->get_ref_id().' AND session_id = '.api_get_session_id();
 			$query = Database::query($sql);
 			$this->exercise_data = Database::fetch_array($query);
     	}

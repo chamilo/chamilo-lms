@@ -873,5 +873,5 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 		}
 	}
 }
-echo '<div id="chart3"></div>';
+//echo '<div id="chart3"></div>';
 Display :: display_footer();

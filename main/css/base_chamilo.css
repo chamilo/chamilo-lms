@@ -303,16 +303,6 @@ input.link_alike:hover {
     height:16px;
     padding-right:4%;
 }
-/********************************************************
- *  HEADER 2: Users online, help, student/teacher view  *
- ********************************************************/
-
-#header2 a {
-}
-#header2 a:hover {
-    text-decoration: underline;
-}
-
 #current {
     color:#FFFFFF;
     cursor:pointer;
@@ -2189,6 +2179,11 @@ span.form_required  {
   background-image: linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* W3C */
   border: 1px solid #e5e5e5;
   /* end default subnav background colors */
+}
+
+/* fixing gray border next the logout button */
+.subnav .nav-tabs .open .dropdown-toggle, .subnav .nav-pills .open .dropdown-toggle, .nav > .open.active > a:hover {
+    border-color: transparent;
 }
 
 .subnav .nav {

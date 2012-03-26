@@ -27,11 +27,7 @@
         
     .notification-panel {
         display:none;
-    }
-    
-    #header2 .nav-pills {
-        display:none;
-    }
+    }   
 }
 
 @media (max-width: 767px) {

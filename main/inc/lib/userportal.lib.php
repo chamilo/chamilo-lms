@@ -798,18 +798,16 @@ class IndexManager {
 		}
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
 		
-		$profile_content = '<div id="social_widget">';
-		
-		$profile_content .= '<div id="social_widget_image">';
-		if (api_get_setting('allow_social_tool') == 'true') {
-			if (!$no_image) {
-				$profile_content .='<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+		$profile_content .= '<ul class="menulist">';
+            
+        if (api_get_setting('allow_social_tool') == 'true') {
+            if (!$no_image) {
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a></li>';
 			} else {
-				$profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a></li>';
 			}
-		}        
-		$profile_content .= ' </div></div>';
-        $profile_content .= ' <div class="clear"></div>';
+		}
+        
 		
 		//  @todo Add a platform setting to add the user image.
 		if (api_get_setting('allow_message_tool') == 'true') {
@@ -828,9 +826,8 @@ class IndexManager {
 			$cant_msg  = '';
 			if ($number_of_new_messages > 0) {
 				$cant_msg = ' ('.$number_of_new_messages.')';
-			}            
-			
-			$profile_content .= '<ul class="menulist">';
+			}         
+            
 			$link = '';
 			if (api_get_setting('allow_social_tool') == 'true') {
 				$link = '?f=social';
@@ -846,9 +843,9 @@ class IndexManager {
 				}
 				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
 			}
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
-			$profile_content .= '</ul>';			
+            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';			
 		}
+        $profile_content .= '</ul>';
 		$html = self::show_right_block(get_lang('Profile'), $profile_content);
 		return $html;
 	}

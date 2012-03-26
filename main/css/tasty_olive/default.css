@@ -356,20 +356,7 @@ a:active {
 #my_courses {
 	float: right;
 }
-/********************************************************
- *  HEADER 2: Users online, help, student/teacher view	*
- ********************************************************/
-#header2 {
-	color: #636363;/*border: 1px solid red;*/
-}
-#header2 a {
-	color: #636363;
-	text-decoration: none;
-	font-weight:normal;
-}
-#header2 a:hover {
-	text-decoration: underline;
-}
+
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/

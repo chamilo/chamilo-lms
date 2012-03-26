@@ -2713,21 +2713,23 @@ class CourseManager {
         return self::course_code_exists($wanted_course_code);
     }
     
-    /* Use smarty*/
-    
+    /* Builds the course block 
+     * @todo use smarty
+     */    
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
         $class = "well course_item";
         if ($is_sub_content) {
             $class = "";
         }        
-        $html .= '<div class="row-fluid">';         
+        
             //$html .= '<div class="span9">';         
+               // $html .= '<div class="well">';         
                 $html .= '<div class="'.$class.'">'; 
+                    $html .= '<div class="row">';    
                     $html .= '<div class="span1">'.$params['icon'].'</div>';
-                    $html .= '<div class="span5">';
-                    $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';
-                    
+                    $html .= '<div class="span6">';
+                    $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
                     if (!empty($params['teachers'])) {                    
                         $html .= '<h5>'.$params['teachers'].'</h5>';
                     }                    
@@ -2737,7 +2739,7 @@ class CourseManager {
                     $html .= '</div>';                        
                     $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
                 $html .= '</div>';
-            //$html .= '</div>';
+         //   $html .= '</div>';
         $html .= '</div>';
         return $html;
     }

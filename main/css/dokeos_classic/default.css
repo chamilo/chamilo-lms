@@ -438,7 +438,7 @@ input[text] {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-#header3 {
+.subnav {
 	font-size: 1.0em;
 	padding: 0.8em 0.5em 0em 0.5em;
 	background: #E5EDF9;
@@ -448,7 +448,7 @@ input[text] {
 	margin-bottom: 1px;	
     width:99%;
 }
-#header3 a {
+.subnav a {
 	PADDING-RIGHT: 15px;
 	DISPLAY: block;
 	PADDING-LEFT: 6px;
@@ -460,12 +460,12 @@ input[text] {
 	TEXT-DECORATION: none;
 	border: 0;
 }
-#header3 a:hover {
+.subnav a:hover {
 	COLOR: #333;
 	BACKGROUND:  url(../../img/tab_right_hover.gif) no-repeat right top;
 	border: 0;
 }
-#header3 ul {
+.subnav ul {
 	PADDING-RIGHT: 10px;
 	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
@@ -473,7 +473,7 @@ input[text] {
 	LIST-STYLE-TYPE: none;
 	display: inline;
 }
-#header3 li {
+.subnav li {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	BACKGROUND:  url(../../img/tab_left.gif) no-repeat left top;
@@ -483,7 +483,7 @@ input[text] {
 	PADDING-TOP: 0px;
 	border: 0;/*border-bottom: 1px solid #4171b5;*/
 }
-#header3 li:hover {
+.subnav li:hover {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	BACKGROUND: url(../../img/tab_left_hover.gif) no-repeat left top;
@@ -492,20 +492,20 @@ input[text] {
 	PADDING-TOP: 0px;
 	border: 0;
 }
-#header3 #current {
+.subnav #current {
 	BACKGROUND-IMAGE:  url(../../img/tab_left_active.gif);
 	border-bottom: 1px solid #fff;
 	background-color: transparent;
 }
-#header3 #current a {
+.subnav #current a {
 	BACKGROUND-IMAGE:  url(../../img/tab_right_active.gif);
 	COLOR: #333;
 	background-color: transparent;
 }
-#header3 .banner_links {
+.subnav .banner_links {
 	margin: 0;
 }
-#header3 input.logout {
+.subnav input.logout {
 	/* makes an input appear like a link in this header */
 	margin: 0 0 0 0;
 	padding: 0;
@@ -520,19 +520,19 @@ input[text] {
 	PADDING-RIGHT: 10px;
 	PADDING-TOP: 3px;
 }
-#header3 input:hover {
+.subnav input:hover {
 	COLOR: #333;
 	BACKGROUND:  url(../../img/tab_right_hover.gif) no-repeat right top;
 }
-#header3 input {
+.subnav input {
 	PADDING-RIGHT: 15px;
 	DISPLAY: block;
 	PADDING-LEFT: 6px;
 }
-#header3 #logout {
+.subnav #logout {
 	margin-top: 0px;
 }
-#header3 input.logout:hover {
+.subnav input.logout:hover {
 }
 #logout {
 	display: inline;

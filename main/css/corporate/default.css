@@ -105,7 +105,7 @@ input[type=button], input[type=submit] {
 	color:#333;
 }
 /* header 3 styles */
-#header3 {
+.subnav {
 	background: #fff;
 	border-bottom: 1px solid #aeaeae;
 	color: #333;
@@ -114,7 +114,7 @@ input[type=button], input[type=submit] {
     width:100%;
 }
 
-#header3 UL {
+.subnav UL {
 	PADDING-RIGHT: 2px;
 	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
@@ -122,7 +122,7 @@ input[type=button], input[type=submit] {
 	list-style:none;
 	display: inline;
 }
-#header3 LI {
+.subnav LI {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 2px;
 	FLOAT: left;
@@ -133,7 +133,7 @@ input[type=button], input[type=submit] {
 }
 
 
-#header3 a {
+.subnav a {
 	float:left;
 	background:url(images/tab_left.gif) no-repeat left top;
 	text-decoration:none;
@@ -142,13 +142,13 @@ input[type=button], input[type=submit] {
     padding: 0px 9px 0px 9px;
 	height:25px;
 }
-#header3 li a:hover {
+.subnav li a:hover {
 	float:left;
 	background:url(images/tab_left_hover.gif) no-repeat left top;
 	text-decoration:none;
 	cursor: pointer;
 }
-#header3 li a span {
+.subnav li a span {
 	float:left;
 	display:block;
 	background:url(images/tab_right.gif) no-repeat right top;
@@ -158,28 +158,28 @@ input[type=button], input[type=submit] {
 	padding-top: 5px;
 	height:20px;
 }
-#header3 li a:hover span {
+.subnav li a:hover span {
 	float:left;
 	display:block;
 	background:url(images/tab_right_hover.gif) no-repeat right top;
 	color:#333;
 	cursor: pointer;
 }
-#header3 #current a {
+.subnav #current a {
 	float:left;
 	background:url(images/tab_left_active.gif) no-repeat left top;
 	text-decoration:none;
 }
-#header3 #current a span {
+.subnav #current a span {
 	float:left;
 	display:block;
 	background:url(images/tab_right_active.gif) no-repeat right top;
 }
 
-#header3 #logout {
+.subnav #logout {
 	margin-top: 0px;
 }
-#header3 input.logout:hover {
+.subnav input.logout:hover {
 }
 #logout {
 	display: inline;

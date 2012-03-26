@@ -51,7 +51,7 @@ img {
 #header2 {
 	display: none;
 }
-#header3 {
+.subnav {
 	display: none;
 }
 /* show the way to the printed document (breadcrumbs)*/

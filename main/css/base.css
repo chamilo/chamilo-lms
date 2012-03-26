@@ -51,18 +51,18 @@ legend {
 }
 
 /* menu dropdown fixes */
-#header3 .nav .open > .dropdown-toggle, #header3 .nav .active > .dropdown-toggle, #header3 .nav .open.active > .dropdown-toggle {
+.subnav .nav .open > .dropdown-toggle, .subnav .nav .active > .dropdown-toggle, .subnav .nav .open.active > .dropdown-toggle {
     background-color: transparent;
 }
-#header3 .dropdown-menu li a {
+.subnav .dropdown-menu li a {
     color:#333;
 }
 
-#header3 .dropdown-toggle {
+.subnav .dropdown-toggle {
     height: 15px;
 }
 
-#header3 li a {
+.subnav li a {
     margin:0px;
 }
 

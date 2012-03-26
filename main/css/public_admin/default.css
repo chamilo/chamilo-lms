@@ -407,7 +407,7 @@ a:active {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-#header3 {
+.subnav {
     font-size: 1.0em;
     padding: 4px 0px 4px 0px;
     background: #fff;
@@ -418,7 +418,7 @@ a:active {
     background-image: url(images/fondoHeader3.jpg);	
     width:100%;
 }
-#header3 A {
+.subnav A {
     PADDING-RIGHT: 15px;
     DISPLAY: block;
     PADDING-LEFT: 6px;
@@ -428,17 +428,17 @@ a:active {
     PADDING-TOP: 5px;
     TEXT-DECORATION: none;
 }
-#header3 A:hover {
+.subnav A:hover {
     COLOR: #9ba408;
     background: none;
 }
-#header3 UL {
+.subnav UL {
     PADDING-BOTTOM: 0px;
     MARGIN: 0px;
     LIST-STYLE-TYPE: none;
     display: inline;
 }
-#header3 LI {
+.subnav LI {
     PADDING-RIGHT: 0px;
     PADDING-LEFT: 9px;
     FLOAT: left;
@@ -446,22 +446,22 @@ a:active {
     MARGIN: 0px;
     PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
 }
-#header3 LI:hover {
+.subnav LI:hover {
     PADDING-RIGHT: 0px;
     PADDING-LEFT: 9px;
     PADDING-BOTTOM: 0px;
     MARGIN: 0px;
     PADDING-TOP: 0px
 }
-#header3 #current {
+.subnav #current {
 }
-#header3 #current A {
+.subnav #current A {
     COLOR: #999
 }
-#header3 .banner_links {
+.subnav .banner_links {
     margin: 0;
 }
-#header3 input.logout {
+.subnav input.logout {
     /* makes an input appear like a link in this header */
     margin: 0 0 0 0;
     padding: 0 30px 0 0;
@@ -475,18 +475,18 @@ a:active {
     PADDING-RIGHT: 0px;
     PADDING-TOP: 3px;
 }
-#header3 input:hover {
+.subnav input:hover {
     COLOR: #999;
 }
-#header3 input {
+.subnav input {
     PADDING-RIGHT: 15px;
     DISPLAY: block;
     PADDING-LEFT: 6px;
 }
-#header3 #logout {
+.subnav #logout {
     margin-top: 0px;
 }
-#header3 input.logout:hover {
+.subnav input.logout:hover {
 }
 #logout {
     display: inline;

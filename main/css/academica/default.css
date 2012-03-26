@@ -49,7 +49,7 @@ a:active {
 	font-weight: bold;
 }
 /* header 3 styles */
-#header3 {
+.subnav {
 	border-bottom: 1px solid #aeaeae;	
 	font-weight: bold;
 	margin: 0;
@@ -57,7 +57,7 @@ a:active {
     width:100%;        
 }
 
-#header3 UL {
+.subnav UL {
 	PADDING-RIGHT: 2px;
 	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
@@ -65,7 +65,7 @@ a:active {
 	LIST-STYLE-TYPE: none;
 	display: inline;
 }
-#header3 LI {
+.subnav LI {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	FLOAT: left;
@@ -74,34 +74,34 @@ a:active {
 	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
 	cursor: pointer;
 }
-#header3 a {	
+.subnav a {	
 	float:left;
 	text-decoration:none;
 	cursor: pointer;
 	padding-right: 1px;
 	height:25px;
 }
-#header3 li a:hover {
+.subnav li a:hover {
 	float:left;
 	text-decoration:none;
 	cursor: pointer;
 }
-#header3 li a span {
+.subnav li a span {
 	float:left;
 	cursor: pointer;
 	padding-right: 10px;
 	padding-top: 5px;
 	height:20px;
 }
-#header3 li a:hover span {
+.subnav li a:hover span {
 	float:left;
 	cursor: pointer;
 }
-#header3 #current a {	
+.subnav #current a {	
 	float:left;
 	text-decoration:none;
 }
-#header3 #current a span {
+.subnav #current a span {
 	float:left;
 }
 

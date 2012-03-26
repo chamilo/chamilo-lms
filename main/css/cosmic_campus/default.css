@@ -121,7 +121,7 @@ input[type=button], input[type=submit] {
 	color:#f1d40d;
 }
 /* header 3 styles */
-#header3 {
+.subnav {
 	padding: 0.8em 0.5em 0.4em 0.5em;
 	background: #fff;
 	color: #006;
@@ -131,7 +131,7 @@ input[type=button], input[type=submit] {
 	background-image: url(images/fondoHeader3.jpg);	
     width:100%;
 }
-#header3 a {
+.subnav a {
 	padding: 10px 0px 20px 0px;
 	display: block;
 	width:150px;
@@ -140,11 +140,11 @@ input[type=button], input[type=submit] {
 	color: #fff;
 	text-align:center;
 }
-#header3 a:hover {
+.subnav a:hover {
 	color: #fff;
 	background:  url(images/tabHover.png) no-repeat;
 }
-#header3 ul {
+.subnav ul {
 	padding-right: 75px;
 	padding-left: 10px;
 	padding-bottom: 0px;
@@ -154,7 +154,7 @@ input[type=button], input[type=submit] {
 	width:50px;
 	height:50px;
 }
-#header3 li {
+.subnav li {
 	padding-right: 0px;
 	padding-left: 9px;
 	float: left;
@@ -162,20 +162,20 @@ input[type=button], input[type=submit] {
 	padding-top: 0px;
 	margin: 0px;/*border-bottom: 1px solid #dcdcdc;*/
 }
-#header3 li:hover {
+.subnav li:hover {
 	padding-right: 0px;
 	padding-left: 9px;
 	padding-bottom: 0px;
 	MARGIN: 0px;
 	padding-top: 0px
 }
-#header3 #current {
+.subnav #current {
 }
-#header3 #current a {
+.subnav #current a {
 	color: #666;
 	background:url(images/tabCurrent.png) no-repeat;
 }
-#header3 #logout {
+.subnav #logout {
 	margin-top: 0px;
 	display: inline;
 	float: right;

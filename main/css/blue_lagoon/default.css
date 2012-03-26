@@ -403,7 +403,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-#header3 {
+.subnav {
 	background-image: url(images/tab-repeat.png);
 	background-position: 0px 0px;
 	background-repeat: repeat-x;/*border: 1px solid green;*/
@@ -412,7 +412,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     padding-right:0px; 
     width: 100%;
 }
-#header3 a {
+.subnav a {
 	DISPLAY: block;
 	PADDING-RIGHT: 15px;
 	PADDING-LEFT: 6px;
@@ -420,17 +420,17 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	PADDING-TOP: 10px;
 	float: left;
 }
-#header3 a:hover {
+.subnav a:hover {
 	color: #a8a7a7;
     background: none;
 }
-#header3 ul {	
+.subnav ul {	
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
 	LIST-STYLE-TYPE: none;
 	display: inline;    
 }
-#header3 li {
+.subnav li {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 9px;
 	FLOAT: left;
@@ -439,29 +439,29 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	padding-top: 10px;
 	height: 31px;
 }
-#header3 li#current {
+.subnav li#current {
 	background:  url(images/tab-left.png) no-repeat top left;
 	padding-top: 0px;
 	height: 41px;
 	float: left;
 }
-#header3 #current a {
+.subnav #current a {
 	background:  url(images/tab-right.png) no-repeat top right;
 	height: 31px;
 }
-#header3 .banner_links {
+.subnav .banner_links {
 	margin: 0;
 }
 
-#header3 input {
+.subnav input {
 	padding-right: 15px;
 	display: block;
 	padding-left: 6px;
 }
-#header3 #logout {
+.subnav #logout {
 	margin-top: 0px;
 }
-#header3 input.logout:hover {
+.subnav input.logout:hover {
 }
 #logout {
 	display: inline;

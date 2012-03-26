@@ -428,12 +428,6 @@ function return_menu() {
             //start user section line with name, my course, my profile, scorm info, etc            
             $menu .= '<ul class="nav nav-pills pull-right">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
-                //echo '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" target="_top"><span>'.get_lang('Profile').'</span></a></li>';
-                
-                //$header3 .= '<li><a href="'.api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id().'" target="_top"><span>'.get_lang('Logout').' ('.$login.')</span></a></li>';
-                //$menu .= '<li><a href=""><img src="'.$user_info['avatar_small'].'"/></a></li>';
-            
-                //<a href="'.$logout_link.'">'.get_lang('Logout').'</a>
                 $menu .= '<li class="dropdown">';                
                 $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="'.$user_info['avatar_small'].'"/> '.$user_info['complete_name'].'<b class="caret"></b></a>
                                 <ul class="dropdown-menu">

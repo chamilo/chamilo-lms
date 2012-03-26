@@ -107,7 +107,7 @@
 
 @media (min-width: 768px) and (max-width: 979px) {
     /* fixes tabs */
-    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;
         padding-right: 6px;
     }
@@ -128,7 +128,7 @@
 
 @media (min-width: 980px) and (max-width: 1024px) {
     /* fixes tabs */
-    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;
         padding-right: 6px;
     }

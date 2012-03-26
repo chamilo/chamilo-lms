@@ -65,28 +65,28 @@ a:active {
   border-right-color: #F88017;  
 }
 
-#header3 li a {
+.subnav li a {
     color:#fff;
 }
 
 /* Green hover */
-#header3 li a:hover {
+.subnav li a:hover {
     background: none repeat scroll 0 0 #FFAE67;
     color: #fff;
 }
 /*
 
-#header3 li a {
+.subnav li a {
     background-color: #F88017;    
     color:#fff;
 }
 
-#header3 li a:hover {
+.subnav li a:hover {
     background: none repeat scroll 0 0 #FFAE67;
     color: #FFFFFF;
 }
 
-#header3 #current a {
+.subnav #current a {
     background: none repeat scroll 0 0 #DF7619;        
 }
 */

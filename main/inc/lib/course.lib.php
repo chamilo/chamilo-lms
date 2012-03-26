@@ -1365,7 +1365,7 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code) {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = ',') {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
@@ -1374,7 +1374,7 @@ class CourseManager {
      			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
     		}
     		if (!empty($list)) {
-    			$teacher_string = implode (', ', $list);
+    			$teacher_string = implode($separator.' ', $list);
     		}
     	}
     	return $teacher_string;

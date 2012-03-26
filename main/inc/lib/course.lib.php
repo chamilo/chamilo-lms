@@ -2718,28 +2718,24 @@ class CourseManager {
      */    
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well course_item";
+        $class = "well";
         if ($is_sub_content) {
             $class = "";
-        }        
-        
-            //$html .= '<div class="span9">';         
-               // $html .= '<div class="well">';         
-                $html .= '<div class="'.$class.'">'; 
-                    $html .= '<div class="row">';    
-                    $html .= '<div class="span1">'.$params['icon'].'</div>';
-                    $html .= '<div class="span6">';
-                    $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
-                    if (!empty($params['teachers'])) {                    
-                        $html .= '<h5>'.$params['teachers'].'</h5>';
-                    }                    
-                    if (!empty($params['coaches'])) {                    
-                        $html .= '<h5>'.$params['coaches'].'</h5>';
-                    }    
-                    $html .= '</div>';                        
-                    $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
-                $html .= '</div>';
-         //   $html .= '</div>';
+        }                     
+        $html .= '<div class="'.$class.'">'; 
+            $html .= '<div class="row">';    
+            $html .= '<div class="span1">'.$params['icon'].'</div>';
+            $html .= '<div class="span6">';
+            $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
+            if (!empty($params['teachers'])) {                    
+                $html .= '<h5>'.$params['teachers'].'</h5>';
+            }                    
+            if (!empty($params['coaches'])) {                    
+                $html .= '<h5>'.$params['coaches'].'</h5>';
+            }    
+            $html .= '</div>';                        
+            $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
+        $html .= '</div>';         
         $html .= '</div>';
         return $html;
     }

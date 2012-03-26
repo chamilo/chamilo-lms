@@ -262,6 +262,7 @@ class Database {
      * @todo move this function in a gradebook-related library
      */
     public static function get_course_by_category($category_id) {
+        $category_id = intval($category_id);
         $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
         return $info ? $info['course_code'] : false;
     }

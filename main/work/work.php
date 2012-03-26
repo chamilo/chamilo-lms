@@ -463,9 +463,241 @@ switch ($action) {
             }
         } else {
             Display::display_error_message(get_lang('ActionNotAllowed'));
-        }
-        
+        }        
 		break;		
+        
+    case 'upload':        
+        $check = Security::check_token('post');         
+		if ($student_can_edit_in_session && $check) {
+			
+			//check the token inserted into the form
+			if (isset($_POST['submitWork']) && !empty($is_course_member)) {
+				$authors = api_get_person_name($currentUserFirstName, $currentUserLastName);
+				$url = null;
+				if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {				
+					$updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
+		
+					// Try to add an extension to the file if it has'nt one
+					$new_file_name = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
+		
+					// Replace dangerous characters
+					$new_file_name = replace_dangerous_char($new_file_name, 'strict');
+		
+					// Transform any .php file in .phps fo security
+					$new_file_name = php2phps($new_file_name);
+						
+					$filesize = filesize($_FILES['file']['tmp_name']);
+						
+					if (empty($filesize)) {
+						Display :: display_error_message(get_lang('UplUploadFailedSizeIsZero'));
+						$succeed = false;
+					} elseif (!filter_extension($new_file_name)) {
+						//filter extension
+						Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+						$succeed = false;
+					}
+					if (!$title) {
+						$title = $_FILES['file']['name'];
+					}
+					
+					// Compose a unique file name to avoid any conflict
+					$new_file_name = api_get_unique_id();
+								
+					//if we come from the group tools the groupid will be saved in $work_table
+					@move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
+					$url = 'work'.$curdirpath.'/'.$new_file_name;
+				}
+				
+				if (empty($title)) {
+					$title = get_lang('Untitled');
+				}
+				
+				$active = '1';
+				$sql_add_publication = "INSERT INTO " . $work_table . " SET
+										   c_id 		= $course_id ,
+									       url         	= '" . $url . "',
+									       title       	= '" . Database::escape_string($title) . "',
+						                   description	= '" . Database::escape_string($description) . "',
+						                   author      	= '" . Database::escape_string($authors) . "',
+						                   contains_file = '".intval($_POST['contains_file'])."',  
+										   active		= '" . $active . "',                                           
+										   accepted		= '1',
+										   post_group_id = '".$group_id."',
+										   sent_date	=  '".api_get_utc_datetime()."',
+										   parent_id 	=  '".$work_id."' ,
+                                           session_id	= '".intval($id_session)."' ,
+                                           user_id 		= '".$user_id."'";
+				//var_dump($sql_add_publication);
+				Database::query($sql_add_publication);
+				$id = Database::insert_id();				
+				if ($id) {				
+					api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
+					$succeed = true;
+				}														
+			} elseif ($newWorkUrl) {
+			
+				// SPECIAL CASE ! For a work coming from another area (i.e. groups)
+	
+				$url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
+	
+				if (!$title) {
+					$title = basename($workUrl);
+				}	
+				$sql = "INSERT INTO  " . $work_table . " SET
+									c_id = $course_id,
+									url        	= '" . $url . "',
+						            title       	= '" . Database::escape_string($title) . "',
+						            description 	= '" . Database::escape_string($description) . "',
+						            author      	= '" . Database::escape_string($authors) . "',
+								    post_group_id   = '".$group_id."',
+						            sent_date    	= '".api_get_utc_datetime()."',
+						            session_id 		= '".intval($id_session)."',
+						            user_id 		= '".$user_id."'";
+	
+				Database::query($sql);
+	
+				$insertId = Database::insert_id();
+				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
+				$succeed = true;
+			} elseif (isset($_POST['editWork'])) {
+				
+				/*
+				 * SPECIAL CASE ! For a work edited
+				*/
+					
+				//Get the author ID for that document from the item_property table
+				$is_author 			= false;
+				$item_to_edit_id 	= intval($_POST['item_to_edit']);
+				$item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_to_edit_id);
+					
+				if ($is_allowed_to_edit) {
+					$is_author = true;
+				} else {
+					if ($item_to_edit_data['insert_user_id'] == api_get_user_id()) {
+						$is_author = true;
+					}
+				}
+					
+				if ($is_author) {
+
+					$work_data = get_work_data_by_id($item_to_edit_id);
+					if (!empty($_POST['title']))
+					$title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
+					$description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
+					
+	
+					if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
+						$add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
+						$add_to_update .= ' qualification ='."'".Database::escape_string($_POST['qualification'])."',";
+						$add_to_update .= ' date_of_qualification ='."'".api_get_utc_datetime()."'";
+					}
+	
+					if ((int)$_POST['qualification'] > (int)$_POST['qualification_over']) {
+						Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
+					} else {
+						$sql = "UPDATE  " . $work_table . "
+						        SET	title       = '" . Database::escape_string($title) . "',
+						            description = '" . Database::escape_string($description) . "'
+						            ".$add_to_update."
+						        WHERE c_id = $course_id AND id = $item_to_edit_id";					
+						Database::query($sql);
+					}
+					api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
+					$succeed = true;
+				} else {
+					$error_message = get_lang('IsNotPosibleSaveTheDocument');
+				}
+			}    
+            Security::clear_token();
+		}
+						
+		if (!empty($succeed) && !empty($id)) {
+			//last value is to check this is not "just" an edit
+			//YW Tis part serve to send a e-mail to the tutors when a new file is sent
+			$send = api_get_course_setting('email_alert_manager_on_new_doc');
+			
+			if ($send > 0) {
+				// Lets predefine some variables. Be sure to change the from address!
+				
+				$emailto = array ();
+				if (empty($id_session)) {
+					$sql_resp = 'SELECT u.email as myemail FROM ' . $table_course_user . ' cu, ' . $table_user . ' u 
+								 WHERE cu.course_code = ' . "'" . api_get_course_id() . "'" . ' AND cu.status = 1 AND u.user_id = cu.user_id';
+					$res_resp = Database::query($sql_resp);
+					while ($row_email = Database :: fetch_array($res_resp)) {
+						if (!empty ($row_email['myemail'])) {
+                            $emailto[$row_email['myemail']] = $row_email['myemail'];
+						}
+					}
+				} else {					
+					// coachs of the session
+					$sql_resp = 'SELECT user.email as myemail
+										FROM ' . $table_session . ' session INNER JOIN ' . $table_user . ' user
+										ON user.user_id = session.id_coach
+										WHERE session.id = ' . intval($id_session);
+					$res_resp = Database::query($sql_resp);
+					while ($row_email = Database :: fetch_array($res_resp)) {
+						if (!empty ($row_email['myemail'])) {
+							$emailto[$row_email['myemail']] = $row_email['myemail'];
+						}
+					}
+			
+					//coach of the course
+					$sql_resp = 'SELECT user.email as myemail
+								FROM ' . $table_session_course_user . ' scu
+                                INNER JOIN ' . $table_user . ' user
+                                    ON user.user_id = scu.id_user AND scu.status=2
+                                WHERE scu.id_session = ' . intval($id_session);
+					$res_resp = Database::query($sql_resp);
+					while ($row_email = Database :: fetch_array($res_resp)) {
+						if (!empty ($row_email['myemail'])) {
+							$emailto[$row_email['myemail']] = $row_email['myemail'];
+						}
+					}
+				}
+			
+				if (count($emailto) > 0) {			
+					$emailto = implode(',', $emailto);				
+					$emailsubject = "[" . api_get_setting('siteName') . "] ";
+					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+					$email_admin = api_get_setting('emailAdministrator');
+							// The body can be as long as you wish, and any combination of text and variables
+				
+					$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+					$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
+					$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+					$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
+					$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
+					$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
+                    
+				    // Here we are forming one large header line
+					// Every header must be followed by a \n except the last
+					@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
+				
+					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";
+					$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+					$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
+					$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
+					$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
+				
+					//Mail to user
+                    var_dump($currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
+                    
+					@api_mail('', $currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
+				}
+			}
+			$message = get_lang('DocAdd');
+			//stats
+			if (!$Id) {
+				$Id = $insertId;
+			}
+			event_upload($Id);
+			$submit_success_message = $message . "<br />";
+			Display :: display_confirmation_message($submit_success_message, false);
+		} else {
+            Display::display_error_message(get_lang('ActionNotAllowed'));
+        }
+        break;
 	case 'send_mail':        
 		if (Security::check_token('get')) {
 			$mails_sent_to = send_reminder_users_without_publication($my_folder_data);
@@ -506,7 +738,8 @@ switch ($action) {
 		}		
 		/*	Display of tool options */
 		display_tool_options($uploadvisibledisabled, $origin);		
-		break;		
+		break;
+        
     case 'create_dir':	
 	case 'add':
         //$check = Security::check_token('post');                
@@ -693,232 +926,7 @@ switch ($action) {
 			}
 		} else {
             $form->display();     
-        }        
-	case 'upload':
-		if ($student_can_edit_in_session && isset($_POST['sec_token']) && Security::check_token('post')) {
-			
-			//check the token inserted into the form
-			if (isset($_POST['submitWork']) && !empty($is_course_member)) {
-				$authors = api_get_person_name($currentUserFirstName, $currentUserLastName);
-				$url = null;
-				if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {					
-					$updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
-		
-					// Try to add an extension to the file if it has'nt one
-					$new_file_name = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
-		
-					// Replace dangerous characters
-					$new_file_name = replace_dangerous_char($new_file_name, 'strict');
-		
-					// Transform any .php file in .phps fo security
-					$new_file_name = php2phps($new_file_name);
-						
-					$filesize = filesize($_FILES['file']['tmp_name']);
-						
-					if (empty($filesize)) {
-						Display :: display_error_message(get_lang('UplUploadFailedSizeIsZero'));
-						$succeed = false;
-					} elseif (!filter_extension($new_file_name)) {
-						//filter extension
-						Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-						$succeed = false;
-					}
-					if (!$title) {
-						$title = $_FILES['file']['name'];
-					}
-					
-					// Compose a unique file name to avoid any conflict
-					$new_file_name = api_get_unique_id();
-								
-					//if we come from the group tools the groupid will be saved in $work_table
-					@move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
-					$url = 'work'.$curdirpath.'/'.$new_file_name;
-				}
-				
-				if (empty($title)) {
-					$title = get_lang('Untitled');
-				}
-				
-				$active = '1';
-				$sql_add_publication = "INSERT INTO " . $work_table . " SET
-										   c_id 		= $course_id ,
-									       url         	= '" . $url . "',
-									       title       	= '" . Database::escape_string($title) . "',
-						                   description	= '" . Database::escape_string($description) . "',
-						                   author      	= '" . Database::escape_string($authors) . "',
-						                   contains_file = '".intval($_POST['contains_file'])."',  
-										   active		= '" . $active . "',                                           
-										   accepted		= '1',
-										   post_group_id = '".$group_id."',
-										   sent_date	=  '".api_get_utc_datetime()."',
-										   parent_id 	=  '".$work_id."' ,
-                                           session_id	= '".intval($id_session)."' ,
-                                           user_id 		= '".$user_id."'";
-				//var_dump($sql_add_publication);
-				Database::query($sql_add_publication);
-				$id = Database::insert_id();				
-				if ($id) {				
-					api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
-					$succeed = true;
-				}														
-			} elseif ($newWorkUrl) {
-			
-				// SPECIAL CASE ! For a work coming from another area (i.e. groups)
-	
-				$url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
-	
-				if (!$title) {
-					$title = basename($workUrl);
-				}	
-				$sql = "INSERT INTO  " . $work_table . " SET
-									c_id = $course_id,
-									url        	= '" . $url . "',
-						            title       	= '" . Database::escape_string($title) . "',
-						            description 	= '" . Database::escape_string($description) . "',
-						            author      	= '" . Database::escape_string($authors) . "',
-								    post_group_id   = '".$group_id."',
-						            sent_date    	= '".api_get_utc_datetime()."',
-						            session_id 		= '".intval($id_session)."',
-						            user_id 		= '".$user_id."'";
-	
-				Database::query($sql);
-	
-				$insertId = Database::insert_id();
-				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
-				$succeed = true;
-			} elseif (isset($_POST['editWork'])) {
-				
-				/*
-				 * SPECIAL CASE ! For a work edited
-				*/
-					
-				//Get the author ID for that document from the item_property table
-				$is_author 			= false;
-				$item_to_edit_id 	= intval($_POST['item_to_edit']);
-				$item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_to_edit_id);
-					
-				if ($is_allowed_to_edit) {
-					$is_author = true;
-				} else {
-					if ($item_to_edit_data['insert_user_id'] == api_get_user_id()) {
-						$is_author = true;
-					}
-				}
-					
-				if ($is_author) {
-
-					$work_data = get_work_data_by_id($item_to_edit_id);
-					if (!empty($_POST['title']))
-					$title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-					$description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
-					
-	
-					if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
-						$add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
-						$add_to_update .= ' qualification ='."'".Database::escape_string($_POST['qualification'])."',";
-						$add_to_update .= ' date_of_qualification ='."'".api_get_utc_datetime()."'";
-					}
-	
-					if ((int)$_POST['qualification'] > (int)$_POST['qualification_over']) {
-						Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
-					} else {
-						$sql = "UPDATE  " . $work_table . "
-						        SET	title       = '" . Database::escape_string($title) . "',
-						            description = '" . Database::escape_string($description) . "'
-						            ".$add_to_update."
-						        WHERE c_id = $course_id AND id = $item_to_edit_id";					
-						Database::query($sql);
-					}
-					api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
-					$succeed = true;
-				} else {
-					$error_message = get_lang('IsNotPosibleSaveTheDocument');
-				}
-			}
-		}
-						
-		if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
-			//last value is to check this is not "just" an edit
-			//YW Tis part serve to send a e-mail to the tutors when a new file is sent
-			$send = api_get_course_setting('email_alert_manager_on_new_doc');
-			
-			if ($send > 0) {
-				// Lets predefine some variables. Be sure to change the from address!
-				
-				$emailto = array ();
-				if (empty ($id_session)) {
-					$sql_resp = 'SELECT u.email as myemail FROM ' . $table_course_user . ' cu, ' . $table_user . ' u 
-								 WHERE cu.course_code = ' . "'" . api_get_course_id() . "'" . ' AND cu.status = 1 AND u.user_id = cu.user_id';
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-						$emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
-				} else {					
-					// coachs of the session
-					$sql_resp = 'SELECT user.email as myemail
-										FROM ' . $table_session . ' session INNER JOIN ' . $table_user . ' user
-										ON user.user_id = session.id_coach
-										WHERE session.id = ' . intval($id_session);
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-							$emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
-			
-					//coach of the course
-					$sql_resp = 'SELECT user.email as myemail
-								FROM ' . $table_session_course_user . ' scu
-                                INNER JOIN ' . $table_user . ' user
-                                    ON user.user_id = scu.id_user AND scu.status=2
-                                WHERE scu.id_session = ' . intval($id_session);
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-							$emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
-				}
-			
-				if (count($emailto) > 0) {			
-					$emailto = implode(',', $emailto);				
-					$emailsubject = "[" . api_get_setting('siteName') . "] ";
-					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
-					$email_admin = api_get_setting('emailAdministrator');
-							// The body can be as long as you wish, and any combination of text and variables
-				
-					$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-					$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-					$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
-					$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-					$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
-					$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
-                    
-				    // Here we are forming one large header line
-					// Every header must be followed by a \n except the last
-					@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-				
-					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";
-					$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-					$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-					$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-					$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
-				
-					//Mail to user
-					@api_mail('', $currentUserEmail, $emailsubject, $emailbody_user, $sender_name,$email_admin);
-				}
-			}
-			$message = get_lang('DocAdd');
-			//stats
-			if (!$Id) {
-				$Id = $insertId;
-			}
-			event_upload($Id);
-			$submit_success_message = $message . "<br />";
-			Display :: display_confirmation_message($submit_success_message, false);
-		}
+        }        	
 	case 'make_visible':
 	case 'make_invisible':
 	case 'mark_work':

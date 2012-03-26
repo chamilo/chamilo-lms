@@ -55,7 +55,7 @@ $form = new FormValidator('update_course');
 $form->addElement('header', '', $tool_name);
 
 // Title
-$form->add_textfield('title', get_lang('Title'), true, array ('size' => '60'));
+$form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 

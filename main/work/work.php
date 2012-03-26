@@ -190,7 +190,20 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if (!empty($group_id)) {	
-	$group_properties  = GroupManager :: get_group_properties($group_id);
+	$group_properties  = GroupManager :: get_group_properties($group_id);    
+    $show_work = false;
+    
+    if (api_is_allowed_to_edit(false, true)) {        
+        $show_work = true;
+    } else {
+        // you are not a teacher              
+        $show_work = GroupManager::user_has_access($user_id, $group_id, GROUP_TOOL_WORK);
+    }
+    
+    if (!$show_work) {
+        api_not_allowed();
+    }
+    
 	$interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
 	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 
@@ -322,9 +335,9 @@ switch ($action) {
 	case 'mark_work':
         if (!api_is_allowed_to_edit()) {
             echo Display::return_message(get_lang('ActionNotAllowed'), 'error');
-            Display::display_footer();
-					
+            Display::display_footer();					
         }
+        break;
 	case 'upload_form': //can be add or edit work
         $is_author = false;
         
@@ -363,7 +376,7 @@ switch ($action) {
 			}
 		}      
         
-		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
+		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
 	
 		// form title
 		if ($item_id) {
@@ -464,8 +477,7 @@ switch ($action) {
         } else {
             Display::display_error_message(get_lang('ActionNotAllowed'));
         }        
-		break;		
-        
+		break;        
     case 'upload':        
         $check = Security::check_token('post');         
 		if ($student_can_edit_in_session && $check) {

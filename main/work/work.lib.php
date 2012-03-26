@@ -123,7 +123,6 @@ function display_tool_options($uploadvisibledisabled, $origin) {
 				</div>
 			</div>';
 	echo '</form>';
-
 }
 
 /**

@@ -62,6 +62,11 @@
 		
 	{* Right column *}
 	<div class="span3">		
+        {if !empty($plugin_menu_top)}
+            <div id="plugin_menu_top">
+                {$plugin_menu_top}
+            </div>
+        {/if}  	
 	    {*if user is not login show the login form*}
 		{if $_u.logged == 0}
 			{include file="default/layout/login_form.tpl"}
@@ -92,9 +97,9 @@
         	
 		{* Plugin courses sidebar *}		
         {*  Plugins for footer section *}		
-        {if !empty($plugin_menu)}
-            <div id="plugin_menu">
-                {$plugin_menu}
+        {if !empty($plugin_menu_bottom)}
+            <div id="plugin_menu_bottom">
+                {$plugin_menu_bottom}
             </div>
         {/if}        
 	</div>

@@ -4,7 +4,8 @@ class AppPlugin {
     var $plugin_blocks = array ( 
  //           'loginpage_main',
             'login',
-            'menu', 
+            'menu_top', 
+            'menu_bottom', 
 /*            'campushomepage_main', 
             'campushomepage_menu',
             'mycourses_main', 

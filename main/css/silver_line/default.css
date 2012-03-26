@@ -426,12 +426,12 @@ ul#navigation .student-connect a {
 ------------------------------------------------------------------------------
 */
 
-#header3 {
+.subnav {
     width: 100%;
 
     padding: 0;
 }
-#header3 input.logout {
+.subnav input.logout {
     /* makes an input appear like a link in this header */
     background-color: transparent;
     border: none;
@@ -443,11 +443,11 @@ ul#navigation .student-connect a {
     margin: -.3em 0 0 2em;
     padding: 0;
 }
-#header3 form {
+.subnav form {
     margin: 0;
     padding: 0;
 }
-#header3 #logout {
+.subnav #logout {
     display: inline;
     float: right;
     clear: right;
@@ -455,7 +455,7 @@ ul#navigation .student-connect a {
     padding: 0;
     width: 10%;
 }
-#header3 #logout li {
+.subnav #logout li {
     display: block;
     margin: 0;
     padding: 0;
@@ -463,7 +463,7 @@ ul#navigation .student-connect a {
     clear: right;
 }
 
-#header3 ul {
+.subnav ul {
     PADDING-RIGHT: 10px;
     PADDING-LEFT: 10px;
     PADDING-BOTTOM: 0px;
@@ -471,7 +471,7 @@ ul#navigation .student-connect a {
     LIST-STYLE-TYPE: none;
     display: inline;
 }
-#header3 ul li {
+.subnav ul li {
     float: left;
     display: inline;
     list-style: none;
@@ -479,7 +479,7 @@ ul#navigation .student-connect a {
     padding: 0;
     width: auto;
 }
-#header3 ul li a {
+.subnav ul li a {
     display: inline;
 }
 /*

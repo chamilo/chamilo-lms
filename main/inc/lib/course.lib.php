@@ -1365,7 +1365,7 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code) {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = ',') {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
@@ -1374,7 +1374,7 @@ class CourseManager {
      			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
     		}
     		if (!empty($list)) {
-    			$teacher_string = implode (', ', $list);
+    			$teacher_string = implode($separator.' ', $list);
     		}
     	}
     	return $teacher_string;
@@ -2713,31 +2713,29 @@ class CourseManager {
         return self::course_code_exists($wanted_course_code);
     }
     
-    /* Use smarty*/
-    
+    /* Builds the course block 
+     * @todo use smarty
+     */    
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well course_item";
+        $class = "well";
         if ($is_sub_content) {
             $class = "";
-        }        
-        $html .= '<div class="row-fluid">';         
-            //$html .= '<div class="span9">';         
-                $html .= '<div class="'.$class.'">'; 
-                    $html .= '<div class="span1">'.$params['icon'].'</div>';
-                    $html .= '<div class="span5">';
-                    $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';
-                    
-                    if (!empty($params['teachers'])) {                    
-                        $html .= '<h5>'.$params['teachers'].'</h5>';
-                    }                    
-                    if (!empty($params['coaches'])) {                    
-                        $html .= '<h5>'.$params['coaches'].'</h5>';
-                    }    
-                    $html .= '</div>';                        
-                    $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
-                $html .= '</div>';
-            //$html .= '</div>';
+        }                     
+        $html .= '<div class="'.$class.'">'; 
+            $html .= '<div class="row">';    
+            $html .= '<div class="span1">'.$params['icon'].'</div>';
+            $html .= '<div class="span6">';
+            $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
+            if (!empty($params['teachers'])) {                    
+                $html .= '<h5>'.$params['teachers'].'</h5>';
+            }                    
+            if (!empty($params['coaches'])) {                    
+                $html .= '<h5>'.$params['coaches'].'</h5>';
+            }    
+            $html .= '</div>';                        
+            $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
+        $html .= '</div>';         
         $html .= '</div>';
         return $html;
     }

@@ -104,7 +104,7 @@ img {
 	text-align:right;
 }
 /* Header 3: Containing breadcrumbs, online users, student/teacher view, help */
-#header3 {
+.subnav {
 	position: relative; /* to avoid the IE peekabo bug*/
 	font-size: 12px;
 	font-weight: normal;
@@ -113,16 +113,16 @@ img {
 	color: #fff;
 	border-bottom: 1px solid white;
 }
-#header3 a {
+.subnav a {
 	color: #ffffff;
 	text-decoration: none;
 	font-weight:normal;
 }
-#header3 a:hover{
+.subnav a:hover{
 	text-decoration: underline;
 }
 /* Header3Right: online users, student/teacher view, help */
-#Header3Right ul{
+.subnavRight ul{
 	position: relative; /* to avoid the IE peekabo bug*/
 	float: right;
 	width: 50%;
@@ -131,10 +131,10 @@ img {
 	list-style-type: none;
 	text-align: right;
 }
-#Header3Right ul li {
+.subnavRight ul li {
 	display: inline;
 }
-#Header3Right ul li a {
+.subnavRight ul li a {
 	padding: 4px 6px 4px 4px;
 	color:#fff;
 }

@@ -46,23 +46,19 @@ legend {
     padding:40px 0px 0px 0px;
 }
 
-#header2 .nav{
-    margin-bottom:0px;
-}
-
 /* menu dropdown fixes */
-#header3 .nav .open > .dropdown-toggle, #header3 .nav .active > .dropdown-toggle, #header3 .nav .open.active > .dropdown-toggle {
+.subnav .nav .open > .dropdown-toggle, .subnav .nav .active > .dropdown-toggle, .subnav .nav .open.active > .dropdown-toggle {
     background-color: transparent;
 }
-#header3 .dropdown-menu li a {
+.subnav .dropdown-menu li a {
     color:#333;
 }
 
-#header3 .dropdown-toggle {
+.subnav .dropdown-toggle {
     height: 15px;
 }
 
-#header3 li a {
+.subnav li a {
     margin:0px;
 }
 
@@ -244,10 +240,6 @@ a.tag {
 
 #settings h4 {
     margin-bottom:10px;
-}
-
-.course_item {
-    padding-bottom: 40px;
 }
 
 /* user_portal course status icon */
@@ -1663,20 +1655,6 @@ div.image-social-content center.friend {
 .social-profile-info {
     width:100%;
 }
-.social-profile-info dt {
-    text-align:left;
-    clear:left;
-    float:left;
-    width:120px;
-}
-.social-profile-info dd {
-    padding:1px 0px 3px 0px;
-    float:left;
-    margin:0;
-    display : block;
-    padding-left:5px;
-    width:150px;
-}
 
 /* general layout of the profile page */
 
@@ -1809,11 +1787,6 @@ div.image-social-content center.friend {
     margin-bottom:10px;
 }
 
-.social_user_information {
-    width:300px;
-    float:left;
-}
-
 .social-friend-container {
     width:100%;
     overflow:hidden;
@@ -1837,40 +1810,6 @@ div.image-social-content center.friend {
     overflow:hidden;
     padding:2px;
     width:76px;
-}
-
-
-/* styles from the my.profile.php file */
-#social_widget  {   
-    margin: 0 20px;
-}
-
-#social_widget_image {
-    float:left;    
-    margin-bottom:10px;
-    padding:2px;
-}
-
-/* SOCIAL BOX */
-
-.social-box-main1 {
-    width:100%;
-    height:auto;
-    overflow:hidden;
-}
-.social-box-left {
-    width:340px;
-    float:left;
-    height:auto;
-    margin:0px;
-}
-
-.social-box-right {
-    width:280px;
-    float:left;
-    height:auto;
-    margin-left:18px;
-    overflow:hidden;
 }
 
 .box_shared_profile_group_title {

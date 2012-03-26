@@ -33,7 +33,7 @@ class FormValidator extends HTML_QuickForm {
 	function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
                     
         //Default form class
-        if (!isset($attributes['class'])) {
+        if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
         

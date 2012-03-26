@@ -392,37 +392,32 @@ class SocialManager extends UserManager {
 		$main_user_table 		 = Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 			 = Database :: get_main_table(TABLE_MAIN_SESSION);
 		
-		$user_id = api_get_user_id();
-        
-		$course_system_code   = $my_course['k'];
-		$course_visual_code   = $my_course['c'];
-		$course_title         = $my_course['i'];
-		$course_directory     = $my_course['d'];
-		$course_teacher       = $my_course['t'];
+		$course_code   = $my_course['code'];
+		$course_visual_code   = $my_course['course_info']['official_code'];
+		$course_title         = $my_course['course_info']['title'];
 		
-		$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
-		$course_info = Database :: get_course_info($course_system_code);
+		$course_info = Database :: get_course_info($course_code);
 		
 		$course_id = $course_info['real_id'];
 
-		$course_access_settings = CourseManager :: get_access_settings($course_system_code);
+		$course_access_settings = CourseManager :: get_access_settings($course_code);
 
 		$course_visibility = $course_access_settings['visibility'];
 
-		$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
+		$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
 		//function logic - act on the data
-		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
+		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course_code);
 		if ($is_virtual_course) {
 			// If the current user is also subscribed in the real course to which this
 			// virtual course is linked, we don't need to display the virtual course entry in
 			// the course list - it is combined with the real course entry.
-			$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
+			$target_course_code = CourseManager :: get_target_of_linked_course($course_code);
 			$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
 			if ($is_subscribed_in_target_course) {
 				return; //do not display this course entry
 			}
 		}
-		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
+		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_code, api_get_user_id());
 		if ($has_virtual_courses) {
 			$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 			$course_display_title = $return_result['title'];
@@ -581,8 +576,7 @@ class SocialManager extends UserManager {
                 ident="#edit_image";
                 $(ident).hide();
             }               
-            </script>';
-		      
+            </script>';		      
 
 	  	if (in_array($show, $show_groups) && !empty($group_id)) {
 			//--- Group image
@@ -656,9 +650,9 @@ class SocialManager extends UserManager {
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Home').'</span></a></li>
 	                  <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array('hspace'=>'6')).'<span class="'.($show=='invitations'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Invitations').$total_invitations.'</span></a></li>';
-	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile',array('hspace'=>'6','style'=>'float:left')).'<span class="social-menu-text-active" >'.get_lang('ViewMySharedProfile').'</span></a></li>
+	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png', get_lang('ViewMySharedProfile'), array('hspace'=>'6','style'=>'float:left')).'<span class="social-menu-text-active" >'.get_lang('ViewMySharedProfile').'</span></a></li>
 	        		  <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Friends').'</span></a></li>
-	                  <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png'),get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('SocialGroups').'</span></a></li>';
+	                  <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png', get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('SocialGroups').'</span></a></li>';
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
 				$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array('hspace'=>'6'),16).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';
     	  	}
@@ -959,6 +953,17 @@ class SocialManager extends UserManager {
 			echo '</ul></dd>';
 		}
 	}
+    
+    public function social_wrapper_div($content, $span_count) {
+        $span_count = intval($span_count);
+        $html = '<div class="span'.$span_count.'">';
+        $html .= '<div class="well_border">';
+        $html .= $content;
+        $html .= '</div></div>';
+        return $html;
+        
+    }
+    
 	/**
 	 * Dummy function
 	 *

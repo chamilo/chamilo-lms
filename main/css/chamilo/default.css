@@ -66,12 +66,12 @@ a:active {
   border-right-color: #028DC2;  
 }
 
-#header3 li a {
+.subnav li a {
     color:#fff;
 }
 
 /* Green hover */
-#header3 li a:hover {
+.subnav li a:hover {
     background: none repeat scroll 0 0 #8ECB50;
     color: #fff;
 }

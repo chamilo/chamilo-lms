@@ -7,13 +7,13 @@
 /**********************/
 /*** ADICIONAL CODE ***/
 /**********************/
-div#header3 ul li a span {
+div.subnav ul li a span {
     font-size:13px;
 }
-div#header3 ul#logout {
+div.subnav ul#logout {
   margin-right: -2px;
 }
-#header3 {
+.subnav {
     border-bottom: 0px;        
 }
 .subnav {
@@ -102,31 +102,31 @@ a:active {
     /* height: 47px; */
     margin-bottom: 43px;
 }
-#header3 {
+.subnav {
     background-image:url(images/bg-header4.png);
 }
 #header4 {
     /*background-image:url(images/bg-header4.png);*/
 }
 
-#header3 li {    
+.subnav li {    
     background:transparent url(images/tab_left.png) no-repeat scroll left top;
     border:none;
     margin-right: 2px;
 }
 
-#header3 li a {
+.subnav li a {
     background:transparent url(images/tab_right.png) no-repeat scroll right top;
     margin-left: 5px;
     border:none;
     color:#ffffff;
 }
 
-#header3 li#current {
+.subnav li#current {
     background:transparent url(images/tab_left-active.png) no-repeat scroll left top;
      height: 30px;
 }
-#header3 #current a {
+.subnav #current a {
     background:transparent url(images/tab_right-active.png) no-repeat scroll right top;
 }
 .maincontent {

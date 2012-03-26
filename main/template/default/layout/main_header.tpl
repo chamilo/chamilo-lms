@@ -76,9 +76,9 @@
                 </div>
             {/if}
         </header>
-        {* header 3 - menu *}
+        {* menu *}
         {if $menu}
-            <div id="header3" class="subnav">        
+            <div class="subnav">        
                 {$menu} 
             </div>        
         {/if}

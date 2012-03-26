@@ -68,7 +68,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
 $social_left_content = SocialManager::show_social_menu('home');	
-$social_right_content .= '<div class="social_user_information span4">';            
+$social_right_content .= '<div class="span5">';            
 $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
 // information current user		       

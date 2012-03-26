@@ -36,7 +36,7 @@
     font-size:100%;
 }
 
-#header3 input.logout {
+.subnav input.logout {
     padding: 2px 10px 0;
     font-size: 120%;
     font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
@@ -213,6 +213,6 @@ input.arrowl {
 .decrease_font {
     font-size: 70%;
 }
-#header3 {    
+.subnav {    
     font-size: 120%;
 }

@@ -5,12 +5,12 @@
 		</span>	
 	</div>
 	
+	{$login_language_form}
     {if !empty($plugin_login_top)}                
         <div id="plugin_login_top">
             {$plugin_login_top}
         </div>
     {/if}	
-	{$login_language_form}
 	{$login_form}
 	{$login_failed}	
 	{$login_options}	

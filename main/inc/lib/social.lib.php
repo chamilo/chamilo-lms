@@ -392,37 +392,32 @@ class SocialManager extends UserManager {
 		$main_user_table 		 = Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 			 = Database :: get_main_table(TABLE_MAIN_SESSION);
 		
-		$user_id = api_get_user_id();
-        
-		$course_system_code   = $my_course['k'];
-		$course_visual_code   = $my_course['c'];
-		$course_title         = $my_course['i'];
-		$course_directory     = $my_course['d'];
-		$course_teacher       = $my_course['t'];
+		$course_code   = $my_course['code'];
+		$course_visual_code   = $my_course['course_info']['official_code'];
+		$course_title         = $my_course['course_info']['title'];
 		
-		$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
-		$course_info = Database :: get_course_info($course_system_code);
+		$course_info = Database :: get_course_info($course_code);
 		
 		$course_id = $course_info['real_id'];
 
-		$course_access_settings = CourseManager :: get_access_settings($course_system_code);
+		$course_access_settings = CourseManager :: get_access_settings($course_code);
 
 		$course_visibility = $course_access_settings['visibility'];
 
-		$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
+		$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
 		//function logic - act on the data
-		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
+		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course_code);
 		if ($is_virtual_course) {
 			// If the current user is also subscribed in the real course to which this
 			// virtual course is linked, we don't need to display the virtual course entry in
 			// the course list - it is combined with the real course entry.
-			$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
+			$target_course_code = CourseManager :: get_target_of_linked_course($course_code);
 			$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
 			if ($is_subscribed_in_target_course) {
 				return; //do not display this course entry
 			}
 		}
-		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
+		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_code, api_get_user_id());
 		if ($has_virtual_courses) {
 			$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 			$course_display_title = $return_result['title'];

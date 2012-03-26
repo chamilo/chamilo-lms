@@ -7,7 +7,7 @@
 * @package chamilo.social
 */
 
-$language_file = array('userInfo');
+$language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
@@ -484,24 +484,25 @@ if ($show_full_profile) {
 	if ( is_array($list) ) {		
         $my_courses .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
         $my_courses .=  '<div class="social-content-training">';
-        //Courses whithout sessions
-        $old_user_category = 0;
+        
+        //Courses without sessions        
         $i=1;
-        foreach($list as $key=>$value) {
+        foreach ($list as $key=>$value) {            
             if ( empty($value[2]) ) { //if out of any session
                 $my_courses .=  $value[1];
-                $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" ></div>';					
+                $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';					
                 $i++;
             }
         }
-        $listActives = $listInactives = $listCourses = array();
+        /*
+        $listActives = $listInactives = array();
         foreach ( $list as $key=>$value ) {
             if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
                 $listActives[] = $value;
             } elseif ( !empty($value[2]) ) { //if there is a session but it is not active
                 $listInactives[] = $value;
             }
-        }
+        }*/
         $my_courses .=  '</div>';		//social-content-training		
 		$social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
 	}

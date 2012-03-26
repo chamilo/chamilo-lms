@@ -90,7 +90,7 @@ $form = new FormValidator('add_course');
 $form->addElement('header', '', $tool_name);
 
 // Title
-$form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex')), array('size' => '60', 'id' => 'title'));
+$form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex')), array('class' => 'span6', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 

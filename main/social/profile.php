@@ -235,7 +235,6 @@ if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	//--- Basic Information
 	$personal_info .=  '<div><h3>'.get_lang('Profile').'</h3></div>';
 }
-$personal_info .=  '<div class="social-profile-info">';
 
 if ($show_full_profile) {	
 	$personal_info .=  '<dl class="dl-horizontal">';
@@ -250,16 +249,13 @@ if ($show_full_profile) {
 		if (!empty($user_info['phone']))
 			$personal_info .=  '<dt>'.get_lang('Phone').'</dt><dd>'. $user_info['phone'].'</dd>';
 		$personal_info .=  '</dl>';	
-} else {
-	$personal_info .=  '<div class="social-profile-info">';
+} else {	
 	$personal_info .=  '<dl>';
 	if (!empty($user_info['username']))
 		$personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
 	$personal_info .=  '</dl>';	    
 }
-$personal_info .=  '</div>';
 $social_right_content =  SocialManager::social_wrapper_div($personal_info, 4);
-
 
 if ($show_full_profile) {
 	

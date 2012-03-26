@@ -1,4 +1,4 @@
-<div class="row-fluid">        
+<div class="row">        
     <div class="span3">
         {$social_left_content}
         {$social_left_menu}

@@ -1822,9 +1822,7 @@ div#friend-header {
 div#friend-header a {
     padding-right:6px;
 }
-div#friend-container {
-    float:left;
-}
+
 div.image_friend_network {
     float:left;
     /* border:1px solid #CCCCCC; */
@@ -1847,8 +1845,7 @@ div.image_friend_network center.friend {
     overflow:hidden;
     height:30px;
 }
-.friend_invitations {
-    float:left;
+.friend_invitations {    
     margin: 0 0 4px 12px;
 }
 /* button >> */

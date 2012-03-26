@@ -104,7 +104,7 @@ $number_loop = count($list_get_invitation);
 $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 
 if ($total_invitations == 0 && count($_GET) <= 0) {
-    $social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a><br /><br />';
+    $social_right_content .= '<div class="span8"><a class="btn" href="search.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';
 } 		
 		
 if ($number_loop != 0) {

@@ -1659,20 +1659,6 @@ div.image-social-content center.friend {
 .social-profile-info {
     width:100%;
 }
-.social-profile-info dt {
-    text-align:left;
-    clear:left;
-    float:left;
-    width:120px;
-}
-.social-profile-info dd {
-    padding:1px 0px 3px 0px;
-    float:left;
-    margin:0;
-    display : block;
-    padding-left:5px;
-    width:150px;
-}
 
 /* general layout of the profile page */
 

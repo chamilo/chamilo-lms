@@ -576,8 +576,7 @@ class SocialManager extends UserManager {
                 ident="#edit_image";
                 $(ident).hide();
             }               
-            </script>';
-		      
+            </script>';		      
 
 	  	if (in_array($show, $show_groups) && !empty($group_id)) {
 			//--- Group image
@@ -651,9 +650,9 @@ class SocialManager extends UserManager {
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Home').'</span></a></li>
 	                  <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array('hspace'=>'6')).'<span class="'.($show=='invitations'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Invitations').$total_invitations.'</span></a></li>';
-	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile',array('hspace'=>'6','style'=>'float:left')).'<span class="social-menu-text-active" >'.get_lang('ViewMySharedProfile').'</span></a></li>
+	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png', get_lang('ViewMySharedProfile'), array('hspace'=>'6','style'=>'float:left')).'<span class="social-menu-text-active" >'.get_lang('ViewMySharedProfile').'</span></a></li>
 	        		  <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Friends').'</span></a></li>
-	                  <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png'),get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('SocialGroups').'</span></a></li>';
+	                  <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png', get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('SocialGroups').'</span></a></li>';
 	        	$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
 				$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array('hspace'=>'6'),16).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';
     	  	}

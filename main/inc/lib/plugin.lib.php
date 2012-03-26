@@ -3,7 +3,8 @@
 class AppPlugin {
     var $plugin_blocks = array ( 
  //           'loginpage_main',
-            'login',
+            'login_top',
+            'login_bottom',
             'menu_top', 
             'menu_bottom', 
 /*            'campushomepage_main', 

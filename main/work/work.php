@@ -338,11 +338,11 @@ switch ($action) {
             Display::display_footer();					
         }
         break;
+    case 'edit':
 	case 'upload_form': //can be add or edit work
         $is_author = false;
         
-		if (empty($item_id)) {
-            
+		if (empty($item_id)) {           
 			$parent_data = get_work_data_by_id($work_id);
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -367,15 +367,9 @@ switch ($action) {
 				$work_item = Database::fetch_array($result);
 			}			
 			
-			//Get the author ID for that document from the item_property table
-			$author_sql = "SELECT * FROM $iprop_table
-						   WHERE c_id = $course_id AND tool = 'work' AND insert_user_id = '$user_id' AND ref = " . $item_id;
-			$author_qry = Database::query($author_sql);
-			if (Database :: num_rows($author_qry)) {
-				$is_author = true;
-			}
-		}      
-        
+			//Get the author ID for that document from the item_property table	
+            $is_author 			= user_is_author($item_id);              
+		}        
 		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
 	
 		// form title
@@ -405,10 +399,13 @@ switch ($action) {
 			$form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
 			$show_progress_bar = true;
 		}		
-		$form->addElement('hidden', 'id', $item_id);
+		
+        $form->addElement('hidden', 'id', $work_id);
 		if (empty($item_id)) {
 			$form->addElement('checkbox', 'contains_file', null, get_lang('ContainsAfile'), array('id'=>'contains_file_id'));
-		}
+		} else {
+            $form->addElement('hidden', 'item_id', $item_id);
+        }
 		$form->addElement('text', 'title', get_lang('Title'), 'id="file_upload"  style="width: 350px;"');
 		$form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
 		
@@ -479,7 +476,8 @@ switch ($action) {
         }        
 		break;        
     case 'upload':        
-        $check = Security::check_token('post');         
+        $check = Security::check_token('post');        
+        //var_dump($check);
 		if ($student_can_edit_in_session && $check) {
 			
 			//check the token inserted into the form
@@ -549,7 +547,7 @@ switch ($action) {
 			} elseif ($newWorkUrl) {
 			
 				// SPECIAL CASE ! For a work coming from another area (i.e. groups)
-	
+	/*
 				$url = str_replace('../../' . $_course['path'] . '/', '', $newWorkUrl);
 	
 				if (!$title) {
@@ -570,33 +568,22 @@ switch ($action) {
 	
 				$insertId = Database::insert_id();
 				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
-				$succeed = true;
-			} elseif (isset($_POST['editWork'])) {
-				
+				$succeed = true;*/
+			} elseif (isset($_POST['editWork'])) {				
 				/*
 				 * SPECIAL CASE ! For a work edited
 				*/
 					
 				//Get the author ID for that document from the item_property table
-				$is_author 			= false;
-				$item_to_edit_id 	= intval($_POST['item_to_edit']);
-				$item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_to_edit_id);
-					
-				if ($is_allowed_to_edit) {
-					$is_author = true;
-				} else {
-					if ($item_to_edit_data['insert_user_id'] == api_get_user_id()) {
-						$is_author = true;
-					}
-				}
+                $item_to_edit_id 	= intval($_POST['item_to_edit']);
+				$is_author 			= user_is_author($item_to_edit_id);
 					
 				if ($is_author) {
-
 					$work_data = get_work_data_by_id($item_to_edit_id);
+                    
 					if (!empty($_POST['title']))
 					$title 		 = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-					$description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
-					
+					$description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];					
 	
 					if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
 						$add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
@@ -616,6 +603,7 @@ switch ($action) {
 					}
 					api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
 					$succeed = true;
+                    Display :: display_confirmation_message(get_lang('ItemUpdated'), false);
 				} else {
 					$error_message = get_lang('IsNotPosibleSaveTheDocument');
 				}
@@ -706,9 +694,7 @@ switch ($action) {
 			event_upload($Id);
 			$submit_success_message = $message . "<br />";
 			Display :: display_confirmation_message($submit_success_message, false);
-		} else {
-            Display::display_error_message(get_lang('ActionNotAllowed'));
-        }
+		}
         break;
 	case 'send_mail':        
 		if (Security::check_token('get')) {
@@ -940,15 +926,13 @@ switch ($action) {
             $form->display();     
         }        	
 	case 'make_visible':
-	case 'make_invisible':
-	case 'mark_work':
+    case 'delete':
+	case 'make_invisible':	
 	case 'move':
 	case 'move_to':
-	case 'list':
-		if ($action == 'mark_work') {		
-		}
+	case 'list':		
 		/*	Move file command */
-		if ($is_allowed_to_edit && $action == 'move_to') {      
+		if ($is_allowed_to_edit && $action == 'move_to') {     
 			$move_to_path = get_work_path($_REQUEST['move_to_id']);
 		
 			if ($move_to_path==-1) {
@@ -982,7 +966,7 @@ switch ($action) {
 		}
 
 		/*	Move file form request */
-		if ($is_allowed_to_edit && $action == 'move') {	
+		if ($is_allowed_to_edit && $action == 'move') {
 			if (!empty($item_id)) {
 				$folders = array();
 				$session_id = api_get_session_id();
@@ -1041,7 +1025,7 @@ switch ($action) {
 		
 		/*	Delete dir command */
 		
-		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {		
+		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {	
 
 			del_dir($_REQUEST['delete_dir']);	
 	
@@ -1069,109 +1053,52 @@ switch ($action) {
 		
 		/*	DELETE WORK COMMAND */
 		
-		if ($is_allowed_to_edit && $delete) {
-			if ($delete == 'all') {
-				
-				//we can't delete all documents
+		if ($action == 'delete' && $item_id) {
+							
+            $file_deleted = false;	
+            $is_author = user_is_author($item_id);            
 
-				/*
-				$path = $currentCourseRepositorySys;
-				$t_agenda   = Database::get_course_table(TABLE_AGENDA);
-		
-				$sql = "SELECT id, url, filetype FROM  ".$work_table." WHERE c_id = $course_id AND session_id = ".api_get_session_id().' ORDER BY url DESC'; // do not change the "order by", otherwise the work assignments will not be renamed
-				$result = Database::query($sql);
-		
-				while($row = Database::fetch_array($result)) {
-					$url = $row['url'];
-					//Deleting works
-					$delete_query = "DELETE FROM  ".$work_table." WHERE c_id = $course_id AND id  = ".$row['id'];
-					Database::query($delete_query);
-		
-					//Deleting agenda calendar for that work assignment
-					$sql_agenda = "SELECT add_to_calendar FROM  ".$TSTDPUBASG." WHERE c_id = $course_id AND publication_id = ".$row['id'];
-		
-					$rs_agenda = Database::query($sql_agenda);
-					while ($row_agenda = Database::fetch_array($rs_agenda)) {
-						if (!empty($row_agenda['add_to_calendar'])) {
-							$delete_agenda = "DELETE FROM  ".$t_agenda." WHERE c_id = $course_id AND id = ".$row_agenda['add_to_calendar'];
-							Database::query($delete_agenda);
-						}
-					}
-					//Deleting the work assignment
-					$delete_query = "DELETE FROM  ".$TSTDPUBASG. " WHERE c_id = $course_id AND publication_id = ".$row['id'];
-					Database::query($delete_query);
-		
-					if ($row['filetype'] == 'folder') {
-						$url = 'work'.$url;
-					}
-		
-					if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-						if (file_exists($path.$url)) {
-							rmdirr($path.$url);
-						}
-					} else {
-						if ($row['filetype'] == 'folder') {
-							$new_file = $path.'work/DELETED_'.basename($url);
-						} else {
-							$new_file = $path.dirname($url).'/DELETED_'.basename($url);
-						}
-						if (file_exists($path.$url)) {
-							rename($path.$url, $new_file);
-						}
-					}
-				}*/
-			} else {
-				
-				$file_deleted = false;
-				//Get the author ID for that document from the item_property table
-				$author_sql = "SELECT * FROM $iprop_table WHERE c_id = $course_id AND tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
-				$author_qry = Database::query($author_sql);
-		
-				if ((Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1) || api_is_allowed_to_edit(null,true)) {
-					//we found the current user is the author
-					$queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $delete";
-					$result1 		= Database::query($queryString1);
-					$row 			= Database::fetch_array($result1);
-		
-					if (Database::num_rows($result1) > 0) {
-						$queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $delete";
-						$queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $delete";
-						$result2 		= Database::query($queryString2);
-						$result3 		= Database::query($queryString3);						 
-						api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
-						$work = $row['url'];
-						
-						if ($row['contains_file'] == 1) {
-							if (!empty($work)) {
-								if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-									
-									my_delete($currentCourseRepositorySys.'/'.$work);
-									Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
-									$file_deleted = true;
-								} else {
-									require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-									$extension = pathinfo($work, PATHINFO_EXTENSION);
-									$basename_file = basename($work, '.'.$extension);
-									$new_dir = $work.'_DELETED_'.$delete.'.'.$extension;
-									
-									if (file_exists($currentCourseRepositorySys.'/'.$work)) {
-										rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
-										Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
-										$file_deleted = true;
-									}
-								}
-							}
-						} else {
-							$file_deleted = true;
-						}
-					}
-					if (!$file_deleted) {
-						Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
-					}
-				} else {
-					Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
-				}
-			}
+            if (($is_author AND api_get_course_setting('student_delete_own_publication') == 1)) {
+                //we found the current user is the author
+                $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
+                $result1 		= Database::query($queryString1);
+                $row 			= Database::fetch_array($result1);
+
+                if (Database::num_rows($result1) > 0) {
+                    $queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $item_id";
+                    $queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $item_id";
+                    $result2 		= Database::query($queryString2);
+                    $result3 		= Database::query($queryString3);						 
+                    api_item_property_update($_course, 'work', $item_id, 'DocumentDeleted', $user_id);
+                    $work = $row['url'];
+
+                    if ($row['contains_file'] == 1) {
+                        if (!empty($work)) {
+                            if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+                                my_delete($currentCourseRepositorySys.'/'.$work);
+                                Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                                $file_deleted = true;
+                            } else {
+                                require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+                                $extension = pathinfo($work, PATHINFO_EXTENSION);
+                                //$basename_file = basename($work, '.'.$extension);
+                                $new_dir = $work.'_DELETED_'.$item_id.'.'.$extension;
+
+                                if (file_exists($currentCourseRepositorySys.'/'.$work)) {
+                                    rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
+                                    Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                                    $file_deleted = true;
+                                }
+                            }
+                        }
+                    } else {
+                        $file_deleted = true;
+                    }
+                }					
+            }           
+            if (!$file_deleted) {
+                Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+            }        
 		}		
 		
 		/*	Display list of student publications */

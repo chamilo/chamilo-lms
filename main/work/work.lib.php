@@ -903,10 +903,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 				if ($is_allowed_to_edit) {
 					$action = '';
 					if ($qualification_exists) {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=mark_work&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=edit&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
 						Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL).'</a>';
 					} else {
-                        $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=mark_work&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
+                        $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=edit&item_id='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.
 						Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
                     }
 					if ($work->contains_file) {
@@ -917,7 +917,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					} else {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=make_visible&item_id='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), ICON_SIZE_SMALL).'</a> ';
 					}
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',ICON_SIZE_SMALL).'</a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=delete&amp;item_id='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',ICON_SIZE_SMALL).'</a>';
 					$row[] = $action;					
 					// the user that is not course admin can only edit/delete own document
 				} elseif ($is_author && empty($work->qualificator_id)) {
@@ -927,12 +927,12 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					}					
 					$action = '';
 					if (api_is_allowed_to_session_edit(false, true)) {
-					   $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;action=mark_work&item_id='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+					   $action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;action=edit&item_id='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
 				    } else {
 				        $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
 				    }
 					if (api_get_course_setting('student_delete_own_publication') == 1) {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'"  >'.Display::return_icon('delete.png',get_lang('WorkDelete'),'',ICON_SIZE_SMALL).'</a>';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_folder_data['id'].'&origin='.$origin.'&gradebook='.$gradebook.'&amp;action=delete&amp;item_id='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'"  >'.Display::return_icon('delete.png',get_lang('WorkDelete'),'',ICON_SIZE_SMALL).'</a>';
 					}
 					$row[] = $action;
 				} else {
@@ -1836,4 +1836,29 @@ function draw_date_picker($prefix, $default = '') {
 
 function get_date_from_select($prefix) {
 	return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
+}
+
+/* Check if a user is the author of the item */
+function user_is_author($item_id, $user_id = null) {
+    if (empty($item_id)) {
+        return false;
+    }
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
+    
+    $is_author 			= false;            
+    $item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());					
+    $is_allowed_to_edit = api_is_allowed_to_edit();
+    if ($is_allowed_to_edit) {
+        $is_author = true;
+    } else {
+        if ($item_to_edit_data['insert_user_id'] == $user_id) {
+            $is_author = true;
+        }
+    }
+    if (!$is_author) {
+        api_not_allowed();
+    }
+    return $is_author;
 }

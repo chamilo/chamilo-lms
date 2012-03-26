@@ -77,7 +77,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		//update view_properties		
 		if (isset($_GET['typeselected']) && 5 == $_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 
-			echo $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
+			$sql1 = 'SELECT thread_title from '.$tbl_forum_thread.' 
 					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
 			$res1	= Database::query($sql1);
 			$rowtit	= Database::fetch_row($res1);

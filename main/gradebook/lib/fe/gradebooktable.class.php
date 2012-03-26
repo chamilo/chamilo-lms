@@ -429,12 +429,9 @@ class GradebookTable extends SortableTable {
 				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
 			// evaluation
 			case 'E' :
-				$cat=new Category();
-				//$dblib=new Database();
-
-				$category_id=Security::remove_XSS($_GET['selectcat']);
-				$course_id=Database::get_course_by_category($category_id);
-				$show_message=$cat->show_message_resource_delete($course_id);
+				$cat = new Category();				
+				$course_id = Database::get_course_by_category($_GET['selectcat']);
+				$show_message = $cat->show_message_resource_delete($course_id);
 
 				// course/platform admin can go to the view_results page
 
@@ -468,16 +465,13 @@ class GradebookTable extends SortableTable {
 				}
 			// link
 			case 'L' :
-				$cat 			= new Category();
-				$category_id 	= intval($_GET['selectcat']);
-				$course_id	 	= Database::get_course_by_category($category_id);				
-				$show_message	= $cat->show_message_resource_delete($course_id);
-				
+				$cat 			= new Category();				
+				$course_id	 	= Database::get_course_by_category($_GET['selectcat']);				
+				$show_message	= $cat->show_message_resource_delete($course_id);				
 
 				$url = $item->get_link();
 				
-				if (isset($url) && $show_message===false) {
-					
+				if (isset($url) && $show_message===false) {	                    
 					$text = '&nbsp;<a href="' . $item->get_link() . '">'
 							. $item->get_name()
 							. '</a>';

@@ -109,7 +109,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" class=\"span5\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" class=\"span4\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -142,9 +142,9 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 		$html = get_lang('InvalidMessageId');
 		return $html;
 	}
-	$pre_html = '<div class="row">
-				<div class="label">'.get_lang('SendMessageTo').': </div>
-				<div class="formw">';                
+	$pre_html = '<div class="control-group">
+				<label class="control-label">'.get_lang('SendMessageTo').': </label>
+				<div class="controls">';                
 	$post = '</div></div>';
     $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
@@ -161,19 +161,18 @@ function show_compose_to_user ($receiver_id) {
     return $html;
 }
 
-function manage_form($default, $select_from_user_list = null, $sent_to = null) {	
-
+function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;	
 	$param_f 		= isset($_GET['f']) ? Security::remove_XSS($_GET['f']):'';
 
-	$form = new FormValidator('compose_message',null,api_get_self().'?f='.$param_f,null,array('enctype'=>'multipart/form-data'));
+	$form = new FormValidator('compose_message',null,api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
 		if (isset($select_from_user_list)) {
-			$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
+			$form->add_textfield('id_text_name', get_lang('SendMessageTo'), true,array('class' => 'span4','id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off'));
 			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
-			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
+			$form->addElement('hidden','user_list', 0, array('id'=>'user_list'));
 		} else {
             if (!empty($sent_to)) {
                 $form->addElement('html',$sent_to);
@@ -188,12 +187,12 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	} else {
 		$group_info = GroupPortalManager::get_group_data($group_id);
         
-		$form->addElement('html','<div class="row"><div class="label">'.get_lang('ToGroup').'</div><div class="formw">'.api_xml_http_response_encode($group_info['name']).'</div></div>');
+		$form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
 		$form->addElement('hidden','group_id',$group_id);
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->add_textfield('title', get_lang('Subject'),true , array('size' => 54));
+	$form->add_textfield('title', get_lang('Subject'),true , array('class' => 'span4'));
 
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	
@@ -209,9 +208,9 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	if (empty($group_id)) {
 
         
-        $form->addElement('advanced_settings',get_lang('FilesAttachment').'<span id="filepaths">
+        $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
 				<div id="filepath_1">
-				<input type="file" name="attach_1" class="span5"/>
+				<input type="file" name="attach_1" class="span4"/>
 				<input type="text" name="legend[]" size="20" /></div></span>');
 		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}

@@ -3573,3 +3573,21 @@ a.forum_group_link {
 #online_grid_container .thumbnail .caption {
     height: 30px;
 }
+
+#hide_bar_template {
+    width: 10px;    
+    display: inline; 
+    overflow: hidden; 
+    height: 100%; 
+    padding-bottom: 90em;
+    cursor:pointer;
+    background-color:#eee;
+    margin-left: 0px !important;    
+    background-image: url("../img/hide0.png"); 
+    background-repeat: no-repeat; 
+    background-position: center center;    
+}
+
+#hide_bar_template:hover {
+    background-color:#aaa;
+}

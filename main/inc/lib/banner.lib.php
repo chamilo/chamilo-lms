@@ -111,9 +111,8 @@ function get_tabs() {
 	return $navigation;
 }
 
-function show_header_1($language_file, $nameTools, $theme) {
-    global $noPHP_SELF;    
-    $_course = api_get_course_info();      
+function return_logo($theme) {    
+    $_course = api_get_course_info();    
     $html = '';
     $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';            
     
@@ -146,21 +145,21 @@ function show_header_1($language_file, $nameTools, $theme) {
         }
     }        
         
-    /*  Course title section */    
+   /* //  Course title section 
     if (!empty($_cid) and $_cid != -1 and isset($_course)) {
         //Put the name of the course in the header  
         $html .= '<div id="my_courses">';     
         $html .= '</div>';        
     } elseif (isset($nameTools) && $language_file != 'course_home') {
         //Put the name of the user-tools in the header
-        if (!isset($_user['user_id'])) {
+        if (!isset($user_id)) {
             //echo '<div id="my_courses"></div>';
         } elseif (!$noPHP_SELF) {
             $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
         } else {
             $html .= '<div id="my_courses">'.$nameTools.'</div>';
         }   
-    }    
+    }*/    
     return $html;
 }
 
@@ -221,7 +220,7 @@ function return_navigation_array() {
     
     $navigation         = array();
     $menu_navigation    = array();
-    $possible_tabs      = get_tabs();    
+    $possible_tabs      = get_tabs();        
         
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
@@ -326,7 +325,7 @@ function return_navigation_array() {
 }
 
 function return_menu() {
-    $navigation         = return_navigation_array();    
+    $navigation         = return_navigation_array();        
     $navigation         = $navigation['navigation'];
    
     // Displaying the tabs
@@ -407,11 +406,11 @@ function return_menu() {
         $show_bar = true;
     }
         
-    $menu = '';
+    $menu = null;
     
     // Logout    
     if ($show_bar) {
-        if (api_get_user_id()) {
+        if (api_get_user_id() && !api_is_anonymous()) {
             $login = '';
             if (api_is_anonymous()) {
                 $login = get_lang('Anonymous');
@@ -421,6 +420,7 @@ function return_menu() {
             $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id();
             
             $message_link  = null;
+            
             if (api_get_setting('allow_message_tool') == 'true') {
                 $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
             }
@@ -446,7 +446,7 @@ function return_menu() {
             $menu .= $lis;
             $menu .= '</ul>';
         }
-    }
+    }    
     return $menu;
 }
 

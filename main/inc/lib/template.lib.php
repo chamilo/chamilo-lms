@@ -2,12 +2,11 @@
 /* For licensing terms, see /license.txt */
 /* 
  * @author Julio Montoya <gugli100@gmail.com>
+ *  @todo better organization of the class, methods and variables 
  * 
  **/
 
- /* @todo better organization of the class methods and variables */
-
-// Load Smarty library
+ // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
@@ -22,7 +21,7 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
-    var $menu_navigation = array();
+    //var $menu_navigation = array();
     var $show_learnpath = false; // This is a learnpath section or not?
     var $plugin = null;
     var $course_id = null;
@@ -285,23 +284,24 @@ class Template extends Smarty {
 		$this->assign('css_style', $style_html);
 		
 		$style_print = '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";'."\n";
-		$this->assign('css_style_print', $style_print);
-        $this->assign('style_print',     $style_print);        
         
-        // Header 1        
-		$header1 = show_header_1($language_file, $nameTools, $this->theme);
-		$this->assign('header1', $header1);
+		$this->assign('css_style_print', $style_print);        
+        
+        // Logo
+		$logo = return_logo($this->theme);
+		$this->assign('logo', $logo);
     }
     
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
+        
 		global $lp_theme_css, $mycoursetheme, $user_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $_user, 
-				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
+		global $httpHeadXtra, $htmlHeadXtra, $_course, $text_dir,
+				$interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
-        $navigation            = return_navigation_array();        
-        $this->menu_navigation = $navigation['menu_navigation'];
+        //$navigation            = return_navigation_array();        
+        //$this->menu_navigation = $navigation['menu_navigation'];
          
 		global $_configuration;
 		
@@ -325,6 +325,7 @@ class Template extends Smarty {
         
 		$title_list[] = api_get_setting('Institution');
 		$title_list[] = api_get_setting('siteName');
+        
 		if (!empty($course_title)) {
 			$title_list[] = $course_title;
 		}
@@ -467,7 +468,7 @@ class Template extends Smarty {
 		$this->assign('bug_notification_link', $bug_notification_link);
 		
 		$notification   = return_notification_menu();
-		$menu           = return_menu();
+		$menu           = return_menu();        
 		$breadcrumb     = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('notification_menu', $notification);

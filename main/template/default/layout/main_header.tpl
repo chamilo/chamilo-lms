@@ -29,10 +29,11 @@
     
     <div id="main" class="container">     
         <header>
-            <div class="row">
-                {* header1 - logo *}
+            <div class="row">                
                 <div id="header_left" class="span4">                
-                    {$header1}                    
+                    {* logo *}
+                    {$logo}
+                    
                     {* plugin_header *}        
                     {if !empty($plugin_header_left)}
                         <div id="plugin_header_left">
@@ -76,6 +77,7 @@
                 </div>
             {/if}
         </header>
+        
         {* menu *}
         {if $menu}
             <div class="subnav">        

@@ -71,12 +71,12 @@ label, input, button, select, textarea, p {
 
 form .label {
     color: #404040;
-    float: left;
-    font-size: 13px;
+    float: left;    
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
     width: 150px;    
+    text-shadow:none;
 }
 form .formw {
     margin-left: 170px;
@@ -2165,23 +2165,6 @@ div.lp_resource {
     padding:5px;    
 }   
 
-/*LP changes
-.lp_resource_element img {
-        float: left;
-    margin-bottom: 0;
-    margin-left: 43px;
-    margin-right: 43px;
-    margin-top: 7px;
-}
-.lp_resource_element a {
-       float: left;
-    margin-bottom: 12px;
-    margin-left: 33px;
-    margin-right: auto;
-    margin-top: 15px;
-    width: 100%;
-}*/
-
 .doc_resource {
     margin:6px;
 }
@@ -2190,7 +2173,6 @@ div.lp_tree {
     height: 100%;
     overflow: auto;
     padding: 3px 10px 3px 0;
-    width: 230px;
 }
 
 table.lp_build td.tree {
@@ -3577,9 +3559,10 @@ a.forum_group_link {
 #hide_bar_template {
     width: 10px;    
     display: inline; 
-    overflow: hidden; 
+    float:left;
     height: 100%; 
     padding-bottom: 90em;
+    margin-bottom: -90em;
     cursor:pointer;
     background-color:#eee;
     margin-left: 0px !important;    

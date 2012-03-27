@@ -2649,7 +2649,7 @@ class Tracking {
 								}
 							}
 				
-							echo Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
+							$html .= Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
 				
 							if (empty($graph)) {
 								$graph = '-';

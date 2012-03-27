@@ -57,7 +57,7 @@ if (isset($form)) {
             $key = Database::escape_string($plugin_name.'_'.$key);
             api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);        
         }
-        $message = Display::return_message(get_lang('ConfigurationSaved'), 'success');
+        $message = Display::return_message(get_lang('Updated'), 'success');
     }
 }
 

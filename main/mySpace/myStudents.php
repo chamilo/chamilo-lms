@@ -299,13 +299,12 @@ if (!empty($student_id)) {
     }
 		
 	// get average of score and average of progress by student
-	$avg_student_progress = $avg_student_score = $nb_courses = 0;
+	$avg_student_progress = $avg_student_score = 0;
 	$course_code = Security :: remove_XSS($_GET['course']);	
 	
 	if (!CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
 		unset($courses[$key]);
-	} else {
-		$nb_courses++;
+	} else {		
 		$avg_student_progress = Tracking::get_avg_student_progress($user_info['user_id'], $course_code, array(), $session_id);
 		//the score inside the Reporting table
 		$avg_student_score 	  = Tracking::get_avg_student_score($user_info['user_id'], $course_code, array(), $session_id);
@@ -666,13 +665,6 @@ if (empty($_GET['details'])) {
 } else {
 	$csv_content[] = array ();
     $csv_content[] = array (str_replace('&nbsp;', '', $table_title));        
-
-    $headerLearnpath = array (
-    	get_lang('Learnpath'),
-    	get_lang('Time'),
-    	get_lang('Progress'),
-    	get_lang('LastConnexion')
-    );
     
     $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
     		

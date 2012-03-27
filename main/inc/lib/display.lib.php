@@ -1371,4 +1371,9 @@ class Display {
         return $div;
     }
     
+    function badge($count) {
+        $count = intval($count);
+        return ' <span class="badge badge-warning">'.$count.'</span>';
+    }
+    
 } //end class Display

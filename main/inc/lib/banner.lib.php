@@ -79,7 +79,7 @@ function get_tabs() {
 	        $group_pending_invitations = count($group_pending_invitations);
         }
         $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        $total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');        
+        $total_invitations = (!empty($total_invitations)?' 	<span class="badge badge-warning">'.$total_invitations.'</span>':'');        
         
 		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}

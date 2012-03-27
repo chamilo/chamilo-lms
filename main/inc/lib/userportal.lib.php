@@ -786,6 +786,7 @@ class IndexManager {
 	function return_profile_block() {
 		$html = '';
 		$user_id = api_get_user_id();
+        
 		if (empty($user_id)) {
 			return; 
 		}
@@ -825,7 +826,7 @@ class IndexManager {
 			$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
 			$cant_msg  = '';
 			if ($number_of_new_messages > 0) {
-				$cant_msg = ' ('.$number_of_new_messages.')';
+				$cant_msg = ' <span class="badge badge-warning">'.$number_of_new_messages.'</span>';
 			}         
             
 			$link = '';
@@ -839,7 +840,7 @@ class IndexManager {
 				if ($total_invitations == 0) {
 					$total_invitations = '';
 				} else {
-					$total_invitations = ' ('.$total_invitations.')';
+					$total_invitations = ' <span class="badge badge-warning">'.$total_invitations.'</span>';
 				}
 				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
 			}

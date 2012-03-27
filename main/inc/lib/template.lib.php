@@ -52,10 +52,9 @@ class Template extends Smarty {
 		
 		//Setting user variables 
 		$this->set_user_parameters();
-                        
-        //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
+        
+        //Setting course variables 
+		$this->set_course_parameters();    
 		
 		//header and footer are showed by default
 		$this->set_footer($show_footer);        
@@ -212,8 +211,16 @@ class Template extends Smarty {
 		
 	function get_template($name) {
 		return $this->style.'/'.$name;
-	}	
+    }	
+    
+    /* Set course parameters */
+    private function set_course_parameters() {                        
+        //Setting course id
+        $course_id = api_get_course_int_id();
+        $this->course_id = $course_id;
+    }
 	
+    /* Set user parameters */
 	private function set_user_parameters() {
 		$user_info = array();
 		$user_info['logged'] = 0;
@@ -234,6 +241,7 @@ class Template extends Smarty {
 		$this->assign('_u', $user_info); 
 	}	
 	
+    /* Set system parameters */
 	private function set_system_parameters() {
 		global $_configuration;
 		

@@ -6682,7 +6682,7 @@ class learnpath {
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
         }        
-        $form = new FormValidator('form', 'POST', api_get_self() . '?' .Security::remove_XSS($_SERVER['QUERY_STRING']), '', array('enctype'=> "multipart/form-data"));
+        $form = new FormValidator('form', 'POST', api_get_self() . '?' .$_SERVER['QUERY_STRING'], '', array('enctype'=> "multipart/form-data"));
         $defaults['title'] = Security :: remove_XSS($item_title);
         if (empty($item_title)) {
             $defaults['title'] = Security::remove_XSS($item_title);

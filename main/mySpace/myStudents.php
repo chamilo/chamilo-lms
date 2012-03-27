@@ -205,7 +205,7 @@ if ($check) {
 }		
 
 // infos about user
-$user_info = UserManager::get_user_info_by_id($student_id);
+$user_info = api_get_user_info($student_id);
 
 $courses_in_session = array();
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());

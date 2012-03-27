@@ -250,7 +250,8 @@ class Template extends Smarty {
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
-                    'web_img' 		=> api_get_path(WEB_IMG_PATH)					
+                    'web_img' 		=> api_get_path(WEB_IMG_PATH),
+                    'web_plugin'    => api_get_path(WEB_PLUGIN_PATH)                    
 					);
 		$this->assign('_p', $_p);
 		

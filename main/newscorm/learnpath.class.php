@@ -5623,7 +5623,7 @@ class learnpath {
         if ($action != 'move') {
             $return .= '<tr>';
             $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
-            $return .= '<td class="input"><input id="idTitle" name="title" size="44" type="text" class="learnpath_item_form" value="' . $item_title . '" /></td>';
+            $return .= '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" /></td>';
             $return .= '</tr>';
         }
 
@@ -5632,7 +5632,7 @@ class learnpath {
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
 
-        $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
 
         $return .= '<option class="top" value="0">' . $this->name . '</option>';
 
@@ -6681,9 +6681,8 @@ class learnpath {
 
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display :: return_warning_message('<strong>' . get_lang('Warning') . ' !</strong><br />' . get_lang('WarningEditingDocument'), false);
-        }
-        require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-        $form = new FormValidator('form', 'POST', api_get_self() . '?' . $_SERVER['QUERY_STRING'], '', 'enctype="multipart/form-data"');
+        }        
+        $form = new FormValidator('form', 'POST', api_get_self() . '?' .Security::remove_XSS($_SERVER['QUERY_STRING']), '', array('enctype'=> "multipart/form-data"));
         $defaults['title'] = Security :: remove_XSS($item_title);
         if (empty($item_title)) {
             $defaults['title'] = Security::remove_XSS($item_title);
@@ -6691,7 +6690,7 @@ class learnpath {
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
         if ($action != 'move') {
-            $form->addElement('text', 'title', get_lang('Title'), 'id="idTitle" class="learnpath_item_form" size=44%');
+            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'span4'));
             $form->applyFilter('title', 'html_filter');
         }
 
@@ -6881,8 +6880,7 @@ class learnpath {
         if (is_numeric($extra_info)) {
             $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'value="submit_button", class="save"');
             $form->addElement('hidden', 'path', $extra_info);
-        }
-        elseif (is_array($extra_info)) {
+        } elseif (is_array($extra_info)) {
             $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
             $form->addElement('hidden', 'path', $extra_info['path']);
         }

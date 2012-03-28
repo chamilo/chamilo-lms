@@ -118,6 +118,8 @@ define('SECTION_GLOBAL', 'global');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
+define('CAS_AUTH_SOURCE', 'cas');
+define('LDAP_AUTH_SOURCE', 'extldap');
 
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');

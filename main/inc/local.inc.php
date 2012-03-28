@@ -258,7 +258,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		if (Database::num_rows($result) > 0) {
 			$uData = Database::fetch_array($result);
 
-			if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
+			if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
 				//the authentification of this user is managed by Chamilo itself
 				$password = trim(stripslashes($password));
 

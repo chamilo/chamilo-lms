@@ -1,7 +1,8 @@
 <?php
 /* See license terms in /license.txt */
+
 class AppPlugin {
-    var $plugin_blocks = array ( 
+    var $plugin_regions = array ( 
  //           'loginpage_main',
             'login_top',
             'login_bottom',
@@ -24,8 +25,7 @@ class AppPlugin {
             'course_tool_plugin'
     );
     
-    function __construct() {
-        
+    function __construct() {        
     }
     
     /*  For each of the possible plugin directories we check whether a file named "plugin.php" exists
@@ -37,6 +37,7 @@ class AppPlugin {
         $plugin_info['version'] = '0.1 alpha'; // The version number of the plugin.
         $plugin_info['author'] = 'Patrick Cool'; // The author of the plugin.
     */
+    
     function read_plugins_from_path() {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginpath = api_get_path(SYS_PLUGIN_PATH);
@@ -52,14 +53,14 @@ class AppPlugin {
         return $possible_plugins;
     }
     
-    function get_installed_plugins_by_block(){
-        $usedplugins = array();
+    function get_installed_plugins_by_region(){
+        $used_plugins = array();
         /* We retrieve all the active plugins. */    
         $result = api_get_settings('Plugins');    
         foreach ($result as $row) {
-            $usedplugins[$row['variable']][] = $row['selected_value'];
+            $used_plugins[$row['variable']][] = $row['selected_value'];
         }
-        return $usedplugins;
+        return $used_plugins;
     }
     
     function get_installed_plugins() {
@@ -132,17 +133,17 @@ class AppPlugin {
         return false;
     }
     
-    function get_plugin_blocks() {
-        sort($this->plugin_blocks);
-        return $this->plugin_blocks;
+    function get_plugin_regions() {
+        sort($this->plugin_regions);
+        return $this->plugin_regions;
     }
     
-    function load_block($block, $main_template) {
+    function load_region($region, $main_template) {
         ob_start();		
-        $this->get_all_plugin_contents_by_block($block, $main_template);		
-        $block_content = ob_get_contents();
+        $this->get_all_plugin_contents_by_region($region, $main_template);		
+        $content = ob_get_contents();
         ob_end_clean();
-        return $block_content;
+        return $content;
     }
     
     /** 
@@ -152,18 +153,18 @@ class AppPlugin {
      * @param smarty obj      
      * @todo improve this function
      */
-    function get_all_plugin_contents_by_block($block, $template) {
+    function get_all_plugin_contents_by_region($region, $template) {
         global $_plugins;
-        if (isset($_plugins[$block]) && is_array($_plugins[$block])) {
+        if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
         //if (1) {
-            foreach ($_plugins[$block] as $plugin_name) {
+            foreach ($_plugins[$region] as $plugin_name) {
                 //Load the plugin information
                 
                 //The plugin_info variable is available inside the plugin index                
                 $plugin_info = $this->get_plugin_info($plugin_name);
                 
                 //We also where the plugin is
-                $plugin_info['current_region'] = $block;    
+                $plugin_info['current_region'] = $region;    
                 
                 // Loading the plugin/XXX/index.php file                
                 $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";                

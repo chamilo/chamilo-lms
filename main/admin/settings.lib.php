@@ -49,7 +49,7 @@ function handle_regions() {
     /* We display all the possible plugins and the checkboxes */
     
     $plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }
@@ -121,7 +121,7 @@ function handle_plugins() {
     echo '</tr>';
     
     $plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }

@@ -80,9 +80,9 @@ class Template extends Smarty {
         
         //Chamilo plugins
         $this->plugin = new AppPlugin();
-        $plugin_blocks = $this->plugin->get_plugin_blocks();        
-        foreach ($plugin_blocks as $block) {
-            $this->set_plugin_block($block);
+        $plugin_regions = $this->plugin->get_plugin_regions();        
+        foreach ($plugin_regions as $region) {
+            $this->set_plugin_region($region);
         }  
 	}
     
@@ -588,12 +588,12 @@ class Template extends Smarty {
     }
     
     /* Sets the plugin content in a Smarty variable */
-    function set_plugin_block($plugin_block) {
-        if (!empty($plugin_block)) {          
-            $block_content = $this->plugin->load_block($plugin_block, $this);    
-            if (!empty($block_content)) {
+    function set_plugin_region($plugin_region) {
+        if (!empty($plugin_region)) {          
+            $content = $this->plugin->load_region($plugin_region, $this);    
+            if (!empty($content)) {
                 //Assigning the plugin with the smarty template
-                $this->assign('plugin_'.$plugin_block, $block_content);                
+                $this->assign('plugin_'.$plugin_region, $content);                
             }
         }
         return null;

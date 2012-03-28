@@ -413,6 +413,7 @@ class Template extends Smarty {
 			$css_file_to_string .= api_get_css($css_file);
 		}
         
+        // @todo move this somewhere else
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>                
@@ -467,7 +468,7 @@ class Template extends Smarty {
         $this->set_help();
         
 		$bug_notification_link = '';
-		if (api_get_setting('show_link_bug_notification') == 'true') {
+		if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
 			$bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
 		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang('ReportABug').'"/></a>

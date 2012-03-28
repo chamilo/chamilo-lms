@@ -465,11 +465,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     $navigation = array();
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
     	
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
-
+        
+        $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+        
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
                 $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
@@ -478,13 +481,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 break;
             default:
                 if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) { 
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 } else {
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$_course['name'];
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;
                 }
                 break;
         }
@@ -497,6 +500,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         */
         $navigation[] = $navigation_item;
     }
+    
     // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {        
         foreach ($interbreadcrumb as $breadcrumb_step) {
@@ -529,9 +533,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = get_lang('Gallery');
             }
             //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
-            if (api_strlen($navigation_item['title']) > MAX_LENGTH_BREADCRUMB) {
-            	$navigation_item['title'] = api_substr($navigation_item['title'], 0, MAX_LENGTH_BREADCRUMB).' ...';
-            }
+            
+            $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);            
             $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
             $navigation[] = $navigation_item;
         }
@@ -551,11 +554,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
+                     
             if ($navigation_info['url'] == '#') {
-                
-                
-                    $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
-                
+                $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';                
             } else {
                 $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top"><span>'.$navigation_info['title'].'</span></a>';
             }
@@ -592,7 +593,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         } else {
             $lis.= Display::tag('li', $home_link);    
         }
-        $html .= Display::tag('ul',$lis, array('class'=>'breadcrumb'));        
+        $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));        
     }
     return $html ;
 }

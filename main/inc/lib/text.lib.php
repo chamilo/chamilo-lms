@@ -563,7 +563,7 @@ function cut($text, $maxchar, $embed = false) {
         if ($embed) {
             return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
         }
-        return api_substr($text, 0, $maxchar).'...';
+        return api_substr($text, 0, $maxchar).' ...';
     }
     return $text;
 }

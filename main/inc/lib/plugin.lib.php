@@ -161,27 +161,23 @@ class AppPlugin {
                 //Load the plugin information
                 
                 //The plugin_info variable is available inside the plugin index                
-                $plugin_info = $this->get_plugin_info($plugin_name);
+                $plugin_info = $this->get_plugin_info($plugin_name);                
                 
                 //We also where the plugin is
                 $plugin_info['current_region'] = $region;    
                 
                 // Loading the plugin/XXX/index.php file                
-                $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";                
+                $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
+                
                 if (file_exists($plugin_file)) {
                     require $plugin_file;
 
-                    //We set the $template variable in order to use smarty                    
-                    if (isset($_template) && !empty($_template)) {   
-                        /*
-                        foreach ($_template as $key =>$value) {                            
-                            $template->assign($plugin_name[$key], $value);                          
-                        }
-                        */
+                    //We set the $template variable in order to use Smarty                    
+                    if (isset($_template) && !empty($_template)) {                        
                         $template->assign($plugin_name, $_template);
                     }                
 
-                    //Loading the smarty template files if exists
+                    //Loading the Smarty template plugin files if exists
                     $template_list = array();
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
@@ -205,31 +201,31 @@ class AppPlugin {
      *
      * Loads plugin info 
      * @staticvar array $plugin_data
-     * @param type $plugin_name
-     * @param type bool
+     * @param string plugin name
+     * @param bool load from DB or from the static array
      * @todo filter setting_form
      * @return array 
      */
     function get_plugin_info($plugin_name, $forced = false) {
         static $plugin_data = array();
-        if (isset($plugin_data[$plugin_name]) && $forced == false) {
+        if (isset($plugin_data[$plugin_name]) && $forced == false) {            
             return $plugin_data[$plugin_name]; 
         } else {
-            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
+            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";            
             $plugin_info = array();
             if (file_exists($plugin_file)) {
                 require $plugin_file;            
-            }
-            $plugin_data[$plugin_name] = $plugin_info;
+            }            
            
             //extra options
             $plugin_settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " =>
-                                            array($plugin_name, 'Plugins','setting')));
+                                            array($plugin_name, 'Plugins','setting')));            
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
                 $settings_filtered[$item['variable']] = $item['selected_value'];
             }
-            $plugin_info['settings'] = $settings_filtered;            
+            $plugin_info['settings'] = $settings_filtered;        
+            $plugin_data[$plugin_name] = $plugin_info;            
             return $plugin_info;
         }
     }

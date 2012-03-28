@@ -106,7 +106,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
 
     $session_id        = $track_exercise_info['session_id'];
     $lp_id             = $track_exercise_info['orig_lp_id'];
-    $lp_item_id        = $track_exercise_info['orig_lp_item_id'];
+    //$lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
     
     // Teacher data    
@@ -241,8 +241,7 @@ if ($is_allowedToEdit || $is_tutor) {
     if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);    
     }    
-} else {
-    
+} else {    
     $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
     $objExerciseTmp = new Exercise();        
     if ($objExerciseTmp->read($exercise_id)) {
@@ -263,15 +262,15 @@ $extra =  '<script type="text/javascript">
                 autoOpen: false,
                 show: "blind",                
                 resizable: false,
-                height:250,
+                height:300,
                 modal: true
          });
     
         $("#export_opener").click(function() {                
             var targetUrl = $(this).attr("href");        
             $( "#dialog-confirm" ).dialog({
-                width:350,
-                height:220,
+                width:400,
+                height:300,
                 buttons: {
                     "'.addslashes(get_lang('Download')).'": function() {
                         var export_format = $("input[name=export_format]:checked").val();
@@ -288,9 +287,12 @@ $extra =  '<script type="text/javascript">
     </script>';
 
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
-$extra .= Display::tag('p', Display::input('radio', 'export_format', 'csv', array('checked'=>'1', 'id'=>'export_format_csv_label')). Display::tag('label', get_lang('ExportAsCSV'), array('for'=>'export_format_csv_label')));
-$extra .= Display::tag('p', Display::input('radio', 'export_format', 'xls', array('id'=>'export_format_xls_label')). Display::tag('label', get_lang('ExportAsXLS'), array('for'=>'export_format_xls_label')));   
-$extra .= Display::tag('p', Display::input('checkbox', 'load_extra_data',  '0',array('id'=>'load_extra_data_id')). Display::tag('label', get_lang('LoadExtraData'), array('for'=>'load_extra_data_id')));
+$form = new FormValidator('report', 'post', null, null, array('class' => 'form-vertical'));
+$form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', array('id' => 'export_format_csv_label'));
+$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
+$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
+$form->setDefaults(array('export_format' => 'csv'));
+$extra .= $form->return_form();
 $extra .= '</div>';
 
 if ($is_allowedToEdit) 
@@ -436,13 +438,11 @@ function exportExcel() {
     form.submit();
 }
 
-$(function() {
-    
+$(function() {    
     <?php 
         echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);      
-    ?>
-    
-    <?php if ($is_allowedToEdit || $is_tutor) { ?>       
+        
+    if ($is_allowedToEdit || $is_tutor) { ?>       
         
         //setSearchSelect("status"); 
         //
@@ -474,7 +474,6 @@ $(function() {
         },buttonicon:'ui-icon-document'})
         */
 
-
         //Adding search options
         var options = {
             'stringResult': true,
@@ -493,7 +492,6 @@ $(function() {
     <input type="hidden" name="export_report" id="export_report" value="1" />    
     <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" /> 
 </form>
-
 <?php
 
 echo Display::grid_html('results');

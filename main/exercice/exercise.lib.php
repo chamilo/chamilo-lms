@@ -1130,9 +1130,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }                    
                     
                     if ($revised) {
-                        $revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));                            
+                        $revised = Display::label(get_lang('Validated'), 'success');                            
                     } else {
-                        $revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));                            
+                        $revised = Display::label(get_lang('NotValidated'), 'info');
                     }
                     
                     if ($is_allowedToEdit || $is_tutor) {                        					

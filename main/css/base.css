@@ -19,7 +19,7 @@ select {
     visibility: visible;
 }
 
-.label {
+form .label {
     padding: 1px 3px 2px;
     font-size: 100%;
     font-weight: normal;
@@ -115,10 +115,13 @@ form .formw input {
     height:26px;
 }
 
-#lp_navigation_elem .buttons,
-#lp_navigation_elem #progress_bar {
-    width:130px;
-    margin:0px 0px 10px 15px;    
+#lp_navigation_elem .buttons{
+    margin-bottom: 5px;    
+}
+
+#lp_navigation_elem {
+    padding-left: 15px;
+    width: 110px;
 }
 
 * {

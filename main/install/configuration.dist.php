@@ -87,6 +87,11 @@ $_configuration['db_admin_path']  = '';
 // $extAuthSource["ldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/login.php";
 // $extAuthSource["ldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/newUser.php";
 //
+// Go to Chamilo > Administration > CAS to activate CAS
+// You can leave these lines uncommented even if you don't use CAS
+$extAuthSource["cas"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
+$extAuthSource["cas"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
+//
 // To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
 // $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.php";
 // $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/updateUser.php";

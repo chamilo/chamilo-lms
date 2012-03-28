@@ -1199,7 +1199,7 @@ class CourseRestorer
                 $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));
                 foreach ($new_answers as $answer_item) {                	
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update($table_ans, $params, array('id = ?'=>$answer_item['id']));
+                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
                 }                
             }            
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
@@ -1291,11 +1291,9 @@ class CourseRestorer
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id) {
 								$qid = $this->restore_survey_question($question_id, $new_id);
-								$sql = "UPDATE ".$table_que." " .
-										"SET survey_id = ".$new_id." WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
+								$sql = "UPDATE ".$table_que." SET survey_id = ".$new_id." WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 								Database::query($sql);
-								$sql = "UPDATE ".$table_ans." ".
-										"SET survey_id = ".$new_id." WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
+								$sql = "UPDATE ".$table_ans." SET survey_id = ".$new_id." WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
 								Database::query($sql);
 							}
 

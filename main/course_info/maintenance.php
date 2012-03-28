@@ -16,7 +16,7 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang('Maintenance');
 api_block_anonymous_users();
 Display :: display_header($nameTools);
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 ?>
 

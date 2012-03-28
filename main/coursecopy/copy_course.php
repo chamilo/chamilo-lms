@@ -77,40 +77,31 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	if (Database::num_rows($res) == 0) {
 		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
 	} else {
-?>
-	<form method="post" action="copy_course.php">
-<?php
-	echo get_lang('SelectDestinationCourse');
-	echo ' <select name="destination_course"/>';
-	while ($obj = Database::fetch_object($res)) {
-		echo '<option value="'.$obj->code.'">'.$obj->title.'</option>';
-	}
-	echo '</select>';
-?>
-	<br/>
-	<br/>
-	<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy"/>
-	<label for="copy_option_1"><?php echo get_lang('FullCopy'); ?></label>
-	<br/>
-	<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" checked="checked"/>
-	<label for="copy_option_2"><?php echo get_lang('LetMeSelectItems'); ?></label>
-	<br/>
-	<br/>
-	<?php echo get_lang('SameFilename'); ?>
-	<blockquote>
-	<input type="radio" class="checkbox"  id="same_file_name_option_1" name="same_file_name_option" value="<?php echo FILE_SKIP; ?>"/>
-	<label for="same_file_name_option_1"><?php echo  get_lang('SameFilenameSkip'); ?></label>
-	<br/>
-	<input type="radio" class="checkbox" id="same_file_name_option_2" name="same_file_name_option" value="<?php echo FILE_RENAME; ?>"/>
-	<label for="same_file_name_option_2"><?php echo get_lang('SameFilenameRename'); ?></label>
-	<br/>
-	<input type="radio" class="checkbox"  id="same_file_name_option_3" name="same_file_name_option"  value="<?php echo FILE_OVERWRITE; ?>" checked="checked"/>
-	<label for="same_file_name_option_3"><?php echo get_lang('SameFilenameOverwrite'); ?></label>
-	</blockquote>
-	<br/>
-	<button class="save" type="submit"><?php echo get_lang('CopyCourse'); ?></button>
-	</form>
-<?php
+        $options = array();
+        while ($obj = Database::fetch_object($res)) {
+            $options[$obj->code] = $obj->title;
+        }
+    
+        $form = new FormValidator('copy_course', 'post', 'copy_course.php');
+        $form->addElement('header','' );
+        $form->addElement('select','destination_course', get_lang('SelectDestinationCourse'), $options);
+        
+        $group = array();
+        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');
+        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('LetMeSelectItems'), 'select_items');
+        $form->addGroup($group, '', get_lang('SelectOptionForBackup'));
+        
+        $group = array();
+        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameSkip'), FILE_SKIP);
+        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameRename'), FILE_RENAME);
+        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
+        $form->addGroup($group, '', get_lang('SameFilename'));
+        
+        $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'),'class="save"');
+        
+        $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
+        $form->display();
+
 	}
 }
 

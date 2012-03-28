@@ -1587,7 +1587,7 @@ class Exercise {
 	
 		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {			
 			$html .='<a href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
-			$html .= get_lang('ValidateAnswer').'</a>';
+			$html .= get_lang('EndTest').'</a>';
 			$html .='<br />';			 
 		} else {
 			//User
@@ -1597,8 +1597,8 @@ class Exercise {
 						$label = get_lang('ReviewQuestions');
 						$class = 'btn btn-primary';
 					} else {
-						$label = get_lang('ValidateAnswers');
-						$class = 'btn btn-sucess';
+						$label = get_lang('EndTest');
+						$class = 'btn btn-success';
 					}
 				} else {
 					$label = get_lang('NextQuestion');
@@ -1620,8 +1620,8 @@ class Exercise {
 						$all_label = get_lang('ReviewQuestions');
 						$class = 'btn btn-primary';
 					} else {
-						$all_label = get_lang('ValidateAnswers');
-						$class = 'btn btn-sucess';
+						$all_label = get_lang('EndTest');
+						$class = 'btn btn-success';
 					}
 					$all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
 					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';					
@@ -2980,8 +2980,7 @@ class Exercise {
 			if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
 				// We made an extra table for the answers
 				
-				if ($show_result) {
-				
+				if ($show_result) {				
 					if ($origin != 'learnpath') {
 						echo '</table></td></tr>';
 						echo '<tr>
@@ -2992,24 +2991,20 @@ class Exercise {
 								<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$exeId.'&from_db=1" />
 							</object>';
 						echo '</td>
-                        </tr>';  
-
+                        </tr>';
 					}
 				}
 			}
 
 			if ($origin != 'learnpath') {				
 				if ($show_result) {
-					echo '</table>';
-					//if ($this->type == ALL_ON_ONE_PAGE) {
+					echo '</table>';					
 						echo '<div id="question_score">';
 						if ($propagate_neg == 0 && $questionScore < 0) {
 							$questionScore = 0;
 						}
 						echo get_lang('Score').": ".show_score($questionScore, $questionWeighting, false, false);
 						echo '</div>';
-					//}
-					echo '<br />';
 				}
 			}
 		}

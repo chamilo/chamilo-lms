@@ -204,8 +204,7 @@ if ($origin != 'learnpath') {
         }     
         echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
         echo '</div>';
-    }
-    /* <button type="submit" class="save"><?php echo get_lang('Finish');?></button> */
+    }    
 }
 
 // Tracking of results

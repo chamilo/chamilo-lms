@@ -80,17 +80,18 @@ if (isset($_GET['preview'])) {
 	$extra_params = '&preview=1';	
 }
 
-//Exercise button
-//Notice we not add there the lp_item_view__id because is not already generated 
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
-$label = get_lang('StartTest');
-if ($time_control && !empty($clock_expired_time)) {
-	$label = get_lang('ContinueTest');
-}
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
 	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+}
+
+//Exercise button
+//Notice we not add there the lp_item_view__id because is not already generated 
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
+$label = get_lang('StartTest');
+if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
+	$label = get_lang('ContinueTest');
 }
 
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'btn btn-primary btn-large'));

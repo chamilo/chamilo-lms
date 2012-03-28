@@ -556,13 +556,13 @@ class SocialManager extends UserManager {
 
 		// get count unread message and total invitations
 		$count_unread_message = MessageManager::get_number_of_messages(true);
-		$count_unread_message = (!empty($count_unread_message)?' ('.$count_unread_message.')':'');
+		$count_unread_message = (!empty($count_unread_message)? Display::badge($count_unread_message) :'');
 
 		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
 		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
 		$group_pending_invitations = count($group_pending_invitations);
 		$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-		$total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');
+		$total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
 		
 		$html = '<div class="social-menu">';
 		

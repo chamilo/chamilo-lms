@@ -194,21 +194,18 @@ function ItemDiv_OnMouseOut()
 
 function ItemDiv_OnClick()
 {
-	SelectTemplate( this.TplIndex ) ;
+	SelectTemplate( this.TplIndex ) ;    
+    if (window.top.hide_bar) {
+        window.top.hide_bar();
+    }
 }
 
 function SelectTemplate( index )
 {
 	oEditor.FCKUndo.SaveUndoStep() ;
-	FCK.SetHTML( FCK._Templates[index].Html ) ;
+	FCK.SetHTML( FCK._Templates[index].Html ) ;    
 }
-
-	</script>
-
-	<style type="text/css">
-		body, td, input, textarea, select, label { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }
-	</style>
-
+</script>
 </head>
 <body scroll="no" style="overflow: hidden; background-color: #ffffff;">
 	<table width="100%" style="height: 100%;" valign="top">

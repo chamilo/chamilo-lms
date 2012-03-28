@@ -145,18 +145,7 @@ switch ($action) {
 		$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
 		// Check whether the document is in the database
 		if (empty($document_data)) {
-			// File not found!
-			header('HTTP/1.0 404 Not Found');
-			$error404 = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">';
-			$error404 .= '<html><head>';
-			$error404 .= '<title>404 Not Found</title>';
-			$error404 .= '</head><body>';
-			$error404 .= '<h1>Not Found</h1>';
-			$error404 .= '<p>The requested URL was not found on this server.</p>';
-			$error404 .= '<hr>';
-			$error404 .= '</body></html>';
-			echo $error404;
-			exit;
+            api_not_allowed();
 		}
 		// Launch event
 		event_download($document_data['url']);
@@ -233,11 +222,9 @@ switch ($action) {
                 if (!copy($file, $copyfile)) {
                     $message = Display::return_message(get_lang('CopyFailed'), 'error');
                 } else {
-                    $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);
-                     
+                    $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);                     
                     /*$doc_id = add_document($_course, $copyfile , 'file', filesize($copyfile), $document_info['title']);                    
-                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $session_id);*/
-                                           
+                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $session_id);*/                                           
                 }
             }
         }        
@@ -480,7 +467,6 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 //$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.inspector.js"></script>';
 
-
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 
 //automatic loading the course language for yoxview
@@ -518,7 +504,7 @@ foreach ($docs_and_folders  as $file) {
                                 //errorAlerts: true,
                                 //warningAlerts: true,
                                 swfPath: "'.$js_path.'jquery-jplayer",
-                                supplied: "m4a, oga, mp3, ogg, wav",
+                                //supplied: "m4a, oga, mp3, ogg, wav",
                                 wmode: "window",
                                 //solution: "flash, html",  // Do not change this setting otherwise 
                                 cssSelectorAncestor: "#jp_container_'.$count.'", 

@@ -607,7 +607,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }          
-        echo show_score($my_total_score_temp, $totalWeighting, false);	
+        echo show_score($my_total_score_temp, $totalWeighting, false);	        
 		echo '</div>';
 	}
 }

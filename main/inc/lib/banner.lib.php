@@ -79,7 +79,7 @@ function get_tabs() {
 	        $group_pending_invitations = count($group_pending_invitations);
         }
         $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        $total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');        
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');        
         
 		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}
@@ -111,9 +111,8 @@ function get_tabs() {
 	return $navigation;
 }
 
-function show_header_1($language_file, $nameTools, $theme) {
-    global $noPHP_SELF;    
-    $_course = api_get_course_info();      
+function return_logo($theme) {    
+    $_course = api_get_course_info();    
     $html = '';
     $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';            
     
@@ -146,21 +145,21 @@ function show_header_1($language_file, $nameTools, $theme) {
         }
     }        
         
-    /*  Course title section */    
+   /* //  Course title section 
     if (!empty($_cid) and $_cid != -1 and isset($_course)) {
         //Put the name of the course in the header  
         $html .= '<div id="my_courses">';     
         $html .= '</div>';        
     } elseif (isset($nameTools) && $language_file != 'course_home') {
         //Put the name of the user-tools in the header
-        if (!isset($_user['user_id'])) {
+        if (!isset($user_id)) {
             //echo '<div id="my_courses"></div>';
         } elseif (!$noPHP_SELF) {
             $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
         } else {
             $html .= '<div id="my_courses">'.$nameTools.'</div>';
         }   
-    }    
+    }*/    
     return $html;
 }
 
@@ -221,7 +220,7 @@ function return_navigation_array() {
     
     $navigation         = array();
     $menu_navigation    = array();
-    $possible_tabs      = get_tabs();    
+    $possible_tabs      = get_tabs();        
         
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
@@ -326,7 +325,7 @@ function return_navigation_array() {
 }
 
 function return_menu() {
-    $navigation         = return_navigation_array();    
+    $navigation         = return_navigation_array();        
     $navigation         = $navigation['navigation'];
    
     // Displaying the tabs
@@ -407,11 +406,11 @@ function return_menu() {
         $show_bar = true;
     }
         
-    $menu = '';
+    $menu = null;
     
     // Logout    
     if ($show_bar) {
-        if (api_get_user_id()) {
+        if (api_get_user_id() && !api_is_anonymous()) {
             $login = '';
             if (api_is_anonymous()) {
                 $login = get_lang('Anonymous');
@@ -421,6 +420,7 @@ function return_menu() {
             $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id();
             
             $message_link  = null;
+            
             if (api_get_setting('allow_message_tool') == 'true') {
                 $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
             }
@@ -446,7 +446,7 @@ function return_menu() {
             $menu .= $lis;
             $menu .= '</ul>';
         }
-    }
+    }    
     return $menu;
 }
 
@@ -465,11 +465,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     $navigation = array();
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
     	
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
-
+        
+        $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+        
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
                 $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
@@ -478,13 +481,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
+                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 break;
             default:
                 if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) { 
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$_course['name'].$my_session_name;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 } else {
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$_course['name'];
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;
                 }
                 break;
         }
@@ -497,6 +500,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         */
         $navigation[] = $navigation_item;
     }
+    
     // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {        
         foreach ($interbreadcrumb as $breadcrumb_step) {
@@ -529,9 +533,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = get_lang('Gallery');
             }
             //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
-            if (api_strlen($navigation_item['title']) > MAX_LENGTH_BREADCRUMB) {
-            	$navigation_item['title'] = api_substr($navigation_item['title'], 0, MAX_LENGTH_BREADCRUMB).' ...';
-            }
+            
+            $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);            
             $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
             $navigation[] = $navigation_item;
         }
@@ -551,11 +554,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
+                     
             if ($navigation_info['url'] == '#') {
-                
-                
-                    $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';
-                
+                $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';                
             } else {
                 $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top"><span>'.$navigation_info['title'].'</span></a>';
             }
@@ -592,7 +593,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         } else {
             $lis.= Display::tag('li', $home_link);    
         }
-        $html .= Display::tag('ul',$lis, array('class'=>'breadcrumb'));        
+        $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));        
     }
     return $html ;
 }

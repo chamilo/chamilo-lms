@@ -112,7 +112,6 @@ $currentUserFirstName 	= $_user['firstName'];
 $currentUserLastName 	= $_user['lastName'];
 $currentUserEmail 		= $_user['mail'];
 
-$delete			        = isset($_REQUEST['delete']) ? Database::escape_string($_REQUEST['delete']) : '';
 $description 	        = isset($_REQUEST['description']) ? Database::escape_string($_REQUEST['description']) : '';
 
 $item_id 		        = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
@@ -1026,29 +1025,29 @@ switch ($action) {
 		/*	Delete dir command */
 		
 		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {	
-
-			del_dir($_REQUEST['delete_dir']);	
-	
-			$delete_2 = intval($_REQUEST['delete_dir']);
+            $delete_dir_id = intval($_REQUEST['delete_dir']);
+            $work_to_delete = get_work_data_by_id($delete_dir_id);
+			del_dir($delete_dir_id);	
+			
 			// gets calendar_id from student_publication_assigment
-			$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_2'";
+			$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
 			$res = Database::query($sql);
 			$calendar_id = Database::fetch_row($res);
+            
 			// delete from agenda if it exists
 			if (!empty($calendar_id[0])) {
 				$t_agenda   = Database::get_course_table(TABLE_AGENDA);
 				$sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
 				Database::query($sql);
 			}
-			$sql2 = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_2'";
-			$result2 = Database::query($sql2);
+			$sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
+			Database::query($sql);
 		
-			$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_2, api_get_session_id());
+			$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_dir_id, api_get_session_id());
 			if ($link_id !== false) {
 				remove_resource_from_course_gradebook($link_id);
-			}
-            Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
-            
+			}            
+            Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);            
 		}
 		
 		/*	DELETE WORK COMMAND */
@@ -1056,9 +1055,10 @@ switch ($action) {
 		if ($action == 'delete' && $item_id) {
 							
             $file_deleted = false;	
-            $is_author = user_is_author($item_id);            
+            $is_author = user_is_author($item_id);     
+            $work_data = get_work_data_by_id($item_id);
 
-            if (($is_author AND api_get_course_setting('student_delete_own_publication') == 1)) {
+            if ($is_allowed_to_edit || ($is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
                 //we found the current user is the author
                 $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
                 $result1 		= Database::query($queryString1);
@@ -1067,8 +1067,8 @@ switch ($action) {
                 if (Database::num_rows($result1) > 0) {
                     $queryString2 	= "UPDATE " . $work_table . "  SET active  = 2 WHERE c_id = $course_id AND id = $item_id";
                     $queryString3 	= "DELETE FROM  " . $TSTDPUBASG . "  WHERE c_id = $course_id AND publication_id = $item_id";
-                    $result2 		= Database::query($queryString2);
-                    $result3 		= Database::query($queryString3);						 
+                    Database::query($queryString2);
+                    Database::query($queryString3);						 
                     api_item_property_update($_course, 'work', $item_id, 'DocumentDeleted', $user_id);
                     $work = $row['url'];
 
@@ -1078,10 +1078,8 @@ switch ($action) {
                                 my_delete($currentCourseRepositorySys.'/'.$work);
                                 Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
                                 $file_deleted = true;
-                            } else {
-                                require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-                                $extension = pathinfo($work, PATHINFO_EXTENSION);
-                                //$basename_file = basename($work, '.'.$extension);
+                            } else {                                
+                                $extension = pathinfo($work, PATHINFO_EXTENSION);                                
                                 $new_dir = $work.'_DELETED_'.$item_id.'.'.$extension;
 
                                 if (file_exists($currentCourseRepositorySys.'/'.$work)) {

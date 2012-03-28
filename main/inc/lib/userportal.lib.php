@@ -786,6 +786,7 @@ class IndexManager {
 	function return_profile_block() {
 		$html = '';
 		$user_id = api_get_user_id();
+        
 		if (empty($user_id)) {
 			return; 
 		}
@@ -802,12 +803,11 @@ class IndexManager {
             
         if (api_get_setting('allow_social_tool') == 'true') {
             if (!$no_image) {
-				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a></li>';
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a></li>';
 			} else {
-				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a></li>';
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a></li>';
 			}
-		}
-        
+		}        
 		
 		//  @todo Add a platform setting to add the user image.
 		if (api_get_setting('allow_message_tool') == 'true') {
@@ -823,10 +823,7 @@ class IndexManager {
 			$group_pending_invitations = count($group_pending_invitations);
 		
 			$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-			$cant_msg  = '';
-			if ($number_of_new_messages > 0) {
-				$cant_msg = ' ('.$number_of_new_messages.')';
-			}         
+            $cant_msg = Display::badge($number_of_new_messages);			         
             
 			$link = '';
 			if (api_get_setting('allow_social_tool') == 'true') {
@@ -835,13 +832,9 @@ class IndexManager {
 			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
 			$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';            
 		
-			if (api_get_setting('allow_social_tool') == 'true') {
-				if ($total_invitations == 0) {
-					$total_invitations = '';
-				} else {
-					$total_invitations = ' ('.$total_invitations.')';
-				}
-				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
+			if (api_get_setting('allow_social_tool') == 'true') {                				
+				$total_invitations = Display::badge($total_invitations);				                
+				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
 			}
             $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';			
 		}
@@ -861,8 +854,7 @@ class IndexManager {
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
 		if (!empty($this->tpl->menu_navigation)) {
-			$main_navigation_content .= '<ul class="menulist">';
-            
+			$main_navigation_content .= '<ul class="menulist">';           
 		
 			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';

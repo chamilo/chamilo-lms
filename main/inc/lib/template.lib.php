@@ -2,12 +2,11 @@
 /* For licensing terms, see /license.txt */
 /* 
  * @author Julio Montoya <gugli100@gmail.com>
+ *  @todo better organization of the class, methods and variables 
  * 
  **/
 
- /* @todo better organization of the class methods and variables */
-
-// Load Smarty library
+ // Load Smarty library
 require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
@@ -22,7 +21,7 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
-    var $menu_navigation = array();
+    //var $menu_navigation = array();
     var $show_learnpath = false; // This is a learnpath section or not?
     var $plugin = null;
     var $course_id = null;
@@ -53,10 +52,9 @@ class Template extends Smarty {
 		
 		//Setting user variables 
 		$this->set_user_parameters();
-                        
-        //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
+        
+        //Setting course variables 
+		$this->set_course_parameters();    
 		
 		//header and footer are showed by default
 		$this->set_footer($show_footer);        
@@ -82,9 +80,9 @@ class Template extends Smarty {
         
         //Chamilo plugins
         $this->plugin = new AppPlugin();
-        $plugin_blocks = $this->plugin->get_plugin_blocks();        
-        foreach ($plugin_blocks as $block) {
-            $this->set_plugin_block($block);
+        $plugin_regions = $this->plugin->get_plugin_regions();        
+        foreach ($plugin_regions as $region) {
+            $this->set_plugin_region($region);
         }  
 	}
     
@@ -213,8 +211,16 @@ class Template extends Smarty {
 		
 	function get_template($name) {
 		return $this->style.'/'.$name;
-	}	
+    }	
+    
+    /* Set course parameters */
+    private function set_course_parameters() {                        
+        //Setting course id
+        $course_id = api_get_course_int_id();
+        $this->course_id = $course_id;
+    }
 	
+    /* Set user parameters */
 	private function set_user_parameters() {
 		$user_info = array();
 		$user_info['logged'] = 0;
@@ -235,6 +241,7 @@ class Template extends Smarty {
 		$this->assign('_u', $user_info); 
 	}	
 	
+    /* Set system parameters */
 	private function set_system_parameters() {
 		global $_configuration;
 		
@@ -243,7 +250,8 @@ class Template extends Smarty {
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
-                    'web_img' 		=> api_get_path(WEB_IMG_PATH)					
+                    'web_img' 		=> api_get_path(WEB_IMG_PATH),
+                    'web_plugin'    => api_get_path(WEB_PLUGIN_PATH)                    
 					);
 		$this->assign('_p', $_p);
 		
@@ -285,23 +293,24 @@ class Template extends Smarty {
 		$this->assign('css_style', $style_html);
 		
 		$style_print = '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";'."\n";
-		$this->assign('css_style_print', $style_print);
-        $this->assign('style_print',     $style_print);        
         
-        // Header 1        
-		$header1 = show_header_1($language_file, $nameTools, $this->theme);
-		$this->assign('header1', $header1);
+		$this->assign('css_style_print', $style_print);        
+        
+        // Logo
+		$logo = return_logo($this->theme);
+		$this->assign('logo', $logo);
     }
     
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
+        
 		global $lp_theme_css, $mycoursetheme, $user_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $_user, 
-				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
+		global $httpHeadXtra, $htmlHeadXtra, $_course, $text_dir,
+				$interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
-        $navigation            = return_navigation_array();        
-        $this->menu_navigation = $navigation['menu_navigation'];
+        //$navigation            = return_navigation_array();        
+        //$this->menu_navigation = $navigation['menu_navigation'];
          
 		global $_configuration;
 		
@@ -325,6 +334,7 @@ class Template extends Smarty {
         
 		$title_list[] = api_get_setting('Institution');
 		$title_list[] = api_get_setting('siteName');
+        
 		if (!empty($course_title)) {
 			$title_list[] = $course_title;
 		}
@@ -403,6 +413,7 @@ class Template extends Smarty {
 			$css_file_to_string .= api_get_css($css_file);
 		}
         
+        // @todo move this somewhere else
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>                
@@ -457,7 +468,7 @@ class Template extends Smarty {
         $this->set_help();
         
 		$bug_notification_link = '';
-		if (api_get_setting('show_link_bug_notification') == 'true') {
+		if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
 			$bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
 		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang('ReportABug').'"/></a>
@@ -467,7 +478,7 @@ class Template extends Smarty {
 		$this->assign('bug_notification_link', $bug_notification_link);
 		
 		$notification   = return_notification_menu();
-		$menu           = return_menu();
+		$menu           = return_menu();        
 		$breadcrumb     = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('notification_menu', $notification);
@@ -578,12 +589,12 @@ class Template extends Smarty {
     }
     
     /* Sets the plugin content in a Smarty variable */
-    function set_plugin_block($plugin_block) {
-        if (!empty($plugin_block)) {          
-            $block_content = $this->plugin->load_block($plugin_block, $this);    
-            if (!empty($block_content)) {
+    function set_plugin_region($plugin_region) {
+        if (!empty($plugin_region)) {          
+            $content = $this->plugin->load_region($plugin_region, $this);    
+            if (!empty($content)) {
                 //Assigning the plugin with the smarty template
-                $this->assign('plugin_'.$plugin_block, $block_content);                
+                $this->assign('plugin_'.$plugin_region, $content);                
             }
         }
         return null;

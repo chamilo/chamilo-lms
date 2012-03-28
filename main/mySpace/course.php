@@ -97,7 +97,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 		echo '</span>';
 	}
 	echo '</div>';
-	echo Display::page_subheader($title);
+	echo Display::page_header($title);
 }
 
 // Database Table Definitions

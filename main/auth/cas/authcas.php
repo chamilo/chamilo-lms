@@ -62,27 +62,41 @@ function cas_is_authenticated()
 			default:
 				$status=5; // Student
 		}*/
-		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
-		if (! $logout){
-			$user_table = Database::get_main_table(TABLE_MAIN_USER);
-			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
-				"FROM $user_table ".
-				"WHERE username = '$login' ";
-
-			$result = api_sql_query($sql,__FILE__,__LINE__);
-			if(mysql_num_rows($result) == 0) { 
-				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
-				$rnumber=rand(0,256000);
-				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
-			}
-			else {
-				$user = mysql_fetch_assoc($result);
-				$user_id = intval($user['user_id']);
-				//echo "deb : $status";
-				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
-
-			}
-		}
+		if (!$logout){
+		    // get user info from username
+		    $tab_user_info = UserManager::get_user_info($login);
+		    // user found in the chamilo database
+		    if (is_array($tab_user_info)) {
+		        // if option is on we can update user automatically from ldap server
+		        return $login;
+		    }
+		    // user not found
+		    else {
+		        // if option is on we can add user automatically from ldap server
+		        return false;
+		    }
+		}		
+//		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
+//		if (! $logout){
+//			$user_table = Database::get_main_table(TABLE_MAIN_USER);
+//			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
+//				"FROM $user_table ".
+//				"WHERE username = '$login' ";
+//
+//			$result = api_sql_query($sql,__FILE__,__LINE__);
+//			if(mysql_num_rows($result) == 0) { 
+//				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
+//				$rnumber=rand(0,256000);
+//				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
+//			}
+//			else {
+//				$user = mysql_fetch_assoc($result);
+//				$user_id = intval($user['user_id']);
+//				//echo "deb : $status";
+//				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
+//
+//			}
+//		}
 		return($login);
 	}
 	else 

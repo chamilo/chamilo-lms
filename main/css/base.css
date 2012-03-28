@@ -19,7 +19,7 @@ select {
     visibility: visible;
 }
 
-.label {
+form .label {
     padding: 1px 3px 2px;
     font-size: 100%;
     font-weight: normal;
@@ -71,12 +71,12 @@ label, input, button, select, textarea, p {
 
 form .label {
     color: #404040;
-    float: left;
-    font-size: 13px;
+    float: left;    
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
     width: 150px;    
+    text-shadow:none;
 }
 form .formw {
     margin-left: 170px;
@@ -98,7 +98,7 @@ form .formw input {
 /* New changes Chamilo 1.9 */
 
 .sidebar-nav {
-    padding: 20px 0px 0px 20px;
+    padding: 20px 20px 10px 20px
 }
 
 .well_border {            
@@ -115,10 +115,13 @@ form .formw input {
     height:26px;
 }
 
-#lp_navigation_elem .buttons,
-#lp_navigation_elem #progress_bar {
-    width:130px;
-    margin:0px 0px 10px 15px;    
+#lp_navigation_elem .buttons{
+    margin-bottom: 5px;    
+}
+
+#lp_navigation_elem {
+    padding-left: 15px;
+    width: 110px;
 }
 
 * {
@@ -793,10 +796,7 @@ button {
     
     -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
     -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    
-    font-weight:bold;
-    font-size: 105%;    
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);       
 }
 
 button:hover {
@@ -2165,23 +2165,6 @@ div.lp_resource {
     padding:5px;    
 }   
 
-/*LP changes
-.lp_resource_element img {
-        float: left;
-    margin-bottom: 0;
-    margin-left: 43px;
-    margin-right: 43px;
-    margin-top: 7px;
-}
-.lp_resource_element a {
-       float: left;
-    margin-bottom: 12px;
-    margin-left: 33px;
-    margin-right: auto;
-    margin-top: 15px;
-    width: 100%;
-}*/
-
 .doc_resource {
     margin:6px;
 }
@@ -2190,7 +2173,6 @@ div.lp_tree {
     height: 100%;
     overflow: auto;
     padding: 3px 10px 3px 0;
-    width: 230px;
 }
 
 table.lp_build td.tree {
@@ -3209,9 +3191,7 @@ a:active{
 }
 
 .homepage_notice {
-    width:90%;
-    margin-left: 14px;    
-    margin-bottom: 10px;
+
 }
 
 .welcome_course li {
@@ -3572,4 +3552,23 @@ a.forum_group_link {
 
 #online_grid_container .thumbnail .caption {
     height: 30px;
+}
+
+#hide_bar_template {
+    width: 10px;    
+    display: inline; 
+    float:left;
+    height: 100%; 
+    padding-bottom: 90em;
+    margin-bottom: -90em;
+    cursor:pointer;
+    background-color:#eee;
+    margin-left: 0px !important;    
+    background-image: url("../img/hide0.png"); 
+    background-repeat: no-repeat; 
+    background-position: center center;    
+}
+
+#hide_bar_template:hover {
+    background-color:#aaa;
 }

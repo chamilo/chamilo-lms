@@ -80,17 +80,18 @@ if (isset($_GET['preview'])) {
 	$extra_params = '&preview=1';	
 }
 
-//Exercise button
-//Notice we not add there the lp_item_view__id because is not already generated 
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
-$label = get_lang('StartTest');
-if ($time_control && !empty($clock_expired_time)) {
-	$label = get_lang('ContinueTest');
-}
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
 	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+}
+
+//Exercise button
+//Notice we not add there the lp_item_view__id because is not already generated 
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
+$label = get_lang('StartTest');
+if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
+	$label = get_lang('ContinueTest');
 }
 
 $exercise_url_button = Display::url($label, $exercise_url, array('class'=>'btn btn-primary btn-large'));
@@ -101,7 +102,6 @@ if ($visible_return['value'] == false) {
 	$exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id;	
 	$exercise_url_button = $visible_return['message'];    
 }
-
 
 //Message "you already try this exercise"
 
@@ -126,17 +126,17 @@ $table_content = '';
 
 if (!empty($attempts)) {
     $i = $counter;
-	foreach ($attempts as $attempt_result) {		
+	foreach ($attempts as $attempt_result) {	
         
 		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
 		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$attempt_result['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
 		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));
 		
-		$teacher_revised = Display::span(get_lang('Validated'), array('class'=>'label_tag success'));
+		$teacher_revised = Display::label(get_lang('Validated'), 'success');
 			//$attempt_link = get_lang('NoResult');
 			//$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), ICON_SIZE_SMALL);
 		if ($attempt_result['attempt_revised'] == 0) {
-			$teacher_revised = Display::span(get_lang('NotValidated'), array('class'=>'label_tag notice'));
+			$teacher_revised = Display::label(get_lang('NotValidated'), 'info');
 		}				
 		$row = array('count'	 	=> $i,
 					 'date'	 		=> api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG)
@@ -167,8 +167,7 @@ if (!empty($attempts)) {
 		case EXERCISE_FEEDBACK_TYPE_EXAM:
 			$header_names = array(get_lang('Attempt'), get_lang('Date'), get_lang('Score'));
 			break;			
-	}
-	
+	}	
 	$row = 0;
 	$column = 0;
 	foreach ($header_names as $item) {

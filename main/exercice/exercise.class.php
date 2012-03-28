@@ -2274,7 +2274,7 @@ class Exercise {
 					// for matching
 				case MATCHING :
 					if ($from_database) {
-						$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct=0';
+						$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct=0';
 						$res_answer = Database::query($sql_answer);
 						// getting the real answer
 						$real_list =array();
@@ -2282,7 +2282,7 @@ class Exercise {
 							$real_list[$real_answer['id']]= $real_answer['answer'];
 						}
 						$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
-                                              WHERE question_id="'.$questionId.'" AND correct <> 0 ORDER BY id_auto';            
+                                              WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct <> 0 ORDER BY id_auto';            
 						$res_answers = Database::query($sql_select_answer);
 						 
 						$questionScore = 0;

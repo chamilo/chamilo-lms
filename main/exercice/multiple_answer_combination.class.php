@@ -134,14 +134,10 @@ class MultipleAnswerCombination extends Question {
 
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 		
-		
-		$html_total_score ='<div style="margin-bottom:2px;">'.get_lang('Score').'</div>';				
-		$form -> addElement ('html', $html_total_score);
-				
+						
 		//only 1 answer the all deal ...
-		$form->addElement('text', 'weighting[1]',null, array('class' => "span1", 'value' => '10'));
-		$form -> addElement ('html', '<br />');
-		
+		$form->addElement('text', 'weighting[1]', get_lang('Score'), array('class' => "span1", 'value' => '10'));
+				
 		$navigator_info = api_get_navigator();
 		global $text, $class, $show_quiz_edition;
 		//ie6 fix
@@ -150,12 +146,12 @@ class MultipleAnswerCombination extends Question {
                 
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-                $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');				
+                $form->addElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');				
 			} else {
                 
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
 				
 				// setting the save button here and not in the question class.php
 				

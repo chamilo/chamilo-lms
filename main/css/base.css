@@ -98,7 +98,7 @@ form .formw input {
 /* New changes Chamilo 1.9 */
 
 .sidebar-nav {
-    padding: 20px 0px 0px 20px;
+    padding: 20px 20px 10px 20px
 }
 
 .well_border {            
@@ -793,10 +793,7 @@ button {
     
     -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
     -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    
-    font-weight:bold;
-    font-size: 105%;    
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);       
 }
 
 button:hover {
@@ -3191,9 +3188,7 @@ a:active{
 }
 
 .homepage_notice {
-    width:90%;
-    margin-left: 14px;    
-    margin-bottom: 10px;
+
 }
 
 .welcome_course li {

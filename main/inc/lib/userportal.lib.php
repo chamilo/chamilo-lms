@@ -803,9 +803,9 @@ class IndexManager {
             
         if (api_get_setting('allow_social_tool') == 'true') {
             if (!$no_image) {
-				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a></li>';
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a></li>';
 			} else {
-				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a></li>';
+				$profile_content .='<li><a class="thumbnail" href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a></li>';
 			}
 		}        
 		

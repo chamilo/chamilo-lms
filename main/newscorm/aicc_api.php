@@ -543,7 +543,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
         percentage = Math.round(percentage);
         
         var progress_bar  = $("#progress_bar_value");
-        progress_bar.css('width', percentage);
+        progress_bar.css('width', percentage +"%");
         
     /*
         var pr_text  = myframe.document.getElementById('progress_text');

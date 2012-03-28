@@ -338,11 +338,11 @@ if (Database::num_rows($res_media) > 0) {
         <!-- hub 26-50-2010 for lp toc height
         <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
         -->
-        <div id="author_image" name="author_image" class="row-fluid">        
-            <div class="span12">
+        <div id="author_image" name="author_image" class="row">        
+            <div class="span3">
                 <div class="well_border">
-                    <div class="row-fluid">                         
-                        <div class="span5">                        
+                    <div class="row">                         
+                        <div class="span1">                        
                             <?php
                             if ($_SESSION['oLP']->get_preview_image()!='') {
                                 $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
@@ -355,15 +355,12 @@ if (Database::num_rows($res_media) > 0) {
                             }
                             ?>                              
                         </div>
-                        <div id="lp_navigation_elem" class="span7">
-                            <div class="row">                        
-                                <div class="span5">
+                        <div id="lp_navigation_elem" class="span2">                          
                                     <?php echo $navigation_bar; ?>
                                     <div id="progress_bar">
                                         <?php echo $progress_bar; ?>
                                     </div>    
-                                </div>
-                            </div>              
+                                   
                         </div>
                     </div>
                 </div>

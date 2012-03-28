@@ -39,7 +39,7 @@ if (isset($plugin_info['settings_form'])) {
         //We override the form attributes
         $attributes = array('action'=>api_get_self().'?name='.$plugin_name, 'method'=>'POST');
         $form->updateAttributes($attributes);     
-        $content = Display::page_subheader($plugin_info['title']);
+        $content = Display::page_header($plugin_info['title']);
         $content .= $form->toHtml();        
     }
 } else {

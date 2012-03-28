@@ -89,7 +89,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 		
 	}
 	echo '</div>';
-	echo Display::page_subheader(get_lang('YourSessionsList'));
+	echo Display::page_header(get_lang('YourSessionsList'));
 
 } else {
 	/*if (api_is_platform_admin()) {

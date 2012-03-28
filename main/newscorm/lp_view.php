@@ -21,7 +21,7 @@ $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {    
-    header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
+    header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
     exit;
 }
 
@@ -35,6 +35,31 @@ require_once 'learnpathItem.class.php';
 $show_learnpath = true;
 
 api_protect_course_script();
+
+$lp_id      = intval($_GET['lp_id']);
+
+// Check if the learning path is visible for student - (LP requisites) 
+if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+    api_not_allowed();
+}     
+
+//Checking visibility (eye icon)
+$visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
+if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
+     api_not_allowed();
+}
+
+if (empty($_SESSION['oLP'])) {
+    api_not_allowed();
+}
+
+$debug = 0;
+
+if ($debug) { error_log('------ Entering lp_view.php -------'); }
+
+$_SESSION['oLP']->error = '';
+$lp_item_id = $_SESSION['oLP']->get_current_item_id();
+$lp_type    = $_SESSION['oLP']->get_type();
 
 $course_code    = api_get_course_id();
 $course_id      = api_get_course_int_id();
@@ -52,35 +77,19 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
 </script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-
 }
-$htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
+
+$htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
 	});
 });
+
+var dokeos_xajax_handler = window.oxajax;
+
 </script>';
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
-      var dokeos_xajax_handler = window.oxajax;
-</script>';
-
-$_SESSION['oLP']->error = '';
-$lp_item_id = $_SESSION['oLP']->get_current_item_id();
-$lp_type    = $_SESSION['oLP']->get_type();
-$lp_id      = intval($_GET['lp_id']);
-
-// Check if the learning path is visible for student - (LP requisites) 
-if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
-    api_not_allowed();
-}     
-
-//Checking visibility (eye icon)
-$visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
-if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
-     api_not_allowed();
-}
 
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
@@ -115,7 +124,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
 if (!isset($src)) {
     $src = '';
        
-    switch($lp_type) {
+    switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
@@ -173,26 +182,32 @@ foreach($list as $toc) {
     }
 }
 
-$debug = 0;
-
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
+
+if ($debug) {
+    error_log('$type_quiz: '.$type_quiz);
+    error_log('$_REQUEST[exeId]: '.$_REQUEST['exeId']);
+    error_log('$lp_id: '.$lp_id);
+    error_log('$_GET[lp_item_id]: '.$_GET['lp_item_id']);
+}
+
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
     global $src;
     
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
     
     $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-    //$TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
+    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);    
     $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
+    $safe_item_id           = intval($_GET['lp_item_id']);
     $safe_id                = $lp_id;
     $safe_exe_id            = intval($_REQUEST['exeId']);
     
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 		
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
+        if ($debug) error_log($sql);
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
@@ -203,12 +218,13 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
         
-        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".(int)$safe_item_id."'";
+        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".$safe_item_id."'";
         if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
 
         $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
         $res_last_attempt = Database::query($sql_last_attempt);
+        if ($debug) error_log($sql_last_attempt);
         
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
@@ -227,7 +243,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.$safe_exe_id.'&origin=learnpath&learnpath_id='.$lp_id.'&learnpath_item_id='.$lp_id.'&fb_type='.Security::remove_XSS($_GET['fb_type']);
-        if ($debug) error_log('Calling URL'.$src);
+        if ($debug) error_log('Calling URL: '.$src);
     }
     $autostart = 'false';
 }
@@ -322,11 +338,11 @@ if (Database::num_rows($res_media) > 0) {
         <!-- hub 26-50-2010 for lp toc height
         <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
         -->
-        <div id="author_image" name="author_image" class="row-fluid">        
-            <div class="span12">
+        <div id="author_image" name="author_image" class="row">        
+            <div class="span3">
                 <div class="well_border">
-                    <div class="row-fluid">                         
-                        <div class="span5">                        
+                    <div class="row">                         
+                        <div class="span1">                        
                             <?php
                             if ($_SESSION['oLP']->get_preview_image()!='') {
                                 $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
@@ -339,15 +355,12 @@ if (Database::num_rows($res_media) > 0) {
                             }
                             ?>                              
                         </div>
-                        <div id="lp_navigation_elem" class="span7">
-                            <div class="row">                        
-                                <div class="span5">
+                        <div id="lp_navigation_elem" class="span2">                          
                                     <?php echo $navigation_bar; ?>
                                     <div id="progress_bar">
                                         <?php echo $progress_bar; ?>
                                     </div>    
-                                </div>
-                            </div>              
+                                   
                         </div>
                     </div>
                 </div>

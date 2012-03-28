@@ -8,8 +8,6 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
 
-$cidReset = true;
-
 require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
@@ -120,7 +118,7 @@ if (isset($_GET['details'])) {
 				}
 			}
 	$nameTools = get_lang("DetailsStudentInCourse");
-} else {		
+} else {
 	if (!empty ($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 		$interbreadcrumb[] = array (
 			'url' => '../admin/index.php',
@@ -186,20 +184,19 @@ $check= Security::check_token('get');
 if ($check) {
 	switch ($_GET['action']) {
 		case 'reset_lp' :
-			$course		= isset($_GET['course'])	?$_GET['course']:"";
-			$lp_id		= isset($_GET['lp_id'])		?intval($_GET['lp_id']):"";
+			$course		= isset($_GET['course']) ? $_GET['course']:"";
+			$lp_id		= isset($_GET['lp_id'])	 ? intval($_GET['lp_id']):"";
 						
-			if (api_is_course_admin() && !empty($course) && !empty($lp_id) && !empty($student_id)) {					   
+			if (api_is_allowed_to_edit() && !empty($course) && !empty($lp_id) && !empty($student_id)) {					   
 				$course_info 	= api_get_course_info($course);                    
                 delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
 			
 				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334					
-				Display::display_confirmation_message(get_lang('LPWasReset'));
+				$message = Display::return_message(get_lang('LPWasReset'),'success');
 			}				
-		  break;			
+            break;			
 		default:
-			break;
-		
+			break;		
 	}
 	Security::clear_token();	
 }		
@@ -268,6 +265,10 @@ if (empty($courses_in_session)) {
 
 Display :: display_header($nameTools);
 
+if (isset($message )) {
+    echo $message;
+}
+
 if (!empty($student_id)) {
 	
 	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {        
@@ -313,8 +314,9 @@ if (!empty($student_id)) {
 	$avg_student_progress = round($avg_student_progress, 2);
 	
 	// time spent on the course
+    
 	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_info['user_id'], $course_code, $session_id));
-	
+    	
 	// get information about connections on the platform by student
 	$first_connection_date = Tracking :: get_first_connection_date($user_info['user_id']);
 	if ($first_connection_date == '') {
@@ -389,15 +391,14 @@ if (!empty($student_id)) {
         $session_name = $session_info['name'];
     } // end
  
-    $info_course  = CourseManager :: get_course_information($get_course_code);
+    $info_course  = CourseManager :: get_course_information($get_course_code);    
     $table_title = Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).$user_info['complete_name'];
     
     echo Display::page_subheader($table_title);
-
-?>
-<table width="100%" border="0">
-	<tr>
-<?php
+    
+    echo '<table width="100%" border="0">';
+    echo '<tr>';
+    
 	$image_array = UserManager :: get_user_picture_path_by_id($user_info['user_id'], 'web', false, true);
 	echo '<td class="borderRight" width="10%" valign="top">';
 
@@ -437,19 +438,17 @@ if (!empty($student_id)) {
 					</td>
 				</tr>
 				<tr>
-					<td> <?php echo get_lang('Tel') . ' : ';
-					
+					<td> <?php echo get_lang('Tel') . ' : ';					
 					if (!empty ($user_info['phone'])) {
 						echo $user_info['phone'];
 					} else {
 						echo get_lang('NoTel');
 					}
-			?>
+                    ?>
 					</td>
 				</tr>
 				<tr>
-					<td> <?php echo get_lang('OfficialCode') . ' : ';
-					
+					<td> <?php echo get_lang('OfficialCode') . ' : ';					
 					if (!empty ($user_info['official_code'])) {
 						echo $user_info['official_code'];
 					} else {
@@ -549,7 +548,7 @@ if (empty($_GET['details'])) {
 
 	$attendance = new Attendance();
 
-	foreach ($courses_in_session as $key => $courses) {		
+	foreach ($courses_in_session as $key => $courses) {	
 		$session_id   = $key;
 		$session_info = api_get_session_info($session_id);
 		$session_name = $session_info['name'];
@@ -701,7 +700,7 @@ if (empty($_GET['details'])) {
                 <th><?php echo get_lang('LastConnexion').' '; Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?></th>
                 <?php       
                     echo '<th>'.get_lang('Details').'</th>'; 
-                    if (api_is_course_admin()) {
+                    if (api_is_allowed_to_edit()) {
                         echo '<th>'.get_lang('ResetLP').'</th>';
                     }
                 ?>
@@ -800,9 +799,9 @@ if (empty($_GET['details'])) {
                 echo Display::tag('td', $link, array('align'=>'center'));
     		}
     
-    		if (api_is_course_admin()) {					
+    		if (api_is_allowed_to_edit()) {					
     			echo '<td align="center">';							
-    				if($any_result === true) {											
+    				if ($any_result === true) {											
     					echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
     					echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
     					echo '</a>';

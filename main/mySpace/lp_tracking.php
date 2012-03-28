@@ -15,7 +15,6 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 } else {
 	$this_section = SECTION_COURSES;
 }
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
@@ -37,12 +36,9 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {
-	Display::display_header('');
-	api_not_allowed();
-	Display::display_footer();
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
+	api_not_allowed();	
 }
-
 $course_exits = CourseManager::course_exists($cidReq);
 
 if (!empty($course_exits)) {	
@@ -88,7 +84,7 @@ $table_title = ($session_name? Display::return_icon('session.png', get_lang('Ses
                 Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].' '.
                 Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
 echo Display::page_subheader($table_title);
-echo '<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>';
+echo Display::page_subheader('<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>');
     
 $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);
 $origin = 'tracking';

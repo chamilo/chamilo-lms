@@ -1246,20 +1246,21 @@ function update_stats_page()
  * @param	integer	Number of items in total
  * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
  */
-function update_progress_bar(nbr_complete, nbr_total, mode)
-{
+function update_progress_bar(nbr_complete, nbr_total, mode) {
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
     logit_lms('could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
 
-    if(mode == ''){mode='%';}
-    if(nbr_total == 0){nbr_total=1;}
+    if (mode == ''){mode='%';}
+    if (nbr_total == 0){nbr_total=1;}
     var percentage = (nbr_complete/nbr_total)*100;
     percentage = Math.round(percentage);
 
     var pr_text  = $("#progress_text");
     var progress_bar  = $("#progress_bar_value");
-    progress_bar.css('width', percentage);
-    
+   
+     
+   progress_bar.css('width', percentage + "%");
+       
     /*
     var pr_full  = $("#progress_img_full");
     var pr_empty = $("#progress_img_empty");

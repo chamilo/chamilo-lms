@@ -197,7 +197,7 @@ class learnpath {
         // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
         $lp_table = Database::get_course_table(TABLE_LP_VIEW);
         // Selecting by view_count descending allows to get the highest view_count first.
-        $sql = "SELECT * FROM $lp_table WHERE c_id = '.$course_id.' AND lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
         if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
         $res = Database::query($sql);
         $view_id = 0; // Used later to query lp_item_view.
@@ -302,10 +302,9 @@ class learnpath {
             // Get last viewing vars.
             $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
             // This query should only return one or zero result.
-            $sql = "SELECT * " .
-                "FROM $lp_item_view_table " .
-                "WHERE c_id = ".$course_id." AND  lp_view_id = " . $this->lp_view_id . " " .
-                "AND lp_item_id = " . $row['id'] . " ORDER BY view_count DESC ";
+            $sql = "SELECT * FROM $lp_item_view_table 
+                    WHERE c_id = $course_id AND lp_view_id = ".$this->lp_view_id." AND lp_item_id = ".$row['id']." 
+                    ORDER BY view_count DESC ";
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
             }
@@ -393,8 +392,8 @@ class learnpath {
         $title       = $this->escape_string($title);
         $description = $this->escape_string($description);
         $sql_count = "	SELECT COUNT(id) AS num
-                        FROM " . $tbl_lp_item . "
-                        WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND parent_item_id = " . $parent;
+                        FROM $tbl_lp_item
+                        WHERE c_id = $course_id AND lp_id = " . $this->get_id() . " AND parent_item_id = " . $parent;
 
         $res_count = Database::query($sql_count);
         $row = Database :: fetch_array($res_count);
@@ -404,7 +403,7 @@ class learnpath {
             if ($previous == 0) {
                 $sql = "SELECT id, next_item_id, display_order
                            FROM " . $tbl_lp_item . "
-                           WHERE   c_id = ".$course_id." AND
+                           WHERE   c_id = $course_id AND
                                    lp_id = " . $this->get_id() . " AND
                                    parent_item_id = " . $parent . " AND
                                    previous_item_id = 0 OR previous_item_id=" . $parent;
@@ -417,8 +416,8 @@ class learnpath {
             } else {
                 $previous = (int) $previous;
                 $sql = "SELECT id, previous_item_id, next_item_id, display_order
-						FROM " . $tbl_lp_item . "
-                        WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND id = " . $previous;
+						FROM $tbl_lp_item
+                        WHERE c_id = $course_id AND lp_id = " . $this->get_id() . " AND id = " . $previous;
 
                 $result = Database::query($sql);
                 $row 	= Database :: fetch_array($result);
@@ -611,7 +610,7 @@ class learnpath {
         // Session id.
         $session_id = api_get_session_id();
         
-        $check_name = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." AND name = '$name'";
+        $check_name = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND name = '$name'";
         //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
         $res_name = Database::query($check_name);
 
@@ -639,7 +638,7 @@ class learnpath {
             // There is already one such name, update the current one a bit.
             $i++;
             $name = $name . ' - ' . $i;
-            $check_name = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." AND name = '$name'";
+            $check_name = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND name = '$name'";
             //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
             $res_name = Database::query($check_name);
         }
@@ -663,7 +662,7 @@ class learnpath {
                 break;
             case 'manual':
             default:
-                $get_max = "SELECT MAX(display_order) FROM $tbl_lp WHERE c_id = ".$course_id." ";
+                $get_max = "SELECT MAX(display_order) FROM $tbl_lp WHERE c_id = $course_id";
                 $res_max = Database::query($get_max);
                 if (Database :: num_rows($res_max) < 1) {
                     $dsp = 1;
@@ -1943,8 +1942,6 @@ class learnpath {
         global $_course;
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-
-
         
         // Getting all the information about the item.
         $sql = "SELECT * FROM " . $tbl_lp_item . " as lp INNER  JOIN " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
@@ -2507,7 +2504,7 @@ class learnpath {
         $course_id = api_get_course_int_id();
         $list = array();
         $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
-        $sql = "SELECT * FROM $table WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
+        $sql = "SELECT * FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
         $res = Database::query($sql);
         $num = Database :: num_rows($res);
         if ($num > 0) {
@@ -2620,7 +2617,7 @@ class learnpath {
     public function get_type_static($lp_id = 0) {
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT lp_type FROM $tbl_lp WHERE c_id = ".$course_id." AND id = '" . $lp_id . "'";
+        $sql = "SELECT lp_type FROM $tbl_lp WHERE c_id = $course_id AND id = '" . $lp_id . "'";
         $res = Database::query($sql);
         if ($res === false) {
             return null;
@@ -3367,7 +3364,6 @@ class learnpath {
                     }
                     $display = $display +1;
                 }
-
                 break;
             default :
                 return false;
@@ -7461,8 +7457,7 @@ class learnpath {
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
-            $sql = "SELECT *
-                    FROM " . $tbl_lp_item . "
+            $sql = "SELECT * FROM " . $tbl_lp_item . "
                     WHERE c_id = ".$course_id." AND id = " . $item_id;
 
             $res = Database::query($sql);

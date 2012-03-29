@@ -69,7 +69,7 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {
-		global $publication, $token;
+		global $token;
 			
 		if (!empty($cur_dir_path)) {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {

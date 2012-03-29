@@ -66,15 +66,6 @@ $work_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $my_folder_data = get_work_data_by_id($work_id);
 
 $curdirpath = '';
-$is_special = false;
-if (!empty($my_folder_data)) {	
-	if ($my_folder_data['filetype'] == 'folder') {	
-		$curdirpath = $my_folder_data['url'];			
-		if (!empty($my_folder_data['has_properties'])) {
-			$is_special = true;
-		} 
-	}
-}
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $htmlHeadXtra[] = to_javascript_work();
@@ -91,7 +82,6 @@ $(document).ready(function () {
 // Table definitions
 $main_course_table 	= Database :: get_main_table(TABLE_MAIN_COURSE);
 $work_table 		= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-//$iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 $table_course_user	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user			= Database :: get_main_table(TABLE_MAIN_USER);
@@ -190,7 +180,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));    
 }
 
-if (!empty($group_id)) {	
+if (!empty($group_id)) {
 	$group_properties  = GroupManager :: get_group_properties($group_id);    
     $show_work = false;
     
@@ -277,7 +267,7 @@ $show_tool_options = (in_array($action, array('list', 'add'))) ? true : false;
 
 $display_upload_link = $action == 'upload_form' ? false : true;
 
-if ($is_special) {    
+if (!empty($my_folder_data)) {
 	$homework = get_work_assignment_by_id($my_folder_data['id']);    
 	
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
@@ -306,8 +296,7 @@ if ($is_special) {
 		$ends_on 	= api_convert_and_format_date($homework['ends_on']);
 		$expires_on = api_convert_and_format_date($homework['expires_on']);
 
-		if ($has_ended) {
-            
+		if ($has_ended) {            
             //if (!api_is_allowed_to_edit()) {                
                 $display_upload_link = false;
             //}
@@ -324,6 +313,7 @@ if ($is_special) {
 }
 
 display_action_links($work_id, $curdirpath, $show_tool_options, $display_upload_link, $action);
+
 echo $message;
 
 //for teachers
@@ -479,7 +469,7 @@ switch ($action) {
             Display::display_error_message(get_lang('ActionNotAllowed'));
         }        
 		break;        
-    case 'upload':        
+    case 'upload': 
         $check = Security::check_token('post');        
         //var_dump($check);
 		if ($student_can_edit_in_session && $check) {
@@ -576,8 +566,7 @@ switch ($action) {
 			} elseif (isset($_POST['editWork'])) {				
 				/*
 				 * SPECIAL CASE ! For a work edited
-				*/
-					
+				*/					
 				//Get the author ID for that document from the item_property table
                 $item_to_edit_id 	= intval($_POST['item_to_edit']);
 				$is_author 			= user_is_author($item_to_edit_id);
@@ -695,9 +684,8 @@ switch ($action) {
 			if (!$Id) {
 				$Id = $insertId;
 			}
-			event_upload($Id);
-			$submit_success_message = $message . "<br />";
-			Display :: display_confirmation_message($submit_success_message, false);
+			event_upload($Id);			
+			Display :: display_confirmation_message(get_lang('DocAdd'), false);
 		}
         break;
 	case 'send_mail':        
@@ -790,12 +778,7 @@ switch ($action) {
             $form->addElement('html', '</div>');
                
             $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));            
-            $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
-            
-/*            
-            $addtext .= '<input type="checkbox" value="1" id="make_calification_id" name="make_calification" onclick=/>
-			             <label for="make_calification_id">'.get_lang('MakeQualifiable').'</label></td></tr><tr>';
-*/            
+            $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));      
             $form->addElement('html', '</div>');            
             $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
 		}
@@ -936,7 +919,7 @@ switch ($action) {
 	case 'move_to':
 	case 'list':		
 		/*	Move file command */
-		if ($is_allowed_to_edit && $action == 'move_to') {     
+		if ($is_allowed_to_edit && $action == 'move_to') {  
 			$move_to_path = get_work_path($_REQUEST['move_to_id']);
 		
 			if ($move_to_path==-1) {
@@ -1111,59 +1094,16 @@ switch ($action) {
 			$my_cur_dir_path = $curdirpath;
 		}
 		
-		/*$add_query = '';
-		//Getting if I'm a teacher
-		$sql = "SELECT user.firstname, user.lastname FROM $table_user user, $table_course_user course_user
-				WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
-		$res = Database::query($sql);
-		$admin_course = '';
-		while ($row = Database::fetch_row($res)) {
-			$admin_course .='\''.api_get_person_name($row[0], $row[1]).'\',';
-		}
-		
-		//If I'm student & I'm in a special work and check the work setting: "New documents are visible for all users"		
-		if (!$is_allowed_to_edit && $is_special && $uploadvisibledisabled == 1) {
-			$add_query = ' AND author IN('.$admin_course.'\''.api_get_person_name($_user['firstName'], $_user['lastName']).'\')';
-		}*/
-        
-		/*if ($is_allowed_to_edit && $is_special) {	
-			if (!empty($_REQUEST['filter'])) {
-				switch($_REQUEST['filter']) {
-					case 1:
-						$add_query = ' AND qualification = '."''";
-						break;
-					case 2:
-						$add_query = ' AND qualification != '."''";
-						break;
-					case 3:
-						$add_query = ' AND sent_date < '."'".$homework['expires_on']."'";
-						break;
-					default:
-						$add_query = '';
-				}
-			}
-			$cidreq = isset($_GET['cidreq']) ? Security::remove_XSS($_GET['cidreq']) : '';
-			$curdirpath = isset($_REQUEST['curdirpath']) ? Security::remove_XSS($_REQUEST['curdirpath']) : '';
-			$filter = isset($_REQUEST['filter']) ? (int)$_REQUEST['filter'] : '';
-		
-			if ($origin != 'learnpath' && $display_list_users_without_publication != 'without' ) {
-				$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&id='.$work_id.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
-				$form_filter .= make_select('filter', array(0 => get_lang('SelectAFilter'), 1 => get_lang('FilterByNotRevised'), 2 => get_lang('FilterByRevised'), 3 => get_lang('FilterByNotExpired')), $filter).'&nbsp&nbsp';
-				$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
-				echo $form_filter;
-			}
-		}*/
 		
 		if (!empty($my_folder_data['description'])) {
 			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
 		}
         
         //User works
-        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {            
+        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {           
             $work_data = get_work_assignment_by_id($work_id);                    
-            $check_weight = intval($my_folder_data['weight']);
-            
-            if (!empty($work_data['enable_qualification']) && !empty($check_weight)) {
+            $check_qualification = intval($my_folder_data['qualification']);            
+            if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
                 $type = 'simple';
                 $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
                                         get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));

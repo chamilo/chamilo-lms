@@ -1514,10 +1514,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $work_table         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);	
     $iprop_table        = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table         = Database::get_main_table(TABLE_MAIN_USER);    
-    
-    $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $session_course_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            
+                    
     $session_id     = api_get_session_id();
     $course_id      = api_get_course_int_id();
     $group_id       = api_get_group_id();
@@ -1554,30 +1551,18 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $extra_conditions .= '';
             }
         }        
-        $extra_conditions .= " AND parent_id  = ".$work_id."  ";
-        
-        if (empty($session_id)) {
-            $course_conditions = " INNER JOIN $course_user_table cu ON (cu.user_id = u.user_id AND cu.course_code = '".$course_info['code']."' ) ";
-        }
-        
-        if ($show_user_no_work) {            
-            $select = 'DISTINCT u.firstname, u.lastname, u.username';
-            $user_condition = " INNER JOIN $user_table u  ON (work.user_id != u.user_id) ";
-            $work_condition = " $work_table work ";
-            $work_where = " AND (work.c_id = $course_id ) ";            
-        } else {
-            $select = 'DISTINCT work.id as id, title as file, url, sent_date, contains_file, has_properties, view_properties, 
-                        qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
-            $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-            $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
-            $work_where = '';
-        }
-        
+        $extra_conditions .= " AND parent_id  = ".$work_id."  ";        
+  
+        $select = 'DISTINCT work.id as id, title as file, url, sent_date, contains_file, has_properties, view_properties, 
+                    qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
+        $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
+        $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
+                
         $work_assignment = get_work_assignment_by_id($work_id);
         
         $sql = "SELECT $select
                 FROM $work_condition  $user_condition $course_conditions                      
-                WHERE  $extra_conditions $work_where $where_condition $condition_session ";
+                WHERE  $extra_conditions $where_condition $condition_session ";
         
         $sql .= " ORDER BY $column $direction ";
         $sql .= " LIMIT $start, $limit";
@@ -1613,7 +1598,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $qualification_exists = true;
             }
             
-            $qualification_string = '';
+            $qualification_string = '-';
             
             if ($qualification_exists) {
                 if ($work['qualification'] == '') {

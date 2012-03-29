@@ -140,7 +140,7 @@ api_protect_course_script(true);
 
 $link_target_parameter = ""; // e.g. "target=\"_blank\"";
 
-$display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without';
+$display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without' ? true : false;
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
@@ -1164,8 +1164,8 @@ switch ($action) {
 		}
         
         //User works
-        if (isset($work_id) && !empty($work_id) && (isset($_GET['list']) && $_GET['list'] == 'with')) {
-            
+        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
+                        
             $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
                                     get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
             $column_model   = array (

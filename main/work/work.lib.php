@@ -1474,14 +1474,16 @@ function get_count_work($work_id) {
     $iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table      = Database::get_main_table(TABLE_MAIN_USER);    
             
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);    
-    $condition_session  = api_get_session_condition($session_id);
+    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);        
     
     $session_id     = api_get_session_id();
+    $condition_session  = api_get_session_condition($session_id);
+    
     $course_id      = api_get_course_int_id();
     $group_id       = api_get_group_id();
     $course_info    = api_get_course_info(api_get_course_id());
-    $work_id       = intval($work_id);    
+    $work_id       = intval($work_id);
+    
     if (!empty($group_id)) {
         $extra_conditions = " work.post_group_id = '".intval($group_id)."' "; // set to select only messages posted by the user's group            
     } else {
@@ -1493,17 +1495,19 @@ function get_count_work($work_id) {
     } else {
         $extra_conditions .= ' AND work.active IN (1) ';            
         if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {            
-            $extra_conditions = " AND user_id = ".api_get_user_id()." ";
+            $extra_conditions .= " AND work.user_id = ".api_get_user_id()." ";
         } else {
             $extra_conditions .= '';
         }
-    }                        
+    }                   
+    
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
     $sql = "SELECT  count(*) as count
             FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) 
                     INNER JOIN $user_table u  ON (work.user_id = u.user_id)                         
             WHERE $extra_conditions $where_condition $condition_session ";
+    
     $result = Database::query($sql);
     
     $users_with_work = 0;    

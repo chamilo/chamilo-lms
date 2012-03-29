@@ -217,12 +217,7 @@ if (!empty($group_id)) {
 	if ($action == 'upload_form') {
 		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
 	}
-    
-    //???
-	if ($display_tool_options) {
-		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('EditToolOptions'));
-	}
-    
+        
 	if ($action == 'create_dir') {
 		$interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
 	}

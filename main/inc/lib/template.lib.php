@@ -21,7 +21,7 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
-    //var $menu_navigation = array();
+    var $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
     var $show_learnpath = false; // This is a learnpath section or not?
     var $plugin = null;
     var $course_id = null;
@@ -309,8 +309,8 @@ class Template extends Smarty {
 		global $httpHeadXtra, $htmlHeadXtra, $_course, $text_dir,
 				$interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
-        //$navigation            = return_navigation_array();        
-        //$this->menu_navigation = $navigation['menu_navigation'];
+        $navigation            = return_navigation_array();        
+        $this->menu_navigation = $navigation['menu_navigation'];
          
 		global $_configuration;
 		

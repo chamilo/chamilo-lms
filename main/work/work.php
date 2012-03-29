@@ -75,6 +75,8 @@ if (!empty($my_folder_data)) {
 		} 
 	}
 }
+$htmlHeadXtra[] = api_get_jqgrid_js();
+
 $htmlHeadXtra[] = to_javascript_work();
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -89,7 +91,7 @@ $(document).ready(function () {
 // Table definitions
 $main_course_table 	= Database :: get_main_table(TABLE_MAIN_COURSE);
 $work_table 		= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-$iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+//$iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 $table_course_user	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user			= Database :: get_main_table(TABLE_MAIN_USER);
@@ -279,6 +281,7 @@ if (!in_array($action, array('send_mail','add','create_dir','upload'))) {
 $show_tool_options = (in_array($action, array('list', 'add'))) ? true : false;
 
 $display_upload_link = $action == 'upload_form' ? false : true;
+
 if ($is_special) {    
 	$homework = get_work_assignment_by_id($my_folder_data['id']);    
 	
@@ -341,7 +344,7 @@ switch ($action) {
 	case 'upload_form': //can be add or edit work
         $is_author = false;
         
-		if (empty($item_id)) {           
+		if (empty($item_id)) {     
 			$parent_data = get_work_data_by_id($work_id);
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -373,11 +376,11 @@ switch ($action) {
 	
 		// form title
 		if ($item_id) {
-			$form_title = get_lang('EditMedia');
+			$form_title = get_lang('Edit');
 		} else {
 			$form_title = get_lang('UploadADocument');
 		}
-		$form->addElement('header', '', $form_title);
+		$form->addElement('header', $form_title);
 	
 		if (!empty ($error_message)) {
 			Display :: display_error_message($error_message);
@@ -461,10 +464,17 @@ switch ($action) {
 			$form->add_real_progress_bar('uploadWork', 'file');
 		}
 		$form->setDefaults($defaults);
-		//fixes bug when showing modification form		
+        
+        //fixes bug when showing modification form		
         if (!empty($work_id)) {
-            if ( $is_allowed_to_edit or $is_author) {
+            if ( $is_allowed_to_edit) {
                 $form->display();
+            } elseif ($is_author) {
+                if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
+                    $form->display();
+                } else {
+                    Display::display_error_message(get_lang('ActionNotAllowed'));
+                }
             } elseif ($student_can_edit_in_session && $has_ended == false) {          
                 $form->display();
             } else {
@@ -680,7 +690,7 @@ switch ($action) {
 					$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
 				
 					//Mail to user
-                    var_dump($currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
+                    //var_dump($currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
                     
 					@api_mail('', $currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
 				}
@@ -1099,15 +1109,14 @@ switch ($action) {
             }        
 		}		
 		
-		/*	Display list of student publications */
-		
+		/*	Display list of student publications */		
 		if ($curdirpath == '/') {
 			$my_cur_dir_path = '';
 		} else {
 			$my_cur_dir_path = $curdirpath;
 		}
 		
-		$add_query = '';
+		/*$add_query = '';
 		//Getting if I'm a teacher
 		$sql = "SELECT user.firstname, user.lastname FROM $table_user user, $table_course_user course_user
 				WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
@@ -1120,9 +1129,9 @@ switch ($action) {
 		//If I'm student & I'm in a special work and check the work setting: "New documents are visible for all users"		
 		if (!$is_allowed_to_edit && $is_special && $uploadvisibledisabled == 1) {
 			$add_query = ' AND author IN('.$admin_course.'\''.api_get_person_name($_user['firstName'], $_user['lastName']).'\')';
-		}
+		}*/
         
-		if ($is_allowed_to_edit && $is_special) {		
+		/*if ($is_allowed_to_edit && $is_special) {	
 			if (!empty($_REQUEST['filter'])) {
 				switch($_REQUEST['filter']) {
 					case 1:
@@ -1148,19 +1157,61 @@ switch ($action) {
 				$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
 				echo $form_filter;
 			}
-		}
+		}*/
 		
 		if (!empty($my_folder_data['description'])) {
 			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
-		}        
-		if ($display_list_users_without_publication) {
-			display_list_users_without_publication($my_folder_data['id']);
-		} else {			
-			display_student_publications_list($work_id, $link_target_parameter, $dateFormatLong, $origin, $add_query);
 		}
-		break;	
-}
+        
+        //User works
+        if (isset($work_id) && !empty($work_id) && (isset($_GET['list']) && $_GET['list'] == 'with')) {
+            
+            $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
+                                    get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+            $column_model   = array (
+                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),                        
+                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
+                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),                    
+//                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),                        
+                array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
+                array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),      
+                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+            );
 
+            $extra_params = array();
+
+            //Autowidth             
+            $extra_params['autowidth'] = 'true';
+
+            //height auto 
+            $extra_params['height'] = 'auto';
+            //$extra_params['excel'] = 'excel';
+
+            //$extra_params['rowList'] = array(10, 20 ,30);
+            
+            $extra_params['sortname'] = 'firstname';            
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id;
+            ?>
+            <script>
+                $(function() {
+                <?php
+                echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);                
+            ?>
+                 });
+            </script>
+            <?php                
+            echo Display::grid_html('results');                    
+        } elseif (isset($_GET['list']) && $_GET['list'] == 'without') {
+            //User with no works
+            display_list_users_without_publication($work_id);                
+        } else {
+            //Work list
+            display_student_publications_list($work_id, $link_target_parameter, $dateFormatLong, $origin, $add_query);
+        }		
+		break;
+}
 if ($origin != 'learnpath') {
 	//we are not in the learning path tool
 	Display :: display_footer();

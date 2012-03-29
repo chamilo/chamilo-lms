@@ -331,7 +331,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     $course_id          = api_get_course_int_id();
     $group_id           = api_get_group_id();
     
-    $course_info        = api_get_course_info();
+    $course_info        = api_get_course_info(api_get_course_id());
     
 	$sort_params = array();
 
@@ -1480,7 +1480,7 @@ function get_count_work($work_id) {
     $session_id     = api_get_session_id();
     $course_id      = api_get_course_int_id();
     $group_id       = api_get_group_id();
-    $course_info    = api_get_course_info();
+    $course_info    = api_get_course_info(api_get_course_id());
     $work_id       = intval($work_id);    
     if (!empty($group_id)) {
         $extra_conditions = " work.post_group_id = '".intval($group_id)."' "; // set to select only messages posted by the user's group            
@@ -1522,7 +1522,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $session_id     = api_get_session_id();
     $course_id      = api_get_course_int_id();
     $group_id       = api_get_group_id();
-    $course_info    = api_get_course_info();
+    $course_info    = api_get_course_info(api_get_course_id());
     
     $work_id       = intval($work_id);    
     $column         = empty($column) ? : Database::escape_string($column);

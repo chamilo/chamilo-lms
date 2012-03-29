@@ -169,8 +169,6 @@ switch ($action) {
         } else {
             $columns = array('type', 'firstname', 'lastname',  'username', 'sent_date', 'actions');	
         }
-        
-        
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);        
         break;
 	case 'get_exercise_results':

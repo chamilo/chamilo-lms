@@ -596,7 +596,7 @@ switch ($action) {
 	
 					if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
 						$add_to_update = ', qualificator_id ='."'".api_get_user_id()."',";
-						$add_to_update .= ' qualification ='."'".Database::escape_string($_POST['qualification'])."',";
+						$add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
 						$add_to_update .= ' date_of_qualification ='."'".api_get_utc_datetime()."'";
 					}
 	
@@ -884,7 +884,7 @@ switch ($action) {
 				// insert into student_publication_assignment	
 				//return something like this: 2008-02-45 00:00:00
 	
-				$enable_calification = isset($_POST['qualification_value']) ? 1 : 0;
+				$enable_calification = isset($_POST['qualification_value']) && !empty($_POST['qualification_value']) ? 1 : 0;
 				
 				if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
 					$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
@@ -1164,21 +1164,43 @@ switch ($action) {
 		}
         
         //User works
-        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
-                        
-            $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
-                                    get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
-            $column_model   = array (
-                array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),                        
-                array('name'=>'firstname',      'index'=>'firstname',       'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
-                array('name'=>'lastname',		'index'=>'lastname',        'width'=>'50',   'align'=>'left', 'search' => 'true'),
-                array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),                    
-//                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
-                array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),                        
-                array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
-                array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),      
-                array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-            );
+        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {            
+            $work_data = get_work_assignment_by_id($work_id);                    
+            $check_weight = intval($my_folder_data['weight']);
+            
+            if (!empty($work_data['enable_qualification']) && !empty($check_weight)) {
+                $type = 'simple';
+                $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
+                                        get_lang('Qualification'), get_lang('Date'),  get_lang('Status'), get_lang('Actions'));
+                $column_model   = array (
+                    array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),                        
+                    array('name'=>'firstname',      'index'=>'firstname',       'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
+                    array('name'=>'lastname',		'index'=>'lastname',        'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                    array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),                    
+    //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                    array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),                        
+                    array('name'=>'sent_date',           'index'=>'sent_date',            'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
+                    array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),      
+                    array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+                    
+                );
+            } else {
+                $type = 'complex';
+                $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 
+                                         get_lang('Date'),  get_lang('Actions'));
+                $column_model   = array (
+                    array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false'),                        
+                    array('name'=>'firstname',      'index'=>'firstname',       'width'=>'50',   'align'=>'left', 'search' => 'true'),                        
+                    array('name'=>'lastname',		'index'=>'lastname',        'width'=>'50',   'align'=>'left', 'search' => 'true'),
+                    array('name'=>'username',       'index'=>'username',        'width'=>'30',   'align'=>'left', 'search' => 'true'),                    
+    //                array('name'=>'file',           'index'=>'file',            'width'=>'20',   'align'=>'left', 'search' => 'false'),
+                    //array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),                        
+                    array('name'=>'sent_date',       'index'=>'sent_date',            'width'=>'60',   'align'=>'left', 'search' => 'true'),                        
+                    //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),      
+                    array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+                );
+            }
+         
 
             $extra_params = array();
 
@@ -1192,7 +1214,7 @@ switch ($action) {
             //$extra_params['rowList'] = array(10, 20 ,30);
             
             $extra_params['sortname'] = 'firstname';            
-            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id;
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$work_id.'&type='.$type;
             ?>
             <script>
                 $(function() {

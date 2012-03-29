@@ -637,15 +637,19 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
 							Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
-							Database::query($sql_add_publication);
-						
+							Database::query($sql_add_publication);						
 			
 							$ends_query = ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
 							Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE c_id = '.$course_id.' AND id = '."'".$row['has_properties']."'");
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
+                                                        
+                            $qualification_value = isset($_POST['qualification']['qualification']) ? intval($_POST['qualification']['qualification']) : 0;
+                            $enable_qualification = !empty($qualification_value) ? 1 : 0;
+                            $sql_add_publication = "UPDATE ".$work_table." SET enable_qualification  = '".$enable_qualification.  "' WHERE c_id = $course_id AND id ='".$row['id']."'";
+							Database::query($sql_add_publication);
 				
-                            $sql = 'UPDATE '.$work_table.' SET 
+                             $sql = 'UPDATE '.$work_table.' SET 
                                                  allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' ,
                                                  title = '."'".Database::escape_string($_POST['dir_name'])."'".',  
                                                  description = '."'".Database::escape_string($_POST['description'])."'".', 
@@ -1598,7 +1602,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $qualification_exists = true;
             }
             
-            $qualification_string = '-';
+            $qualification_string = '';
             
             if ($qualification_exists) {
                 if ($work['qualification'] == '') {
@@ -1628,11 +1632,13 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 //File name
                 $link_to_download = null;
+                
                 if ($work['contains_file']) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                     $link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
                 } 
+                
                 $work['qualification'] = $qualification_string;
 
                 //Date

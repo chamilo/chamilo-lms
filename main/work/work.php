@@ -368,10 +368,9 @@ switch ($action) {
         break;
     case 'edit':
 	case 'upload_form': //can be add or edit work
-        $is_author = false;
-        
-		if (empty($item_id)) {     
-			$parent_data = get_work_data_by_id($work_id);
+        $is_author = false;        
+		if (empty($item_id)) {  
+			$parent_data = get_work_data_by_id($work_id);            
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
 			if (!empty($parent_data) && !empty($parent_data['qualification']))  {

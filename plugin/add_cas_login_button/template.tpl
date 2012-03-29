@@ -39,6 +39,6 @@
             <div class='cas_plugin_clear'>&nbsp;</div>
         {/if}
         <div class='cas_plugin_comm'>{$add_cas_login_button.comm_label}</div>
-        <button type="submit" name="submitAuth" class="btn" onclick="javascript:self.location.href='main/auth/cas/logincas.php'">{"LoginEnter"|get_lang}</button>    
+        <button class="btn" onclick="javascript:self.location.href='main/auth/cas/logincas.php'">{"LoginEnter"|get_lang}</button>    
     </div>
 {/if}

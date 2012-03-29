@@ -47,7 +47,7 @@ if (api_get_setting('allow_message_tool')=='true') {
         ?>
         <div id="display_response_id" style="height:200px;">
 			<?php echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />				
-			<textarea id="txt_area_invite" rows="5" class="span6" ></textarea><br /><br />
+			<textarea id="txt_area_invite" rows="5" class="span5" ></textarea><br /><br />
 			<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" >
 			<?php echo api_xml_http_response_encode(get_lang('SendInvitation')) ?></button>
 		</div>

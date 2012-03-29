@@ -28,7 +28,7 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 ?>
       <div id="display_response_id" style="height:200px;">    
 		<?php echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />				
-		<textarea id="txt_area_invite" rows="5" class="span6" ></textarea><br />
+		<textarea id="txt_area_invite" rows="5" class="span5" ></textarea><br />
 		 <?php echo api_xml_http_response_encode(get_lang('YouShouldWriteAMessage'));  ?><br /><br />
 		<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $user_id;?>')" >
 		<?php echo api_xml_http_response_encode(get_lang('SendInvitation')) ?></button>
@@ -40,7 +40,7 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 ?>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('To')); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?></td>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;"></td>
-    <td height="20"><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="3" class="span6" ></textarea></td>
+    <td height="20"><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="3" class="span5" ></textarea></td>
     <td height="20"><input type="button" value="<?php echo api_xml_http_response_encode(get_lang('NewMessage')); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; <input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')" /></td>
 <?php
 	}
@@ -57,7 +57,7 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 	 <?php echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>			  		 
 	 <br />
 	 <br /><span style="color:red">*</span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-	 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="3" class="span6" ></textarea>	 
+	 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="3" class="span5" ></textarea>	 
 	 <?php echo Display::display_error_message(api_xml_http_response_encode(get_lang('YouShouldWriteASubject')));  ?>	 
 	 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')">
 	 <?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>

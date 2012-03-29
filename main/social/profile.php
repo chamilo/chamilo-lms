@@ -250,7 +250,7 @@ if ($show_full_profile) {
 			$personal_info .=  '<dt>'.get_lang('Phone').'</dt><dd>'. $user_info['phone'].'</dd>';
 		$personal_info .=  '</dl>';	
 } else {	
-	$personal_info .=  '<dl>';
+	$personal_info .=  '<dl class="dl-horizontal">';
 	if (!empty($user_info['username']))
 		$personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
 	$personal_info .=  '</dl>';	    

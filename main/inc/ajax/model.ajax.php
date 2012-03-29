@@ -21,7 +21,7 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
 
-if ($action != 'get_exercise_results') {
+if (!in_array($action, array('get_exercise_results', 'get_work_user_list'))) {
 	api_protect_admin_script(true);
 }
 
@@ -96,7 +96,12 @@ if (!$sidx) $sidx = 1;
 //2. Selecting the count FIRST
 //@todo rework this
 
-switch ($action) {	
+switch ($action) {
+    case 'get_work_user_list':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $work_id = $_REQUEST['work_id'];
+        $count = get_count_work($work_id);        
+        break;
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 		require_once $libpath.'groupmanager.lib.php';
@@ -152,17 +157,21 @@ if ($_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-//4. Querying the DB for the elements
+$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
+$is_tutor                   = api_is_allowed_to_edit(true);
+
+//5. Querying the DB for the elements
 $columns = array();
 switch ($action) {    
-	case 'get_exercise_results':
-		$course                     = api_get_course_info();
-		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
-		$is_tutor                   = api_is_allowed_to_edit(true);
+    case 'get_work_user_list':        
+		$columns = array('type', 'firstname', 'lastname',  'username', 'qualification', 'sent_date', 'qualificator_id', 'actions');	
         
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);        
+        break;
+	case 'get_exercise_results':
+		$course                     = api_get_course_info();        
         //used inside get_exam_results_data()
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 
-		
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		if ($is_allowedToEdit || $is_tutor) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
@@ -220,7 +229,7 @@ switch ($action) {
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
-        foreach($result as $item) {
+        foreach ($result as $item) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
@@ -269,15 +278,16 @@ switch ($action) {
 }
 //var_dump($result);
 
+$allowed_actions = array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 'get_sessions', 'get_exercise_results', 'get_work_user_list');
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 'get_sessions', 'get_exercise_results'))) { 
+if (in_array($action, $allowed_actions)) {
     $response           = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 
     $response->records  = $count; 
     $i=0;
     if (!empty($result)) {
-        foreach($result as $row) {
+        foreach ($result as $row) {
             //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
             if ($row['id'] == "") {
@@ -285,14 +295,14 @@ if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', '
             } else {
                 $response->rows[$i]['id']=$row['id'];
             }             
-            $array = array();
-            foreach($columns as $col) {
+            $array = array();            
+            foreach ($columns as $col) {
                 $array[] = $row[$col];
             }                   
             $response->rows[$i]['cell']=$array;
             $i++; 
         }
-    } 
+    }    
     echo json_encode($response);       
 }
 exit;

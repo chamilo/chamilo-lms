@@ -319,6 +319,47 @@ echo $message;
 //for teachers
 
 switch ($action) {
+    case 'send_mail':        
+		if (Security::check_token('get')) {
+			$mails_sent_to = send_reminder_users_without_publication($my_folder_data);
+            if (empty($mails_sent_to)) {
+                Display::display_warning_message(get_lang('NoResults'));
+            } else {
+                Display::display_confirmation_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to));
+            }            
+            Security::clear_token();			
+		}
+		break;		
+	case 'settings':
+		//if posts
+		if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
+			// changing the tool setting: default visibility of an uploaded document
+			$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
+			Database::query($query);
+		
+			// changing the tool setting: is a student allowed to delete his/her own document
+			// database table definition
+			$table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
+		
+			// counting the number of occurrences of this setting (if 0 => add, if 1 => update)
+			$query = "SELECT * FROM " . $table_course_setting . " WHERE c_id = $course_id AND variable = 'student_delete_own_publication'";
+			$result = Database::query($query);
+			$number_of_setting = Database::num_rows($result);
+		
+			if ($number_of_setting == 1) {
+				$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "'
+						WHERE variable='student_delete_own_publication' AND c_id = $course_id";
+				Database::query($query);
+			} else {
+				$query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES
+				($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
+				Database::query($query);
+			}
+			Display::display_confirmation_message(get_lang('Saved'));
+		}		
+		/*	Display of tool options */
+		display_tool_options($uploadvisibledisabled, $origin);		
+		break;
 	case 'mark_work':
         if (!api_is_allowed_to_edit()) {
             echo Display::return_message(get_lang('ActionNotAllowed'), 'error');
@@ -687,55 +728,12 @@ switch ($action) {
 			event_upload($Id);			
 			Display :: display_confirmation_message(get_lang('DocAdd'), false);
 		}
-        break;
-	case 'send_mail':        
-		if (Security::check_token('get')) {
-			$mails_sent_to = send_reminder_users_without_publication($my_folder_data);
-            if (empty($mails_sent_to)) {
-                Display::display_warning_message(get_lang('NoResults'));
-            } else {
-                Display::display_confirmation_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to));
-            }            
-            Security::clear_token();			
-		}
-		break;		
-	case 'settings':
-		//if posts
-		if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
-			// changing the tool setting: default visibility of an uploaded document
-			$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . api_get_course_id() . "'";
-			Database::query($query);
-		
-			// changing the tool setting: is a student allowed to delete his/her own document
-			// database table definition
-			$table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
-		
-			// counting the number of occurrences of this setting (if 0 => add, if 1 => update)
-			$query = "SELECT * FROM " . $table_course_setting . " WHERE c_id = $course_id AND variable = 'student_delete_own_publication'";
-			$result = Database::query($query);
-			$number_of_setting = Database::num_rows($result);
-		
-			if ($number_of_setting == 1) {
-				$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "'
-						WHERE variable='student_delete_own_publication' AND c_id = $course_id";
-				Database::query($query);
-			} else {
-				$query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES
-				($course_id, 'student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
-				Database::query($query);
-			}
-			Display::display_confirmation_message(get_lang('Saved'));
-		}		
-		/*	Display of tool options */
-		display_tool_options($uploadvisibledisabled, $origin);		
-		break;
-        
     case 'create_dir':	
 	case 'add':
         //$check = Security::check_token('post');                
         //show them the form for the directory name
         
-		if ($is_allowed_to_edit) {            		    
+		if ($is_allowed_to_edit && in_array($action, array('create_dir','add'))) {   		    
 			//create the form that asks for the directory name
             $form = new FormValidator('form1', 'post', api_get_self().'?action=create_dir&'. api_get_cidreq());
             
@@ -781,137 +779,138 @@ switch ($action) {
             $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));      
             $form->addElement('html', '</div>');            
             $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
-		}
+		
         
-		if ($is_allowed_to_edit && $form->validate()) {
+            if ($form->validate()) {
                     
-            /*		
-            $fexpire 		= get_date_from_select('expires');
-            $fend 	 		= get_date_from_select('ends');*/
+                /*		
+                $fexpire 		= get_date_from_select('expires');
+                $fend 	 		= get_date_from_select('ends');*/
 
-            $directory 		= Security::remove_XSS($_POST['new_dir']);
-            $directory 		= replace_dangerous_char($directory);
-            $directory 		= disable_dangerous_file($directory);
-            $dir_name 		= $curdirpath.$directory;
-            $created_dir 	= create_unexisting_work_directory($base_work_dir, $dir_name);
+                $directory 		= Security::remove_XSS($_POST['new_dir']);
+                $directory 		= replace_dangerous_char($directory);
+                $directory 		= disable_dangerous_file($directory);
+                $dir_name 		= $curdirpath.$directory;
+                $created_dir 	= create_unexisting_work_directory($base_work_dir, $dir_name);
 
-            // we insert here the directory in the table $work_table
-            $dir_name_sql = '';
-			
-			if (!empty($created_dir)) {
-				if ($curdirpath == '/') {
-					$dir_name_sql = $created_dir;
-				} else {
-					$dir_name_sql = '/'.$created_dir;
-				}
-				$time = time();
-				$today = api_get_utc_datetime($time);
-	
-				$sql_add_publication = "INSERT INTO " . $work_table . " SET
-										   c_id				= $course_id,  
-										   url         		= '".Database::escape_string($dir_name_sql)."',
-									       title        	= '".Database::escape_string($_POST['new_dir'])."',
-						                   description 		= '".Database::escape_string($_POST['description'])."',
-						                   author      		= '',
-										   active			= '0',
-										   accepted			= '1',
-										   filetype 		= 'folder',
-										   post_group_id 	= '".$group_id."',
-										   sent_date		= '".$today."',
-										   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
-										   parent_id		= '',
-										   qualificator_id	= '',
-										   date_of_qualification	= '0000-00-00 00:00:00',
-										   weight   		= '".Database::escape_string($_POST['weight'])."',
-										   session_id   	= '".intval($id_session)."',
-										   allow_text_assignment   = '".Database::escape_string($_POST['allow_text_assignment'])."',
-										   contains_file    = 0, 
-										   user_id 			= '".$user_id."'";
-	
-				Database::query($sql_add_publication);
-	
-				// add the directory
-				$id = Database::insert_id();
-				if ($id) {
-					// Insert into agenda
-					$agenda_id = 0;
-					$end_date = '';
-					if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
-						require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
-						require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';						
-							
-						// Setting today date
-						$date = $end_date = $time;
-							
-						$title = sprintf(get_lang('HandingOverOfTaskX'), $_POST['new_dir']);
-						if (!empty($_POST['type1'])) {
-							$end_date = get_date_from_select('expires');
-							$date	  = $end_date;
-						}
-						$description = isset($_POST['description']) ? $_POST['description'] : '';
-						$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
-	
-						$agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$group_id), 0);
-					}
-				}
-				
-				//Folder created
-				api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', $user_id, $group_id);
-				Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);
-				
-				// insert into student_publication_assignment	
-				//return something like this: 2008-02-45 00:00:00
-	
-				$enable_calification = isset($_POST['qualification_value']) && !empty($_POST['qualification_value']) ? 1 : 0;
-				
-				if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
-					$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
-											c_id = $course_id ,
-	    								    expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
-	    							        ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
-	    				                    add_to_calendar  		= '$agenda_id',
-	    				                    enable_qualification 	= '$enable_calification',
-	    				                    publication_id 			= '$id'";
-					Database::query($sql_add_homework);	
-                    $my_last_id = Database::insert_id();
-					$sql_add_publication = "UPDATE $work_table SET has_properties  = $my_last_id , view_properties = 1  WHERE c_id = $course_id AND id = $id";
-					Database::query($sql_add_publication);
-				} else {
-					$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
-											c_id = $course_id ,
-	    								    expires_on     = '0000-00-00 00:00:00',
-	    							        ends_on        = '0000-00-00 00:00:00',
-	    				                    add_to_calendar  = '$agenda_id',
-	    				                    enable_qualification = '".$enable_calification."',
-	    				                    publication_id = '".$id."'";
-					Database::query($sql_add_homework);
-	                $inserted_id = Database::insert_id();
-					$sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE c_id = $course_id AND id = $id";
-					Database::query($sql_add_publication);	
-				}
-	
-				if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
-	
-					require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-					require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-					require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-					require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-	
-					//$resource_name = (empty($_POST['qualification_name'])) ? $_POST['new_dir'] : $_POST['qualification_name'];
-					$resource_name = $_POST['new_dir'];
-					add_resource_to_course_gradebook(api_get_course_id(), 3, $id, $resource_name, $_POST['weight'], $_POST['qualification_value'], $_POST['description'], time(), 1, api_get_session_id());
-				}	
-				// end features
-	
-				if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
-					send_email_on_homework_creation(api_get_course_id());
-				}
-			} else {
-				Display :: display_error_message(get_lang('CannotCreateDir'));
-			}
-		} else {
-            $form->display();     
-        }        	
+                // we insert here the directory in the table $work_table
+                $dir_name_sql = '';
+
+                if (!empty($created_dir)) {
+                    if ($curdirpath == '/') {
+                        $dir_name_sql = $created_dir;
+                    } else {
+                        $dir_name_sql = '/'.$created_dir;
+                    }
+                    $time = time();
+                    $today = api_get_utc_datetime($time);
+
+                    $sql_add_publication = "INSERT INTO " . $work_table . " SET
+                                            c_id				= $course_id,  
+                                            url         		= '".Database::escape_string($dir_name_sql)."',
+                                            title        	= '".Database::escape_string($_POST['new_dir'])."',
+                                            description 		= '".Database::escape_string($_POST['description'])."',
+                                            author      		= '',
+                                            active			= '0',
+                                            accepted			= '1',
+                                            filetype 		= 'folder',
+                                            post_group_id 	= '".$group_id."',
+                                            sent_date		= '".$today."',
+                                            qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
+                                            parent_id		= '',
+                                            qualificator_id	= '',
+                                            date_of_qualification	= '0000-00-00 00:00:00',
+                                            weight   		= '".Database::escape_string($_POST['weight'])."',
+                                            session_id   	= '".intval($id_session)."',
+                                            allow_text_assignment   = '".Database::escape_string($_POST['allow_text_assignment'])."',
+                                            contains_file    = 0, 
+                                            user_id 			= '".$user_id."'";
+
+                    Database::query($sql_add_publication);
+
+                    // add the directory
+                    $id = Database::insert_id();
+                    if ($id) {
+                        // Insert into agenda
+                        $agenda_id = 0;
+                        $end_date = '';
+                        if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
+                            require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
+                            require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';						
+
+                            // Setting today date
+                            $date = $end_date = $time;
+
+                            $title = sprintf(get_lang('HandingOverOfTaskX'), $_POST['new_dir']);
+                            if (!empty($_POST['type1'])) {
+                                $end_date = get_date_from_select('expires');
+                                $date	  = $end_date;
+                            }
+                            $description = isset($_POST['description']) ? $_POST['description'] : '';
+                            $content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.api_substr($dir_name_sql, 1).'" >'.$_POST['new_dir'].'</a>'.$description;
+
+                            $agenda_id = agenda_add_item($course_info, $title, $content, $date, $end_date, array('GROUP:'.$group_id), 0);
+                        }
+                    }
+
+                    //Folder created
+                    api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', $user_id, $group_id);
+                    Display :: display_confirmation_message(get_lang('DirectoryCreated'), false);
+
+                    // insert into student_publication_assignment	
+                    //return something like this: 2008-02-45 00:00:00
+
+                    $enable_calification = isset($_POST['qualification_value']) && !empty($_POST['qualification_value']) ? 1 : 0;
+
+                    if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
+                        $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+                                                c_id = $course_id ,
+                                                expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
+                                                ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
+                                                add_to_calendar  		= '$agenda_id',
+                                                enable_qualification 	= '$enable_calification',
+                                                publication_id 			= '$id'";
+                        Database::query($sql_add_homework);	
+                        $my_last_id = Database::insert_id();
+                        $sql_add_publication = "UPDATE $work_table SET has_properties  = $my_last_id , view_properties = 1  WHERE c_id = $course_id AND id = $id";
+                        Database::query($sql_add_publication);
+                    } else {
+                        $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+                                                c_id = $course_id ,
+                                                expires_on     = '0000-00-00 00:00:00',
+                                                ends_on        = '0000-00-00 00:00:00',
+                                                add_to_calendar  = '$agenda_id',
+                                                enable_qualification = '".$enable_calification."',
+                                                publication_id = '".$id."'";
+                        Database::query($sql_add_homework);
+                        $inserted_id = Database::insert_id();
+                        $sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE c_id = $course_id AND id = $id";
+                        Database::query($sql_add_publication);	
+                    }
+
+                    if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
+
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+
+                        //$resource_name = (empty($_POST['qualification_name'])) ? $_POST['new_dir'] : $_POST['qualification_name'];
+                        $resource_name = $_POST['new_dir'];
+                        add_resource_to_course_gradebook(api_get_course_id(), 3, $id, $resource_name, $_POST['weight'], $_POST['qualification_value'], $_POST['description'], time(), 1, api_get_session_id());
+                    }	
+                    // end features
+
+                    if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
+                        send_email_on_homework_creation(api_get_course_id());
+                    }
+                } else {
+                    Display :: display_error_message(get_lang('CannotCreateDir'));
+                }
+            } else {
+                $form->display();     
+            }     	
+        }
 	case 'make_visible':
     case 'delete':
 	case 'make_invisible':	

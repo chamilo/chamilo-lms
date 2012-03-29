@@ -1493,7 +1493,7 @@ function get_count_work($work_id) {
     if ($is_allowed_to_edit) {
         $extra_conditions .= ' AND work.active IN (0, 1) ';
     } else {
-        $extra_conditions .= ' AND work.active IN (1) ';            
+        $extra_conditions .= ' AND work.active = 1 AND accepted = 1';            
         if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {            
             $extra_conditions .= " AND work.user_id = ".api_get_user_id()." ";
         } else {

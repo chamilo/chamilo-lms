@@ -313,26 +313,6 @@ input.link_alike:hover {
 	margin-right: 2px;
 }
 
-/* HEADER 4:      */
-
-#header4 {
-	height:26px;
-    padding:0px;
-    background:none;                    
-    width: 100%;	
-    /*margin-top:35px;*/
-    margin-bottom:5px;    
-    background-repeat:repeat-x;
-    color: #009;    
-    border: 1px solid #EEEEEE;
-}
-#header4 a {
-    color: #666;
-}
-#header4 a:hover {
-    text-decoration: none;
-    color: #f3840d;
-}
 /* The tool shortcuts */
 #toolshortcuts {
     clear:right;

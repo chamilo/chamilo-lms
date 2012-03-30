@@ -136,4 +136,3 @@ $(document).ready(function() {
 });
 </script>
 {$header_extra_content}
-<!--  head end-->

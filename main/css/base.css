@@ -208,11 +208,8 @@ footer .container .row {
     margin-top:0px;
 }
 
-/* Begin of proper */
-
-#header4 {
-    height: 26px !important; /* breadcrumb fix */
-    margin-top:5px;
+#friend-container .thumbnail {
+    min-height: 140px;    
 }
 
 .show-grid [class*="span"] {

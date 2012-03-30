@@ -56,11 +56,6 @@
         height: 0px;
     }
 
-    /* Removing just for now*/
-    #header4 {
-        display:none;
-    }
-
     /* Subnav */
     .subnav {           
         border:1px solid #fff;

@@ -6,6 +6,8 @@
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
 
+$strings['plugin_title'] = "Rss";
+$strings['plugin_comment'] = "Affiche le contenu de flux rss.";
 
-$title = "Title";
-$no_rss = "There is no RSS configured. Please add a RSS";
+$strings['title'] = "Titre";
+$strings['no_rss'] = "Veuillez configurer";

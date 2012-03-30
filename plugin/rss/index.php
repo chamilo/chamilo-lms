@@ -1,32 +1,33 @@
 <?php
 
-$bullet = api_get_path(WEB_PLUGIN_PATH) . '/rss/resources/arrow-bullet.png';
+$plugin = RssPlugin::create();
 
-$settings = $plugin_info['settings'];
-$rss      = isset($plugin_info['rss']) ? $plugin_info['rss'] : '';
-$title    = isset($plugin_info['rss_title']) ? $plugin_info['rss_title'] : 'Rss';
+$rss = $plugin->get_rss();
+
+$title = $plugin->get_block_title();
 $title = $title ? "<h4>$title</h4>" : '';
+
+$css = $plugin->get_css();
+$css = $css ? "<style type=\"text/css\">$css</style>" : '';
+
+$bullet = api_get_path(WEB_PLUGIN_PATH) . '/rss/resources/arrow-bullet.png';
 
 if (empty($rss))
 {
     echo get_lang('no_rss');
+    return;
 }
 
-$css = array();
-$css[] = file_get_contents(dirname(__FILE__) . '/resources/rss.css');
-$css[] = file_get_contents(dirname(__FILE__) . '/resources/color.css');
-$css = implode($css);
+
 
 echo<<<EOT
 <div class="well sidebar-nav rss">
 
     <style type="text/css">
-
         $css
         .gfg-listentry-highlight{
             background-image: url('$bullet');
         }
-
     </style>
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -52,7 +53,7 @@ echo<<<EOT
         }
         google.setOnLoadCallback(OnLoad);
     </script>
-    <h4>$title</h4>
+    $title
     <div id="news" class="" style="min-height:300px;"></div>
 </div>
 EOT;

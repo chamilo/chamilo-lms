@@ -723,7 +723,6 @@ if (isset($cidReset) && $cidReset) {
 			$_course['subscribe_allowed']   = $course_data['subscribe'];
 			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
             $_course['activate_legal']      = $course_data['activate_legal'];
-            $_course['legal_agreement']     = $course_data['legal_agreement'];
             $_course['show_score']          = $course_data['show_score']; //used in the work tool
 
 			api_session_register('_cid');

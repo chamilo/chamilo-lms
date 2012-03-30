@@ -80,8 +80,8 @@ $social_right_content .= '<div>
     <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
     </div>
     <div class="box_description_group_actions">
-    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-        '.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'
+    <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+        '.get_lang('EditProfile').'
     </a>
     </div>';
                   
@@ -102,8 +102,7 @@ $social_right_content .= '<div>
             $social_right_content .= '</div>';
                  
             //Search box
-			$social_right_content .= '<div class="span4">';	
-					
+			$social_right_content .= '<div class="span4">';					
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
     			

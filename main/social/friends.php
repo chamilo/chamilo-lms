@@ -99,19 +99,21 @@ if (isset($name_search) && $name_search!='undefined') {
 	$friends = SocialManager::get_friends($user_id);
 }
 
+$social_right_content .= '<div class="span8">';
+
 if (count($friends) == 0 ) {
-	$social_right_content = get_lang('NoFriendsInYourContactList').'<br /><br />';
-	$social_right_content .= '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
+	$social_right_content .= get_lang('NoFriendsInYourContactList').'<br /><br />';
+	$social_right_content .= '<a class="btn" href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';	
 } else {
-	$social_right_content = '<div class="span8">'.get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
-	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" /></div>';
+	$social_right_content = get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
+	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
     
     $friend_html = '';
 
     $number_friends = count($friends);
-    $j=0;		
-
-    $friend_html.= '<table  id="friend_table" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+    $j=0;		    
+    
+    $friend_html.= '<table id="friend_table" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
     for ($k=0;$k<$number_friends;$k++) {
         $friend_html.='<tr><td valign="top">';
 
@@ -128,13 +130,11 @@ if (count($friends) == 0 ) {
         }
         $friend_html.='</td></tr>';
     }
-    $friend_html.='<br/></table>';
+    $friend_html.='</table>';
     $social_right_content .=  $friend_html;
 }
+$social_right_content .= '</div>';
 
-$social_right_content .=  '</div>';
-$social_right_content .=  '</div>';	
-$social_right_content .=  '</div>';	
 
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

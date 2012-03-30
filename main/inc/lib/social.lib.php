@@ -565,26 +565,13 @@ class SocialManager extends UserManager {
 		$total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
 		
 		$html = '<div class="social-menu">';
-		
-	    $html .= '<script type="text/javascript">      
-            function show_icon_edit(element_html) { 
-                ident="#edit_image";
-                $(ident).show();
-            }       
-            
-            function hide_icon_edit(element_html)  {
-                ident="#edit_image";
-                $(ident).hide();
-            }               
-            </script>';		      
-
 	  	if (in_array($show, $show_groups) && !empty($group_id)) {
 			//--- Group image
 			$group_info = GroupPortalManager::get_group_data($group_id);
 			$big		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_BIG);
 			
 			$html .= '<div class="social-content-image">';                
-				$html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';				
+				$html .= '<div class="social-background-content">';				
 				$html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
 				if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
 					$html .= '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
@@ -600,7 +587,7 @@ class SocialManager extends UserManager {
 
 	  		//--- User image
 			
-            $html .= '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()">';
+            $html .= '<div class="social-background-content">';
                 if ($img_array['file'] != 'unknown.jpg') {
                     $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
                 } else {

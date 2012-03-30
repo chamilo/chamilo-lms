@@ -25,19 +25,6 @@ if (api_get_setting('allow_social_tool') !='true' ){
     api_not_allowed();
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-
-function show_icon_edit(element_html) {
-	ident="#edit_image";
-	$(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}
-
-</script>';
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {	
 	$form = new FormValidator('profile', 'post', 'home.php', null, array());

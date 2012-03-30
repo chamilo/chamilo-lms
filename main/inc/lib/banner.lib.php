@@ -92,8 +92,8 @@ function get_tabs() {
 
 	// Reports
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-			$navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
-			$navigation['reports']['title'] = get_lang('Reports');
+        $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
+        $navigation['reports']['title'] = get_lang('Reports');
 	}
 
 	// Custom tabs
@@ -423,8 +423,13 @@ function return_menu() {
             
             if (api_get_setting('allow_message_tool') == 'true') {
                 $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
-            }
+            }            
             
+            if (api_get_setting('allow_social_tool')=='true') {
+                $profile_url = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
+            } else {
+                $profile_url = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            }
             //start user section line with name, my course, my profile, scorm info, etc            
             $menu .= '<ul class="nav nav-pills pull-right">';
                 //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
@@ -432,7 +437,7 @@ function return_menu() {
                 $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="'.$user_info['avatar_small'].'"/> '.$user_info['complete_name'].'<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>
+                                        '.$profile_url.'
                                         '.$message_link.'                                        
                                     </li>
                                 </ul>';

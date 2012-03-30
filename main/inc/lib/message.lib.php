@@ -219,8 +219,7 @@ class MessageManager
         $receiver_user_id   = intval($receiver_user_id);
         $parent_id          = intval($parent_id);
         $edit_message_id    = intval($edit_message_id);
-        $topic_id   		= intval($topic_id);
-                
+        $topic_id   		= intval($topic_id);                
 		$user_sender_id     = api_get_user_id();
 
 		$total_filesize = 0;
@@ -261,9 +260,7 @@ class MessageManager
 					     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".$now."','$clean_subject','$clean_content','$group_id','$parent_id', '".$now."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
-			}   
-            
-            
+			}
 
 			// Save attachment file for inbox messages
 			if (is_array($file_attachments)) {
@@ -751,39 +748,27 @@ class MessageManager
 		$user_image = UserManager::get_picture_user($row['user_sender_id'], $from_user['picture_uri'],80);
 		$user_image = Display::img($user_image['file'], $name, array('title'=>$name));		
 
-		$message_content =  '<table>
-		    <tr>
-		      <td width="10px">&nbsp; </td>
-		      <td width="100%">
-		      	<table>
-		            <tr>
-		              <td valign="top" width="100%">
-		               '.Display::page_subheader(str_replace("\\","",$title)).'
-		              </td>';
+		$message_content =  Display::page_subheader(str_replace("\\","",$title));
+		              
 		if (api_get_setting('allow_social_tool') == 'true') {
-            $message_content .='<td width="100%">'.$user_image.'</td>';
+            $message_content .= $user_image.' ';
         }
                       
         $message_content .='<tr>';
     	if (api_get_setting('allow_social_tool') == 'true') {	
     		if ($source == 'outbox') {
-    			$message_content .='<td>'.get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </td>';
+    			$message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
     		} else {
-    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </td>';
+    			$message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
     		}    
     	} else {
     		if ($source == 'outbox') {
-    			$message_content .='<td>'.get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row['user_receiver_id']).'</b> </td>';
+    			$message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row['user_receiver_id']).'</b>';
     		} else {
-    			$message_content .='<td>'.get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </td>';
+    			$message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
     		}
     	}
-		 $message_content .='</tr>
-		              <tr>
-		              <td>'.get_lang('Date').':  '.api_get_local_time($row['send_date']).'</td>
-		              </tr>
-		            </tr>
-		        </table>		        
+		 $message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']).'
 		        <br />
 		        <hr style="color:#ddd" />
 		        <table height="209px" width="100%">
@@ -1225,6 +1210,21 @@ class MessageManager
 		}
 		return $item;
 	}
+    
+    function generate_message_form($id, $params = array()) {
+        $form = new FormValidator('send_message', null, 'post', null, array('id'=>$id.'_form'));
+        $form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
+        $form->addElement('textarea', 'content', get_lang('Message'), array('id' => 'content_id', 'rows' => '5', 'class' => 'span4'));
+        $div = Display::div($form->return_form(), array('id' => $id.'_div', 'style' => 'display:none'));                
+        return $div;
+    }
+    function generate_invitation_form($id , $params = array()) {
+        $form = new FormValidator('send_invitation', null, 'post', null, array('id'=>$id.'_form'));
+        //$form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
+        $form->addElement('textarea', 'content', get_lang('AddPersonalMessage'), array('id' => 'content_invitation_id', 'rows' => '5', 'class' => 'span4'));
+        $div = Display::div($form->return_form(), array('id' => $id.'_div', 'style' => 'display:none'));                
+        return $div;
+    }
 }
 
 

@@ -330,9 +330,9 @@ class SocialManager extends UserManager {
 				$count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
 
 				if ($count_is_true) {
-					echo Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
+					echo Display::display_confirmation_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
 				} else {
-					echo Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
+					echo Display::display_warning_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
 				}
 			}
 		}
@@ -660,7 +660,7 @@ class SocialManager extends UserManager {
     	  	// My friend profile
     	  	
 	  		if ($user_id != api_get_user_id()) {
-	  			$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=470&user_friend='.$user_id.'&view=profile&view_panel=1" class="ajax" title="'.get_lang('SendMessage').'">';
+	  			$html .=  '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
 	  			$html .=  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';						
 	  		}
 
@@ -671,7 +671,7 @@ class SocialManager extends UserManager {
 	  			$html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
 	  		} else {
 	  			if (!$show_full_profile) {
-	  				$html .=  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=230&width=500&user_friend='.$user_id.'" class="ajax" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+	  				$html .=  '<li><a  href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user_id.'\');" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
 	  			}
 	  		}
 			
@@ -822,81 +822,56 @@ class SocialManager extends UserManager {
 			$interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
 			Display::display_header($alt, null, $alt);            
 			
-			echo '<div>';
-
-			echo '<div style="margin:0 auto; width:350px; border:1px;">';
-				echo '<div id="whoisonline-user-image" style="float:left; padding:5px;">';
-				if (strlen(trim($user_object->picture_uri)) > 0) {
-					$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
-					$sysdir = $sysdir_array['dir'];
-					$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
-					$webdir = $webdir_array['dir'];
-					$fullurl = $webdir.$user_object->picture_uri;
-					$system_image_path = $sysdir.$user_object->picture_uri;
-					list($width, $height, $type, $attr) = @getimagesize($system_image_path);					
-					$height += 30;
-					$width += 30;					
-					// get the path,width and height from original picture
-					$big_image = $webdir.'big_'.$user_object->picture_uri;
-					$big_image_size = api_getimagesize($big_image);
-					$big_image_width = $big_image_size['width'];
-					$big_image_height = $big_image_size['height'];
-					$url_big_image = $big_image.'?rnd='.time();
-					echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
-				} else {
-					echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
-					echo '<br />';
-				}
-				
-				if (!empty($status)) {
-				    echo '<div style="text-align:center;padding-top:5px;">'.$status.'</div>';
-				}
-				echo '</div>';
-
-				echo '<div id="whoisonline-user-info" style="float:left; padding-left:15px;">';
-
-				global $user_anonymous;
-				if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
-					echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.Display :: return_icon('my_shared_profile.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).get_lang('ViewSharedProfile').'</a></p>';
-
-					$user_anonymous = api_get_anonymous_id();
-
-					if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
-						$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
-						if ($user_relation == 0 || $user_relation == 6) {
-							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).'&nbsp;'.get_lang('SendInvitation').'</a></p>
-								   <p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
-						} else {
-							echo  '<p><a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="ajax" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage'),array('height'=>'18px')).'&nbsp;'.get_lang('SendAMessage').'</a></p>';
-						}
-					}
-				}
-				if (api_get_setting('show_email_addresses') == 'true') {
-					echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
-				}
-				echo '</div>';
+			echo '<div class ="thumbnail">';
+            if (strlen(trim($user_object->picture_uri)) > 0) {
+                $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
+                $sysdir = $sysdir_array['dir'];
+                $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
+                $webdir = $webdir_array['dir'];
+                $fullurl = $webdir.$user_object->picture_uri;
+                $system_image_path = $sysdir.$user_object->picture_uri;
+                list($width, $height, $type, $attr) = @getimagesize($system_image_path);					
+                $height += 30;
+                $width += 30;					
+                // get the path,width and height from original picture
+                $big_image = $webdir.'big_'.$user_object->picture_uri;
+                $big_image_size = api_getimagesize($big_image);
+                $big_image_width = $big_image_size['width'];
+                $big_image_height = $big_image_size['height'];
+                $url_big_image = $big_image.'?rnd='.time();
+                //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
+                echo '<img src="'.$fullurl.'" alt="'.$alt.'" />';
+            } else {
+                echo Display::return_icon('unknown.jpg', get_lang('Unknown'));					
+            }            
+            if (!empty($status)) {
+                echo '<div class="caption">'.$status.'</div>';
+            }
 			echo '</div>';
-			echo '</div>';
-			echo '<div class="clear"></div>';
-			echo '<div>';
+
+			         
+            if (api_get_setting('show_email_addresses') == 'true') {
+                echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
+            }
+            			
 			if ($user_object->competences) {
-				echo '<dt><div class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div></dt>';
-				echo '<dd>'.$user_object->competences.'</dd>';
+				echo Display::page_subheader(get_lang('MyCompetences'));
+				echo '<p>'.$user_object->competences.'</p>';
 			}
 			if ($user_object->diplomas) {
-				echo '<dt><div class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div></dt>';
-				echo '<dd>'.$user_object->diplomas.'</dd>';
+				echo Display::page_subheader(get_lang('MyDiplomas'));
+				echo '<p>'.$user_object->diplomas.'</p>';
 			}
 			if ($user_object->teach) {
-				echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
-				echo '<dd>'.$user_object->teach.'</dd>';;
+				echo Display::page_subheader(get_lang('MyTeach'));
+				echo '<p>'.$user_object->teach.'</p>';
 			}
 			SocialManager::display_productions($user_object->user_id);
 			if ($user_object->openarea) {
-				echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
-				echo '<dd>'.$user_object->openarea.'</dd>';
+				echo Display::page_subheader(get_lang('MyPersonalOpenArea'));
+				echo '<p>'.$user_object->openarea.'</p>';
 			}
-			echo '</div>';
+			
 		} else	{
 			Display::display_header(get_lang('UsersOnLineList'));
 			echo '<div class="actions-title">';
@@ -904,6 +879,7 @@ class SocialManager extends UserManager {
 			echo '</div>';
 		}
 	}
+    
 	/**
 	 * Display productions in whoisonline
 	 * @param int $user_id User id

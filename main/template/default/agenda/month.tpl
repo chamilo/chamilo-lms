@@ -422,8 +422,7 @@ $(document).ready(function() {
                     {$visible_to}                    
                 </div>                  
             </div>
-        {/if}
-        
+        {/if}        
          <div id="visible_to_read_only" class="control-group" style="display:none">                      
                 <label class="control-label" for="date">{"To"|get_lang}</label>                
                 <div class="controls">

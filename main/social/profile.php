@@ -61,11 +61,86 @@ require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 
 require_once $libpath.'magpierss/rss_fetch.inc';
-
+$ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script type="text/javascript">
+    
+function checkLength( o, n, min, max ) {
+    if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+            min + " and " + max + "." );
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function send_message_to_user(user_id) {    
+    $("#send_message_form").show();
+    $("#send_message_div").dialog("open");        
+    $("#send_message_div").dialog({				
+        buttons: {
+            "'.  addslashes(get_lang('Sent')).'": function() {
+                var bValid = true;
+                //bValid = bValid && checkLength( subject, "subject", 1, 255 );
+                //bValid = bValid && checkLength( content, "content", 1, 255 );
+                
+                var url = "'.$ajax_url.'?a=send_message&user_id="+user_id;
+                var params = $("#send_message_form").serialize();						
+                $.ajax({
+                    url: url+"&"+params,
+                    success:function(data) {                        
+                        $("#main_content").before(data);
+                        $("#send_message_div").dialog({ buttons:{}});                        
+                        //$("#send_message_reponse").html(data);
+                        $("#send_message_form").hide();                        
+                        $("#send_message_div").dialog("close");		
+                        
+                        $("#subject_id").val("");
+                        $("#content_id").val("");
+                    }							
+                });
+            },
+        },				
+        close: function() {		            
+        }    
+    });		
+    //prevent the browser to follow the link    
+}
+
+function send_invitation_to_user(user_id) {    
+    $("#send_invitation_form").show();
+    $("#send_invitation_div").dialog("open");        
+    $("#send_invitation_div").dialog({				
+        buttons: {
+            "'.  addslashes(get_lang('SendInvitation')).'": function() {
+                var bValid = true;
+                //bValid = bValid && checkLength( subject, "subject", 1, 255 );
+                //bValid = bValid && checkLength( content, "content", 1, 255 );
+                
+                var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
+                var params = $("#send_invitation_form").serialize();						
+                $.ajax({
+                    url: url+"&"+params,
+                    success:function(data) {                        
+                        $("#main_content").before(data);
+                        $("#send_invitation_div").dialog({ buttons:{}});                        
+                        
+                        $("#send_invitation_form").hide();                        
+                        $("#send_invitation_div").dialog("close");		                                                
+                        $("#content_invitation_id").val("");
+                    }							
+                });
+            },
+        },				
+        close: function() {		            
+        }    
+    });		
+    //prevent the browser to follow the link    
+}
+
 function toogle_course (element_html, course_code){
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
@@ -97,14 +172,28 @@ function toogle_course (element_html, course_code){
 		}
 	});
 }
-</script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
+
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){
 		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
 			$("#form_register_friend").submit();
 		}
 	});
+    
+	$("#send_message_div").dialog({
+		autoOpen: false,
+		modal	: false, 
+		width	: 550, 
+		height	: 300    
+   	});
+    
+	$("#send_invitation_div").dialog({
+		autoOpen: false,
+		modal	: false, 
+		width	: 550, 
+		height	: 300    
+   	});
+    
 });
 function change_panel (mypanel_id,myuser_id) {
 		$.ajax({
@@ -137,7 +226,7 @@ function action_database_panel (option_id, myuser_id) {
 		url: "../messages/send_message.php",
 		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
 		success: function(datos) {
-		 $("#display_response_id").html(datos);
+            $("#display_response_id").html(datos);
 		}
 	});
 }
@@ -286,7 +375,9 @@ if ($show_full_profile) {
 			}
 		}
 		$friend_html.= '</div>'; // close div friend-header
-
+        
+        $friend_html.='<ul class="thumbnails">';
+        
 		$j=1;
 		for ($k=0;$k<$number_friends;$k++) {
 			if ($j > $number_of_images) break;
@@ -297,24 +388,30 @@ if ($show_full_profile) {
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);                
                          
                 if ($user_info_friend['user_is_online']) {
-                    $status_icon = Display::div('', array('class' => 'online_user'));
+                    $status_icon = Display::span('', array('class' => 'online_user_in_text'));
                 } else {
-                    $status_icon = Display::div('', array('class' => 'offline_user'));
+                    $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
                 }
                 
-				$friend_html.= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" >';
-                $friend_html.= $status_icon.'<span><center>';
-
+				//$friend_html.= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" >';
+                $friend_html.= '<li class="span2">';
+                $friend_html.= '<div class="thumbnail">';
+                
 				// the height = 92 must be the sqme in the image_friend_network span style in default.css
-				$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
-				$friend_html.= '<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';                
-				$friend_html.= '<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
-				$friend_html.= '</center></span>';
-				$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
-				$friend_html.= '</div>';
+				$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_ORIGINAL);
+				
+				$friend_html.= '<img src="'.$friends_profile['file'].'"  id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';                
+                
+                $friend_html.= '<div class="caption">';
+				$friend_html.= $status_icon.'<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';                
+				$friend_html.= $name_user;
+                $friend_html.= '</a></div>';
+                $friend_html.= '</div>';
+				$friend_html.= '</li>';
 			}
 			$j++;
 		}
+        $friend_html.='</ul>';
 	} else {
 		// No friends!! :(
 		$friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
@@ -402,8 +499,6 @@ if ($show_full_profile) {
         $social_right_content .=  SocialManager::social_wrapper_div($extra_information, 9);
 }
 
-
-
 if ($show_full_profile) {
 
 	// MY GROUPS
@@ -430,7 +525,7 @@ if ($show_full_profile) {
 			} else {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}
-			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
+			//$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 			$item_name = $url_open.$name.$icon.$url_close;
 
 			if ($result['description'] != '') {
@@ -608,6 +703,9 @@ if ($show_full_profile) {
         $social_right_content .=  SocialManager::social_wrapper_div($more_info, 9);
 	}	
 }
+$social_right_content .= MessageManager::generate_message_form('send_message');
+$social_right_content .= MessageManager::generate_invitation_form('send_invitation');
+
 
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);

@@ -212,6 +212,10 @@ footer .container .row {
     min-height: 140px;    
 }
 
+#friend-container .thumbnail img {
+    max-height: 100px;
+}
+
 .show-grid [class*="span"] {
     background-color: #EEEEEE;
     border-bottom-left-radius: 3px;

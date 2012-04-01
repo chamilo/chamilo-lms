@@ -79,11 +79,13 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);
         
         //Chamilo plugins
-        $this->plugin = new AppPlugin();
-        $plugin_regions = $this->plugin->get_plugin_regions();        
-        foreach ($plugin_regions as $region) {
-            $this->set_plugin_region($region);
-        }  
+        if ($this->show_header) {
+            $this->plugin = new AppPlugin();
+            $plugin_regions = $this->plugin->get_plugin_regions();        
+            foreach ($plugin_regions as $region) {
+                $this->set_plugin_region($region);
+            }  
+        }
 	}
     
     function set_help($help_input = null) {        

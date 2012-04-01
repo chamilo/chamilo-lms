@@ -2878,6 +2878,12 @@ form .formw .freeze {
    -o-box-shadow: 2px 2px 19px #aaa;
    -webkit-box-shadow: 2px 2px 19px #aaa;
    -moz-box-shadow: 2px 2px 19px #aaa;
+   
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+        
 
     background-color: white;
     border: 0.1em dotted #D4E06B;
@@ -2889,7 +2895,7 @@ form .formw .freeze {
     padding-top: 0.9em;
     position: absolute;
     text-align: center;
-    width: 80px;
+    width: 120px;
     z-index: 40;
 }
 
@@ -2934,9 +2940,7 @@ form .formw .freeze {
     border: 2px dotted orange;
 }
 
-
 .edit_block {
-    font-size:14px;
     z-index: 200;    
 }
 
@@ -3260,10 +3264,7 @@ a:active{
     display:none;
 }
 
-
-
-#timeline {
-    
+#my_timeline {    
     background: url("dot.gif") repeat-x scroll left 45px;
     height: 350px;
     margin: 0px auto;
@@ -3572,4 +3573,21 @@ a.forum_group_link {
 
 #hide_bar_template:hover {
     background-color:#aaa;
+}
+
+.timeline-example {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+#timeline {
+    clear: both;
+    height: 600px !important;
+    position: relative !important;
+    z-index: 100;
 }

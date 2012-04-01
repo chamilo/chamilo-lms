@@ -1,9 +1,7 @@
 {extends file="default/layout/main.tpl"}
 {* Header *}
 {block name="header"}
-{if $show_header}
 {include file="default/layout/main_header.tpl"}
-{/if}	
 {/block}
 {* 1 column *}
 {block name=body}
@@ -14,8 +12,6 @@
             {$plugin_content_top}
         </div>
     {/if}
-    
-    
     <div class="span12">            
         {include file="default/layout/page_body.tpl"}
         {if !empty($content)}

@@ -1148,7 +1148,7 @@ class Database {
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
 
-    public static function select($columns, $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
+    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
         $conditions = self::parse_conditions($conditions);
         
         //@todo we could do a describe here to check the columns ...
@@ -1164,7 +1164,7 @@ class Database {
         }
 
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-        //echo $sql.'<br />';
+        //var_dump($sql);
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {

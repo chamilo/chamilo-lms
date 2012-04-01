@@ -1132,7 +1132,7 @@ class Database {
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
             $result = self::query($sql);
             if ($show_query) {
-            	echo $sql;
+            	var_dump($sql);
             }
             return  self::get_last_insert_id();
         }

@@ -10,11 +10,12 @@
  */
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_USER;
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
+
 
 // notice for unauthorized people.
 api_protect_course_script(true);

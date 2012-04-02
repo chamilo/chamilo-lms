@@ -14,6 +14,8 @@ $language_file = array('notebook');
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 
+$current_course_tool  = TOOL_NOTEBOOK;
+
 require_once api_get_path(LIBRARY_PATH).'notebook.lib.php';
 
 // The section (tabs)
@@ -21,9 +23,6 @@ $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
-
-// Including additional libraries
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Additional javascript
 $htmlHeadXtra[] = NotebookManager::javascript_notebook();

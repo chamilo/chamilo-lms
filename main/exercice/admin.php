@@ -56,8 +56,11 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
+$current_course_tool  = TOOL_QUIZ;
+$this_section = SECTION_COURSES;
 
-$this_section=SECTION_COURSES;
+// Access control
+api_protect_course_script(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 

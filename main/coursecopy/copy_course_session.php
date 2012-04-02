@@ -17,6 +17,9 @@ $language_file = array('coursebackup', 'admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
+
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 

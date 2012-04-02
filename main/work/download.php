@@ -11,8 +11,9 @@
  */
 
 session_cache_limiter('public');
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_STUDENTPUBLICATION;
+
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';

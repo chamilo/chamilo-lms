@@ -16,6 +16,8 @@ $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Including the global initialization file
 require '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {

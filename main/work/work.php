@@ -44,6 +44,11 @@
 $language_file = array('exercice', 'work', 'document', 'admin');
 
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_STUDENTPUBLICATION;
+
+/*	Configuration settings */
+
+api_protect_course_script(true);
 
 // Including necessary files
 require_once 'work.lib.php';
@@ -123,10 +128,6 @@ $has_ended   = false;
 $sys_course_path 	= api_get_path(SYS_COURSE_PATH);
 $course_dir 		= $sys_course_path . $_course['path'];
 $base_work_dir 		= $course_dir . '/work';
-
-/*	Configuration settings */
-
-api_protect_course_script(true);
 
 $link_target_parameter = ""; // e.g. "target=\"_blank\"";
 

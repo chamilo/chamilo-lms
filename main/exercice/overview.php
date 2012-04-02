@@ -13,6 +13,7 @@ $language_file = 'exercice';
 require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
+$current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
 if (isset ($_SESSION['objExercise'])) {

@@ -725,14 +725,15 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false) {
-    global $is_allowed_in_course;
+    global $is_allowed_in_course, $current_course_tool;
     $is_visible = false;
     if (api_is_platform_admin()) {
     	return true;
     }
+    
     $course_info = api_get_course_info();
     if (isset($course_info) && !empty($course_info['visibility'])) {
-    	switch($course_info['visibility']) {
+    	switch ($course_info['visibility']) {
     		default:
     		case 0: //Completely closed: the course is only accessible to the teachers.
     			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
@@ -753,7 +754,19 @@ function api_protect_course_script($print_headers = false) {
     			$is_visible = true;    			
     			break;
     	}
-    }    	    	
+    }
+    
+    //Check tool visibility: check the course_hide_tools variable in the settings_current table
+    if ($is_visible == true) {               
+        if (!empty($current_course_tool)) {            
+            $tool_visibility = api_get_setting('course_hide_tools', $current_course_tool);
+            if (!empty($tool_visibility)) {
+                if ($tool_visibility == 'true') {
+                    $is_visible = false;
+                }
+            }        
+        }
+    }   
         
     if (!$is_visible) {
         api_not_allowed($print_headers);
@@ -5721,3 +5734,4 @@ function api_grading_model_functions($grading_model, $action = 'to_array') {
 	}
 	return $return;
 }
+

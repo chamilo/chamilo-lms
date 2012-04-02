@@ -21,10 +21,12 @@ if (!isset ($_GET['cidReq'])){
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_SURVEY;
+
+api_protect_course_script(true);
 
 // Including additional libraries
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 // Tracking
 event_access_tool(TOOL_SURVEY);

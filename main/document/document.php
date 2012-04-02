@@ -34,9 +34,10 @@
 
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
+
 
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);

@@ -26,6 +26,8 @@ $language_file = array('link', 'admin');
 
 // Including libraries
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_LINK;
+
 require_once api_get_path(LIBRARY_PATH).'link.lib.php';
 
 $this_section = SECTION_COURSES;

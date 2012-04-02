@@ -24,6 +24,7 @@ $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_ANNOUNCEMENT;
 $this_section=SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 

@@ -37,6 +37,7 @@ $debug = 1; //debug value is set in the exercise.class.php file
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_QUIZ;
 require_once 'exercise.lib.php';
 
 $this_section = SECTION_COURSES;

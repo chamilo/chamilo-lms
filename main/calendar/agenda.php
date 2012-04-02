@@ -12,8 +12,8 @@ $language_file = array('agenda','group');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_CALENDAR_EVENT;
 
 api_protect_course_script(true);
 

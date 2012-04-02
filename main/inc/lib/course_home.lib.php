@@ -465,20 +465,25 @@ class CourseHome {
         $list = api_get_settings('Tools','list', api_get_current_access_url_id());
         $hide_list = array();
         $check = false;
+        
         foreach ($list as $line) {
+            //Admin can see all tools even if the course_hide_tools configuration is set
+            if ($is_platform_admin) {
+                continue;
+            }
             if ($line['variable'] == 'course_hide_tools' and $line['selected_value'] == 'true') {
                 $hide_list[] = $line['subkey'];
                 $check = true;
             }
         }
+        
         while ($temp_row = Database::fetch_assoc($result)) {
             if ($check) {
-                if (!in_array($temp_row['name'],$hide_list)) {
+                if (!in_array($temp_row['name'], $hide_list)) {
                     $all_tools_list[] = $temp_row;
-                } else {
                 }
             } else {
-                    $all_tools_list[] = $temp_row;
+                $all_tools_list[] = $temp_row;
             }
         }
 

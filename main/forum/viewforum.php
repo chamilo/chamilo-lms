@@ -27,6 +27,7 @@ $language_file = array('forum', 'group');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_FORUM;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);

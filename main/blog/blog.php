@@ -13,7 +13,8 @@ $language_file = "blog";
 $blog_id = intval($_GET['blog_id']);
 
 require_once '../inc/global.inc.php';
-$this_section=SECTION_COURSES;
+$this_section   = SECTION_COURSES;
+$current_course_tool  = TOOL_BLOGS;
 
 
 /* 	ACCESS RIGHTS */

@@ -12,6 +12,10 @@ $language_file = 'group';
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_GROUP;
+
+// Notice for unauthorized people.
+api_protect_course_script(true);
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';

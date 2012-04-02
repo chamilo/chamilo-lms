@@ -15,6 +15,11 @@
 $language_file = 'group';
 
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_GROUP;
+
+// Notice for unauthorized people.
+api_protect_course_script(true);
+
 
 /*	Libraries & config files */
 

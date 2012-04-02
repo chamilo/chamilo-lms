@@ -3,6 +3,8 @@
 $language_file = array('exercice', 'work', 'document', 'admin');
 
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_STUDENTPUBLICATION;
+
 require_once 'work.lib.php';
 
 $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;

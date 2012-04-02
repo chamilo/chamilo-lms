@@ -13,7 +13,11 @@
 $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+
+api_protect_course_script(true);
+api_block_anonymous_users();
 
 // Check access rights (only teachers allowed)
 if (!api_is_allowed_to_edit()) {

@@ -18,9 +18,10 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once 'attendance_controller.php';
-
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
+
+$current_course_tool  = TOOL_ATTENDANCE;
 
 // current section
 $this_section = SECTION_COURSES;

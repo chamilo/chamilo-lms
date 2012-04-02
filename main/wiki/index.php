@@ -18,6 +18,8 @@ require_once '../inc/global.inc.php';
 // section (for the tabs)
 $this_section = SECTION_COURSES;
 
+$current_course_tool  = TOOL_WIKI;
+
 // including additional library scripts
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
@@ -68,15 +70,11 @@ $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id);
 $course_id = api_get_course_int_id();
 
-/*
-ACCESS
-*/
+/* ACCESS */
 api_protect_course_script();
 api_block_anonymous_users();
 
-/*
-TRACKING
-*/
+/* TRACKING */
 event_access_tool(TOOL_WIKI);
 
 /*

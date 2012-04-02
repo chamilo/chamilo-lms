@@ -15,6 +15,8 @@ require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
+$current_course_tool  = TOOL_GLOSSARY;
+
 // The section (tabs).
 $this_section = SECTION_COURSES;
 

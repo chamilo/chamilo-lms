@@ -11,6 +11,7 @@ $language_file = array ('forum', 'group');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_FORUM;
 
 // The section (tabs.)
 $this_section = SECTION_COURSES;

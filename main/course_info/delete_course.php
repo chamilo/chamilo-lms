@@ -18,6 +18,8 @@ require_once '../inc/global.inc.php';
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 $current_course_code = $_course['official_code'];
 $current_course_name = $_course['name'];

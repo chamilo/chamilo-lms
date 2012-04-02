@@ -15,6 +15,9 @@ require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/evalform.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
+$current_course_tool  = TOOL_GRADEBOOK;
+
+api_protect_course_script();
 api_block_anonymous_users();
 block_students();
 

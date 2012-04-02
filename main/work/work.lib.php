@@ -35,17 +35,17 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 	$display_output = '';
 	$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';    
 	
-	if (!empty($cur_dir_path)) {		
+	if (!empty($id)) {		
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$my_back_id.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 
 	if ($show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
 		// Create dir
-		if (empty($cur_dir_path)) {
+		if (empty($id)) {
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=create_dir&origin='.$origin.'&gradebook='.$gradebook.'">';
 			$display_output .= Display::return_icon('new_work.png', get_lang('CreateAssignment'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
-		if (empty($cur_dir_path)) {
+		if (empty($id)) {
 			// Options
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=settings&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">';
 			$display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -69,7 +69,7 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 	if (api_is_allowed_to_edit(null, true)) {
 		global $token;
 			
-		if (!empty($cur_dir_path)) {
+		if (!empty($id)) {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
 				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";

@@ -41,20 +41,18 @@ if (!list($session_name)=Database::fetch_row($result)) {
 
 if ($action == 'delete') {
 	$idChecked = $_REQUEST['idChecked'];
-	if(is_array($idChecked) && count($idChecked)>0) {
+	if (is_array($idChecked) && count($idChecked)>0) {
 		$my_temp = array();
 		foreach ($idChecked as $id){
 			$my_temp[]= Database::escape_string($id);// forcing the escape_string
 		}
-		$idChecked = $my_temp;
-		$idChecked="'".implode("','",$idChecked)."'";
+		$idChecked = $my_temp;        
+		$idChecked="'".implode("','", $idChecked)."'";
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
 		$nbr_affected_rows=Database::affected_rows();
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}
-
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
 	exit();
 }
@@ -62,7 +60,8 @@ if ($action == 'delete') {
 $limit  = 20;
 $from   = $page * $limit;
 
-$result=Database::query("SELECT code,title,nbr_users FROM $tbl_session_rel_course, $tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1));
+$sql = "SELECT code, title, nbr_users FROM $tbl_session_rel_course, $tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1);
+$result=Database::query($sql);
 $Courses=Database::store_result($result);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
 
@@ -71,11 +70,9 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 $interbreadcrumb[]=array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+echo Display::page_header($tool_name);
 ?>
-
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-<br />
 <?php
 $tableHeader = array();
 $tableHeader[] = array(' ');

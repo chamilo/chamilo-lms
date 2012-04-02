@@ -434,8 +434,9 @@ switch ($action) {
 		} else {
             $form->addElement('hidden', 'item_id', $item_id);
         }
-		$form->addElement('text', 'title', get_lang('Title'), 'id="file_upload"  style="width: 350px;"');
-		$form->addElement('textarea', 'description', get_lang("Description"), 'style="width: 350px; height: 60px;"');
+		$form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
+		//$form->addElement('html_editor', 'description', get_lang("Description"));        
+        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
 		
 		if ($item_id && !empty($work_item)) {
 			$defaults['title'] 			= $work_item['title'];
@@ -519,7 +520,9 @@ switch ($action) {
 			if (isset($_POST['submitWork']) && !empty($is_course_member)) {
 				$authors = api_get_person_name($currentUserFirstName, $currentUserLastName);
 				$url = null;
-				if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {				
+                $contains_file = 0;
+                
+				if ($_POST['contains_file'] && !empty($_FILES['file']['size'])) {
 					$updir = $currentCourseRepositorySys . 'work/'; //directory path to upload
 		
 					// Try to add an extension to the file if it has'nt one
@@ -549,8 +552,11 @@ switch ($action) {
 					$new_file_name = api_get_unique_id();
 								
 					//if we come from the group tools the groupid will be saved in $work_table
-					@move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
-					$url = 'work'.$curdirpath.'/'.$new_file_name;
+					$result = @move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
+                    if ($result) {
+                        $url = 'work'.$curdirpath.'/'.$new_file_name;
+                        $contains_file = 1;
+                    }
 				}
 				
 				if (empty($title)) {
@@ -564,13 +570,13 @@ switch ($action) {
 									       title       	= '" . Database::escape_string($title) . "',
 						                   description	= '" . Database::escape_string($description) . "',
 						                   author      	= '" . Database::escape_string($authors) . "',
-						                   contains_file = '".intval($_POST['contains_file'])."',  
+						                   contains_file = '".$contains_file."',  
 										   active		= '" . $active . "',                                           
 										   accepted		= '1',
 										   post_group_id = '".$group_id."',
 										   sent_date	=  '".api_get_utc_datetime()."',
 										   parent_id 	=  '".$work_id."' ,
-                                           session_id	= '".intval($id_session)."' ,
+                                           session_id	= '".intval($id_session)."' ,                                               
                                            user_id 		= '".$user_id."'";
 				//var_dump($sql_add_publication);
 				Database::query($sql_add_publication);
@@ -604,7 +610,7 @@ switch ($action) {
 				$insertId = Database::insert_id();
 				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
 				$succeed = true;*/
-			} elseif (isset($_POST['editWork'])) {				
+			} elseif (isset($_POST['editWork'])) {			
 				/*
 				 * SPECIAL CASE ! For a work edited
 				*/					
@@ -740,13 +746,13 @@ switch ($action) {
             $form->addElement('header', get_lang('CreateAssignment').$token);
             $form->addElement('hidden', 'action', 'add');
             $form->addElement('hidden', 'curdirpath', Security :: remove_XSS($curdirpath));            
-           // $form->addElement('hidden', 'sec_token', $token);
-      
+           // $form->addElement('hidden', 'sec_token', $token);      
             
             $form->addElement('text', 'new_dir', get_lang('AssignmentName'));                        
             $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
             
-            $form->addElement('html_editor', 'description', get_lang('Description'));
+            //$form->addElement('html_editor', 'description', get_lang('Description'));
+            $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '200'));
             
             $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
             
@@ -759,8 +765,7 @@ switch ($action) {
             
             $form->addElement('html', '<div id="option1" style="display: none;">');
             $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
-            $form->addElement('html', '</div>');
-            
+            $form->addElement('html', '</div>');            
             
             $form->addElement('checkbox', 'type1', null, get_lang('EnableExpiryDate'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option2').style.display='block';}else{document.getElementById('option2').style.display='none';}"));
             
@@ -808,20 +813,20 @@ switch ($action) {
                     $sql_add_publication = "INSERT INTO " . $work_table . " SET
                                             c_id				= $course_id,  
                                             url         		= '".Database::escape_string($dir_name_sql)."',
-                                            title        	= '".Database::escape_string($_POST['new_dir'])."',
+                                            title               = '".Database::escape_string($_POST['new_dir'])."',
                                             description 		= '".Database::escape_string($_POST['description'])."',
                                             author      		= '',
-                                            active			= '0',
+                                            active              = '0',
                                             accepted			= '1',
-                                            filetype 		= 'folder',
-                                            post_group_id 	= '".$group_id."',
-                                            sent_date		= '".$today."',
-                                            qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
-                                            parent_id		= '',
-                                            qualificator_id	= '',
+                                            filetype            = 'folder',
+                                            post_group_id       = '".$group_id."',
+                                            sent_date           = '".$today."',
+                                            qualification       = '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
+                                            parent_id           = '',
+                                            qualificator_id     = '',
                                             date_of_qualification	= '0000-00-00 00:00:00',
-                                            weight   		= '".Database::escape_string($_POST['weight'])."',
-                                            session_id   	= '".intval($id_session)."',
+                                            weight              = '".Database::escape_string($_POST['weight'])."',
+                                            session_id          = '".intval($id_session)."',
                                             allow_text_assignment   = '".Database::escape_string($_POST['allow_text_assignment'])."',
                                             contains_file    = 0, 
                                             user_id 			= '".$user_id."'";
@@ -1080,7 +1085,7 @@ switch ($action) {
                         $file_deleted = true;
                     }
                 }					
-            }           
+            }
             if (!$file_deleted) {
                 Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
             }        
@@ -1091,8 +1096,7 @@ switch ($action) {
 			$my_cur_dir_path = '';
 		} else {
 			$my_cur_dir_path = $curdirpath;
-		}
-		
+		}		
 		
 		if (!empty($my_folder_data['description'])) {
 			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).'</p></div></p>';
@@ -1133,8 +1137,7 @@ switch ($action) {
                     //array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),      
                     array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')
                 );
-            }
-         
+            }         
 
             $extra_params = array();
 

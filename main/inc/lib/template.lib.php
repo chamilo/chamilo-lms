@@ -534,12 +534,11 @@ class Template extends Smarty {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
                     if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs').' : <ul>';
-                        $tutor_data .= '<li>'.implode("<li>", $email_link);
-                        $tutor_data .= '</ul>';
+                        $tutor_data .= get_lang('Coachs').' : ';
+                        $tutor_data .= array_to_string($email_link);                        
                     } elseif (count($coachs_email) == 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= implode(" ", $email_link);
+                        $tutor_data .= array_to_string($email_link);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
                     }
@@ -554,23 +553,18 @@ class Template extends Smarty {
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
-                if (!empty($mail)) {
-                    if (count($mail) > 1) {
-                        $teacher_data .= get_lang('Teachers').' : <ul>';
-                        foreach ($mail as $value => $key) {
-                            foreach ($key as $email => $name) {
-                                    $teacher_data .= '<li>'.Display::encrypted_mailto_link($email, $name).'</li>';
-                            }
-                        }
-                        $teacher_data .= '</ul>';
-                    } else {
-                        $teacher_data .= get_lang('Teacher').' : ';
-                        foreach ($mail as $value => $key) {
-                                foreach ($key as $email => $name) {
-                                        $teacher_data .= Display::encrypted_mailto_link($email, $name).'<br />';
-                                }
+                if (!empty($mail)) {                                         
+                    $teachers_parsed = array();
+                    foreach ($mail as $value) {
+                        foreach ($value as $email => $name) {
+                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
                         }
                     }
+                    $label = get_lang('Teacher');
+                    if (count($mail) > 1) { 
+                        $label = get_lang('Teachers');    
+                    }
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed);                
                 }                
                 $this->assign('teachers', $teacher_data);     
             }

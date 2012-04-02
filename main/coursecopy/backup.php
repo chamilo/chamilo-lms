@@ -35,7 +35,7 @@ $nameTools = get_lang('Backup');
 Display::display_header($nameTools);
 
 // Display the tool title
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 /*		MAIN CODE	*/
 

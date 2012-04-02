@@ -41,7 +41,7 @@ $this_section = SECTION_COURSES;
 
 // Display the header
 Display::display_header(get_lang('CopyCourse'));
-//api_display_tool_title($nameTools);
+echo Display::page_header(get_lang('CopyCourse'));
 
 /*	MAIN CODE */
 

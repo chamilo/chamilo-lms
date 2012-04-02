@@ -108,3 +108,10 @@ function utf8_sort($array) {
 	setlocale(LC_COLLATE, $old_locale);	
 	return $array;
 }
+
+function array_to_string($array, $separator = ',') {
+    if (empty($array)) {
+        return '';
+    }
+    return implode($separator.' ', $array);
+}

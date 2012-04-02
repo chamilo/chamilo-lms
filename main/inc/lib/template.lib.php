@@ -535,10 +535,10 @@ class Template extends Smarty {
                     }
                     if (count($coachs_email) > 1) {
                         $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link);                        
+                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);                        
                     } elseif (count($coachs_email) == 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link);
+                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
                     }
@@ -564,7 +564,7 @@ class Template extends Smarty {
                     if (count($mail) > 1) { 
                         $label = get_lang('Teachers');    
                     }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed);                
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, USER_SEPARATOR);                
                 }                
                 $this->assign('teachers', $teacher_data);     
             }

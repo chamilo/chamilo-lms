@@ -97,7 +97,7 @@ define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
 define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
 define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
-define('TEACHER_SEPARATOR_STRING', '|'); //Use to show teacher names in userportal.php
+define('USER_SEPARATOR', ' |'); //Use to show user names in userportal.php, footer, etc
 
 
 
@@ -1377,7 +1377,7 @@ class CourseManager {
      			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
     		}
     		if (!empty($list)) {
-    			$teacher_string = implode(' '.$separator.' ', $list);
+    			$teacher_string = array_to_string($list, $separator);
     		}
     	}
     	return $teacher_string;
@@ -2174,7 +2174,7 @@ class CourseManager {
             $result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
                     WHERE user_id=".$list_users['user_id']);
             while ($row_user = Database::fetch_array($result)){
-                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname']);
                 $list[] = array($row_user['email'] => $name_teacher);
             }
         }
@@ -2833,7 +2833,7 @@ class CourseManager {
                         $course_title .= $course_info['visual_code'];
                     }                    
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {                        
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], TEACHER_SEPARATOR_STRING);                        
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);                        
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
@@ -2975,7 +2975,7 @@ class CourseManager {
                 $course_title .= $course_info['visual_code'];
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], TEACHER_SEPARATOR_STRING);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);
             }            
             
             $params['icon'] = $status_icon;            
@@ -3149,7 +3149,7 @@ class CourseManager {
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             if (api_get_setting('use_session_mode') == 'true' && !$nosession) {             
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], TEACHER_SEPARATOR_STRING);
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR);
                 
                 $coachs_course = api_get_coachs_from_course($course_info['id_session'], $course['code']);
                 $course_coachs = array();
@@ -3164,7 +3164,7 @@ class CourseManager {
                 }    
                 if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
                     if (is_array($course_coachs) && count($course_coachs)> 0 ) {                       
-                        $params['coaches'] = implode(', ',$course_coachs);
+                        $params['coaches'] = array_to_string($course_coachs, USER_SEPARATOR);
                     }
                 }    
             } else {                

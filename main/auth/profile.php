@@ -195,12 +195,13 @@ $form->addElement('email', 'email', get_lang('Email'), array('size' => 40));
 if (api_get_setting('profile', 'email') !== 'true') {
 	$form->freeze('email');
 }
-$form->applyFilter('email', 'stripslashes');
-$form->applyFilter('email', 'trim');
-if (api_get_setting('registration', 'email') == 'true') {
-	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+
+if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {        
+    $form->applyFilter('email', 'stripslashes');
+    $form->applyFilter('email', 'trim');
+    $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('email', get_lang('EmailWrong'), 'email');    
 }
-$form->addRule('email', get_lang('EmailWrong'), 'email');
 
 // OPENID URL
 if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
@@ -446,7 +447,6 @@ $(document).ready(function(){
 });
 </script>';
 
-
 if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('html', '<div id="div_api_key">');
 	$form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
@@ -589,21 +589,24 @@ if ($form->validate()) {
     
     $changeemail = '';
     
-    if ($allow_users_to_change_email_with_no_password) {
-        $changeemail = '';
-        if (!check_user_email($user_data['email'])) {
-            $changeemail = $user_data['email'];
-            //$_SESSION['change_email'] = 'success';
-        }        
-    } else {
-        //Normal behaviour
-        if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
-            $changeemail = $user_data['email'];
+    //If user is sending the email to be changed (input is available and is not freeze )
+    if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {        
+
+        if ($allow_users_to_change_email_with_no_password) {            
+            if (!check_user_email($user_data['email'])) {
+                $changeemail = $user_data['email'];
+                //$_SESSION['change_email'] = 'success';
+            }        
+        } else {
+            //Normal behaviour
+            if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
+                $changeemail = $user_data['email'];
+            }
+
+            if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
+                $_SESSION['change_email'] = 'success';
+            }        
         }
-        
-        if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
-            $_SESSION['change_email'] = 'success';
-        }        
     }
 
 
@@ -733,7 +736,6 @@ if ($form->validate()) {
         if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
-
             $sql .= " email = '".Database::escape_string($changeemail)."',";
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";

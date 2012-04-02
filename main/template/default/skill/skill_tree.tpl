@@ -103,6 +103,8 @@ jsPlumb.bind("ready", function() {
     
     //Add button process
     
+    $("#dialog-form").css('z-index', '9001');
+    
     $("#dialog-form").dialog({              
         buttons: {
             "{"Add"|get_lang}" : function() {                
@@ -131,10 +133,10 @@ jsPlumb.bind("ready", function() {
             $("#name").attr('value', '');
             $("#description").attr('value', '');                
         }
-    });   
+    });
     
-    //Clicking a box skill (we use live instead of bind because we're creating divs on the fly )
-    $(".open_block").live('click', function() {        
+    //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
+    $(".open_block").live('click', function() {      
         var id = $(this).attr('id');
         
         //if is root
@@ -190,7 +192,7 @@ jsPlumb.bind("ready", function() {
     });
     
     //Skill title click  
-    $(".edit_block").live('click',function() {        
+    $(".edit_block").live('click',function() {      
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
         
@@ -222,7 +224,7 @@ jsPlumb.bind("ready", function() {
     });
         
     
-    //
+    //Clicking in a box
     $(".window").bind('click', function() {
         var id = $(this).attr('id');
         id = id.split('_')[1];        
@@ -236,69 +238,158 @@ jsPlumb.bind("ready", function() {
     var resetRenderMode = function(desiredMode) {
         var newMode = jsPlumb.setRenderMode(desiredMode);        
         jsPlumbDemo.init();
-    };    
+    };
     resetRenderMode(jsPlumb.CANVAS);       
 });
-
     
 ;(function() {
          
     prepare = function(elId, endpoint) {
+        console.log('preparing = '+elId);
+        console.log('endpoint = '+endpoint);
         jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
         var e = jsPlumb.addEndpoint(elId, endpoint);
-        jsPlumbDemo.initjulio(e);        
+        //jsPlumbDemo.initjulio(e);        
         skills.push({
             element: elId, endp:e
         });        
         return e;
-    },
-    
-    window.jsPlumbDemo = {    
-        initjulio :function(e) {
-        },      
-        initHover :function(elId) {
-            $("#" + elId).click(function() {
-                var  all = jsPlumb.getConnections({
-                    source:elId
-                });
-            });            
-            /*$("#" + elId).hover(
-                function() { $(this).addClass("bigdot-hover"); },
-                function() { $(this).removeClass("bigdot-hover"); }
-            );*/
-        },        
+    },    
+    window.jsPlumbDemo = {  	   
         init : function() {
-        
-            jsPlumb.Defaults.DragOptions    = { cursor: 'pointer', zIndex:2000 };
-            jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
+            console.log('Import defaults');
+            jsPlumb.importDefaults({
+                // default drag options
+                DragOptions : { cursor: 'pointer', zIndex:2000 },
+                // default to blue at one end and green at the other
+                EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
+                // blue endpoints 7 px; green endpoints 11.
+                Endpoints : [ [ "Dot", {
+                        radius:7
+                    } ], [ "Dot", { radius:11 } ]],
+                // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
+                // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
+                ConnectionOverlays : [
+                    [ "Arrow", { location:0.9 } ],
+                    [ "Label", { 
+                        location:0.1,
+                        id:"label",
+                        cssClass:"aLabel"
+                    }]
+                ]
+            });    
+            
+            /*jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
             jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
             jsPlumb.Defaults.Endpoint       = "Rectangle";
-            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
+            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];*/
 
-            jsPlumb.bind("jsPlumbConnection", function(e) {
-                //updateConnections(e.connection);
-            });
-            jsPlumb.bind("jsPlumbConnectionDetached", function(e) {
-                //updateConnections(e.connection, true);
-            });                        
+            // this is the paint style for the connecting lines..
+			var connectorPaintStyle = {
+				lineWidth:5,
+				strokeStyle:"#deea18",
+				joinstyle:"round"
+			},
+			// .. and this is the hover style. 
+			connectorHoverStyle = {
+				lineWidth:7,
+				strokeStyle:"#2e2aF8"
+			},
+            // the definition of source endpoints (the small blue ones)
+			sourceEndpoint = {
+				endpoint:"Dot",
+				paintStyle:{ fillStyle:"#225588",radius:7 },
+				isSource:true,
+				connector:[ "Flowchart", { stub:40 } ],
+				connectorStyle:connectorPaintStyle,
+				hoverPaintStyle:connectorHoverStyle,
+				connectorHoverStyle:connectorHoverStyle,
+                dragOptions:{
+                },
+                overlays:[
+                	[ "Label", { 
+	                	location:[0.5, 1.5], 
+	                	label:"Drag",
+	                	cssClass:"endpointSourceLabel" 
+	                } ]
+                ]
+			},
+			// a source endpoint that sits at BottomCenter
+			bottomSource = jsPlumb.extend( { anchor:"BottomCenter" }, sourceEndpoint),
+			// the definition of target endpoints (will appear when the user drags a connection) 
+			targetEndpoint = {
+				endpoint:"Dot",					
+				paintStyle:{ fillStyle:"#558822",radius:11 },
+				hoverPaintStyle:connectorHoverStyle,
+				maxConnections:-1,
+				dropOptions:{ hoverClass:"hover", activeClass:"active" },
+				isTarget:true,			
+                overlays:[
+                	[ "Label", { location:[0.5, -0.5], label:"Drop", cssClass:"endpointTargetLabel" } ]
+                ]
+			},	
+            init = function(connection) {
+				connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "-" + connection.targetId.substring(6));
+			};	
             
-            jsPlumb.Defaults.Overlays = [
-                //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
-            ];
+            var allSourceEndpoints = [], allTargetEndpoints = [];
+            _addEndpoints = function(toId, sourceAnchors, targetAnchors) {
+                for (var i = 0; i < sourceAnchors.length; i++) {
+                    var sourceUUID = toId + sourceAnchors[i];
+                    allSourceEndpoints.push(jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:sourceAnchors[i], uuid:sourceUUID }));
+                }
+                for (var j = 0; j < targetAnchors.length; j++) {
+                    var targetUUID = toId + targetAnchors[j];
+                    allTargetEndpoints.push(jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:targetAnchors[j], uuid:targetUUID }));
+                }
+            };
+            
+            console.log('addEndpoints');
+
+            _addEndpoints("window4", ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
+			_addEndpoints("window2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
+			_addEndpoints("window3", ["RightMiddle", "BottomCenter"], ["LeftMiddle", "TopCenter"]);
+			_addEndpoints("window1", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
+
+         	// listen for new connections; initialise them the same way we initialise the connections at startup.
+			jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
+				init(connInfo.connection);
+			});
+						
+			// make all the window divs draggable						
+			jsPlumb.draggable(jsPlumb.getSelector(".window"));
+
+			// connect a few up
+			jsPlumb.connect({
+                                uuids:["window2BottomCenter", "window3TopCenter"]});
+			jsPlumb.connect({
+                                uuids:["window2LeftMiddle", "window4LeftMiddle"]});
+			jsPlumb.connect({
+                                uuids:["window4TopCenter", "window4RightMiddle"]});
+			jsPlumb.connect({
+                                uuids:["window3RightMiddle", "window2RightMiddle"]});
+			jsPlumb.connect({
+                                uuids:["window4BottomCenter", "window1TopCenter"]});
+			jsPlumb.connect({
+                                uuids:["window3BottomCenter", "window1BottomCenter"]});
+
                            
-            jsPlumb.setMouseEventsEnabled(true);
+            //jsPlumb.setMouseEventsEnabled(true);
             
-            {$js}
-
-            var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
-            jsPlumb.draggable(divsWithWindowClass);
-            jsPlumbDemo.attachBehaviour();          
+            {* $js *}
+                
+            // listen for clicks on connections, and offer to delete connections on click.			
+			jsPlumb.bind("click", function(conn, originalEvent) {
+				if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+					jsPlumb.detach(conn); 
+			});    
         }
     };
 })();
 
-$(document).ready( function() {     
+$(document).ready( function() {
+/*
     //When creating a connection see
     //http://jsplumb.org/apidocs/files/jsPlumb-1-3-2-all-js.html#bind 
     jsPlumb.bind("jsPlumbConnection", function(conn) {
@@ -315,12 +406,18 @@ $(document).ready( function() {
     jsPlumb.bind("click", function(endpoint) {
         if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
             jsPlumb.detach(conn); 
-    });
+    });*/
+    
     $(".chzn-select").chosen();
+    $("#menu").draggable();
+    
+    //open_block('block_0');
+    
+    
 });
 
 ;(function() {
-    
+   
     jsPlumbDemo.getSelector = function(spec) {
         return $(spec);
     };
@@ -348,16 +445,25 @@ $(document).ready( function() {
 })();
 
 </script>
-<div style="z-index: 1000; position: absolute;">
-<h3>{'Skills'|get_lang}</h3>
-<ul style="list-style-type:none; margin:0;">
-<li><a style="z-index: 1000" class="a_button gray medium" id="add_item_link" href="#">{'AddSkill'|get_lang}</a></li>
-<li><a style="z-index: 1000" class="a_button gray medium" id="return_to_admin" href="{$_p.web_main}admin">{'BackToAdmin'|get_lang}</a></li>
-</ul>
+<div id="menu" class="well" style="top:20px; left:20px; width:300px; z-index: 9000; opacity: 0.9;">
+    <h3>{'Skills'|get_lang}</h3>
+    <div class="btn-group">
+        <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{'AddSkill'|get_lang}</a>
+        <a style="z-index: 1000" class="btn" id="return_to_admin" href="{$_p.web_main}admin">{'BackToAdmin'|get_lang}</a>
+    </div>
 </div>
-{$html}
+    
+    
+    <div id="demo">
+			<div class="window" id="window1"><strong>1</strong><br/><br/></div>
+			<div class="window" id="window2"><strong>2</strong><br/><br/></div>
+		    <div class="window" id="window3"><strong>3</strong><br/><br/></div>
+		    <div class="window" id="window4"><strong>4</strong><br/><br/></div>
+		</div>
+        
+{* $html *}
 
-<div id="dialog-form" style="display:none; z-index:6000;">    
+<div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>
     <form class="form-horizontal" id="add_item" name="form">
         <fieldset>

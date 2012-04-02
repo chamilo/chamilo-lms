@@ -7,7 +7,7 @@
 
  class SkillVisualizer {
     
-    public $block_size = 80; //see CSS window class
+    public $block_size = 120; //see CSS window class
     public $canvas_x   = 1024;
     public $canvas_y   = 800;
     
@@ -37,7 +37,7 @@
             $extra_class = 'second_window';
         }
         
-        $this->html .= '<div id="block_'.$block_id.'" class = " open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
+        $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
         /*$gradebook_string = '';
         if (!empty($skill['gradebooks'])) {
             foreach ($skill['gradebooks'] as $gradebook) {
@@ -45,9 +45,13 @@
                 $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag gradebook','style'=>'width:50px')).'<br />';    
             }
         } */       
-        $skill['name'] = Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'));
+        $content =  $skill['name'];
+        $content .= '<div class="btn-group">';
+        $content .= Display::url(get_lang('Edit'), '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
+        $content .= Display::url('+', '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));        
+        $content .= '</div>';
         
-        $this->html .= $skill['name'].' '.$gradebook_string;
+        $this->html .= $content.' '.$gradebook_string;
         
         if ($this->type == 'edit' && $skill['parent_id'] != 0) {
             //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));

@@ -126,7 +126,6 @@ function checkLength( o, n, min, max ) {
     </div>
 {/if}
 
-
 {if !empty($order_user_list) }
     <div class="skills-users">
     {foreach $order_user_list as $count => $user_list}
@@ -151,7 +150,7 @@ function checkLength( o, n, min, max ) {
                                 {if $skill_data.found}                                     
                                      *{"IHaveThisSkill"|get_lang}*
                                 {/if}
-                            </li>                    
+                            </li>
                         {/foreach}
                     </ul>
                 </div>    
@@ -159,8 +158,11 @@ function checkLength( o, n, min, max ) {
         {/foreach}
     {/foreach}        
     </div>
-{else}
-    <div class="warning-message">{"NoResults"|get_lang}</div>
+{else}     
+     {if !empty($search_skill_list) }
+        <div class="warning-message">{"NoResults"|get_lang}</div>
+     {/if}
+     
 {/if}
 
 <div id="dialog-form" style="display:none;">    

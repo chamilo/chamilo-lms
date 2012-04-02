@@ -30,7 +30,6 @@ $tpl = new Template(get_lang('Skills'));
 
 $form = new FormValidator('profile_search');
 
-
 $form->addElement('header', get_lang('SearchSkills'));
 $form->addElement('select', 'skills', null, null, array('id'=>'skills'));
 $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="btn"');
@@ -56,10 +55,10 @@ if ($form->validate()) {
         $_SESSION['skills'] = $skills;
         
     } else {
-        $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: null ;
+        $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: array();
     }
 } else {
-    $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: null ;
+    $skills = isset($_SESSION['skills']) ? $_SESSION['skills']: array();
 }
 
 $user_list = array();
@@ -96,8 +95,6 @@ if (!empty($users)) {
     }
 }
 
-
-
 //$tpl->assign('user_list', $user_list);
 $tpl->assign('order_user_list', $ordered_user_list);
 $tpl->assign('total_search_skills', $count_skills);
@@ -125,7 +122,7 @@ $id     = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 switch ($action) {
     case 'remove_skill':
         $new_skill = array();      
-        foreach($skills as $skill_id) {
+        foreach ($skills as $skill_id) {
             if ($id != $skill_id) {
                 $new_skill[] = $skill_id;
             }            

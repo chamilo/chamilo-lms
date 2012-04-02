@@ -13,14 +13,14 @@ $work = get_work_data_by_id($id);
 if (empty($id) || empty($work)) {
 	api_not_allowed();
 }
-
 $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 
 if (user_is_author($id)) {
-    $url_dir = 'work.php?&id=' . $id;
+    $url_dir = 'work.php?&id=' . $my_folder_data['id'];
     $interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);	
+    $interbreadcrumb[] = array ('url' => '#','name' =>  $work['title']);	
 
     if (api_is_allowed_to_edit() || ($work['user_id'] == api_get_user_id() && $work['active'] == 1 && $work['accepted'] == 1)) {
         $tpl = new Template();		

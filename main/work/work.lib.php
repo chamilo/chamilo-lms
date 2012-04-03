@@ -1935,7 +1935,6 @@ function display_list_users_without_publication($task_id) {
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);
     
-
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
 	$paging_options = array();
@@ -1951,6 +1950,7 @@ function display_list_users_without_publication($task_id) {
 		$my_params['list'] = Security::remove_XSS($_GET['list']);
 	}
 	$my_params['origin'] = $origin;
+    $my_params['id'] = intval($_GET['id']);
 
 	//$column_show
 	$column_show[] = 1;

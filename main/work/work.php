@@ -868,7 +868,8 @@ switch ($action) {
                     $enable_calification = isset($_POST['qualification_value']) && !empty($_POST['qualification_value']) ? 1 : 0;
 
                     if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
-                        $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+                        
+                        echo $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
                                                 c_id = $course_id ,
                                                 expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
                                                 ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
@@ -890,7 +891,7 @@ switch ($action) {
                         Database::query($sql_add_homework);
                         $inserted_id = Database::insert_id();
                         $sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE c_id = $course_id AND id = $id";
-                        Database::query($sql_add_publication);	
+                        Database::query($sql_add_publication);
                     }
 
                     if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
@@ -1105,7 +1106,8 @@ switch ($action) {
         //User works
         if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {           
             $work_data = get_work_assignment_by_id($work_id);                    
-            $check_qualification = intval($my_folder_data['qualification']);            
+            $check_qualification = intval($my_folder_data['qualification']);
+            
             if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
                 $type = 'simple';
                 $columns        = array(get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'), 

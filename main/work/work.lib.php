@@ -642,10 +642,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
                                                         
-                            $qualification_value = isset($_POST['qualification']['qualification']) ? intval($_POST['qualification']['qualification']) : 0;
+                            $qualification_value = isset($_POST['qualification']['qualification']) && !empty($_POST['qualification']['qualification']) ? intval($_POST['qualification']['qualification']) : 0;
                             $enable_qualification = !empty($qualification_value) ? 1 : 0;
-                            $sql_add_publication = "UPDATE ".$work_table." SET enable_qualification  = '".$enable_qualification.  "' WHERE c_id = $course_id AND id ='".$row['id']."'";
-							Database::query($sql_add_publication);
+                            $sql_add_publication = "UPDATE ".$work_assigment." SET enable_qualification  = '".$enable_qualification.  "' WHERE c_id = $course_id AND publication_id ='".$row['id']."'";
+							Database::query($sql_add_publication);                      
 				
                              $sql = 'UPDATE '.$work_table.' SET 
                                                  allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' ,

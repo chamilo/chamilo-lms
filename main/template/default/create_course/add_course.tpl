@@ -1,5 +1,5 @@
 {{just_created_link}}
-<h3>{{'JustCreated'|get_lang}} {{course_title}</h3>
+<h3>{{'JustCreated'|get_lang}} {{course_title}}</h3>
     <hr />
 <h3>{{'ThingsToDo'|get_lang}}</h3>
 <ul class="welcome_course">
@@ -12,7 +12,7 @@
     <li>     
         <p><img src="{{_p.web_img}}icons/64/user.png"/></p>
         <a href="{{_p.web_main}}user/subscribe_user.php?cidReq={{course_id}}" class="a_button white medium">
-            {{'SubscribeUserToCourse'|get_lang}
+            {{'SubscribeUserToCourse'|get_lang}}
         </a>    
     </li>
     <li>              

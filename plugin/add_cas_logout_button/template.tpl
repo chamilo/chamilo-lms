@@ -1,4 +1,4 @@
-{* 
+{# 
     This is a Chamilo plugin using Smarty you can use handy shorcuts like:
     
     1. Shortcuts 
@@ -25,20 +25,20 @@
         You can also see more examples in the the main/template/default/layout files
         
     5. {$_p|var_dump} pour les path {$_u|var_dump} pour info de  l'utilisateur loggé
-*}
+#}
 
-{if $add_cas_logout_button.show_message}
-    <link href="{$_p.web_plugin}/add_cas_logout_button/css.css" rel="stylesheet" type="text/css"> 
+{% if add_cas_logout_button.show_message %}
+    <link href="{{_p.web_plugin}}/add_cas_logout_button/css.css" rel="stylesheet" type="text/css"> 
     <div class="well">
-        {if $add_cas_logout_button.logout_image_url}
-            <img src="{$add_cas_logout_button.logout_image_url}" class='cas_plugin_image'/>
-        {/if}
-        <h4>{$add_cas_logout_button.logout_label}</h4>
-        {if $add_cas_logout_button.logout_image_url}
+        {% if add_cas_logout_button.logout_image_url %}
+            <img src="{{add_cas_logout_button.logout_image_url}}" class='cas_plugin_image'/>
+        {% endif %}
+        <h4>{{add_cas_logout_button.logout_label}}</h4>
+        {% if add_cas_logout_button.logout_image_url %}
             <div class='cas_plugin_clear'>&nbsp;</div>
-        {/if}
-        <div class='cas_plugin_comm'>{$add_cas_logout_button.logout_comment}</div>
-        <button class="btn" onclick="javascript:self.location.href='main/auth/cas/logout.php'">{"Logout"|get_lang}</button>    
+        {% endif %}
+        <div class='cas_plugin_comm'>{{add_cas_logout_button.logout_comment}}</div>
+        <button class="btn" onclick="javascript:self.location.href='main/auth/cas/logout.php'">{{"Logout"|get_lang}}</button>    
         
     </div>
-{/if}
+{% endif %}

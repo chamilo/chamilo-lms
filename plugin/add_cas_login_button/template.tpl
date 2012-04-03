@@ -1,4 +1,4 @@
-{* 
+{#
     This is a Chamilo plugin using Smarty you can use handy shorcuts like:
     
     1. Shortcuts 
@@ -25,20 +25,20 @@
         You can also see more examples in the the main/template/default/layout files
         
     5. {$_p|var_dump} pour les path {$_u|var_dump} pour info de  l'utilisateur loggé
-*}
+#}
 
 
-{if $add_cas_login_button.show_message}
+{% if add_cas_login_button.show_message %}
     <link href="{$_p.web_plugin}/add_cas_login_button/css.css" rel="stylesheet" type="text/css"> 
     <div class="well">
-        {if $add_cas_login_button.url_label}
-            <img src="{$add_cas_login_button.url_label}" class='cas_plugin_image'/>
-        {/if}
-        <h4>{$add_cas_login_button.button_label}</h4>
-        {if $add_cas_login_button.url_label}
+        {% if add_cas_login_button.url_label %}
+            <img src="{{add_cas_login_button.url_label}}" class='cas_plugin_image'/>
+        {% endif %}
+        <h4>{{add_cas_login_button.button_label}}</h4>
+        {% if add_cas_login_button.url_label %}
             <div class='cas_plugin_clear'>&nbsp;</div>
-        {/if}
-        <div class='cas_plugin_comm'>{$add_cas_login_button.comm_label}</div>
-        <button class="btn" onclick="javascript:self.location.href='main/auth/cas/logincas.php'">{"LoginEnter"|get_lang}</button>    
+        {% endif %}
+        <div class='cas_plugin_comm'>{{add_cas_login_button.comm_label}}</div>
+        <button class="btn" onclick="javascript:self.location.href='main/auth/cas/logincas.php'">{{"LoginEnter"|get_lang}}</button>    
     </div>
-{/if}
+{% endif %}

@@ -506,8 +506,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
 					list($d_hour, $d_minute) = explode(':', $parts[1]);
 						
-					$qualification_input[] = FormValidator :: createElement('text','qualification');
-					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
+					$qualification_input[] = FormValidator :: createElement('text', 'qualification');
+					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
 						
 					if ((int)$row['weight'] == 0) { 
 						$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
@@ -642,10 +642,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 WHERE c_id = $course_id AND id ='".$row['id']."'";
 							Database::query($sql_add_publication);
                                                         
-                            $qualification_value = isset($_POST['qualification']['qualification']) ? intval($_POST['qualification']['qualification']) : 0;
+                            $qualification_value = isset($_POST['qualification']['qualification']) && !empty($_POST['qualification']['qualification']) ? intval($_POST['qualification']['qualification']) : 0;
                             $enable_qualification = !empty($qualification_value) ? 1 : 0;
-                            $sql_add_publication = "UPDATE ".$work_table." SET enable_qualification  = '".$enable_qualification.  "' WHERE c_id = $course_id AND id ='".$row['id']."'";
-							Database::query($sql_add_publication);
+                            $sql_add_publication = "UPDATE ".$work_assigment." SET enable_qualification  = '".$enable_qualification.  "' WHERE c_id = $course_id AND publication_id ='".$row['id']."'";
+							Database::query($sql_add_publication);                      
 				
                              $sql = 'UPDATE '.$work_table.' SET 
                                                  allow_text_assignment = '."'".intval($_POST['allow_text_assignment'])."'".' ,
@@ -765,7 +765,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$count = $gradebook_data['weight'];
 				}
 				if ($count > 0) {
-					$add_to_name = ' / <span style="color:blue">'.get_lang('IncludedInEvaluation').'</span>';
+					$add_to_name = Display::label(get_lang('IncludedInEvaluation'), 'info');
 				} else {
 					$add_to_name = '';
 				}
@@ -779,8 +779,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                     }
 				//}         
 				$url = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&id='.$work_data['id'].'"'.$class.'>'.
-						$work_title.'</a>'.					
-						$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;							
+						$work_title.'</a> '.$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;							
 				$row[] = $url;				
 			}
 			if ($count_files != 0) {
@@ -1936,7 +1935,6 @@ function display_list_users_without_publication($task_id) {
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);
     
-
 	$sorting_options = array();
 	$sorting_options['column'] = 1;
 	$paging_options = array();
@@ -1952,6 +1950,7 @@ function display_list_users_without_publication($task_id) {
 		$my_params['list'] = Security::remove_XSS($_GET['list']);
 	}
 	$my_params['origin'] = $origin;
+    $my_params['id'] = intval($_GET['id']);
 
 	//$column_show
 	$column_show[] = 1;

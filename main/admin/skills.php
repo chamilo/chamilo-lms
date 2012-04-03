@@ -7,11 +7,12 @@
 
 // Language files that need to be included.
 $language_file = array('admin');
-
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
 require_once api_get_path(LIBRARY_PATH).'skill.visualizer.lib.php';
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();

@@ -62,7 +62,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown"  href="#">{{ _u.complete_name }}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ _p.web_main }}social/home.php">{{"Profile"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">{{"MyAgenda"|get_lang }}}</a></li>
+                                <li><a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">{{"MyAgenda"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}messages/inbox.php">{{"Messages"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}auth/my_progress.php">{{"MyReporting"|get_lang }}</a></li>
                                 <!--<li class="divider"></li>

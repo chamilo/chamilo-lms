@@ -215,7 +215,7 @@ class FlatViewDataGenerator
 
 			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
 				$item  			= $this->evals_links[$count + $items_start];       
-                         
+                                         
 				$score 			= $item->calc_score($user_id);
 				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];                
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
@@ -262,8 +262,6 @@ class FlatViewDataGenerator
             }
             $item_total = round($item_total);
 			$total_score = array($item_value_total, $item_total);
-            
-            
 			
 			if (!$show_all) {				
 				$row[] = $scoredisplay->display_score($total_score);

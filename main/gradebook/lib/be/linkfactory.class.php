@@ -115,5 +115,9 @@ class LinkFactory
                       LINK_SURVEY
 					  );
 	}
+    
+    public function delete() {
+        
+    }
 
 }

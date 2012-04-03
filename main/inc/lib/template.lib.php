@@ -39,7 +39,14 @@ class Template {
         //Twig settings
         
         Twig_Autoloader::register();
-        $loader = new Twig_Loader_Filesystem(api_get_path(SYS_CODE_PATH).'template');        
+        
+        $template_paths = array(
+                api_get_path(SYS_CODE_PATH).'template', 
+                api_get_path(SYS_PLUGIN_PATH) //plugin folder
+        );
+        
+        $loader = new Twig_Loader_Filesystem($template_paths);
+        
         $this->twig = new Twig_Environment($loader, array(
             //'cache' => api_get_path(SYS_ARCHIVE_PATH),
             'autoescape' => false,

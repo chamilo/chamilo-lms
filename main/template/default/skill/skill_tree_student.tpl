@@ -20,7 +20,7 @@ body {
 <script type="text/javascript">
 
 //js settings
-var url             = '{$url}';
+var url             = '{{url}}';
 var skills          = []; //current window divs
 var parents         = []; //list of parents normally there should be only 2
 var hidden_parent   = '';
@@ -28,12 +28,12 @@ var duration_value  = 500;
 
 
 //Block settings see the SkillVisualizer Class
-var offset_x                = {$skill_visualizer->offset_x};
-var offset_y                = {$skill_visualizer->offset_y};
-var space_between_blocks_x  = {$skill_visualizer->space_between_blocks_x};
-var space_between_blocks_y  = {$skill_visualizer->space_between_blocks_y};
-var center_x                = {$skill_visualizer->center_x};
-var block_size              = {$skill_visualizer->block_size};
+var offset_x                = {{skill_visualizer->offset_x}};
+var offset_y                = {{skill_visualizer->offset_y}};
+var space_between_blocks_x  = {{skill_visualizer->space_between_blocks_x}};
+var space_between_blocks_y  = {{skill_visualizer->space_between_blocks_y}};
+var center_x                = {{skill_visualizer->center_x}};
+var block_size              = {{skill_visualizer->block_size}};
 
 //Setting the parent by default 
 var parents = ['block_1'];
@@ -253,8 +253,6 @@ $(document).ready( function() {
     });
 });
 </script>
-
-{$html}
 
 <div id="dialog-form" style="display:none;">    
     <form id="add_item" class="form-horizontal"  name="form">

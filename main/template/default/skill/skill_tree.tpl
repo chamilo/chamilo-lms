@@ -218,8 +218,7 @@ jsPlumb.ready(function() {
         });        
                 
         $("#gradebook_id").trigger("liszt:updated");
-        $("#parent_id").trigger("liszt:updated");        
-                
+        $("#parent_id").trigger("liszt:updated");
         $("#dialog-form").dialog("open");
         return false;
     });
@@ -254,19 +253,17 @@ jsPlumb.ready(function() {
         //jsPlumbDemo.initjulio(e);        
         skills.push({
             element: div, endp:endPoint
-        });        
-        
- 
-        
+        });
         return endPoint;        
     },    
     window.jsPlumbDemo = {  	   
         init : function() {
             console.log('Import defaults');
             
-            jsPlumb.Defaults.Anchors = [ "LeftMiddle", "BottomRight" ];
-            
-         
+            jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];
+          //  jsPlumb.DefaultDragOptions = { cursor: "pointer", zIndex:2000 };
+            jsPlumb.Defaults.Container = "skill_tree";
+                
             
             /*jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
             jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
@@ -366,23 +363,20 @@ jsPlumb.ready(function() {
             
             open_block('block_1', 0);
             
-            // make all the window divs draggable						
-            jsPlumb.draggable($(".window"));
             
-            {* $js *}
+            
+            {# $js #}
                 
             // listen for clicks on connections, and offer to delete connections on click.			
 			jsPlumb.bind("click", function(conn, originalEvent) {
 				if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
 					jsPlumb.detach(conn); 
-			});    
-            
-            
+			});            
         }
     };
 })();
 
-$(document).ready( function() {
+$(document).ready(function() {
 /*
     //When creating a connection see
     //http://jsplumb.org/apidocs/files/jsPlumb-1-3-2-all-js.html#bind 
@@ -404,10 +398,6 @@ $(document).ready( function() {
     
     $(".chzn-select").chosen();
     $("#menu").draggable();
-    
-    
-    
-    
 });
 
 ;(function() {
@@ -447,6 +437,8 @@ $(document).ready( function() {
     </div>
 </div>
            
+<div id="skill_tree">
+</div>
 {# $html #}
 
 <div id="dialog-form" style="display:none; z-index:9001;">    
@@ -455,30 +447,30 @@ $(document).ready( function() {
         <fieldset>
             <input type="hidden" name="id" id="id"/>
             <div class="control-group">            
-                <label class="control-label" for="name">{'Name'|get_lang}}</label>            
+                <label class="control-label" for="name">{{'Name'|get_lang}}</label>            
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />             
                 </div>
             </div>        
             <div class="control-group">            
-                <label class="control-label" for="name">{'Parent'|get_lang}}</label>            
+                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>            
                 <div class="controls">
                     <select id="parent_id" name="parent_id" />
                     </select>                  
                 </div>
             </div>                
             <div class="control-group">            
-                <label class="control-label" for="name">{'Gradebook'|get_lang}}</label>            
+                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>            
                 <div class="controls">
                     <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
                     </select>             
                     <span class="help-block">
-                    {'WithCertificate'|get_lang}}
+                    {{'WithCertificate'|get_lang}}
                     </span>           
                 </div>
             </div>
             <div class="control-group">            
-                <label class="control-label" for="name">{'Description'|get_lang}}</label>            
+                <label class="control-label" for="name">{{'Description'|get_lang}}</label>            
                 <div class="controls">
                     <textarea name="description" id="description" class="span3" rows="7"></textarea>
                 </div>

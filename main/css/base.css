@@ -2868,12 +2868,9 @@ form .formw .freeze {
     color:#999;
 }
 
-
-
-
 /* jsPlumb */
 
-.window {
+.skill_root {
     box-shadow: 2px 2px 19px #aaa;
    -o-box-shadow: 2px 2px 19px #aaa;
    -webkit-box-shadow: 2px 2px 19px #aaa;
@@ -2882,13 +2879,36 @@ form .formw .freeze {
     -webkit-border-radius: 6px;
     -opera-border-radius: 6px;
     -moz-border-radius: 6px;
-    border-radius: 6px;
-        
+    border-radius: 6px;        
+
+    background-color: #ccc;
+    border: 0.1em dotted #D4E06B;
+    color: black;    
+    font-size: 0.9em;
+    height: 4em;
+    opacity: 0.8;
+    padding-top: 0.9em;    
+    text-align: center;
+    width: 120px;
+    z-index: 40;
+    position:relative;
+}
+
+.skill_child {
+    box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+   -moz-box-shadow: 2px 2px 19px #aaa;
+   
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;        
 
     background-color: white;
     border: 0.1em dotted #D4E06B;
     color: black;
-    font-family: helvetica,sans;
+    
     font-size: 0.9em;
     height: 4em;
     opacity: 0.8;
@@ -2897,6 +2917,11 @@ form .formw .freeze {
     text-align: center;
     width: 120px;
     z-index: 40;
+    float:left;
+    margin-left:20px;
+    margin-bottom:20px;
+    margin-top:10px;
+    position:relative;    
 }
 
 .done_window {

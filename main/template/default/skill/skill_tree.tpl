@@ -20,7 +20,7 @@ body {
 <script type="text/javascript">
 
 //js settings
-var url             = '{$url}';
+var url             = '{{url}}';
 var skills          = []; //current window divs
 var parents         = []; //list of parents normally there should be only 2
 var hidden_parent   = '';
@@ -28,17 +28,17 @@ var duration_value  = 500;
 
 
 //Block settings see the SkillVisualizer Class
-var offset_x                = {$skill_visualizer->offset_x};
-var offset_y                = {$skill_visualizer->offset_y};
-var space_between_blocks_x  = {$skill_visualizer->space_between_blocks_x};
-var space_between_blocks_y  = {$skill_visualizer->space_between_blocks_y};
-var center_x                = {$skill_visualizer->center_x};
-var block_size              = {$skill_visualizer->block_size};
+var offset_x                = {{skill_visualizer.offset_x}};
+var offset_y                = {{skill_visualizer.offset_y}};
+var space_between_blocks_x  = {{skill_visualizer.space_between_blocks_x}};
+var space_between_blocks_y  = {{skill_visualizer.space_between_blocks_y}};
+var center_x                = {{skill_visualizer.center_x}};
+var block_size              = {{skill_visualizer.block_size}};
 
 //Setting the parent by default 
 var parents = ['block_1'];
 
-jsPlumb.bind("ready", function() {
+jsPlumb.ready(function() {
     
     //Open dialog
     $("#dialog-form").dialog({
@@ -50,7 +50,7 @@ jsPlumb.bind("ready", function() {
     
     //Filling skills select
     /*
-    $.getJSON("{$url}&a=get_skills&parent_id="+parents[0], {},     
+    $.getJSON("{{url}}&a=get_skills&parent_id="+parents[0], {},     
         function(data) {
             $.each(data, function(n, parent) {
                 // add a new option with the JSON-specified value and text
@@ -60,7 +60,7 @@ jsPlumb.bind("ready", function() {
     );*/
     
     //Filling gradebook select
-    $.getJSON("{$url}&a=get_gradebooks", {},     
+    $.getJSON("{{url}}&a=get_gradebooks", {},     
         function(data) {
             $.each(data, function(n, gradebook) {
                 // add a new option with the JSON-specified value and text
@@ -87,7 +87,8 @@ jsPlumb.bind("ready", function() {
         //Remove all options
         $("#parent_id").find('option').remove();
 
-        $.getJSON("{$url}&a=get_skills&id="+my_id, {},     
+        $.getJSON("{{url}}&a=get_skills&id="+my_id, {
+            },     
             function(data) {
                 $.each(data, function(n, parent) {
                     // add a new option with the JSON-specified value and text
@@ -95,7 +96,7 @@ jsPlumb.bind("ready", function() {
                 });
             }
         );
-    });    
+    });
     
     var name = $( "#name" ),
     description = $( "#description" ),  
@@ -107,7 +108,7 @@ jsPlumb.bind("ready", function() {
     
     $("#dialog-form").dialog({              
         buttons: {
-            "{"Add"|get_lang}" : function() {                
+            "{{"Add"|get_lang}}" : function() {                
                 var bValid = true;
                 bValid = bValid && checkLength( name, "name", 1, 255 );
                 
@@ -244,47 +245,34 @@ jsPlumb.bind("ready", function() {
     
 ;(function() {
          
-    prepare = function(elId, endpoint) {
-        console.log('preparing = '+elId);
-        console.log('endpoint = '+endpoint);
-        jsPlumbDemo.initHover(elId);
+    prepare = function(div, endpointOptions) {
+        console.log('preparing = '+div);
+        console.log('endpointOptions = '+endpointOptions);
+        //jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
-        var e = jsPlumb.addEndpoint(elId, endpoint);
+        var endPoint = jsPlumb.addEndpoint(div, endpointOptions);
         //jsPlumbDemo.initjulio(e);        
         skills.push({
-            element: elId, endp:e
+            element: div, endp:endPoint
         });        
-        return e;
+        
+ 
+        
+        return endPoint;        
     },    
     window.jsPlumbDemo = {  	   
         init : function() {
             console.log('Import defaults');
-            jsPlumb.importDefaults({
-                // default drag options
-                DragOptions : { cursor: 'pointer', zIndex:2000 },
-                // default to blue at one end and green at the other
-                EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
-                // blue endpoints 7 px; green endpoints 11.
-                Endpoints : [ [ "Dot", {
-                        radius:7
-                    } ], [ "Dot", { radius:11 } ]],
-                // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
-                // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
-                ConnectionOverlays : [
-                    [ "Arrow", { location:0.9 } ],
-                    [ "Label", { 
-                        location:0.1,
-                        id:"label",
-                        cssClass:"aLabel"
-                    }]
-                ]
-            });    
+            
+            jsPlumb.Defaults.Anchors = [ "LeftMiddle", "BottomRight" ];
+            
+         
             
             /*jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
             jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
             jsPlumb.Defaults.Endpoint       = "Rectangle";
             jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];*/
-
+/*
             // this is the paint style for the connecting lines..
 			var connectorPaintStyle = {
 				lineWidth:5,
@@ -373,9 +361,13 @@ jsPlumb.bind("ready", function() {
                                 uuids:["window4BottomCenter", "window1TopCenter"]});
 			jsPlumb.connect({
                                 uuids:["window3BottomCenter", "window1BottomCenter"]});
-
-                           
+*/
             //jsPlumb.setMouseEventsEnabled(true);
+            
+            open_block('block_1', 0);
+            
+            // make all the window divs draggable						
+            jsPlumb.draggable($(".window"));
             
             {* $js *}
                 
@@ -384,6 +376,8 @@ jsPlumb.bind("ready", function() {
 				if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
 					jsPlumb.detach(conn); 
 			});    
+            
+            
         }
     };
 })();
@@ -411,7 +405,7 @@ $(document).ready( function() {
     $(".chzn-select").chosen();
     $("#menu").draggable();
     
-    //open_block('block_0');
+    
     
     
 });
@@ -446,22 +440,14 @@ $(document).ready( function() {
 
 </script>
 <div id="menu" class="well" style="top:20px; left:20px; width:300px; z-index: 9000; opacity: 0.9;">
-    <h3>{'Skills'|get_lang}</h3>
+    <h3>{{'Skills'|get_lang}}</h3>
     <div class="btn-group">
-        <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{'AddSkill'|get_lang}</a>
-        <a style="z-index: 1000" class="btn" id="return_to_admin" href="{$_p.web_main}admin">{'BackToAdmin'|get_lang}</a>
+        <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{{'AddSkill'|get_lang}}</a>
+        <a style="z-index: 1000" class="btn" id="return_to_admin" href="{{_p.web_main}}admin">{{'BackToAdmin'|get_lang}}</a>
     </div>
 </div>
-    
-    
-    <div id="demo">
-			<div class="window" id="window1"><strong>1</strong><br/><br/></div>
-			<div class="window" id="window2"><strong>2</strong><br/><br/></div>
-		    <div class="window" id="window3"><strong>3</strong><br/><br/></div>
-		    <div class="window" id="window4"><strong>4</strong><br/><br/></div>
-		</div>
-        
-{* $html *}
+           
+{# $html #}
 
 <div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>
@@ -469,30 +455,30 @@ $(document).ready( function() {
         <fieldset>
             <input type="hidden" name="id" id="id"/>
             <div class="control-group">            
-                <label class="control-label" for="name">{'Name'|get_lang}</label>            
+                <label class="control-label" for="name">{'Name'|get_lang}}</label>            
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />             
                 </div>
             </div>        
             <div class="control-group">            
-                <label class="control-label" for="name">{'Parent'|get_lang}</label>            
+                <label class="control-label" for="name">{'Parent'|get_lang}}</label>            
                 <div class="controls">
                     <select id="parent_id" name="parent_id" />
                     </select>                  
                 </div>
             </div>                
             <div class="control-group">            
-                <label class="control-label" for="name">{'Gradebook'|get_lang}</label>            
+                <label class="control-label" for="name">{'Gradebook'|get_lang}}</label>            
                 <div class="controls">
                     <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
                     </select>             
                     <span class="help-block">
-                    {'WithCertificate'|get_lang}
+                    {'WithCertificate'|get_lang}}
                     </span>           
                 </div>
             </div>
             <div class="control-group">            
-                <label class="control-label" for="name">{'Description'|get_lang}</label>            
+                <label class="control-label" for="name">{'Description'|get_lang}}</label>            
                 <div class="controls">
                     <textarea name="description" id="description" class="span3" rows="7"></textarea>
                 </div>

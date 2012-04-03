@@ -1,7 +1,7 @@
 <div class="page-header">
-    <h2>{$work.title}</h2>
+    <h2>{{ work.title}}</h2>
 </div>
 
 <p>
-{$work.description}
+{{ work.description}}
 </p>

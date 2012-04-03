@@ -7,12 +7,14 @@
  **/
 
  // Load Smarty library
-require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
+//require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
+require_once api_get_path(LIBRARY_PATH).'Twig/Autoloader.php';
 
-class Template extends Smarty {
+//class Template extends Smarty {
+class Template {    
 	
 	var $style = 'default'; //see the template folder 
     var $preview_theme = null; 
@@ -26,15 +28,46 @@ class Template extends Smarty {
     var $plugin = null;
     var $course_id = null;
     var $user_is_logged_in = false;
+    var $twig = null;
+    
+    var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
-        parent::__construct();
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {       
         
+        //parent::__construct();
+        
+        //Twig settings
+        
+        Twig_Autoloader::register();
+        $loader = new Twig_Loader_Filesystem(api_get_path(SYS_CODE_PATH).'template');        
+        $this->twig = new Twig_Environment($loader, array(
+            //'cache' => api_get_path(SYS_ARCHIVE_PATH),
+            'autoescape' => false,
+        ));
+        
+        $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
+        $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
+        $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
+        
+        
+        // Smarty like
+        $lexer = new Twig_Lexer($this->twig, array(
+            //'tag_comment'  => array('{*', '*}'),
+            //'tag_comment'  => array('{#', '#}'),
+            //'tag_block'    => array('{', '}'),
+            //'tag_variable' => array('{$', '}'),
+        ));
+        
+        $this->twig->setLexer($lexer);
+        
+        //--------
+   
         //Page title
 		$this->title = $title;        
 		$this->show_learnpath = $show_learnpath;
         
 		//Smarty 3 configuration
+        /*
         $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
         $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
         $this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));		
@@ -45,7 +78,7 @@ class Template extends Smarty {
 		$this->caching 			= false;
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;		
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
-		//$this->cache_lifetime 	= 120;
+		//$this->cache_lifetime 	= 120;*/
 		
 		//Setting system variables
 		$this->set_system_parameters();	
@@ -61,11 +94,11 @@ class Template extends Smarty {
 		$this->set_header($show_header);
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
-		$this->registerPlugin("modifier","get_lang", "get_lang");
+		//$this->registerPlugin("modifier","get_lang", "get_lang");
 		
 		//Not recomended to use get_path, use {$_p.'xxx'} see the set_system_parameters()
-		$this->registerPlugin("modifier","get_path", "api_get_path");
-		$this->registerPlugin("modifier","get_setting", "api_get_setting");
+		//$this->registerPlugin("modifier","get_path", "api_get_path");
+		//$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		
 		//To load a smarty plugin
 		//$this->loadPlugin('smarty_function_get_lang');
@@ -594,5 +627,22 @@ class Template extends Smarty {
             }
         }
         return null;
+    }
+    
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
+        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);
+        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);        
+        $template = $this->twig->loadTemplate($template);    
+        return $template->render($this->params);
+    }
+    
+    public function assign($tpl_var, $value = null, $nocache = false) {
+        //parent::assign($tpl_var, $value, $nocache);
+        $this->params[$tpl_var] = $value;
+    }
+    
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {
+        //parent::display($template, $cache_id, $compile_id, $parent);             
+        echo $this->twig->render($template, $this->params);
     }
 }

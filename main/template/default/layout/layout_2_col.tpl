@@ -1,113 +1,114 @@
-{extends file="default/layout/main.tpl"}
-{* Header *}
-{block name=header}
-{if $show_header == 1 }
-{include file="default/layout/main_header.tpl"}
-{/if}
-{/block}
+{% extends "default/layout/main.tpl" %}
 
-{block name=body}	
+{% block header %}
+    {% if show_header == 1 %}
+        {% include "default/layout/main_header.tpl" %}
+    {% endif %}
+{% endblock %}
 
-	{* Main content*}
+{% block body %}	
+
+	{# Main content #}
 	
-	{if $show_sniff == 1 }
-	 	{include file="default/layout/sniff.tpl"}
-	{/if}
+	{% if show_sniff == 1 %}
+	 	{% include "default/layout/sniff.tpl" %}
+	{% endif %}
    
 	<div class="span9">
         
-        {* Plugin bottom *}
-        {if !empty($plugin_content_top)}         
+        {#  Plugin bottom  #}
+        {% if plugin_content_top is not null %}
             <div id="plugin_content_top">
-                {$plugin_content_top}
+                {{ plugin_content_top }}
             </div>
-        {/if}
+        {% endif %}
         
-		{* ?? *}
-        {if !empty($home_page_block)}
+		{#  ??  #}
+        {% if home_page_block is not null %}
             <section id="home_page">
-            {$home_page_block}
+            {{ home_page_block}}
             </section>
-        {/if}
+        {% endif %}
 		
-		{* ?? *}
-		{$sniff_notification}        
+		{#  ??  #}
+		{{ sniff_notification }}
 		
-        {include file="default/layout/page_body.tpl"}
-        
-        {if !empty($content)}
+        {% include "default/layout/page_body.tpl" %}
+                
+        {% if content is not null %}
         <section id="main_content">
-        {$content}        
+        {{ content }}
         </section>
-        {/if}
+        {% endif %}
 		
-		{* Announcements *}
-        {if !empty($announcements_block)}
+		{#  Announcements  #}
+        {% if announcements_block is not null %}      
             <section id="announcements_page">
-            {$announcements_block}
+            {{ announcements_block }}
             </section>
-        {/if}
+        {% endif %}
 		
-		{* Hot courses template *}		
-		{include file="default/layout/hot_courses.tpl"}
+		{#  Hot courses template  #}		
+		{% include "default/layout/hot_courses.tpl" %}
         
-        {* Content bottom *}
-        {if !empty($plugin_content_bottom)}               
+        {#  Content bottom  #}
+        {% if plugin_content_bottom is not null %}       
             <div id="plugin_content_bottom">
-                {$plugin_content_bottom}
+                {{plugin_content_bottom}}
             </div>
-        {/if}
+        {% endif %}
         &nbsp;
 	</div>
 		
-	{* Right column *}
-	<div class="span3">		
-        {if !empty($plugin_menu_top)}
+	{#  Right column  #}
+	<div class="span3">		        
+        {% if plugin_menu_top is not null %}
             <div id="plugin_menu_top">
-                {$plugin_menu_top}
+                {{plugin_menu_top}}
             </div>
-        {/if}  	
-	    {*if user is not login show the login form*}
-		{if $_u.logged == 0}
-			{include file="default/layout/login_form.tpl"}
-		{/if}
+        {% endif %}  	
+        
+	    {# if user is not login show the login form #}
+		{% if _u.logged  == 0 %}
+			{% include "default/layout/login_form.tpl" %}
+		{% endif %}
 
-		{* My account - user picture *}
-		{$profile_block}			
-		{$account_block}		
-		{$teacher_block}
+		{#  My account - user picture  #}
+		{{ profile_block }}
+		{{ account_block }}
+		{{ teacher_block }}
 		
-		{* Notices *}
-		{$notice_block}
+		{#  Notices  #}
+		{{ notice_block }}
 		
-		{* Links that are not added in the tabs*}
-		{$navigation_course_links}
+		{#  Links that are not added in the tabs #}
+		{{ navigation_course_links }}
 		
-		{* Reservation block *}
-		{$reservation_block}
+		{#  Reservation block  #}
+		{{ reservation_block }}
 		
-		{* Search (xapian)*}
-		{$search_block}
+		{#  Search (xapian) #}
+		{{ search_block }}
 		
-		{* Classes *}
-		{$classes_block}
+		{#  Classes  #}
+		{{ classes_block }}
 		
-		{* Skills*}
-		{$skills_block}        
+		{#  Skills #}
+		{{ skills_block }}
         	
-		{* Plugin courses sidebar *}		
-        {*  Plugins for footer section *}		
-        {if !empty($plugin_menu_bottom)}
+		{#  Plugin courses sidebar  #}		
+        {#  Plugins for footer section  #}		
+        
+        {% if plugin_menu_bottom is not null %}
             <div id="plugin_menu_bottom">
-                {$plugin_menu_bottom}
+                {{ plugin_menu_bottom }}
             </div>
-        {/if}        
+        {% endif %}        
 	</div>
-{/block}
+{% endblock %}
 
-{* Footer *}
-{block name=footer}
-    {if $show_footer == 1 }
-        {include file="default/layout/main_footer.tpl"}
-    {/if}
-{/block}
+{% block footer %}
+    {% if show_footer == 1 %}
+        {% include "default/layout/main_footer.tpl" %}
+    {% endif %}
+{% endblock %}

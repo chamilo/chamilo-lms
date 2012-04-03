@@ -18,7 +18,7 @@ function clean_user_select() {
         .end();
 }
 
-var region_value = '{$region_value}';
+var region_value = '{{region_value}}';
 $(document).ready(function() {
 
     /*$("body").delegate(".datetime", "focusin", function(){
@@ -95,21 +95,21 @@ $(document).ready(function() {
 			left: 'today prev,next',
 			center: 'title',
 			right: 'month,agendaWeek,agendaDay',	
-		},	
-        {if $use_google_calendar == 1 }
+		},	        
+        {% if use_google_calendar == 1 %}
             eventSources: [
-                '{$google_calendar_url}',  //if you want to add more just add URL in this array
+                '{{google_calendar_url}}',  //if you want to add more just add URL in this array
                 {
                     className: 'gcal-event',           // an option!                    
                 }
             ],
-        {/if}
+        {% endif %}
         
-		buttonText: 	{$button_text}, 
-		monthNames: 	{$month_names},
-		monthNamesShort:{$month_names_short},
-		dayNames: 		{$day_names},
-		dayNamesShort: 	{$day_names_short},		
+		buttonText: 	{{button_text}}, 
+		monthNames: 	{{month_names}},
+		monthNamesShort:{{month_names_short}},
+		dayNames: 		{{day_names}},
+		dayNamesShort: 	{{day_names_short}},		
         firstHour: 8,
         firstDay: 1, 
 		selectable	: true,
@@ -142,11 +142,11 @@ $(document).ready(function() {
 			//Update chz-select
 			$("#users_to_send_id").trigger("liszt:updated");
 			
-			if ({$can_add_events} == 1) {							
-				var url = '{$web_agenda_ajax_url}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
+			if ({{can_add_events}} == 1) {							
+				var url = '{{web_agenda_ajax_url}}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
                 
-                var start_date_value = $.datepicker.formatDate('{$js_format_date}', start);
-                var end_date_value  = $.datepicker.formatDate('{$js_format_date}', end);
+                var start_date_value = $.datepicker.formatDate('{{js_format_date}}', start);
+                var end_date_value  = $.datepicker.formatDate('{{js_format_date}}', end);
 				
 				$('#start_date').html(start_date_value + " " +  start.toTimeString().substr(0, 8));
                 
@@ -161,17 +161,17 @@ $(document).ready(function() {
 					$('#start_date').html(start_date_value);
 					$('#end_date').html(' ');					
 				}
-				$('#color_calendar').html('{$type_label}');
+				$('#color_calendar').html('{{type_label}}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');				
-				$('#color_calendar').addClass('{$type}_event');
+				$('#color_calendar').addClass('{{type}}_event');
 				
 				allFields.removeClass( "ui-state-error" );		
 				$("#dialog-form").dialog("open");		
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						{"Add"|get_lang}: function() {
+						{{"Add"|get_lang}}: function() {
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
 							//bValid = bValid && checkLength( content, "content", 1, 255 );
@@ -237,13 +237,13 @@ $(document).ready(function() {
 				
 				$('#visible_to_input').hide();                
                 $('#add_as_announcement_div').hide();
-                			
-                {if $type != 'admin'}
+                
+                {% if type != 'admin' %}
                     $('#visible_to_read_only').show();                    
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
-				{/if}
+				{% endif %}
                     
-                $('#color_calendar').html('{$type_label}');            
+                $('#color_calendar').html('{{type_label}}');            
                 $('#color_calendar').addClass('label_tag');								
                 $('#color_calendar').removeClass('course_event');
                 $('#color_calendar').removeClass('personal_event');
@@ -263,25 +263,25 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog("open");
 	
-				var url = '{$web_agenda_ajax_url}&a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
-				var delete_url = '{$web_agenda_ajax_url}&a=delete_event&id='+calEvent.id;
+				var url = '{{web_agenda_ajax_url}}&a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var delete_url = '{{web_agenda_ajax_url}}&a=delete_event&id='+calEvent.id;
 				
 				$("#dialog-form").dialog({
 					buttons: {
-                        '{"ExportiCalConfidential"|get_lang}' : function() {                                            
+                        '{{"ExportiCalConfidential"|get_lang}}' : function() {                                            
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";                                
                                 window.location.href = url;
                                 
 						},
-						'{"ExportiCalPrivate"|get_lang}': function() { 
+						'{{"ExportiCalPrivate"|get_lang}}': function() { 
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
                                 window.location.href = url;
 						},
-                        '{"ExportiCalPublic"|get_lang}': function() { 
+                        '{{"ExportiCalPublic"|get_lang}}': function() { 
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
                                 window.location.href = url;
 						},                        
-						'{"Edit"|get_lang}' : function() {
+						'{{"Edit"|get_lang}}' : function() {
 							
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );							
@@ -305,7 +305,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						'{"Delete"|get_lang}': function() { 
+						'{{"Delete"|get_lang}}': function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {
@@ -339,16 +339,16 @@ $(document).ready(function() {
                 
                 $("#simple-dialog-form").dialog({
 					buttons: {
-						'{"ExportiCalConfidential"|get_lang}' : function() {                                            
+						'{{"ExportiCalConfidential"|get_lang}}' : function() {                                            
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";			
                                 window.location.href = url;
                                 
 						},
-						'{"ExportiCalPrivate"|get_lang}': function() { 
+						'{{"ExportiCalPrivate"|get_lang}}': function() { 
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
                                 window.location.href = url;
 						},
-                        '{"ExportiCalPublic"|get_lang}': function() { 
+                        '{{"ExportiCalPublic"|get_lang}}': function() { 
                                 url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
                                 window.location.href = url;
 						}
@@ -358,10 +358,10 @@ $(document).ready(function() {
             }
 		},
 		editable: true,		
-		events: "{$web_agenda_ajax_url}&a=get_events",
+		events: "{{web_agenda_ajax_url}}&a=get_events",
 		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {		
 			$.ajax({
-				url: '{$web_agenda_ajax_url}',
+				url: '{{web_agenda_ajax_url}}',
 				data: {
 					a:'move_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
 				}
@@ -369,7 +369,7 @@ $(document).ready(function() {
 		},
         eventResize: function(event, day_delta, minute_delta, revert_func) {
             $.ajax({
-				url: '{$web_agenda_ajax_url}',
+				url: '{{web_agenda_ajax_url}}',
 				data: {
 					a:'resize_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
 				}
@@ -389,20 +389,20 @@ $(document).ready(function() {
     <div style="width:500px">
         <form name="form-simple" class="form-vertical" >        
             <div class="control-group">
-                <label class="control-label"><b>{"Date"|get_lang}</b></label>			
+                <label class="control-label"><b>{{"Date"|get_lang}}</b></label>			
                 <div class="controls">
                     <span id="simple_start_date"></span><span id="simple_end_date"></span>                
                 </div>					
             </div>
             <div class="control-group">			
-                <label class="control-label"><b>{"Title"|get_lang}</b></label>
+                <label class="control-label"><b>{{"Title"|get_lang}}</b></label>
                 <div class="controls">				
                     <div id="simple_title"></div>
                 </div>
             </div>
 
             <div class="control-group">			
-                <label class="control-label"><b>{"Description"|get_lang}</b></label>			
+                <label class="control-label"><b>{{"Description"|get_lang}}</b></label>			
                 <div class="controls">
                     <div id="simple_content"></div>
                 </div>
@@ -414,62 +414,62 @@ $(document).ready(function() {
 <div id="dialog-form" style="display:none;">
 	<div style="width:500px">
 	<form class="form-horizontal" id="add_event_form" name="form">
-	      
-	    {if !empty($visible_to) } 
+	    
+        {% if visible_to is not null %}
     	    <div id="visible_to_input" class="control-group">                      
-                <label class="control-label" for="date">{"To"|get_lang}</label>                
+                <label class="control-label" for="date">{{"To"|get_lang}}</label>                
                 <div class="controls">
-                    {$visible_to}                    
+                    {{visible_to}}                   
                 </div>                  
             </div>
-        {/if}        
+        {% endif %}        
          <div id="visible_to_read_only" class="control-group" style="display:none">                      
-                <label class="control-label" for="date">{"To"|get_lang}</label>                
+                <label class="control-label" for="date">{{"To"|get_lang}}</label>                
                 <div class="controls">
                     <div id="visible_to_read_only_users"></div>                  
                 </div>                  
          </div>        	
 		<div class="control-group">					
-            <label class="control-label" for="date">{"Agenda"|get_lang}</label>			
+            <label class="control-label" for="date">{{"Agenda"|get_lang}}</label>			
 			<div class="controls">
 				<div id="color_calendar"></div>
 			</div>					
 		</div>
 		<div class="control-group">					
-			<label class="control-label" for="date">{"Date"|get_lang}</label>			
+			<label class="control-label" for="date">{{"Date"|get_lang}}</label>			
 			<div class="controls">
 				<span id="start_date"></span><span id="end_date"></span>                
 			</div>					
 		</div>
 		<div class="control-group">			
-			<label class="control-label" for="name">{"Title"|get_lang}</label>			
+			<label class="control-label" for="name">{{"Title"|get_lang}}</label>			
 			<div class="controls">
 				<input type="text" name="title" id="title" size="40" />				
 			</div>
 		</div>
 				
 		<div class="control-group">			
-			<label class="control-label" for="name">{"Description"|get_lang}</label>			
+			<label class="control-label" for="name">{{"Description"|get_lang}}</label>			
 			<div class="controls">
 				<textarea name="content" id="content" class="span3" rows="5"></textarea>
 			</div>
 		</div>	
 		
-		{if $type == 'course'}
+        {% if type == 'course' %}
 		<div id="add_as_announcement_div">
     		 <div class="control-group">                
                 <label></label>
                 <div class="controls">                    
                     <label class="checkbox inline" for="add_as_annonuncement">
-                        {"AddAsAnnouncement"|get_lang}
+                        {{"AddAsAnnouncement"|get_lang}}
                         <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />                    
                     </label>                    
                 </div>
             </div>
         </div>
-		{/if}
+		{% endif %}
 	</form>
 	</div>
 </div>
-<div id='loading' style='margin-left:150px;position:absolute;display:none'>{"Loading"|get_lang}...</div>
+<div id='loading' style='margin-left:150px;position:absolute;display:none'>{{"Loading"|get_lang}}...</div>
 <div id='calendar'></div>

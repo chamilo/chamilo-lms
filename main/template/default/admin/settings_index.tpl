@@ -18,22 +18,22 @@ $(function() {
     </ul>
     -->        
     <div class="row">
-    {foreach $blocks as $key => $block name=block_loop  }        
-        <div id="tabs-{$smarty.foreach.block_loop.index +1}" class="span6">
+    {% for block_item in blocks %}
+        <div id="tabs-{{loop.index}}" class="span6">
             <div class="well_border">
-                <h4>{$block.icon} {$block.label}</h4>
+                <h4>{{block_item.icon}} {{block_item.label}}</h4>
                 <div style="list-style-type:none">
-                    {$block.search_form}
-                </div>
-                {if $block.items}
+                    {{ block_item.search_form }}
+                </div>                
+                {% if block_item.items is not null %}
                     <ul>
-    		    	{foreach $block.items as $url}
-    		    		<li><a href="{$url.url}">{$url.label}</a></li>	    	
-    				{/foreach}
+    		    	{% for url in block_item.items %}
+    		    		<li><a href="{{url.url}}">{{ url.label }}</a></li>	    	
+    				{% endfor %}
                     </ul>    	
-                {/if}
+                {% endif%}
             </div>
         </div>        
-    {/foreach}
+    {% endfor %}
     </div>
 </div>

@@ -153,15 +153,15 @@ jsPlumb.bind("ready", function() {
         
             
 ;(function() {         
-    prepare = function(elId, endpoint) {
-        jsPlumbDemo.initHover(elId);
+    prepare = function(div, endpointOptions) {
+        //jsPlumbDemo.initHover(elId);
         //jsPlumbDemo.initAnimation(elId);        
-        var e = jsPlumb.addEndpoint(elId, endpoint);
-        jsPlumbDemo.initjulio(e);        
+        var endpoint = jsPlumb.addEndpoint(div, endpointOptions);
+        //jsPlumbDemo.initjulio(e);    
         skills.push({
-            element:elId, endp:e
+            element:div, endp:endpoint
         });        
-        return e;
+        return endpoint;
     },
     
     window.jsPlumbDemo = {    
@@ -169,11 +169,11 @@ jsPlumb.bind("ready", function() {
         },      
         initHover :function(elId) {            
             
-            $("#" + elId).click(function() {
+           /* $("#" + elId).click(function() {
                 var  all = jsPlumb.getConnections({
                     source:elId
                 });               
-            });
+            });*/
             
             /*$("#" + elId).hover(
                 function() { $(this).addClass("bigdot-hover"); },

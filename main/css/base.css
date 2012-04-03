@@ -2893,7 +2893,7 @@ form .formw .freeze {
     height: 4em;
     opacity: 0.8;
     padding-top: 0.9em;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
     width: 120px;
     z-index: 40;

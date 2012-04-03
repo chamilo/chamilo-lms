@@ -13,6 +13,7 @@ var connectorPaintStyle = {
     strokeStyle:"#deea18",
     joinstyle:"round"
 };
+
 // .. and this is the hover style. 
 var connectorHoverStyle = {
     lineWidth:7,
@@ -22,7 +23,7 @@ var connectorHoverStyle = {
 //Admin arrows
 var edit_arrow_color = '#ccc';        
 
-var editEndpoint = {  
+var editEndpointOptions = {  
     //connectorStyle:connectorPaintStyle,
     connector:[ "Flowchart", { stub:28 } ],
     hoverPaintStyle:connectorHoverStyle,
@@ -41,7 +42,25 @@ var editEndpoint = {
         strokeStyle: edit_arrow_color
     },
     isTarget:true,
-    dropOptions : exampleDropOptions
+    dropOptions : exampleDropOptions,
+    
+      // default to blue at one end and green at the other
+    EndpointStyles : [{ fillStyle:'#225588' }, { fillStyle:'#558822' }],
+    // blue endpoints 7 px; green endpoints 11.
+    Endpoints : [ [ "Dot", { radius:7} ], 
+                  [ "Dot", { radius:11 } ]
+                ],
+    // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
+    // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
+    ConnectionOverlays : [
+        [ "Arrow", { location:0.9 } ],
+        [ "Label", { 
+            location:0.1,
+            id:"label",
+            cssClass:"aLabel"
+        }]
+    ]                
+    
 };
 
 
@@ -68,7 +87,7 @@ var defaultEndpoint = {
 
 // If user completed the skill 
 var done_arrow_color = '#73982C'; //green   
-var doneEndpoint = {                
+var doneEndpointOptions = {                
     connector:[ "Flowchart", { stub:28 } ],
     anchors: ['BottomCenter','TopCenter'],    
     endpoint:"Rectangle",
@@ -153,8 +172,46 @@ function load_children(my_id, top_value, load_user_data) {
     //Loading children
     var ix = 0;
     
+    $('body').append('<div id="block_'+my_id+ '" class=" window " >Root </div>');
+    
+       
+    jsPlumb.AnchorPositionFinders.MyFinder = function(dp, ep, es, params) {
+        console.log('MyFinder');
+        console.log('dp: ' +dp);
+        return [100, 200];	
+    };
+
+    
+    var endpointOptions2 = { 
+  isTarget:true, 
+  maxConnections:5,
+  endpoint:"Rectangle", 
+  paintStyle:{ fillStyle:"gray" },
+  anchor:[ "Assign", { 
+        position:"MyFinder",
+        myCustomParameter:"foo",
+        anInteger:5
+  }]  
+};
+    
+    jsPlumb.makeSource("block_" + my_id, {
+                anchor:"Continuous",
+                endpoint:["Rectangle", { width:200, height:50 }]
+            });
+
+
+
+    /*$('#block_'+my_id).css({ 
+                    position: 'absolute',
+                    zIndex: 5000,
+                    left: '100px', 
+                    top: '100px'
+                });*/
+    
+
+    
     $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
-        function(json) {                
+        function(json) {              
             console.log('getJSON reponse: ' + json)
             $.each(json,function(i, item) {
                 if (debug) console.log('Loading children: #' + item.id + " " +item.name);
@@ -164,40 +221,37 @@ function load_children(my_id, top_value, load_user_data) {
                 item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
 
                 var status_class = ' ';
-                my_edit_point = editEndpoint;
+                my_edit_point_options = editEndpointOptions;
 
                 if (item.passed == 1) {
-                    my_edit_point = doneEndpoint;
+                    my_edit_point_options = doneEndpointOptions;
                     status_class = 'done_window';
                 }
 
                 $('body').append('<div id="block_'+item.id+ '" class="third_window open_block window '+status_class+'" >'+item.name+'</div>');
                 if (debug) console.log('Append block: '+item.id);
 
-                $('#block_'+item.id).css({ 
+                /*$('#block_'+item.id).css({ 
                     position: 'absolute',
                     zIndex: 5000,
                     left: '10', 
                     top: '10'
-                });
+                });*/
 
 
-                //console.log('append div id = block_'+item.id);                    
-                //console.log('preparing = '+item.id);          
-
-                var es = prepare("block_" + item.id,  my_edit_point);
-
-                //console.log('preparing = '+my_id);
-
-                var e2 = prepare("block_" + my_id,  my_edit_point);
-
-                jsPlumb.connect({source: es, target:e2});
+                //var es = prepare("block_" + item.id,  my_edit_point_options);
+                //var e2 = prepare("block_" + my_id,  my_edit_point_options);
+                
+                jsPlumb.makeTarget("block_" + item.id, endpointOptions2);
+                
+   
+                jsPlumb.connect({source: "block_" + my_id, target:"block_" + item.id, anchor:"Continuous"});
                 //console.log('connect sources');
 
-                jsPlumb.animate("block_" + item.id, { 
+                /*jsPlumb.animate("block_" + item.id, { 
                     left: left_value, top : top_value
                 }, { duration : duration_value });
-                ix++;   
+                ix++;   */
             });
         }
     );

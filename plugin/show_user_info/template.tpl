@@ -1,4 +1,4 @@
-{* 
+{#
     This is a Chamilo plugin using Smarty you can use handy shorcuts like:
     
     1. Shortcuts 
@@ -23,11 +23,11 @@
         
     4. Read more
         You can also see more examples in the the main/template/default/layout files
-*}
-{if $show_user_info.show_message}
+#}
+{% if show_user_info.show_message is not null %}
 <div class="well">
-    {"Welcome"|get_lang} {$show_user_info.user_info.complete_name} ({$show_user_info.username})
+    {{"Welcome"|get_lang}} {{show_user_info.user_info.complete_name}} ({{show_user_info.username})
     <br />
-    The administrator - {"siteName"|api_get_setting}
+    The administrator - {{"siteName"|get_setting}}
 </div>
-{/if}
+{% endif %}

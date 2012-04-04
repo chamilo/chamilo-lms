@@ -1328,14 +1328,14 @@ class Display {
 		if (!empty($number_of_users_who_voted)) {
 			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
 		}
-		//$labels[]= $point_info['user_vote']  ? Display::return_icon('good.png', get_lang('YourVote'), array(), 22).' ['.$point_info['user_vote'].']' : '';		
-		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : '';		
+		
+		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';		
 		
 		if (!$add_div_wrapper && api_is_anonymous()) {  
 			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 			
-        $html .= Display::span(implode(' ', $labels) , array('id' =>  'vote_label_'.$id));			
+        $html .= Display::span(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id));			
         $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
 		
         if ($add_div_wrapper) {

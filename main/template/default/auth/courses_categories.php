@@ -139,9 +139,7 @@ $stok = Security::get_token();
                 }
                 
                 $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
-
-                //<div class="course-block-main-item"><div class="left">'.get_lang('Teacher').'</div><div class="course-block-teacher right">'.$tutor_name.'</div></div>
-                //<div class="course-block-main-item"><div class="left">'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div></div>
+                
                 echo '<div class="well_border"><div class="row">';
                 
                     echo '<div class="span2">';

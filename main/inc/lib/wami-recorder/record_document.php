@@ -43,15 +43,7 @@ if($ext!= 'wav'){
 	die();
 }
 
-/*
-//Security verify that the file is audio
-$headers = get_headers($content, 1);
-$content_type = explode("/", $headers['Content-Type']);
-if ($content_type[0] != "audio"){
-	echo "Invalid file type";
-	exit;
-}
-*/
+//Do not use here check Fileinfo method because return: application/x-empty
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$wamidir;

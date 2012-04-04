@@ -23,7 +23,7 @@ body {
 var url             = '{{url}}';
 var skills          = []; //current window divs
 var parents         = []; //list of parents normally there should be only 2
-var hidden_parent   = '';
+var first_parent   = '';
 var duration_value  = 500;
 
 
@@ -139,9 +139,9 @@ jsPlumb.ready(function() {
     //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {      
         var id = $(this).attr('id');
-        console.log('id :' + id);
-        console.log('parent');
-        console.log(parents);
+        
+        console.log('click.open_block id: ' + id);
+        console.log('parents: ' + parents);
         
         //if is root
         if (parents[0] == id) {
@@ -152,16 +152,16 @@ jsPlumb.ready(function() {
             console.log('parents.length ' +parents.length);
             
             if (parents.length == 2 ) {
-                hidden_parent = parents[0];   
+                first_parent = parents[0];   
                 //console.log('deleting: '+parents[0]);        
                 //removing father
-                console.log("hidden_parent " + hidden_parent);
+                console.log("first_parent " + first_parent);
                 
                 for (var i = 0; i < skills.length; i++) {  
-                    console.log('looping '+skills[i].element + ': ');
+                    console.log('looping '+skills[i].element + ' ');
                     if (skills[i].element == parents[0] ) {
                         console.log('deleting parent:'+ skills[i].element + ' here ');                             
-                        //jsPlumb.deleteEndpoint(skills[i].endp);
+                        jsPlumb.deleteEndpoint(skills[i].element);
                         jsPlumb.detachAllConnections(skills[i].element);
                         jsPlumb.removeAllEndpoints(skills[i].element);  
                         $("#"+skills[i].element).remove();
@@ -169,19 +169,21 @@ jsPlumb.ready(function() {
                 }                                
                 parents.splice(0,1);                
                 parents.push(id);
+                console.log('parents after slice/push: ' + parents);
             }     
                 
             if ($(this).hasClass('first_window')) {  
                 console.log('first_window');
-                 //show the hidden_parent
-                //if (hidden_parent != '') {
-                   parents = [hidden_parent, id];
+                //show the first_parent
+                //if (first_parent != '') {
+                   parents = [first_parent, id];
                    //    console.log(parents);
-                   open_parent(hidden_parent, id);
+                   open_parent(first_parent, id);
                 //}
             }
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
+                console.log('parents  push' + parents);
             }
             open_block(id, 0);
         }
@@ -200,7 +202,7 @@ jsPlumb.ready(function() {
        
         console.log(parents);
        // console.log(skills);        
-        console.log('hidden_parent : ' + hidden_parent);         
+        console.log('first_parent : ' + first_parent);         
     });
     
     //Skill title click  

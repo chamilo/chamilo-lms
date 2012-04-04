@@ -145,18 +145,24 @@ function load_children(my_id, top_value, load_user_data) {
     
     if (my_id == 1) {
     
-    $('#skill_tree').append('<div id="block_'+my_id+ '" class="skill_root first_window" >Root </div>');
+        $('#skill_tree').append('<div id="block_'+my_id+ '" class="skill_root first_window" >Root </div>');
     
- //   jsPlumb.animate('block_'+my_id, { left: 500, top:50 }, { duration: 100 });       
+    
+        skills.push({
+            element: "block_" + my_id
+        });
+
+    
+        //   jsPlumb.animate('block_'+my_id, { left: 500, top:50 }, { duration: 100 });       
     
      
-    var root_end_point_options = {  
-//        anchor:"Continuous",
-        maxConnections:100,
-        endpoint:"Dot", 
-        paintStyle:{ fillStyle:"gray" },        
-    };
-    
+        var root_end_point_options = {  
+    //        anchor:"Continuous",
+            maxConnections:100,
+            endpoint:"Dot", 
+            paintStyle:{ fillStyle:"gray" },        
+        };
+
     //The root is the source
     
     //jsPlumb.makeSource("block_" + my_id, root_end_point_options);
@@ -168,6 +174,7 @@ function load_children(my_id, top_value, load_user_data) {
                     top: '100px'
                 });*/
     }
+    
     $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
         function(json) {             
             console.log('getJSON reponse: ' + json)
@@ -218,8 +225,11 @@ function load_children(my_id, top_value, load_user_data) {
                 }, { duration : duration_value });
                 ix++;   */
             });
+            
             jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
-            jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
+            //jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
+            
+            console.log('draggable');
             
             //Creating the organigram
             var sum=0;
@@ -231,8 +241,10 @@ function load_children(my_id, top_value, load_user_data) {
                 q = $(this).css('margin-left').replace("px", "");                
             });       
             sum = sum / 2 - normal_weight/2 + q/2;
-            //console.log(sum);
+            console.log('Calculating: ' + sum);
             jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
+            console.log('setting aniemate for block_'+my_id);
+            
             //$('#block_'+my_id).css('margin-bottom', "20px");
         }
     );
@@ -262,10 +274,10 @@ function load_parent(parent_id, id) {
                 jsPlumb.animate("block_" + item.id, { left: left_value, top : top_value }, { duration : duration_value});
 
                 if (item.parent_id) {
-                    if (debug) console.log('setting hidden_parent '+item.parent_id);
-                    hidden_parent = "block_" + item.parent_id;                        
+                    if (debug) console.log('setting first_parent '+item.parent_id);
+                    first_parent = "block_" + item.parent_id;                        
                 } else {
-                    if (debug) console.log('setting NO--- hidden_parent ');
+                    if (debug) console.log('setting NO--- first_parent ');
                 }
                 ix++;   
             });                

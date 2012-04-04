@@ -8,7 +8,7 @@ $title = $plugin->get_block_title();
 $title = $title ? "<h4>$title</h4>" : '';
 
 $css = $plugin->get_css();
-$css = $css ? "<style type=\"text/css\">$css</style>" : '';
+$css = $css ? "<style type=\"text/css\" scoped=\"scoped\">$css</style>" : '';
 
 if (empty($content))
 {
@@ -18,7 +18,11 @@ if (empty($content))
 echo <<<EOT
 <div class="well sidebar-nav static">
     $css
-    $title
-    $content
+    <div class="menusection">
+        $title
+        <div class="content">
+            $content
+        </div>
+    </div>
 </div>
 EOT;

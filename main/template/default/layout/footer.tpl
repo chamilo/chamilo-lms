@@ -1,64 +1,66 @@
 <footer> <!-- start of #footer section -->	    
     <div class="container">
         <div class="row">            
-            <div id="footer_left" class="span4">
-                {if $session_teachers}
+            <div id="footer_left" class="span4">                
+                {% if session_teachers is not null %}
                     <div id="session_teachers">
-                        {$session_teachers}            
+                        {{session_teachers}}           
                     </div>
-                {/if} 
+                {% endif %} 
 
-                {if $teachers }
+                {% if teachers is not null %}
                     <div id="teachers">
-                        {$teachers}            
+                        {{teachers}}            
                     </div>
-                {/if}
-                {*  Plugins for footer section *}		
-                {if !empty($plugin_footer_left)}                                
+                {% endif %}
+                
+                {#  Plugins for footer section #}                                             
+                {% if plugin_footer_left is not null %}
                     <div id="plugin_footer_left">
-                        {$plugin_footer_left}                
+                        {{plugin_footer_left}}               
                     </div>                
-                {/if}
+                {% endif %}
                 &nbsp;
             </div>
             
             <div id="footer_center" class="span4">
-                {*  Plugins for footer section *}		
-                {if !empty($plugin_footer_center)}                                
+                {#   Plugins for footer section  #}		
+                {% if plugin_footer_center is not null %}
                     <div id="plugin_footer_center">
-                        {$plugin_footer_center}                
+                        {{plugin_footer_center}}                
                     </div>                
-                {else} 
+                {% else %} 
                     &nbsp;
-                {/if}
+                {% endif %}
             </div>
             
             <div id="footer_right" class="span4">        
-                {if $administrator_name }
+                
+                {% if administrator_name is not null %}
                     <div id="admin_name">
-                        {$administrator_name}            
+                        {{administrator_name}}          
                     </div>
-                {/if}
+                {% endif %}
                 
                 <div id="software_name">	    	
-                    {"Platform"|get_lang} <a href="{$_p.web}" target="_blank">{$_s.software_name} {$_s.system_version}</a>
-                    &copy; {$smarty.now|date_format:"%Y"}	    	
+                    {{"Platform"|get_lang}} <a href="{{_p.web}}" target="_blank">{{_s.software_name}} {{_s.system_version}}</a>
+                    &copy; {{ "now"|date("Y") }}   	
                 </div>
-                {*  Plugins for footer section *}		
-                {if !empty($plugin_footer_right)}                                
+                {#   Plugins for footer section  #}		
+                {% if plugin_footer_right is not null %}                                
                     <div id="plugin_footer_right">
-                        {$plugin_footer_right}                
+                        {{plugin_footer_right}}                
                     </div>                
-                {/if}
+                {% endif %}
                 &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->        
     </div><!-- end of #container -->
 </footer>
 
-{$footer_extra_content}
+{{footer_extra_content}}
 
-{literal}
+{% raw %}
 <script type="text/javascript">
 $(document).ready( function() {
     $(".chzn-select").chosen();     
@@ -72,5 +74,5 @@ $(document).ready( function() {
     });
 });
 </script>
-{/literal}
-{$execution_stats}
+{% endraw %}
+{{execution_stats}}

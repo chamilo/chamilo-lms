@@ -21,7 +21,7 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
 
-if ($action != 'get_exercise_results') {
+if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines'))) {
 	api_protect_admin_script(true);
 }
 
@@ -96,7 +96,12 @@ if (!$sidx) $sidx = 1;
 //2. Selecting the count FIRST
 //@todo rework this
 
-switch ($action) {	
+switch ($action) {
+    case 'get_work_user_list':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $work_id = $_REQUEST['work_id'];
+        $count = get_count_work($work_id);        
+        break;
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 		require_once $libpath.'groupmanager.lib.php';
@@ -106,6 +111,11 @@ switch ($action) {
     case 'get_sessions':
         require_once $libpath.'sessionmanager.lib.php';        
         $count = SessionManager::get_count_admin();
+        break;
+    case 'get_timelines':
+        require_once $libpath.'timeline.lib.php';
+        $obj        = new Timeline();
+        $count      = $obj->get_count();
         break;
     case 'get_gradebooks':
         require_once $libpath.'gradebook.lib.php';
@@ -152,17 +162,25 @@ if ($_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-//4. Querying the DB for the elements
+$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
+$is_tutor                   = api_is_allowed_to_edit(true);
+
+//5. Querying the DB for the elements
 $columns = array();
+
 switch ($action) {    
+    case 'get_work_user_list':        
+        if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
+            $columns = array('type', 'firstname', 'lastname',  'username', 'qualification', 'sent_date', 'qualificator_id', 'actions');	
+        } else {
+            $columns = array('type', 'firstname', 'lastname',  'username', 'sent_date', 'actions');	
+        }
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);        
+        break;
 	case 'get_exercise_results':
-		$course                     = api_get_course_info();
-		$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
-		$is_tutor                   = api_is_allowed_to_edit(true);
-        
+		$course                     = api_get_course_info();        
         //used inside get_exam_results_data()
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 
-		
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		if ($is_allowedToEdit || $is_tutor) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
@@ -174,6 +192,29 @@ switch ($action) {
     case 'get_sessions':
         $columns = array('name', 'nbr_courses','category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
+        break;    
+     case 'get_timelines': 
+        $columns = array('headline', 'actions');   
+        //$columns = array('headline', 'type', 'start_date', 'end_date', 'text', 'media', 'media_credit', 'media_caption', 'title_slide', 'parent_id');
+   
+        if(!in_array($sidx, $columns)) {
+        	$sidx = 'headline';
+        }
+        $course_id = api_get_course_int_id();
+        $result     = Database::select('*', $obj->table, array('where' => array('parent_id = ? AND c_id = ?' => array('0', $course_id)), 'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        foreach ($result as $item) {
+            if (!$item['status']) {
+                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';                
+            }
+            $item['headline'] = Display::url($item['headline'], api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']);
+            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('AddItems')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
+            $item['actions'] .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']);
+            $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']);
+            
+            $new_result[] = $item;
+        } 
+        $result = $new_result;        
         break;
     case 'get_gradebooks': 
         $columns = array('name', 'certificates','skills', 'actions', 'has_certificates');                
@@ -220,7 +261,7 @@ switch ($action) {
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
-        foreach($result as $item) {
+        foreach ($result as $item) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
@@ -241,8 +282,7 @@ switch ($action) {
             }
             $new_result[] = $item;
         } 
-        $result = $new_result;      
-        
+        $result = $new_result;
         break;
     case 'get_usergroups':
         $columns = array('name', 'users', 'courses','sessions','actions');
@@ -269,15 +309,17 @@ switch ($action) {
 }
 //var_dump($result);
 
+$allowed_actions = array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 
+                         'get_sessions', 'get_exercise_results', 'get_work_user_list', 'get_timelines');
 //5. Creating an obj to return a json
-if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 'get_sessions', 'get_exercise_results'))) { 
+if (in_array($action, $allowed_actions)) {
     $response           = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages; 
     $response->records  = $count; 
     $i=0;
     if (!empty($result)) {
-        foreach($result as $row) {
+        foreach ($result as $row) {
             //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
             if ($row['id'] == "") {
@@ -285,14 +327,14 @@ if (in_array($action, array('get_careers', 'get_promotions', 'get_usergroups', '
             } else {
                 $response->rows[$i]['id']=$row['id'];
             }             
-            $array = array();
-            foreach($columns as $col) {
+            $array = array();            
+            foreach ($columns as $col) {
                 $array[] = $row[$col];
             }                   
             $response->rows[$i]['cell']=$array;
             $i++; 
         }
-    } 
+    }    
     echo json_encode($response);       
 }
 exit;

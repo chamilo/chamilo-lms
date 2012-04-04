@@ -28,6 +28,7 @@ $language_file[] = 'exercice';
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_LEARNPATH;
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
@@ -882,27 +883,24 @@ switch ($action) {
         }
         require 'lp_message.php';
         break;
-
     case 'return_to_course_homepage':
-            if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
-            else {
-                $_SESSION['oLP']->save_current();
-                $_SESSION['oLP']->save_last();
-                // Declare variables to be used in lp_stats.php.
-                $lp_id  = $_SESSION['oLP']->get_id();
-                $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-                $user_id = api_get_user_id();
-                header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
-            }
-            break;
-
+        if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
+        else {
+            $_SESSION['oLP']->save_current();
+            $_SESSION['oLP']->save_last();
+            // Declare variables to be used in lp_stats.php.
+            $lp_id  = $_SESSION['oLP']->get_id();
+            $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+            $user_id = api_get_user_id();
+            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
+        }
+        break;
     case 'search':
         /* Include the search script, it's smart enough to know when we are
          * searching or not.
          */
         require 'lp_list_search.php';
         break;
-
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         //$_SESSION['refresh'] = 1;

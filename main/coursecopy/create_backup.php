@@ -14,6 +14,8 @@ $language_file = array('exercice', 'admin', 'coursebackup');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
@@ -44,7 +46,7 @@ require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
@@ -57,38 +59,25 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	}
 	$zip_file = CourseArchiver :: write_course($course); 
 	Display::display_confirmation_message(get_lang('BackupCreated'));
-	echo '<br /><a class="a_button orange medium" href="../course_info/download.php?archive='.$zip_file.'">'.get_lang('Download').'</a>';
-	
-?>
-	<!-- Manual download <script language="JavaScript">
-	 setTimeout('download_backup()',2000);
-	 function download_backup()
-	 {
-		window.location="../course_info/download.php?archive=<?php echo $zip_file; ?>";
-	 }
-	</script> //-->
-<?php
+	echo '<br /><a class="btn btn-primary btn-large" href="../course_info/download.php?archive='.$zip_file.'">'.get_lang('Download').'</a>';
 
 } elseif (isset($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
 	$cb = new CourseBuilder('partial');
-	$course = $cb->build();
-	
+	$course = $cb->build();	
 	CourseSelectForm :: display_form($course);
 } else {
 	$cb = new CourseBuilder();
 	$course = $cb->build();
 	if (!$course->has_resources()) {
 		echo get_lang('NoResourcesToBackup');
-	} else {
-		echo '<span id="page_title">'.get_lang('SelectOptionForBackup').'</span><br /><br />';
-
-		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+	} else {		
+		
 		$form = new FormValidator('create_backup_form', 'post');
-		$renderer = $form->defaultRenderer();
-		$renderer->setElementTemplate('<div>{element}</div> ');
+		$form->addElement('header',get_lang('SelectOptionForBackup'));
+		
 		$form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
 		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
-		$form->addElement('html', '<br />');
+		
 		$form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
 
 		$form->add_progress_bar();

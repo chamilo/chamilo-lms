@@ -147,19 +147,20 @@ class StudentPublicationLink extends AbstractLink
     		 $v_assigment_id = $assignment['id'];
     	}
     	$sql = 'SELECT * FROM '.$tbl_stats.' 
-    			WHERE c_id = '.$this->course_id.' AND parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
+    			WHERE c_id = '.$this->course_id.' AND active = 1 AND parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
     	
     	if (!empty($stud_id)) {
     		$sql .= " AND user_id = $stud_id ";
     	}
     	// order by id, that way the student's first attempt is accessed first
-		$sql .= ' ORDER BY id';		
+		$sql .= ' ORDER BY id';
+        
     	$scores = Database::query($sql);
 
 		// for 1 student
     	if (!empty($stud_id)) {
-    		if ($data=Database::fetch_array($scores)) {
-     			return array ($data['qualification'], $assignment['qualification']);
+    		if ($data = Database::fetch_array($scores)) {
+     			return array($data['qualification'], $assignment['qualification']);
     		} else {
      			return '';
     		}

@@ -19,7 +19,7 @@ select {
     visibility: visible;
 }
 
-.label {
+form .label {
     padding: 1px 3px 2px;
     font-size: 100%;
     font-weight: normal;
@@ -46,23 +46,19 @@ legend {
     padding:40px 0px 0px 0px;
 }
 
-#header2 .nav{
-    margin-bottom:0px;
-}
-
 /* menu dropdown fixes */
-#header3 .nav .open > .dropdown-toggle, #header3 .nav .active > .dropdown-toggle, #header3 .nav .open.active > .dropdown-toggle {
+.subnav .nav .open > .dropdown-toggle, .subnav .nav .active > .dropdown-toggle, .subnav .nav .open.active > .dropdown-toggle {
     background-color: transparent;
 }
-#header3 .dropdown-menu li a {
+.subnav .dropdown-menu li a {
     color:#333;
 }
 
-#header3 .dropdown-toggle {
+.subnav .dropdown-toggle {
     height: 15px;
 }
 
-#header3 li a {
+.subnav li a {
     margin:0px;
 }
 
@@ -75,12 +71,12 @@ label, input, button, select, textarea, p {
 
 form .label {
     color: #404040;
-    float: left;
-    font-size: 13px;
+    float: left;    
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
     width: 150px;    
+    text-shadow:none;
 }
 form .formw {
     margin-left: 170px;
@@ -102,7 +98,7 @@ form .formw input {
 /* New changes Chamilo 1.9 */
 
 .sidebar-nav {
-    padding: 20px 0px 0px 20px;
+    padding: 20px 20px 10px 20px
 }
 
 .well_border {            
@@ -119,10 +115,13 @@ form .formw input {
     height:26px;
 }
 
-#lp_navigation_elem .buttons,
-#lp_navigation_elem #progress_bar {
-    width:130px;
-    margin:0px 0px 10px 15px;    
+#lp_navigation_elem .buttons{
+    margin-bottom: 5px;    
+}
+
+#lp_navigation_elem {
+    padding-left: 15px;
+    width: 110px;
 }
 
 * {
@@ -209,11 +208,12 @@ footer .container .row {
     margin-top:0px;
 }
 
-/* Begin of proper */
+#friend-container .thumbnail {
+    min-height: 140px;    
+}
 
-#header4 {
-    height: 26px !important; /* breadcrumb fix */
-    margin-top:5px;
+#friend-container .thumbnail img {
+    max-height: 100px;
 }
 
 .show-grid [class*="span"] {
@@ -244,10 +244,6 @@ a.tag {
 
 #settings h4 {
     margin-bottom:10px;
-}
-
-.course_item {
-    padding-bottom: 40px;
 }
 
 /* user_portal course status icon */
@@ -801,10 +797,7 @@ button {
     
     -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
     -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    
-    font-weight:bold;
-    font-size: 105%;    
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);       
 }
 
 button:hover {
@@ -1663,20 +1656,6 @@ div.image-social-content center.friend {
 .social-profile-info {
     width:100%;
 }
-.social-profile-info dt {
-    text-align:left;
-    clear:left;
-    float:left;
-    width:120px;
-}
-.social-profile-info dd {
-    padding:1px 0px 3px 0px;
-    float:left;
-    margin:0;
-    display : block;
-    padding-left:5px;
-    width:150px;
-}
 
 /* general layout of the profile page */
 
@@ -1809,11 +1788,6 @@ div.image-social-content center.friend {
     margin-bottom:10px;
 }
 
-.social_user_information {
-    width:300px;
-    float:left;
-}
-
 .social-friend-container {
     width:100%;
     overflow:hidden;
@@ -1837,40 +1811,6 @@ div.image-social-content center.friend {
     overflow:hidden;
     padding:2px;
     width:76px;
-}
-
-
-/* styles from the my.profile.php file */
-#social_widget  {   
-    margin: 0 20px;
-}
-
-#social_widget_image {
-    float:left;    
-    margin-bottom:10px;
-    padding:2px;
-}
-
-/* SOCIAL BOX */
-
-.social-box-main1 {
-    width:100%;
-    height:auto;
-    overflow:hidden;
-}
-.social-box-left {
-    width:340px;
-    float:left;
-    height:auto;
-    margin:0px;
-}
-
-.social-box-right {
-    width:280px;
-    float:left;
-    height:auto;
-    margin-left:18px;
-    overflow:hidden;
 }
 
 .box_shared_profile_group_title {
@@ -2226,23 +2166,6 @@ div.lp_resource {
     padding:5px;    
 }   
 
-/*LP changes
-.lp_resource_element img {
-        float: left;
-    margin-bottom: 0;
-    margin-left: 43px;
-    margin-right: 43px;
-    margin-top: 7px;
-}
-.lp_resource_element a {
-       float: left;
-    margin-bottom: 12px;
-    margin-left: 33px;
-    margin-right: auto;
-    margin-top: 15px;
-    width: 100%;
-}*/
-
 .doc_resource {
     margin:6px;
 }
@@ -2251,7 +2174,6 @@ div.lp_tree {
     height: 100%;
     overflow: auto;
     padding: 3px 10px 3px 0;
-    width: 230px;
 }
 
 table.lp_build td.tree {
@@ -2946,29 +2868,60 @@ form .formw .freeze {
     color:#999;
 }
 
-
-
-
 /* jsPlumb */
 
-.window {
+.skill_root {
     box-shadow: 2px 2px 19px #aaa;
    -o-box-shadow: 2px 2px 19px #aaa;
    -webkit-box-shadow: 2px 2px 19px #aaa;
    -moz-box-shadow: 2px 2px 19px #aaa;
+   
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;        
+
+    background-color: #ccc;
+    border: 0.1em dotted #D4E06B;
+    color: black;    
+    font-size: 0.9em;
+    height: 4em;
+    opacity: 0.8;
+    padding-top: 0.9em;    
+    text-align: center;
+    width: 120px;
+    z-index: 40;
+    position:relative;
+}
+
+.skill_child {
+    box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+   -moz-box-shadow: 2px 2px 19px #aaa;
+   
+    -webkit-border-radius: 6px;
+    -opera-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;        
 
     background-color: white;
     border: 0.1em dotted #D4E06B;
     color: black;
-    font-family: helvetica,sans;
+    
     font-size: 0.9em;
     height: 4em;
     opacity: 0.8;
     padding-top: 0.9em;
-    position: absolute;
+    /* position: absolute; */
     text-align: center;
-    width: 80px;
+    width: 120px;
     z-index: 40;
+    float:left;
+    margin-left:20px;
+    margin-bottom:20px;
+    margin-top:10px;
+    position:relative;    
 }
 
 .done_window {
@@ -3012,9 +2965,7 @@ form .formw .freeze {
     border: 2px dotted orange;
 }
 
-
 .edit_block {
-    font-size:14px;
     z-index: 200;    
 }
 
@@ -3270,9 +3221,7 @@ a:active{
 }
 
 .homepage_notice {
-    width:90%;
-    margin-left: 14px;    
-    margin-bottom: 10px;
+
 }
 
 .welcome_course li {
@@ -3340,10 +3289,7 @@ a:active{
     display:none;
 }
 
-
-
-#timeline {
-    
+#my_timeline {    
     background: url("dot.gif") repeat-x scroll left 45px;
     height: 350px;
     margin: 0px auto;
@@ -3633,4 +3579,40 @@ a.forum_group_link {
 
 #online_grid_container .thumbnail .caption {
     height: 30px;
+}
+
+#hide_bar_template {
+    width: 10px;    
+    display: inline; 
+    float:left;
+    height: 100%; 
+    padding-bottom: 90em;
+    margin-bottom: -90em;
+    cursor:pointer;
+    background-color:#eee;
+    margin-left: 0px !important;    
+    background-image: url("../img/hide0.png"); 
+    background-repeat: no-repeat; 
+    background-position: center center;    
+}
+
+#hide_bar_template:hover {
+    background-color:#aaa;
+}
+
+.timeline-example {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.25);
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+#timeline {
+    clear: both;
+    height: 600px !important;
+    position: relative !important;
+    z-index: 100;
 }

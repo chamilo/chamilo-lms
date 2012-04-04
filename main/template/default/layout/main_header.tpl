@@ -1,99 +1,98 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html lang="{$document_language}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>    <html lang="{$document_language}" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>    <html lang="{$document_language}" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--><html lang="{$document_language}" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]> <html lang="{{ document_language  }}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html lang="{{ document_language }}" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html lang="{{ document_language }}" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
-{* <script type="text/javascript" src="http://fbug.googlecode.com/svn/lite/branches/firebug1.4/content/firebug-lite-dev.js"></script> *}
-{include file="default/layout/head.tpl"}
+{% include "default/layout/head.tpl" %}
 </head>
-<body dir="{$text_direction}" class="{$section_name}">
-<noscript>{"NoJavascript"|get_lang}</noscript>
-{if $show_header}    
+<body dir="{{ text_direction }}" class="{{ section_name }}">
+<noscript>{{"NoJavascript"|get_lang}}</noscript>
+{% if show_header %}    
 <div class="skip">
     <ul>
-        <li><a href="#menu">{"WCAGGoMenu"|get_lang}</a></li>
-        <li><a href="#content" accesskey="2">{"WCAGGoContent"|get_lang}</a></li>
+        <li><a href="#menu">{{"WCAGGoMenu"|get_lang}}</a></li>
+        <li><a href="#content" accesskey="2">{{"WCAGGoContent"|get_lang}}</a></li>
     </ul>
 </div>    
-<div id="wrapper">
-    
-    {* Bug and help notifications *}		
+<div id="wrapper">    
+    {# Bug and help notifications #}		
     <ul id="navigation" class="notification-panel">
-        {$help_content}
-        {$bug_notification_link}
+        {{ help_content }}
+        {{ bug_notification_link }}
     </ul>    
-    
-    {* topbar *}
-    {include file="default/layout/topbar.tpl"}
+    {# topbar #}
+    {% include "default/layout/topbar.tpl" %}
     
     <div id="main" class="container">     
         <header>
-            <div class="row">
-                {* header1 - logo *}
+            <div class="row">                
                 <div id="header_left" class="span4">                
-                    {$header1}                    
-                    {* plugin_header *}        
-                    {if !empty($plugin_header_left)}
+                    {# logo #}
+                    {{ logo }}
+                    
+                    {# plugin_header #}                            
+                    {% if plugin_header_left is not null %}
                         <div id="plugin_header_left">
-                            {$plugin_header_left}
+                            {{ plugin_header_left }}
                         </div>
-                    {/if}
+                    {% endif %}
                 </div>
                 
                 <div id="header_center" class="span3">                
-                    {* plugin_header *}        
-                    {if !empty($plugin_header_center)}
+                    {# plugin_header #}        
+                    {% if plugin_header_center is not null %}
                         <div id="plugin_header_center">
-                            {$plugin_header_center}
+                            {{ plugin_header_center }}
                         </div>
-                    {/if}
+                    {% endif %}
                     &nbsp;
                 </div>                                
                 <div id="header_right" class="span5">   
-                     {* header right (notifications) *}    
+                    {# header right (notifications) #}    
                     <ul id="notifications" class="nav nav-pills pull-right">        
-                        {$notification_menu}
+                        {{ notification_menu }}
                     </ul>
 
-                    {* plugin_header *}        
-                    {if !empty($plugin_header_right)}
+                    {# plugin_header #}        
+                    {% if plugin_header_right is not null %}
                         <div id="plugin_header_right">
-                            {$plugin_header_right}
+                            {{ plugin_header_right }}
                         </div>
-                    {/if}
+                    {% endif %}
                     &nbsp;
                 </div>
             </div>
                 
-            {if !empty($plugin_header_main)}
+            {% if plugin_header_main is not null %}
                 <div class="row">
                     <div class="span12">
                         <div id="plugin_header_main">
-                            {$plugin_header_main}
+                            {{ plugin_header_main }}
                         </div>
                     </div>
                 </div>
-            {/if}
+            {% endif %}
         </header>
-        {* header 3 - menu *}
-        {if $menu}
-            <div id="header3" class="subnav">        
-                {$menu} 
-            </div>        
-        {/if}
-
-        {* breadcrumb *}
-        {$breadcrumb}
         
-        <div class="row">
-            {if !empty($show_course_shortcut) }
+        {# menu #}
+        {% if menu is not null %}
+            <div class="subnav">        
+                {{ menu }} 
+            </div>        
+        {% endif %}
+
+        {# breadcrumb #}
+        {{ breadcrumb}}
+        
+        <div class="row">            
+            {% if show_course_shortcut is not null %}
                 <div class="span12">
-                    {$show_course_shortcut}
+                    {{ show_course_shortcut }}
                 </div>
-            {/if}
-            
-            {if !empty($show_course_navigation_menu) }
+            {% endif %}
+                        
+            {% if show_course_navigation_menu is not null %}    
                  <script type="text/javascript">
                      
                     /* <![CDATA[ */
@@ -136,20 +135,20 @@
                             if (center_el) {
                                 center_el.style.margin = '0 190px 0 0';
                             }
-                            swap_menu_link_el.innerHTML = '{'Hide'|get_lang}';
+                            swap_menu_link_el.innerHTML = '{{'Hide'|get_lang}}';
                             createCookie('menu_state',1,10);
                         } else {
                             toolnavlist_el.style.display = 'none';
                             if (center_el) {
                                 center_el.style.margin = '0 0 0 0';
                             }
-                            swap_menu_link_el.innerHTML = '{'Show'|get_lang}';
+                            swap_menu_link_el.innerHTML = '{{'Show'|get_lang}}';
                             createCookie('menu_state',0,10);
                         }
                     }
-                    document.write('<div class="span12 pull-right"> <a class="btn" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{'Hide'|get_lang}<\/a></div>');
+                    document.write('<div class="span12 pull-right"> <a class="btn" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{{'Hide'|get_lang}}<\/a></div>');
                     /* ]]> */
                     </script>                    
-                    {$show_course_navigation_menu}                    
-            {/if}            
-{/if}
+                    {{ show_course_navigation_menu }}                    
+            {% endif %}            
+{% endif %}

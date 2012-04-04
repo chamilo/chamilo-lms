@@ -172,10 +172,10 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 	
-	$search_form = ' <form method="POST" action="session_list.php">
-								<input class="span3" type="text" name="keyword" value="">
-								<button class="search" type="submit">'.get_lang('Search').'</button>
-		            		</form>';
+	$search_form = ' <form method="GET" action="session_list.php">
+                        <input class="span3" type="text" name="keyword" value="">
+                        <button class="search" type="submit">'.get_lang('Search').'</button>
+                    </form>';
 	$blocks['sessions']['search_form'] = $search_form;	
 	$items = array();
 	$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));

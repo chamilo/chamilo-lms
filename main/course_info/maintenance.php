@@ -10,13 +10,16 @@
 
 // Language files that need to be included
 $language_file = array('admin','create_course', 'course_info', 'coursebackup');
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;
+
 $nameTools = get_lang('Maintenance');
+api_protect_course_script(true);
 api_block_anonymous_users();
+
 Display :: display_header($nameTools);
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 ?>
 

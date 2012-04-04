@@ -27,11 +27,7 @@
         
     .notification-panel {
         display:none;
-    }
-    
-    #header2 .nav-pills {
-        display:none;
-    }
+    }   
 }
 
 @media (max-width: 767px) {
@@ -58,11 +54,6 @@
 
     #topbar_push {
         height: 0px;
-    }
-
-    /* Removing just for now*/
-    #header4 {
-        display:none;
     }
 
     /* Subnav */
@@ -107,7 +98,7 @@
 
 @media (min-width: 768px) and (max-width: 979px) {
     /* fixes tabs */
-    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;
         padding-right: 6px;
     }
@@ -128,7 +119,7 @@
 
 @media (min-width: 980px) and (max-width: 1024px) {
     /* fixes tabs */
-    #header3 .nav-tabs > li > a, #header3 .nav-pills > li > a {
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;
         padding-right: 6px;
     }

@@ -14,6 +14,13 @@ $language_file = array('admin', 'tracking','scorm');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';
+$current_course_tool = TOOL_TRACKING;
+
+$course_info = api_get_course_info(api_get_course_id());
+
+if (!empty($course_info)) {
+    //api_protect_course_script();
+}
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
@@ -499,7 +506,6 @@ if ($_GET['studentlist'] == 'false') {
         $form -> addElement('hidden', 'action', 'add');
         $form -> addElement('hidden', 'remindallinactives', 'true');
         
-        $course_info = api_get_course_info(api_get_course_id());
         $course_name = get_lang('Course').' '.$course_info['name'];
         
         if ($session_id) {    	

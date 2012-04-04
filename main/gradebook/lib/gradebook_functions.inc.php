@@ -268,7 +268,7 @@ function build_edit_icons_link($link, $selectcat) {
 	if ($message_link===false) {
 		$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-		$modify_icons= '<a href="gradebook_edit_link.php?editlink=' . $link->get_id() . ' &amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+		$modify_icons= '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
 
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';

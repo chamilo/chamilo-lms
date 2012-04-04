@@ -11,8 +11,9 @@
  */
 
 session_cache_limiter('public');
-
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_STUDENTPUBLICATION;
+
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -25,7 +26,7 @@ header('Pragma: no-cache');
 //protection
 api_protect_course_script(true);
 
-$id = $_GET['id'];
+$id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
 
@@ -52,7 +53,9 @@ if (!empty($course_info['real_id'])) {
 		    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
 		        DocumentManager::file_send_for_download($full_file_name, true, $title);
 		    }
-	    }	    
+	    } else {
+            api_not_allowed();
+        }	    
 	}
 }
 exit;

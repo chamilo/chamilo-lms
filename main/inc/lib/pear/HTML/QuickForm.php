@@ -293,15 +293,17 @@ class HTML_QuickForm extends HTML_Common
     public function __construct($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
     {
         HTML_Common::HTML_Common($attributes);
-        
-        
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         // Modified by Chamilo team, 16-MAR-2010
         //$action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
         $action = ($action == '') ? api_get_self() : $action;
         //
         $target = empty($target) ? array() : array('target' => $target);
-        $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$formName) + $target;
+        $form_id = $formName;
+        if (isset($attributes['id']) && !empty($attributes['id'])) {
+            $form_id = Security::remove_XSS($attributes['id']);
+        }
+        $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$form_id) + $target;
         $this->updateAttributes($attributes);
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
             if (1 == get_magic_quotes_gpc()) {

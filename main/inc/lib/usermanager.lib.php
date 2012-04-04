@@ -2342,7 +2342,9 @@ class UserManager {
 
         $image_array_sys = self::get_user_picture_path_by_id($user_id, 'system', false, true);
         $image_array = self::get_user_picture_path_by_id($user_id, 'web', false, true);
+        
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
+        
     	if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style'] = '';
@@ -2813,11 +2815,11 @@ class UserManager {
 	 *
 	 */
 	public static function get_search_form($query) {
-		return '<div><b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
-		<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
-				<input type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
-				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
-		</form></div>';
+		return '
+		<form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
+				<input placeholder="'.get_lang('UsersGroups').'" type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+				<button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
+		</form>';
 	}
 	//deprecated
 	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {

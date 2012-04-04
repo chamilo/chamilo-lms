@@ -140,39 +140,34 @@ $thisYear=date('Y');
 $thisMonth=date('m');
 $thisDay=date('d');
 
-
 $tool_name = get_lang('AddSession');
 
-//display the header
 Display::display_header($tool_name);
 
 if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
-?>
-<form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-    <input type="hidden" name="formSent" value="1">
-
-<?php
 echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-?>
 
-    <div class="row">
-        <div class="label">
+?>
+<form class="form-horizontal" method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
+    <input type="hidden" name="formSent" value="1">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('SessionName') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
             <input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
         </div>        
     </div>   
   
-    <div class="row">
-        <div class="label">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('CoachName') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
   
 <?php
 
@@ -213,18 +208,16 @@ if (intval($count_users)<50) {
 }
 $Categories = SessionManager::get_all_session_category();
 ?>	
-      
-  
         </div>        
     </div>
   
 
 
-    <div class="row">
-        <div class="label">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
            <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
         <option value="0"><?php get_lang('None'); ?></option>       
         <?php 

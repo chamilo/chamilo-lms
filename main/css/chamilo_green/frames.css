@@ -55,38 +55,7 @@ img {
 	float: right;
 	font-weight: bold;
 }
-/* Header 2: Containing My Courses, My Profile,... */
-#header2 {
-	font-size: 12px;
-	padding: 4px;
-	background-color: #4271B5;
-	color: #fff;
-	border-bottom: 1px solid white;
-}
-#header2 .banner_links {
-	margin: 0;
-}
-#header2 a {
-	text-decoration: none;
-	color: #fff;
-	background: transparent;
-	font-weight:normal;
-	font-size: 12px;
-}
-#header2 input.logout {
-	/* makes an input appear like a link in this header */	
-	margin: 0;
-	padding: 0;
-	background-color: transparent;
-	border: none;
-	color: #fff;
-	font-size: 12px;
-	font-weight:normal;
-	font-family: verdana, arial, helvetica, sans-serif;
-}
-#header2 a:hover, #header2 input.logout:hover {
-	border-bottom: 1px solid #fff;
-}
+
 #logout {
 	float: right;
 	width:20%;

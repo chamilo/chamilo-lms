@@ -67,7 +67,7 @@ ul#navigation {
     position: fixed;
     margin: 0px;
     padding: 0px;
-    top: 78px;
+    top: 200px;
     right: -10px;
     list-style: none;
     z-index:9999;
@@ -303,16 +303,6 @@ input.link_alike:hover {
     height:16px;
     padding-right:4%;
 }
-/********************************************************
- *  HEADER 2: Users online, help, student/teacher view  *
- ********************************************************/
-
-#header2 a {
-}
-#header2 a:hover {
-    text-decoration: underline;
-}
-
 #current {
     color:#FFFFFF;
     cursor:pointer;
@@ -323,26 +313,6 @@ input.link_alike:hover {
 	margin-right: 2px;
 }
 
-/* HEADER 4:      */
-
-#header4 {
-	height:26px;
-    padding:0px;
-    background:none;                    
-    width: 100%;	
-    /*margin-top:35px;*/
-    margin-bottom:5px;    
-    background-repeat:repeat-x;
-    color: #009;    
-    border: 1px solid #EEEEEE;
-}
-#header4 a {
-    color: #666;
-}
-#header4 a:hover {
-    text-decoration: none;
-    color: #f3840d;
-}
 /* The tool shortcuts */
 #toolshortcuts {
     clear:right;
@@ -375,9 +345,6 @@ footer a:link, footer a:visited {
     font-weight: bold;
     padding-left: 12px;
 }
-.menusection {
-    width:100%;
-}
 .menusectioncaption {
     background-color: #8A8A8A;
     color: #FFFFFF;
@@ -389,7 +356,7 @@ footer a:link, footer a:visited {
     display:block;
 }
 .menulist {
-    margin: 0 20px;
+    margin: 0px;
     list-style: none;    
     padding: 0;
     list-style-image:none;
@@ -892,8 +859,7 @@ div.admin_section h4 {
 .sectioncomment {
     color: #000000;
     margin: 5px 5px 5px 0px;
-    padding: 5px;
-    font-size: 11px;
+    padding: 5px;    
 }
 .sectionvalue {
     list-style-type: none;
@@ -1704,16 +1670,12 @@ span.radio {
  *  BUTTONS                                          *
  *****************************************************/
 button {
-    margin:2px 5px 3px 3px !important;
+    /* margin:2px 5px 3px 3px; */
     background-color: #F5F5F5;
-
     border-width: 0px;
     border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
     border-style:solid;
-    border-width:1px;
-
-    font-family: bold arial, verdana, helvetica, sans-serif;
-    font-size: 100%;
+    border-width:1px;    
     line-height :130%;
     text-decoration: none;
     color: black;
@@ -1832,9 +1794,7 @@ div#friend-header {
 div#friend-header a {
     padding-right:6px;
 }
-div#friend-container {
-    float:left;
-}
+
 div.image_friend_network {
     float:left;
     /* border:1px solid #CCCCCC; */
@@ -1857,8 +1817,7 @@ div.image_friend_network center.friend {
     overflow:hidden;
     height:30px;
 }
-.friend_invitations {
-    float:left;
+.friend_invitations {    
     margin: 0 0 4px 12px;
 }
 /* button >> */
@@ -2148,7 +2107,7 @@ span.form_required  {
     padding:20px;
 }
 
-#header3 {
+.subnav {
     font-size: 11px;
     font-weight: bold;         
 }
@@ -2189,6 +2148,11 @@ span.form_required  {
   background-image: linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* W3C */
   border: 1px solid #e5e5e5;
   /* end default subnav background colors */
+}
+
+/* fixing gray border next the logout button */
+.subnav .nav-tabs .open .dropdown-toggle, .subnav .nav-pills .open .dropdown-toggle, .nav > .open.active > a:hover {
+    border-color: transparent;
 }
 
 .subnav .nav {

@@ -14,6 +14,9 @@ $language_file = array ('exercice', 'admin', 'course_info', 'coursebackup');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
+
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
@@ -37,7 +40,7 @@ require_once 'classes/CourseRecycler.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 /*		MAIN CODE	*/
 
@@ -62,18 +65,17 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		echo get_lang('NoResourcesToRecycle');
 	} else {
 		Display::display_warning_message(get_lang('RecycleWarning'), false);
-?>
-	<form method="post" action="recycle_course.php">
-	<input type="radio" class="checkbox" id="recycle_option_1" name="recycle_option" value="full_backup" checked="checked"/>
-	<label for="recycle_option_1"><?php echo get_lang('FullRecycle'); ?></label>
-	<br/>
-	<input type="radio" class="checkbox" id="recycle_option_2" name="recycle_option" value="select_items"/>
-	<label for="recycle_option_2"><?php echo get_lang('LetMeSelectItems'); ?></label>
-	<br/>
-	<br/>
-	<button class="save" type="submit"><?php echo get_lang('RecycleCourse'); ?></button>
-	</form>
-<?php
+        
+        
+        $form = new FormValidator('recycle_course', 'post', 'recycle_course.php');
+		$form->addElement('header',get_lang('SelectOptionForBackup'));
+		
+		$form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
+        $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
+        
+        $form->addElement('style_submit_button', 'submit', get_lang('RecycleCourse'), 'class="save"');
+        $form->setDefaults(array('recycle_option' => 'select_items'));
+        $form->display();
 	}
 }
 

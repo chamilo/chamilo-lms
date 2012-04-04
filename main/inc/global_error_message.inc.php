@@ -183,9 +183,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                         <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
                     </div>
 				</div>
-				<div class="clear"></div>
-				<div id="header2"></div>
-				<div id="header3">
+				<div class="clear"></div>				
+				<div class="subnav">
 					<ul>
 						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
 					</ul>

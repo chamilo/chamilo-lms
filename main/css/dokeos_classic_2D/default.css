@@ -423,7 +423,7 @@ ul#navigation .student-connect a {
 ------------------------------------------------------------------------------
 */
 
-#header3 {
+.subnav {
 	background: #E5EDF9; 
     height:auto;
 	border-bottom: 1px solid #4171b5;
@@ -434,23 +434,23 @@ ul#navigation .student-connect a {
 	padding: 0em 0em 0.4em 0em;	
     width:100%;
 }
-#header3 a {
+.subnav a {
 	color: #2754AF;
 	display: block;
 	font-weight: bold;
 	padding: 3px 3px 2px 3px;
 	text-decoration: none;
 }
-#header3 a:hover {
+.subnav a:hover {
 	color: #333;
 }
-#header3 ul {
+.subnav ul {
 	display: inline;
 	list-style-type: none;
 	margin: 0px;
 	padding: 0px 20px 0px 0px;
 }
-#header3 li {
+.subnav li {
 	border-right: solid 1px #73A2B6;
 	color: #73A2B6;
 	display: block;
@@ -459,33 +459,33 @@ ul#navigation .student-connect a {
 	margin: 0px;
 	padding: 0px;
 }
-#header3 li:hover {
+.subnav li:hover {
 	margin: 0px;
 	padding: 0px;
 }
-#header3 #current {
+.subnav #current {
 	background-color: #fff;
 	border-bottom: 1px solid #fff;
 }
-#header3 #current a {
+.subnav #current a {
 	border-bottom: 0px solid #4171b5;
 	color: #2754AF;
 }
-#header3 #current a:hover {
+.subnav #current a:hover {
 	color: #333;
 }
-#header3 .banner_links {
+.subnav .banner_links {
 	margin: 0;
 }
-#header3 input {
+.subnav input {
 	display: block;
 	padding-left: 2px;
 	padding-right: 2px;
 }
-#header3 input:hover {
+.subnav input:hover {
 	color: #333;
 }
-#header3 input.logout {	/* makes an input appear like a link in this header */
+.subnav input.logout {	/* makes an input appear like a link in this header */
 	background-color: transparent;
 	border: none;
 	color: #2754AF;
@@ -497,7 +497,7 @@ ul#navigation .student-connect a {
 	padding-right: 2px;
 	padding-top: 3px;
 }
-#header3 #logout {
+.subnav #logout {
 	margin-top: 0px;
 }
 #logout {

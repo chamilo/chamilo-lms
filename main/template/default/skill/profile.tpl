@@ -2,11 +2,11 @@
 $(document).ready( function() {     
     
     $("#skills").fcbkcomplete({
-        json_url: "{$url}?a=find_skills",
+        json_url: "{{url}}?a=find_skills",
         cache: false,
         filter_case: false,
         filter_hide: true,
-        complete_text:"{'StartToType'|get_lang}",
+        complete_text:"{{'StartToType'|get_lang}}",
         firstselected: true,
         //onremove: "testme",
         onselect:"check_skills",
@@ -36,10 +36,10 @@ $(document).ready( function() {
                 var params = $("#save_profile_form").serialize();          
                       
                 $.ajax({
-                    url: '{$url}?a=save_profile&'+params,
+                    url: '{{url}}?a=save_profile&'+params,
                     success:function(data) {    
                         $("#dialog-form").dialog("close");
-                        alert("{"Saved"|get_lang}");
+                        alert("{{"Saved"|get_lang}}");
                     }                           
                 });
             },            
@@ -63,11 +63,11 @@ function check_skills() {
         var skill_id = $(this).val();        
         if (skill_id != "" ) {            
             $.ajax({ 
-                url: "{$url}?a=skill_exists", 
+                url: "{{url}}?a=skill_exists", 
                 data: "skill_id="+skill_id,
                 success: function(return_value) {                    
                 if (return_value == 0 ) {
-                        alert("{'SkillDoesNotExist'|get_lang}");                                                
+                        alert("{{'SkillDoesNotExist'|get_lang}}");                                                
                         //Deleting select option tag
                         $("#skills option[value="+skill_id+"]").remove();                        
                         //Deleting holder
@@ -95,85 +95,86 @@ function checkLength( o, n, min, max ) {
     }
 }    
 </script>
-{$form}
+{{form}}
 
-{if !empty($search_skill_list) }
+{% if search_skill_list is not null %}    
     <div class="skills-skills">
-        <h3>{"Skills"|get_lang}</h3>
+        <h3>{{"Skills"|get_lang}}</h3>
         <ul class="holder">             
-            {foreach $search_skill_list as $search_skill_id}        
+            {% for search_skill_id in search_skill_list %}        
                 <li class="bit-box">
-                    {$skill_list[$search_skill_id].name}
-                    <a class="closebutton" href="?a=remove_skill&id={$search_skill_id}"></a>
+                    {{ skill_list[search_skill_id].name}}
+                    <a class="closebutton" href="?a=remove_skill&id={{search_skill_id}}"></a>
                 </li>        
-            {/foreach}
+            {% endfor %}
         </ul>
-        <a id="add_profile" class="btn" href="#"> {"SaveThisSearch"|get_lang}</a>
+        <a id="add_profile" class="btn" href="#"> {{"SaveThisSearch"|get_lang}}</a>
     </div>
-{/if}
+{% endif %}
 
 
-{if !empty($profiles) }
+{% if profiles is not null %}    
     <div class="skills-profiles">
-        <h3>{"SkillProfiles"|get_lang}</h3>
+        <h3>{{"SkillProfiles"|get_lang}}</h3>
         <ul class="holder">
-            {foreach $profiles as $profile}        
+            {%for profile in profiles %}        
                 <li class="bit-box">
-                    <a href="?a=load_profile&id={$profile.id}">{$profile.name}</a>                
+                    <a href="?a=load_profile&id={{profile.id}}">{{profile.name}}</a>
                 </li>        
-            {/foreach}
+            {% endfor %}
         </ul>    
     </div>
-{/if}
+{% endif %}
 
-
-{if !empty($order_user_list) }
+{% if order_user_list is not null %}
     <div class="skills-users">
-    {foreach $order_user_list as $count => $user_list}
-        <h2> {"Matches"|get_lang} {$count}/{$total_search_skills} </h2>
-        {foreach $user_list as $user}
+    {% for count, user_list in order_user_list %}
+        <h2> {{"Matches"|get_lang}} {{count}}/{{total_search_skills}} </h2>
+        {% for user in user_list %}
             <div class="ui-widget" style="width:400px">
                 <div class="ui-widget-header">                    
                     <h3>
-                        <img src="{$user['user'].avatar_small}" /> {$user['user'].complete_name} ({$user['user'].username})
+                        <img src="{{user.user.avatar_small}}" /> {{user['user'].complete_name}} ({{user['user'].username}})
                     </h3>
                 </div>
                 <div class="ui-widget-content ">
-                    <h4>{"Skills"|get_lang} {$user.total_found_skills} / {$total_search_skills}</h4>
+                    <h4>{{"Skills"|get_lang}} {{user.total_found_skills}} / {{total_search_skills}}</h4>
                     <ul>                
-                        {foreach $user['skills'] as $skill_data}                 
+                        {% for skill_data in user.skills %}                 
                             <li>
-                                {if !empty({$skill_list[$skill_data.skill_id].name})}
-                                    <span class="label_tag skill">{$skill_list[$skill_data.skill_id].name}</span>
-                                {else}
-                                    {"SkillNotFound"|get_lang}
-                                {/if}
-                                {if $skill_data.found}                                     
-                                     *{"IHaveThisSkill"|get_lang}*
-                                {/if}
-                            </li>                    
-                        {/foreach}
+                                {% if skill_list[skill_data.skill_id].name is not null %}                                    
+                                    <span class="label_tag skill">{{skill_list[skill_data.skill_id].name}}</span>
+                                {% else %} 
+                                    {{"SkillNotFound"|get_lang}}
+                                {% endif %}
+                                {# if $skill_data.found 
+                                     IHaveThisSkill"|get_lang
+                                #}
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>    
             </div>  
-        {/foreach}
-    {/foreach}        
+        {% endfor %}
+    {% endfor %}
     </div>
-{else}
-    <div class="warning-message">{"NoResults"|get_lang}</div>
-{/if}
+{% else %}      
+    {% if search_skill_list is null %}
+        <div class="warning-message">{{"NoResults"|get_lang}}</div>
+     {% endif %}     
+{% endif %}
 
 <div id="dialog-form" style="display:none;">    
     <form id="save_profile_form" class="form-horizontal" name="form">       
         <fieldset>
             <div class="control-group">            
-                <label class="control-label" for="name">{"Name"|get_lang}</label>            
+                <label class="control-label" for="name">{{"Name"|get_lang}}</label>            
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />             
                 </div>
             </div>        
             <div class="control-group">            
-                <label class="control-label" for="name">{"Description"|get_lang}</label>            
+                <label class="control-label" for="name">{{"Description"|get_lang}}</label>            
                 <div class="controls">
                     <textarea name="description" id="description" class="span2"  rows="7"></textarea>
                 </div>

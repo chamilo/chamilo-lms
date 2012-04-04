@@ -17,6 +17,9 @@ $language_file = 'survey';
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_SURVEY;
+
+api_protect_course_script(true);
 
 // Including additional libraries
 require_once 'survey.lib.php';

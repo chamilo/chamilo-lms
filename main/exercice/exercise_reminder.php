@@ -232,7 +232,7 @@ foreach ($question_list as $questionId) {
 
 echo Display::div($table, array('class'=>'span10'));
 
-$exercise_actions = Display::url(get_lang('ValidateAnswers'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-success'));
+$exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-success'));
 $exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn'));
 
 echo Display::div('', array('class'=>'clear'));

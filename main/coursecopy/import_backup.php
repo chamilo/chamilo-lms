@@ -16,6 +16,8 @@ $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Including the global initialization file
 require '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
@@ -46,7 +48,7 @@ require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
-api_display_tool_title($nameTools);
+echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
@@ -119,11 +121,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 	$backups = CourseArchiver::get_available_backups($is_platformAdmin?null:$user['user_id']);
 	$backups_available = count($backups) > 0;
 
-	echo '<span id="page_title">'.get_lang('SelectBackupFile').'</span><br /><br />';
-
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 	$form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');
-
+    $form->addElement('header', get_lang('SelectBackupFile'));
 	$renderer = $form->defaultRenderer();
 	$renderer->setElementTemplate('<div>{element}</div> ');
 

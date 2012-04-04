@@ -13,4 +13,3 @@ if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_mess
 	header('Location:inbox.php');
 }
 exit;
-?>

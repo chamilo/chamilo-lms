@@ -122,7 +122,7 @@ if (!empty($message)) {
     echo $message;
 }
 
-echo Display::page_subheader(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
+echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
 ?>
 <!-- General properties -->
 <table class="data_table" width="100%">

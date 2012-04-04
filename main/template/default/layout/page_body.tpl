@@ -1,20 +1,20 @@
-{* Actions *}
-{if (!empty($actions)) }
+{#  Actions  #}
+{% if actions is not null %}
     <div class="actions">
-        {$actions}	
+        {{ actions }}
     </div>
-{/if}
+{% endif %}
 
-{* Page header*}
-{if !empty($header) }
+{#  Page header #}
+{% if header is not null %}    
     <div class="page-header">
-        <h1>{$header}</h1>
+        <h1>{{ header }}</h1>
     </div>
-{/if}
+{% endif %}
 
-{* Show messages*}
-{if !empty($message) }
+{#  Show messages #}
+{% if message is not null %}    
     <section id="messages">
-        {$message}
+        {{ message}}
     </section>
-{/if}
+{% endif %}

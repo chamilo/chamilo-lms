@@ -40,45 +40,7 @@ $(document).ready(function (){
 		}
 	});
 });
-function change_panel (mypanel_id,myuser_id) {
-		$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-			$("#id_content_panel").html("'.get_lang('Loading', '').'"); },
-			type: "POST",
-			url: "main/messages/send_message.php",
-			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
-			success: function(datos) {
-			 $("div#id_content_panel_init").html(datos);
-			 $("div#display_response_id").html("");
-			}
-		});
-}
-function action_database_panel(option_id,myuser_id) {
 
-	if (option_id==5) {
-		my_txt_subject=$("#txt_subject_id").val();
-	} else {
-		my_txt_subject="clear";
-	}
-	my_txt_content=$("#txt_area_invite").val();
-	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageEmptyMessageOrSubject', '').'");
-		setTimeout("message_information_display()",3000);
-		return false;
-	}
-	$.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-		$("#display_response_id").html("'.get_lang('Loading', '').'"); },
-		type: "POST",
-		url: "main/messages/send_message.php",
-		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
-		success: function(datos) {
-		 $("#display_response_id").html(datos);
-		}
-	});
-}
 function display_hide () {
 		setTimeout("hide_display_message()",3000);
 }

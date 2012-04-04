@@ -2,18 +2,19 @@
 /* For licensing terms, see /license.txt */
 /* 
  * @author Julio Montoya <gugli100@gmail.com>
+ *  @todo better organization of the class, methods and variables 
  * 
  **/
 
- /* @todo better organization of the class methods and variables */
-
-// Load Smarty library
-require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
+ // Load Smarty library
+//require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
+require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
-class Template extends Smarty {
+//class Template extends Smarty {
+class Template {    
 	
 	var $style = 'default'; //see the template folder 
     var $preview_theme = null; 
@@ -22,20 +23,58 @@ class Template extends Smarty {
 	var $show_header;
 	var $show_footer;
     var $help;
-    var $menu_navigation = array();
+    var $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
     var $show_learnpath = false; // This is a learnpath section or not?
     var $plugin = null;
     var $course_id = null;
     var $user_is_logged_in = false;
+    var $twig = null;
+    
+    var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
-        parent::__construct();
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {       
         
+        //parent::__construct();
+        
+        //Twig settings
+        
+        Twig_Autoloader::register();
+        
+        $template_paths = array(
+                api_get_path(SYS_CODE_PATH).'template', 
+                api_get_path(SYS_PLUGIN_PATH) //plugin folder
+        );
+        
+        $loader = new Twig_Loader_Filesystem($template_paths);
+        
+        $this->twig = new Twig_Environment($loader, array(
+            //'cache' => api_get_path(SYS_ARCHIVE_PATH),
+            'autoescape' => false,
+        ));
+        
+        $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
+        $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
+        $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
+        
+        
+        // Smarty like
+        $lexer = new Twig_Lexer($this->twig, array(
+            //'tag_comment'  => array('{*', '*}'),
+            //'tag_comment'  => array('{#', '#}'),
+            //'tag_block'    => array('{', '}'),
+            //'tag_variable' => array('{$', '}'),
+        ));
+        
+        $this->twig->setLexer($lexer);
+        
+        //--------
+   
         //Page title
 		$this->title = $title;        
 		$this->show_learnpath = $show_learnpath;
         
 		//Smarty 3 configuration
+        /*
         $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
         $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
         $this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));		
@@ -46,28 +85,27 @@ class Template extends Smarty {
 		$this->caching 			= false;
 		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;		
 		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
-		//$this->cache_lifetime 	= 120;
+		//$this->cache_lifetime 	= 120;*/
 		
 		//Setting system variables
 		$this->set_system_parameters();	
 		
 		//Setting user variables 
 		$this->set_user_parameters();
-                        
-        //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
+        
+        //Setting course variables 
+		$this->set_course_parameters();    
 		
 		//header and footer are showed by default
 		$this->set_footer($show_footer);        
 		$this->set_header($show_header);
 		
 		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
-		$this->registerPlugin("modifier","get_lang", "get_lang");
+		//$this->registerPlugin("modifier","get_lang", "get_lang");
 		
 		//Not recomended to use get_path, use {$_p.'xxx'} see the set_system_parameters()
-		$this->registerPlugin("modifier","get_path", "api_get_path");
-		$this->registerPlugin("modifier","get_setting", "api_get_setting");
+		//$this->registerPlugin("modifier","get_path", "api_get_path");
+		//$this->registerPlugin("modifier","get_setting", "api_get_setting");
 		
 		//To load a smarty plugin
 		//$this->loadPlugin('smarty_function_get_lang');
@@ -81,11 +119,13 @@ class Template extends Smarty {
 		$this->assign('style', $this->style);
         
         //Chamilo plugins
-        $this->plugin = new AppPlugin();
-        $plugin_blocks = $this->plugin->get_plugin_blocks();        
-        foreach ($plugin_blocks as $block) {
-            $this->set_plugin_block($block);
-        }  
+        if ($this->show_header) {
+            $this->plugin = new AppPlugin();
+            $plugin_regions = $this->plugin->get_plugin_regions();        
+            foreach ($plugin_regions as $region) {
+                $this->set_plugin_region($region);
+            }  
+        }
 	}
     
     function set_help($help_input = null) {        
@@ -213,8 +253,16 @@ class Template extends Smarty {
 		
 	function get_template($name) {
 		return $this->style.'/'.$name;
-	}	
+    }	
+    
+    /* Set course parameters */
+    private function set_course_parameters() {                        
+        //Setting course id
+        $course_id = api_get_course_int_id();
+        $this->course_id = $course_id;
+    }
 	
+    /* Set user parameters */
 	private function set_user_parameters() {
 		$user_info = array();
 		$user_info['logged'] = 0;
@@ -232,9 +280,10 @@ class Template extends Smarty {
             $this->user_is_logged_in = true;
 		}		
         //Setting the $_u array that could be use in any template 
-		$this->assign('_u', $user_info); 
+		$this->assign('_u', $user_info);         
 	}	
 	
+    /* Set system parameters */
 	private function set_system_parameters() {
 		global $_configuration;
 		
@@ -243,7 +292,8 @@ class Template extends Smarty {
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
-                    'web_img' 		=> api_get_path(WEB_IMG_PATH)					
+                    'web_img' 		=> api_get_path(WEB_IMG_PATH),
+                    'web_plugin'    => api_get_path(WEB_PLUGIN_PATH)                    
 					);
 		$this->assign('_p', $_p);
 		
@@ -285,20 +335,21 @@ class Template extends Smarty {
 		$this->assign('css_style', $style_html);
 		
 		$style_print = '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";'."\n";
-		$this->assign('css_style_print', $style_print);
-        $this->assign('style_print',     $style_print);        
         
-        // Header 1        
-		$header1 = show_header_1($language_file, $nameTools, $this->theme);
-		$this->assign('header1', $header1);
+		$this->assign('css_style_print', $style_print);        
+        
+        // Logo
+		$logo = return_logo($this->theme);
+		$this->assign('logo', $logo);
     }
     
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
+        
 		global $lp_theme_css, $mycoursetheme, $user_theme;
-		global $httpHeadXtra, $htmlHeadXtra, $_course, $_user, $text_dir, $_user, 
-				$_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
+		global $httpHeadXtra, $htmlHeadXtra, $_course, $text_dir,
+				$interbreadcrumb, $charset, $language_file, $noPHP_SELF;		
 		        
         $navigation            = return_navigation_array();        
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -325,6 +376,7 @@ class Template extends Smarty {
         
 		$title_list[] = api_get_setting('Institution');
 		$title_list[] = api_get_setting('siteName');
+        
 		if (!empty($course_title)) {
 			$title_list[] = $course_title;
 		}
@@ -403,6 +455,7 @@ class Template extends Smarty {
 			$css_file_to_string .= api_get_css($css_file);
 		}
         
+        // @todo move this somewhere else
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>                
@@ -457,7 +510,7 @@ class Template extends Smarty {
         $this->set_help();
         
 		$bug_notification_link = '';
-		if (api_get_setting('show_link_bug_notification') == 'true') {
+		if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
 			$bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
 		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang('ReportABug').'"/></a>
@@ -467,7 +520,7 @@ class Template extends Smarty {
 		$this->assign('bug_notification_link', $bug_notification_link);
 		
 		$notification   = return_notification_menu();
-		$menu           = return_menu();
+		$menu           = return_menu();        
 		$breadcrumb     = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
 		
 		$this->assign('notification_menu', $notification);
@@ -521,12 +574,11 @@ class Template extends Smarty {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
                     if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs').' : <ul>';
-                        $tutor_data .= '<li>'.implode("<li>", $email_link);
-                        $tutor_data .= '</ul>';
+                        $tutor_data .= get_lang('Coachs').' : ';
+                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);                        
                     } elseif (count($coachs_email) == 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= implode(" ", $email_link);
+                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
                     }
@@ -541,23 +593,18 @@ class Template extends Smarty {
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
-                if (!empty($mail)) {
-                    if (count($mail) > 1) {
-                        $teacher_data .= get_lang('Teachers').' : <ul>';
-                        foreach ($mail as $value => $key) {
-                            foreach ($key as $email => $name) {
-                                    $teacher_data .= '<li>'.Display::encrypted_mailto_link($email, $name).'</li>';
-                            }
-                        }
-                        $teacher_data .= '</ul>';
-                    } else {
-                        $teacher_data .= get_lang('Teacher').' : ';
-                        foreach ($mail as $value => $key) {
-                                foreach ($key as $email => $name) {
-                                        $teacher_data .= Display::encrypted_mailto_link($email, $name).'<br />';
-                                }
+                if (!empty($mail)) {                                         
+                    $teachers_parsed = array();
+                    foreach ($mail as $value) {
+                        foreach ($value as $email => $name) {
+                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
                         }
                     }
+                    $label = get_lang('Teacher');
+                    if (count($mail) > 1) { 
+                        $label = get_lang('Teachers');    
+                    }
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, USER_SEPARATOR);                
                 }                
                 $this->assign('teachers', $teacher_data);     
             }
@@ -578,14 +625,31 @@ class Template extends Smarty {
     }
     
     /* Sets the plugin content in a Smarty variable */
-    function set_plugin_block($plugin_block) {
-        if (!empty($plugin_block)) {          
-            $block_content = $this->plugin->load_block($plugin_block, $this);    
-            if (!empty($block_content)) {
+    function set_plugin_region($plugin_region) {
+        if (!empty($plugin_region)) {          
+            $content = $this->plugin->load_region($plugin_region, $this);    
+            if (!empty($content)) {
                 //Assigning the plugin with the smarty template
-                $this->assign('plugin_'.$plugin_block, $block_content);                
+                $this->assign('plugin_'.$plugin_region, $content);                
             }
         }
         return null;
+    }
+    
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
+        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);
+        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);        
+        $template = $this->twig->loadTemplate($template);    
+        return $template->render($this->params);
+    }
+    
+    public function assign($tpl_var, $value = null, $nocache = false) {
+        //parent::assign($tpl_var, $value, $nocache);
+        $this->params[$tpl_var] = $value;
+    }
+    
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {
+        //parent::display($template, $cache_id, $compile_id, $parent);             
+        echo $this->twig->render($template, $this->params);
     }
 }

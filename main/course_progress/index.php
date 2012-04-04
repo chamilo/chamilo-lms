@@ -23,6 +23,8 @@ require_once 'thematic_controller.php';
 // current section
 $this_section = SECTION_COURSES;
 
+$current_course_tool  = TOOL_COURSE_PROGRESS;
+
 // protect a course script
 api_protect_course_script(true);
 

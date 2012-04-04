@@ -21,5 +21,4 @@ if (!is_object($PHPCAS_CLIENT) ) {
 	phpCAS::setNoCasServerValidation();
 }
 phpCAS::forceAuthentication();
-//echo 'ici';
 header('Location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));

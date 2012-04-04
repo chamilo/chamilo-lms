@@ -12,6 +12,10 @@ $language_file= 'gradebook';
 $cidReset= true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_GRADEBOOK;
+
+api_protect_course_script();
+
 
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';

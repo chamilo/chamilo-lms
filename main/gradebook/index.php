@@ -10,6 +10,9 @@ $language_file= 'gradebook';
 $cidReset= false;
 $_in_course = true;
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_GRADEBOOK;
+
+api_protect_course_script();
 
 $course_code 	= api_get_course_id();
 $stud_id        = api_get_user_id();
@@ -873,5 +876,5 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 		}
 	}
 }
-echo '<div id="chart3"></div>';
+//echo '<div id="chart3"></div>';
 Display :: display_footer();

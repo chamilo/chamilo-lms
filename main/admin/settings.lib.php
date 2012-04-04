@@ -49,7 +49,7 @@ function handle_regions() {
     /* We display all the possible plugins and the checkboxes */
     
     $plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }
@@ -60,15 +60,17 @@ function handle_regions() {
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
-            echo '<tr>';
+            if (isset($_GET['name']) && $_GET['name'] == $plugin) {
+                echo '<tr class="row_selected">';
+            } else {
+                echo '<tr>';
+            }
             echo '<td>';            
             echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
             echo '<p>'.$plugin_info['comment'].'</p>';              
             echo '</td><td>';                        
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
-            
-            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));
-    
+            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));    
             echo '</td></tr>';
         }
     }
@@ -117,10 +119,9 @@ function handle_plugins() {
     echo get_lang('Description');    
     echo '</th>';
     echo '</tr>';
-
     
     $plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_blocks();
+    $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }
@@ -131,7 +132,12 @@ function handle_plugins() {
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
-            echo '<tr>';
+            if (in_array($plugin, $installed_plugins)) {
+                echo '<tr class="row_selected">';
+            } else {
+                echo '<tr>';
+            }
+            //echo '<tr>';
             echo '<td>';
             //Checkbox
             if (in_array($plugin, $installed_plugins)) {              
@@ -149,6 +155,7 @@ function handle_plugins() {
             echo '<div class="btn-group">';
             if (in_array($plugin, $installed_plugins)) {     
                  echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn'));
+                 echo Display::url(get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn'));
             }
             
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {

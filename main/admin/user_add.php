@@ -128,14 +128,24 @@ if (api_get_setting('login_is_email') != 'true') {
 // Password
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
+$nb_ext_auth_source_added = 0;
 if (count($extAuthSource) > 0) {
-	$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
 	$auth_sources = array();
 	foreach($extAuthSource as $key => $info) {
-		$auth_sources[$key] = $key;
+	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
+	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
+	    // extAuthSource always on for CAS even if not activated
+	    // same action for file user_edit.php
+	    if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
+		    $auth_sources[$key] = $key;
+    		$nb_ext_auth_source_added++;
+		}
 	}
-	$group[] =& HTML_QuickForm::createElement('select', 'auth_source', null, $auth_sources);
-	$group[] =& HTML_QuickForm::createElement('static', '', '', '<br />');
+	if ($nb_ext_auth_source_added > 0) {
+    	$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+    	$group[] =& HTML_QuickForm::createElement('select', 'auth_source', null, $auth_sources);
+    	$group[] =& HTML_QuickForm::createElement('static', '', '', '<br />');
+    }
 }
 $group[] =& HTML_QuickForm::createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] =& HTML_QuickForm::createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);

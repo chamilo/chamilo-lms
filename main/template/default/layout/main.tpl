@@ -1,7 +1,8 @@
-{block name="header"}{/block}
+{% block header %}
+{% endblock %}
 
-{* body *}
-{block name="body"}{/block}
+{% block body %}
+{% endblock %}
 
-{* footer *}
-{block name="footer"}{/block}
+{% block footer %}
+{% endblock %}

@@ -21,12 +21,15 @@ $language_file = 'group';
 
 require '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_GROUP;
+
+// Notice for unauthorized people.
+api_protect_course_script(true);
 
 $nameTools = get_lang('GroupOverview');
 
 /*	Libraries */
 
-include_once api_get_path(LIBRARY_PATH).'course.lib.php';
 include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 

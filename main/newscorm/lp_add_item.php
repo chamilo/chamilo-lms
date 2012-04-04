@@ -23,70 +23,79 @@ include 'learnpath_functions.inc.php';
 include 'resourcelinker.inc.php';
 
 $language_file = 'learnpath';
-
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 
-var temp=false;
-var temp2=false;
+var temp    = false;
 var use_document_title='.api_get_setting('use_document_title').';
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 function FCKeditor_OnComplete( editorInstance ) {
-    editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-    document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+    editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title) ;
+    document.getElementById(\'frmModel\').innerHTML = "<iframe id=\'frame_template\' name=\'my_frame_template\' height=890px width=220px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+    loaded = true;
 }
 
-function check_for_title() {
-        if (temp) {
-            // This functions shows that you can interact directly with the editor area
-            // DOM. In this way you have the freedom to do anything you want with it.
+var hide_bar = function() {    
+    $("#main_content .span3").hide(); 
+    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
+}
 
-            // Get the editor instance that we want to interact with.
-            var oEditor = FCKeditorAPI.GetInstance(\'content_lp\') ;
+function check_for_title() {    
+    
+    if (temp) {  
+    
+        // This functions shows that you can interact directly with the editor area
+        // DOM. In this way you have the freedom to do anything you want with it.
 
-            // Get the Editor Area DOM (Document object).
-            var oDOM = oEditor.EditorDocument ;
+        // Get the editor instance that we want to interact with.
+        var oEditor = FCKeditorAPI.GetInstance(\'content_lp\') ;
 
-            var iLength ;
-            var contentText ;
-            var contentTextArray;
-            var bestandsnaamNieuw = "";
-            var bestandsnaamOud = "";
+        // Get the Editor Area DOM (Document object).
+        var oDOM = oEditor.EditorDocument ;
 
-            // The are two diffent ways to get the text (without HTML markups).
-            // It is browser specific.
+        var iLength ;
+        var contentText ;
+        var contentTextArray;
+        var bestandsnaamNieuw = "";
+        var bestandsnaamOud = "";
 
-            if( document.all )		// If Internet Explorer.
+        // The are two diffent ways to get the text (without HTML markups).
+        // It is browser specific.
+
+        if( document.all )		// If Internet Explorer.
+        {
+            contentText = oDOM.body.innerText ;
+        }
+        else					// If Gecko.
+        {
+            var r = oDOM.createRange() ;
+            r.selectNodeContents( oDOM.body ) ;
+            contentText = r.toString() ;
+        }
+
+        var index=contentText.indexOf("/*<![CDATA");
+        contentText=contentText.substr(0,index);
+
+        // Compose title if there is none
+        contentTextArray = contentText.split(\' \') ;
+        var x=0;
+        for(x=0; (x<5 && x<contentTextArray.length); x++) {
+            if(x < 4)
             {
-                contentText = oDOM.body.innerText ;
+                bestandsnaamNieuw += contentTextArray[x] + \' \';
             }
-            else					// If Gecko.
+            else
             {
-                var r = oDOM.createRange() ;
-                r.selectNodeContents( oDOM.body ) ;
-                contentText = r.toString() ;
-            }
-
-            var index=contentText.indexOf("/*<![CDATA");
-            contentText=contentText.substr(0,index);
-
-            // Compose title if there is none
-            contentTextArray = contentText.split(\' \') ;
-            var x=0;
-            for(x=0; (x<5 && x<contentTextArray.length); x++) {
-                if(x < 4)
-                {
-                    bestandsnaamNieuw += contentTextArray[x] + \' \';
-                }
-                else
-                {
-                    bestandsnaamNieuw += contentTextArray[x];
-                }
+                bestandsnaamNieuw += contentTextArray[x];
             }
         }
-        temp=true;
     }
+    temp=true;
+
+        
+        
+}
 
 function InnerDialogLoaded() {
     if (document.all) {
@@ -118,7 +127,6 @@ $_SESSION['oLP']->get_js_dropdown_array() .
 '}
 
 $(function() {
-
     if ($(\'#previous\')) {
         if(\'parent is\'+$(\'#idParent\').val()) {
             load_cbo($(\'#idParent\').val());
@@ -137,13 +145,13 @@ $(function() {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp 	 = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
+
+
+$type = isset($_GET['type']) ? $_GET['type'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
@@ -180,10 +188,11 @@ if (!empty($gradebook) && $gradebook == 'view') {
         );
 }
 
+
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
 
-switch($_GET['type']) {
+switch ($type) {
     case 'chapter':
         $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewChapter'));
         break;
@@ -226,6 +235,20 @@ function confirmation(name) {
         return false;
     }
 }
+
+$(document).ready(function() {
+    
+    $("#hide_bar_template").toggle(
+        function() { 
+            $("#main_content .span3").hide(); 
+            $(this).css({'background-image' : 'url("../img/hide2.png")'})
+        },
+        function() { 
+            $("#main_content .span3").show(); 
+            $(this).css('background-image', 'url("../img/hide0.png")'); 
+        }            
+    );    
+});
 </script>
 <?php
 
@@ -233,11 +256,11 @@ function confirmation(name) {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid">';
+echo '<div class="row-fluid" style="overflow:hidden">';
 echo '<div class="span3">';
 
 // Show the template list.
-if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])) {
+if ($type == 'document' && !isset($_GET['file'])) {
     $count_items = count($_SESSION['oLP']->ordered_items);
     $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ' : ' class="lp_tree" ';
     echo '<div  '.$style.'>';
@@ -245,7 +268,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])
     echo $_SESSION['oLP']->build_tree();
     echo '</div>';
     // Show the template list.
-    echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
+    echo '<p style="border-bottom:1px solid #ddd; margin:0; padding:2px;"></p>';
     echo '<br />';
     echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 } else {
@@ -254,31 +277,35 @@ if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])
     echo $_SESSION['oLP']->build_tree();
     echo '</div>';
 }
-
 echo '</div>';
 
-echo '<div class="span9">';
+//hide bar div
+if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
+    echo '<div id="hide_bar_template" class="span1"></div>';
+}
+
+echo '<div class="span8">';
 
     if (isset($new_item_id) && is_numeric($new_item_id)) {
-        switch($_GET['type']) {
+        switch ($type) {
             case 'chapter':
                 echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);
                 Display::display_confirmation_message(get_lang('NewChapterCreated'));
                 break;
             case TOOL_LINK:
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewLinksCreated'));
                 break;
             case TOOL_STUDENTPUBLICATION:
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
                 break;
             case 'module':
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewModuleCreated'));
                 break;
             case TOOL_QUIZ:
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewExerciseCreated'));
                 break;
             case TOOL_DOCUMENT:
@@ -286,21 +313,21 @@ echo '<div class="span9">';
                 echo $_SESSION['oLP']->display_item($new_item_id, true);
                 break;
             case TOOL_FORUM:
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewForumCreated'));
                 break;
             case 'thread':
-                echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
+                echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);
                 Display::display_confirmation_message(get_lang('NewThreadCreated'));
                 break;
         }
     } else {
-        switch($_GET['type']) {
+        switch ($type) {
             case 'chapter':
-                echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewChapter'));
+                echo $_SESSION['oLP']->display_item_form($type, get_lang('EnterDataNewChapter'));
                 break;
             case 'module':
-                echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewModule'));
+                echo $_SESSION['oLP']->display_item_form($type, get_lang('EnterDataNewModule'));
                 break;
             case 'document':
                 if (isset($_GET['file']) && is_numeric($_GET['file'])) {

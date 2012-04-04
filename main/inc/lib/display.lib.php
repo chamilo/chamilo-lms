@@ -1371,4 +1371,40 @@ class Display {
         return $div;
     }
     
+    function badge($count) {        
+        $count = intval($count);
+        if (!empty($count)) {
+            return ' <span class="badge badge-warning">'.$count.'</span>';
+        }
+        return '';
+    }
+    
+    function label($content, $type = 'default') {  
+        $class = '';
+        switch ($type) {
+            case 'success':
+                $class = 'label-success';
+                break;
+            case 'warning':
+                $class = 'label-warning';
+                break;
+            case 'important':
+                $class = 'label-important';
+                break;
+            case 'info':
+                $class = 'label-info';
+                break;
+            case 'inverse':
+                $class = 'label-inverse';
+                break;            
+        }
+        
+        $html = '';
+        if (!empty($content)) {
+            $html = '<span class="label '.$class.'">';
+            $html .= $content;
+            $html .='</span>';
+        }
+        return $html;        
+    }    
 } //end class Display

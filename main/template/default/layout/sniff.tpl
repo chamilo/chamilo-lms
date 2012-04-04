@@ -1,4 +1,4 @@
-{literal}
+{% raw %}
 <script LANGUAGE="JavaScript">
 var nav ="";
 var screen_size_w;
@@ -113,7 +113,7 @@ function sendSniff(){
         document.sniff_nav_form.submit(); 
 }
 </script>
-{/literal}
+{% endraw %}
 
 <form name="sniff_nav_form" method="POST">
 <input type="hidden" name="sniff_navigator">
@@ -127,8 +127,8 @@ function sendSniff(){
 <input type="hidden" name="sniff_navigator_java">
 <input type="hidden" name="sniff_navigator_java_sun_ver">
 </form>
-{if empty($smarty.post.sniff_navigator) }
+{#
 	<script>
     	sendSniff();
 	</script>
-{/if}
+#}

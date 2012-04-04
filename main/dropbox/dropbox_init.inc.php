@@ -35,8 +35,7 @@ $language_file = 'dropbox';
 
 // including the basic Chamilo initialisation file
 require '../inc/global.inc.php';
-
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+$current_course_tool  = TOOL_DROPBOX;
 
 // the dropbox configuration parameters
 require_once 'dropbox_config.inc.php';

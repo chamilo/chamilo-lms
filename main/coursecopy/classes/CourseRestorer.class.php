@@ -1135,7 +1135,7 @@ class CourseRestorer
 
 		$new_id=0;
 
-		if(is_object($question)) {
+		if (is_object($question)) {
 			if ($question->is_restored()) {
 				return $question->destination_id;
 			}
@@ -1158,8 +1158,7 @@ class CourseRestorer
 						extra='".self::DBUTF8escapestring($question->extra)."'";
 			Database::query($sql);
 			$new_id = Database::insert_id();
-
-
+            
 			if ($question->quiz_type == MATCHING) { // for answer type matching
                 $answerid = 0;
                 $t = array();
@@ -1167,8 +1166,7 @@ class CourseRestorer
                     $t[$answer['position']] = $answer;
                 }
                 foreach ($t as $index => $answer) {
-                    $sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '".$index."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
-                    
+                    $sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '".$index."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";                    
 					Database::query($sql);
 				}
 			} else {
@@ -1193,13 +1191,14 @@ class CourseRestorer
                     $old_id = $item['id'];                    
                     unset($item['id']);                    
                     $item['question_id'] = $new_id;
+                    $item['c_id'] = $this->destination_course_id;
                     $question_option_id = Database::insert($table_options, $item);
                     $old_option_ids[$old_id] = $question_option_id;
-                }               
-                $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));
+                }                               
+                $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));                
                 foreach ($new_answers as $answer_item) {                	
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update($table_ans, $params, array('id = ?'=>$answer_item['id']));
+                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
                 }                
             }            
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
@@ -1291,11 +1290,9 @@ class CourseRestorer
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id) {
 								$qid = $this->restore_survey_question($question_id, $new_id);
-								$sql = "UPDATE ".$table_que." " .
-										"SET survey_id = ".$new_id." WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
+								$sql = "UPDATE ".$table_que." SET survey_id = ".$new_id." WHERE c_id = ".$this->destination_course_id." AND question_id = $qid";
 								Database::query($sql);
-								$sql = "UPDATE ".$table_ans." ".
-										"SET survey_id = ".$new_id." WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
+								$sql = "UPDATE ".$table_ans." SET survey_id = ".$new_id." WHERE  c_id = ".$this->destination_course_id." AND  question_id = $qid";
 								Database::query($sql);
 							}
 

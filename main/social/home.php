@@ -25,19 +25,6 @@ if (api_get_setting('allow_social_tool') !='true' ){
     api_not_allowed();
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-
-function show_icon_edit(element_html) {
-	ident="#edit_image";
-	$(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}
-
-</script>';
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {	
 	$form = new FormValidator('profile', 'post', 'home.php', null, array());
@@ -68,7 +55,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
 $social_left_content = SocialManager::show_social_menu('home');	
-$social_right_content .= '<div class="social_user_information span4">';            
+$social_right_content .= '<div class="span5">';            
 $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
 			
 // information current user		       
@@ -80,8 +67,8 @@ $social_right_content .= '<div>
     <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
     </div>
     <div class="box_description_group_actions">
-    <a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-        '.Display::return_icon('profile_edit.png', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').'
+    <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+        '.get_lang('EditProfile').'
     </a>
     </div>';
                   
@@ -102,8 +89,7 @@ $social_right_content .= '<div>
             $social_right_content .= '</div>';
                  
             //Search box
-			$social_right_content .= '<div class="span4">';	
-					
+			$social_right_content .= '<div class="span4">';					
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
     			

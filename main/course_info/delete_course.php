@@ -15,10 +15,11 @@
 $language_file = array('admin', 'course_info');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 $this_section = SECTION_COURSES;
+$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 $current_course_code = $_course['official_code'];
 $current_course_name = $_course['name'];
@@ -29,9 +30,7 @@ if (!api_is_allowed_to_edit()) {
 $tool_name = get_lang('DelCourse');
 
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-
 	CourseManager :: delete_course($_course['sysCode']);
-
 	$obj_cat = new Category();
 	$obj_cat->update_category_delete($_course['sysCode']);
 
@@ -39,15 +38,17 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
 	unset($_course);
 	unset($_cid);
 	$noPHP_SELF = true;
-	$message = get_lang('Course').' &quot;'.$current_course_name.'&quot; ('.$current_course_code.') '.get_lang('HasDel');
+	$message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
+    $message .=get_lang('HasDel');
 	$message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').' '.api_get_setting('siteName').'</a>';
 
-} else {
-	$message = '&quot;'.$current_course_name.'&quot; ('.$current_course_code.') <p>'.get_lang('ByDel').'</p><p><a href="maintenance.php">'.get_lang('No').'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?delete=yes">'.get_lang('Yes').'</a></p>';
+} else {	
+    $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
+    $message .= '<p>'.get_lang('ByDel').'</p><p><a class="btn btn-primary" href="maintenance.php">'.get_lang('No').'</a>&nbsp;<a class="btn" href="'.api_get_self().'?delete=yes">'.get_lang('Yes').'</a></p>';
 	$interbreadcrumb[] = array('url' => 'maintenance.php', 'name' => get_lang('Maintenance'));
 }
 Display :: display_header($tool_name, 'Settings');
-api_display_tool_title($tool_name);
+echo Display::page_header($tool_name);
 Display::display_warning_message($message, false);
 
 /*	FOOTER */

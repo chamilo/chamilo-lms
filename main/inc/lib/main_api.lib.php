@@ -118,6 +118,8 @@ define('SECTION_GLOBAL', 'global');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
+define('CAS_AUTH_SOURCE', 'cas');
+define('LDAP_AUTH_SOURCE', 'extldap');
 
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
@@ -607,6 +609,25 @@ function api_get_path($path_type, $path = null) {
 
     return null;
 }
+
+
+/**
+ * @return bool     Return true if CAS authentification is activated
+ *
+ */
+function api_is_cas_activated() {
+    return api_get_setting(cas_activate) == "true";
+}
+
+/**
+ * @return bool     Return true if LDAP authentification is activated
+ *
+ */
+function api_is_ldap_activated() {
+    global $extAuthSource;
+    return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
+}
+
 
 /**
  * This function checks whether a given path points inside the system.
@@ -2563,6 +2584,22 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     return isset($_user['is_anonymous']) && $_user['is_anonymous'] === true;
 }
 
+/* 
+ * Returns a not found page 
+ * @todo use smarty to customize the not found page
+ */
+function api_not_found($print_headers = false) {
+    $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
+    $show_headers = 0;
+    if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
+        $show_headers = 1;
+    }
+    $tpl = new Template(null, $show_headers, $show_headers);
+    $msg = get_lang('NotFound');
+    $tpl->assign('content', $msg);	
+    $tpl->display_one_col_template();    
+}
+
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
  * @param bool      Whether or not to print headers (default = false -> does not print them)
@@ -3402,7 +3439,7 @@ function api_number_of_plugins($location) {
 /**
  * Including the necessary plugins.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @deprecated use AppPlugin::get_all_plugin_contents_by_block function
+ * @deprecated use AppPlugin::get_all_plugin_contents_by_region function
  */
 function api_plugin($location) {
     global $_plugins;

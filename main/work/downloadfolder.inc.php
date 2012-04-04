@@ -9,6 +9,11 @@
 
 $work_id = $_GET['id'];
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_STUDENTPUBLICATION;
+
+//protection
+api_protect_course_script(true);
+
 require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
@@ -109,8 +114,6 @@ function my_pre_add_callback($p_event, &$p_header) {
 	}
 	return 0;	
 }
-
-
 
 /**
  * Return the difference between two arrays, as an array of those key/values

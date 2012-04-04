@@ -97,18 +97,21 @@ define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
 define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
 define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
+define('USER_SEPARATOR', ' |'); //Use to show user names in userportal.php, footer, etc
+
 
 
 /**
  * Variables
  */
-
+/*
 $TABLECOURSE         = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSDOMAIN    = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $TABLEUSER           = Database::get_main_table(TABLE_MAIN_USER);
 $TABLECOURSUSER      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEANNOUNCEMENTS  = 'announcement';
 $coursesRepositories = $_configuration['root_sys'];
+*/
 
 /**
  *	CourseManager Class
@@ -1365,7 +1368,7 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code) {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = ',') {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
@@ -1374,7 +1377,7 @@ class CourseManager {
      			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
     		}
     		if (!empty($list)) {
-    			$teacher_string = implode (', ', $list);
+    			$teacher_string = array_to_string($list, $separator);
     		}
     	}
     	return $teacher_string;
@@ -2171,7 +2174,7 @@ class CourseManager {
             $result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
                     WHERE user_id=".$list_users['user_id']);
             while ($row_user = Database::fetch_array($result)){
-                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname']);
                 $list[] = array($row_user['email'] => $name_teacher);
             }
         }
@@ -2713,31 +2716,30 @@ class CourseManager {
         return self::course_code_exists($wanted_course_code);
     }
     
-    /* Use smarty*/
-    
+    /**
+     * Builds the course block in userportal.php
+     * @todo use smarty
+     */    
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well course_item";
+        $class = "well";
         if ($is_sub_content) {
             $class = "";
-        }        
-        $html .= '<div class="row-fluid">';         
-            //$html .= '<div class="span9">';         
-                $html .= '<div class="'.$class.'">'; 
-                    $html .= '<div class="span1">'.$params['icon'].'</div>';
-                    $html .= '<div class="span5">';
-                    $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';
-                    
-                    if (!empty($params['teachers'])) {                    
-                        $html .= '<h5>'.$params['teachers'].'</h5>';
-                    }                    
-                    if (!empty($params['coaches'])) {                    
-                        $html .= '<h5>'.$params['coaches'].'</h5>';
-                    }    
-                    $html .= '</div>';                        
-                    $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
-                $html .= '</div>';
-            //$html .= '</div>';
+        }                     
+        $html .= '<div class="'.$class.'">'; 
+            $html .= '<div class="row">';    
+            $html .= '<div class="span1">'.$params['icon'].'</div>';
+            $html .= '<div class="span6">';
+            $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
+            if (!empty($params['teachers'])) {                    
+                $html .= '<h5>'.$params['teachers'].'</h5>';
+            }                    
+            if (!empty($params['coaches'])) {                    
+                $html .= '<h5>'.$params['coaches'].'</h5>';
+            }    
+            $html .= '</div>';                        
+            $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
+        $html .= '</div>';         
         $html .= '</div>';
         return $html;
     }
@@ -2831,7 +2833,7 @@ class CourseManager {
                         $course_title .= $course_info['visual_code'];
                     }                    
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {                        
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);                        
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);                        
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
@@ -2973,7 +2975,7 @@ class CourseManager {
                 $course_title .= $course_info['visual_code'];
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);
             }            
             
             $params['icon'] = $status_icon;            
@@ -3147,7 +3149,7 @@ class CourseManager {
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             if (api_get_setting('use_session_mode') == 'true' && !$nosession) {             
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR);
                 
                 $coachs_course = api_get_coachs_from_course($course_info['id_session'], $course['code']);
                 $course_coachs = array();
@@ -3162,7 +3164,7 @@ class CourseManager {
                 }    
                 if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
                     if (is_array($course_coachs) && count($course_coachs)> 0 ) {                       
-                        $params['coaches'] = implode(', ',$course_coachs);
+                        $params['coaches'] = array_to_string($course_coachs, USER_SEPARATOR);
                     }
                 }    
             } else {                
@@ -3288,7 +3290,7 @@ class CourseManager {
     
     
     /**
-     * Creates a new course code based in given code
+     * Creates a new course code based in a given code
      * 
      * @param string	wanted code
      * <code>	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
@@ -3319,7 +3321,14 @@ class CourseManager {
     }
         
     
-
+    /**
+     * Gets the status of the users agreement in a course course-session
+     *
+     * @param int user id
+     * @param string course code
+     * @param int session id
+     * @return boolean 
+     */
     function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
         $user_id    = intval($user_id); 
         $course_code = Database::escape_string($course_code);
@@ -3352,6 +3361,12 @@ class CourseManager {
         return false;
     }
     
+    /** 
+     * Saves the user-course legal agreement
+     * @param   int user id
+     * @param   string course code
+     * @param   int session id
+     */
     function save_user_legal($user_id, $course_code, $session_id = null) {
         
         $user_id    = intval($user_id); 
@@ -3503,7 +3518,7 @@ class CourseManager {
      * @param   int vote [1..5]
      * @param   int course id
      * @param   int session id
-     * @param   int url id 
+     * @param   int url id (access_url_id)
 	 * @return	mixed 'added', 'updated' or 'nothing'
      *  
      */
@@ -3581,8 +3596,11 @@ class CourseManager {
         }
     }
 	
-	//Stats functions
-    
+	/** 
+     * Returns an array with the hottest courses 
+     * @param   int number of days
+     * @param   int number of hottest courses
+     */    
     function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
         $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);   

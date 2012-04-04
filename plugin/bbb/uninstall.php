@@ -18,7 +18,7 @@ $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_host'";
 Database::query($sql);
 $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
 Database::query($sql);
-$sql = "DROP TABLE plugin_bbb";
+$sql = "DROP TABLE IF EXISTS plugin_bbb";
 Database::query($sql);
 // update existing courses to add conference settings
 $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);

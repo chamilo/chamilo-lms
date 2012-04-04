@@ -3,12 +3,26 @@
 /**
  * Responses to AJAX calls
  */
+
+$language_file = array('messages','userInfo');
+
 require_once '../global.inc.php';
+
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'send_message':        
+        $result = MessageManager::send_message($_REQUEST['user_id'], $_REQUEST['subject'], $_REQUEST['content']);
+        if ($result) {
+            echo Display::display_confirmation_message(get_lang('MessageHasBeenSent'));
+        } else {
+            echo Display::display_error_message(get_lang('ErrorSendingMessage'));
+        }
+        break;
+    case 'send_invitation':
+        SocialManager::send_invitation_friend_user($_REQUEST['user_id'], $_REQUEST['subject'], $_REQUEST['content']);                
+        break;
 	case 'find_users':
-
 		if (api_is_anonymous()) {
 			echo '';
 			break;

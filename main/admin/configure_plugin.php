@@ -10,6 +10,9 @@ $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+// Access restrictions
+api_protect_admin_script();
+
 $plugin_name = $_GET['name'];
 
 $plugin_obj = new AppPlugin();
@@ -21,36 +24,41 @@ if (empty($plugin_info)) {
 
 $installed_plugins = $plugin_obj->get_installed_plugins();
 
+
 if (!in_array($plugin_name, $installed_plugins)) {
     api_not_allowed();
 }
 
 global $_configuration;
 
-$content = '';
+$content = null;
 
 if (isset($plugin_info['settings_form'])) {
-    $form = $plugin_info['settings_form'];
+    $form = $plugin_info['settings_form'];    
     if (isset($form)) {
         //We override the form attributes
         $attributes = array('action'=>api_get_self().'?name='.$plugin_name, 'method'=>'POST');
-        $form->updateAttributes($attributes);        
-        $content = $form->toHtml();
-    }
-}
-
-if (isset($form) && $form->validate()) {
-    $values = $form->exportValues();
-    //api_delete_category_settings_by_subkey($plugin_name);
-    $access_url_id = api_get_current_access_url_id();
-    api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' =>
-                                   array('Plugins', $access_url_id, $plugin_name, 'setting', "status")));
-    foreach ($values as $key => $value) {
-        $key = Database::escape_string($plugin_name.'_'.$key);
-        api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);        
+        $form->updateAttributes($attributes);     
+        $content = Display::page_header($plugin_info['title']);
+        $content .= $form->toHtml();        
     }
 } else {
-    $content = Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning');
+    $message = Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning');
+}
+
+if (isset($form)) {
+    if ($form->validate()) {
+        $values = $form->exportValues();
+        //api_delete_category_settings_by_subkey($plugin_name);
+        $access_url_id = api_get_current_access_url_id();
+        api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' =>
+                                    array('Plugins', $access_url_id, $plugin_name, 'setting', "status")));
+        foreach ($values as $key => $value) {
+            $key = Database::escape_string($plugin_name.'_'.$key);
+            api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);        
+        }
+        $message = Display::return_message(get_lang('Updated'), 'success');
+    }
 }
 
 $tpl = new Template($tool_name);

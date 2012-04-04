@@ -14,6 +14,7 @@ class Model {
     var $table;
     var $columns;
     var $required;
+    var $is_course_model =false;
     
     // var $pk; some day this will be implemented
     
@@ -39,8 +40,13 @@ class Model {
      */
     public function delete($id) {
         if (empty($id) or $id != strval(intval($id))) { return false; }
+        $params = array('id = ?' => $id);        
+        if ($this->is_course_model) {
+            $course_id = api_get_course_int_id();
+            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+        }
         // Database table definition
-        $result = Database :: delete($this->table, array('id = ?' => $id));        
+        $result = Database :: delete($this->table,$params );        
         if ($result != 1){
             return false;
         }       
@@ -64,20 +70,23 @@ class Model {
      */
     public function display() { 
     }    
-    
-
      
     /**
      * Gets an element
      */
     public function get($id) {
-        if (empty($id)) { return array(); }     
-        $result = Database::select('*',$this->table, array('where'=>array('id = ?'=>intval($id))),'first');
+        if (empty($id)) { return array(); }    
+        $params = array('id = ?'=>intval($id));
+        if ($this->is_course_model) {
+            $course_id = api_get_course_int_id();
+            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+        }
+        $result = Database::select('*',$this->table, array('where' => $params),'first');
         return $result;
     }
     
-    public function get_all($options = null) {        
-        return Database::select('*',$this->table, $options);
+    public function get_all($options = null) {
+        return Database::select('*', $this->table, $options);
     }
     
     /**
@@ -91,8 +100,7 @@ class Model {
     /**
      * a little bit of javascript to display
      */
-	public function javascript() {
-		
+	public function javascript() {		
 	}
 
 	/**
@@ -105,6 +113,11 @@ class Model {
 	public function save($params, $show_query = false) {
         $params = $this->clean_parameters($params);
         
+        if ($this->is_course_model) {            
+            if (!isset($params['c_id']) || empty($params['c_id'])) {
+                $params['c_id'] = api_get_course_int_id();
+            }
+        }
         
         if (!empty($this->required)) {
             $require_ok = true;     
@@ -122,6 +135,7 @@ class Model {
         if (in_array('created_at', $this->columns)) {        	
             $params['created_at'] = api_get_utc_datetime();
         }
+        
         if (!empty($params)) {
             $id = Database::insert($this->table, $params, $show_query);        
     		if (is_numeric($id)){
@@ -139,6 +153,13 @@ class Model {
      */
     public function update($params) {
         $params = $this->clean_parameters($params);
+           
+        if ($this->is_course_model) {            
+            if (!isset($params['c_id']) || empty($params['c_id'])) {
+                $params['c_id'] = api_get_course_int_id();
+            }
+        }
+        
         //If the class has the updated_at field we update the date
         if (in_array('updated_at', $this->columns)) {           
             $params['updated_at'] = api_get_utc_datetime();

@@ -27,6 +27,7 @@ $language_file = array('forum', 'group');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_FORUM;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
@@ -52,20 +53,10 @@ require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $userid  = api_get_user_id();
-$userinf = api_get_user_info($userid);
 
 /* MAIN DISPLAY SECTION */
 
-/* Retrieving forum and forum category information */
-
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-
-//$my_forum_group = isset($_GET['gidReq']) ? $_GET['gidReq'] : '';
-
 $group_id = api_get_group_id();
-
 
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
 
@@ -81,20 +72,10 @@ $current_forum_category = get_forumcategory_information($current_forum['forum_ca
 if (!empty($group_id)) {
     //Group info & group category info
     $group_properties           = GroupManager::get_group_properties($group_id);
-    //$group_cat_info             = GroupManager::get_category(GroupManager::get_category_from_group($group_id));
-    
+        
     //User has access in the group?
     $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
         
-    //User is a tutor in the group? the function GroupManager::user_has_access already contains the is_tutor_of_group()
-    //$is_tutor_group             = GroupManager::is_tutor_of_group($userid, $group_id);
-    //
-    // the function GroupManager::user_has_access already contains the is_tutor_of_group()
-    //$is_my_forum                = GroupManager::is_user_in_group($userid, $group_id);
-    
-    //$group_cat_forum_visibility = $group_cat_info['forum_state'];
-    //$group_forum_visibility     = $group_properties['forum_state'];
-    
     //Course
     if (!api_is_allowed_to_edit(false, true) AND  //is a student
         (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0 OR !$user_has_access_in_group)            
@@ -131,8 +112,7 @@ if (!empty($_GET['gidReq'])) {
     api_session_register('toolgroup');
 }
 
-if ($origin == 'group') {
-    $_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
+if ($origin == 'group') {    
     
     $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url'=>'../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
@@ -151,8 +131,6 @@ if ($origin == 'learnpath') {
 }
 
 /* Actions */
-
-$table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // Change visibility of a forum or a forum category.
 if (($my_action == 'invisible' OR $my_action=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
     $message = change_visibility($_GET['content'], $_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
@@ -164,10 +142,7 @@ if (($my_action == 'lock' OR $my_action == 'unlock') AND isset($_GET['content'])
 // Deleting.
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
     $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
-    // Delete link
-    
-    /*$sql_link = 'DELETE FROM '.$table_link.' WHERE ref_id='.intval($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
-    Database::query($sql_link);*/    
+    // Delete link    
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
     $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
     if ($link_id !== false) {

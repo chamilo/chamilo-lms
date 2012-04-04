@@ -12,6 +12,7 @@ $language_file = array ('course_description', 'pedaSuggest', 'accessibility');
 
 // including files 
 require_once '../inc/global.inc.php';
+$current_course_tool  = TOOL_COURSE_DESCRIPTION;
 
 require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';

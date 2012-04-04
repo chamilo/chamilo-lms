@@ -1,43 +1,40 @@
-{extends file="default/layout/main.tpl"}
-{* Header *}
-{block name="header"}
-{if $show_header}
-{include file="default/layout/main_header.tpl"}
-{/if}	
-{/block}
-{* 1 column *}
-{block name=body}
-    {* Plugin top *}
+{% extends "default/layout/main.tpl" %}
+{#  Header  #}
+{% block header %}
+{% include "default/layout/main_header.tpl" %}
+{% endblock %}
 
-    {if !empty($plugin_content_top)}         
+{#  1 column  #}
+{% block body %}
+    {#  Plugin top  #}
+
+    {% if plugin_content_top is not null %}
         <div id="plugin_content_top" class="span12">
-            {$plugin_content_top}
+            {{ plugin_content_top}}
         </div>
-    {/if}
-    
-    
+    {% endif %}
     <div class="span12">            
-        {include file="default/layout/page_body.tpl"}
-        {if !empty($content)}
+        {% include "default/layout/page_body.tpl" %}
+        
+        {% if content is not null %}
             <section id="main_content">
-            {$content}            
+            {{ content}}           
             </section>
-        {/if}        
+        {% endif %}        
         &nbsp;
     </div>    
     
-    {* Plugin bottom *}
-
-    {if !empty($plugin_content_bottom)}               
+    {#  Plugin bottom  #}    
+    {% if plugin_content_bottom is not null %}
         <div id="plugin_content_bottom" class="span12">
-            {$plugin_content_bottom}
+            {{ plugin_content_bottom }}
         </div>
-    {/if}
-{/block}
+    {% endif %}
+{% endblock %}
 
-{* Footer *}
-{block name=footer}
-	{if $show_footer == 1}
-		{include file="default/layout/main_footer.tpl"}
-	{/if}	
-{/block}
+{#  Footer  #}
+{% block footer %}
+	{% if show_footer == 1 %}
+		{% include "default/layout/main_footer.tpl" %}
+	{% endif %}	
+{% endblock %}

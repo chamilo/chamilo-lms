@@ -12,6 +12,9 @@ require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/evalform.class.php';
+$current_course_tool  = TOOL_GRADEBOOK;
+
+api_protect_course_script();
 api_block_anonymous_users();
 block_students();
 

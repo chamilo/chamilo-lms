@@ -251,10 +251,10 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     sum += $(this).outerWidth(true);                          
                     normal_weight = $(this).width();
                     q = $(this).css('margin-left').replace("px", "");                
-                });       
-                sum = sum / 2 - normal_weight/2 + q/2;
-                console.log('Calculating: ' + sum);
+                });                                       
+                sum = $('body').width() / 2 - normal_weight/2 - q/2;
                 jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
+                
                 console.log('setting animate for block_'+my_id);
 
                 //$('#block_'+my_id).css('margin-bottom', "20px");

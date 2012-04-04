@@ -40,6 +40,8 @@ var parents = ['block_1'];
 
 
 
+
+
 function clean_values() {    
     skills          = []; //current window divs
     parents = ['block_1'];
@@ -53,6 +55,13 @@ function clean_values() {
     
     open_block('block_1', 0, 1);
 }
+
+
+$(window).resize(function() {
+    // Top bar scroll effect
+    //console.log($('body').width());
+    jsPlumb.repaintEverything();
+});
 
 jsPlumb.ready(function() {
     var loading = $( "#dialog-loading" );

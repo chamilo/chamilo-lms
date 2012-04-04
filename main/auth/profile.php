@@ -269,8 +269,8 @@ if (api_get_setting('extended_profile') == 'true') {
 	}
 }
 
-//	PASSWORD
-if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
+//	PASSWORD, if auth_source is platform
+if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 	$form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));	
 	$form->addElement('password', 'password1', get_lang('NewPass'), array('size' => 40));
 	$form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
@@ -467,6 +467,16 @@ $form->setDefaults($user_data);
 
 
 /**
+ * Is user auth_source is platform ?
+ * 
+ * @return  boolean if auth_source is platform
+ */
+function is_platform_authentication() {
+    $tab_user_info = api_get_user_info();
+    return $tab_user_info['auth_source'] == PLATFORM_AUTH_SOURCE;
+}
+
+/**
  * Can a user edit his/her profile?
  *
  * @return	boolean	Editability of the profile
@@ -544,23 +554,24 @@ $upload_production_success  = false;
 $msg_fail_changue_email     = false;
 $msg_is_not_password        = false;
 
-if (!empty($_SESSION['change_email'])) {
-	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
-	unset($_SESSION['change_email']);
-} elseif (!empty($_SESSION['is_not_password'])) {
-	$msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
-	unset($_SESSION['is_not_password']);
-} elseif (!empty($_SESSION['profile_update'])) {
-	$update_success = ($_SESSION['profile_update'] == 'success');
-	unset($_SESSION['profile_update']);
-} elseif (!empty($_SESSION['image_uploaded'])) {
-	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
-	unset($_SESSION['image_uploaded']);
-} elseif (!empty($_SESSION['production_uploaded'])) {
-	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
-	unset($_SESSION['production_uploaded']);
+if (is_platform_authentication()) {
+    if (!empty($_SESSION['change_email'])) {
+    	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
+    	unset($_SESSION['change_email']);
+    } elseif (!empty($_SESSION['is_not_password'])) {
+    	$msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
+    	unset($_SESSION['is_not_password']);
+    } elseif (!empty($_SESSION['profile_update'])) {
+    	$update_success = ($_SESSION['profile_update'] == 'success');
+    	unset($_SESSION['profile_update']);
+    } elseif (!empty($_SESSION['image_uploaded'])) {
+    	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
+    	unset($_SESSION['image_uploaded']);
+    } elseif (!empty($_SESSION['production_uploaded'])) {
+    	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
+    	unset($_SESSION['production_uploaded']);
+    }
 }
-    
 
 if ($form->validate()) {
 
@@ -584,8 +595,11 @@ if ($form->validate()) {
 		$_SESSION['is_not_password'] = 'success';
 	}
 
-    $allow_users_to_change_email_with_no_password = api_get_setting('allow_users_to_change_email_with_no_password') == 'true' ? true :false;
-    //$allow_users_to_change_email_with_no_password = true;
+    $allow_users_to_change_email_with_no_password = true;
+    if (is_platform_authentication() && api_get_setting('allow_users_to_change_email_with_no_password') == 'false') {
+        $allow_users_to_change_email_with_no_password = false;
+    }
+    
     
     $changeemail = '';
     

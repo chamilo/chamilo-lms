@@ -610,6 +610,25 @@ function api_get_path($path_type, $path = null) {
     return null;
 }
 
+
+/**
+ * @return bool     Return true if CAS authentification is activated
+ *
+ */
+function api_is_cas_activated() {
+    return api_get_setting(cas_activate) == "true";
+}
+
+/**
+ * @return bool     Return true if LDAP authentification is activated
+ *
+ */
+function api_is_ldap_activated() {
+    global $extAuthSource;
+    return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
+}
+
+
 /**
  * This function checks whether a given path points inside the system.
  * @param string $path      The path to be tesed. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
@@ -725,15 +744,14 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false) {
-    global $is_allowed_in_course, $current_course_tool;
+    global $is_allowed_in_course;
     $is_visible = false;
     if (api_is_platform_admin()) {
     	return true;
     }
-    
     $course_info = api_get_course_info();
     if (isset($course_info) && !empty($course_info['visibility'])) {
-    	switch ($course_info['visibility']) {
+    	switch($course_info['visibility']) {
     		default:
     		case 0: //Completely closed: the course is only accessible to the teachers.
     			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
@@ -754,19 +772,7 @@ function api_protect_course_script($print_headers = false) {
     			$is_visible = true;    			
     			break;
     	}
-    }
-    
-    //Check tool visibility: check the course_hide_tools variable in the settings_current table
-    if ($is_visible == true) {               
-        if (!empty($current_course_tool)) {            
-            $tool_visibility = api_get_setting('course_hide_tools', $current_course_tool);
-            if (!empty($tool_visibility)) {
-                if ($tool_visibility == 'true') {
-                    $is_visible = false;
-                }
-            }        
-        }
-    }   
+    }    	    	
         
     if (!$is_visible) {
         api_not_allowed($print_headers);
@@ -1190,8 +1196,9 @@ function api_get_course_info($course_code = null) {
             $_course['unubscribe_allowed']    = $course_data['unsubscribe'    ];
             
             $_course['department_name']       = $course_data['department_name'];
-            $_course['department_url']        = $course_data['department_url' ];            
-            $_course['show_score']            = $course_data['show_score']; //used in the work tool            
+            $_course['department_url']        = $course_data['department_url' ];
+            $_course['legal_agreement']       = $course_data['legal_agreement' ];
+            $_course['show_score']            = $course_data['show_score']; //used in the work tool
 
             // The real_id is an integer. It is mandatory for future implementations.
             $_course['real_id'     ]          = $course_data['id'              ];
@@ -1265,7 +1272,8 @@ function api_get_course_info_by_id($id = null) {
             $_course['real_id'      ]         = $course_data['id'              ];            
             $_course['title'        ]         = $course_data['title'           ];
             $_course['course_language']       = $course_data['course_language'];
-            $_course['activate_legal']        = $course_data['activate_legal'];            
+            $_course['activate_legal']        = $course_data['activate_legal'];
+            $_course['legal_agreement']       = $course_data['legal_agreement'];
             $_course['show_score']            = $course_data['show_score']; //used in the work tool
 			
 			if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
@@ -5734,4 +5742,3 @@ function api_grading_model_functions($grading_model, $action = 'to_array') {
 	}
 	return $return;
 }
-

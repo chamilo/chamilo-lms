@@ -38,6 +38,8 @@ var block_size              = {{skill_visualizer.block_size}};
 //Setting the parent by default 
 var parents = ['block_1'];
 
+
+
 function clean_values() {    
     skills          = []; //current window divs
     parents = ['block_1'];
@@ -53,7 +55,32 @@ function clean_values() {
 }
 
 jsPlumb.ready(function() {
+    var loading = $( "#dialog-loading" );
     
+    loading.dialog( "destroy" );
+    loading.dialog({
+        autoOpen:false,
+        height: 120,
+        modal: true,
+        zIndex: 10000,
+        resizable :false,        
+        closeOnEscape : false,
+        disabled: true,            
+        open: function(event, ui) { $(this).parent().children().children('.ui-dialog-titlebar-close').hide(); }
+    });
+    
+    jQuery.ajaxSetup({
+        beforeSend: function() {
+            loading.dialog( "open" );
+            console.log('before------------------->>');
+        },
+        complete: function(){
+            loading.dialog( "close" );                    
+            console.log('complete------------------->>');
+        },
+        success: function() {}
+    });
+        
     $('#return_to_root').live('click', function(){
         clean_values();
         console.log('Clean values');        
@@ -493,6 +520,14 @@ $(document).ready(function() {
 })();
 
 </script>
+<div id="dialog-loading">
+    <div class="modal-body">
+        <p style="text-align:center">
+            {{ "Loading"|get_lang }}
+        <img src="{{ _p.web_img}}loadingAnimation.gif"/>
+        </p>
+    </div>    
+</div>
 <div id="menu" class="well" style="top:20px; left:20px; width:300px; z-index: 9000; opacity: 0.9;">
     <h3>{{'Skills'|get_lang}}</h3>
     <div class="btn-group">

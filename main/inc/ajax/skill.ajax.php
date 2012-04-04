@@ -18,10 +18,11 @@ $skill_gradebook = new SkillRelGradebook();
 switch ($action) {
     case 'add':  
         if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {            
-            $skill->edit($_REQUEST);    
+            $skill_id = $skill->edit($_REQUEST);    
         } else {
-            $skill->add($_REQUEST);    
+            $skill_id = $skill->add($_REQUEST);    
         }        
+        echo $skill_id;
         break;      
     case 'find_skills':        
         $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
@@ -70,7 +71,7 @@ switch ($action) {
         $skills = $skill->get_children($id, $load_user_data);
         
         $return = array();
-        foreach($skills as $skill) {
+        foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
                 $return[$skill['data']['id']] = array(
                                                     'id'    => $skill['data']['id'],
@@ -78,7 +79,16 @@ switch ($action) {
                                                     'passed'=> $skill['data']['passed']);
             }
         }
-        echo json_encode($return);
+        $success = true;
+        if (empty($return)) {
+            $success = false;
+        }
+        
+        $result = array (
+            'success' => $success,
+            'data' => $return
+        );
+        echo json_encode($result);
         break;
     case 'load_direct_parents':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;

@@ -35,21 +35,21 @@ $(document).ready( function() {
                     <div class="row">
                         <div class="span2">                    
                             <div class="thumbnail">
-                                <img src="{{ hot_course.extra_info.course_image}}" />
+                                <img src="{{ hot_course.extra_info.course_image }}" />
                                 {# html_image file=$hot_course.extra_info.course_image #}
                             </div>		
                         </div>
 
                         <div class="span6">
                             <div class="categories-course-description">
-                                <h3>{{hot_course.extra_info.name}}</h3>
-                                {{ hot_course.extra_info.rating_html}}
+                                <h3>{{ hot_course.extra_info.name }}</h3>
+                                {{ hot_course.extra_info.rating_html }}
                             </div>	
                             <p>
                             {#  World  #}
                             {% if hot_course.extra_info.visibility == 3 or (hot_course.extra_info.visibility == 2 and _u.logged == 1 ) %}
-                                <a class="btn btn-primary" title="" href="{{_p.web_course}} {{hot_course.extra_info.path}}/index.php">
-                                    {{"GoToCourse"|get_lang}}
+                                <a class="btn btn-primary" title="" href="{{_p.web_course}}{{hot_course.extra_info.path}}/index.php">
+                                    {{ "GoToCourse"|get_lang }}
                                 </a>
                             {% endif %}
 

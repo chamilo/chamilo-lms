@@ -239,7 +239,7 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                 });
 
                 jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
-                //jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
+                jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
 
                 console.log('draggable');
 
@@ -275,24 +275,26 @@ function load_parent(parent_id, id) {
             var json = jQuery.parseJSON(json);
 
             $.each(json,function(i,item) {
-                /*left_value  = center_x + space_between_blocks_x * ix;
-                top_value   = offset_y;*/
+                if (item.parent_id == 0) {
 
-                $('body').append('<div id="block_'+item.id+ '" class="open_block skill_root first_window " >'+item.name+'</div>');                
-                
-                jsPlumb.connect({
-                    source: 'block_'+parent_id, target:'block_'+id 
-                });                    
-                
-                //jsPlumb.animate("block_" + item.id, { left: left_value, top : top_value }, { duration : duration_value});
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_root first_window " >'+item.name+'</div>');                
 
-                if (item.parent_id) {
-                    if (debug) console.log('setting first_parent '+item.parent_id);
-                    first_parent = "block_" + item.parent_id;                        
+                    jsPlumb.connect({
+                        source: 'block_'+parent_id, target:'block_'+id 
+                    });
+
+                    if (debug) console.log('setting NO--- first_parent ');                    
+                    first_parent = '';             
                 } else {
-                    if (debug) console.log('setting NO--- first_parent ');
-                }
-                ix++;   
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="open_block skill_root first_window " >'+item.name+'</div>');                
+
+                    jsPlumb.connect({
+                        source: 'block_'+parent_id, target:'block_'+id 
+                    });
+
+                    if (debug) console.log('setting first_parent '+item.parent_id);
+                    first_parent = "block_" + item.parent_id;             
+                }                
             });                
         }
         });

@@ -97,8 +97,8 @@ function open_block_student(id) {
     @param  string block id i.e "block_1" 
     @param  int load user data or not    
 */
-function open_block(id, load_user_data) {
-    if (debug) console.log("open_block id : " + id+" load_user_data: " +load_user_data);      
+function open_block(id, load_user_data, create_root) {
+    if (debug) console.log("open_block id : " + id+" load_user_data: " +load_user_data + ', create_root ' + create_root);      
     
     var numeric_id = id.split('_')[1];    
     
@@ -129,30 +129,40 @@ function open_block(id, load_user_data) {
     jsPlumb.animate(parents[0], { left: center_x, top:offset_y }, { duration:duration_value });
     top_value = 2*space_between_blocks_y +offset_y ; */
     
-    load_children(numeric_id, 0, load_user_data);   
-    
+    load_children(numeric_id, 0, load_user_data, create_root);    
 }
 
 
-function load_children(my_id, top_value, load_user_data) {
+function load_children(my_id, top_value, load_user_data, create_root) {
     if (debug) console.log("load_children : my_id " + my_id + ", top_value:" + top_value +", load_user_data: "+load_user_data);
 
     //Loading children
     var ix = 0;
     
-    if (my_id == 1) {
-    
-        $('#skill_tree').append('<div id="block_'+my_id+ '" class="skill_root first_window" >Root </div>');
-    
-    
+    if (create_root == 1) {
+        
+        if (my_id == 1) {      
+            $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root first_window" >Root </div>');
+        } else {      
+            console.log('Loading root info by ajax '+my_id);
+            $.ajax({
+                async: false,//very important other wise it would not work
+                url: url+'&a=get_skill_info&id='+my_id,             
+                success: function(json) {
+                    var skill = jQuery.parseJSON(json);                  
+                    $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root open_block first_window" >' +skill.name+'</div>');
+                    
+                    console.log('Adding block: '+my_id);
+                }
+            });
+        }
+        
         skills.push({
             element: "block_" + my_id
         });
-
-    
+        
         //   jsPlumb.animate('block_'+my_id, { left: 500, top:50 }, { duration: 100 });       
     
-     
         var root_end_point_options = {  
     //        anchor:"Continuous",
             maxConnections:100,
@@ -173,76 +183,83 @@ function load_children(my_id, top_value, load_user_data) {
     }
     
     $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
-        function(json) {             
-            console.log('getJSON reponse: ' + json)
-            $.each(json,function(i, item) {
-                if (debug) console.log('Loading children: #' + item.id + " " +item.name);
-                //left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
-                //top_value   = 300;
-                //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
-                //item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
-                item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
-
-                var status_class = ' ';
-                my_edit_point_options = editEndpointOptions;
-
-                if (item.passed == 1) {
-                    my_edit_point_options = doneEndpointOptions;
-                    status_class = 'done_window';
-                }
-
-                $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_child  open_block  '+status_class+'" >'+item.name+'</div>');
-                if (debug) console.log('Append block: '+item.id);
-
-                /*$('#block_'+item.id).css({ 
-                    position: 'absolute',
-                    zIndex: 5000,
-                    left: '10', 
-                    top: '10'
-                });*/
-
-
-                //var es = prepare("block_" + item.id,  my_edit_point_options);
-                //var e2 = prepare("block_" + my_id,  my_edit_point_options);
+        function (result) {
+            if (result.success) {
+                json = result.data;
                 
-                endpoint = jsPlumb.makeTarget("block_" + item.id, my_edit_point_options);                
-   
-                jsPlumb.connect({source: "block_" + my_id, target:"block_" + item.id});
-                
-                skills.push({
-                    element: "block_" + item.id, endp:endpoint
+                console.log('getJSON result: ' + result.success);
+                console.log('getJSON json: ' + json);
+
+                $.each(json,function(i, item) {
+                    if (debug) console.log('Loading children: #' + item.id + " " +item.name);
+                    //left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
+                    //top_value   = 300;
+                    //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
+                    //item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
+                    item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
+
+                    var status_class = ' ';
+                    my_edit_point_options = editEndpointOptions;
+
+                    if (item.passed == 1) {
+                        my_edit_point_options = doneEndpointOptions;
+                        status_class = 'done_window';
+                    }
+
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_child open_block '+status_class+'" >'+item.name+'</div>');
+                    if (debug) console.log('Append block: '+item.id);
+
+                    /*$('#block_'+item.id).css({ 
+                        position: 'absolute',
+                        zIndex: 5000,
+                        left: '10', 
+                        top: '10'
+                    });*/
+
+
+                    //var es = prepare("block_" + item.id,  my_edit_point_options);
+                    //var e2 = prepare("block_" + my_id,  my_edit_point_options);
+
+                    endpoint = jsPlumb.makeTarget("block_" + item.id, my_edit_point_options);                
+
+                    jsPlumb.connect({source: "block_" + my_id, target:"block_" + item.id});
+
+                    skills.push({
+                        element: "block_" + item.id, endp:endpoint
+                    });
+
+                    console.log('added to array skills id: ' + item.id+" - name: "+item.name);
+
+                    //console.log('connect sources');
+
+                    /*jsPlumb.animate("block_" + item.id, { 
+                        left: left_value, top : top_value
+                    }, { duration : duration_value });
+                    ix++;   */
                 });
-                
-                console.log('added to array skills id: ' + item.id+" - name: "+item.name);
-                
-                //console.log('connect sources');
 
-                /*jsPlumb.animate("block_" + item.id, { 
-                    left: left_value, top : top_value
-                }, { duration : duration_value });
-                ix++;   */
-            });
-            
-            jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
-            //jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
-            
-            console.log('draggable');
-            
-            //Creating the organigram
-            var sum=0;
-            var normal_weight = 0;
-            $('.skill_child').each( function(){ 
-                //sum += $(this).width();                 
-                sum += $(this).outerWidth(true);                          
-                normal_weight = $(this).width();
-                q = $(this).css('margin-left').replace("px", "");                
-            });       
-            sum = sum / 2 - normal_weight/2 + q/2;
-            console.log('Calculating: ' + sum);
-            jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
-            console.log('setting aniemate for block_'+my_id);
-            
-            //$('#block_'+my_id).css('margin-bottom', "20px");
+                jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
+                //jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
+
+                console.log('draggable');
+
+                //Creating the organigram
+                var sum=0;
+                var normal_weight = 0;
+                $('.skill_child').each( function(){ 
+                    //sum += $(this).width();                 
+                    sum += $(this).outerWidth(true);                          
+                    normal_weight = $(this).width();
+                    q = $(this).css('margin-left').replace("px", "");                
+                });       
+                sum = sum / 2 - normal_weight/2 + q/2;
+                console.log('Calculating: ' + sum);
+                jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
+                console.log('setting animate for block_'+my_id);
+
+                //$('#block_'+my_id).css('margin-bottom', "20px");
+                console.log('final parents '+parents);
+            } //result
         }
     );
 }

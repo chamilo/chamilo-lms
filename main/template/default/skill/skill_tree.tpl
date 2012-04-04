@@ -24,8 +24,8 @@ var url             = '{{url}}';
 var skills          = []; //current window divs
 var parents         = []; //list of parents normally there should be only 2
 var first_parent   = '';
-var duration_value  = 500;
 
+var duration_value  = 500;
 
 //Block settings see the SkillVisualizer Class
 var offset_x                = {{skill_visualizer.offset_x}};
@@ -38,7 +38,28 @@ var block_size              = {{skill_visualizer.block_size}};
 //Setting the parent by default 
 var parents = ['block_1'];
 
+function clean_values() {    
+    skills          = []; //current window divs
+    parents = ['block_1'];
+    first_parent   = '';
+    
+    //Reseting jsplumb
+    jsPlumb.reset();                            
+    //Deletes all windows
+    $('.skill_root').remove();
+    $('.skill_child').remove();
+    
+    open_block('block_1', 0, 1);
+}
+
 jsPlumb.ready(function() {
+    
+    $('#return_to_root').live('click', function(){
+        clean_values();
+        console.log('Clean values');        
+        
+        console.log('Reopen the root ');
+    });
     
     //Open dialog
     $("#dialog-form").dialog({
@@ -116,13 +137,40 @@ jsPlumb.ready(function() {
                     var params = $("#add_item").serialize();
                           
                     $.ajax({
+                        async: false,
                         url: url+'&a=add&'+params,
-                        success:function(data) {                            
+                        success:function(my_id) {                            
                             //new window
                             parent_id = $("#parent_id option:selected").attr('value');                            
-                        
+                            
+                            //Reseting jsplumb
+                            jsPlumb.reset();                            
+                            //Deletes all windows
+                            $('.skill_root').remove();
+                            $('.skill_child').remove();
+                            
+                            //cleaning skills
+                            skills = [];
+                            
+                            //cleaninig parents
+                            /*parents         = ['block_'+parent_id]; //list of parents normally there should be only 2
+                            
+                            //cleaning 
+                            first_parent   = '';*/
+        
+                            first_parent = parents[0];
+                            
+                            //Deleting the first parent
+                            console.log('beofr '+parents);
+                            parents.splice(0,1);     
+                            console.log('now '+parents);
+                            
+                            
+                            //Remove parent                            
+                            $('#block_'+parent_id).remove();
+                            
                             //Great stuff                         
-                            open_block('block_'+parent_id, 0);
+                            open_block('block_'+parent_id, 0, 1);                            
                                                                      
                             $("#dialog-form").dialog("close");                                      
                         }                           
@@ -185,7 +233,7 @@ jsPlumb.ready(function() {
                 parents.push(id);
                 console.log('parents  push' + parents);
             }
-            open_block(id, 0);
+            open_block(id, 0, 0);
         }
         
         //Setting class       
@@ -202,7 +250,10 @@ jsPlumb.ready(function() {
        
         console.log(parents);
        // console.log(skills);        
-        console.log('first_parent : ' + first_parent);         
+        console.log('first_parent : ' + first_parent);     
+        
+        //redraw
+        jsPlumb.repaintEverything();
     });
     
     //Skill title click  
@@ -374,7 +425,7 @@ jsPlumb.ready(function() {
 */
             //jsPlumb.setMouseEventsEnabled(true);
             
-            open_block('block_1', 0);
+            open_block('block_1', 0, 1);
             
             
             
@@ -446,7 +497,9 @@ $(document).ready(function() {
     <h3>{{'Skills'|get_lang}}</h3>
     <div class="btn-group">
         <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{{'AddSkill'|get_lang}}</a>
+        <a style="z-index: 1000" class="btn" id="return_to_root" href="#">{{'Root'|get_lang}}</a>
         <a style="z-index: 1000" class="btn" id="return_to_admin" href="{{_p.web_main}}admin">{{'BackToAdmin'|get_lang}}</a>
+        
     </div>
 </div>
            

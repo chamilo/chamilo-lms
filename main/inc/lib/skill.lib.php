@@ -432,8 +432,10 @@ class Skill extends Model {
                     $attributes['skill_id']     = $skill_id;                    
                     $skill_rel_gradebook->save($attributes);
                 }            
-            }                                 
+            } 
+            return $skill_id;
         }
+        return null;
     }
 
     public function edit($params) {
@@ -459,7 +461,9 @@ class Skill extends Model {
             $skill_rel_skill->update_by_skill($attributes);
             
             $skill_rel_gradebook->update_gradebooks_by_skill($skill_id, $params['gradebook_id']);                                 
+            return $skill_id;
         }
+        return null;
     }
     
     /**

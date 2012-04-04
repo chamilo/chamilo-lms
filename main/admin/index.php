@@ -63,9 +63,9 @@ $blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
 if (api_is_platform_admin()) {	
-	$search_form = ' <form method="get" action="user_list.php">
+	$search_form = ' <form method="get" class="form-search" action="user_list.php">
 						<input class="span3" type="text" name="keyword" value="">
-						<button class="search" type="submit">'.get_lang('Search').'</button>
+						<button class="btn" type="submit">'.get_lang('Search').'</button>
             		</form>';
 	$blocks['users']['search_form'] = $search_form;	
 	$items = array(
@@ -97,9 +97,9 @@ if (api_is_platform_admin()) {
 	$blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
 	$blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
 	
-	$search_form = ' <form method="get" action="course_list.php">
+	$search_form = ' <form method="get" class="form-search" action="course_list.php">
 							<input class="span3" type="text" name="keyword" value="">
-							<button class="search" type="submit">'.get_lang('Search').'</button>
+							<button class="btn" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
 	$blocks['courses']['search_form'] = $search_form;
 	
@@ -135,7 +135,7 @@ if (api_is_platform_admin()) {
     $search_form = ' <form method="get" action="settings.php" class="form-search">
 							<input class="span3" type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
-							<button class="search" type="submit">'.get_lang('Search').'</button>
+							<button class="btn" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
 	$blocks['platform']['search_form'] = $search_form;
     
@@ -172,9 +172,9 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 	
-	$search_form = ' <form method="GET" action="session_list.php">
+	$search_form = ' <form method="GET" class="form-search" action="session_list.php">
                         <input class="span3" type="text" name="keyword" value="">
-                        <button class="search" type="submit">'.get_lang('Search').'</button>
+                        <button class="btn" type="submit">'.get_lang('Search').'</button>
                     </form>';
 	$blocks['sessions']['search_form'] = $search_form;	
 	$items = array();
@@ -203,9 +203,9 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'), array(), ICON_SIZE_SMALL, false);
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	
-	$search_form = ' <form method="POST" action="class_list.php">
+	$search_form = ' <form method="POST" class="form-search" action="class_list.php">
 									<input class="span3" type="text" name="keyword" value="">
-									<button class="search" type="submit">.'.get_lang('Search').'</button>
+									<button class="btn" type="submit">.'.get_lang('Search').'</button>
 			            		</form>';
 	$blocks['classes']['search_form'] = $search_form;
 	$items = array();
@@ -292,7 +292,11 @@ if (api_is_platform_admin()) {
 	//session_write_close(); //close session to avoid blocking concurrent access
 	//flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
-	$blocks['chamilo']['extra'] = '<br />'.get_lang('VersionCheck').': '.version_check().'';	
+    
+    //Version check
+    $blocks['version_check']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+	$blocks['version_check']['label'] = get_lang('VersionCheck');    
+	$blocks['version_check']['extra'] = version_check();	
 }
 
 $tpl = new Template();
@@ -319,14 +323,14 @@ function version_check() {
 
     // The site has not been registered yet.
     $return = '';
-    if ($row['selected_value'] == 'false') {
-        $return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
+    if ($row['selected_value'] == 'false') {        
         $return .= get_lang('VersionCheckExplanation');
-        $return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
-        $return .= '<button type="submit" class="save" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
+        $return .= '<form class="well" action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';        
+        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
+        $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';
     } else {
-        $return = 'site registered. ';
+        //$return = 'site registered. ';
         $return .= check_system_version();
     }
     return $return;
@@ -350,7 +354,6 @@ function register_site() {
         $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
         $result = Database::query($sql);
     }
-
     // Reload the settings.
 }
 

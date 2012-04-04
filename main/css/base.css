@@ -246,6 +246,11 @@ a.tag {
     margin-bottom:10px;
 }
 
+/* Admin index.php */
+#settings .span6 {
+    min-height: 180px;
+}
+
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;

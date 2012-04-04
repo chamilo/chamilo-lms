@@ -31,7 +31,13 @@ $(function() {
     		    		<li><a href="{{url.url}}">{{ url.label }}</a></li>	    	
     				{% endfor %}
                     </ul>    	
-                {% endif%}
+                {% endif %}
+                
+                {% if block_item.extra is not null %}
+                    <p>
+                    {{ block_item.extra }}
+                    </p>
+                {% endif %}                
             </div>
         </div>        
     {% endfor %}

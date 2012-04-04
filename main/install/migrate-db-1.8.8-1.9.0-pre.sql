@@ -148,6 +148,11 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_browser_sniffer', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_browser_sniffer', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_wami_record', NULL, 'radio', 'Tools', 'false', 'EnableWamiRecordTitle', 'EnableWamiRecordComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'false', 'No');
+
+
 -- Course ranking
 
 CREATE TABLE track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);

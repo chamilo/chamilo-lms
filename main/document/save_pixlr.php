@@ -17,8 +17,9 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 api_protect_course_script();
 api_block_anonymous_users();
+var_dump($_GET);
 
-if(!isset($_GET['title']) && !isset($_GET['type']) && !isset($_GET['image'])) {
+if(!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
 	api_not_allowed();
 	die();
 }
@@ -42,7 +43,9 @@ $relativeUrlPath=$_SESSION['paint_dir'];
 $currentTool=$_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$_SESSION['paint_dir'];
+
 $contents = file_get_contents($urlcontents);
+
 
 //Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com
 /*
@@ -52,6 +55,11 @@ $urlcontents_to_save=$urlcontents1.$urlcontents2;
 $contents = file_get_contents($urlcontents_to_save);//replace line 45.
 */
 
+if ($contents === false) { 
+	echo "I cannot read: ".$urlcontents;
+    exit;
+} 
+
 //Verify that the file is an image
 $headers = get_headers($urlcontents, 1);
 $content_type = explode("/", $headers['Content-Type']);
@@ -59,6 +67,8 @@ if ($content_type[0] != "image"){
 	echo "Invalid file type";
 	exit;
 }
+
+
 
 //a bit title security
 $filename = addslashes(trim($filename));

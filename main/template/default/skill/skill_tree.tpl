@@ -139,29 +139,40 @@ jsPlumb.ready(function() {
     //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
     $(".open_block").live('click', function() {      
         var id = $(this).attr('id');
+        console.log('id :' + id);
+        console.log('parent');
+        console.log(parents);
         
         //if is root
         if (parents[0] == id) {
             parents = [id];
         }     
         
-        if (parents[1] != id) {            
+        if (parents[1] != id) {   
+            console.log('parents.length ' +parents.length);
+            
             if (parents.length == 2 ) {
                 hidden_parent = parents[0];   
                 //console.log('deleting: '+parents[0]);        
                 //removing father
-                for (var i = 0; i < skills.length; i++) {                               
-                    if ( skills[i].element == parents[0] ) {
-                         //console.log('deleting :'+ skills[i].element + ' here ');                             
-                         jsPlumb.deleteEndpoint(skills[i].endp);
-                         $("#"+skills[i].element).remove();
+                console.log("hidden_parent " + hidden_parent);
+                
+                for (var i = 0; i < skills.length; i++) {  
+                    console.log('looping '+skills[i].element + ': ');
+                    if (skills[i].element == parents[0] ) {
+                        console.log('deleting parent:'+ skills[i].element + ' here ');                             
+                        //jsPlumb.deleteEndpoint(skills[i].endp);
+                        jsPlumb.detachAllConnections(skills[i].element);
+                        jsPlumb.removeAllEndpoints(skills[i].element);  
+                        $("#"+skills[i].element).remove();
                     }
                 }                                
                 parents.splice(0,1);                
                 parents.push(id);
             }     
                 
-            if ($(this).hasClass('first_window')) {                
+            if ($(this).hasClass('first_window')) {  
+                console.log('first_window');
                  //show the hidden_parent
                 //if (hidden_parent != '') {
                    parents = [hidden_parent, id];
@@ -261,7 +272,7 @@ jsPlumb.ready(function() {
             console.log('Import defaults');
             
             jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];
-          //  jsPlumb.DefaultDragOptions = { cursor: "pointer", zIndex:2000 };
+            //jsPlumb.DefaultDragOptions = { cursor: "crosshair", zIndex:2000 };
             jsPlumb.Defaults.Container = "skill_tree";
                 
             
@@ -369,8 +380,8 @@ jsPlumb.ready(function() {
                 
             // listen for clicks on connections, and offer to delete connections on click.			
 			jsPlumb.bind("click", function(conn, originalEvent) {
-				if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-					jsPlumb.detach(conn); 
+				/*if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+					jsPlumb.detach(conn); */
 			});            
         }
     };

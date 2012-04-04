@@ -27,7 +27,7 @@ var editEndpointOptions = {
     isTarget:true, 
     maxConnections:100,
     endpoint:"Rectangle", 
-    paintStyle:{ fillStyle:"yellow" },    
+    paintStyle:{ fillStyle:"yellow" }
 };
 
 
@@ -88,6 +88,11 @@ function open_parent(parent_id, id) {
     load_parent(numeric_parent_id, numeric_id);
 }
 
+
+function open_block_student(id) {
+    open_block(id, 1)
+}
+
 /* 
  *  
  *  When clicking a children block 
@@ -104,7 +109,8 @@ function open_block(id, load_user_data) {
         //Remove everything except parents
         if (jQuery.inArray(skills[i].element, parents) == -1) {
             if (debug) console.log('deleting this skill '+ skills[i].element + " id: " + i);
-            jsPlumb.removeEveryEndpoint(skills[i].endp);
+            jsPlumb.detachAllConnections(skills[i].element);
+            jsPlumb.removeAllEndpoints(skills[i].element);            
             $("#"+skills[i].element).remove();                 
         }
     }        
@@ -125,12 +131,11 @@ function open_block(id, load_user_data) {
     pos_parent = $('#'+parents[0]).position();
     jsPlumb.animate(parents[0], { left: center_x, top:offset_y }, { duration:duration_value });
     top_value = 2*space_between_blocks_y +offset_y ; */
+    
     load_children(numeric_id, 0, load_user_data);   
+    
 }
 
-function open_block_student(id) {
-    open_block(id, 1)
-}
 
 function load_children(my_id, top_value, load_user_data) {
     if (debug) console.log("load_children : my_id " + my_id + ", top_value:" + top_value +", load_user_data: "+load_user_data);
@@ -138,7 +143,9 @@ function load_children(my_id, top_value, load_user_data) {
     //Loading children
     var ix = 0;
     
-    $('#skill_tree').append('<div id="block_'+my_id+ '" class=" skill_root " >Root </div>');
+    if (my_id == 1) {
+    
+    $('#skill_tree').append('<div id="block_'+my_id+ '" class="skill_root first_window" >Root </div>');
     
  //   jsPlumb.animate('block_'+my_id, { left: 500, top:50 }, { duration: 100 });       
     
@@ -152,7 +159,7 @@ function load_children(my_id, top_value, load_user_data) {
     
     //The root is the source
     
-    jsPlumb.makeSource("block_" + my_id, root_end_point_options);
+    //jsPlumb.makeSource("block_" + my_id, root_end_point_options);
     
     /*$('#block_'+my_id).css({ 
                     position: 'absolute',
@@ -160,13 +167,13 @@ function load_children(my_id, top_value, load_user_data) {
                     left: '100px', 
                     top: '100px'
                 });*/
-    
+    }
     $.getJSON(url+'&a=load_children&load_user_data='+load_user_data+'&id='+my_id, {},         
         function(json) {             
             console.log('getJSON reponse: ' + json)
             $.each(json,function(i, item) {
                 if (debug) console.log('Loading children: #' + item.id + " " +item.name);
-                left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
+                //left_value  = ix*space_between_blocks_x +  center_x/2 - block_size / 2;
                 //top_value   = 300;
                 //Display::url($skill['name'], '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block'))
                 //item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
@@ -202,7 +209,7 @@ function load_children(my_id, top_value, load_user_data) {
                     element: "block_" + item.id, endp:endpoint
                 });
                 
-                console.log('added to array skills' + item.id);
+                console.log('added to array skills id: ' + item.id+" - name: "+item.name);
                 
                 //console.log('connect sources');
 
@@ -212,6 +219,7 @@ function load_children(my_id, top_value, load_user_data) {
                 ix++;   */
             });
             jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
+            jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
             
             //Creating the organigram
             var sum=0;
@@ -224,7 +232,8 @@ function load_children(my_id, top_value, load_user_data) {
             });       
             sum = sum / 2 - normal_weight/2 + q/2;
             //console.log(sum);
-            jsPlumb.animate('block_'+my_id, { left: sum, top:10 }, { duration: 100 });       
+            jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
+            //$('#block_'+my_id).css('margin-bottom', "20px");
         }
     );
 }

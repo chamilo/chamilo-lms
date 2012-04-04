@@ -505,7 +505,7 @@ foreach ($docs_and_folders  as $file) {
                                 //errorAlerts: true,
                                 //warningAlerts: true,
                                 swfPath: "'.$js_path.'jquery-jplayer",
-                                //supplied: "m4a, oga, mp3, ogg, wav",
+                                supplied: "m4a, oga, mp3, ogg, wav",
                                 wmode: "window",
                                 //solution: "flash, html",  // Do not change this setting otherwise 
                                 cssSelectorAncestor: "#jp_container_'.$count.'", 

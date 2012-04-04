@@ -88,17 +88,14 @@ function open_parent(parent_id, id) {
     load_parent(numeric_parent_id, numeric_id);
 }
 
-
 function open_block_student(id) {
     open_block(id, 1)
 }
 
-/* 
- *  
+/*   
  *  When clicking a children block 
     @param  string block id i.e "block_1" 
-    @param  int load user data or not
-    
+    @param  int load user data or not    
 */
 function open_block(id, load_user_data) {
     if (debug) console.log("open_block id : " + id+" load_user_data: " +load_user_data);      
@@ -261,17 +258,16 @@ function load_parent(parent_id, id) {
             var json = jQuery.parseJSON(json);
 
             $.each(json,function(i,item) {
-                left_value  = center_x + space_between_blocks_x * ix;
-                top_value   = offset_y;
+                /*left_value  = center_x + space_between_blocks_x * ix;
+                top_value   = offset_y;*/
 
-                $('body').append('<div id="block_'+item.id+ '" class="open_block window " >'+item.name+'</div>');                
-                var es  = prepare("block_" + item.id,  editEndpoint);
-                var es2 = prepare("block_" + id,  editEndpoint);
-
+                $('body').append('<div id="block_'+item.id+ '" class="open_block skill_root first_window " >'+item.name+'</div>');                
+                
                 jsPlumb.connect({
-                    source: es, target:es2 
+                    source: 'block_'+parent_id, target:'block_'+id 
                 });                    
-                jsPlumb.animate("block_" + item.id, { left: left_value, top : top_value }, { duration : duration_value});
+                
+                //jsPlumb.animate("block_" + item.id, { left: left_value, top : top_value }, { duration : duration_value});
 
                 if (item.parent_id) {
                     if (debug) console.log('setting first_parent '+item.parent_id);

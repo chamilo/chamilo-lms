@@ -148,7 +148,7 @@ jsPlumb.ready(function() {
             parents = [id];
         }     
         
-        if (parents[1] != id) {   
+        if (parents[1] != id) {
             console.log('parents.length ' +parents.length);
             
             if (parents.length == 2 ) {
@@ -173,11 +173,11 @@ jsPlumb.ready(function() {
             }     
                 
             if ($(this).hasClass('first_window')) {  
-                console.log('first_window');
+                console.log('im in a first_window (root)');
                 //show the first_parent
                 //if (first_parent != '') {
                    parents = [first_parent, id];
-                   //    console.log(parents);
+                   console.log(parents);
                    open_parent(first_parent, id);
                 //}
             }

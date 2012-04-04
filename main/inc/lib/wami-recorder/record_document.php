@@ -19,7 +19,7 @@ else {
 	die();
 }
 
-if ($wamiuserid!= api_get_user_id()){
+if ($wamiuserid!= api_get_user_id() || api_get_user_id()==0 || $wamiuserid==0) {
 	api_not_allowed();
 	die();
 }

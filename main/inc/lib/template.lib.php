@@ -280,7 +280,7 @@ class Template {
             $this->user_is_logged_in = true;
 		}		
         //Setting the $_u array that could be use in any template 
-		$this->assign('_u', $user_info); 
+		$this->assign('_u', $user_info);         
 	}	
 	
     /* Set system parameters */

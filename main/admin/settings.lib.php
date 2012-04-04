@@ -70,15 +70,14 @@ function handle_regions() {
             echo '<p>'.$plugin_info['comment'].'</p>';              
             echo '</td><td>';                        
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);            
-            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'));    
+            echo Display::select('plugin_'.$plugin.'[]', $plugin_list, $selected_plugins, array('multiple' => 'multiple', 'style' => 'width:500px'), true, get_lang('None'));    
             echo '</td></tr>';
         }
     }
     echo '</table>';
     echo '<br />';
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
-    echo '<br />';
-    
+    echo '<br />';    
 }
 
 function handle_extensions() {    
@@ -420,10 +419,14 @@ function store_regions() {
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
-            $areas_to_installed = $_POST['plugin_'.$plugin];
-            $plugin_obj->remove_all_regions($plugin);
-            foreach ($areas_to_installed as $region) {
-                $plugin_obj->add_to_region($plugin, $region);
+            $areas_to_installed = $_POST['plugin_'.$plugin];            
+            if (!empty($areas_to_installed)) {
+                $plugin_obj->remove_all_regions($plugin);
+                foreach ($areas_to_installed as $region) {
+                    if (!empty($region) && $region != '-1' ) {
+                        $plugin_obj->add_to_region($plugin, $region);
+                    }
+                }
             }
         }
     }
@@ -457,10 +460,8 @@ function store_plugins() {
     }    
     foreach ($remove_plugins as $plugin) {
         $plugin_obj->uninstall($plugin);
-    }
-  
+    }  
 }
-
 
 /**
  * This function allows the platform admin to choose which should be the default stylesheet

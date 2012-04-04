@@ -2633,8 +2633,7 @@ function api_not_allowed($print_headers = false) {
 	                @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
 	                /*]]>*/
 	                </style>';
-    }
-    
+    }    
     $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
     $msg = Display::div($msg, array('align'=>'center'));
 	

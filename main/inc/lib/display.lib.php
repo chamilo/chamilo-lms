@@ -698,7 +698,7 @@ class Display {
      * Displays an HTML select tag
      *
      */
-    public function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true) {
+    public function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true, $blank_item_text = null) {
         $html = '';
         $extra = '';
         $default_id =  'id="'.$name.'" ';
@@ -710,8 +710,13 @@ class Display {
         }
         $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
 
-        if ($show_blank_item) {
-            $html .= self::tag('option', '-- '.get_lang('Select').' --', array('value'=>'-1'));
+        if ($show_blank_item) {            
+            if (empty($blank_item_text)) {
+                $blank_item_text = get_lang('Select');                
+            } else {
+                $blank_item_text = Security::remove_XSS($blank_item_text);
+            }
+            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value'=>'-1'));
         }
         if ($values) {            
             foreach ($values as $key => $value) {

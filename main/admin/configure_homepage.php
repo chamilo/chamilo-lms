@@ -268,7 +268,7 @@ if (!empty($action)) {
 				$filename = trim(stripslashes($_POST['filename']));
 				$target_blank = $_POST['target_blank'] ? true : false;
 
-				if ($link_url == 'http://') {
+				if ($link_url == 'http://' || $link_url == 'https://') {
 					$link_url = '';
 				} elseif (!empty($link_url) && !strstr($link_url, '://')) {
 					$link_url='http://'.$link_url;
@@ -310,7 +310,8 @@ if (!empty($action)) {
 					//}
 					//
 					// If the given link url is empty, then replace the link url by a link to the link file created
-					if (empty($link_url) || $link_url == 'http://') {
+
+					if (empty($link_url) || $link_url == 'http://' ||  $link_url == 'https://') {
 						$link_url = api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
 						// fill it with default text
@@ -581,7 +582,7 @@ if (!empty($action)) {
 
 						// If the link contains the web root of this portal, then strip
 						// it off and keep only the name of the file that needs edition
-						if (strstr($link_url, $_configuration['root_web']) && strstr($link_url, '?include=')) {
+						if (strstr($link_url, '?include=')) {
 							$link_url = explode('?include=', $link_url);
 
 							$filename = $link_url[sizeof($link_url) - 1];
@@ -699,8 +700,8 @@ switch ($action) {
         }        
         
 		if ($target_blank) $target_blank_checkbox->setChecked(true);
-		
-		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://')) {			
+
+		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {			
 			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
 			} else {

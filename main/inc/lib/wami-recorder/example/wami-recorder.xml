@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!-- This is just a Google gadget to toss an example onto the code.google.com page. -->
-<Module>
-  <ModulePrefs title="Wami Recorder Example"
-               author="Ian McGraw"
-               author_email="wami-toolkit@csail.mit.edu"
-               description="A Google gadget to exemplify the simplest wami-recorder use-case." />
-  <Content type="url" href="https://wami-recorder.appspot.com/client/index.html"/>
-</Module>

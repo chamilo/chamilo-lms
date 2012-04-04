@@ -116,7 +116,9 @@ require_once $lib_path.'tracking.lib.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once $lib_path.'online.inc.php';
 
-
+//Here we load the new Doctrine class (just for tests)
+//require_once $lib_path.'db.lib.php';
+//$db = new db();
 
 /*  DATABASE CONNECTION  */
 

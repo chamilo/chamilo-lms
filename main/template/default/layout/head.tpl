@@ -7,20 +7,20 @@
 {# <link rel="top"	href="{{ _p.web_main}}index.php" title="" />
 <link rel="courses" href="{{ _p.web_main}}auth/courses.php" title="{{"OtherCourses"|get_lang}}"/>
 <link rel="profil"  href="{{ _p.web_main}}auth/profile.php" title="{{"ModifyProfile"|get_lang}}"/>  #}
-<meta name="Generator" content="{{ _s.software_name}} {# $_s.system_version|substr:0:1 #}" /> 
+<meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" /> 
  {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
  {#  Improve usability in portal devices #}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ title_string}}</title>
+<title>{{ title_string }}</title>
 <style type="text/css" media="screen">
 	/*<![CDATA[*/
-	{{ css_style}}
+	{{ css_style }}
 	/*]]>*/
 </style>
 <style type="text/css" media="print">
 	/*<![CDATA[*/
-	{{ css_style_print}}
+	{{ css_style_print }}
 	/*]]>*/
 </style>
 <script type="text/javascript">
@@ -43,9 +43,9 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 //]]>
 
 /* Global chat variables */
-var ajax_url        = '{{ _p.web_ajax}}chat.ajax.php';
-var online_button   = '{{ online_button}}';
-var offline_button  = '{{ offline_button}}';
+var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
+var online_button   = '{{ online_button }}';
+var offline_button  = '{{ offline_button }}';
 var connect_lang    = '{{"ChatConnected"|get_lang}}';
 var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
 </script>
@@ -135,4 +135,4 @@ $(document).ready(function() {
     });*/
 });
 </script>
-{{ header_extra_content}}
+{{ header_extra_content }}

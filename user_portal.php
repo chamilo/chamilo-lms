@@ -89,7 +89,6 @@ $this_section = SECTION_COURSES;
     Header
     Include the HTTP, HTML headers plus the top banner.
 */
-
 if ($load_dirs) {
 	$url 			= api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
 	$folder_icon 	= api_get_path(WEB_IMG_PATH).'icons/22/folder.png';

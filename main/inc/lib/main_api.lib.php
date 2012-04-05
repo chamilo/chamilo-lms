@@ -1863,7 +1863,8 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * This function returns information about coachs from a course in session
  * @param int       - optional, session id
  * @param string    - optional, course code
- * @return array    - array containing user_id, lastname, firstname, username.
+ * @return array    - array containing user_id, lastname, firstname, username 
+ * @deprecated use CourseManager::get_coaches_from_course
  */
 function api_get_coachs_from_course($session_id=0,$course_code='') {
 

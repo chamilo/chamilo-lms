@@ -1368,19 +1368,84 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = ',') {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = USER_SEPARATOR, $add_link_to_profile = false) {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
     	if (!empty($teacher_list)) {
     		foreach($teacher_list as $teacher) {
-     			$list[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);    			
+                $teacher_name = api_get_person_name($teacher['firstname'], $teacher['lastname']);
+                if ($add_link_to_profile) {
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=350&user_id='.$teacher['user_id'];
+                    $teacher_name = Display::url($teacher_name, $url, array('class' => 'ajax'));
+                }
+     			$list[]= $teacher_name;    			
     		}
     		if (!empty($list)) {
     			$teacher_string = array_to_string($list, $separator);
     		}
     	}
     	return $teacher_string;
+    }
+    
+     /**
+     * This function returns information about coachs from a course in session
+     * @param int       - optional, session id
+     * @param string    - optional, course code
+     * @return array    - array containing user_id, lastname, firstname, username 
+     *
+     */
+    function get_coachs_from_course($session_id=0, $course_code='') {
+        
+        if (!empty($session_id)) {
+            $session_id = intval($session_id);
+        } else {
+            $session_id = api_get_session_id();
+        }
+
+        if (!empty($course_code)) {
+            $course_code = Database::escape_string($course_code);
+        } else {
+            $course_code = api_get_course_id();
+        }
+
+        $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $coaches = array();
+
+        $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username FROM $tbl_user u,$tbl_session_course_user scu
+                WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs)) {
+                $coaches[] = $row;
+            }
+            return $coaches;
+        } else {
+            return false;
+        }
+    }
+    
+    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = USER_SEPARATOR, $add_link_to_profile = false) {    
+        $coachs_course = self::get_coachs_from_course($session_id, $course_code);
+        $course_coachs = array();
+                
+        if (is_array($coachs_course)) {
+            foreach ($coachs_course as $coach_course) {
+                $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
+                if ($add_link_to_profile) {
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=350&user_id='.$coach_course['user_id'];
+                    $coach_name = Display::url($coach_name, $url, array('class' => 'ajax'));
+                }
+                $course_coachs[] = $coach_name;
+            }
+        }        
+        $coaches_to_string = null;
+        if (is_array($course_coachs) && count($course_coachs)> 0 ) {  
+            $coaches_to_string = array_to_string($course_coachs, $separator);
+        }
+        return $coaches_to_string;        
     }
     
     function get_coach_list_from_course_code_to_string($course_code, $session_id) {
@@ -1392,7 +1457,7 @@ class CourseManager {
                 $coach_list[] = $coach['complete_name'];                
             }
             if (!empty($coach_list)) {
-    			$tutor_data = implode (', ', $coach_list);
+    			$tutor_data = implode(USER_SEPARATOR, $coach_list);
     		}    
         }
         return $tutor_data;
@@ -1409,6 +1474,7 @@ class CourseManager {
     public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0) {
         //get list of virtual courses
         $virtual_course_list = self::get_virtual_courses_linked_to_real_course($course_code);
+        $complete_user_list = array();
 
         //get users from real course
         $user_list = self::get_user_list_from_course_code($course_code, $session_id);
@@ -1455,7 +1521,6 @@ class CourseManager {
         while ($result = Database::fetch_array($sql_result)) {
             $result_array[] = $result;
         }
-
         return $result_array;
     }
 
@@ -1670,8 +1735,7 @@ class CourseManager {
                 $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
                 Database::query($sql);
                 $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-                
+                Database::query($sql);                
 
                 // Delete the course from the course table
                 $sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
@@ -2717,8 +2781,8 @@ class CourseManager {
     }
     
     /**
-     * Builds the course block in userportal.php
-     * @todo use smarty
+     * Builds the course block in user_portal.php
+     * @todo use Twig
      */    
     public function course_item_html($params, $is_sub_content = false) {
         $html = '';
@@ -2743,6 +2807,7 @@ class CourseManager {
         $html .= '</div>';
         return $html;
     }
+    
     
     public function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
         return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
@@ -2833,7 +2898,7 @@ class CourseManager {
                         $course_title .= $course_info['visual_code'];
                     }                    
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {                        
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);                        
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);                        
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
@@ -2975,7 +3040,7 @@ class CourseManager {
                 $course_title .= $course_info['visual_code'];
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);
             }            
             
             $params['icon'] = $status_icon;            
@@ -3149,23 +3214,14 @@ class CourseManager {
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             if (api_get_setting('use_session_mode') == 'true' && !$nosession) {             
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR);
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR, true);
+                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], USER_SEPARATOR, true);
                 
-                $coachs_course = api_get_coachs_from_course($course_info['id_session'], $course['code']);
-                $course_coachs = array();
-                
-                if (is_array($coachs_course)) {
-                    foreach ($coachs_course as $coach_course) {
-                        $course_coachs[] = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
-                    }
-                }
                 if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
                     $params['teachers'] = $teacher_list;
                 }    
                 if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
-                    if (is_array($course_coachs) && count($course_coachs)> 0 ) {                       
-                        $params['coaches'] = array_to_string($course_coachs, USER_SEPARATOR);
-                    }
+                        $params['coaches'] = $course_coachs; 
                 }    
             } else {                
                 $params['teachers'] = $teacher_list;                
@@ -3286,8 +3342,6 @@ class CourseManager {
         }
         return false;
     }
-    
-    
     
     /**
      * Creates a new course code based in a given code
@@ -3645,4 +3699,6 @@ class CourseManager {
         $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => 'accesses DESC', 'limit' => $limit), 'all', true);
         return $result;
 	}    
+    
+   
 } //end class CourseManager

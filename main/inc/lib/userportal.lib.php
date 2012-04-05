@@ -12,10 +12,8 @@ class IndexManager {
 	var $home			= '';
 	var $default_home 	= 'home/';
 	
-	function __construct($title, $load_template = true) {		
-		if ($load_template) {		
-			$this->tpl = new Template($title);					
-		}
+	function __construct($title) {					
+		$this->tpl = new Template($title);		
 		$this->home     = api_get_home_path();
 		$this->user_id  = api_get_user_id();
 		$this->load_directories_preview = false;

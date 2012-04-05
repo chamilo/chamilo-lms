@@ -70,7 +70,7 @@ if (!file_exists($documentPath)){
 	$file_size = filesize($documentPath);
 	$relativeUrlPath=$dir;		
 	$doc_id = add_document($_course, $relativeUrlPath.$filename, 'file', filesize($documentPath), $title);
-	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $nano_user_id, $groupId, null, null, null, $current_session_id);// $nano_user_id instead $_user['user_id'], because here $_user['user_id'] is lost.
 } else {
 	return get_lang('FileExistRename');
 }

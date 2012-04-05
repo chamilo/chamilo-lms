@@ -43,7 +43,7 @@ if($ext!= 'wav'){
 	die();
 }
 
-//Do not use here check Fileinfo method because return: application/x-empty
+//Do not use here check Fileinfo method because return: text/plain
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$wamidir;

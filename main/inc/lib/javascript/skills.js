@@ -21,13 +21,16 @@ var connectorHoverStyle = {
 };    
 
 //Admin arrows
-var edit_arrow_color = '#ccc';        
+  
 
 var editEndpointOptions = {  
     isTarget:true, 
     maxConnections:100,
-    endpoint:"Rectangle", 
-    paintStyle:{ fillStyle:"yellow" }
+    endpoint:"Rectangle",    
+    paintStyle:{ 
+       fillStyle:"yellow" },
+    detachable:false,
+    connector:"Straight"
 };
 
 
@@ -82,9 +85,23 @@ function cleanclass(obj) {
 
 /* When clicking the red block */
 function open_parent(parent_id, id) {   
-    if (debug) console.log("open_parent call : id " + id + " parent_id:" + parent_id);                
+    console.log("open_parent call : id " + id + " parent_id:" + parent_id);                
     var numeric_parent_id = parent_id.split('_')[1];
-    var numeric_id = id.split('_')[1];        
+    var numeric_id = id.split('_')[1];    
+    
+    $('#'+id).css('top', '0px');
+    
+    // @todo move this in a function
+    var final_left =0;
+    var normal_width = 0;
+
+    $('.skill_child').each( function(){                                          
+        normal_width = $(this).width();
+        return true;                    
+    });    
+
+
+    
     load_parent(numeric_parent_id, numeric_id);
 }
 
@@ -105,7 +122,7 @@ function open_block(id, load_user_data, create_root) {
     for (var i = 0; i < skills.length; i++) {
         //Remove everything except parents
         if (jQuery.inArray(skills[i].element, parents) == -1) {
-            if (debug) console.log('deleting this skill '+ skills[i].element + " id: " + i);
+            //if (debug) console.log('deleting this skill '+ skills[i].element + " id: " + i);
             jsPlumb.detachAllConnections(skills[i].element);
             jsPlumb.removeAllEndpoints(skills[i].element);            
             $("#"+skills[i].element).remove();                 
@@ -132,17 +149,19 @@ function open_block(id, load_user_data, create_root) {
     load_children(numeric_id, 0, load_user_data, create_root);    
 }
 
-
 function load_children(my_id, top_value, load_user_data, create_root) {
     if (debug) console.log("load_children : my_id " + my_id + ", top_value:" + top_value +", load_user_data: "+load_user_data+", create_root: "+create_root);
     
     //Fix the block vertical position
     //$('#block_'+my_id).css('top', '150px');
-    my_top = 50;
+
+    my_top_root = 150;
+    my_top_children = 250;    
 
     //Creating the root           
     if (create_root == 1) {
-        my_top = 0;
+        my_top_root = 0;
+        my_top_children = 150;
         if (my_id == 1) {      
             $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root first_window" >Root </div>');
         } else {      
@@ -197,7 +216,6 @@ function load_children(my_id, top_value, load_user_data, create_root) {
 
                     var status_class = ' ';
                     my_edit_point_options = editEndpointOptions;
-
                     if (item.passed == 1) {
                         my_edit_point_options = doneEndpointOptions;
                         status_class = 'done_window';
@@ -206,7 +224,7 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_child open_block '+status_class+'" >'+item.name+'</div>');
                     
                     //Fix the block vertical position
-                    $('#block_'+item.id).css('top', '150px');
+                    $('#block_'+item.id).css('top', my_top_children+'px');
                     
                     if (debug) console.log('Append block: '+item.id);
 
@@ -227,21 +245,22 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                 console.log('draggable');
 
                 //Fixing the root position in the organigram
-                var sum=0;
+                var final_left =0;
                 var normal_width = 0;
                 
                 $('.skill_child').each( function(){                                          
                     normal_width = $(this).width();
                     return true;                    
-                });                                       
+                });              
                 
                 //normal_width = $('.skill_child :first').width();                
-                sum = $('body').width() / 2 - normal_width/2;
+                final_left = $('body').width() / 2 - normal_width/2;
                 
                 console.log('normal_width ----->   '+normal_width);
                 console.log('body.width ----->   '+$('body').width());   
+                console.log('final_left ----->   '+final_left);   
                 
-                jsPlumb.animate('block_'+my_id, { left: sum, top:my_top }, { duration: 100 });                
+                jsPlumb.animate('block_'+my_id, { left: final_left, top:my_top_root }, { duration: 100 });                
                 console.log('setting animate for block_'+my_id);                
                 console.log('final parents '+parents);
             } //result
@@ -266,11 +285,10 @@ function load_parent(parent_id, id) {
                     jsPlumb.connect({
                         source: 'block_'+parent_id, target:'block_'+id 
                     });
-
                     if (debug) console.log('setting NO--- first_parent ');                    
                     first_parent = '';             
                 } else {
-                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="open_block skill_root ">'+item.name+'</div>');                
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="open_block skill_child ">'+item.name+'</div>');                
 
                     jsPlumb.connect({
                         source: 'block_'+parent_id, target:'block_'+id 
@@ -278,7 +296,29 @@ function load_parent(parent_id, id) {
 
                     if (debug) console.log('setting first_parent '+item.parent_id);
                     first_parent = "block_" + item.parent_id;             
+                    jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
                 }                
+                my_top_root = 0;
+                var normal_width = 0;
+                
+                $('.skill_child').each( function(){                                          
+                    normal_width = $(this).width();
+                    return true;                    
+                });              
+                final_left = $('body').width() / 2 - normal_width/2;
+
+                console.log('normal_width ----->   '+normal_width);
+                console.log('body.width ----->   '+$('body').width());   
+                console.log('final_left ----->   '+final_left);                   
+
+                $('#block_'+item.id).css('left', final_left+'px');
+                jsPlumb.repaint('block_'+item.id);
+                
+                
+
+                //jsPlumb.animate(id, { left: final_left, top:my_top_root }, { duration: 100 });
+                //jsPlumb.animate(parent_id, { left: final_left, top:my_top_root }, { duration: 100 });   
+
             });                
         }
     });

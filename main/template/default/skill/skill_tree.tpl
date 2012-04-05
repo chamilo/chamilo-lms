@@ -85,10 +85,12 @@ jsPlumb.ready(function() {
     jQuery.ajaxSetup({
         beforeSend: function() {
             loading.dialog( "open" );
+            //$('#skill_tree').hide();
             console.log('before------------------->>');
         },
         complete: function(){
             loading.dialog( "close" );                    
+            //$('#skill_tree').show();
             console.log('complete------------------->>');
         },
         success: function() {}
@@ -236,13 +238,14 @@ jsPlumb.ready(function() {
             
             //If there are 2 parents in the skill_tree
             if (parents.length == 2 ) {
-                first_parent = parents[0];   
+                first_parent = parents[0]; 
+                $('#'+parents[1]).css('top', '0px');
                 //console.log('deleting: '+parents[0]);        
                 //removing father
                 console.log("first_parent " + first_parent);
                 
                 for (var i = 0; i < skills.length; i++) {  
-                    console.log('looping '+skills[i].element + ' ');
+                    //console.log('looping '+skills[i].element + ' ');
                     if (skills[i].element == parents[0] ) {
                         console.log('deleting parent:'+ skills[i].element + ' here ');                             
                         jsPlumb.deleteEndpoint(skills[i].element);
@@ -258,10 +261,10 @@ jsPlumb.ready(function() {
                 
             if ($(this).hasClass('first_window')) {  
                 console.log('im in a first_window (root)');
+                $('#'+first_parent).css('top', '0px');
                 //show the first_parent
                 //if (first_parent != '') {
-                   parents = [first_parent, id];
-                   console.log(parents);
+                   parents = [first_parent, id];                   
                    open_parent(first_parent, id);
                 //}
             }

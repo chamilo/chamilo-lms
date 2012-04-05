@@ -2937,16 +2937,18 @@ form .formw .freeze {
 
 .first_window {
     border: 1px solid red;
-    cursor:pointer;
+    cursor:pointer;    
 }
 
 .second_window {
-    border: 1px solid blue;        
+    border: 1px solid blue;       
+    margin-left:0px;    
 }
 
 .third_window {    
     border: 1px solid blue;
     cursor:pointer;
+    
 }
 
 ._jsPlumb_endpoint {

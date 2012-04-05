@@ -15,7 +15,9 @@ switch ($action) {
         echo '<div class="well">';
             echo '<div class="row">';
             echo '<div class="span2">';
+            echo '<div class="thumbnail">';            
             echo '<img src="'.$user_info['avatar'].'" /> ';
+            echo '</div>';
             echo '</div>';
             echo '<div class="span2">';
             

@@ -19,13 +19,8 @@ body {
 </style>
 <script type="text/javascript">
 
-//js settings
+//js settings (see the skills.js for more)
 var url             = '{{url}}';
-var skills          = []; //current window divs
-var parents         = []; //list of parents normally there should be only 2
-var first_parent   = '';
-
-var duration_value  = 500;
 
 //Block settings see the SkillVisualizer Class
 var offset_x                = {{skill_visualizer.offset_x}};
@@ -34,24 +29,6 @@ var space_between_blocks_x  = {{skill_visualizer.space_between_blocks_x}};
 var space_between_blocks_y  = {{skill_visualizer.space_between_blocks_y}};
 var center_x                = {{skill_visualizer.center_x}};
 var block_size              = {{skill_visualizer.block_size}};
-
-//Setting the parent by default 
-var parents = ['block_1'];
-
-function clean_values() {    
-    skills          = []; //current window divs
-    parents = ['block_1'];
-    first_parent   = '';
-    
-    //Reseting jsplumb
-    jsPlumb.reset();                            
-    //Deletes all windows
-    $('.skill_root').remove();
-    $('.skill_child').remove();
-    
-    open_block('block_1', 0, 1);
-}
-
 
 $(window).resize(function() {    
     jsPlumb.repaintEverything();    
@@ -342,8 +319,7 @@ jsPlumb.ready(function() {
     resetRenderMode(jsPlumb.CANVAS);       
 });
     
-;(function() {
-         
+;(function() {         
     prepare = function(div, endpointOptions) {
         console.log('preparing = '+div);
         console.log('endpointOptions = '+endpointOptions);

@@ -1,6 +1,27 @@
 /* For licensing terms, see /license.txt */
 
 var debug = 1;
+var skills          = []; //current window divs
+var parents         = []; //list of parents normally there should be only 2
+var first_parent   = '';
+var duration_value  = 500;
+//Setting the parent by default 
+var parents = ['block_1'];
+
+function clean_values() {    
+    skills          = []; //current window divs
+    parents = ['block_1'];
+    first_parent   = '';
+    
+    //Reseting jsplumb
+    jsPlumb.reset();                            
+    //Deletes all windows
+    $('.skill_root').remove();
+    $('.skill_child').remove();
+    
+    open_block('block_1', 0, 1);
+}
+
 
 //Admin/normal arrows
 var editEndpointOptions = {  
@@ -60,15 +81,8 @@ function open_parent(parent_id, id) {
     $('.skill_child').each( function(){                                          
         normal_width = $(this).width();
         return true;                    
-    });    
-
-
-    
+    });        
     load_parent(numeric_parent_id, numeric_id);
-}
-
-function open_block_student(id) {
-    open_block(id, 1)
 }
 
 /*   

@@ -189,9 +189,8 @@ class CatForm extends FormValidator {
                     $content .= Display::tag('li', $skill['name'].'<a id="deleteskill_'.$skill['id'].'" class="closebutton" href="#"></a>', array('id'=>'skill_'.$skill['id'], 'class'=>'bit-box')); 
                 }
             }
-            $this->addElement('html', '<div class="row"><div class="label "></div><div class="formw">'.
-                                Display::tag('ul', $content, array('class'=>'holder holder_simple')).'</div></div>'
-            );
+            $this->addElement('label', null, Display::tag('ul', $content, array('class'=>'holder holder_simple')));
+            
         }
         
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					
@@ -207,8 +206,6 @@ class CatForm extends FormValidator {
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
-        
-		
         
 		if ($this->form_type == self :: TYPE_ADD) {
 			$this->addElement('style_submit_button', null, get_lang('AddCategory'), 'class="save"');

@@ -6,7 +6,7 @@
  *
  *	@package chamilo.document
  *
- * @author Juan Carlos Ra�a Trabado
+ * @author Juan Carlos Raña Trabado
  * @since 5/mar/2011
 */
 /**
@@ -15,18 +15,23 @@
 require_once '../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-//security. Nanogong need less security because under Firefox, Chrome..., not save user_id...
+//security. Nanogong need less security because under Firefox, Chrome..., not stay  SESSION 
 if (api_get_setting('enable_nanogong') == 'false'){
 	api_protect_course_script();
 	api_block_anonymous_users();
 }
 
-if (!isset($_GET['filename']) || !isset($_GET['filepath']) || !isset($_GET['dir']) || !isset($_GET['course_code'])){
-	api_not_allowed(true);
+if (!isset($_GET['filename']) || !isset($_GET['filepath']) || !isset($_GET['dir']) || !isset($_GET['course_code'])|| !isset($_GET['nano_group_id']) || !isset($_GET['nano_session_id']) || !isset($_GET['nano_user_id'])){
+	echo 'Error. Not allowed';
+	exit;
 }
 if (!is_uploaded_file($_FILES['voicefile']['tmp_name'])) exit;
 
 //clean
+$nano_user_id=Security::remove_XSS($_GET['nano_user_id']);
+$nano_group_id=Security::remove_XSS($_GET['nano_group_id']);
+$nano_session_id=Security::remove_XSS($_GET['nano_session_id']);
+
 $filename=Security::remove_XSS($_GET['filename']);
 $filename=urldecode($filename);
 $filepath=Security::remove_XSS(urldecode($_GET['filepath']));
@@ -45,13 +50,23 @@ $title= str_replace('_',' ',$filename);
 //
 $documentPath = $filepath.$filename;
 
+/*
+//comment because here api_get_user_id() return alway 0
+if ($nano_user_id!= api_get_user_id() || api_get_user_id()==0 || $nano_user_id==0) {
+	echo 'Not allowed';
+	exit;
+}
+*/
+
+//Do not use here check Fileinfo method because return: text/plain
+
 if (!file_exists($documentPath)){
 	//add document to disk
 	move_uploaded_file($_FILES['voicefile']['tmp_name'], $documentPath);
 	
 	//add document to database
-	$current_session_id = api_get_session_id();
-	$groupId=$_SESSION['_gid'];
+	$current_session_id = $nano_session_id; // $nano_session_id instead api_get_session_id() because here $_SESSION is lost
+	$groupId=$nano_group_id; // $nano_group_id instead $_SESSION['_gid'], because here $_SESSION is lost.
 	$file_size = filesize($documentPath);
 	$relativeUrlPath=$dir;		
 	$doc_id = add_document($_course, $relativeUrlPath.$filename, 'file', filesize($documentPath), $title);

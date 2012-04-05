@@ -135,7 +135,10 @@ function submitVoice() {
 	var lang_give_a_title="<?php echo get_lang('NanogongGiveTitle'); ?>";
 	var lang_failled_to_submit="<?php echo get_lang('NanogongFailledToSubmit'); ?>";
 	var lang_submitted="<?php echo get_lang('NanogongSubmitted'); ?>";
-	
+	// user and group id
+	var nano_user_id="<?php echo api_get_user_id(); ?>";
+	var nano_group_id="<?php echo api_get_group_id(); ?>";
+	var nano_session_id="<?php echo api_get_session_id(); ?>";
 	//path, url and filename
 	var filename = document.getElementById("audio_title").value+".wav";	
 	var filename = filename.replace(/\s/g, "_");//replace spaces by _
@@ -143,7 +146,7 @@ function submitVoice() {
 	var filepath="<?php echo urlencode($filepath); ?>";
 	var dir="<?php echo urlencode($dir); ?>";
 	var course_code="<?php echo urlencode($course_code); ?>";
-	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code;	
+	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code+"&nano_group_id="+nano_group_id+"&nano_session_id="+nano_session_id+"&nano_user_id="+nano_user_id;
 	
 	//check	
 	var recorder

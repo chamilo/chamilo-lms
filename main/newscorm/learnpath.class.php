@@ -5000,9 +5000,8 @@ class learnpath {
         if ($update_audio != 'true') {
         	$return .= '<div class="span12"><ul id="lp_item_list">';
         	$return .= print_recursive($elements, $default_data, $default_content);
-        	$return .='</ul></div>';
-        	
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button white medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
+        	$return .='</ul></div>';        	
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
         } else {        
         	$return .= $return_audio.'</table>';
         }

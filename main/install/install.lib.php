@@ -2028,7 +2028,7 @@ function display_after_install_message($installType, $nbr_courses) {
     echo '</div>';
     ?></form>
     <br /><br />
-    <a class="a_button green" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    <a class="btn btn-success btn-large" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
     <?php
 }
 

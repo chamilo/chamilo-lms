@@ -1572,7 +1572,7 @@ function display_student_links() {
 	}	
 	$day_url = '&month='.date('m').'&year='.date('Y').'&view='.Security::remove_XSS($_GET['view']);
 	$today_url = api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id();
-	echo Display::url(get_lang('Today'), $today_url, array('class'=>'a_button white medium'));
+	echo Display::url(get_lang('Today'), $today_url, array('class'=>'btn'));
 	
 	//@todo Add next events and all events?  ...
 	 

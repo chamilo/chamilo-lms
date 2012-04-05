@@ -79,8 +79,16 @@ class PDF {
             
         //Formatting the pdf
         self::format_pdf($course_data);
-               
-        foreach ($html_file_array as $file) {
+        $counter = 1;
+        
+        foreach ($html_file_array as $file) {            
+            //Add a page break per file
+            $page_break = '<pagebreak>';
+            if ($counter == count($html_file_array)) {
+                $page_break = '';
+            }
+            $counter++;
+            
             $html_title = '';
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
@@ -94,7 +102,7 @@ class PDF {
             if (empty($file) && !empty($html_title)) {
             	//this is a chapter, print title & skip the rest
                 if ($print_title) {
-                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>',2);
+                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break,2);
                 }
                 continue;
             } 
@@ -112,8 +120,7 @@ class PDF {
             $file_info = pathinfo($file);
             $extension = $file_info['extension'];
             
-            if (in_array($extension, array('html', 'htm'))) {
-            
+            if (in_array($extension, array('html', 'htm'))) {            
                 $dirname = str_replace("\\", '/', $file_info['dirname']);
                 $filename = $file_info['basename'];
                 $filename = str_replace('_',' ',$filename);
@@ -141,8 +148,7 @@ class PDF {
                     $result = @$doc->loadHTML($document_html);
                                          
                     //Fixing only images @todo do the same thing with other elements
-                    $elements = $doc->getElementsByTagName('img');
-                    $replace_img_elements = array();
+                    $elements = $doc->getElementsByTagName('img');                    
                     if (!empty($elements)) {
                         foreach($elements as $item) {                    
                             $old_src = $item->getAttribute('src');
@@ -164,13 +170,13 @@ class PDF {
                 }
                 
                 if (!empty($document_html)) {                	
-                    $this->pdf->WriteHTML($document_html,2);
+                    $this->pdf->WriteHTML($document_html.$page_break, 2);
                 }
             } elseif (in_array($extension, array('jpg','jpeg','png','gif'))) {
                 //Images
                 $image = Display::img($file);
-                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>',2);
-            } 
+                $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break,2);
+            }            
         }
        
         if (empty($pdf_name)) {

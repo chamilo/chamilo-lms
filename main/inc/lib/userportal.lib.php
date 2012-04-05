@@ -933,22 +933,22 @@ class IndexManager {
 	}
 	
 	/**
-	 * The most important function here, prints the session and course list
+	 * The most important function here, prints the session and course list (user_portal.php)
 	 *  
 	 * */
-	function return_courses_and_sessions() {		       
+	function return_courses_and_sessions($user_id) {		       
         $courses_tree = array();        
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		
 		if ($load_history) {
             //Load courses history 
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);            
+			$courses_tree = UserManager::get_sessions_by_category($user_id, true, true, true);            
 			if (empty($courses_tree[0]) && count($courses_tree) == 1) {
 				$courses_tree = null;
 			}
 		} else {
             //Load current courses
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, false, true);            
+			$courses_tree = UserManager::get_sessions_by_category($user_id, true, false, true);            
 		}
         
 		if (!empty($courses_tree)) {
@@ -956,14 +956,14 @@ class IndexManager {
 				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
                 //Get courses
 				if ($cat == 0) {                    
-					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);                            
+					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($user_id, false);                            
 				}
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
                 //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
 					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {                        
 						$courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
-						$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session(api_get_user_id(), $s_id);
+						$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session($user_id, $s_id);
 					}
 				}
 			}
@@ -986,9 +986,9 @@ class IndexManager {
                     // If we're not in the history view...
 					if (!isset($_GET['history'])) {						                        // 
                         //Display special courses
-						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);                        
+						$html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
                         //Display courses
-                        $html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
+                        $html .= CourseManager :: display_courses($user_id, $this->load_directories_preview);
 					}
                     
 					// Independent sessions
@@ -1052,8 +1052,7 @@ class IndexManager {
                             $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
 						}
 					}
-				} else {
-                    
+				} else {                    
 					// All sessions included in.
 					if (!empty($category['details'])) {
 						$count_courses_session = 0;
@@ -1092,7 +1091,7 @@ class IndexManager {
                                 if (api_is_drh()) {
                                     $session_link = $session_box['title'];
                                 } else {
-                                    $session_link = Display::tag('a',$session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                    $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
                                 }
                                 
 								$params['title'] .=  $session_link;
@@ -1114,8 +1113,7 @@ class IndexManager {
 							if (api_is_platform_admin()) {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';
 							}                            
-							$params['title'] .=  $category['details']['name'];							
-		
+							$params['title'] .=  $category['details']['name'];
 							
 							if ($category['details']['date_end'] != '0000-00-00') {
 								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);

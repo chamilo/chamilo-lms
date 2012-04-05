@@ -1,28 +1,8 @@
-// Arrow settings
+/* For licensing terms, see /license.txt */
 
 var debug = 1;
 
-var exampleDropOptions = {
-    tolerance:'touch',
-    hoverClass:'dropHover',
-    activeClass:'dragActive'
-};
-
-var connectorPaintStyle = {
-    lineWidth:5,
-    strokeStyle:"#deea18",
-    joinstyle:"round"
-};
-
-// .. and this is the hover style. 
-var connectorHoverStyle = {
-    lineWidth:7,
-    strokeStyle:"#2e2aF8"
-};    
-
-//Admin arrows
-  
-
+//Admin/normal arrows
 var editEndpointOptions = {  
     isTarget:true, 
     maxConnections:100,
@@ -30,36 +10,17 @@ var editEndpointOptions = {
     paintStyle:{ 
        fillStyle:"yellow" },
     detachable:false,
-    connector:"Straight"
+    connector:"Straight"    
 };
 
 
 //Student arrows    
 
-//If user does not completed the skill
-var default_arrow_color = '#ccc';     //gray  
-var defaultEndpoint = {
-    connector:[ "Flowchart", { stub:28 } ],
-    anchors: ['BottomCenter','TopCenter'],            
-    endpoint:"Rectangle",
-    paintStyle:{ width:1, height:1, fillStyle:default_arrow_color },
-    isSource:false,
-    scope:'blue rectangle',
-    maxConnections:10,
-    connectorStyle : {
-        gradient:{ stops:[[0, default_arrow_color], [0.5, default_arrow_color], [1, default_arrow_color]] },
-        lineWidth:5,
-        strokeStyle:default_arrow_color
-    },
-    isTarget:false,          
-    setDraggableByDefault : false,      
-};            
-
 // If user completed the skill 
 var done_arrow_color = '#73982C'; //green   
 var doneEndpointOptions = {                
-    connector:[ "Flowchart", { stub:28 } ],
-    anchors: ['BottomCenter','TopCenter'],    
+    //connector:[ "Flowchart", { stub:28 } ], like a chart
+    //anchors: ['BottomCenter','TopCenter'],    
     endpoint:"Rectangle",
     paintStyle:{ width:1, height:1, fillStyle:done_arrow_color},
     isSource:false,
@@ -71,7 +32,8 @@ var doneEndpointOptions = {
         strokeStyle:done_arrow_color
     },
     isTarget:false,
-    setDraggableByDefault : false,                         
+    setDraggableByDefault : false,     
+    connector:"Straight"
 };
 
 //Functions   

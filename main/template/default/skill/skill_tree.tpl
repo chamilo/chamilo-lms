@@ -53,18 +53,13 @@ function clean_values() {
 }
 
 
-$(window).resize(function() {
-    
+$(window).resize(function() {    
     jsPlumb.repaintEverything();    
-    /*jsPlumb.repaint(".skill_root");
-    
+    /*jsPlumb.repaint(".skill_root");    
     // When resize repaint everything + fix the root position
     normal_weight = $('.skill_child :first-child').width();                
     sum = $('body').width() / 2 - normal_weight/2;
     $('.skill_root').animate({ left: sum, top:0 }, { duration: 100 });*/
-    
-    
-    
 });
 
 jsPlumb.ready(function() {
@@ -132,9 +127,8 @@ jsPlumb.ready(function() {
         }
     );
     
-    //Add button on click
-    
-    $("#add_item_link").click(function() {        
+    //Add button on click    
+    $("#add_item_link").click(function() {     
         $("#name").attr('value', '');
         $("#description").attr('value', '');        
         $("#parent_id option:selected").removeAttr('selected');
@@ -451,9 +445,7 @@ $(document).ready(function() {
     </div>
 </div>
            
-<div id="skill_tree">
-</div>
-{# $html #}
+<div id="skill_tree"></div>
 
 <div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>

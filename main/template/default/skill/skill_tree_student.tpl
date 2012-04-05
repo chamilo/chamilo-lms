@@ -28,12 +28,12 @@ var duration_value  = 500;
 
 
 //Block settings see the SkillVisualizer Class
-var offset_x                = {{skill_visualizer->offset_x}};
-var offset_y                = {{skill_visualizer->offset_y}};
-var space_between_blocks_x  = {{skill_visualizer->space_between_blocks_x}};
-var space_between_blocks_y  = {{skill_visualizer->space_between_blocks_y}};
-var center_x                = {{skill_visualizer->center_x}};
-var block_size              = {{skill_visualizer->block_size}};
+var offset_x                = {{skill_visualizer.offset_x}};
+var offset_y                = {{skill_visualizer.offset_y}};
+var space_between_blocks_x  = {{skill_visualizer.space_between_blocks_x}};
+var space_between_blocks_y  = {{skill_visualizer.space_between_blocks_y}};
+var center_x                = {{skill_visualizer.center_x}};
+var block_size              = {{skill_visualizer.block_size}};
 
 //Setting the parent by default 
 var parents = ['block_1'];
@@ -152,96 +152,18 @@ jsPlumb.bind("ready", function() {
 });
         
             
-;(function() {         
-    prepare = function(div, endpointOptions) {
-        //jsPlumbDemo.initHover(elId);
-        //jsPlumbDemo.initAnimation(elId);        
-        var endpoint = jsPlumb.addEndpoint(div, endpointOptions);
-        //jsPlumbDemo.initjulio(e);    
-        skills.push({
-            element:div, endp:endpoint
-        });        
-        return endpoint;
-    },
-    
-    window.jsPlumbDemo = {    
-        initjulio :function(e) {
-        },      
-        initHover :function(elId) {            
-            
-           /* $("#" + elId).click(function() {
-                var  all = jsPlumb.getConnections({
-                    source:elId
-                });               
-            });*/
-            
-            /*$("#" + elId).hover(
-                function() { $(this).addClass("bigdot-hover"); },
-                function() { $(this).removeClass("bigdot-hover"); }
-            );*/
-        },        
+;(function() {    
+    window.jsPlumbDemo = {  	   
         init : function() {
-        
-            jsPlumb.Defaults.DragOptions    = { cursor: 'pointer', zIndex:2000 };
-            jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
-            jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
-            jsPlumb.Defaults.Endpoint       = "Rectangle";
-            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
-
-              
-            jsPlumb.Defaults.Overlays = [
-                //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
-            ];
-                           
-            jsPlumb.setMouseEventsEnabled(true);            
+            console.log('Import defaults');            
+            jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];            
+            jsPlumb.Defaults.Container = "skill_tree";
             
-            {$js}
-  
-            var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
-            jsPlumb.draggable(divsWithWindowClass);
-            
-            jsPlumbDemo.attachBehaviour();          
+            open_block('block_1', 1, 1);            
         }
     };
 })();
 
-
-;(function() {
-    
-    jsPlumbDemo.showConnectionInfo = function(s) {
-        $("#list").html(s);
-        $("#list").fadeIn({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
-    
-    jsPlumbDemo.hideConnectionInfo = function() {
-        $("#list").fadeOut({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
-    
-    jsPlumbDemo.getSelector = function(spec) {
-        return $(spec);
-    };
-    
-    jsPlumbDemo.attachBehaviour = function() {
-        $(".hide").click(function() {
-            jsPlumb.toggle($(this).attr("rel"));
-        });
-
-        $(".drag").click(function() {
-            var s = jsPlumb.toggleDraggable($(this).attr("rel"));
-            $(this).html(s ? 'disable dragging' : 'enable dragging');
-            if (!s) $("#" + $(this).attr("rel")).addClass('drag-locked'); else $("#" + $(this).attr("rel")).removeClass('drag-locked');
-            $("#" + $(this).attr("rel")).css("cursor", s ? "pointer" : "default");
-        });
-
-        $(".detach").click(function() {
-            jsPlumb.detachAll($(this).attr("rel"));
-        });
-
-        $("#clear").click(function() { 
-            jsPlumb.detachEverything(); showConnections(); 
-        });
-    };
-})();
 
 
 $(document).ready( function() {     
@@ -253,6 +175,8 @@ $(document).ready( function() {
     });
 });
 </script>
+
+<div id="skill_tree"></div>
 
 <div id="dialog-form" style="display:none;">    
     <form id="add_item" class="form-horizontal"  name="form">

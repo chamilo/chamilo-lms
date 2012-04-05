@@ -207,6 +207,8 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     }
 
                     $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_child open_block '+status_class+'" >'+item.name+'</div>');
+                    $('#block_'+item.id).css('top', '100px');
+                    
                     if (debug) console.log('Append block: '+item.id);
 
                     /*$('#block_'+item.id).css({ 
@@ -253,7 +255,11 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     q = $(this).css('margin-left').replace("px", "");                
                 });                                       
                 sum = $('body').width() / 2 - normal_weight/2 - q/2;
+                
                 jsPlumb.animate('block_'+my_id, { left: sum, top:0 }, { duration: 100 });  
+                //console.log('--> changing top of .skill_child'+ $('.skill_child').css('top') + 50);
+                //$('.skill_child').css('top', $('.skill_child').css('top') + 50);
+                
                 
                 console.log('setting animate for block_'+my_id);
 

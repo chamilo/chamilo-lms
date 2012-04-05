@@ -136,7 +136,6 @@ function open_block(id, load_user_data, create_root) {
 function load_children(my_id, top_value, load_user_data, create_root) {
     if (debug) console.log("load_children : my_id " + my_id + ", top_value:" + top_value +", load_user_data: "+load_user_data+", create_root: "+create_root);
     
-    
     //Fix the block vertical position
     //$('#block_'+my_id).css('top', '150px');
     my_top = 50;
@@ -252,18 +251,17 @@ function load_children(my_id, top_value, load_user_data, create_root) {
 
 /* Loads parent blocks */
 function load_parent(parent_id, id) {
-    if (debug) console.log("load_parent call : id " + id + " parent_id:" + parent_id);
-    var ix= 0;         
+    if (debug) console.log("load_parent call : id " + id + " parent_id:" + parent_id);         
     $.ajax({
         url: url+'&a=load_direct_parents&id='+id,
         async: false, 
-        success: function(json) {                
+        success: function(json) {              
             var json = jQuery.parseJSON(json);
 
             $.each(json,function(i,item) {
                 if (item.parent_id == 0) {
 
-                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_root first_window " >'+item.name+'</div>');                
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="skill_root first_window ">'+item.name+'</div>');                
 
                     jsPlumb.connect({
                         source: 'block_'+parent_id, target:'block_'+id 
@@ -272,7 +270,7 @@ function load_parent(parent_id, id) {
                     if (debug) console.log('setting NO--- first_parent ');                    
                     first_parent = '';             
                 } else {
-                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="open_block skill_root first_window " >'+item.name+'</div>');                
+                    $('#skill_tree').append('<div id="block_'+item.id+ '" class="open_block skill_root ">'+item.name+'</div>');                
 
                     jsPlumb.connect({
                         source: 'block_'+parent_id, target:'block_'+id 
@@ -283,10 +281,8 @@ function load_parent(parent_id, id) {
                 }                
             });                
         }
-        });
+    });
 }
-
-
 
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {

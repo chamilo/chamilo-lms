@@ -292,7 +292,7 @@ jsPlumb.ready(function() {
         
         //redraw
         jsPlumb.repaintEverything();
-        jsPlumb.repaint('#'+id);
+        jsPlumb.repaint(id);
  
     });
     

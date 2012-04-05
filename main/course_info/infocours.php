@@ -135,7 +135,7 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
 $form->addElement('html', $image_html);
 
 
-$form->add_textfield('title', get_lang('Title'), true, array('size' => '60'));
+$form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
 //$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -155,10 +155,10 @@ $form->applyFilter('visual_code', 'strtoupper');*/
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
-$form->add_textfield('department_name', get_lang('Department'), false, array('size' => '60'));
+$form->add_textfield('department_name', get_lang('Department'), false, array('class' => 'span5'));
 $form->applyFilter('department_name', 'trim');
 
-$form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('size' => '60'));
+$form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
 //$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 

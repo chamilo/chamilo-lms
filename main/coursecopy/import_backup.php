@@ -84,17 +84,17 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore();
 		Display::display_normal_message(get_lang('ImportFinished').
-            '<a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>', false);
+            '<a class="btn" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang('CourseHomepage').'</a>', false);
 	} else {
 		if (!$error) {
 			Display::display_warning_message(get_lang('NoResourcesInBackupFile').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
+                '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
 		} elseif ($filename === false) {
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
+                '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
         } else {
 			Display::display_error_message(api_ucfirst(get_lang('UploadError')).
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
+                '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
 		}
 	}
 	CourseArchiver::clean_backup_dir();
@@ -111,10 +111,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		CourseSelectForm::display_form($course, array('same_file_name_option' => $_POST['same_file_name_option']));
 	} elseif ($filename === false) {
     	Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-            '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
+            '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
     } else {
 		Display::display_warning_message(get_lang('NoResourcesInBackupFile').
-            '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
+            '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>', false);
 	}
 } else {
 	$user = api_get_user_info();

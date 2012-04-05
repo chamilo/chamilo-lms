@@ -3623,3 +3623,7 @@ a.forum_group_link {
     position: relative !important;
     z-index: 100;
 }
+
+#main_content .course_item {
+    padding: 5px 0px 5px 0px;
+}

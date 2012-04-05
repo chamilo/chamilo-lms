@@ -2788,7 +2788,7 @@ class CourseManager {
         $html = '';
         $class = "well";
         if ($is_sub_content) {
-            $class = "";
+            $class = "course_item";
         }                     
         $html .= '<div class="'.$class.'">'; 
             $html .= '<div class="row">';    
@@ -2796,10 +2796,10 @@ class CourseManager {
             $html .= '<div class="span6">';
             $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
             if (!empty($params['teachers'])) {                    
-                $html .= '<h5>'.$params['teachers'].'</h5>';
+                $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
             }                    
             if (!empty($params['coaches'])) {                    
-                $html .= '<h5>'.$params['coaches'].'</h5>';
+                $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
             }    
             $html .= '</div>';                        
             $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        

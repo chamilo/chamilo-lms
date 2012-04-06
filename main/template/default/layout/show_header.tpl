@@ -3,7 +3,7 @@
     for backward compatibility we suppose that the default layout is one column which means using a div with class span12
 #}
 {% include "default/layout/main_header.tpl" %}
-{% if show_header is not null%}          
+{% if show_header == 1 %}
         {% if plugin_content_top is not null %}
             <div id="plugin_content_top" class="span12">
                 {{ plugin_content_top }}

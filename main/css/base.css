@@ -3636,3 +3636,29 @@ a.forum_group_link {
 #main_content .course_item {
     padding: 5px 0px 5px 0px;
 }
+
+/* actions */
+.actions_lp {
+    background:#F8F8F8;
+    height: 40px;
+    padding-left: -17px;
+    margin: 5px 2px 1px 12px;
+    vertical-align:middle;
+    width: 90%;    
+}
+.actions_lp .btn-group {
+    margin-left: 25px;
+}
+.actions_lp img {
+    vertical-align:middle;
+}
+.actions_lp a {  
+}
+.actions_lp span {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions_lp form {
+    margin-right: 10px;
+    vertical-align:middle;
+}

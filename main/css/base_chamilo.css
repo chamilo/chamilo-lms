@@ -1500,30 +1500,7 @@ Document title
     width: 75%;
     float:left;
 }
-/* actions */
-.actions_lp {
-    background:#F8F8F8;
-    height: 40px;
-    padding-left: -17px;
-    margin: 5px 2px 1px 12px;
-    vertical-align:middle;
-    width: 90%;
-}
-.actions_lp img {
-    vertical-align:middle;
-}
-.actions_lp a {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions_lp span {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions_lp form {
-    margin-right: 10px;
-    vertical-align:middle;
-}
+
 .actions {	
 	background:#efefef;
     border:1px solid #ccc; 

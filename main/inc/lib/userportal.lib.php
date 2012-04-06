@@ -848,8 +848,7 @@ class IndexManager {
 		if (api_get_setting('allow_social_tool') == 'true') {
 			unset($this->tpl->menu_navigation['myprofile']);
 		}
-        var_dump($this->tpl->menu_navigation);
-        
+                
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
 		if (!empty($this->tpl->menu_navigation)) {            
@@ -869,58 +868,49 @@ class IndexManager {
 	
 	function return_account_block() {
 		$html = '';
-		
-		$show_menu        = false;
+
 		$show_create_link = false;
 		$show_course_link = false;
-		$show_digest_link = false;
-		
+				
 		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
 		if ($display_add_course_link) {
-			$show_menu = true;
 			$show_create_link = true;
 		}
 		
 		if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
-			$show_menu = true;
 			$show_course_link = true;
 		} else {
 			if (api_get_setting('allow_students_to_browse_courses') == 'true') {
-				$show_menu = true;
+		
 				$show_course_link = true;
 			}
 		}
 		
-		if (isset($toolsList) && is_array($toolsList) && isset($digest)) {
-			$show_digest_link = true;
-			$show_menu = true;
-		}
-	
-		
 		// My account section		
 		$my_account_content = '<ul class="menulist">';
+        
 		if ($show_create_link) {
 			$my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 		}
         
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .=  Display::url(get_lang('SortMyCourses'), $url);
+        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url).'</li>';
 
         //Course management                
 		if ($show_course_link) {
 			if (!api_is_drh()) {
-				$my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+				$my_account_content .= '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
 	
 				if (api_get_setting('use_session_mode') == 'true') {
 					if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-						$my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+						$my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
 					} else {
-						$my_account_content .=  '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+						$my_account_content .= '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
 					}
 				}
 			} else {
-				$my_account_content .=  '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+				$my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 			}
 		}
 		$my_account_content .= '</ul>';

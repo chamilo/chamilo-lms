@@ -2028,7 +2028,8 @@ table .span24 {
 }
 .btn.active,
 .btn:active {
-  background-image: none;
+   /*fix added for chamilo1.9 */
+  /* background-image: none; */
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);

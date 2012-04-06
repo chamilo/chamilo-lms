@@ -120,7 +120,7 @@ $options = '';
 if (!empty($exercise_url_button)) {
 	$options .= $exercise_url_button;
 }
-$options  = Display::div($options, array('class'=>'offset4 span4'));
+//$options  = Display::div($options, array('class'=>'offset4 span4'));
 
 $my_attempt_array = array();
 $table_content = '';

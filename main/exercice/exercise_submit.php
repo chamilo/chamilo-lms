@@ -1005,21 +1005,25 @@ if (!empty($error)) {
 	        
 	        // shows the question and its answers
 	        showQuestion($questionId, false, $origin, $i, true, false, $user_choice);
-	        	        
-	        if ($objExercise->type == ONE_PER_PAGE) {
-	        	$exercise_actions .= $objExercise->show_button($questionId, $current_question);
-	        }
-	        
-	        if ($objExercise->type == ALL_ON_ONE_PAGE) {
-	            $button  = '<a href="javascript://" class="a_button orange medium" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-	            $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
-	            $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));                			      
+	        	    
+            //BUtton save and continue
+            switch ($objExercise->type) {
+                case ONE_PER_PAGE: 
+                    $exercise_actions .= $objExercise->show_button($questionId, $current_question);
+                    break;
+                case ALL_ON_ONE_PAGE :
+                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                    $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+                    $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));                			      
+                    break;
 			}
-					
+            
+            //Checkbox review answers
 			if ($objExercise->review_answers) {				
-				$remind_question_div .= Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']',  '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
+				$remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
 				$exercise_actions    .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));		                
-			}			
+			}	
+            
 			echo Display::div($exercise_actions, array('class'=>'form-actions'));		
 		echo '</div>';			    
 		    

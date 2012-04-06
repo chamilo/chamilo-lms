@@ -3662,3 +3662,7 @@ a.forum_group_link {
     margin-right: 10px;
     vertical-align:middle;
 }
+
+.exercise_overview_options {
+    text-align: center;
+}

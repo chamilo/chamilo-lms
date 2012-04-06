@@ -92,6 +92,11 @@ $(document).scroll(function() {
 });
 
 $(document).ready(function() {
+    
+    
+    if (!$('#button').hasClass('btn')) {
+        $("button").addClass('btn');
+    }
 
     //Dropdown effect
     $('.dropdown-toggle').dropdown();   

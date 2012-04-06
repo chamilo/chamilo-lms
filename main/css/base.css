@@ -68,16 +68,15 @@ label, input, button, select, textarea, p {
 }
 
 
+
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
     padding-left:30px;
     background-position:8px !important;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat;    
 }
 
-
 /* Fixing old chamilo forms */
-
 form .label {
     color: #404040;
     float: left;    
@@ -825,7 +824,7 @@ button:hover {
 
 button.next.disabled, .a_button.disabled {
     cursor: default;
-    opacity: 0.65;
+    opacity: 0.65;    
 }
 
 .a_button {

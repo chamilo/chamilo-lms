@@ -1,18 +1,24 @@
 
 /* media queries responsive */
 
-/* Responsive Docs
--------------------------------------------------- */
+/* Responsive Docs */
+
+/* Phone */
 @media (max-width: 479px) {
-    /* No chat in mobiles*/
+    /* No chat in mobiles */
     #chatmain {
         display:none;
     }
     
-    #footer .container .row {
-        padding-top:25px;
+    #footer_right #admin_name, #footer_right #software_name {
+        text-align: center !important;
+    }    
+    
+    footer .container .row {
+        padding-top: 15px;        
     }
     
+    /* No resize font */
     .resize_font {
         display:none;
     }
@@ -35,10 +41,14 @@
     #chatmain {
         display:none;
     }
-    #footer .container .row {
-        padding-top:25px;
-    }
     
+     #footer_right #admin_name, #footer_right #software_name {
+        text-align: center !important;
+    }    
+    
+    footer .container .row {
+        padding-top: 15px;        
+    }
     .notification-panel {
         display:none;
     }

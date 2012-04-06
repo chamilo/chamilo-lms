@@ -249,7 +249,7 @@ function handle_stylesheets() {
     }
     </script>
 <?php
-    echo '<form id="stylesheets_id" name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<form id="stylesheets_id" name="stylesheets" class="form-search" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<br /><select name="style" onchange="load_preview(this)" >';
 
     $list_of_styles = array();

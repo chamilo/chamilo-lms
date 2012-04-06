@@ -247,7 +247,7 @@ class SortableTable extends HTML_Table {
             }
 			
 			if (count($this->form_actions) > 0) {
-				$html .= '<script language="JavaScript" type="text/javascript">
+				$html .= '<script type="text/javascript">
                             /*<![CDATA[*/
                             function setCheckbox(value) {
                                 d = document.form_'.$this->table_name.';
@@ -265,7 +265,7 @@ class SortableTable extends HTML_Table {
                             /*]]>*/
                         </script>';
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+				$html .= '<form class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
 		

@@ -44,7 +44,7 @@ if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusna
 }
 echo '<div class="actions"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png',get_lang('Reporting'),'',  ICON_SIZE_MEDIUM).'</a>'.$login_as_icon.'</div>';
 
-api_display_tool_title($tool_name);
+echo Display::page_header($tool_name);
 
 //getting the user image
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
@@ -67,7 +67,7 @@ echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>'
  * Show the sessions and the courses in wich this user is subscribed
  */
 
-echo '<p><h3>'.get_lang('SessionList').'</h3></p>';
+echo Display::page_subheader(get_lang('SessionList'));
 
 $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_table          = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -173,8 +173,7 @@ if (Database::num_rows($res) > 0) {
         $row[] = $tools;
         $data[] = $row;
     }
-
-    echo '<p><h3>'.get_lang('Courses').'</b></h3>';    
+    echo Display::page_subheader(get_lang('Courses'));
     Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));    
 } else {
     echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';

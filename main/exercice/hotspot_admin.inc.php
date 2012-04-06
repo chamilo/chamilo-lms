@@ -502,24 +502,24 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		?>
 			<?php if ($answerType==HOT_SPOT_DELINEATION) {?>		
-				<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessOAR'); ?>" >
-				<input type="submit" class="plus" name="moreOARAnswers" value="<?php echo get_lang('MoreOAR'); ?>" />
+				<input type="submit" class="btn minus" name="lessAnswers" value="<?php echo get_lang('LessOAR'); ?>" >
+				<input type="submit" class="btn plus" name="moreOARAnswers" value="<?php echo get_lang('MoreOAR'); ?>" />
 			<?php } else { ?>
-				<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
-				<input type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />			
+				<input type="submit" class="btn minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
+				<input type="submit" class="btn plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />			
 			<?php } ?>			
-			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />			 
+			<input type="submit" class="btn save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />			 
 		<?php
 			} else {
 			    			
 		      if ($answerType==HOT_SPOT_DELINEATION) {?>		
-				<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessOAR'); ?>" ><?php echo get_lang('LessOAR'); ?></button>
-				<button type="submit" class="plus" name="moreOARAnswers" value="<?php echo get_lang('MoreOAR'); ?>" /><?php echo get_lang('MoreOAR'); ?></button>
+				<button type="submit" class="btn minus" name="lessAnswers" value="<?php echo get_lang('LessOAR'); ?>" ><?php echo get_lang('LessOAR'); ?></button>
+				<button type="submit" class="btn plus" name="moreOARAnswers" value="<?php echo get_lang('MoreOAR'); ?>" /><?php echo get_lang('MoreOAR'); ?></button>
 			<?php } else { ?>
-				<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
-				<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>			
+				<button type="submit" class="btn minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
+				<button type="submit" class="btn plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>			
 			<?php } ?>
-			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
+			<button type="submit" class="btn save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
 		<?php
 			}
 		?>

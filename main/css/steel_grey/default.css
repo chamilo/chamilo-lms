@@ -425,8 +425,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 .subnav ul {
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
-	LIST-STYLE-TYPE: none;
-	display: inline;
+	LIST-STYLE-TYPE: none;	
 }
 .subnav li {
 	PADDING-RIGHT: 0px;
@@ -434,8 +433,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	FLOAT: left;
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
-	padding-top: 10px;
-	height: 31px;
+	padding-top: 10px;	
 }
 .subnav li#current {
 	background:  url(images/tab-left.png) no-repeat top left;
@@ -2219,22 +2217,7 @@ div.comments {
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
-/* BUTTONS */
-button,input[type="submit"] {
-	margin:5px 5px 3px 0px !important;
-	background-color: #a8a7a7;
-	border-width: 1px;
-	-moz-border-radius-topright : 5px;
-	-moz-border-radius-topleft : 5px;
-	-moz-border-radius-bottomright : 5px;
-	-moz-border-radius-bottomleft : 5px;
-	font-size: 100%;
-	text-decoration: none;
-	color: black;
-	cursor: pointer;
-	padding:5px 15px 5px 15px;
-	vertical-align:middle;
-}
+
 button:hover input[type="submit"]:hover {
 	background-color:#a8a7a7;
 	color:#545454;
@@ -2245,24 +2228,6 @@ button.add, button.save, button.cancel, button.refresh, button.upload, button.se
 	padding-left:30px;
 	background-position:10px;
 	background-repeat:no-repeat;
-}
-/* POSITIVE */
-button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next  {
-	background-color:#E5EDF9;
-	border-color: #D4E2F6;
-}
-button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover, input[type="submit"].submit_next:hover {
-	border-color: #D4E2F6;
-	background-color:#D4E2F6;
-}
-/* NEGATIVE */
-button.cancel {
-	background-color:#F8E8E6;
-	border-color: #FFE3DE;
-}
-button.cancel:hover {
-	border-color: #F4E1D0;
-	background-color: #FFE3DE;
 }
 /*including "save" image*/
 button.save {

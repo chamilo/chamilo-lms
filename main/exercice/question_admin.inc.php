@@ -44,11 +44,11 @@ if (is_object($objQuestion)) {
     //FORM CREATION
     
 	if(isset($_GET['editQuestion'])) {
-		$class="save";
+		$class="btn save";
 		$text=get_lang('ModifyQuestion');
 		$type = Security::remove_XSS($_GET['type']);
 	} else {
-		$class="add";
+		$class="btn add";
 		$text=get_lang('AddQuestionToExercise');
 		$type = $_REQUEST['answerType'];
 	}

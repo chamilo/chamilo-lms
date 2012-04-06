@@ -287,7 +287,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<form action="blog.php" method="get" enctype="multipart/form-data">
 						<input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
 						<input type="hidden" name="action" value="view_search_result" />
-						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><button class="search" type="submit"><?php echo get_lang('Search'); ?></button>
+						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><button class="btn search" type="submit"><?php echo get_lang('Search'); ?></button>
 					</form>
 				</td>
 			</tr>

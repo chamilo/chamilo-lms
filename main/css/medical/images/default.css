@@ -306,8 +306,7 @@ input[text] {font-size: 12px; }
     PADDING-LEFT: 10px;
     PADDING-BOTTOM: 0px;
     MARGIN: 0px;
-    LIST-STYLE-TYPE: none;
-    display: inline;
+    LIST-STYLE-TYPE: none;    
 }
 .subnav LI {
     PADDING-RIGHT: 0px;

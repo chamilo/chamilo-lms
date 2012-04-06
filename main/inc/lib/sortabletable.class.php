@@ -284,7 +284,7 @@ class SortableTable extends HTML_Table {
 					$html .= '<option value="'.$action.'">'.$label.'</option>';
 				}
 				$html .= '</select>';
-				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang('Select').'</button>';
+				$html .= '&nbsp;&nbsp;<button type="submit" class="btn save" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang('Select').'</button>';
 			} else {
 				$html .= $form;
 			}
@@ -549,7 +549,7 @@ class SortableTable extends HTML_Table {
 	public function get_navigation_html () {
 		$pager          = $this->get_pager();
 		$pager_links    = $pager->getLinks();
-		$showed_items   = $pager->getOffsetByPageId();
+		//$showed_items   = $pager->getOffsetByPageId();
 		$nav            = $pager_links['first'].' '.$pager_links['back'];
 		$nav            .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
 		$nav            .= $pager_links['next'].' '.$pager_links['last'];
@@ -561,7 +561,7 @@ class SortableTable extends HTML_Table {
 	 */
 	public function get_table_html() {
 		$pager    = $this->get_pager();
-		$val      = $pager->getOffsetByPageId();
+		//$val      = $pager->getOffsetByPageId();
 		$offset   = $pager->getOffsetByPageId();
 		$from     = $offset[0] - 1;
         
@@ -637,7 +637,7 @@ class SortableTable extends HTML_Table {
 		//}
 		$result[] = '</select>';
 		$result[] = '<noscript>';
-		$result[] = '<button class="save" type="submit">'.get_lang('Save').'</button>';
+		$result[] = '<button class="btn save" type="submit">'.get_lang('Save').'</button>';
 		$result[] = '</noscript>';
 		$result[] = '</form>';
 		$result = implode("\n", $result);

@@ -250,7 +250,7 @@ function handle_stylesheets() {
     </script>
 <?php
     echo '<form id="stylesheets_id" name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<br /><select name="style" onChange="load_preview(this)" >';
+    echo '<br /><select name="style" onchange="load_preview(this)" >';
 
     $list_of_styles = array();
     $list_of_names  = array();
@@ -301,7 +301,7 @@ function handle_stylesheets() {
     //echo '</select><br />';
     echo '</select>&nbsp;&nbsp;';
     if ($is_style_changeable){
-        echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
+        echo '<button class="btn save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
     }
 }
 

@@ -234,22 +234,20 @@ class UniqueAnswer extends Question {
 		global $text, $class, $show_quiz_edition;
 		//ie6 fix
 		if ($show_quiz_edition) {
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-                
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"'); 
-                $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');				
-				
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                
+                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"'); 
+                $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 			} else {
                 //setting the save button here and not in the question class.php                
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');                
+                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');                
                 $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');				
 			}
 		}
-		$renderer->setElementTemplate('{element}','submitQuestion');
+		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
-		$renderer->setElementTemplate('{element}','moreAnswers');
+		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
 
 		$form -> addElement ('html', '</div></div>');
 

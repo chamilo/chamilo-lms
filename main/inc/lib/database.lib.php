@@ -695,8 +695,8 @@ class Database {
         //Check if the table contains a c_ (means a course id)
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
-        	if (    
-                    
+        	if (
+                strpos($query, 'public_admin') === false &&
                 strpos($query, 'chamilo_electric_blue') === false &&
                 strpos($query, 'wcag_anysurfer_public_pages') === false &&
                 strpos($query, 'specific_field') === false &&

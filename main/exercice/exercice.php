@@ -761,7 +761,7 @@ if (!empty($exercise_list)) {
         echo '<h2>'.get_lang('Quiz').'</h2>';
         echo Display::return_icon('quiz.png', '', array(), 64);
         echo '<div class="controls">';    
-        echo Display::url(get_lang('NewEx'), 'exercise_admin.php?' . api_get_cidreq(), array('class' => 'a_button white'));
+        echo Display::url(get_lang('NewEx'), 'exercise_admin.php?' . api_get_cidreq(), array('class' => 'btn'));
         echo '</div>';
         echo '</div>';
     }

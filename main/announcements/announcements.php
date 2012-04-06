@@ -753,11 +753,11 @@ if ($display_form) {
 	if (empty($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-		echo '<button class="save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
 	} else {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-		echo '<button class="save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
 	}
 	echo '</div></div>';
 	echo '</form><br />';
@@ -957,7 +957,7 @@ if ($display_announcement_list) {
             echo '<h2>'.get_lang('Announcements').'</h2>';
             echo Display::return_icon('valves.png', '', array(), 64);
             echo '<div class="controls">';    
-            echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin']) , array('class' => 'a_button white'));
+            echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin']) , array('class' => 'btn'));
             echo '</div>';
             echo '</div>';                   
         } else {

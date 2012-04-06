@@ -45,7 +45,6 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('ArchiveDirCleanup'));
-
 Display::display_normal_message(get_lang('ArchiveDirCleanupDescr'));
 $form->display();
 Display::display_footer();

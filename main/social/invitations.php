@@ -121,14 +121,11 @@ if ($number_loop != 0) {
                 $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);				        
                 $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
 
-            $social_right_content .= '<table cellspacing="0" border="0">
-            <tbody>
-                <tr>
-                    <td class="invitation_image">
-                        <a href="profile.php?u=<?php echo $sender_user_id; ?>">
-                        <img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' /></a>
-                    </td>
-                    <td class="info">
+            $social_right_content .= '<div class="span2">                        
+                            <a class="thumbnail" href="profile.php?u=<?php echo $sender_user_id; ?>">
+                            <img src="'.$friends_profile['file'].'" /></a>                        
+                    </div>
+                    <div class="span3">
                             <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>
                             <div>
                             '.$title.' : '.$content.'
@@ -142,10 +139,7 @@ if ($number_loop != 0) {
                                 <button class="cancel" name="btn_denied" type="submit" id="btn_deniedst_'.$sender_user_id.' " value="'.get_lang('Deny').' " onclick="javascript:denied_friend(this)" >
                                 '.get_lang('Deny').'</button>
                             </div>					
-                    </td>
-                </tr>
-            </tbody>
-            </table>
+                    </div>                   
         </div>';				
     }
 }		
@@ -165,25 +159,19 @@ if (count($list_get_invitation_sent) > 0 ) {
         $content	= Security::remove_XSS($invitation['content'], STUDENT, true);
         $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG); 		               
         $social_right_content .= '	   	
-            <table cellspacing="0" border="0">
-            <tbody>
-                <tr>
-                    <td class="invitation_image">
-                        <a href="profile.php?u=<?php echo $sender_user_id;?>">
-                        <img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' /></a>
-                    </td>
-                    <td class="info">
+                        <div class="span2">                            
+                            <a class="thumbnail" href="profile.php?u=<?php echo $sender_user_id;?>">
+                                <img src="'.$friends_profile['file'].'"  /></a>                            
+                            </div>
+                        <div class="span3">                                                
                             <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>
                             <div>
                             '. $title.' : '.$content.'
                             </div>
                             <div>
                             '. get_lang('DateSend').' : '.$date.'
-                            </div>		
-                    </td>
-                </tr>
-            </tbody>
-            </table>
+                            </div>
+                    </div>
         </div>
     ';
     }

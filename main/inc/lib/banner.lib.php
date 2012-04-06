@@ -17,13 +17,15 @@
  */
 function get_tabs() {
 	global $_course;
-
+    
+    $navigation = array();
+    
 	// Campus Homepage
 	$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
 	$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
 	// My Courses
-	if(api_get_setting('use_session_mode')=='true') {
+	if (api_get_setting('use_session_mode')=='true') {
 		if(api_is_allowed_to_create_course()) {
 			// Link to my courses for teachers
 			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
@@ -33,7 +35,6 @@ function get_tabs() {
 			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
 			$navigation['mycourses']['title'] = get_lang('MyCourses');
 		}
-
 	} else {
 		// Link to my courses
 		$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
@@ -55,7 +56,7 @@ function get_tabs() {
 	}
 
 	// Reporting
-	if(api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+	if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
 		// Link to my space
 		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
 		$navigation['session_my_space']['title'] = get_lang('MySpace');
@@ -91,7 +92,7 @@ function get_tabs() {
 	}
 
 	// Reports
-	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {        
         $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
         $navigation['reports']['title'] = get_lang('Reports');
 	}
@@ -303,13 +304,15 @@ function return_navigation_array() {
         }
         
 		// Reports
-		if (api_get_setting('show_tabs', 'reports') == 'true') {
-			if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
-				$navigation['reports'] = $possible_tabs['reports'];
-			}
-		} else{
-			$menu_navigation['reports'] = $possible_tabs['reports'];
-		}
+        if (!empty($possible_tabs['reports'])) {
+            if (api_get_setting('show_tabs', 'reports') == 'true') {
+                if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
+                    $navigation['reports'] = $possible_tabs['reports'];                
+                }
+            } else {
+                $menu_navigation['reports'] = $possible_tabs['reports'];            
+            }
+        }
 
 		// Custom tabs
 		for ($i=1;$i<=3;$i++)

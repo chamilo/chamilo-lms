@@ -412,7 +412,7 @@ class IndexManager {
 					break;
 			}
 		}
-		return '<div id="login_fail">'.$message.'</div>';
+		return Display::return_message($message, 'error');
 	}	
 	
 	/**
@@ -848,21 +848,22 @@ class IndexManager {
 		if (api_get_setting('allow_social_tool') == 'true') {
 			unset($this->tpl->menu_navigation['myprofile']);
 		}
+        var_dump($this->tpl->menu_navigation);
         
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
-		if (!empty($this->tpl->menu_navigation)) {
-			$main_navigation_content .= '<ul class="menulist">';           
-		
-			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
+		if (!empty($this->tpl->menu_navigation)) {            
+			$content = '<ul class="menulist">';
+			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {                
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-				$main_navigation_content .= '<li'.$current.'>';
-				$main_navigation_content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-				$main_navigation_content .= '</li>';
+				$content .= '<li'.$current.'>';
+				$content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+				$content .= '</li>';
 			}
-			$main_navigation_content .= '</ul>';
-			$html = self::show_right_block(get_lang('MainNavigation'), $main_navigation_content);
-		}
+			$content .= '</ul>';
+            
+			$html = self::show_right_block(get_lang('MainNavigation'), $content);
+		}        
 		return $html;
 	}
 	

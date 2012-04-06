@@ -62,7 +62,6 @@
 }
 
 /* tabs: anchor size otherwise anchors will have a bigger font size */
-
 .ui-widget {
 	font-size:100%;
 }
@@ -107,6 +106,12 @@
 .ui-jqgrid .ui-pg-input {
     width:30px;
 }
+
+/* Fixes btn class when using bootstrap */
+.ui-widget-content a, .ui-widget-content a:hover {
+    color:inherit;
+}
+
 
 
 /*  cupertino */

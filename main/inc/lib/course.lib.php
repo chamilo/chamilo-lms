@@ -2998,6 +2998,7 @@ class CourseManager {
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
             $show_notification = Display :: show_notification($course_info);
+            
             // New code displaying the user's status in respect to this course.
             $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
             
@@ -3010,7 +3011,7 @@ class CourseManager {
                 	$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
                 	$params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class'=>'document_preview_container'));
                 } else {
-                    $params['right_actions'].= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';                	
+                    $params['right_actions'].= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
                 }
                 
                 if ($course_info['status'] == COURSEMANAGER) {
@@ -3020,7 +3021,11 @@ class CourseManager {
             	if ($load_dirs) {
             		$params['right_actions'] .= '<a id="document_preview_'.$course['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
             		$params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class'=>'document_preview_container'));
-            	}            		
+            	} else {
+                    if ($course_info['status'] == COURSEMANAGER) {
+                        $params['right_actions'].= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                    }
+                }       		
             }
             $course_title = $course_info['title'];
                         
@@ -3047,12 +3052,12 @@ class CourseManager {
             $params['title'] = $course_title;
             $params['teachers'] = $teachers;
             $params['notifications'] = $show_notification;
+            
             $is_subcontent = true;
             if (empty($user_category_id)) {
                 $is_subcontent = false;
             }
-            $html .= self::course_item_html($params, $is_subcontent);
-            
+            $html .= self::course_item_html($params, $is_subcontent);            
             $key++;
         }
         return $html; 

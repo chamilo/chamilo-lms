@@ -1384,7 +1384,7 @@ class Display {
         return '';
     }
     
-    function label($content, $type = 'default') {  
+    function label($content, $type = null) {  
         $class = '';
         switch ($type) {
             case 'success':

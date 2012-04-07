@@ -27,17 +27,11 @@ $type   = 'read'; //edit
 
 $tree   = $skill->get_skills_tree(api_get_user_id(), true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
-
-$html = $skill_visualizer->return_html();
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
-
 $tpl = new Template(null, false, false);
 
 $tpl->assign('url', $url);
-$tpl->assign('html', $html);
 $tpl->assign('skill_visualizer', $skill_visualizer);
-$tpl->assign('js', $skill_visualizer->return_js());
-
 
 $content = $tpl->fetch('default/skill/skill_tree_student.tpl');
 $tpl->assign('content', $content);

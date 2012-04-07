@@ -27,7 +27,8 @@ if (empty($id_session )) {
 $course_code    = Database::escape_string(trim($_GET['course_code']));
 $page           = intval($_GET['page']);
 $action         = $_REQUEST['action'];
-$sort           = in_array($_GET['sort'],array('lastname','firstname','username'))?$_GET['sort']:api_sort_by_first_name()?'firstname':'lastname';
+$default_sort = api_sort_by_first_name() ? 'firstname':'lastname';
+$sort           = in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
 $idChecked      = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 
 $direction      = isset($_GET['direction']) && in_array($_GET['direction'], array('desc','asc')) ? $_GET['direction'] : 'desc';
@@ -53,27 +54,26 @@ if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 }
 
 
-   
-    switch($action) {
-        case 'delete':     
-            if (is_array($idChecked) && count($idChecked)>0 ) {
-                array_map('intval', $idChecked);
-                $idChecked = implode(',',$idChecked);
-            }
-            if (!empty($idChecked)) { 
-                Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".$course_code."' AND id_user IN($idChecked)");
-                $nbr_affected_rows = Database::affected_rows();
-                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".$course_code."'");
-            }
-            header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
-            exit();
-            break;
-        case 'add':          
-            SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);          
-            header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
-            exit;
-            break;
-    }
+switch($action) {
+    case 'delete':     
+        if (is_array($idChecked) && count($idChecked)>0 ) {
+            array_map('intval', $idChecked);
+            $idChecked = implode(',',$idChecked);
+        }
+        if (!empty($idChecked)) { 
+            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".$course_code."' AND id_user IN($idChecked)");
+            $nbr_affected_rows = Database::affected_rows();
+            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".$course_code."'");
+        }
+        header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
+        exit();
+        break;
+    case 'add':          
+        SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);          
+        header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
+        exit;
+        break;
+}
 
 
 $limit  = 20;

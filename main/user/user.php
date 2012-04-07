@@ -29,10 +29,8 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 $this_section = SECTION_COURSES;
 
-
 // notice for unauthorized people.
 api_protect_course_script(true);
-
 
 /*		Libraries	*/
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
@@ -303,82 +301,6 @@ function display_user_search_form() {
 	echo '<input type="submit" value="'.get_lang('SearchButton').'"/>';
 	echo '</form>';	
 }
-/**
-*	This function displays a list if users for each virtual course linked to the current
-*	real course.
-*
-*	defines globals
-*
-*	@version 1.0
-*	@author Roan Embrechts
-*	@todo users from virtual courses always show "-" for the group related output. Edit and statistics columns are disabled *	for these users, for now.
-*/
-/*
-function show_users_in_virtual_courses() {
-	global $_course, $_user, $origin;
-	$real_course_code = $_course['sysCode'];
-	$real_course_info = Database::get_course_info($real_course_code);
-	$user_subscribed_virtual_course_list = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
-	
-	$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
-	$row = 0;
-	$column_header[$row++] = "ID";
-	$column_header[$row++] = get_lang("FullUserName");
-	$column_header[$row++] = get_lang("Role");
-	$column_header[$row++] = get_lang("Group");
-	if (api_is_allowed_to_edit()) {
-		$column_header[$row++] = get_lang("Tutor");
-	}
-	if (api_is_allowed_to_edit()) {
-		$column_header[$row++] = get_lang("CourseManager");
-	}
-
-	if (!is_array($user_subscribed_virtual_course_list)) {
-		return;
-	}
-
-	foreach ($user_subscribed_virtual_course_list as $virtual_course) {
-		$virtual_course_code = $virtual_course["code"];
-		$virtual_course_user_list = CourseManager::get_user_list_from_course_code($virtual_course_code);
-		$message = get_lang("RegisteredInVirtualCourse")." ".$virtual_course["title"]."&nbsp;&nbsp;(".$virtual_course["code"].")";
-		echo "<br/>";
-		echo "<h4>".$message."</h4>";
-		$properties["width"] = "100%";
-		$properties["cellspacing"] = "1";
-		Display::display_complex_table_header($properties, $column_header);
-		foreach ($virtual_course_user_list as $this_user) {
-			$user_id = $this_user["user_id"];
-			$loginname = $this_user["username"];
-			$lastname = $this_user["lastname"];
-			$firstname = $this_user["firstname"];
-			$status = $this_user["status"];
-			$role = $this_user["role"];
-			if ($status == "1") {
-				$status = get_lang("CourseManager");
-			} else {
-				$status = " - ";
-			}
-
-			$full_name = api_get_person_name($firstname, $lastname);
-			if ($lastname == '' || $firstname == '') {
-				$full_name = $loginname;
-			}
-
-			$user_info_hyperlink = "<a href=\"userInfo.php?".api_get_cidreq()."&origin=".$origin."&uInfo=".$user_id."&virtual_course=".$virtual_course["code"]."\">".$full_name."</a>";
-			$row = 0;
-			$table_row[$row++] = $user_id;
-			$table_row[$row++] = $user_info_hyperlink; //Full name
-			$table_row[$row++] = $role; //Description
-			$table_row[$row++] = " - "; //Group, for the moment groups don't work for students in virtual courses
-			if (api_is_allowed_to_edit()) {
-				$table_row[$row ++] = " - "; //Tutor column
-				$table_row[$row ++] = $status; //Course Manager column
-			}
-			Display::display_table_row(null, $table_row, true);
-		}
-		echo '</tbody></table>';
-	}
-}*/
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
@@ -409,28 +331,27 @@ event_access_tool(TOOL_USER);
 /*	Setting the permissions for this page */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 
-
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
 if ( api_is_allowed_to_edit(null, true)) {
 	echo '<div class="actions">';
 
-	// the action links
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
-            $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('user_subscribe_course.png',get_lang("SubscribeUserToCourse"),'',ICON_SIZE_MEDIUM).'</a> ';
-            $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'',ICON_SIZE_MEDIUM)."</a> ";
-        }
-		$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
-	    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
-        
-        if (!api_get_session_id()) {
-            $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-        }      
-        
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
-        
-		$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
+    // the action links
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+        $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('user_subscribe_course.png',get_lang("SubscribeUserToCourse"),'',ICON_SIZE_MEDIUM).'</a> ';
+        $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'',ICON_SIZE_MEDIUM)."</a> ";
+    }
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+
+    if (!api_get_session_id()) {
+        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    }      
+
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
+
+    $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
 		
 	if (api_get_setting('use_session_mode') == 'false') {
 		$actions .= ' <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
@@ -455,28 +376,7 @@ if (1) // platform setting api_get_setting('subscribe_user_by_coach') {
 	}
 }*/
 
-
-/*
-	DISPLAY USERS LIST
-	Also shows a "next page" button if there are
-	more than 50 users.
-
-	There's a bug in here somewhere - some users count as more than one if they are in more than one group
-	--> code for > 50 users should take this into account
-	(Roan, Feb 2004)
-*/
-/*
- * @todo seems not to affect anything in the code
-if (CourseManager::has_virtual_courses_from_code($course_id, $user_id)) {
-	$real_course_code = $_course['sysCode'];
-	$real_course_info = Database::get_course_info($real_course_code);
-	$message = get_lang("RegisteredInRealCourse")." ".$real_course_info["title"]."&nbsp;&nbsp;(".$real_course_info["official_code"].")";
-	echo "<h4>".$message."</h4>";
-}*/
-
-/*
-		DISPLAY LIST OF USERS
-*/
+/* 		DISPLAY LIST OF USERS */
 /**
  *  * Get the users to display on the current page.
  */
@@ -564,7 +464,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	}
 
 	foreach ($a_course_users as $user_id => $o_course_user) {
-		if ((isset ($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
 
 			$groups_name = GroupManager :: get_user_group_name($user_id);
 			$temp = array();
@@ -590,21 +490,23 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$temp[] = $o_course_user['firstname'];
 				}
 
-                $temp[] = $o_course_user['username'];
-				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
-				$temp[] = implode(', ', $groups_name); //Group
-				
+                $temp[] = $o_course_user['username'];                
+				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null; //Description
+				$temp[] = implode(', ', $groups_name); //Group				
 
-				// deprecated feature
+				// Status
+                $default_status = '-';
 				if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
-					$temp[] = get_lang('CourseManager');
+					$default_status = get_lang('CourseManager');
 				} elseif (isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) {
-					$temp[] = get_lang('Tutor');
-				} else {
-					$temp[] = '-';
+					$default_status = get_lang('Tutor');
 				}
-
+                $temp[] = $default_status;
+                
+                //Active
 				$temp[] = $o_course_user['active'];
+                
+                //User id
 				$temp[] = $user_id;
 			} else {
 				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
@@ -635,8 +537,6 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		}
 	}
 	return $a_users;
-	
-	
 }
 
 
@@ -683,21 +583,22 @@ function modify_filter($user_id) {
 
 	if (api_is_allowed_to_edit(null, true)) {
             // edit
-            $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-            if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
-                // unregister
-                if ($user_id != $_user['user_id']) {
-                    $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                } else {
-                    $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                }
+        $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+            // unregister
+            if ($user_id != $_user['user_id']) {
+                $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+            } else {
+                $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             }
-	}
-        //if platform admin, show the login_as icon (this drastically shortens
-        // time taken by support to test things out)
-        if (api_is_platform_admin()) {
-            $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
         }
+	}
+    
+    //if platform admin, show the login_as icon (this drastically shortens
+    // time taken by support to test things out)
+    if (api_is_platform_admin()) {
+        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+    }
 	$result .= "</div>";
 	return $result;
 }

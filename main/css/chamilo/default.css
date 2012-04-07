@@ -191,7 +191,7 @@ button.minus {
 }
 /*including "next" image*/
 button.next {
-    background-image:url(images/button_next.gif);
+    background-image:url(images/button_next.gif) !important;
 }
 /*including "back" image*/
 button.back {

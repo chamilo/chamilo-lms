@@ -939,7 +939,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	                $is_sessionAdmin     = true;
 				} else {                    					
                     //Im a coach or a student?
-					$sql = "SELECT id_user FROM ".$tbl_session_course_user."
+					$sql = "SELECT id_user, status FROM ".$tbl_session_course_user."
                             WHERE   course_code = '$_cid' AND 
                                     id_user     = '".$user_id."' AND
                                     id_session  = '".$session_id."'                                    
@@ -947,11 +947,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 					$result = Database::query($sql);                    
                     
 					if (Database::num_rows($result)) {
-                        $row = Database::fetch_array($result,'ASSOC');     
+                        $row = Database::fetch_array($result, 'ASSOC');     
                         
                         $session_course_status = $row['status'];
                         
-                        switch($session_course_status) {
+                        switch ($session_course_status) {
                             case '2': // coach - teacher
                                 $_courseUser['role'] = 'Professor';
                                 $is_courseMember     = true;

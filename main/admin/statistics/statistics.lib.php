@@ -62,13 +62,11 @@ class Statistics {
         $current_url_id = api_get_current_access_url_id();
 
         if ($_configuration['multiple_access_urls']) {
-
             $status_filter = isset($status)?' AND status = '.intval($status):'';
             $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";
             if (isset ($category_code)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";
             }
-
         } else {
             $status_filter = isset($status)?' WHERE status = '.intval($status):'';
             $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table $status_filter ";
@@ -462,8 +460,7 @@ class Statistics {
         echo '<div class="actions">';
             $form->display();
         echo '</div>';
-
-
+        
         $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
         $parameters = array();
 
@@ -610,6 +607,7 @@ class Statistics {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
+        
         if ($_configuration['multiple_access_urls']) {
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend ".
                 "FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf ".

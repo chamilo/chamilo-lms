@@ -137,11 +137,11 @@ class Matching extends Question {
 		$group = array();
 		
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$group[] = FormValidator :: createElement ('submit', 'lessMatches', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('submit', 'moreMatches', get_lang('AddElem'),'class="plus"');
+			$group[] = FormValidator :: createElement ('submit', 'lessMatches', get_lang('DelElem'),'class="btn minus"');
+			$group[] = FormValidator :: createElement ('submit', 'moreMatches', get_lang('AddElem'),'class="btn plus"');
 		} else {
-            $group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
-			$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');			
+            $group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="btn plus"');
+			$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="btn minus"');			
 		}
 
 		$form -> addGroup($group);

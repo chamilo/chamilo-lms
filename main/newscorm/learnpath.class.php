@@ -2685,18 +2685,18 @@ class learnpath {
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp">';
                 if ($display_action_links_with_icons) {
-                    $html .= '<div style = "text-align:center;">';
+                    $html .= '<div class = "btn-group">';
                     $html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('build_learnpath.png', get_lang('Build'),'',ICON_SIZE_MEDIUM)."</a>";
                     $html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM)."</a>";
-                    $html .= '<span>' . Display :: return_icon('view_remove_na.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</span><br />';
+                    //$html .= '<span>' . Display :: return_icon('view_remove_na.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</span><br />';
                     $html .= '<a href="lp_controller.php?' . api_get_cidreq() . '">'. get_lang('ReturnToLPList') . '</a>';
                     $html .= '</div>';
                 } else {
-                    $html .= '<div style = "text-align:center;">';
-                    $html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Build') . "</a>";
-                    $html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('BasicOverview') . "</a>";
-                    $html .= '<span><b>' . get_lang('Display') . '</b></span><br />';
-                    $html .= '<a href="lp_controller.php?' . api_get_cidreq() . '">'. get_lang('ReturnToLPList') . '</a>';
+                    $html .= '<div class="btn-group">';
+                    $html .= "<a class='btn' href='lp_controller.php?" . api_get_cidreq() . "&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Build') . "</a>";
+                    $html .= "<a class='btn' href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('BasicOverview') . "</a>";
+                    //$html .= '<span><b>' . get_lang('Display') . '</b></span><br />';
+                    $html .= '<a class="btn" href="lp_controller.php?'.api_get_cidreq().'">'.get_lang('Back').'</a>';
                     $html .= '</div>';
                 }
                 $html .= '</div>';
@@ -5000,9 +5000,8 @@ class learnpath {
         if ($update_audio != 'true') {
         	$return .= '<div class="span12"><ul id="lp_item_list">';
         	$return .= print_recursive($elements, $default_data, $default_content);
-        	$return .='</ul></div>';
-        	
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'a_button white medium')), array('style'=>'float:left; margin-top:15px;width:100%'));
+        	$return .='</ul></div>';        	
+        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
         } else {        
         	$return .= $return_audio.'</table>';
         }

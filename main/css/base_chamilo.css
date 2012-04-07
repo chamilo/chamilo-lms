@@ -1500,30 +1500,7 @@ Document title
     width: 75%;
     float:left;
 }
-/* actions */
-.actions_lp {
-    background:#F8F8F8;
-    height: 40px;
-    padding-left: -17px;
-    margin: 5px 2px 1px 12px;
-    vertical-align:middle;
-    width: 90%;
-}
-.actions_lp img {
-    vertical-align:middle;
-}
-.actions_lp a {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions_lp span {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions_lp form {
-    margin-right: 10px;
-    vertical-align:middle;
-}
+
 .actions {	
 	background:#efefef;
     border:1px solid #ccc; 
@@ -1669,58 +1646,7 @@ span.radio {
 /*****************************************************
  *  BUTTONS                                          *
  *****************************************************/
-button {
-    /* margin:2px 5px 3px 3px; */
-    background-color: #F5F5F5;
-    border-width: 0px;
-    border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
-    border-style:solid;
-    border-width:1px;    
-    line-height :130%;
-    text-decoration: none;
-    color: black;
-    cursor: pointer;
-    padding:5px 15px 5px 15px;
-    vertical-align:middle;
-}
-button:hover {
-    color:#545454;
-    /* border-style: inset; */
-    /*background-color:#DFF4FF; */
-}
-/* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
-    padding-left:30px;
-    background-position:8px;
-    background-repeat:no-repeat;
-}
-/* POSITIVE */
-button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back {
-    /* background-color:#; */
-    /* border-color: #fff; */
-}
-button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
-/*  border-color: #fff;
-    background-color:#fff; */
-}
-/* NEGATIVE */
-button.cancel {
-    background-color:#F8E8E6;
-    border-color: #FFE3DE;
-}
-button.cancel:hover {
-    border-color: #F4E1D0;
-    background-color: #FFE3DE;
-}
 
-/*including "login" image*/
-button.login {
-    background-position:right;
-    float:left;
-    margin-right:20px;
-    padding-right:30px;
-    margin:2px 5px 3px 5px !important;
-}
 
 .icon_image_content {
     width:70px;

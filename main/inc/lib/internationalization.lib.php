@@ -248,7 +248,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     }
     if (empty($langvar) || !is_string($langvar)) {
         $_api_is_translated = false;
-        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;        
     }
     //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
     $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);     
@@ -3891,14 +3891,13 @@ function api_is_valid_ascii(&$string) {
 function setting_gettext() {
     $domain = 'default';
     $locale = api_get_language_isocode();
-    $locale = 'en_US';
+    $locale = 'es_ES';
     putenv("LC_ALL=$locale");
     setlocale(LC_ALL, $locale);
     bindtextdomain($domain, api_get_path(SYS_LANG_PATH));
     bind_textdomain_codeset($domain, 'UTF-8');    
     textdomain($domain);
 }
-
 
 /**
  * Functions for internal use behind this API

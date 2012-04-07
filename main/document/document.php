@@ -207,8 +207,8 @@ switch ($action) {
                     
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';
-                $message .= '<a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a class = "a_button white small" href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$document_info['id'].'&amp;copy=yes">'.get_lang('Yes').'</a></p>';                    
+                $message .= '<a class = "btn" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a class = "btn" href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$document_info['id'].'&amp;copy=yes">'.get_lang('Yes').'</a></p>';                    
                 if (!isset($_GET['copy'])) {
                     $message = Display::return_message($message, 'warning', false);
                 }

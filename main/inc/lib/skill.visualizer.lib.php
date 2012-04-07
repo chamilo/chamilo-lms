@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  @package chamilo.admin
+ * @package chamilo.admin
+ * @todo lib not use. Only the class variables not the functions
  */
 
  class SkillVisualizer {

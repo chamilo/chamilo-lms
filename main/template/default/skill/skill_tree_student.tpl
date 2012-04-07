@@ -21,22 +21,14 @@ body {
 
 //js settings
 var url             = '{{url}}';
-var skills          = []; //current window divs
-var parents         = []; //list of parents normally there should be only 2
-var hidden_parent   = '';
-var duration_value  = 500;
-
 
 //Block settings see the SkillVisualizer Class
-var offset_x                = {{skill_visualizer->offset_x}};
-var offset_y                = {{skill_visualizer->offset_y}};
-var space_between_blocks_x  = {{skill_visualizer->space_between_blocks_x}};
-var space_between_blocks_y  = {{skill_visualizer->space_between_blocks_y}};
-var center_x                = {{skill_visualizer->center_x}};
-var block_size              = {{skill_visualizer->block_size}};
-
-//Setting the parent by default 
-var parents = ['block_1'];
+var offset_x                = {{skill_visualizer.offset_x}};
+var offset_y                = {{skill_visualizer.offset_y}};
+var space_between_blocks_x  = {{skill_visualizer.space_between_blocks_x}};
+var space_between_blocks_y  = {{skill_visualizer.space_between_blocks_y}};
+var center_x                = {{skill_visualizer.center_x}};
+var block_size              = {{skill_visualizer.block_size}};
 
 jsPlumb.bind("ready", function() {
     
@@ -48,64 +40,83 @@ jsPlumb.bind("ready", function() {
         height  : 350,
     });
     
-    //On box click -(we use live instead of bind because we're creating divs on the fly )
-    $(".open_block").live('click', function() {        
+    //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
+    $(".open_block").live('click', function() {     
         var id = $(this).attr('id');
+        
+        console.log('click.open_block id: ' + id);
+        console.log('parents: ' + parents);
         
         //if is root
         if (parents[0] == id) {
             parents = [id];
         }     
         
-        if (parents[1] != id) {            
+        if (parents[1] != id) {
+            console.log('parents.length ' +parents.length);
+            
+            //If there are 2 parents in the skill_tree
             if (parents.length == 2 ) {
-                hidden_parent = parents[0];   
+                first_parent = parents[0]; 
+                $('#'+parents[1]).css('top', '0px');
                 //console.log('deleting: '+parents[0]);        
                 //removing father
-                for (var i = 0; i < skills.length; i++) {
-                               
-                    if ( skills[i].element == parents[0] ) {
-                         //console.log('deleting :'+ skills[i].element + ' here ');                             
-                         jsPlumb.deleteEndpoint(skills[i].endp);
-                         $("#"+skills[i].element).remove();
-                         //skills.splice(i,1)
+                console.log("first_parent " + first_parent);
+                
+                for (var i = 0; i < skills.length; i++) {  
+                    //console.log('looping '+skills[i].element + ' ');
+                    if (skills[i].element == parents[0] ) {
+                        console.log('deleting parent:'+ skills[i].element + ' here ');                             
+                        jsPlumb.deleteEndpoint(skills[i].element);
+                        jsPlumb.detachAllConnections(skills[i].element);
+                        jsPlumb.removeAllEndpoints(skills[i].element);  
+                        $("#"+skills[i].element).remove();
                     }
                 }                                
                 parents.splice(0,1);                
                 parents.push(id);
+                console.log('parents after slice/push: ' + parents);
             }     
                 
-            if ($(this).hasClass('first_window')) {                
-                 //show the hidden_parent
-                //if (hidden_parent != '') {
-                   parents = [hidden_parent, id];
-                   //    console.log(parents);
-                   open_parent(hidden_parent, id);
+            if ($(this).hasClass('first_window')) {  
+                console.log('im in a first_window (root)');
+                $('#'+first_parent).css('top', '0px');
+                //show the first_parent
+                //if (first_parent != '') {
+                   parents = [first_parent, id];                   
+                   open_parent(first_parent, id);
                 //}
             }
+            
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
+                console.log('parents push: ' + parents);
             }
-            open_block_student(id);
+            open_block(id, 0, 0);            
         }
         
         //Setting class       
-        cleanclass($(this));
-        $(this).addClass('second_window');        
+        cleanclass($(this));   
+        $(this).addClass('second_window');
         
         parent_div = $("#"+parents[0]);
         cleanclass(parent_div);
         parent_div.addClass('first_window');
+        parent_div.addClass('skill_root');
         
         parent_div = $("#"+parents[1]);        
         cleanclass(parent_div);
         parent_div.addClass('second_window');
        
-        console.log(parents);
+        //console.log(parents);
        // console.log(skills);        
-        console.log('hidden_parent : ' + hidden_parent);         
+        console.log('first_parent : ' + first_parent);             
+        
+        //redraw
+        jsPlumb.repaintEverything();
+        jsPlumb.repaint(id);
+ 
     });
-    
     
     
     $(".edit_block").live('click',function() {        
@@ -152,96 +163,18 @@ jsPlumb.bind("ready", function() {
 });
         
             
-;(function() {         
-    prepare = function(div, endpointOptions) {
-        //jsPlumbDemo.initHover(elId);
-        //jsPlumbDemo.initAnimation(elId);        
-        var endpoint = jsPlumb.addEndpoint(div, endpointOptions);
-        //jsPlumbDemo.initjulio(e);    
-        skills.push({
-            element:div, endp:endpoint
-        });        
-        return endpoint;
-    },
-    
-    window.jsPlumbDemo = {    
-        initjulio :function(e) {
-        },      
-        initHover :function(elId) {            
-            
-           /* $("#" + elId).click(function() {
-                var  all = jsPlumb.getConnections({
-                    source:elId
-                });               
-            });*/
-            
-            /*$("#" + elId).hover(
-                function() { $(this).addClass("bigdot-hover"); },
-                function() { $(this).removeClass("bigdot-hover"); }
-            );*/
-        },        
+;(function() {    
+    window.jsPlumbDemo = {  	   
         init : function() {
-        
-            jsPlumb.Defaults.DragOptions    = { cursor: 'pointer', zIndex:2000 };
-            jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
-            jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
-            jsPlumb.Defaults.Endpoint       = "Rectangle";
-            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];
-
-              
-            jsPlumb.Defaults.Overlays = [
-                //[ "Arrow", { location:0.5 } ],  if you want to add an arrow in the connection          
-            ];
-                           
-            jsPlumb.setMouseEventsEnabled(true);            
+            console.log('Import defaults');            
+            jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];            
+            jsPlumb.Defaults.Container = "skill_tree";
             
-            {$js}
-  
-            var divsWithWindowClass = jsPlumbDemo.getSelector(".window");
-            jsPlumb.draggable(divsWithWindowClass);
-            
-            jsPlumbDemo.attachBehaviour();          
+            open_block('block_1', 1, 1);            
         }
     };
 })();
 
-
-;(function() {
-    
-    jsPlumbDemo.showConnectionInfo = function(s) {
-        $("#list").html(s);
-        $("#list").fadeIn({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
-    
-    jsPlumbDemo.hideConnectionInfo = function() {
-        $("#list").fadeOut({ complete:function() { jsPlumb.repaintEverything(); }});
-    };
-    
-    jsPlumbDemo.getSelector = function(spec) {
-        return $(spec);
-    };
-    
-    jsPlumbDemo.attachBehaviour = function() {
-        $(".hide").click(function() {
-            jsPlumb.toggle($(this).attr("rel"));
-        });
-
-        $(".drag").click(function() {
-            var s = jsPlumb.toggleDraggable($(this).attr("rel"));
-            $(this).html(s ? 'disable dragging' : 'enable dragging');
-            if (!s) $("#" + $(this).attr("rel")).addClass('drag-locked'); else $("#" + $(this).attr("rel")).removeClass('drag-locked');
-            $("#" + $(this).attr("rel")).css("cursor", s ? "pointer" : "default");
-        });
-
-        $(".detach").click(function() {
-            jsPlumb.detachAll($(this).attr("rel"));
-        });
-
-        $("#clear").click(function() { 
-            jsPlumb.detachEverything(); showConnections(); 
-        });
-    };
-})();
 
 
 $(document).ready( function() {     
@@ -253,6 +186,8 @@ $(document).ready( function() {
     });
 });
 </script>
+
+<div id="skill_tree"></div>
 
 <div id="dialog-form" style="display:none;">    
     <form id="add_item" class="form-horizontal"  name="form">

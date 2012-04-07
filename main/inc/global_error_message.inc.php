@@ -167,8 +167,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 <!DOCTYPE html>
 <html>
 		<head>
-			<title>{TITLE}</title>
-			<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+			<title>{TITLE}</title>			
+            <meta charset="{ENCODING}" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
 				{CSS}
@@ -177,18 +177,14 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</head>
 		<body>
 		<div id="wrapper">
-			<div id="header">
-				<div id="header1">	
-				    <div id="logo">    
-                        <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
-                    </div>
-				</div>
-				<div class="clear"></div>				
-				<div class="subnav">
+			<div id="header">				
+                <div id="logo">    
+                    <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
+                </div>				
+				<div class="breadcrumb">
 					<ul>
-						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
-					</ul>
-					<div style="clear: both;" class="clear"></div>
+						<li><a href="#">{SECTION}</a></li>
+					</ul>					
 				</div>
 			</div>
 			<div class="clear"> </div>
@@ -205,8 +201,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 		<footer>
             <div class="container">
-                <div class="row">
+                <div class="row">  
+                <div style="text-align: center;">
                 &nbsp;<br />{POWERED_BY}
+                </div>
                 </div>
                 </div>
 			

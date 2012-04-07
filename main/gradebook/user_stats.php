@@ -110,7 +110,7 @@ $actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove
 $actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));
-DisplayGradebook :: display_header_user($_GET['userid']);
 echo $actions;
+DisplayGradebook :: display_header_user($_GET['userid']);
 $user_table->display();
 Display :: display_footer();

@@ -723,11 +723,11 @@ if (isset ($_POST['action'])) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple','get','','',null,false);
+$form = new FormValidator('search_simple','get','','',array('class' => 'form-search'),false);
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
-$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
+$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="btn"');
 $form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
 
 $actions  = '';
@@ -802,8 +802,8 @@ $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
 $active_group = array();
-$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'), array('style'=>'margin-left:17px'));
-$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'),array('style'=>'margin-left:17px'));
+$active_group[] = $form->createElement('checkbox','keyword_active','', get_lang('Active'));
+$active_group[] = $form->createElement('checkbox','keyword_inactive','', get_lang('Inactive'));
 $form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
 $form->addElement('html', '</td><td>');
 
@@ -832,7 +832,7 @@ if (!empty($extra_data)) {
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="search"');
+$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="btn"');
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '</table>');

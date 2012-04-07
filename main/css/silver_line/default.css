@@ -468,8 +468,7 @@ ul#navigation .student-connect a {
     PADDING-LEFT: 10px;
     PADDING-BOTTOM: 0px;
     MARGIN: 5px;
-    LIST-STYLE-TYPE: none;
-    display: inline;
+    LIST-STYLE-TYPE: none;    
 }
 .subnav ul li {
     float: left;
@@ -1890,25 +1889,7 @@ span.radio {
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
-/* BUTTONS */
-button,input[type="submit"] {
-    margin:5px 5px 3px 0px !important;
-    background-color: #DFDFDF;
-    border-width: 1px;
-    /*    -moz-border-radius-topright : 5px;
-    -moz-border-radius-topleft : 5px;
-    -moz-border-radius-bottomright : 5px;
-    -moz-border-radius-bottomleft : 5px;
-*/
-    font-family: bold arial, verdana, helvetica, sans-serif;
-    font-size: 100%;
-    line-height :130%;
-    text-decoration: none;
-    color: black;
-    cursor: pointer;
-    padding:5px 15px 5px 15px;
-    vertical-align:middle;
-}
+
 button:hover input[type="submit"]:hover {
     background-color:#cbcbcb;
     color:#545454;

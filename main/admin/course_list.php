@@ -179,7 +179,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
-    $form->addElement('header', '', $tool_name);
+    $form->addElement('header', $tool_name);
     $form->add_textfield('keyword_code', get_lang('CourseCode'), false);
     $form->add_textfield('keyword_title', get_lang('Title'), false);
     $categories = array();
@@ -198,7 +198,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
+    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="btn"');
     $defaults['keyword_language'] = '%';
     $defaults['keyword_visibility'] = '%';
     $defaults['keyword_subscribe'] = '%';
@@ -230,11 +230,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
+    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);
     $renderer =& $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->addElement('text', 'keyword', get_lang('keyword'));
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="search"');
+    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
     
     $actions .= '<div style="float: right; ">';    

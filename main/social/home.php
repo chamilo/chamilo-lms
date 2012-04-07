@@ -21,7 +21,12 @@ $this_section = SECTION_SOCIAL;
 unset($_SESSION['this_section']);//for hmtl editor repository
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !='true' ){
+
+if (api_get_setting('allow_social_tool') !='true' ) {
+    $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+    header('Location: '.$url);
+    exit;
+    
     api_not_allowed();
 }
 

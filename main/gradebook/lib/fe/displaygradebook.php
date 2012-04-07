@@ -650,12 +650,15 @@ class DisplayGradebook
 		 //limit display width to 200px
  			$img_attributes .= 'width="200" ';
 		}
-		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
-		$info.= get_lang('Name') . ' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $userid . '"> ' . api_get_person_name($user['firstname'], $user['lastname']) . '</a><br />';
-		$info.= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';
-		$info.= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b><br>';
-		$info.= '</td><td>';
-		$info.= '<img ' . $img_attributes . '/></td></tr></table>';
+		$info = '<div class="row"><div class="span3">';        
+        $info .= '<div class="thumbnail"><img ' . $img_attributes . '/></div>';
+        $info .= '</div>';        
+        $info .= '<div class="span6">';
+		$info .= get_lang('Name') . ' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $userid . '"> ' . api_get_person_name($user['firstname'], $user['lastname']) . '</a><br />';
+		$info .= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';
+		$info .= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b>';
+		$info .= '</div>';
+        $info .= '</div>';
 
     	//$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['lastname'], $user['firstname']).'</b><br />';
 		//$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scorecourse_display . '</b>';

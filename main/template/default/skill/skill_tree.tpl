@@ -19,13 +19,8 @@ body {
 </style>
 <script type="text/javascript">
 
-//js settings
+//js settings (see the skills.js for more)
 var url             = '{{url}}';
-var skills          = []; //current window divs
-var parents         = []; //list of parents normally there should be only 2
-var first_parent   = '';
-
-var duration_value  = 500;
 
 //Block settings see the SkillVisualizer Class
 var offset_x                = {{skill_visualizer.offset_x}};
@@ -35,37 +30,18 @@ var space_between_blocks_y  = {{skill_visualizer.space_between_blocks_y}};
 var center_x                = {{skill_visualizer.center_x}};
 var block_size              = {{skill_visualizer.block_size}};
 
-//Setting the parent by default 
-var parents = ['block_1'];
-
-
-
-
-
-function clean_values() {    
-    skills          = []; //current window divs
-    parents = ['block_1'];
-    first_parent   = '';
-    
-    //Reseting jsplumb
-    jsPlumb.reset();                            
-    //Deletes all windows
-    $('.skill_root').remove();
-    $('.skill_child').remove();
-    
-    open_block('block_1', 0, 1);
-}
-
-
-$(window).resize(function() {
-    // Top bar scroll effect
-    //console.log($('body').width());
-    jsPlumb.repaintEverything();
+$(window).resize(function() {    
+    jsPlumb.repaintEverything();    
+    /*jsPlumb.repaint(".skill_root");    
+    // When resize repaint everything + fix the root position
+    normal_weight = $('.skill_child :first-child').width();                
+    sum = $('body').width() / 2 - normal_weight/2;
+    $('.skill_root').animate({ left: sum, top:0 }, { duration: 100 });*/
 });
 
 jsPlumb.ready(function() {
-    var loading = $( "#dialog-loading" );
-    
+    //Setting the loading dialog
+    var loading = $( "#dialog-loading" );    
     loading.dialog( "destroy" );
     loading.dialog({
         autoOpen:false,
@@ -76,24 +52,26 @@ jsPlumb.ready(function() {
         closeOnEscape : false,
         disabled: true,            
         open: function(event, ui) { $(this).parent().children().children('.ui-dialog-titlebar-close').hide(); }
-    });
+    });    
     
     jQuery.ajaxSetup({
         beforeSend: function() {
             loading.dialog( "open" );
+            //$('#skill_tree').hide();
             console.log('before------------------->>');
         },
         complete: function(){
             loading.dialog( "close" );                    
+            //$('#skill_tree').show();
             console.log('complete------------------->>');
         },
         success: function() {}
     });
         
+    //Return to root button
     $('#return_to_root').live('click', function(){
         clean_values();
         console.log('Clean values');        
-        
         console.log('Reopen the root ');
     });
     
@@ -126,9 +104,8 @@ jsPlumb.ready(function() {
         }
     );
     
-    //Add button
-    
-    $("#add_item_link").click(function() {        
+    //Add button on click    
+    $("#add_item_link").click(function() {     
         $("#name").attr('value', '');
         $("#description").attr('value', '');        
         $("#parent_id option:selected").removeAttr('selected');
@@ -155,11 +132,11 @@ jsPlumb.ready(function() {
         );
     });
     
+    //Add button process
+    
     var name = $( "#name" ),
     description = $( "#description" ),  
     allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
-    
-    //Add button process
     
     $("#dialog-form").css('z-index', '9001');
     
@@ -176,7 +153,7 @@ jsPlumb.ready(function() {
                         async: false,
                         url: url+'&a=add&'+params,
                         success:function(my_id) {                            
-                            //new window
+                            //Setting the selected id from the form
                             parent_id = $("#parent_id option:selected").attr('value');                            
                             
                             //Reseting jsplumb
@@ -188,26 +165,21 @@ jsPlumb.ready(function() {
                             //cleaning skills
                             skills = [];
                             
-                            //cleaninig parents
-                            /*parents         = ['block_'+parent_id]; //list of parents normally there should be only 2
-                            
-                            //cleaning 
-                            first_parent   = '';*/
-        
+                            //Setting the first parent
                             first_parent = parents[0];
                             
                             //Deleting the first parent
-                            console.log('beofr '+parents);
+                            console.log('parents before '+parents);
                             parents.splice(0,1);     
-                            console.log('now '+parents);
+                            console.log('parents now '+parents);                            
                             
-                            
-                            //Remove parent                            
+                            //Remove parent block                      
                             $('#block_'+parent_id).remove();
                             
-                            //Great stuff                         
+                            //Open the block                 
                             open_block('block_'+parent_id, 0, 1);                            
-                                                                     
+                            
+                            //Close dialog
                             $("#dialog-form").dialog("close");                                      
                         }                           
                     });
@@ -221,7 +193,7 @@ jsPlumb.ready(function() {
     });
     
     //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
-    $(".open_block").live('click', function() {      
+    $(".open_block").live('click', function() {     
         var id = $(this).attr('id');
         
         console.log('click.open_block id: ' + id);
@@ -235,14 +207,16 @@ jsPlumb.ready(function() {
         if (parents[1] != id) {
             console.log('parents.length ' +parents.length);
             
+            //If there are 2 parents in the skill_tree
             if (parents.length == 2 ) {
-                first_parent = parents[0];   
+                first_parent = parents[0]; 
+                $('#'+parents[1]).css('top', '0px');
                 //console.log('deleting: '+parents[0]);        
                 //removing father
                 console.log("first_parent " + first_parent);
                 
                 for (var i = 0; i < skills.length; i++) {  
-                    console.log('looping '+skills[i].element + ' ');
+                    //console.log('looping '+skills[i].element + ' ');
                     if (skills[i].element == parents[0] ) {
                         console.log('deleting parent:'+ skills[i].element + ' here ');                             
                         jsPlumb.deleteEndpoint(skills[i].element);
@@ -258,38 +232,42 @@ jsPlumb.ready(function() {
                 
             if ($(this).hasClass('first_window')) {  
                 console.log('im in a first_window (root)');
+                $('#'+first_parent).css('top', '0px');
                 //show the first_parent
                 //if (first_parent != '') {
-                   parents = [first_parent, id];
-                   console.log(parents);
+                   parents = [first_parent, id];                   
                    open_parent(first_parent, id);
                 //}
             }
+            
             if (jQuery.inArray(id, parents) == -1) {                              
                 parents.push(id);
-                console.log('parents  push' + parents);
+                console.log('parents push: ' + parents);
             }
-            open_block(id, 0, 0);
+            open_block(id, 0, 0);            
         }
         
         //Setting class       
-        cleanclass($(this));
-        $(this).addClass('second_window');        
+        cleanclass($(this));   
+        $(this).addClass('second_window');
         
         parent_div = $("#"+parents[0]);
         cleanclass(parent_div);
         parent_div.addClass('first_window');
+        parent_div.addClass('skill_root');
         
         parent_div = $("#"+parents[1]);        
         cleanclass(parent_div);
         parent_div.addClass('second_window');
        
-        console.log(parents);
+        //console.log(parents);
        // console.log(skills);        
-        console.log('first_parent : ' + first_parent);     
+        console.log('first_parent : ' + first_parent);             
         
         //redraw
         jsPlumb.repaintEverything();
+        jsPlumb.repaint(id);
+ 
     });
     
     //Skill title click  
@@ -327,8 +305,7 @@ jsPlumb.ready(function() {
     //Clicking in a box
     $(".window").bind('click', function() {
         var id = $(this).attr('id');
-        id = id.split('_')[1];        
-        //$("#dialog-form").dialog("open");
+        id = id.split('_')[1];
     });    
 
     // chrome fix.
@@ -342,15 +319,13 @@ jsPlumb.ready(function() {
     resetRenderMode(jsPlumb.CANVAS);       
 });
     
-;(function() {
-         
+;(function() {         
     prepare = function(div, endpointOptions) {
         console.log('preparing = '+div);
         console.log('endpointOptions = '+endpointOptions);
         //jsPlumbDemo.initHover(elId);
-        //jsPlumbDemo.initAnimation(elId);        
-        var endPoint = jsPlumb.addEndpoint(div, endpointOptions);
-        //jsPlumbDemo.initjulio(e);        
+        
+        var endPoint = jsPlumb.addEndpoint(div, endpointOptions);         
         skills.push({
             element: div, endp:endPoint
         });
@@ -358,115 +333,12 @@ jsPlumb.ready(function() {
     },    
     window.jsPlumbDemo = {  	   
         init : function() {
-            console.log('Import defaults');
-            
-            jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];
-            //jsPlumb.DefaultDragOptions = { cursor: "crosshair", zIndex:2000 };
+            console.log('Import defaults');            
+            jsPlumb.Defaults.Anchors = [ "BottomCenter", "TopCenter" ];            
             jsPlumb.Defaults.Container = "skill_tree";
-                
-            
-            /*jsPlumb.Defaults.PaintStyle     = { strokeStyle:'#666' };
-            jsPlumb.Defaults.EndpointStyle  = { width:20, height:16, strokeStyle:'#666' };
-            jsPlumb.Defaults.Endpoint       = "Rectangle";
-            jsPlumb.Defaults.Anchors        = ["TopCenter", "TopCenter"];*/
-/*
-            // this is the paint style for the connecting lines..
-			var connectorPaintStyle = {
-				lineWidth:5,
-				strokeStyle:"#deea18",
-				joinstyle:"round"
-			},
-			// .. and this is the hover style. 
-			connectorHoverStyle = {
-				lineWidth:7,
-				strokeStyle:"#2e2aF8"
-			},
-            // the definition of source endpoints (the small blue ones)
-			sourceEndpoint = {
-				endpoint:"Dot",
-				paintStyle:{ fillStyle:"#225588",radius:7 },
-				isSource:true,
-				connector:[ "Flowchart", { stub:40 } ],
-				connectorStyle:connectorPaintStyle,
-				hoverPaintStyle:connectorHoverStyle,
-				connectorHoverStyle:connectorHoverStyle,
-                dragOptions:{
-                },
-                overlays:[
-                	[ "Label", { 
-	                	location:[0.5, 1.5], 
-	                	label:"Drag",
-	                	cssClass:"endpointSourceLabel" 
-	                } ]
-                ]
-			},
-			// a source endpoint that sits at BottomCenter
-			bottomSource = jsPlumb.extend( { anchor:"BottomCenter" }, sourceEndpoint),
-			// the definition of target endpoints (will appear when the user drags a connection) 
-			targetEndpoint = {
-				endpoint:"Dot",					
-				paintStyle:{ fillStyle:"#558822",radius:11 },
-				hoverPaintStyle:connectorHoverStyle,
-				maxConnections:-1,
-				dropOptions:{ hoverClass:"hover", activeClass:"active" },
-				isTarget:true,			
-                overlays:[
-                	[ "Label", { location:[0.5, -0.5], label:"Drop", cssClass:"endpointTargetLabel" } ]
-                ]
-			},	
-            init = function(connection) {
-				connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "-" + connection.targetId.substring(6));
-			};	
-            
-            var allSourceEndpoints = [], allTargetEndpoints = [];
-            _addEndpoints = function(toId, sourceAnchors, targetAnchors) {
-                for (var i = 0; i < sourceAnchors.length; i++) {
-                    var sourceUUID = toId + sourceAnchors[i];
-                    allSourceEndpoints.push(jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:sourceAnchors[i], uuid:sourceUUID }));
-                }
-                for (var j = 0; j < targetAnchors.length; j++) {
-                    var targetUUID = toId + targetAnchors[j];
-                    allTargetEndpoints.push(jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:targetAnchors[j], uuid:targetUUID }));
-                }
-            };
-            
-            console.log('addEndpoints');
-
-            _addEndpoints("window4", ["TopCenter", "BottomCenter"], ["LeftMiddle", "RightMiddle"]);
-			_addEndpoints("window2", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
-			_addEndpoints("window3", ["RightMiddle", "BottomCenter"], ["LeftMiddle", "TopCenter"]);
-			_addEndpoints("window1", ["LeftMiddle", "RightMiddle"], ["TopCenter", "BottomCenter"]);
-
-         	// listen for new connections; initialise them the same way we initialise the connections at startup.
-			jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
-				init(connInfo.connection);
-			});
-						
-			// make all the window divs draggable						
-			jsPlumb.draggable(jsPlumb.getSelector(".window"));
-
-			// connect a few up
-			jsPlumb.connect({
-                                uuids:["window2BottomCenter", "window3TopCenter"]});
-			jsPlumb.connect({
-                                uuids:["window2LeftMiddle", "window4LeftMiddle"]});
-			jsPlumb.connect({
-                                uuids:["window4TopCenter", "window4RightMiddle"]});
-			jsPlumb.connect({
-                                uuids:["window3RightMiddle", "window2RightMiddle"]});
-			jsPlumb.connect({
-                                uuids:["window4BottomCenter", "window1TopCenter"]});
-			jsPlumb.connect({
-                                uuids:["window3BottomCenter", "window1BottomCenter"]});
-*/
-            //jsPlumb.setMouseEventsEnabled(true);
             
             open_block('block_1', 0, 1);
-            
-            
-            
-            {# $js #}
-                
+           
             // listen for clicks on connections, and offer to delete connections on click.			
 			jsPlumb.bind("click", function(conn, originalEvent) {
 				/*if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
@@ -529,6 +401,7 @@ $(document).ready(function() {
 })();
 
 </script>
+
 <div id="dialog-loading">
     <div class="modal-body">
         <p style="text-align:center">
@@ -537,7 +410,8 @@ $(document).ready(function() {
         </p>
     </div>    
 </div>
-<div id="menu" class="well" style="top:20px; left:20px; width:300px; z-index: 9000; opacity: 0.9;">
+
+<div id="menu" class="well" style="top:20px; left:20px; width:380px; z-index: 9000; opacity: 0.9;">
     <h3>{{'Skills'|get_lang}}</h3>
     <div class="btn-group">
         <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{{'AddSkill'|get_lang}}</a>
@@ -547,9 +421,7 @@ $(document).ready(function() {
     </div>
 </div>
            
-<div id="skill_tree">
-</div>
-{# $html #}
+<div id="skill_tree"></div>
 
 <div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>

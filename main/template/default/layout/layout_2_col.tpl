@@ -37,7 +37,7 @@
                 
         {% if content is not null %}
         <section id="main_content">
-        {{ content }}
+            {{ content }}
         </section>
         {% endif %}
 		

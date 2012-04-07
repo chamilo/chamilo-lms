@@ -15,7 +15,7 @@ $interbreadcrumb[] = array ('url' => '../index.php', 'name' => get_lang('Platfor
 
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+echo Display::page_header($tool_name);
 
 require_once 'statistics.lib.php';
 
@@ -73,6 +73,16 @@ switch ($_GET['action']) {
 		// courses for each course category
 		statistics::print_stats(get_lang('CountCours'),$courses);
 		break;
+	case 'tools':
+		statistics::print_tool_stats();
+		break;        
+    case 'coursebylanguage':
+		statistics::print_course_by_language_stats();		        
+		break;
+	case 'courselastvisit':
+		statistics::print_course_last_visit();
+        break;
+    //---
 	case 'users':
 		// total amount of users
 		statistics::print_stats(
@@ -89,31 +99,27 @@ switch ($_GET['action']) {
 			$students[$name] = statistics::count_users(5,$code,$_GET['count_invisible_courses']);
 		}
 		// docents for each course category
-		statistics::print_stats(get_lang('Teachers'),$teachers);
+		statistics::print_stats(get_lang('Teachers'), $teachers);
 		// students for each course category
-		statistics::print_stats(get_lang('Students'),$students);
-		break;
-	case 'coursebylanguage':
-		statistics::print_course_by_language_stats();
-		break;
-	case 'logins':
-		statistics::print_login_stats($_GET['type']);
-		break;
-	case 'tools':
-		statistics::print_tool_stats();
-		break;
-	case 'courselastvisit':
-		statistics::print_course_last_visit();
+		statistics::print_stats(get_lang('Students'), $students);
 		break;
 	case 'recentlogins':
 		statistics::print_recent_login_stats();
+		break;        
+	case 'logins':
+		statistics::print_login_stats($_GET['type']);
 		break;
 	case 'pictures':
 		statistics::print_user_pictures_stats();
 		break;
+    case 'no_login_users':
+        statistics::print_users_not_logged_in_stats();
+        break;
+    //---
 	case 'activities':
 		statistics::print_activities_stats();
 		break;
+    //---
 	case 'messagesent':
 		$messages_sent = statistics::get_messages('sent');		
 		statistics::print_stats(get_lang('MessagesSent'), $messages_sent);
@@ -127,9 +133,7 @@ switch ($_GET['action']) {
 		$friends = statistics::get_friends();
 		statistics::print_stats(get_lang('CountFriends'), $friends);
 		break;
-    case 'no_login_users':
-        statistics::print_users_not_logged_in_stats();
-        break;
+
 }
 
 Display::display_footer();

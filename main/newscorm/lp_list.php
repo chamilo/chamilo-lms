@@ -527,7 +527,7 @@ if (!empty($flat_list)) {
         echo '<h2>'.get_lang('LearningPaths').'</h2>';
         echo Display::return_icon('scorms.png', '', array(), 64);
         echo '<div class="controls">';    
-        echo Display::url(get_lang('_add_learnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'a_button white'));
+        echo Display::url(get_lang('_add_learnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'btn'));
         echo '</div>';
         echo '</div>'; 
     }

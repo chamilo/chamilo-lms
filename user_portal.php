@@ -8,7 +8,6 @@
  * - personal course list
  * - menu bar
  * Search for CONFIGURATION parameters to modify settings
- * @todo rewrite code to separate display, logic, database code
  * @package chamilo.main
  * @todo Shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
@@ -90,7 +89,6 @@ $this_section = SECTION_COURSES;
     Header
     Include the HTTP, HTML headers plus the top banner.
 */
-
 if ($load_dirs) {
 	$url 			= api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
 	$folder_icon 	= api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
@@ -132,7 +130,7 @@ if ($load_dirs) {
 /* Sniffing system */
 
 //store posts to sessions
-if($_SESSION['sniff_navigator']!="checked") {
+if ($_SESSION['sniff_navigator']!="checked") {
 	$_SESSION['sniff_navigator']=Security::remove_XSS($_POST['sniff_navigator']);
 	$_SESSION['sniff_screen_size_w']=Security::remove_XSS($_POST['sniff_navigator_screen_size_w']);
 	$_SESSION['sniff__screen_size_h']=Security::remove_XSS($_POST['sniff_navigator_screen_size_h']);
@@ -149,22 +147,19 @@ if($_SESSION['sniff_navigator']!="checked") {
 
 $controller = new IndexManager(get_lang('MyCourses'));
 
-//@todo all this could be moved in the IndexManager
+$user_id = api_get_user_id();
 
 // Main courses and session list
-
-$courses_and_sessions = $controller->return_courses_and_sessions();
+$courses_and_sessions = $controller->return_courses_and_sessions($user_id);
 $controller->tpl->assign('content', $courses_and_sessions);
-
  
 if (api_get_setting('allow_browser_sniffer') == 'true') {
 	if ($_SESSION['sniff_navigator']!="checked") {
 		$controller->tpl->assign('show_sniff', 	1);
-	} else{
+	} else {
 		$controller->tpl->assign('show_sniff', 	0);
 	}
 }
-
 
 //check for flash and message
 $sniff_notification = '';

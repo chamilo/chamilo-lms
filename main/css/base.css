@@ -67,8 +67,16 @@ label, input, button, select, textarea, p {
     font-size: inherit;
 }
 
-/* Fixing old chamilo forms */
 
+
+/* button with image */
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
+    padding-left:30px;
+    background-position:8px !important;
+    background-repeat:no-repeat;    
+}
+
+/* Fixing old chamilo forms */
 form .label {
     color: #404040;
     float: left;    
@@ -816,7 +824,7 @@ button:hover {
 
 button.next.disabled, .a_button.disabled {
     cursor: default;
-    opacity: 0.65;
+    opacity: 0.65;    
 }
 
 .a_button {
@@ -2937,17 +2945,18 @@ form .formw .freeze {
 
 .first_window {
     border: 1px solid red;
-    cursor:pointer;
+    cursor:pointer;    
 }
 
 .second_window {
-    border: 1px solid black;
-        
+    border: 1px solid blue;       
+    margin-left:0px;    
 }
 
 .third_window {    
     border: 1px solid blue;
     cursor:pointer;
+    
 }
 
 ._jsPlumb_endpoint {
@@ -3621,4 +3630,38 @@ a.forum_group_link {
     height: 600px !important;
     position: relative !important;
     z-index: 100;
+}
+
+#main_content .course_item {
+    padding: 5px 0px 5px 0px;
+}
+
+/* actions */
+.actions_lp {
+    background:#F8F8F8;
+    height: 40px;
+    padding-left: -17px;
+    margin: 5px 2px 1px 12px;
+    vertical-align:middle;
+    width: 90%;    
+}
+.actions_lp .btn-group {
+    margin-left: 25px;
+}
+.actions_lp img {
+    vertical-align:middle;
+}
+.actions_lp a {  
+}
+.actions_lp span {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions_lp form {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+
+.exercise_overview_options {
+    text-align: center;
 }

@@ -12,10 +12,8 @@ class IndexManager {
 	var $home			= '';
 	var $default_home 	= 'home/';
 	
-	function __construct($title, $load_template = true) {		
-		if ($load_template) {		
-			$this->tpl = new Template($title);					
-		}
+	function __construct($title) {					
+		$this->tpl = new Template($title);		
 		$this->home     = api_get_home_path();
 		$this->user_id  = api_get_user_id();
 		$this->load_directories_preview = false;
@@ -414,7 +412,7 @@ class IndexManager {
 					break;
 			}
 		}
-		return '<div id="login_fail">'.$message.'</div>';
+		return Display::return_message($message, 'error');
 	}	
 	
 	/**
@@ -850,78 +848,69 @@ class IndexManager {
 		if (api_get_setting('allow_social_tool') == 'true') {
 			unset($this->tpl->menu_navigation['myprofile']);
 		}
-        
+                
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
-		if (!empty($this->tpl->menu_navigation)) {
-			$main_navigation_content .= '<ul class="menulist">';           
-		
-			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
+		if (!empty($this->tpl->menu_navigation)) {            
+			$content = '<ul class="menulist">';
+			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {                
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-				$main_navigation_content .= '<li'.$current.'>';
-				$main_navigation_content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-				$main_navigation_content .= '</li>';
+				$content .= '<li'.$current.'>';
+				$content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+				$content .= '</li>';
 			}
-			$main_navigation_content .= '</ul>';
-			$html = self::show_right_block(get_lang('MainNavigation'), $main_navigation_content);
-		}
+			$content .= '</ul>';
+            
+			$html = self::show_right_block(get_lang('MainNavigation'), $content);
+		}        
 		return $html;
 	}
 	
 	function return_account_block() {
 		$html = '';
-		
-		$show_menu        = false;
+
 		$show_create_link = false;
 		$show_course_link = false;
-		$show_digest_link = false;
-		
+				
 		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
 		if ($display_add_course_link) {
-			$show_menu = true;
 			$show_create_link = true;
 		}
 		
 		if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
-			$show_menu = true;
 			$show_course_link = true;
 		} else {
 			if (api_get_setting('allow_students_to_browse_courses') == 'true') {
-				$show_menu = true;
+		
 				$show_course_link = true;
 			}
 		}
 		
-		if (isset($toolsList) && is_array($toolsList) && isset($digest)) {
-			$show_digest_link = true;
-			$show_menu = true;
-		}
-	
-		
 		// My account section		
 		$my_account_content = '<ul class="menulist">';
+        
 		if ($show_create_link) {
 			$my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 		}
         
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .=  Display::url(get_lang('SortMyCourses'), $url);
+        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url).'</li>';
 
         //Course management                
 		if ($show_course_link) {
 			if (!api_is_drh()) {
-				$my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+				$my_account_content .= '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
 	
 				if (api_get_setting('use_session_mode') == 'true') {
 					if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-						$my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+						$my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
 					} else {
-						$my_account_content .=  '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+						$my_account_content .= '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
 					}
 				}
 			} else {
-				$my_account_content .=  '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+				$my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 			}
 		}
 		$my_account_content .= '</ul>';
@@ -933,22 +922,22 @@ class IndexManager {
 	}
 	
 	/**
-	 * The most important function here, prints the session and course list
+	 * The most important function here, prints the session and course list (user_portal.php)
 	 *  
 	 * */
-	function return_courses_and_sessions() {		       
+	function return_courses_and_sessions($user_id) {		       
         $courses_tree = array();        
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		
 		if ($load_history) {
             //Load courses history 
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, true, true);            
+			$courses_tree = UserManager::get_sessions_by_category($user_id, true, true, true);            
 			if (empty($courses_tree[0]) && count($courses_tree) == 1) {
 				$courses_tree = null;
 			}
 		} else {
             //Load current courses
-			$courses_tree = UserManager::get_sessions_by_category(api_get_user_id(), true, false, true);            
+			$courses_tree = UserManager::get_sessions_by_category($user_id, true, false, true);            
 		}
         
 		if (!empty($courses_tree)) {
@@ -956,14 +945,14 @@ class IndexManager {
 				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
                 //Get courses
 				if ($cat == 0) {                    
-					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false);                            
+					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($user_id, false);                            
 				}
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
                 //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
 					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {                        
 						$courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
-						$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session(api_get_user_id(), $s_id);
+						$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session($user_id, $s_id);
 					}
 				}
 			}
@@ -986,9 +975,9 @@ class IndexManager {
                     // If we're not in the history view...
 					if (!isset($_GET['history'])) {						                        // 
                         //Display special courses
-						$html .= CourseManager :: display_special_courses(api_get_user_id(), $this->load_directories_preview);                        
+						$html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
                         //Display courses
-                        $html .= CourseManager :: display_courses(api_get_user_id(), $this->load_directories_preview);
+                        $html .= CourseManager :: display_courses($user_id, $this->load_directories_preview);
 					}
                     
 					// Independent sessions
@@ -1052,8 +1041,7 @@ class IndexManager {
                             $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
 						}
 					}
-				} else {
-                    
+				} else {                    
 					// All sessions included in.
 					if (!empty($category['details'])) {
 						$count_courses_session = 0;
@@ -1092,7 +1080,7 @@ class IndexManager {
                                 if (api_is_drh()) {
                                     $session_link = $session_box['title'];
                                 } else {
-                                    $session_link = Display::tag('a',$session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                    $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
                                 }
                                 
 								$params['title'] .=  $session_link;
@@ -1114,8 +1102,7 @@ class IndexManager {
 							if (api_is_platform_admin()) {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';
 							}                            
-							$params['title'] .=  $category['details']['name'];							
-		
+							$params['title'] .=  $category['details']['name'];
 							
 							if ($category['details']['date_end'] != '0000-00-00') {
 								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);

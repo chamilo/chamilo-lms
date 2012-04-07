@@ -13,7 +13,10 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
-    api_not_allowed();
+    $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
+    header('Location: '.$url);
+    exit;
+    //api_not_allowed();
 }
 
 $user_id = api_get_user_id();

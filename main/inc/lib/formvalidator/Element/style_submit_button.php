@@ -83,7 +83,8 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
     {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
+    
+    
 
     // }}}
 } //end class HTML_QuickForm_submit
-?>

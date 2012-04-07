@@ -55,6 +55,21 @@ var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
 {{ extra_headers}}
 
 <script type="text/javascript">
+    
+function get_url_params(q, attribute) {
+    var vars;
+    var hash;
+    if (q != undefined) {
+        q = q.split('&');
+        for(var i = 0; i < q.length; i++){
+            hash = q[i].split('=');            
+            if (hash[0] == attribute) {
+                return hash[1];
+            }            
+        }
+    }    
+}
+
 
 $(document).scroll(function() {
     // Top bar scroll effect
@@ -77,6 +92,11 @@ $(document).scroll(function() {
 });
 
 $(document).ready(function() {
+    
+    
+    if (!$('#button').hasClass('btn')) {
+        $("button").addClass('btn');
+    }
 
     //Dropdown effect
     $('.dropdown-toggle').dropdown();   
@@ -88,18 +108,38 @@ $(document).ready(function() {
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {
-                    dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
+                dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
             }
-
+            
+            width_value = 580;
+            height_value = 450;
+            resizable_value = true;
+            
+            new_param = get_url_params(url, 'width');            
+            if (new_param) {
+                width_value = new_param; 
+            }
+            
+            new_param = get_url_params(url, 'height')            
+            if (new_param) {
+                height_value = new_param; 
+            }
+            
+            new_param = get_url_params(url, 'resizable');
+            if (new_param) {
+                resizable_value = new_param; 
+            }
+         
             // load remote content
             dialog.load(
                             url,                    
                             {},
                             function(responseText, textStatus, XMLHttpRequest) {
                                     dialog.dialog({
-                                            modal	: true, 
-                                            width	: 580, 
-                                            height	: 450        
+                                            modal       : true, 
+                                            width       : width_value, 
+                                            height      : height_value,
+                                            resizable   : resizable_value,
                                     });	                    
             });
             //prevent the browser to follow the link

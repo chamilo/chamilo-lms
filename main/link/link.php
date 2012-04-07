@@ -349,7 +349,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					<label class="control-label">
 					</label>
 					<div class="controls">
-						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
+						<button class="btn save" type="submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
 				</div>';		
 		echo '</form>';		
@@ -390,7 +390,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					<label class="control-label">
 					</label>
 					<div class="controls">
-						<button class="save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
+						<button class="btn save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
 					</div>
 				</div>';
 		echo "</form>";

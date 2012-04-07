@@ -76,10 +76,8 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @return   string
      * @access   private
      */
-    function _getAttrString($attributes)
-    {
+    function _getAttrString($attributes) {
         $strAttr = '';
-
         if (is_array($attributes)) {
             foreach ($attributes as $key => $value) {
             	if ($key != 'value') $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
@@ -168,12 +166,15 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function toHtml()
-    {
+    function toHtml() {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >'.$this->getValue() .'</button>';
+            //Adding the btn class            
+            if (isset($this->_attributes['class'])) {
+                $this->_attributes['class'] = 'btn '.$this->_attributes['class'];
+            }
+            return $this->_getTabs().'<button ' . $this->_getAttrString($this->_attributes) . ' >'.$this->getValue() .'</button>';
         }
     } //end func toHtml
 
@@ -225,7 +226,4 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             return parent::exportValue($submitValues, $assoc);
         }
     }
-
-    // }}}
 } // end class HTML_QuickForm_element
-?>

@@ -325,7 +325,9 @@ if ($encryptPassForm == '1') {
 					$('#dbStatsForm').attr('value','chamilo_main');
 					$('#dbUserForm').attr('value','chamilo_main');
 			}
-			
+            
+			$("button").addClass('btn');
+            
     		//Allow Chamilo install in IE
     		$("button").click(function() {
     			$("#is_executable").attr("value",$(this).attr("name"));

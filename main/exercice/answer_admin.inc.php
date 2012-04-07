@@ -1270,8 +1270,8 @@ if($modifyAnswers)
 
 <tr>
   <td colspan="4">
-	<button type="submit" class="minus" name="lessMatches" value="<?php echo get_lang('LessElements'); ?>"><?php echo get_lang('LessElements'); ?></button>
-	&nbsp;&nbsp;<button class="plus" type="submit" name="moreMatches" value="<?php echo get_lang('MoreElements'); ?>"><?php echo get_lang('MoreElements'); ?></button>
+	<button type="submit" class="btn minus" name="lessMatches" value="<?php echo get_lang('LessElements'); ?>"><?php echo get_lang('LessElements'); ?></button>
+	&nbsp;&nbsp;<button class="btn plus" type="submit" name="moreMatches" value="<?php echo get_lang('MoreElements'); ?>"><?php echo get_lang('MoreElements'); ?></button>
   </td>
 </tr>
 <tr>

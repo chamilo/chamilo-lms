@@ -454,8 +454,7 @@ a:active {
 	PADDING-LEFT: 10px;
 	PADDING-BOTTOM: 0px;
 	MARGIN: 0px;
-	LIST-STYLE-TYPE: none;
-	display: inline;
+	LIST-STYLE-TYPE: none;	
 }
 .subnav LI {
 	PADDING-RIGHT: 0px;
@@ -688,7 +687,7 @@ footer {
 	color:#4171b5;
 }
 /* --- end of course navigation menu section  --- */
-------------------------------------------------------------------------------  course navigation menu as a definition list ------------------------------------------------------------------------------ */ this lets the navigation menu appear to the left:
+
 #center {
 margin: 0 0 0 180px;
 padding: 10px 0 40px 0;
@@ -705,7 +704,7 @@ padding: 10px 0 40px 0;
 	margin:-7px 0 0 -5%;
 	overflow:hidden;
 	padding:0;
-	width:180px; left */
+	width:180px;
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {
@@ -715,8 +714,8 @@ padding: 10px 0 40px 0;
 	height: 1%;
 	margin-left: 0;
 }
- /* End hide from IE5/mac */
-*/
+
+
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/

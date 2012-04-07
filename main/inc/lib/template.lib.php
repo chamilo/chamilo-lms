@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
 //class Template extends Smarty {
-class Template {    
+class Template {
 	
 	var $style = 'default'; //see the template folder 
     var $preview_theme = null; 
@@ -32,12 +32,10 @@ class Template {
     
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {       
-        
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {               
         //parent::__construct();
-        
-        //Twig settings
-        
+                
+        //Twig settings        
         Twig_Autoloader::register();
         
         $template_paths = array(
@@ -56,18 +54,14 @@ class Template {
         $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
         $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
         
-        
-        // Smarty like
+        /*
         $lexer = new Twig_Lexer($this->twig, array(
             //'tag_comment'  => array('{*', '*}'),
             //'tag_comment'  => array('{#', '#}'),
             //'tag_block'    => array('{', '}'),
             //'tag_variable' => array('{$', '}'),
-        ));
-        
-        $this->twig->setLexer($lexer);
-        
-        //--------
+        ));        
+        $this->twig->setLexer($lexer);*/
    
         //Page title
 		$this->title = $title;        
@@ -455,7 +449,7 @@ class Template {
 			$css_file_to_string .= api_get_css($css_file);
 		}
         
-        // @todo move this somewhere else
+        // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>                
@@ -509,6 +503,7 @@ class Template {
         
         $this->set_help();
         
+        //@todo move this in the template
 		$bug_notification_link = '';
 		if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
 			$bug_notification_link = '<li class="report">

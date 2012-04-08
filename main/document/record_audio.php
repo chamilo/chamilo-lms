@@ -140,7 +140,7 @@ function submitVoice() {
 	var nano_group_id="<?php echo api_get_group_id(); ?>";
 	var nano_session_id="<?php echo api_get_session_id(); ?>";
 	//path, url and filename
-	var filename = document.getElementById("audio_title").value+".wav";	
+	var filename = document.getElementById("audio_title").value+"_chnano_.wav";//adding name file, tag and extension
 	var filename = filename.replace(/\s/g, "_");//replace spaces by _
 	var filename = encodeURIComponent(filename);	
 	var filepath="<?php echo urlencode($filepath); ?>";

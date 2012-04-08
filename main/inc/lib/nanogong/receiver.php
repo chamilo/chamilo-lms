@@ -46,7 +46,9 @@ $filename = Database::escape_string($filename);
 $filename = replace_dangerous_char($filename, $strict = 'loose');// or strict
 $filename = disable_dangerous_file($filename);
 
-$title= str_replace('_',' ',$filename);
+$title= trim(str_replace('_chnano_.','.',$filename));//hide nanogong wav tag at title
+$title= str_replace('_',' ',$title);
+
 //
 $documentPath = $filepath.$filename;
 

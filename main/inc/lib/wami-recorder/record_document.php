@@ -49,9 +49,22 @@ $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$wamidir;
 $current_session_id = api_get_session_id();
 $groupId=$_SESSION['_gid'];
-$documentPath = $saveDir.'/'.$waminame;
-$title=str_replace('_',' ',$waminame);
-//$title=basename($waminame, ".wav");//save title whitout extension
+
+//avoid duplicates
+$waminame_to_save=$waminame;
+$title_to_save=str_replace('_',' ',$waminame);
+$waminame_noex=basename($waminame, ".wav");
+if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)){ 
+		$i = 1;		
+		while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) $i++;
+		$waminame_to_save = $waminame_noex . '_' . $i . '.'.$ext;
+		$title_to_save = $waminame_noex . '_' . $i . '.'.$ext;
+		$title_to_save = str_replace('_',' ',$title_to_save);
+}
+
+
+$documentPath = $saveDir.'/'.$waminame_to_save;
+
 
 //add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
@@ -59,6 +72,6 @@ fwrite($fh, $content);
 fclose($fh);
 
 //add document to database
-	$doc_id = add_document($_course, $wamidir.'/'.$waminame, 'file', filesize($documentPath), $title);
+	$doc_id = add_document($_course, $wamidir.'/'.$waminame_to_save, 'file', filesize($documentPath), $title_to_save);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 ?>

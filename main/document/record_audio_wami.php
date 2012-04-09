@@ -77,22 +77,6 @@ if (!is_dir($filepath)) {
 	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 	$dir = '/';
 }
-//make some vars
-//$waminame="audiorecord.wav";
-$wamiuserid=api_get_user_id();
-$userinfo=Database::get_user_info_from_id($wamiuserid);
-$waminame = api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'.wav';
-$waminame = replace_dangerous_char($waminame, 'strict');
-
-
-$waminame_noex=basename($waminame, ".wav");
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir=$dirBaseDocuments.$wamidir;
-if (file_exists($saveDir.'/'.$waminame)){ 
-		$i = 1;		
-		while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.wav')) $i++;
-		$waminame = $waminame_noex . '_' . $i . '.wav';
-}
 
 //groups //TODO: clean
 if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
@@ -145,6 +129,10 @@ if (isset($document_data['parents'])) {
     }
 }
 
+
+//make some vars
+$wamiuserid=api_get_user_id();
+
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -161,7 +149,8 @@ echo '</div>';
 <!-- GUI code... take it or leave it -->
 <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui.js"></script>
 
-<script>
+<script type="text/javascript">
+
 	function setupRecorder() {
 		Wami.setup({
 			id : "wami",
@@ -170,10 +159,14 @@ echo '</div>';
 	}
 
 	function setupGUI() {
+		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
+		document.getElementById('audio_title').style.display='none';
+		document.getElementById('audio_button').style.display='none';
+		
 		var gui = new Wami.GUI({
 			id : "wami",
-			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame=<?php echo $waminame; ?>&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
-			playUrl : 	"<?php echo $wamiurlplay.$waminame; ?>",
+			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
+			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame,
 			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
 			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf",
 		});
@@ -183,8 +176,15 @@ echo '</div>';
 
 </script>
 
+
 <div id="wami" style="margin-left: 460px; margin-top:50px;"></div>
 <div align="center" style="margin-top:200px;">
+
+<form name="form_wami_recorder">
+<input placeholder="<?php echo get_lang('Filename'); ?>" type="text" id="audio_title">
+<button class="upload" type="button" value="" onClick="setupRecorder()" id="audio_button" /><?php echo get_lang('Send'); ?></button>
+</form>
+
 <?php
 
 Display::display_normal_message(get_lang('VoiceRecord'), false);
@@ -192,7 +192,6 @@ Display::display_normal_message(get_lang('VoiceRecord'), false);
 ?>
 
 </div>
-<body onLoad="setupRecorder()">
 
 <?php
 

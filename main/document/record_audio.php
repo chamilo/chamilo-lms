@@ -127,7 +127,7 @@ echo '<div class="actions">';
 echo '</div>';
 
 ?>
-<script language="JavaScript"> 
+<script type="text/javascript"> 
 function submitVoice() { 
 	//lang vars
 	var lang_no_applet="<?php echo get_lang('NanogongNoApplet'); ?>";
@@ -199,8 +199,6 @@ echo '</applet>';
  
 echo '<form name="form_nanogong">';	
 	echo '<input placeholder="'.get_lang('Filename').'" type="text" id="audio_title">';
-	echo '<input type="hidden" name="cidReq" value="'.$_course['id'].'">';
-	echo '<input type="hidden" name="id" value="'.$document_id.'">';
 	echo '<input id="status" type="hidden" name="status" value="0">';
 	echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
 echo '</form>';

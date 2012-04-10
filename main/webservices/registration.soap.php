@@ -13,25 +13,39 @@ require_once $libpath.'add_course.lib.inc.php';
 
 $debug = false;
 
+define('WS_ERROR_SECRET_KEY', 1);
+
+function return_error($code) {
+    $fault = null;
+    switch($code) {
+        case WS_ERROR_SECRET_KEY:
+            $fault = new soap_fault('Server', '', 'Secret key is not correct');    
+        break;
+    }
+    return $fault;
+}
+
 function WSHelperVerifyKey($params) {
     global $_configuration, $debug;
-
-    if(is_array($params)) {
+    if (is_array($params)) {
         $secret_key = $params['secret_key'];
     } else {
         $secret_key = $params;
     }
+    //error_log(print_r($params,1));
+    
     $ip = trim($_SERVER['REMOTE_ADDR']);
     // if we are behind a reverse proxy, assume it will send the 
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+      list($ip1, $ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
       $ip = trim($ip1);
     }
-    $security_key = $ip.$_configuration['security_key'];
-
+    $security_key = $ip.$_configuration['security_key'];    
+    //error_log($secret_key.'-'.$security_key);
     $result = api_is_valid_secret_key($secret_key, $security_key);
-    if ($debug) error_log('WSHelperVerifyKey result '.$result);
+    //error_log($result);
+    if ($debug) error_log('WSHelperVerifyKey result '.intval($result));
     return $result;
 }
 
@@ -152,8 +166,8 @@ function WSCreateUsers($params) {
 
     global $_user, $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
-        return -1;
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // database table definition
@@ -363,7 +377,7 @@ function WSCreateUser($params) {
     global $_user, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // database table definition
@@ -556,8 +570,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'users' => array('name' => 'users', 'type' => 'tns:createUsersPassEncryptParamsList'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'users'         => array('name' => 'users',      'type' => 'tns:createUsersPassEncryptParamsList'),
+        'secret_key'    => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -598,11 +612,10 @@ $server->register('WSCreateUsersPasswordCrypted',						    // method name
 
 // Define the method WSCreateUsersPasswordCrypted
 function WSCreateUsersPasswordCrypted($params) {
-
     global $_user, $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
-        return -1;
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // database table definition
@@ -617,10 +630,10 @@ function WSCreateUsersPasswordCrypted($params) {
     foreach ($users_params as $user_param) {
 
         $password = $user_param['password'];
-          $encrypt_method = $user_param['encrypt_method'];
+        $encrypt_method = $user_param['encrypt_method'];
 
-          $firstName = $user_param['firstname'];
-          $lastName = $user_param['lastname'];
+        $firstName = $user_param['firstname'];
+        $lastName = $user_param['lastname'];
         $status = $user_param['status'];
         $email = $user_param['email'];
         $loginName = $user_param['loginname'];
@@ -813,20 +826,20 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
-        'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
-        'status' => array('name' => 'status', 'type' => 'xsd:string'),
-        'email' => array('name' => 'email', 'type' => 'xsd:string'),
-        'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
-        'password' => array('name' => 'password', 'type' => 'xsd:string'),
-        'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
-        'language' => array('name' => 'language', 'type' => 'xsd:string'),
-        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
-        'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'firstname'                 => array('name' => 'firstname',                 'type' => 'xsd:string'),
+        'lastname'                  => array('name' => 'lastname',                  'type' => 'xsd:string'),
+        'status'                    => array('name' => 'status',                    'type' => 'xsd:string'),
+        'email'                     => array('name' => 'email',                     'type' => 'xsd:string'),
+        'loginname'                 => array('name' => 'loginname',                 'type' => 'xsd:string'),
+        'password'                  => array('name' => 'password',                  'type' => 'xsd:string'),
+        'encrypt_method'            => array('name' => 'encrypt_method',            'type' => 'xsd:string'),
+        'language'                  => array('name' => 'language',                  'type' => 'xsd:string'),
+        'phone'                     => array('name' => 'phone',                     'type' => 'xsd:string'),
+        'expiration_date'           => array('name' => 'expiration_date',           'type' => 'xsd:string'),
+        'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
+        'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
+        'extra'                     => array('name'     => 'extra',                 'type' => 'tns:extrasList'),
+        'secret_key'                => array('name' => 'secret_key',                'type' => 'xsd:string')
     )
 );
 
@@ -845,9 +858,10 @@ $server->register('WSCreateUserPasswordCrypted',						// method name
 function WSCreateUserPasswordCrypted($params) {
 
     global $_user, $_configuration, $debug;
-
+    error_log('WSCreateUserPasswordCrypted');
+    error_log(print_r($params,1));
     if (!WSHelperVerifyKey($params)) {        
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // Database table definition.
@@ -856,7 +870,7 @@ function WSCreateUserPasswordCrypted($params) {
     $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
     //$users_params = $params['users'];
-    $results = array();
+    $result = array();
     $orig_user_id_value = array();
 
     $password               = $params['password'];
@@ -1096,7 +1110,7 @@ function WSEditUserCredentials($params) {
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1185,7 +1199,7 @@ function WSEditUsers($params) {
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1336,7 +1350,7 @@ function WSEditUser($params) {
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1514,7 +1528,7 @@ function WSEditUsersPasswordCrypted($params) {
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // get user id from id of remote system
@@ -1692,7 +1706,7 @@ function WSEditUserPasswordCrypted($params) {
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1839,7 +1853,7 @@ $server->wsdl->addComplexType(
 
 function WSHelperActionOnUsers($params, $type) {
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $original_user_ids = $params['ids'];
@@ -1999,7 +2013,7 @@ function WSCreateCourse($params) {
     global $_configuration;
 
     if (!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -2203,7 +2217,7 @@ function WSCreateCourseByTitle($params) {
     global $firstExpirationDelay, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $t_cfv 					= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -2421,7 +2435,7 @@ function WSEditCourse($params){
 
     global $_configuration;
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2579,7 +2593,7 @@ function WSCourseDescription($params) {
     global $_course;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2903,7 +2917,7 @@ $server->register('WSDeleteCourse',			// method name
 function WSDeleteCourse($params) {
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3045,7 +3059,7 @@ function WSCreateSession($params) {
     global $_user;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -3234,7 +3248,7 @@ function WSEditSession($params) {
     global $_user;
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -3407,7 +3421,7 @@ $server->register('WSDeleteSession',			// method name
 function WSDeleteSession($params) {
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
@@ -3555,7 +3569,7 @@ $server->register('WSSubscribeUserToCourse',					// method name
 function WSSubscribeUserToCourse($params) {
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
     $results = array();
     $userscourses = $params['userscourses'];
@@ -3644,7 +3658,7 @@ function WSSubscribeUserToCourseSimple($params) {
     if ($debug) error_log('WSSubscribeUserToCourseSimple');
     if ($debug) error_log('Params '. print_r($params, 1));
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
     $results = array();
     $course_code  = $params['course'];
@@ -3683,7 +3697,7 @@ function WSSubscribeUserToCourseSimple($params) {
 /*   GetUser    */
 
 $server->wsdl->addComplexType(
-    'GetUser_arg',
+    'GetUserArg',
     'complexType',
     'struct',
     'all',
@@ -3697,11 +3711,11 @@ $server->wsdl->addComplexType(
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'User',
-'complexType',
-'struct',
-'all',
-'',
+    'User',
+    'complexType',
+    'struct',
+    'all',
+    '',
 array (      
         'user_id'      => array('name' => 'user_id',    'type' => 'xsd:string'),
         'firstname'    => array('name' => 'firstname',  'type' => 'xsd:string'),
@@ -3709,50 +3723,12 @@ array (
      )
 );
 
-$server->wsdl->addComplexType(
-'GetUserReturn',
-'complexType',
-'struct',
-'all',
-'',
-array (      
-        'result'      => array('name' => 'result',    'type' => 'tns:User[]'),        
-     )
-);
-
-/*
-$server->wsdl->addComplexType(
-'UserArray',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(
-array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:User[]')
-),
-'tns:User'
-);
-*/
-/*
-$server->wsdl->addComplexType(
-'UserSimpleArray',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'string[]')),
-'xsd:string'
-);*/
-
-
 // Register the method to expose
 $server->register('WSGetUser',                   // method name
-    array('GetUser' => 'tns:GetUser_arg'),       // input parameters
+    array('GetUser' => 'tns:GetUserArg'),       // input parameters
     array('return' => 'tns:User'),   // output parameters
     'urn:WSRegistration',                        // namespace
-    'urn:WSRegistration#GetUser',                // soapaction
+    'urn:WSRegistration#WSGetUser',                // soapaction
     'rpc',                                       // style
     'encoded',                                   // use
     'This service get user information by id'    // documentation
@@ -3760,29 +3736,30 @@ $server->register('WSGetUser',                   // method name
 
 // define the method WSSubscribeUserToCourse
 function WSGetUser($params) {
-    global $debug;
+    global $debug; 
     if ($debug) error_log('WSGetUser');
-    if(!WSHelperVerifyKey($params)) {
-        return -1;
+    if ($debug) error_log('$params: '.print_r($params, 1));
+    
+    if (!WSHelperVerifyKey($params)) {        
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $results = array();
+    $result = array();
     
     // Get user id    
     $user_id   = UserManager::get_user_id_from_original_id($params['original_user_id_value'], $params['original_user_id_name']);
     $user_data = UserManager::get_user_info_by_id($user_id);
     
-    if(empty($user_data)) {
+    if (empty($user_data)) {
         // If user was not found, there was a problem
         $result['user_id']    = '';
         $result['firstname']  = '';        
-        $result['lastname']   = '';        
-                
+        $result['lastname']   = '';
     } else {      
         $result['user_id']    = $user_data['user_id'];
         $result['firstname']  = $user_data['firstname'];
         $result['lastname']   = $user_data['lastname'];
-    }
+    }    
     return $result;
 }
 
@@ -3866,7 +3843,7 @@ $server->register('WSUnsubscribeUserFromCourse',					// method name
 // define the method WSUnsubscribeUserFromCourse
 function WSUnsubscribeUserFromCourse($params) {
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4032,7 +4009,7 @@ $server->register('WSSuscribeUsersToSession',						// method name
 function WSSuscribeUsersToSession($params){
 
      if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4240,7 +4217,7 @@ $server->register('WSUnsuscribeUsersFromSession',							// method name
 function WSUnsuscribeUsersFromSession($params) {
 
      if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4468,7 +4445,7 @@ $server->register('WSSuscribeCoursesToSession',						// method name
 function WSSuscribeCoursesToSession($params) {
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
        // initialisation
@@ -4690,7 +4667,7 @@ $server->register('WSUnsuscribeCoursesFromSession',							// method name
 function WSUnsuscribeCoursesFromSession($params) {
 
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
        // Initialisation
@@ -4833,7 +4810,7 @@ $server->register('WSListCourses',				// method name
 // define the method WSListCourses
 function WSListCourses($params) {
     if(!WSHelperVerifyKey($params)) {
-        return -1;
+        return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $course_field_name = $params['original_course_id_name'];
@@ -4902,40 +4879,38 @@ $server->register('WSUpdateUserApiKey',				// method name
 
 
 function WSUpdateUserApiKey($params) {
-  if(!WSHelperVerifyKey($params)) {
-    return -1;
-  }
-
-  $user_id = UserManager::get_user_id_from_original_id($params['original_user_id_value'], $params['original_user_id_name']);
-  if (!$user_id) {
-    if (!empty($params['chamilo_username'])) {
-      $info = api_get_user_info_from_username($params['chamilo_username']);
-      $user_id = $info['user_id'];
-      // Save new fieldlabel into user_field table.
-      $field_id = UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
-      // Save the external system's id into user_field_value table.
-      $res = UserManager::update_extra_field_value($user_id, $params['original_user_id_name'], $params['original_user_id_value']);
+    if(!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
     }
-    else {
-      return 0;
-    }
-  }
 
-  $list = UserManager::get_api_keys($user_id);
-  $key_id = UserManager::get_api_key_id($user_id, 'dokeos');
-
-  if (isset($list[$key_id])) {
-    $apikey = $list[$key_id];
-  }
-  else {
-    $lastid = UserManager::update_api_key($user_id, 'dokeos');
-    if ($lastid) {
-      $apikeys = UserManager::get_api_keys($user_id);
-      $apikey = $apikeys[$lastid];
+    $user_id = UserManager::get_user_id_from_original_id($params['original_user_id_value'], $params['original_user_id_name']);
+        if (!$user_id) {
+        if (!empty($params['chamilo_username'])) {
+            $info = api_get_user_info_from_username($params['chamilo_username']);
+            $user_id = $info['user_id'];
+            // Save new fieldlabel into user_field table.
+            $field_id = UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
+            // Save the external system's id into user_field_value table.
+            $res = UserManager::update_extra_field_value($user_id, $params['original_user_id_name'], $params['original_user_id_value']);
+        }
+        else {
+            return 0;
+        }
     }
-  }
-  
-  return $apikey;
+
+    $list = UserManager::get_api_keys($user_id);
+    $key_id = UserManager::get_api_key_id($user_id, 'dokeos');
+
+    if (isset($list[$key_id])) {
+        $apikey = $list[$key_id];
+    } else {
+        $lastid = UserManager::update_api_key($user_id, 'dokeos');
+        if ($lastid) {
+            $apikeys = UserManager::get_api_keys($user_id);
+            $apikey = $apikeys[$lastid];
+        }
+    }  
+    return $apikey;
 }
 
 // Use the request to (try to) invoke the service

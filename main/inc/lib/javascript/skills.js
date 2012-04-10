@@ -34,7 +34,6 @@ var editEndpointOptions = {
     connector:"Straight"    
 };
 
-
 //Student arrows    
 
 // If user completed the skill 
@@ -70,18 +69,8 @@ function cleanclass(obj) {
 function open_parent(parent_id, id) {   
     console.log("open_parent call : id " + id + " parent_id:" + parent_id);                
     var numeric_parent_id = parent_id.split('_')[1];
-    var numeric_id = id.split('_')[1];    
-    
+    var numeric_id = id.split('_')[1];        
     $('#'+id).css('top', '0px');
-    
-    // @todo move this in a function
-    var final_left =0;
-    var normal_width = 0;
-
-    $('.skill_child').each( function(){                                          
-        normal_width = $(this).width();
-        return true;                    
-    });        
     load_parent(numeric_parent_id, numeric_id);
 }
 
@@ -93,9 +82,9 @@ function open_parent(parent_id, id) {
 function open_block(id, load_user_data, create_root) {
     if (debug) console.log("open_block id : " + id+" load_user_data: " +load_user_data + ', create_root ' + create_root);      
     
-    var numeric_id = id.split('_')[1];    
+    var numeric_id = id.split('_')[1]; 
     
-    for (var i = 0; i < skills.length; i++) {
+    for (var i = 0; i < skills.length; i++) {ranc
         //Remove everything except parents
         if (jQuery.inArray(skills[i].element, parents) == -1) {
             //if (debug) console.log('deleting this skill '+ skills[i].element + " id: " + i);
@@ -103,25 +92,7 @@ function open_block(id, load_user_data, create_root) {
             jsPlumb.removeAllEndpoints(skills[i].element);            
             $("#"+skills[i].element).remove();                 
         }
-    }        
-
-    /*/Modifying current block position
-    pos = $('#'+id).position();        
-    left_value  = center_x; 
-
-    if (parents.length == 2) { 
-        top_value  = space_between_blocks_y + offset_y;
-    } else {
-        top_value = 100;
-    }       
-    
-    jsPlumb.animate(id, { left: left_value, top:top_value }, { duration:duration_value });       
-
-    //Modifying root block position
-    pos_parent = $('#'+parents[0]).position();
-    jsPlumb.animate(parents[0], { left: center_x, top:offset_y }, { duration:duration_value });
-    top_value = 2*space_between_blocks_y +offset_y ; */
-    
+    }
     load_children(numeric_id, 0, load_user_data, create_root);    
 }
 
@@ -129,28 +100,29 @@ function load_children(my_id, top_value, load_user_data, create_root) {
     if (debug) console.log("load_children : my_id " + my_id + ", top_value:" + top_value +", load_user_data: "+load_user_data+", create_root: "+create_root);
     
     //Fix the block vertical position
-    //$('#block_'+my_id).css('top', '150px');
-
     my_top_root = 150;
-    my_top_children = 250;    
+    my_top_children = 250;
+    
+    console.log('Loading root info by ajax '+my_id);
+    var skill = null;
+    $.ajax({
+        async: false,//very important other wise it would not work
+        url: url+'&a=get_skill_info&id='+my_id,             
+        success: function(json) {
+            skill = jQuery.parseJSON(json);            
+        }
+    });
 
     //Creating the root           
     if (create_root == 1) {
+        //Loading children for the first time
         my_top_root = 0;
         my_top_children = 150;
+        
         if (my_id == 1) {      
             $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root first_window" >Root </div>');
-        } else {      
-            console.log('Loading root info by ajax '+my_id);
-            $.ajax({
-                async: false,//very important other wise it would not work
-                url: url+'&a=get_skill_info&id='+my_id,             
-                success: function(json) {
-                    var skill = jQuery.parseJSON(json);                  
-                    $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root open_block first_window" >' +skill.name+'</div>');                    
-                    console.log('Adding root block: '+my_id);
-                }
-            });
+        } else {                  
+            $('#skill_tree').append('<div id="block_'+my_id+'" class="skill_root open_block first_window" >' +skill.name+'</div>');                                                        
         }
         
         //Adding to the skill list
@@ -182,10 +154,28 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                 json = result.data;
                 
                 console.log('getJSON result: ' + result.success);
-                //console.log('getJSON json: ' + json);
+                //console.log('getJSON json: ' + json);                
+                
+                //Fixing the root position in the organigram
+                var final_left =0;
+                var normal_width = 0;
+                
+                $('.skill_child').each( function(){                                          
+                    normal_width = $(this).width();
+                    return true;                    
+                });              
+                
+                //normal_width = $('.skill_child :first').width();                
+                final_left = $('body').width() / 2 - normal_width/2;
+                
+                console.log('normal_width ----->   '+normal_width);
+                console.log('body.width ----->   '+$('body').width());   
+                console.log('final_left ----->   '+final_left);
+                
+                $('#block_'+my_id).css('left', final_left+'px');
 
                 $.each(json,function(i, item) {
-                    if (debug) console.log('Loading children: #' + item.id + " " +item.name);
+                    //if (debug) console.log('Loading children: #' + item.id + " " +item.name);
         
                      //item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
                     item.name = '<a href="#" class="edit_block" id="edit_block_'+item.id+'">'+item.name+'</a>';                    
@@ -202,7 +192,13 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     //Fix the block vertical position
                     $('#block_'+item.id).css('top', my_top_children+'px');
                     
-                    if (debug) console.log('Append block: '+item.id);
+                    if (create_root == 0) {
+                        
+                    }                    
+                
+                
+                    
+                    //if (debug) console.log('Append block: '+item.id);
 
                     endpoint = jsPlumb.makeTarget("block_" + item.id, my_edit_point_options);                
 
@@ -211,32 +207,13 @@ function load_children(my_id, top_value, load_user_data, create_root) {
                     skills.push({
                         element: "block_" + item.id, endp:endpoint
                     });
-
-                    console.log('added to array skills id: ' + item.id+" - name: "+item.name);
+                    //console.log('added to array skills id: ' + item.id+" - name: "+item.name);
                 });
 
                 jsPlumb.draggable(jsPlumb.getSelector(".skill_child"));
                 //jsPlumb.draggable(jsPlumb.getSelector(".skill_root"));
 
-                console.log('draggable');
-
-                //Fixing the root position in the organigram
-                var final_left =0;
-                var normal_width = 0;
-                
-                $('.skill_child').each( function(){                                          
-                    normal_width = $(this).width();
-                    return true;                    
-                });              
-                
-                //normal_width = $('.skill_child :first').width();                
-                final_left = $('body').width() / 2 - normal_width/2;
-                
-                console.log('normal_width ----->   '+normal_width);
-                console.log('body.width ----->   '+$('body').width());   
-                console.log('final_left ----->   '+final_left);   
-                
-                jsPlumb.animate('block_'+my_id, { left: final_left, top:my_top_root }, { duration: 100 });                
+                console.log('draggable');                  
                 console.log('setting animate for block_'+my_id);                
                 console.log('final parents '+parents);
             } //result

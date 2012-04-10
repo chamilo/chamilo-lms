@@ -54,39 +54,49 @@ class sso {
     public function check_user() {
         global $_user, $_configuration;
         $loginFailed = false;
-	//change the way we recover the cookie depending on how it is formed
+        //change the way we recover the cookie depending on how it is formed
         $sso = $this->decode_cookie($_GET['sso_cookie']);
+        
+        //error_log('check_user');
+        //error_log('sso decode cookie: '.print_r($sso,1));
+        
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, 
-                auth_source, active, expiration_date
+        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
                 FROM $user_table
-                WHERE username = '".trim(addslashes($sso['username']))."'";
+                WHERE username = '".trim(Database::escape_string($sso['username']))."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
+            //error_log('user exists');
             $uData = Database::fetch_array($result);
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                // Make sure password is encrypted with md5
-                if (!$_configuration['password_encryption']) {
-                    $uData['password'] = md5($uData['password']);
-                }
+             
                 //the authentification of this user is managed by Chamilo itself
                 // check the user's password
-                // password hash comes into a sha1
-                if ($sso['secret'] === sha1($uData['password']) 
+                // password hash comes already parsed in sha1, md5 or none
+                
+                /*
+                error_log($sso['secret']);
+                error_log($uData['password']);
+                error_log($sso['username']);
+                error_log($uData['username']);
+                */
+                
+                if ($sso['secret'] === $uData['password'] 
                     && ($sso['username'] == $uData['username'])) {
+                    error_log('user n password are ok');                    
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s') 
                          OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                             //If Multiple URL is enabled
-                            if ($_configuration['multiple_access_urls']) {
+                            if (api_get_multiple_access_url()) {
                                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
                                 //Check if user is an admin
                                 $sql = "SELECT user_id FROM $admin_table
-                                        WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
+                                        WHERE user_id = '".intval($uData['user_id'])."' LIMIT 1";
                                 $result = Database::query($sql);
                                 $my_user_is_admin = false;
                                 if (Database::num_rows($result) > 0) {

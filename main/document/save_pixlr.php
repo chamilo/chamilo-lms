@@ -15,20 +15,28 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
+
 api_protect_course_script();
 api_block_anonymous_users();
 
-if(!isset($_GET['title']) && !isset($_GET['type']) && !isset($_GET['image'])) {
+
+if ($_user['user_id']!= api_get_user_id() || api_get_user_id()==0 || $_user['user_id']==0) {
+	api_not_allowed();
+	die();
+}
+
+if(!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
 	api_not_allowed();
 	die();
 }
 
 if(!isset($_SESSION['paint_dir']) || !isset($_SESSION['whereami']) ){
-	api_not_allowed();//
+	api_not_allowed();
 	die();	
 }
 
 //pixlr return
+
 $filename=Security::remove_XSS($_GET['title']);//The user preferred file name of the image.
 $extension=Security::remove_XSS($_GET['type']);//The image type, "pdx", "jpg", "bmp" or "png".
 $urlcontents=Security::remove_XSS($_GET['image']);//A URL to the image on Pixlr.com server or the raw file post of the saved image.
@@ -42,9 +50,18 @@ $relativeUrlPath=$_SESSION['paint_dir'];
 $currentTool=$_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$_SESSION['paint_dir'];
+
 $contents = file_get_contents($urlcontents);
 
-//Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com
+//Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com. Comment because sometimes return a ip number
+/*
+if (strpos($urlcontents, "pixlr.com") === 0){
+	echo "Invalid referrer";
+	exit;
+}
+*/
+
+//Security. Allway get from pixlr.com. Comment because for now this does not run
 /*
 $urlcontents1='http://pixlr.com/';
 $urlcontents2 = strstr($urlcontents, '_temp');
@@ -52,26 +69,50 @@ $urlcontents_to_save=$urlcontents1.$urlcontents2;
 $contents = file_get_contents($urlcontents_to_save);//replace line 45.
 */
 
-//Verify that the file is an image
-$headers = get_headers($urlcontents, 1);
-$content_type = explode("/", $headers['Content-Type']);
-if ($content_type[0] != "image"){
-	echo "Invalid file type";
-	exit;
-}
-
 //a bit title security
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
 $filename = replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
-// a bit extension security
-if($extension!= 'jpg' && $extension!= 'png' && $extension!= 'bmp' && $extension!= 'pxd'){
-	die();
+if (strlen(trim($filename))==0) {
+	 echo "The title is empty";//if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
+	 exit;
 }
 
-//TODO: a bit mime security
+//check file_get_contents
+if ($contents === false) { 
+	echo "I cannot read: ".$urlcontents;
+    exit;
+}
+
+// Extension security
+if($extension!= 'jpg' && $extension!= 'png' && $extension!= 'pxd'){
+	die();
+}
+if($extension=='pxd') {
+	echo "pxd file type does not supported";// not secure because check security headers and finfo() return  Content-Type = application/octet-stream
+    exit;
+}
+
+//Verify that the file is an image. Headers method
+$headers = get_headers($urlcontents, 1);
+$content_type = explode("/", $headers['Content-Type']);
+if ($content_type[0] != "image") {
+	echo "Invalid file type";
+	exit;
+}
+
+//Verify that the file is an image. Fileinfo method
+if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
+	$finfo = new finfo(FILEINFO_MIME);
+	$current_mime=$finfo->buffer($contents);
+	finfo_close($finfo);
+	if(strpos($current_mime, 'image')===false) {
+		echo "Invalid mime type file";
+		exit;
+	}
+}
 
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
@@ -127,7 +168,8 @@ if($currentTool=='document/createpaint'){
 
 
 //delete temporal file
-unlink($_SESSION['temp_realpath_image']);
+$temp_file_2delete=$_SESSION['temp_realpath_image'];
+unlink($temp_file_2delete);
 
 //Clean sessions and return to Chamilo file list
 unset($_SESSION['paint_dir']);

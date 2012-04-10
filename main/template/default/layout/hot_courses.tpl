@@ -1,4 +1,4 @@
-{% if hot_courses is not null %}    
+{% if hot_courses is not null and hot_courses is not empty %}    
     
 <script type="text/javascript">
 $(document).ready( function() {

@@ -423,6 +423,7 @@ class IndexManager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
 	 */
 	function display_anonymous_course_list() {
+                $result = '';
 		$ctok = $_SESSION['sec_token'];
 		$stok = Security::get_token();
 	
@@ -553,12 +554,12 @@ class IndexManager {
 			}
 			$htmlListCat .= "</ul>";
 		}
-		echo $htmlTitre;
+		$result .= $htmlTitre;
 		if ($thereIsSubCat) {
-			echo $htmlListCat;
+			$result .=  $htmlListCat;
 		}
 		while ($categoryName = Database::fetch_array($resCats)) {
-			echo '<h3>', $categoryName['name'], "</h3>\n";
+			$result .= '<h3>' . $categoryName['name'] . "</h3>\n";
 		}
 		$numrows = Database::num_rows($sql_result_courses);
 		$courses_list_string = '';
@@ -657,16 +658,17 @@ class IndexManager {
 	        }
 	        $courses_list_string .= "</ul>";
 						} else {
-						//echo '<blockquote>', get_lang('_No_course_publicly_available'), "</blockquote>\n";
+						//$result .=  '<blockquote>', get_lang('_No_course_publicly_available'), "</blockquote>\n";
 	   					}
 					if ($courses_shown > 0) {
 						// Only display the list of courses and categories if there was more than
                                 // 0 courses visible to the world (we're in the anonymous list here).
-							echo $courses_list_string;
+							$result .=  $courses_list_string;
 					}
 		if ($category != '') {
-			echo '<p><a href="'.api_get_self().'"> ', Display :: return_icon('back.png', get_lang('BackToHomePage')), get_lang('BackToHomePage'), '</a></p>';
+			$result .=  '<p><a href="'.api_get_self().'"> ' . Display :: return_icon('back.png', get_lang('BackToHomePage')) . get_lang('BackToHomePage') . '</a></p>';
 		}
+                return '<div class="home_cats">' . $result . '</div>'; 
 	}
 	
 	/**

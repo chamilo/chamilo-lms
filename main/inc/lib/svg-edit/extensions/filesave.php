@@ -83,7 +83,7 @@ if ($suffix!= 'svg' && $suffix!= 'png'){
 //a bit mime security
 //comment because finfo seems stopping the save process files in some php vers.
 /*
-if (phpversion() >= '5.3') {
+if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
 	$finfo = new finfo(FILEINFO_MIME);
 	$current_mime=$finfo->buffer($contents);
 	finfo_close($finfo);

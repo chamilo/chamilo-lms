@@ -492,4 +492,5 @@ $DownloadLatestRecord = "Descargar grabación";
 $OralExpression = "Expresión Oral";
 $CongratulationsYouPassedTheTest = "Felicitaciones ha aprobado el ejercicio.";
 $YouDidNotReachTheMinimumScore = "No ha alcanzado el puntaje mínimo.";
+$EndTest = "Terminar ejercicio";
 ?>

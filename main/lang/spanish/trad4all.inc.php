@@ -1217,4 +1217,7 @@ $LoginX = "Nombre de usuario: %s";
 $ChatConnected = "Chat (Conectado)";
 $ChatDisconnected = "Chat (Desconectado)";
 $ThingsToDo = "Actividades por realizar";
+$WamiFlashDialog = "Se mostrará un cuadro de diálogo en el que se le pedirá permiso para poder acceder al micrófono, responda afirmativamente y cierre el cuadro de diálogo (si no desea que vuelva a aparecer, antes de cerrar marque la opción
+\"recordar\")";
+$WamiStartRecorder = "Inicie la grabación pulsando el micrófono y deténgala pulsándolo de nuevo. Cada vez que haga esto se generará un archivo.";
 ?>

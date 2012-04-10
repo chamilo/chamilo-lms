@@ -318,4 +318,5 @@ $NumberOfAnnouncementsInCourse = "Número de anuncios en el curso";
 $CurrentCoursesReport = "Informes de cursos actuales";
 $NumberOfPublishedExercises = "Nro de ejercicios publicados";
 $NumberOfPublishedLps = "Nro de Lecciones publicadas";
+$EventType = "Tipo de evento";
 ?>

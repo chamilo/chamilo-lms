@@ -127,4 +127,8 @@ $ConfigLearnpath = "Configurar a ferramenta leccións";
 $PDFWaterMarkHeader = "Marca de auga na cabeceira nas exportacións en PDF";
 $RedirectToALearningPath = "Redirixir a un itinerairo seleccionado";
 $RedirectToTheLearningPathList = "Redirixir á lista de itinerarios";
+$ActivateLegal = "Habilitar termos legais";
+$ShowALegalNoticeWhenEnteringTheCourse = "Amosar o Aviso legal cando se entre no curso";
+$CourseLegalAgreement = "Acordo legal para este curso";
+$AcceptLegal = "Acepto os termos legais";
 ?>

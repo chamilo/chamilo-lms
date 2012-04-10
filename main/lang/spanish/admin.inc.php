@@ -1330,7 +1330,7 @@ $EnabledInsertHtmlComment = "Esto le permitirá embeber en sus páginas web sus 
 $IncludeAsciiMathMlTitle = "Cargar el fichero ASCIIMathML.js para todas las páginas de la plataforma";
 $IncludeAsciiMathMlComment = "Active este parámetro si desea mostrar fórmulas matemáticas basadas en ASCIIMathML y gráficos matemáticos basados en ASCIIsvg, no solo en la herramienta \"Documentos\", pero también en otras herramientas de la plataforma.";
 $CourseHideToolsTitle = "Ocultar las herramientas a los docentes";
-$CourseHideToolsComment = "Seleccione las herramientas que desea esconder del docente. Esto no prohibirá el acceso a la herramienta (no tiene vocación de seguridad), pero hará invisible la herramienta para el docente para evitar la confusión debida a una gran cantidad de herramientas (vocación de usabilidad).";
+$CourseHideToolsComment = "Seleccione las herramientas que desea esconder del docente. Esto prohibirá el acceso a la herramienta.";
 $MoveUserStats = "Mover los resultados de los usuarios desde/hacia una sesión de formación";
 $CompareUserResultsBetweenCoursesAndCoursesInASession = "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de los usuarios cuando cambia de un modelo de cursos a un modelo de sesiones de formación. En una mayoría de casos, no necesitará usarla.<br />
 En esta pantalla, puede comparar los resultados que los usuarios tienen en el contexto de un curso y en el contexto del mismo curso dentro de una sesión de formación.<br />
@@ -1534,4 +1534,6 @@ $LoginIsEmailTitle = "Usar el correo electrónico como nombre de usuario";
 $LoginIsEmailComment = "El correo electrónico será usado para ingresar al sistema";
 $AllowBrowserSnifferTitle = "Activar el investigador de navegadores";
 $AllowBrowserSnifferComment = "Esto activará un investigador de las capacidades que soportan los navegadores que se conectan a Chamilo. Por lo tanto, mejorará la experiencia del usuario, adaptando las respuestas de la plataforma al tipo de navegador que se conecta, pero reducirá la velocidad de carga de la página inicial de los usuarios cada vez que entren a la plataforma.";
+$EnableWamiRecordTitle = "Activar Wami-recorder";
+$EnableWamiRecordComment = "Wami-recorder es una herramienta de grabación de voz sobre Flash";
 ?>

@@ -198,4 +198,5 @@ $MySocialGroups = "Os meus grupos";
 $SocialGroups = "Grupos";
 $CreateASocialGroup = "Crear un grupo social";
 $EditMembersList = "Editar lista de membros";
+$IAmAHRM = "Eu son un administrador de recursos humáns";
 ?>

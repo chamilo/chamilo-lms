@@ -317,4 +317,5 @@ $NumberOfAnnouncementsInCourse = "Number of announcements in course";
 $CurrentCoursesReport = "Current courses report";
 $NumberOfPublishedExercises = "# of published exercises";
 $NumberOfPublishedLps = "# of published Learning Paths";
+$EventType = "Event type";
 ?>

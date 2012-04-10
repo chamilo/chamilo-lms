@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Habilitar a autenticación CAS permitirá aos usuarios autenticarse coas súas credenciais CAS";
 $AdminBy = "Administrado por:";
 $AdministrationTools = "Ferramentas de administración";
 $State = "Estado do sistema";
@@ -1470,4 +1471,6 @@ $ArchiveDirCleanupFailed = "Por algunha razón, non se puido limpar o cartafol a
 $LocalTimeUsingPortalTimezoneXIsY = "A hora local usando a zona horaria do portal (%s) é %s";
 $AllowTeacherChangeGradebookGradingModelTitle = "Los docentes pueden escoger el modelo de evaluación";
 $AllowTeacherChangeGradebookGradingModelComment = "Activar esta opción,permitirá que cada profesor poda escoller o modelo de cualificación que utilizará no seu curso. Este cambio terá que facelo o profesor dentro da ferramenta de cualificacións do curso.";
+$NumberOfSubEvaluations = "Número de subavaliacións";
+$AddNewModel = "Engadir novo modelo";
 ?>

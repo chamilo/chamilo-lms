@@ -259,4 +259,6 @@ $UplUploadFailedSizeIsZero = "Houbo un problema ao subir o seu documento: o arqu
 $NewImage = "Nova imaxe";
 $DirExists = "Operación imposible, xa existe un directorio co mesmo nome.";
 $DocMv = "Documento movido";
+$NoSVGImagesInImagesGalleryPath = "Non hai imaxes SVG na túa galeria de imaxes";
+$NoSVGImages = "Non é unha imaxe SVG";
 ?>

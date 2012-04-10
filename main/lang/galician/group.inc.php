@@ -94,4 +94,6 @@ $Group = "Grupo";
 $ForumOfGroup = "Foro do grupo:";
 $BackToGroupList = "Volver á lista de grupos";
 $EditGroupCategory = "Modificar categoría de grupo";
+$NoStudents = "Non é estudante";
+$NoData = "A información non está dispoñible";
 ?>

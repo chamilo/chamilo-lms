@@ -125,4 +125,8 @@ $PHPVersionError = "A súa versión de PHP non coincide cos requisitos para este
 $ExtensionSessionsNotAvailable = "Extensión de sesións non dispoñible";
 $ExtensionZlibNotAvailable = "Extensión Zlib non dispoñible";
 $ExtensionPCRENotAvailable = "Extensión PCRE non dispoñible";
+$DatabaseXWillBeCreated = "Crearase a base de datos %s";
+$ADatabaseWithTheSameNameAlreadyExists = "Xa existe unha base de datos co mesmo nome";
+$UserXCantHaveAccessInTheDatabaseX = "O usuario %s non ten acceso á base de datos %s";
+$DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Non se pode crear a base de datos %s, o usuario %s non ten persimos suficientes";
 ?>

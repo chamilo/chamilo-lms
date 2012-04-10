@@ -492,4 +492,5 @@ $DownloadLatestRecord = "Download record";
 $OralExpression = "Oral expression";
 $CongratulationsYouPassedTheTest = "Congratulations you passed the test!";
 $YouDidNotReachTheMinimumScore = "You didn't reach the minimum score";
+$EndTest = "End test";
 ?>

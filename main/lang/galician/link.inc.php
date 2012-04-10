@@ -53,4 +53,5 @@ $LinkOpenSelf = "Abrir";
 $LinkOpenBlank = "Abrir nunha ventá nova";
 $LinkOpenParent = "Abrir nunha ventá superior";
 $LinkOpenTop = "Abrir na ventá de arriba";
+$LinkTarget = "Enlace";
 ?>

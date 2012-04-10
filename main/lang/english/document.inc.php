@@ -276,4 +276,5 @@ $DirExists = "The operation is impossible, a directory with this name already ex
 $DocMv = "Document moved";
 $NoSVGImagesInImagesGalleryPath = "There are no SVG images in your images gallery directory";
 $NoSVGImages = "No SVG image";
+$WamiNeedFilename = "Before you activate recording it is necessary a file name.";
 ?>

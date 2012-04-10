@@ -94,4 +94,5 @@ $IncludedInEvaluation = "Incluido na avaliación";
 $DateExpiredNotBeLessDeadLine = "A data de caducidade non pode ser menor que a data límite";
 $NotRevised = "Non se revisou";
 $MaxWeightNeedToBeProvided = "Necesita indicar o peso máximo";
+$ContainsAfile = "Contén un arquivo";
 ?>

@@ -1327,7 +1327,7 @@ $EnabledInsertHtmlComment = "This allows you to embed on your webpages your favo
 $IncludeAsciiMathMlTitle = "Load the file ASCIIMathML.js in all the system's pages";
 $IncludeAsciiMathMlComment = "Activate this setting if you want to show ASCIIMathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system.";
 $CourseHideToolsTitle = "Hide tools from teachers";
-$CourseHideToolsComment = "Check the tools you want to hide from teachers. This will not prohibit access to the tool (no security purpose), but will make it invisible for the teachers in order to avoid confusion (with too many tools - usability purpose).";
+$CourseHideToolsComment = "Check the tools you want to hide from teachers. This will prohibit access to the tool.";
 $MoveUserStats = "Move users results from/to a session";
 $CompareUserResultsBetweenCoursesAndCoursesInASession = "This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won't need to use it.<br />
 On this screen, you can compare results of users between the context of a standalone course, and the context of the same course inside a session.<br />
@@ -1531,4 +1531,6 @@ $LoginIsEmailTitle = "Use the email as username";
 $LoginIsEmailComment = "Use the email in order to login to the system";
 $AllowBrowserSnifferTitle = "Activate the browser sniffer";
 $AllowBrowserSnifferComment = "This will enable an investigator of the capabilities that support browsers that connect to Chamilo. Therefore will improve user experience by adapting responses to the type of browser platform that connects, but will slow initial page load of users every time that they enter to the platform.";
+$EnableWamiRecordTitle = "Activate Wami-recorder";
+$EnableWamiRecordComment = "Wami-recorder is a voice record tool on Flash";
 ?>

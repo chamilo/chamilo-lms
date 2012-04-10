@@ -19,7 +19,7 @@ function return_error($code) {
     $fault = null;
     switch($code) {
         case WS_ERROR_SECRET_KEY:
-            $fault = new soap_fault('Server', '', 'Secret key is not correct');    
+            $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');    
         break;
     }
     return $fault;

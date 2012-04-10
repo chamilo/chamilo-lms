@@ -147,7 +147,7 @@ echo '</div>';
 <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/recorder.js"></script>
 
 <!-- GUI code... take it or leave it -->
-<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui.js"></script>
+<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui_record_document.js"></script>
 
 <script type="text/javascript">
 
@@ -159,38 +159,50 @@ echo '</div>';
 	}
 
 	function setupGUI() {
+		var counter = 0;
+		var waminame_noex=document.getElementById("audio_title").value;
 		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
-		document.getElementById('audio_title').style.display='none';
-		document.getElementById('audio_button').style.display='none';
-		
+		var waminame_play=waminame;
+				
+		if (waminame!=".wav") {
+			document.getElementById('audio_title').style.display='none';
+			document.getElementById('audio_button').style.display='none';
+			document.getElementById('audio_message_1').style.display='none';
+			document.getElementById('audio_message_2').style.display='inline';
+		}
 		var gui = new Wami.GUI({
 			id : "wami",
 			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
-			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame,
+			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
 			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
 			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf",
 		});
 
 		gui.setPlayEnabled(false);
+		
 	}
+	
 
 </script>
 
 
-<div id="wami" style="margin-left: 460px; margin-top:50px;"></div>
-<div align="center" style="margin-top:200px;">
+<div id="wami" style="margin-left: 510px; margin-top:10px;"></div>
 
+<div align="center" style="margin-top:130px;">
 <form name="form_wami_recorder">
-<input placeholder="<?php echo get_lang('Filename'); ?>" type="text" id="audio_title">
-<button class="upload" type="button" value="" onClick="setupRecorder()" id="audio_button" /><?php echo get_lang('Send'); ?></button>
+<input placeholder="<?php echo get_lang('Name'); ?>" type="text" id="audio_title">
+<button type="button" value="" onClick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
 </form>
-
+</div>
+<div align="center" id="audio_message_1" style="display:inline">
 <?php
-
-Display::display_normal_message(get_lang('VoiceRecord'), false);
-
+Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), false);
 ?>
-
+</div>
+<div align="center" id="audio_message_2" style="display:none;">
+<?php
+Display::display_normal_message(get_lang('StartWamiRecorder'), false);
+?>
 </div>
 
 <?php

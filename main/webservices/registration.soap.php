@@ -3661,7 +3661,7 @@ $server->register('WSSubscribeUserToCourseSimple',                    // method 
 // define the method WSSubscribeUserToCourse
 function WSSubscribeUserToCourseSimple($params) {
     global $debug;
-    $debug = true;
+    //$debug = true;
     
     if ($debug) error_log('WSSubscribeUserToCourseSimple');
     if ($debug) error_log('Params '. print_r($params, 1));    

@@ -385,15 +385,15 @@ class IndexManager {
 	 * @version 1.0.1
 	 */
 	function handle_login_failed() {
-		if (!isset($_GET['error'])) {
-			$message = get_lang('InvalidId');
+        $message = get_lang('InvalidId');
+        
+		if (!isset($_GET['error'])) {	
 			if (api_is_self_registration_allowed()) {
 				$message = get_lang('InvalidForSelfRegistration');
 			}
 		} else {
 			switch ($_GET['error']) {
-				case '':
-					$message = get_lang('InvalidId');
+				case '':					
 					if (api_is_self_registration_allowed()) {
 						$message = get_lang('InvalidForSelfRegistration');
 					}
@@ -410,6 +410,9 @@ class IndexManager {
 				case 'access_url_inactive':
 					$message = get_lang('AccountURLInactive');
 					break;
+                case 'unrecognize_sso_origin':
+                    //$message = get_lang('SSOError');
+                    break;
 			}
 		}
 		return Display::return_message($message, 'error');

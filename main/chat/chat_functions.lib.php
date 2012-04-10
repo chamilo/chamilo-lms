@@ -4,6 +4,36 @@
  *	@package chamilo.chat
  */
  
+
+/**
+ * @author isaac flores paz
+ * @param integer the user id
+ * @param string the database name
+ * @return boolean
+ */
+function user_connected_in_chat ($user_id) {
+ 	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
+
+ 	$session_id = api_get_session_id();
+    $group_id   = api_get_group_id();	
+    
+	$user_id 	= intval($user_id);
+    $course_id  = api_get_course_int_id();
+    
+	$extra_condition = '';
+	
+	if (!empty($group_id)) {
+		$extra_condition = " AND to_group_id = '$group_id'";
+	} else {
+		$extra_condition = api_get_session_condition($session_id);
+	}
+
+ 	$sql = 'SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c WHERE c_id = '.$course_id.' AND user_id='.$user_id.$extra_condition;
+ 	$result = Database::query($sql);
+ 	$count  = Database::fetch_array($result,'ASSOC');
+ 	return $count['count'] == 1;
+}
+
 /**
  * @param integer
  * @return void
@@ -33,35 +63,6 @@ function exit_of_chat($user_id) {
  			Database::query($sql);
  		}
  	}
-}
-
-/**
- * @author isaac flores paz
- * @param integer the user id
- * @param string the database name
- * @return boolean
- */
-function user_connected_in_chat ($user_id) {
- 	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
-
- 	$session_id = api_get_session_id();
-    $group_id   = api_get_group_id();	
-    
-	$user_id 	= intval($user_id);
-    $course_id  = api_get_course_int_id();
-    
-	$extra_condition = '';
-	
-	if (!empty($group_id)) {
-		$extra_condition = " AND to_group_id = '$group_id'";
-	} else {
-		$extra_condition = api_get_session_condition($session_id);
-	}
-
- 	$sql = 'SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c WHERE c_id = '.$course_id.' AND user_id='.$user_id.$extra_condition;
- 	$result = Database::query($sql);
- 	$count  = Database::fetch_array($result,'ASSOC');
- 	return $count['count'] == 1;
 }
 
 /**

@@ -483,12 +483,14 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 				$osso->ask_master();
 			} elseif (isset($_GET['sso_cookie'])) {
 				$protocol = api_get_setting('sso_authentication_protocol');
-				$master_url = api_get_setting('sso_authentication_domain').api_get_setting('sso_authentication_auth_uri');
+				$master_url = api_get_setting('sso_authentication_domain').api_get_setting('sso_authentication_auth_uri');                
+                //error_log($_GET['sso_referer']);error_log($protocol.$master_url);                
 				if (isset($_GET['sso_referer']) ? $_GET['sso_referer'] === $protocol.$master_url  : FALSE) {
 					//make all the process of checking 
 					//if the user exists (delegated to the sso class)
 					$osso->check_user();
 				} else {
+                    error_log('Check the sso_referer URL in your script');
 					//Request comes from unknown source
 					$loginFailed = true;
 					api_session_unregister('_uid');

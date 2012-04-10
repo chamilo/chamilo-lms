@@ -153,9 +153,9 @@ class Plugin
             global $language_interface;
 
             $root = api_get_path(SYS_PLUGIN_PATH);
-            $name = $this->get_name();
+            $plugin_name = $this->get_name();
             $language = $language_interface;
-            $path = "$root/$name/lang/$language.php";
+            $path = "$root/$plugin_name/lang/$language.php";
             if (is_readable($path))
             {
                 include $path;

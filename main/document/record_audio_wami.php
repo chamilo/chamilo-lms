@@ -201,7 +201,7 @@ Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiF
 </div>
 <div align="center" id="audio_message_2" style="display:none;">
 <?php
-Display::display_normal_message(get_lang('StartWamiRecorder'), false);
+Display::display_normal_message(get_lang('WamiStartRecorder'), false);
 ?>
 </div>
 

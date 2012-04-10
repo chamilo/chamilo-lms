@@ -29,13 +29,14 @@ if (isset($_GET['loginFailed'])){
 	<title>Custompage - login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<!--[if !IE 6]><!-->
-	<link rel="stylesheet" type="text/css" href="/custompages/style.css" />
+	<link rel="stylesheet" type="text/css" href="custompages/style.css" />
 	<!--<![endif]-->
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
 	<![endif]-->
 
-	<script type="text/javascript" src="/custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="custompages/jquery-1.5.1.min.js"></script>
+        
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (top.location != location) 
@@ -87,5 +88,6 @@ if (isset($_GET['loginFailed'])){
 			<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/footer.png" />
 		</div> <!-- #footer -->
 	</div> <!-- #wrapper -->
+        
 </body>
 </html>

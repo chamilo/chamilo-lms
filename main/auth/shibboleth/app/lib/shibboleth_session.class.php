@@ -53,6 +53,7 @@ class ShibbolethSession
             return;
         }
 
+        session_unset();
         api_session_register('_uid');
 
         global $_user;

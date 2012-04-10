@@ -1,0 +1,1 @@
+Search courses in the main catalogue and register.

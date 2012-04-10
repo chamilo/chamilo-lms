@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Enter email form. When the email is mandatory and the Shibboleth email user field
+ * is empty the system display this form and ask the user to provide an email.
+ * 
+ * @todo: add email validation
+ *
+ * @copyright (c) 2012 University of Geneva
+ * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
+ * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod
+ */
+class ShibbolethEmailForm
+{
+        
+    /**
+     *
+     * @return ShibbolethEmailForm 
+     */
+    public static function instance()
+    {
+        static $result = false;
+        if (empty($result))
+        {
+            $result = new self();
+        }
+        return $result;
+    }
+
+    function display()
+    {
+        
+        $email = get_lang('email');
+        $submit = get_lang('submit');
+        return <<<EOT
+        <form id="email_form" action="" method="post">
+            <label for="">$email</label>
+            <input type="text" value="" tabindex="1" name="email" id="email_email" class=""><br/>
+            <input type="submit" value="$submit" tabindex="2" name="submit" id="email_submit" class="submit">
+        </form>
+        
+EOT;
+    }
+    
+    function get_email()
+    {
+        return isset($_POST['email']) ? $_POST['email'] : '';
+    }
+
+}

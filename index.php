@@ -122,11 +122,8 @@ if (!empty($_POST['submitAuth'])) {
 	event_open();
 }
 
-//@todo add this in the template
 if (api_get_setting('display_categories_on_homepage') == 'true') {
-	echo '<div class="home_cats">';
-	$controller->display_anonymous_course_list();
-	echo '</div>';
+	$controller->tpl->assign('content', $controller->display_anonymous_course_list());
 }
 
 $controller->set_login_form();

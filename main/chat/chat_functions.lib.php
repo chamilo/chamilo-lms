@@ -4,35 +4,6 @@
  *	@package chamilo.chat
  */
  
-/**
- * @param integer
- * @return void
- */
-function exit_of_chat($user_id) {
-	$user_id = intval($user_id);
-    $course_id = api_get_course_int_id();
-	$list_course = array();
- 	$list_course = CourseManager::get_courses_list_by_user_id($user_id);
-
-	$group_id   = intval($_SESSION['id_group']);
-	$session_id = intval($_SESSION['id_session']);
-	
-	$extra_condition = '';
-	if (!empty($group_id)) {
-		$extra_condition = " AND to_group_id = '$group_id'";
-	} else {
-		$extra_condition = api_get_session_condition($session_id);
-	}
-    $extra_condition.= " AND course_id = $course_id";
- 	foreach ($list_course as $courses) {
- 		$response = user_connected_in_chat($user_id);
- 		if ($response === true) {
- 			$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
- 			$sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE user_id='.$user_id.$extra_condition;
- 			Database::query($sql);
- 		}
- 	}
-}
 
 /**
  * @author isaac flores paz
@@ -43,10 +14,11 @@ function exit_of_chat($user_id) {
 function user_connected_in_chat ($user_id) {
  	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
 
- 	$group_id 	= intval($_SESSION['id_group']);
-	$session_id = intval($_SESSION['id_session']);
+ 	$session_id = api_get_session_id();
+    $group_id   = api_get_group_id();	
+    
 	$user_id 	= intval($user_id);
-    $course_id = api_get_course_int_id();
+    $course_id  = api_get_course_int_id();
     
 	$extra_condition = '';
 	
@@ -60,6 +32,37 @@ function user_connected_in_chat ($user_id) {
  	$result = Database::query($sql);
  	$count  = Database::fetch_array($result,'ASSOC');
  	return $count['count'] == 1;
+}
+
+/**
+ * @param integer
+ * @return void
+ */
+function exit_of_chat($user_id) {
+	$user_id = intval($user_id);
+    $course_id = api_get_course_int_id();
+	$list_course = array();
+ 	$list_course = CourseManager::get_courses_list_by_user_id($user_id);
+    
+    $session_id = api_get_session_id();
+    $group_id   = api_get_group_id();	
+	
+	$extra_condition = '';
+	if (!empty($group_id)) {
+		$extra_condition = " AND to_group_id = '$group_id'";
+	} else {
+		$extra_condition = api_get_session_condition($session_id);
+	}
+    $extra_condition.= " AND course_id = $course_id";
+    $tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
+    
+ 	foreach ($list_course as $course) {
+ 		$response = user_connected_in_chat($user_id);
+ 		if ($response === true) { 			
+ 			$sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE c_id = '.$course['real_id'].' AND user_id='.$user_id.$extra_condition;
+ 			Database::query($sql);
+ 		}
+ 	}
 }
 
 /**
@@ -105,8 +108,9 @@ function users_list_in_chat() {
  	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
     $course_id = api_get_course_int_id();
     
- 	$group_id = intval($_SESSION['id_group']);
-	$session_id = intval($_SESSION['id_session']);
+ 	$session_id = api_get_session_id();
+    $group_id   = api_get_group_id();
+    
 	$extra_condition = '';
 	if (!empty($group_id)) {
 		$extra_condition = " WHERE to_group_id = '$group_id'";

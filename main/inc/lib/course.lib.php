@@ -561,6 +561,7 @@ class CourseManager {
      * @return boolean true if subscription succeeds, boolean false otherwise.
      */
     public static function add_user_to_course($user_id, $course_code, $status = STUDENT) {
+        $debug = false;
         $user_table         = Database::get_main_table(TABLE_MAIN_USER);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -573,16 +574,19 @@ class CourseManager {
 
         // Check in advance whether the user has already been registered on the platform.
         if (Database::num_rows(Database::query("SELECT status FROM ".$user_table." WHERE user_id = '$user_id' ")) == 0) {
-            return false; // Thehe user has not been registered to the platform.
+            if ($debug) error_log('The user has not been registered to the platform');
+            return false; // The user has not been registered to the platform.
         }
 
         // Check whether the user has already been subscribed to this course.
         if (Database::num_rows(Database::query("SELECT * FROM ".$course_user_table." WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'")) > 0) {
+            if ($debug) error_log('The user has been already subscribed to the course');
             return false; // The user has been subscribed to the course.
         }
 
         // Check in advance whether subscription is allowed or not for this course.
         if (Database::num_rows(Database::query("SELECT code, visibility FROM ".$course_table." WHERE code = '$course_code' AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'")) > 0) {
+            if ($debug) error_log('Subscription is not allowed for this course');
             return false; // Subscription is not allowed for this course.
         }
 

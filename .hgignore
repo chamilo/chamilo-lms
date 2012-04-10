@@ -117,3 +117,5 @@ syntax: regexp
 
 syntax: regexp
 ^\.settings$
+
+nbproject/*

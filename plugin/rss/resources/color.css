@@ -1,0 +1,41 @@
+
+.gfg-root a:link,
+.gfg-root a:visited,
+.gfg-root a:focus,
+.gfg-root a:active
+{
+    color: #CC0066;
+}
+
+.gfg-subtitle, .gfg-title{
+    background-color: #CC0066 !important;
+    color: #FFFFFF !important;
+}
+
+.gfg-subtitle > a{
+    color: #FFFFFF !important;
+}
+
+.gfg-subtitle > a:hover{
+    color: black !important;
+}
+
+.gfg-root a:hover, .gfg-subtitle:hover {
+    color: black;
+}
+
+.gfg-listentry-odd:hover{
+    background-color: #E9E9F0 !important;
+}
+
+.gfg-listentry-even:hover{
+    background-color: #E9E9F0 !important;
+}
+
+.gfg-horizontal-root .gfg-entry .gf-result, .gfg-horizontal-root .gfg-entry, .gfg-horizontal-root .gf-snippet{
+    background-color: white !important;
+}
+
+.gfg-horizontal-root .gfg-entry {
+    background-color: white !important;
+}

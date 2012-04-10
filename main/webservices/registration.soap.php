@@ -172,8 +172,6 @@ function WSCreateUsers($params) {
 
     // database table definition
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv 		= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
     $users_params = $params['users'];
     $results = array();
@@ -373,18 +371,15 @@ $server->register('WSCreateUser',				// method name
 
 // Define the method WSCreateUser
 function WSCreateUser($params) {
+    global $_user, $_configuration, $debug;
 
-    global $_user, $_configuration;
-
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // database table definition
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv 		= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
+    
     $firstName = $params['firstname'];
     $lastName = $params['lastname'];
     $status = $params['status'];
@@ -459,30 +454,34 @@ function WSCreateUser($params) {
 
     // First check wether the login already exists
     if (!UserManager::is_username_available($loginName)) {
-        if(api_set_failure('login-pass already taken')) {
+        if ($debug) error_log("Username $loginName is not available");
+        return 0;
+        /*
+        if (api_set_failure('login-pass already taken')) {
             return 0;
-        }
+        }*/
     }
 
     $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
-    $sql = "INSERT INTO $table_user
-                                SET lastname = '".Database::escape_string(trim($lastName))."',
-                                firstname = '".Database::escape_string(trim($firstName))."',
-                                username = '".Database::escape_string(trim($loginName))."',
-                                status = '".Database::escape_string($status)."',
-                                password = '".Database::escape_string($password)."',
-                                email = '".Database::escape_string($email)."',
-                                official_code	= '".Database::escape_string($official_code)."',
-                                picture_uri 	= '".Database::escape_string($picture_uri)."',
-                                creator_id  	= '".Database::escape_string($creator_id)."',
-                                auth_source = '".Database::escape_string($auth_source)."',
-                                phone = '".Database::escape_string($phone)."',
-                                language = '".Database::escape_string($language)."',
-                                registration_date = now(),
-                                expiration_date = '".Database::escape_string($expiration_date)."',
-                                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                                active = '".Database::escape_string($active)."'";
+    $sql = "INSERT INTO $table_user SET 
+                    lastname = '".Database::escape_string(trim($lastName))."',
+                    firstname = '".Database::escape_string(trim($firstName))."',
+                    username = '".Database::escape_string(trim($loginName))."',
+                    status = '".Database::escape_string($status)."',
+                    password = '".Database::escape_string($password)."',
+                    email = '".Database::escape_string($email)."',
+                    official_code	= '".Database::escape_string($official_code)."',
+                    picture_uri 	= '".Database::escape_string($picture_uri)."',
+                    creator_id  	= '".Database::escape_string($creator_id)."',
+                    auth_source = '".Database::escape_string($auth_source)."',
+                    phone = '".Database::escape_string($phone)."',
+                    language = '".Database::escape_string($language)."',
+                    registration_date = now(),
+                    expiration_date = '".Database::escape_string($expiration_date)."',
+                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                    active = '".Database::escape_string($active)."'";
     $result = Database::query($sql);
+    
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
@@ -831,7 +830,7 @@ $server->wsdl->addComplexType(
         'status'                    => array('name' => 'status',                    'type' => 'xsd:string'),
         'email'                     => array('name' => 'email',                     'type' => 'xsd:string'),
         'loginname'                 => array('name' => 'loginname',                 'type' => 'xsd:string'),
-        'password'                  => array('name' => 'password',                  'type' => 'xsd:string'),
+        'password'                  => array('name' => 'password',                  'type' => 'xsd:string'), //encripted password using the encrypt_method
         'encrypt_method'            => array('name' => 'encrypt_method',            'type' => 'xsd:string'),
         'language'                  => array('name' => 'language',                  'type' => 'xsd:string'),
         'phone'                     => array('name' => 'phone',                     'type' => 'xsd:string'),
@@ -856,20 +855,17 @@ $server->register('WSCreateUserPasswordCrypted',						// method name
 
 // Define the method WSCreateUserPasswordCrypted
 function WSCreateUserPasswordCrypted($params) {
-
     global $_user, $_configuration, $debug;
-    error_log('WSCreateUserPasswordCrypted');
-    error_log(print_r($params,1));
+    //$debug = true;    
+    if ($debug) error_log('WSCreateUserPasswordCrypted');
+    if ($debug) error_log(print_r($params,1));
     if (!WSHelperVerifyKey($params)) {        
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // Database table definition.
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-    //$users_params = $params['users'];
+    
     $result = array();
     $orig_user_id_value = array();
 
@@ -890,19 +886,21 @@ function WSCreateUserPasswordCrypted($params) {
     $original_user_id_value = $params['original_user_id_value'];
     $orig_user_id_value[]   = $params['original_user_id_value'];
     $extra_list             = $params['extra'];
-    $salt = '';
-
+    
     if ($_configuration['password_encryption'] === $encrypt_method ) {
         if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
             $msg = "Encryption $encrypt_method is invalid";
+            if ($debug) error_log($msg);
             return $msg;
 
         } else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
             $msg = "Encryption $encrypt_method is invalid";
+            if ($debug) error_log($msg);
             return $msg;
         }
     } else {
         $msg = "This encryption $encrypt_method is not configured";
+        if ($debug) error_log($msg);
         return $msg;
     }
 
@@ -912,17 +910,22 @@ function WSCreateUserPasswordCrypted($params) {
 
     // Check whether x_user_id exists into user_field_values table.
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    
     if ($debug) error_log('Ready to create user');
-    if ($user_id > 0) {
-        
+    
+    if ($user_id > 0) {      
         if ($debug) error_log('User found');
         
-        // Check whether user is not active.
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
+        // Check whether user is not active
+        //@todo why this condition exists??
+        $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0' ";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         $count_check_user = Database::num_rows($resu);
         if ($count_check_user > 0) {
+            
+            if ($debug) error_log('User id: '.$user_id.' exists and is NOT active. Updating user and setting setting active = 1');
+            
             $sql = "UPDATE $table_user SET
                     lastname='".Database::escape_string($lastName)."',
                     firstname='".Database::escape_string($firstName)."',
@@ -954,9 +957,11 @@ function WSCreateUserPasswordCrypted($params) {
             }
             return $r_check_user[0];
         } else {
-            if ($debug) error_log('User is already active');
+            if ($debug) error_log('User exists but is active. Cant be updated');
             return 0;
         }
+    } else {
+        if ($debug) error_log("User not found with original_id = $original_user_id_value and original_name = $original_user_id_name");
     }
 
     // Default language.
@@ -969,47 +974,48 @@ function WSCreateUserPasswordCrypted($params) {
     } else {
         $creator_id = '';
     }
+    
     // First check wether the login already exists
-    if (! UserManager::is_username_available($loginName)) {
-        if(api_set_failure('login-pass already taken')) {
+    if (!UserManager::is_username_available($loginName)) {
+        if ($debug) error_log("Username $loginName is not available");        
+        return 0;
+        /*if (api_set_failure('login-pass already taken')) {
             if ($debug) error_log('login-pass already taken');
             return 0;
-        }
+        }*/
     }
 
-    $sql = "INSERT INTO $table_user
-                                SET lastname        = '".Database::escape_string(trim($lastName))."',
-                                firstname           = '".Database::escape_string(trim($firstName))."',
-                                username            = '".Database::escape_string(trim($loginName))."',
-                                status              = '".Database::escape_string($status)."',
-                                password            = '".Database::escape_string($password)."',
-                                email               = '".Database::escape_string($email)."',
-                                official_code	    = '".Database::escape_string($official_code)."',
-                                picture_uri 	    = '".Database::escape_string($picture_uri)."',
-                                creator_id  	    = '".Database::escape_string($creator_id)."',
-                                auth_source         = '".Database::escape_string($auth_source)."',
-                                phone               = '".Database::escape_string($phone)."',
-                                language            = '".Database::escape_string($language)."',
-                                registration_date   = now(),
-                                expiration_date     = '".Database::escape_string($expiration_date)."',
-                                hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
-                                active              = '".Database::escape_string($active)."'";
+    $sql = "INSERT INTO $table_user SET 
+                lastname            = '".Database::escape_string(trim($lastName))."',
+                firstname           = '".Database::escape_string(trim($firstName))."',
+                username            = '".Database::escape_string(trim($loginName))."',
+                status              = '".Database::escape_string($status)."',
+                password            = '".Database::escape_string($password)."',
+                email               = '".Database::escape_string($email)."',
+                official_code	    = '".Database::escape_string($official_code)."',
+                picture_uri 	    = '".Database::escape_string($picture_uri)."',
+                creator_id  	    = '".Database::escape_string($creator_id)."',
+                auth_source         = '".Database::escape_string($auth_source)."',
+                phone               = '".Database::escape_string($phone)."',
+                language            = '".Database::escape_string($language)."',
+                registration_date   = '".api_get_utc_datetime()."',
+                expiration_date     = '".Database::escape_string($expiration_date)."',
+                hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
+                active              = '".Database::escape_string($active)."'";
     if ($debug) error_log($sql);
+    
     $result = Database::query($sql);
+    
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
+        
+        //Multiple URL
         require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-        if ($_configuration['multiple_access_urls']) {
-            if (api_get_current_access_url_id() != -1) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
-            } else {
-                UrlManager::add_user_to_url($return, 1);
-            }
-        } else {
-            // We add by default the access_url_user table with access_url_id = 1
-            UrlManager::add_user_to_url($return, 1);
-        }
+        $url_id = api_get_current_access_url_id();
+        UrlManager::add_user_to_url($return, $url_id);
+        if ($debug) error_log("Adding user_id = $return to URL id $url_id ");
+
         // Save new fieldlabel into user_field table.
         $field_id = UserManager::create_extra_field($original_user_id_name, 1, $original_user_id_name, '');
         // Save the remote system's id into user_field_value table.
@@ -1017,8 +1023,8 @@ function WSCreateUserPasswordCrypted($params) {
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
-                $extra_field_name = $extra['field_name'];
-                $extra_field_value = $extra['field_value'];
+                $extra_field_name   = $extra['field_name'];
+                $extra_field_value  = $extra['field_value'];
                 // save new fieldlabel into user_field table
                 $field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
                 // save the external system's id into user_field_value table'
@@ -1026,6 +1032,8 @@ function WSCreateUserPasswordCrypted($params) {
             }
         }
     } else {
+        $error = Database::error();
+        if ($debug) error_log($error);
         return 0;
     }
     return $return;
@@ -3547,8 +3555,8 @@ $server->wsdl->addComplexType(
 'all',
 '',
 array(
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'original_user_id_value'    => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
         'result' => array('name' => 'result', 'type' => 'xsd:int')
      )
 );
@@ -3568,48 +3576,46 @@ $server->register('WSSubscribeUserToCourse',					// method name
 // define the method WSSubscribeUserToCourse
 function WSSubscribeUserToCourse($params) {
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
     $results = array();
     $userscourses = $params['userscourses'];
-    foreach($userscourses as $usercourse) {
+    foreach ($userscourses as $usercourse) {
         $original_course_id = $usercourse['course_id'];
-        $original_user_id = $usercourse['user_id'];
+        $original_user_id   = $usercourse['user_id'];
         $status = STUDENT;
-        if($usercourse['status']) {
+        if ($usercourse['status']) {
             $status = $usercourse['status'];
         }
 
         $result = array(
-            'original_user_id_value' => $original_user_id['original_user_id_value'],
-            'original_course_id_value' => $original_course_id['original_course_id_value'],
+            'original_user_id_value'    => $original_user_id['original_user_id_value'],
+            'original_course_id_value'  => $original_course_id['original_course_id_value'],
             'result' => 1);
 
         // Get user id
         $user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
-        if($user_id == 0) {
+        if ($user_id == 0) {
             // If user was not found, there was a problem
             $result['result'] = 0;
         } else {
             // User was found
             $course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
-            if($course_id == 0) {
+            if ($course_id == 0) {
                 // Course was not found
                 $result['result'] = 0;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
                 if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
-              $result['result'] = 0;
+                    $result['result'] = 0;
+                }
             }
-        }
         }
         $results[] = $result;
     }
     return $results;
 }
-
-
 
 
 /** WSSubscribeUserToCourse **/
@@ -3621,8 +3627,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'course'       => array('name' => 'course',     'type' => 'xsd:string'),
-        'user_id'      => array('name' => 'user_id',    'type' => 'xsd:string'),
+        'course'       => array('name' => 'course',     'type' => 'xsd:string'), //Course string code
+        'user_id'      => array('name' => 'user_id',    'type' => 'xsd:string'), //Chamilo user_id
         'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
@@ -3655,37 +3661,40 @@ $server->register('WSSubscribeUserToCourseSimple',                    // method 
 // define the method WSSubscribeUserToCourse
 function WSSubscribeUserToCourseSimple($params) {
     global $debug;
+    $debug = true;
+    
     if ($debug) error_log('WSSubscribeUserToCourseSimple');
-    if ($debug) error_log('Params '. print_r($params, 1));
-    if(!WSHelperVerifyKey($params)) {
+    if ($debug) error_log('Params '. print_r($params, 1));    
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    $results = array();
-    $course_code  = $params['course'];
-    $user_id      = $params['user_id'];
+    $result = array();
+    $course_code  = $params['course']; //Course code
+    $user_id      = $params['user_id']; //chamilo user id
     $status       = STUDENT;
     
     // Get user id
     $user_data = UserManager::get_user_info_by_id($user_id);
-    if(empty($user_data)) {
-        if ($debug) error_log('User does not exist');
+    
+    if (empty($user_data)) {        
         // If user was not found, there was a problem
-        $result = 'User does not exists';        
+        $result = "User $user_id does not exist";        
+        if ($debug) error_log($result);
         return $result;
     }
     if (!empty($course_code)) {        
         $course_data = CourseManager::get_course_information($course_code);
-        if(empty($course_data)) {
-            if ($debug) error_log('Course does not exist '.$course_code);
+        if (empty($course_data)) {            
             // Course was not found
-            $result = 'Course does not exist';
+            $result = "Course $course_code does not exist in the platform ";
+            if ($debug) error_log($result);
         } else {
-            if ($debug) error_log('Try to register: '.$user_id.' - '.$course_data['code']); 
-            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status)) {
-                if ($debug) error_log('User already registered');
-                $result = 'User already registered';
+            if ($debug) error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']); 
+            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status)) {                
+                $result = 'User was not registered possible reasons: User already registered to the course, Course visibility doesnt allow user subscriptions ';
+                if ($debug) error_log($result);
             } else {
-                if ($debug) error_log('User registered to course');
+                if ($debug) error_log('User registered to the course: '.$course_data['code']);
                 $result = 1;
             }
         }    

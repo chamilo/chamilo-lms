@@ -43,7 +43,7 @@ class ShibbolethDisplay
         require("$include_path/local.inc.php");
         $title = $title ? $title : get_lang('page_title');
 
-        Display :: display_header($page_title);
+        Display :: display_header($title);
         Display :: display_confirmation_message($message);
         Display :: display_footer();
         die;

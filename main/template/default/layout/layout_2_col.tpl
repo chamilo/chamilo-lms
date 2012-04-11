@@ -36,9 +36,9 @@
         {% include "default/layout/page_body.tpl" %}
                 
         {% if content is not null %}
-        <section id="main_content">
-            {{ content }}
-        </section>
+            <section id="main_content">
+                {{ content }}
+            </section>
         {% endif %}
 		
 		{#  Announcements  #}
@@ -73,13 +73,20 @@
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
 
-		{#  My account - user picture  #}
+		{#  User picture  #}
 		{{ profile_block }}
-		{{ account_block }}
+        
+        {#  Course block - admin #}
+		{{ course_block }}
+        
+        {#  Course block - teacher #}
 		{{ teacher_block }}
 		
-		{#  Notices  #}
+		{#  Notice  #}
 		{{ notice_block }}
+                    
+        {#  Help #}
+		{{ help_block }}
 		
 		{#  Links that are not added in the tabs #}
 		{{ navigation_course_links }}

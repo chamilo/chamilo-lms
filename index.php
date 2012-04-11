@@ -133,7 +133,7 @@ if (!api_is_anonymous()) {
 	$controller->tpl->assign('profile_block', $controller->return_profile_block());
 	
 	if (api_is_platform_admin()) {
-		$controller->tpl->assign('account_block',			$controller->return_account_block());
+		$controller->tpl->assign('course_block',			$controller->return_course_block());
 	} else {		
 		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
 	}
@@ -142,7 +142,10 @@ if (!api_is_anonymous()) {
 $controller->tpl->assign('hot_courses',             $controller->return_hot_courses());
 $controller->tpl->assign('announcements_block', 	$controller->return_announcements());
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
+
 $controller->tpl->assign('notice_block',			$controller->return_notice());
+$controller->tpl->assign('main_navigation_block',	$controller->return_navigation_links());
+$controller->tpl->assign('help_block',              $controller->return_help());
 
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block',            $controller->return_skills_links());

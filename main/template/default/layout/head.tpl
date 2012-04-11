@@ -1,8 +1,14 @@
 <meta charset="{{ system_charset }}" />
-<link href="http://www.chamilo.org/documentation.php" rel="Help" />
+<link href="http://www.chamilo.org/documentation.php" rel="help" />
 <link href="http://www.chamilo.org/team.php" rel="author" />
-<link href="http://www.chamilo.org" rel="Copyright" />
+<link href="http://www.chamilo.org" rel="copyright" />
 {{ favico }}
+
+<link rel="apple-touch-icon" href="{{ _p.web}}apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="{{ _p.web}}apple-touch-icon-72x72-precomposed.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ _p.web}}apple-touch-icon-114x114-precomposed.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
 {# This fires some HTML5 errors #}
 {# <link rel="top"	href="{{ _p.web_main}}index.php" title="" />
 <link rel="courses" href="{{ _p.web_main}}auth/courses.php" title="{{"OtherCourses"|get_lang}}"/>

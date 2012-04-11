@@ -15,6 +15,7 @@
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $course_id = api_get_course_int_id();
+$session_id = api_get_session_id();
 
 //	MAIN CODE
 
@@ -40,7 +41,7 @@ if (api_is_platform_admin()) {
 	if (!empty($_GET['askDelete'])) {
         $content .='<div id="toolhide">'.get_lang('DelLk').'<br />&nbsp;&nbsp;&nbsp;
             <a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;
-            <a href="'.api_get_self().'?delete=yes&id='.intval($_GET['id']).'">'.get_lang('Yes').'</a>
+            <a href="'.api_get_self().'?delete=yes&id='.$id.'">'.get_lang('Yes').'</a>
         </div>';
 	} elseif (isset($_GET['delete']) && $_GET['delete']) {
         /*
@@ -55,20 +56,7 @@ if (api_is_platform_admin()) {
 //	COURSE ADMIN ONLY VIEW
 
 // Start of tools for CourseAdmins (teachers/tutors)
-if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-
-	$current_protocol = $_SERVER['SERVER_PROTOCOL'];
-	$current_host = $_SERVER['HTTP_HOST'];
-	$server_protocol = substr($current_protocol, 0, strrpos($current_protocol, '/'));
-	$server_protocol = $server_protocol.'://';
-	if ($current_host == 'localhost') {
-		// Get information of path
-		$info = explode('courses', api_get_self());
-		$path_work = substr($info[0], 1);
-	} else {
-		$path_work = '';
-	}
-    
+if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {    
 	$content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
 			$content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
@@ -79,10 +67,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	</div>';
 
 
-	if (api_get_setting('show_session_data') == 'true' && $id_session > 0) {
+	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
         $content .= '<div class="courseadminview">
             <span class="viewcaption">'.get_lang('SessionData').'</span>
-            <table class="course_activity_home">'.CourseHome::show_session_data($id_session).'
+            <table class="course_activity_home">'.CourseHome::show_session_data($session_id).'
             </table>
         </div>';
 	}
@@ -97,8 +85,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $my_list = array_merge($my_list,$list2);
     $items =  CourseHome::show_tools_category($my_list);
 	
-    $content .= return_block(get_lang('Interaction'),  $items);
-        
+    $content .= return_block(get_lang('Interaction'),  $items);        
 	
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
     $items = CourseHome::show_tools_category($my_list);	
@@ -106,12 +93,12 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .= return_block(get_lang('Administration'),  $items);
     
 } elseif (api_is_coach()) {
-	if (api_get_setting('show_session_data') == 'true' && $id_session > 0) {
+	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
 
 		$content .= '<div class="row">
 			<span class="viewcaption">'.get_lang('SessionData').'</span>
 			<table class="course_activity_home">';
-				$content .= CourseHome::show_session_data($id_session);
+				$content .= CourseHome::show_session_data($session_id);
              $content .=  '</table></div>';
 	}
 

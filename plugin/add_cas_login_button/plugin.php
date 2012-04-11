@@ -20,6 +20,7 @@ $plugin_info['comment']     = "If CAS is activated, this plugin add a text and a
 $plugin_info['version']     = '1.0';
 //the plugin author
 $plugin_info['author']      = 'Hubert Borderiou';
+
 //the plugin configuration
 $form = new FormValidator('add_cas_button_form');
 $form->addElement('text', 'cas_button_label', 'CAS connexion title', '');
@@ -30,6 +31,7 @@ $form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 $tab_default_add_cas_login_button_cas_button_label = api_get_setting('add_cas_login_button_cas_button_label');
 $tab_default_add_cas_login_button_cas_button_comment = api_get_setting('add_cas_login_button_cas_button_comment');
 $tab_default_add_cas_login_button_cas_image_url = api_get_setting('add_cas_login_button_cas_image_url');
+$defaults = array();
 $defaults['cas_button_label'] = $tab_default_add_cas_login_button_cas_button_label['add_cas_login_button'];
 $defaults['cas_button_comment'] = $tab_default_add_cas_login_button_cas_button_comment['add_cas_login_button'];
 $defaults['cas_image_url'] = $tab_default_add_cas_login_button_cas_image_url['add_cas_login_button'];

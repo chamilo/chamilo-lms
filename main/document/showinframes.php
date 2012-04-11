@@ -204,7 +204,7 @@ $htmlHeadXtra[] = '
 Display::display_header('');
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
+echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
 
 $pathinfo =pathinfo($header_file);
 if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true'){

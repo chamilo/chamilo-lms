@@ -170,14 +170,23 @@ class AppPlugin {
                 $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
                 
                 if (file_exists($plugin_file)) {
+                    //Printing the plugin index.php file
                     require $plugin_file;
+                    
+                    
 
-                    //We set the $template variable in order to use Smarty                    
-                    if (isset($_template) && !empty($_template)) {                        
-                        $template->assign($plugin_name, $_template);
-                    }                
+                    //If the variable $_template is set we assign those values to be accesible in Twig
+                    if (isset($_template)) {                        
+                        $_template['plugin_info'] = $plugin_info;
+                    } else {
+                        $_template = array();
+                        $_template['plugin_info'] = $plugin_info;
+                    }
+                    
+                    //Setting the plugin info available in the template if exists                    
+                    $template->assign($plugin_name, $_template);
 
-                    //Loading the Smarty template plugin files if exists
+                    //Loading the Twig template plugin files if exists
                     $template_list = array();
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
@@ -187,7 +196,7 @@ class AppPlugin {
                         foreach ($template_list as $plugin_tpl) {
                             if (!empty($plugin_tpl)) {
                                 //$template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl"; //for smarty
-                                $template_plugin_file = "$plugin_name/$plugin_tpl"; // for twig
+                                $template_plugin_file = "$plugin_name/$plugin_tpl"; // for twig                                
                                 $template->display($template_plugin_file);
                             }
                         }                

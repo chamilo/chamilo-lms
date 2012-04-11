@@ -220,11 +220,6 @@ class IndexManager {
 			$show_create_link = false;
 			$show_course_link = false;
 		
-			if ($display_add_course_link) {
-				$show_menu = true;
-				$show_create_link = true;
-			}
-		
 			if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
 				$show_menu = true;
 				$show_course_link = true;
@@ -261,7 +256,7 @@ class IndexManager {
 		}	
 		
 		if (!empty($html)) {
-			$html = self::show_right_block(get_lang('MenuUser'), $html);
+			$html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
 		}
 		return $html;
 	}
@@ -320,61 +315,38 @@ class IndexManager {
 		if (!empty($home_notice)) {
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
             $home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
-			$html = self::show_right_block(get_lang('Notice'), $home_notice, '');
+			$html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block');
 		}
-		
-		if (isset($_SESSION['_user']['user_id']) && $_SESSION['_user']['user_id'] != 0) {
-			// Deleting the myprofile link.
-			if (api_get_setting('allow_social_tool') == 'true') {
-				unset($this->tpl->menu_navigation['myprofile']);
-			}
-		
-			if (!empty($this->tpl->menu_navigation)) {
-				$content = '<ul class="menulist">';
-				foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
-					$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-					$content .='<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
-				}
-				$content .= '</ul>';
-				$html .= self::show_right_block(get_lang('MainNavigation'), $content);
-			}
-		}
-		
+        return $html;
+    }
+    
+    function return_help() { 
+        $user_selected_language = api_get_interface_language();
+        $sys_path               = api_get_path(SYS_PATH);
+        
 		// Help section.
 		/* Hide right menu "general" and other parts on anonymous right menu. */
 		
 		if (!isset($user_selected_language)) {
 			$user_selected_language = $platformLanguage;
 		}
-		
+        
+        $html = null;		
 		$home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
 		if (!empty($home_menu)) {
 			$home_menu_content .= '<ul class="menulist">';
 			$home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 			$home_menu_content .= '</ul>';
-			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content);
-		}
-		
+			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
+		}		
 		return $html;
 	}
-	
-	/*function return_plugin_campushomepage() {
-		$html = '';
-		if (api_get_user_id() && api_number_of_plugins('campushomepage_menu') > 0) {
-			ob_start();
-			api_plugin('campushomepage_menu');
-			$plugin_content = ob_get_contents();
-			ob_end_clean();
-			$html = self::show_right_block('', $plugin_content);
-		}
-		return $html;
-	}*/
-    
+	    
     function return_skills_links() {
         $content = '<ul class="menulist">';      
         $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
         $content .= '</ul>';        
-        $html = self::show_right_block(get_lang("Skills"), $content);
+        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
         return $html;
     }
 	
@@ -703,14 +675,20 @@ class IndexManager {
 		return $courses;
 	}	
 	
-	function show_right_block($title, $content, $class = '') {
-	    $html = '';  
-		$html.= '<div class="well sidebar-nav">';
-		$html.= '<div class="menusection '.$class.' ">';
+    /**
+     * @todo use the template system
+     */
+	function show_right_block($title, $content, $id = null) {
+        $id_label = null;
+	    if (!empty($id)) {
+            $id_label = " id = $id ";
+        }
+        
+		$html= '<div '.$id_label.' class="well sidebar-nav">';
+		$html.= '<div class="menusection">';
 		if (!empty($title)) {
 			$html.= '<h4>'.$title.'</h4>';
-		}
-        //<li class="nav-header">List header</li>
+		}        
 		$html.= $content;
 	    $html.= '</div>';        
 	    $html.= '</div>';   
@@ -745,7 +723,7 @@ class IndexManager {
 		    	<input type="text" id="query" class="span2" name="query" value="" />
 		    	<button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
 		    	</form></div>';    
-			$html .= self::show_right_block(get_lang('Search'), $search_content);
+			$html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
 		}
 		return $html;	
 	}
@@ -769,7 +747,7 @@ class IndexManager {
 			}
 			if (!empty($classes)) {
 				$classes = Display::tag('ul', $classes, array('class'=>'menulist'));
-				$html .= self::show_right_block(get_lang('Classes'), $classes);
+				$html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
 			}		
 		}
 		return $html;
@@ -781,7 +759,7 @@ class IndexManager {
 			$booking_content .='<ul class="menulist">';
 			$booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
 			$booking_content .='</ul>';
-			$html .= self::show_right_block(get_lang('Booking'), $booking_content);
+			$html .= self::show_right_block(get_lang('Booking'), $booking_content, 'reservation_block');
 		}
 		return $html;
 	}
@@ -842,11 +820,11 @@ class IndexManager {
             $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';			
 		}
         $profile_content .= '</ul>';
-		$html = self::show_right_block(get_lang('Profile'), $profile_content);
+		$html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
 		return $html;
 	}
 	
-	function return_navigation_course_links() {
+	function return_navigation_links() {
 		$html = '';
 		
 		// Deleting the myprofile link.
@@ -864,14 +842,13 @@ class IndexManager {
 				$content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 				$content .= '</li>';
 			}
-			$content .= '</ul>';
-            
-			$html = self::show_right_block(get_lang('MainNavigation'), $content);
+			$content .= '</ul>';            
+			$html = self::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
 		}        
 		return $html;
 	}
 	
-	function return_account_block() {
+	function return_course_block() {
 		$html = '';
 
 		$show_create_link = false;
@@ -885,8 +862,7 @@ class IndexManager {
 		if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
 			$show_course_link = true;
 		} else {
-			if (api_get_setting('allow_students_to_browse_courses') == 'true') {
-		
+			if (api_get_setting('allow_students_to_browse_courses') == 'true') {		
 				$show_course_link = true;
 			}
 		}
@@ -918,10 +894,11 @@ class IndexManager {
 				$my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 			}
 		}
+        
 		$my_account_content .= '</ul>';
 		
 		if (!empty($my_account_content)) {
-			$html =  self::show_right_block(get_lang('MenuUser'), $my_account_content);
+			$html =  self::show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
 		}
 		return $html;
 	}

@@ -174,8 +174,8 @@ if(!empty($some_activex) || !empty($some_plugins)){
 }
 
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());
-$controller->tpl->assign('account_block',				$controller->return_account_block());
-$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_course_links());
+$controller->tpl->assign('course_block',				$controller->return_course_block());
+$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
 $controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
 $controller->tpl->assign('search_block', 				$controller->return_search_block());
 $controller->tpl->assign('classes_block', 				$controller->return_classes_block());

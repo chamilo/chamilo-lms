@@ -39,16 +39,22 @@ class Template {
         Twig_Autoloader::register();
         
         $template_paths = array(
-                api_get_path(SYS_CODE_PATH).'template', 
+                api_get_path(SYS_CODE_PATH).'template', //template folder
                 api_get_path(SYS_PLUGIN_PATH) //plugin folder
         );
         
         $loader = new Twig_Loader_Filesystem($template_paths);
         
         $this->twig = new Twig_Environment($loader, array(
-            //'cache' => api_get_path(SYS_ARCHIVE_PATH),
+            //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
             'autoescape' => false,
+            //'debug'      => true,
+            //'auto_reload' => true
+            //'optimizations' => 0 // turn on optimizations with -1
         ));
+        
+        $debug = new Twig_Extension_Debug();
+        $this->twig->addExtension($debug);
         
         $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
         $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));

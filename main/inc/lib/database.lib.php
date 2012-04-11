@@ -696,6 +696,8 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
+                    
+                strpos($query, 'static_') === false &&
                 strpos($query, 'public_admin') === false &&
                 strpos($query, 'chamilo_electric_blue') === false &&
                 strpos($query, 'wcag_anysurfer_public_pages') === false &&

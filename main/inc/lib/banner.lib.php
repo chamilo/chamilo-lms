@@ -183,21 +183,23 @@ function return_notification_menu() {
         // Display the who's online of the platform
         if ($number) {
             if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" >'.Display::return_icon('members.gif', get_lang('UsersOnline'), array('width'=>'13px')).' '.$number.'</a></li>';
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" >'.
+                            Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
             }
         }
     
         // Display the who's online for the course
         if ($number_online_in_course) {
             if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
+                        Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
             }
         }
         
         // Display the who's online for the session 
         if (api_get_setting('use_session_mode') == 'true' && isset($user_id) && api_get_session_id() != 0) {
-            //echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';        
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array('width'=>'13px')).' </a></li>';
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
+                    Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
         }        
     }
     

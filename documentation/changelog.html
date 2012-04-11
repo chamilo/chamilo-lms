@@ -1,26 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-  <title>Chamilo Changelog</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-  <style type="text/css">
-    <!--
-        @page { size: 21cm 29.7cm; margin: 2cm }
-        #main h1 {padding-bottom:10px; margin-top:20px; border-bottom: 2px solid #999;}
-        pre { font-family: "Courier New", monospace }
-        p { margin-bottom: 0.21cm }
-        .code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
-    --></style></head>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Chamilo Changelog</title>
+    <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="default.css" type="text/css" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+</head>
 <body>
-<div id="header1">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="index.html">Chamilo - Documentation</a>
+            <div class="nav-collapse">
+            <ul class="nav">
+                <li><a href="index.html">Home</a></li>
+                <li ><a href="readme.html">About</a></li>
+                <li ><a href="license.html">License</a></li>            
+                <li><a href="credits.html">Credits</a></li>            
+                <li><a href="dependencies.html">Dependencies</a></li>            
+                <li class="active"><a href="changelog.html">Changelog</a></li>
+            </ul>        
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>    
+    
 <h1>Chamilo&nbsp;Changelog</h1>
-</div>
+
 <a href="index.html">Documentation</a> &gt; Changelog
 <div id="outerframe">
 <div id="main">
 
-<h1>Chamilo 1.9.0 - [version-name], December 2011</h1>
+<h1>Chamilo 1.9.0 - [version-name], April 2012</h1>
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.0 is a major stable version with loads of added features.</p>
@@ -32,7 +48,10 @@ This version of Chamilo only includes new features:
   <li>Extra reports generation feature by CBlue</li>
   <li>Feature for admin to recover deleted attendances (BT#3002)</li>
   <li><b>New tool</b> to manage student Skills by gradebook</li>
+  <li>Plugin system has been reworked, new plugins added</li>
   <li>New options in Exercises</li>
+  <li>New CSS framework added</li>
+  <li>User Interface is very easy to modify. Now we use Twig Template System</li>
   <li>Record your voice (flash mode)</li>
   
 </ul>
@@ -53,15 +72,17 @@ This version of Chamilo only includes new features:
     <li>
       Assignments
       <ul>
+          <li>New assignment list, now we use jqgrid and we see the user name instead of the work title see BT#4131</li>
       </ul>
     </li>
     <li>
         Attendances
-        <ul>            
+        <ul>
         </ul>
     </li>
     <li>Documents
 	    <ul>
+            <li>Jplayer lib updated</li>
         </ul>
     </li>    
 	<li>Exercises
@@ -69,6 +90,8 @@ This version of Chamilo only includes new features:
             <li>Group questions by category added by Hubert Borderiou</li>
             <li>Save question to review</li>
             <li>Live exercise stats</li>
+            <li>Exercise results now uses jqgrid to filter results</li>
+            <li>UI improved</li>
         </ul>
     </li>
     <li>Gradebook
@@ -83,7 +106,8 @@ This version of Chamilo only includes new features:
         
     <li>Learning path
         <ul>
-	</ul>
+            <li></li>
+        </ul>
     </li>          
     <li>Links
         <ul>
@@ -94,26 +118,44 @@ This version of Chamilo only includes new features:
       <ul>
       </ul>
     </li>
-     
+    
     <li>Portal administration
         <ul>
+            <li>Plugin system was fixed in order to be more easy to add plugins to Chamilo now we use Regions (à la Drupal)</li>
+            <li>Regions: Thanks to Smarty we can add plugins everywhere in Chamilo using the plugins</li>            
+            <li>New we can find a Chamilo setting very fast, thanks to a search form</li>            
             <li>2 new blocks were added "System" and "Skills"</li>
+            <li>The extensions block was moved to the Plugin area</li>            
             <li>New option to delete files in /archive (only for the super administrator)</li>
             <li>Data filler: several fixes added</li>
+            <li>The hide tool options now blocks the access to the tool. See BT#4138</li>            
+            <li>The setting "Hide course tools" was changed: Check the tools you want to hide from teachers. This will prohibit access to the tool instead of just hidden the tools.                 
+            </li>            
         </ul>
     </li>
     
+    <li>Plugins
+        <ul>
+            <li>New Hello World plugin added</li>
+            <li>New Social tools plugin added</li>
+            <li>New Shared tools plugin added</li>
+            <li>New Show regions plugin added</li>
+        </ul>
+   </li>
+    
     <li>Users
         <ul>
-            <li>Expot users to a PDF document</li>
+            <li>Export users to a PDF document</li>
         </ul>
     </li>
     <li>User portal/ My courses
         <ul>            
+            <li>Courses/Session blocks layout have been improved</li>
         </ul>
     </li>
     <li>Sessions
         <ul>
+            <li>Session list uses now jqgrid in order to filter fields better and faster.</li>
         </ul>
     </li>    
     <li>Social Network / Groups
@@ -139,6 +181,7 @@ This version of Chamilo only includes new features:
         <ul>
             <li>Styles changed for all forms</li>
             <li>New top bar added (only for admins)</li>
+            <li>Responsive layout for Mobile Devices</li>
         </ul>
     </li>
 </ul>
@@ -151,7 +194,9 @@ This version of Chamilo only includes new features:
 
 <h3>Third-Party Libraries additions/updates</h3>
 <ul>
-    <li>Fullcalendar js library version 1.5.2</li>    
+    <li>Fullcalendar js library version 1.5.2</li>   
+    <li>Smarty 3 Template system</li>
+    <li>Twitter Bootstrap CSS Framework</li>
 </ul>
 
 <h3>Removals</h3>

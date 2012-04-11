@@ -172,7 +172,7 @@ echo '</div>';
 			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
 			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
 			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
-			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf",
+			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
 		});
 
 		gui.setPlayEnabled(false);

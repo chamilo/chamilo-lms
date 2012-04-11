@@ -901,6 +901,20 @@ switch ($action) {
          */
         require 'lp_list_search.php';
         break;
+    case 'impress':
+        if ($debug > 0)
+            error_log('New LP - view action triggered', 0);
+        if (!$lp_found) {
+            error_log('New LP - No learnpath given for view', 0);
+            require 'lp_list.php';
+        } else {
+            if ($debug > 0) {error_log('New LP - Trying to impress this LP item to ' . $_REQUEST['item_id'], 0); }
+            if ( !empty($_REQUEST['item_id']) ) {
+                $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+            }           
+            require 'lp_impress.php';
+        }
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         //$_SESSION['refresh'] = 1;

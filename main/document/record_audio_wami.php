@@ -147,7 +147,7 @@ echo '</div>';
 <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/recorder.js"></script>
 
 <!-- GUI code... take it or leave it -->
-<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui_record_document.js"></script>
+<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui.js"></script>
 
 <script type="text/javascript">
 
@@ -159,17 +159,14 @@ echo '</div>';
 	}
 
 	function setupGUI() {
-		var counter = 0;
-		var waminame_noex=document.getElementById("audio_title").value;
 		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
 		var waminame_play=waminame;
 				
 		if (waminame!=".wav") {
 			document.getElementById('audio_title').style.display='none';
 			document.getElementById('audio_button').style.display='none';
-			document.getElementById('audio_message_1').style.display='none';
-			document.getElementById('audio_message_2').style.display='inline';
 		}
+		
 		var gui = new Wami.GUI({
 			id : "wami",
 			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
@@ -179,7 +176,6 @@ echo '</div>';
 		});
 
 		gui.setPlayEnabled(false);
-		
 	}
 	
 
@@ -199,9 +195,9 @@ echo '</div>';
 Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), false);
 ?>
 </div>
-<div align="center" id="audio_message_2" style="display:none;">
+<div align="center" id="audio_message_2" style="display:inline;">
 <?php
-Display::display_normal_message(get_lang('StartWamiRecorder'), false);
+Display::display_normal_message(get_lang('WamiStartRecorder'), false);
 ?>
 </div>
 

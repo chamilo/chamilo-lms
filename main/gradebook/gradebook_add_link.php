@@ -25,7 +25,9 @@ $course_info = api_get_course_info($_GET['course_code']);
 
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_link=Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-$all_categories = Category :: load();
+
+$session_id = api_get_session_id();
+$all_categories = Category :: load(null, null, api_get_course_id(), null, null, $session_id);
 
 $category = Category :: load($_GET['selectcat']);
 $url = api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']). '&newtypeselected=' . (isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : ''). '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code']));

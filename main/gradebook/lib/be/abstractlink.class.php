@@ -211,7 +211,7 @@ abstract class AbstractLink implements GradebookItem {
 			$row_testing=Database::fetch_array($result_testing);
 						
 			if ($row_testing[0]==0) {
-				$sql = 'INSERT INTO '.$tbl_grade_links.' (type,ref_id, user_id, course_code, category_id, weight, visible, created_at';
+				$sql = 'INSERT INTO '.$tbl_grade_links.' (type, ref_id, user_id, course_code, category_id, weight, visible, created_at';
 				$sql .= ') VALUES ('
 					.intval($this->get_type())
 					.','.intval($this->get_ref_id())

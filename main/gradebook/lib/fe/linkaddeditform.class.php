@@ -72,8 +72,8 @@ class LinkAddEditForm extends FormValidator
         $select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));
         
         $default_weight = 0;
-        if (!empty($category_object)) {
-            foreach($category_object as $my_cat) {
+        if (!empty($category_object)) {            
+            foreach ($category_object as $my_cat) {
                 if ($my_cat->get_course_code() == api_get_course_id()) {
                     if ($my_cat->get_parent_id() == 0 ) {
                         $default_weight = $my_cat->get_weight();

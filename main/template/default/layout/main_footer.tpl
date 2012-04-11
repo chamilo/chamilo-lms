@@ -1,7 +1,5 @@
-        </div> <!-- end of #row" -->
-    </div> <!-- end of #main" -->
-    <div class="push"></div>
-</div> <!-- end of #wrapper section -->
-{% include "default/layout/footer.tpl" %}
+{% if show_footer == true %}
+    {% include "default/layout/footer.tpl" %}
+{% endif %}
 </body>
 </html>

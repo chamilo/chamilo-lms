@@ -1,13 +1,6 @@
 {% extends "default/layout/main.tpl" %}
 
-{% block header %}
-    {% if show_header == 1 %}
-        {% include "default/layout/main_header.tpl" %}
-    {% endif %}
-{% endblock %}
-
 {% block body %}	
-
 	{# Main content #}
 	
 	{% if show_sniff == 1 %}
@@ -112,10 +105,4 @@
             </div>
         {% endif %}        
 	</div>
-{% endblock %}
-
-{% block footer %}
-    {% if show_footer == 1 %}
-        {% include "default/layout/main_footer.tpl" %}
-    {% endif %}
 {% endblock %}

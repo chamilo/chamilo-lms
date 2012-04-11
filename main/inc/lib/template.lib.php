@@ -59,6 +59,7 @@ class Template {
         $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
         $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
         $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
+        $this->twig->addFilter('var_dump',new Twig_Filter_Function('var_dump'));
         
         /*
         $lexer = new Twig_Lexer($this->twig, array(
@@ -617,7 +618,7 @@ class Template {
     
     function show_header_template() {        
 		$tpl = $this->get_template('layout/show_header.tpl');        
-		$this->display($tpl);	
+		$this->display($tpl);
     }
     
     function show_footer_template() {

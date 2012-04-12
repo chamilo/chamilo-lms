@@ -67,6 +67,12 @@ class UserStore extends _UserStore
     {
         $object->username = $object->username ? $object->username : $this->generate_username();
         $object->password = $object->password ? $object->password : api_generate_password();
+        $object->language = $object->language ? $object->language : $this->default_language();
+    }
+    
+    function default_language()
+    {
+        return api_get_setting('platformLanguage');
     }
 
     function generate_username()

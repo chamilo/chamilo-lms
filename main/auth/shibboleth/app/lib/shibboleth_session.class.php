@@ -36,6 +36,9 @@ class ShibbolethSession
     function logout()
     {
         $_SESSION['_user'] = array();
+        
+        $logout_no_redirect = true;
+        online_logout();
     }
 
     /**
@@ -51,10 +54,12 @@ class ShibbolethSession
         {
             return;
         }
-
-        session_unset();
+        
+        $this->logout();
+        
+        api_session_start();
         api_session_register('_uid');
-
+        
         global $_user;
         $_user = (array)$user;
 
@@ -62,7 +67,7 @@ class ShibbolethSession
         $_SESSION['_user']['user_id'] = $_uid;
         $_SESSION['noredirection'] = true;
 
-        //used in 'init_local.inc.php'
+        //used in 'init_local.inc.php' this is BAD but and should be changed
         $loginFailed = false;
         $uidReset = true;
 

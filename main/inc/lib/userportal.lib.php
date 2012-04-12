@@ -397,7 +397,7 @@ class IndexManager {
 	 * @version 1.1
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
 	 */
-	function display_anonymous_course_list() {
+	function return_anonymous_course_list() {
                 $result = '';
 		$ctok = $_SESSION['sec_token'];
 		$stok = Security::get_token();

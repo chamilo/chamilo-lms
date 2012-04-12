@@ -688,16 +688,7 @@ if (!empty($action)) {
 					}
 				}
 				break;
-		}
-		Security::clear_token();
-	}
-}
-
-if (isset ($_POST['action'])) {
-	$check = Security::check_token('get');
-	if ($check) {
-		switch ($_POST['action']) {
-			case 'delete' :
+            case 'delete' :
 				if (api_is_platform_admin()) {
 					$number_of_selected_users = count($_POST['id']);
 					$number_of_deleted_users = 0;
@@ -710,10 +701,10 @@ if (isset ($_POST['action'])) {
 							}
 						}
 					}
-					if($number_of_selected_users == $number_of_deleted_users) {
-						Display :: display_confirmation_message(get_lang('SelectedUsersDeleted'));
+					if ($number_of_selected_users == $number_of_deleted_users) {						
+                        $message = Display :: return_message(get_lang('SelectedUsersDeleted'), 'confirmation');
 					} else {
-						Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+                        $message = Display :: return_message(get_lang('SomeUsersNotDeleted'), 'error');						
 					}
 				}
 				break;
@@ -723,7 +714,7 @@ if (isset ($_POST['action'])) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple','get','','',array('class' => 'form-search'),false);
+$form = new FormValidator('search_simple','get', '', '',array('class' => 'form-search'),false);
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
@@ -737,7 +728,6 @@ if (api_is_platform_admin()) {
 		 '</span>';
 }
 $actions .=$form->return_form();
-
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));

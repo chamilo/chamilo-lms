@@ -151,6 +151,9 @@ echo '</div>';
 
 <script type="text/javascript">
 
+	function newNameRecord() {
+		location.reload(true)
+	}
 
 	function setupRecorder() {
 		var nospaces =document.getElementById("audio_title").value;
@@ -161,8 +164,6 @@ echo '</div>';
 			document.getElementById('audio_title').readOnly = true;
 			//document.getElementById('audio_title').style.display='none';
 			document.getElementById('audio_button').style.display='none';
-			//document.getElementById('audio_messsage_1').style.display='none';
-			//document.getElementById('audio_message_2').style.display='inline';
 			
 			Wami.setup({
 				id : "wami",
@@ -196,16 +197,16 @@ echo '</div>';
 
 <div align="center" style="margin-top:140px;">
 <form name="form_wami_recorder">
-<input placeholder="<?php echo get_lang('Name'); ?>" type="text" id="audio_title">
+<input placeholder="<?php echo get_lang('InputHereName'); ?>" type="text" id="audio_title"><br/>
 <button type="button" value="" onclick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
+<button type="button" value="" onclick="newNameRecord()" id="new_name" /><?php echo get_lang('Reload'); ?></button>
+<?php echo Display :: return_icon('info3.gif', get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog').' '.get_lang('WamiReload'), array('align' => 'absmiddle', 'hspace' => '3px'), false); ?>
 </form>
 </div>
 <div align="center" id="audio_message_1" style="display:inline">
-<?php Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), false); ?>
+<?php Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiStartRecorder'), false); ?>
 </div>
-<div align="center" id="audio_message_2" style="display:inline;">
-<?php Display::display_normal_message(get_lang('WamiStartRecorder'), false); ?>
-</div>
+
 
 <?php
 

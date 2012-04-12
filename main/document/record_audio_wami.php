@@ -156,11 +156,14 @@ echo '</div>';
 		var nospaces =document.getElementById("audio_title").value;
 		var audioname = nospaces.replace(/ /gi, "");
 		if(audioname==""){
-			 return
+			 return;
 		 }else{
-			document.getElementById('audio_title').style.display='none';
+			document.getElementById('audio_title').readOnly = true;
+			//document.getElementById('audio_title').style.display='none';
 			document.getElementById('audio_button').style.display='none';
-			 
+			//document.getElementById('audio_messsage_1').style.display='none';
+			//document.getElementById('audio_message_2').style.display='inline';
+			
 			Wami.setup({
 				id : "wami",
 				onReady : setupGUI
@@ -194,18 +197,14 @@ echo '</div>';
 <div align="center" style="margin-top:140px;">
 <form name="form_wami_recorder">
 <input placeholder="<?php echo get_lang('Name'); ?>" type="text" id="audio_title">
-<button type="button" value="" onClick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
+<button type="button" value="" onclick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
 </form>
 </div>
 <div align="center" id="audio_message_1" style="display:inline">
-<?php
-Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), false);
-?>
+<?php Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), false); ?>
 </div>
 <div align="center" id="audio_message_2" style="display:inline;">
-<?php
-Display::display_normal_message(get_lang('WamiStartRecorder'), false);
-?>
+<?php Display::display_normal_message(get_lang('WamiStartRecorder'), false); ?>
 </div>
 
 <?php

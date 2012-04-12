@@ -66,6 +66,9 @@ class ShibbolethSession
         $_SESSION['_user'] = $_user;
         $_SESSION['_user']['user_id'] = $_uid;
         $_SESSION['noredirection'] = true;
+        
+        //must be called before 'init_local.inc.php'
+        event_login();
 
         //used in 'init_local.inc.php' this is BAD but and should be changed
         $loginFailed = false;
@@ -79,7 +82,6 @@ class ShibbolethSession
 
         require("$includePath/local.inc.php");
 
-        event_login();
 
         return $_user;
     }

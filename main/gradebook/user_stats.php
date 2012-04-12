@@ -26,10 +26,12 @@ $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
 ));
-$category= Category :: load(0);
+
+$category = Category :: load($_GET['selectcat']);
 $my_user_id=Security::remove_XSS($_GET['userid']);
 $allevals= $category[0]->get_evaluations($my_user_id, true);
 $alllinks= $category[0]->get_links($my_user_id, true);
+
 if ($_GET['selectcat'] != null) {
 	$addparams= array (
 		'userid' => $my_user_id,
@@ -43,6 +45,7 @@ if ($_GET['selectcat'] != null) {
 }
 
 $user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
+
 if (isset ($_GET['exportpdf'])) {
 	$datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);
 	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);    

@@ -38,13 +38,6 @@ class LinkAddEditForm extends FormValidator
 		} elseif (isset ($link_type) && isset ($category_object)) {
 			$link = LinkFactory :: create ($link_type);
 			$link->set_course_code(api_get_course_id());
-			/*
-			$cc = $category_object->get_course_code();
-			if (empty($cc) && !empty($_GET['course_code'])) {
-				$link->set_course_code(Database::escape_string($_GET['course_code']));
-			} else {
-				$link->set_course_code($category_object->get_course_code());
-			}*/
 		} else {
 			die ('LinkAddEditForm error: define link_type/category_object or link_object');
 		}
@@ -74,6 +67,7 @@ class LinkAddEditForm extends FormValidator
         $default_weight = 0;
         if (!empty($category_object)) {            
             foreach ($category_object as $my_cat) {
+                
                 if ($my_cat->get_course_code() == api_get_course_id()) {
                     if ($my_cat->get_parent_id() == 0 ) {
                         $default_weight = $my_cat->get_weight();
@@ -89,10 +83,7 @@ class LinkAddEditForm extends FormValidator
             }
         }
         
-
 		// ELEMENT: weight
-		
-        
         $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
             'maxlength' => '5',
@@ -125,7 +116,6 @@ class LinkAddEditForm extends FormValidator
 		//$this->add_datepicker('date',get_lang('Date'));
 		//$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
 
-
 		// ELEMENT: description
 		if ($link->needs_name_and_description()) {
 			$this->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3','cols' => '34'));
@@ -140,8 +130,6 @@ class LinkAddEditForm extends FormValidator
 		if ($form_type == self :: TYPE_EDIT) {
 			$defaults['visible'] = $link->is_visible();
 		}
-		
-	
 		
 		// ELEMENT: add results
 		if ($form_type == self :: TYPE_ADD && $link->needs_results()) {

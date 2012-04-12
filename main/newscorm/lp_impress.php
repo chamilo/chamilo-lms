@@ -23,7 +23,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id      = intval($_GET['lp_id']);
+$lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites) 
 if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
@@ -61,16 +61,16 @@ foreach ($list as $toc) {
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<h2>'.$toc['title'].'</h2>';
     
-           $src = $_SESSION['oLP']->get_link('http', $toc['id']);                     
-               
+    $src = $_SESSION['oLP']->get_link('http', $toc['id']);
+    //just showing the src in a iframe ...
     $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
     
     $html .= "</div>\n";
     $step ++;
 }
 
+//Setting the template
 $tpl = new Template($tool_name, false, false, true);
-
 $tpl->assign('html', $html);
 $content = $tpl->fetch('default/learnpath/impress.tpl');
 $tpl->assign('content', $content);

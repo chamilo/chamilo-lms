@@ -869,12 +869,12 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 					if (!empty($grading_string)) {
 						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
 					}
-				}				
+				}		
+                
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);                
 				$gradebooktable->display();				
 			}
 		}
 	}
 }
-//echo '<div id="chart3"></div>';
 Display :: display_footer();

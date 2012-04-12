@@ -526,7 +526,7 @@ if (!empty($exercise_list)) {
                 
                 $lp_blocked = '';
                 if (!$show_quiz_edition) {
-                    $lp_blocked = Display::label(get_lang('AddedToALP'), 'warning');
+                    $lp_blocked = Display::label(get_lang('AddedToALP'), 'info');
                 }                    
                                 
                 //Showing exercise title                    

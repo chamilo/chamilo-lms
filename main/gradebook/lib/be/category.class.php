@@ -16,7 +16,6 @@ class Category implements GradebookItem
 {
 
     // PROPERTIES
-
 	private $id;
 	private $name;
 	private $description;
@@ -155,7 +154,7 @@ class Category implements GradebookItem
      * @param int      session id (in case we are in a session)
      * @param bool     Whether to show all "session" categories (true) or hide them (false) in case there is no session id
 	 */
-	public function load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $show_session_categories = true) {        
+	public function load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null) {        
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
 		if ( isset($id) && (int)$id === 0 ) {
@@ -181,23 +180,34 @@ class Category implements GradebookItem
 			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
+        
 		if (isset($course_code)) {
 			$course_code = Database::escape_string($course_code);
-			if ($paramcount != 0) { $sql .= ' AND'; }
-			else { $sql .= ' WHERE'; }
-			if ($course_code == '0') { $sql .= ' course_code is null '; }
-			else { $sql .= " course_code = '".Database::escape_string($course_code)."'"; }
+			if ($paramcount != 0) { 
+                $sql .= ' AND';                 
+            } else { 
+                $sql .= ' WHERE'; 
+            }
             
-            if (!empty($session_id)) {
-            	$sql .= ' AND session_id = '.(int) $session_id.' ';
-            } else {
-            	// a query on the course should show all
+			if ($course_code == '0') { 
+                $sql .= ' course_code is null ';                 
+            } else { 
+                $sql .= " course_code = '".Database::escape_string($course_code)."'"; 
+            }
+            
+            /*if ($show_session_categories !== true) {
+                // a query on the course should show all
                 // the categories inside sessions for this course
                 // otherwise a special parameter is given to ask explicitely
-                if ($show_session_categories !== true) {
-                    $sql .= " AND (session_id IS NULL OR session_id = 0) ";
+                $sql .= " AND (session_id IS NULL OR session_id = 0) ";
+            } else {*/
+                
+                if (empty($session_id)) {
+                    $sql .= ' AND (session_id IS NULL OR session_id = 0) ';            
+                } else {
+                    $sql .= ' AND session_id = '.(int) $session_id.' ';  
                 }
-            }
+            //}            
 			$paramcount ++;
 		}
 		if (isset($parent_id)) {
@@ -219,8 +229,7 @@ class Category implements GradebookItem
 			}
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
-		}
-		
+		}		
 		$result = Database::query($sql);
         $allcat = array();		
 		if (Database::num_rows($result) > 0) {
@@ -1110,19 +1119,18 @@ class Category implements GradebookItem
 			$course_code = api_get_course_id();
 		}
 
-		// no links in root or course independent categories
+		// no links in root or course independent categories        
 		if ($this->id == 0) {
 			
-		}
-		// 1 student $stud_id
- 		elseif (isset($stud_id)) {
-			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$course_code,$this->id,
+		} elseif (isset($stud_id)) {
+            // 1 student $stud_id
+			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$course_code, $this->id,
 						api_is_allowed_to_edit() ? null : 1);
- 		}
-		// all students -> only for course/platform admin
-		elseif (api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) {
+ 		} elseif (api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) {
+            // all students -> only for course/platform admin
 			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id, null);
 		}
+        
 
 		if ($recursive) {
 			$subcats = $this->get_subcategories($stud_id);

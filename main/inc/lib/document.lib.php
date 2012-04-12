@@ -28,7 +28,7 @@ define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
  *	@package chamilo.library
  */
 class DocumentManager {
-
+    
     private function __construct() {
 
     }
@@ -2963,6 +2963,10 @@ class DocumentManager {
             }
         }
         return true;
+    }
+    
+    public function get_web_odf_extension_list(){
+        return array('ods', 'odt');
     }
 }
 //end class DocumentManager

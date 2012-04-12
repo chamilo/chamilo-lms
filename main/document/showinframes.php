@@ -198,15 +198,24 @@ $htmlHeadXtra[] = '
 -->
 </script>';
 
+$pathinfo = pathinfo($header_file);
 
-//Display::display_header($tool_name, 'User');
+$web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
+if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
+    $show_web_odf  = true;
+}
 
 Display::display_header('');
+
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
+echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';
 
-$pathinfo =pathinfo($header_file);
+if ($show_web_odf) {
+    //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
+}
+echo "</div>";
+
 if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
 		echo '<br/>';

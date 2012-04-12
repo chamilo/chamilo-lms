@@ -151,33 +151,38 @@ echo '</div>';
 
 <script type="text/javascript">
 
+
 	function setupRecorder() {
-		Wami.setup({
-			id : "wami",
-			onReady : setupGUI
-		});
+		var nospaces =document.getElementById("audio_title").value;
+		var audioname = nospaces.replace(/ /gi, "");
+		if(audioname==""){
+			 return
+		 }else{
+			document.getElementById('audio_title').style.display='none';
+			document.getElementById('audio_button').style.display='none';
+			 
+			Wami.setup({
+				id : "wami",
+				onReady : setupGUI
+			});
+		}
 	}
 
 	function setupGUI() {
-		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension				
-		if (waminame!=".wav") {
+		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
+	    var waminame_play=waminame;
 			
-			document.getElementById('audio_title').style.display='none';
-			document.getElementById('audio_button').style.display='none';
-			
-			var waminame_play=waminame;
-			
-			var gui = new Wami.GUI({
-				id : "wami",
-				singleButton : true,
-				recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
-				playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
-				buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
-				swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
-			});
+		var gui = new Wami.GUI({
+			id : "wami",
+			singleButton : true,
+			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
+			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
+			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
+			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
+		});
 	
-			gui.setPlayEnabled(false);
-		}
+		gui.setPlayEnabled(false);
+
 	}
 	
 

@@ -49,7 +49,7 @@ class GradebookTable extends SortableTable {
 			$this->set_header($column++, get_lang('Weight'),'','width="80px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
-			$this->set_header($column++, get_lang('Evaluation'), false);
+			$this->set_header($column++, get_lang('Result'), false);
 		}
 		
 		if (api_is_allowed_to_edit(null, true)) {

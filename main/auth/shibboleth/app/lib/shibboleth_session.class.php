@@ -75,10 +75,15 @@ class ShibbolethSession
         $uidReset = true;
 
         $gidReset = true;
-        $cidReset = true;
+        $cidReset = false; //FALSE !!      
 
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);
+        
+        global $is_platformAdmin; 
+        /* This must be set for local.inc.php to set up correctly the platform admin
+         * This is BAD.
+         */
 
         require("$includePath/local.inc.php");
 

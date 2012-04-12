@@ -159,23 +159,25 @@ echo '</div>';
 	}
 
 	function setupGUI() {
-		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
-		var waminame_play=waminame;
-				
+		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension				
 		if (waminame!=".wav") {
+			
 			document.getElementById('audio_title').style.display='none';
 			document.getElementById('audio_button').style.display='none';
+			
+			var waminame_play=waminame;
+			
+			var gui = new Wami.GUI({
+				id : "wami",
+				singleButton : true,
+				recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
+				playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
+				buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
+				swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
+			});
+	
+			gui.setPlayEnabled(false);
 		}
-		
-		var gui = new Wami.GUI({
-			id : "wami",
-			recordUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/record_document.php?waminame="+waminame+"&wamidir=<?php echo $wamidir; ?>&wamiuserid=<?php echo $wamiuserid; ?>",
-			playUrl : 	"<?php echo $wamiurlplay; ?>"+waminame_play,
-			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
-			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
-		});
-
-		gui.setPlayEnabled(false);
 	}
 	
 
@@ -184,7 +186,7 @@ echo '</div>';
 
 <div id="wami" style="margin-left: 510px; margin-top:10px;"></div>
 
-<div align="center" style="margin-top:130px;">
+<div align="center" style="margin-top:140px;">
 <form name="form_wami_recorder">
 <input placeholder="<?php echo get_lang('Name'); ?>" type="text" id="audio_title">
 <button type="button" value="" onClick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>

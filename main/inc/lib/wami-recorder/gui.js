@@ -48,18 +48,22 @@ Wami.GUI = function(options) {
 		recordButton.onstop = stopRecording;
 
 		recordButton.setEnabled(true);
-
-		if (!options.singleButton) {
-			var pid = Wami.createID();
-			var playDiv = createDiv(pid,
+		
+//Chamilo hack single button
+		var pid = Wami.createID();
+		var playDiv = createDiv(pid,
 					"position: absolute; right: 40px; top: 25px");
 			guidiv.appendChild(playDiv);
-
+		if (!options.singleButton) {
 			playButton = new Button(pid, PLAY_BUTTON, options.buttonUrl);
+		} else {
+			playButton = new Button(pid, PLAY_BUTTON, options.buttonNoUrl);
+		}
+		
 			playButton.onstart = startPlaying;
 			playButton.onstop = stopPlaying;
-		}
 	}
+//end hack single button
 
 	/**
 	 * These methods are called on clicks from the GUI.

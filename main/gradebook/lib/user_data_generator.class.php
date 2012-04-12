@@ -25,7 +25,6 @@ class UserDataGenerator
 	const UDG_SORT_ASC = 128;
 	const UDG_SORT_DESC = 256;
 
-
 	private $items;
 	private $userid;
 
@@ -33,7 +32,6 @@ class UserDataGenerator
 	private $categorycache;
 	private $scorecache;
 	private $avgcache;
-
 
     function UserDataGenerator($userid, $evals = array(), $links = array()) {
 		$this->userid = $userid;
@@ -59,14 +57,11 @@ class UserDataGenerator
 		}
 		$this->items = array_merge ($evals_filtered, $links);
 
-
 		$this->coursecodecache = array();
 		$this->categorycache = array();
 		$this->scorecache = null;
 		$this->avgcache = null;
-
     }
-
 
 	/**
 	 * Get total number of items (rows)
@@ -74,8 +69,6 @@ class UserDataGenerator
 	public function get_total_items_count() {
 		return count($this->items);
 	}
-
-
 
 	/**
 	 * Get actual array data
@@ -109,9 +102,8 @@ class UserDataGenerator
 			usort($allitems, array('UserDataGenerator', 'sort_by_category'));
 		} elseif ($sorting & self :: UDG_SORT_AVERAGE) {
 			// if user sorts on average scores, first calculate them and cache them
-			foreach ($allitems as $item) {
-				$this->avgcache[$item->get_item_type() . $item->get_id()]
-								= $item->calc_score();
+			foreach ($allitems as $item) {                
+				$this->avgcache[$item->get_item_type() . $item->get_id()]= $item->calc_score();                
 			}
 			usort($allitems, array('UserDataGenerator', 'sort_by_average'));
 		} elseif ($sorting & self :: UDG_SORT_SCORE) {
@@ -159,13 +151,11 @@ class UserDataGenerator
 				$row[] = $this->build_mask_column ($item, $ignore_score_color);
 			$data[] = $row;
 		}
-
 		return $data;
-
 	}
 
-// Sort functions
-// Make sure to only use functions as defined in the GradebookItem interface !
+    // Sort functions
+    // Make sure to only use functions as defined in the GradebookItem interface !
 
 	function sort_by_type($item1, $item2) {
 		if ($item1->get_item_type() == $item2->get_item_type()) {
@@ -233,20 +223,23 @@ class UserDataGenerator
 
 	private function build_category_name ($item) {
 		$cat = $this->get_category_cached($item->get_category_id());
+       
 		return $this->get_category_name_to_display($cat);
 	}
 
 
 	private function build_average_column ($item, $ignore_score_color) {		
 		if (isset($this->avgcache)) {
-			$avgscore = $this->avgcache[$item->get_item_type() . $item->get_id()];
+			$avgscore = $this->avgcache[$item->get_item_type() . $item->get_id()];            
 		} else {
 			$avgscore = $item->calc_score();
 		}		
+        
 		$scoredisplay = ScoreDisplay :: instance();
 		$displaytype = SCORE_AVERAGE;
-		if ($ignore_score_color)
+		/*if ($ignore_score_color)
 			$displaytype |= SCORE_IGNORE_SPLIT;
+        */
 		return $scoredisplay->display_score($avgscore, $displaytype);
 	}
 
@@ -297,17 +290,14 @@ class UserDataGenerator
 	}
 
 	private function get_category_name_to_display ($cat) {
-
-		if (isset($cat)){
-
-			if ($cat->get_parent_id() == '0' || $cat->get_parent_id() == null){
-					return '';
-				} else {
-					return $cat->get_name();
-				}
-
-			} else {
-					return '';
-			}
+		if (isset($cat)) {            
+            if ($cat->get_parent_id() == '0' || $cat->get_parent_id() == null){
+                return '';
+            } else {
+                return $cat->get_name();
+            }
+        } else {
+            return '';
+        }
 	}
 }

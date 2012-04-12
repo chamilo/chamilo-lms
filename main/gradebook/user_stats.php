@@ -43,15 +43,12 @@ if ($_GET['selectcat'] != null) {
 }
 
 $user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
-if (isset ($_GET['exportpdf'])) {	
-
-	$datagen       = new UserDataGenerator($my_user_id, $allevals,$alllinks);
-	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
-    
+if (isset ($_GET['exportpdf'])) {
+	$datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);
+	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);    
 	$newarray      = array ();
-	$displayscore  = Scoredisplay :: instance();
-	$newitem       = array ();
-	foreach ($data_array as $data) {
+	$displayscore  = Scoredisplay :: instance();	
+	foreach ($data_array as $data) {        
         $newarray[] = array_slice($data, 1);
 	}
 	$userinfo = get_user_info_from_id($my_user_id);    
@@ -94,8 +91,8 @@ $actions = '<div class="actions">';
 if (isset ($_GET['selectcat'])) {
 	$interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
 	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'),'',ICON_SIZE_MEDIUM).'</a>';
-
 }
+
 if (isset ($_GET['selecteval'])) {
 	$interbreadcrumb[]= array (
 		'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
@@ -104,6 +101,7 @@ if (isset ($_GET['selecteval'])) {
 	$actions.= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '>
 	'.Display::return_icon('back.png', get_lang('BackToEvaluation'),'',ICON_SIZE_MEDIUM).'</a>';
 }
+
 $actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank">
 ' . Display::return_icon('pdf.png', get_lang('ExportPDF'),'',ICON_SIZE_MEDIUM).'</a>';
 

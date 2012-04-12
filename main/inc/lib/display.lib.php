@@ -1303,7 +1303,7 @@ class Display {
      * @param  string  url that will be added (for jquery see hot_courses.tpl)
 	 * @param	string	point info array see function CourseManager::get_course_ranking()
 	 * @param	bool	add a div wrapper
-	 * @todo	use smarty
+	 * @todo	use     templates
      **/
     public function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
 		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;

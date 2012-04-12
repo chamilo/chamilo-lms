@@ -150,7 +150,7 @@ class AppPlugin {
      *
      *
      * @param string $block
-     * @param smarty obj      
+     * @param obj   template obj
      * @todo improve this function
      */
     function get_all_plugin_contents_by_region($region, $template) {

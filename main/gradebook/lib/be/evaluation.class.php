@@ -24,12 +24,12 @@ class Evaluation implements GradebookItem
 	private $eval_max;
 	private $visible;
 
-// CONSTRUCTORS
+    // CONSTRUCTORS
 
     function __construct() {    	
     }
 
-// GETTERS AND SETTERS
+    // GETTERS AND SETTERS
 
    	public function get_id() {
 		return $this->id;
@@ -117,8 +117,6 @@ class Evaluation implements GradebookItem
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
-
-
 	
     public function set_type ($type) {
 		$this->type = $type;
@@ -129,7 +127,7 @@ class Evaluation implements GradebookItem
 	}
     
     
-// CRUD FUNCTIONS
+    // CRUD FUNCTIONS
 
 	/**
 	 * Retrieve evaluations and return them as an array of Evaluation objects

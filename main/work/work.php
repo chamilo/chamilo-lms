@@ -784,13 +784,8 @@ switch ($action) {
             $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));      
             $form->addElement('html', '</div>');            
             $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
-		
-        
+		        
             if ($form->validate()) {
-                    
-                /*		
-                $fexpire 		= get_date_from_select('expires');
-                $fend 	 		= get_date_from_select('ends');*/
 
                 $directory 		= Security::remove_XSS($_POST['new_dir']);
                 $directory 		= replace_dangerous_char($directory);
@@ -816,7 +811,7 @@ switch ($action) {
                                             title               = '".Database::escape_string($_POST['new_dir'])."',
                                             description 		= '".Database::escape_string($_POST['description'])."',
                                             author      		= '',
-                                            active              = '0',
+                                            active              = '1',
                                             accepted			= '1',
                                             filetype            = 'folder',
                                             post_group_id       = '".$group_id."',

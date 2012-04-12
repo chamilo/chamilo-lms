@@ -1263,7 +1263,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
             			}
             			
             			$group[] = $form->createElement('select', $option_id.'[denominator]', array('/'), $numbers,'class="denominator"');            			
-            			$group[] = $form->createElement('button', "delete", get_lang('Delete'), array('type'=>'button', 'id'=>$id, 'onclick'=>"delete_grading_model('$id');"));
+            			$group[] = $form->createElement('button', "delete", get_lang('Delete'), array('type'=>'button', 'class' => 'btn btn-danger','id'=>$id, 'onclick'=>"delete_grading_model('$id');"));
             			
             			$default_values[$option_id.'[denominator]'] = $denominator;
             			$form->addGroup($group, '', get_lang($row['title']), ' ');

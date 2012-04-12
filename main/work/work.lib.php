@@ -280,10 +280,11 @@ function get_work_count_by_student($user_id, $work_id) {
 	$user_id = intval($user_id);
 	$work_id = intval($work_id);
 	$course_id = api_get_course_int_id();
+    $session_id = api_get_session_id();
 	
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT COUNT(*) as count FROM  $work_table 
-            WHERE c_id = $course_id AND parent_id = $work_id AND user_id = $user_id AND active = 1 ";
+            WHERE c_id = $course_id AND parent_id = $work_id AND user_id = $user_id AND active = 1 AND session_id = $session_id ";
 	$result = Database::query($sql);
 	$return = 0;
 	if (Database::num_rows($result)) {

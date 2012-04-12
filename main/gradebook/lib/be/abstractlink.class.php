@@ -47,6 +47,10 @@ abstract class AbstractLink implements GradebookItem {
 	public function get_ref_id() {
 		return $this->ref_id;
 	}
+    
+    public function get_session_id() {
+		return $this->session_id;
+	}
 
 	public function get_user_id() {
 		return $this->user_id;
@@ -107,6 +111,10 @@ abstract class AbstractLink implements GradebookItem {
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
+    
+    public function set_session_id($id) {
+    	$this->session_id = $id;
+    }
 
 // CRUD FUNCTIONS
 
@@ -115,8 +123,8 @@ abstract class AbstractLink implements GradebookItem {
 	 * To keep consistency, do not call this method but LinkFactory::load instead.
 	 */
 	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
-    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql='SELECT id, type, ref_id, user_id,course_code,category_id,created_at,weight,visible FROM '.$tbl_grade_links;
+    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);        
+		$sql='SELECT id, type, ref_id, user_id, course_code, category_id, created_at, weight, visible FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.Database::escape_string($id);
@@ -187,16 +195,18 @@ abstract class AbstractLink implements GradebookItem {
 			$link->set_course_code($data['course_code']);
 			$link->set_category_id($data['category_id']);
 			$link->set_date($data['created_at']);
-			$link->set_weight($data['weight']);
+			$link->set_weight($data['weight']);            
 			$link->set_visible($data['visible']);
+            
+            //session id should depend of the category --> $data['category_id']
+            $session_id = api_get_session_id();
+                        
+            $link->set_session_id($session_id);
 			$links[]=$link;
 		}
 		return $links;
     }
 
-    public function set_session_id($id) {
-    	$this->session_id = $id;
-    }
 
     /**
      * Insert this link into the database
@@ -377,7 +387,9 @@ abstract class AbstractLink implements GradebookItem {
 	abstract function needs_results();
 	abstract function is_allowed_to_change_name();
 
-// TRIVIAL FUNCTIONS - to be overwritten by subclass if needed
+    /* TRIVIAL FUNCTIONS - to be overwritten by subclass if needed */
+    
+    /* Seems to be not used anywhere */
 	public function get_not_created_links() {
 		return null;
 	}

@@ -54,7 +54,6 @@ class LinkFactory
 		return AbstractLink::load($id, $type, $ref_id, $user_id, $course_code, $category_id, $visible);
 	}
 
-
 	/**
 	 * Get the link object referring to an evaluation
 	 */

@@ -1,16 +1,20 @@
-{% block header %}{% include "default/layout/main_header.tpl" %}    
+{% block header %}
+    {% include "default/layout/main_header.tpl" %}    
 {% endblock %}
 
-{% block body %}
+{% block body %}	
+	{% if show_sniff == 1 %}
+	 	{% include "default/layout/sniff.tpl" %}
+	{% endif %}
 {% endblock %}
 
 {% block footer %}
     {#  Footer  #}
     {% if show_footer == true %}
-            </div> <!-- end of #row" -->
+        </div> <!-- end of #row" -->
         </div> <!-- end of #main" -->
         <div class="push"></div>
-    </div> <!-- end of #wrapper section -->
+        </div> <!-- end of #wrapper section -->
     {% endif %}
 {% include "default/layout/main_footer.tpl" %}
 {% endblock %}

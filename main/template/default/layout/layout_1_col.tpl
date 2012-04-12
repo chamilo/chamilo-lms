@@ -19,7 +19,7 @@
             </section>
         {% endif %}        
         &nbsp;
-    </div>    
+    </div>
     
     {#  Plugin bottom  #}    
     {% if plugin_content_bottom is not null %}

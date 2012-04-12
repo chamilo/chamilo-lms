@@ -1,4 +1,4 @@
-<?php //$id $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Sets needed course variables and then jumps to the exercises result page.
@@ -21,20 +21,22 @@ $course_code = api_get_course_id();
 $course_info = Database::get_course_info($course_code);
 $course_title = $course_info['title'];
 $course_code = $return_result['code'];
-$gradebook=Security::remove_XSS($_GET['gradebook']);
+$gradebook = Security::remove_XSS($_GET['gradebook']);
 
-$dbname = $course_info['db_name'];
+$session_id = api_get_session_id();
+
+$cidReq = Security::remove_XSS($_GET['cidReq']);
 
 $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;
 
 if (isset($_GET['doexercise'])) {
-	header('Location: ../exercice/overview.php?cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.intval($_GET['doexercise']));
+	header('Location: ../exercice/overview.php?session_id='.$session_id.'&cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.intval($_GET['doexercise']));
 	exit;
 } else {
 	if (isset($_GET['gradebook'])) {
 		$add_url = '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
 	}
-	header('Location: ../exercice/exercice.php?cidReq='.Security::remove_XSS($cidReq).'&show=result'.$add_url);
+	header('Location: ../exercice/exercice.php??session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&show=result'.$add_url);
 	exit;
 }

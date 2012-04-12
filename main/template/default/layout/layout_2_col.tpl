@@ -2,10 +2,6 @@
 
 {% block body %}	
 	{# Main content #}
-	
-	{% if show_sniff == 1 %}
-	 	{% include "default/layout/sniff.tpl" %}
-	{% endif %}
    
 	<div class="span9">
         

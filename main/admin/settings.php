@@ -97,6 +97,7 @@ if (isset($_POST['new_model']) && isset($_POST['number_evaluations']) && !empty(
 	$array_to_save['value']		 	= $string_to_save;
 	
 	$result = api_set_setting_option($array_to_save);
+    $_POST['new_model'] = null;
 }
 
 if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
@@ -261,8 +262,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 		}
                 	} else {
 	                    $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
-	                    $res = Database::query($sql);
-	                    $subkeys = array();
+	                    $res = Database::query($sql);	                    
 	                    while ($row_subkeys = Database::fetch_array($res)) {
 	                        // If subkey is changed:
 	                        if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
@@ -292,33 +292,31 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
     }
 }
-
-
 $htmlHeadXtra[] = '<script language="javascript">
 
 function delete_grading_model(id) {
 	window.location = "settings.php?category=Gradebook&action=delete_grading&id=" + id;
 }
 
-	$(document).ready(function() {
-		var elements = ["B","C","D","E","F","G","H","I", "J", "K", "L","M","N","O","P","Q","R"];		
-		var i = 0;		
-		$(".formw").each(function(index) {
-			 $(this).find("*").each(function(index2) {			 		
-				if ($(this).hasClass("first_number")) {
-					$(this).before("<b>( A * </b>");	
-				}
-				if ($(this).hasClass("denominator")) {
-					$(this).before("<b> \) /  </b>");						
-				}
-				if ($(this).hasClass("number")) {
-					$(this).before("<b> + " + elements[i] + " * </b>");
-					i++;
-				}					
-			});
-			i = 0;
-		});
-	});
+$(document).ready(function() {
+    var elements = ["B","C","D","E","F","G","H","I", "J", "K", "L","M","N","O","P","Q","R"];		
+    var i = 0;		
+    $(".controls").each(function(index) {
+            $(this).find("*").each(function(index2) {			 		
+            if ($(this).hasClass("first_number")) {
+                $(this).before("<b>( A * </b>");	
+            }
+            if ($(this).hasClass("denominator")) {
+                $(this).before("<b> \) /  </b>");						
+            }
+            if ($(this).hasClass("number")) {
+                $(this).before("<b> + " + elements[i] + " * </b>");
+                i++;
+            }					
+        });
+        i = 0;
+    });
+});
 </script>';
 
 // Including the header (banner).

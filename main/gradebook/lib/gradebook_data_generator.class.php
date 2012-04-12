@@ -96,9 +96,9 @@ class GradebookDataGenerator
 			$row[] = $item->get_name();
 			$row[] = $item->get_description();
 			$row[] = $item->get_weight();
-			if (api_is_allowed_to_edit(null, true)) {
-				//$row[] = $this->build_date_column($item);
-			}			
+			/*if (api_is_allowed_to_edit(null, true)) {
+				$row[] = $this->build_date_column($item);
+			}*/			
 			if (count($this->evals_links) > 0) {
 				if (!api_is_allowed_to_edit() || $status_user != 1 ) {
 					$row[] = $this->build_result_column($item, $ignore_score_color);
@@ -187,7 +187,7 @@ class GradebookDataGenerator
     //  Other functions
 
 	private function build_result_column($item, $ignore_score_color) {
-		$scoredisplay = ScoreDisplay :: instance();
+		$scoredisplay = ScoreDisplay :: instance();        
 		$score 	     = $item->calc_score(api_get_user_id());
 		
         if (!empty($score)) {        	

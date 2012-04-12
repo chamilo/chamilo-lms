@@ -49,7 +49,7 @@ class GradebookTable extends SortableTable {
 			$this->set_header($column++, get_lang('Weight'),'','width="80px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
-			$this->set_header($column++, get_lang('Evaluation'), false);
+			$this->set_header($column++, get_lang('Result'), false);
 		}
 		
 		if (api_is_allowed_to_edit(null, true)) {
@@ -252,7 +252,6 @@ class GradebookTable extends SortableTable {
 					//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 					
 					//Weight
-					
 					$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
 					
 					if (api_is_allowed_to_edit(null, true)) {						
@@ -408,7 +407,7 @@ class GradebookTable extends SortableTable {
 	 * @return string
 	 */
 	private function build_name_link ($item) {
-
+        //$session_id = api_get_session_id();
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :
@@ -420,7 +419,7 @@ class GradebookTable extends SortableTable {
 					}
 				}
 
-				$cat=new Category();
+				$cat = new Category();
 				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 
 				return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
@@ -431,6 +430,7 @@ class GradebookTable extends SortableTable {
 			case 'E' :
 				$cat = new Category();				
 				$course_id = Database::get_course_by_category($_GET['selectcat']);
+                
 				$show_message = $cat->show_message_resource_delete($course_id);
 
 				// course/platform admin can go to the view_results page

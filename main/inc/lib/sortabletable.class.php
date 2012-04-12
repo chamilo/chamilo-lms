@@ -247,8 +247,7 @@ class SortableTable extends HTML_Table {
             }
 			
 			if (count($this->form_actions) > 0) {
-				$html .= '<script type="text/javascript">
-                            /*<![CDATA[*/
+				$html .= '<script type="text/javascript">                            
                             function setCheckbox(value) {
                                 d = document.form_'.$this->table_name.';
                                 for (i = 0; i < d.elements.length; i++) {
@@ -262,32 +261,63 @@ class SortableTable extends HTML_Table {
                                     }
                                 }
                             }
-                            /*]]>*/
+                            function action_click(element) {
+                                if (!confirm('."'".addslashes(get_lang("ConfirmYourChoice"))."'".')) {
+                                    return false;
+                                } else {            
+                                    var action =$(element).attr("data");                                    
+                                    $(\' #form_'.$this->table_name.'_id input[name="action"] \').attr("value", action);                                
+                                    $("#form_'.$this->table_name.'_id").submit();
+                                    return false;
+                                }
+                            }
                         </script>';
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-				$html .= '<form class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+				$html .= '<form id ="form_'.$this->table_name.'_id" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
 		
 		$html .= $content;
 		
-		if (!$empty_table) {
+		if (!$empty_table) {            
+            if (!empty($this->additional_parameters)) {
+                foreach($this->additional_parameters as $key => $value) {
+                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';        
+                }
+            }
+            $html .= '<input type="hidden" name = "action">';
 			$html .= '<table style="width:100%;">';
 			$html .= '<tr>';
 			$html .= '<td colspan="2">';
+            
 			if (count($this->form_actions) > 0) {
-				$html .= '<br />';
-				$html .= '<a href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true); return false;">'.get_lang('SelectAll').'</a> - ';
-				$html .= '<a href="?'.$params.'" onclick="javascript: setCheckbox(false); return false;">'.get_lang('UnSelectAll').'</a> ';
-				$html .= '<select name="action">';
+                
+				$html .= '<div class="btn-toolbar">';
+                
+                $html .= '<div class="btn-group">';
+				$html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true); return false;">'.get_lang('SelectAll').'</a>';
+				$html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false); return false;">'.get_lang('UnSelectAll').'</a> ';
+                $html .= '</div>';
+                
+                $html .= '<div class="btn-group">
+                            <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>                    
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>';
+                $html .= '<ul class="dropdown-menu">';
+				//$html .= '<select name="action">';
 				foreach ($this->form_actions as $action => & $label) {
-					$html .= '<option value="'.$action.'">'.$label.'</option>';
+					//$html .= '<option value="'.$action.'">'.$label.'</option>';
+                    $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this); " >'.$label.'</a></li>';
 				}
-				$html .= '</select>';
-				$html .= '&nbsp;&nbsp;<button type="submit" class="btn save" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang('Select').'</button>';
+				$html .= '</ul>';
+				//$html .= '&nbsp;&nbsp;<button type="submit" class="btn save" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang('Select').'</button>';
+                $html .= '</div>';//btn-group                
+                $html .= '</div>'; //toolbar
 			} else {
 				$html .= $form;
 			}
+            
 			$html .= '</td>';
 			
 			if ($this->get_total_number_of_items() > $this->default_items_per_page) {
@@ -751,7 +781,6 @@ class SortableTable extends HTML_Table {
 		}
 		$res = implode('&amp;', $param_string_parts);
 		return $res;
-
 	}
 
 	/**

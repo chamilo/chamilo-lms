@@ -12,9 +12,8 @@ require_once dirname(__FILE__) . '/scaffold/user.class.php';
  * modifications without touching the generated file. Don't modify _User as
  * it may change in the future. Instead add modifications to this class.
  * 
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
 class User extends _User
 {

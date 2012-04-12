@@ -7,9 +7,8 @@
  * 
  * If a user is not authenticated nothing is returned.
  *
- * @copyright 2010, University of Geneva
- * @author laurent.opprecht@unige.ch, Nicolas Rod
- * @license GNU, http://www.gnu.org/licenses/gpl.html
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
 class ShibbolethStore
 {

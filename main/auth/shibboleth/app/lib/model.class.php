@@ -1,16 +1,10 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of model
  *
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
 class Model
 {

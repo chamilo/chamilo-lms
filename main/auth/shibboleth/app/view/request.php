@@ -9,9 +9,8 @@
  * 
  * Other users - teachers, students - are directly logged-in.
  * 
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
  */
 $dir = dirname(__FILE__);
 include_once("$dir/../../init.php");

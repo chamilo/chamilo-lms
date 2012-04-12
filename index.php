@@ -123,7 +123,7 @@ if (!empty($_POST['submitAuth'])) {
 }
 
 if (api_get_setting('display_categories_on_homepage') == 'true') {
-	$controller->tpl->assign('content', $controller->display_anonymous_course_list());
+	$controller->tpl->assign('content', $controller->return_anonymous_course_list());
 }
 
 $controller->set_login_form();

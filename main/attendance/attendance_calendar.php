@@ -69,6 +69,8 @@ if (isset($action) && $action == 'calendar_add') {
         $form->addElement('datepickerdate', 'end_date_time', get_lang('RepeatEnd'), array('form_name'=>'attendance_calendar_add'));
         $defaults['end_date_time'] = date('Y-m-d 12:00:00');        
         $form->addElement('html', '</div>');
+        
+        $defaults['repeat_type'] = 'weekly';
 		
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($defaults);
@@ -92,7 +94,7 @@ if (isset($action) && $action == 'calendar_add') {
 						$form->display();
 					echo '</div>';						
 				} else {
-					echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$calendar['date_time'].'&nbsp;';
+					echo Display::return_icon('lp_calendar_event.png', get_lang('DateTime')).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
 					if (!$is_locked_attendance || api_is_platform_admin()) {
                         echo '<span style="margin-left:20px;">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>&nbsp;';

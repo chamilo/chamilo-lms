@@ -2587,7 +2587,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
 
 /* 
  * Returns a not found page 
- * @todo use smarty to customize the not found page
+ * @todo use templates to customize the not found page
  */
 function api_not_found($print_headers = false) {
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';

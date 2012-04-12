@@ -6,9 +6,7 @@
  * 
  **/
 
- // Load Smarty library
-//require_once api_get_path(LIBRARY_PATH).'smarty/Smarty.class.php';
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
+ require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
@@ -73,21 +71,7 @@ class Template {
         //Page title
 		$this->title = $title;        
 		$this->show_learnpath = $show_learnpath;
-        
-		//Smarty 3 configuration
-        /*
-        $this->setTemplateDir(api_get_path(SYS_CODE_PATH).'template/');
-        $this->setCompileDir(api_get_path(SYS_ARCHIVE_PATH));
-        $this->setConfigDir(api_get_path(SYS_ARCHIVE_PATH));		
-		$this->setCacheDir(api_get_path(SYS_ARCHIVE_PATH));
-        $this->setPluginsDir(api_get_path(LIBRARY_PATH).'smarty/plugins');		
-		
-		//Caching settings
-		$this->caching 			= false;
-		//$this->caching = Smarty::CACHING_LIFETIME_CURRENT;		
-		$this->cache_lifetime 	= Smarty::CACHING_OFF; // no caching
-		//$this->cache_lifetime 	= 120;*/
-		
+        		
 		//Setting system variables
 		$this->set_system_parameters();	
 		
@@ -100,20 +84,7 @@ class Template {
 		//header and footer are showed by default
 		$this->set_footer($show_footer);        
 		$this->set_header($show_header);
-		
-		//Creating a Smarty modifier - Now we can call the get_lang from a template!!! Just use {"MyString"|get_lang} 
-		//$this->registerPlugin("modifier","get_lang", "get_lang");
-		
-		//Not recomended to use get_path, use {$_p.'xxx'} see the set_system_parameters()
-		//$this->registerPlugin("modifier","get_path", "api_get_path");
-		//$this->registerPlugin("modifier","get_setting", "api_get_setting");
-		
-		//To load a smarty plugin
-		//$this->loadPlugin('smarty_function_get_lang');
-		
-		//To the the smarty installation
-		//$this->testInstall();
-        
+				
 		$this->set_header_parameters();
 		$this->set_footer_parameters();
         
@@ -150,7 +121,7 @@ class Template {
     }
 
     /*
-     * Use smarty to parse the actions menu
+     * Use template system to parse the actions menu
      * @todo finish it!
      * */
     function set_actions($actions) {
@@ -627,12 +598,12 @@ class Template {
 		$this->display($tpl);	
     }
     
-    /* Sets the plugin content in a Smarty variable */
+    /* Sets the plugin content in a template variable */
     function set_plugin_region($plugin_region) {
         if (!empty($plugin_region)) {          
             $content = $this->plugin->load_region($plugin_region, $this);    
             if (!empty($content)) {
-                //Assigning the plugin with the smarty template
+                //Assigning the plugin with the template
                 $this->assign('plugin_'.$plugin_region, $content);                
             }
         }

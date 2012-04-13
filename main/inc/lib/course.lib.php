@@ -2918,8 +2918,7 @@ class CourseManager {
     }
     
     /**
-     * Display courses (without special courses) as several HTML divs
-     * of course categories, as class userportal-catalog-item.
+     * Display courses (without special courses) as several HTML divs of course categories
      * @uses display_courses_in_category() to display the courses themselves
      * @param int        user id
      * @param bool      Whether to show the document quick-loader or not
@@ -2986,6 +2985,7 @@ class CourseManager {
         }
         // Use user's classification for courses (if any).
         $sql_select_courses .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+        
         $result = Database::query($sql_select_courses);        
         $key = 0;
         $status_icon = '';

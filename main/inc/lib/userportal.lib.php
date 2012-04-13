@@ -923,13 +923,14 @@ class IndexManager {
 		}
         
 		if (!empty($courses_tree)) {
-			foreach ($courses_tree as $cat => $sessions) {                
-				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-                //Get courses
-				if ($cat == 0) {                    
+			foreach ($courses_tree as $cat => $sessions) {
+                //Getting session categories
+				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);                
+				if ($cat == 0) {        
 					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($user_id, false);                            
 				}
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
+                
                 //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
 					foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {                        
@@ -955,7 +956,7 @@ class IndexManager {
 					// Sessions and courses that are not in a session category.
                     
                     // If we're not in the history view...
-					if (!isset($_GET['history'])) {						                        // 
+					if (!isset($_GET['history'])) {
                         //Display special courses
 						$html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
                         //Display courses

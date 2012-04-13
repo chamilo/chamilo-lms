@@ -77,8 +77,7 @@ switch ($action) {
 		if (api_is_anonymous()) {
 			echo '';
 			break;
-		}
-		$list_path_friends	= array();
+		}		
 		$user_id	= api_get_user_id();
 		$name_search= Security::remove_XSS($_POST['search_name_q']);		
 		$number_friends = 0;
@@ -97,27 +96,32 @@ switch ($action) {
 			$number_loop   = ($number_friends/$number_of_images);
 			$loop_friends  = ceil($number_loop);
 			$j=0;
-			$friend_html.= '<br /><table width="100%" border="0" cellpadding="0" cellspacing="0" >';
-			for ($k=0;$k<$loop_friends;$k++) {
-				$friend_html.='<tr><td valign="top">';
+			$friend_html.= '<ul class="thumbnails">';
+			for ($k=0;$k<$loop_friends;$k++) {				
 				if ($j==$number_of_images) {
 					$number_of_images=$number_of_images*2;
 				}
 				while ($j<$number_of_images) {
 					if (isset($friends[$j])) {
+                        $friend_html.='<li class="span2">';
 						$friend = $friends[$j];
 						$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 						$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
-						$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-						$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="width:60px;height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
-						$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="'.api_get_path(WEB_IMG_PATH).'blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
+						$friend_html.='<div class="thumbnail" onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+                        $friend_html.='<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" />';
+                        $friend_html.='<div class="caption">';
+						$friend_html.='<a href="profile.php?u='.$friend['friend_user_id'].'"><h5>'.$user_name.'</h5></a>';
+						$friend_html.='<p><button class="btn" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>'.get_lang('Delete').'</button></p>';
+                        $friend_html.='</div>';
+                        $friend_html.='</div>';
+                        
+                        $friend_html.='</li>';
 					}
 					$j++;
-				}
-				$friend_html.='</td></tr>';
+				}				
 			}
-			$friend_html.='<br/></table>';
-		}
+			$friend_html.='</ul>';
+		}        
 		echo $friend_html;	
 		break;		
 	case 'toogle_course':

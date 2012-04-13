@@ -15,8 +15,6 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();
 
-if ($debug) error_log("$action ajax call");
-
 switch ($action) {
     case 'get_live_stats':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -123,8 +121,8 @@ switch ($action) {
             Display::display_confirmation_message(get_lang('Saved'));
         }
         break;
-    case 'add_question_to_reminder':          
-    	$objExercise  = $_SESSION['objExercise'];    	
+    case 'add_question_to_reminder':    	    	
+    	$objExercise             = $_SESSION['objExercise'];    	
     	if (empty($objExercise)) {
     		echo 0;
     		exit;
@@ -137,24 +135,19 @@ switch ($action) {
         if (api_is_allowed_to_session_edit()) {
         	            
             //"all" or "simple" strings means that there's one or all questions           
-            $type                   = $_REQUEST['type'];            
+            $type                    = $_REQUEST['type'];            
             
             //Normal questions choices
-            $choice                 = $_REQUEST['choice'];
+            $choice                  = $_REQUEST['choice'];
             
             //All Hotspot coordinates from all questions 
-            $hot_spot_coordinates   = $_REQUEST['hotspot'];            
+            $hot_spot_coordinates    = $_REQUEST['hotspot'];
+            
             
             //There is a reminder?
-            $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
+            $remind_list             = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
                
-            $exe_id                 = $_REQUEST['exe_id'];
-            
-            if ($debug) error_log("exe_id = $exe_id ");
-            if ($debug) error_log("type = $type ");
-            if ($debug) error_log("choice = ".print_r($choice, 1)." ");
-            if ($debug) error_log("hot_spot_coordinates = $hot_spot_coordinates ");
-            if ($debug) error_log("remind_list = $remind_list ");            
+            $exe_id = $_REQUEST['exe_id'];
             
             //Exercise information            
             $question_id             = intval($_REQUEST['question_id']);            
@@ -164,8 +157,7 @@ switch ($action) {
             if (empty($question_list) || empty($objExercise)) {
                 echo 0;
                 exit;
-            }
-            
+            }            
             //Getting information of the current exercise    
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);           
             
@@ -240,16 +232,12 @@ switch ($action) {
             
             //Looping the question list
             
-            foreach ($question_list as $my_question_id) {
-                if ($debug) error_log("Saving question_id = $my_question_id ");                
-                
+            foreach($question_list as $my_question_id) {                
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 }             
                  
                 $my_choice = $choice[$my_question_id];
-                
-                if ($debug) error_log("my_choice = ".print_r($my_choice, 1)."");
                                 
                // creates a temporary Question object
             	$objQuestionTmp        = Question::read($my_question_id);
@@ -267,8 +255,7 @@ switch ($action) {
             	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
             	
             	// Deleting old attempt
-                if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {          
-                    if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
+                if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {                    
                     delete_attempt($exe_id, api_get_user_id() , api_get_course_id(), api_get_session_id(), $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {            	        
             	        delete_attempt_hotspot($exe_id, api_get_user_id() , api_get_course_id(), $my_question_id);
@@ -279,18 +266,13 @@ switch ($action) {
             	// We're inside *one* question. Go through each possible answer for this question
             	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice,'exercise_result', $hot_spot_coordinates, true, false, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
             	  	
-                $total_score     += $result['score'];
-                
-                if ($debug) error_log("total_score: $total_score ");
-                if ($debug) error_log("total_weight: $total_weight ");
-                                
+                $total_score     += $result['score'];    
+              	
                 update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $exercise_stat_info['exe_duration'], $question_list, 'incomplete', $remind_list);
                 
                  // Destruction of the Question object
             	unset($objQuestionTmp); 
-                if ($debug) error_log(" -- end question -- ");
-            }   
-            if ($debug) error_log(" ------ end ajax call ------- ");            
+            }            
         }
         
         if ($objExercise->type == ONE_PER_PAGE) {

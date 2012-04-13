@@ -45,7 +45,7 @@ api_protect_course_script(true);
 // Database table definitions
 $main_admin_table       = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-if ($debug){ error_log('Entering exercise_result.php: '.print_r($_POST,1));}
+if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
 
 // general parameters passed via POST/GET
 if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
@@ -165,7 +165,6 @@ $total_score = $total_weight = 0;
 
 // Loop over all question to show results for each of them, one by one
 if (!empty($question_list)) {
-    if ($debug){ error_log('Loopinf question_list '.print_r($question_list,1));}
 	foreach ($question_list as $questionId) {
 	    // destruction of the Question object
 		unset($objQuestionTmp);

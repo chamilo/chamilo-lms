@@ -186,18 +186,16 @@ echo '</div>';
 		});
 	
 		gui.setPlayEnabled(false);
-
 	}
-	
 
 </script>
 
 
-<div id="wami" style="margin-left: 510px; margin-top:10px;"></div>
+<div id="wami" style="margin-top:10px;"></div>
 
-<div align="center" style="margin-top:140px;">
+<div align="center" style="margin-top:150px;">
 <form name="form_wami_recorder">
-<input placeholder="<?php echo get_lang('InputHereName'); ?>" type="text" id="audio_title"><br/>
+<input placeholder="<?php echo get_lang('InputNameHere'); ?>" type="text" id="audio_title"><br/>
 <button type="button" value="" onclick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
 <button type="button" value="" onclick="newNameRecord()" id="new_name" /><?php echo get_lang('Reload'); ?></button>
 <?php echo Display :: return_icon('info3.gif', get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog').' '.get_lang('WamiReload'), array('align' => 'absmiddle', 'hspace' => '3px'), false); ?>
@@ -207,6 +205,13 @@ echo '</div>';
 <?php Display::display_normal_message(get_lang('WamiNeedFilename').' '.get_lang('WamiStartRecorder'), false); ?>
 </div>
 
+<script>
+if (navigator.appName == 'Microsoft Internet Explorer') {
+	document.getElementById('wami').style.marginLeft='400px';
+}else{
+	document.getElementById('wami').style.marginLeft='510px';
+}
+</script>
 
 <?php
 

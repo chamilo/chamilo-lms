@@ -1748,7 +1748,6 @@ class UserManager {
 		$tbl_session_user			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);		
 		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        
 		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
@@ -1756,8 +1755,7 @@ class UserManager {
 		if ($fill_first) {
 			$categories[0] = array();
 		}
-        
-		// Get the list of sessions where the user is subscribed as student
+		// get the list of sessions where the user is subscribed as student
 
 		$condition_date_end = "";
 		if ($is_time_over) {
@@ -1766,10 +1764,11 @@ class UserManager {
 			$condition_date_end = " AND (date_end >= CURDATE() OR date_end = '0000-00-00') ";
 		}
 
-		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name 
-                        FROM $tbl_session_user, $tbl_session 
-                        WHERE id_session=id AND id_user=$user_id $condition_date_end 
-                        ORDER BY session_category_id, date_start, date_end";
+		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session_user, $tbl_session "
+                        ." WHERE id_session=id AND id_user=$user_id " 
+                        ." $condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
         $result = Database::query($sessions_sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
@@ -1778,16 +1777,17 @@ class UserManager {
             }
         }
 
-        // Get the list of sessions where the user is subscribed as coach in a 
+        // get the list of sessions where the user is subscribed as coach in a 
         // course, from table session_rel_course_rel_user
 
-		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name 
-                            FROM $tbl_session as session  INNER JOIN $tbl_session_course_user as session_rel_course_user 
-                            ON  session_rel_course_user.id_session = session.id  AND 
-                                session_rel_course_user.id_user = $user_id AND 
-                                session_rel_course_user.status = 2 $condition_date_end 
-                            ORDER BY session_category_id, date_start, date_end";
-        
+		$sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session as session "
+                        ." INNER JOIN $tbl_session_course_user as session_rel_course_user "
+                          ." ON session_rel_course_user.id_session = session.id "
+                          ." AND session_rel_course_user.id_user = $user_id "
+                          ." AND session_rel_course_user.status = 2	$condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
+
         $result = Database::query($sessions_sql);
         if (Database::num_rows($result)>0) {
             while ($row = Database::fetch_array($result)) {
@@ -1796,10 +1796,11 @@ class UserManager {
             }
         }
 
-        // Get the list of sessions where the user is subscribed as a session coach
-        $sessions_sql = "SELECT DISTINCT id, session_category_id, session.name FROM $tbl_session as session 
-                            WHERE session.id_coach = $user_id $condition_date_end 
-                            ORDER BY session_category_id, date_start, date_end";
+        // get the list of sessions where the user is subscribed as session coach
+        $sessions_sql = "SELECT DISTINCT id, session_category_id, session.name "
+                        ." FROM $tbl_session as session "
+                        ." WHERE session.id_coach = $user_id $condition_date_end "
+                        ." ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql);
 		if (Database::num_rows($result)>0) {

@@ -19,7 +19,7 @@ define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback 	 - Show score only
 
 define('EXERCISE_MAX_NAME_SIZE',            80);
 
-$debug = true; //All exercise scripts should depend in this debug variable
+$debug = 0; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
@@ -1818,18 +1818,18 @@ class Exercise {
 	public function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0, $hotspot_delineation_result = array()) {
 		global $_configuration, $feedback_type, $debug;		
 		require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
-        
-        if ($debug) error_log("<------ manage_answer ------> ");
-		if ($debug) error_log('manage_answer called exe_id: '.$exeId);
-		if ($debug) error_log('manage_answer $from:  '.$from);
-		if ($debug) error_log('manage_answer $saved_results: '.$saved_results);
-		if ($debug) error_log('manage_answer $from_database: '.$from_database);
-		if ($debug) error_log('manage_answer $show_result: '.$show_result);
-		if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
-		if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
+
+		if ($debug) error_log('manage_answer called exe_id '.$exeId);
+		if ($debug) error_log('manage_answer $from  '.$from);
+		if ($debug) error_log('manage_answer $saved_results  '.$saved_results);
+		if ($debug) error_log('manage_answer $from_database '.$from_database);
+		if ($debug) error_log('manage_answer $show_result '.$show_result);
+		if ($debug) error_log('manage_answer $propagate_neg '.$propagate_neg);
+		if ($debug) error_log('manage_answer $hotspot_delineation_result '.print_r($hotspot_delineation_result, 1));
 			
 		$extra_data = array();
-				 
+		$html = '';
+		 
 		$questionId   = intval($questionId);
 		$exeId        = intval($exeId);
 		$TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1868,8 +1868,9 @@ class Exercise {
 		$objAnswerTmp = new Answer($questionId);
 		$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-		if ($debug) error_log('Count of answers: '.$nbrAnswers);
-		if ($debug) error_log('$answerType: '.$answerType);
+		if ($debug) error_log('Count of answers :'.$nbrAnswers);
+		if ($debug) error_log('$answerType : '.$answerType);
+
 
 		if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION) {
 			$nbrAnswers = 1;
@@ -1915,26 +1916,18 @@ class Exercise {
 		$organs_at_risk_hit = 0;
 
 		$questionScore = 0;
-		if ($debug) error_log('Start answer loop ');
-        
-        $answer_correct_array = array();
-        
+		 
 		for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 			$answer             = $objAnswerTmp->selectAnswer($answerId);			
 			$answerComment      = $objAnswerTmp->selectComment($answerId);
 			$answerCorrect      = $objAnswerTmp->isCorrect($answerId);
 			$answerWeighting    = $objAnswerTmp->selectWeighting($answerId);
 			$numAnswer          = $objAnswerTmp->selectAutoId($answerId);
-            
-            $answer_correct_array[$answerId] = (bool)$answerCorrect;
-            
-            if ($debug) error_log("answer auto id: $numAnswer ");
-            if ($debug) error_log("answer correct : $answerCorrect ");
 
 			//delineation
 			$delineation_cord   = $objAnswerTmp->selectHotspotCoordinates(1);
 			$answer_delineation_destination=$objAnswerTmp->selectDestination(1);
-            
+
 			switch ($answerType) {
 				// for unique answer
 				case UNIQUE_ANSWER :
@@ -1989,34 +1982,32 @@ class Exercise {
 						//if no result then the user just hit don't know
 						$studentChoice = 3;
 						$questionScore  +=  $doubt_score;
-					}					
+					}
+					
 					$totalScore = $questionScore;
 					break;
-				case MULTIPLE_ANSWER : //2                    
+				case MULTIPLE_ANSWER :
 					if ($from_database) {
-						$choice = array();
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
+						$choice=array();
+						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
 						$resultans = Database::query($queryans);
 						while ($row = Database::fetch_array($resultans)) {
 							$ind = $row['answer'];
 							$choice[$ind] = 1;
 						}
-						$numAnswer = $objAnswerTmp->selectAutoId($answerId);
-						$studentChoice = $choice[$numAnswer];  
-                        $real_answers[$answerId] = (bool)$studentChoice;
-						if ($studentChoice == $answerCorrect) {
-							$questionScore  +=$answerWeighting;							                            
+						$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+						$studentChoice=$choice[$numAnswer];
+						if ($studentChoice) {
+							$questionScore  +=$answerWeighting;
+							$totalScore     +=$answerWeighting;
 						}
 					} else {
-						$studentChoice = $choice[$numAnswer];
-						if ($studentChoice == $answerCorrect) {
+						$studentChoice=$choice[$numAnswer];
+						if ($studentChoice) {
 							$questionScore  +=$answerWeighting;
+							$totalScore     +=$answerWeighting;
 						}
-                        $real_answers[$answerId] = (bool)$studentChoice;
 					}
-                    $totalScore     +=$answerWeighting;
-                    
-                    if ($debug) error_log("studentChoice: $studentChoice");
 					break;
 				case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
 					if ($from_database) {
@@ -2345,8 +2336,10 @@ class Exercise {
 						break;
 					}
 					// for hotspot with no order
-				case HOT_SPOT :					
-					if ($from_database) {						
+				case HOT_SPOT :
+					
+					if ($from_database) {
+						
 						if ($show_result) {
 							$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
@@ -2412,14 +2405,11 @@ class Exercise {
 					$_SESSION['hotspot_dest'][1]	= $answer_delineation_destination;
 					break;
 			} // end switch Answertype
-            
 
-			global $origin;
+			global $origin, $debug;
 
 			if ($show_result) {
-                
-                if ($debug) error_log('show result '.$show_result);
-                
+
 				if ($from == 'exercise_result') {
 					if ($debug) error_log('Showing questions $from '.$from);
 					//display answers (if not matching type, or if the answer is correct)
@@ -2831,10 +2821,7 @@ class Exercise {
 					}
 				}
 			}
-            if ($debug) error_log(' ------ ');
 		} // end for that loops over all answers of the current question
-        
-        if ($debug) error_log('-- end answer loop --');
 
 		
 		// destruction of Answer
@@ -2846,7 +2833,7 @@ class Exercise {
 		}
 
 		$final_answer = true;
-		foreach ($real_answers as $my_answer) {
+		foreach($real_answers as $my_answer) {
 			if (!$my_answer) {
 				$final_answer = false;
 			}
@@ -2861,19 +2848,6 @@ class Exercise {
 				$totalScore         += $answerWeighting;
 			}
 		}
-        
-        //Fixes multiple answer question in order to be exact 
-        if ($answerType == MULTIPLE_ANSWER) {
-            $diff = @array_diff($answer_correct_array, $real_answers);
-            
-            if ($debug) error_log(" answer_correct_array: ".print_r($answer_correct_array, 1)."");
-            if ($debug) error_log(" real_answers: ".print_r($real_answers, 1)."");
-            if ($debug) error_log(" diff: $diff");
-            
-            if (!empty($diff)) {
-                $questionScore = 0;
-            }
-        } 
 
 		$extra_data = array('final_overlap' => $final_overlap, 'final_missing'=>$final_missing, 'final_excess'=> $final_excess,
         					'overlap_color' => $overlap_color, 'missing_color'=>$missing_color, 'excess_color'=> $excess_color,
@@ -3041,15 +3015,14 @@ class Exercise {
 		// Store results directly in the database
 		// For all in one page exercises, the results will be
 		// stored by exercise_results.php (using the session)
-        
+
 		if ($saved_results) {
-            if ($debug) error_log("Save question results $saved_results");
-            if ($debug) error_log(print_r($choice ,1 ));
-            
 			if (empty($choice)) {
 				$choice = 0;
 			}
 			if ($answerType ==  MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+				
+				if ($debug) error_log(print_r($choice ,1 ));
 				if ($choice != 0) {
 					$reply = array_keys($choice);
 					for ($i = 0; $i < sizeof($reply); $i++) {
@@ -3063,7 +3036,6 @@ class Exercise {
 			} elseif ($answerType == MULTIPLE_ANSWER) {
 				if ($choice != 0) {
 					$reply = array_keys($choice);
-                    if ($debug) error_log("reply ".print_r($reply, 1)."");
 					for ($i = 0; $i < sizeof($reply); $i++) {
 						$ans = $reply[$i];
 						exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);

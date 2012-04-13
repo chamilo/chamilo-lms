@@ -158,6 +158,7 @@ class IndexManager {
 		}
 		exit_of_chat($uid);
 		api_session_destroy();
+                $query_string = $query_string ? "$query_string&loggedout=true" : '?loggedout=true';
 		header("Location: index.php$query_string");
 		exit();
 	}

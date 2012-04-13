@@ -158,6 +158,7 @@ class IndexManager {
 		}
 		exit_of_chat($uid);
 		api_session_destroy();
+                $query_string = $query_string ? "$query_string&loggedout=true" : '?loggedout=true';
 		header("Location: index.php$query_string");
 		exit();
 	}
@@ -242,12 +243,12 @@ class IndexManager {
 		if ($show_menu) {
 			$html .= '<ul class="menulist">';
 			if ($show_create_link) {			
-				$html .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+				$html .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 			}
 			
 			if ($show_course_link) {
 				if (!api_is_drh() && !api_is_session_admin()) {
-					$html .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';					
+					$html .=  '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseManagement').'</a></li>';					
 				} else {
 					$html .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 				}
@@ -871,23 +872,23 @@ class IndexManager {
 		$my_account_content = '<ul class="menulist">';
         
 		if ($show_create_link) {
-			$my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 		}
         
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url).'</li>';
+        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         //Course management                
 		if ($show_course_link) {
 			if (!api_is_drh()) {
-				$my_account_content .= '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+				$my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseManagement').'</a></li>';
 	
 				if (api_get_setting('use_session_mode') == 'true') {
 					if (isset($_GET['history']) && intval($_GET['history']) == 1) {
 						$my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
 					} else {
-						$my_account_content .= '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+						$my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
 					}
 				}
 			} else {

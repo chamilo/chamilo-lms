@@ -59,6 +59,7 @@ var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
 {{ extra_headers}}
 
 <script type="text/javascript">
+
     
 function get_url_params(q, attribute) {
     var vars;
@@ -96,7 +97,20 @@ $(document).scroll(function() {
 
 $(document).ready(function() {
     
+    //Removes the yellow input in Chrome
+    if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
+        $(window).load(function(){
+            $('input:-webkit-autofill').each(function(){
+                var text = $(this).val();
+                var name = $(this).attr('name');
+                console.log(name);
+                $(this).after(this.outerHTML).remove();
+                $('input[name=' + name + ']').val(text);
+            });
+        });
+    }
     
+    //Fixes buttons to the new btn class
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
     }
@@ -107,6 +121,7 @@ $(document).ready(function() {
     //Responsive effect 
     $(".collapse").collapse();
     
+    //Global popup
     $('.ajax').on('click', function() {
             var url     = this.href;
             var dialog  = $("#dialog");
@@ -153,8 +168,8 @@ $(document).ready(function() {
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);
- 
-    $('#navigation> li').hover(
+    
+    $('#navigation > li').hover(
         function () {
             $('a',$(this)).stop().animate({
                 'marginLeft':'1px'
@@ -165,7 +180,8 @@ $(document).ready(function() {
                 'marginLeft':'50px'
             },200);
         }
-    );    
+    );
+
     /*
     $(".td_actions").hide();    
     

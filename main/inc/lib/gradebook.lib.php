@@ -10,7 +10,7 @@
  */
    
 class Gradebook extends Model {    
-    var $columns = array('id', 'name','description', 'course_code', 'parent_id');
+    var $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
     
     public function __construct() {
         $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -26,6 +26,10 @@ class Gradebook extends Model {
             }
         }
         return $gradebooks;        
+    }
+    
+    public function update($params) {
+        return parent::update($params);
     }
     
     public function update_skills_to_gradebook($gradebook_id, $skill_list) {

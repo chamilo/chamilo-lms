@@ -36,6 +36,9 @@ require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
+require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+
 /*
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
@@ -870,6 +873,49 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
 					}
 				}		
+                $obj = new GradeModel();
+                $grade_models = $obj->get_all();                
+                $options = array(0 => get_lang('none'));
+                foreach ($grade_models as $item) {
+                    $options[$item['id']] = $item['name'];
+                }                
+                //$grade_model_id = $cat->get_grade_model_id();
+                //
+                //No children
+                if (empty($allcat)) {
+                    $form = new FormValidator('grade_model_settings');
+                    $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
+                    $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');                
+                    $form->display();     
+
+                    if ($form->validate()) {
+                        $value = $form->exportValue('grade_model');                    
+                        $gradebook = new Gradebook();
+                        $gradebook->update(array('id'=> $cat->get_id(), 'grade_model_id' => $value), true);                 
+
+                        //do something                        
+                        $obj = new GradeModel();                             
+                        $components = $obj->get_components($value);
+
+                        foreach ($components as $component) {
+                            $gradebook =  new Gradebook();
+                            $params = array();
+
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $cat->get_id();
+                            $params['weight'] = $component['percentage'];
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = api_get_course_id();
+                            $params['grade_model_id'] = api_get_session_id();
+
+                            $gradebook->save($params);
+
+
+                        }
+                    }
+                }
                 
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);                
 				$gradebooktable->display();				

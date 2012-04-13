@@ -865,7 +865,7 @@ VALUES
 ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17054','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17471','DatabaseVersion','', NULL, NULL, 0);17470
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -2972,3 +2972,23 @@ CREATE TABLE IF NOT EXISTS chat (
 
 ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
 ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
+
+-- Grade Model
+
+CREATE TABLE grade_model (
+  id INTEGER  NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255)  NOT NULL,
+  description TEXT ,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE grade_components (
+  id INTEGER  NOT NULL AUTO_INCREMENT,
+  percentage VARCHAR(255)  NOT NULL,
+  title VARCHAR(255)  NOT NULL,
+  acronym VARCHAR(255)  NOT NULL,
+  grade_model_id INTEGER NOT NULL,
+  PRIMARY KEY (id)
+);
+
+ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;

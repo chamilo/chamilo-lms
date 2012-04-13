@@ -330,3 +330,7 @@ define('TABLE_MAIN_SKILL_REL_PROFILE',      'skill_rel_profile');
 
 define('TABLE_MAIN_CHAT',					'chat');
 define('TABLE_TIMELINE',                    'timeline');
+
+//Gradebook model
+define('TABLE_GRADE_MODEL',                  'grade_model');
+define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');

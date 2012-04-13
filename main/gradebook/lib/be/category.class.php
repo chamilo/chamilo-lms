@@ -27,6 +27,7 @@ class Category implements GradebookItem
 	private $certificate_min_score;
     private $session_id;
     private $skills = array();
+    private $grade_model_id;
 
     function __construct() {
     }
@@ -114,6 +115,14 @@ class Category implements GradebookItem
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
+    
+    public function set_grade_model_id ($id) {
+		$this->grade_model_id = $id;
+	}
+    
+    public function get_grade_model_id () {
+		return $this->grade_model_id;
+	}
 	
 	public function get_type() {
 		return 'category';
@@ -164,7 +173,7 @@ class Category implements GradebookItem
 		}
 
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'SELECT id, name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id FROM '.$tbl_grade_categories;
+		$sql = 'SELECT id, name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, grade_model_id FROM '.$tbl_grade_categories;
 		$paramcount = 0;
 		if (isset($id)) {
 			$id = Database::escape_string($id);
@@ -265,6 +274,7 @@ class Category implements GradebookItem
 			$cat->set_visible($data['visible']);
             $cat->set_session_id($data['session_id']);
 			$cat->set_certificate_min_score($data['certif_min_score']);
+            $cat->set_grade_model_id($data['grade_model_id']);
 			$allcat[]=$cat;
 		}
 		return $allcat;

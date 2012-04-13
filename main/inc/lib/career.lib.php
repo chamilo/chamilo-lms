@@ -86,7 +86,7 @@ class Career extends Model {
             $header = get_lang('Modify');
         }
         
-        $form->addElement('header', '', $header);
+        $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
         

@@ -44,6 +44,8 @@ class GradebookTable extends SortableTable {
 		
 		$this->set_header($column++, get_lang('Type'),'','width="35px"');
 		$this->set_header($column++, get_lang('Name'), false);
+        
+        $this->set_header($column++, get_lang('Description'), false);
 
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Weight'),'','width="80px"');
@@ -171,7 +173,7 @@ class GradebookTable extends SortableTable {
             $main_categories[$item->get_id()]['weight'] = $item->get_weight();
             
 			//Description
-			//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+			$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 			
 			//Weight
 			$row[] = $invisibility_span_open .Display::tag('h4', $data[3] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		

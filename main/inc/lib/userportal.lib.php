@@ -948,25 +948,26 @@ class IndexManager {
 			if (empty($courses_tree)) {
 				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
 			}
-		}	
+        }
+        
+        //Loading courses 
+        if ($load_history == false) {            
+            //Display special courses
+            $html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
+            //Display courses
+            $html .= CourseManager :: display_courses($user_id, $this->load_directories_preview);
+        }
 		
+        //Loading sessions inside/outside session categories
+        
 		if (is_array($courses_tree)) {
-            foreach ($courses_tree as $key => $category) {
+            foreach ($courses_tree as $key => $category) {                
+                //Category = 0
                 if ($key == 0) {
-					// Sessions and courses that are not in a session category.
-                    
-                    // If we're not in the history view...
-					if (!isset($_GET['history'])) {
-                        //Display special courses
-						$html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
-                        //Display courses
-                        $html .= CourseManager :: display_courses($user_id, $this->load_directories_preview);
-					}
-                    
-					// Independent sessions
+					// Sessions and courses that are not in a session category (Independent sessions)
 					foreach ($category['sessions'] as $session) {
 		
-						// Don't show empty sessions.
+						// Don't show empty sessions (with any course added)
 						if (count($session['courses']) < 1) {
 							continue;
 						}
@@ -978,6 +979,7 @@ class IndexManager {
 						$session_now = time();
 						$html_courses_session = '';
 						$count_courses_session = 0;
+                        
 						foreach ($session['courses'] as $course) {
 							$is_coach_course = api_is_coach($session['details']['id'], $course['code']);
 							$allowed_time = 0;
@@ -991,6 +993,7 @@ class IndexManager {
 							if ($session_now > $allowed_time) {
 								//read only and accesible
 								if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                    //Loading courses inside the session
 									$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item', true, $this->load_directories_preview);									
 									$html_courses_session .= $c[1];
 								}
@@ -1000,8 +1003,7 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
 							$params = array();                            							
-							$params['icon'] =  Display::return_icon('window_list.png', null, array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
-		
+							$params['icon'] =  Display::return_icon('window_list.png', null, array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);		
 							$session_box = Display :: get_session_title_box($session['details']['id']);
 							$extra_info = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];		
                             if (api_is_drh()) {
@@ -1024,13 +1026,14 @@ class IndexManager {
                             $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
 						}
 					}
-				} else {                    
+				} else {           
 					// All sessions included in.
 					if (!empty($category['details'])) {
+                        
 						$count_courses_session = 0;
-						$html_sessions = '';                        
+						$html_sessions = '';                 
 						foreach ($category['sessions'] as $session) {
-							// Don't show empty sessions.
+							// Don't show empty sessions (with no course)
 							if (count($session['courses']) < 1) {
 								continue;
 							}

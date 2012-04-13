@@ -946,7 +946,7 @@ class IndexManager {
 		if ($load_history) {
 			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));			
 			if (empty($courses_tree)) {
-				$html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+				$html .=  Display::return_message(get_lang('YouDoNotHaveAnySessionInItsHistory'), 'warning');
 			}
         }
         

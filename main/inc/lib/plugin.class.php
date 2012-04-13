@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base class for plugins
+ * Base class for plugins.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -14,11 +14,11 @@ class Plugin
     protected $author = '';
     protected $fields = array();
 
-    protected function __construct($version, $author, $settings = array())
+    protected function __construct($version, $author, $fields = array())
     {
         $this->version = $version;
-        $this->author = $author;
-        $this->fields = $settings;
+        $this->author = $author;      
+        $this->fields = $fields;
 
         global $language_files;
         $language_files[] = 'plugin_' . $this->get_name();
@@ -104,6 +104,12 @@ class Plugin
             if ($type == 'wysiwyg')
             {
                 $result->add_html_editor($name, $this->get_lang($name));
+            }
+            else if ($type == 'text')
+            {
+                $a = array('maxlength' => 255);
+                $result->addElement($type, $name, $this->get_lang($name), $a);
+                $result->addRule($name, '', 'maxlength', 255);
             }
             else
             {

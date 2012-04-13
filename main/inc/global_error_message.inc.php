@@ -122,7 +122,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$click_to_install = substr($InstallationDescription, 0, $pos);
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-										<button class="a_button blue" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >
+										<button class="btn btn-primary btn-large" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >
 										'.$click_to_install.'</button>
 										</form><br />
 					<a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';

@@ -309,8 +309,7 @@ if ($encryptPassForm == '1') {
 		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";        
 		/*]]>*/
 	</style>
-	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>
-	
+	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>	
 	<script type="text/javascript" >
 		$(document).ready( function() {
 			 //checked
@@ -406,56 +405,53 @@ if ($encryptPassForm == '1') {
 			return false;
 		}	
 
-            $(document).ready( function() {
-                $(".advanced_parameters").click(function() {
-                    if ($("#id_contact_form").css("display") == "none") {
-                            $("#id_contact_form").css("display","block");
-                            $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
-                    } else {
-                            $("#id_contact_form").css("display","none");
-                            $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
-                    }
-                });
+        $(document).ready( function() {
+            $(".advanced_parameters").click(function() {
+                if ($("#id_contact_form").css("display") == "none") {
+                        $("#id_contact_form").css("display","block");
+                        $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                } else {
+                        $("#id_contact_form").css("display","none");
+                        $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                }
             });
+        });
 
-            function send_contact_information() {
-                var data_post = "";
-                data_post += "person_name="+$("#person_name").val()+"&";
-                data_post += "company_name="+$("#company_name").val()+"&";
-                data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
-                data_post += "person_role="+$("#person_role option:selected").val()+"&";
-                data_post += "company_country="+$("#country option:selected").val()+"&";
-                data_post += "company_city="+$("#company_city").val()+"&";
-                data_post += "language="+$("#language option:selected").val()+"&";
-                data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
+        function send_contact_information() {
+            var data_post = "";
+            data_post += "person_name="+$("#person_name").val()+"&";
+            data_post += "company_name="+$("#company_name").val()+"&";
+            data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
+            data_post += "person_role="+$("#person_role option:selected").val()+"&";
+            data_post += "company_country="+$("#country option:selected").val()+"&";
+            data_post += "company_city="+$("#company_city").val()+"&";
+            data_post += "language="+$("#language option:selected").val()+"&";
+            data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
 
-                $.ajax({
-                        contentType: "application/x-www-form-urlencoded",
-                        beforeSend: function(objeto) {},
-                        type: "POST",
-                        url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
-                        data: data_post,
-                        success: function(datos) {
-                            if (datos == 'required_field_error') {
-                                message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
-                            } else if (datos == '1') {
-                            	message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
-                            } else {
-                            	message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
-                            }
-                            alert(message);
+            $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(objeto) {},
+                    type: "POST",
+                    url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+                    data: data_post,
+                    success: function(datos) {
+                        if (datos == 'required_field_error') {
+                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
+                        } else if (datos == '1') {
+                            message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                        } else {
+                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
                         }
-                });
-            }
-
-        </script>
-        
+                        alert(message);
+                    }
+            });
+        }
+    </script>        
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 
 <div id="wrapper">
-
 	<div id="header">
 		<div id="header1" style="margin-bottom:10px;">	
 			<div id="logo">	   
@@ -463,33 +459,28 @@ if ($encryptPassForm == '1') {
 			</div>	
         </div>
 	</div>
-
 <div id="main">
-<form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-<div id="installation_steps" style="width:220px">	
-	<br />
-	<ol>
-		<li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
-		<li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
-		<li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
-		<li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
-		<li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
-		<li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
-		<li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
-	</ol>
-</div>
-
-<table cellpadding="6" cellspacing="0" border="0" width="72%" align="center">
-	<tr>
-		<td>
-			<div id="note" style="float:right;">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well">		
+                <ol>
+                    <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
+                    <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
+                    <li <?php step_active('3'); ?>><?php echo get_lang('Licence'); ?></li>
+                    <li <?php step_active('4'); ?>><?php echo get_lang('DBSetting'); ?></li>
+                    <li <?php step_active('5'); ?>><?php echo get_lang('CfgSetting'); ?></li>
+                    <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
+                    <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
+                </ol>
+            </div>
+        </div>
+        <div class="span9">
+            <div id="note" style="float:right;">
 				<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
 			</div>
-		</td>
-	</tr>
-<tr>
-  <td>
-    <?php
+            
+<form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     
     $instalation_type_label = '';
@@ -546,7 +537,6 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="session_lifetime"     value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
 	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
 	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
-
 <?php
 if ($_POST['step2']) {
 	//STEP 3 : LICENSE
@@ -623,7 +613,6 @@ if ($_POST['step2']) {
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 
 } elseif ($_POST['step5']) {
-
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
@@ -631,24 +620,22 @@ if ($_POST['step2']) {
 	</div>
     <div class="RequirementContent">
 		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-	</div><br />
-	
+	</div><br />	
+    
 	<blockquote>        
     <?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
 	<?php else: ?>	
-	<?php endif; ?>
+	<?php endif; 
     
-    
-	<?php
 	if (api_is_western_name_order()) {
 		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
 	} else {
 		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
 	}
-	?>    
-    <?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />    
+	
+    echo get_lang('AdminEmail').' : '.$emailForm; ?><br />    
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
@@ -840,10 +827,9 @@ if ($_POST['step2']) {
     display_language_selection();
 }
 ?>
-  </td>
-</tr>
-</table>
 </form>
+</div>                  <!-- span-->
+</div>  <!-- row -->
 
 </div> <!-- main end-->
 <div class="push"></div>

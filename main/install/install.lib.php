@@ -2029,7 +2029,7 @@ function display_after_install_message($installType, $nbr_courses) {
     printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'), 'main/inc/conf/configuration.php', 'main/install/index.php');
     echo '</div>';
     ?></form>
-    <br /><br />
+    <br />
     <a class="btn btn-success btn-large" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
     <?php
 }

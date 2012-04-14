@@ -249,16 +249,16 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
-				preg_match('/swf$/i',  urldecode($url))  ||
-            	preg_match('/png$/i',  urldecode($url))  ||
-            	preg_match('/gif$/i',  urldecode($url))  ||
-            	preg_match('/jpg$/i',  urldecode($url))  ||
-            	preg_match('/jpeg$/i', urldecode($url))  ||
-            	preg_match('/bmp$/i',  urldecode($url))  ||
-            	preg_match('/svg$/i',  urldecode($url))  ||
-			    (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url)) && api_get_setting('enable_nanogong') == 'true')    
-			     //preg_match('/html$/i', urldecode($url))  || 
-			     //preg_match('/htm$/i',  urldecode($url))  
+					preg_match('/html$/i', urldecode($url))  || 
+					preg_match('/htm$/i',  urldecode($url))  ||
+					preg_match('/swf$/i',  urldecode($url))  ||
+					preg_match('/png$/i',  urldecode($url))  ||
+					preg_match('/gif$/i',  urldecode($url))  ||
+					preg_match('/jpg$/i',  urldecode($url))  ||
+					preg_match('/jpeg$/i', urldecode($url))  ||
+					preg_match('/bmp$/i',  urldecode($url))  ||
+					preg_match('/svg$/i',  urldecode($url))  ||
+					(preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
 			     
             ) {
             	//yox view
@@ -291,13 +291,21 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                      return $sound_preview ;
                 } elseif (
                     //Show preview sith yoxview
-                     preg_match('/swf$/i',  urldecode($url))  || 
-                     preg_match('/html$/i', urldecode($url))  || 
-                     preg_match('/htm$/i',  urldecode($url))  ||
-					 (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url))&& api_get_setting('enable_nanogong') == 'true') 
-                ) {
-					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';
+						preg_match('/html$/i', urldecode($url))  || 
+						preg_match('/htm$/i',  urldecode($url))  ||
+						preg_match('/swf$/i',  urldecode($url))  || 
+						preg_match('/png$/i',  urldecode($url))  ||
+						preg_match('/gif$/i',  urldecode($url))  ||
+						preg_match('/jpg$/i',  urldecode($url))  ||
+						preg_match('/jpeg$/i', urldecode($url))  ||
+						preg_match('/bmp$/i',  urldecode($url))  ||
+						preg_match('/svg$/i',  urldecode($url))  ||
+						(preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url))&& api_get_setting('enable_nanogong') == 'true')
+										) {
+					//$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//with yoxview
+					$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//without yoxview
+					//return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';//with yoxview
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';//without yoxview
 				} else {			
 					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';
 				}          
@@ -314,13 +322,21 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                      return $sound_preview ;                     
                 } elseif (
                     //Show preview sith yoxview
-                     preg_match('/swf$/i',  urldecode($url))  || 
-                     preg_match('/html$/i', urldecode($url))  || 
-                     preg_match('/htm$/i',  urldecode($url))  ||
-					 (preg_match('/wav$/i',  urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+						preg_match('/html$/i', urldecode($url))  || 
+						preg_match('/htm$/i',  urldecode($url))  ||
+						preg_match('/swf$/i',  urldecode($url))  || 
+						preg_match('/png$/i',  urldecode($url))  ||
+						preg_match('/gif$/i',  urldecode($url))  ||
+						preg_match('/jpg$/i',  urldecode($url))  ||
+						preg_match('/jpeg$/i', urldecode($url))  ||
+						preg_match('/bmp$/i',  urldecode($url))  ||
+						preg_match('/svg$/i',  urldecode($url))  ||
+						(preg_match('/wav$/i',  urldecode($url)) && preg_match('/_chnano_.wav$/i',  urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
-					$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
-					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';
+					//$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//with yoxview
+					$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//without yoxview
+					//return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';//with yoxview
+					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';//without yoxview
 				} else {			
 					return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';
 				}          
@@ -345,10 +361,14 @@ function build_document_icon_tag($type, $path) {
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     if ($type == 'file') {
         $icon = choose_image($basename);
+		
 		if(preg_match('/_chnano_.wav$/i',  $basename)) {
 			$icon="jplayer_play.png";
-        	$basename = get_lang('Play').' '.get_lang('Nanogong');
+        	$basename = get_lang('wav').' '.get_lang('(Nanogong)');
+		}else{
+			$basename=substr(strrchr($basename, '.'), 1);
 		}
+		
     } else {
         if ($path == '/shared_folder') {
             $icon = 'folder_users.gif';

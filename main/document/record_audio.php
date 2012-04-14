@@ -146,7 +146,9 @@ function submitVoice() {
 	var filepath="<?php echo urlencode($filepath); ?>";
 	var dir="<?php echo urlencode($dir); ?>";
 	var course_code="<?php echo urlencode($course_code); ?>";
+	//
 	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code+"&nano_group_id="+nano_group_id+"&nano_session_id="+nano_session_id+"&nano_user_id="+nano_user_id;
+	var cookie="<?php  echo 'ch_sid='.session_id(); ?>";
 	
 	//check	
 	var recorder
@@ -165,7 +167,7 @@ function submitVoice() {
 	}
 	//	
 	var applet = document.getElementById("nanogong");	
-	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", "", "temp");//'PostToForm', postURL, inputname, cookie, filename
+	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", cookie, "temp");//'PostToForm', postURL, inputname, cookie, filename
 	if (ret == null)  { 
 	    alert(lang_failled_to_submit); 
 	} else {

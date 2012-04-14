@@ -1213,6 +1213,8 @@ $LoginX = "Login: %s";
 $ChatConnected = "Chat (Connected)";
 $ChatDisconnected = "Chat (Disconnected)";
 $ThingsToDo = "Things to do next";
-$WamiFlashDialog = "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check \"remember\")";
+$WamiFlashDialog = "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)";
 $WamiStartRecorder = "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file.";
+$InputNameHere = "Enter name here";
+$Reload = "Reload";
 ?>

@@ -200,7 +200,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 echo '</applet>';
  
 echo '<form name="form_nanogong">';	
-	echo '<input placeholder="'.get_lang('Filename').'" type="text" id="audio_title">';
+	echo '<input placeholder="'.get_lang('InputNameHere').'" type="text" id="audio_title">';
 	echo '<input id="status" type="hidden" name="status" value="0">';
 	echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';
 echo '</form>';

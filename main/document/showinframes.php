@@ -216,7 +216,7 @@ if ($show_web_odf) {
 }
 echo "</div>";
 
-if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true'){
+if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
 		echo '<br/>';
 		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';

@@ -198,7 +198,7 @@ echo '</div>';
 <input placeholder="<?php echo get_lang('InputNameHere'); ?>" type="text" id="audio_title"><br/>
 <button type="button" value="" onclick="setupRecorder()" id="audio_button" /><?php echo get_lang('Activate'); ?></button>
 <button type="button" value="" onclick="newNameRecord()" id="new_name" /><?php echo get_lang('Reload'); ?></button>
-<?php echo Display :: return_icon('info3.gif', get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog').' '.get_lang('WamiReload'), array('align' => 'absmiddle', 'hspace' => '3px'), false); ?>
+<?php echo Display :: return_icon('info3.gif', get_lang('WamiNeedFilename').' '.get_lang('WamiFlashDialog'), array('align' => 'absmiddle', 'hspace' => '3px'), false); ?>
 </form>
 </div>
 <div align="center" id="audio_message_1" style="display:inline">

@@ -255,6 +255,10 @@ if (isset($clone_question) && !empty($objExercise->id)) {
 	$new_answer_obj = new Answer($clone_question);
 	$new_answer_obj->read();
 	$new_answer_obj->duplicate($new_id);
+    
+    //Reloading tne $objExercise obj
+    $objExercise->read($objExercise->id);
+    
 	header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
 	exit;
 }
@@ -474,7 +478,7 @@ if ($inATest) {
     $oQ = Question::read($q);
     $maxScoreAllQuestions += $oQ->selectWeighting();
     }
-    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'),$objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
+    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
     echo '</div>';
 } else if (isset($_GET['newQuestion'])) {
 	// we are in create a new question from question pool not in a test

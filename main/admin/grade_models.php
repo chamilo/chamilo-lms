@@ -37,9 +37,9 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('GradeModel'));
 }
 
-$htmlHeadXtra[]= '
-  <script>
-  function plusItem(item) {
+$htmlHeadXtra[]= '<script>
+    
+function plusItem(item) {
         if (item != 1) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";
@@ -50,7 +50,8 @@ $htmlHeadXtra[]= '
 	 	//document.getElementById("txta-"+(item-1)).value = "";
         }
   }
-  function minItem(item) {
+  
+function minItem(item) {
     if (item != 1) {
      document.getElementById(item).style.display = "none";
 	 //document.getElementById("txta-"+item).value = "";
@@ -62,8 +63,8 @@ $htmlHeadXtra[]= '
 	if (item = 1) {
 		document.getElementById("min-"+(item)).style.display = "none";
 	}
-  }
- </script>';
+}
+</script>';
 
 // The header.
 Display::display_header($tool_name);

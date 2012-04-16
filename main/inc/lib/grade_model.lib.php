@@ -70,22 +70,33 @@ class GradeModel extends Model {
         $form->addElement('label', get_lang('Components'));
         
         //Get components
-        $nr_items = 10;
+        $nr_items = 2;
+        $max = 10;
+                
+        // Setting the defaults
+        $defaults = $this->get($id);        
+        $components = $this->get_components($defaults['grade_model_id']);
         
+        if ($action == 'edit') {
+            if (!empty($components)) { 
+                $nr_items = count($components) -1;
+            }
+        }
+                
         $renderer = & $form->defaultRenderer();
         
-        for ($i = 0; $i <= $nr_items;  $i++) {    
+        for ($i = 0; $i <= $max;  $i++) {    
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
-            $form->addElement('text', 'components['.$i.'][acronym]', null , array('class' => 'span1'));
-            $form->addElement('text', 'components['.$i.'][title]', null, array('class' => 'span3'));        
-            $form->addElement('hidden', 'components['.$i.'][id]', null , array('class' => 'span3'));
+            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
+            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span3'));        
+            $form->addElement('hidden', 'components['.$i.'][id]',       null, array('class' => 'span3'));
             
             $template_percentage =
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">
             <p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
             <label class="control-label">{label}</label>
-            <div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->{element} % =';
+            <div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->{element} % = ';
             
             $template_acronym = '
             <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
@@ -113,11 +124,7 @@ class GradeModel extends Model {
         } else {
         	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
         }
-        
-        // Setting the defaults
-        $defaults = $this->get($id);        
-        $components = $this->get_components($defaults['grade_model_id']);
-        
+
         if (!empty($components)) {
             $counter = 0;
             foreach ($components as $component) {

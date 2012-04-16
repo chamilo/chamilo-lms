@@ -852,7 +852,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 		
 	if (!empty($cats)) {	    
-		$items = $grading_contents['items'];
+		//$items = $grading_contents['items'];
 		$i = 0;
 		foreach ($cats as $cat) {
 			
@@ -872,15 +872,14 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 					if (!empty($grading_string)) {
 						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
 					}
-				}		
+				}
                 $obj = new GradeModel();
                 $grade_models = $obj->get_all();                
                 $options = array(0 => get_lang('none'));
                 foreach ($grade_models as $item) {
                     $options[$item['id']] = $item['name'];
                 }                
-                //$grade_model_id = $cat->get_grade_model_id();
-                //
+        
                 //No children
                 if (empty($allcat)) {
                     $form = new FormValidator('grade_model_settings');
@@ -911,8 +910,6 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                             $params['grade_model_id'] = api_get_session_id();
 
                             $gradebook->save($params);
-
-
                         }
                     }
                 }

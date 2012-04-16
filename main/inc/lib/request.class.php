@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Description of request
- *
- * @author Laurent Opprecht <laurent@opprecht.info>
+ * Provides access to various HTTP request elements: GET, POST, FILE, etc paramaters.
+ 
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class Request
 {

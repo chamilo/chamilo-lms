@@ -293,10 +293,6 @@ button.refresh {
 button.upload {
     background-image:url(images/button_upload.gif);
 }
-
-.fake_button_back {
-    background-image:url(images/button_back.gif);
-}
 button.arrowr, input.arrowr {
 	background-image:url(images/2rightarrow.gif);	
 }

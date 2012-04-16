@@ -470,9 +470,11 @@ class Template {
 		        $clean_url = replace_dangerous_char($url);
 		        $clean_url = str_replace('/', '-', $clean_url);
 		        $clean_url .= '/';
-		        $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path               
+		        $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
+
 		        //we create the new dir for the new sites
-		        if (is_file($homep.'favicon.ico')) {
+		        if (is_file($icon_real_homep.'favicon.ico')) {
 		            $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
 		        }
 		    }

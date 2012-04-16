@@ -112,7 +112,7 @@ $courses_without_category = $courses_in_category[0];
                             <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())) ?>')) return false;">
 	                            <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
 	                            <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-	                            <button class="a_button orange small" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
+	                            <button class="btn" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
 	                            	<?php echo get_lang('_unsubscribe'); ?>
 	                            </button>
                             </form>
@@ -271,7 +271,7 @@ $courses_without_category = $courses_in_category[0];
 									<form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding()))?>')) return false">
                                     	<input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                                     	<input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />                                    	
-                                    	 <button class="a_button orange small" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
+                                    	 <button class="btn" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
 	                            	<?php echo get_lang('_unsubscribe'); ?>
 	                            </button>
                                     	</form>

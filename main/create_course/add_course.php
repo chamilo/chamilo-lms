@@ -266,7 +266,7 @@ if ($form->validate()) {
                 $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 $message = Display :: return_message($message, 'confirmation', false);
                 $message .=  '<div style="float: left; margin:0px; padding: 0px;">' .
-                    '<a class="a_button gray medium" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
+                    '<a class="btn" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
                     '</div>';
             } else {
                 $message = Display :: return_message(get_lang('CourseRequestCreationFailed'), 'error', false);

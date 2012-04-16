@@ -2175,7 +2175,7 @@ class Blog {
 				//Link to register users
 				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
 				{
-					$row[] = "<a class=\"a_button orange small \" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
+					$row[] = "<a class=\"btn \" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
 				}
 				else
 				{
@@ -2288,7 +2288,7 @@ class Blog {
 			//Link to register users
 
 			if($myrow["user_id"] != $_user['user_id']) {
-				$row[] = "<a class=\"a_button gray small \" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
+				$row[] = "<a class=\"btn\" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
 			} else {
 				$row[] = '';
 			}

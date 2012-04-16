@@ -89,7 +89,7 @@ echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGrou
  */
 $subscribe_group = '';
 if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	$subscribe_group = '<a class="a_button gray small" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
+	$subscribe_group = '<a class="btn" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
 }
 
 /*
@@ -97,7 +97,7 @@ if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], 
  */
 $unsubscribe_group = '';
 if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	$unsubscribe_group = '<a class="a_button gray small" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
+	$unsubscribe_group = '<a class="btn" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
 

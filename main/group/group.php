@@ -299,9 +299,9 @@ foreach ($group_cats as $index => $category) {
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (GroupManager :: is_self_registration_allowed($_user['user_id'], $this_group['id'])) {
-                    $row[] = '<a class = "a_button gray small" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
+                    $row[] = '<a class = "btn" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
                 } elseif (GroupManager :: is_self_unregistration_allowed($_user['user_id'], $this_group['id'])) {
-                    $row[] = '<a class = "a_button gray small" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
+                    $row[] = '<a class = "btn" href="group.php?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
                 } else {
                     $row[] = '-';
                 }

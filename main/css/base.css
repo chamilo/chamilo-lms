@@ -800,26 +800,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     float:right !important; 
 }
 
-/* New button style experimental */ 
-button {
-    border:1px solid #ccc;
-    
-    -opera-border-radius: 8px;
-    -webkit-border-radius: 8px; 
-    border-radius: 8px;
-    
-    -opera-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);    
-    -webkit-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);       
-}
-
-button:hover {
-    color:#000;
-    border-style: inset;
-    background-color:#eee;
-    border:1px solid #ccc;  
-}
-
 /* Nice buttons v2 */
 
 button.next.disabled, .a_button.disabled {

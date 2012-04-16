@@ -94,7 +94,7 @@ if (api_get_setting('allow_lostpassword') == 'false') {
 }
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {	
-	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="a_button gray" >'.get_lang('Back').'</a>';	
+	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';	
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 } else {
 	$form = new FormValidator('lost_password');

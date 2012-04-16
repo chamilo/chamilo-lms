@@ -128,7 +128,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 
 if ($export && $name) {
 	Display::display_confirmation_message(get_lang('BackupCreated')); 
-	echo '<br /><a class="a_button orange medium" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.get_lang('Download').'</a>';	
+	echo '<br /><a class="btn" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.get_lang('Download').'</a>';	
 } else {
 	// Display forms especial export
 	if (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {

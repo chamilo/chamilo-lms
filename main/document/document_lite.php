@@ -4,6 +4,9 @@
  * Code
  */
 
+exit;
+
+
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 

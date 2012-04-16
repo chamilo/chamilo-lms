@@ -76,8 +76,8 @@ button.add, button.save, button.cancel, button.refresh, button.upload, button.se
 
 /* button << */
 button.arrowl, button.arrowr{
-    margin: 0px 15px;    
-    padding:18px;
+    margin: 0px 15px 0px 15px;    
+    padding:15px 18px;
     background-position:7px;
 }
 /*including "arrowl" image*/

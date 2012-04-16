@@ -16,7 +16,6 @@
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
-$this_section=SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 // IMPORTANT to avoid caching of documents
@@ -43,6 +42,7 @@ if (!isset($_course)) {
 }
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/'.$doc_url;
+
 //if the rewrite rule asks for a directory, we redirect to the document explorer
 if (is_dir($full_file_name)) {
 	//remove last slash if present
@@ -62,8 +62,10 @@ event_download($doc_url);
 
 $course_id = api_get_course_int_id();
 
+$doc_url = Database::escape_string($doc_url);
+
 $sql = "SELECT filename FROM $tbl_announcement_attachment
-  	  	WHERE c_id = $course_id AND path LIKE BINARY $doc_url";
+  	  	WHERE c_id = $course_id AND path LIKE BINARY '$doc_url'";
 
 $result= Database::query($sql);
 if (Database::num_rows($result) > 0) {

@@ -88,6 +88,7 @@ class ShibbolethSession
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);
         
+        $no_redirection = true;
         require("$includePath/local.inc.php");
 
 

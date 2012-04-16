@@ -123,7 +123,7 @@ $form->addElement('hidden', 'referer');
 $form->add_textfield('name', get_lang('GroupName'));
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array ('cols' => 50, 'rows' => 6));
+$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
 
 
 // Search Members of group
@@ -191,8 +191,8 @@ $group_tutors_element->setElementTemplate('
 </table>
 ');
 
-$group_tutors_element->setButtonAttributes('add', array('class' => 'arrowr'));
-$group_tutors_element->setButtonAttributes('remove', array('class' => 'arrowl'));
+$group_tutors_element->setButtonAttributes('add', array('class' => 'btn arrowr'));
+$group_tutors_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
@@ -223,8 +223,8 @@ $group_members_element->setElementTemplate('
 </tr>
 </table>');
 
-$group_members_element->setButtonAttributes('add', array('class' => 'arrowr'));
-$group_members_element->setButtonAttributes('remove', array('class' => 'arrowl'));
+$group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'));
+$group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
 
@@ -244,7 +244,7 @@ $form->addFormRule('check_group_members');
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), MEMBER_PER_GROUP_NO_LIMIT);
 $group = array();
 $group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
-$group[] = & $form->createElement('text', 'max_member', null, array('size' => 2));
+$group[] = & $form->createElement('text', 'max_member', null, array('class' => 'span1'));
 $group[] = & $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');

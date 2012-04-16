@@ -19,7 +19,6 @@ api_protect_course_script(true);
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /*	Create the groups */
 
@@ -134,13 +133,6 @@ elseif (isset($_POST['number_of_groups'])) {
 		}
 		$group_categories = GroupManager :: get_categories();
 		$group_id = GroupManager :: get_number_of_groups() + 1;
-		/*$tutors = GroupManager :: get_all_tutors();
-		$tutor_options[0] = get_lang('GroupNoTutor');
-		foreach ($tutors as $index => $tutor) {
-			$tutor_options[$tutor['user_id']] = api_get_person_name($tutor['firstname'], $tutor['lastname']);
-		}
-		$cat_options = array ();
-		*/
 		foreach ($group_categories as $index => $category) {
 			// Don't allow new groups in the virtual course category!
 			if ($category['id'] != VIRTUAL_COURSE_CATEGORY) {
@@ -165,8 +157,6 @@ elseif (isset($_POST['number_of_groups'])) {
 
 EOT;
 		$renderer->setElementTemplate($element_template);
-		//$form->addElement('header', '', $nameTools);
-
 		$form->addElement('hidden', 'action');
 		$form->addElement('hidden', 'number_of_groups');
 		$defaults = array ();
@@ -196,9 +186,8 @@ EOT;
 			$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_name');
 			if (api_get_setting('allow_group_categories') == 'true') {
 				$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
-			}
-			//$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_tutor', null, $tutor_options, array('id' => 'tutor_'.$group_number));
-			$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_places', null, array('size' => 3, 'id' => 'places_'.$group_number));
+			}			
+			$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
 
 			if ($_POST['number_of_groups'] < 10000) {
 				if ($group_id < 10) {
@@ -234,7 +223,7 @@ EOT;
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
 		$group_el[] = & $create_groups_form->createElement('static', null, null, get_lang('Create'));
-		$group_el[] = & $create_groups_form->createElement('text', 'number_of_groups', null, array('size' => 3));
+		$group_el[] = & $create_groups_form->createElement('text', 'number_of_groups', null, array('class' => 'span1'));
 		$group_el[] = & $create_groups_form->createElement('static', null, null, get_lang('NewGroups'));
 		$group_el[] = & $create_groups_form->createElement('style_submit_button', 'submit', get_lang('ProceedToCreateGroup'), 'class="save"');
 		$create_groups_form->addGroup($group_el, 'create_groups', null, ' ', false);
@@ -339,5 +328,4 @@ EOT;
 }
 
 /*	FOOTER */
-
 Display :: display_footer();

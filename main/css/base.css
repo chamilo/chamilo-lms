@@ -75,17 +75,17 @@ button.add, button.save, button.cancel, button.refresh, button.upload, button.se
 }
 
 /* button << */
-button.arrowl, button.arrowr{
+button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
     margin: 0px 15px 0px 15px;    
     padding:15px 18px;
     background-position:7px;
 }
 /*including "arrowl" image*/
-button.arrowl, button.arrowr {
+button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
     background-repeat:no-repeat;    
 }
 
-button.arrowl:hover, button.arrowr:hover{
+button.arrowl:hover, button.arrowr:hover , input.arrowl:hover, input.arrowr:hover {
     background-position:7px;
 }
 

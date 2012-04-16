@@ -21,7 +21,7 @@
        
     {% if plugin_login_bottom is not null %}        
         <div id="plugin_login_bottom">
-            {$plugin_login_bottom}
+            {{ plugin_login_bottom }}
         </div>
     {% endif %}
 </div>

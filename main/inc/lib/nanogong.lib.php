@@ -649,7 +649,7 @@ class Nanogong {
 	function show_button() {		
 		$params_string = $this->get_params(true);		
 		$html .= '<br />'.Display::url(get_lang('RecordAnswer'),api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=350&width=500', 
-						array('class'=>'btn white thickbox'));
+						array('class'=>'btn thickbox'));
 		$html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));				
 		return $html;
 	}	

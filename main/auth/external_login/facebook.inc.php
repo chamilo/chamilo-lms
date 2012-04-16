@@ -1,6 +1,6 @@
 <?php
 /**
- * Licence: GPL
+ * Licence: GPL 
  * Please contact CBlue regarding any licences issues.
  * Author: noel@cblue.be
  *  Copyright: CBlue SPRL, 20XX
@@ -28,7 +28,10 @@ function facebook_connect() {
 		try {
 			//Gets facebook user info
 			$fu = $facebook->api('/me');
-			$username = api_get_setting('login_is_email') == 'true' ? $fu['email'] : $fu['username'];
+			$username = $fu['username'];
+			if (api_get_setting('login_is_email') == 'true' || empty($fu['username'])) {
+			    $username = change_to_valid_chamilo_login($fu['email']);
+			}
 			//Checks if user already exists in chamilo
 			$u = array(
 					'firstname' => $fu['first_name'],
@@ -91,3 +94,11 @@ function facebook_get_login_url(){
 	return $login_url;
 }
 
+/**
+ * @input : a string
+ * @return : a string containing valid chamilo login characters
+ * Chamilo login only use characters lettres, des chiffres et les signes _ . -
+**/
+function change_to_valid_chamilo_login($in_txt) {
+    return preg_replace("/[^a-zA-Z1-9_\-.]/", "_", $in_txt);exit;
+}

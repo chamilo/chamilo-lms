@@ -306,7 +306,7 @@ class Nanogong {
 		if (!empty($file_path)) {
 			$url = $this->get_public_url(true);
 			$actions = Display::url(Display::return_icon('save.png', get_lang('Download'), array(), ICON_SIZE_SMALL), $url, array('target'=>'_blank'));
-			$download_button = Display::url(get_lang('Download'), $url, array('class' =>'a_button gray medium'));
+			$download_button = Display::url(get_lang('Download'), $url, array('class' =>'btn'));
 			
 			if ($show_delete_button) {				
 				$actions .= ' '.Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), "#", array('onclick'=>'delete_file();'));
@@ -587,7 +587,7 @@ class Nanogong {
 	
 		$html .= '<form id="form_nanogong_simple" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
 		$html .= '<input type="file" name="file">';
-		$html .= '<a href="#" class="a_button white medium"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
+		$html .= '<a href="#" class="btn"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
 		$html .= '</form></div>';	
 	
 		$html .= '<div id="nanogong_div">';
@@ -611,7 +611,7 @@ class Nanogong {
 	
 		$html .= '<br /><br /><br /><form name="form_nanogong_advanced">';
 		$html .= '<input type="hidden" name="is_nano" value="1">';
-		$html .= '<a href="#" class="a_button white medium"  onclick="send_voice()" />'.get_lang('SendRecord').'</a>';
+		$html .= '<a href="#" class="btn"  onclick="send_voice()" />'.get_lang('SendRecord').'</a>';
 		$html .= '</form></div>';	
 	
 		$html .= '</center>';
@@ -649,7 +649,7 @@ class Nanogong {
 	function show_button() {		
 		$params_string = $this->get_params(true);		
 		$html .= '<br />'.Display::url(get_lang('RecordAnswer'),api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=350&width=500', 
-						array('class'=>'a_button white thickbox'));
+						array('class'=>'btn white thickbox'));
 		$html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));				
 		return $html;
 	}	

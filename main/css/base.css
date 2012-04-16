@@ -2350,8 +2350,7 @@ div.admin_section h4 {
     vertical-align: middle;
 }
 
-.question_options {
-    margin-left:14px;
+.question_options {    
     min-height:150px;
 }
 .question_description {

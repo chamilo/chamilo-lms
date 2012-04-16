@@ -117,11 +117,6 @@ footer {
 	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
 
-/* New training */
-.bottom-link {
-    background-image:url(images/button_back.jpg);
-}
-
 .social-menu-title {
 	background-color:#00AAE3;
 }

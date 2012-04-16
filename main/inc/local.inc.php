@@ -1132,7 +1132,9 @@ if (isset($_cid)) {
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	Database::query($sql);
 }
-if (isset($_SESSION['request_uri']) && !empty($_SESSION['request_uri'])){
+
+$no_redirection = isset($no_redirection) ? $no_redirection : false;
+if (!$no_redirection && (isset($_SESSION['request_uri']) && !empty($_SESSION['request_uri']))){
     $req= $_SESSION['request_uri'];
     unset($_SESSION['request_uri']);
     header('Location: '.$req);

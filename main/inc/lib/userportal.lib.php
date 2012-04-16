@@ -685,12 +685,12 @@ class IndexManager {
         }
         
 		$html= '<div '.$id_label.' class="well sidebar-nav">';
-		$html.= '<div class="menusection">';
+		//$html.= '<div class="menusection">';
 		if (!empty($title)) {
 			$html.= '<h4>'.$title.'</h4>';
 		}        
 		$html.= $content;
-	    $html.= '</div>';        
+	    //$html.= '</div>';        
 	    $html.= '</div>';   
 		return $html;
 	}

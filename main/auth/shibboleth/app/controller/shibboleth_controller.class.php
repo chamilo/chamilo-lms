@@ -31,7 +31,7 @@ class ShibbolethController
 
         if (Shibboleth::session()->is_logged_in())
         {
-            Shibboleth::redirect();
+            Redirect::home();
         }
 
         $user = Shibboleth::store()->get_user();

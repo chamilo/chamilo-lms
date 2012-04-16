@@ -603,7 +603,7 @@ if (!empty($exercise_list)) {
 					if ($row['random_by_category'] > 0) {	
 						if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
 						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
-						$number_of_questions .= $nbQuestionsTotal." ";
+						$number_of_questions = $nbQuestionsTotal." ";
 						$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
 						$number_of_questions .= " - ";
 						//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($my_exercise_id).' '.get_lang('QuestionByCategory');

@@ -833,7 +833,7 @@ if (api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {				
-	$models = api_get_settings_options('grading_model');
+	/*$models = api_get_settings_options('grading_model');
 	$course_grading_model_id = api_get_course_setting('course_grading_model');
 	$grading_model = '';
 	if (!empty($course_grading_model_id)) {
@@ -847,7 +847,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	}
 	
 	$grading_contents = api_grading_model_functions($grading_model, 'to_array');
-	$grading_string   = api_grading_model_functions($grading_model, 'decorate');
+	$grading_string   = api_grading_model_functions($grading_model, 'decorate');*/
     
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 		

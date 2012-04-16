@@ -1219,10 +1219,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
-
             case 'custom_gradebook':
             case 'custom':
-            	$values = api_get_settings_options($row['variable']);
+            	/*$values = api_get_settings_options($row['variable']);
             	
             	//$renderer = & $form->defaultRenderer();
             	//$renderer->setElementTemplate('{label} - {element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 -->');
@@ -1279,7 +1278,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
             	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvaluations')."&nbsp;");
             	
             	$form->addElement('style_submit_button', null, get_lang('Add'), 'class="add"');
-            	
+            	*/
             	
             	break;
             /*

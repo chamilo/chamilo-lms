@@ -144,7 +144,7 @@ class CatForm extends FormValidator {
 			$this->freeze('name');
 		}
 
-		$models                  = api_get_settings_options('grading_model');
+		/*$models                  = api_get_settings_options('grading_model');
 		$course_grading_model_id = api_get_course_setting('course_grading_model');
 		$grading_model = '';
 		if (!empty($course_grading_model_id)) {
@@ -156,10 +156,10 @@ class CatForm extends FormValidator {
 		}		
 		
 		$grading_contents = api_grading_model_functions($grading_model, 'to_array');
-		
-		if (!empty($grading_contents)) {
+		*/
+		if (0) {
 			
-			$course_code	= api_get_course_id();			
+			/*$course_code	= api_get_course_id();			
 			$session_id		= api_get_session_id();
 			
 			///direct access to one evaluation
@@ -172,7 +172,7 @@ class CatForm extends FormValidator {
 			
 			$this->add_textfield('weight', get_lang('TotalWeight'), true, array('value'=> $value,'size'=>'4','maxlength'=>'5'));
 			//$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
-			$this->freeze('weight');			
+			$this->freeze('weight');			*/
 		} else {
 			$this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value,'size'=>'4','maxlength'=>'5'));
 			$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');

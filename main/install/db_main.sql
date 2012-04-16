@@ -853,7 +853,6 @@ VALUES
 ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
 ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0),
 ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
-('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1),
 ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
 ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
 ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
@@ -865,7 +864,7 @@ VALUES
 ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17471','DatabaseVersion','', NULL, NULL, 0);17470
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17486','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -907,8 +906,7 @@ ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), va
 
 /*!40000 ALTER TABLE settings_options DISABLE KEYS */;
 LOCK TABLES settings_options WRITE;
-INSERT INTO settings_options
-(variable, value, display_text)
+INSERT INTO settings_options (variable, value, display_text)
 VALUES
 ('show_administrator_data','true','Yes'),
 ('show_administrator_data','false','No'),
@@ -1165,10 +1163,6 @@ VALUES
 ('enable_help_link', 'false', 'No'),
 ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes'),
 ('allow_teacher_change_gradebook_grading_model', 'false', 'No'),
-('grading_model', '1*X+1*X', 'Model 1'),
-('grading_model', '1*X+1*X+1*X', 'Model 2'),
-('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3'),
-('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4'),
 ('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
 ('allow_users_to_change_email_with_no_password', 'false', 'No'),
 ('show_admin_toolbar', 'do_not_show', 'DoNotShow'),

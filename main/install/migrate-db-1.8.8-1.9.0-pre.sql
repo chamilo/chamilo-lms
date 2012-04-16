@@ -96,12 +96,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'false', 'No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('grading_model', 'grading_model', 'custom', 'Gradebook', 'false', 'GradingModelTitle', 'GradingModelComment', NULL, NULL, 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X', 'Model 1');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X/3', 'Model 2');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+1*X+1*X+1*X/4', 'Model 3');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('grading_model', '1*X+2*X+1*X+2*X/6', 'Model 4');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'false', 'No');
@@ -181,7 +175,7 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 UPDATE settings_current SET title = 'DatabaseVersion' WHERE variable = 'chamilo_database_version';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17471' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17486' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
@@ -201,7 +195,6 @@ ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
 ALTER TABLE lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
 ALTER TABLE lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;
-INSERT INTO course_setting(variable, value, category) VALUES ('course_grading_model','','gradebook');
 ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
 ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;

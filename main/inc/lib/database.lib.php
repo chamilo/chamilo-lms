@@ -697,6 +697,8 @@ class Database {
         	//Check if the table contains inner joins 
         	if (
                     
+                strpos($query, 'dokeos_classic_2D') === false &&
+                strpos($query, 'cosmic_campus') === false &&
                 strpos($query, 'static_') === false &&
                 strpos($query, 'public_admin') === false &&
                 strpos($query, 'chamilo_electric_blue') === false &&

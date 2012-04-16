@@ -67,13 +67,26 @@ label, input, button, select, textarea, p {
     font-size: inherit;
 }
 
-
-
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
     padding-left:30px;
     background-position:8px !important;
     background-repeat:no-repeat;    
+}
+
+/* button << */
+button.arrowl, button.arrowr{
+    margin:20px;    
+    padding:18px;
+    background-position:7px;
+}
+/*including "arrowl" image*/
+button.arrowl, button.arrowr {
+    background-repeat:no-repeat;    
+}
+
+button.arrowl:hover, button.arrowr:hover{
+    background-position:7px;
 }
 
 /* Fixing old chamilo forms */

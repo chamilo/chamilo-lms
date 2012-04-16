@@ -1231,7 +1231,10 @@ class AnnouncementManager  {
     public static function send_email($id) {        
         $sent_to	= self::sent_to("announcement", $id);
         $userlist   = $sent_to['users'];
+        $userlist = array_map('intval', $userlist);
+        
         $grouplist  = $sent_to['groups'];
+        $grouplist = array_map('intval', $grouplist);
         
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
@@ -1244,7 +1247,7 @@ class AnnouncementManager  {
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
         // groepen omzetten in users
-        if ($grouplist) {
+        if (isset($grouplist) && !empty($grouplist)) {            
             $grouplist = "'".implode("', '",$grouplist)."'";	//protect individual elements with surrounding quotes
             $sql = "SELECT user_id
                     FROM $tbl_groupUser gu
@@ -1257,7 +1260,7 @@ class AnnouncementManager  {
             }
         }
 
-        if (is_array($userlist)) {
+        if (isset($userlist) && !empty($userlist) && is_array($userlist)) {            
             $userlist = "'".implode("', '", array_unique($userlist) )."'";
 
             // send to the created 'userlist'
@@ -1281,8 +1284,7 @@ class AnnouncementManager  {
                             $tbl_session_course_user.course_code = '".$course_code."' AND
                             $tbl_session_course_user.id_session = ".api_get_session_id();
             }
-        }                    
-        
+        }                            
         $user_info = api_get_user_info();
         
         if ($sqlmail != '') {
@@ -1319,7 +1321,7 @@ class AnnouncementManager  {
                     $row_attach  = Database::fetch_array($rs_attach);
                     $path_attach = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/announcements/'.$row_attach['path'];
                     $filename_attach = $row_attach['filename'];
-                    $data_file = array('path' => $path_attach,'filename' => $filename_attach);
+                    $data_file = array('path' => $path_attach,'filename' => $filename_attach);                    
                 }
                 @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);          
             }

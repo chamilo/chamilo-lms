@@ -2339,7 +2339,7 @@ function show_add_form($id = '') {
 							</label>
 							<div class="controls">
 								<div id="err_title" style="display:none;color:red"></div>
-								<input type="text" id="agenda_title" size="50" name="title" value="';
+								<input type="text" id="agenda_title" class="span5" name="title" value="';
 	if (isset($title)) echo $title;
 	echo				'" />
 							</div>
@@ -2659,7 +2659,7 @@ function show_add_form($id = '') {
 			$oFCKeditor->Value		= $content;
 			$return =	$oFCKeditor->CreateHtml();
 			echo $return;*/
-            echo '<textarea cols="50" rows="4" name="content">'.$content.'</textarea>';
+            echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
 	echo '</div>
 			</div>';
 

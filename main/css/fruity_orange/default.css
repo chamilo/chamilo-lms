@@ -37,15 +37,6 @@ body {
 }
 /* End hide from IE5-mac */
 
-#main {
-	float: left;
-	margin: 0px auto;
-	margin-top: 10x;
-	width: 96%;
-	padding: 0px 10px 10px 10px;
-	min-height: 320px;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
@@ -275,15 +266,14 @@ h4 {
 h5, h6 {
 }
 /* the following for regular <a> elements */
-a:link {
+a {
 	text-decoration: none;
 	font-weight : bold;
 	color : #fea404;
 }
 a:visited {
 	text-decoration: none;
-	font-weight : bold;
-	color : #fea404;
+	font-weight : bold;	
 }
 a:hover {
 	text-decoration: none;

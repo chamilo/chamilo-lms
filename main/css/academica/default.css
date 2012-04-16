@@ -32,11 +32,11 @@ a {
 	font-weight: bold;
 	text-decoration: none;
 }
-a:link {
+a {
 	color : #4171b5;
 }
 a:visited {
-	color : #4171b5;
+	
 }
 a:hover {
 	color: #000915;
@@ -332,33 +332,6 @@ ul#navigation .student-connect a {
 	height: auto !important;
 	height: 320px;
 	margin-top:10px;
-}
-.menu #lang_form select {
-	margin: 1em 31px;
-}
-.menu form {
-	color: #000915;
-	font-weight: bold;
-	margin-bottom: .8em;
-	text-align: center;
-}
-.menucaption {
-	font-size: 12px;
-	font-weight: bold;
-	padding-left: 12px;
-}
-.menusection {
-	width: 100%;
-	margin: .3em 0 .3em 0;
-	padding-left: 3px;
-}
-.menusectioncaption {
-	font-weight:bold;
-	position: relative;
-}
-.menulist {
-	list-style: none;
-	padding: 0;
 }
 .note {
 	width: auto;

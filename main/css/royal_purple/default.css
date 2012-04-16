@@ -37,15 +37,6 @@ body {
 }
 /* End hide from IE5-mac */
 
-#main {
-	float: left;
-	margin: 0px auto;
-	margin-top: 10x;
-	width: 96%;
-	padding: 0px 10px 10px 10px;
-	min-height: 320px;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
@@ -275,7 +266,7 @@ h4 {
 h5, h6 {
 }
 /* the following for regular <a> elements */
-a:link {
+a {
 	text-decoration: none;
 	font-weight : bold;
 	color : #8e5b97;
@@ -283,7 +274,6 @@ a:link {
 a:visited {
 	text-decoration: none;
 	font-weight : bold;
-	color : #8e5b97;
 }
 a:hover {
 	text-decoration: none;
@@ -477,38 +467,7 @@ footer {
 .push {
 	height: 3em; /* Very important */
 }
-/*****************************************************
- *  NAVIGATION MENU                                  *
- *****************************************************/
-.menu {
-	float: right;
-	width: 20%;
-	padding: 0 0 6px 0;
-	border: 1px solid #636363;
-}
-.menucaption {
-	font-weight: bold;
-	padding-left: 12px;
-}
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	/* border: 1px solid #636363; */
-	background-color: #FFF;
-}
-.menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color: #FFF;
-	padding: 0 8px 0 4px;
-	font-weight:bold;
-}
-.menulist {
-	list-style: none;
-	margin: 0 0 12px 0;
-	padding: 0;
-}
+
 #centerwrap {
 	float: left;
 	width: 100%;

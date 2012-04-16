@@ -34,11 +34,11 @@ a {
 	font-weight: bold;
 	text-decoration: none;
 }
-a:link {
+a {
 	color: #317100;
 }
 a:visited {
-	color: #317100;
+	
 }
 a:hover {
 	color: #683000;
@@ -317,22 +317,6 @@ ul#navigation .student-connect a {
 	padding-left: 130px;
 }
 
-.menu form {
-	color: #000915;	
-}
-.menucaption {
-	font-size: 12px;
-	font-weight: bold;
-	padding-left: 12px;
-}
-.menusection {
-	width: 100%;	
-	
-}
-.menulist {
-	list-style: none;
-	padding: 0;
-}
 .note {
 	width: auto;
 	margin: 24px 6px 0 6px;
@@ -343,7 +327,7 @@ ul#navigation .student-connect a {
 /* form styles */
 .form {
 	width: 75%;
-	float: 'left';
+	float: left;
 }
 form div.row {
 	clear: both;

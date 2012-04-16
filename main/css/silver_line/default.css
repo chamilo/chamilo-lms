@@ -11,7 +11,7 @@ html {
 /* Redefining html styles */
 body {
     /* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
     margin: 0;
     padding: 0;
     font-size: .85em;
@@ -146,15 +146,6 @@ ul#navigation .help a{
 }
 .session_course_item .item_closed, .userportal-course-item-title .item_closed {
      font-size:80%; 
-}
-
-#main {
-	float: left;
-	margin: 0px auto;
-	margin-top: 5x;
-	width: 96%;
-	padding: 0px 10px 10px 10px;
-	min-height: 320px;
 }
 
 /*
@@ -554,52 +545,6 @@ footer {
 }
 .menu #formLogin input {
     margin: .3em auto;
-}
-.menusection {
-    width: 100%;
-    margin: .3em 0 .3em 0;
-}
-.menusection .menulist {
-    float: left;
-    clear: both;
-    margin: 0;
-    padding: 0;
-    text-indent: 1.2em;
-    width: 100%;
-    list-style: none;
-}
-.menusection .menulist li {
-    margin: .4em .5em .4em 0;
-}
-.menusectioncaption {
-    font: bold 1.2em Arial, sans-serif, sans;
-    color: #111;
-    margin: 0 0 .5em 1em;
-}
-/* Specific for administration section*/
-.menu img {
-    margin: 0 0 0 1.2em;
-    vertical-align: baseline;
-}
-.menu label {
-    display: block;
-    clear: both;
-    font: bold 1.2em Arial, sans-serif, sans;
-    color: #111;
-    text-align: center;
-    margin: .3em 0;
-    padding: 0;
-    width: 100%
-}
-.menu #loginform {
-    text-align: center;
-    color: #111;
-    font-weight: bold;
-    margin-bottom: .8em;
-}
-.menu #loginform input {
-    margin: .3em auto;
-    display: block;
 }
 .menu .note {
     margin: .3em 0 .3em .5em;
@@ -1184,13 +1129,6 @@ a.specialLink:hover, a.specialLink:focus {
     margin-bottom: 5px;
     height:35px;
 }
-
-/* New training */
-.bottom-link {
-    background-color:#E5EDF9;
-    border-color: #D4E2F6;
-    background-image:url(images/button_back.jpg);
-}
 /*
 ==============================================================================
     DROPBOX
@@ -1463,32 +1401,7 @@ div.system_announcement {
     font-weight: normal;
     font-size: 80%;
 }
-/*NAVIGATION MENU BAR*/
 
-
-.menucaption {
-    font-size: 12px;
-    font-weight: bold;
-    padding-left: 12px;
-}
-.menusection {
-    width: auto;
-    margin: 24px 6px 0 6px;
-    padding-left: 10px;
-    /* border: 1px solid #4171B5; */
-}
-.menusectioncaption {
-    position: relative;
-    top: -9px;
-    background-color: #E5EDF9;
-    font-size: 12px;
-    padding: 0 8px 0 4px;
-}
-.menulist {
-    list-style: none;
-    margin: 0 0 12px 0;
-    padding: 0;
-}
 #centerwrap {
     float: left;
     width: 100%;

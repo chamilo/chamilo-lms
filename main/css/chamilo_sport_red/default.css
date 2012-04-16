@@ -23,26 +23,8 @@ div.subnav ul#logout {
 #current #tab_active {
     color: #EDDD00;
 }
-.bread {
-    background:#222222;
-    -moz-border-radius: 0 0 5px 5px;
-    -webkit-border-radius: 0 0 5px 5px;
-    border-radius: 0 0 5px 5px;
-}
-.bread li a {
-    background: url(images/crumbs.png) no-repeat right center;
-}
 .userportal-course-item {
     background-color: #ededed;
-}
-#submain {
-    -moz-border-radius:22px;
-    -webkit-border-radius:22px;
-    border-radius:22px;
-}
-
-ul.bread li a span {
-    color:#CCC;
 }
 
 /*** medios ***/

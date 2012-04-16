@@ -38,13 +38,6 @@ body {
 }
 /* End hide from IE5-mac */
 
-#main {
-	margin: 0p;
-	width: 100%;
-	padding: 0px;
-	min-height: 320px;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
@@ -281,15 +274,14 @@ h5, h6 {
     font-family: verdana, arial, helvetica, sans-serif;
 }
 /* the following for regular <a> elements */
-a:link {
+a {
     text-decoration: none;
     font-weight : bold;
     color : #333;
 }
 a:visited {
     text-decoration: none;
-    font-weight : bold;
-    color : #333;
+    font-weight : bold; 
 }
 a:hover {
     text-decoration: none;
@@ -543,30 +535,8 @@ footer a:link, footer a:visited {
     NAVIGATION MENU
 ==============================================================================
 */
-
 .menu {    
     background: #f0f0f0 url(images/fondoNav.jpg) no-repeat top center;
-}
-.menucaption {
-    font-size: 12px;
-    font-weight: bold;
-    padding-left: 12px;
-}
-.menusection {
-    margin: 20px 0px 0 6px;
-    padding-left: 3px;
-    width: auto;
-}
-.menusectioncaption {
-    font-weight:bold;
-    font-size: 12px;
-    position: relative;
-    top: -5px;
-}
-.menulist {
-    list-style: none;
-    margin: 0 0 12px 0;
-    padding: 0;
 }
 #centerwrap {
     float: left;

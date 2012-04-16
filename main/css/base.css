@@ -699,7 +699,21 @@ a.personal_agenda:hover, a.personal_agenda:hover {
       /* height: 150px; */ 
 }
 
+.menulist {
+    margin: 0px;
+    list-style: none;    
+    padding: 0;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+}
 
+.menulist li {
+    /* float:left; */
+    /* margin-left:10px; */
+    margin-bottom:10px;
+    display:list-item;
+}
 
 .menulist li {
     margin-top: 10px;

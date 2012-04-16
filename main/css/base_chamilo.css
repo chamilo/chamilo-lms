@@ -34,25 +34,6 @@ body {
 * html #outerframe {
     height: 1%;
 }
-/* End hide from IE5-mac */
-
-#main {    
-    
-}
-
-#submain {
-    border: 1px solid #ccc;        
-    margin: 0px auto;
-    min-height: 320px;   
-    -moz-border-radius:0px 0px 10px 10px;
-    border-radius:0px 0px 10px 10px;
-    box-shadow: 3px 3px 10px #ddd;
-    -moz-box-shadow: 3px 3px 10px #ddd; 
-}
-
-.bread {
-    border-bottom: none;
-}
 
 .item {
     -moz-border-radius:5px;
@@ -340,36 +321,6 @@ footer a:link, footer a:visited {
     padding-bottom: 20px;
 }
 
-.menucaption {
-    font-size: 12px;
-    font-weight: bold;
-    padding-left: 12px;
-}
-.menusectioncaption {
-    background-color: #8A8A8A;
-    color: #FFFFFF;
-    font-size: 1.12em;
-    font-weight: normal;
-    margin-bottom: 8px;
-    padding: 7px 10px 7px 15px;
-    /*width: 205px;*/
-    display:block;
-}
-.menulist {
-    margin: 0px;
-    list-style: none;    
-    padding: 0;
-    list-style-image:none;
-    list-style-position:outside;
-    list-style-type:none;
-}
-
-.menulist li {
-    /* float:left; */
-    /* margin-left:10px; */
-    margin-bottom:10px;
-    display:list-item;
-}
 #centerwrap {
     float: left;
     width: 100%;

@@ -10,7 +10,7 @@ html {
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
@@ -43,9 +43,6 @@ a {
 	font-weight: bold;
 	text-decoration: none;
 	color:#333;
-}
-a:link {
-	color: #333;
 }
 a:visited {
 	color: #333;
@@ -122,64 +119,28 @@ input[type=button], input[type=submit] {
 }
 /* header 3 styles */
 .subnav {
-	padding: 0.8em 0.5em 0.4em 0.5em;
 	background: #fff;
 	color: #006;
 	border-bottom: 1px solid #aeaeae;
-	height:25px;
-	margin-bottom: 1px;
+	height:40px;	
 	background-image: url(images/fondoHeader3.jpg);	
     width:100%;
 }
 .subnav a {
-	padding: 10px 0px 20px 0px;
-	display: block;
-	width:150px;
 	height:25px;
-/*	background:  url(images/tab.png) no-repeat; */
 	color: #fff;
-	text-align:center;
+
 }
 .subnav a:hover {
-	color: #fff;
-	background:  url(images/tabHover.png) no-repeat;
+	color: #8484CA;	
 }
 .subnav ul {
-	padding-right: 75px;
-	padding-left: 10px;
-	padding-bottom: 0px;
-	margin: 0px;
-	list-style-type: none;	
-	width:50px;
 	height:50px;
 }
 .subnav li {
-	padding-right: 0px;
-	padding-left: 9px;
-	float: left;
-	padding-bottom: 0px;
-	padding-top: 0px;
-	margin: 0px;/*border-bottom: 1px solid #dcdcdc;*/
+
 }
-.subnav li:hover {
-	padding-right: 0px;
-	padding-left: 9px;
-	padding-bottom: 0px;
-	MARGIN: 0px;
-	padding-top: 0px
-}
-.subnav #current {
-}
-.subnav #current a {
-	color: #666;
-	background:url(images/tabCurrent.png) no-repeat;
-}
-.subnav #logout {
-	margin-top: 0px;
-	display: inline;
-	float: right;
-	width: auto;
-}
+
 /* header 4 styles */
 #header4 {
     background-color: #fff;
@@ -214,13 +175,6 @@ footer a:link, footer a:visited {
 }
 .push {
 	height: 9em; /* Very important */
-}
-/* main styles */
-#main {
-	padding: 0px 10px 10px 10px;
-	float:left;
-	min-height: 320px;
-	width:92%;
 }
 
 /*
@@ -396,9 +350,6 @@ ul#navigation .student-connect a {
 .session_course_item .item_closed, .userportal-course-item-title .item_closed {
      font-size:80%; 
 }
-
-.courses a {
-}
 .user_course_category {
 	background-color: #efefef;
 	border: 1px solid #666;
@@ -409,44 +360,6 @@ ul#navigation .student-connect a {
 	padding: 5px;
 }
 
-.menu {
-	float: right;
-	width: 200px;
-	min-height: 150px;
-	background-color: #F0F0F0;
-	border: 1px solid #bbb;
-	padding: 60px 10px 10px 10px;
-	background: #f0f0f0 url(images/fondoNav.jpg) no-repeat top center;
-}
-.menu #lang_form select {
-	margin: 1em 31px;
-}
-.menu form {
-	color: #000915;
-	font-weight: bold;
-	margin-bottom: .8em;
-	text-align: center;
-}
-.menucaption {
-	font-weight: bold;
-	padding-left: 12px;
-}
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	/* border: 1px solid #bbb; */
-}
-.menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color:#F0F0F0;
-	padding: 0 8px 0 4px;
-}
-.menulist {
-	list-style: none;
-	padding: 0;
-}
 .note {
 	width: auto;
 	margin: 24px 6px 0 6px;

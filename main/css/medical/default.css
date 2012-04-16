@@ -37,17 +37,6 @@ body {
 }
 /* End hide from IE5-mac */
 
-#main {
-	float: left;
-	margin: 0px auto;
-	margin-top: 10px;
-	width: 98%;
-	padding: 0px 10px 10px 10px;
-	background-color: transparent;
-	min-height: 320px;
-	background-repeat: no-repeat;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
@@ -302,15 +291,14 @@ h5, h6 {
 	font-family: verdana, arial, helvetica, sans-serif;
 }
 /* the following for regular <a> elements */
-a:link {
+a {
 	text-decoration: none;
 	font-weight : bold;
 	color : #333;
 }
 a:visited {
 	text-decoration: none;
-	font-weight : bold;
-	color : #333;
+	font-weight : bold;	
 }
 a:hover {
 	text-decoration: none;
@@ -558,41 +546,7 @@ footer {
 .push {
 	height: 5em; /* Very important */
 }
-/*****************************************************
- *  NAVIGATION MENU                                  *
- *****************************************************/
 
-/*NAVIGATION MENU BAR*/
-
-.menu {
-	float: right;
-	width: 20%;
-	padding: 0 0 6px 0;
-}
-
-.menucaption {
-	font-size: 12px;
-	font-weight: bold;
-	padding-left: 12px;
-}
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	/* border: 1px solid #4171B5; */
-}
-.menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color: #E5EDF9;
-	font-size: 12px;
-	padding: 0 8px 0 4px;
-}
-.menulist {
-	list-style: none;
-	margin: 0 0 12px 0;
-	padding: 0;
-}
 #centerwrap {
 	float: left;
 	width: 100%;

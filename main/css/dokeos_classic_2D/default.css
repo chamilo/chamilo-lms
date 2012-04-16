@@ -42,12 +42,10 @@ h3 {
 	padding-top:0px;
 }
 /* the following for regular <a> elements */
-a:link, a:visited, a:hover, a:active {
+a {
 	font-weight : bold;
 	text-decoration: none;
-}
-a:link, a:visited {
-	color : #4171b5;
+    color : #4171b5; 
 }
 a:hover {
 	color: red;
@@ -144,16 +142,6 @@ ul#navigation .help a{
 	height: 1%;
 }
 /* End hide from IE5-mac */
-
-#main {
-	float: left;
-	margin: 0px auto;
-	margin-top: 10x;
-	width: 96%;
-	padding: 0px 10px 10px 10px;
-	min-height: 320px;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php

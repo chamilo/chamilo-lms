@@ -26,11 +26,10 @@ body {
 img {
 	border: none;
 }
-a:link {
+a {
 	color : #333;
 }
 a:visited {
-	color : #333;
 }
 a:hover {
 	color: #f3840d;
@@ -225,34 +224,6 @@ footer a:link, footer a:visited {
 #footer a {
 	color:#fff;
 }
-
-/* Header2Right: online users, student/teacher view, help */
-#Header2Right ul {
-    position: relative; /* to avoid the IE peekabo bug*/
-    float: right;
-    width: 70%;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: right;
-}
-#Header2Right ul li {
-    display: inline;
-}
-#Header2Right ul li a {
-    padding: 4px 6px 4px 4px;
-    color:#636363;
-}
-/* main styles */
-#main {
-    float:left;
-    width: 92%;
-	
-	min-height: 320px;
-	padding-left: 15px;	
-	padding-bottom: 5px;
-}
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
@@ -1252,25 +1223,6 @@ span.radio {
 	height:35px;
 }
 
-/*NAVIGATION MENU BAR*/
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	/* border: 1px solid #4171B5; */
-}
-.menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color: #E5EDF9;
-	font-size: 12px;
-	padding: 0 8px 0 4px;
-}
-.menulist {
-	list-style: none;
-	margin: 0 0 12px 0;
-	padding: 0;
-}
 #centerwrap {
 	float: left;
 	width: 100%;

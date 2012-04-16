@@ -9,6 +9,7 @@
  */
 
 $__dir = dirname(__FILE__) . '/';
+$no_redirection = true; 
 include_once($__dir . '/../../inc/global.inc.php');
 
 require_once $__dir . 'app/lib/shibboleth_config.class.php';

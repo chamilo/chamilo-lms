@@ -126,17 +126,10 @@ class Shibboleth
                 $first_slash_pos = strpos($rootWeb, '/', 8);
                 $rootWeb_wo_uri = substr($rootWeb, 0, $first_slash_pos);
                 $url = $rootWeb_wo_uri . $course_url . '_stop';
-                header("Location: $url");
+                Redirect::go($url);
             }
         }
-        else
-        {
-            $_SESSION['request_uri'];
-        }
-
-        $url = api_get_path('WEB_PATH') . $url;
-        header("Location: $url");
-        die;
+        Redirect::go();
     }
 
     /**

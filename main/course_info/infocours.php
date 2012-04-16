@@ -246,7 +246,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 // Gradebook SETTINGS
-$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', Security::remove_XSS(get_lang('Gradebook')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Gradebook')).'</h3><div>');
+//$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', Security::remove_XSS(get_lang('Gradebook')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Gradebook')).'</h3><div>');
 
 /*$group = array();
 $models = api_get_settings_options('grading_model');

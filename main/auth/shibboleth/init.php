@@ -9,12 +9,12 @@
  */
 
 $__dir = dirname(__FILE__) . '/';
-$no_redirection = true; 
+$no_redirection = true;  //no redirection in global.
 include_once($__dir . '/../../inc/global.inc.php');
 
-require_once $__dir . 'app/lib/shibboleth_config.class.php';
-require_once $__dir . 'app/lib/shibboleth_session.class.php';
-require_once $__dir . 'app/lib/store.class.php';
+require_once $__dir . 'lib/shibboleth_config.class.php';
+require_once $__dir . 'lib/shibboleth_session.class.php';
+require_once $__dir . 'lib/store.class.php';
 require_once $__dir . 'app/controller/shibboleth_controller.class.php';
 require_once $__dir . 'app/model/shibboleth_store.class.php';
 require_once $__dir . 'app/model/shibboleth_user.class.php';

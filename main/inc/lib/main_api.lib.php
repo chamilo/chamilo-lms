@@ -4226,11 +4226,11 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
 function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     $access_url = (int) $access_url;
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $list = "'".implode("','",$exceptions)."'";
-    $sql = "SELECT DISTINCT category FROM $t_cs";
+    $list = "'".implode("','",$exceptions)."'";    
+    $sql = "SELECT DISTINCT category FROM $t_cs WHERE category is NOT NULL ";
     if ($list != "'',''" and $list != "''" and !empty($list)) {
-        $sql .= " WHERE category NOT IN ($list)";
-    }
+        $sql .= " AND category NOT IN ($list) ";
+    }    
     $result = Database::store_result(Database::query($sql));
     return $result;
 }

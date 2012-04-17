@@ -1,10 +1,5 @@
 <div id="login_block" class="well sidebar-nav">
-	<div class="menusection">
-		<span class="menusectioncaption">
-		{{"Login"|get_lang}}
-		</span>	
-	</div>
-	
+        
 	{{ login_language_form }}
         
     {% if plugin_login_top is not null %}

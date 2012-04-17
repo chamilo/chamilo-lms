@@ -224,15 +224,17 @@ class CatForm extends FormValidator {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                
-            $options = array(0 => get_lang('none'));
+            $options = array(-1 => get_lang('none'));
             foreach ($grade_models as $item) {
                 $options[$item['id']] = $item['name'];
             }                                    
             $this->addElement('select', 'grade_model_id', array(get_lang('GradeModel'), get_lang('OnlyActiveWhenThereAreAnyComponents')), $options);
             
             //Freeze or not
+            $course_code = api_get_course_id();
+            $session_id = api_get_session_id();
             $test_cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	
-            $links = $test_cats[0]->get_links();
+            $links = $test_cats[0]->get_links();            
             
             if (count($test_cats) > 1 || !empty($links)) {
                 $this->freeze('grade_model_id');

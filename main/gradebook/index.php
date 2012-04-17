@@ -795,50 +795,53 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
 	if (!empty($cats)) {        
         
-        //Getting grade models
-        $obj = new GradeModel();
-        $grade_models = $obj->get_all();                
-        $options = array(0 => get_lang('none'));
-        foreach ($grade_models as $item) {
-            $options[$item['id']] = $item['name'];
-        }                
+        if (api_is_allowed_to_edit(null, true)) {
+            //Getting grade models
+            $obj = new GradeModel();
+            $grade_models = $obj->get_all();                
+            $options = array('-1' => get_lang('none'));
+            foreach ($grade_models as $item) {
+                $options[$item['id']] = $item['name'];
+            }                
 
-        $grade_model_id = $cats[0]->get_grade_model_id();
+            $grade_model_id = $cats[0]->get_grade_model_id();        
+            
+            //No children
+            if (count($cats) == 1 && empty($grade_model_id)) {
+                $form = new FormValidator('grade_model_settings');
+                $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
+                $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
+                
+                if ($form->validate()) {
+                    $value = $form->exportValue('grade_model');                    
+                    $gradebook = new Gradebook();
+                    $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
 
-        //No children
-        if (count($cats) == 1 && !isset($grade_model_id)) {
-            $form = new FormValidator('grade_model_settings');
-            $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
-            $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
-            $form->display();     
+                    //do something                        
+                    $obj = new GradeModel();                             
+                    $components = $obj->get_components($value);
 
-            if ($form->validate()) {
-                $value = $form->exportValue('grade_model');                    
-                $gradebook = new Gradebook();
-                $gradebook->update(array('id'=> $cat->get_id(), 'grade_model_id' => $value), true);                 
+                    foreach ($components as $component) {
+                        $gradebook =  new Gradebook();
+                        $params = array();
 
-                //do something                        
-                $obj = new GradeModel();                             
-                $components = $obj->get_components($value);
+                        $params['name']             = $component['acronym'];
+                        $params['description']      = $component['title'];
+                        $params['user_id']          = api_get_user_id();
+                        $params['parent_id']        = $cats[0]->get_id();
+                        $params['weight']           = $component['percentage'];
+                        $params['session_id']       = api_get_session_id();
+                        $params['course_code']      = api_get_course_id();
+                        $params['grade_model_id']   = api_get_session_id();
 
-                foreach ($components as $component) {
-                    $gradebook =  new Gradebook();
-                    $params = array();
-
-                    $params['name']             = $component['acronym'];
-                    $params['description']      = $component['title'];
-                    $params['user_id']          = api_get_user_id();
-                    $params['parent_id']        = $cat->get_id();
-                    $params['weight']           = $component['percentage'];
-                    $params['session_id']       = api_get_session_id();
-                    $params['course_code']      = api_get_course_id();
-                    $params['grade_model_id']   = api_get_session_id();
-
-                    $gradebook->save($params);
+                        $gradebook->save($params);
+                    }
                     
                     //Reloading cats
                     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-                }
+                } else {
+                    $form->display();   
+                }                
             }
         }
         

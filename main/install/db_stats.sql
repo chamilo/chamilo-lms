@@ -8,6 +8,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP TABLE IF EXISTS track_c_browsers;
 CREATE TABLE track_c_browsers (
   id int NOT NULL auto_increment,
   browser varchar(255) NOT NULL default '',
@@ -15,6 +16,7 @@ CREATE TABLE track_c_browsers (
   PRIMARY KEY  (id)
 );
 
+DROP TABLE IF EXISTS track_c_countries;
 CREATE TABLE track_c_countries (
   id int NOT NULL auto_increment,
   code varchar(40) NOT NULL default '',
@@ -23,6 +25,7 @@ CREATE TABLE track_c_countries (
   PRIMARY KEY  (id)
 );
 
+DROP TABLE IF EXISTS track_c_os;
 CREATE TABLE track_c_os (
   id int NOT NULL auto_increment,
   os varchar(255) NOT NULL default '',
@@ -30,6 +33,7 @@ CREATE TABLE track_c_os (
   PRIMARY KEY  (id)
 );
 
+DROP TABLE IF EXISTS track_c_providers;
 CREATE TABLE track_c_providers (
   id int NOT NULL auto_increment,
   provider varchar(255) NOT NULL default '',
@@ -37,6 +41,7 @@ CREATE TABLE track_c_providers (
   PRIMARY KEY  (id)
 );
 
+DROP TABLE IF EXISTS track_c_referers;
 CREATE TABLE track_c_referers (
   id int NOT NULL auto_increment,
   referer varchar(255) NOT NULL default '',
@@ -44,6 +49,7 @@ CREATE TABLE track_c_referers (
   PRIMARY KEY  (id)
 );
 
+DROP TABLE IF EXISTS track_e_access;
 CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
@@ -56,6 +62,7 @@ CREATE TABLE track_e_access (
   KEY access_cours_code (access_cours_code)
 );
 
+DROP TABLE IF EXISTS track_e_lastaccess;
 CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
@@ -69,7 +76,7 @@ CREATE TABLE track_e_lastaccess (
   KEY access_session_id (access_session_id)
 );
 
-
+DROP TABLE IF EXISTS track_e_default;
 CREATE TABLE track_e_default (
   default_id int NOT NULL auto_increment,
   default_user_id int unsigned NOT NULL default 0,
@@ -81,6 +88,7 @@ CREATE TABLE track_e_default (
   PRIMARY KEY  (default_id)
 );
 
+DROP TABLE IF EXISTS track_e_downloads;
 CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
@@ -93,6 +101,7 @@ CREATE TABLE track_e_downloads (
   KEY down_cours_id (down_cours_id)
 );
 
+DROP TABLE IF EXISTS track_e_exercices;
 CREATE TABLE track_e_exercices (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
@@ -119,7 +128,7 @@ ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL 
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
 
-
+DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
   exe_id int default NULL,
   user_id int NOT NULL default 0,
@@ -138,6 +147,7 @@ ALTER TABLE track_e_attempt ADD INDEX (user_id);
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
 ALTER TABLE track_e_attempt ADD INDEX (session_id);
 
+DROP TABLE IF EXISTS track_e_attempt_recording;
 CREATE TABLE track_e_attempt_recording (
   exe_id int unsigned NOT NULL, 
   question_id int unsigned NOT NULL,  
@@ -151,6 +161,7 @@ ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 
+DROP TABLE IF EXISTS track_e_hotpotatoes;
 CREATE TABLE track_e_hotpotatoes (
   exe_name VARCHAR( 255 ) NOT NULL ,
   exe_user_id int unsigned DEFAULT NULL ,
@@ -162,6 +173,7 @@ CREATE TABLE track_e_hotpotatoes (
   KEY exe_cours_id (exe_cours_id)
 );
 
+DROP TABLE IF EXISTS track_e_links;
 CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
@@ -174,6 +186,7 @@ CREATE TABLE track_e_links (
   KEY links_user_id (links_user_id)
 );
 
+DROP TABLE IF EXISTS track_e_login;
 CREATE TABLE track_e_login (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
@@ -184,6 +197,7 @@ CREATE TABLE track_e_login (
   KEY login_user_id (login_user_id)
 );
 
+DROP TABLE IF EXISTS track_e_online;
 CREATE TABLE track_e_online (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
@@ -195,7 +209,7 @@ CREATE TABLE track_e_online (
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
 );
-
+DROP TABLE IF EXISTS track_e_open;
 CREATE TABLE track_e_open (
   open_id int NOT NULL auto_increment,
   open_remote_host tinytext NOT NULL,
@@ -205,6 +219,7 @@ CREATE TABLE track_e_open (
   PRIMARY KEY  (open_id)
 );
 
+DROP TABLE IF EXISTS track_e_uploads;
 CREATE TABLE track_e_uploads (
   upload_id int NOT NULL auto_increment,
   upload_user_id int unsigned default NULL,
@@ -217,6 +232,7 @@ CREATE TABLE track_e_uploads (
   KEY upload_cours_id (upload_cours_id)
 );
 
+DROP TABLE IF EXISTS track_e_course_access;
 CREATE TABLE track_e_course_access (
   course_access_id int NOT NULL auto_increment,
   course_code varchar(40) NOT NULL,
@@ -228,6 +244,7 @@ CREATE TABLE track_e_course_access (
   PRIMARY KEY  (course_access_id)
 );
 
+DROP TABLE IF EXISTS track_e_hotspot;
 CREATE TABLE track_e_hotspot (
   hotspot_id int NOT NULL auto_increment,
   hotspot_user_id int NOT NULL,
@@ -243,6 +260,8 @@ CREATE TABLE track_e_hotspot (
   KEY hotspot_exe_id (hotspot_exe_id),
   KEY hotspot_question_id (hotspot_question_id)
 );
+
+DROP TABLE IF EXISTS track_e_item_property;
 
 CREATE TABLE track_e_item_property (
   id int NOT NULL auto_increment PRIMARY KEY,
@@ -273,6 +292,7 @@ ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
 --
 -- Table structure for LP custom storage API
 --
+DROP TABLE IF EXISTS stored_values;
 CREATE TABLE stored_values (
         user_id INT NOT NULL,
         sco_id INT NOT NULL,
@@ -283,6 +303,7 @@ CREATE TABLE stored_values (
 ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
 ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
 
+DROP TABLE IF EXISTS stored_values_stack;
 CREATE TABLE stored_values_stack (
         user_id INT NOT NULL,
         sco_id INT NOT NULL,
@@ -293,4 +314,3 @@ CREATE TABLE stored_values_stack (
 );
 ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
 ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
-

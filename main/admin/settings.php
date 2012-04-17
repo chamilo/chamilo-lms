@@ -278,18 +278,30 @@ $action_images['extra']     	= 'wizard.png';
 $action_images['tracking']     	= 'statistics.png';
 $action_images['gradebook2']    = 'gradebook.png';
 
+$action_images['search']        = 'search.png';
+$action_images['stylesheets']   = 'stylesheets.png';
+$action_images['templates']     = 'template.png';
+$action_images['plugins']       = 'plugins.png';
+
 // Grabbing the categories.
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
 
-echo "<div class=\"actions\">";
+$action_array = array();
+
+$resultcategories[] = array('category' => 'search');
+$resultcategories[] = array('category' => 'stylesheets');
+$resultcategories[] = array('category' => 'templates');
+$resultcategories[] = array('category' => 'plugins');
 foreach ($resultcategories as $row) {
-    echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'',ICON_SIZE_MEDIUM)."</a>";
+    $url = array();    
+    $url['url'] = api_get_self()."?category=".$row['category'];
+    $url['content'] = Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'',ICON_SIZE_MEDIUM);    
+    if (strtolower($row['category']) == strtolower($_GET['category'])) {
+        $url['active'] = true;
+    }
+    $action_array[] = $url;
 }
-echo "<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'',ICON_SIZE_MEDIUM)."</a>";
-echo "<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'',ICON_SIZE_MEDIUM)."</a>";
-echo "<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'',ICON_SIZE_MEDIUM)."</a>";
-echo "<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'',ICON_SIZE_MEDIUM)."</a>";
-echo "</div>";
+echo Display::actions($action_array);
 
 $form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'vertical'));
 $form_search->addElement('text', 'search_field');

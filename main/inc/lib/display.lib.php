@@ -1412,4 +1412,22 @@ class Display {
         }
         return $html;        
     }    
+    
+    function actions($items) {
+        if (!empty($items)) {
+            $html = '<div class="new_actions"><ul class="nav nav-pills">';        
+            foreach ($items as $value) {
+                $class = null;
+                if (isset($value['active']) && $value['active']) {
+                    $class = 'class ="active"';
+                }
+                $html .= "<li $class >"; 
+                $html .= self::url($value['content'], $value['url']);
+                $html .= '</li>'; 
+            }        
+            $html .= '</ul></div>';
+        }
+        return $html;
+        
+    }
 } //end class Display

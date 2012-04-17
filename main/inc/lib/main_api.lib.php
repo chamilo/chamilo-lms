@@ -628,6 +628,15 @@ function api_is_ldap_activated() {
     return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
 }
 
+/**
+ * @return bool     Return true if Facebook authentification is activated
+ *
+ */
+function api_is_facebook_auth_activated() {
+    global $_configuration;
+    return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
+}
+
 
 /**
  * This function checks whether a given path points inside the system.

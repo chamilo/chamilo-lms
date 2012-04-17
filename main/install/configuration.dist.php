@@ -82,25 +82,26 @@ $_configuration['db_admin_path']  = '';
  * 
  * Login modules settings
  */
-// For new login module
-// Uncomment these lines to activate ldap
-// $extAuthSource["ldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/login.php";
-// $extAuthSource["ldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/ldap/newUser.php";
+// CAS IMPLEMENTATION
+// -> Go to your portal Chamilo > Administration > CAS to activate CAS
+// You can leave these lines uncommented even if you don't use CAS authentification
+$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
+$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
 //
-// Go to Chamilo > Administration > CAS to activate CAS
-// You can leave these lines uncommented even if you don't use CAS
-$extAuthSource["cas"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
-$extAuthSource["cas"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
+// NEW LDAP IMPLEMENTATION BASED ON external_login info
+// -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
+// $extAuthSource["extldap"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";
+// $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.ldap.php";
 //
+// FACEBOOK IMPLEMENTATION BASED ON external_login info
+// -> Uncomment the line bellow to activate Facebook Auth AND edit main/auth/external_login/ldap.conf.php for configuration
+// $_configuration['facebook_auth'] = 1;
+//
+// OTHER EXTERNAL LOGIN INFORMATION
 // To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
 // $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.php";
 // $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/updateUser.php";
-//
-//NEW LDAP IMPLEMENTATION BASED ON external_logininfo
-// Please edit main/auth/external_login/ldap.conf.php
-//$extAuthSource["extldap"]["login"]						= $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";
-//$extAuthSource["extldap"]["newUser"]					= $_configuration['root_sys'].$_configuration['code_append']."auth/external_ldap/newUser.ldap.php";
-//
+
 /**
  * 
  * Hosting settings - Allows you to set limits to the Chamilo portal when

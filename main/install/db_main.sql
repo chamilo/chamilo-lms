@@ -864,7 +864,8 @@ VALUES
 ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17486','DatabaseVersion','', NULL, NULL, 0);
+('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17536','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1355,7 +1356,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
   course_code varchar(40) default NULL,
   category_id int default NULL,
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
-  weight smallint NOT NULL,
+  weight FLOAT NOT NULL,
   max float unsigned NOT NULL,
   visible tinyint NOT NULL,
   type varchar(40) NOT NULL default 'evaluation',

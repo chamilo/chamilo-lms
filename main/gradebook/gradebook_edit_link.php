@@ -32,7 +32,11 @@ $cats = Category :: load(null, null, $course_code, null, null, $session_id, fals
 
 $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'edit_link_form', api_get_self() . '?selectcat=' . $linkcat. '&editlink=' . $linkedit);
 if ($form->validate()) {
-	$values = $form->exportValues();
+	$values = $form->exportValues();    
+    $parent_cat = Category :: load($values['select_gradebook']);    
+    $cat = Category :: load($parent_cat[0]->get_parent_id());           
+    $global_weight = $cat[0]->get_weight();    
+    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
 	$link->set_weight($values['weight']);
     
     if (!empty($values['select_gradebook'])) {

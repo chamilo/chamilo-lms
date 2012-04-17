@@ -10,10 +10,10 @@
 $language_file = 'gradebook';
 
 require_once '../inc/global.inc.php';
-
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/catform.class.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 api_block_anonymous_users();
 block_students();
@@ -100,13 +100,14 @@ if ($form->validate()) {
 	}else {
 		$cat->set_course_code($values['course_code']);
 	}
-	$cat->set_description($values['description']);
-	
-	$cat->set_skills($values['skills']);
     
+    $cat->set_grade_model_id($values['grade_model_id']);
+	$cat->set_description($values['description']);	
+	$cat->set_skills($values['skills']);    
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
 	$cat->set_weight($values['weight']);
+    
 	if ($values['hid_parent_id'] == 0 ) {
 		$cat->set_certificate_min_score($values['certif_min_score']);
 	}
@@ -117,6 +118,35 @@ if ($form->validate()) {
 	}
 	$cat->set_visible($visible);
 	$cat->save();
+    $parent_id = $cat->get_parent_id();
+    
+    
+    if ($parent_id == 0) {        
+        //do something           
+        if (isset($values['grade_model_id']) && !empty($values['grade_model_id'])) {
+            $obj = new GradeModel();                             
+            $components = $obj->get_components($values['grade_model_id']);
+
+            foreach ($components as $component) {
+                $gradebook =  new Gradebook();
+                $params = array();
+
+                $params['name']             = $component['acronym'];
+                $params['description']      = $component['title'];
+                $params['user_id']          = api_get_user_id();
+                $params['parent_id']        = $cat->get_id();
+                $params['weight']           = $component['percentage']/100*$values['weight'];
+                $params['session_id']       = api_get_session_id();
+                $params['course_code']      = api_get_course_id();
+                $params['grade_model_id']   = api_get_session_id();
+
+                $gradebook->save($params);                
+            }
+        }
+        
+    }
+    
+    
 	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }

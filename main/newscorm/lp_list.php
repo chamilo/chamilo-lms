@@ -90,9 +90,9 @@ if ($is_allowed_to_edit) {
     }
 
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('add.png', get_lang('_add_learnpath'),'',ICON_SIZE_MEDIUM).'</a>' .
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('_add_learnpath'),'',ICON_SIZE_MEDIUM).'</a>' .
         str_repeat('&nbsp;', 3).
-        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import.png', get_lang('UploadScorm'),'',ICON_SIZE_MEDIUM).'</a>';
+        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'),'',ICON_SIZE_MEDIUM).'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
         echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
 		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -226,7 +226,7 @@ if (!empty($flat_list)) {
             $my_title = Display::tag('font', $name, array('style'=>'color:grey'));
         }
         $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
-            		'<td align="left" valign="top"><a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
+            		'<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'),'',ICON_SIZE_SMALL).'<a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
         
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';
@@ -441,12 +441,12 @@ if (!empty($flat_list)) {
              /* Export */
 
             if ($details['lp_type'] == 1) {
-                $dsp_disk = Display::url(Display::return_icon('dock.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
+                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
                 
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(Display::return_icon('dock.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
+                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
             } else {
-                $dsp_disk = Display::return_icon('dock_na.png', get_lang('Export'), array(), ICON_SIZE_SMALL);                
+                $dsp_disk = Display::return_icon('export_scorm_na.png', get_lang('Export'), array(), ICON_SIZE_SMALL);                
             }
             
             //Copy            

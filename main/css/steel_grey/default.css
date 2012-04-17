@@ -373,99 +373,52 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #my_courses {
 	float: right;
 }
-/********************************************************
- *  HEADER 2: Users online, help, student/teacher view	*
- ********************************************************/
-#header2 {
-	position: relative; /* to avoid the IE peekabo bug*/
-	color: #636363;/*border: 1px solid red;*/
-	min-height: 25px;
-}
-#header2 a {
-	color: #636363;
-	text-decoration: none;
-	font-weight:normal;
-}
-#header2 a:hover {
-	text-decoration: underline;
-}
+
 /*****************************************************
- *  HEADER 3: TABS OF THE HEADER			     	 *
+ *  TABS OF THE HEADER			     	 *
  *****************************************************/
 .subnav {
-	background-image: url(images/tab-repeat.png);
-	background-position: 0px 0px;
-	background-repeat: repeat-x;/*border: 1px solid green;*/
-	height:41px;
-    width: 100%;
+    background-color: #4C4C4C; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #4C4C4C 0%, #747474 100%); /* FF3.6+ */  
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4C4C4C), color-stop(100%,#747474)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #4C4C4C 0%, #747474 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #4C4C4C 0%,#747474 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #4C4C4C 0%,#747474 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4C4C4C', endColorstr='#747474',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
+    border: 1px solid #4C4C4C;
 }
 .subnav a {
-	DISPLAY: block;
-	PADDING-RIGHT: 15px;
-	PADDING-LEFT: 6px;
-	COLOR: #fff;
-    float:left;
-	PADDING-TOP: 10px;
+    color:white;
+}
+
+.subnav #current a {
+    background-color: #808080; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #808080 0%, #A5A5A5 100%); /* FF3.6+ */  
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#808080), color-stop(100%,#A5A5A5)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #808080 0%, #A5A5A5 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #808080 0%,#A5A5A5 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #808080 0%,#A5A5A5 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#808080', endColorstr='#A5A5A5',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #808080 0%, #A5A5A5 100%); /* W3C */
+}
+.subnav .nav > #current > a, .subnav .nav > #current > a:hover {
+    color: white;
 }
 .subnav a:hover {
-	color: #a8a7a7;
-    background: none;
+    color: #a8a7a7;
 }
-.subnav ul {
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	LIST-STYLE-TYPE: none;	
-}
-.subnav li {
-	PADDING-RIGHT: 0px;
-	PADDING-LEFT: 9px;
-	FLOAT: left;
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	padding-top: 10px;	
-}
-.subnav li#current {
-	background:  url(images/tab-left.png) no-repeat top left;
-	padding-top: 0px;
-	height: 41px;
-	float: left;
-}
-.subnav #current a {
-	background:  url(images/tab-right.png) no-repeat top right;
-	height: 31px;
-}
-.subnav .banner_links {
-	margin: 0;
-}
-.subnav input {
-	padding-right: 15px;
-	display: block;
-	padding-left: 6px;
-}
-.subnav #logout {
-	margin-top: 0px;
-}
-.subnav input.logout:hover {
+.subnav .nav > li > a {
+    border-left: none;    
+    border-right: none;
 }
 #logout {
 	display: inline;
 	float: right;
 	width: auto;
 	text-align: right;
-}
-/*****************************************************
- *  HEADER 4
- *****************************************************/
-#header4 {
-    background-color: #fff;
-    color: #fff;
-    margin-bottom: 2px; 
-    width:100%;
-}
-
-#header4 a:hover {
-	text-decoration: none;
-	color: #a8a7a7;
 }
 /* The tool shortcuts */
 #toolshortcuts {

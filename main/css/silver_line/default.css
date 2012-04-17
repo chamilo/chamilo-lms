@@ -74,6 +74,8 @@ ul {
     list-style: none;
 }
 
+
+
 /*
 -----------------------------------------------------------------------------
 Menu Slide JQuery
@@ -369,121 +371,11 @@ ul#navigation .student-connect a {
     margin-bottom: .5em;
     position:relative;
 }
-/*
-------------------------------------------------------------------------------
-    HEADER 1: Title, portal, organisation, course title
-------------------------------------------------------------------------------
-*/
 
-#header1 {
-    width: 100%;
-    float: left;
-}
-#header1 #my_courses {
-    display: none;
-    visibility: hidden;
-}
-#top_corner {
-}
 #institution {
     margin: 0 0 0 3.9em;
 }
-/*
-------------------------------------------------------------------------------
-    HEADER 2: Users online, help, student/teacher view
-------------------------------------------------------------------------------
-*/
 
-#header2 {
-    width: 100%;
-    position: relative; /* to avoid the IE peekabo bug*/
-    height:90px;
-}
-#header2 ul {
-    list-style: none;
-    margin: 0 1.9em 0 0;
-    padding: 0;
-}
-#header2 ul li {
-    display: inline;
-    width: auto;
-    margin: 0 .1em 0 .2em;
-    padding: 0;
-}
-
-/*
-------------------------------------------------------------------------------
-    HEADER 3: Main menu
-------------------------------------------------------------------------------
-*/
-
-.subnav {
-    width: 100%;
-
-    padding: 0;
-}
-.subnav input.logout {
-    /* makes an input appear like a link in this header */
-    background-color: transparent;
-    border: none;
-    color: #000;
-    height: auto;
-    display: inline;
-    line-height: 1em;
-    font: bold 1em Arial, sans-serif, sans;
-    margin: -.3em 0 0 2em;
-    padding: 0;
-}
-.subnav form {
-    margin: 0;
-    padding: 0;
-}
-.subnav #logout {
-    display: inline;
-    float: right;
-    clear: right;
-    margin: 0 1.5em 0 0;
-    padding: 0;
-    width: 10%;
-}
-.subnav #logout li {
-    display: block;
-    margin: 0;
-    padding: 0;
-    float: right;
-    clear: right;
-}
-
-.subnav ul {
-    PADDING-RIGHT: 10px;
-    PADDING-LEFT: 10px;
-    PADDING-BOTTOM: 0px;
-    MARGIN: 5px;
-    LIST-STYLE-TYPE: none;    
-}
-.subnav ul li {
-    float: left;
-    display: inline;
-    list-style: none;
-    margin: 0 1em 0 0;
-    padding: 0;
-    width: auto;
-}
-.subnav ul li a {
-    display: inline;
-}
-/*
-------------------------------------------------------------------------------
-    HEADER 4:
-------------------------------------------------------------------------------
-*/
-
-#header4 { 
-    background-color: #fff;
-    color: #fff;
-    margin-bottom: 2px;
-    width:100%;
-}
 
 /*
 ------------------------------------------------------------------------------
@@ -1283,14 +1175,12 @@ div.system_announcement {
 .survey_question_wrapper {
     border: 1px solid #4271b5;
 }
-.survey_question {
-    /* 264269 4271b5 E5EDF9 */
+.survey_question {    
     background-color:#4271b5;
     color:#FFFFFF;
     padding:5px;/*border: 1px solid #264269;*/
 }
-.survey_question_options {
-    /* 264269 4271b5 E5EDF9 */
+.survey_question_options {    
     background-color:#FFF;
     color:#000;
     padding:5px;/*border: 1px solid #264269;*/
@@ -1802,36 +1692,6 @@ span.radio {
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
-
-button:hover input[type="submit"]:hover {
-    background-color:#cbcbcb;
-    color:#545454;
-    border-style: inset;
-}
-/* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next {
-    padding-left:30px;
-    background-position:10px;
-    background-repeat:no-repeat;
-}
-/* POSITIVE */
-button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next {
-    background-color:#E5EDF9;
-    border-color: #D4E2F6;
-}
-button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover, input[type="submit"].submit_next:hover {
-    border-color: #D4E2F6;
-    background-color:#D4E2F6;
-}
-/* NEGATIVE */
-button.cancel {
-    background-color:#F8E8E6;
-    border-color: #FFE3DE;
-}
-button.cancel:hover {
-    border-color: #F4E1D0;
-    background-color: #FFE3DE;
-}
 /*including "save" image*/
 button.save {
     background-image:url(images/button_accept.gif);

@@ -51,57 +51,13 @@ a:active {
 /* header 3 styles */
 .subnav {
 	border-bottom: 1px solid #aeaeae;	
-	font-weight: bold;
-	margin: 0;
-	padding: 0;	
-    width:100%;        
+	font-weight: bold;	
 }
 
-.subnav UL {
-	PADDING-RIGHT: 2px;
-	PADDING-LEFT: 10px;
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	LIST-STYLE-TYPE: none;	
-}
-.subnav LI {
-	PADDING-RIGHT: 0px;
-	PADDING-LEFT: 9px;
-	FLOAT: left;
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
-	cursor: pointer;
-}
-.subnav a {	
-	float:left;
-	text-decoration:none;
-	cursor: pointer;
-	padding-right: 1px;
-	height:25px;
-}
 .subnav li a:hover {
 	float:left;
 	text-decoration:none;
 	cursor: pointer;
-}
-.subnav li a span {
-	float:left;
-	cursor: pointer;
-	padding-right: 10px;
-	padding-top: 5px;
-	height:20px;
-}
-.subnav li a:hover span {
-	float:left;
-	cursor: pointer;
-}
-.subnav #current a {	
-	float:left;
-	text-decoration:none;
-}
-.subnav #current a span {
-	float:left;
 }
 
 /* The tool shortcuts */

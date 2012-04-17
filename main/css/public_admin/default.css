@@ -399,93 +399,28 @@ a:active {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-.subnav {
-    font-size: 1.0em;
-    padding: 4px 0px 4px 0px;
-    background: #fff;
-    color: #006;
-    border-bottom: 1px solid #aeaeae;
-    height:25px;
-    margin-bottom: 1px;
-    background-image: url(images/fondoHeader3.jpg);	
-    width:100%;
+.subnav {    
+    background-image: url(images/fondoHeader3.jpg);	    
 }
-.subnav A {
-    PADDING-RIGHT: 15px;
-    DISPLAY: block;
-    PADDING-LEFT: 6px;
-    /* BACKGROUND:  url(images/tab_right.gif) no-repeat right top; */
-    PADDING-BOTTOM: 0px;
-    COLOR: #fff;
-    PADDING-TOP: 5px;
-    TEXT-DECORATION: none;
+
+.subnav a {
+    COLOR: #fff;    
 }
-.subnav A:hover {
+.subnav a:hover {
     COLOR: #9ba408;
     background: none;
 }
-.subnav UL {
-    PADDING-BOTTOM: 0px;
-    MARGIN: 0px;
-    LIST-STYLE-TYPE: none;    
-}
-.subnav LI {
-    PADDING-RIGHT: 0px;
-    PADDING-LEFT: 9px;
-    FLOAT: left;
-    PADDING-BOTTOM: 0px;
-    MARGIN: 0px;
-    PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
-}
-.subnav LI:hover {
-    PADDING-RIGHT: 0px;
-    PADDING-LEFT: 9px;
-    PADDING-BOTTOM: 0px;
-    MARGIN: 0px;
-    PADDING-TOP: 0px
-}
-.subnav #current {
-}
+
 .subnav #current A {
     COLOR: #999
 }
-.subnav .banner_links {
-    margin: 0;
+
+.subnav .nav > li > a {
+    border-left: none;
+    border-radius: 0 0 0 0;
+    border-right: none;
 }
-.subnav input.logout {
-    /* makes an input appear like a link in this header */
-    margin: 0 0 0 0;
-    padding: 0 30px 0 0;
-    background-color: transparent;
-    border: none;
-    COLOR: #fff;
-    font-size: 1.0em;
-    font-weight:bold;
-    font-family: verdana, arial, helvetica, sans-serif;
-    display: inline;
-    PADDING-RIGHT: 0px;
-    PADDING-TOP: 3px;
-}
-.subnav input:hover {
-    COLOR: #999;
-}
-.subnav input {
-    PADDING-RIGHT: 15px;
-    DISPLAY: block;
-    PADDING-LEFT: 6px;
-}
-.subnav #logout {
-    margin-top: 0px;
-}
-.subnav input.logout:hover {
-}
-#logout {
-    display: inline;
-    float: right;
-    width: auto;
-    text-align: right;
-    font-size: 1.0em;
-}
+
 /*****************************************************
  *  HEADER 4
  *****************************************************/

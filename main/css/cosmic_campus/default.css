@@ -84,69 +84,24 @@ input[type=button], input[type=submit] {
 	float: left;
 	font-weight: bold;
 }
-#my_courses {
-	float: right;
-	font-weight: bold;
-}
-/* header 2 styles */
-#header2 {
-	min-height:10px;
-	padding:  0.2em 0.5em;
-	padding-bottom: 0.2em;
-	background: #A7A7E5;
-	color: #666;
-}
-#header2 a {
-	color: #666;
-}
-#header2 a:hover {
-	text-decoration: underline;
-}
-#Header2Right ul {
-	float: right;
-	width: 70%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header2Right ul li {
-	display: inline;
-	color:#ffffff;
-}
-#Header2Right ul li a {
-	color:#f1d40d;
-}
+
 /* header 3 styles */
 .subnav {
 	background: #fff;
 	color: #006;
-	border-bottom: 1px solid #aeaeae;
-	height:40px;	
-	background-image: url(images/fondoHeader3.jpg);	
-    width:100%;
+	border-bottom: 1px solid #aeaeae;	
+	background-image: url(images/fondoHeader3.jpg);
 }
-.subnav a {
-	height:25px;
-	color: #fff;
-
+.subnav a {	
+    color: #fff;
 }
 .subnav a:hover {
 	color: #8484CA;	
 }
-.subnav ul {
-	height:50px;
-}
-.subnav li {
 
-}
-
-/* header 4 styles */
-#header4 {
-    background-color: #fff;
-    color: #fff;
-    margin-bottom: 2px;
-    width:100%;
+.subnav .nav > li > a {
+    border-left: none;    
+    border-right: none;
 }
 
 /* The tool shortcuts */

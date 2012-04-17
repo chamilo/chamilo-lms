@@ -10,6 +10,7 @@
 class Shibboleth
 {
 
+    const NAME = 'shibboleth';
     const UNKNOWN_STATUS = -1;
     const TEACHER_STATUS = 1;
     const STUDENT_STATUS = 5;
@@ -125,17 +126,10 @@ class Shibboleth
                 $first_slash_pos = strpos($rootWeb, '/', 8);
                 $rootWeb_wo_uri = substr($rootWeb, 0, $first_slash_pos);
                 $url = $rootWeb_wo_uri . $course_url . '_stop';
-                header("Location: $url");
+                Redirect::go($url);
             }
         }
-        else
-        {
-            $_SESSION['request_uri'];
-        }
-
-        $url = api_get_path('WEB_PATH') . $url;
-        header("Location: $url");
-        die;
+        Redirect::go();
     }
 
     /**
@@ -152,6 +146,7 @@ class Shibboleth
         $user = User::store()->get_by_shibboleth_id($shibb_user->unique_id);
         if (empty($user))
         {
+            $shibb_user->auth_source == self::NAME;
             return User::create($shibb_user)->save();
         }
 
@@ -163,6 +158,7 @@ class Shibboleth
             {
                 $user->{$key} = $shibb_user->{$key};
             }
+            $user->auth_source == self::NAME;
         }
         $user->save();
         return $result;

@@ -44,12 +44,20 @@ class ShibbolethSession
     /**
      * Create a Shibboleth session for the user ID
      *
-     * @param  string $_uid - The user ID
+     * @param  string $uid - The user ID
      * @return $_user (array) - The user infos array created when the user logs in
      */
-    function login($_uid)
+    function login($uid)
     {
-        $user = User::store()->get_by_user_id($_uid);
+        /* This must be set for local.inc.php to register correctly the global variables in session
+         * This is BAD. Logic should be migrated into a function and stop relying on global variables.
+         */
+        global $_uid, $is_allowedCreateCourse, $is_platformAdmin, $_real_cid, $_courseUser, $is_courseAdmin;
+        global $is_courseMember, $is_courseTutor, $is_courseCoach, $is_allowed_in_course, $is_sessionAdmin, $_gid;
+        $_uid = $uid;
+        
+        //is_allowedCreateCourse
+        $user = User::store()->get_by_user_id($uid);
         if (empty($user))
         {
             return;
@@ -80,11 +88,7 @@ class ShibbolethSession
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);
         
-        global $is_platformAdmin; 
-        /* This must be set for local.inc.php to set up correctly the platform admin
-         * This is BAD.
-         */
-
+        $no_redirection = true;
         require("$includePath/local.inc.php");
 
 

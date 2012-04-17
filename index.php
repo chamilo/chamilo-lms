@@ -79,9 +79,17 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 	unset($_SESSION['info_current_user']);
 }
 //If we are not logged in and customapages activated
-if (!api_get_user_id() && api_get_setting('use_custom_pages') == 'true' ){
+if (!api_get_user_id() && api_get_setting('use_custom_pages') == 'true' )
+{
   require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
-  CustomPages::displayPage('index-unlogged');
+  if(Request::get('loggedout'))
+  {      
+    CustomPages::displayPage('loggedout');
+  }
+  else
+  {      
+    CustomPages::displayPage('index-unlogged');
+  }
 }
 
 /**

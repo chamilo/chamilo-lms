@@ -284,4 +284,7 @@ star				crystal
 star_green			modif crystal
 menu				nuvola
 starthere (=info.png 64 px)	crystal
-copy				crystal 
+copy				crystal
+scorm				nuvola
+scorm_builder			modif nuvola
+scormbuilder_na.png  		modif nuvola

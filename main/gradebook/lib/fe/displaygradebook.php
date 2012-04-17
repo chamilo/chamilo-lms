@@ -381,15 +381,10 @@ class DisplayGradebook
             }
         }
 
-
-
 		if (!$is_course_admin && $status<>1 && $selectcat<>0) {
 			$user_id = api_get_user_id();
-			//$user= get_user_info_from_id($user_id);
-
 			$catcourse	  = Category::load($catobj->get_id());            
-			$scoredisplay = ScoreDisplay :: instance();
-			//$scorecourse  = $catcourse[0]->calc_score($user_id);
+			$scoredisplay = ScoreDisplay :: instance();			
 
 			// generating the total score for a course
 			$allevals= $catcourse[0]->get_evaluations($user_id,true);
@@ -397,36 +392,30 @@ class DisplayGradebook
 			$evals_links = array_merge($allevals, $alllinks);
 			$item_value=0;
 			$item_total=0;
-            
-           
             $item_total_value = 0;            
-           
+            
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item           = $evals_links[$count];
 				$score          = $item->calc_score($user_id);
                 $my_score_denom =($score[1]==0) ? 1 : $score[1];
-				$item_value     = $score[0]/$my_score_denom * $item->get_weight();                
                 
-                //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                //$percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$catobj->get_weight(), 2);
+				$item_value     = $score[0]/$my_score_denom * $item->get_weight(); 
+                $sub_item_total      = $item->get_weight();                
                 
-                //$item_value     = $percentage*$item_value;                
-                
-				//$item_total         += $percentage*100;
-                $item_total         += $item->get_weight();                
-                $item_total_value   += $item_value;
-				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);				
+                /*$item_value         = $item_value*$catcourse[0]->get_weight();                 
+                $sub_item_total      = $item->get_weight()*$catcourse[0]->get_weight();                
+                */
+                //var_dump($item_value.' - '.$sub_item_total);
+                $item_total         += $sub_item_total;                
+                $item_total_value   += $item_value;                
 			}
             $item_total = round($item_total);
-			$item_value = number_format($item_total_value, 2);
+			//$item_value = number_format($item_total_value, api_get_setting('gradebook_number_decimals'));
+            $item_value = number_format($item_total_value, 2);
 			$total_score = array($item_value, $item_total);
 		
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
-			//$cattotal = Category :: load(0);
-			//$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-			//$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-			//$scoreinfo = get_lang('StatsStudent') . ' :<b> '.api_get_person_name($user['firstname'], $user['lastname']).'</b><br />';
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {
 				$scoreinfo.= '<h2>'.get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
 			}

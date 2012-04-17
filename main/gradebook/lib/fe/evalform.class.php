@@ -285,7 +285,7 @@ class EvalForm extends FormValidator
 			$this->add_textfield($element_name,
 								 $this->build_stud_label($user[0], $user[1], $user[2], $user[3]),
 								 false,
-								 array ('size' => 4,'maxlength' => 5));
+								 array ('class' => 'span1','maxlength' => 5));
             
 			$this->addRule($element_name, get_lang('OnlyNumbers'), 'numeric');
 			$this->addRule(array($element_name,'maxvalue'), get_lang('OverMax'), 'compare', '<=');
@@ -381,20 +381,30 @@ class EvalForm extends FormValidator
 	/**
 	 * Builds a form to edit an evaluation
 	 */
-	protected function build_editing_form() {
-		$this->setDefaults(array (	'hid_id' => $this->evaluation_object->get_id(), 
-									'name' 	 => $this->evaluation_object->get_name(), 
-									'description' => $this->evaluation_object->get_description(), 
-									'hid_user_id' => $this->evaluation_object->get_user_id(), 
-									'hid_course_code' => $this->evaluation_object->get_course_code(), 
-									'hid_category_id' => $this->evaluation_object->get_category_id(), 
-									'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()), 
-									'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
+	protected function build_editing_form() {        
+        $parent_cat = Category :: load($this->evaluation_object->get_category_id());
+        $cat = Category :: load($parent_cat[0]->get_parent_id());
+        $global_weight = $cat[0]->get_weight();                
+        //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+        $weight_mask = $global_weight*$this->evaluation_object->get_weight()/$parent_cat[0]->get_weight() ;
+            
+		$this->setDefaults(array (	'hid_id'            => $this->evaluation_object->get_id(), 
+									'name'              => $this->evaluation_object->get_name(), 
+									'description'       => $this->evaluation_object->get_description(), 
+									'hid_user_id'       => $this->evaluation_object->get_user_id(), 
+									'hid_course_code'   => $this->evaluation_object->get_course_code(), 
+									'hid_category_id'   => $this->evaluation_object->get_category_id(), 
+									'created_at'        => api_get_utc_datetime($this->evaluation_object->get_date()), 
+									'weight'            => $weight,
+                                    'weight_mask'       => $weight_mask,
+                                    'max'               => $this->evaluation_object->get_max(), 
+                                    'visible'           => $this->evaluation_object->is_visible()));
 		$id_current=isset($this->id)?$this->id :null;
-		$this->addElement('hidden', 'hid_id',$id_current);
+		$this->addElement('hidden', 'hid_id', $id_current);
 		$this->build_basic_form(1);
 		$this->addElement('style_submit_button', 'submit', get_lang('ModifyEvaluation'),'class="save"');
 	}
+    
 	/**
 	 * Builds a basic form that is used in add and edit
 	 */
@@ -432,14 +442,19 @@ class EvalForm extends FormValidator
         
         if (!empty($all_categories)) {            
             foreach ($all_categories as $my_cat) {
-                if ($my_cat->get_course_code() == api_get_course_id()) {                    
-                    if ($my_cat->get_parent_id() == 0 ) {
-                        $default_weight = $my_cat->get_weight();
-                        $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
-                        $cats_added[] = $my_cat->get_id();
+                if ($my_cat->get_course_code() == api_get_course_id()) {         
+                    $grade_model_id = $my_cat->get_grade_model_id();
+                    if (empty($grade_model_id)) {
+                        if ($my_cat->get_parent_id() == 0) {
+                            $default_weight = $my_cat->get_weight();
+                            $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                            $cats_added[] = $my_cat->get_id();
+                        } else {
+                            $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                            $cats_added[] = $my_cat->get_id();
+                        }
                     } else {
-                        $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
-                        $cats_added[] = $my_cat->get_id();
+                        $select_gradebook->addoption(get_lang('Select'), 0);
                     }
                     if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
                         $default_weight = $my_cat->get_weight();                        
@@ -447,13 +462,20 @@ class EvalForm extends FormValidator
                 }           
             }
         }
+        $global_weight = api_get_setting('gradebook_default_weight');
         
-
-		$this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
+		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$global_weight.'] '), true, array (
 			'size' => '4',
 			'maxlength' => '5',
             'class' => 'span1'
 		));
+        
+        /*$this->add_textfield('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
+            	'size' => '4',
+			'maxlength' => '5',
+            'class' => 'span1'
+		));*/
+        
         
 		if ($edit) {
 			if (!$this->evaluation_object->has_results()) {
@@ -480,8 +502,8 @@ class EvalForm extends FormValidator
 			'cols' => '34'
 		));
 		$this->addElement('checkbox', 'visible', null, get_lang('Visible'));
-		$this->addRule('weight', get_lang('OnlyNumbers'), 'numeric');
-		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		$this->addRule('weight_mask', get_lang('OnlyNumbers'), 'numeric');
+		$this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 	}

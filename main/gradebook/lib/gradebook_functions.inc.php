@@ -196,11 +196,18 @@ function get_icon_file_name ($type) {
  * @param int $selectcat id of selected category
  */
 function build_edit_icons_cat($cat, $selectcat) {
-	$show_message=$cat->show_message_resource_delete($cat->get_course_code());
+	$show_message = $cat->show_message_resource_delete($cat->get_course_code());
+    $grade_model_id = $selectcat->get_grade_model_id();
+    
+    $selectcat = $selectcat->get_id();
+    
 	if ($show_message===false) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-		$modify_icons= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        
+        if (empty($grade_model_id)) {
+            $modify_icons= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        }
 		
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 		
@@ -212,8 +219,10 @@ function build_edit_icons_cat($cat, $selectcat) {
 			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 		}
         
-        $modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
+        if (empty($grade_model_id)) {
+            $modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
                 Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            
+        }
 
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';
 

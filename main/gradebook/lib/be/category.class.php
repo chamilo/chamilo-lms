@@ -334,12 +334,11 @@ class Category implements GradebookItem
 	}
 	/**
 	 * Update the properties of this category in the database
+     * @todo fix me
 	 */
 	public function save() {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'UPDATE '.$tbl_grade_categories
-			." SET name = '".Database::escape_string($this->get_name())."'"
-			.', description = ';
+		$sql = 'UPDATE '.$tbl_grade_categories." SET name = '".Database::escape_string($this->get_name())."'".', description = ';
 		if (isset($this->description)) {
 			$sql .= "'".Database::escape_string($this->get_description())."'";
 		} else {
@@ -364,13 +363,17 @@ class Category implements GradebookItem
 		} else {
 			$sql .= 'null';
 		}
+        if (isset($this->grade_model_id)) {
+            $sql .= ', grade_model_id = '.intval($this->get_grade_model_id());
+        }
 		$sql .= ', weight = '.Database::escape_string($this->get_weight())
 			.', visible = '.intval($this->is_visible())
 			.' WHERE id = '.intval($this->id);
+        
 		Database::query($sql);
         
         $gradebook= new Gradebook();
-        $res    = $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
+        $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
 
 	}
 

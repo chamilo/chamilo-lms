@@ -217,7 +217,7 @@ if (!empty($auto_lunch)) {
             }
         }
         
-        $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 $condition LIMIT 1";
+        $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result) >  0) {
             $lp_data = Database::fetch_array($result,'ASSOC');

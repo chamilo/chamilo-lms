@@ -55,7 +55,8 @@ class GradeModel extends Model {
 		
         $form = new FormValidator('grades', 'post', $url);
         // Settting the form elements
-        $header = get_lang('Add');        
+        $header = get_lang('Add');
+        
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }
@@ -74,7 +75,9 @@ class GradeModel extends Model {
         $max = 10;
                 
         // Setting the defaults
+        
         $defaults = $this->get($id);        
+        
         $components = $this->get_components($defaults['grade_model_id']);
         
         if ($action == 'edit') {
@@ -144,7 +147,10 @@ class GradeModel extends Model {
     
     public function get_components($id) {       
         $obj = new GradeModelComponents();
-        return $obj->get_all(array('where'=> array('grade_model_id = ?' => $id)));                
+        if (!empty($id)) {
+            return $obj->get_all(array('where'=> array('grade_model_id = ?' => $id)));                
+        } 
+        return null;
     }
         
     public function save($params) {        

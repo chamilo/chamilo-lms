@@ -328,15 +328,17 @@ class GradebookTable extends SortableTable {
 			}
 		} //end looping categories
         
-        if (api_is_allowed_to_edit()) {            
-            $main_weight = intval($main_cat[0]->get_weight());    
-            if (intval($total_categories_weight) == $main_weight) {                
-                $total = Display::badge($total_categories_weight.' / '.$main_weight, 'success');
-            } else {                                                                       
-                $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
+        if (api_is_allowed_to_edit()) {           
+            if (count($main_cat) > 1) {
+                $main_weight = intval($main_cat[0]->get_weight());    
+                if (intval($total_categories_weight) == $main_weight) {                
+                    $total = Display::badge($total_categories_weight.' / '.$main_weight, 'success');
+                } else {                                                                       
+                    $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
+                }
+                $row = array(null, null, get_lang('Total'), null, $total);
+                $sortable_data[] = $row;
             }
-            $row = array(null, null, get_lang('Total'), null, $total);
-            $sortable_data[] = $row;
         }
 
 		// warning messages

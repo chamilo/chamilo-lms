@@ -152,26 +152,38 @@ $stok = Security::get_token();
                     
                     echo '<p>';
                     // we display the icon to subscribe or the text already subscribed
+                    echo '<div class="btn-toolbar">';
                     
+                       
+                    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+                        echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
+                    }
                                        
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && !api_is_anonymous())) {
-                        echo '<a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+                        echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+                        
+                        if (!api_is_anonymous()) {
+                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
+                                echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
+                                        get_lang('Subscribe').'</a>';
+                            }
+                        }                   
                     } else {
                         if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {
                             if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
-                                echo '<a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
+                                echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
                                         get_lang('Subscribe').'</a>';
                             } else {
                                 if (!api_is_anonymous()) {
-                                    echo '<a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';    
+                                    echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';    
                                 }
                             }
                         }
                     }
+                 
                     
-                    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '&nbsp;<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
-                    }
+                    echo '</div>';
+                    
                     echo '</p>';
                     echo '</div>';        
 

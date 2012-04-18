@@ -1376,12 +1376,31 @@ class Display {
         return $div;
     }
     
-    function badge($count) {        
-        $count = intval($count);
-        if (!empty($count)) {
-            return ' <span class="badge badge-warning">'.$count.'</span>';
+    function badge($count, $type ="warning") {        
+        $class = '';
+        
+        switch ($type) {
+            case 'success':
+                $class = 'badge-success';
+                break;
+            case 'warning':
+                $class = 'badge-warning';
+                break;
+            case 'important':
+                $class = 'badge-important';
+                break;
+            case 'info':
+                $class = 'badge-info';
+                break;
+            case 'inverse':
+                $class = 'badge-inverse';
+                break;            
         }
-        return '';
+        
+        if (!empty($count)) {
+            return ' <span class="badge '.$class.'">'.$count.'</span>';
+        }
+        return null;
     }
     
     function label($content, $type = null) {  

@@ -232,7 +232,6 @@ class AnnouncementEmail
         $course_name = $this->course('title');
 
         $result = '';
-        $result .= "<h2>$title</h2>";
         $result .= "<div>$content</div>";
         $result .= '--<br/>';
         $result .= "<a href=\"mailto:$user_email\">$user_firstname $user_lastname</a><br/>";

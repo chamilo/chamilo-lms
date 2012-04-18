@@ -23,12 +23,14 @@ class Login
 	 */
 	public static function get_user_account_list($user, $reset = false, $by_username = false) {
 		global $_configuration;
-		$portal_url = $_configuration['root_web'];
+        //$portal_url = $_configuration['root_web'];
+		$portal_url = api_get_path(WEB_PATH);
+        
 		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ) {
 				$url = api_get_access_url($access_url_id);
-				$portal_url = $url['url'];
+				$portal_url = $url['url'];                
 			}
 		}
 	
@@ -44,8 +46,7 @@ class Login
 	
 				if ($user_account_list) {
 					$user_account_list = "\n-----------------------------------------------\n" . $user_account_list;
-				}
-	
+				}	
 			} else {	
 				foreach ($user as $this_user) {
 					$secret_word = self::get_secret_word($this_user['email']);
@@ -103,13 +104,9 @@ class Login
 	    $email_admin = api_get_setting('emailAdministrator');
 
 		if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-            if (api_get_setting('use_custom_pages') == 'true') {
-                return get_lang('your_password_has_been_reset');
-            } else {
-                Display::display_confirmation_message(get_lang('your_password_has_been_reset'));
-            }
+            return get_lang('your_password_has_been_reset');            
 		} else {
-			$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+			return get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		}
 	}
 	
@@ -142,8 +139,9 @@ class Login
 
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
         $email_admin = api_get_setting('emailAdministrator');
-
+        
         if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
+            
             if (api_get_setting('use_custom_pages') == 'true') {
                 return get_lang('YourPasswordHasBeenEmailed');
             } else {
@@ -184,12 +182,12 @@ class Login
 		} else {
 			return get_lang('CouldNotResetPassword'); 
 		}
-	
+        	
 		if (self::get_secret_word($user['email']) == $secret) { // OK, secret word is good. Now change password and mail it.
 			$user['password'] = api_generate_password();
 			$crypted = $user['password'];
 			$crypted = api_get_encrypted_password($crypted);
-			$sql = "UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id";
+			$sql = "UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id = $id";
 			$result = Database::query($sql);
 			return self::send_password_to_user($user, $by_username);
 		} else {

@@ -29,7 +29,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function HTML_QuickForm_label($label, $text) {        
+    function HTML_QuickForm_label($label = null, $text = null) {        
         $this->HTML_QuickForm_static(null, $label, $text);
         $this->_type = 'html';
     }

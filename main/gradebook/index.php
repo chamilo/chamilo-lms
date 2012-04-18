@@ -505,7 +505,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 
 
 // DISPLAY HEADERS AND MESSAGES
-
 if (!isset($_GET['exportpdf'])) {
 	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('ToolGradebook'));
@@ -521,16 +520,6 @@ if (!isset($_GET['exportpdf'])) {
 		Display :: display_header('');
 	} else {
 		Display :: display_header(get_lang('ToolGradebook'));
-		/*if ( ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
-			$cats = Category :: load (0, null, null, null, null, null, false);
-			$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-			$alleval= $cats[0]->get_evaluations($stud_id);
-			$alllink= $cats[0]->get_links($stud_id);
-			$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
-			$gradebooktable->display();
-			Display :: display_footer();
-			exit;
-		}*/
 	}
 }
 
@@ -589,27 +578,6 @@ if (empty ($_GET['selectcat'])) {
 	$category= $_GET['selectcat'];
 }
 $simple_search_form='';
-// search disabled in course context
-/*
-$simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']));
-$values= $simple_search_form->exportValues();
-$keyword = '';
-if (isset($_GET['search']) && !empty($_GET['search']))
-	$keyword = Security::remove_XSS($_GET['search']);
-if ($simple_search_form->validate() && (empty($keyword)))
-	$keyword = $values['keyword'];
-*/
-
-/* search disabled in course context
-if (!empty($keyword))
-{
-	$cats= Category :: load($category);
-	$allcat= array ();
-	$alleval= Evaluation :: find_evaluations($keyword, $cats[0]->get_id());
-	$alllink= LinkFactory :: find_links($keyword, $cats[0]->get_id());
-}
-else
-*/
 
 if (isset ($_GET['studentoverview'])) {    
     //@todo this code also seems to be deprecated ...    
@@ -717,12 +685,6 @@ if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
 	$addparams['cidReq']='';
 }
 $no_qualification = false;
-if (( count($allcat) == 0) && ( count($alleval) == 0 ) && ( count($alllink) == 0 )) {
-    $no_qualification = true;
-    if ((($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
-        Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
-    }
-}
 
 //here we are in a sub category
 if ($category != '0') {
@@ -780,9 +742,7 @@ if ($category != '0') {
 			
 			$cattotal = Category :: load($category_id);
             //echo 'start';            
-			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-            
-            //echo 'end';            var_dump($scoretotal);
+			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());            
 					
 			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
 			$my_score_in_gradebook =  round($scoretotal[0],2);
@@ -823,36 +783,68 @@ if (api_is_allowed_to_edit(null, true)) {
 	//
 	} else {	    
         if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
-            $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-			if (!$first_time=1) {                
-            }
+            $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);		
 		}
 	}
 }
 
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
-} else {				
-	/*$models = api_get_settings_options('grading_model');
-	$course_grading_model_id = api_get_course_setting('course_grading_model');
-	$grading_model = '';
-	if (!empty($course_grading_model_id)) {
-		if (!empty($models)) {
-			foreach($models as $option) {			
-				if (intval($option['id']) == $course_grading_model_id) {
-					$grading_model = $option['value'];
-				}
-			}
-		}
-	}
-	
-	$grading_contents = api_grading_model_functions($grading_model, 'to_array');
-	$grading_string   = api_grading_model_functions($grading_model, 'decorate');*/
-    
+} else {    
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-		
-	if (!empty($cats)) {	    
-		//$items = $grading_contents['items'];
+
+	if (!empty($cats)) {        
+        
+        if (api_is_allowed_to_edit(null, true)) {
+            //Getting grade models
+            $obj = new GradeModel();
+            $grade_models = $obj->get_all();                
+            $options = array('-1' => get_lang('none'));
+            foreach ($grade_models as $item) {
+                $options[$item['id']] = $item['name'];
+            }                
+
+            $grade_model_id = $cats[0]->get_grade_model_id();        
+            
+            //No children
+            if (count($cats) == 1 && empty($grade_model_id)) {
+                $form = new FormValidator('grade_model_settings');
+                $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
+                $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
+                
+                if ($form->validate()) {
+                    $value = $form->exportValue('grade_model');                    
+                    $gradebook = new Gradebook();
+                    $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
+
+                    //do something                        
+                    $obj = new GradeModel();                             
+                    $components = $obj->get_components($value);
+
+                    foreach ($components as $component) {
+                        $gradebook =  new Gradebook();
+                        $params = array();
+
+                        $params['name']             = $component['acronym'];
+                        $params['description']      = $component['title'];
+                        $params['user_id']          = api_get_user_id();
+                        $params['parent_id']        = $cats[0]->get_id();
+                        $params['weight']           = $component['percentage'];
+                        $params['session_id']       = api_get_session_id();
+                        $params['course_code']      = api_get_course_id();
+                        $params['grade_model_id']   = api_get_session_id();
+
+                        $gradebook->save($params);
+                    }
+                    
+                    //Reloading cats
+                    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+                } else {
+                    $form->display();   
+                }                
+            }
+        }
+        
 		$i = 0;
 		foreach ($cats as $cat) {
 			
@@ -869,51 +861,10 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 				
 				if (api_is_allowed_to_edit(null,true)) {
 					//Showing the grading system
-					if (!empty($grading_string)) {
-						Display::display_normal_message(get_lang('GradeModel').': '.$grading_string);
-					}
-				}
-                $obj = new GradeModel();
-                $grade_models = $obj->get_all();                
-                $options = array(0 => get_lang('none'));
-                foreach ($grade_models as $item) {
-                    $options[$item['id']] = $item['name'];
-                }                
-        
-                //No children
-                if (empty($allcat)) {
-                    $form = new FormValidator('grade_model_settings');
-                    $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
-                    $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');                
-                    $form->display();     
-
-                    if ($form->validate()) {
-                        $value = $form->exportValue('grade_model');                    
-                        $gradebook = new Gradebook();
-                        $gradebook->update(array('id'=> $cat->get_id(), 'grade_model_id' => $value), true);                 
-
-                        //do something                        
-                        $obj = new GradeModel();                             
-                        $components = $obj->get_components($value);
-
-                        foreach ($components as $component) {
-                            $gradebook =  new Gradebook();
-                            $params = array();
-
-                            $params['name'] = $component['acronym'];
-                            $params['description'] = $component['title'];
-                            $params['user_id'] = api_get_user_id();
-                            $params['parent_id'] = $cat->get_id();
-                            $params['weight'] = $component['percentage'];
-                            $params['session_id'] = api_get_session_id();
-                            $params['course_code'] = api_get_course_id();
-                            $params['grade_model_id'] = api_get_session_id();
-
-                            $gradebook->save($params);
-                        }
-                    }
-                }
-                
+					if (!empty($grade_models[$grade_model_id])) {                        
+                        Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);
+                    }					
+				}                
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);                
 				$gradebooktable->display();				
 			}

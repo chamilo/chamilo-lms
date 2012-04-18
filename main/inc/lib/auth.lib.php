@@ -429,8 +429,7 @@ class Auth
         $tbl_course               = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD       = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        
+                
 
         // get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
@@ -487,10 +486,8 @@ class Auth
                 
                 if ($row['tutor_name'] == '0') {
                     $row['tutor_name'] = get_lang('NoManager');
-                }
-                
-                $point_info = CourseManager::get_course_ranking($row['id'], 0);        
-                
+                }                
+                $point_info = CourseManager::get_course_ranking($row['id'], 0);
                 $courses[] = array(
                                     'real_id'           => $row['id'],
                                     'point_info'		=> $point_info,                                    
@@ -504,6 +501,7 @@ class Auth
                                     'unsubscribe'       => $row['unsubscribe'],
                                     'registration_code' => $row['registration_code'],
                                     'creation_date'     => $row['creation_date'],
+                                    'visibility'        => $row['visibility'],
                                     'count_users'       => $count_users,
                                     'count_connections' => $count_connections_last_month
                                   );

@@ -78,8 +78,11 @@ function extldap_connect()
  *
  * @return mixed false if user cannot authenticate on ldap, user ldap entry if tha succeeds
  * @author ndiechburg <noel@cblue.be>
+ * Modified by hubert.borderiou@grenet.fr 
+ * Add possibility to get user info from LDAP without check password (if CAS auth and LDAP profil update)
+ * 
  **/
-function extldap_authenticate($username, $password)
+function extldap_authenticate($username, $password, $in_auth_with_no_password=false)
 {
   global $extldap_config;
 
@@ -118,6 +121,10 @@ function extldap_authenticate($username, $password)
   $users = ldap_get_entries($ds,$sr);
   $user = $users[0];
 
+  // If we just want to have user info from LDAP and not to check password
+  if ($in_auth_with_no_password) {
+    return $user;
+  }
   //now we try to autenthicate the user in the ldap
   $ubind = @ldap_bind($ds, $user['dn'], $password);
   if($ubind !== false){

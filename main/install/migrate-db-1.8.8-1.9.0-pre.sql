@@ -146,6 +146,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0);
 
 -- Course ranking
 
@@ -173,9 +174,10 @@ CREATE TABLE grade_model (id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255)
 CREATE TABLE grade_components (id INTEGER  NOT NULL AUTO_INCREMENT, percentage VARCHAR(255)  NOT NULL, title VARCHAR(255)  NOT NULL, acronym VARCHAR(255)  NOT NULL, grade_model_id INTEGER NOT NULL, PRIMARY KEY (id));
 ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 UPDATE settings_current SET title = 'DatabaseVersion' WHERE variable = 'chamilo_database_version';
+ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17486' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17536' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
@@ -202,3 +204,5 @@ ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
 ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
 ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
 ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
+
+

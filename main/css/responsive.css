@@ -11,8 +11,7 @@
     
     header #header_center, header #header_right {
         display:none;
-    }
-    
+    }    
     
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
@@ -93,6 +92,36 @@
     }
     .subnav .nav > li:first-child > a,
     .subnav .nav > li:first-child > a:hover {
+        -webkit-border-radius: 4px 4px 0 0;
+            -moz-border-radius: 4px 4px 0 0;
+                border-radius: 4px 4px 0 0;
+    }
+    
+    
+     /* .new_actions */
+    .new_actions {           
+        border:1px solid #fff;
+        position: static;
+        top: auto;
+        z-index: auto;
+        width: 100%;
+        height: auto;    
+        -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+                box-shadow: none;
+                text-align: center;
+    }
+    .new_actions .nav > li {
+        float: none;    
+    }
+    .new_actions .nav > li > a {
+        border: 0;
+    }
+    .new_actions .nav > li + li > a {
+        border-top: 1px solid #e5e5e5;
+    }
+    .new_actions .nav > li:first-child > a,
+    .new_actions .nav > li:first-child > a:hover {
         -webkit-border-radius: 4px 4px 0 0;
             -moz-border-radius: 4px 4px 0 0;
                 border-radius: 4px 4px 0 0;

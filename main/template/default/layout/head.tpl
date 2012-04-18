@@ -77,22 +77,51 @@ function get_url_params(q, attribute) {
 
 $(document).scroll(function() {
     // Top bar scroll effect
-    if($('body').width() > 959) {
-    if ($('.subnav').length) {
-        if (!$('.subnav').attr('data-top')) {
-            // If already fixed, then do nothing
-            if ($('.subnav').hasClass('subnav-fixed')) return;
-            // Remember top position
-            var offset = $('.subnav').offset()
-            $('.subnav').attr('data-top', offset.top);
-        }
+    if ($('body').width() > 959) {
+        if ($('.subnav').length) {
+            if (!$('.subnav').attr('data-top')) {
+                // If already fixed, then do nothing
+                if ($('.subnav').hasClass('subnav-fixed')) return;
+                // Remember top position
+                var offset = $('.subnav').offset();
+                $('.subnav').attr('data-top', offset.top);
+            }
 
-        if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop())
-            $('.subnav').addClass('subnav-fixed');
-        else
-            $('.subnav').removeClass('subnav-fixed');
+            if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop()) {
+                $('.subnav').addClass('subnav-fixed');
+            } else {
+                $('.subnav').removeClass('subnav-fixed');
+            }
         }
     }
+    
+    
+    if ($('.new_actions').length) {
+        if (!$('.new_actions').attr('data-top')) {
+            // If already fixed, then do nothing
+            if ($('.new_actions').hasClass('new_actions-fixed')) return;
+            // Remember top position
+            var offset = $('.new_actions').offset();
+            
+            var more_top = 0;
+            if ($('.subnav').hasClass('new_actions-fixed')) {
+                more_top = 50;
+            }
+            
+            $('.new_actions').attr('data-top', offset.top + more_top);
+            
+        }
+        
+        if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+            $('.new_actions').addClass('new_actions-fixed');
+              
+        } else {
+            $('.new_actions').removeClass('new_actions-fixed');
+        }
+    }
+    
+    
+    
 });
 
 $(document).ready(function() {

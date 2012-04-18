@@ -30,6 +30,7 @@ if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
 	$evaladd->set_category_id(0);
 }
 $form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' .$select_cat);
+
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$eval = new Evaluation();
@@ -42,12 +43,17 @@ if ($form->validate()) {
 	}
 	
 	//Always add the gradebook to the course
-	$eval->set_course_code(api_get_course_id());
-	
+	$eval->set_course_code(api_get_course_id());	
 	$eval->set_category_id($values['hid_category_id']);
+    
+    $parent_cat = Category :: load($values['hid_category_id']);            
+    $global_weight = $cat[0]->get_weight();
+    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    
 	$eval->set_weight($values['weight']);
 	
 	$eval->set_max($values['max']);
+    
 	if (empty ($values['visible'])) {
 		$visible = 0;
 	} else {

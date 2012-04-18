@@ -208,8 +208,7 @@ class Evaluation implements GradebookItem
     /**
      * Insert this evaluation into the database
      */
-    public function add()
-	{
+    public function add() {
 		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset ($this->eval_max) && isset($this->visible)) {
 			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
@@ -228,7 +227,7 @@ class Evaluation implements GradebookItem
 			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
-					.','.intval($this->get_weight())
+					.','.floatval($this->get_weight())
 					.','.intval($this->get_max())
 					.','.intval($this->is_visible());
 			if (isset($this->description)) {
@@ -301,11 +300,12 @@ class Evaluation implements GradebookItem
 		} else {
 			$sql .= 'null';
 		}
-		$sql .= ', weight = '.Database::escape_string($this->get_weight())
+		$sql .= ', weight = "'.Database::escape_string($this->get_weight()).'" '
 				.', max = '.Database::escape_string($this->get_max())
 				.', visible = '.intval($this->is_visible())
 				.' WHERE id = '.intval($this->id);
 		//recorded history
+        
 		$eval_log=new Evaluation();
 		$eval_log->add_evaluation_log($this->id);
 		Database::query($sql);

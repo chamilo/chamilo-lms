@@ -15,30 +15,9 @@
     font-size:120%;
 }
 
-#header1 {
-    font-size:100%;
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
-}
-#header1 a {
-    font-size:100%;
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
-}
-
-#header2 {
-    font-size: 120%;
-}
-#Header2Right ul li {
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
-    font-size:100%;
-}
-#Header2Right ul li a {
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
-    font-size:100%;
-}
-
 .subnav input.logout {
     padding: 2px 10px 0;
-    font-size: 120%;
+    font-size: 110%;
     font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
 }
 

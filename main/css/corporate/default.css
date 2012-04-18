@@ -55,129 +55,34 @@ input[type=button], input[type=submit] {
     padding: 0;
     width: 100%;
 }
-/* header 1 styles */
-#header1 {
-	background-color: #dcdcdc;
-	color: #666;
-	border-bottom: 1px solid #ccc;
-}
-#header1 a {
-	color: #333;
-	text-decoration: none;
-}
-#header1 a:hover {
-}
-#my_courses {
-	float: right;
-	font-weight: bold;
-}
-#header1 img {
-	border: 0px;
-}
-/* header 2 styles */
-#header2 {
-	background: #f0f0f0;
-	color: #666;
-	border-bottom: 1px solid #ccc;
-}
-#header2 a {
-	color: #333;
-	text-decoration: none;
-}
-#header2 a:hover {
-}
-#Header2Right ul {
-	float: right;
-	list-style-type: none;
-	text-align: right;
-	color:#680157;
-	margin: 0;
-	padding: 0;
-}
-#Header2Right ul li {
-	display: inline;
-}
-#Header2Right ul li a {
-	color:#333;
-}
-#Header2Right ul li a:hover {
-	color:#333;
-}
-/* header 3 styles */
+
 .subnav {
-	background: #fff;
-	border-bottom: 1px solid #aeaeae;
-	color: #333;
-	height:auto;
-	font-weight: bold;	
-    width:100%;
+    background-color: #F2F2F2; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #CCCCCC 0%, #F2F2F2 100%); /* FF3.6+ */  
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4C4C4C), color-stop(100%,#747474)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #4C4C4C 0%, #747474 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #4C4C4C 0%,#747474 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #4C4C4C 0%,#747474 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4C4C4C', endColorstr='#747474',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
+    border: 1px solid #CCCCCC;
 }
-
-.subnav UL {
-	PADDING-RIGHT: 2px;
-	PADDING-LEFT: 10px;
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	list-style:none;	
-}
-.subnav LI {
-	PADDING-RIGHT: 0px;
-	PADDING-LEFT: 2px;
-	FLOAT: left;
-	PADDING-BOTTOM: 0px;
-	MARGIN: 0px;
-	PADDING-TOP: 0px;/*border-bottom: 1px solid #dcdcdc;*/
-	cursor: pointer;
-}
-
 .subnav a {
-	float:left;
-	background:url(images/tab_left.gif) no-repeat left top;
-	text-decoration:none;
-	cursor: pointer;
-	color: #333;	
-    padding: 0px 9px 0px 9px;
-	height:25px;
-}
-.subnav li a:hover {
-	float:left;
-	background:url(images/tab_left_hover.gif) no-repeat left top;
-	text-decoration:none;
-	cursor: pointer;
-}
-.subnav li a span {
-	float:left;
-	display:block;
-	background:url(images/tab_right.gif) no-repeat right top;
-	color:#333;
-	cursor: pointer;
-	padding-right: 10px;
-	padding-top: 5px;
-	height:20px;
-}
-.subnav li a:hover span {
-	float:left;
-	display:block;
-	background:url(images/tab_right_hover.gif) no-repeat right top;
-	color:#333;
-	cursor: pointer;
-}
-.subnav #current a {
-	float:left;
-	background:url(images/tab_left_active.gif) no-repeat left top;
-	text-decoration:none;
-}
-.subnav #current a span {
-	float:left;
-	display:block;
-	background:url(images/tab_right_active.gif) no-repeat right top;
+    color:#333;
 }
 
-.subnav #logout {
-	margin-top: 0px;
+.subnav #current a {    
 }
-.subnav input.logout:hover {
+
+.subnav .nav > #current > a, .subnav .nav > #current > a:hover {
+    color:#333;
 }
+.subnav .nav > li > a {
+    border-left: none;    
+    border-right: none;
+}
+
 #logout {
 	display: inline;
 	float: right;
@@ -186,14 +91,6 @@ input[type=button], input[type=submit] {
 	font-size: 1.0em;
 }
 
-
-/* header 4 styles */
-#header4 {	
-	background-color: #fff;
-    color: #fff;
-    margin-bottom: 2px;
-    width:100%;
-}
 
 /* The tool shortcuts */
 #toolshortcuts {

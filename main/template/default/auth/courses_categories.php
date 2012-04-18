@@ -31,15 +31,13 @@ $stok = Security::get_token();
 
 <?php if (intval($_GET['hidden_links']) != 1) { ?>
 
-<div id="actions" class="actions">
-	<span id="categories-search">
-    	<form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">            
-        	<input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-            <input type="hidden" name="search_course" value="1" />
-            <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-            &nbsp;<button class="search" type="submit"><?php echo get_lang('SearchCourse'); ?></button>
-		</form>
-	</span>
+<div class="actions">
+    <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">            
+        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
+        <input type="hidden" name="search_course" value="1" />
+        <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+        &nbsp;<button class="search" type="submit"><?php echo get_lang('SearchCourse'); ?></button>
+    </form>	
 </div>
 <?php 
     $hidden_links = 0;
@@ -51,12 +49,7 @@ $stok = Security::get_token();
     <div class="span3">
         <div class="well">
             <?php 
-            if (!empty($browse_course_categories)) {
-                /*if ($action == 'display_random_courses') { 
-                    echo '<strong>'.get_lang('RandomPick').'</strong>';
-                    $code = '';
-                } else {                    
-                }*/
+            if (!empty($browse_course_categories)) {                   
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
                 
                 // level 1
@@ -110,6 +103,7 @@ $stok = Security::get_token();
             ?>
         </div>
     </div>
+    
     <div class="span9">
         <?php 
         if (!empty($message)) { Display::display_confirmation_message($message, false); }         
@@ -140,8 +134,7 @@ $stok = Security::get_token();
                 
                 $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
                 
-                echo '<div class="well_border"><div class="row">';
-                
+                echo '<div class="well_border"><div class="row">';                
                     echo '<div class="span2">';
                         echo '<div class="thumbnail">';                
                         if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -159,17 +152,23 @@ $stok = Security::get_token();
                     
                     echo '<p>';
                     // we display the icon to subscribe or the text already subscribed
-                    if (!in_array($course['code'], $user_coursecodes)) {
-                        
-                        if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && !api_is_anonymous())) {
-                             echo '<a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
-                        } else {
-                            if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {
+                    
+                                       
+                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && !api_is_anonymous())) {
+                        echo '<a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+                    } else {
+                        if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {
+                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
                                 echo '<a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
                                         get_lang('Subscribe').'</a>';
+                            } else {
+                                if (!api_is_anonymous()) {
+                                    echo '<a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';    
+                                }
                             }
                         }
                     }
+                    
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                         echo '&nbsp;<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
                     }

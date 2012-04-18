@@ -83,17 +83,32 @@ class LinkAddEditForm extends FormValidator
             }
         }
         
+        $global_weight = api_get_setting('gradebook_default_weight');
+        
+		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$global_weight.'] '), true, array (
+			'size' => '4',
+			'maxlength' => '5',
+            'class' => 'span1'
+		));
+        /*
+        
 		// ELEMENT: weight
         $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
             'maxlength' => '5',
             'class' => 'span1'
-        ));
+        ));*/
         
-		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
-		$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
-		if ($form_type == self :: TYPE_EDIT) {
-			$defaults['weight'] = $link->get_weight();            
+		$this->addRule('weight_mask',get_lang('OnlyNumbers'),'numeric');
+		$this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+		if ($form_type == self :: TYPE_EDIT) {            
+            $parent_cat = Category :: load($link->get_category_id());     
+            $cat = Category :: load($parent_cat[0]->get_parent_id());
+            $global_weight = $cat[0]->get_weight();
+            
+            $values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
+			//$defaults['weight'] = $link->get_weight();   
+            $defaults['weight_mask'] = $values['weight'] ;   
             $defaults['select_gradebook'] = $link->get_category_id();
             
 		}

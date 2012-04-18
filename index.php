@@ -134,6 +134,11 @@ if (api_get_setting('display_categories_on_homepage') == 'true') {
 	$controller->tpl->assign('content', $controller->return_anonymous_course_list());
 }
 
+// Facebook connexion, if activated
+if (api_is_facebook_auth_activated() && !api_get_user_id()) {
+    facebook_connect();
+}
+
 $controller->set_login_form();
 
 //@todo move this inside the IndexManager

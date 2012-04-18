@@ -628,6 +628,15 @@ function api_is_ldap_activated() {
     return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
 }
 
+/**
+ * @return bool     Return true if Facebook authentification is activated
+ *
+ */
+function api_is_facebook_auth_activated() {
+    global $_configuration;
+    return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
+}
+
 
 /**
  * This function checks whether a given path points inside the system.
@@ -4226,11 +4235,11 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
 function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     $access_url = (int) $access_url;
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $list = "'".implode("','",$exceptions)."'";
-    $sql = "SELECT DISTINCT category FROM $t_cs";
+    $list = "'".implode("','",$exceptions)."'";    
+    $sql = "SELECT DISTINCT category FROM $t_cs WHERE category is NOT NULL ";
     if ($list != "'',''" and $list != "''" and !empty($list)) {
-        $sql .= " WHERE category NOT IN ($list)";
-    }
+        $sql .= " AND category NOT IN ($list) ";
+    }    
     $result = Database::store_result(Database::query($sql));
     return $result;
 }

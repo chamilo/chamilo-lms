@@ -68,6 +68,12 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		} else {
 			$link->set_ref_id($addvalues['select_link']);
 		}
+        
+        $parent_cat = Category :: load($addvalues['select_gradebook']);            
+        $global_weight = $category[0]->get_weight();
+        
+        $addvalues['weight'] = $addvalues['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    
 		$link->set_weight($addvalues['weight']);
 
 		if ($link->needs_max()) {

@@ -134,6 +134,7 @@ class GradebookTable extends SortableTable {
 		//status of user in course
 	    $user_id     = api_get_user_id();
 		$course_code = api_get_course_id();
+        $session_id = api_get_session_id();
 		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
         
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
@@ -143,7 +144,8 @@ class GradebookTable extends SortableTable {
 		$weight_total_links = 0;
         
         $main_categories = array();
-		
+        
+        $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        		
 		foreach ($data_array as $data) {		
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
@@ -157,9 +159,10 @@ class GradebookTable extends SortableTable {
 			$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
 
 			if (api_is_allowed_to_edit(null, true)) {
+                //id
 				$row[] = $this->build_id_column($item);
-			}
-			
+			}		
+            //Type
 			$row[] = $this->build_type_column($item);
 			
 			//Name
@@ -174,9 +177,14 @@ class GradebookTable extends SortableTable {
             
 			//Description
 			$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
-			
+			            
 			//Weight
-			$row[] = $invisibility_span_open .Display::tag('h4', $data[3] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
+			//$row[] = $invisibility_span_open .Display::tag('h4', $data['3'] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
+            //$average = $data['3']/$this->currentcat->get_weight()*100;
+            
+            $scoredisplay = ScoreDisplay :: instance();            
+            $average = $scoredisplay->display_score(array($data['3'], $this->currentcat->get_weight()), SCORE_PERCENT, SCORE_BOTH, true);
+            $row[] = $invisibility_span_open .Display::tag('h4', $average).$invisibility_span_close;		
             
             $category_weight = $item->get_weight();
             	
@@ -186,13 +194,13 @@ class GradebookTable extends SortableTable {
 				$cattotal   = Category :: load($_GET['selectcat']);
                 $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
                 $item_value = $scoretotal[0];
-                $item_value = number_format($item_value, 2, '.', ' ');			   				  			   	
+                $item_value = number_format($item_value, api_get_setting('gradebook_number_decimals'), '.', ' ');			   				  			   	
 			}
 						
 			//Date
     		//$row[] = $invisibility_span_open.$data[4].$invisibility_span_close;
 
-			//Admins get an edit column
+			//Edit (for admins)
 			if (api_is_allowed_to_edit(null, true)) {
 				$cat = new Category();
 				$show_message = $cat->show_message_resource_delete($item->get_course_code());
@@ -236,8 +244,7 @@ class GradebookTable extends SortableTable {
 								
 					//if the item is invisible, wrap it in a span with class invisible
 					$invisibility_span_open  = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
-					$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
-		
+					$invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';		
                     
                     $main_categories[$parent_id]['children'][$item->get_id()]['name'] = $item->get_name();
                     $main_categories[$parent_id]['children'][$item->get_id()]['weight'] = $item->get_weight();
@@ -251,10 +258,13 @@ class GradebookTable extends SortableTable {
 					$row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item) . $invisibility_span_close;
 					
 					//Description
-					//$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+					$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
 					
 					//Weight
-					$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
+					//$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
+                    $weight = $data[3]/$category_weight*$main_cat[0]->get_weight();
+                    
+                    $row[] = $invisibility_span_open . $weight.$invisibility_span_close;
 					
 					if (api_is_allowed_to_edit(null, true)) {						
 						//$weight_total_links += intval($data[3]);
@@ -282,6 +292,8 @@ class GradebookTable extends SortableTable {
 						if (count($eval_n_links)> 0 && $status_user!=1 ) {
 							$value_data = isset($data[4]) ? $data[4] : null;							
 							if (!is_null($value_data)) {
+                                //$my_score = $data[5]->get_eval_max()/;
+                                //var_dump($data[5]);
 								$row[] = $value_data;
 							}
 						}    
@@ -494,7 +506,7 @@ class GradebookTable extends SortableTable {
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :
-				return build_edit_icons_cat($item, $this->currentcat->get_id());
+				return build_edit_icons_cat($item, $this->currentcat);
 			// evaluation
 			case 'E' :
 				return build_edit_icons_eval($item, $this->currentcat->get_id());

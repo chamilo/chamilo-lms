@@ -331,8 +331,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 		if (!exercise_time_control_is_valid($exo_id)) {
 			$score = 0;		
 	    }
-	    $now = time();
-              
+	                  
         /*  start_date wouldn't be updated
         $start_date_condition = '';        
 	    //Validation in case of wrong start_date
@@ -376,6 +375,9 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 				   data_tracking    	= '".implode(',', $question_list)."'
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		$res = Database::query($sql);
+        
+        if ($debug) error_log('update_event_exercice called ');
+        if ($debug) error_log("$sql");
         
         //Deleting control time session track		
 		//exercise_time_control_delete($exo_id);
@@ -448,56 +450,71 @@ function create_event_exercice($exo_id) {
  * @param	integer	Position
  * @return	boolean	Result of the insert query
  */
-function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0, $nano = null) {	
+function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null) {	
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-	$score 	= Database::escape_string($score);
-	$answer = Database::escape_string($answer);
-	$quesId = Database::escape_string($quesId);
-	$exeId 	= Database::escape_string($exeId);
-	$j 		= Database::escape_string($j);
+    global $debug;
+	$score          = Database::escape_string($score);
+	$answer         = Database::escape_string($answer);
+	$question_id    = Database::escape_string($question_id);
+	$exe_id          = Database::escape_string($exe_id);
+	$position 		= Database::escape_string($position);
+    $now            = api_get_utc_datetime();
+	$user_id        = api_get_user_id();
 		
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    
+    if ($debug) error_log("----- entering exercise_attempt function ------");
+    
+    if ($debug) error_log("answer: $answer");
+    if ($debug) error_log("score: $score");
+    if ($debug) error_log("question_id : $question_id");
+    if ($debug) error_log("position: $position");
 
-	//Validation in case of fraud with actived control time	
-	
+	//Validation in case of fraud with actived control time	    	
     if (!exercise_time_control_is_valid($exercise_id)) {
+        if ($debug) error_log("exercise_time_control_is_valid is false");
     	$score = 0;
     	$answer = 0;
     	$j = 0;
 	}
-	$reallyNow 	= api_get_utc_datetime();
-	$user_id 	= api_get_user_id();
+	
+    
 	if (!empty($user_id)) {
 		$user_id = "'".$user_id."'";
 	} else {
 		// anonymous
 		$user_id = api_get_anonymous_id();
 	}		
-	$file = '';
-	
+    
+	$file = '';	
 	if (isset($nano)) {	
-		$file = basename($nano->load_filename_if_exists(false));
+		$file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
 	}
     
 	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, session_id, position, tms, filename)
 			  VALUES (
-			  ".$exeId.",
+			  ".$exe_id.",
 			  ".$user_id.",
-			   '".$quesId."',
+			   '".$question_id."',
 			   '".$answer."',
 			   '".$score."',
 			   '".api_get_course_id()."',
 			   '".api_get_session_id()."',
-			   '".$j."',
-			   '".$reallyNow."',
+			   '".$position."',
+			   '".$now."',
 			   '".$file."'
 			)";		
-    //error_log($sql);
-	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
+    
+    if ($debug) error_log("Saving question attempt: ");
+    if ($debug) error_log($sql);
+    if ($debug) error_log("");
+    
+	if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
 		$res = Database::query($sql);		
 		if (defined('ENABLED_LIVE_EXERCISE_TRACKING')){
 			$recording_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-			$recording_changes = "INSERT INTO $recording_table (exe_id, question_id, marks, insert_date, author, session_id) VALUES ('$exeId','$quesId','$score','".api_get_utc_datetime()."','', '".api_get_session_id()."') ";
+            if ($debug) error_log("Saving e attempt recording ");
+			$recording_changes = "INSERT INTO $recording_table (exe_id, question_id, marks, insert_date, author, session_id) VALUES ('$exe_id','$question_id','$score','".api_get_utc_datetime()."','', '".api_get_session_id()."') ";
 			Database::query($recording_changes);			
 		}		
 		return $res;
@@ -1374,4 +1391,3 @@ function event_course_login($course_code, $user_id, $session_id) {
     //Course catalog stats modifications see #4191    
     CourseManager::update_course_ranking(null, null, null, null, true, false);
 }
-

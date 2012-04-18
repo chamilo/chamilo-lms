@@ -22,29 +22,11 @@ a:active {
     color : #3757f7;
 }
 
-.subnav-fixed {
-    position: fixed;
-    top: 0px;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    border-color: #d5d5d5;
-    border-width: 0 0 1px; /* drop the border on the fixed edges */
-    -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-            border-radius: 0;
-    /*-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-        -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
-    */
-}
-
 
 .subnav {  
   background-color: #00AAE3; /* Old browsers */
   background-repeat: repeat-x; /* Repeat the gradient */
-  background-image: -moz-linear-gradient(top, #028DC2 0%, #00AAE3 100%); /* FF3.6+ */
-  
+  background-image: -moz-linear-gradient(top, #028DC2 0%, #00AAE3 100%); /* FF3.6+ */  
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#028DC2), color-stop(100%,#00AAE3)); /* Chrome,Safari4+ */
   background-image: -webkit-linear-gradient(top, #028DC2 0%, #00AAE3 100%); /* Chrome 10+,Safari 5.1+ */
   background-image: -ms-linear-gradient(top, #028DC2 0%,#00AAE3 100%); /* IE10+ */

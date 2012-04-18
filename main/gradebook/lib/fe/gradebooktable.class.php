@@ -27,12 +27,13 @@ class GradebookTable extends SortableTable {
 	 * Constructor
 	 */
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
-  		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+  		//$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
     	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
 		
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);								
+        
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
@@ -54,11 +55,11 @@ class GradebookTable extends SortableTable {
 			$this->set_header($column++, get_lang('Result'), false);
 		}
 		
-		if (api_is_allowed_to_edit(null, true)) {
+		/*if (api_is_allowed_to_edit(null, true)) {
 			//$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
 		} elseif (($status<>1)  && !api_is_allowed_to_edit() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
 			//$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
-		}
+		}*/
 		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
@@ -83,7 +84,6 @@ class GradebookTable extends SortableTable {
     function get_data() {
         return $this->datagen;
     }
-
 
 	/**
 	 * Function used by SortableTable to get total number of items in the table
@@ -132,10 +132,10 @@ class GradebookTable extends SortableTable {
 		}
 		
 		//status of user in course
-	    $user_id     = api_get_user_id();
-		$course_code = api_get_course_id();
-        $session_id = api_get_session_id();
-		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
+	    $user_id        = api_get_user_id();
+		$course_code    = api_get_course_id();
+        $session_id     = api_get_session_id();
+		$status_user    = api_get_status_of_user_in_course($user_id, $course_code);
         
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
 
@@ -146,6 +146,7 @@ class GradebookTable extends SortableTable {
         $main_categories = array();
         
         $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        		
+        
 		foreach ($data_array as $data) {		
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)

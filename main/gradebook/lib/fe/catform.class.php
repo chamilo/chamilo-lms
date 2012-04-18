@@ -120,8 +120,12 @@ class CatForm extends FormValidator {
         $session_id = api_get_session_id();
          //Freeze or not
         $test_cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	
-        $links = $test_cats[0]->get_links();
+        $links = null;
+        if (isset($test_cats[0])) {
+            $links = $test_cats[0]->get_links();
+        }
         $grade_model_id = $this->category_object->get_grade_model_id();
+        
         if (empty($links)) {
             $grade_model_id    = 0;
         }
@@ -151,47 +155,17 @@ class CatForm extends FormValidator {
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
 			//we can't change the root category
 			$this->freeze('name');
-		}
+		}	
 
-		/*$models                  = api_get_settings_options('grading_model');
-		$course_grading_model_id = api_get_course_setting('course_grading_model');
-		$grading_model = '';
-		if (!empty($course_grading_model_id)) {
-			foreach($models as $option) {			
-				if (intval($option['id']) == $course_grading_model_id) {
-					$grading_model = $option['value'];
-				}
-			}
-		}		
-		
-		$grading_contents = api_grading_model_functions($grading_model, 'to_array');
-		*/
-		if (0) {			
-			/*$course_code	= api_get_course_id();			
-			$session_id		= api_get_session_id();
-			
-			///direct access to one evaluation
-			$cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init			
-			$count = count($cats) - 1;			
-			$value = round((float)$grading_contents['items'][$count]['percentage'], 2);            
-            if ($value == 0) {                
-                //$this->freeze();
-            }
-			
-			$this->add_textfield('weight', get_lang('TotalWeight'), true, array('value'=> $value,'size'=>'4','maxlength'=>'5'));
-			//$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
-			$this->freeze('weight');			*/
-		} else {
-            $global_weight = api_get_setting('gradebook_default_weight');
-            if (isset($global_weight)) {
-                $value = $global_weight;
-            } else {
-                $value = 100;
-            }            
-			$this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'size'=>'4','maxlength'=>'5'));
-			$this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
-		}
-        
+        $global_weight = api_get_setting('gradebook_default_weight');
+        if (isset($global_weight)) {
+            $value = $global_weight;
+        } else {
+            $value = 100;
+        }            
+        $this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'size'=>'4','maxlength'=>'5'));
+        $this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
+
         if (api_is_platform_admin() || api_is_drh()) {
             //the magic should be here            
             $skills = $this->category_object->get_skills();    
@@ -202,8 +176,7 @@ class CatForm extends FormValidator {
                     $content .= Display::tag('li', $skill['name'].'<a id="deleteskill_'.$skill['id'].'" class="closebutton" href="#"></a>', array('id'=>'skill_'.$skill['id'], 'class'=>'bit-box')); 
                 }
             }
-            $this->addElement('label', null, Display::tag('ul', $content, array('class'=>'holder holder_simple')));
-            
+            $this->addElement('label', null, Display::tag('ul', $content, array('class'=>'holder holder_simple')));            
         }
         
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					
@@ -234,7 +207,10 @@ class CatForm extends FormValidator {
             $course_code = api_get_course_id();
             $session_id = api_get_session_id();
             $test_cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init	
-            $links = $test_cats[0]->get_links();            
+            $links = null;
+            if (!empty($test_cats[0])) {
+                $links = $test_cats[0]->get_links();            
+            }
             
             if (count($test_cats) > 1 || !empty($links)) {
                 $this->freeze('grade_model_id');
@@ -248,11 +224,11 @@ class CatForm extends FormValidator {
 			$this->addElement('style_submit_button', null, get_lang('EditCategory'), 'class="save"');
 		}
         
-		if (!empty($grading_contents)) {
+		//if (!empty($grading_contents)) {
 			$this->addRule('weight', get_lang('OnlyNumbers'), 'numeric');
 			//$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 			$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
-		}
+		//}
 		
    	}
 	/**

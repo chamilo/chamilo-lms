@@ -665,6 +665,7 @@ if (isset ($_GET['studentoverview'])) {
     } else {
     	$stud_id = $stud_id;
     }
+    
 	$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
 	$alleval = $cats[0]->get_evaluations($stud_id);
 	$alllink = $cats[0]->get_links($stud_id);
@@ -792,8 +793,8 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {    
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-
-	if (!empty($cats)) {        
+    
+	if (!empty($cats)) {
         
         if (api_is_allowed_to_edit(null, true)) {
             //Getting grade models
@@ -845,10 +846,10 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             }
         }
         
-		$i = 0;
-		foreach ($cats as $cat) {
-			
-			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
+		$i = 0;     
+        
+		foreach ($cats as $cat) {			
+			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);            
 			$alleval = $cat->get_evaluations($stud_id);
 			$alllink = $cat->get_links($stud_id);
 			
@@ -864,7 +865,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 					if (!empty($grade_models[$grade_model_id])) {                        
                         Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);
                     }					
-				}                
+				}                                
 				$gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);                
 				$gradebooktable->display();				
 			}

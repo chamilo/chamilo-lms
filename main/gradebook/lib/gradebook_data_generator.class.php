@@ -34,7 +34,7 @@ class GradebookDataGenerator
 		$allevals = (isset($evals) ? $evals : array());
 		$alllinks = (isset($links) ? $links : array());
 		// merge categories, evaluations and links
-		$this->items = array_merge($allcats, $allevals, $alllinks);
+		$this->items = array_merge($allcats, $allevals, $alllinks);        
 		$this->evals_links = array_merge($allevals, $alllinks);
     }
 
@@ -56,7 +56,7 @@ class GradebookDataGenerator
 	 * 5: student's score (if student logged in)
 	 */
 	public function get_data($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {
-		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+		//$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		// do some checks on count, redefine if invalid value
 		if (!isset($count)) {
 			$count = count ($this->items) - $start;
@@ -64,6 +64,7 @@ class GradebookDataGenerator
 		if ($count < 0) {
 			$count = 0;
 		}
+        
 		$allitems = $this->items;
 		// sort array
 		if ($sorting & self :: GDG_SORT_TYPE) {
@@ -90,6 +91,7 @@ class GradebookDataGenerator
 		$status_user  = api_get_status_of_user_in_course($user_id, $course_code);
 		// generate the data to display
 		$data = array();
+        
 		foreach ($visibleitems as $item) {
 			$row = array ();
 			$row[] = $item;

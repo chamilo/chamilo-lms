@@ -213,7 +213,6 @@ abstract class AbstractLink implements GradebookItem {
      */
     public function add() {
 		$this->add_linked_data();
-
 		if (isset($this->type) && isset($this->ref_id) && isset($this->user_id) && isset($this->course_code) && isset($this->category) && isset($this->weight) && isset($this->visible)) {
 			$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 			$sql_testing="SELECT count(*) FROM ".$tbl_grade_links." WHERE ref_id=".$this->get_ref_id()." AND category_id =  ".$this->category." AND type =  ".$this->type." ;";

@@ -29,57 +29,58 @@ require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 // Had to move the form handling in here, because otherwise there would 
 // already be some display output.
 global $_configuration;
+
 if (api_get_setting('use_custom_pages') == 'true') {
 
-  //Reset Password when user goes to the link
-  if($_GET['reset'] && $_GET['id']){
-    $mesg = Login::reset_password($_GET["reset"], $_GET["id"], true);
-    CustomPages::displayPage('index-unlogged', array('info' => $mesg));
-  }
-
-  //Check email/username and do the right thing
-  if (isset ($_POST['user']) && isset ($_POST['email'])) {
-    $user = $_POST['user'];
-    $email = $_POST['email'];
-
-    $condition = '';
-    if (!empty($email)) {
-      $condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
+    //Reset Password when user goes to the link
+    if ($_GET['reset'] && $_GET['id']){
+        $mesg = Login::reset_password($_GET["reset"], $_GET["id"], true);
+        CustomPages::displayPage('index-unlogged', array('info' => $mesg));
     }
 
-    $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $query = " SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
-      username AS loginName, password, email, status AS status,
-      official_code, phone, picture_uri, creator_id
-      FROM ".$tbl_user."
-      WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
+    //Check email/username and do the right thing
+    if (isset ($_POST['user']) && isset ($_POST['email'])) {
+        $user = $_POST['user'];
+        $email = $_POST['email'];
 
-    $result 	= Database::query($query);
-    $num_rows 	= Database::num_rows($result);
-
-    if ($result && $num_rows > 0) {
-      if ($num_rows > 1) {
-        $by_username = false; // more than one user
-        while ($data = Database::fetch_array($result)) {
-          $user[] = $data;
+        $condition = '';
+        if (!empty($email)) {
+            $condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
         }
-      } else {
-        $by_username = true; // single user (valid user + email)
-        $user = Database::fetch_array($result);
-      }
-			if ($_configuration['password_encryption'] != 'none') {
-        //Send email with secret link to user
-        Login::handle_encrypted_password($user, $by_username);
-      } else {
-        Login::send_password_to_user($user, $by_username);
-      }
+
+        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $query = " SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
+                    username AS loginName, password, email, status AS status,
+                    official_code, phone, picture_uri, creator_id
+                    FROM ".$tbl_user."
+                    WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
+
+        $result 	= Database::query($query);
+        $num_rows 	= Database::num_rows($result);
+
+        if ($result && $num_rows > 0) {
+            if ($num_rows > 1) {
+                $by_username = false; // more than one user
+                while ($data = Database::fetch_array($result)) {
+                    $user[] = $data;
+                }
+            } else {
+                $by_username = true; // single user (valid user + email)
+                $user = Database::fetch_array($result);
+            }
+            if ($_configuration['password_encryption'] != 'none') {
+                //Send email with secret link to user
+                Login::handle_encrypted_password($user, $by_username);
+            } else {
+                Login::send_password_to_user($user, $by_username);
+            }
+        } else {
+            CustomPages::displayPage('lostpassword',array('error' => get_lang('NoUserAccountWithThisEmailAddress')));
+        }
     } else {
-      CustomPages::displayPage('lostpassword',array('error' => get_lang('NoUserAccountWithThisEmailAddress')));
+        CustomPages::displayPage('lostpassword');
     }
-	} else {
-    CustomPages::displayPage('lostpassword');
-  }
-  CustomPages::displayPage('index-unlogged', array('info' => get_lang('YourPasswordHasBeenEmailed')));
+    CustomPages::displayPage('index-unlogged', array('info' => get_lang('YourPasswordHasBeenEmailed')));
 }
 
 $tool_name = get_lang('LostPassword');
@@ -93,15 +94,15 @@ if (api_get_setting('allow_lostpassword') == 'false') {
 	api_not_allowed();
 }
 
-if (isset ($_GET['reset']) && isset ($_GET['id'])) {	
-	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';	
-	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
+if (isset($_GET['reset']) && isset($_GET['id'])) {	
+    $message = Display::return_message(Login::reset_password($_GET["reset"], $_GET["id"], true), 'normal', false);    
+	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';	
+	echo $message;
 } else {
 	$form = new FormValidator('lost_password');
     $form->addElement('header', $tool_name);
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
 
-	//$form->applyFilter('email','strtolower');
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="btn"');
 
 	// setting the rules
@@ -138,7 +139,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 		if ($result && $num_rows > 0) {
             $by_username = true;
             $users = Database::store_result($result);
-            foreach( $users as $user ) {
+            foreach ($users as $user ) {
                 if ($_configuration['password_encryption'] != 'none') {
                     Login::handle_encrypted_password($user, $by_username);
                 } else {

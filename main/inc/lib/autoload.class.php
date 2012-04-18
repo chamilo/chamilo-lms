@@ -28,10 +28,13 @@ class Autoload
         }
 
         $dir = dirname(__FILE__);
+        $sys = api_get_path(SYS_CODE_PATH);
 
         $result = array();
         $result['Redirect'] = $dir . '/redirect.class.php';
         $result['Request'] = $dir . '/request.class.php';
+        $result['AnnouncementEmail'] = $sys. 'announcements/announcement_email.class.php';
+        
         return $result;
     }
 

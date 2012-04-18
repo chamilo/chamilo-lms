@@ -368,6 +368,8 @@ class DisplayGradebook
 		$course_id = Database::get_course_by_category($selectcat);
 		$message_resource=$objcat->show_message_resource_delete($course_id);
         
+        $grade_model_id = $catobj->get_grade_model_id();
+        
         //@todo move these in a function            
         $sum_categories_weight_array = array();     
         if (isset($catobj) && !empty($catobj)) {            
@@ -409,6 +411,7 @@ class DisplayGradebook
                 $item_total         += $sub_item_total;                
                 $item_total_value   += $item_value;                
 			}
+            
             $item_total = round($item_total);
 			//$item_value = number_format($item_total_value, api_get_setting('gradebook_number_decimals'));
             $item_value = number_format($item_total_value, 2);
@@ -481,7 +484,10 @@ class DisplayGradebook
 		//$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
 		
 		if (api_is_allowed_to_edit(null, true)) {
-			$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'"><img src="../img/icons/32/new_folder.png" alt="' . get_lang('AddGradebook') . '" /></a></td>';			
+            
+            if (empty($grade_model_id) || $grade_model_id == -1) {
+                $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'"><img src="../img/icons/32/new_folder.png" alt="' . get_lang('AddGradebook') . '" /></a></td>';			
+            }
 			
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {				   

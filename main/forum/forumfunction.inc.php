@@ -2092,7 +2092,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     }
 
     // User upload
-    $form->addElement('label', null, get_lang('AddAnAttachment'));
+    $form->addElement('static', null, null, get_lang('AddAnAttachment'));
     $form->addElement('file', 'user_upload',get_lang('FileName'),'');
     $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array ('rows' => 4, 'cols' => 34));
     $form->applyFilter('file_comment', 'html_filter');

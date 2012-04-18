@@ -27,12 +27,13 @@ class GradebookTable extends SortableTable {
 	 * Constructor
 	 */
     function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null) {
-  		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+  		//$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
     	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
 		
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);								
+        
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
@@ -54,11 +55,11 @@ class GradebookTable extends SortableTable {
 			$this->set_header($column++, get_lang('Result'), false);
 		}
 		
-		if (api_is_allowed_to_edit(null, true)) {
+		/*if (api_is_allowed_to_edit(null, true)) {
 			//$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
 		} elseif (($status<>1)  && !api_is_allowed_to_edit() && (!isset($_GET['selectcat']) || $_GET['selectcat']==0)) {
 			//$this->set_header($column++, get_lang('Date'),true, 'width="100px"');
-		}
+		}*/
 		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
@@ -83,7 +84,6 @@ class GradebookTable extends SortableTable {
     function get_data() {
         return $this->datagen;
     }
-
 
 	/**
 	 * Function used by SortableTable to get total number of items in the table
@@ -132,10 +132,10 @@ class GradebookTable extends SortableTable {
 		}
 		
 		//status of user in course
-	    $user_id     = api_get_user_id();
-		$course_code = api_get_course_id();
-        $session_id = api_get_session_id();
-		$status_user = api_get_status_of_user_in_course($user_id, $course_code);
+	    $user_id        = api_get_user_id();
+		$course_code    = api_get_course_id();
+        $session_id     = api_get_session_id();
+		$status_user    = api_get_status_of_user_in_course($user_id, $course_code);
         
 		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
 
@@ -146,7 +146,11 @@ class GradebookTable extends SortableTable {
         $main_categories = array();
         
         $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        		
-		foreach ($data_array as $data) {		
+        
+        $total_categories_weight = 0;
+        
+        //Looping categories
+		foreach ($data_array as $data) {
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
 			$row  = array();
@@ -173,10 +177,12 @@ class GradebookTable extends SortableTable {
 				$row[] = $invisibility_span_open.$this->build_name_link($item) . $invisibility_span_close;
                 $main_categories[$item->get_id()] = $this->build_name_link($item);                
 			}
+            
             $main_categories[$item->get_id()]['weight'] = $item->get_weight();
+            $total_categories_weight += $item->get_weight();
             
 			//Description
-			$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+			$row[] = $invisibility_span_open.$data[2].$invisibility_span_close;			
 			            
 			//Weight
 			//$row[] = $invisibility_span_open .Display::tag('h4', $data['3'] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
@@ -204,7 +210,7 @@ class GradebookTable extends SortableTable {
 			if (api_is_allowed_to_edit(null, true)) {
 				$cat = new Category();
 				$show_message = $cat->show_message_resource_delete($item->get_course_code());
-				if ($show_message===false) {
+				if ($show_message === false) {
 					$row[] = $this->build_edit_column($item); 
 				}
 			} else {
@@ -236,7 +242,9 @@ class GradebookTable extends SortableTable {
 				
 				$sub_cat_info = new GradebookDataGenerator($allcat, $alleval, $alllink);
 				$data_array  =  $sub_cat_info->get_data($sorting, $from, $this->per_page);				
-				
+                
+				$total_weight = 0;
+                
 				foreach ($data_array as $data) {
 					$row  = array();
 					$item = $data[0];
@@ -263,6 +271,7 @@ class GradebookTable extends SortableTable {
 					//Weight
 					//$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
                     $weight = $data[3]/$category_weight*$main_cat[0]->get_weight();
+                    $total_weight += $weight;
                     
                     $row[] = $invisibility_span_open . $weight.$invisibility_span_close;
 					
@@ -300,9 +309,35 @@ class GradebookTable extends SortableTable {
 					}					
 					$sortable_data[] = $row;
 				}
-				//add elements			
+                
+                //"Warning row"
+                if (!empty($data_array)) {
+                    if (api_is_allowed_to_edit()) {
+                        $main_weight = intval($main_cat[0]->get_weight());                
+                        if (intval($total_weight) == $main_weight) {
+                            $label = Display::return_icon('accept.png', get_lang('Ok'));    
+                            $total = Display::badge($total_weight.' / '.$main_weight, 'success');
+                        } else {                                                       
+                            $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $main_weight) );    
+                            $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                    
+                        }
+                        $row = array(null, null, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".get_lang('SubTotal'),null, $total.' '.$label);
+                        $sortable_data[] = $row;
+                    }
+                }			
 			}
-		}
+		} //end looping categories
+        
+        if (api_is_allowed_to_edit()) {            
+            $main_weight = intval($main_cat[0]->get_weight());    
+            if (intval($total_categories_weight) == $main_weight) {                
+                $total = Display::badge($total_categories_weight.' / '.$main_weight, 'success');
+            } else {                                                                       
+                $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
+            }
+            $row = array(null, null, get_lang('Total'), null, $total);
+            $sortable_data[] = $row;
+        }
 
 		// warning messages
         $view = isset($_GET['view']) ? $_GET['view']: null; 
@@ -336,14 +371,11 @@ class GradebookTable extends SortableTable {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
 					Display::display_warning_message($warning_message);
 				}
-
 			}
 
 			if (empty($_GET['selectcat'])) {
-
 				$categories = Category :: load();
 				$weight_categories = $certificate_min_scores = $course_codes = array();
-
 				foreach ($categories as $category) {
 					$course_code_category = $this->build_course_code($category);
 					if (!empty($course_code)) {

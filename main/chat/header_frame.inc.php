@@ -14,7 +14,7 @@ if (!defined('FRAME')) {
 	exit();
 }
 
-$bodyXtra = 'dir="'.api_get_text_direction().'" ';
+$bodyXtra = ' class="course_chat" dir="'.api_get_text_direction().'" ';
 
 if (FRAME == 'hidden') {
 	$bodyXtra .= 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\', 5000);"';
@@ -108,6 +108,5 @@ function send_message(evenement){
 
 //-->
 </script>
-
 </head>
 <body <?php echo $bodyXtra; ?> >

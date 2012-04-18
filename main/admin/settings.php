@@ -254,6 +254,35 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     }
 }
 
+
+$htmlHeadXtra[] = '<script>    
+    var hide_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting_na.png";
+    var show_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting.png";
+    var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
+        
+    $(function(){
+        $(".share_this_setting").on("click", function() {
+            var my_img = $(this).find("img");
+            var link = $(this);
+            $.ajax({
+                url: url,
+                data: {changeable:  $(this).attr("data_status"), id: $(this).attr("data_to_send") },
+                success: function(data) {                
+                    if (data == 1) {
+                        if (link.attr("data_status") == 1) {
+                            my_img.attr("src", show_icon);
+                            link.attr("data_status", 0); 
+                        } else {                                
+                            my_img.attr("src", hide_icon);
+                            link.attr("data_status", 1);                            
+                        }                        
+                    }
+                }
+            });
+        });
+    });
+</script>';
+
 // Including the header (banner).
 Display :: display_header($tool_name);
 

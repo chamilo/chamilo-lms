@@ -41,7 +41,7 @@ class Attendance
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att 
-		        WHERE c_id = {$course_id} AND att.active = 1 $condition_session ";
+		        WHERE c_id = $course_id AND att.active = 1 $condition_session ";
 		$res = Database::query($sql);
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
@@ -71,7 +71,7 @@ class Attendance
 
 		// Get attendance data
 		$sql = "SELECT id, name, attendance_qualify_max FROM $tbl_attendance 
-		        WHERE c_id = {$course_id} AND active = 1 $condition_session ";
+		        WHERE c_id = $course_id AND active = 1 $condition_session ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs,'ASSOC')) {
@@ -265,43 +265,42 @@ class Attendance
 	 */
 	public function attendance_edit($attendance_id, $link_to_gradebook = false) {
 		global $_course;
-		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
-		$table_link 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$session_id 	= api_get_session_id();
-		$user_id 		= api_get_user_id();
-		$attendance_id	= intval($attendance_id);
-		$course_code 	= api_get_course_id();
-        $course_id = api_get_course_int_id();
-		$title_gradebook	 = Database::escape_string($this->attendance_qualify_title);
-		$value_calification  = 0;
-		$weight_calification =	floatval($this->attendance_weight);
+		$tbl_attendance     = Database :: get_course_table(TABLE_ATTENDANCE);
+		$table_link         = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$session_id         = api_get_session_id();
+		$user_id            = api_get_user_id();
+		$attendance_id      = intval($attendance_id);
+		$course_code        = api_get_course_id();
+        $course_id          = api_get_course_int_id();
+		$title_gradebook	= Database::escape_string($this->attendance_qualify_title);
+		$value_calification = 0;
+		$weight_calification= floatval($this->attendance_weight);
 		
-		$sql = "UPDATE $tbl_attendance
-				SET name ='".Database::escape_string($this->name)."',
-					description = '".Database::escape_string($this->description)."',
-					attendance_qualify_title = '".$title_gradebook."',
-					attendance_weight = '".$weight_calification."'
-				WHERE c_id = $course_id AND id = '$attendance_id'";
-		Database::query($sql);
-		if (!empty($affected_rows)) {
-			// update row item property table
-			$last_id = Database::insert_id();
-			api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"AttendanceUpdated", $user_id);
-		}
+        if (!empty($attendance_id)) {
+            
+            $sql = "UPDATE $tbl_attendance
+                    SET name ='".Database::escape_string($this->name)."',
+                        description = '".Database::escape_string($this->description)."',
+                        attendance_qualify_title = '".$title_gradebook."',
+                        attendance_weight = '".$weight_calification."'
+                    WHERE c_id = $course_id AND id = '$attendance_id'";
+            Database::query($sql);
 
-		// add link to gradebook
-		if ($link_to_gradebook) {
-			$description = '';
-			$link_id=is_resource_in_course_gradebook($course_code,7,$attendance_id,$session_id);
-			if (!$link_id) {
-				add_resource_to_course_gradebook($course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,$session_id);
-			} else {
-				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
-			}
-		}
-		$last_id = $attendance_id;
+            api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"AttendanceUpdated", $user_id);	
 
-		return $last_id;
+            // add link to gradebook
+            if ($link_to_gradebook) {
+                $description = '';
+                $link_id=is_resource_in_course_gradebook($course_code,7,$attendance_id,$session_id);
+                if (!$link_id) {
+                    add_resource_to_course_gradebook($course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,$session_id);
+                } else {
+                    Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+                }
+            }          
+            return $attendance_id;
+        }
+        return null;		
 	}
 
 	/**
@@ -558,7 +557,7 @@ class Attendance
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$tbl_attendance_result  = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$tbl_attendance			= Database::get_course_table(TABLE_ATTENDANCE);
-        $course_id = api_get_course_int_id();
+        $course_id              = api_get_course_int_id();
         
 		$attendance_id = intval($attendance_id);
 		// fill results about presence of students
@@ -607,43 +606,41 @@ class Attendance
 	}
 
 
-        /**
-         * update attendance_sheet_log table, is used as history of an attendance sheet
-         * @param   int     Attendance id
-         * @param   string  Last edit datetime
-         * @param   string  Event type ('locked_attendance', 'done_attendance_sheet' ...)
-         * @param   int     Last edit user id
-         * @param   string  Calendar datetime value (optional, when event type is 'done_attendance_sheet')
-         * @return  int     Affected rows
-         */
-        public function save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id, $calendar_date_value = null) {
-            $course_id = api_get_course_int_id();
+    /**
+        * update attendance_sheet_log table, is used as history of an attendance sheet
+        * @param   int     Attendance id
+        * @param   string  Last edit datetime
+        * @param   string  Event type ('locked_attendance', 'done_attendance_sheet' ...)
+        * @param   int     Last edit user id
+        * @param   string  Calendar datetime value (optional, when event type is 'done_attendance_sheet')
+        * @return  int     Affected rows
+        */
+    public function save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id, $calendar_date_value = null) {
+        $course_id = api_get_course_int_id();
 
-            // define table
-            $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
+        // define table
+        $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
 
-            // protect data
-            $attendance_id = intval($attendance_id);
-            $lastedit_date = Database::escape_string($lastedit_date);
-            $lastedit_type = Database::escape_string($lastedit_type);
-            $lastedit_user_id = intval($lastedit_user_id);
-            
-            if (isset($calendar_date_value)) {
-                $calendar_date_value = Database::escape_string($calendar_date_value);
-            } else {
-                $calendar_date_value = '';
-            }
+        // protect data
+        $attendance_id = intval($attendance_id);
+        $lastedit_date = Database::escape_string($lastedit_date);
+        $lastedit_type = Database::escape_string($lastedit_type);
+        $lastedit_user_id = intval($lastedit_user_id);
 
-            // save data
-            $ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
-                    VALUES($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
-
-            Database::query($ins);
-
-            return Database::affected_rows();
-            
+        if (isset($calendar_date_value)) {
+            $calendar_date_value = Database::escape_string($calendar_date_value);
+        } else {
+            $calendar_date_value = '';
         }
 
+        // save data
+        $ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
+                VALUES($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
+
+        Database::query($ins);
+
+        return Database::affected_rows();            
+   }
 
 	/**
 	 * Get number of done attendances inside current sheet
@@ -654,7 +651,9 @@ class Attendance
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
-		$sql = "SELECT count(done_attendance) as count FROM $tbl_attendance_calendar WHERE c_id = {$course_id} AND attendance_id = '$attendance_id' AND done_attendance=1";
+		$sql = "SELECT count(done_attendance) as count 
+                FROM $tbl_attendance_calendar 
+                WHERE c_id = $course_id AND attendance_id = '$attendance_id' AND done_attendance=1";
 		$rs  = Database::query($sql);
 		$row = Database::fetch_array($rs);
 		$count = $row['count'];
@@ -729,7 +728,8 @@ class Attendance
 			foreach ($attendances_by_course as $attendance) {
 				// get total faults and total weight
 				$total_done_attendance 	= $attendance['attendance_qualify_max'];
-				$sql = "SELECT score FROM $tbl_attendance_result WHERE c_id = $course_id AND user_id = $user_id AND attendance_id = ".$attendance['id'];
+				$sql = "SELECT score FROM $tbl_attendance_result
+                        WHERE c_id = $course_id AND user_id = $user_id AND attendance_id = ".$attendance['id'];
 				$rs = Database::query($sql);
 				$score = 0;
 				if (Database::num_rows($rs) > 0) {
@@ -758,8 +758,6 @@ class Attendance
 	 * @return 	array  results containing number of faults, total done attendance, porcent of faults and color depend on result (red, orange)
 	 */
 	public function get_faults_average_by_course($user_id, $course_code, $session_id = null) {
-
-
 		// Database tables and variables
 		$course_info = api_get_course_info($course_code);
 		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);
@@ -997,7 +995,8 @@ class Attendance
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
-		$sql = "SELECT count(id) FROM $tbl_attendance_calendar WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
+		$sql = "SELECT count(id) FROM $tbl_attendance_calendar 
+                WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
                 $row = Database::fetch_row($rs);
 		$count = $row[0];
@@ -1013,7 +1012,8 @@ class Attendance
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
          $course_id = api_get_course_int_id();
-		$sql = "SELECT count(id) FROM $tbl_attendance_calendar WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
+		$sql = "SELECT count(id) FROM $tbl_attendance_calendar 
+                WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
 		$count = 0;
 		if (Database::num_rows($rs) > 0) {

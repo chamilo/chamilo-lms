@@ -1077,33 +1077,28 @@ class Category implements GradebookItem
 		if (isset($stud_id) && !empty($stud_id)) {
 			// special case: this is the root
 			if ($this->id == 0) {
-				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);
+				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);                
 			} else { 
-					$evals = Evaluation::load(null,null,$course_code,$this->id, api_is_allowed_to_edit() ? null : 1);
-					
+                $evals = Evaluation::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1);
+                
 			}
 		} else {// all students
-			// course admin
+			// course admin            
 			if ((api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) && !api_is_platform_admin()) {
-				// root
+				// root                
 				if ($this->id == 0) {
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
-				}
-				// inside a course
-				elseif (isset($this->course_code) && !empty($this->course_code)) {
+				} elseif (isset($this->course_code) && !empty($this->course_code)) {
+                    // inside a course
 					$evals = Evaluation::load(null, null, $course_code, $this->id, null);
-
-				}else { // course independent
+				} else { 
+                    // course independent
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
 				}
-
+			} elseif (api_is_platform_admin()) {
+                //platform admin                
+				$evals = Evaluation::load(null, null, $course_code, $this->id, null);                
 			}
-
-			//platform admin
-			elseif (api_is_platform_admin()) {
-				$evals = Evaluation::load(null, null, $course_code, $this->id, null);
-			}
-
 		}
 
 		if ($recursive) {

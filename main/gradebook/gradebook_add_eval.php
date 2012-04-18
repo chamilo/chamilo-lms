@@ -29,7 +29,8 @@ if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
 } else {
 	$evaladd->set_category_id(0);
 }
-$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null,api_get_self() . '?selectcat=' .$select_cat);
+
+$form = new EvalForm(EvalForm :: TYPE_ADD, $evaladd, null, 'add_eval_form',null, api_get_self() . '?selectcat=' .$select_cat);
 
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -50,8 +51,7 @@ if ($form->validate()) {
     $global_weight = $cat[0]->get_weight();
     $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
     
-	$eval->set_weight($values['weight']);
-	
+	$eval->set_weight($values['weight']);	
 	$eval->set_max($values['max']);
     
 	if (empty ($values['visible'])) {

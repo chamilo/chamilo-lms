@@ -696,7 +696,13 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
-                    
+                strpos($query, 'thematic_advance') === false &&  
+                strpos($query, 'thematic_plan') === false &&  
+                strpos($query, 'track_c_countries') === false &&                        
+                strpos($query, 'track_c_os') === false &&
+                strpos($query, 'track_c_providers') === false &&
+                strpos($query, 'track_c_referers') === false &&
+                strpos($query, 'track_c_browsers') === false &&
                 strpos($query, 'dokeos_classic_2D') === false &&
                 strpos($query, 'cosmic_campus') === false &&
                 strpos($query, 'static_') === false &&

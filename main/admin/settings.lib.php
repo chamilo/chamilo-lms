@@ -1059,8 +1059,14 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
         $i++;
 
-        if ($row['access_url_changeable'] == '1' && $_configuration['multiple_access_urls']) {
-            $form->addElement('html', '<div style="float: right;">'.Display::return_icon('shared_setting.png', get_lang('SharedSettingIconComment')).'</div>');
+        if ( $_configuration['multiple_access_urls']) {
+            if (api_is_global_platform_admin()) {
+                if ($row['access_url_changeable'] == '1') {
+                    $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                } else {
+                    $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                }
+            }
         }
 
         $hideme = array();

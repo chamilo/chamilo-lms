@@ -3970,6 +3970,15 @@ function api_set_setting_option($params) {
 	}		
 }
 
+function api_set_setting_simple($params) {
+	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	if (empty($params['id'])) {
+		Database::insert($table, $params);
+	} else {
+		Database::update($table, $params, array('id = ? '=> $params['id']));
+	}		
+}
+
 function api_delete_setting_option($id) {
 	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 	if (!empty($id)) {

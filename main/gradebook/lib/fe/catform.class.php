@@ -125,7 +125,7 @@ class CatForm extends FormValidator {
             $links = $test_cats[0]->get_links();
         }
         $grade_model_id = $this->category_object->get_grade_model_id();
-        
+                
         if (empty($links)) {
             $grade_model_id    = 0;
         }
@@ -149,7 +149,7 @@ class CatForm extends FormValidator {
    	private function build_basic_form() {
    	    
 		$this->addElement('hidden', 'zero', 0);
-		$this->add_textfield('name', get_lang('CategoryName'), true, array('size'=>'54','maxlength'=>'50'));        
+		$this->add_textfield('name', get_lang('CategoryName'), true, array('class'=>'span3','maxlength'=>'50'));        
 		$this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 		
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
@@ -163,7 +163,7 @@ class CatForm extends FormValidator {
         } else {
             $value = 100;
         }            
-        $this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'size'=>'4','maxlength'=>'5'));
+        $this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'class'=>'span1','maxlength'=>'5'));
         $this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
 
         if (api_is_platform_admin() || api_is_drh()) {
@@ -180,7 +180,7 @@ class CatForm extends FormValidator {
         }
         
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					
-			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'5'));
+			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('class'=>'span1','maxlength'=>'5'));
 			$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
 			$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
 			//$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');

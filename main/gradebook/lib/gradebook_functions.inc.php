@@ -205,7 +205,7 @@ function build_edit_icons_cat($cat, $selectcat) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
         
-        if (empty($grade_model_id)) {
+        if (empty($grade_model_id) || $grade_model_id == -1) {
             $modify_icons= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
         }
 		
@@ -219,9 +219,9 @@ function build_edit_icons_cat($cat, $selectcat) {
 			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 		}
         
-        if (empty($grade_model_id)) {
-            $modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
-                Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            
+        if (empty($grade_model_id) || $grade_model_id == -1) {
+            /*$modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
+                Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            */
         }
 
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';

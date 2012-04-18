@@ -941,9 +941,9 @@ class AnnouncementManager  {
 				document.getElementById('emailTitle').focus();
 			} else {			
 				if (cbList.length <	1) {
-					if (!confirm(\"".get_lang('Send2All')."\")) {
-						return false;
-					}
+					//if (!confirm(\"".get_lang('Send2All')."\")) {
+					//	return false;
+					//}
 				}				
 				for	(var i=0; i<cbList.length; i++)
 				cbList[i].selected = cbList[i].checked = bSelect;				

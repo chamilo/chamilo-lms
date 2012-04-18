@@ -76,12 +76,8 @@ class Login
 	 * @param unknown_type $user
 	 * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
 	 */
-	public static function send_password_to_user($user, $by_username = false) {
-	
+	public static function send_password_to_user($user, $by_username = false) {	
 		global $_configuration;
-		/*
-		$emailHeaders = get_email_headers(); // Email Headers
-		*/
 		$email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	
 		if ($by_username) { // Show only for lost password
@@ -107,10 +103,11 @@ class Login
 	    $email_admin = api_get_setting('emailAdministrator');
 
 		if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-      if (api_get_setting('use_custom_pages') == 'true') 
-        return get_lang('your_password_has_been_reset');
-      else
-        Display::display_confirmation_message(get_lang('your_password_has_been_reset'));
+            if (api_get_setting('use_custom_pages') == 'true') {
+                return get_lang('your_password_has_been_reset');
+            } else {
+                Display::display_confirmation_message(get_lang('your_password_has_been_reset'));
+            }
 		} else {
 			$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		}
@@ -124,41 +121,43 @@ class Login
 	 *
 	 * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
 	 */
-  public static function handle_encrypted_password($user, $by_username = false) {	
-    global $_configuration;
-    $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+    public static function handle_encrypted_password($user, $by_username = false) {	
+        global $_configuration;
+        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
-    if ($by_username) { // Show only for lost password
-      $user_account_list = self::get_user_account_list($user, true, $by_username); // BODY
-      $email_to = $user['email'];
-    } else {
-      $user_account_list = self::get_user_account_list($user, true); // BODY
-      $email_to = $user[0]['email'];
+        if ($by_username) { // Show only for lost password
+            $user_account_list = self::get_user_account_list($user, true, $by_username); // BODY
+            $email_to = $user['email'];
+        } else {
+            $user_account_list = self::get_user_account_list($user, true); // BODY
+            $email_to = $user[0]['email'];
+        }
+
+        $secret_word = self::get_secret_word($email_to);
+        $email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
+        $email_body .= $user_account_list."\n-----------------------------------------------\n\n";
+        $email_body .= get_lang('PasswordEncryptedForSecurity');
+
+        $email_body .= "\n\n".get_lang('Formula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." - ".api_get_setting('siteName');
+
+        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('emailAdministrator');
+
+        if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
+            if (api_get_setting('use_custom_pages') == 'true') {
+                return get_lang('YourPasswordHasBeenEmailed');
+            } else {
+                Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
+            }
+        } else {
+            $message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+            if (api_get_setting('use_custom_pages') == 'true') {
+                return $message;
+            } else {
+                Display::display_error_message($message, false);
+            }
+        }
     }
-
-    $secret_word = self::get_secret_word($email_to);
-    $email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
-    $email_body .= $user_account_list."\n-----------------------------------------------\n\n";
-    $email_body .= get_lang('PasswordEncryptedForSecurity');
-    //$email_body .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-    $email_body .= "\n\n".get_lang('Formula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." - ".api_get_setting('siteName');
-
-    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    $email_admin = api_get_setting('emailAdministrator');
-
-    if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-      if (api_get_setting('use_custom_pages') == 'true') 
-        return get_lang('YourPasswordHasBeenEmailed');
-      else
-        Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
-    } else {
-      $message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
-      if (api_get_setting('use_custom_pages') == 'true') 
-        return $message;
-      else
-        Display::display_error_message($message, false);
-    }
-  }
 	
 	/**
 	 * Gets the secret word

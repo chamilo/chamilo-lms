@@ -159,7 +159,6 @@ if ($time_control) {
 	$current_expired_time_key = generate_time_control_key($objExercise->id);
 }
 
-
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
@@ -220,42 +219,44 @@ if ($objExercise->selectAttempts() > 0) {
 
 
 
-if ($debug) { error_log("4. Setting the exe_id $exe_id");} ;
+if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
 //var_dump($safe_lp_id.' - '.$safe_lp_item_id.' - '.$safe_lp_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
 
 if (empty($exercise_stat_info)) {
+    if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
 	$questionList = $objExercise->get_validated_question_list();	
-	foreach($questionList as $question_id) {
+	foreach ($questionList as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
 	$clock_expired_time = '';
+    
 	if ($time_control) {
 		$expected_time = $current_timestamp + $total_seconds;
 		
-		if ($debug)  error_log('6.3. $current_timestamp '.$current_timestamp);
-		if ($debug)  error_log('6.4. $expected_time '.$expected_time);
+		if ($debug)  error_log('5.1. $current_timestamp '.$current_timestamp);
+		if ($debug)  error_log('5.2. $expected_time '.$expected_time);
 		
 		$clock_expired_time 	= api_get_utc_datetime($expected_time);
-		if ($debug) error_log('6.5. $expected_time '.$clock_expired_time);
+		if ($debug) error_log('5.3. $expected_time '.$clock_expired_time);
 		
 		//Sessions  that contain the expired time
 		$_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;
-		if ($debug) {
-			error_log('6.6. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] );
-		};
+		if ($debug) { error_log('5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
 	}
 	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList, $total_weight);
 	$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);	
+    if ($debug)  error_log("5.5  exercise_stat_info[] exists getting exe_id $exe_id");
 } else {
 	$exe_id = $exercise_stat_info['exe_id'];
+    if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
 
-if ($debug) { error_log('5. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
+if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
 if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = $exercise_stat_info['questions_to_check'];
@@ -264,29 +265,30 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 }
 
 $params = 'exe_id='.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
-if ($debug) { error_log("5.1 params: ->  $params"); };
+if ($debug) { error_log("6.1 params: ->  $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {	
+    if ($debug) { error_log("6.2 calling the exercise_reminder.php "); };
 	header('Location: exercise_reminder.php?'.$params);
 	exit;
 }
 
 /*
- * 6. Loading Time control parameters
+ * 7. Loading Time control parameters
  * If the expired time is major that zero(0) then the expired time is compute on this time. Disable for learning path
  */
 
 if ($time_control) {
-	if ($debug) error_log('6.1. Time control is enabled');	
-	if ($debug) {error_log('6.2. $current_expired_time_key  '.$current_expired_time_key); };
-	if ($debug) { error_log('6.2. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]); };
+	if ($debug) error_log('7.1. Time control is enabled');	
+	if ($debug) error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
+	if ($debug) error_log('7.3. $_SESSION[expired_time][$current_expired_time_key]  '.$_SESSION['expired_time'][$current_expired_time_key]);
 	
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
         //Timer - Get expired_time for a student        
         if (!empty($exercise_stat_info)) {
-        	if ($debug) {error_log('6.3 Seems that the session ends and the user want to retake the exam'); };        	
+        	if ($debug) {error_log('7.4 Seems that the session ends and the user want to retake the exam'); };        	
 	        $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
-			if ($debug) {error_log('$expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }			
+			if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }			
 	        //Get the last attempt of an exercice
 	    	$last_attempt_date = get_last_attempt_date_of_exercise($exercise_stat_info['exe_id']);
 	    	
@@ -299,31 +301,33 @@ if ($time_control) {
 	    		$diff = $current_timestamp - api_strtotime($last_attempt_date,'UTC');
 	    		$last_attempt_date = api_get_utc_datetime(api_strtotime($last_attempt_date,'UTC') + $diff);
 	    	}
-	        if ($debug) {error_log('6.4. $last_attempt_date: '.$last_attempt_date); }
+	        if ($debug) {error_log('7.6. $last_attempt_date: '.$last_attempt_date); }
 	        	
 	        //New expired time - it is due to the possible closure of session
 	        $new_expired_time_in_seconds = api_strtotime($expired_time_of_this_attempt, 'UTC') - api_strtotime($last_attempt_date,'UTC');
-	        if ($debug) {error_log('6.5. $new_expired_time_in_seconds: '.$new_expired_time_in_seconds); }	        
+	        if ($debug) {error_log('7.7. $new_expired_time_in_seconds: '.$new_expired_time_in_seconds); }	        
 	        
 	        $expected_time	= $current_timestamp + $new_expired_time_in_seconds;
-	        if ($debug) {error_log('6.6. $expected_time1: '.$expected_time); }
+	        if ($debug) {error_log('7.8. $expected_time1: '.$expected_time); }
 	        	        			
 	        $clock_expired_time  = api_get_utc_datetime($expected_time);
-	        if ($debug) {error_log('6.7. $clock_expired_time: '.$clock_expired_time); }
+	        if ($debug) {error_log('7.9. $clock_expired_time: '.$clock_expired_time); }
 	        	              		
 			// First we update the attempt to today
 			// How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
 	        $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."' WHERE exe_id = '".$exercise_stat_info['exe_id']."' AND tms = '".$last_attempt_date."' ";
-	        if ($debug) {error_log('6.8. $sql_track_e_exe2: '.$sql_track_e_exe); }
+	        if ($debug) {error_log('7.10. $sql_track_e_exe2: '.$sql_track_e_exe); }
 	        Database::query($sql_track_e_exe);
 	        	
 	        //Sessions  that contain the expired time
 	        $_SESSION['expired_time'][$current_expired_time_key] 		= $clock_expired_time;
-	        if ($debug) {error_log('6.9. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
+	        if ($debug) {error_log('7.11. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
         }
     } else {
         $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];
     }
+} else {
+    if ($debug) { error_log("7 No time control"); };
 }
 
 // Get time left for exipiring time
@@ -337,24 +341,6 @@ if ($time_control) { //Sends the exercice form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
-/*
-if ($objExercise->type == ONE_PER_PAGE && $objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {	
-	if (!empty($exercise_stat_info)) {
-        $exe_id = $exercise_stat_info['exe_id'];
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {            
-            $recorded['questionList'] = explode(',', $exercise_stat_info['data_tracking']);            
-            $query = 'SELECT * FROM ' . $exercice_attemp_table . ' WHERE exe_id = ' . $exercise_stat_info['exe_id'] . ' ORDER BY tms ASC';            
-            $result = Database::query($query);
-            while ($row = Database :: fetch_array($result,'ASSOC')) {
-                $recorded['exerciseResult'][$row['question_id']] = 1;
-            }
-            $exerciseResult = $_SESSION['exerciseResult'] = $recorded['exerciseResult'];            
-            $current_question = count($recorded['exerciseResult']);
-            $current_question++;
-            $questionList = $_SESSION['questionList'] = $recorded['questionList'];
-        }
-    }
-}*/
 // if the user has submitted the form
 
 $exercise_title			= $objExercise->selectTitle();
@@ -378,7 +364,7 @@ if (!isset($_SESSION['questionList'])) {
 	}
 }
 
-if ($debug) error_log('7 Question list loaded '.print_r($questionList, 1));
+if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
 $quizStartTime = time();
 api_session_register('quizStartTime');
@@ -390,7 +376,7 @@ if (!empty($questionList)) {
 }
 
 if ($formSent && isset($_POST)) {
-    if ($debug > 0) { error_log('8. $formSent was set'); }
+    if ($debug) { error_log('9. $formSent was set'); }
 
     // Initializing
     if (!is_array($exerciseResult)) {
@@ -406,13 +392,13 @@ if ($formSent && isset($_POST)) {
     
     // if the user has answered at least one question
     if (is_array($choice)) {
-        if ($debug) { error_log('8.1. $choice is an array '.print_r($choice, 1)); } 	
+        if ($debug) { error_log('9.1. $choice is an array '.print_r($choice, 1)); } 	
         // Also store hotspot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
 
         if (isset($_POST['hotspot'])) {
             $exerciseResultCoordinates = $_POST['hotspot'];
-            if ($debug) { error_log('8.2. $_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1)); }     
+            if ($debug) { error_log('9.2. $_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1)); }     
         }        	
         if ($objExercise->type == ALL_ON_ONE_PAGE) {
             // $exerciseResult receives the content of the form.
@@ -433,15 +419,15 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                        if ($debug > 0) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
+                        if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
                     	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false, $objExercise->propagate_neg);
                     }
                     //END of saving and qualifying
                 }
             }
         }
-        if ($debug > 0) { error_log('8.3.  $choice is an array - end'); }
-        if ($debug > 0) { error_log('8.4.  $exerciseResult '.print_r($exerciseResult,1)); }
+        if ($debug) { error_log('9.3.  $choice is an array - end'); }
+        if ($debug) { error_log('9.4.  $exerciseResult '.print_r($exerciseResult,1)); }
     }
     
     
@@ -452,11 +438,11 @@ if ($formSent && isset($_POST)) {
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
     
-    if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count)) {       
+    if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count)) {          
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
-                if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
+                if ($debug) { error_log('10. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
                 
                 //We check if the user attempts before sending to the exercise_result.php                
                 if ($objExercise->selectAttempts() > 0) {
@@ -492,23 +478,20 @@ if ($formSent && isset($_POST)) {
                     if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
                     Database::query($update_query);*/
                 }                
-                if ($debug) { error_log('Redirecting to exercise_show.php'); }
+                if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
                 //header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             }            
         } else {
-            if ($debug) { error_log('Redirecting to exercise_submit.php'); }
+            if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
             header("Location: exercise_submit.php?exerciseId=$exerciseId&origin=$origin");
             exit;            
         }
     }
-    
-    if (!empty($remind_list)) {
-         //header("Location: exercise_reminder.php?origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
-         exit;
-    }
-    if ($debug > 0) { error_log('$formSent was set - end'); }
+    if ($debug) { error_log('11. $formSent was set - end'); }
+} else {
+    if ($debug) { error_log('9. $formSent was NOT sent'); }
 }
 
 // if questionNum comes from POST and not from GET
@@ -520,12 +503,13 @@ if (!$current_question || $_REQUEST['num']) {
         $current_question++;
     }
 }
+
 if ($question_count != 0) {
 	if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count)) {       
 	    if (api_is_allowed_to_session_edit()) {
 	        // goes to the script that will show the result of the exercise
 	        if ($objExercise->type == ALL_ON_ONE_PAGE) {
-	            if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
+	            if ($debug) { error_log('12. Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }
 	            
 	            //We check if the user attempts before sending to the exercise_result.php
 	            if ($objExercise->selectAttempts() > 0) {
@@ -554,10 +538,10 @@ if ($question_count != 0) {
 	            
 	                if ($check) {
 	                	$sql_exe_result = "";                    	
-	                    if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
+	                    if ($debug) { error_log('12. exercise_time_control_is_valid is valid'); }
 	                } else {
 	                	$sql_exe_result = ", exe_result = 0";
-	                    if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
+	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
 	                }
 	                /*
 	                //Clean incomplete - @todo why setting to blank the status?                  
@@ -626,12 +610,6 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     }
     echo '</div>';
 }
-/*
-$exercise_header = Display::div($exercise_title, array('class'=>'exercise_title'));
-if (!empty($exercise_description)) {
-	$exercise_header .= Display::div($exercise_description, array('class'=>'exercise_description'));
-}
-echo Display::div($exercise_header, array('class'=>'exercise_header'));*/
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 if ($is_visible_return['value'] == false) {
@@ -644,7 +622,7 @@ if ($is_visible_return['value'] == false) {
 
 $limit_time_exists = (($objExercise->start_time != '0000-00-00 00:00:00') || ($objExercise->end_time != '0000-00-00 00:00:00')) ? true : false;
 
-if ($limit_time_exists) {	    
+if ($limit_time_exists) {    
     $exercise_start_time 	= api_strtotime($objExercise->start_time, 'UTC');
     $exercise_end_time 		= api_strtotime($objExercise->end_time, 'UTC');
     $time_now 				= time();
@@ -699,16 +677,15 @@ if ($origin != 'learnpath') {
    echo '<div id="highlight-plugin" class="glossary-content">';
 }
 
-//var_dump('$remind_question_id . '.$remind_question_id);
-
 if ($reminder == 2)  {
+    if ($debug) { error_log('. $reminder == 2'); }
  
     $data_tracking  = $exercise_stat_info['data_tracking'];
     $data_tracking  = explode(',', $data_tracking);
       
     $current_question = 1; //set by default the 1st question    
     
-    if (!empty($my_remind_list)) { 
+    if (!empty($my_remind_list)) {
     	//Checking which questions we are going to call from the remind list      
 		for ($i = 0; $i < count($data_tracking); $i++) {
 			for($j = 0; $j < count($my_remind_list); $j++) {				
@@ -741,8 +718,9 @@ if ($reminder == 2)  {
 				}
 			}  
         }
-    } else {    	
+    } else {
     	if ($objExercise->review_answers) {
+            if ($debug) { error_log('. redirecting to exercise_reminder.php '); }
 	    	header("Location: exercise_reminder.php?$params");
 	    	exit;
     	}
@@ -847,10 +825,8 @@ if (!empty($error)) {
                             
            		// Only for the first time
            		
-           		
-           		
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");                                
-                    $.ajax({ 
+                    $.ajax({
                         url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                         data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,                                 
                         success: function(return_value) {
@@ -867,10 +843,12 @@ if (!empty($error)) {
 								} else {
 									url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
 								}								
-								window.location = url;
-								
+								window.location = url;								
                         	}
-                        },                                 
+                        },
+                        error: function() {
+                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                        }
                     });   
                 return false;
             }

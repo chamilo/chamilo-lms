@@ -743,6 +743,7 @@ class GroupManager {
 	/**
 	 * Get all users from a given group
 	 * @param int $group_id The group
+         * @return array list of user id
 	 */
 	public static function get_users ($group_id) {
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
@@ -756,6 +757,34 @@ class GroupManager {
 		}
 		return $users;
 	}
+        
+        
+        /**
+         * Returns users belonging to any of the group 
+         * 
+         * @param array $groups list of group ids
+         * @return array list of user ids
+         */
+        public static function get_groups_users($groups = array())
+        {
+            $result = array();
+            
+            $tbl_group_user = Database::get_course_table(TABLE_GROUP_USER); 
+            $course_id = api_get_course_int_id();
+        
+            $groups = array_map('intval', $groups);
+            $groups = implode(', ', $groups);	//protect individual elements with surrounding quotes
+            $sql = "SELECT DISTINCT user_id
+                    FROM $tbl_group_user gu
+                    WHERE c_id = $course_id AND gu.group_id IN ($groups)";
+            $rs = Database::query($sql);
+            while ($row = Database::fetch_array($rs)) 
+            {
+                $result[] = $row['user_id']; 
+            }
+
+            return $result;
+        }
 
 	/**
 	 * Fill the groups with students.

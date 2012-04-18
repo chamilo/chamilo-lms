@@ -600,6 +600,33 @@ class UserManager {
 	public static function is_username_too_long($username) {
 		return (strlen($username) > USERNAME_MAX_LENGTH);
 	}
+        
+	public static function get_user_list_by_ids($ids = array(), $active = null) 
+        {
+            if(empty($ids))
+            {
+                return array();
+            }
+            
+            $ids = is_array($ids) ? $ids : array($ids);            
+            $ids = array_map('intval', $ids);       
+            $ids = implode(',', $ids);
+            
+            $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+            $sql = "SELECT * FROM $tbl_user WHERE user_id IN ($ids)";
+            if(! is_null($active))
+            {
+                $sql .= ' AND active=' . ($active ? '1' : '0'); 
+            }
+            
+            $rs = Database::query($sql);
+            $result = array();
+            while ($row = Database::fetch_array($rs)) 
+            {
+                $result[] = $row;
+            }
+            return $result;
+        }
 
 	/**
 	* Get a list of users of which the given conditions match with an = 'cond'

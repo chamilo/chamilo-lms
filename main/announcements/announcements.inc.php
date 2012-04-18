@@ -702,6 +702,37 @@ class AnnouncementManager  {
 	/*
 			DATA FUNCTIONS
 	*/
+        
+        /**
+         * Returns announcement info from its id
+         * 
+         * @param type $course_id
+         * @param type $annoucement_id
+         * @return array
+         */
+        public static function get_by_id($course_id, $annoucement_id)
+        {
+            $annoucement_id = intval($annoucement_id);
+            $course_id = $course_id ? intval($course_id) : api_get_course_int_id();
+            
+            $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+            $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+            $sql = "SELECT DISTINCT announcement.id, announcement.title, announcement.content
+                           FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+                           WHERE announcement.id = toolitemproperties.ref AND
+                                 toolitemproperties.tool='announcement' AND
+                                 announcement.c_id = $course_id AND
+                                 toolitemproperties.c_id = $course_id AND
+                                 announcement.id = $annoucement_id";                
+            $rs = Database::query($sql);
+            while ($data = Database::fetch_array($rs)) 
+            {
+                return $data;
+            }		
+            return array();
+            
+        }
 	
 	/**
 	* this function gets all the users of the course,
@@ -910,9 +941,9 @@ class AnnouncementManager  {
 				document.getElementById('emailTitle').focus();
 			} else {			
 				if (cbList.length <	1) {
-					if (!confirm(\"".get_lang('Send2All')."\")) {
-						return false;
-					}
+					//if (!confirm(\"".get_lang('Send2All')."\")) {
+					//	return false;
+					//}
 				}				
 				for	(var i=0; i<cbList.length; i++)
 				cbList[i].selected = cbList[i].checked = bSelect;				
@@ -1094,7 +1125,7 @@ class AnnouncementManager  {
 		}
 		return $sent_to;
 	}
-	
+        
 	
 	/*		ATTACHMENT FUNCTIONS	*/
 	
@@ -1227,107 +1258,12 @@ class AnnouncementManager  {
 		// update item_property
 		//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
 	}
+        
     
-    public static function send_email($id) {        
-        $sent_to	= self::sent_to("announcement", $id);
-        $userlist   = $sent_to['users'];
-        $userlist = array_map('intval', $userlist);
-        
-        $grouplist  = $sent_to['groups'];
-        $grouplist = array_map('intval', $grouplist);
-        
-        $course_id = api_get_course_int_id();
-        $course_code = api_get_course_id();
-        $course_info = api_get_course_info($course_code);       
-        
-        $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);   
-        $tbl_user          		= Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_course_user   		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);        
-        $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-
-        // groepen omzetten in users
-        if (isset($grouplist) && !empty($grouplist)) {            
-            $grouplist = "'".implode("', '",$grouplist)."'";	//protect individual elements with surrounding quotes
-            $sql = "SELECT user_id
-                    FROM $tbl_groupUser gu
-                    WHERE c_id = $course_id AND gu.group_id IN (".$grouplist.")";
-            $groupMemberResult = Database::query($sql);
-            if ($groupMemberResult) {
-                while ($u = Database::fetch_array($groupMemberResult)) {
-                    $userlist[] = $u['user_id']; // complete the user id list ...
-                }
-            }
+        public static function send_email($annoucement_id) 
+        {        
+            $email = AnnouncementEmail::create(null, $annoucement_id);
+            $email->send();
         }
-
-        if (isset($userlist) && !empty($userlist) && is_array($userlist)) {            
-            $userlist = "'".implode("', '", array_unique($userlist) )."'";
-
-            // send to the created 'userlist'
-            $sqlmail = "SELECT user_id, lastname, firstname, email
-                        FROM $tbl_user
-                        WHERE active = 1 AND user_id IN (".$userlist.")";
-        } else if (empty($_POST['not_selected_form'])) {
-            if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false') {
-                // send to everybody
-                $sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-                            FROM $tbl_course_user, $tbl_user
-                            WHERE  active = 1 AND 
-                                    course_code='".Database::escape_string($course_code)."' AND
-                                    course_rel_user.user_id = user.user_id AND 
-                                    relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
-            } else {
-                $sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-                            FROM $tbl_user INNER JOIN $tbl_session_course_user
-                            ON $tbl_user.user_id = $tbl_session_course_user.id_user AND
-                            active = 1 AND
-                            $tbl_session_course_user.course_code = '".$course_code."' AND
-                            $tbl_session_course_user.id_session = ".api_get_session_id();
-            }
-        }                            
-        $user_info = api_get_user_info();
-        
-        if ($sqlmail != '') {
-            $rs_mail = Database::query($sqlmail);
-
-            /*	Send email one by one to avoid antispam */
-
-            //$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
-            while ($myrow = Database::fetch_array($rs_mail)) {
-
-                $emailSubject = "[" . $course_info['official_code'] . "] " . $emailTitle;
-
-                // intro of the email: receiver name and subject
-                $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";                
-
-                // Main part of the email
-                $mail_body .= trim(stripslashes(self::parse_content($newContent, api_get_course_id())));
-                // Signature of email: sender name and course URL after -- line
-                $mail_body .= "<br />-- <br />";
-                $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
-                $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()."\">";
-                $mail_body .= $course_info['official_code'].' '.$course_info['name'] . "</a>";
-
-                $recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-                $mailid = $myrow["email"];
-                $sender_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                $sender_email = $user_info['mail'];
-
-                // send attachment file
-                $data_file = array();
-                $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE c_id = '.$course_id.' AND announcement_id = "'.$id.'"';
-                $rs_attach = Database::query($sql);
-                if (Database::num_rows($rs_attach) > 0) {
-                    $row_attach  = Database::fetch_array($rs_attach);
-                    $path_attach = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/announcements/'.$row_attach['path'];
-                    $filename_attach = $row_attach['filename'];
-                    $data_file = array('path' => $path_attach,'filename' => $filename_attach);                    
-                }
-                @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);          
-            }
-            self::update_mail_sent($id);            
-        }
-        
-    }
     
 } //end class

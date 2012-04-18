@@ -69,56 +69,20 @@ if (!defined('CLI_INSTALLATION')) {
 	$mysqlRepositorySys = Database::fetch_array($result);
 	$mysqlRepositorySys = $mysqlRepositorySys['Value'];
 	
-	if (!$singleDbForm) {
-		Database::query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(Database::error());
-	}
-	
-	$create_database = true;	
-	if ($singleDbForm) {
-        if (database_exists($mysqlMainDb)) {
-	       $create_database = false;
-        }
-	}
-	
+	$create_database = true;
+    
+	if (database_exists($mysqlMainDb)) {
+        $create_database = false;
+    }	
+	//Create database
 	if ($create_database) {
 		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
 		Database::query($sql) or die(Database::error());
 	}	
 }
 
-/**
- * CREATING THE STATISTICS DATABASE
- */
-
 $mysqlStatsDb = $mysqlMainDb;
-/*
-if ($mysqlStatsDb != $mysqlMainDb) {
-	if (!$singleDbForm) {
-		// multi DB mode AND tracking has its own DB so create it
-		Database::query("DROP DATABASE IF EXISTS `$mysqlStatsDb`") or die(Database::error());
-		Database::query("CREATE DATABASE `$mysqlStatsDb`") or die(Database::error());
-	} else {
-		// single DB mode so $mysqlStatsDb MUST BE the SAME than $mysqlMainDb
-		$mysqlStatsDb = $mysqlMainDb;
-	}
-}*/
-
-/**
- * CREATING THE USER DATABASE
- */
-
 $mysqlUserDb = $mysqlMainDb;
-/*
-if ($mysqlUserDb != $mysqlMainDb) {
-	if (!$singleDbForm) {
-		// multi DB mode AND user data has its own DB so create it
-		Database::query("DROP DATABASE IF EXISTS `$mysqlUserDb`") or die(Database::error());
-		Database::query("CREATE DATABASE `$mysqlUserDb`") or die(Database::error());
-	} else {
-		// single DB mode so $mysqlUserDb MUST BE the SAME than $mysqlMainDb
-		$mysqlUserDb = $mysqlMainDb;
-	}
-}*/
 
 // This parameter is needed to run a command line install of Chamilo (needed for Phing)
 if (!defined('CLI_INSTALLATION')) {
@@ -129,27 +93,24 @@ if (!defined('CLI_INSTALLATION')) {
 	}
 }
 
-/**
- * Creating the tables of the main database
- */
-
 Database::select_db($mysqlMainDb) or die(Database::error());
 
-$installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
-$installation_settings['{ORGANISATIONURL}'] = $institutionUrlForm;
-$installation_settings['{CAMPUSNAME}'] = $campusForm;
-$installation_settings['{PLATFORMLANGUAGE}'] = $languageForm;
-$installation_settings['{ALLOWSELFREGISTRATION}'] = true_false($allowSelfReg);
-$installation_settings['{ALLOWTEACHERSELFREGISTRATION}'] = true_false($allowSelfRegProf);
-$installation_settings['{ADMINLASTNAME}'] = $adminLastName;
-$installation_settings['{ADMINFIRSTNAME}'] = $adminFirstName;
-$installation_settings['{ADMINLOGIN}'] = $loginForm;
-$installation_settings['{ADMINPASSWORD}'] = $passToStore;
-$installation_settings['{ADMINEMAIL}'] = $emailForm;
-$installation_settings['{ADMINPHONE}'] = $adminPhoneForm;
-$installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
-$installation_settings['{ADMINLANGUAGE}'] = $languageForm;
-$installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
+$installation_settings = array();
+$installation_settings['{ORGANISATIONNAME}']                = $institutionForm;
+$installation_settings['{ORGANISATIONURL}']                 = $institutionUrlForm;
+$installation_settings['{CAMPUSNAME}']                      = $campusForm;
+$installation_settings['{PLATFORMLANGUAGE}']                = $languageForm;
+$installation_settings['{ALLOWSELFREGISTRATION}']           = true_false($allowSelfReg);
+$installation_settings['{ALLOWTEACHERSELFREGISTRATION}']    = true_false($allowSelfRegProf);
+$installation_settings['{ADMINLASTNAME}']                   = $adminLastName;
+$installation_settings['{ADMINFIRSTNAME}']                  = $adminFirstName;
+$installation_settings['{ADMINLOGIN}']                      = $loginForm;
+$installation_settings['{ADMINPASSWORD}']                   = $passToStore;
+$installation_settings['{ADMINEMAIL}']                      = $emailForm;
+$installation_settings['{ADMINPHONE}']                      = $adminPhoneForm;
+$installation_settings['{PLATFORM_AUTH_SOURCE}']            = PLATFORM_AUTH_SOURCE;
+$installation_settings['{ADMINLANGUAGE}']                   = $languageForm;
+$installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
 load_main_database($installation_settings);
 
@@ -158,22 +119,9 @@ require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
 update_Db_course();
 
-/**
- * Creating the tables of the tracking database
- */
-
-//Database::select_db($mysqlMainDb) or die(Database::error());
-
 load_database_script('db_stats.sql');
 
 $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
-
-/**
- * Creating the tables of the USER database
- * This is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
- */
-
-//Database::select_db($mysqlMainDb) or die(Database::error());
 
 load_database_script('db_user.sql');

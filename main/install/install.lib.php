@@ -625,38 +625,7 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
     $dbConnect = -1;
     //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        //$check_user_can_create_databases = true;
-        //Checking if single database exist 
-        
-        /*if ($singleDbForm) {
-            if (database_exists($dbPrefixForm.$dbNameForm)) {                        
-                $check_user_can_create_databases = false;                
-                $dbConnect = 1;    
-            }            
-        }*/
-        
-        $dbConnect = 1;
-        
-        //this is not neeeded for chamilo 1.9 
-        //
-        //Checking database creation
-        /*
-        if ($check_user_can_create_databases) {
-            @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)        
-            //$multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
-            $multipleDbCheck = @Database::query("CREATE DATABASE ".$dbNameForm);
-            if ($multipleDbCheck !== false) {
-                //$multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
-                $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbNameForm);
-                if ($multipleDbCheck !== false) {
-                    $dbConnect = 1;
-                } else {
-                    $dbConnect = 0;
-                }
-            } else {
-                $dbConnect = 0;
-            }
-        }*/
+        $dbConnect = 1; 
     } else {
         $dbConnect = -1;
     }    

@@ -205,7 +205,7 @@ class AnnouncementEmail
      */
     public function subject()
     {
-        $result = $this->course('title');
+        $result = $this->course('title') . ' - ' . $this->announcement('title');
         $result = stripslashes($result);
         return $result;
     }
@@ -229,12 +229,12 @@ class AnnouncementEmail
 
         $www = api_get_path(WEB_CODE_PATH);
         $course_param = api_get_cidreq();
-        $course_name = $this->course('name');
+        $course_name = $this->course('title');
 
         $result = '';
-        $result .= "<h1>$title</h1>";
+        $result .= "<h2>$title</h2>";
         $result .= "<div>$content</div>";
-        $result .= '--';
+        $result .= '--<br/>';
         $result .= "<a href=\"mailto:$user_email\">$user_firstname $user_lastname</a><br/>";
         $result .= "<a href=\"$www/announcements/announcements.php?$course_param\">$course_name</a><br/>";
         return $result;

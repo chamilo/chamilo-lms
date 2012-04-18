@@ -900,8 +900,7 @@ class CourseBuilder {
 		$table_attendance			= Database :: get_course_table(TABLE_ATTENDANCE);
 		$table_attendance_calendar  = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		
-		$course_id = api_get_course_int_id();
-		
+		$course_id = api_get_course_int_id();		
 		
 		$sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
 		$db_result = Database::query($sql);

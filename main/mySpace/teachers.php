@@ -6,11 +6,8 @@ ob_start();
 // names of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
 require_once 'myspace.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -140,7 +137,7 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["firstname"] = $firstname;
 		}
 		
-		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id,true));
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, 'last_week'));
 		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;
 

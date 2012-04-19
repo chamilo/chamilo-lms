@@ -24,29 +24,40 @@ class Tracking {
 
 	/**
 	 * Calculates the time spent on the platform by a user
-	 * @param int    User id
-	 * @param bool    True for calculating only time spent last week (optional)
-	 * @param int    Timestamp for filtering by Day (optional, default = 0)
+	 * @param   int    User id
+	 * @param   string type of time filter: 'last_week' or 'custom'
+	 * @param   strgin  start date
+     * @param   strgin  end date
 	 * @return timestamp $nb_seconds
 	 */
-	public static function get_time_spent_on_the_platform($user_id, $last_week = false, $by_day = 0) {
+	public static function get_time_spent_on_the_platform($user_id, $time_filter = 'last_week', $start_date = null, $end_date = null) {
 
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 		$condition_time = '';
-		if ($last_week) {
-			$a_last_week = get_last_week();
-			$fday_last_week = date('Y-m-d H:i:s',$a_last_week[0]);
-			$lday_last_week = date('Y-m-d H:i:s',$a_last_week[6]);
-			$condition_time = ' AND (login_date >= "'.$fday_last_week.'" AND logout_date <= "'.$lday_last_week.'") ';
-		} else if (!empty($by_day)) {
-			$fdate_time = date('Y-m-d',$by_day).' 00:00:00';
-			$ldate_time = date('Y-m-d',$by_day).' 23:59:59';
-			$condition_time = ' AND (login_date >= "'.$fdate_time.'" AND logout_date <= "'.$ldate_time.'" ) ';
-		}
+        
+        if (empty($time_filter)) {
+            $time_filter = 'last_week';
+        }
+        
+        switch ($time_filter) {
+            case 'last_week':
+                $a_last_week = get_last_week();
+                $fday_last_week = date('Y-m-d H:i:s',$a_last_week[0]);
+                $lday_last_week = date('Y-m-d H:i:s',$a_last_week[6]);
+                $condition_time = ' AND (login_date >= "'.$fday_last_week.'" AND logout_date <= "'.$lday_last_week.'") ';
+                break;
+            case 'last_month':
+               break;                
+            case 'custom':
+                if (empty($start_date) && !empty($end_date))  {
+                    $condition_time = ' AND (login_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'" ) ';
+                }
+                break;
+        }
 
 		$sql = 'SELECT login_date, logout_date FROM '.$tbl_track_login.'
-                        WHERE login_user_id = '.intval($user_id).$condition_time;
+                WHERE login_user_id = '.intval($user_id).$condition_time;        
 		$rs = Database::query($sql);
 
 		$nb_seconds = 0;

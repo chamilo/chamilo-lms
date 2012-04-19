@@ -607,6 +607,7 @@ function get_last_week() {
     }
 
     $lastweek = sprintf("%02d", $lastweek);
+    $arrdays = array();
     for ($i = 1; $i <= 7; $i++) {
         $arrdays[] = strtotime("$year"."W$lastweek"."$i");
     }

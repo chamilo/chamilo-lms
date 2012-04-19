@@ -87,30 +87,70 @@ class ScoreDisplay
 	 * Protected constructor - call instance() to instantiate
 	 */
     protected function ScoreDisplay($category_id = 0) {
-
         if (!empty($category_id)) {
             $this->category_id = $category_id;
         }
+        
+        //Loading portal settings
+        
+        $value = api_get_setting('gradebook_score_display_coloring');
+        $value = $value['my_display_coloring'];        
+        $this->coloring_enabled = $value == 'true' ? true : false;    
 
-    	$this->coloring_enabled = $this->load_bool_setting('gradebook_score_display_coloring',0);
-    	if ($this->coloring_enabled) {
-    		//$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
+        if ($this->coloring_enabled) {
+            $value = api_get_setting('gradebook_score_display_colorsplit');
+            if (isset($value)) {    		
                 $this->color_split_value = $this->get_score_color_percent();
-    	}
-    	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
-    	if ($this->custom_enabled) {
-            $this->custom_display = $this->get_custom_displays();
+            }
+        }
+        
+        $value = api_get_setting('gradebook_score_display_custom');
+        $value = $value['my_display_custom'];   
+        $this->custom_enabled  = $value;
+        
+        if ($this->custom_enabled) {
+            //$this->custom_display = $this->get_custom_displays();        
+            
+            $params = array('category = ? AND subkey = ?' =>  array('Gradebook', 'ranking'));
+            $displays = api_get_settings_params($params);
+            $portal_displays = array();
+            if (!empty($displays)) {
+                foreach ($displays as $display) {
+                    $data = explode('::', $display['selected_value']);
+                    $portal_displays[$data[0]] = array('score' => $data[0], 'display' =>$data[1]);
+                }
+                sort($portal_displays);
+            }            
+            $this->custom_display = $portal_displays;
+            
             if (count($this->custom_display)>0) {
-    		  $this->upperlimit_included = $this->load_bool_setting('gradebook_score_display_upperlimit', 0);
-    		  $this->custom_display_conv = $this->convert_displays($this->custom_display);
+                $value = api_get_setting('gradebook_score_display_upperlimit');
+                $value = $value['my_display_upperlimit'];        
+                $this->upperlimit_included  = $value == 'true' ? true : false;    
+                $this->custom_display_conv = $this->convert_displays($this->custom_display);                
             }
     	}
+        
+        if (api_get_setting('teachers_can_change_score_settings') == 'true') {
+            //Load course settings
+            //
+            $this->custom_display = $this->get_custom_displays();    
+            if (count($this->custom_display)>0) {
+                $value = api_get_setting('gradebook_score_display_upperlimit');
+                $value = $value['my_display_upperlimit'];        
+                $this->upperlimit_included  = $value == 'true' ? true : false;    
+                $this->custom_display_conv = $this->convert_displays($this->custom_display);                
+            }
+            
+        }
+        
+    	
     }
+    
 	/**
 	 * Is coloring enabled ?
 	 */
-	public function is_coloring_enabled ()
-	{
+	public function is_coloring_enabled () {
 		return $this->coloring_enabled;
 	}
 	/**
@@ -126,42 +166,6 @@ class ScoreDisplay
 	public function is_upperlimit_included ()
 	{
 		return $this->upperlimit_included;
-	}
-	/**
-	 * Update the 'coloring' setting
-	 * @param boolean $coloring coloring enabled or disabled
-	 */
-	public function set_coloring_enabled ($coloring) {
-		$this->coloring_enabled = $coloring;
-		$this->save_bool_setting ('gradebook_score_display_coloring', $coloring);
-	}
-
-	/**
-	 * Update the 'colorsplit' setting
-	 * @param int $colorsplit color split value, in percent
-	 */
-	public function set_color_split_value ($colorsplit) {
-		$this->color_split_value = $colorsplit;
-		$this->save_int_setting ('gradebook_score_display_colorsplit', $colorsplit);
-	}
-
-
-	/**
-	 * Update the 'custom' setting
-	 * @param boolean $custom custom enabled or disabled
-	 */
-	public function set_custom ($custom) {
-		$this->custom_enabled = $custom;
-		$this->save_bool_setting ('gradebook_score_display_custom', $custom);
-	}
-
-	/**
-	 * Update the 'upperlimit' setting
-	 * @param boolean $upperlimit_included true if upper limit must be included, false otherwise
-	 */
-	public function set_upperlimit_included ($upperlimit_included) {
-		$this->upperlimit_incl = $upperlimit_included;
-		$this->save_bool_setting ('gradebook_score_display_upperlimit', $upperlimit_included);
 	}
 
 	/**
@@ -315,17 +319,9 @@ class ScoreDisplay
 	/**
 	 * Returns "100 %" for array("100", "100");
 	 */
-	private function display_as_percent($score) {
-        //Add real weight ugly hack
-        /*$course_code = api_get_course_id();
-        $session_id = api_get_session_id();
-        $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        
-        $global_weight = $main_cat[0]->get_weight();
-        $extra = $score[0] / $score_denom*$global_weight;
-         */
-        
+	private function display_as_percent($score) {        
 		$score_denom=($score[1]==0) ? 1 : $score[1];        
-		return round(($score[0] / $score_denom) * 100,2) . ' %'.$extra;
+		return round(($score[0] / $score_denom) * 100,2) . ' %';
 	}
 	
     /**
@@ -416,22 +412,6 @@ class ScoreDisplay
         return $score;
     }
 
-
-	private function save_bool_setting ($property, $value) {
-		$this->save_int_setting($property, ($value ? 'true' : 'false') );
-	}
-
-	private function save_int_setting ($property, $value) {
-    	$tbl_setting = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    	$property    = Database::escape_string($property);
-    	$value       = Database::escape_string($value);
-		$sql = 'UPDATE '.$tbl_setting
-				." SET selected_value = '".$value."' "
-				." WHERE variable = '".$property."' AND category='Gradebook'";
-		Database::query($sql);
-	}
-
-
 	/**
 	 * Get current custom score display settings
          * @param   int     Gradebook category id
@@ -448,7 +428,8 @@ class ScoreDisplay
 		$result = Database::query($sql);
 		return Database::store_result($result,'ASSOC');
 	}
-
+    
+ 
 
 	/**
 	 * Convert display settings to internally used values

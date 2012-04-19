@@ -2599,9 +2599,25 @@ form .formw .freeze {
     color: #999;
 }
 
-
 .requirements td {
     padding:5px;
+}
+
+/* header cell in data table in tools */
+.data_table {
+    margin-top: 8px;    
+    border-collapse: collapse;
+    border-spacing: 0;    
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.data_table th {    
+    line-height: normal;
+    padding: 8px 10px;    
+    vertical-align: middle;    
+    font-weight: bold;
 }
 
 .data_table_no_border {

@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	Interface for assigning sessions to Human Resources Manager
 *	@package chamilo.admin
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -179,14 +177,10 @@ if ($user_info['status'] != SESSIONADMIN) {
 	echo 	'<span style="float: right;margin:0px;padding:0px;">
 				<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 				<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
-			</span>
-			<span style="vertical-align:middle">'.sprintf(get_lang('AssignSessionsToX'),api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span>';
-} else {
-	echo '<span>'.sprintf(get_lang('AssignSessionsToX'),api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span>';
+			</span>';
 }
 echo '</div>';
-
-// *******************
+echo Display::page_header(sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
 
 $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
@@ -203,10 +197,13 @@ if (isset($_POST['firstLetterSession'])) {
 
 if ($_configuration['multiple_access_urls']) {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()." 
+                ORDER BY s.name";
 } else {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions 
+                ORDER BY s.name
+                ";
 }
 
 $result	= Database::query($sql);
@@ -301,10 +298,4 @@ if(!empty($msg)) {
 </form>
 
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

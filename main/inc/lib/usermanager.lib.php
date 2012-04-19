@@ -3104,10 +3104,14 @@ class UserManager {
 		}
         if (api_get_multiple_access_url()) {
             $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
-				 INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id) WHERE friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status AND access_url_id = ".api_get_current_access_url_id()."";
+                    INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a 
+                    ON (a.user_id = u.user_id) 
+                    WHERE friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status AND access_url_id = ".api_get_current_access_url_id()."
+                    ";
         } else {
             $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
-                 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
+                    INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status 
+                    ";
         }
         
 		$rs_assigned_users = Database::query($sql);

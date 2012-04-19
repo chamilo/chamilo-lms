@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	Interface for assigning courses to Human Resources Manager
 *	@package chamilo.admin
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -183,9 +181,9 @@ echo '<div class="actions">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';
+</div>';
 
-// *******************
+echo Display::page_header(sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
 
 $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
@@ -206,11 +204,13 @@ if (isset($_POST['firstLetterCourse'])) {
 
 if ($_configuration['multiple_access_urls']) {
 	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-			WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
+                WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."
+                ORDER BY c.title";
 
 } else {
 	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
-			WHERE  c.code LIKE '$needle' $without_assigned_courses ";
+                WHERE  c.code LIKE '$needle' $without_assigned_courses 
+                ORDER BY c.title";
 }
 
 
@@ -305,12 +305,5 @@ if(!empty($msg)) {
 </table>
 
 </form>
-
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

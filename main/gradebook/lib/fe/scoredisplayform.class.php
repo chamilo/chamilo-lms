@@ -24,11 +24,8 @@ class ScoreDisplayForm extends FormValidator
 		$displayscore= ScoreDisplay :: instance();
 		$customdisplays= $displayscore->get_custom_score_display_settings();
 		$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
-		$this->setDefaults(array (
-            'enablescorecolor' => $displayscore->is_coloring_enabled(),
-            'scorecolpercent' => $displayscore->get_color_split_value(),
-            'enablescore' => $displayscore->is_custom(),
-            'includeupperlimit' => $displayscore->is_upperlimit_included()
+		$this->setDefaults(array (            
+            'scorecolpercent' => $displayscore->get_color_split_value()                
 		));
 		$this->addElement('hidden', 'maxvalue', '100');
 		$this->addElement('hidden', 'minvalue', '0');
@@ -49,8 +46,7 @@ class ScoreDisplayForm extends FormValidator
 
 		//settings for the colored score
 		$this->addElement('header', '', get_lang('ScoreEdit'));
-		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
-		$this->addElement('checkbox', 'enablescorecolor', null, get_lang('EnableScoreColor'), null);
+		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');		
 		$this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
 			'size' => 5,
 			'maxlength' => 5,
@@ -64,10 +60,10 @@ class ScoreDisplayForm extends FormValidator
 		//settings for the scoring system
 
 		$this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
-		$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
+		//$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
 
 		if ($displayscore->is_custom()) {
-			$this->addElement('checkbox', 'includeupperlimit', null, get_lang('IncludeUpperLimit'), null);
+			//$this->addElement('checkbox', 'includeupperlimit', null, get_lang('IncludeUpperLimit'), null);
 			$this->addElement('static', null, null, get_lang('ScoreInfo'));
 			$scorenull[]= & $this->CreateElement('static', null, null, get_lang('Between'));
 			$this->setDefaults(array (
@@ -114,9 +110,7 @@ class ScoreDisplayForm extends FormValidator
 				$this->addRule(array ('endscore[' . $counter . ']', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
 				$this->addRule(array ('endscore[' . $counter . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>');
 			}
-		}
-		$this->setDefaults(array (
-		'enablescore' => $displayscore->is_custom(), 'includeupperlimit' => $displayscore->is_upperlimit_included()));
+		}		
 		$this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
 	}
 	function validate() {

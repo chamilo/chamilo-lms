@@ -322,12 +322,8 @@ class DisplayGradebook
 					//Right icons
 					$modify_icons  = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_MEDIUM).'</a>';
 					//$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
-					Display::return_icon('certificate.png', get_lang('AttachCertificate'),'',ICON_SIZE_MEDIUM).'</a>';
-		
-					//$modify_icons .= '<a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_MEDIUM).'</a>';
-		
-					//$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'',ICON_SIZE_MEDIUM).'</a>';
-		
+					Display::return_icon('certificate.png', get_lang('AttachCertificate'),'',ICON_SIZE_MEDIUM).'</a>';	
+	
 					//hide or delete are not options available
 					//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_MEDIUM).'</a>';
 					if ($catobj->get_name() != api_get_course_id()) {
@@ -530,13 +526,9 @@ class DisplayGradebook
                     if (empty($categories)) {
                         $modify_icons .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_MEDIUM).'</a>';
                     }
-            		
-            		$modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'',ICON_SIZE_MEDIUM).'</a>';
-            		
-            		//hide or delete are not options available
-            		//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_MEDIUM).'</a>';
-            		//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $catobj->get_id() . '&amp;selectcat=0&amp;cidReq='.$catobj->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_MEDIUM).'</a>';
-            			
+            		if (api_get_setting('teachers_can_change_score_settings') == 'true') {
+                        $modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'',ICON_SIZE_MEDIUM).'</a>';
+                    }
             		$header .= Display::div($modify_icons, array('class'=>'right'));
 					
                 }

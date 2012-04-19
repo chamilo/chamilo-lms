@@ -127,6 +127,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     
     if ($form->validate()) {       
         $values = $form->exportValues();         
+        
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
          
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {       
@@ -178,12 +179,20 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                
         foreach ($values as $key => $value) {
             if (in_array($key, $settings_to_avoid)) { continue; }
-                      	
+                                	                                         
+            //Gradebook fix
+            if ($key == 'gradebook_display') {
+                foreach ($value as $new_key => $item) {                    
+                    $final_value = $item['text'].'::'.$item['score'];
+                    $result = api_set_setting($new_key, $final_value, 'ranking', null, $_configuration['access_url']);	
+                } 
+            }
+            //
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
-                    $old_value = api_get_setting($key);                    
-                    switch ($key) {                    	
+                    $old_value = api_get_setting($key);                                        
+                    switch ($key) {                            
                     	case 'header_extra_content':
                     		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);                    		
                     		$value = api_get_home_path().'/header_extra_content.txt';

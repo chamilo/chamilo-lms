@@ -77,8 +77,8 @@ class GradeModel extends Model {
         // Setting the defaults
         
         $defaults = $this->get($id);        
-        
-        $components = $this->get_components($defaults['grade_model_id']);
+                
+        $components = $this->get_components($defaults['id']);
         
         if ($action == 'edit') {
             if (!empty($components)) { 
@@ -117,8 +117,7 @@ class GradeModel extends Model {
             
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
-            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
-            //$renderer->setElementTemplate($template_acronym , 'components['.$i.'][item_id]');
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');            
         }
         $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
         	            

@@ -82,21 +82,30 @@ if (!api_is_drh() && !api_is_platform_admin()) {
 	}
 }
 
-$a_last_week = get_last_week();
-$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+$time_filter = 'last_7_days';
+$time_label = sprintf(get_lang('TimeSpentLastXDays'), 7);
+$form = new FormValidator('time_filter');
+$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'exercise_admin'));
+$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'exercise_admin'));
+$form->addRule('start_date', get_lang('InvalidDate'), 'date');
+$form->addRule('end_date', get_lang('InvalidDate'), 'date');
+$form->addRule(array ('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
 
-$time_filter = 'last_week';
-$time_label = get_lang('TimeSpentLastWeek').'<br />'.$last_week;
-        
-if (isset($_GET['time_filter'])) {
-    if ($_GET['time_filter'] == 'last_month') {
-        $time_filter = $_GET['time_filter'];        
-        $time_label = get_lang('TimeSpentLastMonth');
-    }
+$defaults = array();
+$defaults['start_date'] =  date('Y-m-d 12:00:00', strtotime("-7 days"));
+$defaults['end_date']   = date('Y-m-d 12:00:00',time());
+$start_date = $end_date = null;
+
+if ($form->validate()) {
+    $values = $form->exportValues();
+    $start_date = $defaults['start_date'] =  $values['start_date'];
+    $end_date = $defaults['end_date']   =  $values['end_date'];
+    $time_filter = 'custom';
+    $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);        
 }
-
-//echo Display::url(get_lang('LastMonth'), api_get_self().'?time_filter=last_month', array('class' => 'btn'));
-//echo ' '.Display::url(get_lang('LastWeek'), api_get_self().'?time_filter=last_week', array('class' => 'btn'));
+$form->setDefaults($defaults);
+$form->addelement('style_submit_button', 'submit', get_lang('Filter'));
+$form->display();
 
 if ($is_western_name_order) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.$time_label.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -112,7 +121,7 @@ if ($is_western_name_order) {
 	$header[] = get_lang('FirstName');
 }
 
-$header[] = get_lang('TimeSpentLastWeek');
+$header[] = $time_label;
 $header[] = get_lang('Email');
 
 $data = array();
@@ -150,7 +159,7 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["firstname"] = $firstname;
 		}
 		
-		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter));
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter, $start_date, $end_date));
 		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;
 

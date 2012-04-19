@@ -65,10 +65,11 @@ class GradebookTable extends SortableTable {
 		if (api_is_allowed_to_edit(null, true)) {
 			$this->set_header($column++, get_lang('Modify'), false, 'width="120px"');
 			//actions on multiple selected documents
-			$this->set_form_actions(array (
-				'deleted' => get_lang('DeleteSelected'),
+			$this->set_form_actions(array (				
 				'setvisible' => get_lang('SetVisible'),
-				'setinvisible' => get_lang('SetInvisible')));
+				'setinvisible' => get_lang('SetInvisible'),
+                'deleted' => get_lang('DeleteSelected')
+                ));
 		} else {
 	 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_edit()) {
 			    $this->set_header($column++, get_lang('Certificates'),false);
@@ -315,13 +316,14 @@ class GradebookTable extends SortableTable {
                     if (api_is_allowed_to_edit()) {
                         $main_weight = intval($main_cat[0]->get_weight());                
                         if (intval($total_weight) == $main_weight) {
-                            $label = Display::return_icon('accept.png', get_lang('Ok'));    
+                            //$label = Display::return_icon('accept.png', get_lang('Ok'));    
+                            $label = null;
                             $total = Display::badge($total_weight.' / '.$main_weight, 'success');
                         } else {                                                       
                             $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $main_weight) );    
                             $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                    
                         }
-                        $row = array(null, null, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".get_lang('SubTotal'),null, $total.' '.$label);
+                        $row = array(null, null, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',null, $total.' '.$label);
                         $sortable_data[] = $row;
                     }
                 }			
@@ -336,7 +338,7 @@ class GradebookTable extends SortableTable {
                 } else {                                                                       
                     $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
                 }
-                $row = array(null, null, get_lang('Total'), null, $total);
+                $row = array(null, null, '<h3>'.get_lang('Total').'</h3>', null, $total);
                 $sortable_data[] = $row;
             }
         }

@@ -251,8 +251,7 @@ class ScoreDisplay
 	 * 				(only taken into account if custom score display is enabled and for course/platform admin)
 	 */
 	public function display_score($score, $type = SCORE_DIV_PERCENT, $what = SCORE_BOTH, $no_color = false) {	  
-		$my_score = ($score==0) ? 1 : $score;
-		
+		$my_score = ($score==0) ? 1 : $score;		
 		if ($this->custom_enabled && isset($this->custom_display_conv)) {		    
 	        $display = $this->display_default($my_score, $type);	        
 		} else {
@@ -317,8 +316,16 @@ class ScoreDisplay
 	 * Returns "100 %" for array("100", "100");
 	 */
 	private function display_as_percent($score) {
-		$score_denom=($score[1]==0) ? 1 : $score[1];
-		return round(($score[0] / $score_denom) * 100,2) . ' %';
+        //Add real weight ugly hack
+        /*$course_code = api_get_course_id();
+        $session_id = api_get_session_id();
+        $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        
+        $global_weight = $main_cat[0]->get_weight();
+        $extra = $score[0] / $score_denom*$global_weight;
+         */
+        
+		$score_denom=($score[1]==0) ? 1 : $score[1];        
+		return round(($score[0] / $score_denom) * 100,2) . ' %'.$extra;
 	}
 	
     /**

@@ -78,8 +78,7 @@ class FlatViewTable extends SortableTable
 			$show_draw = false;
 			if ($total_users >0 ) {			    
 				foreach($pre_result as $res) {
-					$total =  $res / ($total_users);
-										
+					$total =  $res / ($total_users);										
 					if ($total != 0) {
 						$show_draw  = true;
 					}

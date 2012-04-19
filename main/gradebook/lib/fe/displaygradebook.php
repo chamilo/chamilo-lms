@@ -175,25 +175,12 @@ class DisplayGradebook
 		$header .= '<a href="' . api_get_self() . '?export_format=doc&export_report=export_report&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('export_doc.png', get_lang('ExportAsDOC'),'',ICON_SIZE_MEDIUM).'</a>';
 		$header .= '<a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 		$header .= '<a href="' . api_get_self() . '?exportpdf=&selectcat=' . $catobj->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
-
-		//exportpdf
-		//<div class="clear">
-		$header .= '</div>';
-		if (!$catobj->get_id() == '0') {
-			//this is necessary?
-			//$header .= '<table border="0" cellpadding="5"><tr><td><form name="itemfilter" method="post" action="' . api_get_self() . '?selectcat=' . $catobj->get_id() . '"><input type="checkbox" name="showeval" onclick="document.itemfilter.submit()" ' . (($showeval == '1') ? 'checked' : '') . '>Show Evaluations &nbsp;';
-			//$header .= '<input type="checkbox" name="showlink" onclick="document.itemfilter.submit()" ' . (($showlink == '1') ? 'checked' : '') . '>'.get_lang('ShowLinks').'</form></td></tr></table>';
-		}
-		/*
-		if (isset ($_GET['search'])) {
-			$header .= '<b>'.get_lang('SearchResults').' :</b>';
-		}*/
+		$header .= '</div>';		
 		echo $header;
 	}	
 	
 	function display_header_gradebook_per_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
-
-		//student
+		// Student
 		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat = new Category();
 		$course_id = Database::get_course_by_category($selectcat);
@@ -218,8 +205,7 @@ class DisplayGradebook
 				$score = $item->calc_score($user_id);
 				$my_score_denom=($score[1]==0) ? 1 : $score[1];
 				$item_value+=$score[0]/$my_score_denom*$item->get_weight();
-				$item_total+=$item->get_weight();
-				//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+				$item_total+=$item->get_weight();				
 			}
 			$item_value = number_format($item_value, 2, '.', ' ');
 			$total_score=array($item_value,$item_total);
@@ -234,8 +220,8 @@ class DisplayGradebook
 			}		
 			Display :: display_normal_message($scoreinfo, false);
 		}
-		// show navigation tree and buttons?
-		
+        
+		// show navigation tree and buttons?		
 		$header = '<div class="actions"><table border=0>';
 		if (($showtree == '1') || (isset ($_GET['studentoverview']))) {
 			$header .= '<tr>';

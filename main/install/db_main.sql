@@ -852,7 +852,16 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17599','DatabaseVersion','', NULL, NULL, 0);
+('gradebook_ranking_1', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_2', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_3', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_4', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_5', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_6', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1)
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17601','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

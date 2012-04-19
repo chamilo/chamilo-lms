@@ -16,9 +16,9 @@ switch ($action) {
 			$tool_info = api_get_tool_information($_GET["id"]);
 			$tool_visibility   = $tool_info['visibility'];
 			$tool_image        = $tool_info['image'];
-			if (api_get_setting('homepage_view') != 'activity_big') {			
-                $new_image         = api_get_path(WEB_IMG_PATH).str_replace('.gif','_na.gif',$tool_image);
-                $tool_image        = api_get_path(WEB_IMG_PATH).$tool_image;    
+			if (api_get_setting('homepage_view') != 'activity_big') {			                    
+                $new_image        = Display::return_icon(str_replace('.gif','_na.gif',$tool_image), null, null, null, null, true);
+                $tool_image       = Display::return_icon($tool_image, null, null, null, null, true);
 			} else {
 			    $tool_image        = $tool_info['image'];
 			    $tool_image        = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';

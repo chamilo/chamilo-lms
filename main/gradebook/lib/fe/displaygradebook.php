@@ -154,8 +154,15 @@ class DisplayGradebook
 	*/
 	function display_header_reduce_flatview($catobj, $showeval, $showlink,$simple_search_form) {
 		$header = '<div class="actions">';
-		$header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?'.api_get_cidreq().'">'. Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM).'</a>';
-//		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/file_pdf.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
+        if ($catobj->get_parent_id() == 0) {
+            $select_cat = $catobj->get_id();
+            $url = Security::remove_XSS($_SESSION['gradebook_dest']);
+        } else {
+            $select_cat = $catobj->get_parent_id();
+            $url = 'gradebook_flatview.php';
+        }        
+        $header .= '<a href="'.$url.'?'.api_get_cidreq().'&selectcat='.$select_cat.'">'. Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM).'</a>';    
+		
 
 		// this MUST be a GET variable not a POST
 		if (isset($_GET['show'])) {

@@ -93,7 +93,9 @@ if (!empty($keyword)) {
 }
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
+
 $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+
 $parameters=array('selectcat'=>intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 
@@ -120,8 +122,7 @@ if (isset($_GET['exportpdf']))	{
 
 		// HTML report creation first
 
-		$time = time();
-		$cat_name = trim($cat[0]->get_name());
+		$time = time();		
 		$course_code = trim($cat[0]->get_course_code());
 		$organization = api_get_setting('Institution');
 		
@@ -262,9 +263,7 @@ if (isset ($_GET['print']))	{
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
 }
-
-
-        
+       
         
 if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {    
 	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) {

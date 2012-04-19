@@ -1036,16 +1036,15 @@ function update_gradebook_score_display_custom_values($values) {
 function generate_settings_form($settings, $settings_by_access_list) {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    
+        
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     $form ->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
     $default_values = array();
     $count_settings = count($settings);
     
-    foreach ($settings as $row) {
-        
-    	if (in_array($row['variable'], $settings_to_avoid)) { continue; }
+    foreach ($settings as $row) {           
+    	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
 
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
         $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");

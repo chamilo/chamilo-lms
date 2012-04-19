@@ -305,7 +305,7 @@ $action_images['editor']        = 'html_editor.png';
 $action_images['timezones']     = 'timezone.png';
 $action_images['extra']     	= 'wizard.png';
 $action_images['tracking']     	= 'statistics.png';
-$action_images['gradebook2']    = 'gradebook.png';
+$action_images['gradebook']     = 'gradebook.png';
 
 $action_images['search']        = 'search.png';
 $action_images['stylesheets']   = 'stylesheets.png';

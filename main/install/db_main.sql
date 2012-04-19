@@ -839,7 +839,7 @@ VALUES
 ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
 ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
 ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0),
-('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1),
+('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
 ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
 ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
 ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
@@ -852,7 +852,7 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17536','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17599','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1152,8 +1152,6 @@ VALUES
 ('allow_hr_skills_management', 'false', 'No'),
 ('enable_help_link', 'true', 'Yes'),
 ('enable_help_link', 'false', 'No'),
-('allow_teacher_change_gradebook_grading_model', 'true', 'Yes'),
-('allow_teacher_change_gradebook_grading_model', 'false', 'No'),
 ('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
 ('allow_users_to_change_email_with_no_password', 'false', 'No'),
 ('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
@@ -1192,7 +1190,9 @@ VALUES
 ('enable_wami_record', 'false', 'No'),
 ('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
 ('update_user_info_cas_with_ldap', 'true', 'Yes'),
-('update_user_info_cas_with_ldap', 'false', 'No');
+('update_user_info_cas_with_ldap', 'false', 'No'),
+('teachers_can_change_score_settings', 'false', 'Yes'),
+('teachers_can_change_score_settings', 'false', 'No');
 
 
 UNLOCK TABLES;

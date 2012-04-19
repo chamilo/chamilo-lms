@@ -92,9 +92,10 @@ ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_teacher_change_gradebook_grading_model', NULL, 'radio', 'Gradebook', 'false', 'AllowTeacherChangeGradebookGradingModelTitle', 'AllowTeacherChangeGradebookGradingModelComment', NULL, NULL, 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teacher_change_gradebook_grading_model', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'false', 'No');
+
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
@@ -177,7 +178,7 @@ UPDATE settings_current SET title = 'DatabaseVersion' WHERE variable = 'chamilo_
 ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17536' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17599' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

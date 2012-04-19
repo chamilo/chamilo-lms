@@ -85,10 +85,23 @@ if (!api_is_drh() && !api_is_platform_admin()) {
 $a_last_week = get_last_week();
 $last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 
+$time_filter = 'last_week';
+$time_label = get_lang('TimeSpentLastWeek').'<br />'.$last_week;
+        
+if (isset($_GET['time_filter'])) {
+    if ($_GET['time_filter'] == 'last_month') {
+        $time_filter = $_GET['time_filter'];        
+        $time_label = get_lang('TimeSpentLastMonth');
+    }
+}
+
+//echo Display::url(get_lang('LastMonth'), api_get_self().'?time_filter=last_month', array('class' => 'btn'));
+//echo ' '.Display::url(get_lang('LastWeek'), api_get_self().'?time_filter=last_week', array('class' => 'btn'));
+
 if ($is_western_name_order) {
-	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.$time_label.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 } else {
-	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.$time_label.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 }
 
 if ($is_western_name_order) {
@@ -137,7 +150,7 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["firstname"] = $firstname;
 		}
 		
-		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, 'last_week'));
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter));
 		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;
 
@@ -157,7 +170,6 @@ if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
 	MySpace::export_csv($header, $data, 'teachers.csv');
 }
 
-echo "<br /><br />";
 if (!api_is_drh()) {
 	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
 }

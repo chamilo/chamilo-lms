@@ -832,153 +832,22 @@ class AnnouncementManager  {
 	* this goes into the $htmlHeadXtra[] array
 	*/
 	public static function to_javascript() {
-		return "<script type=\"text/javascript\" language=\"JavaScript\">
-	
-		<!-- Begin javascript menu swapper
-	
-		function move(fbox,	tbox)
-		{
-			var	arrFbox	= new Array();
-			var	arrTbox	= new Array();
-			var	arrLookup =	new	Array();
-	
-			var	i;
-			for	(i = 0;	i <	tbox.options.length; i++)
-			{
-				arrLookup[tbox.options[i].text]	= tbox.options[i].value;
-				arrTbox[i] = tbox.options[i].text;
-			}
-	
-			var	fLength	= 0;
-			var	tLength	= arrTbox.length;
-	
-			for(i =	0; i < fbox.options.length;	i++)
-			{
-				arrLookup[fbox.options[i].text]	= fbox.options[i].value;
-	
-				if (fbox.options[i].selected &&	fbox.options[i].value != \"\")
-				{
-					arrTbox[tLength] = fbox.options[i].text;
-					tLength++;
-				}
-				else
-				{
-					arrFbox[fLength] = fbox.options[i].text;
-					fLength++;
-				}
-			}
-	
-			arrFbox.sort();
-			arrTbox.sort();
-	
-			var arrFboxGroup = new Array();
-			var arrFboxUser = new Array();
-			var prefix_x;
-	
-			for (x = 0; x < arrFbox.length; x++) {
-				prefix_x = arrFbox[x].substring(0,2);
-				if (prefix_x == 'G:') {
-					arrFboxGroup.push(arrFbox[x]);
-				} else {
-					arrFboxUser.push(arrFbox[x]);
-				}
-			}
-	
-			arrFboxGroup.sort();
-			arrFboxUser.sort();
-			arrFbox = arrFboxGroup.concat(arrFboxUser);
-	
-			var arrTboxGroup = new Array();
-			var arrTboxUser = new Array();
-			var prefix_y;
-	
-			for (y = 0; y < arrTbox.length; y++) {
-				prefix_y = arrTbox[y].substring(0,2);
-				if (prefix_y == 'G:') {
-					arrTboxGroup.push(arrTbox[y]);
-				} else {
-					arrTboxUser.push(arrTbox[y]);
-				}
-			}
-	
-			arrTboxGroup.sort();
-			arrTboxUser.sort();
-			arrTbox = arrTboxGroup.concat(arrTboxUser);
-	
-			fbox.length	= 0;
-			tbox.length	= 0;
-	
-			var	c;
-			for(c =	0; c < arrFbox.length; c++)
-			{
-				var	no = new Option();
-				no.value = arrLookup[arrFbox[c]];
-				no.text	= arrFbox[c];
-				fbox[c]	= no;
-			}
-			for(c =	0; c < arrTbox.length; c++)
-			{
-				var	no = new Option();
-				no.value = arrLookup[arrTbox[c]];
-				no.text	= arrTbox[c];
-				tbox[c]	= no;
-			}
-		}
-	
-		function validate()
-		{
-			var	f =	document.new_calendar_item;
-			f.submit();
-			return true;
-		}
-	
-	
-		function selectAll(cbList, bSelect, showwarning) {
-	
-			if (document.getElementById('emailTitle').value==''){
-				document.getElementById('msg_error').innerHTML='".get_lang('FieldRequired')."';
-				document.getElementById('msg_error').style.display='block';
-				document.getElementById('emailTitle').focus();
-			} else {			
-				if (cbList.length <	1) {
-					//if (!confirm(\"".get_lang('Send2All')."\")) {
-					//	return false;
-					//}
-				}				
-				for	(var i=0; i<cbList.length; i++)
-				cbList[i].selected = cbList[i].checked = bSelect;				
-				document.f1.submit();
-			}	
-		}
-	
-		function reverseAll(cbList)
-		{
-			for	(var i=0; i<cbList.length; i++)
-			{
-				cbList[i].checked  = !(cbList[i].checked)
-				cbList[i].selected = !(cbList[i].selected)
-			}
-		}
-	
-	
-		function plus_attachment() {
-			if (document.getElementById('options').style.display == 'none') {
-				document.getElementById('options').style.display = 'block';
-				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
-			} else {
-				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
-			}
-		}
-		
-	
-	
-	
-		//	End	-->
-		</script>";
+            $www = api_get_path(WEB_PATH);
+            if(api_get_setting('server_type') == 'test')
+            {
+                $src = $www . 'main/announcements/resources/js/main.js';            
+            }
+            else
+            {
+                $src = $www . 'main/announcements/resources/js/main.min.js'; 
+            }
+            $result = Javascript::tag($src);
+            
+            $code = Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment');            
+            $result .= Javascript::tag_code($code);
+            return $result;
 	}
-	
-	
+        
 	/*
 				SENT_TO_FORM
 	*/
@@ -1204,7 +1073,7 @@ class AnnouncementManager  {
 	 * @return int
 	 */
 	public static function edit_announcement_attachment_file($id_attach, $file, $file_comment) {
-		global $_course;
+		global $_course; 
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	    $return = 0;
 	    $course_id = api_get_course_int_id();

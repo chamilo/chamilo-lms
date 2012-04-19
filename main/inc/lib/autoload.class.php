@@ -34,6 +34,8 @@ class Autoload
         $result['Redirect'] = $dir . '/redirect.class.php';
         $result['Request'] = $dir . '/request.class.php';
         $result['AnnouncementEmail'] = $sys. 'announcements/announcement_email.class.php';
+        $result['Javascript'] = $dir . '/javascript.class.php';
+        $result['ClosureCompiler'] = $dir . '/closure_compiler.class.php';
         
         return $result;
     }

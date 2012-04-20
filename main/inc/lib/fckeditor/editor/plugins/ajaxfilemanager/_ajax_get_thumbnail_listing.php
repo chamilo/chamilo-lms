@@ -17,11 +17,7 @@ foreach ($fileList as $file) {
 	$certificates_chamilo		= 'certificates';
 	//hidden directory of the group if the user is not a member of the group
 	$group_folder				= '_groupdocs';
-	//hidde Nanogong  tag
-	if (strpos($file['path'], '_chnano_')) {
-		$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
-		$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
-	}
+	
 
 	//show group's directory only if I'm member. Or I'm a teacher
 	$show_doc_group=true;
@@ -43,6 +39,12 @@ foreach ($fileList as $file) {
 		!ereg($hotpotatoes_folder_chamilo, $file['path']) && 
 		!ereg($chat_files_chamilo, $file['path']) && 
 		!ereg($certificates_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.') {	
+		//hide Nanogong  tag
+		if (strpos($file['path'], '_chnano_')) {
+			$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
+			$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
+		}
+
 	?>
 		<dl class="thumbnailListing" id="dl<?php echo $count; ?>">
 			 <?php

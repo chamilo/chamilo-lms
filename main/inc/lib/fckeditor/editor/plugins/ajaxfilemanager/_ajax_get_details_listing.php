@@ -32,13 +32,7 @@
 			$certificates_chamilo='certificates';
 			//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 			$group_folder='_groupdocs';
-			
-			//hidde Nanogong  tag
-			if (strpos($file['path'], '_chnano_')) {
-				$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
-				$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
-			}
-				
+						
 
 			$show_doc_group=true;
 			if(ereg($group_folder, $file['path'])) {
@@ -58,7 +52,12 @@
 				 !ereg($chat_files_chamilo, $file['path']) && 
 				 !ereg($certificates_chamilo, $file['path']) && 
 				 $show_doc_group && $file['name'][0]!='.') {							
-
+				//hide Nanogong  tag
+				if (strpos($file['path'], '_chnano_')) {
+					$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
+					$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
+				}
+				
 				if ($file['type'] == 'file') {
 					if(Security::remove_XSS($_GET['editor'])!='stand_alone') {
 						$path_chamilo_file='../'.$file['path'];// fix for makes a good show when pressed next on window preview, don't only one image

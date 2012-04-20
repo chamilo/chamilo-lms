@@ -83,7 +83,7 @@ class FlatViewTable extends SortableTable
 						$show_draw  = true;
 					}
 					$DataSet->AddPoint($total, "Serie".$i);
-					$DataSet->SetSerieName($header_name[$i-1],"Serie".$i);
+					$DataSet->SetSerieName(strip_tags($header_name[$i-1]),"Serie".$i);
 					
 					// Dataset definition
 					$DataSet->AddAllSeries();
@@ -178,8 +178,7 @@ class FlatViewTable extends SortableTable
 			array_shift($header_name);
             
 			$displayscore = ScoreDisplay :: instance();
-			$customdisplays = $displayscore->get_custom_score_display_settings();
-		
+			$customdisplays = $displayscore->get_custom_score_display_settings();		
 			
 			if (is_array($customdisplays) && count(($customdisplays))) {
 			    
@@ -191,7 +190,6 @@ class FlatViewTable extends SortableTable
 					//print_r($result);
 					for($i=0; $i< count($header_name); $i++) {
 						$pre_result[$i+3][]= $result[$i+1];
-						//$pre_result_pie[$i+3][] = $result[$i+1][0];
 					}
 				}
 	
@@ -235,12 +233,11 @@ class FlatViewTable extends SortableTable
 				        if ($value[$item['display']] > $max) {
 				            $max = $value[$item['display']];
 				        }
-				        $new_value[$item['display']] = $value[$item['display']];				        
+				        $new_value[$item['display']] = strip_tags($value[$item['display']]);
 				    }
 				    $new_list[] = $new_value;
 				}
-				$resource_list = $new_list;
-				
+				$resource_list = $new_list;				
 				
 				$i = 1;
 				$j = 0;
@@ -317,7 +314,7 @@ class FlatViewTable extends SortableTable
 
 							//Set title properties
 							$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",10);
-							$Test->drawTitle(50,22,$header_name[$i-1],50,50,80,$chart_size_w-50);
+							$Test->drawTitle(50,22,  strip_tags($header_name[$i-1]),50,50,80,$chart_size_w-50);
 
 							//------------------
 							//echo 'not in cache';

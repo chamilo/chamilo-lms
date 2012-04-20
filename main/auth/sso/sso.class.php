@@ -83,7 +83,7 @@ class sso {
                 error_log($uData['username']);
                 */
                 
-                if ($sso['secret'] === $uData['password'] 
+                if ($sso['secret'] === sha1($uData['password']) 
                     && ($sso['username'] == $uData['username'])) {
                     error_log('user n password are ok');                    
                     //Check if the account is active (not locked)

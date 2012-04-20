@@ -967,6 +967,7 @@ VALUES
 ('enable_tool_introduction','false','No'),
 ('page_after_login', 'index.php', 'CampusHomepage'),
 ('page_after_login', 'user_portal.php', 'MyCourses'),
+('page_after_login', 'main/auth/courses.php', 'CourseCatalog'),
 ('breadcrumbs_course_homepage', 'get_lang', 'CourseHomepage'),
 ('breadcrumbs_course_homepage', 'course_code', 'CourseCode'),
 ('breadcrumbs_course_homepage', 'course_title', 'CourseTitle'),

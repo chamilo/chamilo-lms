@@ -279,40 +279,35 @@ class SortableTable extends HTML_Table {
 		
 		$html .= $content;
 		
-		if (!$empty_table) {            
+		if (!$empty_table) {  
             if (!empty($this->additional_parameters)) {
                 foreach($this->additional_parameters as $key => $value) {
                     $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';        
                 }
             }
-            $html .= '<input type="hidden" name = "action">';
+            $html .= '<input type="hidden" name="action">';
 			$html .= '<table style="width:100%;">';
 			$html .= '<tr>';
 			$html .= '<td colspan="2">';
             
 			if (count($this->form_actions) > 0) {
                 
-				$html .= '<div class="btn-toolbar">';
-                
-                $html .= '<div class="btn-group">';
-				$html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true); return false;">'.get_lang('SelectAll').'</a>';
-				$html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false); return false;">'.get_lang('UnSelectAll').'</a> ';
-                $html .= '</div>';
-                
-                $html .= '<div class="btn-group">
-                            <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>                    
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>';
-                $html .= '<ul class="dropdown-menu">';
-				//$html .= '<select name="action">';
-				foreach ($this->form_actions as $action => & $label) {
-					//$html .= '<option value="'.$action.'">'.$label.'</option>';
-                    $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this); " >'.$label.'</a></li>';
-				}
-				$html .= '</ul>';
-				//$html .= '&nbsp;&nbsp;<button type="submit" class="btn save" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang('Select').'</button>';
-                $html .= '</div>';//btn-group                
+				$html .= '<div class="btn-toolbar">';         
+                    $html .= '<div class="btn-group">';
+                    $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true); return false;">'.get_lang('SelectAll').'</a>';
+                    $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false); return false;">'.get_lang('UnSelectAll').'</a> ';
+                    $html .= '</div>';                
+                    $html .= '<div class="btn-group">
+                                <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>                    
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>';
+                    $html .= '<ul class="dropdown-menu">';				
+                    foreach ($this->form_actions as $action => & $label) {					
+                        $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this); " >'.$label.'</a></li>';
+                    }
+                    $html .= '</ul>';				
+                    $html .= '</div>';//btn-group                
                 $html .= '</div>'; //toolbar
 			} else {
 				$html .= $form;
@@ -579,7 +574,7 @@ class SortableTable extends HTML_Table {
 	public function get_navigation_html () {
 		$pager          = $this->get_pager();
 		$pager_links    = $pager->getLinks();
-		//$showed_items   = $pager->getOffsetByPageId();
+        
 		$nav            = $pager_links['first'].' '.$pager_links['back'];
 		$nav            .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
 		$nav            .= $pager_links['next'].' '.$pager_links['last'];
@@ -590,20 +585,25 @@ class SortableTable extends HTML_Table {
 	 * Get the HTML-code with the data-table.
 	 */
 	public function get_table_html() {
-		$pager    = $this->get_pager();
-		//$val      = $pager->getOffsetByPageId();
+		$pager    = $this->get_pager();		
 		$offset   = $pager->getOffsetByPageId();
 		$from     = $offset[0] - 1;
         
 		$table_data = $this->get_table_data($from);
         
+        $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
 		if (is_array($table_data)) {
+            $count = 1;
 			foreach ($table_data as $index => & $row) {
-				$row = $this->filter_data($row);
+				$row = $this->filter_data($row);                                
 				$this->addRow($row);
+                if (isset($row['child_of'])) {
+                    $this->setRowAttributes ($count, array('class' => 'hidden hidden_'.$row['child_of']), true);
+                }
+                $count++;
 			}
 		}
-		$this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
+		
 		foreach ($this->th_attributes as $column => $attributes) {
 			$this->setCellAttributes(0, $column, $attributes);
 		}
@@ -619,8 +619,7 @@ class SortableTable extends HTML_Table {
 	 * @return array table row items
 	 */
 	public function get_clean_html($sort = true) {
-		$pager    = $this->get_pager();
-		$val      = $pager->getOffsetByPageId();
+		$pager    = $this->get_pager();		
 		$offset   = $pager->getOffsetByPageId();
 		$from     = $offset[0] - 1; 
 		        
@@ -645,7 +644,7 @@ class SortableTable extends HTML_Table {
 		if ($total_number_of_items <= $this->default_items_per_page) {
 			return '';
 		}
-		$result[] = '<form method="get" action="'.api_get_self().'" style="display:inline;">';
+		$result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
 		$param[$this->param_prefix.'direction'] = $this->direction;
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'column'] = $this->column;

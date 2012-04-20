@@ -46,7 +46,26 @@ $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
 
 $htmlHeadXtra[] = '<script type="text/javascript">
     
-$(document).ready( function() {
+var show_icon = "../img/view_more_stats.gif";
+var hide_icon = "../img/view_less_stats.gif";
+
+$(document).ready(function() {
+
+    $(".view_children").live("click", function() {
+        var id = $(this).attr("data-cat-id");
+        $(".hidden_"+id).removeClass("hidden");    
+        $(this).removeClass("view_children");        
+        $(this).find("img").attr("src", hide_icon);        
+        $(this).attr("class", "hide_children");
+    });
+
+    $(".hide_children").live("click", function(event) {    
+        var id = $(this).attr("data-cat-id");        
+        $(".hidden_"+id).addClass("hidden");    
+        $(this).removeClass("hide_children");
+        $(this).addClass("view_children");
+        $(this).find("img").attr("src", show_icon);
+    });
 
 /*
   var s1 = [["a",25]];

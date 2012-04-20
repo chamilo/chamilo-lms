@@ -855,7 +855,6 @@ switch ($action) {
 					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 					echo $open;
 				}
-
 			?>
 			  </td>-->
 			</tr>
@@ -885,8 +884,6 @@ switch ($action) {
                 if (!empty($enreg)) {
                     $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
                     $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-                    
-                    
                     $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), 
                                               array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), 
                                               $enreg);
@@ -900,49 +897,40 @@ switch ($action) {
             <div class="actions">
                 <a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
             </div>
-            <?php 
-            
+            <?php             
             echo '<table class="data_table">';            
             echo $link_list;			
-            echo '</table>';
-            
+            echo '</table>';            
 			?>
 		  </td>
 		  <td width="10%" valign="top"></td>
 		  <td width="20%" rowspan="3" valign="top">
-		    <div id="menu-wrapper">
-			<div id="menu" class="menu">
-			<?php echo api_display_language_form(); ?>
-			<form id="formLogin">
-				<div><label><?php echo get_lang('LoginName'); ?></label></div>
-				<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
-			    <div><label><?php echo get_lang('UserPassword'); ?></label></div>
-				<div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
-				<div><button class="login" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
-			</form>
-			<div class="clear"> &nbsp; </div>
+              
+		    <div class="well sidebar-nav">                
+                <?php echo api_display_language_form(); ?>
+                <form id="formLogin">
+                    <div><label><?php echo get_lang('LoginName'); ?></label></div>
+                    <div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
+                    <div><label><?php echo get_lang('UserPassword'); ?></label></div>
+                    <div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
+                    <div><button class="btn" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
+                </form>
+			</div>
 			
 			
-			<div class="menusection">
-				<span class="menusectioncaption"><?php echo get_lang('MenuUser'); ?></span>
+			<div class="well sidebar-nav">
+				<h4><?php echo get_lang('MenuUser'); ?></h4>
 				<ul class="menulist">
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
-			
-			</div>
-			
-			<div id="menu" class="menu">
-            
-            <div class="menusection">
-                <span class="menusectioncaption">
-                    <?php echo get_lang('Notice'); ?>
-                    <a href="<?php echo api_get_self(); ?>?action=edit_notice">
-                        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>                    
-                </span>                    
-            <?php
-            
+						
+			<div class="well sidebar-nav">
+                <h4><?php echo get_lang('Notice'); ?> 
+                    <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>                    
+                </h4>
+            <?php            
             $home_notice = '';
             if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
                 $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
@@ -956,16 +944,12 @@ switch ($action) {
             ?>
             </div>
             
-            </div>
-            
 			
-            <div id="menu" class="menu">
-                <br />
+           	<div class="well sidebar-nav">
                 <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
                 <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php echo get_lang('InsertLink'); ?></a>
                 
-    			<div class="menusection">
-    				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>
+    			<h4><?php echo api_ucfirst(get_lang('General')); ?></h4>
     				<ul class="menulist">
     				<?php
     					$home_menu = '';
@@ -995,11 +979,7 @@ switch ($action) {
     				?>
     				</ul>
 			     </div>
-			</div>
-
-
 			
-			</div> <!-- menu wrapper -->
 		  </td>
 		</tr>
 		</table>

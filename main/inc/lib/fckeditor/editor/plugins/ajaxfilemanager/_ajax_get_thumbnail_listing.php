@@ -6,7 +6,7 @@ $thumbnailBaseUrl = CONFIG_URL_IMG_THUMBNAIL;
 foreach ($fileList as $file) {
 	
 	///First step for hidden some type of Chamilo files and folders
-	//Juan Carlos Ra�a
+	//Juan Carlos Raña Trabado
 
 	//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat, certificates
 	$deleted_by_chamilo_file	= ' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
@@ -17,6 +17,11 @@ foreach ($fileList as $file) {
 	$certificates_chamilo		= 'certificates';
 	//hidden directory of the group if the user is not a member of the group
 	$group_folder				= '_groupdocs';
+	//hidde Nanogong  tag
+	if (strpos($file['path'], '_chnano_')) {
+		$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
+		$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
+	}
 
 	//show group's directory only if I'm member. Or I'm a teacher
 	$show_doc_group=true;
@@ -31,7 +36,7 @@ foreach ($fileList as $file) {
 	 $shared_folder='shared folder';	 //'shared folder' not 'shared_folder' because  in $file['name'] _ is replaced with blank see class.manager.php
 	
 	///Second step: hiding as the case
-	//Juan Carlos Ra�a
+	//Juan Carlos Raña Trabado
 	if ((!ereg($deleted_by_chamilo_file, $file['name']) && 
 		!ereg($deleted_by_chamilo_folder, $file['path'])) && 
 		!ereg($css_folder_chamilo, $file['path']) && 

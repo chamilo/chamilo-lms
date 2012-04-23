@@ -9,13 +9,28 @@
 class Autoload
 {
 
+    static private $is_registered = false;
+
     /**
      * Register the Chamilo autoloader on the stack. 
+     * Will only do it once so this method is repeatable.
      */
     static public function register()
     {
+        if(self::is_registered())
+        {
+            return false;
+        }
+        
         $f = array(new self, 'load');
         spl_autoload_register($f);
+        self::$is_registered = true;
+        return true;
+    }
+
+    static public function is_registered()
+    {
+        return self::$is_registered;
     }
 
     static public function map()
@@ -27,15 +42,25 @@ class Autoload
             return $result;
         }
 
-        $dir = dirname(__FILE__);
-        $sys = api_get_path(SYS_CODE_PATH);
+        $dir = dirname(__FILE__) . '/';
+        $sys = $dir . '../../';
 
         $result = array();
-        $result['Redirect'] = $dir . '/redirect.class.php';
-        $result['Request'] = $dir . '/request.class.php';
-        $result['AnnouncementEmail'] = $sys. 'announcements/announcement_email.class.php';
-        $result['Javascript'] = $dir . '/javascript.class.php';
-        $result['ClosureCompiler'] = $dir . '/closure_compiler.class.php';
+        $result['Chamilo'] = $dir . 'chamilo.class.php';
+        $result['Redirect'] = $dir . 'redirect.class.php';
+        $result['Request'] = $dir . 'request.class.php';
+        $result['RequestServer'] = $dir . 'request_server.class.php';
+        $result['AnnouncementEmail'] = $sys . 'announcements/announcement_email.class.php';
+        $result['Javascript'] = $dir . 'javascript.class.php';
+        $result['ClosureCompiler'] = $dir . 'closure_compiler.class.php';
+        $result['Uri'] = $dir . 'uri.class.php';
+        $result['GroupManager'] = $dir . 'groupmanager.lib.php';
+        $result['Header'] = $dir . 'header.class.php';
+        $result['Cache'] = $dir . 'cache.class.php';
+        $result['KeyAuth'] = $sys . 'auth/key/key_auth.class.php';
+        $result['CourseNoticeQuery'] = $sys . 'course_notice/course_notice_query.class.php';
+        $result['CourseNoticeController'] = $sys . 'course_notice/course_notice_controller.class.php';
+        $result['CourseNoticeRss'] = $sys . 'course_notice/course_notice_rss.class.php';
         
         return $result;
     }

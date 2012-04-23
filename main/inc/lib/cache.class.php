@@ -101,7 +101,7 @@ class Cache
      */
     static function path($key = '')
     {
-        return api_get_path(SYS_PATH) . 'main/inc/cache/' . self::key($key);
+        return Chamilo::path('archive/temp/cache/' . self::key($key));
     }
 
     /**

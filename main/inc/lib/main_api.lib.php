@@ -1138,6 +1138,8 @@ function api_get_anonymous_id() {
  * Returns the cidreq parameter name + current course id taken from 
  * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
  * @return  string  Course & session references to add to a URL
+ * 
+ * @see Uri.course_params
  */
 function api_get_cidreq() {
     return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).

@@ -92,8 +92,7 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once $lib_path.'autoload.class.php';
-Autoload::register();
+require_once dirname(__FILE__).'/autoload.inc.php';
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'template.lib.php';

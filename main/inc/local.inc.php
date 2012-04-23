@@ -567,7 +567,13 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 				$loginFailed = true;
 			}
 		}
-	}
+	} elseif (KeyAuth::is_enabled()) {
+            $success = KeyAuth::instance()->login();
+            if($success)
+            {
+                $use_anonymous = false;
+            }
+        }
 
 	//    else {} => continue as anonymous user
 	$uidReset = true;

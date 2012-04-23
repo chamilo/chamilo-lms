@@ -4,10 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-/* the sticky effect */
-html {
-	height: 100%;
-}
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
@@ -15,14 +11,7 @@ body {
 	font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
-	padding: 0;
-	height: 100%; /* stick */
-}
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -9em;
+	padding: 0;	
 }
 img {
 	border: none;
@@ -1821,24 +1810,29 @@ a.read {
 	float: left;
 }
 
-#menu {
-	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
-	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-/*
-	margin-top:20px;
-	margin-right:10px;
-	margin-bottom:40px;
-	
-	padding-left:10px;
-	padding-right:10px;
-	padding-top:5px;
-	padding-bottom:30px;	
-	
-	width:240px; */
-	/* float: right; */
-	min-height: 150px;
-	
+
+/*****************************************************
+ *  DISPLAY MESSAGES	                             *
+ *****************************************************/
+.normal-message {
+    color: #00407F;
+    border: 1px solid #CDE6F5;
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+}
+.warning-message {
+    border: 1px solid #FFB30F;
+    color: #000;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+}
+.confirmation-message {
+	border: 1px solid #1F8323;
+    color:#1F8323;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+}
+.error-message {
+    border: 1px solid #FF0000;
+    color: #440000;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
 
 /* INVITATIONS */

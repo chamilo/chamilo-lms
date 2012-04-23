@@ -4,9 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-html {
-	height: 100%;
-}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
@@ -16,13 +13,6 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
-	height: 100%; /* stick */
-}
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -4em;
 }
 img {
 	border: none;

@@ -4,9 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-html {
-	height: 100%;
-}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
         behavior:url("/main/css/csshover3.htc");
@@ -16,29 +13,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */
 }
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -4em;
-}
-#outerframe {
-	position: relative;  /* do not remove, fixes a bug in IE */
-	border: 1px solid #fff;
-	background-color: #fff;
-}
-
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
-}
-/* Hides from IE5-mac \*/
-* html #outerframe {
-	height: 1%;
-}
-/* End hide from IE5-mac */
-
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php

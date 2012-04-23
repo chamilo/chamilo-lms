@@ -447,7 +447,7 @@ function return_menu() {
                                     </li>
                                 </ul>';
                 $menu .= '</li>';
-                $menu .= '<li><a class="close" title="'.get_lang('Logout').'" href="'.$logout_link.'">&times;</a></li>'; 
+                $menu .= '<li><a class="logout" title="'.get_lang('Logout').'" href="'.$logout_link.'">'.Display::return_icon('exit.png', get_lang('Logout'), array(), ICON_SIZE_SMALL).'</a></li>'; 
             $menu .= '</ul>';    
         }      
         

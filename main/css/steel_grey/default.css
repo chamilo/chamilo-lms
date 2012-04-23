@@ -4,14 +4,10 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-/* the sticky effect */
-html {
-	height: 100%;
-}
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-     behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000;
@@ -20,22 +16,6 @@ body {
 	background-color: #fff;
 	height: 100%; /* stick */
 }
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -3em;
-}
-#outerframe {
-	position: relative;  /* do not remove, fixes a bug in IE */
-	border: 1px solid #fff;
-	background-color: #fff;
-}
-/* Hides from IE5-mac \*/
-* html #outerframe {
-	height: 1%;
-}
-/* End hide from IE5-mac */
 /*
 -----------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php

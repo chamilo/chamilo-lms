@@ -163,13 +163,15 @@ $stok = Security::get_token();
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                         
                         if (!api_is_anonymous()) {
-                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
-                                echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
-                                        get_lang('Subscribe').'</a>';
+                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {  
+                                if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
+                                    echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
+                                            get_lang('Subscribe').'</a>';
+                                }
                             }
                         }                   
                     } else {
-                        if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {
+                        if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {                       
                             if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
                                 echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
                                         get_lang('Subscribe').'</a>';

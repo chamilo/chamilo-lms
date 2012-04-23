@@ -2,39 +2,6 @@
  * Special CSS styles for the chamilo_XXX themes
  */
 
-/* the sticky effect */
-html {
-    height: 100%;
-}
-
-body {
-    /* hack ignored by non-IE to enable ie to support :hover on button */
-    behavior:url("/main/css/csshover3.htc");            
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    height: 100%; /* stick */	
-}
-
-/* Sticky footer*/
-#wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -9em; /* Do not change this value */
-}
-
-#outerframe {
-    position: relative;  /* do not remove, fixes a bug in IE */
-    background-color: #fff;
-    background-repeat:no-repeat;
-}
-
-/* Hides from IE5-mac \*/
-* html #outerframe {
-    height: 1%;
-}
-
 .item {
     -moz-border-radius:5px;
     border-radius:5px;
@@ -308,34 +275,7 @@ footer a:link, footer a:visited {
 /*
     NAVIGATION MENU
 */
-#menu-wrapper {
-    display: block;    
-    background-color: #F3F4F5;
-    border-bottom: 1px solid #CCCCCC;
-    border-bottom-left-radius: 5px;
-    border-left: 1px solid #CCCCCC;
-    box-shadow: -3px 3px 32px 0 #E8E8E8;
-    color: #595959;
-    margin-bottom: 1em;    
-    min-height: 20px;
-    padding-bottom: 20px;
-}
 
-#centerwrap {
-    float: left;
-    width: 100%;
-    margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
-         it's empty otherwise. The difference is made up by putting a
-         negative left margin on the left float:
-       Note IE/Mac doesn't like this method ~ it wants the 100% so it can
-       be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
-    */
-}
-#center {
-    margin: 0 190px 0 0;
-    min-height: 300px;
-    padding: 10px 0 40px 0;
-}
 #toolnav {
     float:right;
     margin:-7px 0 0 -5%;
@@ -1831,11 +1771,6 @@ span.form_required  {
 
 #id_contact_form .normal-message{
     padding:20px;
-}
-
-.subnav {
-    font-size: 11px;
-    font-weight: bold;         
 }
 
 /* Scroll effect */

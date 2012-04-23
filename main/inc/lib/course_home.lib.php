@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+//require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php'; moved to autoload
 
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);

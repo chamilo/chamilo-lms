@@ -21,7 +21,7 @@ require_once $lib_path.'document.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
 require_once $lib_path.'fileDisplay.lib.php';
-require_once $lib_path.'tablesort.lib.php';
+//require_once $lib_path.'tablesort.lib.php';moved to autoload
 
 api_protect_course_script(true);
 

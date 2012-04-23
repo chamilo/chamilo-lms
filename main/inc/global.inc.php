@@ -106,7 +106,7 @@ require_once $lib_path.'debug.lib.php';
 require_once $lib_path.'rights.lib.php';
 
 require_once $lib_path.'model.lib.php';
-require_once $lib_path.'sortabletable.class.php';
+//require_once $lib_path.'sortabletable.class.php';  moved to autoload
 require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';
@@ -115,7 +115,7 @@ require_once $lib_path.'course.lib.php';
 require_once $lib_path.'sessionmanager.lib.php';
 require_once $lib_path.'tracking.lib.php';
 
-require_once $lib_path.'formvalidator/FormValidator.class.php';
+//require_once $lib_path.'formvalidator/FormValidator.class.php'; moved to autoload
 require_once $lib_path.'online.inc.php';
 
 //Here we load the new Doctrine class (just for tests)

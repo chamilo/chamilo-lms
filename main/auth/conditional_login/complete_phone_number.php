@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/../../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php');
+//require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'); moved to autologin
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $url =  api_get_path(WEB_PATH).'main/auth/conditional_login/complete_phone_number.php';
 

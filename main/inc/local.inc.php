@@ -129,7 +129,7 @@
 	 variables should be initialised here
  */
 
-require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {	
@@ -669,7 +669,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
                     //If we just want to reset info without redirecting user
                     unset($_SESSION['noredirection']);
                 } else {
-                    require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+                    //require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php'; moved to autologin
                     LoginRedirection::redirect();
                 }
             }

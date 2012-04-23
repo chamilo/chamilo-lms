@@ -13,7 +13,7 @@
 define('SESSION_LINK_TARGET','_self');
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+//require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php'; moved to autoload
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 /**

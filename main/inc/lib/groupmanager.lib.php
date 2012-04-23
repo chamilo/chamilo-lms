@@ -7,7 +7,7 @@
 /**
  * Code
  */
-require_once 'tablesort.lib.php';
+//require_once 'tablesort.lib.php';moved to autoload
 require_once 'fileManage.lib.php';
 require_once 'fileUpload.lib.php';
 require_once 'document.lib.php';

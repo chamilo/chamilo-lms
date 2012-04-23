@@ -117,7 +117,12 @@ $stok = Security::get_token();
       
         if (!empty($browse_courses_in_category)) {
 
-            foreach ($browse_courses_in_category as $course) {                
+            foreach ($browse_courses_in_category as $course) {   
+                // if course is closed, don't show it.
+                if ($course['visibility'] == COURSE_VISIBILITY_CLOSED) {
+                    continue;
+                }
+                // course isn't closed
                 $title      = cut($course['title'], 70);
                 $tutor_name = $course['tutor'];
                          
@@ -158,32 +163,24 @@ $stok = Security::get_token();
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                         echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
                     }
-                                       
-                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && !api_is_anonymous())) {
-                        echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
-                        
-                        if (!api_is_anonymous()) {
-                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {  
-                                if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
-                                    echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
-                                            get_lang('Subscribe').'</a>';
-                                }
-                            }
-                        }                   
-                    } else {
-                        if ($course['subscribe'] == SUBSCRIBE_ALLOWED && !api_is_anonymous()) {                       
-                            if (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes)) {     
-                                echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.
-                                        get_lang('Subscribe').'</a>';
-                            } else {
-                                if (!api_is_anonymous()) {
-                                    echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';    
-                                }
-                            }
-                        }
-                    }
-                 
                     
+                    // Go To Course button
+                    if (!api_is_anonymous() 
+                            && ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)) {
+                        echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+                    }
+                    // Subscribe button
+                    if (!api_is_anonymous() 
+                            && ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) 
+                            && $course['subscribe'] == SUBSCRIBE_ALLOWED 
+                            && (!in_array($course['code'], $user_coursecodes) || empty($user_coursecodes))) {
+                        echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+                    }
+                    
+                    // If user is already subscribed to the course
+                    if (!api_is_anonymous() && in_array($course['code'], $user_coursecodes)) {
+                        echo Display::label(get_lang("AlreadyRegisteredToCourse"), "label-info");
+                    }
                     echo '</div>';
                     
                     echo '</p>';

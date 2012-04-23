@@ -72,75 +72,84 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
         o.addClass( "ui-state-error" );
-        updateTips( "Length of " + n + " must be between " +
-            min + " and " + max + "." );
+        //updateTips( "Length of " + n + " must be between " + min + " and " + max + "." );
         return false;
     } else {
         return true;
     }
 }
 
-function send_message_to_user(user_id) {    
-    $("#send_message_form").show();
-    $("#send_message_div").dialog("open");        
-    $("#send_message_div").dialog({				
+function send_message_to_user(user_id) {  
+    var subject = $( "#subject_id" );
+    var content = $( "#content_id" );
+    
+    $("#send_message_form").show();            
+    $("#send_message_div").dialog({
+        modal:true,
+        height:350,
         buttons: {
-            "'.  addslashes(get_lang('Sent')).'": function() {
+            "'.  addslashes(get_lang('Sent')).'": function() {                
                 var bValid = true;
-                //bValid = bValid && checkLength( subject, "subject", 1, 255 );
-                //bValid = bValid && checkLength( content, "content", 1, 255 );
+                bValid = bValid && checkLength( subject, "subject", 1, 255 );
+                bValid = bValid && checkLength( content, "content", 1, 255 );
                 
-                var url = "'.$ajax_url.'?a=send_message&user_id="+user_id;
-                var params = $("#send_message_form").serialize();						
-                $.ajax({
-                    url: url+"&"+params,
-                    success:function(data) {                        
-                        $("#main_content").before(data);
-                        $("#send_message_div").dialog({ buttons:{}});                        
-                        //$("#send_message_reponse").html(data);
-                        $("#send_message_form").hide();                        
-                        $("#send_message_div").dialog("close");		
-                        
-                        $("#subject_id").val("");
-                        $("#content_id").val("");
-                    }							
-                });
+                if ( bValid ) {
+                    var url = "'.$ajax_url.'?a=send_message&user_id="+user_id;
+                    var params = $("#send_message_form").serialize();						
+                    $.ajax({
+                        url: url+"&"+params,
+                        success:function(data) {                        
+                            $("#main_content").before(data);
+                            $("#send_message_div").dialog({ buttons:{}});                        
+                            //$("#send_message_reponse").html(data);
+                            $("#send_message_form").hide();                        
+                            $("#send_message_div").dialog("close");		
+
+                            $("#subject_id").val("");
+                            $("#content_id").val("");
+                        }							
+                    });
+                }
             },
         },				
         close: function() {		            
         }    
-    });		
+    });
+    $("#send_message_div").dialog("open");
     //prevent the browser to follow the link    
 }
 
 function send_invitation_to_user(user_id) {    
-    $("#send_invitation_form").show();
-    $("#send_invitation_div").dialog("open");        
-    $("#send_invitation_div").dialog({				
+    var content = $( "#content_invitation_id" );
+    $("#send_invitation_form").show();    
+    $("#send_invitation_div").dialog({
+        modal:true,
         buttons: {
             "'.  addslashes(get_lang('SendInvitation')).'": function() {
                 var bValid = true;
-                //bValid = bValid && checkLength( subject, "subject", 1, 255 );
-                //bValid = bValid && checkLength( content, "content", 1, 255 );
                 
-                var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
-                var params = $("#send_invitation_form").serialize();						
-                $.ajax({
-                    url: url+"&"+params,
-                    success:function(data) {                        
-                        $("#main_content").before(data);
-                        $("#send_invitation_div").dialog({ buttons:{}});                        
-                        
-                        $("#send_invitation_form").hide();                        
-                        $("#send_invitation_div").dialog("close");		                                                
-                        $("#content_invitation_id").val("");
-                    }							
-                });
+                bValid = bValid && checkLength( content, "content", 1, 255 );
+                if (bValid) {
+                    var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
+                    var params = $("#send_invitation_form").serialize();						
+                    $.ajax({
+                        url: url+"&"+params,
+                        success:function(data) {                        
+                            $("#main_content").before(data);
+                            $("#send_invitation_div").dialog({ buttons:{}});                        
+
+                            $("#send_invitation_form").hide();                        
+                            $("#send_invitation_div").dialog("close");		                                                
+                            $("#content_invitation_id").val("");
+                        }							
+                    });
+                }
             },
         },				
         close: function() {		            
         }    
     });		
+    $("#send_invitation_div").dialog("open");        
     //prevent the browser to follow the link    
 }
 

@@ -157,6 +157,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1);
 
 -- Course ranking
 
@@ -189,7 +190,7 @@ ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'main/auth/courses.php', 'CourseCatalog');
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17601' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17631' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

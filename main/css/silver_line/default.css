@@ -4,10 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-/* the sticky effect */
-html {
-	height: 100%;
-}
 /* Redefining html styles */
 body {
     /* hack ignored by non-IE to enable ie to support :hover on button */
@@ -17,14 +13,7 @@ body {
     font-size: .85em;
     font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
     color: #000;
-    background-color: #fff;
-    height: 100%; /* stick */
-}
-#wrapper{
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -9em;
+    background-color: #fff;    
 }
 
 a {

@@ -4,9 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-html {
-	height: 100%;
-}
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
@@ -16,14 +13,7 @@ body {
 	color: #000;
 	background-color: #fff;
 	margin: 0;
-	padding: 0;
-	height: 100%; /* stick */
-}
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -9em;
+	padding: 0;	
 }
 
 div.row div.label {
@@ -31,10 +21,6 @@ div.row div.label {
 }
 div.row div.formw {
 	width: 100%;
-}
-
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
 }
 img {
 	border: none;

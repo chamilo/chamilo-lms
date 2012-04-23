@@ -1536,4 +1536,7 @@ $AllowBrowserSnifferTitle = "Activar el investigador de navegadores";
 $AllowBrowserSnifferComment = "Esto activará un investigador de las capacidades que soportan los navegadores que se conectan a Chamilo. Por lo tanto, mejorará la experiencia del usuario, adaptando las respuestas de la plataforma al tipo de navegador que se conecta, pero reducirá la velocidad de carga de la página inicial de los usuarios cada vez que entren a la plataforma.";
 $EnableWamiRecordTitle = "Activar Wami-recorder";
 $EnableWamiRecordComment = "Wami-recorder es una herramienta de grabación de voz sobre Flash";
+$ChangeSharedSetting = "Cambiar visibilidad de la configuración para los otros portales";
+$GradebookDefaultWeightTitle = "Peso total por defecto en la herramienta \"Evaluaciones\"";
+$GradebookDefaultWeightComment = "Este peso será utilizado en todos los cursos";
 ?>

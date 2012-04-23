@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	Interface for assigning users to Human Resources Manager
 *	@package chamilo.admin
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -79,7 +77,7 @@ function search_users($needle,$type) {
 		$without_assigned_users = '';
 
 		if (count($assigned_users_id) > 0) {
-			$without_assigned_users = " AND user_id NOT IN(".implode(',',$assigned_users_id).")";
+			$without_assigned_users = " AND user.user_id NOT IN(".implode(',',$assigned_users_id).")";
 		}
 
 		if ($_configuration['multiple_access_urls']) {
@@ -90,7 +88,6 @@ function search_users($needle,$type) {
 			$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
 		}
-
 
 		$rs	= Database::query($sql);
 
@@ -181,9 +178,9 @@ echo '<div class="actions">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';
+</div>';
 
-// *******************
+echo Display::page_header(sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
 
 $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 $assigned_users_id = array_keys($assigned_users_to_hrm);
@@ -201,10 +198,12 @@ if (isset($_POST['firstLetterUser'])) {
 
 if ($_configuration['multiple_access_urls']) {
 	$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
-			WHERE  $without_assigned_users user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND access_url_id = ".api_get_current_access_url_id()."";
+			WHERE $without_assigned_users user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND access_url_id = ".api_get_current_access_url_id()."
+            ORDER BY firstname";
 } else {
 	$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-			WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user ";
+			WHERE $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user 
+            ORDER BY firstname ";
 }
 
 $result	= Database::query($sql);
@@ -302,10 +301,4 @@ if(!empty($msg)) {
 </form>
 
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

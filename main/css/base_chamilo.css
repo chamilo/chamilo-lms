@@ -568,32 +568,22 @@ a.nobold:hover {
 /*****************************************************
  *  DATA TABLE STYLES                                *
  *****************************************************/
-
-/* header cell in data table in tools */
-.data_table {
-    margin-top: 8px;    
-    border-collapse: collapse;
-    border-spacing: 0;  
-    border: 1px solid #DDDDDD;    
-    margin-bottom: 15px;
-    text-align: left;
-    width: 100%;    
-}
-.data_table th {
-    border-bottom: 1px solid #DDDDDD;
-    line-height: normal;
-    padding: 8px 10px;
-    text-align: center;
-    vertical-align: middle;
-    background-color: #F2F2F2;  
-    font-weight: bold;
-}
 .cell_header {
     background-color: #EEEEFF;
     font-weight:bold;
     text-align:left;
     padding-left:5px;
 }
+
+.data_table {    
+    border: 1px solid #DDDDDD;        
+}
+
+.data_table th {
+    border-bottom: 1px solid #DDDDDD;    
+    background-color: #F2F2F2;      
+}
+
 .data_table tr.row_odd {
     background-color: #F9F9F9;
 }
@@ -610,7 +600,6 @@ a.nobold:hover {
     text-align: left;
     vertical-align: middle;
 }
-
 
 .data_table_no_border td .highlight{
     font-weight: bold;

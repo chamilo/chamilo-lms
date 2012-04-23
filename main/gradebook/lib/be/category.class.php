@@ -500,7 +500,6 @@ class Category implements GradebookItem
 	 */
 	public function calc_score ($stud_id = null, $course_code = '', $session_id = null) {
 		// get appropriate subcategories, evaluations and links
-
 		if (!empty($course_code)) {
 			$cats  = $this->get_subcategories($stud_id, $course_code, $session_id);
 			$evals = $this->get_evaluations($stud_id, false, $course_code);
@@ -515,7 +514,13 @@ class Category implements GradebookItem
 		$rescount     = 0;
 		$ressum       = 0;
 		$weightsum    = 0;
-
+        /*$debug = false;
+        
+        if ($stud_id == 11) {
+            $debug = true;    
+        }
+        if ($debug) var_dump($links);*/
+        
 		if (!empty($cats)) {
 			foreach ($cats as $cat) {
 				$catres = $cat->calc_score($stud_id);     // recursive call							
@@ -530,7 +535,6 @@ class Category implements GradebookItem
 			}
 		}
         
-        //var_dump($weightsum);
 		if (!empty($evals)) {
 			foreach ($evals as $eval) {
 				$evalres = $eval->calc_score($stud_id);                
@@ -548,6 +552,7 @@ class Category implements GradebookItem
 		if (!empty($links)) {
 			foreach ($links as $link) {			    
 				$linkres = $link->calc_score($stud_id);
+                //if ($debug) var_dump($linkres);
                 
 				if (isset($linkres) && $link->get_weight() != 0) {
 					$linkweight     = $link->get_weight();
@@ -555,7 +560,13 @@ class Category implements GradebookItem
 					$rescount++;
 					$weightsum += $linkweight;
 					$ressum += (($linkres[0]/$link_res_denom) * $linkweight);
-				}
+				} else {
+                    //adding if result does not exists
+                    if ($link->get_weight() != 0) {
+                        $linkweight     = $link->get_weight();
+                        $weightsum += $linkweight;
+                    }
+                }
 			}
 		}
         

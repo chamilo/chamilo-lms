@@ -1217,4 +1217,6 @@ $WamiFlashDialog = "It will display a dialog box which asks for your permission 
 $WamiStartRecorder = "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file.";
 $InputNameHere = "Enter name here";
 $Reload = "Reload";
+$TimeSpentLastXDays = "Time spent the last %s days";
+$TimeSpentBetweenXAndY = "Time spent between %s and %s";
 ?>

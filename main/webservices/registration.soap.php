@@ -855,8 +855,7 @@ $server->register('WSCreateUserPasswordCrypted',						// method name
 
 // Define the method WSCreateUserPasswordCrypted
 function WSCreateUserPasswordCrypted($params) {
-    global $_user, $_configuration, $debug;
-    //$debug = true;    
+    global $_user, $_configuration, $debug;    
     if ($debug) error_log('WSCreateUserPasswordCrypted');
     if ($debug) error_log(print_r($params,1));
     if (!WSHelperVerifyKey($params)) {        

@@ -1,0 +1,6 @@
+@import url('bootstrap.css');
+
+/* Adding default style for the chamilo_X themes */
+@import url('../base_chamilo.css');
+
+

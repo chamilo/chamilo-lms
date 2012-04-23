@@ -33,8 +33,9 @@ class FlatViewDataGenerator
 		$this->evals = (isset($evals) ? $evals : array());
 		$this->links = (isset($links) ? $links : array());
 		$this->evals_links = array_merge($this->evals, $this->links);
+        
+        
     }
-
 
 	/**
 	 * Get total number of users (rows)
@@ -50,7 +51,6 @@ class FlatViewDataGenerator
 		return count($this->evals_links);
 	}
 
-
 	/**
 	 * Get array containing column header names (incl user columns)
 	 */
@@ -61,10 +61,17 @@ class FlatViewDataGenerator
         
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
-		}		
+		}
+        
+        $grade_model_id = $this->category->get_grade_model_id();        
+        $use_grade_model = true;
+        if (empty($grade_model_id) || $grade_model_id == -1) {
+            $use_grade_model = false;    
+        }
+		        
 		//@todo move these in a function
-		$sum_categories_weight_array = array();		
-		if (isset($this->category) && !empty($this->category)) {		    
+		$sum_categories_weight_array = array();
+		if (isset($this->category) && !empty($this->category)) {
 			$categories = Category::load(null, null, null, $this->category->get_id());
 			if (!empty($categories)) {
 			    foreach($categories as $category) {			         
@@ -75,32 +82,34 @@ class FlatViewDataGenerator
 			}
 		}
         
-		for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-			$item = $this->evals_links[$count + $items_start];
-			
-			//$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
-			$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-            
-			$weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
-			$headers[] = $item->get_name().'  '.$weight.' % ';
-			if ($show_detail) {
-				//$headers[] = $item->get_name().' ('.get_lang('Detail').')';
-			}
-		}
+        if ($use_grade_model) {
+            $course_code 	= api_get_course_id();            
+            $session_id		= api_get_session_id();
+            $allcat  = $this->category->get_subcategories(null, $course_code, $session_id);   
+            foreach ($allcat as $sub_cat) {
+                 $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).' '.$sub_cat->get_weight().' % ';
+            }
+        } else {            
+            for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
+                $item = $this->evals_links[$count + $items_start];
 
-		$headers[] = get_lang('GradebookQualificationTotal').' 100%';
-		if ($show_detail) {
-			//$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
-		}
-        
+                //$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+
+                $weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
+                $headers[] = $item->get_name().' '.$weight.' % ';
+                if ($show_detail) {
+                    //$headers[] = $item->get_name().' ('.get_lang('Detail').')';
+                }
+            }
+        }
+		$headers[] = get_lang('GradebookQualificationTotal').' 100%';		
 		return $headers;
 	}
 	
 	function get_max_result_by_link($id) {		
-		$usertable = array ();
-		
-		$items_count = count ($this->evals) + count ($this->links);
-		
+		$usertable = array();		
+		$items_count = count ($this->evals) + count ($this->links);		
 		$item_value = 0;
 		$item_total = 0;
 		$max = 0;
@@ -131,9 +140,7 @@ class FlatViewDataGenerator
 			$headers[] = $item->get_name();
 		}
 		return $headers;
-	}
-	
-	
+	}		
 
 	/**
 	 * Get actual array data
@@ -201,65 +208,124 @@ class FlatViewDataGenerator
                 $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();
             }
         }
+        
+        $grade_model_id = $this->category->get_grade_model_id();
+        $parent_id = $this->category->get_parent_id();
+        if ($parent_id == 0) {
+            $main_weight  = $this->category->get_weight();
+        } else {
+            $main_cat  = Category::load($parent_id, null, null);
+            $main_weight = $main_cat[0]->get_weight();
+        }        
+                
+        $use_grade_model = true;
+        if (empty($grade_model_id) || $grade_model_id == -1) {
+            $use_grade_model = false;    
+        }
 		
-		foreach ($selected_users as $user) {
+		foreach ($selected_users as $user) {            
 			$row = array ();
-			$row[] = $user_id = $user[0];	// user id
-			$row[] = $user[2];	// last name
-			$row[] = $user[3];	// first name
+			$row[] = $user_id = $user[0];	//user id
+			$row[] = $user[2];	//last name
+			$row[] = $user[3];	//first name
 
 			$item_value = 0;
             $item_value_total = 0;
 			$item_total = 0;
             
+            $convert_using_the_global_weight = false;
+            
+            if ($use_grade_model) {
+                $course_code 	= api_get_course_id();            
+                $session_id		= api_get_session_id();
+                $allcat  = $this->category->get_subcategories(null, $course_code, $session_id);   
+                foreach ($allcat as $sub_cat) {
+                    $score 			= $sub_cat->calc_score($user_id);
+                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];      
+                    
+                    $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
+                    $item_value     = round($score[0]/$divide,2) * $main_weight;
 
-			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-				$item  			= $this->evals_links[$count + $items_start];       
-                                         
-				$score 			= $item->calc_score($user_id);
-				$divide			= ( ($score[1])==0 ) ? 1 : $score[1];                
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                
-                $item_value     = round($score[0]/$divide,2) * 100;
-                
-                //Fixing total when using one or multiple gradebooks 
-                if ($this->category->get_parent_id() == 0 ) {
-                    $item_value     = $item_value;
-                    $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
-                } else {
-                    $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
+                    //Fixing total when using one or multiple gradebooks                    
+                    $percentage     = round($sub_cat->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
                     $item_value     = $percentage*$item_value;
+                    
+                    $item_total		+= $sub_cat->get_weight();
+                    
+                    if ($convert_using_the_global_weight) {
+                        $score[0] = $main_weight*$score[0]/$sub_cat->get_weight();
+                        $score[1] = $main_weight ;
+                    }
+                    
+                    $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+
+                    if (!$show_all) {                   
+                        $row[] = $temp_score.' ';                   
+                    } else {                        
+                        $row[] = $temp_score;                        
+                    }                    
+                    $item_value_total +=$item_value;    
                 }
-                                
-				$item_total		+= $item->get_weight();
-                
-				$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
-                
-                //$temp_score = $temp_score . ' '.$item_value.' / '.$this->category->get_weight();
-                $temp_score = $temp_score;
-                
-				if (!$show_all) {
-					//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-					if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
-					                                       LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
-					    if (!empty($score[0])) {																		
-                            $row[] = $temp_score.' ';
+                if ($convert_using_the_global_weight) {
+                    //$item_total = $main_weight;
+                }
+            } else  {
+                for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
+                    $item  			= $this->evals_links[$count + $items_start];
+                    $score 			= $item->calc_score($user_id);
+                    $debug = false;
+                    if ($user_id == 11) {
+                        $debug = true;
+                    }
+                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];                
+                    //sub cat weight
+                    $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+
+                    $item_value     = round($score[0]/$divide,2);
+
+                    //Fixing total when using one or multiple gradebooks 
+                    if ($this->category->get_parent_id() == 0 ) {
+                        $item_value     = $item_value;
+                        $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
+                    } else {
+                       // if ($debug) var_dump($item_value);
+                        //$percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
+                        //if ($debug) var_dump($item->get_weight().' '.$item_value .' -'.$sub_cat_percentage);
+                        $item_value     = $item_value*$item->get_weight();                        
+                        $item_value     = $main_weight*$item_value/$item->get_weight();                        
+                    }                    
+                    //if ($debug) var_dump($item_value);
+                    $item_total		+= $item->get_weight();                    
+
+                    $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                    
+                    //if ($debug) var_dump($temp_score);
+
+                    if (!$show_all) {
+                        //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+                        if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
+                                                               LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+                            if (!empty($score[0])) {																		
+                                $row[] = $temp_score.' ';
+                            } else {
+                                $row[] = '';
+                            }
+                            //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
                         } else {
-                            $row[] = '';
-                        }
-                        //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
-					} else {
-						//$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-                        //$row[] = $score[0];
-                        $row[] = $temp_score.' ';
-					}					
-				} else {
-					//$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
-					$row[] = $temp_score;
-					//$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
-				}
-                $item_value_total +=$item_value;              
-            }
+                            //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+                            //$row[] = $score[0];
+                            $row[] = $temp_score.' ';
+                        }					
+                    } else {
+                        //$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
+                        $row[] = $temp_score;
+                        //$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
+                    }                    
+                    $item_value_total +=$item_value;              
+                }
+                $item_total = $main_weight;
+            }            
+            
             $item_total = round($item_total);
 			$total_score = array($item_value_total, $item_total);
 			
@@ -326,7 +392,6 @@ class FlatViewDataGenerator
 
 		return $result;
 	}
-
 
 	public function get_data_to_graph () {
 		// do some checks on users/items counts, redefine if invalid values

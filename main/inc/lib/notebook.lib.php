@@ -21,8 +21,7 @@ class NotebookManager
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function javascript_notebook()
-	{
+	function javascript_notebook() {
 		return "<script type=\"text/javascript\">
 				function confirmation (name)
 				{
@@ -79,13 +78,14 @@ class NotebookManager
 		if (empty($notebook_id)) { return array(); }
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $course_id = api_get_course_int_id();
 
 		$sql = "SELECT 	notebook_id 		AS notebook_id,
 						title				AS note_title,
 						description 		AS note_comment,
 				   		session_id			AS session_id
 				   FROM $t_notebook
-				   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
+				   WHERE c_id = $course_id AND notebook_id = '".Database::escape_string($notebook_id)."' ";
 		$result = Database::query($sql);
 		if (Database::num_rows($result)!=1) { return array(); }
 		return Database::fetch_array($result);
@@ -106,6 +106,8 @@ class NotebookManager
 		}
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        
+        $course_id = api_get_course_int_id();
 
 		$sql = "UPDATE $t_notebook SET
 					user_id = '".api_get_user_id()."',
@@ -114,7 +116,7 @@ class NotebookManager
 					title = '".Database::escape_string($values['note_title'])."',
 					description = '".Database::escape_string($values['note_comment'])."',
 					update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
-				WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
+				WHERE c_id = $course_id AND notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 		$result = Database::query($sql);
 
 		//update item_property (update)
@@ -129,8 +131,10 @@ class NotebookManager
 		if (empty($notebook_id) or $notebook_id != strval(intval($notebook_id))) { return false; }
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        
+        $course_id = api_get_course_int_id();
 
-		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".intval($notebook_id)."' AND user_id = '".api_get_user_id()."'";
+		$sql = "DELETE FROM $t_notebook WHERE c_id = $course_id AND notebook_id='".intval($notebook_id)."' AND user_id = '".api_get_user_id()."'";
 		$result = Database::query($sql);
         $affected_rows = Database::affected_rows();
         if ($affected_rows != 1){
@@ -144,19 +148,13 @@ class NotebookManager
 	function display_notes() {
 
 		global $_user;
-
-		if (!$_GET['direction'])
-		{
+		if (!$_GET['direction']) {
 			$sort_direction = 'ASC';
 			$link_sort_direction = 'DESC';
-		}
-		elseif ($_GET['direction'] == 'ASC')
-		{
+		} elseif ($_GET['direction'] == 'ASC') {
 			$sort_direction = 'ASC';
 			$link_sort_direction = 'DESC';
-		}
-		else
-		{
+		} else {
 			$sort_direction = 'DESC';
 			$link_sort_direction = 'ASC';
 		}
@@ -226,4 +224,3 @@ class NotebookManager
 		//return $return;
 	}
 }
-?>

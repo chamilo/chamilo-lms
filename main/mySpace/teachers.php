@@ -6,11 +6,8 @@ ob_start();
 // names of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
 require_once 'myspace.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -85,13 +82,35 @@ if (!api_is_drh() && !api_is_platform_admin()) {
 	}
 }
 
-$a_last_week = get_last_week();
-$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+$time_filter = 'last_7_days';
+$time_label = sprintf(get_lang('TimeSpentLastXDays'), 7);
+$form = new FormValidator('time_filter');
+$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'exercise_admin'));
+$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'exercise_admin'));
+$form->addRule('start_date', get_lang('InvalidDate'), 'date');
+$form->addRule('end_date', get_lang('InvalidDate'), 'date');
+$form->addRule(array ('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+
+$defaults = array();
+$defaults['start_date'] =  date('Y-m-d 12:00:00', strtotime("-7 days"));
+$defaults['end_date']   = date('Y-m-d 12:00:00',time());
+$start_date = $end_date = null;
+
+if ($form->validate()) {
+    $values = $form->exportValues();
+    $start_date = $defaults['start_date'] =  $values['start_date'];
+    $end_date = $defaults['end_date']   =  $values['end_date'];
+    $time_filter = 'custom';
+    $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);        
+}
+$form->setDefaults($defaults);
+$form->addelement('style_submit_button', 'submit', get_lang('Filter'));
+$form->display();
 
 if ($is_western_name_order) {
-	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.$time_label.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 } else {
-	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.$time_label.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 }
 
 if ($is_western_name_order) {
@@ -102,7 +121,7 @@ if ($is_western_name_order) {
 	$header[] = get_lang('FirstName');
 }
 
-$header[] = get_lang('TimeSpentLastWeek');
+$header[] = $time_label;
 $header[] = get_lang('Email');
 
 $data = array();
@@ -140,7 +159,7 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["firstname"] = $firstname;
 		}
 		
-		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id,true));
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter, $start_date, $end_date));
 		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;
 
@@ -160,7 +179,6 @@ if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
 	MySpace::export_csv($header, $data, 'teachers.csv');
 }
 
-echo "<br /><br />";
 if (!api_is_drh()) {
 	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
 }

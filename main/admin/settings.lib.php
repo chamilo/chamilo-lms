@@ -1036,16 +1036,15 @@ function update_gradebook_score_display_custom_values($values) {
 function generate_settings_form($settings, $settings_by_access_list) {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    
+        
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     $form ->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
     $default_values = array();
     $count_settings = count($settings);
     
-    foreach ($settings as $row) {
-        
-    	if (in_array($row['variable'], $settings_to_avoid)) { continue; }
+    foreach ($settings as $row) {           
+    	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
 
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
         $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
@@ -1225,7 +1224,16 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
-            case 'custom_gradebook':
+            case 'gradebook_ranking':
+                $value = explode('::', $row['selected_value']);
+                
+                $form->addElement('text', 'gradebook_display['.$row['variable'].'][text]',  array(get_lang($row['title']), get_lang($row['comment'])), array('class' => 'span1', 'value' => $value[0]), $hideme);
+                $form->addElement('text', 'gradebook_display['.$row['variable'].'][score]', array(get_lang($row['title']), get_lang($row['comment'])), array('class' => 'span3','value' => $value[1]), $hideme);
+                
+                $renderer = $form -> defaultRenderer();
+                $renderer->setElementTemplate(' {label}<div class="controls"> {element} %= ', 'gradebook_display['.$row['variable'].'][text]');
+                $renderer->setElementTemplate(' {element}</div><br />', 'gradebook_display['.$row['variable'].'][score]');                
+                break;
             case 'custom':
             	/*$values = api_get_settings_options($row['variable']);
             	

@@ -1533,4 +1533,7 @@ $AllowBrowserSnifferTitle = "Activate the browser sniffer";
 $AllowBrowserSnifferComment = "This will enable an investigator of the capabilities that support browsers that connect to Chamilo. Therefore will improve user experience by adapting responses to the type of browser platform that connects, but will slow initial page load of users every time that they enter to the platform.";
 $EnableWamiRecordTitle = "Activate Wami-recorder";
 $EnableWamiRecordComment = "Wami-recorder is a voice record tool on Flash";
+$ChangeSharedSetting = "Change setting visibility for the other portals";
+$GradebookDefaultWeightTitle = "Default weight in Gradebook";
+$GradebookDefaultWeightComment = "This weight will be use in all courses by default";
 ?>

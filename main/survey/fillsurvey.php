@@ -39,9 +39,17 @@ if (!empty($_user)) {
 Display :: display_header(get_lang('ToolSurvey'));
 
 // getting all the course information
-$_course = CourseManager::get_course_information($_GET['course']);
+if (isset($_GET['course'])) {
+    $course_info = api_get_course_info($_GET['course']);
+} else {
+    $course_info = api_get_course_info();
+}
 
-$course_id = api_get_course_int_id();
+if (empty($course_info)) {
+    api_not_allowed();
+}
+    
+$course_id = $course_info['real_id'];
 
 // Database table definitions
 $table_survey 					= Database :: get_course_table(TABLE_SURVEY);
@@ -50,21 +58,20 @@ $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_survey_invitation        = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 
 // First we check if the needed parameters are present
-if ((!isset($_GET['course']) || !isset($_GET['invitationcode']))&& !isset($_GET['user_id'])) {
+if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
 	Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'), false);
 	Display :: display_footer();
 	exit;
 }
+
 $invitationcode = $_GET['invitationcode'];
-$course_id = api_get_course_int_id();
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ($invitationcode == 'auto' && isset($_GET['scode'])){
+if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     // Not intended for anonymous users
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'],true)) {
 		api_not_allowed();
@@ -102,13 +109,14 @@ if (Database::num_rows($result) < 1) {
 	Display :: display_footer();
 	exit;
 }
+
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
 
 // Now we check if the user already filled the survey
 if ($survey_invitation['answered'] == 1 && !isset($_GET['user_id'])) {
 	Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
 	Display :: display_footer();
-	exit();
+	exit;
 }
 
 // Checking if there is another survey with this code.
@@ -129,7 +137,7 @@ if (Database::num_rows($result) > 1) {
 		//echo '  <input type="submit" name="Submit" value="' . get_lang('Ok') . '" class="next" />';
 		echo '<button type="submit" name="Submit" class="next">'.get_lang('Ok').'</button>';
 		echo '</form>';
-		display::display_footer();
+		Display::display_footer();
 		exit();
 	}
 } else {

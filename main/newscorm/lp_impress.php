@@ -9,6 +9,8 @@
  * Code
  */
 
+exit;
+
 $_SESSION['whereami'] = 'lp/impress';
 $this_section = SECTION_COURSES;
 

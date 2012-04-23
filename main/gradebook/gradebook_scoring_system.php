@@ -14,13 +14,17 @@ require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/scoredisplayform.class.php';
 require_once 'lib/scoredisplay.class.php';
+
 api_block_anonymous_users();
 //api_protect_admin_script();
 
+if (api_get_setting('teachers_can_change_score_settings') != 'true') {
+    api_not_allowed();
+}
+
 $htmlHeadXtra[]= '
-  <script language="JavaScript">
-  function plusItem(item)
-  {
+  <script>
+  function plusItem(item) {
 		document.getElementById(item).style.display = "inline";
     	document.getElementById("plus-"+item).style.display = "none";
    	 	document.getElementById("min-"+(item-1)).style.display = "none";
@@ -30,10 +34,8 @@ $htmlHeadXtra[]= '
 	 	document.getElementById("txta-"+(item-1)).value = "";
   }
 
-  function minItem(item)
-   {
-    if (item != 1)
-	{
+  function minItem(item) {
+    if (item != 1) {
      document.getElementById(item).style.display = "none";
 	 document.getElementById("txta-"+item).value = "";
 	 document.getElementById("txtb-"+item).value = "";
@@ -42,12 +44,11 @@ $htmlHeadXtra[]= '
 	 document.getElementById("txta-"+(item-1)).value = "100";
 
 	}
-	if (item = 1)
-	{
+	if (item = 1) {
 		document.getElementById("min-"+(item)).style.display = "none";
 	}
-  }
- </script>';
+    }
+</script>';
 
 $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
 
@@ -63,8 +64,8 @@ if ($scoreform->validate()) {
 	$value_export=isset($value_export) ? $scoreform->exportValues(): '';
 	$values= $value_export;
 
-        // create new array of custom display settings
-        // this loop also checks if all score ranges are unique
+    // create new array of custom display settings
+    // this loop also checks if all score ranges are unique
 
 	$scoringdisplay= array ();
 	$ranges_ok = true;
@@ -80,7 +81,7 @@ if ($scoreform->validate()) {
                     $ranges_ok = false;
                 }
             }
-        $scoringdisplay[]= $setting;
+            $scoringdisplay[]= $setting;
         }
     }
 
@@ -89,20 +90,11 @@ if ($scoreform->validate()) {
 		exit;
 	}
 
-	// update color settings
-	$val_enablescorecolor=isset($values['enablescorecolor']) ? $values['enablescorecolor'] : null;
-	$displayscore->set_coloring_enabled(($val_enablescorecolor == '1') ? true : false);
 	$scorecolpercent = 0;
-        if ($displayscore->is_coloring_enabled()) {
-		//$displayscore->set_color_split_value($values['scorecolpercent']);
-                $scorecolpercent = $values['scorecolpercent'];
+    if ($displayscore->is_coloring_enabled()) {		
+        $scorecolpercent = $values['scorecolpercent'];
 	}
-	// update custom display settings
-	$val_enablescore=isset($values['enablescore']) ? $values['enablescore'] : null;
-	$val_includeupperlimit=isset($values['includeupperlimit']) ? $values['includeupperlimit'] : null;
-
-	$displayscore->set_custom(($val_enablescore == '1') ? true : false);
-	$displayscore->set_upperlimit_included(($val_includeupperlimit == '1') ? true : false);
+	    
 	if ($displayscore->is_custom() && !empty($scoringdisplay)) {
 		$displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
 	}

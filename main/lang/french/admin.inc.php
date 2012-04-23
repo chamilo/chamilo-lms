@@ -1506,4 +1506,39 @@ $CasUserAddLastnameAttributeComment = "Enregistrer le nom de famille CAS de l'ut
 $ShowAdminToolbarTitle = "Afficher la barre d'administration";
 $ShowAdminToolbarComment = "Affiche une barre d'outils globale au sommet de la page aux utilisateurs des rôles désignés. Cette barre d'outils, très similaire à celles de Wordpress et de Google, peut considérablement accélérer certaines opérations complexes et augmente l'espace disponible pour les contenus de cours, mais elle pourrait rendre certains utilisateurs confus.";
 $FirstLetterCourseTitle = "Première lettre (title)";
+$LdapDescriptionComment = "<div class='normal-message'>La configuration de LDAP pour Chamilo est nécessaire dans les cas suivants<br/>
+<ul>
+<li>Authentification des utilisateurs de la plate forme à travers un serveur LDAP.<br/>Voir I. ci-dessous pour configurer LDAP<br/>Voir II. ci-dessous pour activer l'authentification LDAP</li><br/>
+<li> Mise à jour des attributs de l'utilisateur, auprès du serveur LDAP, après une authentification CAS (voir <a href='settings.php?category=CAS'>configuration de CAS</a>).<br/>L'authentification est gérée par CAS, il n'est pas nécessaire d'activer l'authentification LDAP dans ce cas.<br/>Voir I. ci-dessous pour configurer LDAP</li><br/></div>
+<br/><h4>I. Configuration des paramètres du serveur LDAP </h4>
+<h5>Éditez le fichier main/auth/external_login/ldap.conf.php</h5>
+-> Mettez à jour les informations de configuration LDAP du tableau <code>&#36;extldap_config</code><br/>
+Les paramètres sont<br/>
+<ul>
+<li>base dommain string (ex : 'base_dn' => 'DC=cblue,DC=be')</li>
+<li>admin distinguished name (ex : 'admin_dn' => 'CN=admin,dc=cblue,dc=be')</li>
+<li>admin password (ex : 'admin_password' => '123456')</li>
+<li>ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+<li>filter (ex : 'filter' => '')</li>
+<li>port (ex : 'port' => 389)</li>
+<li>protocl version (2 or 3) (ex : 'protocol_version' => 3)</li>
+<li>user_search (ex : 'user_search' => 'sAMAccountName=%username%')</li>
+<li>encoding (ex : 'encoding' => 'UTF-8')</li>
+<li>update_userinfo (ex : 'update_userinfo' => true)</li>
+</ul></h5>
+-> Mettez à jour les informations de correspondances entre les attributs LDAP et les champs utilisateurs Chamilo du tableau <code>&#36;extldap_user_correspondance</code><br/>
+Le tableau est de la forme : &lt;chamilo_field&gt; => &gt;ldap_field&gt;<br/>
+Sa structure est détaillée dans le fichier main/auth/external_login/ldap.conf.php<br/>
+<br/>
+<br/>
+<h4>II. Activation de l'authentification LDAP</h4>
+<h5>Éditez le fichier main/inc/conf/configuration.php</h5>
+-> Décommenter les lignes<br/>
+&#36;extAuthSource[\"extldap\"][\"login\"] = &#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/login.ldap.php\";<br/>
+&#36;extAuthSource[\"extldap\"][\"newUser\"] = &#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";<br/>
+<br/>
+Notes : les utilisateurs authentifiés par LDAP saisissent leur login et mot de passe dans les même champs que les utilisateurs locaux à la plate forme.
+<br/>
+Notes : activer l'authentification LDAP ajoute un menu External authentification [LDAP] dans l'interface d'ajout et de modification d'un utilisateur.
+";$LdapDescriptionTitle = "<h3>Configuration de LDAP</h3>";
 ?>

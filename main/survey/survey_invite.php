@@ -111,13 +111,13 @@ $users->setElementTemplate('
 </tr>
 </table>
 ');
-$users->setButtonAttributes('add', array('class' => 'arrowr'));
-$users->setButtonAttributes('remove', array('class' => 'arrowl'));
+$users->setButtonAttributes('add', array('class' => 'btn arrowr'));
+$users->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 // Additional users
-$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('cols' => 50, 'rows' => 2));
+$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 2));
 
 // The title of the mail
-$form->addElement('text', 'mail_title', get_lang('MailTitle'), array('size' => '80'));
+$form->addElement('text', 'mail_title', get_lang('MailTitle'), array('class' => 'span6'));
 // The text of the mail
 $form->addElement('html_editor', 'mail_text', array(get_lang('MailText'), get_lang('UseLinkSyntax')), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
 
@@ -134,7 +134,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'c
 $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
 
-$portal_url = $_configuration['root_web'];
+$portal_url = api_get_path(WEB_PATH);
 if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
@@ -144,11 +144,11 @@ if ($_configuration['multiple_access_urls']) {
 }
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = $portal_url.$_configuration['code_append'].
-	'survey/'.'fillsurvey.php?course='.$_course['sysCode'].
-	'&invitationcode=auto&scode='.$survey_data['survey_code'];
-$form->addElement('static',null, null, '<br \><br \>' . get_lang('AutoInviteLink'));
-$form->addElement('static',null, null, $auto_survey_link);
+$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'];
+
+$form->addElement('label', null, get_lang('AutoInviteLink'));
+$form->addElement('label', null, $auto_survey_link);
+
 if ($form->validate()) {
 	$values = $form->exportValues();
 	// Save the invitation mail
@@ -164,7 +164,7 @@ if ($form->validate()) {
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
 	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
-		$values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;

@@ -395,7 +395,7 @@ class survey_manager {
 		if ($shared) {
 			$table_survey = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
 			 // Deleting the survey
-            $sql = "DELETE FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
+            $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
             $res = Database::query($sql);
 		} else {
 		    $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
@@ -3835,14 +3835,14 @@ class SurveyUtil {
 			// Send the email if checkboxed
 			if (($new_user || $reminder == 1) && $sendmail != 0) {
 				// Make a change for absolute url
-				if (isset($invitation_text)) {
-					$invitation_text = api_html_entity_decode($invitation_text, ENT_QUOTES);
+				if (isset($invitation_text)) {				
+                    $invitation_text = api_html_entity_decode($invitation_text, ENT_QUOTES);					
 					$invitation_text = str_replace('src="../../', 'src="'.api_get_path(WEB_PATH), $invitation_text);
 					$invitation_text = trim(stripslashes($invitation_text));
-				}
+				}                
 				SurveyUtil::send_invitation_mail($value, $invitation_code, $invitation_title, $invitation_text);
 				$counter++;
-			}
+			}            
 		}
 		return $counter; // Number of invitations sent
 	}
@@ -3857,7 +3857,7 @@ class SurveyUtil {
 	function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text) {
 		global $_user, $_course, $_configuration;
 
-		$portal_url = $_configuration['root_web'];
+		$portal_url = api_get_path(WEB_PATH);
 		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -3866,7 +3866,7 @@ class SurveyUtil {
 			}
 		}
 		// Replacing the **link** part with a valid link for the user
-		$survey_link = $portal_url.$_configuration['code_append'].'survey/'.'fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
+		$survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
 		$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
 
 		$replace_count = 0;
@@ -3900,7 +3900,7 @@ class SurveyUtil {
 				$sender_name = $noreply;
 				$sender_email = $noreply;
 			}
-		}
+		}        
 		@api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
 	}
 

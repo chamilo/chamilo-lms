@@ -463,9 +463,7 @@ class EvalForm extends FormValidator
             }
         }
         
-        $global_weight = api_get_setting('gradebook_default_weight');
-        
-		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$global_weight.'] '), true, array (
+		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
 			'size' => '4',
 			'maxlength' => '5',
             'class' => 'span1'

@@ -43,7 +43,7 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         /* 2.Get the chamilo username and password from your system or from webservices */
         
         $account['username'] = 'jbrion525';           //username in Chamilo
-        $account['password'] = sha1('jbrion525'); //encrypted password with sha1 in chamilo
+        $account['password'] = sha1(sha1('jbrion525')); //encrypted password with assuming that the first encrypted method is sha1 in chamilo
         
         $master_auth_uri = $my_chamilo_server.'/?q=user';
 

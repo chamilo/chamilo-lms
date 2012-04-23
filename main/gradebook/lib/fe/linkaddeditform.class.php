@@ -87,17 +87,12 @@ class LinkAddEditForm extends FormValidator
                         if ($link->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();                        
                         }
-                    }           
+                    }
                 }
             }
-            
-            
-            
         }
         
-        $global_weight = api_get_setting('gradebook_default_weight');
-        
-		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$global_weight.'] '), true, array (
+		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$category_object[0]->get_weight().'] '), true, array (
 			'size' => '4',
 			'maxlength' => '5',
             'class' => 'span1'

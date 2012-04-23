@@ -555,7 +555,7 @@ class Display {
      * @author Yannick Warnier 2011 Added size handler
      * @version Feb 2011
     */
-    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL, $show_text = true) {
+    public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL, $show_text = true, $return_only_path = false) {
         
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
@@ -568,6 +568,8 @@ class Display {
         if (isset($size)) {
             $size = intval($size);            
             $size_extra = $size.'/';
+        } else {
+            $size = ICON_SIZE_SMALL;
         }
         
         //Checking the theme icons folder example: main/css/chamilo/icons/XXX
@@ -578,8 +580,13 @@ class Display {
             $icon = $w_code_path.'img/icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.'img/'.$image;
-        }        
+            $icon = $w_code_path.'img/'.$image;            
+        }
+        
+        if ($return_only_path) {
+            return $icon;
+        }
+        
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
             if ($show_text) {
@@ -602,7 +609,6 @@ class Display {
         // Sanitizing the parameter $image_path
         $image_path = Security::filter_img_path($image_path);
 
-        $attribute_list = '';
         // alt text = the image name if there is none provided (for XHTML compliance)
         if ($alt_text == '') {
             $alt_text = basename($image_path);

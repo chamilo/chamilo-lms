@@ -223,14 +223,7 @@ if (isset($_POST['comment'])) {
     }
 }
 
-/*	Code to rename the file name */
-//var_dump($_POST['renameTo']);
-if (isset($_POST['renameTo'])) {
-    $info_message = change_name($baseWorkDir, $_GET['sourceFile'], $_POST['renameTo'], $dir, $doc);
-}
-
 /*	WYSIWYG HTML EDITOR - Program Logic */
-
 if ($is_allowed_to_edit) {
 	if ($_POST['formSent'] == 1) {	    
 		if (isset($_POST['renameTo'])) {
@@ -372,7 +365,7 @@ $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
 if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {	
-	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&id='.$document_data['id'];
+	$action = api_get_self().'?id='.$document_data['id'];
 	$form = new FormValidator('formEdit', 'post', $action);
 
 	// Form title

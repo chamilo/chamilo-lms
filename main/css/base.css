@@ -57,6 +57,11 @@ legend {
     margin:0px;
 }
 
+.subnav {
+    font-size: 11px;
+    font-weight: bold;         
+}
+
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
@@ -3597,4 +3602,8 @@ a.forum_group_link {
 .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.subnav .nav > li > .logout {
+    padding:7px;
 }

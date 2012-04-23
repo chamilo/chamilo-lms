@@ -206,7 +206,7 @@ EOT;
         <form class="course_list" method="post" action="$self">
             <input type="hidden" name="sec_token" value="$stok" />
             <input type="hidden" name="search_course" value="1" />
-            <input type="text" name="search_term" size="55" value="$search_term" />
+            <input type="text" name="search_term" class="span2" value="$search_term" />
             &nbsp;<input class="btn" type="submit" value="$search_label" />
         </form>
 EOT;

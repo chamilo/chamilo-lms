@@ -3,4 +3,6 @@
 /* Adding default style for the chamilo_X themes */
 @import url('../base_chamilo.css');
 
-
+footer a:link, footer a:visited {
+    color:#DD4814;
+}

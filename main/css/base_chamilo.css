@@ -357,7 +357,6 @@ footer a:link, footer a:visited {
     height: 1%;
     margin-left: 0;
 }
-/* End hide from IE5/mac */
 
 /* Warning and error messages to the user */
 
@@ -1398,13 +1397,11 @@ Document title
 .actions-title {
     background:#E5EDF9;
     border-bottom:1px dotted #999999;
-    border-top:1px dotted #999999;
-    /*height:35px;*/
+    border-top:1px dotted #999999;    
     padding:4px;
     margin-bottom: 5px;
     font-size:14px;
-    font-weight:bolder;
-    /*background:url(images/actions.jpg) repeat-x;*/
+    font-weight:bolder;    
     vertical-align:middle;
 }
 .actions-message {

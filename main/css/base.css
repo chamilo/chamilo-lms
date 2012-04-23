@@ -1,4 +1,4 @@
-/**
+/*
  * Common CSS for all themes
  */
 
@@ -2928,16 +2928,14 @@ div#no-data-view div.controls {
   height: 25px;
   position: relative;
   overflow:hidden;
-  background: url(../img/alt_star.gif) top left repeat-x;        
+  background: url(../img/alt_star.png) top left repeat-x;        
 }
 .star-rating li{
   padding:0px;
   margin:0px;
   width:25px;
-  height:25px;
-  /*\*/
-  float: left;
-  /* */
+  height:25px;  
+  float: left;  
 }
 .star-rating li a{
   display:block;
@@ -2952,7 +2950,7 @@ div#no-data-view div.controls {
   overflow:hidden;
 }
 .star-rating li a:hover{
-  background: url(../img/alt_star.gif) left bottom;
+  background: url(../img/alt_star.png) left bottom;
   z-index: 2;
   left: 0px;
   border:none;
@@ -2988,7 +2986,7 @@ div#no-data-view div.controls {
   width: 125px;
 }
 .star-rating li.current-rating{
-  background: url(../img/alt_star.gif) left center;
+  background: url(../img/alt_star.png) left center;
   position: absolute;
   height: 25px;
   display: block;

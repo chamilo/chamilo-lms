@@ -1025,7 +1025,6 @@ function display_language_selection() { ?>
  */
 function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
-
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
@@ -1041,14 +1040,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').'>= 5.0</td>
+                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.MIN_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (phpversion() < '5.0') {
+    if (phpversion() < MIN_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
     }
-    echo '      </td>
+    echo '</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>

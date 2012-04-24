@@ -38,20 +38,20 @@ class Diagnoser
             $current_section = $_GET['section'];
         }
 
-        $html = '<br /><div class="tabbed-pane"><ul class="tabbed-pane-tabs">';
+        $html = '<div class="tabbable"><ul class="nav nav-tabs">';
 
         foreach ($sections as $section) {
-            $html .= '<li><a';
-            if ($current_section == $section) {
-                $html .= ' class="current"';
+            
+            if ($current_section == $section) {                
+                $html .= '<li class="active">';
+            } else {
+                $html .= '<li>';
             }
-            //$params = $this->manager->get_parameters();
             $params['section'] = $section;
-            $html .=' href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
-            //$html[] = ' href="' . $this->manager->get_url($params, true) . '">' . htmlentities(Translation :: get(ucfirst($section) . 'Title')) . '</a></li>';
+            $html .='<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';            
         }
 
-        $html .= '</ul><div class="tabbed-pane-content">';
+        $html .= '</ul><div class="tab-pane">';
 
         $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
         echo $html;
@@ -75,8 +75,7 @@ class Diagnoser
     function get_chamilo_data() {
         $array = array();
         $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/', 'main/default_course_document/images/');
-        foreach ($writable_folders as $index => $folder) {
-            //echo api_get_path(SYS_PATH) . $folder;
+        foreach ($writable_folders as $index => $folder) {            
             $writable = is_writable(api_get_path(SYS_PATH) . $folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[FILES]', get_lang('IsWritable') . ': ' . $folder, 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no', get_lang('DirectoryMustBeWritable'));
@@ -99,8 +98,8 @@ class Diagnoser
         // General Functions
 
         $version = phpversion();
-        $status = $version > '5.0' ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.0', null, get_lang('PHPVersionInfo'));
+        $status = $version > MIN_PHP_VERSION ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= '.MIN_PHP_VERSION, null, get_lang('PHPVersionInfo'));
 
         $setting = ini_get('output_buffering');
         $req_setting = 1;

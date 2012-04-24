@@ -245,27 +245,6 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 $form->addElement('html', '</div></div>');
 
-// Gradebook SETTINGS
-//$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', Security::remove_XSS(get_lang('Gradebook')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Gradebook')).'</h3><div>');
-
-/*$group = array();
-$models = api_get_settings_options('grading_model');
-if (!empty($models )) {
-	foreach ($models as $option) {
-		$grading_parsed = api_grading_model_functions($option['value'], 'decorate');
-		$element = $form->createElement('radio', 'course_grading_model', '', $option['display_text'].': '.$grading_parsed, $option['id']);		
-		$group[] = $element;
-	}
-}
-
-$element = $form->createElement('radio', 'course_grading_model', '', get_lang('None'), 0);
-$group[] = $element;
-
-$form->addGroup($group, '', array(get_lang('GradingModelTitle')), '', 'li', false);
-
-$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-$form->addElement('html', '</div></div>');*/
-
 // USER RIGHTS
 $form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', Security::remove_XSS(get_lang('UserRights')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('UserRights')).'</h3><div>');
 
@@ -408,22 +387,12 @@ $values['enable_lp_auto_launch']                    = api_get_course_setting('en
 
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 
-//$values['course_grading_model']                		= api_get_course_setting('course_grading_model');
-
-
 $form->setDefaults($values);
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
-	
-/*
-    // update course picture
-    $picture = $_FILES['picture'];
-    if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
-    }*/
-    
+   
     $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
     
     if (!empty($pdf_export_watermark_path['name'])) {        
@@ -488,7 +457,7 @@ echo '<script>
 $(function() {
 	$("#course_settings").accordion({
 		autoHeight: false,		
-		header: "div> h3"
+		header: "div > h3"
 	});
 });
 </script>';

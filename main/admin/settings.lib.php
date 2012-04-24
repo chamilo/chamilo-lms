@@ -1101,7 +1101,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
         switch ($row['type']) {
             case 'textfield':
                 if (in_array($row['variable'], $convert_byte_to_mega_list)) {                    
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '8'));
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('class' => 'span1', 'maxlength' => '8'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);                    
                 } elseif ($row['variable'] == 'account_valid_duration') {
@@ -1135,7 +1135,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     }                    
                     $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $valid_encodings);
                     $default_values[$row['variable']] = $current_system_encoding;                                
-                } else {                    
+                } else {                                        
+                    $hideme['class'] = 'span4';
                     $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);                    
                     $form->applyFilter($row['variable'],'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];

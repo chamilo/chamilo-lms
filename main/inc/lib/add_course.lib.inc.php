@@ -2242,32 +2242,21 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     if (is_null($fill_with_exemplary_content)) {
         $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
     }
-    global $_configuration, $_user;
+    global $_configuration;
     $course_id = intval($course_id);
+    
     if (empty($course_id)) {
     	return false;	
     }
     
     $tbl_course_homepage 	= Database::get_course_table(TABLE_TOOL_LIST);
-    $TABLEINTROS 			= Database::get_course_table(TABLE_TOOL_INTRO);
-
-    $TABLEGROUPS 			= Database::get_course_table(TABLE_GROUP);
-    $TABLEGROUPCATEGORIES 	= Database::get_course_table(TABLE_GROUP_CATEGORY);
-    $TABLEGROUPUSER 		= Database::get_course_table(TABLE_GROUP_USER);
-
-    $TABLEITEMPROPERTY 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-    $TABLETOOLCOURSEDESC 	= Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+    $TABLEINTROS 			= Database::get_course_table(TABLE_TOOL_INTRO);    
+    $TABLEGROUPCATEGORIES 	= Database::get_course_table(TABLE_GROUP_CATEGORY);    
+    $TABLEITEMPROPERTY 		= Database::get_course_table(TABLE_ITEM_PROPERTY);    
     $TABLETOOLAGENDA 		= Database::get_course_table(TABLE_AGENDA);
     $TABLETOOLANNOUNCEMENTS = Database::get_course_table(TABLE_ANNOUNCEMENT);
-    $TABLEADDEDRESOURCES 	= Database::get_course_table(TABLE_LINKED_RESOURCES);
-    $TABLETOOLWORKS 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
     $TABLETOOLDOCUMENT 		= Database::get_course_table(TABLE_DOCUMENT);
-    $TABLETOOLWIKI 			= Database::get_course_table(TABLE_WIKI);
-
     $TABLETOOLLINK 			= Database::get_course_table(TABLE_LINK);
-
     $TABLEQUIZ 				= Database::get_course_table(TABLE_QUIZ_TEST);
     $TABLEQUIZQUESTION 		= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $TABLEQUIZQUESTIONLIST 	= Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -2403,7 +2392,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
     // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-    if (is_array($default_document_array) && count($default_document_array)>0) {
+    if (is_array($default_document_array) && count($default_document_array) > 0) {
         foreach ($default_document_array as $media_type => $array_media) {
             if ($media_type == 'images') {
                 $path_documents = '/images/gallery/';
@@ -2513,9 +2502,7 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         				VALUES ( '.$course_id.', '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
         Database::query("INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ('.$course_id.', 1,1,1)");
 
-        /*
-            Forum tool
-        */
+        /* Forum tool */
 
         Database::query("INSERT INTO $TABLEFORUMCATEGORIES VALUES ($course_id, 1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)");
         $insert_id = Database :: insert_id();
@@ -2535,23 +2522,23 @@ function fill_Db_course($course_id, $course_repository, $language, $default_docu
         				VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
 
         Database::query("INSERT INTO $TABLEFORUMPOSTS VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
-
     }
     
     // PLUGINS - if an installed plugin has a course_install.php file, execute it
-    $installed_plugins = api_get_settings('Plugins','list',$_configuration['access_url']);
+    $installed_plugins = api_get_settings('Plugins','list', $_configuration['access_url']);    
     $shortlist_installed = array();
     foreach ($installed_plugins as $plugin) {
         $shortlist_installed[] = $plugin['subkey'];
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
+    
     foreach ($shortlist_installed as $plugin) {
-        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/course_install.php';
+        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/course_install.php';        
         if (is_file($pluginpath) && is_readable($pluginpath)) {
             //execute the install procedure
             include $pluginpath;
         }
-    }
+    }    
     //end of installed plugins alterations
     $language_interface = $language_interface_original;
     return true;

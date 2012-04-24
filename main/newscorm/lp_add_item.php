@@ -21,7 +21,6 @@ api_protect_course_script();
 
 include 'learnpath_functions.inc.php';
 include 'resourcelinker.inc.php';
-
 $language_file = 'learnpath';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -92,9 +91,6 @@ function check_for_title() {
         }
     }
     temp=true;
-
-        
-        
 }
 
 function InnerDialogLoaded() {
@@ -149,7 +145,6 @@ $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= $_POST['submit_button'];
 
-
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -162,19 +157,6 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
 }
-// From here on, we are admin because of the previous condition, so don't check anymore.
-$course_id = api_get_course_int_id();
-
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql_query);
-$therow = Database::fetch_array($result);
-
-//$admin_output = '';
-/*
-    Course admin section
-    - all the functions not available for students - always available in this case (page only shown to admin)
-*/
-
 /* SHOWING THE ADMIN TOOLS */
 
 if (isset($_SESSION['gradebook'])) {
@@ -188,9 +170,8 @@ if (!empty($gradebook) && $gradebook == 'view') {
         );
 }
 
-
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
 
 switch ($type) {
     case 'chapter':
@@ -206,7 +187,6 @@ $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 Display::display_header(null, 'Path');
-//api_display_tool_title($therow['name']);
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 //@todo move this somewhere else css/fix.css

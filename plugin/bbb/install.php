@@ -12,18 +12,18 @@ $t_options  = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 /**
  * Queries
  */
-$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
-		('bbb_plugin', '', 'radio', 'Extra', 'false', 'BigBlueButtonEnableTitle','BigBlueButtonEnableComment',NULL,NULL, 1)";
+$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
+		('bbb_plugin', '', 'radio', 'Extra', 'false', 'BigBlueButtonEnableTitle','BigBlueButtonEnableComment',NULL,NULL, 1, 1)";
 Database::query($sql);
 $sql = "INSERT INTO $t_options (variable, value, display_text) VALUES ('bbb_plugin', 'true', 'Yes')";
 Database::query($sql);
 $sql = "INSERT INTO $t_options (variable, value, display_text) VALUES ('bbb_plugin', 'false', 'No')";
 Database::query($sql);
-$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
-    ('bbb_plugin_host', '', 'textfield', 'Extra', '192.168.0.100', 'BigBlueButtonHostTitle','BigBlueButtonHostComment',NULL,NULL, 1)";
+$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
+    ('bbb_plugin_host', '', 'textfield', 'Extra', '192.168.0.100', 'BigBlueButtonHostTitle','BigBlueButtonHostComment',NULL,NULL, 1,1)";
 Database::query($sql);
-$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
-    ('bbb_plugin_salt', '', 'textfield', 'Extra', '', 'BigBlueButtonSecuritySaltTitle','BigBlueButtonSecuritySaltComment',NULL,NULL, 1)";
+$sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
+    ('bbb_plugin_salt', '', 'textfield', 'Extra', '', 'BigBlueButtonSecuritySaltTitle','BigBlueButtonSecuritySaltComment',NULL,NULL, 1,1)";
 Database::query($sql);
 
 $table = Database::get_main_table('plugin_bbb');

@@ -1043,9 +1043,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $default_values = array();
     $count_settings = count($settings);
     
-    foreach ($settings as $row) {           
+    foreach ($settings as $row) {             
     	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
-
+        
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
         $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
@@ -1062,9 +1062,11 @@ function generate_settings_form($settings, $settings_by_access_list) {
             if (api_is_global_platform_admin()) {                
                 if ($row['access_url_locked'] == 0) {
                     if ($row['access_url_changeable'] == '1') {
-                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
                     } else {
-                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['id'].'" href="javascript:void(0);">'.
+                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
                     }
                 }
                 
@@ -1237,131 +1239,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 $renderer->setElementTemplate(' {label}<div class="controls"> {element} %= ', 'gradebook_display['.$row['variable'].'][text]');
                 $renderer->setElementTemplate(' {element}</div><br />', 'gradebook_display['.$row['variable'].'][score]');                
                 break;
-            case 'custom':
-            	/*$values = api_get_settings_options($row['variable']);
-            	
-            	//$renderer = & $form->defaultRenderer();
-            	//$renderer->setElementTemplate('{label} - {element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 -->');
-            	
-            	$numbers = array();
-            	for($j=1;$j<=20;$j++) {
-            		$numbers[$j] = $j;
-            	}
-            	
-            	if (!empty($values)) {            		
-            		foreach($values as $option) {
-            			$group = array();
-            			$id = $option['id'];            			            			
-            			$option_id = $row['variable']."[$id]";            			
-            			$group[] = $form->createElement('text', $option_id.'[display_text]', array(get_lang($row['title']), get_lang($row['comment'])),'class="begin_model"');
-            			
-            			$default_values[$option_id.'[display_text]'] = $option['display_text'];
-            			$parts = api_grading_model_functions($option['value'], 'to_array');            			
-            			$denominator = $parts['denominator'];            			
-            			$j = 1;            			
-            			foreach($parts['items'] as $item) {  
-            				$letter = $item['letter'];
-            				$value  = $item['value'];
-            				$group[] =$form->createElement('static','<div>');
-            				$class = 'number';
-            				if ($j == 1) {
-            					$class = 'first_number'; 
-            				}
-            				$group[] = $form->createElement('select', $option_id.'[items]['.$j.']', array('dd'), $numbers, array('class'=>$class));
-            				$sum = ' ';
-            				if ($j != count($parts['items'])) {
-            					$sum = ' + ';
-            				}
-            				//$group[] =$form->createElement('static',' * '.$letter.$sum);
-            				
-            				$default_values[$option_id.'[items]['.$j.']'] = $value;            				
-            				$j++;            				
-            			}
-            			
-            			$group[] = $form->createElement('select', $option_id.'[denominator]', array('/'), $numbers,'class="denominator"');            			
-            			$group[] = $form->createElement('button', "delete", get_lang('Delete'), array('type'=>'button', 'class' => 'btn btn-danger','id'=>$id, 'onclick'=>"delete_grading_model('$id');"));
-            			
-            			$default_values[$option_id.'[denominator]'] = $denominator;
-            			$form->addGroup($group, '', get_lang($row['title']), ' ');
-            		}     		
-            	}
-            	
-            	//New Grading Model form
-            	$group = array();
-            	
-            	$group[] = $form->createElement('text',   'new_model', array(get_lang('AddNewModel')));            	
-            	$group[] = $form->createElement('select', 'number_evaluations', array(''), $numbers,''); 
-            	
-            	$form->addGroup($group, '', get_lang('AddNewModel'), "&nbsp;&nbsp;".get_lang('NumberOfSubEvaluations')."&nbsp;");
-            	
-            	$form->addElement('style_submit_button', null, get_lang('Add'), 'class="add"');
-            	*/
-            	
-            	break;
-            /*
-             * Used to display custom values for the gradebook score display
-             */
-            /* this configuration is moved now inside gradebook tool
-            case 'gradebook_score_display_custom':
-                if(api_get_setting('gradebook_score_display_custom', 'my_display_custom') == 'false') {
-                    $form->addElement('static', null, null, get_lang('GradebookActivateScoreDisplayCustom'));
-                } else {
-                    // Get score displays.
-                    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
-                    $scoredisplay = ScoreDisplay::instance();
-                    $customdisplays = $scoredisplay->get_custom_score_display_settings();
-                    $nr_items = (count($customdisplays)!='0') ? count($customdisplays) : '1';
-                    $form->addElement('hidden', 'gradebook_score_display_custom_values_maxvalue', '100');
-                    $form->addElement('hidden', 'gradebook_score_display_custom_values_minvalue', '0');
-                    $form->addElement('static', null, null, get_lang('ScoreInfo'));
-                    $scorenull[] = $form->CreateElement('static', null, null, get_lang('Between'));
-                    $form->setDefaults(array (
-                        'beginscore' => '0'
-                    ));
-                    $scorenull[] = $form->CreateElement('text', 'beginscore', null, array (
-                        'size' => 5,
-                        'maxlength' => 5,
-                        'disabled' => 'disabled'
-                    ));
-                    $scorenull[] = $form->CreateElement('static', null, null, ' %');
-                    $form->addGroup($scorenull, '', '', ' ');
-                    for ($counter= 1; $counter <= 20; $counter++) {
-                        $renderer = $form->defaultRenderer();
-                        $elementTemplateTwoLabel =
-                        '<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';">
-                        <p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-                        <div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error --> <b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
-
-                        $elementTemplateTwoLabel2 =
-                        '<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
-                        <a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter >= $nr_items && $counter != 1) ? 'inline' : 'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>
-                        <a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
-                        </div></p></div>';
-
-                        $scorebetw= array ();
-                        $form->addElement('text', 'gradebook_score_display_custom_values_endscore[' . $counter . ']', null, array (
-                            'size' => 5,
-                            'maxlength' => 5,
-                            'id' => 'txta-'.$counter
-                        ));
-                        $form->addElement('text', 'gradebook_score_display_custom_values_displaytext[' . $counter . ']', null,array (
-                            'size' => 40,
-                            'maxlength' => 40,
-                            'id' => 'txtb-'.$counter
-                        ));
-                        $renderer->setElementTemplate($elementTemplateTwoLabel,'gradebook_score_display_custom_values_endscore[' . $counter . ']');
-                        $renderer->setElementTemplate($elementTemplateTwoLabel2,'gradebook_score_display_custom_values_displaytext[' . $counter . ']');
-                        $form->addRule('gradebook_score_display_custom_values_endscore[' . $counter . ']', get_lang('OnlyNumbers'), 'numeric');
-                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_maxvalue'), get_lang('Over100'), 'compare', '<=');
-                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_minvalue'), get_lang('UnderMin'), 'compare', '>');
-                        if ($customdisplays[$counter - 1]) {
-                            $default_values['gradebook_score_display_custom_values_endscore['.$counter.']'] = $customdisplays[$counter - 1]['score'];
-                            $default_values['gradebook_score_display_custom_values_displaytext['.$counter.']'] = $customdisplays[$counter - 1]['display'];
-                        }
-                    }
-                }
-                break;
-                */
+            case 'custom':            	
+            	break;            
         }        
         
         if ($row['variable'] == 'pdf_export_watermark_enable') {
@@ -1395,13 +1274,13 @@ function generate_settings_form($settings, $settings_by_access_list) {
 }
 
 /**
- * Searchs a platform setting
+ * Searchs a platform setting in all categories except from the Plugins category
  * @param string $search
  * @return array
  */
 function search_setting($search) {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
-    $sql = "SELECT * FROM $table_settings_current GROUP BY variable ORDER BY id ASC ";
+    $sql = "SELECT * FROM $table_settings_current WHERE category <> 'Plugins' GROUP BY variable ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');
     $settings = array();
     

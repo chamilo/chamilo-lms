@@ -89,8 +89,8 @@ $settings = null;
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $my_category = Database::escape_string($_GET['category']);
 
-    if ($_configuration['access_url'] == 1) {
-        $settings = api_get_settings($my_category, 'group', $_configuration['access_url']);
+    if ($_configuration['access_url'] == 1) {        
+        $settings = api_get_settings($my_category, 'group', $_configuration['access_url']);        
     } else {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {

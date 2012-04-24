@@ -231,7 +231,7 @@ class SessionManager {
 					('$today' < s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0) 
 				as session_active, 
-				s.name, nbr_courses, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
+				s.name, nbr_courses, nbr_users, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
 
 		$query = "$select FROM $tbl_session s 
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
@@ -260,7 +260,6 @@ class SessionManager {
 
 		$query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
 
-	   // echo $query;
 		$result = Database::query($query);
 		$formatted_sessions = array();
 		if (Database::num_rows($result)) {
@@ -302,6 +301,7 @@ class SessionManager {
 			  $formatted_sessions[] = $session;
 			}
 		}
+		
 		return $formatted_sessions;
 	}    
     	

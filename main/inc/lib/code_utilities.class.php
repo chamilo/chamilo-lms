@@ -13,7 +13,7 @@ class CodeUtilities
     const INLINE_COMMENT_PATTERN = '#//.*$#m';
     const MULTILINE_COMMENT_PATTERN = '#/\*.*?\*/#ms';
     const NAMESPACE_PATTERN = '/namespace\s*(.*);/';
-    const IDENTIFIER_PATTERN = '/[a-zA-Z_][a-zA-Z0-9_]*/';
+    const IDENTIFIER_PATTERN = '/^[a-zA-Z_][a-zA-Z0-9_]*$/';
 
     static function remove_comments($content)
     {

@@ -112,6 +112,7 @@ main/upload/users/*
 searchdb/*
 !searchdb/index.html
 
+main/inc/cache/*
 syntax: regexp
 ^main/upload/users$
 

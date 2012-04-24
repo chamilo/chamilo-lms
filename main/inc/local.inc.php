@@ -129,12 +129,13 @@
 	 variables should be initialised here
  */
 
-require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
-if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {	
-	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-}
+//moved to autologin
+//if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {	
+//	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
+//}
 
 //Conditional login
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){	
@@ -289,7 +290,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 				// Check the user's password
 				if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
-                    require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+                    //require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php'); moved to autoload
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
@@ -458,7 +459,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		 * - Work on a better validation for webservices paths. Current is very poor and exit
 		 */
 		$subsso = api_get_setting('sso_authentication_subclass');
-		require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.class.php');
+		//require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.class.php'); moved to autologin
 		if (!empty($subsso)) {
 			require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php');
 			$subsso = 'sso'.$subsso;
@@ -567,7 +568,13 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 				$loginFailed = true;
 			}
 		}
-	}
+	} elseif (KeyAuth::is_enabled()) {
+            $success = KeyAuth::instance()->login();
+            if($success)
+            {
+                $use_anonymous = false;
+            }
+        }
 
 	//    else {} => continue as anonymous user
 	$uidReset = true;
@@ -663,7 +670,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
                     //If we just want to reset info without redirecting user
                     unset($_SESSION['noredirection']);
                 } else {
-                    require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php';
+                    //require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php'; moved to autologin
                     LoginRedirection::redirect();
                 }
             }

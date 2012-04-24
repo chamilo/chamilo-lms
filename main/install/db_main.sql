@@ -560,6 +560,7 @@ CREATE TABLE IF NOT EXISTS settings_current (
   subkeytext varchar(255) default NULL,
   access_url int unsigned not null default 1,
   access_url_changeable int unsigned not null default 0,
+  access_url_locked int not null default 0,
   PRIMARY KEY id (id),
   INDEX (access_url)
 );
@@ -860,8 +861,9 @@ VALUES
 ('gradebook_ranking_6', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
 ('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
 ('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1)
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17601','DatabaseVersion','', NULL, NULL, 0);
+('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17631','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

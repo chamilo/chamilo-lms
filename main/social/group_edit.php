@@ -61,23 +61,23 @@ if (!GroupPortalManager::is_group_admin($group_id)) {
 $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
-$form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 100%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
+$form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "textarea_maxlength()", onKeyUp => "textarea_maxlength()"));
+$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, onKeyDown => "textarea_maxlength()", onKeyUp => "textarea_maxlength()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 $form->addRule('name', '', 'maxlength',255);
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
+$form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 

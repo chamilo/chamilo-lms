@@ -1,4 +1,4 @@
-/**
+/*
  * Common CSS for all themes
  */
 
@@ -55,6 +55,11 @@ legend {
 
 .subnav li a {
     margin:0px;
+}
+
+.subnav {
+    font-size: 11px;
+    font-weight: bold;         
 }
 
 /* To fix the increase/decrease buttons */
@@ -149,13 +154,42 @@ html, body {
     padding: 0;
 }
 
+/* the sticky effect */
+html {
+    height: 100%;
+}
+
+body {
+    /* hack ignored by non-IE to enable ie to support :hover on button */
+    behavior:url("/main/css/csshover3.htc");            
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    height: 100%; /* stick */	
+}
+
+/* Sticky footer*/
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -9em; /* Do not change this value */
+}
+
 #topbar {
     z-index:9000; /* bug when using full area fckeditor */
 }
 
 footer {
     margin-top: 17px;
-    padding-top: 17px;  
+    padding-top: 17px;    
+    height: 9em;    
+    width: 100%;    
+}
+
+/* Sticky footer*/
+.push {
+    height: 9em; /* Very important */
 }
 
 footer .container .row {
@@ -1783,7 +1817,7 @@ border-top: 1px solid #E2E2E2;
     float: left;
     height: 70px;
     margin: 0 8px 15px 15px;
-    padding: 16px 12px 27px;
+    padding: 16px 12px 40px 0px;
     width:600px;
 }
 
@@ -2894,16 +2928,14 @@ div#no-data-view div.controls {
   height: 25px;
   position: relative;
   overflow:hidden;
-  background: url(../img/alt_star.gif) top left repeat-x;        
+  background: url(../img/alt_star.png) top left repeat-x;        
 }
 .star-rating li{
   padding:0px;
   margin:0px;
   width:25px;
-  height:25px;
-  /*\*/
-  float: left;
-  /* */
+  height:25px;  
+  float: left;  
 }
 .star-rating li a{
   display:block;
@@ -2918,7 +2950,7 @@ div#no-data-view div.controls {
   overflow:hidden;
 }
 .star-rating li a:hover{
-  background: url(../img/alt_star.gif) left bottom;
+  background: url(../img/alt_star.png) left bottom;
   z-index: 2;
   left: 0px;
   border:none;
@@ -2954,7 +2986,7 @@ div#no-data-view div.controls {
   width: 125px;
 }
 .star-rating li.current-rating{
-  background: url(../img/alt_star.gif) left center;
+  background: url(../img/alt_star.png) left center;
   position: absolute;
   height: 25px;
   display: block;
@@ -3598,3 +3630,21 @@ a.forum_group_link {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.subnav .nav > li > .logout {
+    padding:7px;
+}
+
+footer {
+    /* Default gray footer */
+    background-color: #F5F5F5; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #F5F5F5 0%, #EEEEEE 100%); /* FF3.6+ */  
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F5F5F5), color-stop(100%,#EEEEEE)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #F5F5F5 0%, #EEEEEE 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #F5F5F5 0%,#EEEEEE 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #F5F5F5 0%,#EEEEEE 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F5F5F5', endColorstr='#EEEEEE',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #F5F5F5 0%, #EEEEEE 100%); /* W3C */        
+}
+

@@ -283,7 +283,7 @@ function get_course_tables() {
 /**
  * Creates all the necessary tables for a new course 
  */
-function update_Db_course($course_db_name = null) {
+function update_db_course($course_db_name = null) {
     global $_configuration;
     
     $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';

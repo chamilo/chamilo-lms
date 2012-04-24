@@ -11,12 +11,7 @@ class Redirect
 
     static function www()
     {
-        static $result = false;
-        if (empty($result))
-        {
-            $result = api_get_path('WEB_PATH');
-        }
-        return $result;
+        Uri::www();
     }
 
     static function go($url = '')

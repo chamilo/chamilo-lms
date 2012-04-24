@@ -56,7 +56,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_base_file         = $css_path.'base.css';
 	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
     
-    $css_list = array($css_file, $css_base_file, $css_base_chamilo_file, $bootstrap_file);
+    $css_list = array($css_base_file, $css_base_chamilo_file, $bootstrap_file, $css_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -195,16 +195,15 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 						{CODE}
 				</div>
 			</div>
-
 			<div class="push"/></div>
 		</div>
 
 		<footer>
             <div class="container">
                 <div class="row">  
-                <div style="text-align: center;">
-                &nbsp;<br />{POWERED_BY}
-                </div>
+                    <div style="text-align: center;">
+                    &nbsp;<br />{POWERED_BY}
+                    </div>
                 </div>
                 </div>
 			

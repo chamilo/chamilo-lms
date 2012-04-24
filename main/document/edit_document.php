@@ -83,45 +83,44 @@ require_once $lib_path.'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 if (api_is_in_group()) {
-	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+	$group_properties = GroupManager::get_group_properties($group_id);
 }
+
+$course_info = api_get_course_info();
+
+$dir = '/';
 
 if (isset($_GET['id'])) {
     $document_data  = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
     $document_id    = $document_data['id'];
     $file           = $document_data['path'];
-    $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($file));    
+    $parent_id      = DocumentManager::get_document_id($course_info, dirname($file));    
     $dir            = dirname($document_data['path']);    
     $dir_original   =  $dir;
     
     $doc            = basename($file);
     $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
-    $readonly = $document_data['readonly'];
+    $readonly       = $document_data['readonly'];
 }
 
 if (empty($document_data)) {
     api_not_allowed();
 }  
 
-/*
-//I'm in the certification module?
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
-	$is_certificate_mode = true;
-}*/
-
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
-
 
 //Call from
 $call_from_tool = Security::remove_XSS($_GET['origin']);
 $slide_id = Security::remove_XSS($_GET['origin_opt']);
 $file_name = $doc;
 
-$baseServDir = api_get_path(SYS_COURSE_PATH);
-$courseDir   = $_course['path'].'/document';
-$baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
+
 $current_session_id = api_get_session_id();
+$group_id = api_get_group_id();
+$user_id = api_get_user_id();
+
+
 $doc_tree = explode('/', $file);
 $count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
 
@@ -163,9 +162,9 @@ $noPHP_SELF = true;
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 
-if (!empty($_SESSION['_gid'])) {
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
+if (!empty($group_id)) {
+	$req_gid = '&amp;gidReq='.$group_id;
+	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
 	$group_document = true;
 	$noPHP_SELF = true;
 }
@@ -174,7 +173,6 @@ if (!$is_certificate_mode)
 	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
 else
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
-
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
@@ -191,12 +189,12 @@ if (empty($document_data['parents'])) {
 if (!is_allowed_to_edit) {
 	api_not_allowed(true);
 }
-$user_id = api_get_user_id();
+
 event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
 if (!is_allowed_to_edit()) {
-	if (DocumentManager::check_readonly($_course, $user_id, $file)) {
+	if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
 		api_not_allowed();
 	}
 }
@@ -223,40 +221,27 @@ if (isset($_POST['comment'])) {
     }
 }
 
-/*	Code to rename the file name */
-//var_dump($_POST['renameTo']);
-if (isset($_POST['renameTo'])) {
-    $info_message = change_name($baseWorkDir, $_GET['sourceFile'], $_POST['renameTo'], $dir, $doc);
-}
-
 /*	WYSIWYG HTML EDITOR - Program Logic */
-
 if ($is_allowed_to_edit) {
-	if ($_POST['formSent'] == 1) {	    
-		if (isset($_POST['renameTo'])) {
-			$_POST['filename'] = disable_dangerous_file($_POST['renameTo']);
-			$extension = explode('.', $_POST['filename']);
-			$extension = $extension[sizeof($extension) - 1];
-			$_POST['filename'] = str_replace('.'.$extension, '', $_POST['filename']);
-		}
-
-		$filename = stripslashes($_POST['filename']);
-
-		$content = trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content'])));
-		$content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
+	if ($_POST['formSent'] == 1) {
+        
+		$filename   = stripslashes($_POST['filename']);
+        $extension  = $_POST['extension'];
+        
+		$content    = trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content'])));
+		$content    = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
 		if (!strstr($content, '/css/frames.css')) {
-			$content=str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
-		}
-
-        $extension = $_POST['extension'];
-		$file = $dir.$filename.'.'.$extension;
+			$content = str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
+		}        
+        if ($dir == '/') {
+            $dir = '';
+        }
+        
+		$file = $dir.'/'.$filename.'.'.$extension;        
 		$read_only_flag = $_POST['readonly'];
 		$read_only_flag = empty($read_only_flag) ? 0 : 1;
-				
-		$show_edit = $_SESSION['showedit'];
-		api_session_unregister('showedit');
-
+		
 		if (empty($filename)) {
 			$msgError = get_lang('NoFileName');
 		} else {
@@ -299,21 +284,18 @@ if ($is_allowed_to_edit) {
 							}
 						}
 
-						// "WHAT'S NEW" notification: update table item_property
-						$document_id = DocumentManager::get_document_id($_course, $file);
-						if ($document_id) {							
+						// "WHAT'S NEW" notification: update table item_property                        
+						$document_id = DocumentManager::get_document_id($_course, $file);   
+                                                
+						if ($document_id) {				
 							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $current_session_id);
 							// Update parent folders
-							item_property_update_on_folder($_course, $dir, api_get_user_id());
-							$dir_modified = substr($dir, 0, -1);
-							//header('Location: document.php?id='.urlencode($dir));
-							
-							$my_id = DocumentManager::get_document_id($_course, $dir_modified);
-							header('Location: document.php?id='.$my_id);							
-							exit;
+							item_property_update_on_folder($_course, $dir, api_get_user_id());							                            
+							header('Location: document.php?id='.$document_data['parent_id']);
+                            exit;
 						} else {
-							//$msgError = get_lang('Impossible');
+							$msgError = get_lang('Impossible');
 						}
 					} else {
 						$msgError = get_lang('Impossible');
@@ -341,7 +323,7 @@ if (file_exists($document_data['absolute_path'])) {
 	if (in_array($extension, array('html', 'htm'))) {
 		$content = file($document_data['absolute_path']);
 		$content = implode('', $content);
-		$path_to_append = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+		//$path_to_append = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 	//	$content = str_replace('="./', '="'.$path_to_append, $content);
 		//$content = str_replace('mp3player.swf?son=.%2F', 'mp3player.swf?son='.urlencode($path_to_append), $content);
 	}
@@ -352,7 +334,6 @@ if (file_exists($document_data['absolute_path'])) {
 // Display the header
 $nameTools = get_lang('EditDocument') . ': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
-
 
 if (isset($msgError)) {
 	Display::display_error_message($msgError);
@@ -372,11 +353,11 @@ $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
 if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {	
-	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&id='.$document_data['id'];
+	$action = api_get_self().'?id='.$document_data['id'];
 	$form = new FormValidator('formEdit', 'post', $action);
 
 	// Form title
-	$form->addElement('header', '', $nameTools);
+	$form->addElement('header', $nameTools);
 
 	$renderer = $form->defaultRenderer();
 
@@ -426,9 +407,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	}
 
 	$form->addElement('textarea', 'comment', get_lang('Comment'), 'rows="3" style="width:300px;"');
-	/*
-	$renderer = $form->defaultRenderer();
-	*/
+	
 	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
 		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
 		$checked =& $form->addElement('checkbox', 'readonly', get_lang('ReadOnly'));
@@ -452,10 +431,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	$defaults['origin_opt'] = Security::remove_XSS($_GET['origin_opt']);
 
 	$form->setDefaults($defaults);
-	// Show templates
-	/*
-	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
-	*/
+	
 	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
 	
 	if ($is_certificate_mode) {
@@ -471,8 +447,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
-	$form->display();
-	//Display::display_error_message(get_lang('ReadOnlyFile'));
+	$form->display();	
 }
 
 Display::display_footer();
@@ -491,9 +466,10 @@ Display::display_footer();
 	This function changes the name of a certain file.
 	It needs no global variables, it takes all info from parameters.
 	It returns nothing.
+    @todo check if this function is used
 */
-function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
-    var_dump($source_file, $rename_to);
+function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {    
+    
 	$file_name_for_change = $base_work_dir.$dir.$source_file;
 	//api_display_debug_info("call my_rename: params $file_name_for_change, $rename_to");
     $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file

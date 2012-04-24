@@ -15,14 +15,13 @@ $language_file = 'help';
 require_once '../inc/global.inc.php';
 $help_name = Security::remove_XSS($_GET['open']);
 
-Display::display_reduced_header();
 ?>
-<div style="margin:10px;">
-    <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq') ?></a>
-    <h4>
-        <?php echo get_lang('H'.$help_name); ?>
-    </h4>
-    <?php echo get_lang($help_name.'Content'); ?>
-    <br /><br />
-    <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq'); ?></a>
+<a class="btn" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq'); ?></a>
+
+<div class="page-header">
+    <h3><?php echo get_lang('H'.$help_name); ?></h3>
 </div>
+
+<?php echo get_lang($help_name.'Content'); ?>    
+<hr>    
+<a class="btn" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq'); ?></a>

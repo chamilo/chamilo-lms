@@ -33,11 +33,8 @@
     </div>
 </div>    
 
+<div class="container">    
 <h1>Chamilo 1.9 - Installation Guide</h1>
-
-<div id="outerframe">
-<div id="main">
-<p></p>
 
 <p>Thank you for downloading Chamilo 1.9</p>
 <ul>
@@ -766,10 +763,10 @@ Provider for) include a full review of the full-text search feature.
 <h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
-On Debian or Ubuntu 10.04 and superior, install OpenOffice.org v3 (this might work with LibreOffice) and start it as a headless server:
+On Debian or Ubuntu 11.10 and superior, install LibreOffice.org v3 and start it as a headless server:
 <pre>
-sudo apt-get install openoffice.org
-sudo soffice -nologo -nofirststartwizard -headless -norestore -invisible "-accept=socket,host=localhost,port=2002,tcpNoDelay=1;urp;"
+sudo apt-get install libreoffice
+sudo soffice "--accept=socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
 </pre>
 Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
 <em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
@@ -807,7 +804,6 @@ settings there.
   <br />
 </p>
 <hr />
-</div>
 
 </div>
 

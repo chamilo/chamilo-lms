@@ -1025,7 +1025,6 @@ function display_language_selection() { ?>
  */
 function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
-
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
@@ -1041,14 +1040,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').'>= 5.0</td>
+                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.MIN_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (phpversion() < '5.0') {
+    if (phpversion() < MIN_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
     }
-    echo '      </td>
+    echo '</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
@@ -1562,8 +1561,7 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
         $maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
         if ($install_type == INSTALL_TYPE_UPDATE) {
             echo '<input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />';
-            echo '<td>'.api_htmlentities($parameter_value)."</td>";
-            //echo "<td>$extra_notice</td>\n";
+            echo '<td>'.api_htmlentities($parameter_value)."</td>";            
         } else {
             echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>";
             echo "<td>$extra_notice</td>";
@@ -1686,26 +1684,6 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     	}    
     	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
-    
-    //Database Prefix
-    //display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, '', null, 'id="optional_param5" '.$style); //get_lang('DbPrefixCom')
-    
-    /*  Tracking is always available see #2066
-     *
-    <tr id="optional_param5" style="display:none;">
-      <td><?php echo get_lang('EnableTracking'); ?> </td>
-
-      <?php if ($installType == 'update'): ?>
-      <td><input type="hidden" name="enableTrackingForm" value="<?php echo $enableTrackingForm; ?>" /><?php echo $enableTrackingForm ? get_lang('Yes') : get_lang('No'); ?></td>
-      <?php else: ?>
-      <td>
-        <input class="checkbox" type="radio" name="enableTrackingForm" value="1" id="enableTracking1" <?php echo $enableTrackingForm ? 'checked="checked" ' : ''; ?>/> <label for="enableTracking1"><?php echo get_lang('Yes'); ?></label>
-        <input class="checkbox" type="radio" name="enableTrackingForm" value="0" id="enableTracking0" <?php echo $enableTrackingForm ? '' : 'checked="checked" '; ?>/> <label for="enableTracking0"><?php echo get_lang('No'); ?></label>
-      </td>
-      <?php endif; ?>
-
-      <td>&nbsp;</td>
-    </tr>   */
     ?>
     <tr>
         <td>
@@ -1884,23 +1862,6 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     //Parameter 11: institute (short) name
     display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
 
-    /*
-     //old method
-          <tr>
-      <td><?php echo get_lang('EncryptUserPass'); ?> :</td>
-
-      <?php if($installType == 'update'): ?>
-      <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm? get_lang('Yes') : get_lang('No'); ?></td>
-      <?php else: ?>
-      <td>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="1" id="encryptPass1" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass1"><?php echo get_lang('Yes'); ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="0" id="encryptPass0" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass0"><?php echo get_lang('No'); ?></label>
-      </td>
-      <?php endif; ?>
-    </tr>
-
-    */
-
     ?>
     <tr>
       <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
@@ -2009,7 +1970,6 @@ function display_after_install_message($installType, $nbr_courses) {
  * @return  array|string countries list
  */
 function get_countries_list_from_array($combo = false) {
-
     $a_countries = array(
         "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
         "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
@@ -2049,4 +2009,50 @@ function get_countries_list_from_array($combo = false) {
     }
 
     return $a_countries;
+}
+
+/**
+ * Lockis settings that can't be changed in other portals 
+ */
+function locking_settings() {
+    $access_url_locked_settings = array(
+        'server_type', 
+        'use_document_title', 
+        'permanently_remove_deleted_files',
+        'account_valid_duration',
+        'service_visio',
+        'service_ppt2lp',
+        'wcag_anysurfer_public_pages',
+        'upload_extensions_list_type',
+        'upload_extensions_blacklist',
+        'upload_extensions_whitelist',   
+        'upload_extensions_skip',    
+        'upload_extensions_replace_by',
+        'hide_dltt_markup',
+        'split_users_upload_directory',
+        'permissions_for_new_directories',
+        'permissions_for_new_files',
+        'platform_charset',
+        'service_visio',
+        'ldap_description',    
+        'cas_activate',
+        'cas_server',
+        'cas_server_uri',
+        'cas_port',
+        'cas_protocol',
+        'cas_add_user_activate',
+        'update_user_info_cas_with_ldap',    
+        'languagePriority1',
+        'languagePriority2',
+        'languagePriority3',
+        'languagePriority4',
+        'login_is_email',
+        'chamilo_database_version'    
+    );
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    foreach ($access_url_locked_settings as $setting) {
+        $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
+        Database::query($sql);
+    }
+
 }

@@ -4,10 +4,6 @@
 /* Adding default generic style for non chamilo_X themes */
 @import url('../base.css');
 
-/* the sticky effect */
-html {
-	height: 100%;
-}
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
@@ -18,24 +14,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */
 }
-#wrapper{
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	margin: 0 auto -3em;
-}
-#outerframe {
-	position: relative;  /* do not remove, fixes a bug in IE */
-	border: 1px solid #fff;
-	background-color: #fff;
-}
-/* Hides from IE5-mac \*/
-* html #outerframe {
-	height: 1%;
-}
-/* End hide from IE5-mac */
 
 /*
 -----------------------------------------------------------------------------
@@ -825,6 +804,7 @@ a.personal_agenda:link, a.personal_agenda:visited {
 a.personal_agenda:hover, a.personal_agenda:hover {
 	color: #666666;
 }
+
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/
@@ -848,12 +828,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border: 1px solid #FF0000;
 	color: #FF0000;
 	background-color: #EFEFEF;
-}
-/* New training */
-.bottom-link {
-	background-color:#E5EDF9;
-	border-color: #D4E2F6;
-	background-image:url(images/button_back.jpg);
 }
 /**********************************************
  *  DOCUMENT MODULE                           *
@@ -2475,10 +2449,6 @@ a.read {
     margin-right:4px;
 }
 
-#menu-wrapper {
-	width:200px;
-	float: right;
-}
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;

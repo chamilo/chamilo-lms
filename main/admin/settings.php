@@ -107,6 +107,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     $row['subkey'] = 0;
                 if (empty($row['category']))
                     $row['category'] = 0;
+                
                 // One more validation if is changeable.
                 if ($row['access_url_changeable'] == 1)
                     $settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]  = $row;

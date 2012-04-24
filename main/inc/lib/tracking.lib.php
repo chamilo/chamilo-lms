@@ -13,7 +13,7 @@
 define('SESSION_LINK_TARGET','_self');
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+//require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php'; moved to autoload
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 /**
@@ -2210,9 +2210,15 @@ class Tracking {
 
 						$total_time_login      = Tracking :: get_time_spent_on_the_course($user_id, $course_code);
 						$time                  = api_time_to_hms($total_time_login);
-						$progress              = Tracking :: get_avg_student_progress($user_id, $course_code);
+						$progress              = Tracking :: get_avg_student_progress($user_id, $course_code);                        
 						$percentage_score      = Tracking :: get_avg_student_score($user_id, $course_code, array());
 						$last_connection       = Tracking :: get_last_connection_date_on_the_course($user_id, $course_code);
+                        
+                        if (is_null($progress)) {
+                            $progress = '0%';
+                        } else {
+                            $progress = $progress.'%';
+                        }
 
 						if ($course_code == $_GET['course'] && empty($_GET['session_id'])) {
 							$html .= '<tr class="row_odd" style="background-color:#FBF09D">';
@@ -2224,7 +2230,7 @@ class Tracking {
 						$html .= '<td>'.$course_url.'</td>';
 
 						$html .= '<td align="center">'.$time.'</td>';
-						$html .= '<td align="center">'.$progress.'%</td>';
+						$html .= '<td align="center">'.$progress.'</td>';
 
 						$html .= '<td align="center">';
 						if (is_numeric($percentage_score)) {

@@ -248,9 +248,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
 			
             $errors = array();
-            //$filename = api_get_path(SYS_ARCHIVE_PATH).'migration_report.log';
-            //$time = date(); file_put_contents($filename, "File creation at $time ");
-            
+              
             if (Database::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
@@ -258,7 +256,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $list[] = $row;
                     $i++;
                 }
-                $query_id = '';
                 
                 foreach ($list as $row_course) {
                     // Now use the $c_q_list
@@ -378,7 +375,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     error_log('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
                     
                     $count = $old_count = 0;
-                    foreach($table_list as $table) {
+                    foreach ($table_list as $table) {
                     	$old_table = $row_course['db_name'].".".$table;
                     	if ($singleDbForm) {
                     		$old_table = "$prefix{$row_course['db_name']}_".$table;
@@ -427,23 +424,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                     		error_log("Check the results: ");
                     		error_log(print_r($errors, 1));
                     	}
-                    }                    
-                    error_log('<<<------- end  -------->>');
-                    
-                    //error
-                    /*
-                     //Adding all_day to the calendar event table
-                    $calendar_event_table = $row_course['db_name'].".calendar_event";
-                    if ($singleDbForm) {
-                    $calendar_event_table = "$prefix{$row_course['db_name']}_calendar_event";
                     }
-                    $query = "ALTER TABLE `".$calendar_event_table."` ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;";
-                    $res = Database::query($query);
-                    if ($res === false) {
-                    error_log('Error in '.$query.': '.Database::error());
-                    } */
-                    
-                    
+                    error_log('<<<------- end  -------->>');
                 }
             }
         }

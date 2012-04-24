@@ -122,8 +122,8 @@ if ($number_loop != 0) {
                 $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
 
             $social_right_content .= '<div class="span2">                        
-                            <a class="thumbnail" href="profile.php?u=<?php echo $sender_user_id; ?>">
-                            <img src="'.$friends_profile['file'].'" /></a>                        
+                            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
+                            <img src="'.$friends_profile['file'].'" /></a>          
                     </div>
                     <div class="span3">
                             <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>
@@ -160,7 +160,7 @@ if (count($list_get_invitation_sent) > 0 ) {
         $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG); 		               
         $social_right_content .= '	   	
                         <div class="span2">                            
-                            <a class="thumbnail" href="profile.php?u=<?php echo $sender_user_id;?>">
+                            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
                                 <img src="'.$friends_profile['file'].'"  /></a>                            
                             </div>
                         <div class="span3">                                                
@@ -172,8 +172,7 @@ if (count($list_get_invitation_sent) > 0 ) {
                             '. get_lang('DateSend').' : '.$date.'
                             </div>
                     </div>
-        </div>
-    ';
+        </div>';
     }
 }
 

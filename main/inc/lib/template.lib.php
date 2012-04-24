@@ -112,7 +112,7 @@ class Template {
     		if (!empty($help)) {
     			$help = Security::remove_XSS($help);			
     		    $help_content  = '<li class="help">';                   
-    		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="thickbox" title="'.get_lang('Help').'">';
+    		    $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
     		    $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang('Help').'" title="'.get_lang('Help').'" />';
     		    $help_content .= '</a></li>';		
 		  }

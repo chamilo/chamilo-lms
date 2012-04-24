@@ -92,31 +92,30 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once $lib_path.'autoload.class.php';
-Autoload::register();
+require_once dirname(__FILE__).'/autoload.inc.php';
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'template.lib.php';
 require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
-require_once $lib_path.'image.lib.php';
+//require_once $lib_path.'image.lib.php';   moved to autoload
 require_once $lib_path.'array.lib.php';
-require_once $lib_path.'security.lib.php';
+//require_once $lib_path.'security.lib.php';  moved to autoload
 require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'debug.lib.php';
-require_once $lib_path.'rights.lib.php';
+//require_once $lib_path.'debug.lib.php';  moved to autoload
+//require_once $lib_path.'rights.lib.php';  moved to autoload
 
 require_once $lib_path.'model.lib.php';
-require_once $lib_path.'sortabletable.class.php';
+//require_once $lib_path.'sortabletable.class.php';  moved to autoload
 require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';
 require_once $lib_path.'notification.lib.php';
 require_once $lib_path.'course.lib.php';
-require_once $lib_path.'sessionmanager.lib.php';
+//require_once $lib_path.'sessionmanager.lib.php'; moved to autoload
 require_once $lib_path.'tracking.lib.php';
 
-require_once $lib_path.'formvalidator/FormValidator.class.php';
+//require_once $lib_path.'formvalidator/FormValidator.class.php'; moved to autoload
 require_once $lib_path.'online.inc.php';
 
 //Here we load the new Doctrine class (just for tests)

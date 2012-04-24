@@ -4223,8 +4223,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
         $where_condition = " AND access_url_changeable= '1' ";
     }    
     if (empty($access_url) or $access_url == -1) { $access_url = 1; }
-    $sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
-            " FROM $t_cs WHERE access_url = $access_url  $where_condition ";
+    $sql = "SELECT * FROM $t_cs WHERE access_url = $access_url  $where_condition ";
     
     if (!empty($cat)) {
         $cat = Database::escape_string($cat);

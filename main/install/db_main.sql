@@ -560,6 +560,7 @@ CREATE TABLE IF NOT EXISTS settings_current (
   subkeytext varchar(255) default NULL,
   access_url int unsigned not null default 1,
   access_url_changeable int unsigned not null default 0,
+  access_url_locked int not null default 0,
   PRIMARY KEY id (id),
   INDEX (access_url)
 );

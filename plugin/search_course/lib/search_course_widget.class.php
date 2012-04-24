@@ -69,7 +69,7 @@ class SearchCourseWidget
 
         return $url == $index_url || $url == $root;
     }
-    
+
     /**
      *
      * @return bool
@@ -245,13 +245,16 @@ EOT;
             $details = implode(' - ', $details);
             $title = $course['title'];
 
-            $href = api_get_path(WEB_PATH) . 'courses/' . $course['code'];
+            $href = api_get_path(WEB_PATH) . 'courses/' . $course['code'] .'/index.php';
             echo '<tr><td><b><a href="' . $href . '">' . "$title</a></b><br/>$details</td><td>";
-            if ($course['registration_code'])
+            if (!api_is_anonymous())
             {
-                Display::display_icon('passwordprotected.png', '', array('style' => 'float:left;'));
+                if ($course['registration_code'])
+                {
+                    Display::display_icon('passwordprotected.png', '', array('style' => 'float:left;'));
+                }
+                $this->display_subscribe_icon($course, $user_courses);
             }
-            $this->display_subscribe_icon($course, $user_courses);
             echo '</td></tr>';
         }
         echo '</table>';
@@ -333,9 +336,20 @@ EOT;
         $search_term = Database::escape_string($search_term);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+        if (api_is_anonymous())
+        {
+            $course_fiter = 'visibility = ' . COURSE_VISIBILITY_OPEN_WORLD;
+        }
+        else
+        {
+            $course_fiter = 'visibility = ' . COURSE_VISIBILITY_OPEN_WORLD . ' OR ';
+            $course_fiter .= 'visibility = ' . COURSE_VISIBILITY_OPEN_PLATFORM . ' OR ';
+            $course_fiter .= '(visibility = ' . COURSE_VISIBILITY_REGISTERED . ' AND subscribe = 1)';
+        }
+
         $sql = <<<EOT
                 SELECT * FROM $course_table 
-                WHERE code LIKE '%$search_term%' OR visual_code LIKE '%$search_term%' OR title LIKE '%$search_term%' OR tutor_name LIKE '%$search_term%' 
+                WHERE ($course_fiter) AND (code LIKE '%$search_term%' OR visual_code LIKE '%$search_term%' OR title LIKE '%$search_term%' OR tutor_name LIKE '%$search_term%') 
                 ORDER BY title, visual_code ASC      
 EOT;
 

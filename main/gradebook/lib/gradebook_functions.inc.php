@@ -205,14 +205,12 @@ function build_edit_icons_cat($cat, $selectcat) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
         
-        if (empty($grade_model_id) || $grade_model_id == -1) {
-            $modify_icons= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
-        }
+        $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('view_more_stats.gif', get_lang('Show'),'',ICON_SIZE_SMALL).'</a>';
         
-        if (!empty($grade_model_id) && $grade_model_id != -1) {
-            $modify_icons= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('view_more_stats.gif', get_lang('Show'),'',ICON_SIZE_SMALL).'</a>';
+        if (empty($grade_model_id) || $grade_model_id == -1) {
+            $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
         }
-		
+      
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 		
 		//no move ability for root categories

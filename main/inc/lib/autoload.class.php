@@ -43,6 +43,19 @@ class Autoload
         }
 
         $root = dirname(__FILE__) . '/../../';
+        /**
+         * WARNING
+         * 
+         * This map is autogeneated by AutoloadClassFinder. It may be ovewrite
+         * by future run.
+         * 
+         * If you need to manually add mappings do it at the end and clearly 
+         * identifies that as manually added or better ensure your class is 
+         * captured by the finder. 
+         * 
+         * If it comes from a different package you may want to add another autoload
+         * function on the stack.
+         */
         $result = array();
         $result['AbstractLink'] = '/main/gradebook/lib/be/abstractlink.class.php';
         $result['Accessurleditcoursestourl'] = '/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php';
@@ -70,6 +83,7 @@ class Autoload
         $result['Chat'] = '/main/inc/lib/chat.lib.php';
         $result['ClassManager'] = '/main/inc/lib/classmanager.lib.php';
         $result['ClosureCompiler'] = '/main/inc/lib/closure_compiler.class.php';
+        $result['CodeUtilities'] = '/main/inc/lib/code_utilities.class.php';
         $result['ConditionalLogin'] = '/main/inc/lib/conditional_login.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
         $result['CourseArchiver'] = '/main/coursecopy/classes/CourseArchiver.class.php';
@@ -90,6 +104,7 @@ class Autoload
         $result['DataForm'] = '/main/gradebook/lib/fe/dataform.class.php';
         $result['Debug'] = '/main/inc/lib/debug.lib.php';
         $result['Diagnoser'] = '/main/inc/lib/diagnoser.lib.php';
+        $result['Diagnosis'] = '/main/inc/lib/doctor/diagnosis.class.php';
         $result['Display'] = '/main/inc/lib/display.lib.php';
         $result['Document'] = '/main/coursecopy/classes/Document.class.php';
         $result['DocumentManager'] = '/main/inc/lib/document.lib.php';
@@ -127,9 +142,71 @@ class Autoload
         $result['GradebookTable'] = '/main/gradebook/lib/fe/gradebooktable.class.php';
         $result['GroupManager'] = '/main/inc/lib/groupmanager.lib.php';
         $result['GroupPortalManager'] = '/main/inc/lib/group_portal_manager.lib.php';
+        $result['HTML_Common'] = '/main/inc/lib/pear/HTML/Common.php';
+        $result['HTML_QuickForm'] = '/main/inc/lib/pear/HTML/QuickForm.php';
+        $result['HTML_QuickForm_Action'] = '/main/inc/lib/pear/HTML/QuickForm/Action.php';
+        $result['HTML_QuickForm_Action_Back'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Back.php';
+        $result['HTML_QuickForm_Action_Direct'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Direct.php';
+        $result['HTML_QuickForm_Action_Display'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Display.php';
+        $result['HTML_QuickForm_Action_Jump'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Jump.php';
+        $result['HTML_QuickForm_Action_Next'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Next.php';
+        $result['HTML_QuickForm_Action_Submit'] = '/main/inc/lib/pear/HTML/QuickForm/Action/Submit.php';
+        $result['HTML_QuickForm_Controller'] = '/main/inc/lib/pear/HTML/QuickForm/Controller.php';
+        $result['HTML_QuickForm_Error'] = '/main/inc/lib/pear/HTML/QuickForm.php';
+        $result['HTML_QuickForm_Page'] = '/main/inc/lib/pear/HTML/QuickForm/Page.php';
+        $result['HTML_QuickForm_Renderer'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer.php';
+        $result['HTML_QuickForm_Renderer_Array'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Array.php';
+        $result['HTML_QuickForm_Renderer_ArraySmarty'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ArraySmarty.php';
+        $result['HTML_QuickForm_Renderer_Default'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Default.php';
+        $result['HTML_QuickForm_Renderer_ITDynamic'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ITDynamic.php';
+        $result['HTML_QuickForm_Renderer_ITStatic'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ITStatic.php';
+        $result['HTML_QuickForm_Renderer_Object'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
+        $result['HTML_QuickForm_Renderer_ObjectFlexy'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ObjectFlexy.php';
+        $result['HTML_QuickForm_Renderer_QuickHtml'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/QuickHtml.php';
+        $result['HTML_QuickForm_Rule'] = '/main/inc/lib/pear/HTML/QuickForm/Rule.php';
+        $result['HTML_QuickForm_RuleRegistry'] = '/main/inc/lib/pear/HTML/QuickForm/RuleRegistry.php';
+        $result['HTML_QuickForm_Rule_Callback'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Callback.php';
+        $result['HTML_QuickForm_Rule_Compare'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Compare.php';
+        $result['HTML_QuickForm_Rule_CompareDate'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/CompareDate.php';
+        $result['HTML_QuickForm_Rule_Email'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Email.php';
+        $result['HTML_QuickForm_Rule_Range'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Range.php';
+        $result['HTML_QuickForm_Rule_Regex'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Regex.php';
+        $result['HTML_QuickForm_Rule_Required'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Required.php';
+        $result['HTML_QuickForm_advanced_settings'] = '/main/inc/lib/pear/HTML/QuickForm/advanced_settings.php';
+        $result['HTML_QuickForm_advcheckbox'] = '/main/inc/lib/pear/HTML/QuickForm/advcheckbox.php';
+        $result['HTML_QuickForm_advmultiselect'] = '/main/inc/lib/pear/HTML/QuickForm/advmultiselect.php';
+        $result['HTML_QuickForm_autocomplete'] = '/main/inc/lib/pear/HTML/QuickForm/autocomplete.php';
+        $result['HTML_QuickForm_button'] = '/main/inc/lib/pear/HTML/QuickForm/button.php';
+        $result['HTML_QuickForm_checkbox'] = '/main/inc/lib/pear/HTML/QuickForm/checkbox.php';
+        $result['HTML_QuickForm_date'] = '/main/inc/lib/pear/HTML/QuickForm/date.php';
+        $result['HTML_QuickForm_element'] = '/main/inc/lib/pear/HTML/QuickForm/element.php';
+        $result['HTML_QuickForm_email'] = '/main/inc/lib/pear/HTML/QuickForm/email.php';
+        $result['HTML_QuickForm_file'] = '/main/inc/lib/pear/HTML/QuickForm/file.php';
+        $result['HTML_QuickForm_group'] = '/main/inc/lib/pear/HTML/QuickForm/group.php';
+        $result['HTML_QuickForm_header'] = '/main/inc/lib/pear/HTML/QuickForm/header.php';
+        $result['HTML_QuickForm_hidden'] = '/main/inc/lib/pear/HTML/QuickForm/hidden.php';
+        $result['HTML_QuickForm_hiddenselect'] = '/main/inc/lib/pear/HTML/QuickForm/hiddenselect.php';
+        $result['HTML_QuickForm_hierselect'] = '/main/inc/lib/pear/HTML/QuickForm/hierselect.php';
+        $result['HTML_QuickForm_html'] = '/main/inc/lib/pear/HTML/QuickForm/html.php';
+        $result['HTML_QuickForm_image'] = '/main/inc/lib/pear/HTML/QuickForm/image.php';
+        $result['HTML_QuickForm_input'] = '/main/inc/lib/pear/HTML/QuickForm/input.php';
+        $result['HTML_QuickForm_label'] = '/main/inc/lib/pear/HTML/QuickForm/label.php';
+        $result['HTML_QuickForm_link'] = '/main/inc/lib/pear/HTML/QuickForm/link.php';
+        $result['HTML_QuickForm_password'] = '/main/inc/lib/pear/HTML/QuickForm/password.php';
+        $result['HTML_QuickForm_radio'] = '/main/inc/lib/pear/HTML/QuickForm/radio.php';
+        $result['HTML_QuickForm_reset'] = '/main/inc/lib/pear/HTML/QuickForm/reset.php';
+        $result['HTML_QuickForm_select'] = '/main/inc/lib/pear/HTML/QuickForm/select.php';
+        $result['HTML_QuickForm_static'] = '/main/inc/lib/pear/HTML/QuickForm/static.php';
+        $result['HTML_QuickForm_submit'] = '/main/inc/lib/pear/HTML/QuickForm/submit.php';
+        $result['HTML_QuickForm_text'] = '/main/inc/lib/pear/HTML/QuickForm/text.php';
+        $result['HTML_QuickForm_textarea'] = '/main/inc/lib/pear/HTML/QuickForm/textarea.php';
+        $result['HTML_QuickForm_xbutton'] = '/main/inc/lib/pear/HTML/QuickForm/xbutton.php';
+        $result['HTML_Table'] = '/main/inc/lib/pear/HTML/Table.php';
+        $result['HTML_Table_Storage'] = '/main/inc/lib/pear/HTML/Table/Storage.php';
         $result['Header'] = '/main/inc/lib/header.class.php';
         $result['HotSpot'] = '/main/exercice/hotspot.class.php';
         $result['HotSpotDelineation'] = '/main/exercice/hotspot.class.php';
+        $result['Html_Quickform_Rule_Date'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Date.php';
         $result['Image'] = '/main/inc/lib/image.lib.php';
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
         $result['ImagickWrapper'] = '/main/inc/lib/image.lib.php';
@@ -158,16 +235,33 @@ class Autoload
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
         $result['NotebookManager'] = '/main/inc/lib/notebook.lib.php';
         $result['Notification'] = '/main/inc/lib/notification.lib.php';
+        $result['OLE'] = '/main/inc/lib/pear/OLE/OLE.php';
+        $result['OLE_ChainedBlockStream'] = '/main/inc/lib/pear/OLE/ChainedBlockStream.php';
+        $result['OLE_PPS'] = '/main/inc/lib/pear/OLE/PPS.php';
+        $result['OLE_PPS_File'] = '/main/inc/lib/pear/OLE/PPS/File.php';
+        $result['OLE_PPS_Root'] = '/main/inc/lib/pear/OLE/PPS/Root.php';
         $result['OpenOfficeTextDocument'] = '/main/newscorm/openoffice_text_document.class.php';
         $result['OpenofficeDocument'] = '/main/newscorm/openoffice_document.class.php';
         $result['OpenofficePresentation'] = '/main/newscorm/openoffice_presentation.class.php';
         $result['OpenofficeText'] = '/main/newscorm/openoffice_text.class.php';
         $result['OralExpression'] = '/main/exercice/oral_expression.class.php';
         $result['PDF'] = '/main/inc/lib/pdf.lib.php';
+        $result['PEAR'] = '/main/inc/lib/pear/PEAR.php';
+        $result['PEAR5'] = '/main/inc/lib/pear/PEAR5.php';
+        $result['PEAR_Error'] = '/main/inc/lib/pear/PEAR.php';
+        $result['Pager'] = '/main/inc/lib/pear/Pager/Pager.php';
+        $result['Pager_Common'] = '/main/inc/lib/pear/Pager/Common.php';
+        $result['Pager_HtmlWidgets'] = '/main/inc/lib/pear/Pager/HtmlWidgets.php';
+        $result['Pager_Jumping'] = '/main/inc/lib/pear/Pager/Jumping.php';
+        $result['Pager_Sliding'] = '/main/inc/lib/pear/Pager/Sliding.php';
         $result['PclZip'] = '/main/inc/lib/pclzip/pclzip.lib.php';
         $result['Plugin'] = '/main/inc/lib/plugin.class.php';
         $result['Promotion'] = '/main/inc/lib/promotion.lib.php';
         $result['Question'] = '/main/exercice/question.class.php';
+        $result['QuickformElement'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
+        $result['QuickformFlexyElement'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ObjectFlexy.php';
+        $result['QuickformFlexyForm'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/ObjectFlexy.php';
+        $result['QuickformForm'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
         $result['Quiz'] = '/main/coursecopy/classes/Quiz.class.php';
         $result['QuizQuestion'] = '/main/coursecopy/classes/QuizQuestion.class.php';
         $result['Redirect'] = '/main/inc/lib/redirect.class.php';
@@ -205,6 +299,14 @@ class Autoload
         $result['SortableTable'] = '/main/inc/lib/sortable_table.class.php';
         $result['SortableTableFromArray'] = '/main/inc/lib/sortable_table.class.php';
         $result['SortableTableFromArrayConfig'] = '/main/inc/lib/sortable_table.class.php';
+        $result['Spreadsheet_Excel_Reader'] = '/main/inc/lib/pear/excelreader/reader.php';
+        $result['Spreadsheet_Excel_Writer'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer.php';
+        $result['Spreadsheet_Excel_Writer_BIFFwriter'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/BIFFwriter.php';
+        $result['Spreadsheet_Excel_Writer_Format'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/Format.php';
+        $result['Spreadsheet_Excel_Writer_Parser'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/Parser.php';
+        $result['Spreadsheet_Excel_Writer_Validator'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/Validator.php';
+        $result['Spreadsheet_Excel_Writer_Workbook'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/Workbook.php';
+        $result['Spreadsheet_Excel_Writer_Worksheet'] = '/main/inc/lib/pear/Spreadsheet_Excel_Writer/Writer/Worksheet.php';
         $result['Statistics'] = '/main/admin/statistics/statistics.lib.php';
         $result['Store'] = '/main/auth/shibboleth/lib/store.class.php';
         $result['StudentPublicationLink'] = '/main/gradebook/lib/be/studentpublicationlink.class.php';
@@ -218,6 +320,30 @@ class Autoload
         $result['SystemAnnouncementManager'] = '/main/inc/lib/system_announcements.lib.php';
         $result['TableSort'] = '/main/inc/lib/table_sort.class.php';
         $result['Template'] = '/main/inc/lib/template.lib.php';
+        $result['Text_Diff'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff3'] = '/main/inc/lib/pear/Text/Diff3.php';
+        $result['Text_Diff3_BlockBuilder'] = '/main/inc/lib/pear/Text/Diff3.php';
+        $result['Text_Diff3_Op'] = '/main/inc/lib/pear/Text/Diff3.php';
+        $result['Text_Diff3_Op_copy'] = '/main/inc/lib/pear/Text/Diff3.php';
+        $result['Text_Diff_Engine_native'] = '/main/inc/lib/pear/Text/Diff/Engine/native.php';
+        $result['Text_Diff_Engine_shell'] = '/main/inc/lib/pear/Text/Diff/Engine/shell.php';
+        $result['Text_Diff_Engine_string'] = '/main/inc/lib/pear/Text/Diff/Engine/string.php';
+        $result['Text_Diff_Engine_xdiff'] = '/main/inc/lib/pear/Text/Diff/Engine/xdiff.php';
+        $result['Text_Diff_Mapped'] = '/main/inc/lib/pear/Text/Diff/Mapped.php';
+        $result['Text_Diff_Op'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff_Op_add'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff_Op_change'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff_Op_copy'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff_Op_delete'] = '/main/inc/lib/pear/Text/Diff.php';
+        $result['Text_Diff_Renderer'] = '/main/inc/lib/pear/Text/Diff/Renderer.php';
+        $result['Text_Diff_Renderer_context'] = '/main/inc/lib/pear/Text/Diff/Renderer/context.php';
+        $result['Text_Diff_Renderer_inline'] = '/main/inc/lib/pear/Text/Diff/Renderer/inline.php';
+        $result['Text_Diff_Renderer_unified'] = '/main/inc/lib/pear/Text/Diff/Renderer/unified.php';
+        $result['Text_Diff_ThreeWay'] = '/main/inc/lib/pear/Text/Diff/ThreeWay.php';
+        $result['Text_Diff_ThreeWay_BlockBuilder'] = '/main/inc/lib/pear/Text/Diff/ThreeWay.php';
+        $result['Text_Diff_ThreeWay_Op'] = '/main/inc/lib/pear/Text/Diff/ThreeWay.php';
+        $result['Text_Diff_ThreeWay_Op_copy'] = '/main/inc/lib/pear/Text/Diff/ThreeWay.php';
+        $result['Text_MappedDiff'] = '/main/inc/lib/pear/Text/Diff.php';
         $result['Timeline'] = '/main/inc/lib/timeline.lib.php';
         $result['ToolIntro'] = '/main/coursecopy/classes/ToolIntro.class.php';
         $result['Tracking'] = '/main/inc/lib/tracking.lib.php';
@@ -237,7 +363,6 @@ class Autoload
         $result['UserTable'] = '/main/gradebook/lib/fe/usertable.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['XapianIndexer'] = '/main/inc/lib/search/xapian/XapianIndexer.class.php';
-        $result['CodeUtilities'] = '/main/inc/lib/code_utilities.class.php';
         $result['_Admin'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_AdminStore'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
@@ -290,6 +415,7 @@ class Autoload
         $result['vtimezone'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
+        $result['xmddoc'] = '/main/inc/lib/xmd.lib.php';
 
         return $result;
     }
@@ -379,6 +505,43 @@ class AutoloadClassFinder
         return implode("<br/>", $result);
     }
 
+    protected function accept_file($path)
+    {
+        if (!is_readable($path))
+        {
+            return false;
+        }
+        if (!is_file($path))
+        {
+            return false;
+        }
+        if (strpos($path, '.php') === false)
+        {
+            return false;
+        }
+        if (strpos($path, 'autoload.class.php') !== false)
+        {
+            return false;
+        }
+        if (strpos($path, 'test') !== false)
+        {
+            return false;
+        }
+        if (strpos($path, '.class.php') !== false)
+        {
+            return true;
+        }
+        if (strpos($path, '.lib.php') !== false)
+        {
+            return true;
+        }
+        if (strpos($path, 'pear'))
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Synchronize the autoloader map with the current file structure.
      * 
@@ -410,11 +573,7 @@ class AutoloadClassFinder
         foreach ($files as $file)
         {
             $path = $current_dir . '/' . $file;
-            if (is_readable($path) &&
-                    is_file($path) &&
-                    (strpos($path, '.class.php') || strpos($path, '.lib.php')) &&
-                    $file != 'autoload.class.php' &&
-                    strpos($file, 'test') === false)
+            if ($this->accept_file($path))
             {
                 $content = file_get_contents($path);
                 $classes = CodeUtilities::get_classes($content);

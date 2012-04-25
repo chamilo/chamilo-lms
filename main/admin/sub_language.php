@@ -5,7 +5,7 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
 require_once 'sub_language.class.php';
 require_once api_get_path(LIBRARY_PATH).'array.lib.php';
 $this_section=SECTION_PLATFORM_ADMIN;

@@ -1741,7 +1741,7 @@ class Rsys {
 $language_file = 'reservation';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
 Rsys :: init();
 require_once 'rcalendar.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

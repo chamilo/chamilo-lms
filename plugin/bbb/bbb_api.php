@@ -135,7 +135,7 @@ class BigBlueButtonBN {
 
 
         $params = 'name='.urlencode($name).'&meetingID='.urlencode($meetingID).'&attendeePW='.urlencode($attendeePW).'&moderatorPW='.urlencode($moderatorPW).'&voiceBridge='.$voiceBridge.'&logoutURL='.urlencode($logoutURL).'&record='.$record.$meta;
-
+        
         $duration = intval($duration); 
         if( $duration > 0 )
             $params .= '&duration='.$duration;
@@ -224,9 +224,9 @@ class BigBlueButtonBN {
 	*
 	*@return The joinURL if successful or an error message if unsuccessful
 	*/
-	public static function createMeetingAndGetJoinURL( $username, $meetingID, $welcomeString, $mPW, $aPW, $SALT, $URL, $logoutURL, $record = 'false', $duration=0, $voiceBridge=0, $metadata = array() ) {
+	public static function createMeetingAndGetJoinURL( $username, $meeting_name, $meetingID, $welcomeString, $mPW, $aPW, $SALT, $URL, $logoutURL, $record = 'false', $duration=0, $voiceBridge=0, $metadata = array()) {
 
-		$xml = BigBlueButtonBN::_wrap_simplexml_load_file( BigBlueButtonBN::createMeetingURL($username, $meetingID, $aPW, $mPW, $welcomeString, $logoutURL, $SALT, $URL, $record, $duration, $voiceBridge, $metadata ) );        
+		$xml = BigBlueButtonBN::_wrap_simplexml_load_file( BigBlueButtonBN::createMeetingURL($meeting_name, $meetingID, $aPW, $mPW, $welcomeString, $logoutURL, $SALT, $URL, $record, $duration, $voiceBridge, $metadata ) );        
 		
 		if( $xml && $xml->returncode == 'SUCCESS' ) {
 			return ( BigBlueButtonBN::joinURL( $meetingID, $username, $mPW, $SALT, $URL ) );

@@ -106,7 +106,7 @@ require_once $lib_path.'events.lib.inc.php';
 //require_once $lib_path.'rights.lib.php';  moved to autoload
 
 require_once $lib_path.'model.lib.php';
-//require_once $lib_path.'sortabletable.class.php';  moved to autoload
+//require_once $lib_path.'sortable_table.class.php';  moved to autoload
 require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'message.lib.php';
 require_once $lib_path.'social.lib.php';

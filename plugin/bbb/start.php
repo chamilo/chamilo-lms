@@ -15,6 +15,14 @@ $course_code = api_get_course_id();
 $meeting_params = array();
 $meeting_params['meeting_name'] = api_get_course_id();
 
+$teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
+
+//If I'm a teacher I'm going to the listing page
+if ($teacher && !isset($_GET['launch'])) {
+    header('location: listing.php?'.api_get_cidreq());
+    exit;
+}
+
 $bbb = new bbb();
 
 if ($bbb) {

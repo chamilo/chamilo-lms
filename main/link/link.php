@@ -224,7 +224,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<span class="form_required">*</span> URL
 					</label>
 					<div class="controls">
-						<input type="text" name="urllink" size="50" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
+						<input type="text" name="urllink" class="span6" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
 					</div>
 				</div>';
 		echo '	<div class="control-group">
@@ -232,7 +232,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						'.get_lang('LinkName').'
 					</label>
 					<div class="controls">
-						<input type="text" name="title" size="50" value="' . Security::remove_XSS($title) . '" />
+						<input type="text" name="title" class="span6" value="' . Security::remove_XSS($title) . '" />
 					</div>
 				</div>';
 		echo '	<div class="control-group">
@@ -248,7 +248,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						'.get_lang('Description').'
 					</label>
 					<div class="controls">
-						<textarea rows="3" cols="50" name="description">' .	Security::remove_XSS($description) . '</textarea>
+						<textarea class="span3" cols="50" name="description">' .	Security::remove_XSS($description) . '</textarea>
 					</div>
 				</div>';
 

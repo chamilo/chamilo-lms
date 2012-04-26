@@ -13,6 +13,7 @@ require_once 'fckeditor/fckeditor.php';
 
 define ('CAREER_STATUS_ACTIVE',  1);
 define ('CAREER_STATUS_INACTIVE',0);
+
 /**
  * @package chamilo.library
  */
@@ -162,7 +163,6 @@ class Career extends Model {
         return $cid;
     }    
     
-    
     public function save($params) {
 	    $id = parent::save($params);
 	    if (!empty($id)) {
@@ -174,6 +174,5 @@ class Career extends Model {
     public function delete($id) {
 	    parent::delete($id);
 	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-    }
-    
+    }    
 }

@@ -101,16 +101,30 @@ class bbb {
             if ($this->debug) error_log("meeting does not exist: $meeting_name ");
             return false;
         }        
+                
         $meeting_is_running = BigBlueButtonBN::isMeetingRunning($meeting_data['id'], $this->url, $this->salt);
+        
+        
+        $meeting_info = BigBlueButtonBN::getMeetingInfoArray($meeting['id'], $pass, $this->url, $this->salt);
+        $meeting_info_exists = false;
+        
+        if ($meeting_info['returncode'] != 'FAILED') {
+            $meeting_info_exists = true;
+        }                  
         $url = false;
         if ($this->debug) error_log("meeting is running".$meeting_is_running);
-        if (isset($meeting_is_running)) {        
+        
+        if (isset($meeting_is_running) && $meeting_info_exists) {        
             $url = $this->protocol.BigBlueButtonBN::joinURL($meeting_data['id'], $this->user_complete_name, $pass, $this->salt, $this->url);        
         }
-        if ($this->debug) error_log("url :".$url);
+        if ($this->debug) error_log("return url :".$url);
         return $url;
     }    
-        
+       
+    /**
+     * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * @return string 
+     */
     function get_course_meetings() {
         $pass = $this->get_user_metting_password();
         $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));                     
@@ -120,8 +134,7 @@ class bbb {
             $item_meeting = $meeting;
             $item_meeting['info'] = BigBlueButtonBN::getMeetingInfoArray($meeting['id'], $pass, $this->url, $this->salt);
             
-            if ($meeting['info']['returncode'] == 'FAILED') {
-                
+            if ($meeting['info']['returncode'] == 'FAILED') {                
             } else {
                 $item_meeting['end_url'] = api_get_self().'?action=end&id='.$meeting['id'];    
             }   
@@ -129,19 +142,25 @@ class bbb {
             
             if ($meeting['record'] == 1) {                
                 $records =  BigBlueButtonBN::getRecordingsArray($meeting['id'], $this->url, $this->salt);                      
-                
-                if (!empty($records)) {
-                    foreach ($records as $record) {
-                    //var_dump($record);
+                //var_dump($meeting['id']);
+                if (!empty($records)) {                    
+                    foreach ($records as $record) {                        
                         if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
-                            foreach ($record['playbacks'] as $item) {                            
-                                $url = Display::url(get_lang('ViewRecord'), $item['url'], array('target' => '_blank'));
+                            
+                            //Fix the bbb timestamp
+                            $record['startTime'] = substr($record['startTime'], 0, strlen($record['startTime']) -3);
+                            $record['endTime']   = substr($record['endTime'], 0, strlen($record['endTime']) -3);
+                            
+                            foreach ($record['playbacks'] as $item) {                                                        
+                                $url = Display::url(get_lang('ViewRecord'), $item['url'], array('target' => '_blank')).' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime']);
+                                //$url .= Display::url(get_lang('DeleteRecord'), api_get_self().'?action=delete_record&'.$record['recordID']);
+                                $url .= Display::url(get_lang('CopyToLinkTool'), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting['id'].'&record_id='.$record['recordID']);
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $record_array[] = $url;
                             }
                         }
                     }
-                }                
+                }
                 $item_meeting['show_links']  = implode('<br />', $record_array);
             }
             
@@ -200,5 +219,34 @@ class bbb {
             
         }
         return 0;
-    }    
+    }   
+    
+    /**
+     * @todo 
+     */
+    function delete_record($id) {        
+    }
+    
+    function copy_record_to_link_tool($id, $record_id) {
+        require_once api_get_path(LIBRARY_PATH).'link.lib.php';        
+        $records =  BigBlueButtonBN::getRecordingsArray($id, $this->url, $this->salt);           
+        if (!empty($records)) {
+            foreach ($records as $record) {
+                if ($record['recordID'] == $record_id) {
+                    if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
+                        foreach ($record['playbacks'] as $item) {
+                            $link = new Link();         
+                            $params['url'] = $item['url'];
+                            $params['title'] = 'bbb 1';                                                       
+                            $id = $link->save($params);
+                            return $id;
+                        }                      
+                    }
+                                        
+                }
+            }
+        }
+        return false;
+        
+    }
 }

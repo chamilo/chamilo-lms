@@ -153,7 +153,7 @@ class CourseSelectForm
 			$course->resources['document']= null;
 		}
 
-		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
+		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
 
 		if (is_array($hidden_fields)) {
 			foreach ($hidden_fields as $key => $value) {
@@ -218,7 +218,7 @@ class CourseSelectForm
 	 * in the form given by display_form(...)
 	 */
 	function get_posted_course($from='', $session_id = 0, $course_code = '') {
-		$course = unserialize(base64_decode($_POST['course']));
+		$course = Course::unserialize(base64_decode($_POST['course']));
 
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of the javascript
@@ -432,7 +432,7 @@ class CourseSelectForm
 			// this is a known issue of serialize
 			$course->resources['document']= null;
 		}
-		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
+		echo '<input type="hidden" name="course" value="'.base64_encode(Course::serialize($course)).'"/>';
 		if (is_array($hidden_fields)) {
 			foreach ($hidden_fields as $key => $value) {
 				echo "\n";

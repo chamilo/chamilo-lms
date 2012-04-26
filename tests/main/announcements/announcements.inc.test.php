@@ -13,7 +13,7 @@ class TestAnnouncements extends UnitTestCase {
         }
         /*public function Testdisplay_announcement(){
             global $_user, $dateFormatLong, $_course;
-            global $defaultVisibilityForANewCourse, $error_msg;
+            global $error_msg;
             ob_start();
             //create course
             $courseSysCode= '142';

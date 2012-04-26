@@ -56,7 +56,7 @@ class OralExpression extends Question {
 		$this->save();
 	}
 	
-	function return_header($feedback_type, $counter = null) {
+	function return_header($feedback_type = null, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
 	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>

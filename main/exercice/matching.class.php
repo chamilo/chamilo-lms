@@ -244,7 +244,7 @@ class Matching extends Question {
 		$this->save();
 	}
 	
-	function return_header($feedback_type, $counter = null) {
+	function return_header($feedback_type = null, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
         echo '<table width="100%" height="71" class="data_table_exercise_result_left">';            
         echo '<tr>

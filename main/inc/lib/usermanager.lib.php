@@ -306,7 +306,82 @@ class UserManager {
         event_system(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager, null, $user_info);
 		return true;
 	}
+    
+    /**
+     * Deactivate users. Can be called either as:
+     * 
+     * - UserManager :: delete_users(1, 2, 3);
+     * - UserManager :: delete_users(array(1, 2, 3));
+     * 
+     * @param array|int $ids
+     * @return boolean  True if at least one user was successfuly deleted. False otherwise.
+     * @author Laurent Opprecht
+     */
+    static function delete_users($ids = array())
+    {
+        $result = false;
+        $ids = is_array($ids) ? $ids : func_get_args();        
+        $ids = array_map('intval', $ids);
+        foreach($ids as $id)
+        {
+            $deleted = self::delete_user($id);
+            $result = $deleted || $result;
+        }
+        return $result;
+    }
 
+    /**
+     * Deactivate users. Can be called either as:
+     * 
+     * - UserManager :: deactivate_users(1, 2, 3);
+     * - UserManager :: deactivate_users(array(1, 2, 3));
+     * 
+     * @param array|int $ids
+     * @return boolean 
+     * @author Laurent Opprecht
+     */
+    static function deactivate_users($ids = array())
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+        $ids = is_array($ids) ? $ids : func_get_args();
+        $ids = array_map('intval', $ids);
+        $ids = implode(',', $ids);
+        
+        $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
+        return Database::query($sql);
+    }
+
+    /**
+     * Activate users. Can be called either as:
+     * 
+     * - UserManager :: activate_users(1, 2, 3);
+     * - UserManager :: activate_users(array(1, 2, 3));
+     * 
+     * @param array|int $ids
+     * @return boolean 
+     * @author Laurent Opprecht
+     */
+    static function activate_users($ids = array())
+    {
+        if (empty($ids)) {
+            return false;
+        }
+
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+        $ids = is_array($ids) ? $ids : func_get_args();
+        $ids = array_map('intval', $ids);
+        $ids = implode(',', $ids);
+        
+        $sql = "UPDATE $table_user SET active = 1 WHERE user_id IN ($ids)";
+        return Database::query($sql);
+    }
+    
 	/**
 	 * Update user information with new openid
 	 * @param int $user_id

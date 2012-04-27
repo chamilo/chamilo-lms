@@ -14,9 +14,33 @@ class Request
         return isset($_GET[$key]) ? $_GET[$key] : $default;
     }
     
+    /**
+     * Returns true if the request is a GET request. False otherwise.
+     * 
+     * @return bool
+     */
+    public static function is_get()
+    {
+        $method = self::server()->request_method();
+        $method = strtoupper($method);
+        return $method == 'GET';
+    }
+    
     public static function post($key, $default = null)
     {
         return isset($_POST[$key]) ? $_POST[$key] : $default;
+    }
+    
+    /**
+     * Returns true if the request is a POST request. False otherwise.
+     * 
+     * @return bool
+     */
+    public static function is_post()
+    {
+        $method = self::server()->request_method();
+        $method = strtoupper($method);
+        return $method == 'POST';
     }
    
     /**

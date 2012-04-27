@@ -26,6 +26,21 @@ class Uri
         }
         return $result;
     }
+    
+    public static function here($params = array(), $html = true)
+    {
+        $protocol = Request::server()->server_protocol();
+        $protocol = stripos($protocol, 'https') !== false ? 'https' : 'http';
+        
+        $host = Request::server()->server_name();
+        $host = $host ? $host : Request::server()->server_addr();
+        
+        $here = Request::server()->request_uri();
+        $here = explode('?', $here);
+        $here = reset($here);
+        $here = $protocol . '://' . $host . $here;
+        return self::url($here, $params, $html);
+    }
 
     /**
      * Returns a full url from local/absolute path and parameters.

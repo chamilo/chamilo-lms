@@ -422,7 +422,7 @@ function return_menu() {
             } else {
                 $user_info = api_get_user_info(api_get_user_id());                
             }            
-            $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id();
+            $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&amp;uid='.api_get_user_id();
             
             $message_link  = null;
             

@@ -304,7 +304,7 @@ class SortableTable extends HTML_Table {
                                 </button>';
                     $html .= '<ul class="dropdown-menu">';				
                     foreach ($this->form_actions as $action => & $label) {					
-                        $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this); " >'.$label.'</a></li>';
+                        $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this);">'.$label.'</a></li>';
                     }
                     $html .= '</ul>';				
                     $html .= '</div>';//btn-group                

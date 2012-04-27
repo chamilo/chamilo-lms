@@ -17,8 +17,7 @@ class Autoload
      */
     static public function register()
     {
-        if (self::is_registered())
-        {
+        if (self::is_registered()) {
             return false;
         }
 
@@ -37,8 +36,7 @@ class Autoload
     {
         static $result = false;
 
-        if ($result)
-        {
+        if ($result) {
             return $result;
         }
 
@@ -213,6 +211,7 @@ class Autoload
         $result['Import'] = '/main/inc/lib/import.lib.php';
         $result['IndexManager'] = '/main/inc/lib/userportal.lib.php';
         $result['IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
+        $result['ItemPropertyMissing'] = '/main/inc/lib/doctor/actions/item_property_missing.class.php';
         $result['Javascript'] = '/main/inc/lib/javascript.class.php';
         $result['KeyAuth'] = '/main/auth/key/key_auth.class.php';
         $result['LearnpathLink'] = '/main/gradebook/lib/be/learnpathlink.class.php';
@@ -269,6 +268,7 @@ class Autoload
         $result['RequestServer'] = '/main/inc/lib/request_server.class.php';
         $result['Resource'] = '/main/coursecopy/classes/Resource.class.php';
         $result['Result'] = '/main/gradebook/lib/be/result.class.php';
+        $result['ResultSet'] = '/main/inc/lib/result_set.class.php';
         $result['ResultTable'] = '/main/gradebook/lib/fe/resulttable.class.php';
         $result['ResultsDataGenerator'] = '/main/gradebook/lib/results_data_generator.class.php';
         $result['Rights'] = '/main/inc/lib/rights.lib.php';
@@ -363,6 +363,10 @@ class Autoload
         $result['UserTable'] = '/main/gradebook/lib/fe/usertable.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['XapianIndexer'] = '/main/inc/lib/search/xapian/XapianIndexer.class.php';
+        $result['ZombieManager'] = '/main/inc/lib/doctor/zombie/zombie_manager.class.php';
+        $result['ZombieQuery'] = '/main/inc/lib/doctor/zombie/zombie_query.class.php';
+        $result['ZombieReport'] = '/main/inc/lib/doctor/zombie/zombie_report.class.php';
+        $result['Zombies'] = '/main/inc/lib/doctor/zombie/zombies.class.php';
         $result['_Admin'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_AdminStore'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
@@ -431,14 +435,11 @@ class Autoload
     {
         $root = dirname(__FILE__) . '/../../../';
         $map = &self::map();
-        if (isset($map[$class_name]))
-        {
+        if (isset($map[$class_name])) {
             $path = $root . $map[$class_name];
             require_once $path;
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -488,17 +489,14 @@ class AutoloadClassFinder
         $result = array();
 
         $result[] = '$result = array();';
-        foreach ($this->map as $name => $path)
-        {
+        foreach ($this->map as $name => $path) {
             $result[] = '$result[' . "'" . $name . "']" . ' = ' . "'" . $path . "';";
         }
 
         $result[] = "<br/>Duplicates </br>";
 
-        foreach ($this->get_duplicates() as $key => $items)
-        {
-            foreach ($items as $value)
-            {
+        foreach ($this->get_duplicates() as $key => $items) {
+            foreach ($items as $value) {
                 $result[] = "$key => $value";
             }
         }
@@ -507,36 +505,28 @@ class AutoloadClassFinder
 
     protected function accept_file($path)
     {
-        if (!is_readable($path))
-        {
+        if (!is_readable($path)) {
             return false;
         }
-        if (!is_file($path))
-        {
+        if (!is_file($path)) {
             return false;
         }
-        if (strpos($path, '.php') === false)
-        {
+        if (strpos($path, '.php') === false) {
             return false;
         }
-        if (strpos($path, 'autoload.class.php') !== false)
-        {
+        if (strpos($path, 'autoload.class.php') !== false) {
             return false;
         }
-        if (strpos($path, 'test') !== false)
-        {
+        if (strpos($path, 'test') !== false) {
             return false;
         }
-        if (strpos($path, '.class.php') !== false)
-        {
+        if (strpos($path, '.class.php') !== false) {
             return true;
         }
-        if (strpos($path, '.lib.php') !== false)
-        {
+        if (strpos($path, '.lib.php') !== false) {
             return true;
         }
-        if (strpos($path, 'pear'))
-        {
+        if (strpos($path, 'pear')) {
             return true;
         }
         return false;
@@ -562,27 +552,23 @@ class AutoloadClassFinder
         $current_dir = realpath($current_dir);
 
         //plugins are not handled by the autoloader. 
-        if (basename($current_dir) == 'plugin')
-        {
+        if (basename($current_dir) == 'plugin') {
             return $result;
         }
 
         $files = scandir($current_dir);
         $files = array_diff($files, array('.', '..'));
 
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $path = $current_dir . '/' . $file;
-            if ($this->accept_file($path))
-            {
+            if ($this->accept_file($path)) {
                 $content = file_get_contents($path);
                 $classes = CodeUtilities::get_classes($content);
 
                 $namespace = CodeUtilities::get_namespace($content);
                 $namespace = $namespace ? $namespace . '\\' : '';
 
-                foreach ($classes as $class)
-                {
+                foreach ($classes as $class) {
                     /* a few classes have the same namespace and class name
                      * in this case we let the latest win as this may 
                      * relates to different autoloader.
@@ -593,33 +579,25 @@ class AutoloadClassFinder
 
                     $key = $namespace . $class;
 
-                    if (isset($this->duplicates[$key]))
-                    {
+                    if (isset($this->duplicates[$key])) {
                         $this->duplicates[$key][] = $rel_path;
-                    }
-                    else if (isset($this->map[$key]))
-                    {
-                        if (!isset($this->duplicates[$key]))
-                        {
+                    } else if (isset($this->map[$key])) {
+                        if (!isset($this->duplicates[$key])) {
                             $this->duplicates[$key] = array();
                         }
                         $this->duplicates[$key][] = $rel_path;
                         $this->duplicates[$key][] = $this->map[$key];
                         unset($this->map[$key]);
-                    }
-                    else
-                    {
+                    } else {
                         $this->map[$key] = $rel_path;
                     }
                 }
             }
         }
 
-        foreach ($files as $dir)
-        {
+        foreach ($files as $dir) {
             $path = $current_dir . '/' . $dir;
-            if (is_dir($path))
-            {
+            if (is_dir($path)) {
                 $this->synch($current_dir . '/' . $dir);
             }
         }

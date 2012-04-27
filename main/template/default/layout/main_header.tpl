@@ -79,7 +79,7 @@
             {# menu #}
             {% if menu is not null %}
                 <div class="subnav">
-                    {{ menu }}
+                    {{ menu }} 
                 </div>
             {% endif %}
 

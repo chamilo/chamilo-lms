@@ -265,7 +265,7 @@ class SortableTable extends HTML_Table {
                                 if (!confirm('."'".addslashes(get_lang("ConfirmYourChoice"))."'".')) {
                                     return false;
                                 } else {            
-                                    var action =$(element).attr("data");                                    
+                                    var action =$(element).attr("data-action");                                    
                                     $(\' #form_'.$this->table_name.'_id input[name="action"] \').attr("value", action);                                
                                     $("#form_'.$this->table_name.'_id").submit();
                                     return false;
@@ -288,7 +288,7 @@ class SortableTable extends HTML_Table {
             $html .= '<input type="hidden" name="action">';
 			$html .= '<table style="width:100%;">';
 			$html .= '<tr>';
-			$html .= '<td colspan="2">';
+			$html .= '<td>';
             
 			if (count($this->form_actions) > 0) {
                 
@@ -304,7 +304,7 @@ class SortableTable extends HTML_Table {
                                 </button>';
                     $html .= '<ul class="dropdown-menu">';				
                     foreach ($this->form_actions as $action => & $label) {					
-                        $html .= '<li><a data ="'.$action.'" href="#" onclick="javascript:action_click(this);">'.$label.'</a></li>';
+                        $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this);">'.$label.'</a></li>';
                     }
                     $html .= '</ul>';				
                     $html .= '</div>';//btn-group                
@@ -319,7 +319,10 @@ class SortableTable extends HTML_Table {
     			$html .= '<td style="text-align:right;">';
     			$html .= $nav;
     			$html .= '</td>';
-			}
+			}else{
+    			$html .= '<td> ';
+    			$html .= '</td>';
+            }
 			
 			$html .= '</tr>';
 			$html .= '</table>';

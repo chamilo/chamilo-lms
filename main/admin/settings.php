@@ -89,8 +89,8 @@ $settings = null;
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $my_category = Database::escape_string($_GET['category']);
 
-    if ($_configuration['access_url'] == 1) {
-        $settings = api_get_settings($my_category, 'group', $_configuration['access_url']);
+    if ($_configuration['access_url'] == 1) {        
+        $settings = api_get_settings($my_category, 'group', $_configuration['access_url']);        
     } else {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
@@ -107,6 +107,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     $row['subkey'] = 0;
                 if (empty($row['category']))
                     $row['category'] = 0;
+                
                 // One more validation if is changeable.
                 if ($row['access_url_changeable'] == 1)
                     $settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]  = $row;

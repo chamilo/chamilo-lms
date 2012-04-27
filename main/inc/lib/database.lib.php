@@ -1174,7 +1174,7 @@ class Database {
         }
 
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-        ///var_dump($sql);
+        //var_dump($sql);
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {
@@ -1338,7 +1338,7 @@ class Database {
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);                
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
-                if ($show_query) { echo $sql; echo '<br />'; }
+                if ($show_query) { var_dump($sql); }
                 $result = self::query($sql);
                 $affected_rows = self::affected_rows();
                 return $affected_rows;

@@ -80,7 +80,7 @@ if (!empty($new_session_list)) {
                         $exercise = new Exercise($course_info['real_id']);
                         $exercise->read($exercise_item['id']);  
                         $visible_return = $exercise->is_visible();
-                        if ($visible_return['value'] == false) {                             
+                        if ($visible_return['value'] != false) {                             
                             //$exercise_course_list[$exercise_item['id']] = $exercise;
                             //Reading all Exercise results by user, exercise_id, code, and session
                             $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);

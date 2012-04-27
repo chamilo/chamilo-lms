@@ -320,4 +320,26 @@ class Course
 		}
 		$this->encoding = api_get_system_encoding();
 	}
+    
+    /**	
+	* Serialize the course with the best serializer available	
+	*/	
+	public static function serialize($course) {	
+		if (extension_loaded('igbinary')) {	
+			return igbinary_serialize($course);	
+		} else {	
+			return serialize($course);
+        }	
+	}	
+	
+	/**
+	* Unserialize the course with the best serializer available
+	*/
+	public static function unserialize($course) {
+		if (extension_loaded('igbinary')) {
+			return igbinary_unserialize($course);
+		} else {
+			return unserialize($course);
+		}
+	}
 }

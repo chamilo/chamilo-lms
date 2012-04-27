@@ -20,6 +20,31 @@
 
 /* FUNCTIONS */
 
+
+class Link extends Model {
+    var $table;
+    var $is_course_model = true;
+    var $columns = array('id', 'c_id','url','title','description','category_id', 'display_order', 'on_homepage', 'target', 'session_id');
+    var $required = array('url', 'title');
+   
+    public function __construct() {
+        $this->table =  Database::get_course_table(TABLE_LINK);
+	}
+    
+    public function save($params) {
+        $course_info = api_get_course_info();        
+        $params['session_id'] = api_get_session_id();
+        $params['category_id'] = isset($params['category_id']) ? $params['category_id'] : 0;
+        
+	    $id = parent::save($params);        
+	    if (!empty($id)) {	    	
+            api_item_property_update($course_info, TOOL_LINK, $id, 'LinkAdded', api_get_user_id());
+   		}
+   		return $id;
+    }
+}
+
+
 /**
  * Used to add a link or a category
  * @param string $type, "link" or "category"

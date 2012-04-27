@@ -189,6 +189,9 @@ ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'main/auth/courses.php', 'CourseCatalog');
 
+ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
+
+
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.17631' WHERE variable = 'chamilo_database_version';
 

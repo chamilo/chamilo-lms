@@ -201,7 +201,7 @@ class FillBlanks extends Question
         $objAnswer->save();
 	}
 	
-	function return_header($feedback_type, $counter = null) {
+	function return_header($feedback_type = null, $counter = null) {
 	    parent::return_header($feedback_type, $counter);
 	    $header = '<table width="100%" class="data_table_exercise_result_left">				
 			<tr>

@@ -15,6 +15,6 @@ $plugin_info['comment']="Open Source Videoconference tool";
 //the locations where this plugin can be shown
 $plugin_info['location']=array('course_tool_plugin');
 //the plugin version
-$plugin_info['version']='0.9';
+$plugin_info['version']='1.0';
 //the plugin author
-$plugin_info['author']='Yannick Warnier';
+$plugin_info['author']='Julio Montoya & Yannick Warnier';

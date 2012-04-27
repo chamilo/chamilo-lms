@@ -35,14 +35,17 @@ api_block_anonymous_users();
 define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
-$TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$TABLEFACULTY 				= Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 
 $course_code 				= $_course['sysCode'];
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
+
+$video_conference_enabled = false;
+if (api_get_setting('bbb_plugin') == 'true') {
+    $video_conference_enabled = true;
+}
+
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {
@@ -245,27 +248,6 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 $form->addElement('html', '</div></div>');
 
-// Gradebook SETTINGS
-//$form->addElement('html', '<div><h3>'.Display::return_icon('gradebook.png', Security::remove_XSS(get_lang('Gradebook')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Gradebook')).'</h3><div>');
-
-/*$group = array();
-$models = api_get_settings_options('grading_model');
-if (!empty($models )) {
-	foreach ($models as $option) {
-		$grading_parsed = api_grading_model_functions($option['value'], 'decorate');
-		$element = $form->createElement('radio', 'course_grading_model', '', $option['display_text'].': '.$grading_parsed, $option['id']);		
-		$group[] = $element;
-	}
-}
-
-$element = $form->createElement('radio', 'course_grading_model', '', get_lang('None'), 0);
-$group[] = $element;
-
-$form->addGroup($group, '', array(get_lang('GradingModelTitle')), '', 'li', false);
-
-$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-$form->addElement('html', '</div></div>');*/
-
 // USER RIGHTS
 $form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', Security::remove_XSS(get_lang('UserRights')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('UserRights')).'</h3><div>');
 
@@ -290,7 +272,6 @@ $group[]=$form->createElement('radio', 'allow_user_view_user_list', null, get_la
 $form->addGroup($group, '', array(get_lang("AllowUserViewUserList")), '');
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-
 $form->addElement('html', '</div></div>');
 
 
@@ -355,11 +336,44 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 
+// BBB SETTINGS
+
+if ($video_conference_enabled) {
+    $form->addElement('html', '<div><h3>'.Display::return_icon('visio.png', Security::remove_XSS(get_lang('VideoConferenceSettings')),'', ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('VideoConferenceSettings')).'</h3><div>');
+    
+//    $form->add_textfield('big_blue_button_welcome_message', get_lang('big_blue_button_welcome_message'), false, array('class' => 'span5'));
+    
+/*    $form->add_textfield('big_blue_button_meeting_name', get_lang('big_blue_button_meeting_name'), false, array('class' => 'span5'));
+    
+    
+    $form->add_textfield('big_blue_button_attendee_password', get_lang('big_blue_button_attendee_password'), false, array('class' => 'span5'));
+    $form->add_textfield('big_blue_button_moderator_password', get_lang('big_blue_button_moderator_password'), false, array('class' => 'span5'));
+    
+    
+    
+    $form->addElement('checkbox', 'big_blue_button_open_new_window', array(null, null, get_lang('big_blue_button_open_new_window')), null);
+    
+    $form->addElement('checkbox', 'big_blue_button_student_must_wait_until_moderator', array(null, null, get_lang('big_blue_button_student_must_wait_until_moderator')), null);    
+    
+    $form->addElement('datepicker', 'big_blue_button_join_start_date', array(get_lang('big_blue_button_join_start_date')), null);
+    $form->addElement('datepicker', 'big_blue_button_join_end_date', array(get_lang('big_blue_button_join_end_date')), null);*/
+    
+    $form->add_textfield('big_blue_button_max_students_allowed', get_lang('big_blue_button_max_students_allowed'), false, array('class' => 'span5'));    
+    $form->addElement('checkbox', 'big_blue_button_record_and_store', array(null, null, get_lang('big_blue_button_record_and_store')), null);
+
+    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('html', '</div></div>');
+}
+
+
+
+
 // Get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
 
 
 // Set the default values of the form
+$values = array();
 
 $values['title']                        = $_course['name'];
 //$values['visual_code']                  = $_course['official_code'];
@@ -375,8 +389,6 @@ $values['course_registration_password'] = $all_course_information['registration_
 
 $values['legal']                        = $all_course_information['legal'];
 $values['activate_legal']               = $all_course_information['activate_legal'];
-
-
 
 // Get send_mail_setting (auth)from table
 $values['email_alert_to_teacher_on_new_user_in_course']= api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
@@ -405,25 +417,45 @@ $values['display_info_advance_inside_homecourse']   = api_get_course_setting('di
 $values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
 
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
-
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 
-//$values['course_grading_model']                		= api_get_course_setting('course_grading_model');
-
+if ($video_conference_enabled) {
+    
+    $values['big_blue_button_welcome_message']      = api_get_course_setting('big_blue_button_welcome_message');
+    $values['big_blue_button_max_students_allowed'] = api_get_course_setting('big_blue_button_max_students_allowed');  
+    
+    
+    /*$values['big_blue_button_meeting_name']         = api_get_course_setting('big_blue_button_meeting_name');
+    
+    $values['big_blue_button_attendee_password']    = api_get_course_setting('big_blue_button_attendee_password');
+    $values['big_blue_button_moderator_password']   = api_get_course_setting('big_blue_button_moderator_password');    
+      
+    $values['big_blue_button_open_new_window']                     = api_get_course_setting('big_blue_button_open_new_window');
+    $values['big_blue_button_student_must_wait_until_moderator']   = api_get_course_setting('big_blue_button_student_must_wait_until_moderator');
+    
+    $start_date = api_get_course_setting('big_blue_button_join_start_date');
+    if (empty($start_date)) {
+        $start_date = date('Y-m-d 12:00:00');        
+    }
+    
+    $values['big_blue_button_join_start_date']      = $start_date;
+    
+    $end_date = api_get_course_setting('big_blue_button_join_end_date');
+    if (empty($end_date)) {
+        $end_date = date('Y-m-d 18:00:00');        
+    }
+    
+    $values['big_blue_button_join_end_date']        = $end_date;       
+    */
+     $values['big_blue_button_record_and_store']     = api_get_course_setting('big_blue_button_record_and_store');
+}
 
 $form->setDefaults($values);
 
 // Validate form
-if ($form->validate() && is_settings_editable()) {
-	$update_values = $form->exportValues();
-	
-/*
-    // update course picture
-    $picture = $_FILES['picture'];
-    if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
-    }*/
-    
+if ($form->validate() && is_settings_editable()) {	    
+    $update_values = $form->exportValues();
+       
     $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
     
     if (!empty($pdf_export_watermark_path['name'])) {        
@@ -434,13 +466,11 @@ if ($form->validate() && is_settings_editable()) {
     //Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',  
     								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
-
+    
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
-	}
-	unset($value);
-	//visual_code 		    = '".$update_values['visual_code']."',
-    //tutor_name              = '".$update_values['tutor_name']."',
+	}    
+	unset($value);	
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
 				title 				    = '".$update_values['title']."',				
@@ -456,11 +486,31 @@ if ($form->validate() && is_settings_editable()) {
 				registration_code 	    = '".$update_values['course_registration_password']."'
 			WHERE code = '".$course_code."'";
 	Database::query($sql);
-
+        
+    if ($video_conference_enabled) {       
+        /*
+        if (isset($update_values['big_blue_button_open_new_window']) && $update_values['big_blue_button_open_new_window']) {
+            $update_values['big_blue_button_open_new_window'] = 1;
+        } else {
+            $update_values['big_blue_button_open_new_window'] = 0;
+        }        
+        if (isset($update_values['big_blue_button_student_must_wait_until_moderator']) && $update_values['big_blue_button_student_must_wait_until_moderator']) {
+            $update_values['big_blue_button_student_must_wait_until_moderator'] = 1;
+        } else {
+            $update_values['big_blue_button_student_must_wait_until_moderator'] = 0;
+        }
+        */
+        if (isset($update_values['big_blue_button_record_and_store']) && $update_values['big_blue_button_record_and_store']) {
+            $update_values['big_blue_button_record_and_store'] = 1;
+        } else {
+            $update_values['big_blue_button_record_and_store'] = 0;
+        }        
+    }
+    
 	// Update course_settings table - this assumes those records exist, otherwise triggers an error
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);   
     
-    foreach($update_values as $key =>$value) {
+    foreach ($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {
             Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id()), true));
@@ -488,7 +538,7 @@ echo '<script>
 $(function() {
 	$("#course_settings").accordion({
 		autoHeight: false,		
-		header: "div> h3"
+		header: "div > h3"
 	});
 });
 </script>';

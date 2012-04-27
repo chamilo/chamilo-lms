@@ -283,7 +283,7 @@ class MultipleAnswerTrueFalse extends Question {
         $this -> save();
 	}
 	
-	function return_header($feedback_type, $counter = null) {
+	function return_header($feedback_type = null, $counter = null) {
 	    $header = "";
 	    if ($in_echo == 1) {
 	        parent::return_header($feedback_type, $counter, $in_echo);

@@ -31,9 +31,9 @@ class SkillProfile extends Model {
         return $profiles;
     }
     
-    public function save($params) {
+    public function save($params, $show_query = false) {
         if (!empty($params)) {
-           $profile_id = parent::save($params);
+           $profile_id = parent::save($params, $show_query);
             if ($profile_id) {
                 $skill_rel_profile = new SkillRelProfile();
                 if (isset($params['skills'])) {

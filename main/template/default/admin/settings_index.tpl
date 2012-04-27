@@ -34,9 +34,9 @@ $(function() {
                 {% endif %}
                 
                 {% if block_item.extra is not null %}
-                    <p>
+                    <div>
                     {{ block_item.extra }}
-                    </p>
+                    </div>
                 {% endif %}                
             </div>
         </div>        

@@ -404,7 +404,7 @@ function return_menu() {
                 $current = '';
             }
             if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>';
+                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span class="tab_active">'.$navigation_info['title'].'</span></a></li>';
             }
         }
         $lis = $pre_lis.$lis;

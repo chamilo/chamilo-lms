@@ -20,7 +20,7 @@ div.subnav ul#logout {
     background: none;
 }
 
-#current #tab_active {
+#current .tab_active {
     color: #EDDD00;
 }
 .userportal-course-item {

@@ -250,8 +250,8 @@ class ZombieReport implements Countable
         $table->set_header($col++, get_lang('LoginName'));
         $table->set_header($col++, get_lang('Email'));
         $table->set_header($col++, get_lang('Profile'));
-        $table->set_header($col++, get_lang('Authentication'));
-        $table->set_header($col++, get_lang('Registered'));
+        $table->set_header($col++, get_lang('AuthenticationSource'));
+        $table->set_header($col++, get_lang('RegisteredDate'));
         $table->set_header($col++, get_lang('LastAccess'), false);
         $table->set_header($col++, get_lang('Active'), false);
 

@@ -204,6 +204,7 @@ class Autoload
         $result['Header'] = '/main/inc/lib/header.class.php';
         $result['HotSpot'] = '/main/exercice/hotspot.class.php';
         $result['HotSpotDelineation'] = '/main/exercice/hotspot.class.php';
+        $result['Html'] = '/main/inc/lib/html.class.php';
         $result['Html_Quickform_Rule_Date'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Date.php';
         $result['Image'] = '/main/inc/lib/image.lib.php';
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
@@ -211,7 +212,6 @@ class Autoload
         $result['Import'] = '/main/inc/lib/import.lib.php';
         $result['IndexManager'] = '/main/inc/lib/userportal.lib.php';
         $result['IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
-        $result['ItemPropertyMissing'] = '/main/inc/lib/doctor/actions/item_property_missing.class.php';
         $result['Javascript'] = '/main/inc/lib/javascript.class.php';
         $result['KeyAuth'] = '/main/auth/key/key_auth.class.php';
         $result['LearnpathLink'] = '/main/gradebook/lib/be/learnpathlink.class.php';
@@ -363,10 +363,8 @@ class Autoload
         $result['UserTable'] = '/main/gradebook/lib/fe/usertable.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['XapianIndexer'] = '/main/inc/lib/search/xapian/XapianIndexer.class.php';
-        $result['ZombieManager'] = '/main/inc/lib/doctor/zombie/zombie_manager.class.php';
-        $result['ZombieQuery'] = '/main/inc/lib/doctor/zombie/zombie_query.class.php';
-        $result['ZombieReport'] = '/main/inc/lib/doctor/zombie/zombie_report.class.php';
-        $result['Zombies'] = '/main/inc/lib/doctor/zombie/zombies.class.php';
+        $result['ZombieManager'] = '/main/inc/lib/zombie/zombie_manager.class.php';
+        $result['ZombieReport'] = '/main/inc/lib/zombie/zombie_report.class.php';
         $result['_Admin'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_AdminStore'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
         $result['_IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';

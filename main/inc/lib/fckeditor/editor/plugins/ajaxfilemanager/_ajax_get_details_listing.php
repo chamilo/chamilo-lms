@@ -32,6 +32,7 @@
 			$certificates_chamilo='certificates';
 			//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 			$group_folder='_groupdocs';
+						
 
 			$show_doc_group=true;
 			if(ereg($group_folder, $file['path'])) {
@@ -51,7 +52,12 @@
 				 !ereg($chat_files_chamilo, $file['path']) && 
 				 !ereg($certificates_chamilo, $file['path']) && 
 				 $show_doc_group && $file['name'][0]!='.') {							
-
+				//hide Nanogong  tag
+				if (strpos($file['path'], '_chnano_')) {
+					$file['path']= substr_replace($file['path'], '.wav', -12);//into real file name
+					$file['name']= substr_replace($file['name'], '.wav', -12);//into web name
+				}
+				
 				if ($file['type'] == 'file') {
 					if(Security::remove_XSS($_GET['editor'])!='stand_alone') {
 						$path_chamilo_file='../'.$file['path'];// fix for makes a good show when pressed next on window preview, don't only one image
@@ -66,11 +72,11 @@
 						<input type="checkbox"  name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?> />
 					</td>
 					<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
-						<a id="a<?php echo $count; ?>" href="<?php echo $path_chamilo_file; // fix for Chamilo ?>" target="_blank">
+						<a id="<?php echo $count; ?>" href="<?php echo $path_chamilo_file; // fix for Chamilo ?>" target="_blank">
 							<span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a>
 					</td>					
 					<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>">
-						<a id="aa<?php echo $count; ?>" href="<?php echo $path_chamilo_file; //fix for Chamilo ?>" target="_blank">
+						<a id="<?php echo $count; ?>" href="<?php echo $path_chamilo_file; //fix for Chamilo ?>" target="_blank">
 						<?php echo $file['name']; ?></a>
 					</td>
 
@@ -91,28 +97,28 @@
 						//add icon into ajaxfilemanager if sharedfolder is into Chamilo
 						?>
 							<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
-								<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
+								<a id="<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
 									<span class="<?php echo ($file['type'] == 'folder '?$file['cssClass']:"folderShared"); ?>">&nbsp;</span></a>
 							</td>
 						<?php
 						} elseif(preg_match('/sf_user_/', basename($file['path']))) {
 						?>
 						<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
-							<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
+							<a id="<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
 								<span class="<?php echo ($file['type'] == 'folder '?$file['cssClass']:"unknownUser"); ?>">&nbsp;</span></a>
 						</td>											
 						<?php
 						} else {
 						?>
 							<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;
-								<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
+								<a id="<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  >
 									<span class="<?php echo ($file['file']||$file['subdir']?$file['cssClass']:"folderEmpty"); ?>">&nbsp;</span></a>
 							</td>
 						<?php
 						}
 						?>                                            
 						<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>">
-							<a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a>
+							<a id="<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a>
 						</td>
 						<td class="docInfo" id="tdrd<?php echo $count; ?>">&nbsp;</td>
 						 <!-- hide while implementing this Chamilo -->

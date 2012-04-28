@@ -205,9 +205,12 @@ $(document).ready(function(){
 </style>
 <div id="textareaCallBack"></div>
 <?php
-
-    downloadMP3_google($filepath, $dir);    
-    downloadMP3_pediaphone($filepath, $dir);
+	if($_POST['text2voice_mode']=='google'){  
+    	downloadMP3_google($filepath, $dir);
+	}
+	elseif($_POST['text2voice_mode']=='pediaphone'){   
+    	downloadMP3_pediaphone($filepath, $dir);
+	}
     
     $tbl_admin_languages    = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
     $sql_select = "SELECT * FROM $tbl_admin_languages";
@@ -247,6 +250,7 @@ $(document).ready(function(){
 	echo '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
     
     $form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
+	$form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('text', 'title', get_lang('Title'));
     $form->addElement('select', 'lang', get_lang('Language'), $options);    
     $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea', 'class' =>'span6' ));
@@ -262,6 +266,7 @@ $(document).ready(function(){
 	echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
     
     $form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
+	$form->addElement('hidden', 'text2voice_mode','pediaphone');
     $form->addElement('text', 'title', get_lang('Title'));
     $form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
     $form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            

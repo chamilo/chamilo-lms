@@ -271,9 +271,9 @@ $(document).ready(function(){
     $form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
     $form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
     $speed_options = array();
+	$speed_options['1']     = get_lang('Normal');
     $speed_options['0.75']  = get_lang('GoFaster');
     $speed_options['0.8']   = get_lang('Fast');
-    $speed_options['1']     = get_lang('Normal');
     $speed_options['1.2']   = get_lang('Slow');
     $speed_options['1.6']   = get_lang('SlowDown');
     

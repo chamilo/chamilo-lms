@@ -391,12 +391,26 @@ function downloadMP3_google($filepath, $dir) {
 	}
 	$clean_title=Security::remove_XSS($clean_title);
 	$clean_title=Database::escape_string($clean_title);	
+	$clean_title=str_replace(' ','_', $clean_title);//compound file names
+	
 	$clean_text=Security::remove_XSS($clean_text);
 	$clean_lang=Security::remove_XSS($_POST['lang']);	
 	
+	$extension='mp3';
+	$audio_filename=$clean_title.'.'.$extension;	
+	$audio_title = str_replace('_',' ',$clean_title);
 	
-	$AudioFilename=$clean_title.'.mp3';	
-	$documentPath = $filepath.$AudioFilename;
+	//prevent duplicates
+	if (file_exists($filepath.'/'.$clean_title.'.'.$extension)){ 
+		$i = 1;		
+		while (file_exists($filepath.'/'.$clean_title.'_'.$i.'.'.$extension)) $i++;
+		$audio_filename = $clean_title . '_' . $i . '.'.$extension;
+		$audio_title = $clean_title . '_' . $i . '.'.$extension;
+		$audio_title = str_replace('_',' ',$audio_title);
+	}
+
+	$documentPath = $filepath.'/'.$audio_filename;
+	
 	
 	//prev for a fine unicode, borrowed from main api TODO:clean
 	// Safe replacements for some non-letter characters (whitout blank spaces)
@@ -413,7 +427,6 @@ function downloadMP3_google($filepath, $dir) {
     $clean_text = str_replace($search, $replace, $filename);
 	
 	//adding the file
-	if (!file_exists($documentPath)) {
 		//add new file to disk
 		file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
 		//add document to database
@@ -421,10 +434,9 @@ function downloadMP3_google($filepath, $dir) {
 		$groupId=$_SESSION['_gid'];
 		$file_size = filesize($documentPath);
 		$relativeUrlPath=$dir;
-		$doc_id = add_document($_course, $relativeUrlPath.$AudioFilename, 'file', filesize($documentPath), $AudioFilename);
+		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
         Display::display_confirmation_message(get_lang('DocumentCreated'));
-	}	
 }
 
 /**
@@ -442,20 +454,37 @@ function downloadMP3_pediaphone($filepath, $dir){
 	}
     global $_course, $_user;
 	$clean_title=trim($_POST['title']);
+	$clean_title= Database::escape_string($clean_title);
 	$clean_text=trim($_POST['text']);
 	if(empty($clean_title) || empty($clean_text)){ 
 		return;
 	}
 	$clean_title=Security::remove_XSS($clean_title);
 	$clean_title=Database::escape_string($clean_title);	
+	$clean_title=str_replace(' ','_', $clean_title);//compound file names
 	$clean_text=Security::remove_XSS($clean_text);
 	$clean_lang=Security::remove_XSS($_POST['lang']);
 	$clean_voices=Security::remove_XSS($_POST['voices']);
 	$clean_speed=Security::remove_XSS($_POST['speed']);
 	
-	$AudioFilename=$clean_title.'.mp3';	
-	$documentPath = $filepath.$AudioFilename;
+	$extension='mp3';
+	$audio_filename=$clean_title.'.'.$extension;
+	$audio_title = str_replace('_',' ',$clean_title);
 	
+	//prevent duplicates
+	if (file_exists($filepath.'/'.$clean_title.'.'.$extension)){ 
+		$i = 1;		
+		while (file_exists($filepath.'/'.$clean_title.'_'.$i.'.'.$extension)) $i++;
+		$audio_filename = $clean_title . '_' . $i . '.'.$extension;
+		$audio_title = $clean_title . '_' . $i . '.'.$extension;
+		$audio_title = str_replace('_',' ',$audio_title);
+	}
+
+	$documentPath = $filepath.'/'.$audio_filename;
+	
+
+
+
 	//prev for a fine unicode, borrowed from main api TODO:clean
 	// Safe replacements for some non-letter characters (whitout blank spaces)
 	$search  = array("\0", "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
@@ -471,30 +500,44 @@ function downloadMP3_pediaphone($filepath, $dir){
     $clean_text = str_replace($search, $replace, $filename);
 	
 	//adding the file
-	if (!file_exists($documentPath)){
-		//add new file to disk		
+	
 		
 		if($clean_lang=='de'){
 			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice.cgi';
+			$find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/(.*)\.mp3\"/';
 		}		
-		elseif($clean_lang=='en'){
-			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice_en.cgi';
+		else{
+			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice_'.$clean_lang.'.cgi';//en, es, fr
+			$find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/'.$clean_lang.'\/(.*)\.mp3\"/';
 		}
-		elseif($clean_lang=='es'){
-			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice_es.cgi';
-		}
-		elseif($clean_lang=='fr'){
-			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice_fr.cgi';
-		}
-	
-		file_put_contents($documentPath, file_get_contents($url_pediaphon."?stimme=".$clean_voices."&inputtext=".urlencode($clean_text)."&speed=".$clean_speed."&go=Sprich"));///speed
+
+		$data="stimme=".$clean_voices."&inputtext=".$clean_text."&speed=".$clean_speed."&go=go";
+		$opts = array('http' =>
+			array(
+			 'method'  => 'POST',
+			 'header'  =>"Content-Type: application/x-www-form-urlencoded\r\n",
+			 "Content-Length: " . strlen($data) . "\r\n",
+			 'content' => $data
+			)
+		);                   
+		$context  = stream_context_create($opts);
+		$previous_returntext2voice = file_get_contents($url_pediaphon,false,$context);
+		
+		//clean file contents
+		
+		$search_source=preg_match($find_t2v, $previous_returntext2voice, $hits);
+		$souce_end=substr($hits[0], 0,-1);
+		$returntext2voice = file_get_contents($souce_end);
+				
+		//save file
+		file_put_contents($documentPath, $returntext2voice);
+		
 		//add document to database
 		$current_session_id = api_get_session_id();
 		$groupId=$_SESSION['_gid'];
 		$file_size = filesize($documentPath);
 		$relativeUrlPath=$dir;
-		$doc_id = add_document($_course, $relativeUrlPath.$AudioFilename, 'file', filesize($documentPath), $AudioFilename);
+		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
         Display::display_confirmation_message(get_lang('DocumentCreated'));
-	}	
 }

@@ -50,11 +50,12 @@ class TableGenerator extends AbstractIdGenerator
         if ($this->_maxValue === null || $this->_nextValue == $this->_maxValue) {
             // Allocate new values
             $conn = $em->getConnection();
-            if ($conn->getTransactionNestingLevel() == 0) {
 
+            if ($conn->getTransactionNestingLevel() === 0) {
                 // use select for update
-                $sql = $conn->getDatabasePlatform()->getTableHiLoCurrentValSql($this->_tableName, $this->_sequenceName);
+                $sql          = $conn->getDatabasePlatform()->getTableHiLoCurrentValSql($this->_tableName, $this->_sequenceName);
                 $currentLevel = $conn->fetchColumn($sql);
+
                 if ($currentLevel != null) {
                     $this->_nextValue = $currentLevel;
                     $this->_maxValue = $this->_nextValue + $this->_allocationSize;
@@ -62,7 +63,7 @@ class TableGenerator extends AbstractIdGenerator
                     $updateSql = $conn->getDatabasePlatform()->getTableHiLoUpdateNextValSql(
                         $this->_tableName, $this->_sequenceName, $this->_allocationSize
                     );
-                    
+
                     if ($conn->executeUpdate($updateSql, array(1 => $currentLevel, 2 => $currentLevel+1)) !== 1) {
                         // no affected rows, concurrency issue, throw exception
                     }
@@ -74,6 +75,7 @@ class TableGenerator extends AbstractIdGenerator
                 // or do we want to work with table locks exclusively?
             }
         }
+
         return $this->_nextValue++;
     }
 }

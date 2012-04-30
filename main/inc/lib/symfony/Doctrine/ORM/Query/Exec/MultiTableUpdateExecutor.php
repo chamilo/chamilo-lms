@@ -64,7 +64,7 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
         $idColumnList = implode(', ', $idColumnNames);
 
         // 1. Create an INSERT INTO temptable ... SELECT identifiers WHERE $AST->getWhereClause()
-        $sqlWalker->setSQLTableAlias($primaryClass->table['name'], 't0', $updateClause->aliasIdentificationVariable);
+        $sqlWalker->setSQLTableAlias($primaryClass->getTableName(), 't0', $updateClause->aliasIdentificationVariable);
 
         $this->_insertSql = 'INSERT INTO ' . $tempTable . ' (' . $idColumnList . ')'
                 . ' SELECT t0.' . implode(', t0.', $idColumnNames);
@@ -80,7 +80,7 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
         // 3. Create and store UPDATE statements
         $classNames = array_merge($primaryClass->parentClasses, array($primaryClass->name), $primaryClass->subClasses);
         $i = -1;
-        
+
         foreach (array_reverse($classNames) as $className) {
             $affected = false;
             $class = $em->getClassMetadata($className);
@@ -88,27 +88,27 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
 
             foreach ($updateItems as $updateItem) {
                 $field = $updateItem->pathExpression->field;
-                
+
                 if (isset($class->fieldMappings[$field]) && ! isset($class->fieldMappings[$field]['inherited']) ||
                     isset($class->associationMappings[$field]) && ! isset($class->associationMappings[$field]['inherited'])) {
                     $newValue = $updateItem->newValue;
-                    
+
                     if ( ! $affected) {
                         $affected = true;
                         ++$i;
                     } else {
                         $updateSql .= ', ';
                     }
-                    
+
                     $updateSql .= $sqlWalker->walkUpdateItem($updateItem);
-                    
+
                     //FIXME: parameters can be more deeply nested. traverse the tree.
                     //FIXME (URGENT): With query cache the parameter is out of date. Move to execute() stage.
                     if ($newValue instanceof AST\InputParameter) {
                         $paramKey = $newValue->name;
                         $this->_sqlParameters[$i]['parameters'][] = $sqlWalker->getQuery()->getParameter($paramKey);
                         $this->_sqlParameters[$i]['types'][] = $sqlWalker->getQuery()->getParameterType($paramKey);
-                        
+
                         ++$this->_numParametersInUpdateClause;
                     }
                 }
@@ -118,12 +118,12 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
                 $this->_sqlStatements[$i] = $updateSql . ' WHERE (' . $idColumnList . ') IN (' . $idSubselect . ')';
             }
         }
-        
+
         // Append WHERE clause to insertSql, if there is one.
         if ($AST->whereClause) {
             $this->_insertSql .= $sqlWalker->walkWhereClause($AST->whereClause);
         }
-        
+
         // 4. Store DDL for temporary identifier table.
         $columnDefinitions = array();
 
@@ -133,19 +133,15 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
                 'type' => Type::getType($rootClass->getTypeOfColumn($idColumnName))
             );
         }
-        
+
         $this->_createTempTableSql = $platform->getCreateTemporaryTableSnippetSQL() . ' ' . $tempTable . ' ('
                 . $platform->getColumnDeclarationListSQL($columnDefinitions) . ')';
-        
+
         $this->_dropTempTableSql = $platform->getDropTemporaryTableSQL($tempTable);
     }
 
     /**
-     * Executes all SQL statements.
-     *
-     * @param Connection $conn The database connection that is used to execute the queries.
-     * @param array $params The parameters.
-     * @override
+     * {@inheritDoc}
      */
     public function execute(Connection $conn, array $params, array $types)
     {
@@ -156,8 +152,8 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
 
         // Insert identifiers. Parameters from the update clause are cut off.
         $numUpdated = $conn->executeUpdate(
-            $this->_insertSql, 
-            array_slice($params, $this->_numParametersInUpdateClause), 
+            $this->_insertSql,
+            array_slice($params, $this->_numParametersInUpdateClause),
             array_slice($types, $this->_numParametersInUpdateClause)
         );
 
@@ -165,12 +161,12 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
         for ($i=0, $count=count($this->_sqlStatements); $i<$count; ++$i) {
             $parameters = array();
             $types      = array();
-            
+
             if (isset($this->_sqlParameters[$i])) {
                 $parameters = isset($this->_sqlParameters[$i]['parameters']) ? $this->_sqlParameters[$i]['parameters'] : array();
                 $types = isset($this->_sqlParameters[$i]['types']) ? $this->_sqlParameters[$i]['types'] : array();
             }
-            
+
             $conn->executeUpdate($this->_sqlStatements[$i], $parameters, $types);
         }
 

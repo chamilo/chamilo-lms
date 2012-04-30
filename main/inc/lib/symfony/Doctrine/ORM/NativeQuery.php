@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -38,6 +38,7 @@ final class NativeQuery extends AbstractQuery
     public function setSQL($sql)
     {
         $this->_sql = $sql;
+
         return $this;
     }
 
@@ -57,17 +58,19 @@ final class NativeQuery extends AbstractQuery
      */
     protected function _doExecute()
     {
-        $stmt = $this->_em->getConnection()->prepare($this->_sql);
         $params = $this->_params;
-        foreach ($params as $key => $value) {
-            if (isset($this->_paramTypes[$key])) {
-                $stmt->bindValue($key, $value, $this->_paramTypes[$key]);
-            } else {
-                $stmt->bindValue($key, $value);
-            }
-        }
-        $stmt->execute();
+        $types  = $this->_paramTypes;
 
-        return $stmt;
+        if ($params && is_int(key($params))) {
+            ksort($params);
+            ksort($types);
+
+            $params = array_values($params);
+            $types  = array_values($types);
+        }
+
+        return $this->_em->getConnection()->executeQuery(
+            $this->_sql, $params, $types, $this->_queryCacheProfile
+        );
     }
 }

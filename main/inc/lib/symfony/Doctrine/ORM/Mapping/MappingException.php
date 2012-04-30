@@ -68,6 +68,11 @@ class MappingException extends \Doctrine\ORM\ORMException
         return new self("No mapping file found named '$fileName' for class '$entityName'.");
     }
 
+    public static function invalidMappingFile($entityName, $fileName)
+    {
+        return new self("Invalid mapping file '$fileName' for class '$entityName'.");
+    }
+
     public static function mappingNotFound($className, $fieldName)
     {
         return new self("No mapping found for field '$fieldName' on class '$className'.");
@@ -184,7 +189,7 @@ class MappingException extends \Doctrine\ORM\ORMException
         if ( ! empty($path)) {
             $path = '[' . $path . ']';
         }
-        
+
         return new self(
             'File mapping drivers must have a valid directory path, ' .
             'however the given path ' . $path . ' seems to be incorrect!'
@@ -224,6 +229,11 @@ class MappingException extends \Doctrine\ORM\ORMException
     public static function cannotVersionIdField($className, $fieldName)
     {
         return new self("Setting Id field '$fieldName' as versionale in entity class '$className' is not supported.");
+    }
+
+    public static function sqlConversionNotAllowedForIdentifiers($className, $fieldName, $type)
+    {
+        return new self("It is not possible to set id field '$fieldName' to type '$type' in entity class '$className'. The type '$type' requires conversion SQL which is not allowed for identifiers.");
     }
 
     /**
@@ -270,6 +280,12 @@ class MappingException extends \Doctrine\ORM\ORMException
             "part of the identifier in '$className#$field'.");
     }
 
+    public static function illegalOrphanRemoval($className, $field)
+    {
+        return new self("Orphan removal is only allowed on one-to-one and one-to-many ".
+                "associations, but " . $className."#" .$field . " is not.");
+    }
+
     public static function illegalInverseIdentifierAssocation($className, $field)
     {
         return new self("An inverse association is not allowed to be identifier in '$className#$field'.");
@@ -279,18 +295,38 @@ class MappingException extends \Doctrine\ORM\ORMException
     {
         return new self("Many-to-many or one-to-many associations are not allowed to be identifier in '$className#$field'.");
     }
-    
+
     public static function noInheritanceOnMappedSuperClass($className)
     {
         return new self("Its not supported to define inheritance information on a mapped superclass '" . $className . "'.");
     }
-    
+
     public static function mappedClassNotPartOfDiscriminatorMap($className, $rootClassName)
     {
         return new self(
-            "Entity '" . $className . "' has to be part of the descriminator map of '" . $rootClassName . "' " .
+            "Entity '" . $className . "' has to be part of the discriminator map of '" . $rootClassName . "' " .
             "to be properly mapped in the inheritance hierachy. Alternatively you can make '".$className."' an abstract class " .
             "to avoid this exception from occuring."
         );
+    }
+
+    public static function lifecycleCallbackMethodNotFound($className, $methodName)
+    {
+        return new self("Entity '" . $className . "' has no method '" . $methodName . "' to be registered as lifecycle callback.");
+    }
+
+    public static function invalidFetchMode($className, $annotation)
+    {
+        return new self("Entity '" . $className . "' has a mapping with invalid fetch mode '" . $annotation . "'");
+    }
+
+    public static function compositeKeyAssignedIdGeneratorRequired($className)
+    {
+        return new self("Entity '". $className . "' has a composite identifier but uses an ID generator other than manually assigning (Identity, Sequence). This is not supported.");
+    }
+
+    public static function invalidTargetEntityClass($targetEntity, $sourceEntity, $associationName)
+    {
+        return new self("The target-entity " . $targetEntity . " cannot be found in '" . $sourceEntity."#".$associationName."'.");
     }
 }

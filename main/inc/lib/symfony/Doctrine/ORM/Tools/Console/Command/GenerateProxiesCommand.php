@@ -70,7 +70,7 @@ EOT
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $em = $this->getHelper('em')->getEntityManager();
-        
+
         $metadatas = $em->getMetadataFactory()->getAllMetadata();
         $metadatas = MetadataFilter::filter($metadatas, $input->getOption('filter'));
 
@@ -87,7 +87,7 @@ EOT
 
         if ( ! file_exists($destPath)) {
             throw new \InvalidArgumentException(
-                sprintf("Proxies destination directory '<info>%s</info>' does not exist.", $destPath)
+                sprintf("Proxies destination directory '<info>%s</info>' does not exist.", $em->getConfiguration()->getProxyDir())
             );
         } else if ( ! is_writable($destPath)) {
             throw new \InvalidArgumentException(

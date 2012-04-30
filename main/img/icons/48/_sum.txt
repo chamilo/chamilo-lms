@@ -288,3 +288,5 @@ copy				crystal
 scorm				nuvola
 scorm_builder			modif nuvola
 scormbuilder_na.png  		modif nuvola
+text2audio			modif nuvola
+audio				nuvola

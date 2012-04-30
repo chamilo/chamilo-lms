@@ -44,27 +44,6 @@ $document_id = $document_data['id'];
 $dir = $document_data['path'];
 //jquery textareaCounter
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/textareacounter/jquery.textareaCounter.plugin.js" type="text/javascript"></script>';
-//need jquery for hide menus
-$htmlHeadXtra[] = '<script type="text/javascript">
-function advanced_parameters() {
-	if(document.getElementById(\'options\').style.display == \'none\') {
-        document.getElementById(\'options\').style.display = \'block\';
-		document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-	} else {
-		document.getElementById(\'options\').style.display = \'none\';
-		document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-	}
-}
-
-function setFocus(){
-	$("#search_title").focus();
-}
-
-$(document).ready(function () {
-	  setFocus();
-});
-
-</script>';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -151,6 +130,12 @@ Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		
+		echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=google">'.Display::return_icon('google.png',get_lang('GoogleAudio'),'',ICON_SIZE_MEDIUM).'</a>';
+		
+		echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=pediaphon">'.Display::return_icon('pediaphon.png', get_lang('Pediaphon'),'',ICON_SIZE_MEDIUM).'</a>';
+
+		
 echo '</div>';
 
 ?>
@@ -165,13 +150,9 @@ $(document).ready(function(){
 		'warningNumber': 20,
 		'displayFormat' : '#input/#max'
 	};
-	$('#textarea').textareaCount(options, function(data){
+	$('#textarea_google').textareaCount(options, function(data){
 		$('#textareaCallBack').html(data);				
-	});	
-    
-    $("#option1").show();
-    $("#checktext2voiceid").attr('checked',true);
-    
+	});    
 });
 
 </script>		        
@@ -205,11 +186,11 @@ $(document).ready(function(){
 </style>
 <div id="textareaCallBack"></div>
 <?php
-	if($_POST['text2voice_mode']=='google'){  
+	if(Security::remove_XSS($_POST['text2voice_mode'])=='google'){  
     	downloadMP3_google($filepath, $dir);
 	}
-	elseif($_POST['text2voice_mode']=='pediaphone'){   
-    	downloadMP3_pediaphone($filepath, $dir);
+	elseif(Security::remove_XSS($_POST['text2voice_mode'])=='pediaphon'){   
+    	downloadMP3_pediaphon($filepath, $dir);
 	}
     
     $tbl_admin_languages    = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -229,94 +210,88 @@ $(document).ready(function(){
         }        
     }
     
-	$icon = Display::return_icon('sound.gif', get_lang('CreateAudio')); 
+	$icon = Display::return_icon('text2audio.png', get_lang('HelpText2Audio'),'',ICON_SIZE_MEDIUM);
 	echo '<div class="page-header"><h2>'.$icon.get_lang('HelpText2Audio').'</h2></div>'; 
 	
-    $form = new FormValidator('');
-    //Google services
-    $form->addElement('radio', 'checktext2voice', '<img src="../img/file_sound.gif" title="'.get_lang('HelpGoogleAudio').'" alt="'.get_lang('GoogleAudio').'"/>', get_lang('GoogleAudio'), null, 
-            array('id'=>'checktext2voiceid', 'onclick' => "javascript: if(this.checked){document.getElementById('option2').style.display='none'; document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}",
-        ));
-    
-    //Pediaphone
-    $form->addElement('radio', 'checktext2voice', '<img src="../img/file_sound.gif" title="'.get_lang('HelpPediaphon').'" alt="'.get_lang('Pediaphon').'"/>', get_lang('Pediaphon'), null,  
-            array('value'=>'2','onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='none'; document.getElementById('option2').style.display='block';}else{document.getElementById('option2').style.display='none';}",
-        ));
-    
-    $form ->display();
+  
+    if(Security::remove_XSS($_GET['dt2a'])=='google'){
+		echo '<div>';
+		$form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
+		$form->addElement('hidden', 'text2voice_mode', 'google');
+		$form->addElement('hidden', 'document_id', $document_id);
+		$form->addElement('text', 'title', get_lang('Title'));
+		$form->addElement('select', 'lang', get_lang('Language'), $options);    
+		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google', 'class' =>'span6' ));
+		//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
+		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+		$form->addElement('style_submit_button', 'submit1', get_lang('SaveMP3'), 'class="save"');
+		$defaults = array();
+		$defaults['lang'] = $selected_language;    
+		$form->setDefaults($defaults);        
+		$form->display();
 
-    echo '<span id="msg_error2" style="display:none;color:red"></span>';
-    
-	echo '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-    
-    $form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
-	$form->addElement('hidden', 'text2voice_mode', 'google');
-    $form->addElement('text', 'title', get_lang('Title'));
-    $form->addElement('select', 'lang', get_lang('Language'), $options);    
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea', 'class' =>'span6' ));
-    
-    $form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
-    $defaults = array();
-    $defaults['lang'] = $selected_language;    
-    $form->setDefaults($defaults);        
-    $form->display();
-
-    echo '</div>';
-    
-	echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-    
-    $form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
-	$form->addElement('hidden', 'text2voice_mode','pediaphone');
-    $form->addElement('text', 'title', get_lang('Title'));
-    $form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
-    $form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
-    $speed_options = array();
-	$speed_options['1']     = get_lang('Normal');
-    $speed_options['0.75']  = get_lang('GoFaster');
-    $speed_options['0.8']   = get_lang('Fast');
-    $speed_options['1.2']   = get_lang('Slow');
-    $speed_options['1.6']   = get_lang('SlowDown');
-    
-    $form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());        
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea', 'class' =>'span6' ));    
-    $form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
-    $defaults = array();
-    $defaults['lang'] = $selected_language;    
-    $form->setDefaults($defaults);        
-    $form->display();
-    echo '</div>';
+		echo '</div>';
+	}
 	
-	?>
-    
-    <!-- javascript form name form2 update voices -->
-	<script type="text/javascript">      
-    var langslist=document.form2.lang
-    var voiceslist=document.form2.voices     
-    var voices=new Array()
-	
-	<!--German -->
-    voices[0]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
-	
-	<!--English -->
-    voices[1]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
-	
-	<!--Spanish -->
-    voices[2]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
-	
-	<!--French -->
-	voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
+	if(Security::remove_XSS($_GET['dt2a'])=='pediaphon'){
+		echo '<div>';
 		
-  	     
-    function update_voices(selectedvoicegroup){
-    voiceslist.options.length=0
-    for (i=0; i<voices[selectedvoicegroup].length; i++)
-		voiceslist.options[voiceslist.options.length]=new Option(voices[selectedvoicegroup][i].split("|")[0], voices[selectedvoicegroup][i].split("|")[1])
-    }
-    </script>    
-    
-    
-    
+		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
+		$form->addElement('hidden', 'text2voice_mode','pediaphon');
+		$form->addElement('hidden', 'document_id', $document_id);
+		$form->addElement('text', 'title', get_lang('Title'));
+		$form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
+		$form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
+		$speed_options = array();
+		$speed_options['1']     = get_lang('Normal');
+		$speed_options['0.75']  = get_lang('GoFaster');
+		$speed_options['0.8']   = get_lang('Fast');
+		$speed_options['1.2']   = get_lang('Slow');
+		$speed_options['1.6']   = get_lang('SlowDown');
+		
+		$form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());        
+		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon', 'class' =>'span6'));
+		//echo Display :: return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
+		    
+		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+		$defaults = array();
+		$defaults['lang'] = $selected_language;    
+		$form->setDefaults($defaults);        
+		$form->display();
+		echo '</div>';
+		
+		?>
+		
+		<!-- javascript form name form2 update voices -->
+		<script type="text/javascript">      
+		var langslist=document.form2.lang
+		var voiceslist=document.form2.voices     
+		var voices=new Array()
+		
+		<!--German -->
+		voices[0]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
+		
+		<!--English -->
+		voices[1]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
+		
+		<!--Spanish -->
+		voices[2]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
+		
+		<!--French -->
+		voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
+			
+			 
+		function update_voices(selectedvoicegroup){
+		voiceslist.options.length=0
+		for (i=0; i<voices[selectedvoicegroup].length; i++)
+			voiceslist.options[voiceslist.options.length]=new Option(voices[selectedvoicegroup][i].split("|")[0], voices[selectedvoicegroup][i].split("|")[1])
+		}
+		</script>    
+
+     
     <?php
+	}//end pediaphon
+	
 	//vozMe services
 		//disabled for a time
 	/*
@@ -378,8 +353,11 @@ Display :: display_footer();
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_google($filepath, $dir) {
+	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['document_id']).'&dt2a=google';
+
 	//security
 	if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
+		echo '<script>window.location.href="'.$location.'"</script>';
 		return;	
 	}
     global $_course, $_user;
@@ -387,6 +365,7 @@ function downloadMP3_google($filepath, $dir) {
 	$clean_title=trim($_POST['title']);
 	$clean_text=trim($_POST['text']);
 	if(empty($clean_title) || empty($clean_text)){ 
+		echo '<script>window.location.href="'.$location.'"</script>';
 		return;
 	}
 	$clean_title=Security::remove_XSS($clean_title);
@@ -437,26 +416,31 @@ function downloadMP3_google($filepath, $dir) {
 		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
         Display::display_confirmation_message(get_lang('DocumentCreated'));
+	//return to location
+	echo '<script>window.location.href="'.$location.'"</script>';
 }
 
 /**
- * This function save a post into a file mp3 from pediaphone services
+ * This function save a post into a file mp3 from pediaphon services
  *
  * @param $filepath
  * @param $dir
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
  * @version january 2011, chamilo 1.8.8
  */
-function downloadMP3_pediaphone($filepath, $dir){
+function downloadMP3_pediaphon($filepath, $dir){
+	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['document_id']).'&dt2a=pediaphon';
 	//security
 	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
+		echo '<script>window.location.href="'.$location.'"</script>';
 		return;	
 	}
     global $_course, $_user;
 	$clean_title=trim($_POST['title']);
 	$clean_title= Database::escape_string($clean_title);
 	$clean_text=trim($_POST['text']);
-	if(empty($clean_title) || empty($clean_text)){ 
+	if(empty($clean_title) || empty($clean_text)){
+		echo '<script>window.location.href="'.$location.'"</script>'; 
 		return;
 	}
 	$clean_title=Security::remove_XSS($clean_title);
@@ -540,4 +524,6 @@ function downloadMP3_pediaphone($filepath, $dir){
 		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
         Display::display_confirmation_message(get_lang('DocumentCreated'));
+	//return to location
+	echo '<script>window.location.href="'.$location.'"</script>';
 }

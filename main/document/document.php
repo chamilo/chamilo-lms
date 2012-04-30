@@ -1091,8 +1091,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		
 		// Create new audio from text
 		if (api_get_setting('enabled_text2audio') == 'true'){
+			$dt2a='google';
+			$req_dt2a='&amp;dt2a='.$dt2a;			
 		?>
-			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
+			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id.$req_gid.$req_dt2a; ?>">
 		   <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'),'',ICON_SIZE_MEDIUM); ?></a>
 		<?php
 		}		

@@ -1100,20 +1100,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
 .skip {
     display: none;
 }
-/*
-Document title
-*/
-.input_titles {
-    width: 400px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-/*
-    Survey
-*/
+/* Survey  */
 #survey_title {
     background-color:#dcdcdc;
     color:#000;

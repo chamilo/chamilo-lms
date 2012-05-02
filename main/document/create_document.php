@@ -61,12 +61,6 @@ function InnerDialogLoaded() {
 	var temp2=false;	
 	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
-	function launch_templates() {
-		//document.getElementById(\'frmModel\').style.display="block";
-		//document.getElementById(\'content___Frame\').width=\'70%\';
-		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
-	}
-
 	function FCKeditor_OnComplete( editorInstance ) {
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
 		document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
@@ -120,13 +114,6 @@ function InnerDialogLoaded() {
 					bestandsnaamNieuw += contentTextArray[x];
 				}
 			}
-
-		// comment see FS#3335
-		//	if(document.getElementById(\'title_edited\').value == "false")
-		//	{
-		//		document.getElementById(\'filename\').value = bestandsnaamNieuw;		
-		//	}
-
 		}
 		temp=true;
 	}
@@ -140,13 +127,6 @@ function InnerDialogLoaded() {
         }
         return s;
 	}
-
-	function check_if_still_empty() {
-		if(trim(document.getElementById(\'filename\').value) != "") {
-			document.getElementById(\'title_edited\').value = "true";
-		}
-	}
-
 	function setFocus() {
 	   $("#document_title").focus();
     }
@@ -160,7 +140,6 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 
 //I'm in the certification module?
 $is_certificate_mode = false;
@@ -326,7 +305,8 @@ $renderer = & $form->defaultRenderer();
 
 // Hidden element with current directory
 $form->addElement('hidden', 'id');
-$default['id'] = $folder_id;
+$defaults = array();
+$defaults['id'] = $folder_id;
 // Filename
 
 $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
@@ -343,51 +323,21 @@ function document_exists($filename) {
 	return !file_exists($filepath.$filename.'.html');
 }
 
-$filename_template = str_replace('{element}', '{element}', $renderer->_elementTemplate); // TODO: What is the point of this statement?
-$renderer->setElementTemplate($filename_template, 'filename');
-
-// Initialize group array
-$group = array();
-$group[] = $form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
-
-// Added by Ivan Tcholakov, 10-OCT-2009.
-$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
-
-/*
-// If allowed, add element for document title
-if (api_get_setting('use_document_title') == 'true') {
-	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
-
-	// Added by Ivan Tcholakov, 10-OCT-2009.
-	$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
-	//
+// Add group to the form
+if ($is_certificate_mode) {	
+    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
 } else {
-	// replace the 	add_textfield with this
-	$group[]=$form->createElement('text', 'filename', get_lang('FileName'), 'class="input_titles" id="document_title" onblur="javascript: check_if_still_empty();"');	
-	// Added by Ivan Tcholakov, 10-OCT-2009.
-	$form->addElement('hidden', 'title', '', array('id' => 'title'));
+	$form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
 }
-*/
 
 // Show read-only box only in groups
 if (!empty($_SESSION['_gid'])) {
 	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 
-// Add group to the form
-if ($is_certificate_mode)
-	$form->addGroup($group, 'filename_group', get_lang('CertificateName') ,'&nbsp;&nbsp;&nbsp;', false);
-else
-	$form->addGroup($group, 'filename_group', get_lang('Title'), false);
 
-$form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
-
-$form->addGroupRule('filename_group', array(
-    'title' => array(
-    array(get_lang('ThisFieldIsRequired'), 'required'),
-    array(get_lang('FileExists'),'callback', 'document_exists')
-    )
-));
+$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
 
@@ -410,7 +360,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 	// Following two conditions copied from document.inc.php::build_directory_selector()
 	$folder_titles = array();
 	
-    if (is_array($folders)) {			
+    if (is_array($folders)) {		
         $escaped_folders = array();			
         foreach ($folders as $key => & $val) {
             //Hide some folders
@@ -440,8 +390,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
         while ($obj = Database::fetch_object($res)) {				
             $folder_titles[$obj->path] = $obj->title;
         }
-    }
-	
+    }	
 	
 	if (empty($group_dir)) {
 		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
@@ -492,19 +441,17 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 		}
 	}
 }
-//$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 
 if ($is_certificate_mode)
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
 else
 	$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
 
-$form->setDefaults($default);
-
+$form->setDefaults($defaults);
 
 // If form validates -> save the new document
 if ($form->validate()) {
-	$values = $form->exportValues();
+	$values = $form->exportValues();    
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	
 	$values['title'] = trim($values['title']);	
@@ -512,17 +459,22 @@ if ($form->validate()) {
 	if (!empty($values['curdirpath'])) {
 		$dir = $values['curdirpath'];
 	}
+    
 	if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
-	$values['title'] = $values['filename'];	
-	$values['filename'] = addslashes(trim($values['filename']));
-	$values['filename'] = Security::remove_XSS($values['filename']);
-	$values['filename'] = replace_dangerous_char($values['filename']);
-	$values['filename'] = disable_dangerous_file($values['filename']);	
-
-	$filename 	= $values['filename'];
+    
+    //Setting the filename
+	$filename = $values['title'];    
+	$filename = addslashes(trim($filename));
+	$filename = Security::remove_XSS($filename);
+	$filename = replace_dangerous_char($filename);
+	$filename = disable_dangerous_file($filename);	
+    
+    //Setting the title
 	$title 		= $values['title'];
+    
+    //Setting the extension
 	$extension = 'html';
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);

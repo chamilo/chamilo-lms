@@ -717,10 +717,6 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-
-    // Do we need the title field for the document name or not?
-    // We get the setting here, so we only have to do it once
-    $use_document_title = api_get_setting('use_document_title');
     // Create a sortable table with our data
     $sortable_data = array();
 
@@ -744,7 +740,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row['size'] = format_file_size($size);
         
         // Get the title or the basename depending on what we're using
-        if ($use_document_title == 'true' && $document_data['title'] != '') {
+        if ($document_data['title'] != '') {
             $document_name = $document_data['title'];
         } else {
             $document_name = basename($document_data['path']);

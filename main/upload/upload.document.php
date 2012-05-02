@@ -157,17 +157,10 @@ else {	//give them a link to create a directory
 <input type="file" name="user_upload"/>
 </td>
 </tr>
-<?php
-if(api_get_setting('use_document_title')=='true')
-{
-	?>
     <tr>
     <td><?php echo get_lang('Title');?></td>
     <td><input type="text" size="20" name="title" style="width:300px;"></td>
     </tr>
-	<?php
-}
-?>
     <tr>
     <td valign="top"><?php echo get_lang('Comment');?></td>
     <td><textarea rows="3" cols="20" name="comment" wrap="virtual" style="width:300px;"></textarea></td>

@@ -27,7 +27,6 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 
 var temp    = false;
-var use_document_title='.api_get_setting('use_document_title').';
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 function FCKeditor_OnComplete( editorInstance ) {

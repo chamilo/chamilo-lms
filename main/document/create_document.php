@@ -58,8 +58,7 @@ function InnerDialogLoaded() {
 };
 
 	var temp=false;
-	var temp2=false;
-	var use_document_title='.api_get_setting('use_document_title').';
+	var temp2=false;	
 	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 	function launch_templates() {
@@ -125,10 +124,7 @@ function InnerDialogLoaded() {
 		// comment see FS#3335
 		//	if(document.getElementById(\'title_edited\').value == "false")
 		//	{
-		//		document.getElementById(\'filename\').value = bestandsnaamNieuw;
-		//		if(use_document_title){
-		//			document.getElementById(\'title\').value = bestandsnaamNieuw;
-		//		}
+		//		document.getElementById(\'filename\').value = bestandsnaamNieuw;		
 		//	}
 
 		}
@@ -349,9 +345,15 @@ function document_exists($filename) {
 
 $filename_template = str_replace('{element}', '{element}', $renderer->_elementTemplate); // TODO: What is the point of this statement?
 $renderer->setElementTemplate($filename_template, 'filename');
+
 // Initialize group array
 $group = array();
+$group[] = $form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
 
+// Added by Ivan Tcholakov, 10-OCT-2009.
+$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
+
+/*
 // If allowed, add element for document title
 if (api_get_setting('use_document_title') == 'true') {
 	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
@@ -365,6 +367,7 @@ if (api_get_setting('use_document_title') == 'true') {
 	// Added by Ivan Tcholakov, 10-OCT-2009.
 	$form->addElement('hidden', 'title', '', array('id' => 'title'));
 }
+*/
 
 // Show read-only box only in groups
 if (!empty($_SESSION['_gid'])) {
@@ -375,25 +378,16 @@ if (!empty($_SESSION['_gid'])) {
 if ($is_certificate_mode)
 	$form->addGroup($group, 'filename_group', get_lang('CertificateName') ,'&nbsp;&nbsp;&nbsp;', false);
 else
-	$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+	$form->addGroup($group, 'filename_group', get_lang('Title'), false);
 
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
-if (api_get_setting('use_document_title') == 'true') {
-	$form->addGroupRule('filename_group', array(
-	  'title' => array(
-	    array(get_lang('ThisFieldIsRequired'), 'required'),
-	    array(get_lang('FileExists'),'callback', 'document_exists')
-	    )
-	));
-} else {
-	$form->addGroupRule('filename_group', array(
-	  'filename' => array(
-		array(get_lang('ThisFieldIsRequired'), 'required'),
-	    array(get_lang('FileExists'),'callback', 'document_exists')
-	    )
-	));
-}
+$form->addGroupRule('filename_group', array(
+    'title' => array(
+    array(get_lang('ThisFieldIsRequired'), 'required'),
+    array(get_lang('FileExists'),'callback', 'document_exists')
+    )
+));
 
 $current_session_id = api_get_session_id();
 
@@ -415,45 +409,39 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 	
 	// Following two conditions copied from document.inc.php::build_directory_selector()
 	$folder_titles = array();
-	if (api_get_setting('use_document_title') == 'true') {
-		if (is_array($folders)) {			
-			$escaped_folders = array();			
-			foreach ($folders as $key => & $val) {
-				//Hide some folders
-				if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
-				 continue;
-				}
-				//Admin setting for Hide/Show the folders of all users		
-				if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
-					continue;
-				}
-				//Admin setting for Hide/Show Default folders to all users
-				if (api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
-					continue;
-				}
-				//Admin setting for Hide/Show chat history folder
-				if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
-					continue;
-				}				
-					
-					$escaped_folders[$key] = Database::escape_string($val);
-			}
-			$folder_sql = implode("','", $escaped_folders);
-			
-			$sql = "SELECT * FROM $doc_table WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
-			$res = Database::query($sql);
-			$folder_titles = array();	
-			while ($obj = Database::fetch_object($res)) {				
-				$folder_titles[$obj->path] = $obj->title;
-			}
-		}
-	} else {	
-		if (is_array($folders)) {
-			foreach ($folders as & $folder) {
-				$folder_titles[$folder] = basename($folder);
-			}
-		}
-	}
+	
+    if (is_array($folders)) {			
+        $escaped_folders = array();			
+        foreach ($folders as $key => & $val) {
+            //Hide some folders
+            if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
+                continue;
+            }
+            //Admin setting for Hide/Show the folders of all users		
+            if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
+                continue;
+            }
+            //Admin setting for Hide/Show Default folders to all users
+            if (api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
+                continue;
+            }
+            //Admin setting for Hide/Show chat history folder
+            if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
+                continue;
+            }				
+
+            $escaped_folders[$key] = Database::escape_string($val);
+        }
+        $folder_sql = implode("','", $escaped_folders);
+
+        $sql = "SELECT * FROM $doc_table WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
+        $res = Database::query($sql);
+        $folder_titles = array();	
+        while ($obj = Database::fetch_object($res)) {				
+            $folder_titles[$obj->path] = $obj->title;
+        }
+    }
+	
 	
 	if (empty($group_dir)) {
 		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
@@ -527,18 +515,11 @@ if ($form->validate()) {
 	if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
-
-	if (api_get_setting('use_document_title') != 'true') {
-		$values['title'] = $values['filename'];
-	} else	{
-		$values['filename'] = $values['title'];
-	}
-	
+	$values['title'] = $values['filename'];	
 	$values['filename'] = addslashes(trim($values['filename']));
 	$values['filename'] = Security::remove_XSS($values['filename']);
 	$values['filename'] = replace_dangerous_char($values['filename']);
-	$values['filename'] = disable_dangerous_file($values['filename']);
-	
+	$values['filename'] = disable_dangerous_file($values['filename']);	
 
 	$filename 	= $values['filename'];
 	$title 		= $values['title'];

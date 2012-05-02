@@ -39,10 +39,8 @@ class ScormDocument extends Resource
 		parent::show();
 		$path = preg_replace('@^scorm/@', '', $this->path);
 		echo $path;
-		if (!empty($this->title) && (api_get_setting('use_document_title') == 'true'))
-		{
-			if (strpos($path, $this->title) === false)
-			{
+		if (!empty($this->title)) {
+			if (strpos($path, $this->title) === false) {
 				echo " - ".$this->title;
 			}
 		}

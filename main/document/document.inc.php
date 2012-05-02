@@ -20,28 +20,22 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
     $doc_table = Database::get_course_table(TABLE_DOCUMENT);
     $course_id = api_get_course_int_id();
     $folder_titles = array();
-    if (api_get_setting('use_document_title') == 'true') {
-        if (is_array($folders)) {
-            $escaped_folders = array();
-            foreach ($folders as $key => & $val) {
-                $escaped_folders[$key] = Database::escape_string($val);
-            }
-            $folder_sql = implode("','", $escaped_folders);
-            
-            $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('".$folder_sql."')";
-            $res = Database::query($sql);
-            $folder_titles = array();
-            while ($obj = Database::fetch_object($res)) {
-                $folder_titles[$obj->path] = $obj->title;
-            }
+    
+    if (is_array($folders)) {
+        $escaped_folders = array();
+        foreach ($folders as $key => & $val) {
+            $escaped_folders[$key] = Database::escape_string($val);
         }
-    } else {
-        if (is_array($folders)) {
-            foreach ($folders as & $folder) {
-                $folder_titles[$folder] = basename($folder);
-            }
+        $folder_sql = implode("','", $escaped_folders);
+
+        $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('".$folder_sql."')";
+        $res = Database::query($sql);
+        $folder_titles = array();
+        while ($obj = Database::fetch_object($res)) {
+            $folder_titles[$obj->path] = $obj->title;
         }
     }
+
     
     $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());    
     $form->addElement('hidden', 'cidReq', api_get_course_id());    
@@ -111,10 +105,9 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     }
     $course_info = api_get_course_info();
     $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
-    $use_document_title = api_get_setting('use_document_title');
-    
+        
     // Get the title or the basename depending on what we're using
-    if ($use_document_title == 'true' && $document_data['title'] != '') {
+    if ($document_data['title'] != '') {
         $title = $document_data['title'];
     } else {
         $title = basename($document_data['path']);    
@@ -683,10 +676,9 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                 // 3. inside a subfolder of the folder you want to move
                 if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
                     $path_displayed = $folder;
-                    // If document title is used, we have to display titles instead of real paths...
-                    if (api_get_setting('use_document_title')) {
-                        $path_displayed = get_titles_of_path($folder);
-                    }
+                    // If document title is used, we have to display titles instead of real paths...                    
+                    $path_displayed = get_titles_of_path($folder);
+                    
                     if (empty($path_displayed)) {
                         $path_displayed = get_lang('Untitled');
                     }
@@ -696,10 +688,8 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
         }
     } else {
         foreach ($folders as $folder) {
-            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) { // Cannot copy dir into his own subdir
-                if (api_get_setting('use_document_title')) {
-                    $path_displayed = get_titles_of_path($folder);
-                }
+            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) { // Cannot copy dir into his own subdir                
+                $path_displayed = get_titles_of_path($folder);                
                 $display_folder = substr($path_displayed,strlen($group_dir));
                 $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
                 $form .= '<option value="'.$folder.'">'.$display_folder.'</option>';

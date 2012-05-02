@@ -153,8 +153,6 @@ if ($is_certificate_mode) {
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
-
-$use_document_title = api_get_setting('use_document_title') == 'true';
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -371,11 +369,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 
     $form->add_textfield('title', get_lang('Title'));
     
-	if ($use_document_title) {		
-		$defaults['title'] = $document_data['title'];
-	} else {
-		$form->addElement('hidden', 'renameTo');
-	}
+	$defaults['title'] = $document_data['title'];
 
 	$form->addElement('hidden', 'formSent');
 	$defaults['formSent'] = 1;

@@ -2016,8 +2016,7 @@ function get_countries_list_from_array($combo = false) {
  */
 function locking_settings() {
     $access_url_locked_settings = array(
-        'server_type', 
-        'use_document_title', 
+        'server_type',        
         'permanently_remove_deleted_files',
         'account_valid_duration',
         'service_visio',

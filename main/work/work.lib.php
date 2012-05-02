@@ -660,8 +660,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 							$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
 							if ($link_id !== false) {
+                                $course_code = api_get_course_id();
 								Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
-								                 WHERE c_id = '.$course_id.' AND id = '.$link_id);
+								                 WHERE course_code = "'.$course_code.'" AND id = '.$link_id);
 							}
 
 							//we are changing the current work and we want add them into gradebook

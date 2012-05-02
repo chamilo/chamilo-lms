@@ -52,13 +52,16 @@ class XmlDriver extends AbstractFileDriver
         $xmlRoot = $this->getElement($className);
 
         if ($xmlRoot->getName() == 'entity') {
-            $metadata->setCustomRepositoryClass(
-                isset($xmlRoot['repository-class']) ? (string)$xmlRoot['repository-class'] : null
-            );
+            if (isset($xmlRoot['repository-class'])) {
+                $metadata->setCustomRepositoryClass((string)$xmlRoot['repository-class']);
+            }
             if (isset($xmlRoot['read-only']) && $xmlRoot['read-only'] == "true") {
                 $metadata->markReadOnly();
             }
         } else if ($xmlRoot->getName() == 'mapped-superclass') {
+            $metadata->setCustomRepositoryClass(
+                isset($xmlRoot['repository-class']) ? (string)$xmlRoot['repository-class'] : null
+            );
             $metadata->isMappedSuperclass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
@@ -163,8 +166,11 @@ class XmlDriver extends AbstractFileDriver
             foreach ($xmlRoot->field as $fieldMapping) {
                 $mapping = array(
                     'fieldName' => (string)$fieldMapping['name'],
-                    'type' => (string)$fieldMapping['type']
                 );
+
+                if (isset($fieldMapping['type'])) {
+                    $mapping['type'] = (string)$fieldMapping['type'];
+                }
 
                 if (isset($fieldMapping['column'])) {
                     $mapping['columnName'] = (string)$fieldMapping['column'];
@@ -216,12 +222,19 @@ class XmlDriver extends AbstractFileDriver
 
             $mapping = array(
                 'id' => true,
-                'fieldName' => (string)$idElement['name'],
-                'type' => (string)$idElement['type']
+                'fieldName' => (string)$idElement['name']
             );
+
+            if (isset($idElement['type'])) {
+                $mapping['type'] = (string)$idElement['type'];
+            }
 
             if (isset($idElement['column'])) {
                 $mapping['columnName'] = (string)$idElement['column'];
+            }
+
+            if (isset($idElement['column-definition'])) {
+                $mapping['columnDefinition'] = (string)$idElement['column-definition'];
             }
 
             $metadata->mapField($mapping);
@@ -368,10 +381,6 @@ class XmlDriver extends AbstractFileDriver
                     $mapping['cascade'] = $this->_getCascadeMappings($manyToOneElement->cascade);
                 }
 
-                if (isset($manyToOneElement->{'orphan-removal'})) {
-                    $mapping['orphanRemoval'] = (bool)$manyToOneElement->{'orphan-removal'};
-                }
-
                 $metadata->mapManyToOne($mapping);
             }
         }
@@ -386,6 +395,10 @@ class XmlDriver extends AbstractFileDriver
 
                 if (isset($manyToManyElement['fetch'])) {
                     $mapping['fetch'] = constant('Doctrine\ORM\Mapping\ClassMetadata::FETCH_' . (string)$manyToManyElement['fetch']);
+                }
+
+                if (isset($manyToManyElement['orphan-removal'])) {
+                    $mapping['orphanRemoval'] = (bool)$manyToManyElement['orphan-removal'];
                 }
 
                 if (isset($manyToManyElement['mapped-by'])) {
@@ -417,10 +430,6 @@ class XmlDriver extends AbstractFileDriver
 
                 if (isset($manyToManyElement->cascade)) {
                     $mapping['cascade'] = $this->_getCascadeMappings($manyToManyElement->cascade);
-                }
-
-                if (isset($manyToManyElement->{'orphan-removal'})) {
-                    $mapping['orphanRemoval'] = (bool)$manyToManyElement->{'orphan-removal'};
                 }
 
                 if (isset($manyToManyElement->{'order-by'})) {
@@ -473,10 +482,6 @@ class XmlDriver extends AbstractFileDriver
 
         if (isset($joinColumnElement['on-delete'])) {
             $joinColumn['onDelete'] = (string)$joinColumnElement['on-delete'];
-        }
-
-        if (isset($joinColumnElement['on-update'])) {
-            $joinColumn['onUpdate'] = (string)$joinColumnElement['on-update'];
         }
 
         if (isset($joinColumnElement['column-definition'])) {

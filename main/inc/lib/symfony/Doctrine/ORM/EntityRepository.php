@@ -107,42 +107,51 @@ class EntityRepository implements ObjectRepository
      */
     public function find($id, $lockMode = LockMode::NONE, $lockVersion = null)
     {
+        if ( ! is_array($id)) {
+            $id = array($this->_class->identifier[0] => $id);
+        }
+        $sortedId = array();
+        foreach ($this->_class->identifier as $identifier) {
+            if (!isset($id[$identifier])) {
+                throw ORMException::missingIdentifierField($this->_class->name, $identifier);
+            }
+            $sortedId[$identifier] = $id[$identifier];
+        }
+
         // Check identity map first
-        if ($entity = $this->_em->getUnitOfWork()->tryGetById($id, $this->_class->rootEntityName)) {
-            if (!($entity instanceof $this->_class->name)) {
+        if ($entity = $this->_em->getUnitOfWork()->tryGetById($sortedId, $this->_class->rootEntityName)) {
+            if ( ! ($entity instanceof $this->_class->name)) {
                 return null;
             }
 
-            if ($lockMode != LockMode::NONE) {
+            if ($lockMode !== LockMode::NONE) {
                 $this->_em->lock($entity, $lockMode, $lockVersion);
             }
 
             return $entity; // Hit!
         }
 
-        if ( ! is_array($id) || count($id) <= 1) {
-            // @todo FIXME: Not correct. Relies on specific order.
-            $value = is_array($id) ? array_values($id) : array($id);
-            $id = array_combine($this->_class->identifier, $value);
-        }
+        switch ($lockMode) {
+            case LockMode::NONE:
+                return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($sortedId);
 
-        if ($lockMode == LockMode::NONE) {
-            return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id);
-        } else if ($lockMode == LockMode::OPTIMISTIC) {
-            if (!$this->_class->isVersioned) {
-                throw OptimisticLockException::notVersioned($this->_entityName);
-            }
-            $entity = $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id);
+            case LockMode::OPTIMISTIC:
+                if ( ! $this->_class->isVersioned) {
+                    throw OptimisticLockException::notVersioned($this->_entityName);
+                }
 
-            $this->_em->getUnitOfWork()->lock($entity, $lockMode, $lockVersion);
+                $entity = $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($sortedId);
 
-            return $entity;
-        } else {
-            if (!$this->_em->getConnection()->isTransactionActive()) {
-                throw TransactionRequiredException::transactionRequired();
-            }
+                $this->_em->getUnitOfWork()->lock($entity, $lockMode, $lockVersion);
 
-            return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id, null, null, array(), $lockMode);
+                return $entity;
+
+            default:
+                if ( ! $this->_em->getConnection()->isTransactionActive()) {
+                    throw TransactionRequiredException::transactionRequired();
+                }
+
+                return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($sortedId, null, null, array(), $lockMode);
         }
     }
 
@@ -178,7 +187,7 @@ class EntityRepository implements ObjectRepository
      */
     public function findOneBy(array $criteria)
     {
-        return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($criteria);
+        return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($criteria, null, null, array(), 0, 1);
     }
 
     /**
@@ -191,31 +200,35 @@ class EntityRepository implements ObjectRepository
      */
     public function __call($method, $arguments)
     {
-        if (substr($method, 0, 6) == 'findBy') {
-            $by = substr($method, 6, strlen($method));
-            $method = 'findBy';
-        } else if (substr($method, 0, 9) == 'findOneBy') {
-            $by = substr($method, 9, strlen($method));
-            $method = 'findOneBy';
-        } else {
-            throw new \BadMethodCallException(
-                "Undefined method '$method'. The method name must start with ".
-                "either findBy or findOneBy!"
-            );
+        switch (true) {
+            case (substr($method, 0, 6) == 'findBy'):
+                $by = substr($method, 6, strlen($method));
+                $method = 'findBy';
+                break;
+
+            case (substr($method, 0, 9) == 'findOneBy'):
+                $by = substr($method, 9, strlen($method));
+                $method = 'findOneBy';
+                break;
+
+            default:
+                throw new \BadMethodCallException(
+                    "Undefined method '$method'. The method name must start with ".
+                    "either findBy or findOneBy!"
+                );
         }
 
-        if ( !isset($arguments[0])) {
-            // we dont even want to allow null at this point, because we cannot (yet) transform it into IS NULL.
-            throw ORMException::findByRequiresParameter($method.$by);
+        if (empty($arguments)) {
+            throw ORMException::findByRequiresParameter($method . $by);
         }
 
         $fieldName = lcfirst(\Doctrine\Common\Util\Inflector::classify($by));
 
         if ($this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)) {
             return $this->$method(array($fieldName => $arguments[0]));
-        } else {
-            throw ORMException::invalidFindByCall($this->_entityName, $fieldName, $method.$by);
         }
+
+        throw ORMException::invalidFindByCall($this->_entityName, $fieldName, $method.$by);
     }
 
     /**
@@ -224,6 +237,14 @@ class EntityRepository implements ObjectRepository
     protected function getEntityName()
     {
         return $this->_entityName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->getEntityName();
     }
 
     /**

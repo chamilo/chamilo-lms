@@ -46,13 +46,16 @@ class YamlDriver extends AbstractFileDriver
         $element = $this->getElement($className);
 
         if ($element['type'] == 'entity') {
-            $metadata->setCustomRepositoryClass(
-                isset($element['repositoryClass']) ? $element['repositoryClass'] : null
-            );
+            if (isset($element['repositoryClass'])) {
+                $metadata->setCustomRepositoryClass($element['repositoryClass']);
+            }
             if (isset($element['readOnly']) && $element['readOnly'] == true) {
                 $metadata->markReadOnly();
             }
         } else if ($element['type'] == 'mappedSuperclass') {
+            $metadata->setCustomRepositoryClass(
+                isset($element['repositoryClass']) ? $element['repositoryClass'] : null
+            );
             $metadata->isMappedSuperclass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
@@ -162,15 +165,14 @@ class YamlDriver extends AbstractFileDriver
                     continue;
                 }
 
-                if (!isset($idElement['type'])) {
-                    throw MappingException::propertyTypeIsRequired($className, $name);
-                }
-
                 $mapping = array(
                     'id' => true,
-                    'fieldName' => $name,
-                    'type' => $idElement['type']
+                    'fieldName' => $name
                 );
+
+                if (isset($idElement['type'])) {
+                    $mapping['type'] = $idElement['type'];
+                }
 
                 if (isset($idElement['column'])) {
                     $mapping['columnName'] = $idElement['column'];
@@ -178,6 +180,10 @@ class YamlDriver extends AbstractFileDriver
 
                 if (isset($idElement['length'])) {
                     $mapping['length'] = $idElement['length'];
+                }
+
+                if (isset($idElement['columnDefinition'])) {
+                    $mapping['columnDefinition'] = $idElement['columnDefinition'];
                 }
 
                 $metadata->mapField($mapping);
@@ -198,19 +204,21 @@ class YamlDriver extends AbstractFileDriver
         // Evaluate fields
         if (isset($element['fields'])) {
             foreach ($element['fields'] as $name => $fieldMapping) {
-                if (!isset($fieldMapping['type'])) {
-                    throw MappingException::propertyTypeIsRequired($className, $name);
+
+                $mapping = array(
+                    'fieldName' => $name
+                );
+
+                if (isset($fieldMapping['type'])) {
+                    $e = explode('(', $fieldMapping['type']);
+                    $fieldMapping['type'] = $e[0];
+                    $mapping['type']      = $fieldMapping['type'];
+
+                    if (isset($e[1])) {
+                        $fieldMapping['length'] = substr($e[1], 0, strlen($e[1]) - 1);
+                    }
                 }
 
-                $e = explode('(', $fieldMapping['type']);
-                $fieldMapping['type'] = $e[0];
-                if (isset($e[1])) {
-                    $fieldMapping['length'] = substr($e[1], 0, strlen($e[1]) - 1);
-                }
-                $mapping = array(
-                    'fieldName' => $name,
-                    'type' => $fieldMapping['type']
-                );
                 if (isset($fieldMapping['id'])) {
                     $mapping['id'] = true;
                     if (isset($fieldMapping['generator']['strategy'])) {
@@ -375,10 +383,6 @@ class YamlDriver extends AbstractFileDriver
                     $mapping['cascade'] = $manyToOneElement['cascade'];
                 }
 
-                if (isset($manyToOneElement['orphanRemoval'])) {
-                    $mapping['orphanRemoval'] = (bool)$manyToOneElement['orphanRemoval'];
-                }
-
                 $metadata->mapManyToOne($mapping);
             }
         }
@@ -398,9 +402,6 @@ class YamlDriver extends AbstractFileDriver
                 if (isset($manyToManyElement['mappedBy'])) {
                     $mapping['mappedBy'] = $manyToManyElement['mappedBy'];
                 } else if (isset($manyToManyElement['joinTable'])) {
-                    if (isset($manyToManyElement['inversedBy'])) {
-                        $mapping['inversedBy'] = $manyToManyElement['inversedBy'];
-                    }
 
                     $joinTableElement = $manyToManyElement['joinTable'];
                     $joinTable = array(
@@ -430,12 +431,12 @@ class YamlDriver extends AbstractFileDriver
                     $mapping['joinTable'] = $joinTable;
                 }
 
-                if (isset($manyToManyElement['cascade'])) {
-                    $mapping['cascade'] = $manyToManyElement['cascade'];
+                if (isset($manyToManyElement['inversedBy'])) {
+                    $mapping['inversedBy'] = $manyToManyElement['inversedBy'];
                 }
 
-                if (isset($manyToManyElement['orphanRemoval'])) {
-                    $mapping['orphanRemoval'] = (bool)$manyToManyElement['orphanRemoval'];
+                if (isset($manyToManyElement['cascade'])) {
+                    $mapping['cascade'] = $manyToManyElement['cascade'];
                 }
 
                 if (isset($manyToManyElement['orderBy'])) {
@@ -444,6 +445,10 @@ class YamlDriver extends AbstractFileDriver
 
                 if (isset($manyToManyElement['indexBy'])) {
                     $mapping['indexBy'] = $manyToManyElement['indexBy'];
+                }
+
+                if (isset($manyToManyElement['orphanRemoval'])) {
+                    $mapping['orphanRemoval'] = (bool)$manyToManyElement['orphanRemoval'];
                 }
 
                 $metadata->mapManyToMany($mapping);
@@ -488,10 +493,6 @@ class YamlDriver extends AbstractFileDriver
 
         if (isset($joinColumnElement['onDelete'])) {
             $joinColumn['onDelete'] = $joinColumnElement['onDelete'];
-        }
-
-        if (isset($joinColumnElement['onUpdate'])) {
-            $joinColumn['onUpdate'] = $joinColumnElement['onUpdate'];
         }
 
         if (isset($joinColumnElement['columnDefinition'])) {

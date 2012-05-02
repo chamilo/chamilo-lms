@@ -30,7 +30,7 @@ class Chamilo
     {
         return Uri::www();
     }
-    
+
     /**
      * File system root for Chamilo
      * 
@@ -40,15 +40,24 @@ class Chamilo
     {
         return api_get_path(SYS_PATH);
     }
-    
+
     public static function path($path = '')
     {
         $root = self::root();
-        if(empty($path))
-        {
+        if (empty($path)) {
             return $root;
         }
         return $root . $path;
+    }
+
+    static function is_test_server()
+    {
+        return api_get_setting('server_type') == 'test';
+    }
+
+    static function is_production_server()
+    {
+        return api_get_setting('server_type') == 'production';
     }
 
 }

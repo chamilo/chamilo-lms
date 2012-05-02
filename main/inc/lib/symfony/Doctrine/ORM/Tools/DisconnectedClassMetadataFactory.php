@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
  * The DisconnectedClassMetadataFactory is used to create ClassMetadataInfo objects
- * that do not require the entity class actually exist. This allows us to 
+ * that do not require the entity class actually exist. This allows us to
  * load some mapping information and use it to do things like generate code
  * from the mapping information.
  *
@@ -38,36 +38,8 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class DisconnectedClassMetadataFactory extends ClassMetadataFactory
 {
-    /**
-     * @override
-     */
-    protected function newClassMetadataInstance($className)
+    public function getReflectionService()
     {
-        $metadata = new ClassMetadataInfo($className);
-        if (strpos($className, "\\") !== false) {
-            $metadata->namespace = strrev(substr( strrev($className), strpos(strrev($className), "\\")+1 ));
-        } else {
-            $metadata->namespace = "";
-        }
-        return $metadata;
-    }
-
-    /**
-     * Validate runtime metadata is correctly defined.
-     *
-     * @param ClassMetadata $class
-     * @param ClassMetadata $parent
-     */
-    protected function validateRuntimeMetadata($class, $parent)
-    {
-        // validate nothing
-    }
-
-    /**
-     * @override
-     */
-    protected function getParentClasses($name)
-    {
-        return array();
+        return new \Doctrine\Common\Persistence\Mapping\StaticReflectionService;
     }
 }

@@ -152,13 +152,14 @@ class bbb {
                             //Fix the bbb timestamp
                             //$record['startTime'] = substr($record['startTime'], 0, strlen($record['startTime']) -3);
                             //$record['endTime']   = substr($record['endTime'], 0, strlen($record['endTime']) -3);
-                            //.' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime'])
-                           
+                            //.' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime'])                           
                             foreach ($record['playbacks'] as $item) {                                                        
-                                $url = Display::url(get_lang('ViewRecord').' #'.$count, $item['url'], array('target' => '_blank'));
+                                $url = Display::url(get_lang('ViewRecord'), $item['url'], array('target' => '_blank'));
                                 //$url .= Display::url(get_lang('DeleteRecord'), api_get_self().'?action=delete_record&'.$record['recordID']);
                                 $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting['id'].'&record_id='.$record['recordID']);
                                 $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']).'&url='.$item['url']);
+                                $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordID']);
+                                
                                 
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $count++;
@@ -219,8 +220,7 @@ class bbb {
         $pass = $this->get_user_metting_password();        
         //$meeting_is_running = BigBlueButtonBN::isMeetingRunning($meeting_data['id'], $this->url, $this->salt);
         $info = BigBlueButtonBN::getMeetingInfoArray($meeting_data['id'], $pass, $this->url, $this->salt);
-        var_dump($meeting_data['id']);
-        
+                
         if (!empty($info) && isset($info['participantCount'])) {
             return $info['participantCount'];
             
@@ -228,10 +228,8 @@ class bbb {
         return 0;
     }   
     
-    /**
-     * @todo 
-     */
-    function delete_record($id) {        
+    function delete_record($ids) {
+        return BigBlueButtonBN::deleteRecordings($ids, $this->url, $this->salt);           
     }
     
     function copy_record_to_link_tool($id, $record_id) {

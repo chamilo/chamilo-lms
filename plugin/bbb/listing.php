@@ -20,7 +20,6 @@ $tpl = new Template($tool_name);
 $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-
 switch ($action) {
     case 'add_to_calendar':
         $course_info = api_get_course_info();        
@@ -47,8 +46,13 @@ switch ($action) {
             $message = Display::return_message(get_lang('Error'), 'error');
         }
         break;
-    case 'delete_recording':
-        //$bbb->delete_record($_GET['id']);     
+    case 'delete_record':
+        $bbb->delete_record($_GET['id']);
+        if ($result) {
+            $message = Display::return_message(get_lang('Deleted'), 'success');
+        } else {
+            $message = Display::return_message(get_lang('Error'), 'error');
+        }
         break;
     case 'end':
         $bbb->end_meeting($_GET['id']);

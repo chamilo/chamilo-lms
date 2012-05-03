@@ -18,7 +18,7 @@
         <table class="table">
             <tr>
                 <th>#</th>                
-                <th>{{'Date'|get_lang}}</th>
+                <th>{{'CreatedAt'|get_lang}}</th>
                 <th>{{'Status'|get_lang}}</th>
                 <th>{{'Records'|get_lang}}</th>
                 <th>{{'Actions'|get_lang}}</th>

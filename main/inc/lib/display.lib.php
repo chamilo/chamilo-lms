@@ -330,6 +330,11 @@ class Display {
     public static function display_error_message ($message, $filter = true) {
         echo self::return_message($message, 'error', $filter);
     }
+    
+    public static function return_message_and_translate($message, $type='normal', $filter = true) {
+        $message = get_lang($message);
+        echo self::return_message($message, $type, $filter);
+    }    
 
     /**
      * Returns a div html string with

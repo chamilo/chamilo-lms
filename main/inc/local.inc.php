@@ -716,6 +716,7 @@ if (isset($cidReset) && $cidReset) {
 			$_course['id']                  = $course_data['code']; //auto-assigned integer
 			$_course['code']                = $course_data['code']; 
 			$_course['name']                = $course_data['title'];
+            $_course['title']               = $course_data['title'];
 			$_course['official_code']       = $course_data['visual_code']; // use in echo
 			$_course['sysCode']             = $course_data['code']; // use as key in db
 			$_course['path']                = $course_data['directory']; // use as key in path

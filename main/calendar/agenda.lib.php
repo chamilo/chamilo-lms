@@ -39,11 +39,17 @@ class Agenda {
 	
 	/**
 	 * 
-	 * Adds an event
-	 * @param 	int		start tms
-	 * @param 	int		end tms
-	 * @param 	string	agendaDay, agendaWeek, month
-	 * @param	string	personal, course or global (only works for personal by now) 
+	 * Adds an event to the calendar
+     * 
+	 * @param   int		start tms
+	 * @param   int		end tms
+     * @param   string all day (true, false)
+	 * @param   string  view agendaDay, agendaWeek, month @todo seems not to be used
+     * @param   string  title 
+     * @param   string  content
+     * @param   array   users to send array('everyone') or a list of user ids
+     * @param   bool    add event as a *course* announcement
+     * 	 
 	 */
 	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array(), $add_as_announcement = false) {
 		

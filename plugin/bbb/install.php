@@ -30,16 +30,17 @@ $sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_valu
 Database::query($sql);
 
 $table = Database::get_main_table('plugin_bbb_meeting');
-$sql = "CREATE TABLE $table ( " .
-        "id INT unsigned NOT NULL auto_increment PRIMARY KEY, " .
-        "c_id INT unsigned NOT NULL DEFAULT 0, " .        
-        "meeting_name VARCHAR(255) NOT NULL DEFAULT '', " .        
-        "attendee_pw VARCHAR(255) NOT NULL DEFAULT '', " .
-        "moderator_pw VARCHAR(255) NOT NULL DEFAULT '', " .                
-        "record INT NOT NULL DEFAULT 0, " .
-        "status INT NOT NULL DEFAULT 0, " .
-        "created_at VARCHAR(255) NOT NULL, " .
-        "welcome_msg VARCHAR(255) NOT NULL DEFAULT '')";
+$sql = "CREATE TABLE $table ( 
+        id INT unsigned NOT NULL auto_increment PRIMARY KEY, 
+        c_id INT unsigned NOT NULL DEFAULT 0,
+        meeting_name VARCHAR(255) NOT NULL DEFAULT '', 
+        attendee_pw VARCHAR(255) NOT NULL DEFAULT '',
+        moderator_pw VARCHAR(255) NOT NULL DEFAULT '', 
+        record INT NOT NULL DEFAULT 0,
+        status INT NOT NULL DEFAULT 0,
+        created_at VARCHAR(255) NOT NULL,
+        calendar_id INT DEFAULT 0,
+        welcome_msg VARCHAR(255) NOT NULL DEFAULT '')";
 Database::query($sql);
 
 // Update existing courses to add conference settings

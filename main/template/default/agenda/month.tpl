@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
@@ -39,7 +39,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 450,
+		height	: 480,
         zIndex: 20000 // added because of qtip2
    	});
     
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		modal	: false, 
 		width	: 550, 
-		height	: 450,
+		height	: 480,
         zIndex: 20000 // added because of qtip2
    	});
 
@@ -471,5 +471,5 @@ $(document).ready(function() {
 	</form>
 	</div>
 </div>
-<div id='loading' style='margin-left:150px;position:absolute;display:none'>{{"Loading"|get_lang}}...</div>
-<div id='calendar'></div>
+<div id="loading" style="margin-left:150px;position:absolute;display:none">{{"Loading"|get_lang}}...</div>
+<div id="calendar"></div>

@@ -134,9 +134,10 @@ class bbb {
             $item_meeting = $meeting;
             $item_meeting['info'] = BigBlueButtonBN::getMeetingInfoArray($meeting['id'], $pass, $this->url, $this->salt);
             
-            if ($meeting['info']['returncode'] == 'FAILED') {                
+            if ($meeting['info']['returncode'] == 'FAILED') {     
             } else {
-                $item_meeting['end_url'] = api_get_self().'?action=end&id='.$meeting['id'];    
+                $item_meeting['end_url']             = api_get_self().'?action=end&id='.$meeting['id'];    
+                $item_meeting['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']);
             }   
             $record_array = array();
             
@@ -156,12 +157,13 @@ class bbb {
                             foreach ($record['playbacks'] as $item) {                                                        
                                 $url = Display::url(get_lang('ViewRecord').' #'.$count, $item['url'], array('target' => '_blank'));
                                 //$url .= Display::url(get_lang('DeleteRecord'), api_get_self().'?action=delete_record&'.$record['recordID']);
-                                $url .= Display::url(get_lang('CopyToLinkTool'), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting['id'].'&record_id='.$record['recordID']);
+                                $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting['id'].'&record_id='.$record['recordID']);
+                                $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']).'&url='.$item['url']);
+                                
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $count++;
                                 $record_array[] = $url;
-                            }
-                            
+                            }                            
                         }
                     }
                 }
@@ -210,13 +212,14 @@ class bbb {
      */
     function get_users_online_in_current_room() {
         $course_id = api_get_course_int_id();
-        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND status = 1 ' => $course_id)), 'first');        
+        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND status = 1 ' => $course_id)), 'first');                
         if (empty($meeting_data)) {
             return 0;
         }        
         $pass = $this->get_user_metting_password();        
         //$meeting_is_running = BigBlueButtonBN::isMeetingRunning($meeting_data['id'], $this->url, $this->salt);
         $info = BigBlueButtonBN::getMeetingInfoArray($meeting_data['id'], $pass, $this->url, $this->salt);
+        var_dump($meeting_data['id']);
         
         if (!empty($info) && isset($info['participantCount'])) {
             return $info['participantCount'];

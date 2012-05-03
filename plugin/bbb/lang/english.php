@@ -13,6 +13,19 @@ $strings['plugin_comment']      = "Open Source Videoconference tool";
 
 $strings['Videoconference']     = "Videoconference";
 $strings['MeetingOpened']       = "Meeting opened";
+$strings['MeetingClosed']       = "Meeting closed";
+$strings['CloseMeeting']        = "Close meeting";
+
+$strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
+$strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";
+
+$strings['Records']             = "Records";
+$strings['Meeting']             = "Meeting";
+
+$strings['ViewRecord']          = "View record";
+$strings['CopyToLinkTool']      = "Copy to link tool";
+
 $strings['StartConference']     = "Start conference";
 $strings['RecordList']          = "Record list";
-$strings['ServerIsNotRunning']  = "Server Is Not Running";
+$strings['ServerIsNotRunning']  = "Videoconference server is not running";
+$strings['XUsersOnLine']        = "%s user(s) online";

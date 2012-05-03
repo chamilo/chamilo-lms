@@ -73,10 +73,10 @@ class bbb {
             // ?? 
             $voiceBridge = 0;
             $metadata = array('maxParticipants' => $max);                      
-            return $this->protocol.BigBlueButtonBN::createMeetingAndGetJoinURL($this->user_complete_name, $meeting_name, $id, $welcome_msg, $moderator_password, $attende_password, 
-                            $this->salt, $this->url, $this->logout_url, $record, $duration, $voiceBridge, $metadata);
-            
-            //$id = Database::update($this->table, array('created_at' => ''));
+            return $this->protocol.BigBlueButtonBN::createMeetingAndGetJoinURL(
+                            $this->user_complete_name, $meeting_name, $id, $welcome_msg, $moderator_password, $attende_password, 
+                            $this->salt, $this->url, $this->logout_url, $record, $duration, $voiceBridge, $metadata
+            );       
         }
     }
     
@@ -143,28 +143,32 @@ class bbb {
             if ($meeting['record'] == 1) {                
                 $records =  BigBlueButtonBN::getRecordingsArray($meeting['id'], $this->url, $this->salt);                      
                 //var_dump($meeting['id']);
-                if (!empty($records)) {                    
+                if (!empty($records)) {
+                    $count = 1;
                     foreach ($records as $record) {                        
                         if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
                             
                             //Fix the bbb timestamp
-                            $record['startTime'] = substr($record['startTime'], 0, strlen($record['startTime']) -3);
-                            $record['endTime']   = substr($record['endTime'], 0, strlen($record['endTime']) -3);
-                            
+                            //$record['startTime'] = substr($record['startTime'], 0, strlen($record['startTime']) -3);
+                            //$record['endTime']   = substr($record['endTime'], 0, strlen($record['endTime']) -3);
+                            //.' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime'])
+                           
                             foreach ($record['playbacks'] as $item) {                                                        
-                                $url = Display::url(get_lang('ViewRecord'), $item['url'], array('target' => '_blank')).' - '.api_convert_and_format_date($record['startTime']).' - '.api_convert_and_format_date($record['endTime']);
+                                $url = Display::url(get_lang('ViewRecord').' #'.$count, $item['url'], array('target' => '_blank'));
                                 //$url .= Display::url(get_lang('DeleteRecord'), api_get_self().'?action=delete_record&'.$record['recordID']);
                                 $url .= Display::url(get_lang('CopyToLinkTool'), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting['id'].'&record_id='.$record['recordID']);
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
+                                $count++;
                                 $record_array[] = $url;
                             }
+                            
                         }
                     }
                 }
                 $item_meeting['show_links']  = implode('<br />', $record_array);
             }
             
-            $item_meeting['created_at'] = api_get_local_time($item_meeting['created_at']);            
+            $item_meeting['created_at'] = api_convert_and_format_date($item_meeting['created_at']);            
             //created_at
             
             $item_meeting['publish_url'] = api_get_self().'?action=publish&id='.$meeting['id'];
@@ -246,7 +250,10 @@ class bbb {
                 }
             }
         }
-        return false;
-        
+        return false;        
+    }
+    
+    function is_server_running() {
+        return BigBlueButtonBN::isServerRunning($this->url);
     }
 }

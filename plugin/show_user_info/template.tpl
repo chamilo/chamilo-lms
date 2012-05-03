@@ -24,9 +24,7 @@
 #}
 
 {% if show_user_info.show_message is not null and _u.logged == 1 %}
-<div class="well">
-    {{"Welcome"|get_lang}} {{show_user_info.user_info.complete_name}} ({{show_user_info.username}})
-    <br />
-    The administrator - {{"siteName"|get_setting}}
-</div>
+    <div class="well">
+        {{ "WelcomToChamiloUserX" | get_lang | format(show_user_info.user_info.complete_name) }}            
+    </div>
 {% endif %}

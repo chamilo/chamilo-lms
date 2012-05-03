@@ -27,17 +27,7 @@ class AppPlugin {
     
     function __construct() {        
     }
-    
-    /*  For each of the possible plugin directories we check whether a file named "plugin.php" exists
-        (it contains all the needed information about this plugin).
-        This "plugin.php" file looks like:
-        $plugin_info['title'] = 'The title of the plugin';
-        $plugin_info['comment'] = 'Some comment about the plugin';
-        $plugin_info['location'] = array('loginpage_menu', 'campushomepage_menu', 'banner'); // The possible locations where the plugins can be used.
-        $plugin_info['version'] = '0.1 alpha'; // The version number of the plugin.
-        $plugin_info['author'] = 'Patrick Cool'; // The author of the plugin.
-    */
-    
+        
     function read_plugins_from_path() {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginpath = api_get_path(SYS_PLUGIN_PATH);
@@ -146,6 +136,40 @@ class AppPlugin {
         return $content;
     }
     
+    /**
+     * Loads the translation files inside a plugin if exists. It loads by default english see the hello world plugin
+     * 
+     * @todo add caching
+     * @param string $plugin_name 
+     */
+    function load_plugin_lang_variables($plugin_name) {
+        global $language_interface;
+        $root = api_get_path(SYS_PLUGIN_PATH);                                    
+
+        //1. Loading english if exists 
+        $english_path = $root.$plugin_name."/lang/english.php";  
+
+        if (is_readable($english_path)) {                        
+            include $english_path;
+            foreach ($strings as $key => $string) {                            
+                //$$key = $string;
+                $GLOBALS[$key] = $string;                     
+            }                        
+        }
+
+        //2. Loading the system language
+        $path = $root.$plugin_name."/lang/$language_interface.php";                    
+        if (is_readable($path)) {
+            include $path;
+            if (!empty($strings)) {                
+                foreach ($strings as $key => $string) {
+                    //$$key = $string;
+                    $GLOBALS[$key] = $string;                                           
+                }
+            }
+        }
+    }
+    
     /** 
      *
      *
@@ -163,18 +187,20 @@ class AppPlugin {
                 //The plugin_info variable is available inside the plugin index                
                 $plugin_info = $this->get_plugin_info($plugin_name);                
                 
-                //We also where the plugin is
+                //We also know where the plugin is
                 $plugin_info['current_region'] = $region;    
                 
                 // Loading the plugin/XXX/index.php file                
                 $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
                 
                 if (file_exists($plugin_file)) {
+                    
+                    //Loading the lang variables of the plugin if exists                    
+                    self::load_plugin_lang_variables($plugin_name);        
+                    
                     //Printing the plugin index.php file
                     require $plugin_file;
                     
-                    
-
                     //If the variable $_template is set we assign those values to be accesible in Twig
                     if (isset($_template)) {                        
                         $_template['plugin_info'] = $plugin_info;
@@ -191,7 +217,7 @@ class AppPlugin {
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
                     }           
-
+                    
                     if (!empty($template_list)) {
                         foreach ($template_list as $plugin_tpl) {
                             if (!empty($plugin_tpl)) {

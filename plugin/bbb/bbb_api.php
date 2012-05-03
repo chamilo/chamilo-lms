@@ -734,26 +734,26 @@ class BigBlueButtonBN {
 	}
         
         
-        public function _wrap_simplexml_load_file($url){
-	
-            if (extension_loaded('curl')) {
-                $ch = curl_init() or die ( curl_error() );
-                $timeout = 10;
-                curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);	
-                curl_setopt( $ch, CURLOPT_URL, $url );
-                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-                curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-                $data = curl_exec( $ch );
-                curl_close( $ch );
-		
-                if($data)
-                    return (new SimpleXMLElement($data,LIBXML_NOCDATA));
-                else
-                    return false;
-            }
-	
-            return (simplexml_load_file($url,'SimpleXMLElement', LIBXML_NOCDATA));
-        }        
+    public function _wrap_simplexml_load_file($url){
+
+        if (extension_loaded('curl')) {
+            $ch = curl_init() or die ( curl_error() );
+            $timeout = 10;
+            curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);	
+            curl_setopt( $ch, CURLOPT_URL, $url );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+            curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+            $data = curl_exec( $ch );
+            curl_close( $ch );
+
+            if($data)
+                return (new SimpleXMLElement($data,LIBXML_NOCDATA));
+            else
+                return false;
+        }
+
+        return (simplexml_load_file($url,'SimpleXMLElement', LIBXML_NOCDATA));
+    }        
         
 	
 }

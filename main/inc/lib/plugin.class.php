@@ -128,17 +128,16 @@ class Plugin {
         if (is_null($this->strings)) {
             global $language_interface;
             $root = api_get_path(SYS_PLUGIN_PATH);
-            $plugin_name = $this->get_name();
-            $language = $language_interface;
-            $path = "$root/$plugin_name/lang/$language.php";
+            $plugin_name = $this->get_name();                 
 
             //1. Loading english if exists            
-            $english_path = "$root/$plugin_name/lang/english.php";
+            $english_path = $root.$plugin_name."/lang/english.php";
             if (is_readable($english_path)) {
                 include $english_path;
                 $this->strings = $strings;
             }
-
+            
+            $path = $root.$plugin_name."/lang/$language_interface.php";
             //2. Loading the system language
             if (is_readable($path)) {
                 include $path;

@@ -7,7 +7,7 @@
  * Initialization
  */
 
-$language_file = array('videoconf');
+$course_plugin = 'bbb';
 
 require_once '../../main/inc/global.inc.php';
 require_once 'bbb.lib.php';
@@ -16,6 +16,7 @@ require_once 'bbb_api.php';
 $bbb = new bbb();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+
 switch ($action) {
     case 'copy_record_to_link_tool':
         $result = $bbb->copy_record_to_link_tool($_GET['id'], $_GET['record_id']);        
@@ -40,10 +41,12 @@ switch ($action) {
         break;
 }
 
-$meetings = $bbb->get_course_meetings();
-$users_online = $bbb->get_users_online_in_current_room();
+$meetings       = $bbb->get_course_meetings();
+$users_online   = $bbb->get_users_online_in_current_room();
+$status         = $bbb->is_server_running();
+$status         = false;
 
-$tool_name = get_lang('OrganisationSVideoconference');
+$tool_name = get_lang('Videoconference');
 
 $tpl = new Template($tool_name);
 
@@ -51,6 +54,7 @@ $tpl->assign('meetings', $meetings);
 $conference_url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_get_cidreq();
 $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
+$tpl->assign('bbb_status', $status);
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

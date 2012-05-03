@@ -6,7 +6,7 @@
  * 
  **/
 
- require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
@@ -30,8 +30,7 @@ class Template {
     
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {               
-        //parent::__construct();
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
                 
         //Twig settings        
         Twig_Autoloader::register();
@@ -50,14 +49,12 @@ class Template {
             //'auto_reload' => true
             //'optimizations' => 0 // turn on optimizations with -1
         ));
-        
-        $debug = new Twig_Extension_Debug();
-        $this->twig->addExtension($debug);
-        
-        $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
-        $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
-        $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
-        $this->twig->addFilter('var_dump',new Twig_Filter_Function('var_dump'));
+               
+        $this->twig->addFilter('get_lang',       new Twig_Filter_Function('get_lang'));
+        $this->twig->addFilter('get_path',       new Twig_Filter_Function('api_get_path'));
+        $this->twig->addFilter('get_setting',    new Twig_Filter_Function('api_get_setting'));
+        $this->twig->addFilter('var_dump',       new Twig_Filter_Function('var_dump'));        
+        $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         
         /*
         $lexer = new Twig_Lexer($this->twig, array(
@@ -92,11 +89,21 @@ class Template {
         
         //Chamilo plugins
         if ($this->show_header) {
+            
             $this->plugin = new AppPlugin();
-            $plugin_regions = $this->plugin->get_plugin_regions();        
+            
+            //1. Showing installed plugins in regions
+            $plugin_regions = $this->plugin->get_plugin_regions();                  
             foreach ($plugin_regions as $region) {
                 $this->set_plugin_region($region);
             }  
+            
+            //2. Loading the course plugin info
+            global $course_plugin;           
+            if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
+                //Load plugin get_langs
+                $this->plugin->load_plugin_lang_variables($course_plugin);                
+            }
         }
 	}
     

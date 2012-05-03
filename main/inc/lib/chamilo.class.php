@@ -9,6 +9,23 @@
  */
 class Chamilo
 {
+    
+    public static function name()
+    {
+        //@todo: add version
+        return 'chamilo';
+    }
+
+    static function is_test_server()
+    {
+        return api_get_setting('server_type') == 'test';
+    }
+
+    static function is_production_server()
+    {
+        return api_get_setting('server_type') == 'production';
+    }
+        
 
     /**
      * Returns a full url from local/absolute path and parameters.
@@ -48,16 +65,6 @@ class Chamilo
             return $root;
         }
         return $root . $path;
-    }
-
-    static function is_test_server()
-    {
-        return api_get_setting('server_type') == 'test';
-    }
-
-    static function is_production_server()
-    {
-        return api_get_setting('server_type') == 'production';
     }
 
 }

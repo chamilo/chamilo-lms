@@ -132,9 +132,9 @@ class Plugin {
             $language = $language_interface;
             $path = "$root/$plugin_name/lang/$language.php";
 
-            //1. Loading english if exists 
-            if (is_readable($path)) {
-                $english_path = "$root/$plugin_name/lang/english.php";
+            //1. Loading english if exists            
+            $english_path = "$root/$plugin_name/lang/english.php";
+            if (is_readable($english_path)) {
                 include $english_path;
                 $this->strings = $strings;
             }

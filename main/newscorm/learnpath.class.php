@@ -7363,9 +7363,7 @@ class learnpath {
                                         s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
                                         s1.write("container");
                                     </script>';
-        }
-        // Commented ":" for message in step.
-        //$return .= $lang.': ';
+        }                
         $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
          
         $return .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item&path_item=' . $row['path']);
@@ -7376,18 +7374,6 @@ class learnpath {
             $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
-/*
-        // Get the audiorecorder. Use of ob_* functions since there are echos in the file.
-        ob_start();
-        $audio_recorder_studentview = 'false';
-        $audio_recorder_item_id = $item_id;
-        if (api_get_setting('service_visio', 'active') == 'true') {
-           require_once 'audiorecorder.inc.php';
-        }
-        $return .= ob_get_contents();
-        ob_end_clean();
-        // End of audiorecorder include
-        */
         $return .= '</div>';
         return $return;
     }
@@ -7724,10 +7710,8 @@ class learnpath {
         $res_quiz = Database::query($sql_quiz);
         $res_hot  = Database::query($sql_hot);
 
-        $return = '<div class="lp_resource">';
-        
-        $return .= '<div class="lp_resource_element">';
-        //$return .= Display::return_icon('new_exercice.png', '', array(), 32); //'<img alt="" src="../img/icons/ICON_SIZE_SMALL/exercise.gif" style="margin-right:5px;" title="" />';
+        $return = '<div class="lp_resource">';        
+        $return .= '<div class="lp_resource_element">';        
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?lp_id=' . $this->lp_id . '">' . get_lang('NewExercise') . '</a>';
         $return .= '</div>';        
@@ -7742,11 +7726,9 @@ class learnpath {
 
         while ($row_quiz = Database :: fetch_array($res_quiz)) {
             $return .= '<div class="lp_resource_element">';
-            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-            //$return .= Display::return_icon('quiz.png', '', array(), 32); //'<img alt="" src="../img/icons/22/exercise.gif" style="margin-right:5px;" title="" />';
+            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';            
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . 
-                    Security :: remove_XSS(cut($row_quiz['title'], 80)).'</a>';
-            //$return .= $row_quiz['title'];
+                    Security :: remove_XSS(cut($row_quiz['title'], 80)).'</a>';            
             $return .= '</div>';
         }
 
@@ -7768,7 +7750,6 @@ class learnpath {
         $sql_link = "SELECT * FROM $tbl_link WHERE c_id = ".$course_id." $condition_session ORDER BY title ASC";
         $res_link = Database::query($sql_link);
 
-        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang('Links') . '</div>';
         $return = '<div class="lp_resource">';        
         $return .= '<div class="lp_resource_element">';
         $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
@@ -7778,15 +7759,12 @@ class learnpath {
         while ($row_link = Database :: fetch_array($res_link)) {
             $return .= '<div class="lp_resource_element">';
             $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
+            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
+                        $row_link['title'].
+                        '</a>';
             $return .= '</div>';
         }     
-
-        /*if (Database :: num_rows($res_link) == 0)
-            $return .= '<div class="lp_resource_element">' . get_lang('NoLinksAvailable') . '</div>';
-        */
         $return .= '</div>';
-
         return $return;
     }
 
@@ -7795,12 +7773,12 @@ class learnpath {
      * @return unknown
      */
     public function get_student_publications() {
-        $course_id = api_get_course_int_id();
-        $tbl_student = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
-        $sql_student = "SELECT * FROM $tbl_student  WHERE c_id = ".$course_id." $condition_session  ORDER BY title ASC";
-        $res_student = Database::query($sql_student);
+        //$course_id = api_get_course_int_id();
+        //$tbl_student = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+        //$session_id = api_get_session_id();
+        //$condition_session = api_get_session_condition($session_id);
+        //$sql_student = "SELECT * FROM $tbl_student  WHERE c_id = ".$course_id." $condition_session  ORDER BY title ASC";
+        //$res_student = Database::query($sql_student);
         //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';

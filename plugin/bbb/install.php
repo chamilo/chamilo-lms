@@ -64,7 +64,7 @@ while ($row = Database::fetch_assoc($res)) {
     $sql = "SELECT name FROM $t_tool WHERE c_id = $course_id AND name = 'videoconference' ";
     $result = Database::query($sql);
     if (!Database::num_rows($result)) {
-        $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_blank','plugin','0')";
+        $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_self','plugin','0')";
         $r = Database::query($sql_course);    
     }    
 }

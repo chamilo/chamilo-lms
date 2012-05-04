@@ -14,17 +14,8 @@
 
 -- xxMAINxx
 
-DELIMITER $$
-DROP PROCEDURE IF EXISTS drop_index $$
-CREATE PROCEDURE drop_index(in t_name varchar(128), in i_name varchar(128) )
-BEGIN
-IF ( (SELECT count(*) AS index_exists FROM  information_schema.statistics WHERE table_schema = DATABASE( )  AND table_name = t_name  AND  index_name =   i_name ) > 0) THEN
-   SET @s = CONCAT('DROP INDEX ' , i_name , ' ON ' , t_name );
-   PREPARE stmt FROM @s;
-   EXECUTE stmt;
- END IF;
-END $$
-DELIMITER ;
+DROP PROCEDURE IF EXISTS drop_index;
+CREATE PROCEDURE drop_index(in t_name varchar(128), in i_name varchar(128) ) BEGIN IF ( (SELECT count(*) AS index_exists FROM  information_schema.statistics WHERE table_schema = DATABASE( )  AND table_name = t_name  AND  index_name =   i_name ) > 0) THEN    SET @s = CONCAT('DROP INDEX ' , i_name , ' ON ' , t_name );    PREPARE stmt FROM @s;    EXECUTE stmt;  END IF; END;
 
 CALL drop_index('settings_current', 'unique_setting');
 CALL drop_index('settings_options', 'unique_setting_option');

@@ -326,10 +326,10 @@ $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 
 
 $action_array = array();
 
-$resultcategories[] = array('category' => 'search');
-$resultcategories[] = array('category' => 'stylesheets');
-$resultcategories[] = array('category' => 'templates');
-$resultcategories[] = array('category' => 'plugins');
+$resultcategories[] = array('category' => 'Search');
+$resultcategories[] = array('category' => 'Stylesheets');
+$resultcategories[] = array('category' => 'Templates');
+$resultcategories[] = array('category' => 'Plugins');
 foreach ($resultcategories as $row) {
     $url = array();    
     $url['url'] = api_get_self()."?category=".$row['category'];

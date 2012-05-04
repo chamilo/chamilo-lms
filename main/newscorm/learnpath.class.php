@@ -2678,7 +2678,7 @@ class learnpath {
         //echo $this->current;
         //$parent = $this->items[$this->current]->get_parent();
         //if (empty($parent)) { $parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()]; }
-        $html = '<div id="scorm_title" class="scorm_title"><div class="scorm_title_text">' . Security::remove_XSS($this->get_name()) . '</div></div>';
+        $html = '<div id="scorm_title" class="scorm_title">' . Security::remove_XSS($this->get_name()) . '</div>';
         // Build, display.
         if ($is_allowed_to_edit) {
             $gradebook = Security :: remove_XSS($_GET['gradebook']);

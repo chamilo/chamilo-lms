@@ -186,56 +186,6 @@ a.invisible:link, a.invisible:visited {
     line-height: 0px;
     height: 0;
 }
-input.link_alike {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #4171b5;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-input.link_alike:hover {
-    background-color: #FFFFFF;
-    border-width: 0px;
-    color: #f3840d;
-    font-weight: bold;
-    text-align: left;
-    padding: 0px;
-    margin: 0px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-
-
-
-/*****************************************************
- *  HEADER STYLES                                    *
- *****************************************************/
-#header {
-
-}
-/********************************************************
- *  HEADER 1: Title, portal, organisation, course title *
- ********************************************************/
-
-#header1 a {
-    font-size:12px;    
-    font-weight:normal;
-    color: #666666;
-    text-decoration: none;
-}
-#header1 a:hover {
-    text-decoration: underline;
-}
 #sitename {
     margin: 0;
 }
@@ -1807,10 +1757,6 @@ span.form_required  {
 .decrease_font:hover {
     border: 1px solid black;
     cursor: pointer;
-}
-
-.progresstext {
-    text-align:center;
 }
 
 /* tips Abbr-plugin for FCKeditor */

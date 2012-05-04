@@ -43,6 +43,6 @@ if (!empty($course_id)) {
     $r = Database::query($sql_course);   
     
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_blank','plugin','0')";
+    $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, 'videoconference','../../plugin/bbb/start.php','visio.gif','".string2binary(api_get_setting('course_create_active_tools', 'videoconference'))."','0','squaregrey.gif','NO','_self','plugin','0')";
     $r = Database::query($sql_course);
 }

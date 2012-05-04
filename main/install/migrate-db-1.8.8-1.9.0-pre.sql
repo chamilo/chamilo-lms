@@ -170,9 +170,9 @@ ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date)
 
 CREATE TABLE user_rel_course_vote ( id int unsigned not null AUTO_INCREMENT PRIMARY KEY,  c_id int unsigned not null,  user_id int unsigned not null, session_id int unsigned not null default 0,  url_id int unsigned not null default 0, vote int unsigned not null default 0);
 
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
 
@@ -196,7 +196,7 @@ DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17705' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17733' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

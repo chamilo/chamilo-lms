@@ -862,7 +862,7 @@ VALUES
 ('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
 ('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
 ('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17705','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17733','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -2952,9 +2952,9 @@ CREATE TABLE IF NOT EXISTS user_rel_course_vote (
   vote int unsigned not null default 0
 );
 
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 -- Global chat
 DROP TABLE IF EXISTS chat;

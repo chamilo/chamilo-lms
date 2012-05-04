@@ -60,7 +60,7 @@ a:active {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-footer {
+footer {    
     background-color: #037fb2;
     background-image: url(images/bg-footer.gif);
     background-repeat:repeat-x;    

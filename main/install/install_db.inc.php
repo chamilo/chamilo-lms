@@ -118,8 +118,8 @@ load_main_database($installation_settings);
 //Adds the c_XXX courses tables see #3910
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php'; 
 
-
 drop_course_tables();
+
 create_course_tables();
 
 load_database_script('db_stats.sql');

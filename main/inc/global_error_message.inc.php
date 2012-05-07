@@ -120,13 +120,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['title'] = $InstallationTitle;
 			if (($pos = strpos($InstallationDescription, '%s')) === false) {
 				$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
-			}
-			$click_to_install = substr($InstallationDescription, 0, $pos);
+			}			
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
                                         <p class="download-info">
-                                            <button class="btn btn-primary btn-large" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >
-                                            '.$click_to_install.'</button>
+                                            <button class="btn btn-primary btn-large" type="submit" value="INSTALL Chamilo" >INSTALL Chamilo</button>
                                             <a class="btn btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
                                         </p>
 										</form>';

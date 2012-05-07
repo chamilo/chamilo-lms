@@ -38,10 +38,10 @@ class Log
         static $result = null;
         if (empty($result)) {
             self::register_autoload();
-            $name = 'name';
+            $name = 'chamilo';
             $result = new Logger($name);
             $handler = new Monolog\Handler\StreamHandler('php://stderr');
-            $handler->setFormatter(new Monolog\Formatter\LineFormatter('[%datetime%] [%level_name%] [%channel%]: %message% %context% %extra%' . PHP_EOL, 'Y-m-d H:i:s'));
+            $handler->setFormatter(new Monolog\Formatter\LineFormatter('[%datetime%] [%level_name%] [%channel%]: %message%' . PHP_EOL, 'Y-m-d H:i:s')); //%context% %extra%
             $result->pushHandler($handler);
             //$result->pushProcessor(new \Monolog\Processor\WebProcessor());
         }

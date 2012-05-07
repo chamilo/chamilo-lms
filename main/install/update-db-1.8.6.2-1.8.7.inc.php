@@ -82,21 +82,21 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+                 Log::error('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+                 Log::error('Database '.$dbNameForm.' was not found, skipping');
             } else {
                 Database::select_db($dbNameForm);
                 foreach ($m_q_list as $query){
                     if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
+                         Log::notice("Database::query($dbNameForm,$query)");
                     } else {
                         $res = Database::query($query);
                         if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
+                             Log::notice("In $dbNameForm, executed: $query");
                         }
                         if ($res === false) {
-                        	error_log('Error in '.$query.': '.Database::error());
+                        	 Log::error('Error in '.$query.': '.Database::error());
                         }
                     }
                 }
@@ -105,13 +105,13 @@ if (defined('SYSTEM_INSTALLATION')) {
             	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
-                         error_log('Error in '.$query.': '.Database::error());
+                          Log::error('Error in '.$query.': '.Database::error());
                     }
                 }
             	$query = "ALTER DATABASE `".$dbNameForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
-                     error_log('Error in '.$query.': '.Database::error());
+                      Log::error('Error in '.$query.': '.Database::error());
                 }
             }
         }
@@ -221,18 +221,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+                 Log::error('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm,$dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+                 Log::error('Database '.$dbNameForm.' was not found, skipping');
             } else {
                 Database::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
+                         Log::notice("Database::query($dbNameForm,$query)", 0);
                     } else {
                         $res = Database::query($query);
                         if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
+                             Log::notice("In $dbNameForm, executed: $query", 0);
                         }
                     }
                 }
@@ -248,22 +248,22 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbStatsForm) > 40) {
-                error_log('Database name '.$dbStatsForm.' is too long, skipping', 0);
+                 Log::error('Database name '.$dbStatsForm.' is too long, skipping');
             } elseif (!in_array($dbStatsForm, $dblist)){
-                error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
+                 Log::error('Database '.$dbStatsForm.' was not found, skipping');
             } else {
                 Database::select_db($dbStatsForm);
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbStatsForm,$query)", 0);
+                         Log::notice("Database::query($dbStatsForm,$query)");
                     } else {
                         $res = Database::query($query);
                         if ($log) {
-                            error_log("In $dbStatsForm, executed: $query", 0);
+                             Log::notice("In $dbStatsForm, executed: $query");
                         }
                         if ($res === false) {
-                            error_log('Error in '.$query.': '.Database::error());
+                             Log::error('Error in '.$query.': '.Database::error());
                         }
                     }
                 }
@@ -272,13 +272,13 @@ if (defined('SYSTEM_INSTALLATION')) {
             	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
-                         error_log('Error in '.$query.': '.Database::error());
+                          Log::error('Error in '.$query.': '.Database::error());
                     }
                 }
                 $query = "ALTER DATABASE `".$dbStatsForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
-                     error_log('Error in '.$query.': '.Database::error());
+                      Log::error('Error in '.$query.': '.Database::error());
                 }
 
 
@@ -331,19 +331,19 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbUserForm) > 40) {
-                error_log('Database name '.$dbUserForm.' is too long, skipping', 0);
+                 Log::error('Database name '.$dbUserForm.' is too long, skipping');
             } elseif (!in_array($dbUserForm,$dblist)) {
-                error_log('Database '.$dbUserForm.' was not found, skipping', 0);
+                 Log::error('Database '.$dbUserForm.' was not found, skipping');
             } else {
                 Database::select_db($dbUserForm);
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbUserForm,$query)", 0);
-                        error_log("In $dbUserForm, executed: $query", 0);
+                         Log::notice("Database::query($dbUserForm,$query)");
+                         Log::notice("In $dbUserForm, executed: $query");
                     } else {
                         $res = Database::query($query);
                         if ($res === false) {
-                            error_log('Error in '.$query.': '.Database::error());
+                             Log::error('Error in '.$query.': '.Database::error());
                         }
                     }
                 }
@@ -352,13 +352,13 @@ if (defined('SYSTEM_INSTALLATION')) {
             	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
-                         error_log('Error in '.$query.': '.Database::error());
+                          Log::error('Error in '.$query.': '.Database::error());
                     }
                 }
                 $query = "ALTER DATABASE `".$dbUserForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
-                     error_log('Error in '.$query.': '.Database::error());
+                      Log::error('Error in '.$query.': '.Database::error());
                 }
             }
         }
@@ -375,9 +375,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
-            error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+             Log::error('Database name '.$dbNameForm.' is too long, skipping');
         } elseif(!in_array($dbNameForm, $dblist)) {
-            error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+             Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
             Database::select_db($dbNameForm);
             $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
@@ -407,14 +407,14 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
 
                         if ($only_test) {
-                            error_log("Database::query(".$row_course['db_name'].",$query)", 0);
+                             Log::notice("Database::query(".$row_course['db_name'].",$query)");
                         } else {
                             $res = Database::query($query);
                             if ($log) {
-                                error_log("In ".$row_course['db_name'].", executed: $query", 0);
+                                 Log::notice("In ".$row_course['db_name'].", executed: $query");
                             }
                             if ($res === false) {
-                                error_log('Error in '.$query.': '.Database::error());
+                                 Log::error('Error in '.$query.': '.Database::error());
                             }
                         }
                     }
@@ -425,13 +425,13 @@ if (defined('SYSTEM_INSTALLATION')) {
             	            $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                             $res = Database::query($query);
                             if ($res === false) {
-                                error_log('Error in '.$query.': '.Database::error());
+                                 Log::error('Error in '.$query.': '.Database::error());
                             }
                         }
                     	$query = "ALTER DATABASE `".$row_course['db_name']."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                     	$res = Database::query($query);
                         if ($res === false) {
-                            error_log('Error in '.$query.': '.Database::error());
+                             Log::error('Error in '.$query.': '.Database::error());
                         }
                     }
                     $t_student_publication = $row_course['db_name'].".student_publication";
@@ -447,7 +447,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $rs_insert_user = Database::query($sql_insert_user);
 
                     if ($rs_insert_user === false) {
-				    	error_log('Could not query insert_user_id table: '.Database::error());
+				    	 Log::error('Could not query insert_user_id table: '.Database::error());
 					} else {
 						if (Database::num_rows($rs_insert_user) > 0) {
 							while ($row_ids = Database::fetch_array($rs_insert_user)) {
@@ -513,9 +513,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
-            error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+             Log::error('Database name '.$dbNameForm.' is too long, skipping');
         } elseif (!in_array($dbNameForm, $dblist)) {
-            error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+             Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
             Database::select_db($dbNameForm);
             $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
@@ -544,11 +544,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
                         }
                         if ($only_test) {
-                            error_log("Database::query(".$row['db_name'].",$query)", 0);
+                             Log::notice("Database::query(".$row['db_name'].",$query)");
                         } else {
                             $res = Database::query($query);
                             if ($log) {
-                                error_log("In ".$row['db_name'].", executed: $query", 0);
+                                 Log::notice("In ".$row['db_name'].", executed: $query");
                             }
                         }
                     }

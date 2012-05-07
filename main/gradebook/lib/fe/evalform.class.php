@@ -172,7 +172,7 @@ class EvalForm extends FormValidator
 		}        
 		usort($results_and_users, array ('EvalForm', 'sort_by_user'));
 
-		$defaults= array ();
+		$defaults = array();
 		
 		foreach ($results_and_users as $result_and_user) {
 			$user = $result_and_user['user'];
@@ -383,10 +383,13 @@ class EvalForm extends FormValidator
 	 */
 	protected function build_editing_form() {        
         $parent_cat = Category :: load($this->evaluation_object->get_category_id());
-        $cat = Category :: load($parent_cat[0]->get_parent_id());
-        $global_weight = $cat[0]->get_weight();                
-        //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
-        $weight_mask = $global_weight*$this->evaluation_object->get_weight()/$parent_cat[0]->get_weight() ;
+        if ($parent_cat[0]->get_parent_id() == 0) {
+            $weight_mask = $this->evaluation_object->get_weight();            
+        } else {
+            $cat = Category :: load($parent_cat[0]->get_parent_id());
+            $global_weight = $cat[0]->get_weight();                
+            $weight_mask = $global_weight*$this->evaluation_object->get_weight()/$parent_cat[0]->get_weight() ;
+        }
             
 		$this->setDefaults(array (	'hid_id'            => $this->evaluation_object->get_id(), 
 									'name'              => $this->evaluation_object->get_name(), 
@@ -434,7 +437,7 @@ class EvalForm extends FormValidator
                 
         if (count($all_categories) == 1) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
-        } else {        
+        } else {
             $select_gradebook = $this->addElement('select', 'hid_category_id', get_lang('SelectGradebook'), array(), array('id' => 'hid_category_id'));
             $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'nonzero');
         

@@ -27,13 +27,19 @@ if ($form->validate()) {
 	$eval->set_user_id($values['hid_user_id']);
 	$eval->set_course_code($values['hid_course_code']);
 	$eval->set_category_id($values['hid_category_id']);
-    
-    $parent_cat = Category :: load($values['hid_category_id']);                
-    $cat = Category :: load($parent_cat[0]->get_parent_id());    
-    $global_weight = $cat[0] -> get_weight();        
-    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
         
-    $eval->set_weight($values['weight']);
+    $parent_cat = Category :: load($values['hid_category_id']);                
+    
+    $final_weight = null;
+    if ($parent_cat[0]->get_parent_id() == 0) {
+        $final_weight = $values['weight_mask'];    
+    } else {
+        $cat = Category :: load($parent_cat[0]->get_parent_id());
+        $global_weight = $cat[0]->get_weight();
+        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();        
+    }    
+    
+    $eval->set_weight($final_weight);
     
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {

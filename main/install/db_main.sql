@@ -374,6 +374,7 @@ LOCK TABLES language WRITE;
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
 ('Asturianu','asturian','ast','asturian',0),
+('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0),
 ('&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;','bulgarian','bg','bulgarian',1),
 ('Bosanski','bosnian','bs','bosnian',1),
 ('Catal&agrave;','catalan','ca','catalan',0),
@@ -417,6 +418,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;','russian','ru','russian',0),
 ('Sloven&#269;ina','slovak','sk','slovak',0),
 ('Sloven&scaron;&#269;ina','slovenian','sl','slovenian',1),
+('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0),
 ('Srpski','serbian','sr','serbian',0),
 ('Suomi','finnish','fi','finnish',0),
 ('Svenska','swedish','sv','swedish',0),
@@ -856,7 +858,7 @@ VALUES
 ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17759','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17763','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

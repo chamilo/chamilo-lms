@@ -1230,16 +1230,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
-            /*case 'gradebook_ranking':
-                $value = explode('::', $row['selected_value']);
-                
-                $form->addElement('text', 'gradebook_display['.$row['variable'].'][text]',  array(get_lang($row['title']), get_lang($row['comment'])), array('class' => 'span1', 'value' => $value[0]), $hideme);
-                $form->addElement('text', 'gradebook_display['.$row['variable'].'][score]', array(get_lang($row['title']), get_lang($row['comment'])), array('class' => 'span3','value' => $value[1]), $hideme);
-                
-                $renderer = $form -> defaultRenderer();
-                $renderer->setElementTemplate(' {label}<div class="controls"> {element} %= ', 'gradebook_display['.$row['variable'].'][text]');
-                $renderer->setElementTemplate(' {element}</div><br />', 'gradebook_display['.$row['variable'].'][score]');                
-                break;*/
             case 'custom':            	
             	break;            
         }        

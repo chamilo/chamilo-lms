@@ -193,7 +193,7 @@ class CatForm extends FormValidator {
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('class'=>'span3','cols' => '34'));        
         
-        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
+        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0 && api_get_setting('teachers_can_change_grade_model_settings') == 'true') {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                

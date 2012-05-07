@@ -852,7 +852,9 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17752','DatabaseVersion','', NULL, NULL, 0);
+('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
+('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17759','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1188,7 +1190,9 @@ VALUES
 ('enable_wami_record', 'true', 'Yes'),
 ('enable_wami_record', 'false', 'No'),
 ('teachers_can_change_score_settings', 'true', 'Yes'),
-('teachers_can_change_score_settings', 'false', 'No');
+('teachers_can_change_score_settings', 'false', 'No'),
+('teachers_can_change_grade_model_settings', 'true', 'Yes'),
+('teachers_can_change_grade_model_settings', 'false', 'No');
 UNLOCK TABLES;
 /*
 ('activate_send_event_by_mail', 'true', 'Yes'),

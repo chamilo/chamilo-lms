@@ -1062,7 +1062,6 @@ $CourseCodeAlreadyExistExplained = "Datu bāzes sistēma pārbauda kursa kodu, v
 $CantDeleteReadonlyFiles = "Nevar izdzēst failu, kas konfigurēts tikai lasīšanas režīmā";
 $Uploaded = "Augšupielādēts";
 $Saved = "Saglabāts";
-$GotoCourse = "Doties uz Kursu";
 $EmailSentFromDokeos = "E - vēstule, no platformas ir nosūtīta";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Informācija par pēdējo pabeigto soli un nākošo nepabeigto soli";
 $LatexCode = "LaTEX kods";

@@ -1063,7 +1063,6 @@ $CourseCodeAlreadyExistExplained = "Cando un código de curso se publica, o sist
 $CantDeleteReadonlyFiles = "Non se pode eliminar os arquivos que están configuraos en modo de só lectura.";
 $Uploaded = "Subido";
 $Saved = "Gardado";
-$GotoCourse = "Ir ao curso";
 $EmailSentFromDokeos = "Correo electrónico enviado desde a plataforma";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Información sobre o último paso terminado e o seguinte sen rematar.";
 $LatexCode = "Código LaTex";

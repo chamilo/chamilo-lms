@@ -36,7 +36,7 @@ $ValidateChanges = "Uveljavi spremembe";
 $FolderUpdated = "Mapa je bila ažurirana";
 $EndsAt = "Konča (popolnoma zaprta)";
 $QualificationOfAssignment = "Ocenjevanje nalog/izdelkov";
-$MakeQualifiable = "Omogoči ocenjevanje";
+$MakeQualifiable = "Dodaj v redovalnico";
 $QualificationNumberOver = "Ocena";
 $WeightInTheGradebook = "Utež v kompetenčnem poročilu";
 $DatesAvailables = "Razpoložljivi datumi";
@@ -97,5 +97,5 @@ $MaxWeightNeedToBeProvided = "Največja vrednost uteži mora biti podana";
 $ContainsAfile = "Vsebuje datoteko";
 $AllowTextAssignments = "Dovoli izdelku, da je upravljan preko spletnega urejevalnika";
 $YouAlreadySentAPaperYouCantUpload = "Nalogo ste že odposlali. Ne morete naložiti nove.";
-$CantUploadDeleteYourPaperFirst = "Te naloge ne morete naložiti. Najprej morate odstraniti predhodno naloženo nalogo.";
+$CantUploadDeleteYourPaperFirst = "Ta naloga/izdelek je predhodno že bila oddana in je ne morete ponovno naložiti. Če to vseeno želite storiti, najprej odstranite že oddano nalogo.";
 ?>

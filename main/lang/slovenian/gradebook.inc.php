@@ -228,4 +228,8 @@ $SelectGradebook = "Izberi ocenjevanje";
 $CheckYourGradingModelValues = "Preverite vrednosti modela ocenjevanja";
 $SkillsAchievedWhenAchievingThisGradebook = "Spretnosti pridobljene s tem ocenjevanjem";
 $AddGradebook = "Dodaj ocenjevanje";
+$SelectGradeModel = "Izberi model ocenjevanja";
+$AllMustWeight100 = "Vsota vseh vrednosti mora biti 100";
+$Components = "Komponente";
+$OnlyActiveWhenThereAreAnyComponents = "Ta možnost je omogočena v primeru, da imate kakršnokoli ocenjevanje ali kategorije";
 ?>

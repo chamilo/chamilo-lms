@@ -315,4 +315,7 @@ $NumberOfForumsInLearnpath = "Št. forumov v učni poti";
 $NumberOfAssignmentsInLearnpath = "Št. nalog v učni poti";
 $NumberOfAnnouncementsInCourse = "Št. obvestil v tečaju";
 $CurrentCoursesReport = "Poročilo o trenutnih tečajih";
+$NumberOfPublishedExercises = "št. objavljenih vaj/testov";
+$NumberOfPublishedLps = "št. objavljenih učnih poti";
+$EventType = "Vrsta dogodka";
 ?>

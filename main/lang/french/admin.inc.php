@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', parametrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
+$CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS";
 $AdminBy = "Administration  par";
 $AdministrationTools = "Administration";
 $State = "Etat du système";
@@ -1506,9 +1506,4 @@ $CasUserAddLastnameAttributeComment = "Enregistrer le nom de famille CAS de l'ut
 $ShowAdminToolbarTitle = "Afficher la barre d'administration";
 $ShowAdminToolbarComment = "Affiche une barre d'outils globale au sommet de la page aux utilisateurs des rôles désignés. Cette barre d'outils, très similaire à celles de Wordpress et de Google, peut considérablement accélérer certaines opérations complexes et augmente l'espace disponible pour les contenus de cours, mais elle pourrait rendre certains utilisateurs confus.";
 $FirstLetterCourseTitle = "Première lettre (title)";
-$ShibbolethMainActivateTitle = "<h3>Configuration de l'authentification Shibboleth</h3>";
-$ShibbolethMainActivateComment = "<p>Vous devez, en premier lieu, configurer Shibboleth pour votre serveur web. Pour le configurer pour Chamilo.</p><h5>éditez le fichier main/auth/shibboleth/config/aai.class.php</h5><p>Modifiez les valeurs de l'objet &#36;result avec les nom des attributs retourné par votre serveur Shibboleth.</p>Les valeurs à modifier sont<ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login Shibboleth', parametrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
-$FacebookMainActivateTitle = "<h3>Configuration de l'authentification via Facebook</h3>";
-$FacebookMainActivateComment =  "<p>Vous devez, en premier lieu, créer une application Facebook (cf. <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) avec votre compte Facebbok. Le paramètre de l'application Facebook 'URL du site' doit comporter 'action=fbconnect' comme paramètre en GET (exemple : http://mychamilo.com/?action=fbconnect)</p>Ensuite, <h5>éditez le fichier main/auth/external_login/facebook.conf.php</h5>et entrez les valeurs 'appId' et 'secret', fournies par Facebbok, pour la variable &#36;facebook_config.<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login Facebook', parametrable, qui s'ajoutera à la page d'accueil de votre campus Chamilo.";
-
 ?>

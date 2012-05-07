@@ -20,7 +20,7 @@ class Log
 
         $directory = api_get_path(LIBRARY_PATH) . 'symfony';
         if (!class_exists('Doctrine\Common\ClassLoader', false)) {
-            require_once $directory . '/doctrine/Common/ClassLoader.php';
+            require_once $directory . '/Doctrine/Common/ClassLoader.php';
         }
 
         $loader = new Doctrine\Common\ClassLoader('Monolog', $directory);

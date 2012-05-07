@@ -64,7 +64,6 @@ $(function() {
                 var foo_course  = "'.$course_code.'";
                 var graph_type  = "'.$type.'";
                 var foo_slider_state = getSliderState();
-
                 if (foo_slider_state == "open"){
                     sliderAction();
                 }
@@ -80,7 +79,7 @@ $(function() {
                         $( "#ui-tabs-2" ).html(db.graph_result);
                     }
                     else{
-                        $("#messages").text("No existen registros para este rango");
+                        $("#messages").text("'.get_lang('NoDataAvailable').'");
                         $("#messages").addClass("warning-message");
                         $("#cev_cont_stats").html(db.stats);
                         $( "#ui-tabs-1" ).empty();
@@ -89,8 +88,7 @@ $(function() {
                     }
                     var foo_height = sliderGetHeight("#messages");
                     sliderSetHeight(".slider",foo_height);
-                    controlSliderMenu(foo_height);
-                    //$("#messages").css("height", foo_height);
+                    controlSliderMenu(foo_height);                    
                     // Hide confirmation message and enable stars for "Rate this" control, after 2 sec...
                     /*setTimeout(function(){
                             $("#messages").fadeOut(1000, function(){ui.enable()})
@@ -153,7 +151,7 @@ function areBothFilled() {
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(function() {
         $("#cev_button").hide();
-    $("#container-9").tabs({remote: true});
+        $("#container-9").tabs({remote: true});
 });
 </script>';
 
@@ -163,28 +161,21 @@ $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AccessDetails'));
 Display :: display_header('');
 $main_user_info = api_get_user_info($user_id);
 $result_to_print = '';
-$main_date_array = array();
 
 $sql_result      = MySpace::get_connections_to_course($user_id, $course_code);
 $result_to_print = convert_to_string($sql_result);
 
-api_display_tool_title(get_lang('DetailsStudentInCourse'));
+echo Display::page_header(get_lang('DetailsStudentInCourse'));
+echo Display::page_subheader(get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).' - '.get_lang('Course').': '.$course_code);
+
+$form = new FormValidator('myform', 'post', "javascript:get(document.getElementById('myform'));", null, array('id' => 'myform'));
+$form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
+$form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
+
+$form->addElement('style_submit_button', 'reset', get_lang('Reset'), array('onclick' => "javascript:window.location='access_details.php?course=".$course_code."&student=".$user_id."&cidReq=".$course_code."';"));
+$form->display();
 ?>
 <div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-<div id="cev_cont" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-<?php echo '<strong>'.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong> <br /> <strong>'.get_lang('Course').': </strong>'.$course_code; ?></div>
-<br />
-<form action="javascript:get(document.getElementById('myform'));" name="myform" id="myform">
-<div id="cev_cont_header">
-    <p><?php echo get_lang('SelectADateRange')?></p>
-    <label for="to"><?php echo get_lang('From')?></label>
-    <input type="text" id="date_from" name="from"/>
-    <label for="to"><?php echo get_lang('Until')?></label>
-    <input type="text" id="date_to" name="to"/>
-</div><br /><br />
-</form>
-<input id="cev_button" type=button class="ui-state-default ui-corner-all" value="Resetear Fechas" onClick="javascript:window.location='access_details.php?course=<?php echo $course_code?>&student=<?php echo $user_id?>&cidReq=<?php echo $course_code ?>';" >
-</div><br />
 
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('Statistics'); ?></div><br />
@@ -210,7 +201,6 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
     </ul>
 </div>
 
-
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('DateAndTimeOfAccess'),' - ', get_lang('Duration') ?></div><br />
     <div id="cev_cont_results" >
@@ -225,9 +215,9 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
     </div>
     <?php
     if ($result_to_print != "")  {
-        echo ('<br /><div class="slider_menu">
+        echo '<br /><div class="slider_menu">
         <a href="#" onclick="return sliderAction();">'.get_lang('More').'</a>
-        </div><br />');
+        </div>';
     }?>
     </div>
 </div><br />

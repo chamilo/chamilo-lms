@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials";
+$CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
 $AdminBy = "Administration by";
 $AdministrationTools = "Administration";
 $State = "Portal status";
@@ -1535,7 +1535,16 @@ $EnableWamiRecordTitle = "Activate Wami-recorder";
 $EnableWamiRecordComment = "Wami-recorder is a voice record tool on Flash";
 $ChangeSharedSetting = "Change setting visibility for the other portals";
 $AllowHRSkillsManagementTitle = "Allow HR skills management";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>LDAP authentication : <br />See I. below to configure LDAP <br />See II. below to activate LDAP authentication </li><br /><br /><li> Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />See I. below to configure LDAP <br />CAS manage user authentication, LDAP activation isn't required. </li><br /></ul></div><br /><h4>I. LDAP configuration</h4><h5>Edit file main/auth/external_login/ldap.conf.php </h5>-&gt; Edit values of array <code>&#36;extldap_config</code> <br /><br />Parameters are <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; To update correspondences between user and LDAP attributes, edit array <code>&#36;extldap_user_correspondance</code> <br />Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activate LDAP authentication </h4><h5>Edit file main/inc/conf/configuration.php </h5>-&gt; Uncomment lines <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : LDAP users use same fields than platform users to login. <br />N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.";
+$LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
 $AllowHRSkillsManagementComment = "Allows HR to manage skills";
 $GradebookDefaultWeightTitle = "Default weight in Gradebook";
 $GradebookDefaultWeightComment = "This weight will be use in all courses by default";
-?>
+$ActiveOnly = "Active only";
+$AuthenticationSource = "Authentication";
+$RegisteredDate = "Registered";
+$Zombies = "Zombies";
+$ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
+$ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
+$FacebookMainActivateTitle = "<h3>Facebook authentication</h3>";
+$FacebookMainActivateComment =  "<p>First of all, you have create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps parameters, the site URL value should have a GET parameter 'action=fbconnect' (e.g. http://mychamilo.com/?action=fbconnect).</p>Then, <h5>edit file main/auth/external_login/facebook.conf.php</h5>and enter 'appId' and 'secret' values for &#36;facebook_config.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'Facebook Login' button for your Chamilo campus.";

@@ -852,7 +852,19 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17752','DatabaseVersion','', NULL, NULL, 0);
+('gradebook_ranking_1', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_2', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_3', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_4', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_5', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_6', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17734','DatabaseVersion','', NULL, NULL, 0);
+('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
+('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1187,8 +1199,13 @@ VALUES
 ('allow_browser_sniffer', 'false', 'No'),
 ('enable_wami_record', 'true', 'Yes'),
 ('enable_wami_record', 'false', 'No'),
-('teachers_can_change_score_settings', 'true', 'Yes'),
+('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
+('update_user_info_cas_with_ldap', 'true', 'Yes'),
+('update_user_info_cas_with_ldap', 'false', 'No'),
+('teachers_can_change_score_settings', 'false', 'Yes'),
 ('teachers_can_change_score_settings', 'false', 'No');
+
+
 UNLOCK TABLES;
 /*
 ('activate_send_event_by_mail', 'true', 'Yes'),

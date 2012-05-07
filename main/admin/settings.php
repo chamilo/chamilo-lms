@@ -312,6 +312,8 @@ $action_images['search']        = 'search.png';
 $action_images['stylesheets']   = 'stylesheets.png';
 $action_images['templates']     = 'template.png';
 $action_images['plugins']       = 'plugins.png';
+$action_images['shibboleth']    = 'shibboleth.png';
+$action_images['facebook']      = 'facebook.png';
 
 // Grabbing the categories.
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));

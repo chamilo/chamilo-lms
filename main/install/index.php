@@ -28,11 +28,6 @@ define('MAX_FORM_FIELD_LENGTH',                 80);
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5');
 
-/**
- * @todo: remove that
- */
-error_reporting(E_ALL);
-
 if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
 	$global_error_code = 1;
 	// Incorrect PHP version.
@@ -106,6 +101,11 @@ header('Content-Type: text/html; charset='. api_get_system_encoding());
 
 // Setting the error reporting levels.
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+
+/**
+ * @todo: remove that
+ */
+error_reporting(E_ALL);
 
 // Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
@@ -728,7 +728,7 @@ if ($_POST['step2']) {
         
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')', 0);
+        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
     	if ($userPasswordCrypted == '1') {
 			$userPasswordCrypted = 'md5';

@@ -38,7 +38,7 @@ class Log
         static $result = null;
         if (empty($result)) {
             self::register_autoload();
-            $name = Chamilo::name();
+            $name = 'name';
             $result = new Logger($name);
             $handler = new Monolog\Handler\StreamHandler('php://stderr');
             $handler->setFormatter(new Monolog\Formatter\LineFormatter('[%datetime%] [%level_name%] [%channel%]: %message% %context% %extra%' . PHP_EOL, 'Y-m-d H:i:s'));

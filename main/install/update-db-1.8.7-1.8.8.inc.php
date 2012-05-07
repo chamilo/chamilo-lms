@@ -113,18 +113,18 @@ if (defined('SYSTEM_INSTALLATION')) {
             // We connect to the right DB first to make sure we can use the queries
             // without a database name.
             if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+                error_log('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm,$dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+                error_log('Database '.$dbNameForm.' was not found, skipping');
             } else {
                 Database::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
+                        error_log("Database::query($dbNameForm,$query)");
                     } else {
                         $res = Database::query($query);
                         if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
+                            error_log("In $dbNameForm, executed: $query");
                         }
                     }
                 }

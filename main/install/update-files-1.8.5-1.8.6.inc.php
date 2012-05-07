@@ -79,9 +79,9 @@ if (defined('SYSTEM_INSTALLATION')) {
             continue;
         }
         // Move everything to the new hierarchy (from old path to new path)
-        Log::notice('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories['directory'], 0);
+        Log::notice('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories['directory']);
         rename($origCRS, $sys_course_path . $courses_directories['directory']);
-        Log::notice('Creating dirs in ' . $currentCourseRepositorySys, 0);
+        Log::notice('Creating dirs in ' . $currentCourseRepositorySys);
 
         // DOCUMENT FOLDER
         // document > shared_folder

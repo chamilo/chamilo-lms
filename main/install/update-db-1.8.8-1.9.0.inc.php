@@ -271,11 +271,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
                         }
                         if ($only_test) {
-                            Log::notice("Database::query(".$row_course['db_name'].",$query)", 0);
+                            Log::notice("Database::query(".$row_course['db_name'].",$query)");
                         } else {
                             $res = Database::query($query);
                             if ($log) {
-                                Log::notice("In ".$row_course['db_name'].", executed: $query", 0);
+                                Log::notice("In ".$row_course['db_name'].", executed: $query");
                             }
                             if ($res === false) {
                                 Log::error('Error in '.$query.': '.Database::error());

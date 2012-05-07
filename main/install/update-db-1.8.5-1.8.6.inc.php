@@ -91,11 +91,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 				Database::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbNameForm,$query)", 0);
+						 Log::notice("Database::query($dbNameForm,$query)");
 					} else {
 						$res = Database::query($query);
 						if ($log) {
-							 Log::notice("In $dbNameForm, executed: $query", 0);
+							 Log::notice("In $dbNameForm, executed: $query");
 						}
 					}
 				}
@@ -1049,15 +1049,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 			 * without a database name
 			 */
 			if (strlen($dbUserForm) > 40) {
-				 Log::error('Database name '.$dbUserForm.' is too long, skipping', 0);
+				 Log::error('Database name '.$dbUserForm.' is too long, skipping');
 			} elseif (!in_array($dbUserForm,$dblist)) {
-				 Log::error('Database '.$dbUserForm.' was not found, skipping', 0);
+				 Log::error('Database '.$dbUserForm.' was not found, skipping');
 			} else {
 				Database::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test) {
-						error_log("Database::query($dbUserForm,$query)", 0);
-						error_log("In $dbUserForm, executed: $query", 0);
+						error_log("Database::query($dbUserForm,$query)");
+						error_log("In $dbUserForm, executed: $query");
 					} else {
 						$res = Database::query($query);
 					}

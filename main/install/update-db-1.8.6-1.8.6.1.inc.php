@@ -200,11 +200,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 						}
 
 						if ($only_test) {
-							 Log::notice("Database::query(".$row_course['db_name'].",$query)", 0);
+							 Log::notice("Database::query(".$row_course['db_name'].",$query)");
 						} else {
 							$res = Database::query($query);
 							if ($log) {
-								 Log::notice("In ".$row_course['db_name'].", executed: $query", 0);
+								 Log::notice("In ".$row_course['db_name'].", executed: $query");
 							}
 						}
 					}

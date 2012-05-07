@@ -59,7 +59,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM $db_name.course";
-    Log::notice('Getting courses for files updates: ' . $sql, 0);
+    Log::notice('Getting courses for files updates: ' . $sql);
     $result = Database::query($sql);
 
     if (Database::num_rows($result) > 0) {

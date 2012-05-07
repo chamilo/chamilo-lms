@@ -230,11 +230,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                 Database::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                         Log::notice("Database::query($dbNameForm,$query)", 0);
+                         Log::notice("Database::query($dbNameForm,$query)");
                     } else {
                         $res = Database::query($query);
                         if ($log) {
-                             Log::notice("In $dbNameForm, executed: $query", 0);
+                             Log::notice("In $dbNameForm, executed: $query");
                         }
                     }
                 }

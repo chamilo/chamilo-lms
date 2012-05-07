@@ -28,6 +28,11 @@ define('MAX_FORM_FIELD_LENGTH',                 80);
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5');
 
+/**
+ * @todo: remove that
+ */
+error_reporting(E_ALL);
+
 if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
 	$global_error_code = 1;
 	// Incorrect PHP version.
@@ -723,7 +728,7 @@ if ($_POST['step2']) {
         
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-        error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
+        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')', 0);
 
     	if ($userPasswordCrypted == '1') {
 			$userPasswordCrypted = 'md5';

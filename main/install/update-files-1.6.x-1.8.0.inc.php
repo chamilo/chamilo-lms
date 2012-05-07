@@ -18,6 +18,8 @@
  * @package chamilo.install
  */
 
+Log::notice("Starting " . basename(__FILE__));
+
 function insert_db($db_name, $folder_name, $text) {
 
 	// TODO: The (global?) variable $_course has not been declared/initialized.

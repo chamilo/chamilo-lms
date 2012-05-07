@@ -427,7 +427,7 @@ function get_config_param($param, $updatePath = '') {
             $updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
         } else {
             // Give up recovering.
-            error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
+            //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
             return null;
         }
     }

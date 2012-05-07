@@ -2053,5 +2053,4 @@ function locking_settings() {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
         Database::query($sql);
     }
-
 }

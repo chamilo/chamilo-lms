@@ -1190,7 +1190,7 @@ VALUES
 ('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
 ('update_user_info_cas_with_ldap', 'true', 'Yes'),
 ('update_user_info_cas_with_ldap', 'false', 'No'),
-('teachers_can_change_score_settings', 'false', 'Yes'),
+('teachers_can_change_score_settings', 'true', 'Yes'),
 ('teachers_can_change_score_settings', 'false', 'No');
 
 

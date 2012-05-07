@@ -74,21 +74,6 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             $try_new_fsc_id ++;
             $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
         }
-        /*
-        if ($_configuration['single_database']) {
-            $query = "SHOW TABLES FROM ".$_configuration['main_database']." LIKE '".$_configuration['table_prefix'].$keys_course_db_name.$_configuration['db_glue']."%'";
-            $result = Database::query($query);
-        } else {
-            $query = "SHOW DATABASES LIKE '$keys_course_db_name'";
-            $result = Database::query($query);
-        }
-
-        if (Database::num_rows($result)) {
-            $keys_are_unique = false;
-            $try_new_fsc_db ++;
-            $final_suffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
-        }*/
-
         if (file_exists(api_get_path(SYS_COURSE_PATH).$keys_course_repository)) {
             $keys_are_unique = false;
             $try_new_fsc_dir ++;
@@ -99,15 +84,9 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             return $keys;
         }
     }
-    /*
-    // Db name can't begin with a number.
-    if (stripos('abcdefghijklmnopqrstuvwxyz', $keys_course_db_name[0]) === false) {
-        $keys_course_db_name = $prefixAntiNumber . $keys_course_db_name;
-    }*/
-
+    
     $keys['currentCourseCode'] = $keys_course_code;
     $keys['currentCourseId'] = $keys_course_id;
-    //$keys['currentCourseDbName'] = $keys_course_db_name;
     $keys['currentCourseRepository'] = $keys_course_repository;
 
     return $keys;
@@ -185,15 +164,11 @@ function get_course_tables() {
     
     $tables[]= 'tool';    
     $tables[]= 'tool_intro';
-
-    // Group tool
     $tables[]= 'group_info';
     $tables[]= 'group_category';
     $tables[]= 'group_rel_user';
     $tables[]= 'group_rel_tutor';
-
     $tables[]= 'item_property';
-
     $tables[]= 'userinfo_content';
     $tables[]= 'userinfo_def';    
     $tables[]= 'course_description';
@@ -264,7 +239,6 @@ function get_course_tables() {
     $tables[]= 'wiki_conf';
     $tables[]= 'wiki_discuss';
     $tables[]= 'wiki_mailcue';
-    //$tables[]= 'audiorecorder';
     $tables[]= 'course_setting';
     $tables[]= 'glossary';
     $tables[]= 'notebook';
@@ -276,18 +250,26 @@ function get_course_tables() {
     $tables[]= 'thematic';
     $tables[]= 'thematic_plan';
     $tables[]= 'thematic_advance';
+    $tables[]= 'metadata';
     
-    return $tables;
-    
+    return $tables;    
 }
+
+/* Executed only before create_course_tables() */
+function drop_course_tables() {    
+    $list = get_course_tables();    
+    foreach ($list as $table) {
+        $sql = "DROP TABLE IF EXISTS ".DB_COURSE_PREFIX.$table;
+        Database::query($sql);
+    }    
+}
+
 /**
  * Creates all the necessary tables for a new course 
  */
-function update_db_course($course_db_name = null) {
-    global $_configuration;
-    
-    $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
-    
+function create_course_tables($course_db_name = null) {
+    global $_configuration;   
+    $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';    
     $use_one_db = true;
     
     if ($use_one_db) {
@@ -302,24 +284,19 @@ function update_db_course($course_db_name = null) {
     //@todo define the backticks inside those table names directly (instead of adding them afterwards)
     $tbl_course_homepage        = $course_db_name . 'tool';
     $TABLEINTROS                = $course_db_name . 'tool_intro';
-
-    // Group tool
     $TABLEGROUPS                = $course_db_name . 'group_info';
     $TABLEGROUPCATEGORIES       = $course_db_name . 'group_category';
     $TABLEGROUPUSER             = $course_db_name . 'group_rel_user';
     $TABLEGROUPTUTOR            = $course_db_name . 'group_rel_tutor';
-
     $TABLEITEMPROPERTY          = $course_db_name . 'item_property';
-
     $TABLETOOLUSERINFOCONTENT   = $course_db_name . 'userinfo_content';
     $TABLETOOLUSERINFODEF       = $course_db_name . 'userinfo_def';
-
     $TABLETOOLCOURSEDESC        = $course_db_name . 'course_description';
     $TABLETOOLAGENDA            = $course_db_name . 'calendar_event';
     $TABLETOOLAGENDAREPEAT      = $course_db_name . 'calendar_event_repeat';
     $TABLETOOLAGENDAREPEATNOT   = $course_db_name . 'calendar_event_repeat_not';
     $TABLETOOLAGENDAATTACHMENT  = $course_db_name . 'calendar_event_attachment';
-
+    
     // Announcements
     $TABLETOOLANNOUNCEMENTS             = $course_db_name . 'announcement';
     $TABLETOOLANNOUNCEMENTSATTACHMENT   = $course_db_name . 'announcement_attachment';
@@ -360,8 +337,7 @@ function update_db_course($course_db_name = null) {
     $TABLEQUIZQUESTION          = $course_db_name . 'quiz_rel_question';
     $TABLEQUIZQUESTIONLIST      = $course_db_name . 'quiz_question';
     $TABLEQUIZANSWERSLIST       = $course_db_name . 'quiz_answer';
-    $TABLEQUIZQUESTIONOPTION    = $course_db_name . 'quiz_question_option';
-	
+    $TABLEQUIZQUESTIONOPTION    = $course_db_name . 'quiz_question_option';	
 	$table_quiz_question_category    	 = $course_db_name . 'quiz_question_category';
 	$table_quiz_question_rel_category    = $course_db_name . 'quiz_question_rel_category';
 
@@ -415,9 +391,6 @@ function update_db_course($course_db_name = null) {
     $TABLEWIKIDISCUSS           = $course_db_name . 'wiki_discuss';
     $TABLEWIKIMAILCUE           = $course_db_name . 'wiki_mailcue';
 
-    // audiorecorder
-    //$TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
-
     // Course settings
     $TABLESETTING               = $course_db_name . 'course_setting';
 
@@ -437,8 +410,7 @@ function update_db_course($course_db_name = null) {
     // Thematic
     $TBL_THEMATIC               = $course_db_name . 'thematic';
     $TBL_THEMATIC_PLAN          = $course_db_name . 'thematic_plan';
-    $TBL_THEMATIC_ADVANCE       = $course_db_name . 'thematic_advance';
-    
+    $TBL_THEMATIC_ADVANCE       = $course_db_name . 'thematic_advance';    
     $TBL_METADATA               = $course_db_name . 'metadata';
     
     $add_to_all_tables = ' c_id INT NOT NULL, ';
@@ -519,7 +491,7 @@ function update_db_course($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
-    /*            Forum tool	*/
+    /* Forum tool	*/
 
     // Forum Category
     $sql = "

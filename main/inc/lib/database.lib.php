@@ -696,6 +696,7 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
+                strpos($query, 'DROP TABLE IF EXISTS') === false &&      
                 strpos($query, 'thematic_advance') === false &&  
                 strpos($query, 'thematic_plan') === false &&  
                 strpos($query, 'track_c_countries') === false &&                        

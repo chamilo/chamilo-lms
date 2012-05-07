@@ -800,7 +800,6 @@ if ($_POST['step2']) {
 				break;
 		}
 	} else {        
-        
 		set_file_folder_permissions();
 		database_server_connect();
 

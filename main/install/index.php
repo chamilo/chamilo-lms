@@ -491,10 +491,12 @@ if ($encryptPassForm == '1') {
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     
     $instalation_type_label = '';
-    if ($installType == 'new') 
+    if ($installType == 'new'){ 
         $instalation_type_label  = get_lang('NewInstallation'); 
-    elseif ($installType == 'update') 
+    }elseif ($installType == 'update') {
+        $update_from_version = isset($update_from_version) ? $update_from_version : null;
         $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+    }
     if (!empty($instalation_type_label)) {
     	echo "<h2>$instalation_type_label</h2><hr />";
     }        
@@ -822,6 +824,7 @@ if (@$_POST['step2']) {
 		include 'install_files.inc.php';
 	}
     $current_step = 7;
+    $nbr_courses = isset($nbr_courses) ? $nbr_courses : null;
     display_after_install_message($installType, $nbr_courses);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {

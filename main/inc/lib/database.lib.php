@@ -425,6 +425,7 @@ class Database {
         $password = isset($parameters['password']) ? $parameters['password'] : null;
         $client_flag = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
         $new_link = isset($parameters['new_link']) ? $parameters['new_link'] : null;
+        $client_flags = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
         return $persistent
             ? mysql_pconnect($server, $username, $password, $client_flags)
             : mysql_connect($server, $username, $password, $new_link, $client_flags);

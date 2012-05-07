@@ -84,12 +84,14 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_def = '';
     foreach ($css_list as $css_item) {
         $css_base_chamilo_file = $root_sys.$css_item;
-        if (file_exists($css_base_chamilo_file)) {
+        if (file_exists($css_base_chamilo_file)) {            
             $css_def .= @file_get_contents($css_base_chamilo_file);
         }        
     }
     
-	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);
+    
+    $css_def = str_replace("@import url('bootstrap.css');", '', $css_def);    
+	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);    
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
 	$css_def = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css_def);
 	$css_def = str_replace('../../img/', $root_rel.'main/img/', $css_def);
@@ -122,10 +124,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$click_to_install = substr($InstallationDescription, 0, $pos);
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-										<button class="btn btn-primary btn-large" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >
-										'.$click_to_install.'</button>
-										</form><br />
-					<a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
+                                        <p class="download-info">
+                                            <button class="btn btn-primary btn-large" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >
+                                            '.$click_to_install.'</button>
+                                            <a class="btn btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
+                                        </p>
+										</form>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;
 		case 3:
@@ -181,11 +185,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                 <div id="logo">    
                     <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
                 </div>				
-				<div class="breadcrumb">
-					<ul>
-						<li><a href="#">{SECTION}</a></li>
-					</ul>					
-				</div>
+				
+                <ul class="breadcrumb">
+                    <li><a href="#">{SECTION}</a></li>
+                </ul>				
 			</div>
 			<div class="clear"> </div>
 

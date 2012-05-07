@@ -516,7 +516,7 @@ function get_config_param($param, $updatePath = '') {
                     $configFile[$variable] = $value;
 
                     $a = explode("'", $variable);
-                    $key_tmp = $a[1];
+                    $key_tmp = isset($a[1]) ? $a[1] : null;
                     if ($key_tmp == $param) {
                         $val = $value;
                     }

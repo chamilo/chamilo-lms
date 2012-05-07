@@ -125,7 +125,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 				@mkdir($dir.$user_id, $perm);
 			}
 
-			if (file_exists($image_repository)) {
+			if (file_exists($image_repository) && is_file($image_repository)) {
 				chmod($dir.$user_id, 0777);
 				if (is_dir($dir.$user_id)) {
 					$picture_location = $dir.$user_id.'/'.$file;

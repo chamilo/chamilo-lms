@@ -162,13 +162,13 @@ if (!empty($_POST['updatePath'])) {
 	$proposedUpdatePath = $_POST['updatePath'];
 }
 
-if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6']) {
-	if ($_POST['step2_install']) {
+if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_update_6']) {
+	if (@$_POST['step2_install']) {
 		$installType = 'new';
 		$_POST['step2'] = 1;
 	} else {
 		$installType = 'update';
-		if ($_POST['step2_update_8']) {
+		if (@$_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
 			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
 			if (file_exists($proposedUpdatePath)) {
@@ -201,7 +201,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 			}
 		}
 	}
-} elseif ($_POST['step1']) {
+} elseif (@$_POST['step1']) {
 	$_POST['updatePath'] = '';
 	$installType = '';
 	$updateFromConfigFile = '';
@@ -545,13 +545,13 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
 	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
 <?php
-if ($_POST['step2']) {
+if (@$_POST['step2']) {
 	//STEP 3 : LICENSE
 	display_license_agreement();
-} elseif ($_POST['step3']) {
+} elseif (@$_POST['step3']) {
 	//STEP 4 : MYSQL DATABASE SETTINGS	
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
-} elseif ($_POST['step4']) {
+} elseif (@$_POST['step4']) {
 	//STEP 5 : CONFIGURATION SETTINGS
 	
 	//if update, try getting settings from the database...
@@ -619,7 +619,7 @@ if ($_POST['step2']) {
 	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 
-} elseif ($_POST['step5']) {
+} elseif (@$_POST['step5']) {
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
@@ -707,7 +707,7 @@ if ($_POST['step2']) {
 	</table>
 
 <?php
-} elseif ($_POST['step6']) {
+} elseif (@$_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
 	

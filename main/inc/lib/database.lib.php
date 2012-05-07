@@ -781,9 +781,9 @@ class Database {
             if (empty($line) && $line !== false) {
                 $line = $caller['line'];
             }
-            $type = $owner['type'];
+            $type = isset($owner['type']) ? $owner['type'] : null;
             $function = $owner['function'];
-            $class = $owner['class'];
+            $class = isset($owner['class']) ? $owner['class'] : null;
             $server_type = api_get_setting('server_type');
             if (!empty($line) && !empty($server_type) && $server_type != 'production') {
                 $info = '<pre>' .

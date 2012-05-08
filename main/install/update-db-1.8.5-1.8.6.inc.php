@@ -1102,6 +1102,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					if (!$singleDbForm) { //otherwise just use the main one
 						Database::select_db($row_course['db_name']);
 					}
+                    Log::notice(basename(__FILE__) . ' - course ' . $row_course);
 
 					foreach ($c_q_list as $query) {
 						if ($singleDbForm) { //otherwise just use the main one

@@ -434,7 +434,7 @@ class CourseManager {
         }
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
-        $role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
+        //$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 
         // A preliminary check whether the user has bben already registered on the platform.
         if (Database::num_rows(@Database::query("SELECT status FROM ".Database::get_main_table(TABLE_MAIN_USER)."
@@ -1661,10 +1661,8 @@ class CourseManager {
 
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
-        $user_role_table                    = Database::get_main_table(MAIN_USER_ROLE_TABLE);
-        $location_table                     = Database::get_main_table(MAIN_LOCATION_TABLE);
-        $role_right_location_table          = Database::get_main_table(MAIN_ROLE_RIGHT_LOCATION_TABLE);
+        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);        
+        
         $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $table_course_survey                = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
@@ -1691,7 +1689,7 @@ class CourseManager {
             return;
         }
         $this_course = Database::fetch_array($res);
-        $db_name = $this_course['db_name'];
+        
         self::create_database_dump($code);
         if (!self::is_virtual_course_from_system_code($code)) {
             // If this is not a virtual course, look for virtual courses that depend on this one, if any
@@ -1813,8 +1811,7 @@ class CourseManager {
         $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
         Database::query($sql);
         $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
-        Database::query($sql);
-        
+        Database::query($sql);        
 
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {

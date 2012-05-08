@@ -16,11 +16,10 @@
  * - reorganise code into functions
  * @todo use database library
  */
+Log::notice("Starting " . basename(__FILE__));
 
 $old_file_version = '1.8.6.1';
 $new_file_version = '1.8.6.2';
-
-Log::notice("Starting update db " . $old_file_version . ' -> ' . $new_file_version);
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {

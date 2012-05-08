@@ -16,6 +16,7 @@
  * - reorganise code into functions
  * @todo use database library
  */
+Log::notice("Starting " . basename(__FILE__));
 
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';

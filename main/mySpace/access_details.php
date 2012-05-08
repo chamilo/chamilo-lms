@@ -216,7 +216,7 @@ $form->display();
     <?php
     if ($result_to_print != "")  {
         echo '<br /><div class="slider_menu">
-        <a href="#" onclick="return sliderAction();">'.get_lang('More').'</a>
+        <a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_in.png"></a>
         </div>';
     }?>
     </div>

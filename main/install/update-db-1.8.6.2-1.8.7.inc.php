@@ -272,6 +272,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $tables = Database::get_tables($dbStatsForm);
                 foreach ($tables as $table) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
+                    Log::notice('Database: statistics, Table:  '. $table);
                     $res = Database::query($query);
                     if ($res === false) {
                         Log::error('Error in ' . $query . ': ' . Database::error());
@@ -299,6 +300,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                         //getting the type question id
                         $sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";
+                        Log::notice('Database: '. $my_course_db);
                         $res_question = Database::query($sql_question);
                         $row = Database::fetch_array($res_question);
                         $type = $row['type'];

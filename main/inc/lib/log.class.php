@@ -2,6 +2,8 @@
 
 use Monolog\Logger;
 
+Log::register_autoload();
+
 /**
  * Description of log
  *
@@ -11,7 +13,7 @@ use Monolog\Logger;
 class Log
 {
 
-    private static function register_autoload()
+    public static function register_autoload()
     {
         static $has_run = false;
         if ($has_run) {
@@ -33,19 +35,52 @@ class Log
      *
      * @return \Monolog\Logger 
      */
+    public static function default_logger()
+    {
+        $name = 'chamilo';
+        $result = new Logger($name);
+        $handler = new Monolog\Handler\StreamHandler('php://stderr');
+        $handler->setFormatter(new Monolog\Formatter\LineFormatter('[%datetime%] [%level_name%] [%channel%] %message%' . PHP_EOL, 'Y-m-d H:i:s')); //%context% %extra%
+        $result->pushHandler($handler);
+        return $result;
+    }
+
+    private static $logger = null;
+
+    /**
+     *
+     * @return \Monolog\Logger 
+     */
     public static function logger()
     {
-        static $result = null;
-        if (empty($result)) {
-            self::register_autoload();
-            $name = 'chamilo';
-            $result = new Logger($name);
-            $handler = new Monolog\Handler\StreamHandler('php://stderr');
-            $handler->setFormatter(new Monolog\Formatter\LineFormatter('[%datetime%] [%level_name%] [%channel%]: %message%' . PHP_EOL, 'Y-m-d H:i:s')); //%context% %extra%
-            $result->pushHandler($handler);
-            //$result->pushProcessor(new \Monolog\Processor\WebProcessor());
+        if (empty(self::$logger)) {
+            self::$logger = self::default_logger();
         }
-        return $result;
+        return self::$logger;
+    }
+
+    public static function set_logger($value)
+    {
+        self::$logger = $value;
+    }
+
+    public static function write($level, $message, $context = array())
+    {
+        /*
+         * Note that the same could be done with a monolog processor.
+         */
+
+        $trace = debug_backtrace();
+        array_shift($trace);
+        $trace = reset($trace);
+        $file = $trace['file'];
+        $root = realpath(api_get_path(SYS_PATH));
+        $file = str_replace($root, '', $file);
+        $file = trim($file, DIRECTORY_SEPARATOR);
+        $line = $trace['line'];
+        $message = "[$file:$line] " . $message;
+
+        self::logger()->addRecord($level, $message, $context);
     }
 
     /**
@@ -59,7 +94,7 @@ class Log
      */
     public static function debug($message, array $context = array())
     {
-        return self::logger()->debug($message, $context);
+        return self::write(Logger::DEBUG, $message, $context);
     }
 
     /**
@@ -73,7 +108,7 @@ class Log
      */
     public static function info($message, array $context = array())
     {
-        return self::logger()->info($message, $context);
+        return self::write(Logger::INFO, self::message($message), $context);
     }
 
     /**
@@ -87,7 +122,7 @@ class Log
      */
     public static function notice($message, array $context = array())
     {
-        return self::logger()->notice($message, $context);
+        return self::write(Logger::INFO, $message, $context);
     }
 
     /**
@@ -101,7 +136,7 @@ class Log
      */
     public static function warning($message, array $context = array())
     {
-        return self::logger()->warn($message, $context);
+        return self::write(Logger::WARNING, $message, $context);
     }
 
     /**
@@ -115,7 +150,7 @@ class Log
      */
     public static function error($message, array $context = array())
     {
-        return self::logger()->err($message, $context);
+        return self::write(Logger::ERROR, $message, $context);
     }
 
     /**
@@ -129,7 +164,7 @@ class Log
      */
     public static function crit($message, array $context = array())
     {
-        return self::logger()->crit($message, $context);
+        return self::write(Logger::CRITICAL, $message, $context);
     }
 
     /**
@@ -143,7 +178,7 @@ class Log
      */
     public static function alert($message, array $context = array())
     {
-        return self::logger()->alert($message, $context);
+        return self::write(Logger::ALERT, $message, $context);
     }
 
 }

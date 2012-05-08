@@ -17,7 +17,7 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice("Starting " . basename(__FILE__));
+Log::notice('Entering file');
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
@@ -186,7 +186,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if (!$singleDbForm) { // otherwise just use the main one
                         Database::select_db($row_course['db_name']);
                     }                
-                    Log::notice(basename(__FILE__) . ' - course ' . $row_course);
+                    Log::notice('Course ' . $row_course);
 
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {

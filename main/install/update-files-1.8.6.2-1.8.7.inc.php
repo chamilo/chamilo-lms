@@ -11,8 +11,7 @@
  * @package chamilo.install
  */
 
-
-Log::notice("Starting " . basename(__FILE__));
+Log::notice('Entering file');
 
 if (defined('SYSTEM_INSTALLATION')) {
 

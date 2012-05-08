@@ -12,7 +12,7 @@
 /**
  * Include mandatory libraries
  */
-Log::notice("Starting " . basename(__FILE__));
+Log::notice('Entering file');
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()

@@ -18,7 +18,7 @@
  *
  * @package chamilo.install
  */
-Log::notice("Starting " . basename(__FILE__));
+Log::notice('Entering file');
 
 function insert_db($db_name, $folder_name, $text)
 {

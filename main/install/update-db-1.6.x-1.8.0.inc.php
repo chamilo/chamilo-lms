@@ -18,7 +18,8 @@
  * @todo use database library
  */
 
-Log::notice("Starting " . basename(__FILE__));
+Log::notice('Entering file');
+
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
 

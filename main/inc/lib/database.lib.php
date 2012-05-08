@@ -43,17 +43,7 @@ class Database {
      */
     public static function get_statistic_database() {
         global $_configuration;
-        return $_configuration['statistics_database'];
-    }
-
-    /**
-     *	Returns the name of the SCORM database.
-     *  @todo use main_database
-     *	@deprecated
-     */
-    public static function get_scorm_database() {
-        global $_configuration;
-        return $_configuration['scorm_database'];
+        return $_configuration['main_database'];
     }
 
     /**
@@ -62,7 +52,7 @@ class Database {
      */
     public static function get_user_personal_database() {
         global $_configuration;
-        return $_configuration['user_personal_database'];
+        return $_configuration['main_database'];
     }
 
     /**

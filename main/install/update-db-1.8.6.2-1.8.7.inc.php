@@ -88,32 +88,32 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm, $dblist)) {
                 Log::error('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
                         Log::notice("Database::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                             Log::notice("In $dbNameForm, executed: $query");
                         }
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . Database::error());
+                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
-                $tables = Database::get_tables($dbNameForm);
+                $tables = iDatabase::get_tables($dbNameForm);
                 foreach ($tables as $table) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
-                    $res = Database::query($query);
+                    $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . Database::error());
+                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbNameForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . Database::error());
+                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
                 }
             }
         }
@@ -152,64 +152,64 @@ if (defined('SYSTEM_INSTALLATION')) {
             $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '" . $timeOffsetString . "', '+00:00');";
 
             foreach ($queries as $query) {
-                Database::query($query);
+                iDatabase::query($query);
             }
         }
         // Moving user followed by a human resource manager from hr_dept_id field to user_rel_user table
         $query = "SELECT user_id, hr_dept_id  FROM $dbNameForm.user";
-        $result = Database::query($query);
-        if (Database::num_rows($result) > 0) {
+        $result = iDatabase::query($query);
+        if (iDatabase::num_rows($result) > 0) {
             require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = iDatabase::fetch_array($result, 'ASSOC')) {
                 $user_id = $row['user_id'];
                 $hr_dept_id = $row['hr_dept_id'];
                 // moving data to user_rel_user table
                 if (!empty($hr_dept_id)) {
                     $sql = " SELECT id FROM $dbNameForm.user_rel_user WHERE user_id = $user_id AND friend_user_id = $hr_dept_id AND relation_type = " . USER_RELATION_TYPE_RRHH . " ";
-                    $rs = Database::query($sql);
-                    if (Database::num_rows($rs) == 0) {
+                    $rs = iDatabase::query($sql);
+                    if (iDatabase::num_rows($rs) == 0) {
                         $ins = "INSERT INTO $dbNameForm.user_rel_user SET user_id = $user_id, friend_user_id = $hr_dept_id, relation_type = " . USER_RELATION_TYPE_RRHH . " ";
-                        Database::query($ins);
+                        iDatabase::query($ins);
                     }
                 }
             }
             // cleaning hr_dept_id field inside user table
             $upd = "UPDATE $dbNameForm.user SET hr_dept_id = 0";
-            Database::query($upd);
+            iDatabase::query($upd);
         }
 
         // Updating score display for each gradebook category
         // first we check if there already is migrated data to categoy_id field
         $query = "SELECT id FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
-        $rs_check = Database::query($query);
+        $rs_check = iDatabase::query($query);
 
-        if (Database::num_rows($rs_check) > 0) {
+        if (iDatabase::num_rows($rs_check) > 0) {
             // get all gradebook categories id
             $a_categories = array();
             $query = "SELECT id FROM $dbNameForm.gradebook_category";
-            $rs_gradebook = Database::query($query);
-            if (Database::num_rows($rs_gradebook) > 0) {
-                while ($row_gradebook = Database::fetch_row($rs_gradebook)) {
+            $rs_gradebook = iDatabase::query($query);
+            if (iDatabase::num_rows($rs_gradebook) > 0) {
+                while ($row_gradebook = iDatabase::fetch_row($rs_gradebook)) {
                     $a_categories[] = $row_gradebook[0];
                 }
             }
 
             // get all gradebook score display
             $query = "SELECT * FROM $dbNameForm.gradebook_score_display";
-            $rs_score_display = Database::query($query);
-            if (Database::num_rows($rs_score_display) > 0) {
+            $rs_score_display = iDatabase::query($query);
+            if (iDatabase::num_rows($rs_score_display) > 0) {
                 $score_color_percent = api_get_setting('gradebook_score_display_colorsplit');
-                while ($row_score_display = Database::fetch_array($rs_score_display)) {
+                while ($row_score_display = iDatabase::fetch_array($rs_score_display)) {
                     $score = $row_score_display['score'];
                     $display = $row_score_display['display'];
                     foreach ($a_categories as $category_id) {
                         $ins = "INSERT INTO $dbNameForm.gradebook_score_display(score, display, category_id, score_color_percent) VALUES('$score', '$display', $category_id, '$score_color_percent')";
-                        Database::query($ins);
+                        iDatabase::query($ins);
                     }
                 }
                 // remove score display with category id = 0
                 $del = "DELETE FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
-                Database::query($del);
+                iDatabase::query($del);
             }
         }
 
@@ -226,12 +226,12 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm, $dblist)) {
                 Log::error('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
                         Log::notice("Database::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                             Log::notice("In $dbNameForm, executed: $query");
                         }
@@ -253,45 +253,45 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbStatsForm, $dblist)) {
                 Log::error('Database ' . $dbStatsForm . ' was not found, skipping');
             } else {
-                Database::select_db($dbStatsForm);
+                iDatabase::select_db($dbStatsForm);
                 Log::notice('Database: statistics');
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
                         Log::notice("Database::query($dbStatsForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                             Log::notice("In $dbStatsForm, executed: $query");
                         }
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . Database::error());
+                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
-                $tables = Database::get_tables($dbStatsForm);
+                $tables = iDatabase::get_tables($dbStatsForm);
                 foreach ($tables as $table) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     Log::notice('Database: statistics, Table:  '. $table);
-                    $res = Database::query($query);
+                    $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . Database::error());
+                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbStatsForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 Log::notice('Database: statistics - change default char set');
-                $res = Database::query($query);
+                $res = iDatabase::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . Database::error());
+                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
                 }
 
 
                 // chamilo_stat.track_e_attempt table update changing id by id_auto
 
                 $sql = "SELECT exe_id, question_id, course_code, answer FROM $dbStatsForm.track_e_attempt";
-                $result = Database::query($sql);
-                if (Database::num_rows($result) > 0) {
-                    while ($row = Database::fetch_array($result)) {
+                $result = iDatabase::query($sql);
+                if (iDatabase::num_rows($result) > 0) {
+                    while ($row = iDatabase::fetch_array($result)) {
                         $course_code = $row['course_code'];
                         $course_info = api_get_course_info($course_code);
                         $my_course_db = $course_info['dbName'];
@@ -302,20 +302,20 @@ if (defined('SYSTEM_INSTALLATION')) {
                         //getting the type question id
                         $sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";
                         Log::notice('Database: '. $my_course_db);
-                        $res_question = Database::query($sql_question);
-                        $row = Database::fetch_array($res_question);
+                        $res_question = iDatabase::query($sql_question);
+                        $row = iDatabase::fetch_array($res_question);
                         $type = $row['type'];
 
                         require_once api_get_path(SYS_CODE_PATH) . 'exercice/question.class.php';
                         //this type of questions produce problems in the track_e_attempt table
                         if (in_array($type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, MULTIPLE_ANSWER_COMBINATION))) {
                             $sql_question = "SELECT id_auto FROM $my_course_db.quiz_answer where question_id = $question_id and id = $answer";
-                            $res_question = Database::query($sql_question);
-                            $row = Database::fetch_array($res_question);
+                            $res_question = iDatabase::query($sql_question);
+                            $row = iDatabase::fetch_array($res_question);
                             $id_auto = $row['id_auto'];
                             if (!empty($id_auto)) {
                                 $sql = "UPDATE $dbStatsForm.track_e_attempt SET answer = '$id_auto' WHERE exe_id = $exe_id AND question_id = $question_id AND course_code = '$course_code' and answer = $answer ";
-                                Database::query($sql);
+                                iDatabase::query($sql);
                             }
                         }
                     }
@@ -338,31 +338,31 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbUserForm, $dblist)) {
                 Log::error('Database ' . $dbUserForm . ' was not found, skipping');
             } else {
-                Database::select_db($dbUserForm);
+                iDatabase::select_db($dbUserForm);
                 Log::notice('Database: user');
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
                         Log::notice("Database::query($dbUserForm,$query)");
                         Log::notice("In $dbUserForm, executed: $query");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . Database::error());
+                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
-                $tables = Database::get_tables($dbUserForm);
+                $tables = iDatabase::get_tables($dbUserForm);
                 foreach ($tables as $table) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
-                    $res = Database::query($query);
+                    $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . Database::error());
+                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbUserForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
-                $res = Database::query($query);
+                $res = iDatabase::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . Database::error());
+                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
                 }
             }
         }
@@ -383,17 +383,17 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif (!in_array($dbNameForm, $dblist)) {
             Log::error('Database ' . $dbNameForm . ' was not found, skipping');
         } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
             if ($res === false) {
                 die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php');
             }
 
-            if (Database::num_rows($res) > 0) {
+            if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
-                while ($row = Database::fetch_array($res)) {
+                while ($row = iDatabase::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -404,7 +404,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                      * without a database name
                      */
                     if (!$singleDbForm) { // otherwise just use the main one
-                        Database::select_db($row_course['db_name']);
+                        iDatabase::select_db($row_course['db_name']);
                     }
                     Log::notice('Course db ' . $row_course['db_name']);
 
@@ -416,29 +416,29 @@ if (defined('SYSTEM_INSTALLATION')) {
                         if ($only_test) {
                             Log::notice("Database::query(" . $row_course['db_name'] . ",$query)");
                         } else {
-                            $res = Database::query($query);
+                            $res = iDatabase::query($query);
                             if ($log) {
                                 Log::notice("In " . $row_course['db_name'] . ", executed: $query");
                             }
                             if ($res === false) {
-                                Log::error('Error in ' . $query . ': ' . Database::error());
+                                Log::error('Error in ' . $query . ': ' . iDatabase::error());
                             }
                         }
                     }
 
                     if (!$singleDbForm) {
-                        $tables = Database::get_tables($row_course['db_name']);
+                        $tables = iDatabase::get_tables($row_course['db_name']);
                         foreach ($tables as $table) {
                             $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
-                            $res = Database::query($query);
+                            $res = iDatabase::query($query);
                             if ($res === false) {
-                                Log::error('Error in ' . $query . ': ' . Database::error());
+                                Log::error('Error in ' . $query . ': ' . iDatabase::error());
                             }
                         }
                         $query = "ALTER DATABASE `" . $row_course['db_name'] . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . Database::error());
+                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                     $t_student_publication = $row_course['db_name'] . ".student_publication";
@@ -451,26 +451,26 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                     $sql_insert_user = "SELECT ref, insert_user_id FROM $t_item_property WHERE tool='work'";
 
-                    $rs_insert_user = Database::query($sql_insert_user);
+                    $rs_insert_user = iDatabase::query($sql_insert_user);
 
                     if ($rs_insert_user === false) {
-                        Log::error('Could not query insert_user_id table: ' . Database::error());
+                        Log::error('Could not query insert_user_id table: ' . iDatabase::error());
                     } else {
-                        if (Database::num_rows($rs_insert_user) > 0) {
-                            while ($row_ids = Database::fetch_array($rs_insert_user)) {
+                        if (iDatabase::num_rows($rs_insert_user) > 0) {
+                            while ($row_ids = iDatabase::fetch_array($rs_insert_user)) {
                                 $user_id = $row_ids['insert_user_id'];
                                 $ref = $row_ids['ref'];
                                 $sql_upd = "UPDATE $t_student_publication SET user_id='$user_id' WHERE id='$ref'";
-                                Database::query($sql_upd);
+                                iDatabase::query($sql_upd);
                             }
                         }
                     }
 
                     //updating parent_id of the student_publication table
                     $sql = 'SELECT id, url, parent_id FROM ' . $t_student_publication;
-                    $result = Database::query($sql);
-                    if (Database::num_rows($result) > 0) {
-                        $items = Database::store_result($result);
+                    $result = iDatabase::query($sql);
+                    if (iDatabase::num_rows($result) > 0) {
+                        $items = iDatabase::store_result($result);
                         $directory_list = $file_list = array();
 
                         foreach ($items as $item) {
@@ -500,7 +500,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                                 if ($parent_id != 0) {
                                     $sql = 'UPDATE ' . $t_student_publication . ' SET parent_id = ' . $parent_id . ' WHERE id = ' . $file['id'] . '';
-                                    Database::query($sql);
+                                    iDatabase::query($sql);
                                 }
                             }
                         }
@@ -518,14 +518,14 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif (!in_array($dbNameForm, $dblist)) {
             Log::error('Database ' . $dbNameForm . ' was not found, skipping');
         } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
             if ($res === false) {
                 die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php');
             }
-            if (Database::num_rows($res) > 0) {
+            if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
-                while ($row = Database::fetch_array($res)) {
+                while ($row = iDatabase::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -539,7 +539,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if ($singleDbForm) {
                         $prefix_course = $prefix . $row['db_name'] . "_";
                     } else {
-                        Database::select_db($row['db_name']);
+                        iDatabase::select_db($row['db_name']);
                     }
 
                     foreach ($c_q_list as $query) {
@@ -549,7 +549,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                         if ($only_test) {
                             Log::notice("Database::query(" . $row['db_name'] . ",$query)");
                         } else {
-                            $res = Database::query($query);
+                            $res = iDatabase::query($query);
                             if ($log) {
                                 Log::notice("In " . $row['db_name'] . ", executed: $query");
                             }

@@ -46,6 +46,7 @@ require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
 require_once 'install.class.php';
+require_once 'i_database.class.php';
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the

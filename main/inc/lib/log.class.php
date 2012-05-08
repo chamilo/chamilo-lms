@@ -64,20 +64,38 @@ class Log
         self::$logger = $value;
     }
 
+    /**
+     * Returns the 
+     * @param type $index
+     * @return type 
+     */
+    public static function frame($index)
+    {
+        $result = debug_backtrace();
+        array_shift($result);
+        for ($i = 0; $i++; $i < $index) {
+            array_shift($result);
+        }
+        return $result;
+    }
+
     public static function write($level, $message, $context = array())
     {
         /*
          * Note that the same could be done with a monolog processor.
          */
-
-        $trace = debug_backtrace();
-        array_shift($trace);
-        $trace = reset($trace);
-        $file = $trace['file'];
+        if (!isset($context['file'])) {
+            $trace = debug_backtrace();
+            array_shift($trace);
+            $trace = reset($trace);
+            $context['file'] = $trace['file'];
+            $context['file'] = $trace['file'];
+        }
+        $file = $context['file'];
         $root = realpath(api_get_path(SYS_PATH));
         $file = str_replace($root, '', $file);
         $file = trim($file, DIRECTORY_SEPARATOR);
-        $line = $trace['line'];
+        $line = $context['line'];
         $message = "[$file:$line] " . $message;
 
         self::logger()->addRecord($level, $message, $context);

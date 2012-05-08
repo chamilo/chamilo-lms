@@ -37,6 +37,7 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 
 /*		INITIALIZATION SECTION */
 
+ob_implicit_flush(true);
 session_start();
 
 // Including necessary libraries.
@@ -824,8 +825,7 @@ if (@$_POST['step2']) {
 		include 'install_files.inc.php';
 	}
     $current_step = 7;
-    $nbr_courses = isset($nbr_courses) ? $nbr_courses : null;
-    display_after_install_message($installType, $nbr_courses);
+    display_after_install_message($installType);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS

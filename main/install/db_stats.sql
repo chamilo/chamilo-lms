@@ -85,6 +85,7 @@ CREATE TABLE track_e_default (
   default_event_type varchar(20) NOT NULL default '',
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
+  c_id int unsigned default NULL,
   PRIMARY KEY  (default_id)
 );
 

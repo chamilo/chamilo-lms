@@ -858,7 +858,8 @@ VALUES
 ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17763','DatabaseVersion','', NULL, NULL, 0);
+('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17769','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1196,7 +1197,9 @@ VALUES
 ('teachers_can_change_score_settings', 'true', 'Yes'),
 ('teachers_can_change_score_settings', 'false', 'No'),
 ('teachers_can_change_grade_model_settings', 'true', 'Yes'),
-('teachers_can_change_grade_model_settings', 'false', 'No');
+('teachers_can_change_grade_model_settings', 'false', 'No'),
+('gradebook_locking_enabled', 'true', 'Yes'),
+('gradebook_locking_enabled', 'false', 'No');
 UNLOCK TABLES;
 /*
 ('activate_send_event_by_mail', 'true', 'Yes'),

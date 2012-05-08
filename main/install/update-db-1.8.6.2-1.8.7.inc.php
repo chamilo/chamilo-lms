@@ -279,6 +279,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbStatsForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
+                Log::notice('Database: statistics - change default char set');
                 $res = Database::query($query);
                 if ($res === false) {
                     Log::error('Error in ' . $query . ': ' . Database::error());

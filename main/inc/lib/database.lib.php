@@ -17,6 +17,7 @@
  * Constants definition
  */
 require_once 'database.constants.inc.php';
+
 /**
  * Database class definition
  * @package chamilo.database
@@ -182,19 +183,7 @@ class Database {
     }
 
     /**
-     * This generic method returns the correct and complete name of any scorm
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_scorm_table($short_table_name) {
-        return self::format_table_name(self::get_scorm_database(), $short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any scorm
+     * This generic method returns the correct and complete name of any user
      * table of which you pass the short name as a parameter. Please, define
      * table names as constants in this library and use them instead of directly
      * using magic words in your tool code.

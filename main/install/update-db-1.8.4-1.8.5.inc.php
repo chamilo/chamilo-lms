@@ -191,7 +191,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					if (!$singleDbForm) { //otherwise just use the main one
 						Database::select_db($row_course['db_name']);
 					}
-                    Log::notice('Course ' . $row_course);
+                    Log::notice('Course db ' . $row_course['db_name']);
 
 					foreach ($c_q_list as $query) {
 						if ($singleDbForm) {

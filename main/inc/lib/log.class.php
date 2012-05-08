@@ -85,7 +85,7 @@ class Log
             array_shift($trace);
             $trace = reset($trace);
             $context['file'] = $trace['file'];
-            $context['file'] = $trace['file'];
+            $context['line'] = $trace['line'];
         }
         $file = $context['file'];
         $root = realpath(api_get_path(SYS_PATH));

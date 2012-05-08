@@ -18,7 +18,7 @@ class iDatabase extends Database
 
     static function query($query, $connection = null, $file = null, $line = null)
     {
-        Log::notice(__FUNCTION__ . ' ' . $database_name, Log::frame(1));
+        Log::notice(__FUNCTION__ . ' ' . $query, Log::frame(1));
 
         parent::query($query, $connection, $file, $line);
     }

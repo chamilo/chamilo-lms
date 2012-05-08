@@ -72,11 +72,7 @@ class Log
     public static function frame($index)
     {
         $result = debug_backtrace();
-        array_shift($result);
-        for ($i = 0; $i++; $i < $index) {
-            array_shift($result);
-        }
-        return $result;
+        return isset($result[$index]) ? $result[$index] : array();
     }
 
     public static function write($level, $message, $context = array())

@@ -30,13 +30,13 @@ class bbb {
         $course_code = api_get_course_id();
         
         $this->logout_url = api_get_path(WEB_COURSE_PATH).$course_code;  
+        $this->table = Database::get_main_table('plugin_bbb_meeting');
         
         if ($bbb_plugin == true) {
             $user_info = api_get_user_info();
             $this->user_complete_name = $user_info['complete_name'];        
             $this->salt = $bbb_salt;
-            $this->url  = $bbb_host.'/bigbluebutton/';        
-            $this->table = Database::get_main_table('plugin_bbb_meeting');            
+            $this->url  = $bbb_host.'/bigbluebutton/';                             
             $this->plugin_enabled = true;
         }    
     }

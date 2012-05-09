@@ -24,7 +24,6 @@ if (empty($plugin_info)) {
 
 $installed_plugins = $plugin_obj->get_installed_plugins();
 
-
 if (!in_array($plugin_name, $installed_plugins)) {
     api_not_allowed();
 }
@@ -49,6 +48,7 @@ if (isset($plugin_info['settings_form'])) {
 if (isset($form)) {
     if ($form->validate()) {
         $values = $form->exportValues();
+        
         //api_delete_category_settings_by_subkey($plugin_name);
         $access_url_id = api_get_current_access_url_id();
         api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' =>

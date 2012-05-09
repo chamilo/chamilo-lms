@@ -781,7 +781,6 @@ class Display {
         $lis = '';
         $i = 1;
         foreach ($header_list as $item) {
-
             $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i));
             $lis .=self::tag('li', $item, $ul_attributes);
             $i++;

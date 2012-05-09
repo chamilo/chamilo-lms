@@ -25,9 +25,9 @@ class bbb {
                 $bbb_settings[$setting['variable']] = $setting['selected_value'];
             }
         }
-        $bbb_plugin = $bbb_settings['bbb_plugin'] === 'true';
-        $bbb_host   = $bbb_settings['bbb_plugin_host'];
-        $bbb_salt   = $bbb_settings['bbb_plugin_salt'];
+        $bbb_plugin = $bbb_settings['bbb_tool_enable'] === 'true';
+        $bbb_host   = $bbb_settings['bbb_host'];
+        $bbb_salt   = $bbb_settings['bbb_salt'];
         
         $course_code = api_get_course_id();
         

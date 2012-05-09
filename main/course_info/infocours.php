@@ -42,7 +42,7 @@ $course_code 				= $_course['sysCode'];
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 $video_conference_enabled = false;
-if (api_get_setting('bbb_plugin') == 'true') {
+if (api_get_setting('bbb_tool_enable') == 'true') {
     $video_conference_enabled = true;
 }
 

@@ -2,11 +2,12 @@
 
 class BBBPlugin extends Plugin
 {        
-    public $variables = array( 'big_blue_button_meeting_name',
+    public $variables = array(
+                    'big_blue_button_meeting_name',
                     'big_blue_button_attendee_password',
                     'big_blue_button_moderator_password',
                     'big_blue_button_welcome_message',
-                    'big_blue_button_max_students_allowed'    
+                    'big_blue_button_max_students_allowed', 
     );
     
     static function create() {
@@ -15,7 +16,7 @@ class BBBPlugin extends Plugin
     }
     
     protected function __construct() {
-        parent::__construct('2.0', 'Julio Montoya, Yannick Warnier');
+        parent::__construct('2.0', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
     
     function course_install($course_id) {    
@@ -60,23 +61,7 @@ class BBBPlugin extends Plugin
     }
     
     function install() {        
-        $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $t_options  = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
-        
-        $sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
-                ('bbb_plugin', '', 'radio', 'Extra', 'false', 'BigBlueButtonEnableTitle','BigBlueButtonEnableComment',NULL,NULL, 1, 1)";
-        Database::query($sql);
-        $sql = "INSERT INTO $t_options (variable, value, display_text) VALUES ('bbb_plugin', 'true', 'Yes')";
-        Database::query($sql);
-        $sql = "INSERT INTO $t_options (variable, value, display_text) VALUES ('bbb_plugin', 'false', 'No')";
-        Database::query($sql);
-        $sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
-            ('bbb_plugin_host', '', 'textfield', 'Extra', '192.168.0.100', 'BigBlueButtonHostTitle','BigBlueButtonHostComment',NULL,NULL, 1,1)";
-        Database::query($sql);
-        $sql = "INSERT INTO $t_settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable, access_url_locked) VALUES
-            ('bbb_plugin_salt', '', 'textfield', 'Extra', '', 'BigBlueButtonSecuritySaltTitle','BigBlueButtonSecuritySaltComment',NULL,NULL, 1,1)";
-        Database::query($sql);
 
         $table = Database::get_main_table('plugin_bbb_meeting');
         $sql = "CREATE TABLE $table ( 
@@ -119,7 +104,18 @@ class BBBPlugin extends Plugin
     
     function uninstall() {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
+        $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);        
+        
+        //New settings
+        
+        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_tool_enable'";
+        Database::query($sql);
+        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_salt'";
+        Database::query($sql);
+        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_host'";
+        Database::query($sql);
+        
+        //Old settings
 
         $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin'";
         Database::query($sql);
@@ -129,8 +125,10 @@ class BBBPlugin extends Plugin
         Database::query($sql);
         $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
         Database::query($sql);
+        
         $sql = "DROP TABLE IF EXISTS plugin_bbb_meeting";
         Database::query($sql);
+        
         // update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id, code FROM $t_courses ORDER BY id";

@@ -16,6 +16,7 @@
  * - reorganise code into functions
  * @todo use database library
  */
+Log::notice('Entering file');
 
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';
@@ -190,6 +191,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					if (!$singleDbForm) { //otherwise just use the main one
 						Database::select_db($row_course['db_name']);
 					}
+                    Log::notice('Course db ' . $row_course['db_name']);
 
 					foreach ($c_q_list as $query) {
 						if ($singleDbForm) {

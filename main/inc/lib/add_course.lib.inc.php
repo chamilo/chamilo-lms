@@ -599,7 +599,8 @@ function create_course_tables($course_db_name = null) {
          $add_to_all_tables
          thread_id int default NULL,
          user_id int default NULL,
-         post_id int default NULL
+         post_id int default NULL,
+        PRIMARY KEY  ( c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
     Database::query($sql);
 
@@ -624,7 +625,8 @@ function create_course_tables($course_db_name = null) {
               thread_id int,
               post_id int,
               KEY user_id (user_id),
-              KEY forum_id (forum_id)
+              KEY forum_id (forum_id),
+              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id ),
             )" . $charset_clause;
     Database::query($sql);
 
@@ -1035,7 +1037,8 @@ function create_course_tables($course_db_name = null) {
         startdate_assig datetime NOT NULL default '0000-00-00 00:00:00',
         enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
         delayedsubmit int NOT NULL default 0,
-        KEY page_id (page_id)
+        KEY page_id (page_id),
+        PRIMARY KEY  ( c_id, page_id )
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1058,7 +1061,8 @@ function create_course_tables($course_db_name = null) {
         type text NOT NULL,
         group_id int DEFAULT NULL,
         session_id smallint default 0,
-        KEY (c_id, id)
+        KEY (c_id, id),
+        PRIMARY KEY  ( c_id, id, user_id )
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1091,7 +1095,8 @@ function create_course_tables($course_db_name = null) {
         user_id int unsigned NOT NULL default '0',
         last_connection datetime NOT NULL default '0000-00-00 00:00:00',
         session_id  INT NOT NULL default 0,
-        to_group_id INT NOT NULL default 0
+        to_group_id INT NOT NULL default 0,
+        PRIMARY KEY  ( `c_id`, `user_id`, `last_connection` )
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1652,7 +1657,8 @@ function create_course_tables($course_db_name = null) {
         	$add_to_all_tables
             role_id int NOT NULL default 0,
             scope varchar( 20 ) NOT NULL default 'course',
-            group_id int NOT NULL default 0
+            group_id int NOT NULL default 0,
+            PRIMARY KEY  (group_id )
         )" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -1665,7 +1671,8 @@ function create_course_tables($course_db_name = null) {
             role_id int NOT NULL default 0,
             tool varchar( 250 ) NOT NULL default '',
             action varchar( 50 ) NOT NULL default '',
-            default_perm tinyint NOT NULL default 0
+            default_perm tinyint NOT NULL default 0,
+            PRIMARY KEY  ( c_id, role_id, tool, action )
         )" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -1677,7 +1684,8 @@ function create_course_tables($course_db_name = null) {
         	$add_to_all_tables
             role_id int NOT NULL default 0,
             scope varchar( 20 ) NOT NULL default 'course',
-            user_id int NOT NULL default 0
+            user_id int NOT NULL default 0,
+            PRIMARY KEY  ( c_id, role_id, user_id )
         )" . $charset_clause;
 
     if (!Database::query($sql)) {

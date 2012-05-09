@@ -221,6 +221,7 @@ class Autoload
         $result['LinkCategory'] = '/main/coursecopy/classes/LinkCategory.class.php';
         $result['LinkFactory'] = '/main/gradebook/lib/be/linkfactory.class.php';
         $result['LinkForm'] = '/main/gradebook/lib/fe/linkform.class.php';
+        $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';

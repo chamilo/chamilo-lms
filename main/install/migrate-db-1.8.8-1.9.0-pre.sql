@@ -189,6 +189,19 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_lo
 
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
 
+-- skills
+
+CREATE TABLE IF NOT EXISTS skill ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, short_code varchar(100) NOT NULL, description TEXT NOT NULL, access_url_id int NOT NULL, icon varchar(255) NOT NULL, PRIMARY KEY (id));
+INSERT INTO skill (name) VALUES ('Root');
+
+CREATE TABLE IF NOT EXISTS skill_rel_gradebook ( id int NOT NULL AUTO_INCREMENT, gradebook_id int NOT NULL, skill_id int NOT NULL, type varchar(10) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_skill ( skill_id int NOT NULL, parent_id int NOT NULL, relation_type int NOT NULL, level int NOT NULL);
+INSERT INTO skill_rel_skill VALUES(1, 0, 0, 0);
+
+CREATE TABLE IF NOT EXISTS skill_rel_user ( id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL, skill_id int NOT NULL, acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',assigned_by int NOT NULL,PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255)  NOT NULL, description TEXT  NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS skill_rel_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, skill_id INTEGER  NOT NULL, profile_id INTEGER  NOT NULL, PRIMARY KEY (id));
+
 -- Removing use_document_title
 DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';

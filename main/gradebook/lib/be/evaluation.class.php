@@ -139,7 +139,7 @@ class Evaluation implements GradebookItem
 	 */
 	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null, $locked = null) {
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-		$sql = 'SELECT id,name,description,user_id,course_code,category_id,created_at,weight,max,visible,type,locked FROM '.$tbl_grade_evaluations;
+		$sql = 'SELECT * FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.intval($id);
@@ -172,7 +172,7 @@ class Evaluation implements GradebookItem
 		if (isset ($locked)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' visible = '.intval($locked);
+			$sql .= ' locked = '.intval($locked);
 			$paramcount ++;
 		}		
 		$result = Database::query($sql);

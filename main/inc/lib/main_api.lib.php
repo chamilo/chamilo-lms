@@ -2630,7 +2630,7 @@ function api_not_found($print_headers = false) {
  * @version 1.0, February 2004
  * @version dokeos 1.8, August 2006
  */
-function api_not_allowed($print_headers = false) {
+function api_not_allowed($print_headers = false, $message = null) {
 	
     $home_url   = api_get_path(WEB_PATH);
     $user       = api_get_user_id(); //0 if not defined
@@ -2653,7 +2653,12 @@ function api_not_allowed($print_headers = false) {
 	                /*]]>*/
 	                </style>';
     }    
-    $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
+    
+    if (isset($message)) {
+        $msg = Display::div($message, array('align'=>'center'));
+    } else {
+        $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);        
+    }
     $msg = Display::div($msg, array('align'=>'center'));
 	
     $show_headers = 0;

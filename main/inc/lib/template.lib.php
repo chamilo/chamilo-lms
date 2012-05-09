@@ -50,7 +50,7 @@ class Template {
                 'debug'             => true,
                 'auto_reload'       => true,
                 'optimizations'     => 0, // turn on optimizations with -1
-                'strict_variables'  => true, //If set to false, Twig will silently ignore invalid variables
+                'strict_variables'  => false, //If set to false, Twig will silently ignore invalid variables
                 );
         } else {
             $options = array (
@@ -229,20 +229,21 @@ class Template {
         $this->assign('show_toolbar', $show_toolbar);
         
         //Only if course is available        
-        if (!empty($this->course_id) && $this->user_is_logged_in) {        
-            
+        $show_course_shortcut = null;
+        $show_course_navigation_menu = null;
+        
+        if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
-                $course_tool = CourseHome::show_navigation_tool_shortcuts();                
-                $this->assign('show_course_shortcut', $course_tool);
-            }
-
+                $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();                                
+            }            
             if (api_get_setting('show_navigation_menu') != 'false') {
                 //Course toolbar
-                $course_tool = CourseHome::show_navigation_menu();
-                $this->assign('show_course_navigation_menu', $course_tool);
-            }
-        }        
+                $show_course_navigation_menu = CourseHome::show_navigation_menu();                
+            }            
+        }    
+        $this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
 	}
 		
 	function get_template($name) {
@@ -524,13 +525,12 @@ class Template {
 		$this->assign('notification_menu', $notification);
 		$this->assign('menu', $menu);        
 		$this->assign('breadcrumb', $breadcrumb);
-		
+        
+		$extra_header = null;
 		if (!api_is_platform_admin()) {
 			$extra_header = trim(api_get_setting('header_extra_content'));
-			if (!empty($extra_header)) {				
-				$this->assign('header_extra_content', $extra_header);
-			}		
-		}
+		}        
+        $this->assign('header_extra_content', $extra_header);
 		
 		if ($this->show_header == 1) {
 			header('Content-Type: text/html; charset='.api_get_system_encoding());
@@ -626,10 +626,7 @@ class Template {
     function set_plugin_region($plugin_region) {
         if (!empty($plugin_region)) {          
             $content = $this->plugin->load_region($plugin_region, $this);    
-            if (!empty($content)) {
-                //Assigning the plugin with the template
-                $this->assign('plugin_'.$plugin_region, $content);                
-            }
+            $this->assign('plugin_'.$plugin_region, $content);                
         }
         return null;
     }

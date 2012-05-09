@@ -71,6 +71,10 @@ abstract class AbstractLink implements GradebookItem {
 	public function get_weight() {
 		return $this->weight;
 	}
+        
+    public function get_locked() {
+		return $this->locked;
+	}
 
 	public function is_visible() {
 		return $this->visible;
@@ -115,8 +119,11 @@ abstract class AbstractLink implements GradebookItem {
     public function set_session_id($id) {
     	$this->session_id = $id;
     }
+    public function set_locked ($locked) {
+		$this->locked = $locked;
+	}
 
-// CRUD FUNCTIONS
+    // CRUD FUNCTIONS
 
 	/**
 	 * Retrieve links and return them as an array of extensions of AbstractLink.
@@ -124,7 +131,7 @@ abstract class AbstractLink implements GradebookItem {
 	 */
 	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);        
-		$sql='SELECT id, type, ref_id, user_id, course_code, category_id, created_at, weight, visible FROM '.$tbl_grade_links;
+		$sql='SELECT * FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.Database::escape_string($id);
@@ -196,7 +203,7 @@ abstract class AbstractLink implements GradebookItem {
 			$link->set_category_id($data['category_id']);
 			$link->set_date($data['created_at']);
 			$link->set_weight($data['weight']);            
-			$link->set_visible($data['visible']);
+			$link->set_visible($data['visible']);            
             
             //session id should depend of the category --> $data['category_id']
             $session_id = api_get_session_id();
@@ -415,5 +422,17 @@ abstract class AbstractLink implements GradebookItem {
 	}
 	public function get_view_url ($stud_id) {
 		return null;
-	}
+	}    
+    
+    /**
+  	 * Locks a link
+  	 * @param int locked 1 or unlocked 0  	 
+  	 * 
+  	 * */
+  	function lock($locked) {  		
+  		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+  		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
+  		Database::query($sql);
+  	}
+    
 }

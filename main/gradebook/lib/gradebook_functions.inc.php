@@ -211,7 +211,15 @@ function build_edit_icons_cat($cat, $selectcat) {
             
             //Locking button
             if (api_get_setting('gradebook_locking_enabled') == 'true') {
-                //$modify_icons .= '&nbsp;<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';
+                if ($cat->is_locked()) {
+                    if (api_is_platform_admin()) {
+                        $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
+                    } else {
+                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('unlock_na.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
+                    }
+                } else {
+                    $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
+                }
             }
             
             //PDF
@@ -264,15 +272,16 @@ function build_edit_icons_eval($eval, $selectcat) {
 		if (api_is_allowed_to_edit(null, true)){
 			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';			
 		}
+        /*
 		if ($locked_status == 0){
 			$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('unlock.png',get_lang('LockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
 		} else {
 			if (api_is_platform_admin()){
-				$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;typelocked=&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
+				$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;typelocked=&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."';\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
 			} else {
 				$modify_icons .= '&nbsp;<img src="../img/locked_na.png" border="0" title="' . get_lang('TheEvaluationIsLocked') . '" alt="" />';
 			}
-		}
+		}*/
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 		return $modify_icons;
 	}

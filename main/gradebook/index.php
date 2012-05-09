@@ -49,6 +49,15 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 var show_icon = "../img/view_more_stats.gif";
 var hide_icon = "../img/view_less_stats.gif";
 
+function lock_confirmation() {
+    if (confirm("' . get_lang('ConfirmToLockElement') . '?")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 $(document).ready(function() {
 
     $(".view_children").live("click", function() {
@@ -66,6 +75,9 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
+ 
+    
+    
 
 /*
   var s1 = [["a",25]];
@@ -342,9 +354,9 @@ if (isset($_GET['lockedeval'])) {
 		$type_locked = 1;
 		$confirmation_message = get_lang('EvaluationHasBeenLocked');
 	}
-	$eval= Evaluation :: load($locked);
+	$eval = Evaluation :: load($locked);
 	if ($eval[0] != null) {
-		$eval[0]->locked_evaluation($locked, $type_locked);
+		$eval[0]->lock($type_locked);
 	}
 	
 	$filter_confirm_msg = false;	
@@ -423,6 +435,24 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 	$warning_message = get_lang('MoveWarning').'<br><br>'.$button;
 	$filter_warning_msg = false;
 }
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
+switch ($action) {
+    case 'lock':
+        $category_to_lock = Category :: load($_GET['category_id']);
+        $category_to_lock[0]->lock_all_items(1);
+        $confirmation_message = get_lang('GradebookLockedAlert');
+        break;
+    case 'unlock':
+        if (api_is_platform_admin()) {
+            $category_to_lock = Category :: load($_GET['category_id']);
+            $category_to_lock[0]->lock_all_items(0);
+            $confirmation_message = get_lang('GradebookUnlockedAlert');
+        }
+        break;    
+}
+
 //actions on the sortabletable
 if (isset ($_POST['action'])) {
 	block_students();
@@ -433,6 +463,7 @@ if (isset ($_POST['action'])) {
 		$filter_warning_msg = false;
 	} else {
 		switch ($_POST['action']) {
+ 
 			case 'deleted' :
 				$number_of_deleted_categories= 0;
 				$number_of_deleted_evaluations= 0;

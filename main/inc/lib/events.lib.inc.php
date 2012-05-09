@@ -550,22 +550,6 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 }
 
 /**
- *
- * @param type $status LOG_GRADEBOOK_LOCKED - LOG_GRADEBOOK_UNLOCKED
- * @param type $course_id
- * @param type $session_id
- * @param type $item_id
- * @param type $tool_id
- * @return boolean 
- */
-function event_change_gradebook_lock_status($status, $course_code, $gradebook_id) {    
-    if (api_get_setting('gradebook_locking_enabled') == 'true') {  
-        event_system($status, LOG_GRADEBOOK_ID, $gradebook_id, null, null, $course_code);        
-    }
-    return false;
-}
-
-/**
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  * @desc Record information for common (or admin) events (in the track_e_default table)
  * @param	string	Type of event
@@ -601,8 +585,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
     
     if (!empty($course_info)) {
         $course_id      = $course_info['real_id'];
-        $course_code    = $course_info['code'];
-        
+        $course_code    = $course_info['code'];        
         $course_code    = Database::escape_string($course_code);
     } else {
         $course_id = null;

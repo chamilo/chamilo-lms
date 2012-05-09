@@ -580,21 +580,15 @@ class Evaluation implements GradebookItem
 	public function get_icon_name() {
 		return $this->has_results() ? 'evalnotempty' : 'evalempty';
 	}
-  	/***
-  	 * This function, locks an evaluation, only one who can unlock it is the platform administrator.
-  	 * @param int evaluation id
+    
+  	/**
+  	 * Locks an evaluation, only one who can unlock it is the platform administrator.  	 
   	 * @param int locked 1 or unlocked 0 
-  	 * @return bool 
   	 * 
-  	 * */
-  	function locked_evaluation($id_evaluation, $locked) {
-  		
+  	 **/
+  	function lock($locked) {
   		$table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-  		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($id_evaluation)."'";
-  		$rs = Database::query($sql);
-  		$affected_rows = Database::affected_rows();
-		if (!empty($affected_rows)) {
-			return true;
-		}
+  		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
+  		Database::query($sql);
   	}
 }

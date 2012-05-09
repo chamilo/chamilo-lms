@@ -272,7 +272,6 @@ $DocumentAdded = "Belge eklendi";
 $DocumentUpdated = "Belge güncellendi";
 $DocumentInFolderUpdated = "Belgenin güncellendiği klasör";
 $Course_description = "Ders açıklaması";
-$Calendar_event = "Ajanda";
 $Document = "Belge";
 $Learnpath = "Dersler";
 $Link = "Bağlantı";

@@ -34,10 +34,17 @@ $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'e
 if ($form->validate()) {
 	$values = $form->exportValues();    
     $parent_cat = Category :: load($values['select_gradebook']);    
-    $cat = Category :: load($parent_cat[0]->get_parent_id());           
-    $global_weight = $cat[0]->get_weight();    
-    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
-	$link->set_weight($values['weight']);
+        
+    $final_weight = null;
+    if ($parent_cat[0]->get_parent_id() == 0) {
+        $final_weight = $values['weight_mask'];    
+    } else {
+        $cat = Category :: load($parent_cat[0]->get_parent_id());
+        $global_weight = $cat[0]->get_weight();
+        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();        
+    }
+    
+	$link->set_weight($final_weight);
     
     if (!empty($values['select_gradebook'])) {
         $link->set_category_id($values['select_gradebook']);

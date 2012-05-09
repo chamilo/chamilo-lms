@@ -57,6 +57,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     // that we want to change the main databases as well...
     $only_test = false;
     if (defined('SYSTEM_INSTALLATION')) {
+        
         if ($singleDbForm) {
             $dbStatsForm = $dbNameForm;
             $dbScormForm = $dbNameForm;
@@ -126,7 +127,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
         
-        //Moving Stats DB to the main database
+        //Moving Stats DB to the main DB
         
         $stats_table = array(        
 			"track_c_browsers",
@@ -159,14 +160,30 @@ if (defined('SYSTEM_INSTALLATION')) {
         
         if ($dbNameForm != $dbStatsForm) {
         	iDatabase::select_db($dbStatsForm);
-	        foreach($stats_table as $stat_table) {
+	        foreach ($stats_table as $stat_table) {
 	        	$sql = "ALTER TABLE $dbStatsForm.$stat_table RENAME $dbNameForm.$stat_table";
 	        	iDatabase::query($sql);
 	        }
 	        iDatabase::select_db($dbNameForm);
         }
-
-
+        
+        //Renaming user tables in the main DB
+        $user_tables = array(
+            'personal_agenda',
+            'personal_agenda_repeat',
+            'personal_agenda_repeat_not',
+            'user_course_category',
+        );
+                
+        if ($dbNameForm != $dbUserForm) {
+        	Database::select_db($dbUserForm);
+	        foreach ($user_tables as $table) {
+	        	$sql = "ALTER TABLE $dbUserForm.$table RENAME $dbNameForm.$table";
+	        	Database::query($sql);
+	        }
+	        Database::select_db($dbNameForm);
+        }
+        
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
         

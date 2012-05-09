@@ -215,13 +215,17 @@ class GradebookTable extends SortableTable {
 					$row[] = $this->build_edit_column($item); 
 				}
 			} else {
-				//students get the results and certificates columns
-				if (count($this->evals_links)>0 && $status_user!=1 ) {
-					$value_data = isset($data[4]) ? $data[4] : null;					
-					if (!is_null($value_data)) {
+				//students get the results and certificates columns                
+				if (count($this->evals_links) > 0 && $status_user != 1) {                    
+					$value_data = isset($data[4]) ? $data[4] : null;
+					if (!is_null($value_data)) {                        
 						$row[] = Display::tag('h4', $value_data);
-					}
-				}    
+					} else {                        
+                        $row[] = $this->build_edit_column($item);     
+                    }
+				} else {
+                    $row[] = $this->build_edit_column($item);
+                }
 			}
             
             //Category added

@@ -209,6 +209,7 @@ $StudentEmail = "Sähköposti";
 $CourseName = "Kurssin nimi";
 $HotspotDescription = "Nyt klikkaa: (...)";
 $ExamSheetVCC = "Tehtävä tarkistettu";
+$AttemptVCC = "Tehtäväsi on tarkistettu/kommentoitu.";
 $DearStudentEmailIntroduction = "Hyvä Opiskelija,";
 $ExerciseFinished = "Harjoitus valmis";
 $DisableResults = "Älä näytä tuloksia oppilaille";

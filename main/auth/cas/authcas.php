@@ -9,17 +9,37 @@ require_once(api_get_path(SYS_PATH).'main/auth/cas/cas_var.inc.php');
 require_once(api_get_path(SYS_PATH).'main/auth/external_login/ldap.inc.php');
 require_once(api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php');
 
+
+
+/**
+* @return true if cas is configured
+*
+**/
+function cas_configured() {
+	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri; 
+    $res = false;
+    if (!empty($cas_auth_ver) && !empty($cas_auth_server) && !empty($cas_auth_port)) {
+        $res = true;
+    }
+    return $res;
+}
+
+
+
 /**
 * checks if the user already get a session
 * @return the user login if the user already has a session ,false otherwise
 **/
-
 
 function cas_is_authenticated()
 {
 	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri; 
 	global $PHPCAS_CLIENT;
 	global $logout;
+
+    if (!cas_configured()) {
+        return;
+    }
 
 
 	if (!is_object($PHPCAS_CLIENT) ) 

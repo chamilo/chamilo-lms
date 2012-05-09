@@ -1467,18 +1467,9 @@ div.system_announcement {
 /* actions */
 .actions_lp {
     background:#F8F8F8;
-    height:29px;
-    padding-left: -17px;
-    margin-bottom: 1px;
-    vertical-align:middle;
-    width: 90%;
-    margin-left:17px;
+    height:29px;    
 }
 .actions_lp img {
-    vertical-align:middle;
-}
-.actions_lp a {
-    margin-right: 10px;
     vertical-align:middle;
 }
 .actions_lp span {

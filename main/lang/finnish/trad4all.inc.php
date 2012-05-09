@@ -830,7 +830,6 @@ $AllDone = "Kaikki tehty";
 $Blogs = "Blogit";
 $Postpone = "Lykkää";
 $Saved = "Tallennettu";
-$GotoCourse = "Mene kurssille";
 $NextBis = "Seuraava";
 $Prev = "Edellinen";
 $UserRoles = "Käyttäjä roolit";

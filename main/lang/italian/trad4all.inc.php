@@ -1064,7 +1064,6 @@ $CourseCodeAlreadyExistExplained = "I codici di corso duplicati saranno bloccati
 $CantDeleteReadonlyFiles = "I file marcati come di sola lettura non possono essere eliminati";
 $Uploaded = "Caricato";
 $Saved = "Salvato";
-$GotoCourse = "Vai al corso";
 $EmailSentFromDokeos = "email inviata dalla piattaforma";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Informazioni su passi completati e sul primo da completare";
 $LatexCode = "Codice LaTeX";

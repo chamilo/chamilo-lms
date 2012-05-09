@@ -17,6 +17,7 @@
  * Constants definition
  */
 require_once 'database.constants.inc.php';
+
 /**
  * Database class definition
  * @package chamilo.database
@@ -43,17 +44,7 @@ class Database {
      */
     public static function get_statistic_database() {
         global $_configuration;
-        return $_configuration['statistics_database'];
-    }
-
-    /**
-     *	Returns the name of the SCORM database.
-     *  @todo use main_database
-     *	@deprecated
-     */
-    public static function get_scorm_database() {
-        global $_configuration;
-        return $_configuration['scorm_database'];
+        return $_configuration['main_database'];
     }
 
     /**
@@ -62,7 +53,7 @@ class Database {
      */
     public static function get_user_personal_database() {
         global $_configuration;
-        return $_configuration['user_personal_database'];
+        return $_configuration['main_database'];
     }
 
     /**
@@ -192,19 +183,7 @@ class Database {
     }
 
     /**
-     * This generic method returns the correct and complete name of any scorm
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_scorm_table($short_table_name) {
-        return self::format_table_name(self::get_scorm_database(), $short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any scorm
+     * This generic method returns the correct and complete name of any user
      * table of which you pass the short name as a parameter. Please, define
      * table names as constants in this library and use them instead of directly
      * using magic words in your tool code.
@@ -704,6 +683,7 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
+                strpos($query, 'DROP TABLE IF EXISTS') === false &&      
                 strpos($query, 'thematic_advance') === false &&  
                 strpos($query, 'thematic_plan') === false &&  
                 strpos($query, 'track_c_countries') === false &&                        

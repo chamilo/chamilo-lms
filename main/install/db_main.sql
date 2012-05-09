@@ -374,6 +374,7 @@ LOCK TABLES language WRITE;
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
 ('Asturianu','asturian','ast','asturian',0),
+('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0),
 ('&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;','bulgarian','bg','bulgarian',1),
 ('Bosanski','bosnian','bs','bosnian',1),
 ('Catal&agrave;','catalan','ca','catalan',0),
@@ -417,6 +418,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;','russian','ru','russian',0),
 ('Sloven&#269;ina','slovak','sk','slovak',0),
 ('Sloven&scaron;&#269;ina','slovenian','sl','slovenian',1),
+('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0),
 ('Srpski','serbian','sr','serbian',0),
 ('Suomi','finnish','fi','finnish',0),
 ('Svenska','swedish','sv','swedish',0),
@@ -852,17 +854,12 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('gradebook_ranking_1', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_2', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_3', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_4', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_5', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_6', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17733','DatabaseVersion','', NULL, NULL, 0);
+('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
+('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
+('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
+('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
+('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17769','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1197,13 +1194,12 @@ VALUES
 ('allow_browser_sniffer', 'false', 'No'),
 ('enable_wami_record', 'true', 'Yes'),
 ('enable_wami_record', 'false', 'No'),
-('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
-('update_user_info_cas_with_ldap', 'true', 'Yes'),
-('update_user_info_cas_with_ldap', 'false', 'No'),
-('teachers_can_change_score_settings', 'false', 'Yes'),
-('teachers_can_change_score_settings', 'false', 'No');
-
-
+('teachers_can_change_score_settings', 'true', 'Yes'),
+('teachers_can_change_score_settings', 'false', 'No'),
+('teachers_can_change_grade_model_settings', 'true', 'Yes'),
+('teachers_can_change_grade_model_settings', 'false', 'No'),
+('gradebook_locking_enabled', 'true', 'Yes'),
+('gradebook_locking_enabled', 'false', 'No');
 UNLOCK TABLES;
 /*
 ('activate_send_event_by_mail', 'true', 'Yes'),

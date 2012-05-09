@@ -59,13 +59,13 @@ function sliderAction()
     {
         sliderOpen();
         slider_state = "open"
-        $(".slider_menu").html('<a href="#" onclick="return sliderAction();">Cerrar</a>');
+        $(".slider_menu").html('<a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_out.png"></a>');
     }
     else if (slider_state == "open")
     {
         sliderClose();
         slider_state = "close";
-        $(".slider_menu").html('<a href="#" onclick="return sliderAction();">M&aacute;s...</a>');
+        $(".slider_menu").html('<a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_in.png"></a>');
     }
 
     return false;

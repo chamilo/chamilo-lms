@@ -1060,7 +1060,7 @@ $CourseCodeAlreadyExistExplained = "When a course code is duplicated, the databa
 $CantDeleteReadonlyFiles = "Cannot delete files that are configured in read-only mode.";
 $Uploaded = "Uploaded.";
 $Saved = "Saved.";
-$GotoCourse = "Go to the course";
+$Reset = "Reset";
 $EmailSentFromDokeos = "E-mail sent from the platform";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Information about the last finished step and the next unfinished one.";
 $LatexCode = "LaTeX code";
@@ -1219,4 +1219,5 @@ $InputNameHere = "Enter name here";
 $Reload = "Reload";
 $TimeSpentLastXDays = "Time spent the last %s days";
 $TimeSpentBetweenXAndY = "Time spent between %s and %s";
+$GoToCourse = "Go to the course";
 ?>

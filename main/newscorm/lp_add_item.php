@@ -271,7 +271,7 @@ if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
 
 echo '<div class="span8">';
 
-    if (isset($new_item_id) && is_numeric($new_item_id)) {
+    if (isset($new_item_id) && is_numeric($new_item_id)) {        
         switch ($type) {
             case 'chapter':
                 echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);

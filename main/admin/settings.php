@@ -179,14 +179,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                
         foreach ($values as $key => $value) {
             if (in_array($key, $settings_to_avoid)) { continue; }
-                                	                                         
-            //Gradebook fix
-            if ($key == 'gradebook_display') {
-                foreach ($value as $new_key => $item) {                    
-                    $final_value = $item['text'].'::'.$item['score'];
-                    $result = api_set_setting($new_key, $final_value, 'ranking', null, $_configuration['access_url']);	
-                } 
-            }
             //
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
@@ -320,6 +312,8 @@ $action_images['search']        = 'search.png';
 $action_images['stylesheets']   = 'stylesheets.png';
 $action_images['templates']     = 'template.png';
 $action_images['plugins']       = 'plugins.png';
+$action_images['shibboleth']    = 'shibboleth.png';
+$action_images['facebook']      = 'facebook.png';
 
 // Grabbing the categories.
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));

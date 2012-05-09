@@ -1,15 +1,16 @@
 
-Chamilo - elearning and course management software
+Chamilo LMS - elearning and course management software
 
-Copyright (c) 2008-2010 Dokeos Latinoamérica SAC / BeezNest Latino SAC
-Copyright (c) 2004-2009 Dokeos SPRL
+Copyright (c) 2008-2012 BeezNest Latino SAC, Peru & BeezNest Belgium SPRL, Belgium
+Copyright (c) 2012 Université de Genève, Switzerland
+Copyright (c) 2010-2012 Université de Grenoble, France
+Copyright (c) 2011-2012 CBlue SPRL, Belgium
+Copyright (c) Juan Carlos Raña (independent), Spain
+Copyright (c) 2004-2009 Dokeos SPRL, Belgium
 Copyright (c) 2003-2007 Ghent University (UGent)
-Copyright (c) 2001 Universite catholique de Louvain (UCL)
+Copyright (c) 2001-2004 Universite catholique de Louvain (UCL)
 Copyright (c) 2003-2008 Vrije Universiteit Brussel (VUB)
 Copyright (c) 2004-2008 Hoogeschool Gent (HoGent)
-Copyright (c) Bart Mollet, Hogeschool Gent
-Copyright (c) Facultad de Matematicas, UADY (México) (Message plugin)
-Copyright (c) Kristof Van Steenkiste & Sebastien Jacobs (Reservation plugin) 
 	
 For a full list of contributors detaining copyrights over parts of
 the Chamilo software, see "documentation/credits.html".

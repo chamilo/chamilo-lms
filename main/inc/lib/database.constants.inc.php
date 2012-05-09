@@ -143,7 +143,7 @@ define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
 define('TABLE_MAIN_USER_REL_COURSE_VOTE',           'user_rel_course_vote');
 
 
-// SCORM database tables
+// SCORM database tables this is used only during the migration from 1.6 to 1.8 see update-db-scorm-1.6.x-1.8.0.inc
 define('TABLE_SCORM_MAIN', 'scorm_main');
 define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 

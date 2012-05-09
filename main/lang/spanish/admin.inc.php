@@ -1537,6 +1537,8 @@ $AllowBrowserSnifferComment = "Esto activará un investigador de las capacidades
 $EnableWamiRecordTitle = "Activar Wami-recorder";
 $EnableWamiRecordComment = "Wami-recorder es una herramienta de grabación de voz sobre Flash";
 $ChangeSharedSetting = "Cambiar visibilidad de la configuración para los otros portales";
+$AllowHRSkillsManagementTitle = "Permitir al perfil RRHH administrar las competencias";
+$AllowHRSkillsManagementComment = "El usuario podrá crear, editar competencias";
 $GradebookDefaultWeightTitle = "Peso total por defecto en la herramienta \"Evaluaciones\"";
 $GradebookDefaultWeightComment = "Este peso será utilizado en todos los cursos";
 ?>

@@ -42,13 +42,28 @@ class Template {
         
         $loader = new Twig_Loader_Filesystem($template_paths);
         
-        $this->twig = new Twig_Environment($loader, array(
-            //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-            'autoescape' => false,
-            //'debug'      => true,
-            //'auto_reload' => true
-            //'optimizations' => 0 // turn on optimizations with -1
-        ));
+        //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
+        if (api_get_setting('server_type') == 'test') {
+            $options = array (
+                //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'autoescape'        => false,
+                'debug'             => true,
+                'auto_reload'       => true,
+                'optimizations'     => 0, // turn on optimizations with -1
+                'strict_variables'  => true, //If set to false, Twig will silently ignore invalid variables
+                );
+        } else {
+            $options = array (
+                'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'autoescape'        => false,
+                'debug'             => false,
+                'auto_reload'       => false,
+                'optimizations'     => -1, // turn on optimizations with -1
+                'strict_variables'  => false //If set to false, Twig will silently ignore invalid variables
+            );
+        }
+        
+        $this->twig = new Twig_Environment($loader, $options);
                
         $this->twig->addFilter('get_lang',       new Twig_Filter_Function('get_lang'));
         $this->twig->addFilter('get_path',       new Twig_Filter_Function('api_get_path'));

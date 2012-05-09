@@ -1333,7 +1333,7 @@ function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $
  * @param   int     session id
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
-function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $user_list, $return_string = true) { 
+function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $user_list = array(), $return_string = true) { 
     //No score given we return 
     if (is_null($my_score)) {
         return '-';
@@ -1341,9 +1341,9 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     if (empty($user_list)) {
         return '-';
     }
-    $best_attempts = array(); 
-   
-    foreach($user_list as $user_data) {
+    
+    $best_attempts = array();   
+    foreach ($user_list as $user_data) {
         $user_id = $user_data['user_id'];        
         $best_attempts[$user_id]= get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id);   
     }
@@ -1364,7 +1364,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
             asort($my_ranking);
             $position = count($my_ranking);
             if (!empty($my_ranking)) {        
-                foreach($my_ranking as $user_id => $ranking) {
+                foreach ($my_ranking as $user_id => $ranking) {
                 	if ($my_score >= $ranking) {
                         if ($my_score == $ranking) {
                             $exe_id = $best_attempts[$user_id]['exe_id'];

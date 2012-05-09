@@ -235,13 +235,12 @@ if (defined('SYSTEM_INSTALLATION')) {
         	}
         	Database::select_db($dbNameForm);
         }                
-    }
-    
+    }    
     
     //Adds the c_XXX courses tables see #3910
     require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
     global $_configuration;
-    update_Db_course();
+    create_course_tables();
     
     $prefix = '';
     if ($singleDbForm) {

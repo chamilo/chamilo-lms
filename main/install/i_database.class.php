@@ -35,6 +35,7 @@ class iDatabase extends Database
     static function query($query, $connection = null, $file = null, $line = null)
     {
         if (self::is_logging()) {
+            $query = str_replace("\n", '', $query);
             Log::notice(__FUNCTION__ . ' ' . $query, Log::frame(1));
         }
 

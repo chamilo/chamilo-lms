@@ -859,7 +859,7 @@ VALUES
 ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
 ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17825','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17828','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1344,6 +1344,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
   certif_min_score int DEFAULT NULL,
   session_id int DEFAULT NULL,
   document_id int unsigned DEFAULT NULL,
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;

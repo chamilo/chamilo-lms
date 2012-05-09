@@ -109,4 +109,12 @@ class ShibbolethTestHelper
         $_SERVER['persistent-id'] = 'idp!viewer!' . md5($id);
     }
 
+    public function setup_new_minimal_data()
+    {
+        $id = uniqid();
+        $_SERVER['Shib-SwissEP-UniqueID'] = 'usr_' . $id;       
+        $_SERVER['Shib-InetOrgPerson-givenName'] = 'John';
+        $_SERVER['Shib-Person-surname'] = 'Doe' . $id;
+    }
+
 }

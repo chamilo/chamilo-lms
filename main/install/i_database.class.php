@@ -29,7 +29,7 @@ class iDatabase extends Database
         if (self::is_logging()) {
             Log::notice(__FUNCTION__ . ' ' . $database_name, Log::frame(1));
         }
-        parent::select_db($database_name, $connection);
+        return parent::select_db($database_name, $connection);
     }
 
     static function query($query, $connection = null, $file = null, $line = null)
@@ -39,7 +39,7 @@ class iDatabase extends Database
             Log::notice(__FUNCTION__ . ' ' . $query, Log::frame(1));
         }
 
-        parent::query($query, $connection, $file, $line);
+        return parent::query($query, $connection, $file, $line);
     }
 
 }

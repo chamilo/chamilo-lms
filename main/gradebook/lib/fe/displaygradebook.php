@@ -29,12 +29,18 @@ class DisplayGradebook
     				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
     				'.Display::return_icon('evaluation_rate.png',get_lang('AddResult'),'',ICON_SIZE_MEDIUM) . '</a>';				
     			}
-    			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">
-    			'.Display::return_icon('import_evaluation.png',get_lang('ImportResult'),'',ICON_SIZE_MEDIUM) . '</a>';			
+                
+                if (api_is_platform_admin() || $evalobj->is_locked() == false) {
+                    $header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">'.Display::return_icon('import_evaluation.png',get_lang('ImportResult'),'',ICON_SIZE_MEDIUM) . '</a>';			
+                }
+                
     			if ($evalobj->has_results()) {
     				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export=">'.Display::return_icon('export_evaluation.png',get_lang('ExportResult'),'',ICON_SIZE_MEDIUM) . '</a>';
-    				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'">'.Display::return_icon('edit.png',get_lang('EditResult'),'',ICON_SIZE_MEDIUM).'</a>';
-    				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">'.Display::return_icon('delete.png',get_lang('DeleteResult'),'',ICON_SIZE_MEDIUM).'</a>';
+                    
+                    if (api_is_platform_admin() || $evalobj->is_locked() == false) {
+                        $header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'">'.Display::return_icon('edit.png',get_lang('EditResult'),'',ICON_SIZE_MEDIUM).'</a>';
+                        $header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">'.Display::return_icon('delete.png',get_lang('DeleteResult'),'',ICON_SIZE_MEDIUM).'</a>';
+                    }
     			}
     			
     			$header .= '<a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank">'.Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';

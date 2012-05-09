@@ -78,6 +78,11 @@ class Evaluation implements GradebookItem
 	public function get_locked() {
 		return $this->locked;
 	}
+    
+    public function is_locked() {
+		return isset($this->locked) && $this->locked == 1 ? true : false ;
+	}  
+    
 	public function set_id ($id) {
 		$this->id = $id;
 	}
@@ -591,4 +596,14 @@ class Evaluation implements GradebookItem
   		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
   		Database::query($sql);
   	}
+    
+    function check_lock_permissions() {
+        if (api_is_platform_admin()) {
+            return true;
+        } else {
+            if ($this->is_locked()) {
+                api_not_allowed();
+            }
+        }
+    }
 }

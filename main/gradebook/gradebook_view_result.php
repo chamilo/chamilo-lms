@@ -90,12 +90,15 @@ if (isset ($_GET['editres'])) {
 	}
 }
 
-if (isset ($_GET['import'])) {
+if (isset ($_GET['import'])) {    
+    
 	$interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
 	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']), '_blank', '');
 	if (!$import_result_form->validate()) {
 		Display :: display_header(get_lang('Import'));
 	}
+    
+    $eval[0]->check_lock_permissions();
 
 	if ($_POST['formSent'] ) {
 		if (!empty ($_FILES['import_file']['name'])) {

@@ -72,9 +72,9 @@ abstract class AbstractLink implements GradebookItem {
 		return $this->weight;
 	}
         
-    public function get_locked() {
-		return $this->locked;
-	}
+    public function is_locked() {
+		return isset($this->locked) && $this->locked == 1 ? true : false ;
+	}  
 
 	public function is_visible() {
 		return $this->visible;

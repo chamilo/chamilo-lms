@@ -106,8 +106,7 @@ class Log
          */
         if (!isset($context['file'])) {
             $trace = debug_backtrace();
-            array_shift($trace);
-            $trace = reset($trace);
+            $trace = $trace[1];
             $context['file'] = $trace['file'];
             $context['line'] = $trace['line'];
         }

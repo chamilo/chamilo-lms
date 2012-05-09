@@ -13,7 +13,7 @@ $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
 $bbb = new bbb();
 
-if ($bbb) {
+if ($bbb->plugin_enabled) {
     if ($bbb->is_server_running()) {
         
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {

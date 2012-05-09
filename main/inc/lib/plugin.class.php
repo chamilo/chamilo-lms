@@ -63,9 +63,8 @@ class Plugin {
     }
 
     function get_css() {
-        $name = $this->get_name();
-        $root = api_get_path(SYS_PLUGIN_PATH);
-        $path = "$root/$name/resources/$name.css";
+        $name = $this->get_name();        
+        $path = api_get_path(SYS_PLUGIN_PATH)."$name/resources/$name.css";
         if (!is_readable($path)) {
             return '';
         }

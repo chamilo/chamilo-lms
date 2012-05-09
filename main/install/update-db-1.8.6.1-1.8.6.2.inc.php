@@ -87,12 +87,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbNameForm,$dblist)) {
 				 Log::error('Database '.$dbNameForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbNameForm);
+				iDatabase::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbNameForm,$query)");
+						 Log::notice("iDatabase::query($dbNameForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbNameForm, executed: $query");
 						}
@@ -110,21 +110,21 @@ if (defined('SYSTEM_INSTALLATION')) {
 				        FROM session_rel_course
 				        ORDER BY id_session, course_code";
 
-				$res = Database::query($sql);
+				$res = iDatabase::query($sql);
 
 				if ($res === false) {
-				     Log::error('Could not query session course coaches table: '.Database::error());
+				     Log::error('Could not query session course coaches table: '.iDatabase::error());
 				} else {
 					// For each coach found, add him as a course coach in the
 					// session_rel_course_rel_user table
-					while ($row = Database::fetch_array($res)) {
+					while ($row = iDatabase::fetch_array($res)) {
 
 						// Check whether coach is a student
 						$sql = "SELECT 1 FROM session_rel_course_rel_user
 									 WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
-						$rs  =	Database::query($sql);
+						$rs  =	iDatabase::query($sql);
 
-						if (Database::num_rows($rs) > 0) {
+						if (iDatabase::num_rows($rs) > 0) {
 							$sql_upd = "UPDATE session_rel_course_rel_user SET status=2
 										WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
 						} else {
@@ -132,10 +132,10 @@ if (defined('SYSTEM_INSTALLATION')) {
 						  				VALUES ('{$row[id_session]}','{$row[course_code]}','{$row[id_coach]}',2)";
 						}
 
-						$rs_coachs = Database::query($sql_ins);
+						$rs_coachs = iDatabase::query($sql_ins);
 
 						if ($rs_coachs === false) {
-							 Log::error('Could not move course coach to new table: '.Database::error());
+							 Log::error('Could not move course coach to new table: '.iDatabase::error());
 						}
 
 					}
@@ -144,34 +144,34 @@ if (defined('SYSTEM_INSTALLATION')) {
 				// Remove duplicated rows for 'show_tutor_data' AND 'show_teacher_data' into settings_current table
 
 				$sql = "SELECT id FROM settings_current WHERE variable='show_tutor_data' ORDER BY id";
-				$rs_chk_id1 = Database::query($sql);
+				$rs_chk_id1 = iDatabase::query($sql);
 
 				if ($rs_chk_id1 === false) {
-				     Log::error('Could not query settings_current ids table: '.Database::error());
+				     Log::error('Could not query settings_current ids table: '.iDatabase::error());
 				} else {
 					$i = 1;
-					while ($row_id1 = Database::fetch_array($rs_chk_id1)) {
+					while ($row_id1 = iDatabase::fetch_array($rs_chk_id1)) {
 						$id = $row_id1['id'];
 						if ($i > 1) {
 							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
-							Database::query($sql_del);
+							iDatabase::query($sql_del);
 						}
 						$i++;
 					}
 				}
 
 				$sql = "SELECT id FROM settings_current WHERE variable='show_teacher_data' ORDER BY id";
-				$rs_chk_id2 = Database::query($sql);
+				$rs_chk_id2 = iDatabase::query($sql);
 
 				if ($rs_chk_id2 === false) {
-				     Log::error('Could not query settings_current ids table: '.Database::error());
+				     Log::error('Could not query settings_current ids table: '.iDatabase::error());
 				} else {
 					$i = 1;
-					while ($row_id2 = Database::fetch_array($rs_chk_id2)) {
+					while ($row_id2 = iDatabase::fetch_array($rs_chk_id2)) {
 						$id = $row_id2['id'];
 						if ($i > 1) {
 							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
-							Database::query($sql_del);
+							iDatabase::query($sql_del);
 						}
 						$i++;
 					}
@@ -192,12 +192,12 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm,$dblist)) {
                  Log::error('Database '.$dbNameForm.' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                         Log::notice("Database::query($dbNameForm,$query)");
+                         Log::notice("iDatabase::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                              Log::notice("In $dbNameForm, executed: $query");
                         }
@@ -220,12 +220,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbStatsForm, $dblist)) {
 				 Log::error('Database '.$dbStatsForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbStatsForm);
+				iDatabase::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbStatsForm,$query)");
+						 Log::notice("iDatabase::query($dbStatsForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbStatsForm, executed: $query");
 						}
@@ -246,13 +246,13 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbUserForm,$dblist)) {
 				 Log::error('Database '.$dbUserForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbUserForm);
+				iDatabase::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test){
-						 Log::notice("Database::query($dbUserForm,$query)");
+						 Log::notice("iDatabase::query($dbUserForm,$query)");
 						 Log::notice("In $dbUserForm, executed: $query");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 					}
 				}
 			}
@@ -275,15 +275,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 		} elseif (!in_array($dbNameForm, $dblist)) {
 			 Log::error('Database '.$dbNameForm.' was not found, skipping');
 		} else {
-			Database::select_db($dbNameForm);
-			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+			iDatabase::select_db($dbNameForm);
+			$res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
 			if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.1-1.8.6.2.inc.php'); }
 
-			if (Database::num_rows($res) > 0) {
+			if (iDatabase::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				while ($row = Database::fetch_array($res)) {
+				while ($row = iDatabase::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
@@ -294,7 +294,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					 * without a database name
 					 */
 					if (!$singleDbForm) { //otherwise just use the main one
-						Database::select_db($row_course['db_name']);
+						iDatabase::select_db($row_course['db_name']);
 					}
                     Log::notice('Course db ' . $row_course['db_name']);
 
@@ -304,9 +304,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 						}
 
 						if ($only_test) {
-							 Log::error("Database::query(".$row_course['db_name'].",$query)");
+							 Log::error("iDatabase::query(".$row_course['db_name'].",$query)");
 						} else {
-							$res = Database::query($query);
+							$res = iDatabase::query($query);
 							if ($log) {
 								 Log::error("In ".$row_course['db_name'].", executed: $query");
 							}
@@ -323,16 +323,16 @@ if (defined('SYSTEM_INSTALLATION')) {
 
 					// Get all ids and update description_type field with them from course_description table
 					$sql_sel = "SELECT id FROM $t_course_description";
-					$rs_sel = Database::query($sql_sel);
+					$rs_sel = iDatabase::query($sql_sel);
 
 					if ($rs_sel === false) {
-				    	 Log::error('Could not query course_description ids table: '.Database::error());
+				    	 Log::error('Could not query course_description ids table: '.iDatabase::error());
 					} else {
-						if (Database::num_rows($rs_sel) > 0) {
-							while ($row_ids = Database::fetch_array($rs_sel)) {
+						if (iDatabase::num_rows($rs_sel) > 0) {
+							while ($row_ids = iDatabase::fetch_array($rs_sel)) {
 								$description_id = $row_ids['id'];
 								$sql_upd = "UPDATE $t_course_description SET description_type='$description_id' WHERE id='$description_id'";
-								Database::query($sql_upd);
+								iDatabase::query($sql_upd);
 							}
 						}
 					}

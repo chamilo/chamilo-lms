@@ -254,7 +254,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 Log::error('Database ' . $dbStatsForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbStatsForm);
-                Log::notice('Database: statistics');
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
@@ -272,14 +271,12 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $tables = iDatabase::get_tables($dbStatsForm);
                 foreach ($tables as $table) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
-                    Log::notice('Database: statistics, Table:  '. $table);
                     $res = iDatabase::query($query);
                     if ($res === false) {
                         Log::error('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbStatsForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
-                Log::notice('Database: statistics - change default char set');
                 $res = iDatabase::query($query);
                 if ($res === false) {
                     Log::error('Error in ' . $query . ': ' . iDatabase::error());
@@ -301,7 +298,6 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                         //getting the type question id
                         $sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";
-                        Log::notice('Database: '. $my_course_db);
                         $res_question = iDatabase::query($sql_question);
                         $row = iDatabase::fetch_array($res_question);
                         $type = $row['type'];
@@ -339,7 +335,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 Log::error('Database ' . $dbUserForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbUserForm);
-                Log::notice('Database: user');
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
                         Log::notice("Database::query($dbUserForm,$query)");
@@ -406,7 +401,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if (!$singleDbForm) { // otherwise just use the main one
                         iDatabase::select_db($row_course['db_name']);
                     }
-                    Log::notice('Course db ' . $row_course['db_name']);
 
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {

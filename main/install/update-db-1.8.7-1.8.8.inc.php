@@ -87,17 +87,17 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm, $dblist)) {
                 Log::error('Database '.$dbNameForm.' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query){
                     if ($only_test) {
-                        Log::notice("Database::query($dbNameForm,$query)");
+                        Log::notice("iDatabase::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                              Log::notice("In $dbNameForm, executed: $query");
                         }
                         if ($res === false) {
-                        	 Log::error('Error in '.$query.': '.Database::error());
+                        	 Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
@@ -116,12 +116,12 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm,$dblist)) {
                 error_log('Database '.$dbNameForm.' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)");
+                        error_log("iDatabase::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                             error_log("In $dbNameForm, executed: $query");
                         }
@@ -144,18 +144,18 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbStatsForm, $dblist)){
                  Log::error('Database '.$dbStatsForm.' was not found, skipping');
             } else {
-                Database::select_db($dbStatsForm);
+                iDatabase::select_db($dbStatsForm);
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
-                         Log::notice("Database::query($dbStatsForm,$query)");
+                         Log::notice("iDatabase::query($dbStatsForm,$query)");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($log) {
                              Log::notice("In $dbStatsForm, executed: $query");
                         }
                         if ($res === false) {
-                             Log::error('Error in '.$query.': '.Database::error());
+                             Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
@@ -177,15 +177,15 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbUserForm,$dblist)) {
                  Log::error('Database '.$dbUserForm.' was not found, skipping');
             } else {
-                Database::select_db($dbUserForm);
+                iDatabase::select_db($dbUserForm);
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
-                         Log::notice("Database::query($dbUserForm,$query)");
+                         Log::notice("iDatabase::query($dbUserForm,$query)");
                          Log::notice("In $dbUserForm, executed: $query");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                             Log::error('Error in '.$query.': '.Database::error());
+                             Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
@@ -208,15 +208,15 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif(!in_array($dbNameForm, $dblist)) {
              Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
             if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
 
-            if (Database::num_rows($res) > 0) {
+            if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
-                while ($row = Database::fetch_array($res)) {
+                while ($row = iDatabase::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -227,7 +227,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                      * without a database name
                      */
                     if (!$singleDbForm) { // otherwise just use the main one
-                        Database::select_db($row_course['db_name']);
+                        iDatabase::select_db($row_course['db_name']);
                     }
                     Log::notice('Course db ' . $row_course['db_name']);
 
@@ -237,14 +237,14 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
 
                         if ($only_test) {
-                             Log::notice("Database::query(".$row_course['db_name'].",$query)");
+                             Log::notice("iDatabase::query(".$row_course['db_name'].",$query)");
                         } else {
-                            $res = Database::query($query);
+                            $res = iDatabase::query($query);
                             if ($log) {
                                  Log::notice("In ".$row_course['db_name'].", executed: $query");
                             }
                             if ($res === false) {
-                                 Log::error('Error in '.$query.': '.Database::error());
+                                 Log::error('Error in '.$query.': '.iDatabase::error());
                             }
                         }
                     }                    
@@ -264,35 +264,35 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $query = "SELECT DISTINCT path as exercise_id, lp_item_id, lp_view_id, user_id, v.lp_id 
                               FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v  ON v.id = iv.lp_view_id INNER JOIN $table_lp_item i ON  i.id = lp_item_id
                               WHERE item_type = 'quiz'";
-                    $result = Database::query($query);
+                    $result = iDatabase::query($query);
                     
-                    if (Database::num_rows($result) > 0) {
-                        while ($row = Database::fetch_array($result,'ASSOC')) {                            
+                    if (iDatabase::num_rows($result) > 0) {
+                        while ($row = iDatabase::fetch_array($result,'ASSOC')) {                            
                             $sql = "SELECT exe_id FROM $dbNameForm.track_e_exercices 
                                     WHERE exe_user_id = {$row['user_id']} AND 
                                     exe_cours_id = '{$row_course['code']}' AND 
                                     exe_exo_id = {$row['exercise_id']}  AND
                                     orig_lp_id = {$row['lp_id']}  AND 
                                     orig_lp_item_id = {$row['lp_item_id']} ";
-                            $sub_result = Database::query($sql);
+                            $sub_result = iDatabase::query($sql);
                             $exe_list = array();
-                            while ($sub_row = Database::fetch_array($sub_result,'ASSOC')) {
+                            while ($sub_row = iDatabase::fetch_array($sub_result,'ASSOC')) {
                                 $exe_list[] = $sub_row['exe_id'];             
                             }
                             
                             $sql = "SELECT iv.id, iv.view_count
                                       FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v  ON v.id = iv.lp_view_id INNER JOIN $table_lp_item i ON  i.id = lp_item_id
                                       WHERE item_type = 'quiz' AND user_id =  {$row['user_id']} AND path = {$row['exercise_id']} ";
-                            $sub_result = Database::query($sql);
+                            $sub_result = iDatabase::query($sql);
                             $lp_item_view_id_list = array();
-                            while ($sub_row = Database::fetch_array($sub_result,'ASSOC')) {
+                            while ($sub_row = iDatabase::fetch_array($sub_result,'ASSOC')) {
                                 $lp_item_view_id_list[] = $sub_row['id'];             
                             } 
                             $i = 0;
                             foreach($exe_list as $exe_id) {       
                                 $lp_item_view_id = $lp_item_view_id_list[$i];                         
                                 $update = "UPDATE $dbNameForm.track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id' WHERE exe_id = $exe_id ";                                
-                                Database::query($update);                                
+                                iDatabase::query($update);                                
                                 $i++;
                             }                            
                         }            
@@ -303,49 +303,49 @@ if (defined('SYSTEM_INSTALLATION')) {
             //Adding notifications options
     
             $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1') ";
-            $result = Database::query($sql);
-            $id = Database::insert_id();
+            $result = iDatabase::query($sql);
+            $id = iDatabase::insert_id();
                         
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
-            $result = Database::query($sql);         
+            $result = iDatabase::query($sql);         
                 
             
             $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1')";
-            $result = Database::query($sql);
-            $id = Database::insert_id();
+            $result = iDatabase::query($sql);
+            $id = iDatabase::insert_id();
             
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             
                         
             $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1') ";
-            $result = Database::query($sql);
-            $id = Database::insert_id();
+            $result = iDatabase::query($sql);
+            $id = iDatabase::insert_id();
             
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
                      
             //Fixing table access_url_rel_course if the platform have courses that were created in Dok€os 1.8.5
               
             if (!isset($_configuration['multiple_access_urls']) || $_configuration['multiple_access_urls'] == false) {
                 $sql = "SELECT code FROM $dbNameForm.course";
-                $result = Database::query($sql);
-                while ($row = Database::fetch_array($result)) {
+                $result = iDatabase::query($sql);
+                while ($row = iDatabase::fetch_array($result)) {
                     //Adding course to default URL just in case
-                    $sql = "INSERT INTO $dbNameForm.access_url_rel_course SET course_code = '".Database::escape_string($row['code'])."', access_url_id = '1' ";  
-                    Database::query($sql);
+                    $sql = "INSERT INTO $dbNameForm.access_url_rel_course SET course_code = '".iDatabase::escape_string($row['code'])."', access_url_id = '1' ";  
+                    iDatabase::query($sql);
                 }                
             }
         }
@@ -366,12 +366,12 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif (!in_array($dbNameForm, $dblist)) {
              Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
             if ($res === false) { die('Error while querying the courses list in update_db-1.8.7-1.8.8.inc.php'); }
-            if (Database::num_rows($res) > 0) {
+            if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
-                while ($row = Database::fetch_array($res)) {
+                while ($row = iDatabase::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -383,7 +383,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if ($singleDbForm) {
                         $prefix_course = $prefix.$row['db_name']."_";
                     } else {
-                        Database::select_db($row['db_name']);
+                        iDatabase::select_db($row['db_name']);
                     }
 
                     foreach($c_q_list as $query) {
@@ -391,9 +391,9 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
                         }
                         if ($only_test) {
-                             Log::notice("Database::query(".$row['db_name'].",$query)");
+                             Log::notice("iDatabase::query(".$row['db_name'].",$query)");
                         } else {
-                            $res = Database::query($query);
+                            $res = iDatabase::query($query);
                             if ($log) {
                                  Log::notice("In ".$row['db_name'].", executed: $query");
                             }

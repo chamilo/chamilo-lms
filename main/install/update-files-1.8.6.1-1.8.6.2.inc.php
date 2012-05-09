@@ -53,17 +53,17 @@ if (defined('SYSTEM_INSTALLATION')) {
     $perm = api_get_permissions_for_new_directories();
 
     // The following line is disabled, connection has been already done
-    //$link = Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
-    //Database::select_db($dbNameForm, $link);
-    Database::select_db($dbNameForm);
+    //$link = iDatabase::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
+    //iDatabase::select_db($dbNameForm, $link);
+    iDatabase::select_db($dbNameForm);
 
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM $db_name.course";
     Log::notice('Getting courses for files updates: ' . $sql);
-    $result = Database::query($sql);
+    $result = iDatabase::query($sql);
 
-    if (Database::num_rows($result) > 0) {
-        while ($courses_directories = Database::fetch_array($result)) {
+    if (iDatabase::num_rows($result) > 0) {
+        while ($courses_directories = iDatabase::fetch_array($result)) {
             $currentCourseRepositorySys = $sys_course_path . $courses_directories['directory'] . '/';
             // upload > announcements
             if (!is_dir($currentCourseRepositorySys . "upload/announcements")) {

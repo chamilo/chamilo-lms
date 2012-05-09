@@ -87,12 +87,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbNameForm, $dblist)) {
 				 Log::error('Database '.$dbNameForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbNameForm);
+				iDatabase::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbNameForm,$query)");
+						 Log::notice("iDatabase::query($dbNameForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbNameForm, executed: $query");
 						}
@@ -107,15 +107,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 		// Filling the access_url_rel_user table with access_url_id by default = 1
 		$query = "SELECT user_id FROM $dbNameForm.user";
 
-		$result_users = Database::query($query);
-		while ($row = Database::fetch_array($result_users, 'NUM')) {
+		$result_users = iDatabase::query($query);
+		while ($row = iDatabase::fetch_array($result_users, 'NUM')) {
 			$user_id = $row[0];
 			$sql = "INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";
-			$res = Database::query($sql);
+			$res = iDatabase::query($sql);
 			//Updating user image
 			$query = "SELECT picture_uri FROM $dbNameForm.user WHERE user_id=$user_id";
-			$res = Database::query($query);
-			$picture_uri = Database::fetch_array($res, 'NUM');
+			$res = iDatabase::query($query);
+			$picture_uri = iDatabase::fetch_array($res, 'NUM');
 			$file =  $picture_uri[0];
 			$dir = api_get_path(SYS_CODE_PATH).'upload/users/';
 			$image_repository = file_exists($dir.$file) ? $dir.$file : $dir.$user_id.'/'.$file;
@@ -167,10 +167,10 @@ if (defined('SYSTEM_INSTALLATION')) {
 		}
 		// Filling the access_url_rel_session table with access_url_id by default = 1
 		$query = "SELECT id FROM $dbNameForm.session";
-		$result = Database::query($query);
-		while ($row = Database::fetch_array($result, 'NUM')) {
+		$result = iDatabase::query($query);
+		while ($row = iDatabase::fetch_array($result, 'NUM')) {
 			$sql = "INSERT INTO $dbNameForm.access_url_rel_session SET session_id=".$row[0].", access_url_id=1";
-			$res = Database::query($sql);
+			$res = iDatabase::query($sql);
 		}
 
 		// Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
@@ -209,7 +209,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -259,7 +259,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</body>
 		\');';
 
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -299,7 +299,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</body>
 		\');
 		';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftList\', \'TemplateTitleListLeftListDescription\', \'leftlist.gif\', \'
@@ -337,7 +337,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftRightList\', \'TemplateTitleLeftRightListDescription\', \'leftrightlist.gif\', \'
@@ -389,7 +389,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</body>
 
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleRightList\', \'TemplateTitleRightListDescription\', \'rightlist.gif\', \'
@@ -428,7 +428,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -455,7 +455,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</tr>
 					</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -491,7 +491,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</body>
 		\');
 		';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDesc\', \'TemplateTitleCheckListDescription\', \'description.gif\', \'
@@ -520,7 +520,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</body>
 		\');
 		';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -561,7 +561,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</p>
 						</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -627,7 +627,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</p>
 						</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -670,7 +670,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</body>
 		\');
 		';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -737,7 +737,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</body>
 		\');
 		';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -771,7 +771,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -838,7 +838,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						<br />
 						</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleAudio\', \'TemplateTitleAudioDescription\', \'audiocomment.gif\', \'
@@ -873,7 +873,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</p>
 							</body>
 		\');';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleVideo\', \'TemplateTitleVideoDescription\', \'video.gif\', \'
@@ -935,7 +935,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					 <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 					</body>
 		\'); ';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleFlash\', \'TemplateTitleFlashDescription\', \'flash.gif\', \'
@@ -959,11 +959,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</center>
 					</body>
 		\'); ';
-		$res = Database::query($sql);
+		$res = iDatabase::query($sql);
 
         // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and $sql = 'INSERT it if necessary
         $query = "SELECT * FROM $dbNameForm.course_module";
-        $result = Database::query($query);
+        $result = iDatabase::query($query);
         if ($result === false) {
         	//the course_module table doesn't exist, create it
             $sql = "CREATE TABLE $dbNameForm.course_module (
@@ -977,7 +977,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                       PRIMARY KEY  (id)
                     )
                     ";
-            $result = Database::query($sql);
+            $result = iDatabase::query($sql);
             if ($result !== false) {
             	$sql = "INSERT INTO $dbNameForm.course_module (name, link, image, `row`,`column`, position) VALUES
                     ('calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
@@ -1008,7 +1008,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     ('gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
                     ('glossary','glossary/index.php','glossary.gif',2,1,'basic'),
                     ('notebook','notebook/index.php','notebook.gif',2,1,'basic')";
-                $res = Database::query($sql);
+                $res = iDatabase::query($sql);
             }
         }
 
@@ -1026,12 +1026,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbStatsForm,$dblist)) {
 				 Log::error('Database '.$dbStatsForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbStatsForm);
+				iDatabase::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbStatsForm,$query)");
+						 Log::notice("iDatabase::query($dbStatsForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbStatsForm, executed: $query");
 						}
@@ -1052,13 +1052,13 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbUserForm,$dblist)) {
 				 Log::error('Database '.$dbUserForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbUserForm);
+				iDatabase::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test) {
-						error_log("Database::query($dbUserForm,$query)");
+						error_log("iDatabase::query($dbUserForm,$query)");
 						error_log("In $dbUserForm, executed: $query");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 					}
 				}
 			}
@@ -1081,15 +1081,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 		} elseif (!in_array($dbNameForm, $dblist)) {
 			error_log('Database '.$dbNameForm.' was not found, skipping');
 		} else {
-			Database::select_db($dbNameForm);
-			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+			iDatabase::select_db($dbNameForm);
+			$res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
 			if ($res === false) { die('Error while querying the courses list in update_db-1.8.5-1.8.6.inc.php'); }
 
-			if (Database::num_rows($res) > 0) {
+			if (iDatabase::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				while ($row = Database::fetch_array($res)) {
+				while ($row = iDatabase::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
@@ -1100,7 +1100,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					 * without a database name
 					 */
 					if (!$singleDbForm) { //otherwise just use the main one
-						Database::select_db($row_course['db_name']);
+						iDatabase::select_db($row_course['db_name']);
 					}
                     Log::notice('Course db ' . $row_course['db_name']);
 
@@ -1110,9 +1110,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 						}
 
 						if ($only_test) {
-							 Log::notice("Database::query(".$row_course['db_name'].",$query)");
+							 Log::notice("iDatabase::query(".$row_course['db_name'].",$query)");
 						} else {
-							$res = Database::query($query);
+							$res = iDatabase::query($query);
 							if ($log) {
 								 Log::notice("In ".$row_course['db_name'].", executed: $query");
 							}
@@ -1128,11 +1128,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                     }
                     // Shared documents folder
                     $query = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')";
-                    $myres = Database::query($query);
+                    $myres = iDatabase::query($query);
                     if ($myres !== false) {
-                    	$doc_id = Database::insert_id();
+                    	$doc_id = iDatabase::insert_id();
                         $query = "INSERT INTO $t_ip (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderAdded',1,0,NULL,1)";
-                        $myres = Database::query($query);
+                        $myres = iDatabase::query($query);
                     }
 				}
 			}

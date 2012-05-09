@@ -87,12 +87,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbNameForm,$dblist)) {
 				 Log::error('Database '.$dbNameForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbNameForm);
+				iDatabase::select_db($dbNameForm);
 				foreach($m_q_list as $query) {
 					if ($only_test){
-						 Log::notice("Database::query($dbNameForm,$query)");
+						 Log::notice("iDatabase::query($dbNameForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbNameForm, executed: $query");
 						}
@@ -116,12 +116,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbStatsForm,$dblist)) {
 				 Log::error('Database '.$dbStatsForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbStatsForm);
+				iDatabase::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbStatsForm,$query)");
+						 Log::notice("iDatabase::query($dbStatsForm,$query)");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 						if ($log) {
 							 Log::notice("In $dbStatsForm, executed: $query");
 						}
@@ -142,13 +142,13 @@ if (defined('SYSTEM_INSTALLATION')) {
 			} elseif (!in_array($dbUserForm, $dblist)) {
 				 Log::error('Database '.$dbUserForm.' was not found, skipping');
 			} else {
-				Database::select_db($dbUserForm);
+				iDatabase::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("Database::query($dbUserForm,$query)");
+						 Log::notice("iDatabase::query($dbUserForm,$query)");
 						 Log::notice("In $dbUserForm, executed: $query");
 					} else {
-						$res = Database::query($query);
+						$res = iDatabase::query($query);
 					}
 				}
 			}
@@ -171,15 +171,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 		} elseif (!in_array($dbNameForm, $dblist)) {
 			 Log::error('Database '.$dbNameForm.' was not found, skipping');
 		} else {
-			Database::select_db($dbNameForm);
-			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+			iDatabase::select_db($dbNameForm);
+			$res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
 			if ($res === false) { die('Error while querying the courses list in update_db-1.8.6-1.8.6.1.inc.php'); }
 
-			if (Database::num_rows($res) > 0) {
+			if (iDatabase::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				while ($row = Database::fetch_array($res)) {
+				while ($row = iDatabase::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
@@ -190,7 +190,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					 * without a database name
 					 */
 					if (!$singleDbForm) { //otherwise just use the main one
-						Database::select_db($row_course['db_name']);
+						iDatabase::select_db($row_course['db_name']);
 					}
                     Log::notice('Course db ' . $row_course['db_name']);
 
@@ -200,9 +200,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 						}
 
 						if ($only_test) {
-							 Log::notice("Database::query(".$row_course['db_name'].",$query)");
+							 Log::notice("iDatabase::query(".$row_course['db_name'].",$query)");
 						} else {
-							$res = Database::query($query);
+							$res = iDatabase::query($query);
 							if ($log) {
 								 Log::notice("In ".$row_course['db_name'].", executed: $query");
 							}
@@ -219,11 +219,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                     // Update correct page_id to wiki table, actually only store 0
                     $query = "SELECT id, reflink FROM $t_wiki";
-                    $res_page = Database::query($query);
+                    $res_page = iDatabase::query($query);
                     $wiki_id = $reflink = array();
 
-					if (Database::num_rows($res_page) > 0) {
-	                    while ($row_page = Database::fetch_row($res_page)) {
+					if (iDatabase::num_rows($res_page) > 0) {
+	                    while ($row_page = iDatabase::fetch_row($res_page)) {
 	                    	$wiki_id[] = $row_page[0];
 	                    	$reflink[] = $row_page[1];
 	                    }
@@ -236,19 +236,19 @@ if (defined('SYSTEM_INSTALLATION')) {
 	                    foreach ($wiki_id as $key => $wiki_page) {
 	                    	$pag_id = $reflink_flip[$reflink[$key]];
 	                    	$sql= "UPDATE $t_wiki SET page_id='".($pag_id + 1)."' WHERE id = '$wiki_page'";
-	                    	$res_update = Database::query($sql);
+	                    	$res_update = iDatabase::query($sql);
 	                    }
                     }
 
                     // Insert page_id into wiki_conf table, actually this table is empty
 				   	$query = "SELECT DISTINCT page_id FROM $t_wiki ORDER BY page_id";
-				   	$myres_wiki = Database::query($query);
+				   	$myres_wiki = iDatabase::query($query);
 
-				   	if (Database::num_rows($myres_wiki) > 0) {
-					   	while ($row_wiki = Database::fetch_row($myres_wiki)) {
+				   	if (iDatabase::num_rows($myres_wiki) > 0) {
+					   	while ($row_wiki = iDatabase::fetch_row($myres_wiki)) {
 					   		$page_id = $row_wiki[0];
 					   		$query = "INSERT INTO ".$t_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3) VALUES ('".$page_id."','','','','','','','')";
-	                   		$myres_wiki_conf = Database::query($query);
+	                   		$myres_wiki_conf = iDatabase::query($query);
 					   	}
 				   	}
 

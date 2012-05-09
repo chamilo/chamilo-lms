@@ -2,10 +2,34 @@
 
 use Monolog\Logger;
 
+/**
+ * Since static constructors do not exist in php the line below serves as a 
+ * substitute.
+ * 
+ * Log is used by install which do not use autoload at the moment. If it becomes
+ * the case then the line below may/should be moved to the main autoloading 
+ * function.
+ */
 Log::register_autoload();
 
 /**
- * Description of log
+ * Provides access to the main log - i.e. stderr - and allows to register events.
+ * It is a facade to the monolog library:
+ * 
+ * Log::error('message');
+ * Log::warning('message');
+ * ...
+ * 
+ * 
+ * Note:
+ * This class uses a static approach which has the benefit of being simpler but do
+ * no allow as much freedom as using an object approche. Another approach could be
+ * 
+ * Chamilo::log()->error('message');
+ * Chamilo::log()->warning('message');
+ * 
+ * To somewhat alleviate this issue the user can register a different logger if hew
+ * wants.
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -92,6 +116,7 @@ class Log
         $file = str_replace($root, '', $file);
         $file = trim($file, DIRECTORY_SEPARATOR);
         $line = $context['line'];
+        $line = str_pad($line, 4, ' ', STR_PAD_LEFT);
         $message = "[$file:$line] " . $message;
 
         self::logger()->addRecord($level, $message, $context);

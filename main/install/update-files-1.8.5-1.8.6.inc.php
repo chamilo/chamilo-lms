@@ -58,16 +58,16 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     //$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
     //// Linking (The following line is disabled, connection has been already done)
-    //$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
-    //Database::select_db($dbNameForm, $link);
-    Database::select_db($dbNameForm);
+    //$res = @iDatabase::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
+    //iDatabase::select_db($dbNameForm, $link);
+    iDatabase::select_db($dbNameForm);
 
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM $db_name.course";
     Log::notice('Getting courses for files updates: ' . $sql);
-    $result = Database::query($sql);
+    $result = iDatabase::query($sql);
 
-    while ($courses_directories = Database::fetch_array($result)) {
+    while ($courses_directories = iDatabase::fetch_array($result)) {
 
         $currentCourseRepositorySys = $sys_course_path . $courses_directories['directory'] . '/';
 

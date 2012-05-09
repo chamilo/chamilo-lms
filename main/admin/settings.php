@@ -378,9 +378,38 @@ if (!empty($_GET['category'])) {
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }
+            
+                
+            
+            echo '<script>                    
+                $(function(){
+                    $("#tabs").tabs();
+                });
+                </script>';
+            
+    
+            echo '<div id="tabs">';
+            
+            echo '<ul>';
+            echo '<li><a href="#tabs-1">'.get_lang('Plugins').'</a></li>';
+            echo '<li><a href="#tabs-2">'.get_lang('DashboardPlugins').'</a></li>';
+            echo '<li><a href="#tabs-3">'.get_lang('ConfigureExtensions').'</a></li>';
+            echo '</ul>';
+
+            echo '<div id="tabs-1">';
             handle_plugins();
+            echo '</div>';
+            
+            echo '<div id="tabs-2">';
             DashboardManager::handle_dashboard_plugins();
+            echo '</div>';
+            
+            echo '<div id="tabs-3">';
             handle_extensions();
+            echo '</div>';
+            
+            echo '</div>';
+            
             break;
         case 'stylesheets':
             // Displaying the extensions: Stylesheets.

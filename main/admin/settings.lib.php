@@ -81,7 +81,7 @@ function handle_regions() {
 }
 
 function handle_extensions() {    
-    echo '<div class="page-header"><h2>'.get_lang('ConfigureExtensions').'</h2></div>';
+    echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';    
     
 }
@@ -105,10 +105,10 @@ function handle_plugins() {
     
     $all_plugins = $plugin_obj->read_plugins_from_path(); 
     $installed_plugins = $plugin_obj->get_installed_plugins(); 
-    $not_installed = array_diff($all_plugins, $installed_plugins);    
+
     
     //Plugins NOT installed
-    echo '<div class="page-header"><h2>'.get_lang('Plugins').'</h2></div>';
+    echo Display::page_subheader(get_lang('Plugins'));
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
@@ -167,7 +167,6 @@ function handle_plugins() {
     echo '</table>';
     echo '<br />';
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
-    echo '<br />';
 }
 
 /**

@@ -209,6 +209,11 @@ function build_edit_icons_cat($cat, $selectcat) {
         
         if (api_is_allowed_to_edit(null, true)) {
             
+            //Locking button
+            if (api_get_setting('gradebook_locking_enabled') == 'true') {
+                //$modify_icons .= '&nbsp;<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';
+            }
+            
             //PDF
             $modify_icons .= '&nbsp;<a href="gradebook_flat_view.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
             

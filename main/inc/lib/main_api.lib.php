@@ -155,6 +155,11 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
 define('LOG_CAREER_ID',                         'career_id');
 define('LOG_PROMOTION_ID',                      'promotion_id');
 
+define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
+define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
+define('LOG_GRADEBOOK_ID',                       'gradebook_id');
+
+
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -4235,7 +4240,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
         $sql .= " ORDER BY 1,2 ASC";
     }
     $result = Database::store_result(Database::query($sql));
-    return $result;    
+    return $result;
 }
 
 /**
@@ -5637,7 +5642,6 @@ function api_get_jquery_libraries_js($libraries) {
     return $js;	
 }
 
-
 /**
  * Returns the course's URL 
  *
@@ -5647,7 +5651,6 @@ function api_get_jquery_libraries_js($libraries) {
  * @return 	mixed 	The URL of the course or null if something does not work  
  * @author 	Julio Montoya <gugli100@gmail.com>
  */
-
 function api_get_course_url($course_code = null, $session_id = null) {
     $session_url = '';
     if (empty($course_code)) {
@@ -5707,7 +5710,6 @@ function api_get_home_path() {
 	return $home;
 }
 
-
 function api_get_course_table_condition($and = true) {
 	$course_id = api_get_course_int_id();
 	$condition = '';
@@ -5718,48 +5720,16 @@ function api_get_course_table_condition($and = true) {
 	return $condition;
 }
 
-function api_grading_model_functions($grading_model, $action = 'to_array') {
-	$return = null;
-	if (empty($grading_model)) {
-		return null;
-	}
-	$elements = array('A','B','C','D','E','F','G','H','I','J','K','L','M');
-	
-	if (in_array($action, array('to_array', 'decorate'))) {	
-		$parts = explode('/', $grading_model);
-		$return['denominator'] = $parts[1];
-		$sums = explode('+', $parts[0]);
-
-		$j = 0;
-		foreach($sums as $item) {
-			$item = explode('*', $item);
-			$per = 0;
-			if (!empty($return['denominator'])) {
-				$per = $item[0]/$return['denominator']*100;
-			}
-			$return['items'][] =array(	'letter'	=> $elements[$j], 
-										'value'		=> $item[0], 
-										'percentage'=> $per.'%');
-			$j++;
-		}
-		
-		if ($action == 'decorate') {			
-			$return_value = '';
-			$items = $return['items'];
-			$j = 1;
-			foreach ($items as $item) {
-				$letter = $item['letter'];
-				$value  = $item['value'];
-				
-				$sum = '+';
-				if (count($items) == $j){
-					$sum = '';
-				}
-				$return_value = $return_value.' '.$value.'*'.$letter." $sum ";
-				$j++;							
-			}			
-			$return = ' ('.$return_value.') / '.$return['denominator'];
-		}
-	}
-	return $return;
+/**
+ *
+ * @param int Course id
+ * @param int tool id: TOOL_QUIZ, TOOL_FORUM, TOOL_STUDENTPUBLICATION, TOOL_LEARNPATH
+ * @param int the item id (tool id, exercise id, lp id)
+ * 
+ */
+function api_course_item_is_blocked_by_gradebook($course_id, $tool_id, $item_id) {
+    if (api_get_setting('gradebook_locking_enabled') == 'true') {        
+        //$course_id
+    }
+    return false;
 }

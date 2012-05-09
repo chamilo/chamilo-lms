@@ -550,6 +550,22 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 }
 
 /**
+ *
+ * @param type $status LOG_GRADEBOOK_LOCKED - LOG_GRADEBOOK_UNLOCKED
+ * @param type $course_id
+ * @param type $session_id
+ * @param type $item_id
+ * @param type $tool_id
+ * @return boolean 
+ */
+function event_change_gradebook_lock_status($status, $course_code, $gradebook_id) {    
+    if (api_get_setting('gradebook_locking_enabled') == 'true') {  
+        event_system($status, LOG_GRADEBOOK_ID, $gradebook_id, null, null, $course_code);        
+    }
+    return false;
+}
+
+/**
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  * @desc Record information for common (or admin) events (in the track_e_default table)
  * @param	string	Type of event
@@ -580,9 +596,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
         }
     }
     
-	$event_value        = Database::escape_string($event_value);	
-	$user_id            = Database::escape_string($user_id);
-        
+	$event_value        = Database::escape_string($event_value);		        
     $course_info        = api_get_course_info($course_code);
     
     if (!empty($course_info)) {
@@ -604,6 +618,8 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 	if (!isset($user_id)) {
 		$user_id = api_get_user_id();
 	}
+    
+    $user_id = intval($user_id);
     
 	$sql = "INSERT INTO $TABLETRACK_DEFAULT
 				(default_user_id,

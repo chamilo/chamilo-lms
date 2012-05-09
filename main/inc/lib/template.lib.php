@@ -468,8 +468,11 @@ class Template {
 	
 		global $this_section;        
         
+        //@todo minify CSS and JS 
+        
 		$this->assign('css_file_to_string', $css_file_to_string);
-		$this->assign('js_file_to_string',  $js_file_to_string);		
+		$this->assign('js_file_to_string',  $js_file_to_string);
+        
 		$this->assign('text_direction',	    api_get_text_direction());					
 		$this->assign('section_name',       'section-'.$this_section);        
         

@@ -516,7 +516,7 @@ function get_config_param($param, $updatePath = '') {
                     $configFile[$variable] = $value;
 
                     $a = explode("'", $variable);
-                    $key_tmp = $a[1];
+                    $key_tmp = isset($a[1]) ? $a[1] : null;
                     if ($key_tmp == $param) {
                         $val = $value;
                     }
@@ -1942,7 +1942,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 /**
  * After installation is completed (step 6), this message is displayed.
  */
-function display_after_install_message($installType, $nbr_courses) {
+function display_after_install_message($installType) {
     ?>
     <div class="RequirementHeading">
     	<h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>

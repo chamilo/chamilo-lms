@@ -1067,7 +1067,7 @@ function api_get_user_info_from_username($username = '') {
  * Returns the current course code (string)
  */
 function api_get_course_id() {
-    return $GLOBALS['_cid'];
+    return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
 }
 
 /**

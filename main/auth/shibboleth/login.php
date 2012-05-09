@@ -28,5 +28,6 @@ include_once(dirname(__FILE__) . '/init.php');
 //ShibbolethTest::helper()->setup_new_staff();
 //ShibbolethTest::helper()->setup_new_teacher();
 //ShibbolethTest::helper()->setup_new_student();
+//ShibbolethTest::helper()->setup_new_minimal_data();
 
 ShibbolethController::instance()->login();

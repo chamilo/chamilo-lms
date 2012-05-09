@@ -397,9 +397,17 @@ class Database {
         if (!isset($parameters['client_flags'])) {
             $parameters['client_flags'] = 0;
         }
-        return $parameters['persistent']
-            ? mysql_pconnect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['client_flags'])
-            : mysql_connect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['new_link'], $parameters['client_flags']);
+        
+        $persistent = isset($parameters['persistent']) ? $parameters['persistent'] : null;
+        $server = isset($parameters['server']) ? $parameters['server'] : null;
+        $username = isset($parameters['username']) ? $parameters['username'] : null;
+        $password = isset($parameters['password']) ? $parameters['password'] : null;
+        $client_flag = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
+        $new_link = isset($parameters['new_link']) ? $parameters['new_link'] : null;
+        $client_flags = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
+        return $persistent
+            ? mysql_pconnect($server, $username, $password, $client_flags)
+            : mysql_connect($server, $username, $password, $new_link, $client_flags);
     }
 
     /**
@@ -761,9 +769,9 @@ class Database {
             if (empty($line) && $line !== false) {
                 $line = $caller['line'];
             }
-            $type = $owner['type'];
+            $type = isset($owner['type']) ? $owner['type'] : null;
             $function = $owner['function'];
-            $class = $owner['class'];
+            $class = isset($owner['class']) ? $owner['class'] : null;
             $server_type = api_get_setting('server_type');
             if (!empty($line) && !empty($server_type) && $server_type != 'production') {
                 $info = '<pre>' .

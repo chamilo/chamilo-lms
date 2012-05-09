@@ -582,18 +582,18 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
     
 	$event_value        = Database::escape_string($event_value);	
 	$user_id            = Database::escape_string($user_id);
-	    
+        
     $course_info        = api_get_course_info($course_code);
-    
-    $course_id          = null;
-    $course_code        = null;
     
     if (!empty($course_info)) {
         $course_id      = $course_info['real_id'];
         $course_code    = $course_info['code'];
+        
+        $course_code    = Database::escape_string($course_code);
+    } else {
+        $course_id = null;
+        $course_code = null;
     }
-    
-    $course_code        = Database::escape_string($course_code);
     
 	if (!isset($datetime)) {
 		$datetime = api_get_utc_datetime();

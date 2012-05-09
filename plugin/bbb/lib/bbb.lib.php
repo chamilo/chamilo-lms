@@ -270,4 +270,7 @@ class bbb {
     function is_server_running() {
         return BigBlueButtonBN::isServerRunning($this->url);
     }
+    
+    
+    
 }

@@ -6,6 +6,11 @@
 /**
  * Initialization
  */
+
+//@todo check if this script is used
+exit;
+
+
 require_once '../../main/inc/global.inc.php';
 require_once 'bbb.lib.php';
 //The script receives the course_code (cidReq), which allows it to get the corresponding data

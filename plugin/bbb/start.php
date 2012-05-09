@@ -6,9 +6,7 @@
 /**
  * Initialization
  */
-require_once '../../main/inc/global.inc.php';
-require_once 'bbb.lib.php';
-require_once 'bbb_api.php';
+require_once 'config.php';
 
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);

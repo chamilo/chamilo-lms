@@ -3,9 +3,10 @@
 
 /* bbb parameters that will be registered in the course settings */
 
-$variables = array( 'big_blue_button_meeting_name',
-                    'big_blue_button_attendee_password',
-                    'big_blue_button_moderator_password',
-                    'big_blue_button_welcome_message',
-                    'big_blue_button_max_students_allowed'    
-);
+require_once '../../main/inc/global.inc.php';
+
+require_once 'lib/bbb_plugin.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+require_once 'lib/bbb.lib.php';
+require_once 'lib/bbb_api.php';
+require_once 'lib/bbb_plugin.class.php';

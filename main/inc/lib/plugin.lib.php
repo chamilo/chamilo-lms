@@ -148,23 +148,26 @@ class AppPlugin {
 
         //1. Loading english if exists 
         $english_path = $root.$plugin_name."/lang/english.php";  
-
+        
         if (is_readable($english_path)) {                        
-            include $english_path;
-            foreach ($strings as $key => $string) {                            
+            include $english_path;            
+            foreach ($strings as $key => $string) {                                            
                 //$$key = $string;
-                $GLOBALS[$key] = $string;                     
+                $GLOBALS[$key] = $string;                
             }                        
         }
 
         //2. Loading the system language
-        $path = $root.$plugin_name."/lang/$language_interface.php";                    
-        if (is_readable($path)) {
-            include $path;
-            if (!empty($strings)) {                
-                foreach ($strings as $key => $string) {
-                    //$$key = $string;
-                    $GLOBALS[$key] = $string;                                           
+        if ($language_interface != 'english') {
+            $path = $root.$plugin_name."/lang/$language_interface.php";
+            
+            if (is_readable($path)) {
+                include $path;
+                if (!empty($strings)) {                
+                    foreach ($strings as $key => $string) {
+                        //$$key = $string;
+                        $GLOBALS[$key] = $string;                                           
+                    }
                 }
             }
         }

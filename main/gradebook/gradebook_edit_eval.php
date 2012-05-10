@@ -17,6 +17,9 @@ api_block_anonymous_users();
 block_students();
 
 $evaledit = Evaluation :: load($_GET['editeval']);
+if ($evaledit[0]->is_locked() && !api_is_platform_admin()) {
+    api_not_allowed();
+}
 $form = new EvalForm(EvalForm :: TYPE_EDIT, $evaledit[0], null, 'edit_eval_form',null,api_get_self() . '?editeval=' . Security::remove_XSS($_GET['editeval']));
 if ($form->validate()) {
 	$values = $form->exportValues();

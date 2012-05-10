@@ -203,7 +203,8 @@ abstract class AbstractLink implements GradebookItem {
 			$link->set_category_id($data['category_id']);
 			$link->set_date($data['created_at']);
 			$link->set_weight($data['weight']);            
-			$link->set_visible($data['visible']);            
+			$link->set_visible($data['visible']);  
+            $link->set_locked($data['locked']);
             
             //session id should depend of the category --> $data['category_id']
             $session_id = api_get_session_id();

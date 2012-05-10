@@ -1278,8 +1278,8 @@ abstract class Question
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
 			require_once($a_type[0]);
-	    // get the picture of the type and the langvar which describes it
-      $img = $explanation = '';
+            // get the picture of the type and the langvar which describes it
+            $img = $explanation = '';
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';

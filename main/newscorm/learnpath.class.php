@@ -923,9 +923,9 @@ class learnpath {
             }
         }*/        
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        $link_id = is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
-        if ($link_id !== false) {
-            remove_resource_from_course_gradebook($link_id);
+        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
+        if ($link_info !== false) {
+            remove_resource_from_course_gradebook($link_info['id']);
         }
 
         if (api_get_setting('search_enabled') == 'true') {

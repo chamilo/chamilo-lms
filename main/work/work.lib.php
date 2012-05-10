@@ -364,7 +364,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     }
         
     if (empty($my_folder_data)) {
-    	$work_in_gradebook_link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
+    	$link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
+        $work_in_gradebook_link_id = $link_info['id'];
+        
     	if ($work_in_gradebook_link_id) {
     		if ($is_allowed_to_edit)
     			if (intval($my_folder_data['qualification']) == 0) {
@@ -466,7 +468,9 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$is_assignment   = $row['has_properties'];
 			$id2             = $row['id']; //work id
 
-			if ($is_allowed_to_edit) {
+            $locked = api_resource_is_locked_by_gradebook($id2);
+            
+			if ($is_allowed_to_edit && $locked == false) {
 			    // form edit directory
                 
 				if (!empty($edit_dir) && $edit_dir == $id2) {
@@ -486,16 +490,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '80%', 'Height' => '200'));
 
 					$there_is_a_end_date = false;						
-					$form_folder -> addElement('html', '<div class="row">
-							 	                         <div class="label">&nbsp;</div>
-						 	  	                         <div class="formw">
-						 	  	                                 <a href="javascript://" onclick="javascript: return plus();" >
+					$form_folder -> addElement('advanced_settings', '<a href="javascript://" onclick="javascript: return plus();" >
 						 	  	                                 <span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />
 						 	  	                                 &nbsp;'.get_lang('AdvancedParameters').'
 						 	  	                                 </span>
-						 	  	                                 </a>
-						 	  	                         </div>
-							  	                         </div>	');
+						 	  	                                 </a>');
 					$form_folder->addElement('html', '<div id="options" style="display: none;">');
 						
 					if (empty($default)) {
@@ -511,15 +510,28 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
 						
 					if ((int)$row['weight'] == 0) { 
+                        
 						$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+                        
 						$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
+                        
+                         //Loading gradebook select
+                        load_gradebook_select_in_tool($form_folder);
+                        
 						$weight_input2[] = FormValidator :: createElement('text', 'weight');
 						$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+
 						$form_folder -> addElement('html', '</div>');
 					} else {
 						$weight_input[] = FormValidator :: createElement('text', 'weight');
+                        //Loading gradebook select
+                        load_gradebook_select_in_tool($form_folder);                        
 						$form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
 					}
+                    
+                    $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
+                                                            
+                    $defaults['category_id'] = $link_info['category_id'];
 											
 					if ($homework['expires_on'] != '0000-00-00 00:00:00') {
 						$homework['expires_on'] = api_get_local_time($homework['expires_on']);
@@ -615,8 +627,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						
 						$values = $form_folder->exportValues();
                         $work_id = $values['work_id'];
-						//$values = $values['my_group'];
-                        
+						                        
 						$dir_name = replace_dangerous_char($values['dir_name']);
 						$dir_name = disable_dangerous_file($dir_name);
 
@@ -658,23 +669,24 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							Database::query($sql);
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-							$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
-							if ($link_id !== false) {
-                                $course_code = api_get_course_id();
-								Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
-								                 WHERE course_code = "'.$course_code.'" AND id = '.$link_id);
-							}
+                            
+                            if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1 && !empty($_POST['category_id'])) {
+                                $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
+                                $link_id = $link_info['id'];
+                                if ($link_info !== false) {
+                                    $course_code = api_get_course_id();
+                                    Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
+                                                    WHERE course_code = "'.$course_code.'" AND id = '.$link_id);
+                                }
 
-							//we are changing the current work and we want add them into gradebook
-							if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
-								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-								$resource_name = $_POST['dir_name'];
-								add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], $resource_name, (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], $_POST['description'] , time(), 1, api_get_session_id());
-							}
+                                $resource_name = $_POST['dir_name'];
+                                add_resource_to_course_gradebook($_POST['category_id'], api_get_course_id(), 3, $row['id'], $resource_name, (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], $_POST['description'], 1, api_get_session_id());                                
+                            }
 
 							update_dir_name($work_data, $dir_name, $values['dir_name']);
 							
@@ -760,9 +772,10 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 				$add_to_name = '';
 				require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-				$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id2 , api_get_session_id());
+				$link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id2 , api_get_session_id());
+                $link_id = $link_info['id'];
 				$count  = 0;
-				if ($link_id !== false) {
+				if ($link_info !== false) {
 					$gradebook_data = get_resource_from_course_gradebook($link_id);
 					$count = $gradebook_data['weight'];
 				}
@@ -798,8 +811,14 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
-					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$id2.'">'.Display::return_icon('edit.png', get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-					$action .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.png',get_lang('DirDelete'),'',ICON_SIZE_SMALL).'</a>';
+                    if (api_resource_is_locked_by_gradebook($id2)) {
+                        $action .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+                        $action .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
+                    } else {
+                        $action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$id2.'">'.Display::return_icon('edit.png', get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
+                        $action .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.png',get_lang('DirDelete'),'',ICON_SIZE_SMALL).'</a>';
+                    }
+                    
 					$row[] = $action;
 				} else {
 					$row[] = '';
@@ -1539,6 +1558,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $work_data          = get_work_data_by_id($work_id);       
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);    
     $condition_session  = api_get_session_condition($session_id);
+    
+    $locked = api_resource_is_locked_by_gradebook($work_id);
 
     if (!empty($work_data)) {
         
@@ -1627,8 +1648,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 //Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
-                $work['username'] = Display::div($work['username'], array('class' => $class));                            
-                
+                $work['username'] = Display::div($work['username'], array('class' => $class));
            
                 //Type
                 $work['type'] = build_document_icon_tag('file', $work['file']);  
@@ -1652,23 +1672,38 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&id='.$work_id.'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']);                    
                 $action = '';                
                 if ($is_allowed_to_edit) {
-                    if ($qualification_exists) {
-                        $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'&amp;parent_id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.
-                        Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL).'</a>';
+                    if ($locked) {
+                        if ($qualification_exists) {
+                            $action .= Display::return_icon('rate_work_na.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL);
+                        } else {
+                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'),array(), ICON_SIZE_SMALL);
+                        }
                     } else {
-                        $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.
-                        Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                        if ($qualification_exists) {
+                            $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'&amp;parent_id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.
+                            Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL).'</a>';
+                        } else {
+                            $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work['parent_id'].'" title="'.get_lang('Modify').'"  >'.
+                            Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                        }
                     }
-
                     if ($work['contains_file']) {
-                        $action .= '<a href="'.$url.'&amp;action=move&item_id='.$item_id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), ICON_SIZE_SMALL).'</a>';
+                        if ($locked) {
+                            $action .= Display::return_icon('move_na.png', get_lang('Move'),array(), ICON_SIZE_SMALL);
+                        } else {
+                            $action .= '<a href="'.$url.'&amp;action=move&item_id='.$item_id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), ICON_SIZE_SMALL).'</a>';
+                        }
                     }
                     if ($work['accepted'] == '1') {
                         $action .= '<a href="'.$url.'&amp;action=make_invisible&item_id='.$item_id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= '<a href="'.$url.'&amp;action=make_visible&item_id='.$item_id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-                    $action .= '<a href="'.$url.'&amp;action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                    if ($locked) {
+                        $action .= Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
+                    } else {
+                        $action .= '<a href="'.$url.'&amp;action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                    }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {                        
                     if (api_is_allowed_to_session_edit(false, true)) {
                     $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
@@ -1688,18 +1723,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 } else {
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }                                       
-                $work['qualificator_id'] = $qualificator_id;  
-
-                $work['actions'] = $link_to_download.$action;     
-                
-                
-                
-                           
+                $work['qualificator_id'] = $qualificator_id;
+                $work['actions'] = $link_to_download.$action;
                 $works[] = $work;
             }            
         }
-        return $works;
-                            
+        return $works;                            
     }
 }
 

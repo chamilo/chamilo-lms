@@ -141,12 +141,17 @@ if (($my_action == 'lock' OR $my_action == 'unlock') AND isset($_GET['content'])
 }
 // Deleting.
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
-    $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
-    // Delete link    
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-    $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
-    if ($link_id !== false) {
-        remove_resource_from_course_gradebook($link_id);
+    
+    $locked = api_resource_is_locked_by_gradebook($_GET['id']);
+    if ($locked == false) {    
+        $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
+        // Delete link    
+        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
+        $link_id = $link_info['id'];
+        if ($link_info !== false) {
+            remove_resource_from_course_gradebook($link_id);
+        }
     }
 }
 // Moving.
@@ -357,12 +362,6 @@ if (is_array($threads)) {
             } else {
                 echo '<td>'.Display::tag('span', api_get_person_name($row['firstname'], $row['lastname']), array("title"=>api_htmlentities($poster_username, ENT_QUOTES))).'</td>';
             }            
-            // display the last post name
-//            if ($row['user_id'] == '0') {
-//                $name = prepare4display($row['thread_poster_name']);
-//            } else {
-//                $name = api_get_person_name($row['firstname'], $row['lastname']);
-//            } 
             
             if ($row['last_poster_user_id'] == '0') {
                 $name = $row['poster_name'];
@@ -404,7 +403,13 @@ if (is_array($threads)) {
             if ($origin != 'learnpath') {
                 if (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) {
                     echo '<a href="editpost.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($row['thread_id']).'&amp;post='.$row_post_id['post_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;id_attach='.$id_attach.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=delete&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                    
+                    if (api_resource_is_locked_by_gradebook($row['thread_id'])) {
+                        echo Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
+                    } else {
+                        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=delete&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                    }
+                    
                     display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => $_SESSION['toolgroup']));
                     display_lock_unlock_icon('thread', $row['thread_id'], $row['locked'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => $_SESSION['toolgroup']));
                     echo '<a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=move&amp;gidReq='.$_SESSION['toolgroup'].'&amp;thread='.$row['thread_id'].$origin_string.'">'.Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL).'</a>';

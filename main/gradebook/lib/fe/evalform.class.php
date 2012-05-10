@@ -213,9 +213,8 @@ class EvalForm extends FormValidator
 		$this->setDefaults($defaults);
 		$this->addElement('style_submit_button', 'submit',get_lang('EditResult'),'class="save"');
 		$renderer->setElementTemplate($template_submit,'submit');
-        
-        
 	}
+    
 	/**
 	 * This function builds a form to move an item to another category
 	 *
@@ -433,7 +432,7 @@ class EvalForm extends FormValidator
         
         $session_id  = api_get_session_id();        
         $course_code = api_get_course_id();
-        $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);             
+        $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);        
                 
         if (count($all_categories) == 1) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
@@ -442,7 +441,7 @@ class EvalForm extends FormValidator
             $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'nonzero');
         
             $default_weight = 0;
-            if (!empty($all_categories)) {            
+            if (!empty($all_categories)) {
                 foreach ($all_categories as $my_cat) {
                     if ($my_cat->get_course_code() == api_get_course_id()) {         
                         $grade_model_id = $my_cat->get_grade_model_id();                     

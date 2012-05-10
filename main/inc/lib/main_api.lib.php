@@ -5732,9 +5732,32 @@ function api_get_course_table_condition($and = true) {
  * @param int the item id (tool id, exercise id, lp id)
  * 
  */
-function api_course_item_is_blocked_by_gradebook($course_id, $tool_id, $item_id) {
+function api_resource_is_locked_by_gradebook($item_id, $course_code = null) {
+    if (api_is_platform_admin()) {
+        return false;
+    }
     if (api_get_setting('gradebook_locking_enabled') == 'true') {        
-        //$course_id
+        if (empty($course_code)) {
+            $course_code = api_get_course_id();
+        }
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $item_id = intval($item_id);
+        $sql = "SELECT locked FROM $table WHERE locked = 1 AND ref_id = $item_id AND type = 1 AND course_code = '$course_code' ";                        
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            return true;
+        }
     }
     return false;
+}
+
+function block_course_item_locked_by_gradebook($item_id, $course_code = null) {
+    if (api_is_platform_admin()) {
+        return false;
+    }
+    
+    if (api_resource_is_locked_by_gradebook($item_id, $course_code)) {
+        $message = Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
+        api_not_allowed(true, $message);
+    }    
 }

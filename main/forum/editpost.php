@@ -25,7 +25,7 @@
 /* INIT SECTION */
 
 // Language files that need to be included.
-$language_file = array ('forum', 'group');
+$language_file = array ('forum', 'group', 'gradebook');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
@@ -80,6 +80,8 @@ $current_thread         = get_thread_information($_GET['thread']); // Note: This
 $current_forum          = get_forum_information($_GET['forum']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post           = get_post_information($_GET['post']);
+
+block_course_item_locked_by_gradebook($_GET['thread']);
 
 /* Header and Breadcrumbs */
 
@@ -211,9 +213,10 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
         $weight_calification = $values['weight_calification'];
         $description = '';
         $session_id = api_get_session_id();
-        $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
-        if (!$link_id) {
-            add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook, $weight_calification, $value_calification, $description, time(), 1, api_get_session_id());
+        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
+        $link_id = $link_info['id'];
+        if (!$link_info) {
+            add_resource_to_course_gradebook($values['category_id'], api_get_course_id(), 5, $id, $title_gradebook, $weight_calification, $value_calification, $description, 1, api_get_session_id());
         } else {
             Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
         }

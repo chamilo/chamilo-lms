@@ -36,11 +36,7 @@ else
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
-$main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
-$main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -58,9 +54,7 @@ if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise
 if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
 if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 
-//$emailId       = $_REQUEST['email'];
 $id 	       = intval($_REQUEST['id']); //exe id
-$current_time  = time();
 
 if (empty($id)) {
 	api_not_allowed();
@@ -83,8 +77,9 @@ $student_id         = $track_exercise_info['exe_user_id'];
 $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
-$course_code        = api_get_course_id();
 $current_user_id    = api_get_user_id();
+
+$locked = api_resource_is_locked_by_gradebook($exercise_id);
 
 if (empty($objExercise)) {
 	$objExercise = new Exercise();
@@ -123,7 +118,7 @@ $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => 
 $interbreadcrumb[]=array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
 $interbreadcrumb[]=array("url" => "#","name" => get_lang('Result'));
 
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 if ($origin != 'learnpath') {
 	Display::display_header('');
@@ -161,7 +156,6 @@ function getFCK(vals,marksid) {
 		oHidden.value = oEditor.GetXHTML(true);
 		f.appendChild(oHidden);
 	}
-//f.submit();
 }
 </script>
 <?php
@@ -211,7 +205,7 @@ if (!empty($track_exercise_info)) {
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
-$html = '';
+
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
@@ -279,12 +273,10 @@ foreach ($questionList as $questionId) {
 	unset($objQuestionTmp);
 	
 	// creates a temporary Question object
-	$objQuestionTmp 	= Question::read($questionId);
-	$questionName		= $objQuestionTmp->selectTitle();
-	$questionDescription= $objQuestionTmp->selectDescription();
+	$objQuestionTmp 	= Question::read($questionId);	
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
 	$answerType			= $objQuestionTmp->selectType();
-	$quesId 			= $objQuestionTmp->selectId();	
+	
 	        	
  	if ($show_results) {
  	    // display question category, if any
@@ -492,11 +484,11 @@ foreach ($questionList as $questionId) {
 	    }
 	}
 	
-	if ($show_results) {		    
-
+	if ($show_results) {		            
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
-		if ($is_allowedToEdit) {
+		if ($is_allowedToEdit && $locked == false) {            
+        
 			echo '<tr><td>';
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
@@ -536,6 +528,7 @@ foreach ($questionList as $questionId) {
 			$feedback_form->setDefaults(${user.$questionId});
 			$feedback_form->display();
 			echo '</div>';
+            
 		} else {
 			$comnt = get_comments($id,$questionId);
 			echo '<tr><td><br />';
@@ -616,7 +609,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 	$marksid = implode(",",$arrmarks);
 }
 
-if ($is_allowedToEdit) {
+if ($is_allowedToEdit && $locked == false) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
 		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		//echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';

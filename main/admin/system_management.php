@@ -106,6 +106,8 @@ EOT;
                 $result[] = $course['db_name'];
             }
         }
+        
+        Display::display_confirmation_message(get_lang('OldDatabasesDeleted') . ' ' . count($result));
         return $result;
     }
 

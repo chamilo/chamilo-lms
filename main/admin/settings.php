@@ -419,7 +419,8 @@ if (!empty($_GET['category'])) {
             }            
             break;
         default:
-            $form->display();
+            if (isset($form))
+                $form->display();
     }
 }
 

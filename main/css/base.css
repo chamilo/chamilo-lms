@@ -19,16 +19,6 @@ select {
     visibility: visible;
 }
 
-form .label {
-    padding: 1px 3px 2px;
-    font-size: 100%;
-    font-weight: normal;
-    color: #ffffff;
-    text-transform: none;
-    background: none;  
-    border-radius: none;
-}
-
 legend {
     margin-bottom: 10px;
 }
@@ -90,15 +80,12 @@ button.arrowl:hover, button.arrowr:hover , input.arrowl:hover, input.arrowr:hove
 }
 
 /* Fixing old chamilo forms */
-form .label {
-    color: #404040;
-    float: left;    
-    line-height: 18px;
-    padding-top: 6px;
-    text-align: right;
-    width: 150px;    
-    text-shadow:none;
+
+/* fixes the * */
+span.form_required  {
+    padding-right:5px;
 }
+
 form .formw {
     margin-left: 170px;
 }

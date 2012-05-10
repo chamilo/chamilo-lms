@@ -1598,11 +1598,6 @@ a.read {
     padding: 2px 0px 5px 5px;
 }
 
-/* fixes the * */
-span.form_required  {
-    padding-right:5px;
-}
-
 .courseadminview-activity-3col, .platformadminview-activity-3col {
     -moz-border-radius:5px 5px 5px 5px;
     border:1px solid #E1E1E0;

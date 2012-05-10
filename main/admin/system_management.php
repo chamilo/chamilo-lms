@@ -72,7 +72,7 @@ EOT;
                 return;
 
             default:
-                $f == array($this, $action);
+                $f = array($this, $action);
                 if (is_callable($f)) {
                     call_user_func($f);
                     return;
@@ -102,7 +102,13 @@ EOT;
             $drop_statement = 'DROP DATABASE ' . $course['db_name'];
             $success = Database::query($drop_statement);
             if ($sucess) {
-                Database::update($course_db, array('course_db' => null), array('id' => $course['id']));
+                /*
+                 * Note that Database::update do not supports null statements so
+                 * we do it by hand here.
+                 */
+                $id = $course['id'];                
+                $update_statement = "UPDATE $course_db SET db_name = NULL WHERE id = $id";
+                Database::query($update_statement);
                 $result[] = $course['db_name'];
             }
         }

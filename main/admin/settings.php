@@ -52,7 +52,7 @@ $convert_byte_to_mega_list = array('dropbox_max_filesize', 'message_max_upload_f
 // Submit stylesheets.
 if (isset($_POST['submit_stylesheets'])) {
     $message = store_stylesheets();
-    header("Location: ".api_get_self()."?category=stylesheets");
+    header("Location: ".api_get_self()."?category=Stylesheets");
     exit;
 }
 
@@ -402,7 +402,7 @@ if (!empty($_GET['category'])) {
                 echo '</div>';            
             echo '</div>';            
             break;
-        case 'Stylesheets':
+        case 'Stylesheets':        
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
             break;

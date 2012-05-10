@@ -179,7 +179,7 @@ function build_edit_icons_cat($cat, $selectcat) {
             if (api_get_setting('gradebook_locking_enabled') == 'true') {
                 if ($cat->is_locked()) {
                     if (api_is_platform_admin()) {
-                        $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
+                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
                     } else {
                         $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('unlock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
                     }
@@ -189,7 +189,7 @@ function build_edit_icons_cat($cat, $selectcat) {
             }
             
             //PDF
-            $modify_icons .= '&nbsp;<a href="gradebook_flat_view.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+            $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
             
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 if ($cat->is_locked() && !api_is_platform_admin()) {
@@ -416,8 +416,9 @@ function get_table_type_course($type) {
 	return Database::get_course_table($table_evaluated[$type][0]);
 }
 
-function get_printable_data($cat, $users, $alleval, $alllinks) {
-	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
+function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
+	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks, $params);
+    
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 	$offset = intval($offset);	
     
@@ -426,7 +427,7 @@ function get_printable_data($cat, $users, $alleval, $alllinks) {
         
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;	
 	$header_names = $datagen->get_header_names($offset, $count, true);	
-	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);
+	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true);
 
 	$newarray = array();
 	foreach ($data_array as $data) {
@@ -693,7 +694,7 @@ function load_gradebook_select_in_tool($form) {
 function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
     // Beginning of PDF report creation
 
-    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);    
+    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
 
     // Reading report's CSS
     $css_file = api_get_path(SYS_CODE_PATH).'gradebook/print.css';
@@ -731,7 +732,19 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         }
     }
     
-    $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    $grade_model_id = $cat[0]->get_grade_model_id();        
+    $use_grade_model = true;
+    if (empty($grade_model_id) || $grade_model_id == -1) {
+        $use_grade_model = false;    
+    }
+    
+    //var_dump($use_grade_model);exit;
+        
+    if ($use_grade_model) {        
+        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    } else {
+        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    }
     $html .= '<table align="center" width="100%"><tr><td valign="top">';
 
     $html .= '<table align="left" width="33%">';		

@@ -57,6 +57,14 @@ function lock_confirmation() {
     }
 }
 
+function unlock_confirmation() {
+    if (confirm("' . get_lang('ConfirmToUnlockElement') . '?")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 $(document).ready(function() {
 

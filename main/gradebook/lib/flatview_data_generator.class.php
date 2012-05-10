@@ -23,18 +23,18 @@ class FlatViewDataGenerator
 	private $evals;
 	private $links;
 	private $evals_links;	
+    public $params;
 	public  $category = array();
 
 	/**
 	 * Constructor
 	 */
-    public function FlatViewDataGenerator ($users= array (), $evals= array (), $links= array ()) {
+    public function FlatViewDataGenerator ($users = array(), $evals = array(), $links = array(), $params = array()) {
 		$this->users = (isset($users) ? $users : array());
 		$this->evals = (isset($evals) ? $evals : array());
 		$this->links = (isset($links) ? $links : array());
 		$this->evals_links = array_merge($this->evals, $this->links);
-        
-        
+        $this->params = $params;
     }
 
 	/**
@@ -89,17 +89,16 @@ class FlatViewDataGenerator
             foreach ($allcat as $sub_cat) {
                  $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).' '.$sub_cat->get_weight().' % ';
             }
-        } else {            
-            for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-                $item = $this->evals_links[$count + $items_start];
+        } else {
+            if (!isset($this->params['only_total_category'])) {
+                for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
+                    $item = $this->evals_links[$count + $items_start];
 
-                //$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                    //$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
+                    $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 
-                $weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
-                $headers[] = $item->get_name().' '.$weight.' % ';
-                if ($show_detail) {
-                    //$headers[] = $item->get_name().' ('.get_lang('Detail').')';
+                    $weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
+                    $headers[] = $item->get_name().' '.$weight.' % ';                
                 }
             }
         }
@@ -107,17 +106,11 @@ class FlatViewDataGenerator
 		return $headers;
 	}
 	
-	function get_max_result_by_link($id) {		
-		$usertable = array();		
-		$items_count = count ($this->evals) + count ($this->links);		
-		$item_value = 0;
-		$item_total = 0;
+	function get_max_result_by_link($id) {						
 		$max = 0;
 		foreach ($this->users as $user) {
 			$item  = $this->evals_links [$id];					
 			$score = $item->calc_score($user[0]);			
-			$divide=( ($score[1])==0 ) ? 1 : $score[1];
-			//$item_value = round($score[0]/$divide*$item->get_weight(),2);			
 			if ($score[0] > $max) {
 				$max = $score[0];
 			}			
@@ -160,7 +153,7 @@ class FlatViewDataGenerator
 		}
 		if ($users_count < 0) {
 			$users_count = 0;
-		}
+		}        
 		if (!isset($items_count)) {
 			$items_count = count ($this->evals) + count ($this->links) - $items_start;
 		}
@@ -186,8 +179,8 @@ class FlatViewDataGenerator
 
 		// select the requested users
 		$selected_users = array_slice($usertable, $users_start, $users_count);
+        
 		// generate actual data array
-
 		$scoredisplay = ScoreDisplay :: instance();
 
 		$data = array ();
@@ -222,7 +215,7 @@ class FlatViewDataGenerator
         if (empty($grade_model_id) || $grade_model_id == -1) {
             $use_grade_model = false;    
         }
-		
+        
 		foreach ($selected_users as $user) {            
 			$row = array ();
 			$row[] = $user_id = $user[0];	//user id
@@ -258,12 +251,13 @@ class FlatViewDataGenerator
                     }
                     
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
-
-                    if (!$show_all) {                   
-                        $row[] = $temp_score.' ';                   
-                    } else {                        
-                        $row[] = $temp_score;                        
-                    }                    
+                    if (!isset($this->params['only_total_category'])) {
+                        if (!$show_all) {                   
+                            $row[] = $temp_score.' ';                   
+                        } else {                        
+                            $row[] = $temp_score;                        
+                        }                    
+                    }
                     $item_value_total +=$item_value;    
                 }
                 if ($convert_using_the_global_weight) {
@@ -271,13 +265,10 @@ class FlatViewDataGenerator
                 }
             } else  {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
-                    $item  			= $this->evals_links[$count + $items_start];
+                    $item  			= $this->evals_links[$count + $items_start];                    
                     $score 			= $item->calc_score($user_id);
-                    $debug = false;
-                    if ($user_id == 11) {
-                        $debug = true;
-                    }
-                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];                
+                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];  
+                    
                     //sub cat weight
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 
@@ -287,10 +278,7 @@ class FlatViewDataGenerator
                     if ($this->category->get_parent_id() == 0 ) {
                         $item_value     = $item_value;
                         $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
-                    } else {
-                       // if ($debug) var_dump($item_value);
-                        //$percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
-                        //if ($debug) var_dump($item->get_weight().' '.$item_value .' -'.$sub_cat_percentage);
+                    } else {                       
                         $item_value     = $item_value*$item->get_weight();                        
                         $item_value     = $main_weight*$item_value/$item->get_weight();                        
                     }                    
@@ -299,28 +287,28 @@ class FlatViewDataGenerator
 
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
                     
-                    //if ($debug) var_dump($temp_score);
-
-                    if (!$show_all) {
-                        //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-                        if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
-                                                               LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
-                            if (!empty($score[0])) {																		
-                                $row[] = $temp_score.' ';
-                            } else {
-                                $row[] = '';
-                            }
-                            //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
-                        } else {
+                    if (!isset($this->params['only_total_category'])) {
+                        if (!$show_all) {
                             //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
-                            //$row[] = $score[0];
-                            $row[] = $temp_score.' ';
-                        }					
-                    } else {
-                        //$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
-                        $row[] = $temp_score;
-                        //$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
-                    }                    
+                            if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
+                                                                LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+                                if (!empty($score[0])) {																		
+                                    $row[] = $temp_score.' ';
+                                } else {
+                                    $row[] = '';
+                                }
+                                //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);	
+                            } else {
+                                //$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+                                //$row[] = $score[0];
+                                $row[] = $temp_score.' ';
+                            }					
+                        } else {
+                            //$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
+                            $row[] = $temp_score;
+                            //$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
+                        }          
+                    }
                     $item_value_total +=$item_value;              
                 }
                 $item_total = $main_weight;

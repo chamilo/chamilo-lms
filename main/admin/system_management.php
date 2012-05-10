@@ -98,6 +98,7 @@ EOT;
     {
         $result = array();
         $courses = $this->get_old_databases();
+        $course_db = Database::get_main_table(TABLE_MAIN_COURSE);
         foreach ($courses as $course) {
             $drop_statement = 'DROP DATABASE ' . $course['db_name'];
             $success = Database::query($drop_statement);

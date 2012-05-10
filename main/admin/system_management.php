@@ -41,7 +41,7 @@ class SystemManagementPage extends AdminPage
     function display_default()
     {
         $message = get_lang('RemoveOldDatabaseMessage');
-        $url = $this->url(array(PARAM_ACTION => 'drop_old_databases'));
+        $url = $this->url(array(self::PARAM_ACTION => 'drop_old_databases'));
         $go = get_lang('go');
 
         echo <<<EOT

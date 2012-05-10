@@ -242,6 +242,7 @@ if (api_is_platform_admin()) {
 		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
 	}
     
+	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
     //$items[] = array('url'=>'statistics/index.php?action=activities', 	'label' => get_lang('ImportantActivities'));
     
 	$blocks['settings']['items'] = $items;

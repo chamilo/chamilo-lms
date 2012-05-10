@@ -39,7 +39,12 @@ class Chamilo
     {
         return Uri::url($path, $params, $html);
     }
-
+    
+    public static function here($params = array(), $html = true)
+    {
+        return Uri::here($params, $html);
+    }
+        
     /**
      * Application web root
      */

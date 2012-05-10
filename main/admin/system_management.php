@@ -16,7 +16,7 @@ class SystemManagementPage extends AdminPage
 {
 
     const PARAM_ACTION = 'action';
-    const PARAM_SECURITY_TOKEN = 'security_token';
+    const PARAM_SECURITY_TOKEN = 'sec_token';
     const ACTION_DEFAULT = 'list';
     const ACTION_SECURITY_FAILED = 'security_failed';
 
@@ -25,6 +25,7 @@ class SystemManagementPage extends AdminPage
         $result = Request::get(self::PARAM_ACTION, self::ACTION_DEFAULT);
         if ($result != self::ACTION_DEFAULT) {
             $passed = Security::check_token('get');
+            Security::clear_token();
             $result = $passed ? $result : self::ACTION_SECURITY_FAILED;
         }
         return $result;

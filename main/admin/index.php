@@ -238,9 +238,9 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-	if (api_is_global_platform_admin()) {
+	//if (api_is_global_platform_admin()) {
 		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-	}
+	//}
     
     //$items[] = array('url'=>'statistics/index.php?action=activities', 	'label' => get_lang('ImportantActivities'));
     

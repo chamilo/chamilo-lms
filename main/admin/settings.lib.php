@@ -1270,6 +1270,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
  * @return array
  */
 function search_setting($search) {
+    if (empty($search)) {
+        return array();
+    }
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
     $sql = "SELECT * FROM $table_settings_current WHERE category <> 'Plugins' GROUP BY variable ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');

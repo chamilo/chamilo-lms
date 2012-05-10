@@ -46,13 +46,7 @@ class MultipleAnswer extends Question {
 
 		$obj_ex = $_SESSION['objExercise'];
 
-		$html='
-		<div class="row">
-			<div class="label">
-			'.get_lang('Answers').'<br /><img src="../img/fill_field.png">
-			</div>
-			<div class="formw">
-				<table class="data_table">
+		$html='<table class="data_table">
 					<tr>
 						<th width="10px">
 							'.get_lang('Number').'
@@ -73,7 +67,7 @@ class MultipleAnswer extends Question {
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-		$form -> addElement ('html', $html);
+		$form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;

@@ -62,6 +62,11 @@ class Chamilo
     {
         return api_get_path(SYS_PATH);
     }
+    
+    public static function root_courses()
+    {
+        return api_get_path(SYS_COURSE_PATH);
+    }
 
     public static function path($path = '')
     {

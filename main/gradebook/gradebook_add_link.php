@@ -93,7 +93,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 			$res1	= Database::query($sql1);
 			$rowtit	= Database::fetch_row($res1);
 			$course_id = api_get_course_id();
-			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE c_id = '.$course_info['real_id'].' AND ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
+			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
 			$res_l=Database::query($sql_l);
 			$row=Database::fetch_row($res_l);
 			if ( $row[0]==0 ) {

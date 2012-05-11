@@ -10,8 +10,7 @@
  **/
 
 // Copy little progress bar in <tr></tr>
-function minipb() {
-    
+function minipb() {    
     $('#learning_path_main #control tr').after('<tr></tr>');
 	$('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
 	$('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
@@ -22,6 +21,8 @@ function minipb() {
 	$('#learning_path_main #control tr:eq(1) #progress_text').remove();
 	$('#learning_path_main #control tr:eq(1) div').css('width','');
 }
+
+var left_width = 292;
   
 $(document).ready(function() {
 
@@ -32,13 +33,13 @@ $(document).ready(function() {
     $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
 
     //Adding effects to hide bar
-    $('#hide_bar table').hover(function () {
-    	if($('#hide_bar').position().left == 280)
+    $('#hide_bar table').hover(function () {        
+    	if ($('#hide_bar').position().left == 292)
     		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
     	else if($('#hide_bar').position().left == 0)
     		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');    	
         },function (){
-            if($('#hide_bar').position().left == 280)
+            if($('#hide_bar').position().left == left_width)
               $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
             else if($('#hide_bar').position().left == 0)
               $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
@@ -46,56 +47,61 @@ $(document).ready(function() {
     );
 
     // Adding funcionality
-    $('#hide_bar table').toggle(function() {
-        
-        if ($('#hide_bar').position().left == 280) {
-      
-            // Construct mini panel
-            var panel = $('#lp_navigation_elem div:first').clone();
-            $(panel).attr('id','control');
-            $('#learning_path_main').append(panel);
-            minipb();      
-            $('#learning_path_main #control .buttons').attr('align','center');
+    $( "#hide_bar" ).click(function() {
+                
+        $('#hide_bar table').toggle(function() {
 
-            $('#learning_path_main  #control').css({
-                margin: "auto",
-                width: "132px",
-                height: "34px",
-                position: "absolute",
-                top: "5px",
-                left:"15px",
-                backgroundColor: "white",
-                backgroundImage: "url(../img/minipanelback.png)",
-                paddingTop: "8px",
-                paddingBottom: "8px",
-                borderRadius: "4px 4px 4px 4px",
-                opacity: "0.8",
-                cursor: "move"
-            });
+            if ($('#hide_bar').position().left == left_width) {
 
-            $('#learning_path_main  #control table').attr('align','center');
-            $('#learning_path_main  #control').draggable({ 
-                iframeFix: true,
-                stack: "#learning_path_right_zone",
-                cursor: "move"
-            });
+                // Construct mini panel
+                var panel = $('#lp_navigation_elem div:first').clone();
+                $(panel).attr('id','control');
+                $('#learning_path_main').append(panel);
+                minipb();      
+                $('#learning_path_main #control .buttons').attr('text-align','center');
 
-            $('#learning_path_main #control .buttons img').click(function(){ 
-                $('#learning_path_main #control tr:eq(1)').remove();
-                minipb();
-            });
-            // Hiding navigation left zone
-            $('#learning_path_left_zone').hide(50);
-            $('#learning_path_right_zone').css('margin-left','10px');
-            $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+                $('#learning_path_main  #control').css({
+                    margin: "auto",
+                    width: "132px",
+                    height: "34px",
+                    position: "absolute",
+                    top: "5px",
+                    right:"15px",
+                    backgroundColor: "white",
+                    backgroundImage: "url(../img/minipanelback.png)",
+                    paddingTop: "8px",
+                    paddingBottom: "8px",
+                    borderRadius: "4px 4px 4px 4px",
+                    opacity: "0.8",
+                    cursor: "move",                    
+                });
+                
+                //$('#learning_path_main  #control').css("text-align", "center");
+
+                $('#learning_path_main  #control table').attr('align','center');
+                $('#learning_path_main  #control').draggable({ 
+                    iframeFix: true,
+                    stack: "#learning_path_right_zone",
+                    cursor: "move"
+                });
+
+                $('#learning_path_main #control .buttons img').click(function(){ 
+                    $('#learning_path_main #control tr:eq(1)').remove();
+                    minipb();
+                });
+                // Hiding navigation left zone
+                $('#learning_path_left_zone').hide(50);
+                $('#learning_path_right_zone').css('margin-left','10px');
+                $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+            }
+        },    
+        function(){
+        // Show navigation left zone
+        $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+        $('#learning_path_right_zone').css('marginLeft','290px');
+        $('#learning_path_left_zone').show(50);
+        $('#learning_path_main  #control').remove();
         }
-    },    
-    function(){
-      // Show navigation left zone
-      $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
-      $('#learning_path_right_zone').css('marginLeft','290px');
-      $('#learning_path_left_zone').show(50);
-      $('#learning_path_main  #control').remove();
-    }
     );
+    });
 });

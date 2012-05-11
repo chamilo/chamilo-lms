@@ -203,9 +203,12 @@ if (api_is_allowed_to_edit(null, true)) {
                             }                                   
                                                 
                             $result .= '<th height="80px" width="800px">';
-                            $result .= '<center><div style="font-size:10px;width:80px;">'.$datetime.'&nbsp;';
+                            $result .= '<center><div style="font-size:10px;width:80px;">'.$datetime.'&nbsp;';                            
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
-                            $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
+                            
+                            if ($is_locked_attendance == false) {
+                                $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
+                            }
                          }                  
                     } else {
                         $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
@@ -219,8 +222,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 
                 <tr class="tableWithFloatingHeader row_odd">
                 <?php echo $result; ?>
-                </tr>
-                
+                </tr>                
                 </thead>
                 <tbody>         
                 <?php 
@@ -233,10 +235,13 @@ if (api_is_allowed_to_edit(null, true)) {
                     <tr class="<?php echo $class ?>">
                     <?php 
                         if (count($attendant_calendar) > 0 ) {
+                            
                             foreach ($attendant_calendar as $calendar) {
-                                $checked = 'checked';                           
+                                $checked = 'checked';          
+                                $presence = null;
+                                
                                 if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
-                                    $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
+                                    $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];                                    
                                     if (intval($presence) == 1) {
                                         $checked = 'checked';
                                     } else {

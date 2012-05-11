@@ -52,7 +52,7 @@ $convert_byte_to_mega_list = array('dropbox_max_filesize', 'message_max_upload_f
 // Submit stylesheets.
 if (isset($_POST['submit_stylesheets'])) {
     $message = store_stylesheets();
-    header("Location: ".api_get_self()."?category=stylesheets");
+    header("Location: ".api_get_self()."?category=Stylesheets");
     exit;
 }
 
@@ -298,8 +298,6 @@ $action_images['cas'] 	        = 'user_access.png';
 $action_images['security']      = 'security.png';
 $action_images['languages']     = 'languages.png';
 $action_images['tuning']        = 'tuning.png';
-$action_images['plugins']       = 'plugins.png';
-$action_images['stylesheets']   = 'stylesheets.png';
 $action_images['templates']     = 'template.png';
 $action_images['search']        = 'search.png';
 $action_images['editor']        = 'html_editor.png';
@@ -324,6 +322,7 @@ $resultcategories[] = array('category' => 'Search');
 $resultcategories[] = array('category' => 'Stylesheets');
 $resultcategories[] = array('category' => 'Templates');
 $resultcategories[] = array('category' => 'Plugins');
+
 foreach ($resultcategories as $row) {
     $url = array();    
     $url['url'] = api_get_self()."?category=".$row['category'];
@@ -377,12 +376,33 @@ if (!empty($_GET['category'])) {
                     event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
-            }
-            handle_plugins();
-            DashboardManager::handle_dashboard_plugins();
-            handle_extensions();
+            }            
+            echo '<script>                    
+                $(function(){
+                    $("#tabs").tabs();
+                });
+                </script>';
+            echo '<div id="tabs">';
+                echo '<ul>';
+                echo '<li><a href="#tabs-1">'.get_lang('Plugins').'</a></li>';
+                echo '<li><a href="#tabs-2">'.get_lang('DashboardPlugins').'</a></li>';
+                echo '<li><a href="#tabs-3">'.get_lang('ConfigureExtensions').'</a></li>';
+                echo '</ul>';
+
+                echo '<div id="tabs-1">';
+                handle_plugins();
+                echo '</div>';
+
+                echo '<div id="tabs-2">';
+                DashboardManager::handle_dashboard_plugins();
+                echo '</div>';
+
+                echo '<div id="tabs-3">';
+                handle_extensions();
+                echo '</div>';            
+            echo '</div>';            
             break;
-        case 'stylesheets':
+        case 'Stylesheets':        
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
             break;
@@ -399,7 +419,8 @@ if (!empty($_GET['category'])) {
             }            
             break;
         default:
-            $form->display();
+            if (isset($form))
+                $form->display();
     }
 }
 

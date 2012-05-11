@@ -81,7 +81,7 @@ class LinkForm extends FormValidator
 		$cc = $this->category_object->get_course_code();
                 
 		foreach ($linktypes as $linktype) {
-			$link = LinkFactory :: create ($linktype);
+			$link = LinkFactory :: create ($linktype);            
 			if (!empty($cc)) {
 				$link->set_course_code($cc);
 			} elseif(!empty($_GET['course_code'])) {

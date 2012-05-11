@@ -119,6 +119,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_hel
 
 ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
 ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
+ALTER TABLE gradebook_link ADD COLUMN locked INT DEFAULT 0;
+ALTER TABLE gradebook_category ADD COLUMN locked INT DEFAULT 0;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
@@ -207,7 +209,7 @@ DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17769' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17828' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

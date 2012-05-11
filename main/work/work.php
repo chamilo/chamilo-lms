@@ -41,7 +41,7 @@
 
 /*		INIT SECTION */
 
-$language_file = array('exercice', 'work', 'document', 'admin');
+$language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
@@ -370,7 +370,7 @@ switch ($action) {
     case 'edit':
 	case 'upload_form': //can be add or edit work
         $is_author = false;        
-		if (empty($item_id)) {  
+		if (empty($item_id)) { 
 			$parent_data = get_work_data_by_id($work_id);            
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -494,8 +494,12 @@ switch ($action) {
         
         //fixes bug when showing modification form		
         if (!empty($work_id)) {
-            if ( $is_allowed_to_edit) {
-                $form->display();
+            if ($is_allowed_to_edit) {
+                if (api_resource_is_locked_by_gradebook($work_id)) {
+                    echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+                } else {
+                    $form->display();
+                }
             } elseif ($is_author) {
                 if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
                     $form->display();
@@ -758,12 +762,17 @@ switch ($action) {
             
             $form->addElement('html', '<div id="options" style="display: none;">');
             
+        
             //QualificationOfAssignment
             $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
             
             $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
             
             $form->addElement('html', '<div id="option1" style="display: none;">');
+            
+            //Loading gradebook select
+            load_gradebook_select_in_tool($form);        
+            
             $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
             $form->addElement('html', '</div>');            
             
@@ -888,20 +897,20 @@ switch ($action) {
                         $sql_add_publication = "UPDATE $work_table SET has_properties  = $inserted_id, view_properties = 0 WHERE c_id = $course_id AND id = $id";
                         Database::query($sql_add_publication);
                     }
+                    if (!empty($_POST['category_id'])) {
+                 
+                        if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
 
-                    if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
-                        //$resource_name = (empty($_POST['qualification_name'])) ? $_POST['new_dir'] : $_POST['qualification_name'];
-                        $resource_name = $_POST['new_dir'];
-                        add_resource_to_course_gradebook(api_get_course_id(), 3, $id, $resource_name, $_POST['weight'], $_POST['qualification_value'], $_POST['description'], time(), 1, api_get_session_id());
-                    }	
-                    // end features
-
+                            $resource_name = $_POST['new_dir'];
+                            add_resource_to_course_gradebook($_POST['category_id'], api_get_course_id(), 3, $id, $resource_name, $_POST['weight'], $_POST['qualification_value'], $_POST['description'], 1, api_get_session_id());
+                        }	
+                    }
+                    
                     if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
                         send_email_on_homework_creation(api_get_course_id());
                     }
@@ -1012,30 +1021,38 @@ switch ($action) {
 		
 		/*	Delete dir command */
 		
-		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {	
+		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {
             $delete_dir_id = intval($_REQUEST['delete_dir']);
-            $work_to_delete = get_work_data_by_id($delete_dir_id);
-			del_dir($delete_dir_id);	
-			
-			// gets calendar_id from student_publication_assigment
-			$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
-			$res = Database::query($sql);
-			$calendar_id = Database::fetch_row($res);
+            $locked = api_resource_is_locked_by_gradebook($delete_dir_id);
             
-			// delete from agenda if it exists
-			if (!empty($calendar_id[0])) {
-				$t_agenda   = Database::get_course_table(TABLE_AGENDA);
-				$sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
-				Database::query($sql);
-			}
-			$sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
-			Database::query($sql);
-		
-			$link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_dir_id, api_get_session_id());
-			if ($link_id !== false) {
-				remove_resource_from_course_gradebook($link_id);
-			}            
-            Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);            
+            if ($locked == false) {
+            
+                $work_to_delete = get_work_data_by_id($delete_dir_id);
+                del_dir($delete_dir_id);	
+
+                // gets calendar_id from student_publication_assigment
+                $sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
+                $res = Database::query($sql);
+                $calendar_id = Database::fetch_row($res);
+
+                // delete from agenda if it exists
+                if (!empty($calendar_id[0])) {
+                    $t_agenda   = Database::get_course_table(TABLE_AGENDA);
+                    $sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id ='".$calendar_id[0]."'";
+                    Database::query($sql);
+                }
+                $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id ='$delete_dir_id'";
+                Database::query($sql);
+
+                $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_dir_id, api_get_session_id());
+                $link_id = $link_info['id'];
+                if ($link_info !== false) {
+                    remove_resource_from_course_gradebook($link_id);
+                }            
+                Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);            
+            } else {
+                Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
+            }
 		}
 		
 		/*	DELETE WORK COMMAND */
@@ -1044,9 +1061,10 @@ switch ($action) {
 							
             $file_deleted = false;	
             $is_author = user_is_author($item_id);     
-            $work_data = get_work_data_by_id($item_id);
-
-            if ($is_allowed_to_edit || ($is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
+            $work_data = get_work_data_by_id($item_id);            
+            $locked = api_resource_is_locked_by_gradebook($work_data['parent_id']);
+            
+            if ( ($is_allowed_to_edit && $locked == false) || ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
                 //we found the current user is the author
                 $queryString1 	= "SELECT url, contains_file FROM  " . $work_table . "  WHERE c_id = $course_id AND id = $item_id";
                 $result1 		= Database::query($queryString1);

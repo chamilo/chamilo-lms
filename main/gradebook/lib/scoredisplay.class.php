@@ -426,7 +426,11 @@ class ScoreDisplay
 			$converted2 = array();
 			foreach ($converted as $element) {
 				$newelement = array();
-				$newelement['score'] = $element['score'] / $highest;
+                if (!empty($highest)) {
+                    $newelement['score'] = $element['score'] / $highest;
+                } else {
+                    $newelement['score'] = 0;
+                }
 				$newelement['display'] = $element['display'];
 				$converted2[] = $newelement;
 			}

@@ -47,7 +47,26 @@ function setFocus(){
 $(window).load(function () {
     setFocus();    
 });
-</script>';
+</script>
+<style>
+
+form .label {
+    padding: 1px 3px 2px;
+    font-size: 100%;
+    font-weight: normal;
+    color: #ffffff;
+    text-transform: none;
+    background: none;  
+    border-radius: none;
+    color: #404040;
+    float: left;    
+    line-height: 18px;
+    padding-top: 6px;
+    text-align: right;
+    width: 150px;    
+    text-shadow:none;
+}
+</style>';
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;

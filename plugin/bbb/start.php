@@ -6,16 +6,14 @@
 /**
  * Initialization
  */
-require_once '../../main/inc/global.inc.php';
-require_once 'bbb.lib.php';
-require_once 'bbb_api.php';
 
+$course_plugin = 'bbb'; //needed in order to load the plugin lang variables 
+require_once 'config.php';
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
-
 $bbb = new bbb();
 
-if ($bbb) {
+if ($bbb->plugin_enabled) {
     if ($bbb->is_server_running()) {
         
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
@@ -43,7 +41,7 @@ if ($bbb) {
             header('location: '.$url);
             exit;
         }
-    } else {
+    } else {        
         $message = Display::return_message(get_lang('ServerIsNotRunning'), 'warning');        
     }
 } else {    

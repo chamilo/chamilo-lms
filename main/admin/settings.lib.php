@@ -81,7 +81,7 @@ function handle_regions() {
 }
 
 function handle_extensions() {    
-    echo '<div class="page-header"><h2>'.get_lang('ConfigureExtensions').'</h2></div>';
+    echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';    
     
 }
@@ -105,10 +105,10 @@ function handle_plugins() {
     
     $all_plugins = $plugin_obj->read_plugins_from_path(); 
     $installed_plugins = $plugin_obj->get_installed_plugins(); 
-    $not_installed = array_diff($all_plugins, $installed_plugins);    
+
     
     //Plugins NOT installed
-    echo '<div class="page-header"><h2>'.get_lang('Plugins').'</h2></div>';
+    echo Display::page_subheader(get_lang('Plugins'));
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
@@ -167,7 +167,6 @@ function handle_plugins() {
     echo '</table>';
     echo '<br />';
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
-    echo '<br />';
 }
 
 /**
@@ -179,6 +178,7 @@ function handle_stylesheets() {
     global $_configuration;
     // Current style.
     $currentstyle = api_get_setting('stylesheets');
+    
     $is_style_changeable = false;
 
     if ($_configuration['access_url'] != 1) {
@@ -1149,7 +1149,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('class'=>'span6','rows'=>'10'), $hideme);
             	    $default_values[$row['variable']] = $value;            	        
                 } elseif ($row['variable'] == 'footer_extra_content') {
             		$file = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
@@ -1157,10 +1157,10 @@ function generate_settings_form($settings, $settings_by_access_list) {
             		if (file_exists($file)) {
 						$value = file_get_contents($file);
             		}
-            	    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+            	    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10', 'class'=>'span6'), $hideme);
             	    $default_values[$row['variable']] = $value;            	        
             	} else {
-                	$form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','cols'=>'50'), $hideme);
+                	$form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','class'=>'span6'), $hideme);
                 	$default_values[$row['variable']] = $row['selected_value'];
             	}
                 break;
@@ -1270,6 +1270,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
  * @return array
  */
 function search_setting($search) {
+    if (empty($search)) {
+        return array();
+    }
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
     $sql = "SELECT * FROM $table_settings_current WHERE category <> 'Plugins' GROUP BY variable ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');

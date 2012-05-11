@@ -6,8 +6,8 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
-$strings['plugin_title'] = "Rss";
-$strings['plugin_comment'] = "Display rss content.";
+$strings['plugin_title'] = "RSS";
+$strings['plugin_comment'] = "Display RSS content.";
 
 $strings['rss'] = "Rss";
 $strings['block_title'] = "Block title";

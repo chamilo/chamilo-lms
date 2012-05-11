@@ -73,13 +73,7 @@ class UniqueAnswerNoOption extends Question {
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
 		}
 
-		$html='
-		<div class="row">
-			<div class="label">
-			'.get_lang('Answers').' <br /> <img src="../img/fill_field.png">
-			</div>
-			<div class="formw">
-				<table class="data_table">
+		$html='<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="10px">
 							'.get_lang('Number').'
@@ -96,8 +90,7 @@ class UniqueAnswerNoOption extends Question {
 							'.get_lang('Weighting').'
 						</th>        
 					</tr>';
-
-		$form -> addElement ('html', $html);
+        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;

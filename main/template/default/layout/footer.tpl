@@ -6,7 +6,7 @@
                     <div id="session_teachers">
                         {{session_teachers}}           
                     </div>
-                {% endif %} 
+                {% endif %}
 
                 {% if teachers is not null %}
                     <div id="teachers">
@@ -20,7 +20,7 @@
                         {{plugin_footer_left}}               
                     </div>                
                 {% endif %}
-                &nbsp;
+                 &nbsp;
             </div>
             
             <div id="footer_center" class="span4">
@@ -28,10 +28,9 @@
                 {% if plugin_footer_center is not null %}
                     <div id="plugin_footer_center">
                         {{plugin_footer_center}}                
-                    </div>                
-                {% else %} 
-                    &nbsp;
+                    </div>
                 {% endif %}
+                 &nbsp;
             </div>
             
             <div id="footer_right" class="span4">        
@@ -61,7 +60,8 @@
 {{footer_extra_content}}
 
 {% raw %}
-<script type="text/javascript">
+<script>
+/* Makes row highlighting possible */
 $(document).ready( function() {
     $(".chzn-select").chosen();     
     $("form .data_table input:checkbox").click(function() {

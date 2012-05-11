@@ -99,13 +99,18 @@ $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $
 $parameters=array('selectcat'=>intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 
+if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {  
+    $params = array();
+    $params['only_total_category'] = true;
+    export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+}
+    
 if (isset($_GET['exportpdf']))	{
 	$interbreadcrumb[] = array (
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
 	);
-
-	$export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
+    $export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
 
 	if ($export_pdf_form->validate()) {        
         $params = $export_pdf_form->exportValues();
@@ -116,7 +121,7 @@ if (isset($_GET['exportpdf']))	{
 }
 
 if (isset ($_GET['print']))	{
-	$printable_data = get_printable_data ($cat[0], $users,$alleval, $alllinks);
+	$printable_data = get_printable_data ($cat[0], $users, $alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
 }

@@ -78,6 +78,11 @@ class Evaluation implements GradebookItem
 	public function get_locked() {
 		return $this->locked;
 	}
+    
+    public function is_locked() {
+		return isset($this->locked) && $this->locked == 1 ? true : false ;
+	}  
+    
 	public function set_id ($id) {
 		$this->id = $id;
 	}
@@ -139,7 +144,7 @@ class Evaluation implements GradebookItem
 	 */
 	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null, $locked = null) {
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-		$sql = 'SELECT id,name,description,user_id,course_code,category_id,created_at,weight,max,visible,type,locked FROM '.$tbl_grade_evaluations;
+		$sql = 'SELECT * FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.intval($id);
@@ -172,7 +177,7 @@ class Evaluation implements GradebookItem
 		if (isset ($locked)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' visible = '.intval($locked);
+			$sql .= ' locked = '.intval($locked);
 			$paramcount ++;
 		}		
 		$result = Database::query($sql);
@@ -580,21 +585,25 @@ class Evaluation implements GradebookItem
 	public function get_icon_name() {
 		return $this->has_results() ? 'evalnotempty' : 'evalempty';
 	}
-  	/***
-  	 * This function, locks an evaluation, only one who can unlock it is the platform administrator.
-  	 * @param int evaluation id
+    
+  	/**
+  	 * Locks an evaluation, only one who can unlock it is the platform administrator.  	 
   	 * @param int locked 1 or unlocked 0 
-  	 * @return bool 
   	 * 
-  	 * */
-  	function locked_evaluation($id_evaluation, $locked) {
-  		
+  	 **/
+  	function lock($locked) {
   		$table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-  		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($id_evaluation)."'";
-  		$rs = Database::query($sql);
-  		$affected_rows = Database::affected_rows();
-		if (!empty($affected_rows)) {
-			return true;
-		}
+  		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
+  		Database::query($sql);
   	}
+    
+    function check_lock_permissions() {
+        if (api_is_platform_admin()) {
+            return true;
+        } else {
+            if ($this->is_locked()) {
+                api_not_allowed();
+            }
+        }
+    }
 }

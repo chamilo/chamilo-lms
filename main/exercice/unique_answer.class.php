@@ -72,32 +72,26 @@ class UniqueAnswer extends Question {
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
 		}
 
-		$html='
-		<div class="row">
-			<div class="label">
-			'.get_lang('Answers').' <br /> <img src="../img/fill_field.png">
-			</div>
-			<div class="formw">
-				<table class="data_table">
-					<tr style="text-align: center;">
-						<th width="10px">
-							'.get_lang('Number').'
-						</th>
-						<th width="10px" >
-							'.get_lang('True').'
-						</th>
-						<th width="50%">
-							'.get_lang('Answer').'
-						</th>
-							'.$comment_title.'
-							'.$feedback_title.'
-						<th width="50px">
-							'.get_lang('Weighting').'
-						</th>        
-					</tr>';
+		$html='<table class="data_table">
+                <tr style="text-align: center;">
+                    <th width="10px">
+                        '.get_lang('Number').'
+                    </th>
+                    <th width="10px" >
+                        '.get_lang('True').'
+                    </th>
+                    <th width="50%">
+                        '.get_lang('Answer').'
+                    </th>
+                        '.$comment_title.'
+                        '.$feedback_title.'
+                    <th width="50px">
+                        '.get_lang('Weighting').'
+                    </th>        
+                </tr>';
 
-		$form -> addElement ('html', $html);
-
+        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+		
 		$defaults = array();
 		$correct = 0;
 		if(!empty($this -> id)) {
@@ -219,7 +213,6 @@ class UniqueAnswer extends Question {
                 $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'lp'.$i);
                 $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'try'.$i);
                 
-
                 $form -> addGroup($group, 'scenario', 'scenario');
                 $renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
             }
@@ -228,7 +221,8 @@ class UniqueAnswer extends Question {
         }
 
 		$form -> addElement ('html', '</table>');
-		$form -> addElement ('html', '<br />');
+		$form -> addElement ('html', '<br />');        
+        
 		$navigator_info = api_get_navigator();
 
 		global $text, $class, $show_quiz_edition;
@@ -248,8 +242,8 @@ class UniqueAnswer extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
-
-		$form -> addElement ('html', '</div></div>');
+        
+        $form -> addElement ('html', '</div></div>');
 
 		//We check the first radio button to be sure a radio button will be check
 		if ($correct==0) {

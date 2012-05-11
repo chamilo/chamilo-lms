@@ -1027,6 +1027,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     
             $user_list_id = array ();                        
             $duration_list = '';
+            
+            $locked = api_resource_is_locked_by_gradebook($exercise_id);
             			
             for ($i = 0; $i < $sizeof; $i++) {                
                 $revised = $results[$i]['revised'];	
@@ -1119,9 +1121,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                                 $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                             }
                         }
-                        if (api_is_platform_admin() || $is_tutor) {                        	
-                            $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
-                            $actions .='&nbsp;';
+                        if (api_is_platform_admin() || $is_tutor) {     
+                            if ($locked == false) {
+                                $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
+                                $actions .='&nbsp;';
+                            }
                         }
                     } else {
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';

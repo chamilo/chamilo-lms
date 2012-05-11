@@ -1,9 +1,11 @@
 <?php
-
 /**
  * This script initiates a videoconference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
  */
+
+require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
+require_once 'bbb_plugin.class.php';
 
 class bbb {
     
@@ -14,34 +16,29 @@ class bbb {
     var $protocol = 'http://';
     var $debug = true;
     var $logout_url = null;
+    var $plugin_enabled = false;
     
     function __construct() {
         
-        // initialize video server settings from global settings
-        $settings = api_get_settings('Extra','list',api_get_current_access_url_id());
-        $bbb_settings = array();
-        foreach ($settings as $setting) {
-            if (substr($setting['variable'],0,4)==='bbb_') {
-                $bbb_settings[$setting['variable']] = $setting['selected_value'];
-            }
-        }
-        $bbb_plugin = $bbb_settings['bbb_plugin'] === 'true';
-        $bbb_host   = $bbb_settings['bbb_plugin_host'];
-        $bbb_salt   = $bbb_settings['bbb_plugin_salt'];
+        // initialize video server settings from global settings        
+        $plugin = BBBPlugin::create();
+        
+        $bbb_plugin = $plugin->get('tool_enable');        
+        $bbb_host   = $plugin->get('host');
+        $bbb_salt   = $plugin->get('salt');
         
         $course_code = api_get_course_id();
         
         $this->logout_url = api_get_path(WEB_COURSE_PATH).$course_code;  
+        $this->table = Database::get_main_table('plugin_bbb_meeting');
         
-        if ($bbb_plugin) {
+        if ($bbb_plugin == true) {
             $user_info = api_get_user_info();
             $this->user_complete_name = $user_info['complete_name'];        
             $this->salt = $bbb_salt;
-            $this->url  = $bbb_host.'/bigbluebutton/';        
-            $this->table = Database::get_main_table('plugin_bbb_meeting');
-            return true;
-        }
-        return false;
+            $this->url  = $bbb_host.'/bigbluebutton/';                             
+            $this->plugin_enabled = true;
+        }    
     }
     
     function is_teacher() {

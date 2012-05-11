@@ -12,13 +12,9 @@
 class ForumThreadLink extends AbstractLink
 {
 
-// INTERNAL VARIABLES
-
+    // INTERNAL VARIABLES
     private $forum_thread_table = null;
     private $itemprop_table = null;
-
-
-// CONSTRUCTORS
 
     function __construct() {
     	parent::__construct();
@@ -29,13 +25,11 @@ class ForumThreadLink extends AbstractLink
     	return get_lang('ForumThreads');
     }
 
-
 	public function is_allowed_to_change_name() {
 		return false;
 	}
 
-
-// FUNCTIONS IMPLEMENTING ABSTRACTLINK
+    // FUNCTIONS IMPLEMENTING ABSTRACTLINK
 
 	/**
 	 * Generate an array of exercises that a teacher hasn't created a link for.
@@ -76,6 +70,13 @@ class ForumThreadLink extends AbstractLink
     	}    	
     	$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD);
     	$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $session_id = api_get_session_id();
+        
+        if ($session_id) {
+            $session_condition = 'tl.session_id='.api_get_session_id();
+        } else {
+            $session_condition = '(tl.session_id = 0 OR tl.session_id IS NULL)';
+        }
     	
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify 
 				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip 
@@ -83,7 +84,8 @@ class ForumThreadLink extends AbstractLink
 						ip.c_id 		= '.$this->course_id.' AND 
 						tl.thread_id	= ip.ref AND 
 						ip.tool			= "forum_thread" AND 
-						ip.visibility<>2 AND tl.session_id='.api_get_session_id().' GROUP BY ip.ref ';
+						ip.visibility<>2 AND  '.$session_condition.' GROUP BY ip.ref ';
+        
 		$result = Database::query($sql);
 
 		while ($data=Database::fetch_array($result)) {
@@ -235,10 +237,17 @@ class ForumThreadLink extends AbstractLink
 		return $url;
    		
 	}
-	private function get_exercise_data() {
+	private function get_exercise_data() {        
+        $session_id = api_get_session_id();        
+        if ($session_id) {
+            $session_condition = 'session_id='.api_get_session_id();
+        } else {
+            $session_condition = '(session_id = 0 OR session_id IS NULL)';
+        }
+        
 		if (!isset($this->exercise_data)) {
     		$sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE c_id = '.$this->course_id.' AND  thread_id = '.$this->get_ref_id().' AND session_id = '.api_get_session_id();
+                    WHERE c_id = '.$this->course_id.' AND  thread_id = '.$this->get_ref_id().' AND '.$session_condition;
 			$query = Database::query($sql);
 			$this->exercise_data = Database::fetch_array($query);
     	}

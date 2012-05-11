@@ -44,13 +44,7 @@ class MultipleAnswerCombination extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		$obj_ex = $_SESSION['objExercise'];
-		$html='
-		<div class="row">
-			<div class="label">
-			'.get_lang('Answers').'<br /><img src="../img/fill_field.png">
-			</div>
-			<div class="formw">
-				<table class="data_table">
+		$html= '<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="10px">
 							'.get_lang('Number').'
@@ -66,8 +60,7 @@ class MultipleAnswerCombination extends Question {
 							$html .='<th>'.get_lang('Comment').'</th>';
 						}
 						$html .= '</tr>';
-					
-		$form -> addElement ('html', $html);
+        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;

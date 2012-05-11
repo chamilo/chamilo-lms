@@ -78,9 +78,7 @@ class FillBlanks extends Question
 		}
 
 		// javascript
-
-		echo '
-		<script type="text/javascript">
+		echo '<script type="text/javascript">
 			function FCKeditor_OnComplete( editorInstance )
 			{
 				if (window.attachEvent) {
@@ -90,52 +88,44 @@ class FillBlanks extends Question
 				}
 
 			}
+            var firstTime = true;
+            function updateBlanks() {
+                if (firstTime) {
+                    field = document.getElementById("answer");
+                    var answer = field.value; }
+                else {
+                    var oEditor = FCKeditorAPI.GetInstance(\'answer\');
+                    answer =  oEditor.GetXHTML( true ) ;
+                }
 
-		var firstTime = true;
-		function updateBlanks()
-		{
-			if (firstTime) {
-				field = document.getElementById("answer");
-				var answer = field.value; }
-			else {
-				var oEditor = FCKeditorAPI.GetInstance(\'answer\');
-				answer =  oEditor.GetXHTML( true ) ;
-			}
+                var blanks = answer.match(/\[[^\]]*\]/g);
+                var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('Weighting').'</label><div class=\"controls\"><table>";
+                if(blanks!=null){
+                    for(i=0 ; i<blanks.length ; i++){
+                        if(document.getElementById("weighting["+i+"]"))
+                            value = document.getElementById("weighting["+i+"]").value;
+                        else
+                            value = "10";
+                        fields += "<tr><td>"+blanks[i]+"</td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
 
-			var blanks = answer.match(/\[[^\]]*\]/g);
-
-			var fields = "<div class=\"row\"><div class=\"label\">'.get_lang('Weighting').'</div><div class=\"formw\"><table>";
-			if(blanks!=null){
-				for(i=0 ; i<blanks.length ; i++){
-					if(document.getElementById("weighting["+i+"]"))
-						value = document.getElementById("weighting["+i+"]").value;
-					else
-						value = "10";
-					fields += "<tr><td>"+blanks[i]+"</td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
-
-				}
-			}
-			document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
-			if(firstTime){
-				firstTime = false;
+                    }
+                }
+                document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
+                if(firstTime){
+                    firstTime = false;
 			';
-
-		if(count($a_weightings)>0)
-		{
-			foreach($a_weightings as $i=>$weighting)
-			{
-				echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-			}
-		}
-		echo '}
-		}
-		window.onload = updateBlanks;
-		</script>
-		';
-
+            if(count($a_weightings)>0) {
+                foreach($a_weightings as $i=>$weighting) {
+                    echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+                }
+            }
+            echo '}
+            }
+            window.onload = updateBlanks;
+		</script>';
 
 		// answer
-		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');
+		$form -> addElement ('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
 		$form -> addElement ('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
 		$form -> addRule ('answer',get_lang('GiveText'),'required');

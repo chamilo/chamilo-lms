@@ -19,12 +19,17 @@ api_block_anonymous_users();
 block_students();
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id 		= get_course_id_by_link_id($_GET['editlink']);
+$course_id              = get_course_id_by_link_id($_GET['editlink']);
 $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work 				= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);
 $linkarray 				= LinkFactory :: load($_GET['editlink']);
 $link = $linkarray[0];
+
+if ($link->is_locked() && !api_is_platform_admin()) {
+    api_not_allowed();
+}
+
 $linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
 
@@ -53,23 +58,25 @@ if ($form->validate()) {
 	$link->save();
 
 	//Update weight for attendance
-	$sql = 'SELECT ref_id FROM '.$tbl_grade_links.' WHERE c_id = '.$course_id.' AND  id = '.intval($_GET['editlink']).' AND type='.LINK_ATTENDANCE;
+	$sql = 'SELECT ref_id FROM '.$tbl_grade_links.' WHERE id = '.intval($_GET['editlink']).' AND type='.LINK_ATTENDANCE;
 	$rs_attendance  = Database::query($sql);
 	if (Database::num_rows($rs_attendance) > 0) {
 		$row_attendance = Database::fetch_array($rs_attendance);
 		$attendance_id  = $row_attendance['ref_id'];
-		$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($values['weight']).' WHERE c_id = '.$course_id.' AND  id = '.intval($attendance_id);
+		$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($final_weight).' WHERE c_id = '.$course_id.' AND  id = '.intval($attendance_id);
 		Database::query($upd_attendance);
 	}
 
 	//Update weight into forum thread
-	$sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' 
-			  WHERE c_id = '.$course_id.' AND thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.intval($_GET['editlink']).' and type=5 AND c_id = '.$course_id.'  ) ';
+	$sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$final_weight.' 
+			  WHERE c_id = '.$course_id.' AND thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.intval($_GET['editlink']).' and type=5) ';
+    
 	Database::query($sql_t);
     
 	//Update weight into student publication(work)
-	$sql_t = 'UPDATE '.$tbl_work.' SET weight='.$values['weight'].' 
-			  WHERE c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$tbl_grade_links.' WHERE c_id = '.$course_id.' AND id='.intval($_GET['editlink'] ).' AND  type=3 )';
+	$sql_t = 'UPDATE '.$tbl_work.' SET weight='.$final_weight.' 
+			  WHERE c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.intval($_GET['editlink'] ).' AND type=3 )';
+    
 	Database::query($sql_t);
 	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;
@@ -79,8 +86,7 @@ $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_d
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 
-    $("#hide_category_id").change(function(){
-        
+    $("#hide_category_id").change(function(){        
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();
             $.ajax({ 

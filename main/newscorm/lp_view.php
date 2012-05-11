@@ -309,98 +309,99 @@ if (Database::num_rows($res_media) > 0) {
     while ($row_media= Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
     }
-}
-                
+}                
 ?>
 
-<div id="learning_path_left_zone" style="<?php echo $display_none;?>">
-    <!-- header -->
-            
-    <div id="header">        
-        <table>
-            <tr>
-                <td>
-                    <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                        <img src="../img/lp_arrow.gif" />
-                    </a>
-                </td>
-                <td>
-                    <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                    <?php echo get_lang('CourseHomepageLink'); ?></a>
-                </td>
-            </tr>
-        </table>
-    </div>
+<div id="learning_path_main" style="width:100%;height:100%;">
 
-    <!-- end header -->
-    
-    <!-- Author image preview -->        
-    <div id="author_image">   
-        <div id="author_icon">                        
-            <?php
-            if ($_SESSION['oLP']->get_preview_image()!='') {
-                $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
-                $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
-                echo '<img src="'.$my_path.'">';
-            } else {
-                echo Display :: display_icon('unknown_250_100.jpg');
-            }
-            ?>                              
+    <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
+        <!-- header -->
+
+        <div id="header">        
+            <table>
+                <tr>
+                    <td>
+                        <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                            <img src="../img/lp_arrow.gif" />
+                        </a>
+                    </td>
+                    <td>
+                        <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                        <?php echo get_lang('CourseHomepageLink'); ?></a>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <div id="lp_navigation_elem">                          
-            <?php echo $navigation_bar; ?>
-            <div id="progress_bar">
-                <?php echo $progress_bar; ?>
-            </div>    
-        </div>
-    </div>
-    <!-- end image preview Layout -->
-    
-    <div id="author_name">
-        <?php echo $_SESSION['oLP']->get_author(); ?>
-    </div>
 
-    <!-- media player layout -->
-    <?php $style_media = (($show_audioplayer) ? ' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"' : 'style="height:15px"'); ?>
-    <div id="media"  <?php echo $style_media; ?>>
-        <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
-    </div>
-    <!-- end media player layout -->
+        <!-- end header -->
 
-    <!-- TOC layout -->        
-    <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
-        <div id="learning_path_toc">
-            <?php echo $_SESSION['oLP']->get_html_toc(); ?>
-
-            <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
-            <!-- log message layout -->
-            <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                <div id="log_content"></div>
-                <div id="log_content_cleaner" style="color: white;">.</div>
+        <!-- Author image preview -->        
+        <div id="author_image">   
+            <div id="author_icon">                        
+                <?php
+                if ($_SESSION['oLP']->get_preview_image()!='') {
+                    $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
+                    if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
+                    $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
+                    $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+                    echo '<img src="'.$my_path.'">';
+                } else {
+                    echo Display :: display_icon('unknown_250_100.jpg');
+                }
+                ?>                              
             </div>
-            <!-- end log message layout -->
-            <?php } ?>
+            <div id="lp_navigation_elem">                          
+                <?php echo $navigation_bar; ?>
+                <div id="progress_bar">
+                    <?php echo $progress_bar; ?>
+                </div>    
+            </div>
         </div>
+        <!-- end image preview Layout -->
+
+        <div id="author_name">
+            <?php echo $_SESSION['oLP']->get_author(); ?>
+        </div>
+
+        <!-- media player layout -->
+        <?php $style_media = (($show_audioplayer) ? ' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"' : 'style="height:15px"'); ?>
+        <div id="media"  <?php echo $style_media; ?>>
+            <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
+        </div>
+        <!-- end media player layout -->
+
+        <!-- TOC layout -->        
+        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
+            <div id="learning_path_toc">
+                <?php echo $_SESSION['oLP']->get_html_toc(); ?>
+
+                <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+                <!-- log message layout -->
+                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
+                    <div id="log_content"></div>
+                    <div id="log_content_cleaner" style="color: white;">.</div>
+                </div>
+                <!-- end log message layout -->
+                <?php } ?>
+            </div>
+        </div>
+        <!-- end TOC layout -->        
     </div>
-    <!-- end TOC layout -->        
-</div>
-<!-- end left Zone -->
+    <!-- end left Zone -->
 
 
-<!-- right Zone -->
-<div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
-<?php
-    // hub 26-05-2010 Fullscreen or not fullscreen
-    if ($_SESSION['oLP']->mode == 'fullscreen') {
-        echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
-    } else {            
-        echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="width:100%;height:600px"></iframe>';
-    }
-?>
-</div>
-<!-- end right Zone -->
+    <!-- right Zone -->
+    <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
+    <?php
+        // hub 26-05-2010 Fullscreen or not fullscreen
+        if ($_SESSION['oLP']->mode == 'fullscreen') {
+            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
+        } else {            
+            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:600px"></iframe>';
+        }
+    ?>
+    </div>
+    <!-- end right Zone -->
 </div>
 
 <script>

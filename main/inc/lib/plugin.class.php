@@ -29,6 +29,7 @@ class Plugin {
         $result['comment'] = $this->get_comment();
         $result['version'] = $this->get_version();
         $result['author'] = $this->get_author();
+        
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
             foreach ($this->fields as $name => $type) {
@@ -63,9 +64,8 @@ class Plugin {
     }
 
     function get_css() {
-        $name = $this->get_name();
-        $root = api_get_path(SYS_PLUGIN_PATH);
-        $path = "$root/$name/resources/$name.css";
+        $name = $this->get_name();        
+        $path = api_get_path(SYS_PLUGIN_PATH)."$name/resources/$name.css";
         if (!is_readable($path)) {
             return '';
         }
@@ -85,30 +85,45 @@ class Plugin {
         $defaults = array();
         foreach ($this->fields as $name => $type) {
             $value = $this->get($name);
+            
             $defaults[$name] = $value;
-            $type = $type ? $type : 'text';
-            if ($type == 'wysiwyg') {
-                $result->add_html_editor($name, $this->get_lang($name));
-            } else {
-                $result->addElement($type, $name, $this->get_lang($name));
+            $type = isset($type) ? $type : 'text';
+            
+            $help = null;
+            if ($this->get_lang_plugin_exists($name.'_help')) {
+                $help = $this->get_lang($name.'_help');
+            }
+                    
+            switch ($type) {
+                case 'html':
+                    $result->addElement('html', $this->get_lang($name));  
+                    break;
+                case 'wysiwyg':
+                    $result->add_html_editor($name, $this->get_lang($name));
+                    break;
+                case 'text':                  
+                    $result->addElement($type, $name, array($this->get_lang($name), $help));    
+                    break;
+                case 'boolean':
+                    $group = array();
+                    $group[] = $result->createElement('radio', $name, '', get_lang('Yes'), 'true');
+                    $group[] = $result->createElement('radio', $name, '', get_lang('No'),  'false');                    
+                    $result->addGroup($group, null, array($this->get_lang($name), $help));
+                    break;
             }
         }
         $result->setDefaults($defaults);
-
         $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
         return $result;
     }
 
-    function get($name) {
-        $content = '';
-        $title = 'Static';
-        $settings = $this->get_settings();
+    function get($name) {        
+        $settings = $this->get_settings();        
         foreach ($settings as $setting) {
             if ($setting['variable'] == ($this->get_name() . '_' . $name)) {
                 return $setting['selected_value'];
             }
         }
-
         return false;
     }
 
@@ -123,6 +138,10 @@ class Plugin {
     }
 
     private $strings = null;
+    
+    public function get_lang_plugin_exists($name) {
+        return isset($this->strings[$name]);
+    }
 
     public function get_lang($name) {
         if (is_null($this->strings)) {

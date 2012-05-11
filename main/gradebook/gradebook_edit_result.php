@@ -21,9 +21,11 @@ $select_eval=Security::remove_XSS($_GET['selecteval']);
 if (empty($select_eval)) {
 	api_not_allowed();
 }
-
 $resultedit = Result :: load (null,null,$select_eval);
 $evaluation = Evaluation :: load ($select_eval);
+
+$evaluation[0]->check_lock_permissions();
+
 $edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval='.$select_eval);
 $table = $edit_result_form->toHtml();
 if ($edit_result_form->validate()) {

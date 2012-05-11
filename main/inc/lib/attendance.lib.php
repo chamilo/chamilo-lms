@@ -20,6 +20,7 @@ class Attendance
 	private $attendance_qualify_title;
 	private $attendance_weight;
 	private $course_int_id;
+    public $category_id;
 
     // constants
 	const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
@@ -154,8 +155,8 @@ class Attendance
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
                     if ($is_locked_attendance) {
-                        $actions .= Display::return_icon('edit_na.gif',get_lang('Edit')).'&nbsp;';
-                        $actions .= Display::return_icon('delete_na.gif',get_lang('Delete'));
+                        $actions .= Display::return_icon('edit_na.png',get_lang('Edit')).'&nbsp;';
+                        $actions .= Display::return_icon('delete_na.png',get_lang('Delete'));
                     } else {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
@@ -245,11 +246,12 @@ class Attendance
 			api_item_property_update($_course, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", $user_id);
 		}
 		// add link to gradebook
-		if ($link_to_gradebook) {
+		if ($link_to_gradebook && !empty($this->category_id)) {
 			$description = '';
-			$link_id=is_resource_in_course_gradebook($course_code,7,$last_id,$session_id);
-			if (!$link_id) {
-				add_resource_to_course_gradebook($course_code, 7, $last_id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,$session_id);
+			$link_info = is_resource_in_course_gradebook($course_code,7,$last_id,$session_id);
+            $link_id = $link_info['id'];
+			if (!$link_info) {
+				add_resource_to_course_gradebook($this->category_id, $course_code, 7, $last_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
 			} else {
 				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
 			}
@@ -289,11 +291,11 @@ class Attendance
             api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"AttendanceUpdated", $user_id);	
 
             // add link to gradebook
-            if ($link_to_gradebook) {
+            if ($link_to_gradebook && !empty($this->category_id)) {
                 $description = '';
                 $link_id=is_resource_in_course_gradebook($course_code,7,$attendance_id,$session_id);
                 if (!$link_id) {
-                    add_resource_to_course_gradebook($course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,$session_id);
+                    add_resource_to_course_gradebook($this->category_id, $course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
                 } else {
                     Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
                 }
@@ -1050,6 +1052,11 @@ class Attendance
          * @param   bool
          */
         public function is_locked_attendance($attendance_id) {
+            //use gradebook lock
+            $result = api_resource_is_locked_by_gradebook($attendance_id);            
+            return $result;
+            
+            /*
             $attendance_id = intval($attendance_id);
             $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
             $course_id = api_get_course_int_id();
@@ -1061,7 +1068,7 @@ class Attendance
             if (Database::num_rows($rs) > 0) {
                 $result = true;
             }
-            return $result;
+            return $result;*/
         }       
 
 	/**

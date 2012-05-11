@@ -580,15 +580,12 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
         }
     }
     
-	$event_value        = Database::escape_string($event_value);	
-	$user_id            = Database::escape_string($user_id);
-        
+	$event_value        = Database::escape_string($event_value);		        
     $course_info        = api_get_course_info($course_code);
     
     if (!empty($course_info)) {
         $course_id      = $course_info['real_id'];
-        $course_code    = $course_info['code'];
-        
+        $course_code    = $course_info['code'];        
         $course_code    = Database::escape_string($course_code);
     } else {
         $course_id = null;
@@ -604,6 +601,8 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 	if (!isset($user_id)) {
 		$user_id = api_get_user_id();
 	}
+    
+    $user_id = intval($user_id);
     
 	$sql = "INSERT INTO $TABLETRACK_DEFAULT
 				(default_user_id,

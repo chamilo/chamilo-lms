@@ -89,7 +89,6 @@ if (!empty($_GET['gidReq'])) {
     api_session_register('toolgroup');
 }
 
-
 /* Is the user allowed here? */
 
 // The user is not allowed here if:
@@ -121,7 +120,6 @@ if ($current_forum['forum_of_group'] != 0) {
         api_not_allowed();
     }
 }
-
 $session_toolgroup = 0;
 if ($origin == 'group') {
     $session_toolgroup = intval($_SESSION['toolgroup']);
@@ -146,8 +144,6 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     header('Location: ../resourcelinker/resourcelinker.php');
 }
 
-
-
 /* Header */
 
 if ($origin == 'learnpath') {
@@ -163,36 +159,9 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-/*
-if ($origin == 'group') {
-    echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
-} else {
-    echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-}*/
 echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'">'.Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-/* Display Forum Category and the Forum information */
-/*
-echo "<table class=\"data_table\" width=\"100%\">\n";
-
-if ($origin != 'learnpath') {
-    echo "<tr>\n<th align=\"left\"  colspan=\"2\">";
-
-    echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
-
-    if (!empty($current_forum['forum_comment'])) {
-        echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
-    }
-
-    if (!empty($current_forum_category['cat_title'])) {
-        echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
-    }
-    echo "</th>\n";
-    echo "</tr>\n";
-}
-echo '</table>';
-*/
 $values = show_add_post_form('newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
 
 if (!empty($values) && isset($values['SubmitPost'])) {

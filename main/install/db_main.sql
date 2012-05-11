@@ -859,7 +859,7 @@ VALUES
 ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
 ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17769','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17828','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1344,6 +1344,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
   certif_min_score int DEFAULT NULL,
   session_id int DEFAULT NULL,
   document_id int unsigned DEFAULT NULL,
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
@@ -1357,7 +1358,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight FLOAT NOT NULL,
   max float unsigned NOT NULL,
-  visible tinyint NOT NULL,
+  visible int NOT NULL,
   type varchar(40) NOT NULL default 'evaluation',
   locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
@@ -1372,7 +1373,8 @@ CREATE TABLE IF NOT EXISTS gradebook_link (
   category_id int NOT NULL,
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight float NOT NULL,
-  visible tinyint NOT NULL,
+  visible int NOT NULL,
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_result;

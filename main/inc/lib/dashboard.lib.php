@@ -26,14 +26,12 @@ class DashboardManager {
 	*/
 	public static function handle_dashboard_plugins() {
 
-		$table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
 		/* We scan the plugin directory. Each folder is a potential plugin. */
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
 		$table_cols = array('name', 'version', 'description');		
-        echo '<div class="page-header"><h2>'.get_lang('DashboardPlugins').'</h2></div>';
+        echo Display::page_subheader(get_lang('DashboardPlugins'));
 		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 		echo '<table class="data_table">';
 		echo '<tr>';

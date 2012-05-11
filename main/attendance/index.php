@@ -10,7 +10,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('course_description', 'course_info', 'pedaSuggest', 'userInfo', 'admin', 'agenda','tracking', 'trad4all');
+$language_file = array ('course_description', 'course_info', 'pedaSuggest', 'userInfo', 'admin', 'agenda','tracking', 'gradebook');
 
 // including files 
 require_once '../inc/global.inc.php';

@@ -91,6 +91,7 @@ if (api_is_platform_admin()) {
  	);
 }
 $blocks['users']['items'] = $items;
+$blocks['users']['extra'] = null;
 
 if (api_is_platform_admin()) {
 	/* Courses */
@@ -126,6 +127,7 @@ if (api_is_platform_admin()) {
     	$items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
     $blocks['courses']['items'] = $items;
+    $blocks['courses']['extra'] = null;
     
     /* Platform */    
     $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
@@ -162,6 +164,7 @@ if (api_is_platform_admin()) {
     	$items[] = array('url'=>'legal_add.php', 	'label' => get_lang('TermsAndConditions'));
 	}    
 	$blocks['platform']['items'] = $items;
+    $blocks['platform']['extra'] = null;
 }
 
 /* Sessions */
@@ -195,6 +198,7 @@ if (api_get_setting('use_session_mode') == 'true') {
     $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
     
     $blocks['sessions']['items'] = $items;
+    $blocks['sessions']['extra'] = null;
 
 } elseif (api_is_platform_admin()) {
 
@@ -203,9 +207,9 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	
 	$search_form = ' <form method="POST" class="form-search" action="class_list.php">
-									<input class="span3" type="text" name="keyword" value="">
-									<button class="btn" type="submit">.'.get_lang('Search').'</button>
-			            		</form>';
+                        <input class="span3" type="text" name="keyword" value="">
+                        <button class="btn" type="submit">.'.get_lang('Search').'</button>
+                    </form>';
 	$blocks['classes']['search_form'] = $search_form;
 	$items = array();
 	$items[] = array('url'=>'class_list.php', 	'label' => get_lang('ClassList'));
@@ -215,6 +219,8 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$items[] = array('url'=>'subscribe_class2course.php', 	'label' => get_lang('AddClassesToACourse'));
 	
 	$blocks['classes']['items'] = $items;
+    $blocks['classes']['extra'] = null;
+    
 }
 
 /* Settings */
@@ -232,13 +238,16 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-	if (api_is_global_platform_admin()) {
+	//if (api_is_global_platform_admin()) {
 		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-	}
+	//}
     
     //$items[] = array('url'=>'statistics/index.php?action=activities', 	'label' => get_lang('ImportantActivities'));
     
 	$blocks['settings']['items'] = $items;
+    $blocks['settings']['extra'] = null;
+    
+    $blocks['settings']['search_form'] = null;
 
 	/* Extensions */
 	/*
@@ -266,6 +275,8 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
     
     $blocks['skills']['items'] = $items;
+    $blocks['skills']['extra'] = null;
+    $blocks['skills']['search_form'] = null;
     
 
 	
@@ -285,7 +296,9 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
 	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
 	
-	$blocks['chamilo']['items'] = $items;    
+	$blocks['chamilo']['items'] = $items; 
+    $blocks['chamilo']['extra'] = null;
+    $blocks['chamilo']['search_form'] = null;
 	
 	// Try to display a maximum before we check the chamilo version and all that.
 	//session_write_close(); //close session to avoid blocking concurrent access
@@ -296,6 +309,8 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['icon']  = Display::return_icon('logo.gif', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['version_check']['label'] = get_lang('VersionCheck');    
 	$blocks['version_check']['extra'] = version_check();	
+    $blocks['version_check']['search_form'] = null;
+    $blocks['version_check']['items'] = null;
 }
 
 $tpl = new Template();

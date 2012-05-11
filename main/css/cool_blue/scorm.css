@@ -19,15 +19,12 @@
 .inner_lp_toc {
 	overflow: auto;
 	background-color: white;
-	height: 210px;
-	width: 94%;
-	border-left: 10px #FFF solid;
+	height: 210px;	
 }
 .inner_lp_toc .scorm_item {
 	font-size: 11px;
 	margin-left: 10px;
 	margin-right:10px;
-//cambiado era 20  padding-bottom: 2px;
 	text-decoration: none;
 }
 .inner_lp_toc .scorm_item A {
@@ -107,7 +104,6 @@
 .lp_navigation_elem .progresstext {
 	margin-top: -20px;
 	margin-left: 40%;
-//em  font-size: normal;
 }
 /*.scormpage .menu */
 .lp_navigation_elem .buttons {

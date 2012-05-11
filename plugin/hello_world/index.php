@@ -11,4 +11,8 @@ if (!empty($plugin_info['settings']['hello_world_show_type'])) {
 } else {
     echo "<h2>Hello world</h2>";  
 }
+
+//Using get_lang inside a plugin
+echo get_lang('HelloPlugin');
+
 echo '</div>';

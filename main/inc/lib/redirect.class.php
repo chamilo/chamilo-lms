@@ -11,7 +11,7 @@ class Redirect
 
     static function www()
     {
-        Uri::www();
+        return Uri::www();
     }
 
     static function go($url = '')

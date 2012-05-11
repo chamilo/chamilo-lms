@@ -1751,14 +1751,6 @@ div.comments {
 }
 /*
 ------------------------------------------------------------------------------
-    OTHERS
-------------------------------------------------------------------------------
-*/
-.input_titles {
-	width: 300px;
-}
-/*
-------------------------------------------------------------------------------
     Survey
 ------------------------------------------------------------------------------
 */
@@ -2011,17 +2003,9 @@ div.comments {
 /* actions */
 .actions_lp {
 	background:#F8F8F8;
-	height:29px;
-	padding-left: -17px;
-	margin: 5px 2px 1px 12px;
-	vertical-align:middle;
-	width: 90%;
+	height:29px;	
 }
 .actions_lp img {
-	vertical-align:middle;
-}
-.actions_lp a {
-	margin-right: 10px;
 	vertical-align:middle;
 }
 .actions_lp span {

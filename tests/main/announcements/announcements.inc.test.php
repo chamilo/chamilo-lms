@@ -11,50 +11,6 @@ class TestAnnouncements extends UnitTestCase {
         function TestAnnouncements(){
             $this->UnitTestCase('Displays one specific announcement test');
         }
-        /*public function Testdisplay_announcement(){
-            global $_user, $dateFormatLong, $_course;
-            global $error_msg;
-            ob_start();
-            //create course
-            $courseSysCode= '142';
-            $courseScreenCode='142';
-            $courseRepository='142';
-            $courseDbName='dokeos_142';
-            $titular='R. F. Wolfgan';
-            $category='1';
-            $title='prueba111';
-            $course_language='english';
-            $uidCreator='1';
-            global $course_code;
-            $course_code = $courseSysCode;
-            prepare_course_repository($courseRepository,$courseSysCode);
-            update_Db_course($courseDbName);
-            $pictures_array=fill_course_repository($courseRepository);
-            fill_Db_course($courseDbName, $courseRepository, $course_language,$pictures_array);
-            $res1 = register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array());
-            $_course = api_get_course_info($courseSysCode);
-
-            // display announcement in the course added
-            $announcements_id= 1;
-            $res2 = display_announcement($announcements_id);
-            ob_end_clean();
-            $this->assertTrue(is_numeric($res1));
-            $res3 = CourseManager::delete_course($courseSysCode);
-
-            //var_dump($res1);
-            //var_dump($res2);
-
-        }
-
-        public function Testshow_to_form(){
-            $to_already_selected = "";
-
-            $_SESSION['_cid'] = 'CURSO1';
-
-            $res = show_to_form($to_already_selected);
-            $this->assertTrue(is_null($res));
-            //var_dump($res);
-        }*/
 
         public function Testconstruct_not_selected_select_form(){
             $courseSysCode= '123';

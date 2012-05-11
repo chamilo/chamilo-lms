@@ -1750,14 +1750,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 /*
 ------------------------------------------------------------------------------
-    OTHERS
-------------------------------------------------------------------------------
-*/
-.input_titles {
-	width: 300px;
-}
-/*
-------------------------------------------------------------------------------
     Survey
 ------------------------------------------------------------------------------
 */
@@ -1978,11 +1970,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 /* actions */
 .actions_lp {
 	background:#F8F8F8;
-	height:29px;
-	padding-left: -17px;
-	margin: 5px 2px 1px 12px;
-	vertical-align:middle;
-	width: 90%;
+	height:29px;	
 }
 .actions_lp img {
 	vertical-align:middle;

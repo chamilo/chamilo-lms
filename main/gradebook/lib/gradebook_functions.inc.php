@@ -27,7 +27,7 @@ require_once 'gradebook_functions_users.inc.php';
  * @param   int     Session ID (optional or 0 if not defined)
  * @return  boolean True on success, false on failure
  */
-function add_resource_to_course_gradebook($course_code, $resource_type, $resource_id, $resource_name='', $weight=0, $max=0, $resource_description='', $date=null, $visible=0, $session_id = 0) {
+function add_resource_to_course_gradebook($category_id, $course_code, $resource_type, $resource_id, $resource_name='', $weight=0, $max=0, $resource_description='',  $visible=0, $session_id = 0) {
     /* See defines in lib/be/linkfactory.class.php
     define('LINK_EXERCISE',1);
     define('LINK_DROPBOX',2);
@@ -35,51 +35,17 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     define('LINK_LEARNPATH',4);
     define('LINK_FORUM_THREAD',5),
     define('LINK_WORK',6);
-    */
-    $category = 0;
+    */ 
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+   
     $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
-    // TODO find the corresponding category (the first one for this course, ordered by ID)
-    $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-    $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
-    if (!empty($session_id)) {
-    	$sql .= " AND session_id = ".(int)$session_id;
-    } else {
-    	$sql .= " AND (session_id IS NULL OR session_id = 0) ";
-    }
-    $sql .= " ORDER BY id";
-    $res = Database::query($sql);
-    if (Database::num_rows($res)<1){
-        //there is no unique category for this course+session combination,
-        $cat = new Category();
-        if (!empty($session_id)) {
-        	$my_session_id=api_get_session_id();
-            $s_name = api_get_session_name($my_session_id);
-            $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
-            $cat->set_session_id($session_id);
-        } else {
-            $cat->set_name($course_code);
-        }
-        $cat->set_course_code($course_code);
-        $cat->set_description(null);
-        $cat->set_user_id(api_get_user_id());
-        $cat->set_parent_id(0);
-        $cat->set_weight(100);
-        $cat->set_visible(0);
-        $can_edit = api_is_allowed_to_edit(true, true);
-        if ($can_edit) {
-            $cat->add();
-        }
-        $category = $cat->get_id();
-        unset ($cat);
-    } else {
-        $row = Database::fetch_array($res);
-        $category = $row['id'];
-    }
-    $link->set_category_id($category);
-
+    
+    if (empty($category_id)) {
+        return false;        
+    }        
+    $link->set_category_id($category_id);
     if ($link->needs_name_and_description()) {
     	$link->set_name($resource_name);
     } else {
@@ -207,27 +173,52 @@ function build_edit_icons_cat($cat, $selectcat) {
         
         $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('view_more_stats.gif', get_lang('Show'),'',ICON_SIZE_SMALL).'</a>';
         
-        if (empty($grade_model_id) || $grade_model_id == -1) {
-            $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
-        }
-      
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
-		
-		//no move ability for root categories
-		if ($cat->is_movable()) {
-			/*$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'">
-								<img src="../img/icons/22/move.png" border="0" title="' . get_lang('Move') . '" alt="" /></a>';*/
-		} else {
-			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
-		}
-        
-        if (empty($grade_model_id) || $grade_model_id == -1) {
-            /*$modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
-                Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            */
-        }
+        if (api_is_allowed_to_edit(null, true)) {
+            
+            //Locking button
+            if (api_get_setting('gradebook_locking_enabled') == 'true') {
+                if ($cat->is_locked()) {
+                    if (api_is_platform_admin()) {
+                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
+                    } else {
+                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('unlock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
+                    }
+                } else {
+                    $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
+                }
+            }
+            
+            //PDF
+            $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+            
+            if (empty($grade_model_id) || $grade_model_id == -1) {
+                if ($cat->is_locked() && !api_is_platform_admin()) {
+                    $modify_icons .= Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
+                } else {
+                    $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+                }
+            }
 
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 
+            //no move ability for root categories
+            if ($cat->is_movable()) {
+                /*$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'">
+                                    <img src="../img/icons/22/move.png" border="0" title="' . get_lang('Move') . '" alt="" /></a>';*/
+            } else {
+                //$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
+            }
+
+            if (empty($grade_model_id) || $grade_model_id == -1) {
+                /*$modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
+                    Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            */
+            }
+            if ($cat->is_locked() && !api_is_platform_admin()) {
+                $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL);
+            } else {
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';
+            }            
+        }
 		return $modify_icons;
 	}
 }
@@ -238,31 +229,40 @@ function build_edit_icons_cat($cat, $selectcat) {
  */
 function build_edit_icons_eval($eval, $selectcat) {
 	$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-	$locked_status = $eval->get_locked();
+	$is_locked = $eval->is_locked();
 	$eval->get_course_code();
 	$cat=new Category();
 	$message_eval=$cat->show_message_resource_delete($eval->get_course_code());
-	if ($message_eval===false) {
+    
+	if ($message_eval===false && api_is_allowed_to_edit(null, true)) {
 		$visibility_icon= ($eval->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-		$modify_icons= '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . ' &amp;cidReq='.$eval->get_course_code().'">
-		'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        if ($is_locked && !api_is_platform_admin()) {
+            $modify_icons= Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
+        } else {
+            $modify_icons= '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        }
 
-		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?moveeval=' . $eval->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 		if (api_is_allowed_to_edit(null, true)){
 			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';			
 		}
+        
+        /*
 		if ($locked_status == 0){
 			$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('unlock.png',get_lang('LockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
 		} else {
 			if (api_is_platform_admin()){
-				$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;typelocked=&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
+				$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;typelocked=&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."';\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
 			} else {
 				$modify_icons .= '&nbsp;<img src="../img/locked_na.png" border="0" title="' . get_lang('TheEvaluationIsLocked') . '" alt="" />';
 			}
-		}
-		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+		}*/        
+        if ($is_locked && !api_is_platform_admin()) {
+            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
+        } else {
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deleteeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+        }
 		return $modify_icons;
 	}
 }
@@ -271,15 +271,20 @@ function build_edit_icons_eval($eval, $selectcat) {
  * @param object $linkobject
  * @param int $selectcat id of selected category
  */
-function build_edit_icons_link($link, $selectcat) {
-
-	$link->get_course_code();
+function build_edit_icons_link($link, $selectcat) {	
 	$cat = new Category();
-	$message_link = $cat->show_message_resource_delete($link->get_course_code());
+	$message_link = $cat->show_message_resource_delete($link->get_course_code());    
+    $is_locked = $link->is_locked();
+        
 	if ($message_link===false) {
 		$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-		$modify_icons= '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        
+        if ($is_locked && !api_is_platform_admin()) {
+            $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
+        } else {
+            $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        }
 
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
@@ -291,9 +296,13 @@ function build_edit_icons_link($link, $selectcat) {
 			$show_delete = false;
 		}
 		if ($show_delete) {
-        	$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+            if ($is_locked && !api_is_platform_admin()) {
+                $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);                
+            } else {
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+            }
 		} else {
-			$modify_icons .= '&nbsp;.'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
+			$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
 		}
 		return $modify_icons;
 	}
@@ -315,7 +324,7 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
+    /*$sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
     if (!empty($session_id)) {
         $sql .= " AND session_id = ".(int)$session_id;
     } else {
@@ -326,15 +335,17 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     if (Database::num_rows($res)<1) {
     	return false;
     }
-    $row = Database::fetch_array($res);
-    $category = $row['id'];
-    $sql = "SELECT id FROM $l l WHERE l.category_id = $category AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
+    $row = Database::fetch_array($res,'ASSOC');    
+    $category = $row['id'];*/
+    
+    $course_code = Database::escape_string($course_code);
+    $sql = "SELECT * FROM $l l WHERE course_code = '$course_code' AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
     $res = Database::query($sql);
     if (Database::num_rows($res)<1) {
     	return false;
     }
-    $row = Database::fetch_array($res);
-    return $row['id'];
+    $row = Database::fetch_array($res, 'ASSOC');
+    return $row;
 }
 
 /**
@@ -343,11 +354,10 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
  * @return   bool    false on error, true on success
  */
 function get_resource_from_course_gradebook($link_id) {
-    if ( empty($link_id) ) { return false; }
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+    if ( empty($link_id) ) { return false; }    
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;
+    $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;    
     $res = Database::query($sql);
     $row = array();
     if (Database::num_rows($res) > 0) {
@@ -406,8 +416,9 @@ function get_table_type_course($type) {
 	return Database::get_course_table($table_evaluated[$type][0]);
 }
 
-function get_printable_data($cat, $users, $alleval, $alllinks) {
-	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
+function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
+	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks, $params);
+    
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 	$offset = intval($offset);	
     
@@ -416,7 +427,7 @@ function get_printable_data($cat, $users, $alleval, $alllinks) {
         
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;	
 	$header_names = $datagen->get_header_names($offset, $count, true);	
-	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);
+	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true);
 
 	$newarray = array();
 	foreach ($data_array as $data) {
@@ -602,4 +613,226 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     //add header
     $new_content_html = $new_content[0].$print.'</head>'.$new_content_html;
     return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
+}
+
+function create_default_course_gradebook() {    
+    if (api_is_allowed_to_edit(true, true)) {
+        $course_code = api_get_course_id();
+        $session_id = api_get_session_id();
+        
+        $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
+        if (!empty($session_id)) {
+            $sql .= " AND session_id = ".(int)$session_id;
+        } else {
+            $sql .= " AND (session_id IS NULL OR session_id = 0) ";
+        }
+        $sql .= " ORDER BY id";
+        $res = Database::query($sql);
+        if (Database::num_rows($res)<1){
+            //there is no unique category for this course+session combination,
+            $cat = new Category();
+            if (!empty($session_id)) {
+                $my_session_id=api_get_session_id();
+                $s_name = api_get_session_name($my_session_id);
+                $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
+                $cat->set_session_id($session_id);
+            } else {
+                $cat->set_name($course_code);
+            }
+            $cat->set_course_code($course_code);
+            $cat->set_description(null);
+            $cat->set_user_id(api_get_user_id());
+            $cat->set_parent_id(0);
+            $cat->set_weight(100);
+            $cat->set_visible(0);            
+            $cat->add();            
+            $category_id = $cat->get_id();
+            unset ($cat);
+        } else {
+            $row = Database::fetch_array($res);
+            $category_id = $row['id'];
+        }
+    }
+    return $category_id;
+}
+function load_gradebook_select_in_tool($form) {     
+    
+    $course_code = api_get_course_id();
+    $session_id = api_get_session_id();
+    
+    create_default_course_gradebook();
+                
+    //Cat list
+    $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);    
+    $select_gradebook = $form->addElement('select', 'category_id', get_lang('SelectGradebook'));
+      
+    if (!empty($all_categories)) {
+        foreach ($all_categories as $my_cat) {
+            if ($my_cat->get_course_code() == api_get_course_id()) {         
+                $grade_model_id = $my_cat->get_grade_model_id();                     
+                if (empty($grade_model_id)) {
+                    if ($my_cat->get_parent_id() == 0) {
+                        //$default_weight = $my_cat->get_weight();
+                        $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                        $cats_added[] = $my_cat->get_id();
+                    } else {
+                        $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                        $cats_added[] = $my_cat->get_id();
+                    }
+                } else {
+                    $select_gradebook->addoption(get_lang('Select'), 0);
+                }
+                /*if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
+                    $default_weight = $my_cat->get_weight();                        
+                } */                                       
+            }           
+        }
+    }
+}
+
+function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
+    // Beginning of PDF report creation
+
+    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
+
+    // Reading report's CSS
+    $css_file = api_get_path(SYS_CODE_PATH).'gradebook/print.css';
+    $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+
+    // HTML report creation first
+    $time = time();		
+    $course_code = trim($cat[0]->get_course_code());
+    $organization = api_get_setting('Institution');
+
+    $displayscore = ScoreDisplay :: instance();
+    $customdisplays = $displayscore->get_custom_score_display_settings();
+    
+    $total = array();
+    if (is_array($customdisplays) && count(($customdisplays))) {        
+        foreach($customdisplays  as $custom) {
+            $total[$custom['display']]  = 0; 
+        }			
+        $user_results = $flatviewtable->datagen->get_data_to_graph2();
+        foreach($user_results  as $user_result) {
+            $total[$user_result[count($user_result)-1][1]]++;
+        }
+    }
+
+    $html = '';
+
+    $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+    
+    if (file_exists($img)) {
+        $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+        $html .= "<img src='$img'>";			
+    } else {
+        if (!empty($organization)) {			  
+            $html .= '<h2 align="left">'.$organization.'</h2>';
+        }
+    }
+    
+    $grade_model_id = $cat[0]->get_grade_model_id();        
+    $use_grade_model = true;
+    if (empty($grade_model_id) || $grade_model_id == -1) {
+        $use_grade_model = false;    
+    }
+    
+    //var_dump($use_grade_model);exit;
+        
+    if ($use_grade_model) {        
+        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    } else {
+        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    }
+    $html .= '<table align="center" width="100%"><tr><td valign="top">';
+
+    $html .= '<table align="left" width="33%">';		
+    $session_name = api_get_session_name(api_get_session_id());
+    $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
+    if (!empty($session_name)) {
+        $html .= Display::tag('tr', Display::tag('td', get_lang('Session')).Display::tag('td', Display::tag('strong', $session_name)));
+    }		
+    $html .= Display::tag('tr', Display::tag('td', get_lang('Course')).Display::tag('td', Display::tag('strong', $course_code)));
+    $html .= Display::tag('tr', Display::tag('td', get_lang('Date')).Display::tag('td', Display::tag('strong', api_convert_and_format_date(date('Y-m-d', time()), DATE_TIME_FORMAT_LONG))));
+    $html .= Display::tag('tr', Display::tag('td', get_lang('Teacher')).Display::tag('td', Display::tag('strong', $teacher_list)));
+    $html .= '</table></td>';
+
+    $html .= '<td valign="top"><table align="left" width="33%">';
+
+    if (!empty($total)) {			
+        foreach($total as $label => $count) {
+            $total_custom_score = round($count/count($user_results), 2) *100;
+            $html .= Display::tag('tr', Display::tag('td', $label).': '.Display::tag('td', Display::tag('strong', $total_custom_score.' %')));
+        }
+    }
+    $html .= '</table></td>';		
+    $html .= '<td valign="top"><table align="left" width="33%">';
+    $headers = $printable_data[0];
+    unset($headers[0]);
+    unset($headers[1]);
+    unset($headers[count($headers)+1]);
+
+    foreach ($headers as $head) {			
+        $html .= Display::tag('tr', Display::tag('td', Display::tag('strong', $head)));
+    }		
+    $html .= '</table></td></table><br />';		
+
+    $columns = count($printable_data[0]);
+    $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
+
+    if (api_is_western_name_order()) {
+        // Choosing the right person name order according to the current language.
+        list($printable_data[0][0], $printable_data[0][1]) = array($printable_data[0][1], $printable_data[0][0]);
+        if ($has_data) {
+            foreach ($printable_data[1] as &$printable_data_row) {
+                list($printable_data_row[0], $printable_data_row[1]) = array($printable_data_row[1], $printable_data_row[0]);
+            }
+        }
+    }
+
+    $table = new HTML_Table(array('class' => 'data_table'));
+    $row = 0;
+    $column = 0;
+    foreach ($printable_data[0] as $printable_data_cell) {
+        $table->setHeaderContents($row, $column, $printable_data_cell);
+        $column++;
+    }
+    $row++;
+    if ($has_data) {
+        foreach ($printable_data[1] as &$printable_data_row) {
+            $column = 0;
+            foreach ($printable_data_row as &$printable_data_cell) {
+                $table->setCellContents($row, $column, $printable_data_cell);
+                $table->updateCellAttributes($row, $column, 'align="center"');
+                $column++;
+            }
+            $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+            $row++;
+        }
+    } else {
+        $column = 0;
+        $table->setCellContents($row, $column, get_lang('NoResults'));
+        $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
+    }
+
+    $html .= $table->toHtml();
+
+    unset($printable_data);
+    unset($table);
+
+    // Conversion of the created HTML report to a PDF report
+
+    $html         = api_utf8_encode($html);
+    $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+    $pdf = new PDF($page_format, $params['orientation']);
+
+    // Sending the created PDF report to the client
+    $file_name = date('YmdHi_', $time);
+    if (!empty($course_code)) {
+        $file_name .= $course_code.'_';
+    }
+    $file_name .= get_lang('FlatView').'.pdf';
+    $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
+    exit;	
 }

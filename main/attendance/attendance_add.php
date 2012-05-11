@@ -24,7 +24,7 @@ if (!$error) {
 	$token = Security::get_token();
 }
 // display form
-$form = new FormValidator('attendance_add','POST','index.php?action=attendance_add&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+$form = new FormValidator('attendance_add','POST','index.php?action=attendance_add&'.api_get_cidreq().$param_gradebook);
 $form->addElement('header', '', get_lang('CreateANewAttendance'));
 $form->addElement('hidden', 'sec_token', $token);
 
@@ -41,7 +41,10 @@ $form->addElement('html','<div id="id_qualify" style="display:none">');
 
 // Qualify Attendance for gradebook option
 $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-$form -> addElement('html','<div id="options_field" style="display:none">');
+$form->addElement('html','<div id="options_field" style="display:none">');
+
+load_gradebook_select_in_tool($form);
+
 $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));
 $form->applyFilter('attendance_qualify_title', 'html_filter');
 $form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');

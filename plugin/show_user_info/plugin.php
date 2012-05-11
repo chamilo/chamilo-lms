@@ -13,7 +13,7 @@
 $plugin_info['title']      = 'Show user information';
 
 //the comments that go with the plugin
-$plugin_info['comment']     = "Shows a welcome message, (this is an example to uses smarty)";
+$plugin_info['comment']     = "Shows a welcome message, (this is an example to uses the template system: Twig)";
 //the plugin version
 $plugin_info['version']     = '1.0';
 //the plugin author

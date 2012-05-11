@@ -6,7 +6,7 @@
  * 
  **/
 
- require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
@@ -30,8 +30,7 @@ class Template {
     
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {               
-        //parent::__construct();
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
                 
         //Twig settings        
         Twig_Autoloader::register();
@@ -43,21 +42,34 @@ class Template {
         
         $loader = new Twig_Loader_Filesystem($template_paths);
         
-        $this->twig = new Twig_Environment($loader, array(
-            //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-            'autoescape' => false,
-            //'debug'      => true,
-            //'auto_reload' => true
-            //'optimizations' => 0 // turn on optimizations with -1
-        ));
+        //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
+        if (api_get_setting('server_type') == 'test') {
+            $options = array (
+                //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'autoescape'        => false,
+                'debug'             => true,
+                'auto_reload'       => true,
+                'optimizations'     => 0, // turn on optimizations with -1
+                'strict_variables'  => false, //If set to false, Twig will silently ignore invalid variables
+                );
+        } else {
+            $options = array (
+                'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'autoescape'        => false,
+                'debug'             => false,
+                'auto_reload'       => false,
+                'optimizations'     => -1, // turn on optimizations with -1
+                'strict_variables'  => false //If set to false, Twig will silently ignore invalid variables
+            );
+        }
         
-        $debug = new Twig_Extension_Debug();
-        $this->twig->addExtension($debug);
-        
-        $this->twig->addFilter('get_lang',new Twig_Filter_Function('get_lang'));
-        $this->twig->addFilter('get_path',new Twig_Filter_Function('api_get_path'));
-        $this->twig->addFilter('get_setting',new Twig_Filter_Function('api_get_setting'));
-        $this->twig->addFilter('var_dump',new Twig_Filter_Function('var_dump'));
+        $this->twig = new Twig_Environment($loader, $options);
+               
+        $this->twig->addFilter('get_lang',       new Twig_Filter_Function('get_lang'));
+        $this->twig->addFilter('get_path',       new Twig_Filter_Function('api_get_path'));
+        $this->twig->addFilter('get_setting',    new Twig_Filter_Function('api_get_setting'));
+        $this->twig->addFilter('var_dump',       new Twig_Filter_Function('var_dump'));        
+        $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         
         /*
         $lexer = new Twig_Lexer($this->twig, array(
@@ -92,11 +104,21 @@ class Template {
         
         //Chamilo plugins
         if ($this->show_header) {
+            
             $this->plugin = new AppPlugin();
-            $plugin_regions = $this->plugin->get_plugin_regions();        
+            
+            //1. Showing installed plugins in regions
+            $plugin_regions = $this->plugin->get_plugin_regions();                  
             foreach ($plugin_regions as $region) {
                 $this->set_plugin_region($region);
             }  
+            
+            //2. Loading the course plugin info
+            global $course_plugin;           
+            if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
+                //Load plugin get_langs
+                $this->plugin->load_plugin_lang_variables($course_plugin);                
+            }
         }
 	}
     
@@ -207,20 +229,21 @@ class Template {
         $this->assign('show_toolbar', $show_toolbar);
         
         //Only if course is available        
-        if (!empty($this->course_id) && $this->user_is_logged_in) {        
-            
+        $show_course_shortcut = null;
+        $show_course_navigation_menu = null;
+        
+        if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
-                $course_tool = CourseHome::show_navigation_tool_shortcuts();                
-                $this->assign('show_course_shortcut', $course_tool);
-            }
-
+                $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();                                
+            }            
             if (api_get_setting('show_navigation_menu') != 'false') {
                 //Course toolbar
-                $course_tool = CourseHome::show_navigation_menu();
-                $this->assign('show_course_navigation_menu', $course_tool);
-            }
-        }        
+                $show_course_navigation_menu = CourseHome::show_navigation_menu();                
+            }            
+        }    
+        $this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
 	}
 		
 	function get_template($name) {
@@ -445,8 +468,11 @@ class Template {
 	
 		global $this_section;        
         
+        //@todo minify CSS and JS 
+        
 		$this->assign('css_file_to_string', $css_file_to_string);
-		$this->assign('js_file_to_string',  $js_file_to_string);		
+		$this->assign('js_file_to_string',  $js_file_to_string);
+        
 		$this->assign('text_direction',	    api_get_text_direction());					
 		$this->assign('section_name',       'section-'.$this_section);        
         
@@ -502,13 +528,12 @@ class Template {
 		$this->assign('notification_menu', $notification);
 		$this->assign('menu', $menu);        
 		$this->assign('breadcrumb', $breadcrumb);
-		
+        
+		$extra_header = null;
 		if (!api_is_platform_admin()) {
 			$extra_header = trim(api_get_setting('header_extra_content'));
-			if (!empty($extra_header)) {				
-				$this->assign('header_extra_content', $extra_header);
-			}		
-		}
+		}        
+        $this->assign('header_extra_content', $extra_header);
 		
 		if ($this->show_header == 1) {
 			header('Content-Type: text/html; charset='.api_get_system_encoding());
@@ -604,10 +629,7 @@ class Template {
     function set_plugin_region($plugin_region) {
         if (!empty($plugin_region)) {          
             $content = $this->plugin->load_region($plugin_region, $this);    
-            if (!empty($content)) {
-                //Assigning the plugin with the template
-                $this->assign('plugin_'.$plugin_region, $content);                
-            }
+            $this->assign('plugin_'.$plugin_region, $content);                
         }
         return null;
     }

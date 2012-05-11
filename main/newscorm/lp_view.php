@@ -309,14 +309,15 @@ if (Database::num_rows($res_media) > 0) {
     while ($row_media= Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
     }
-}
-                
+}                
 ?>
 
-<div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
-    <!-- header -->
-    <div id="header">
-        <div id="learning_path_header" style="font-size:14px;">
+<div id="learning_path_main" style="width:100%;height:100%;">
+
+    <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
+        <!-- header -->
+
+        <div id="header">        
             <table>
                 <tr>
                     <td>
@@ -331,60 +332,47 @@ if (Database::num_rows($res_media) > 0) {
                 </tr>
             </table>
         </div>
-    </div>
+
         <!-- end header -->
 
-        <!-- Image preview Layout -->
-        <!-- hub 26-50-2010 for lp toc height
-        <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
-        -->
-        <div id="author_image" name="author_image" class="row">        
-            <div class="span3">
-                <div class="well_border">
-                    <div class="row">                         
-                        <div class="span1">                        
-                            <?php
-                            if ($_SESSION['oLP']->get_preview_image()!='') {
-                                $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                                if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
-                                $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                                $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
-                                echo '<img src="'.$my_path.'">';
-                            } else {
-                                echo Display :: display_icon('unknown_250_100.jpg');
-                            }
-                            ?>                              
-                        </div>
-                        <div id="lp_navigation_elem" class="span2">                          
-                                    <?php echo $navigation_bar; ?>
-                                    <div id="progress_bar">
-                                        <?php echo $progress_bar; ?>
-                                    </div>    
-                                   
-                        </div>
-                    </div>
-                </div>
+        <!-- Author image preview -->        
+        <div id="author_image">   
+            <div id="author_icon">                        
+                <?php
+                if ($_SESSION['oLP']->get_preview_image()!='') {
+                    $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
+                    if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
+                    $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
+                    $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+                    echo '<img src="'.$my_path.'">';
+                } else {
+                    echo Display :: display_icon('unknown_250_100.jpg');
+                }
+                ?>                              
             </div>
-       </div>       
-        
-       <!-- end image preview Layout -->
-        <div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
+            <div id="lp_navigation_elem">                          
+                <?php echo $navigation_bar; ?>
+                <div id="progress_bar">
+                    <?php echo $progress_bar; ?>
+                </div>    
+            </div>
+        </div>
+        <!-- end image preview Layout -->
+
+        <div id="author_name">
             <?php echo $_SESSION['oLP']->get_author(); ?>
         </div>
 
-        <!-- media player layaout -->
+        <!-- media player layout -->
         <?php $style_media = (($show_audioplayer) ? ' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"' : 'style="height:15px"'); ?>
         <div id="media"  <?php echo $style_media; ?>>
             <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
         </div>
         <!-- end media player layout -->
 
-        <!-- TOC layout -->
-        <!-- hub 26-05-2010 remove height for lp toc height resizable
-        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
-        -->
+        <!-- TOC layout -->        
         <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
-            <div id="learning_path_toc" style="font-size:9pt;margin:0;">
+            <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
                 <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
@@ -397,25 +385,26 @@ if (Database::num_rows($res_media) > 0) {
                 <?php } ?>
             </div>
         </div>
-        <!-- end TOC layout -->
+        <!-- end TOC layout -->        
     </div>
     <!-- end left Zone -->
+
 
     <!-- right Zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
-    
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {
             echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
         } else {            
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="width:100%;height:600px"></iframe>';
+            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:600px"></iframe>';
         }
     ?>
     </div>
     <!-- end right Zone -->
 </div>
-<script language="javascript" type="text/javascript">
+
+<script>
     // Resize right and left pane to full height (HUB 20-05-2010).
     function updateContentHeight() {
         document.body.style.overflow = 'hidden';

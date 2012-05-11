@@ -18,6 +18,7 @@
  * @param  string	Dir path
  * @return boolean	True on success, false otherwise
  */
+/*
 function removescormDir($dir) {
     global $_course;
     if(!@$opendir = opendir($dir)) {
@@ -61,7 +62,7 @@ function removescormDir($dir) {
         return false;
     }
     return true;
-}
+}*/
 
 /**
  * This function removes a directory if it exists

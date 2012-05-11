@@ -13,19 +13,16 @@
 */
 /*	   INIT SECTION */
 
-
-
 $TABLETRACK_LOGIN           = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 $TABLETRACK_OPEN 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
 $TABLETRACK_ACCESS          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $course_tracking_table		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 $TABLETRACK_DOWNLOADS	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_UPLOADS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+$TABLETRACK_UPLOADS         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 $TABLETRACK_LINKS 		    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_EXERCICES 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-//$TABLETRACK_SUBSCRIPTIONS   = $_configuration['statistics_database'].".track_e_subscriptions"; // this table is never use
 $TABLETRACK_LASTACCESS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
-$TABLETRACK_DEFAULT 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+$TABLETRACK_DEFAULT         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
 
 /* FUNCTIONS */
@@ -562,8 +559,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
  */
-function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id=null, $course_code=null) {	
-	global $_user;
+function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null) {	
 	global $TABLETRACK_DEFAULT;
 
 	$event_type         = Database::escape_string($event_type);
@@ -579,75 +575,85 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
             unset($event_value['avatar']);
             unset($event_value['password']);
             unset($event_value['lastLogin']);  
-            unset($event_value['picture_uri']);  
-            
+            unset($event_value['picture_uri']);              
             $event_value = serialize($event_value);
         }
     }
-	$event_value        = Database::escape_string($event_value);	
-	$user_id            = Database::escape_string($user_id);
-	$course_code        = Database::escape_string($course_code);
+    
+	$event_value        = Database::escape_string($event_value);		        
+    $course_info        = api_get_course_info($course_code);
+    
+    if (!empty($course_info)) {
+        $course_id      = $course_info['real_id'];
+        $course_code    = $course_info['code'];        
+        $course_code    = Database::escape_string($course_code);
+    } else {
+        $course_id = null;
+        $course_code = null;
+    }
     
 	if (!isset($datetime)) {
 		$datetime = api_get_utc_datetime();
 	}
+            
     $datetime           = Database::escape_string($datetime);
     
-	if(!isset($user_id)) {
-		$user_id = 0;
+	if (!isset($user_id)) {
+		$user_id = api_get_user_id();
 	}
-	if(!isset($course_code)) {
-		$course_code = '';
-	}
+    
+    $user_id = intval($user_id);
+    
 	$sql = "INSERT INTO $TABLETRACK_DEFAULT
 				(default_user_id,
 				 default_cours_code,
+                 c_id,
 				 default_date,
 				 default_event_type,
 				 default_value_type,
 				 default_value
 				 )
-				 VALUES
-					('$user_id.',
+				 VALUES('$user_id.',
 					'$course_code',
+                    '$course_id',
 					'$datetime',
 					'$event_type',
 					'$event_value_type',
 					'$event_value')";
 	$res = Database::query($sql);
 	
-	//Sending notifications to users
-  $send_event_setting = api_get_setting('activate_send_event_by_mail');
-  if (!empty($send_event_setting) && $send_event_setting == 'true') {
-    global $language_file;
+	//Sending notifications to users @todo check this
+    $send_event_setting = api_get_setting('activate_send_event_by_mail');
+    if (!empty($send_event_setting) && $send_event_setting == 'true') {
+        global $language_file;
 
-    //prepare message
-    list($message, $subject) = get_event_message_and_subject($event_type);
-    $mail_body=$message;
-    if ( is_array($notification_infos) ){
-      foreach ($notification_infos as $variable => $value) {
-        $mail_body = str_replace('%'.$variable.'%',$value,$mail_body);
-      }
-    }
+        //prepare message
+        list($message, $subject) = get_event_message_and_subject($event_type);
+        $mail_body=$message;
+        if (is_array($notification_infos)) {
+            foreach ($notification_infos as $variable => $value) {
+                $mail_body = str_replace('%'.$variable.'%',$value,$mail_body);
+            }
+        }
 
-    //prepare mail common variables
-    if(empty($subject)) {
-      $subject = $event_type;
-    }
-    $mail_subject = '['.api_get_setting('siteName').'] '.$subject;
-    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    $email_admin = api_get_setting('emailAdministrator');
-    $emailfromaddr = api_get_setting('emailAdministrator');
-    $emailfromname = api_get_setting('siteName');
+        //prepare mail common variables
+        if (empty($subject)) {
+            $subject = $event_type;
+        }
+        $mail_subject = '['.api_get_setting('siteName').'] '.$subject;
+        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('emailAdministrator');
+        $emailfromaddr = api_get_setting('emailAdministrator');
+        $emailfromname = api_get_setting('siteName');
 
-    //Send mail to all subscribed users
-    $users_arr = get_users_subscribed_to_event($event_type);
-    foreach ($users_arr as $user) {
-      $recipient_name = api_get_person_name($user['firstname'], $user['lastname']);
-      $email = $user['email'];
-      @api_mail($recipient_name, $email, $mail_subject, $mail_body, $sender_name, $email_admin);
+        //Send mail to all subscribed users
+        $users_arr = get_users_subscribed_to_event($event_type);
+        foreach ($users_arr as $user) {
+            $recipient_name = api_get_person_name($user['firstname'], $user['lastname']);
+            $email = $user['email'];
+            @api_mail($recipient_name, $email, $mail_subject, $mail_body, $sender_name, $email_admin);
+        }
     }
-  }
 	return true;
 }
 

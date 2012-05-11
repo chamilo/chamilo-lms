@@ -49,6 +49,23 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 var show_icon = "../img/view_more_stats.gif";
 var hide_icon = "../img/view_less_stats.gif";
 
+function lock_confirmation() {
+    if (confirm("' . get_lang('ConfirmToLockElement') . '?")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function unlock_confirmation() {
+    if (confirm("' . get_lang('ConfirmToUnlockElement') . '?")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 $(document).ready(function() {
 
     $(".view_children").live("click", function() {
@@ -66,6 +83,9 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
+ 
+    
+    
 
 /*
   var s1 = [["a",25]];
@@ -342,9 +362,9 @@ if (isset($_GET['lockedeval'])) {
 		$type_locked = 1;
 		$confirmation_message = get_lang('EvaluationHasBeenLocked');
 	}
-	$eval= Evaluation :: load($locked);
+	$eval = Evaluation :: load($locked);
 	if ($eval[0] != null) {
-		$eval[0]->locked_evaluation($locked, $type_locked);
+		$eval[0]->lock($type_locked);
 	}
 	
 	$filter_confirm_msg = false;	
@@ -423,6 +443,24 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 	$warning_message = get_lang('MoveWarning').'<br><br>'.$button;
 	$filter_warning_msg = false;
 }
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
+switch ($action) {
+    case 'lock':
+        $category_to_lock = Category :: load($_GET['category_id']);
+        $category_to_lock[0]->lock_all_items(1);
+        $confirmation_message = get_lang('GradebookLockedAlert');
+        break;
+    case 'unlock':
+        if (api_is_platform_admin()) {
+            $category_to_lock = Category :: load($_GET['category_id']);
+            $category_to_lock[0]->lock_all_items(0);
+            $confirmation_message = get_lang('GradebookUnlockedAlert');
+        }
+        break;    
+}
+
 //actions on the sortabletable
 if (isset ($_POST['action'])) {
 	block_students();
@@ -433,6 +471,7 @@ if (isset ($_POST['action'])) {
 		$filter_warning_msg = false;
 	} else {
 		switch ($_POST['action']) {
+ 
 			case 'deleted' :
 				$number_of_deleted_categories= 0;
 				$number_of_deleted_evaluations= 0;
@@ -815,53 +854,59 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     
 	if (!empty($cats)) {
         
-        if (api_is_allowed_to_edit(null, true)) {
+        if (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true') {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                
             $options = array('-1' => get_lang('none'));
-            foreach ($grade_models as $item) {
-                $options[$item['id']] = $item['name'];
-            }                
+            
+            if (!empty($grade_models)) {
+                foreach ($grade_models as $item) {
+                    $options[$item['id']] = $item['name'];
+                }                
+            }
 
             $grade_model_id = $cats[0]->get_grade_model_id();        
             
             //No children
             if (count($cats) == 1 && empty($grade_model_id)) {
-                $form = new FormValidator('grade_model_settings');
-                $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
-                $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
+                if (!empty($grade_models)) {
                 
-                if ($form->validate()) {
-                    $value = $form->exportValue('grade_model');                    
-                    $gradebook = new Gradebook();
-                    $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
+                    $form = new FormValidator('grade_model_settings');
+                    $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
+                    $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
 
-                    //do something                        
-                    $obj = new GradeModel();                             
-                    $components = $obj->get_components($value);
+                    if ($form->validate()) {
+                        $value = $form->exportValue('grade_model');                    
+                        $gradebook = new Gradebook();
+                        $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
 
-                    foreach ($components as $component) {
-                        $gradebook =  new Gradebook();
-                        $params = array();
+                        //do something                        
+                        $obj = new GradeModel();                             
+                        $components = $obj->get_components($value);
 
-                        $params['name']             = $component['acronym'];
-                        $params['description']      = $component['title'];
-                        $params['user_id']          = api_get_user_id();
-                        $params['parent_id']        = $cats[0]->get_id();
-                        $params['weight']           = $component['percentage'];
-                        $params['session_id']       = api_get_session_id();
-                        $params['course_code']      = api_get_course_id();
-                        $params['grade_model_id']   = api_get_session_id();
+                        foreach ($components as $component) {
+                            $gradebook =  new Gradebook();
+                            $params = array();
 
-                        $gradebook->save($params);
-                    }
-                    
-                    //Reloading cats
-                    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-                } else {
-                    $form->display();   
-                }                
+                            $params['name']             = $component['acronym'];
+                            $params['description']      = $component['title'];
+                            $params['user_id']          = api_get_user_id();
+                            $params['parent_id']        = $cats[0]->get_id();
+                            $params['weight']           = $component['percentage'];
+                            $params['session_id']       = api_get_session_id();
+                            $params['course_code']      = api_get_course_id();
+                            $params['grade_model_id']   = api_get_session_id();
+
+                            $gradebook->save($params);
+                        }
+
+                        //Reloading cats
+                        $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+                    } else {
+                        $form->display();   
+                    }      
+                }
             }
         }
         

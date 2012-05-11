@@ -69,6 +69,10 @@ class Category implements GradebookItem
 	public function get_weight() {
 		return $this->weight;
 	}
+    
+    public function is_locked() {
+		return isset($this->locked) && $this->locked == 1 ? true : false ;
+	}  
 
 	public function is_visible() {
 		return $this->visible;
@@ -119,7 +123,9 @@ class Category implements GradebookItem
     public function set_grade_model_id ($id) {
 		$this->grade_model_id = $id;
 	}
-    
+    public function set_locked ($locked) {
+		$this->locked = $locked;
+	}        
     public function get_grade_model_id () {
 		return $this->grade_model_id;
 	}
@@ -173,7 +179,7 @@ class Category implements GradebookItem
 		}
 
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'SELECT id, name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, grade_model_id FROM '.$tbl_grade_categories;
+		$sql = 'SELECT * FROM '.$tbl_grade_categories;
 		$paramcount = 0;
 		if (isset($id)) {
 			$id = Database::escape_string($id);
@@ -275,6 +281,7 @@ class Category implements GradebookItem
             $cat->set_session_id($data['session_id']);
 			$cat->set_certificate_min_score($data['certif_min_score']);
             $cat->set_grade_model_id($data['grade_model_id']);
+            $cat->set_locked($data['locked']);
 			$allcat[]=$cat;
 		}
 		return $allcat;
@@ -1195,5 +1202,44 @@ class Category implements GradebookItem
 			}
 		}
 		return $foundcats;
+    }
+    
+    /**
+  	 * This function, locks a category , only one who can unlock it is the platform administrator.  	 
+  	 * @param int locked 1 or unlocked 0 
+  	 * @return bool 
+  	 * 
+  	 * */
+  	function lock($locked) {
+  		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+  		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
+  		$rs = Database::query($sql);
+  	}
+    
+    function lock_all_items($locked) {        
+        if (api_get_setting('gradebook_locking_enabled') == 'true') {        
+            $this->lock($locked);
+
+            $evals_to_lock = $this->get_evaluations();
+
+            if (!empty($evals_to_lock)) {
+                foreach ($evals_to_lock as $item) {
+                    $item->lock($locked);
+                }        
+            }
+
+            $link_to_lock= $this->get_links();
+            if (!empty($link_to_lock)) {
+                foreach ($link_to_lock as $item ) {
+                    $item->lock($locked);
+                }
+            }
+            
+            $event_type = LOG_GRADEBOOK_UNLOCKED;
+            if ($locked == 1) {
+                $event_type = LOG_GRADEBOOK_LOCKED;
+            }
+            event_system($event_type, LOG_GRADEBOOK_ID, $this->id);   
+        }
     }
 }

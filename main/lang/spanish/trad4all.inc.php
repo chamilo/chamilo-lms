@@ -1062,7 +1062,7 @@ $CourseCodeAlreadyExistExplained = "Cuando un código de curso se duplica, el si
 $CantDeleteReadonlyFiles = "No se puede eliminar los archivos que están configurados en modo de sólo lectura";
 $Uploaded = "Subido.";
 $Saved = "Guardado.";
-$GotoCourse = "Ir al curso";
+$Reset = "Reinicializar";
 $EmailSentFromDokeos = "Correo electrónico enviado desde la plataforma";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Información sobre el último paso terminado y el siguiente sin terminar.";
 $LatexCode = "Código LaTeX";
@@ -1222,4 +1222,7 @@ recordar)";
 $WamiStartRecorder = "Inicie la grabación pulsando el micrófono y deténgala pulsándolo de nuevo. Cada vez que haga esto se generará un archivo.";
 $InputNameHere = "Escriba el nombre aquí";
 $Reload = "Recargar";
+$TimeSpentLastXDays = "Tiempo dedicado en los últimos %s días";
+$TimeSpentBetweenXAndY = "Tiempo dedicado entre el %s y el %s";
+$GoToCourse = "Ir al curso";
 ?>

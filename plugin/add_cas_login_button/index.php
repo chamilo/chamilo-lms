@@ -1,9 +1,12 @@
 <?php
 // Show the CAS button to login using CAS
+require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
 
 $_template['show_message']   = false;
 
-if (api_is_anonymous() && api_get_setting('cas_activate') == 'true') {
+if (api_is_anonymous()) {
+    $_template['cas_activated'] = api_is_cas_activated();
+    $_template['cas_configured'] = cas_configured();
     $_template['show_message']   = true;
     // the default title
     $button_label = "Connexion via CAS";

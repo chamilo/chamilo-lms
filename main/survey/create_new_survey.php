@@ -97,8 +97,10 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 	$defaults['survey_id'] = $survey_id;
 	$defaults['anonymous'] = $survey_data['anonymous'];
 
-	$gradebook_link_id = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
-	if ($gradebook_link_id) {
+	$link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+    $gradebook_link_id = $link_info['id'];
+    
+	if ($link_info) {
 		if ($sql_result_array = Database::fetch_array(Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))) {
 			$defaults['survey_qualify_gradebook'] = $gradebook_link_id;
 			$defaults['survey_weight'] = number_format($sql_result_array['weight'], 2, '.', '');
@@ -303,9 +305,10 @@ if ($form->validate()) {
 				$date = time(); // TODO: Maybe time zones implementation is needed here.
 				$visible = 1;	// 1 = visible
 
-				$gradebook_link_id = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+				$link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+                $gradebook_link_id = $link_info['id'];
 				if (!$gradebook_link_id) {
-					add_resource_to_course_gradebook($course_id, $gradebook_link_type, $survey_id, $title_gradebook, $survey_weight, $max_score, $description_gradebook, time(), 1, $session_id);
+					add_resource_to_course_gradebook($course_id, $gradebook_link_type, $survey_id, $title_gradebook, $survey_weight, $max_score, $description_gradebook, 1, $session_id);
 				} else {
 					Database::query('UPDATE '.$table_gradebook_link.' SET weight='.$survey_weight.' WHERE id='.$gradebook_link_id);
 				}

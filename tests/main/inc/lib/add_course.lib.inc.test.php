@@ -69,31 +69,7 @@ class TestAddCourse extends UnitTestCase {
         $res = define_course_keys(generate_course_code($wantedCode), null, null, null,null, null);
         $this->assertTrue($res);
     }
-
-/*  // 26 excepciones
-    function TestPrepareCourseRepository(){
-        //umask(0); // This function is not thread-safe.
-        $perm = '0777';
-        $courseRepository = 'C16';
-        $courseId = 'COD16';
-        $res = prepare_course_repository($courseRepository, $courseId);
-        $res1 = CourseManager::delete_course('C16');
-
-
-
-
-        $this->assertTrue($res===0);
-    }
-    // Problemas con este archivo - falta analizar esta función
-    function TestUpdateDbCourse(){
-        global $_configuration;
-        $dbcourse = array('courseDbName'=> 'COD16');
-        $res = update_Db_course($dbcourse['courseDbName']);
-        $this->assertTrue($res===0);
-        //var_dump($res);
-    }
-*/
-
+    
     function TestBrowseFolders(){
         $browse = array('path'=>'','file'=>'','media'=>'');
         $res = browse_folders($browse['path'], $browse['files'],$browse['media']);

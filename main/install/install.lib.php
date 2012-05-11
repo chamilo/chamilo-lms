@@ -427,7 +427,7 @@ function get_config_param($param, $updatePath = '') {
             $updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
         } else {
             // Give up recovering.
-            error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
+            //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
             return null;
         }
     }
@@ -516,7 +516,7 @@ function get_config_param($param, $updatePath = '') {
                     $configFile[$variable] = $value;
 
                     $a = explode("'", $variable);
-                    $key_tmp = $a[1];
+                    $key_tmp = isset($a[1]) ? $a[1] : null;
                     if ($key_tmp == $param) {
                         $val = $value;
                     }
@@ -1942,7 +1942,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 /**
  * After installation is completed (step 6), this message is displayed.
  */
-function display_after_install_message($installType, $nbr_courses) {
+function display_after_install_message($installType) {
     ?>
     <div class="RequirementHeading">
     	<h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
@@ -2016,8 +2016,7 @@ function get_countries_list_from_array($combo = false) {
  */
 function locking_settings() {
     $access_url_locked_settings = array(
-        'server_type', 
-        'use_document_title', 
+        'server_type',        
         'permanently_remove_deleted_files',
         'account_valid_duration',
         'service_visio',
@@ -2054,5 +2053,4 @@ function locking_settings() {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
         Database::query($sql);
     }
-
 }

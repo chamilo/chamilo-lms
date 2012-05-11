@@ -20,8 +20,6 @@
 	overflow: auto;
 	background-color: white;
 	height: 210px;
-	width: 94%;
-	border-left: 10px #FFF solid;
 }
 .inner_lp_toc .scorm_item {
 	font-size: 11px;

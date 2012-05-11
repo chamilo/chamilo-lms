@@ -27,7 +27,6 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 
 var temp    = false;
-var use_document_title='.api_get_setting('use_document_title').';
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 function FCKeditor_OnComplete( editorInstance ) {
@@ -272,7 +271,7 @@ if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
 
 echo '<div class="span8">';
 
-    if (isset($new_item_id) && is_numeric($new_item_id)) {
+    if (isset($new_item_id) && is_numeric($new_item_id)) {        
         switch ($type) {
             case 'chapter':
                 echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);

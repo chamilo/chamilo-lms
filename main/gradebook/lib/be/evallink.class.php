@@ -20,7 +20,7 @@ abstract class EvalLink extends AbstractLink
     function __construct() {
     	parent::__construct();
     }
-// Functions implementing AbstractLink
+    // Functions implementing AbstractLink
 
     public function has_results() {
     	$eval = $this->get_evaluation();

@@ -176,10 +176,7 @@ if ($is_allowed_to_edit) { // TEACHER ONLY
 
 $docs_and_folders = getlist ($base_work_dir.'/');
 
-if ($docs_and_folders) {
-	//do we need the title field for the document name or not?
-	//we get the setting here, so we only have to do it once
-	$use_document_title = api_get_setting('use_document_title');
+if ($docs_and_folders) {	
 	//create a sortable table with our data
 	$sortable_data = array();
 	while (list ($key, $id) = each($docs_and_folders)) {
@@ -196,8 +193,8 @@ if ($docs_and_folders) {
 		//size (or total size of a directory)
 		$size = $id['filetype'] == 'folder' ? get_total_folder_size($id['path'], $is_allowed_to_edit) : $id[size];
 		//get the title or the basename depending on what we're using
-		if ($use_document_title == 'true' AND $id['title'] != '') {
-			 $document_name=$id['title'];
+		if ($id['title'] != '') {
+			 $document_name = $id['title'];
 		} else {
 			$document_name = basename($id['path']);
 		}

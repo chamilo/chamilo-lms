@@ -68,6 +68,7 @@
 					if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
 						$link_to_gradebook = true;	
 					}    			    			
+                    $attendance->category_id = $_POST['category_id'];
 	    			$last_id = $attendance->attendance_add($link_to_gradebook);    			   			
 		        	Security::clear_token();	        		
 	    		}
@@ -84,8 +85,6 @@
 				$this->view->set_template('attendance_add');		       
 				$this->view->render();
 			}
-
-
 		} else {
 			$this->view->set_data($data);
 			$this->view->set_layout('layout'); 
@@ -114,7 +113,8 @@
 	    			$attendance->set_description($_POST['description']);
 	    			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
 	    			$attendance->set_attendance_weight($_POST['attendance_weight']);
-	    			
+                    
+                    $attendance->category_id = $_POST['category_id'];
 	    			$link_to_gradebook = false;    			    			
 					if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
 						$link_to_gradebook = true;	
@@ -229,7 +229,7 @@
 		}		
 
 		if (api_is_allowed_to_edit(null, true)) {
-			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	
+			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	            
 		} else {
 			if (!empty($student_id)) {
 				$user_id = intval($student_id);

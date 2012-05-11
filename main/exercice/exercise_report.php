@@ -58,6 +58,9 @@ $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 $course_id      = api_get_course_int_id();
 $exercise_id    = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 
+
+$locked = api_resource_is_locked_by_gradebook($exercise_id);
+
 if (empty($exercise_id)) {
     api_not_allowed();
 }
@@ -222,15 +225,16 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 //Deleting an attempt
-if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did'])) {
+if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false) {
     $exe_id = intval($_GET['did']);
-    if (!empty($exe_id)) {    
+    if (!empty($exe_id)) {          
         $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
         Database::query($sql);
         $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
         Database::query($sql);    
         header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
         exit;
+        
     }
 }
 

@@ -374,6 +374,7 @@ LOCK TABLES language WRITE;
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
 ('Asturianu','asturian','ast','asturian',0),
+('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0),
 ('&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;','bulgarian','bg','bulgarian',1),
 ('Bosanski','bosnian','bs','bosnian',1),
 ('Catal&agrave;','catalan','ca','catalan',0),
@@ -417,6 +418,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;','russian','ru','russian',0),
 ('Sloven&#269;ina','slovak','sk','slovak',0),
 ('Sloven&scaron;&#269;ina','slovenian','sl','slovenian',1),
+('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0),
 ('Srpski','serbian','sr','serbian',0),
 ('Suomi','finnish','fi','finnish',0),
 ('Svenska','swedish','sv','swedish',0),
@@ -626,7 +628,6 @@ VALUES
 ('allow_personal_agenda',NULL,'radio','User','true','AllowPersonalAgendaTitle','AllowPersonalAgendaComment',NULL,NULL, 0),
 ('display_coursecode_in_courselist',NULL,'radio','Platform','false','DisplayCourseCodeInCourselistTitle','DisplayCourseCodeInCourselistComment',NULL,NULL, 0),
 ('display_teacher_in_courselist',NULL,'radio','Platform','true','DisplayTeacherInCourselistTitle','DisplayTeacherInCourselistComment',NULL,NULL, 0),
-('use_document_title',NULL,'radio','Tools','true','UseDocumentTitleTitle','UseDocumentTitleComment',NULL,NULL, 0),
 ('permanently_remove_deleted_files',NULL,'radio','Tools','false','PermanentlyRemoveFilesTitle','PermanentlyRemoveFilesComment',NULL,NULL, 0),
 ('dropbox_allow_overwrite',NULL,'radio','Tools','true','DropboxAllowOverwriteTitle','DropboxAllowOverwriteComment',NULL,NULL, 0),
 ('dropbox_max_filesize',NULL,'textfield','Tools','100000000','DropboxMaxFilesizeTitle','DropboxMaxFilesizeComment',NULL,NULL, 0),
@@ -853,17 +854,12 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
-('gradebook_ranking_1', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_2', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_3', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_4', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_5', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_6', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_7', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_8', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_9', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('gradebook_ranking_10', 'ranking', 'gradebook_ranking', 'Gradebook', '', '', '', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17631','DatabaseVersion','', NULL, NULL, 0);
+('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
+('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
+('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
+('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
+('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17828','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -943,8 +939,6 @@ VALUES
 ('display_coursecode_in_courselist','false','No'),
 ('display_teacher_in_courselist','true','Yes'),
 ('display_teacher_in_courselist','false','No'),
-('use_document_title','true','Yes'),
-('use_document_title','false','No'),
 ('permanently_remove_deleted_files','true','YesWillDeletePermanently'),
 ('permanently_remove_deleted_files','false','NoWillDeletePermanently'),
 ('dropbox_allow_overwrite','true','Yes'),
@@ -1200,13 +1194,12 @@ VALUES
 ('allow_browser_sniffer', 'false', 'No'),
 ('enable_wami_record', 'true', 'Yes'),
 ('enable_wami_record', 'false', 'No'),
-('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
-('update_user_info_cas_with_ldap', 'true', 'Yes'),
-('update_user_info_cas_with_ldap', 'false', 'No'),
-('teachers_can_change_score_settings', 'false', 'Yes'),
-('teachers_can_change_score_settings', 'false', 'No');
-
-
+('teachers_can_change_score_settings', 'true', 'Yes'),
+('teachers_can_change_score_settings', 'false', 'No'),
+('teachers_can_change_grade_model_settings', 'true', 'Yes'),
+('teachers_can_change_grade_model_settings', 'false', 'No'),
+('gradebook_locking_enabled', 'true', 'Yes'),
+('gradebook_locking_enabled', 'false', 'No');
 UNLOCK TABLES;
 /*
 ('activate_send_event_by_mail', 'true', 'Yes'),
@@ -1351,6 +1344,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
   certif_min_score int DEFAULT NULL,
   session_id int DEFAULT NULL,
   document_id int unsigned DEFAULT NULL,
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
@@ -1364,7 +1358,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight FLOAT NOT NULL,
   max float unsigned NOT NULL,
-  visible tinyint NOT NULL,
+  visible int NOT NULL,
   type varchar(40) NOT NULL default 'evaluation',
   locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
@@ -1379,7 +1373,8 @@ CREATE TABLE IF NOT EXISTS gradebook_link (
   category_id int NOT NULL,
   created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight float NOT NULL,
-  visible tinyint NOT NULL,
+  visible int NOT NULL,
+  locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_result;
@@ -2955,9 +2950,9 @@ CREATE TABLE IF NOT EXISTS user_rel_course_vote (
   vote int unsigned not null default 0
 );
 
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cid (c_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_uid (user_id);
-ALTER TABLE user_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
+ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
 -- Global chat
 DROP TABLE IF EXISTS chat;

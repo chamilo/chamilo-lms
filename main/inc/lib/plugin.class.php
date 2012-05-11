@@ -7,15 +7,13 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
-class Plugin
-{
+class Plugin {
 
     protected $version = '';
     protected $author = '';
     protected $fields = array();
 
-    protected function __construct($version, $author, $settings = array())
-    {
+    protected function __construct($version, $author, $settings = array()) {
         $this->version = $version;
         $this->author = $author;
         $this->fields = $settings;
@@ -24,19 +22,17 @@ class Plugin
         $language_files[] = 'plugin_' . $this->get_name();
     }
 
-    function get_info()
-    {
+    function get_info() {
         $result = array();
 
         $result['title'] = $this->get_title();
         $result['comment'] = $this->get_comment();
         $result['version'] = $this->get_version();
         $result['author'] = $this->get_author();
-        if ($form = $this->get_settings_form())
-        {
+        
+        if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
-            foreach ($this->fields as $name => $type)
-            {
+            foreach ($this->fields as $name => $type) {
                 $value = $this->get($name);
                 $result[$name] = $value;
             }
@@ -44,41 +40,33 @@ class Plugin
         return $result;
     }
 
-    function get_name()
-    {
+    function get_name() {
         $result = get_class($this);
         $result = str_replace('Plugin', '', $result);
         $result = strtolower($result);
         return $result;
     }
 
-    function get_title()
-    {
+    function get_title() {
         return $this->get_lang('plugin_title');
     }
 
-    function get_comment()
-    {
+    function get_comment() {
         return $this->get_lang('plugin_comment');
     }
 
-    function get_version()
-    {
+    function get_version() {
         return $this->version;
     }
 
-    function get_author()
-    {
+    function get_author() {
         return $this->author;
     }
 
-    function get_css()
-    {
-        $name = $this->get_name();
-        $root = api_get_path(SYS_PLUGIN_PATH);
-        $path = "$root/$name/resources/$name.css";
-        if (!is_readable($path))
-        {
+    function get_css() {
+        $name = $this->get_name();        
+        $path = api_get_path(SYS_PLUGIN_PATH)."$name/resources/$name.css";
+        if (!is_readable($path)) {
             return '';
         }
         $css = array();
@@ -91,53 +79,58 @@ class Plugin
      *
      * @return FormValidator
      */
-    function get_settings_form()
-    {
+    function get_settings_form() {
         $result = new FormValidator($this->get_name());
 
         $defaults = array();
-        foreach ($this->fields as $name => $type)
-        {
+        foreach ($this->fields as $name => $type) {
             $value = $this->get($name);
+            
             $defaults[$name] = $value;
-            $type = $type ? $type : 'text';
-            if ($type == 'wysiwyg')
-            {
-                $result->add_html_editor($name, $this->get_lang($name));
+            $type = isset($type) ? $type : 'text';
+            
+            $help = null;
+            if ($this->get_lang_plugin_exists($name.'_help')) {
+                $help = $this->get_lang($name.'_help');
             }
-            else
-            {
-                $result->addElement($type, $name, $this->get_lang($name));
+                    
+            switch ($type) {
+                case 'html':
+                    $result->addElement('html', $this->get_lang($name));  
+                    break;
+                case 'wysiwyg':
+                    $result->add_html_editor($name, $this->get_lang($name));
+                    break;
+                case 'text':                  
+                    $result->addElement($type, $name, array($this->get_lang($name), $help));    
+                    break;
+                case 'boolean':
+                    $group = array();
+                    $group[] = $result->createElement('radio', $name, '', get_lang('Yes'), 'true');
+                    $group[] = $result->createElement('radio', $name, '', get_lang('No'),  'false');                    
+                    $result->addGroup($group, null, array($this->get_lang($name), $help));
+                    break;
             }
         }
         $result->setDefaults($defaults);
-
         $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
         return $result;
     }
 
-    function get($name)
-    {
-        $content = '';
-        $title = 'Static';
-        $settings = $this->get_settings();
-        foreach ($settings as $setting)
-        {
-            if ($setting['variable'] == ($this->get_name() . '_' . $name))
-            {
+    function get($name) {        
+        $settings = $this->get_settings();        
+        foreach ($settings as $setting) {
+            if ($setting['variable'] == ($this->get_name() . '_' . $name)) {
                 return $setting['selected_value'];
             }
         }
-
         return false;
     }
 
     private $settings = null;
 
-    public function get_settings()
-    {
-        if (is_null($this->settings))
-        {
+    public function get_settings() {
+        if (is_null($this->settings)) {
             $settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')));
             $this->settings = $settings;
         }
@@ -145,32 +138,41 @@ class Plugin
     }
 
     private $strings = null;
+    
+    public function get_lang_plugin_exists($name) {
+        return isset($this->strings[$name]);
+    }
 
-    public function get_lang($name)
-    {
-        if (is_null($this->strings))
-        {
+    public function get_lang($name) {
+        if (is_null($this->strings)) {
             global $language_interface;
-
             $root = api_get_path(SYS_PLUGIN_PATH);
-            $plugin_name = $this->get_name();
-            $language = $language_interface;
-            $path = "$root/$plugin_name/lang/$language.php";
-            if (is_readable($path))
-            {
-                include $path;
+            $plugin_name = $this->get_name();                 
+
+            //1. Loading english if exists            
+            $english_path = $root.$plugin_name."/lang/english.php";
+            if (is_readable($english_path)) {
+                include $english_path;
                 $this->strings = $strings;
             }
-            else
-            {
+            
+            $path = $root.$plugin_name."/lang/$language_interface.php";
+            //2. Loading the system language
+            if (is_readable($path)) {
+                include $path;
+                if (!empty($strings)) {
+                    foreach ($strings as $key => $string) {
+                        $this->strings[$key] = $string;
+                    }
+                }
+            } else {
                 $this->strings = array();
             }
         }
-        if (isset($this->strings[$name]))
-        {
+
+        if (isset($this->strings[$name])) {
             return $this->strings[$name];
         }
         return get_lang($name);
     }
-
 }

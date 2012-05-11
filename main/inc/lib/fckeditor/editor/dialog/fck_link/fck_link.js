@@ -811,7 +811,19 @@ function BrowseServer()
 
 function SetUrl( url )
 {
-	url = FCK.GetSelectedUrl ( url ) ;
+    
+//	url = FCK.GetSelectedUrl ( url ) ;
+    url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
+    PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/dialog\/fck_link\.html/, "");
+    PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "")
+    // if url_append in configuration file != "" (see ticket ref #3933)
+    if (PrefixeUrl != "") {
+        url = PrefixeUrl + url;
+    }
+    else {
+        url = FCK.GetSelectedUrl ( url ) ;
+    }
+    
 	GetE('cmbLinkProtocol').value = '' ;
 
 	GetE('txtUrl').value = url ;

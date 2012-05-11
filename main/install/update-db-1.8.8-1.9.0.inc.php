@@ -16,6 +16,7 @@
  * - reorganise code into functions
  * @todo use database library
  */
+Log::notice('Entering file');
 
 $old_file_version = '1.8.8';
 $new_file_version = '1.9.0';
@@ -55,8 +56,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     // If this script has been included by index.php, not update_courses.php, so
     // that we want to change the main databases as well...
     $only_test = false;
-    $log = 0;
     if (defined('SYSTEM_INSTALLATION')) {
+        
         if ($singleDbForm) {
             $dbStatsForm = $dbNameForm;
             $dbScormForm = $dbNameForm;
@@ -80,21 +81,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+                Log::error('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+                Log::error('Database '.$dbNameForm.' was not found, skipping');
             } else {
-                Database::select_db($dbNameForm);
+                iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query){
                     if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
+                        Log::notice("iDatabase::query($dbNameForm,$query)");
                     } else {
-                        $res = Database::query($query);
-                        if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
-                        }
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                        	error_log('Error in '.$query.': '.Database::error());
+                        	Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
@@ -110,29 +108,26 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbStatsForm) > 40) {
-                error_log('Database name '.$dbStatsForm.' is too long, skipping', 0);
+                Log::error('Database name '.$dbStatsForm.' is too long, skipping');
             } elseif (!in_array($dbStatsForm, $dblist)){
-                error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
+                Log::error('Database '.$dbStatsForm.' was not found, skipping');
             } else {
-                Database::select_db($dbStatsForm);
+                iDatabase::select_db($dbStatsForm);
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbStatsForm,$query)", 0);
+                        Log::notice("iDatabase::query($dbStatsForm,$query)");
                     } else {
-                        $res = Database::query($query);
-                        if ($log) {
-                            error_log("In $dbStatsForm, executed: $query", 0);
-                        }
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                            error_log('Error in '.$query.': '.Database::error());
+                            Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
             }
         }
         
-        //Moving Stats DB to the main database
+        //Moving Stats DB to the main DB
         
         $stats_table = array(        
 			"track_c_browsers",
@@ -164,15 +159,31 @@ if (defined('SYSTEM_INSTALLATION')) {
         );
         
         if ($dbNameForm != $dbStatsForm) {
-        	Database::select_db($dbStatsForm);
-	        foreach($stats_table as $stat_table) {
+        	iDatabase::select_db($dbStatsForm);
+	        foreach ($stats_table as $stat_table) {
 	        	$sql = "ALTER TABLE $dbStatsForm.$stat_table RENAME $dbNameForm.$stat_table";
+	        	iDatabase::query($sql);
+	        }
+	        iDatabase::select_db($dbNameForm);
+        }
+        
+        //Renaming user tables in the main DB
+        $user_tables = array(
+            'personal_agenda',
+            'personal_agenda_repeat',
+            'personal_agenda_repeat_not',
+            'user_course_category',
+        );
+                
+        if ($dbNameForm != $dbUserForm) {
+        	Database::select_db($dbUserForm);
+	        foreach ($user_tables as $table) {
+	        	$sql = "ALTER TABLE $dbUserForm.$table RENAME $dbNameForm.$table";
 	        	Database::query($sql);
 	        }
 	        Database::select_db($dbNameForm);
         }
-
-
+        
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
         
@@ -183,19 +194,19 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbUserForm) > 40) {
-                error_log('Database name '.$dbUserForm.' is too long, skipping', 0);
+                Log::error('Database name '.$dbUserForm.' is too long, skipping');
             } elseif (!in_array($dbUserForm,$dblist)) {
-                error_log('Database '.$dbUserForm.' was not found, skipping', 0);
+                Log::error('Database '.$dbUserForm.' was not found, skipping');
             } else {
-                Database::select_db($dbUserForm);
+                iDatabase::select_db($dbUserForm);
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
-                        error_log("Database::query($dbUserForm,$query)", 0);
-                        error_log("In $dbUserForm, executed: $query", 0);
+                        Log::notice("iDatabase::query($dbUserForm,$query)");
+                        Log::notice("In $dbUserForm, executed: $query");
                     } else {
-                        $res = Database::query($query);
+                        $res = iDatabase::query($query);
                         if ($res === false) {
-                            error_log('Error in '.$query.': '.Database::error());
+                            Log::error('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }
@@ -211,20 +222,19 @@ if (defined('SYSTEM_INSTALLATION')) {
         );
         
         if ($dbNameForm != $dbUserForm) {
-        	Database::select_db($dbUserForm);
+        	iDatabase::select_db($dbUserForm);
         	foreach($users_table as $table) {
         		$sql = "ALTER TABLE $dbUserForm.$table RENAME  $dbNameForm.$table";
-        		Database::query($sql);
+        		iDatabase::query($sql);
         	}
-        	Database::select_db($dbNameForm);
+        	iDatabase::select_db($dbNameForm);
         }                
-    }
-    
+    }    
     
     //Adds the c_XXX courses tables see #3910
     require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
     global $_configuration;
-    update_Db_course();
+    create_course_tables();
     
     $prefix = '';
     if ($singleDbForm) {
@@ -233,26 +243,26 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
-    error_log('Starting migration: '.$old_file_version.' - '.$new_file_version);
+    Log::notice('Starting migration: '.$old_file_version.' - '.$new_file_version);
     
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
-            error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+            Log::error('Database name '.$dbNameForm.' is too long, skipping');
         } elseif(!in_array($dbNameForm, $dblist)) {
-            error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+            Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
-            Database::select_db($dbNameForm);
-            $res = Database::query("SELECT id, code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT id, code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
             if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
 			
             $errors = array();
               
-            if (Database::num_rows($res) > 0) {
+            if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
-                while ($row = Database::fetch_array($res)) {
+                while ($row = iDatabase::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -261,22 +271,20 @@ if (defined('SYSTEM_INSTALLATION')) {
                     // Now use the $c_q_list
                     
                     if (!$singleDbForm) { // otherwise just use the main one
-                        Database::select_db($row_course['db_name']);
+                        iDatabase::select_db($row_course['db_name']);
                     }
+                    Log::notice('Course db ' . $row_course['db_name']);
 
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
                         }
                         if ($only_test) {
-                            error_log("Database::query(".$row_course['db_name'].",$query)", 0);
+                            Log::notice("iDatabase::query(".$row_course['db_name'].",$query)");
                         } else {
-                            $res = Database::query($query);
-                            if ($log) {
-                                error_log("In ".$row_course['db_name'].", executed: $query", 0);
-                            }
+                            $res = iDatabase::query($query);
                             if ($res === false) {
-                                error_log('Error in '.$query.': '.Database::error());
+                                Log::error('Error in '.$query.': '.iDatabase::error());
                             }
                         }
                     }                    
@@ -372,7 +380,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                                         'wiki_mailcue'                   
                     );
                     
-                    error_log('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+                    Log::notice('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+                    Install::message('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
                     
                     $count = $old_count = 0;
                     foreach ($table_list as $table) {
@@ -385,47 +394,48 @@ if (defined('SYSTEM_INSTALLATION')) {
                     	
                     	if (!$singleDbForm) {
                     		// otherwise just use the main one
-                    		Database::select_db($row_course['db_name']);
+                    		iDatabase::select_db($row_course['db_name']);
                     	} else {
-                    		Database::select_db($dbNameForm);
+                    		iDatabase::select_db($dbNameForm);
                     	}                    	
                     	
                     	//Count of rows
                     	$sql 	= "SELECT count(*) FROM $old_table";
-                    	$result = Database::query($sql);
+                    	$result = iDatabase::query($sql);
                     	
                     	$old_count = 0;
                     	if ($result) {
-                    		$row 		= Database::fetch_row($result);
+                    		$row 		= iDatabase::fetch_row($result);
                     		$old_count = $row[0];
                     	} else {
-                    		error_log("Seems that the table $old_table doesn't exists ");
+                    		Log::error("Seems that the table $old_table doesn't exists ");
                     	}                    	
-                    	error_log("#rows in $old_table: $old_count");
+                    	Log::notice("# rows in $old_table: $old_count");
                     	
                     	$sql = "SELECT * FROM $old_table";
-                    	$result = Database::query($sql);
+                    	$result = iDatabase::query($sql);
                     	
                     	$count = 0;                    	
-                    	while($row = Database::fetch_array($result, 'ASSOC')) {
+                    	while($row = iDatabase::fetch_array($result, 'ASSOC')) {
                     		$row['c_id'] = $course_id;
-                    		Database::select_db($dbNameForm);
-                    		$id = Database::insert($new_table, $row);
+                    		iDatabase::select_db($dbNameForm);
+                    		$id = iDatabase::insert($new_table, $row);
                     		if (is_numeric($id)) {
                     			$count++;
                     		} else {
                     			$errors[$old_table][] = $row;                    			
                     		}
                     	}                    	
-                    	error_log("# rows inserted in $new_table: $count");
+                    	Log::notice("# rows inserted in $new_table: $count");
                     	
                     	if ($old_count != $count) {
-                    		error_log("ERROR count of new and old table doesn't match: $old_count - $new_table");
-                    		error_log("Check the results: ");
+                    		Log::error("ERROR count of new and old table doesn't match: $old_count - $new_table");
+                    		Log::error("Check the results: ");
+                            Log::error(print_r($errors, 1));
                     		error_log(print_r($errors, 1));
                     	}
                     }
-                    error_log('<<<------- end  -------->>');
+                    Log::notice('<<<------- end  -------->>');
                 }
             }
         }

@@ -16,9 +16,15 @@ require_once (api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 require_once('authcas.php');
 global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri; 
 // phpCAS
-if (!is_object($PHPCAS_CLIENT) ) {
-	phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
-	phpCAS::setNoCasServerValidation();
+
+if (cas_configured()) {
+    if (!is_object($PHPCAS_CLIENT) ) {
+    	phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
+    	phpCAS::setNoCasServerValidation();
+    }
+    phpCAS::forceAuthentication();
+    header('Location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
 }
-phpCAS::forceAuthentication();
-header('Location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
+else {
+    header('Location: '.api_get_path(WEB_PATH));
+}

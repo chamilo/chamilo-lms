@@ -228,10 +228,8 @@ $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
 
-if (api_get_setting('use_document_title') == 'true') {
-	$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
-	$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
-}
+$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
+$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
 
 $advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 // Advanced parameters

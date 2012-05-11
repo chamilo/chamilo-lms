@@ -50,11 +50,24 @@ function drawFiles($list, &$manager)
 {
 	global $relative;
 	global $IMConfig;
+	// add filename with course code in it
+	// here filename is images/gallery/COMES.jpg
+	// it should be /chamilo1884url/courses/COURSTESTSIMSUURLAPP/document/
+	
+	global $_configuration;	// 
 
+	//var topDoc = window.top.document;
+		
 	foreach($list as $entry => $file)
-	{ ?>
+	{ 
+		$chamiloPath = '/'.$_configuration['url_append'].'/courses/'.api_get_course_path().'/document'.$file['relative']; // 
+		// 
+		?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
+		<!-- change <?php echo $file['relative'];?> with <?php echo $chamiloPath; ?>
 		<a href="javascript: void(0);" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
+		-->
+		<a href="javascript: void(0);" onclick="selectImage('<?php echo $chamiloPath; ?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit" style="padding-top: 5px;">
 		<?php if ($IMConfig['allow_delete']) { ?>
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>

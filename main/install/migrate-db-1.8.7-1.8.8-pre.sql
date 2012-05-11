@@ -13,10 +13,15 @@
 -- This first part is for the main database
 
 -- xxMAINxx
+
+DROP PROCEDURE IF EXISTS drop_index;
+CREATE PROCEDURE drop_index(in t_name varchar(128), in i_name varchar(128) ) BEGIN IF ( (SELECT count(*) AS index_exists FROM  information_schema.statistics WHERE table_schema = DATABASE( )  AND table_name = t_name  AND  index_name =   i_name ) > 0) THEN    SET @s = CONCAT('DROP INDEX ' , i_name , ' ON ' , t_name );    PREPARE stmt FROM @s;    EXECUTE stmt;  END IF; END;
+
 CREATE TABLE course_request (id int NOT NULL AUTO_INCREMENT, code varchar(40) NOT NULL, user_id int unsigned NOT NULL default '0', directory varchar(40) DEFAULT NULL, db_name varchar(40) DEFAULT NULL, course_language varchar(20) DEFAULT NULL, title varchar(250) DEFAULT NULL, description text, category_code varchar(40) DEFAULT NULL, tutor_name varchar(200) DEFAULT NULL, visual_code varchar(40) DEFAULT NULL, request_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', objetives text, target_audience text, status int unsigned NOT NULL default '0', info int unsigned NOT NULL default '0', exemplary_content int unsigned NOT NULL default '0', PRIMARY KEY (id), UNIQUE KEY code (code));
 
-ALTER TABLE settings_current DROP INDEX unique_setting;
-ALTER TABLE settings_options DROP INDEX unique_setting_option;
+CALL drop_index('settings_current', 'unique_setting');
+CALL drop_index('settings_options', 'unique_setting_option');
+
 ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(110), category(110), access_url);
 ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), value(165));
 ALTER TABLE settings_current CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;

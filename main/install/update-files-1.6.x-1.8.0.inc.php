@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -17,137 +18,134 @@
  *
  * @package chamilo.install
  */
+Log::notice('Entering file');
 
-function insert_db($db_name, $folder_name, $text) {
+function insert_db($db_name, $folder_name, $text)
+{
 
-	// TODO: The (global?) variable $_course has not been declared/initialized.
-	$_course['dbName'] = $db_name;
+    // TODO: The (global?) variable $_course has not been declared/initialized.
+    $_course['dbName'] = $db_name;
 
-	$doc_id = add_document_180($_course, '/'.$folder_name, 'folder', 0, api_ucfirst($text));
-	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
-
+    $doc_id = add_document_180($_course, '/' . $folder_name, 'folder', 0, api_ucfirst($text));
+    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
 }
 
 if (defined('SYSTEM_INSTALLATION')) {
 
-	$sys_course_path = $pathForm.'courses/';
-	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	Database::select_db($dbNameForm);
-	$db_name = $dbNameForm;
-	$sql = "SELECT * FROM course";
-	error_log('Getting courses for files updates: '.$sql, 0);
-	$result = Database::query($sql);
+    $sys_course_path = $pathForm . 'courses/';
+    //$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+    Database::select_db($dbNameForm);
+    $db_name = $dbNameForm;
+    $sql = "SELECT * FROM course";
+    Log::notice('Getting courses for files updates: ' . $sql);
+    $result = Database::query($sql);
 
-	while ($courses_directories = Database::fetch_array($result)) {
+    while ($courses_directories = Database::fetch_array($result)) {
 
-		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
-		$db_name = $courses_directories["db_name"];
-		$origCRS = $updatePath.'courses/'.$courses_directories["directory"];
+        $currentCourseRepositorySys = $sys_course_path . $courses_directories["directory"] . "/";
+        $db_name = $courses_directories["db_name"];
+        $origCRS = $updatePath . 'courses/' . $courses_directories["directory"];
 
-		if (!is_dir($origCRS)) {
-			error_log('Directory '.$origCRS.' does not exist. Skipping.', 0);
-			continue;
-		}
-		// Move everything to the new hierarchy (from old path to new path)
-		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories["directory"], 0);
-		rename($origCRS,$sys_course_path.$courses_directories["directory"]);
-		error_log('Creating dirs in '.$currentCourseRepositorySys, 0);
+        if (!is_dir($origCRS)) {
+            Log::error('Directory ' . $origCRS . ' does not exist. Skipping.');
+            continue;
+        }
+        // Move everything to the new hierarchy (from old path to new path)
+        Log::notice('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories["directory"]);
+        rename($origCRS, $sys_course_path . $courses_directories["directory"]);
+        Log::notice('Creating dirs in ' . $currentCourseRepositorySys);
 
-		// FOLDER DOCUMENT
+        // FOLDER DOCUMENT
+        // document > audio
+        if (!is_dir($currentCourseRepositorySys . "document/audio")) {
+            mkdir($currentCourseRepositorySys . "document/audio", $perm);
+            insert_db($db_name, "audio", get_lang('Audio'));
+        }
 
-		// document > audio
-		if (!is_dir($currentCourseRepositorySys."document/audio")) {
-			mkdir($currentCourseRepositorySys."document/audio", $perm);
-			insert_db($db_name, "audio", get_lang('Audio'));
-		}
+        // document > flash
+        if (!is_dir($currentCourseRepositorySys . "document/flash")) {
+            mkdir($currentCourseRepositorySys . "document/flash", $perm);
+            insert_db($db_name, "flash", get_lang('Flash'));
+        }
 
-		// document > flash
-		if (!is_dir($currentCourseRepositorySys."document/flash")) {
-			mkdir($currentCourseRepositorySys."document/flash", $perm);
-			insert_db($db_name,"flash",get_lang('Flash'));
-		}
+        // document > images
+        if (!is_dir($currentCourseRepositorySys . "document/images")) {
+            mkdir($currentCourseRepositorySys . "document/images", $perm);
+            insert_db($db_name, "images", get_lang('Images'));
+        }
 
-		// document > images
-		if (!is_dir($currentCourseRepositorySys."document/images")) {
-			mkdir($currentCourseRepositorySys."document/images", $perm);
-			insert_db($db_name,"images",get_lang('Images'));
-		}
+        // document > video
+        if (!is_dir($currentCourseRepositorySys . "document/video")) {
+            mkdir($currentCourseRepositorySys . "document/video", $perm);
+            insert_db($db_name, "video", get_lang('Video'));
+        }
 
-		// document > video
-		if (!is_dir($currentCourseRepositorySys."document/video")) {
-			mkdir($currentCourseRepositorySys."document/video", $perm);
-			insert_db($db_name,"video",get_lang('Video'));
-		}
+        // document > video > flv
+        if (!is_dir($currentCourseRepositorySys . "document/video/flv")) {
+            mkdir($currentCourseRepositorySys . "document/video/flv", $perm);
+            insert_db($db_name, "video", get_lang('Video') . " (flv)");
+        }
 
-		// document > video > flv
-		if (!is_dir($currentCourseRepositorySys."document/video/flv")) {
-			mkdir($currentCourseRepositorySys."document/video/flv", $perm);
-			insert_db($db_name,"video",get_lang('Video')." (flv)");
-		}
+        // FOLDER UPLOAD
+        // upload
+        if (!is_dir($currentCourseRepositorySys . "upload")) {
+            mkdir($currentCourseRepositorySys . "upload", $perm);
+        }
 
-		// FOLDER UPLOAD
+        // upload > blog
+        if (!is_dir($currentCourseRepositorySys . "upload/blog")) {
+            mkdir($currentCourseRepositorySys . "upload/blog", $perm);
+        }
 
-		// upload
-		if (!is_dir($currentCourseRepositorySys."upload")) {
-			mkdir($currentCourseRepositorySys."upload", $perm);
-		}
+        // upload > forum
+        if (!is_dir($currentCourseRepositorySys . "upload/forum")) {
+            mkdir($currentCourseRepositorySys . "upload/forum", $perm);
+        }
 
-		// upload > blog
-		if (!is_dir($currentCourseRepositorySys."upload/blog")) {
-			mkdir($currentCourseRepositorySys."upload/blog", $perm);
-		}
+        // upload > test
+        if (!is_dir($currentCourseRepositorySys . "upload/test")) {
+            mkdir($currentCourseRepositorySys . "upload/test", $perm);
+        }
 
-		// upload > forum
-		if (!is_dir($currentCourseRepositorySys."upload/forum")) {
-			mkdir($currentCourseRepositorySys."upload/forum", $perm);
-		}
+        // Updating index file in courses directories to change claroline/ into main/
+        $content = '<?php' . "\n" .
+            '$cidReq="' . $courses_directories['code'] . '";' . "\n" .
+            '$dbname="' . $courses_directories['db_name'] . '";' . "\n" .
+            'include("../../main/course_home/course_home.php");' . "\n" .
+            '?>';
+        unlink($currentCourseRepositorySys . 'index.php');
+        $fp = @ fopen($currentCourseRepositorySys . 'index.php', 'w');
+        if ($fp) {
+            Log::error('Writing redirection file in ' . $currentCourseRepositorySys . 'index.php');
+            fwrite($fp, $content);
+            fclose($fp);
+        } else {
+            Log::error('Could not open file ' . $currentCourseRepositorySys . 'index.php');
+        }
+    }
 
-		// upload > test
-		if (!is_dir($currentCourseRepositorySys."upload/test")) {
-			mkdir($currentCourseRepositorySys."upload/test", $perm);
-		}
+    // Write the config file
+    write_system_config_file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
+    // Write a distribution file with the config as a backup for the admin
+    write_system_config_file(api_get_path(CONFIGURATION_PATH) . 'configuration.dist.php');
+    // Write a .htaccess file in the course repository
+    write_courses_htaccess_file($urlAppendPath);
+    copy($updatePath . 'claroline/inc/conf/add_course.conf.php', $pathForm . 'main/inc/conf/add_course.conf.php');
+    copy($updatePath . 'claroline/inc/conf/course_info.conf.php', $pathForm . 'main/inc/conf/course_info.conf.php');
+    copy($updatePath . 'claroline/inc/conf/mail.conf.php', $pathForm . 'main/inc/conf/mail.conf.php');
+    copy($updatePath . 'claroline/inc/conf/profile.conf.inc.php', $pathForm . 'main/inc/conf/profile.conf.php');
 
-		// Updating index file in courses directories to change claroline/ into main/
-		$content = '<?php'."\n".
-				'$cidReq="'.$courses_directories['code'].'";'."\n" .
-				'$dbname="'.$courses_directories['db_name'].'";'."\n" .
-				'include("../../main/course_home/course_home.php");'."\n" .
-				'?>';
-		unlink($currentCourseRepositorySys.'index.php');
-		$fp = @ fopen($currentCourseRepositorySys.'index.php', 'w');
-		if ($fp) {
-			error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php', 0);
-			fwrite($fp, $content);
-			fclose($fp);
-		} else {
-			error_log('Could not open file '.$currentCourseRepositorySys.'index.php', 0);
-		}
-	}
-
-	// Write the config file
-	write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.php');
-	// Write a distribution file with the config as a backup for the admin
-	write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.dist.php');
-	// Write a .htaccess file in the course repository
-	write_courses_htaccess_file($urlAppendPath);
-	copy($updatePath.'claroline/inc/conf/add_course.conf.php', $pathForm.'main/inc/conf/add_course.conf.php');
-	copy($updatePath.'claroline/inc/conf/course_info.conf.php', $pathForm.'main/inc/conf/course_info.conf.php');
-	copy($updatePath.'claroline/inc/conf/mail.conf.php', $pathForm.'main/inc/conf/mail.conf.php');
-	copy($updatePath.'claroline/inc/conf/profile.conf.inc.php', $pathForm.'main/inc/conf/profile.conf.php');
-
-	error_log('Renaming '.$updatePath.'claroline/upload/users to '.$pathForm.'main/upload/users', 0);
-	rename($updatePath.'claroline/upload/users', $pathForm.'main/upload/users');
-	error_log('Renaming '.$updatePath.'claroline/upload/audio to '.$pathForm.'main/upload/audio', 0);
-	rename($updatePath.'claroline/upload/audio', $pathForm.'main/upload/audio');
-	error_log('Renaming '.$updatePath.'claroline/upload/images to '.$pathForm.'main/upload/images', 0);
-	rename($updatePath.'claroline/upload/images', $pathForm.'main/upload/images');
-	error_log('Renaming '.$updatePath.'claroline/upload/linked_files to '.$pathForm.'main/upload/linked_files', 0);
-	rename($updatePath.'claroline/upload/linked_files', $pathForm.'main/upload/linked_files');
-	error_log('Renaming '.$updatePath.'claroline/upload/video to '.$pathForm.'main/upload/video', 0);
-	rename($updatePath.'claroline/upload/video', $pathForm.'main/upload/video');
-
+    Log::notice('Renaming ' . $updatePath . 'claroline/upload/users to ' . $pathForm . 'main/upload/users');
+    rename($updatePath . 'claroline/upload/users', $pathForm . 'main/upload/users');
+    Log::notice('Renaming ' . $updatePath . 'claroline/upload/audio to ' . $pathForm . 'main/upload/audio');
+    rename($updatePath . 'claroline/upload/audio', $pathForm . 'main/upload/audio');
+    Log::notice('Renaming ' . $updatePath . 'claroline/upload/images to ' . $pathForm . 'main/upload/images');
+    rename($updatePath . 'claroline/upload/images', $pathForm . 'main/upload/images');
+    Log::notice('Renaming ' . $updatePath . 'claroline/upload/linked_files to ' . $pathForm . 'main/upload/linked_files');
+    rename($updatePath . 'claroline/upload/linked_files', $pathForm . 'main/upload/linked_files');
+    Log::notice('Renaming ' . $updatePath . 'claroline/upload/video to ' . $pathForm . 'main/upload/video');
+    rename($updatePath . 'claroline/upload/video', $pathForm . 'main/upload/video');
 } else {
 
-	echo 'You are not allowed here !';
-
+    echo 'You are not allowed here !';
 }

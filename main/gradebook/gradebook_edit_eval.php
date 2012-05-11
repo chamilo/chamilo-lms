@@ -17,6 +17,9 @@ api_block_anonymous_users();
 block_students();
 
 $evaledit = Evaluation :: load($_GET['editeval']);
+if ($evaledit[0]->is_locked() && !api_is_platform_admin()) {
+    api_not_allowed();
+}
 $form = new EvalForm(EvalForm :: TYPE_EDIT, $evaledit[0], null, 'edit_eval_form',null,api_get_self() . '?editeval=' . Security::remove_XSS($_GET['editeval']));
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -27,13 +30,19 @@ if ($form->validate()) {
 	$eval->set_user_id($values['hid_user_id']);
 	$eval->set_course_code($values['hid_course_code']);
 	$eval->set_category_id($values['hid_category_id']);
-    
-    $parent_cat = Category :: load($values['hid_category_id']);                
-    $cat = Category :: load($parent_cat[0]->get_parent_id());    
-    $global_weight = $cat[0] -> get_weight();        
-    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
         
-    $eval->set_weight($values['weight']);
+    $parent_cat = Category :: load($values['hid_category_id']);                
+    
+    $final_weight = null;
+    if ($parent_cat[0]->get_parent_id() == 0) {
+        $final_weight = $values['weight_mask'];    
+    } else {
+        $cat = Category :: load($parent_cat[0]->get_parent_id());
+        $global_weight = $cat[0]->get_weight();
+        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();        
+    }    
+    
+    $eval->set_weight($final_weight);
     
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {

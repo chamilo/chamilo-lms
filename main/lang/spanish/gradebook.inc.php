@@ -228,4 +228,8 @@ $SelectGradebook = "Seleccionar evaluación";
 $CheckYourGradingModelValues = "Compruebe sus valores de modelo de evaluación";
 $SkillsAchievedWhenAchievingThisGradebook = "Competencias obtenidas al lograr esta evaluación";
 $AddGradebook = "Añadir evaluación";
+$SelectGradeModel = "Seleccionar un modelo de calificación";
+$AllMustWeight100 = "La suma debe ser de 100";
+$Components = "Componentes";
+$OnlyActiveWhenThereAreAnyComponents = "Esta opción está habilitada si tiene evaluaciones o categorías";
 ?>

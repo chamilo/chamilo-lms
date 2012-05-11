@@ -14,14 +14,17 @@
 
 -- xxMAINxx
 
-ALTER TABLE settings_current DROP INDEX unique_setting;
-ALTER TABLE settings_options DROP INDEX unique_setting_option;
+DROP PROCEDURE IF EXISTS drop_index;
+CREATE PROCEDURE drop_index(in t_name varchar(128), in i_name varchar(128) ) BEGIN IF ( (SELECT count(*) AS index_exists FROM  information_schema.statistics WHERE table_schema = DATABASE( )  AND table_name = t_name  AND  index_name =   i_name ) > 0) THEN    SET @s = CONCAT('DROP INDEX ' , i_name , ' ON ' , t_name );    PREPARE stmt FROM @s;    EXECUTE stmt;  END IF; END;
+
+CALL drop_index('settings_current', 'unique_setting');
+CALL drop_index('settings_options', 'unique_setting_option');
 
 ALTER TABLE user_friend RENAME TO user_rel_user;
 ALTER TABLE session_rel_user ADD COLUMN relation_type int NOT NULL default 0;
 ALTER TABLE course_rel_user  ADD COLUMN relation_type int NOT NULL default 0;
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
+-- see #4705 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
 ALTER TABLE course DROP PRIMARY KEY , ADD UNIQUE KEY code (code);
 ALTER TABLE course ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 CREATE TABLE block (id INT NOT NULL auto_increment, name VARCHAR(255) NULL, description TEXT NULL, path VARCHAR(255) NOT NULL, controller VARCHAR(100) NOT NULL, active TINYINT NOT NULL default 1, PRIMARY KEY(id));

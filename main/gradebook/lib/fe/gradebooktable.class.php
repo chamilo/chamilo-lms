@@ -63,7 +63,7 @@ class GradebookTable extends SortableTable {
 		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Modify'), false, 'width="120px"');
+			$this->set_header($column++, get_lang('Modify'), false, 'width="150px"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (				
 				'setvisible' => get_lang('SetVisible'),
@@ -215,13 +215,17 @@ class GradebookTable extends SortableTable {
 					$row[] = $this->build_edit_column($item); 
 				}
 			} else {
-				//students get the results and certificates columns
-				if (count($this->evals_links)>0 && $status_user!=1 ) {
-					$value_data = isset($data[4]) ? $data[4] : null;					
-					if (!is_null($value_data)) {
+				//students get the results and certificates columns                
+				if (count($this->evals_links) > 0 && $status_user != 1) {                    
+					$value_data = isset($data[4]) ? $data[4] : null;
+					if (!is_null($value_data)) {                        
 						$row[] = Display::tag('h4', $value_data);
-					}
-				}    
+					} else {                        
+                        $row[] = $this->build_edit_column($item);     
+                    }
+				} else {
+                    $row[] = $this->build_edit_column($item);
+                }
 			}
             
             //Category added
@@ -267,7 +271,7 @@ class GradebookTable extends SortableTable {
 					$row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item) . $invisibility_span_close;
 					
 					//Description
-					$row[] = $invisibility_span_open.$data[2] . $invisibility_span_close;			
+					$row[] = $invisibility_span_open.$data[2].$invisibility_span_close;			
 					
 					//Weight
 					//$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
@@ -494,7 +498,7 @@ class GradebookTable extends SortableTable {
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()
-							. '</a>&nbsp;['.get_lang('Evaluation').']';
+							. '</a>&nbsp;'.Display::label(get_lang('Evaluation'));
 					}
 				} elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
 					// students can go to the statistics page (if custom display enabled)
@@ -528,7 +532,7 @@ class GradebookTable extends SortableTable {
 					$text = $item->get_name();
 				}
 
-				$text .= '&nbsp;[' . $item->get_type_name() . ']'.$show_message;
+				$text .= "&nbsp;".Display::label($item->get_type_name()).$show_message;
 				$cc = $this->currentcat->get_course_code();
 				if (empty($cc)) {
 					$text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';

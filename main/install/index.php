@@ -37,12 +37,16 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 
 /*		INITIALIZATION SECTION */
 
+ob_implicit_flush(true);
 session_start();
 
 // Including necessary libraries.
 require_once '../inc/lib/main_api.lib.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
+require_once 'install.class.php';
+require_once 'i_database.class.php';
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the
@@ -100,6 +104,11 @@ header('Content-Type: text/html; charset='. api_get_system_encoding());
 // Setting the error reporting levels.
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
+/**
+ * @todo: remove that
+ */
+error_reporting(E_ALL);
+
 // Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
 
@@ -155,13 +164,13 @@ if (!empty($_POST['updatePath'])) {
 	$proposedUpdatePath = $_POST['updatePath'];
 }
 
-if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6']) {
-	if ($_POST['step2_install']) {
+if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_update_6']) {
+	if (@$_POST['step2_install']) {
 		$installType = 'new';
 		$_POST['step2'] = 1;
 	} else {
 		$installType = 'update';
-		if ($_POST['step2_update_8']) {
+		if (@$_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
 			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
 			if (file_exists($proposedUpdatePath)) {
@@ -194,7 +203,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 			}
 		}
 	}
-} elseif ($_POST['step1']) {
+} elseif (@$_POST['step1']) {
 	$_POST['updatePath'] = '';
 	$installType = '';
 	$updateFromConfigFile = '';
@@ -484,10 +493,12 @@ if ($encryptPassForm == '1') {
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     
     $instalation_type_label = '';
-    if ($installType == 'new') 
+    if ($installType == 'new'){ 
         $instalation_type_label  = get_lang('NewInstallation'); 
-    elseif ($installType == 'update') 
+    }elseif ($installType == 'update') {
+        $update_from_version = isset($update_from_version) ? $update_from_version : null;
         $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+    }
     if (!empty($instalation_type_label)) {
     	echo "<h2>$instalation_type_label</h2><hr />";
     }        
@@ -538,13 +549,13 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
 	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
 <?php
-if ($_POST['step2']) {
+if (@$_POST['step2']) {
 	//STEP 3 : LICENSE
 	display_license_agreement();
-} elseif ($_POST['step3']) {
+} elseif (@$_POST['step3']) {
 	//STEP 4 : MYSQL DATABASE SETTINGS	
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
-} elseif ($_POST['step4']) {
+} elseif (@$_POST['step4']) {
 	//STEP 5 : CONFIGURATION SETTINGS
 	
 	//if update, try getting settings from the database...
@@ -612,7 +623,7 @@ if ($_POST['step2']) {
 	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 
-} elseif ($_POST['step5']) {
+} elseif (@$_POST['step5']) {
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
@@ -700,7 +711,7 @@ if ($_POST['step2']) {
 	</table>
 
 <?php
-} elseif ($_POST['step6']) {
+} elseif (@$_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
 	
@@ -721,7 +732,7 @@ if ($_POST['step2']) {
         
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
-        error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);
+        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
     	if ($userPasswordCrypted == '1') {
 			$userPasswordCrypted = 'md5';
@@ -800,7 +811,6 @@ if ($_POST['step2']) {
 				break;
 		}
 	} else {        
-        
 		set_file_folder_permissions();
 		database_server_connect();
 
@@ -815,7 +825,7 @@ if ($_POST['step2']) {
 		include 'install_files.inc.php';
 	}
     $current_step = 7;
-    display_after_install_message($installType, $nbr_courses);
+    display_after_install_message($installType);
 
 } elseif ($_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS

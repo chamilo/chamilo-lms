@@ -2044,7 +2044,7 @@ function WSCreateCourse($params) {
         $orig_course_id_value[]     = $course_param['original_course_id_value'];        
         $visibility                 = null;
         
-        if($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
+        if ($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
             $visibility = $course_param['visibility'];
         }
         $extra_list = $course_param['extra'];
@@ -2236,7 +2236,7 @@ function WSCreateCourseByTitle($params) {
     $results = array();
     $orig_course_id_value = array();
 
-    foreach($courses_params as $course_param) {
+    foreach ($courses_params as $course_param) {
 
         $title = $course_param['title'];
         $category_code = 'LANG'; // TODO: A hard-coded value.
@@ -2305,23 +2305,27 @@ function WSCreateCourseByTitle($params) {
         $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"', Database :: escape_string($wanted_code));
         $result_check = Database::query($sql_check); // I don't know why this api function doesn't work...
         if (Database::num_rows($result_check) < 1) {
-            if (sizeof($keys)) {
-                $visual_code = $keys['currentCourseCode'];
-                $code = $keys['currentCourseId'];
-                $db_name = $keys['currentCourseDbName'];
-                $directory = $keys['currentCourseRepository'];
-                $expiration_date = time() + $firstExpirationDelay;
-                prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory);
-                fill_Db_course($db_name, $directory, $course_language, $pictures_array);
-                $return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+            
+            $params = array();
+
+            $params['title']            = $title;
+            $params['wanted_code']      = $wanted_code;
+            $params['category_code']    = $category_code;
+            $params['tutor_name']       = $tutor_name;
+            $params['course_language']  = $course_language;
+            $params['user_id']          = api_get_user_id();
+            $params['visibility']       = $visibility;
+
+            $course_info = create_course($params);
+            
+            if (!empty($course_info)) {
+                $course_code = $course_info['code'];
 
                 // Save new fieldlabel into course_field table.
                 $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
 
                 // Save the external system's id into user_field_value table.
-                $res = CourseManager::update_course_extra_field_value($code, $original_course_id_name, $original_course_id_value);
+                $res = CourseManager::update_course_extra_field_value($course_code, $original_course_id_name, $original_course_id_value);
 
                 if (is_array($extra_list) && count($extra_list) > 0) {
                     foreach ($extra_list as $extra) {
@@ -2330,11 +2334,11 @@ function WSCreateCourseByTitle($params) {
                         // Save new fieldlabel into course_field table.
                         $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
                         // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value($code, $extra_field_name, $extra_field_value);
+                        $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
                     }
                 }
             }
-            $results[] = $code;
+            $results[] = $course_code;
             continue;
 
         } else {

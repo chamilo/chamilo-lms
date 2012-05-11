@@ -6,7 +6,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin');
+$language_file = array('admin', 'gradebook');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';

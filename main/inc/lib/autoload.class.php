@@ -109,6 +109,7 @@ class Autoload
         $result['DokeosIndexer'] = '/main/inc/lib/search/DokeosIndexer.class.php';
         $result['DropboxLink'] = '/main/gradebook/lib/be/dropboxlink.class.php';
         $result['DummyCourseCreator'] = '/main/coursecopy/classes/DummyCourseCreator.class.php';
+        $result['EntityGenerator'] = '/main/inc/lib/tools/entity_generator.class.php';
         $result['EvalForm'] = '/main/gradebook/lib/fe/evalform.class.php';
         $result['EvalLink'] = '/main/gradebook/lib/be/evallink.class.php';
         $result['Evaluation'] = '/main/gradebook/lib/be/evaluation.class.php';
@@ -216,11 +217,11 @@ class Autoload
         $result['KeyAuth'] = '/main/auth/key/key_auth.class.php';
         $result['LearnpathLink'] = '/main/gradebook/lib/be/learnpathlink.class.php';
         $result['LegalManager'] = '/main/inc/lib/legal.lib.php';
-        $result['Link'] = '/main/coursecopy/classes/Link.class.php';
         $result['LinkAddEditForm'] = '/main/gradebook/lib/fe/linkaddeditform.class.php';
         $result['LinkCategory'] = '/main/coursecopy/classes/LinkCategory.class.php';
         $result['LinkFactory'] = '/main/gradebook/lib/be/linkfactory.class.php';
         $result['LinkForm'] = '/main/gradebook/lib/fe/linkform.class.php';
+        $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';

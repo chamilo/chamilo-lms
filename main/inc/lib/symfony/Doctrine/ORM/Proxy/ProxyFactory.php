@@ -21,7 +21,8 @@ namespace Doctrine\ORM\Proxy;
 
 use Doctrine\ORM\EntityManager,
     Doctrine\ORM\Mapping\ClassMetadata,
-    Doctrine\ORM\Mapping\AssociationMapping;
+    Doctrine\ORM\Mapping\AssociationMapping,
+    Doctrine\Common\Util\ClassUtils;
 
 /**
  * This factory is used to create proxy objects for entities at runtime.
@@ -40,6 +41,14 @@ class ProxyFactory
     private $_proxyNamespace;
     /** The directory that contains all proxy classes. */
     private $_proxyDir;
+
+    /**
+     * Used to match very simple id methods that don't need
+     * to be proxied since the identifier is known.
+     *
+     * @var string
+     */
+    const PATTERN_MATCH_ID_METHOD = '((public\s)?(function\s{1,}%s\s?\(\)\s{1,})\s{0,}{\s{0,}return\s{0,}\$this->%s;\s{0,}})i';
 
     /**
      * Initializes a new instance of the <tt>ProxyFactory</tt> class that is
@@ -74,13 +83,12 @@ class ProxyFactory
      */
     public function getProxy($className, $identifier)
     {
-        $proxyClassName = str_replace('\\', '', $className) . 'Proxy';
-        $fqn = $this->_proxyNamespace . '\\' . $proxyClassName;
+        $fqn = ClassUtils::generateProxyClassName($className, $this->_proxyNamespace);
 
         if (! class_exists($fqn, false)) {
-            $fileName = $this->_proxyDir . DIRECTORY_SEPARATOR . $proxyClassName . '.php';
+            $fileName = $this->getProxyFileName($className);
             if ($this->_autoGenerate) {
-                $this->_generateProxyClass($this->_em->getClassMetadata($className), $proxyClassName, $fileName, self::$_proxyClassTemplate);
+                $this->_generateProxyClass($this->_em->getClassMetadata($className), $fileName, self::$_proxyClassTemplate);
             }
             require $fileName;
         }
@@ -95,38 +103,59 @@ class ProxyFactory
     }
 
     /**
+     * Generate the Proxy file name
+     *
+     * @param string $className
+     * @param string $baseDir Optional base directory for proxy file name generation.
+     *                        If not specified, the directory configured on the Configuration of the
+     *                        EntityManager will be used by this factory.
+     * @return string
+     */
+    private function getProxyFileName($className, $baseDir = null)
+    {
+        $proxyDir = $baseDir ?: $this->_proxyDir;
+
+        return $proxyDir . DIRECTORY_SEPARATOR . '__CG__' . str_replace('\\', '', $className) . '.php';
+    }
+
+    /**
      * Generates proxy classes for all given classes.
      *
      * @param array $classes The classes (ClassMetadata instances) for which to generate proxies.
      * @param string $toDir The target directory of the proxy classes. If not specified, the
      *                      directory configured on the Configuration of the EntityManager used
      *                      by this factory is used.
+     * @return int Number of generated proxies.
      */
     public function generateProxyClasses(array $classes, $toDir = null)
     {
         $proxyDir = $toDir ?: $this->_proxyDir;
-        $proxyDir = rtrim($proxyDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $proxyDir = rtrim($proxyDir, DIRECTORY_SEPARATOR);
+        $num = 0;
+
         foreach ($classes as $class) {
             /* @var $class ClassMetadata */
-            if ($class->isMappedSuperclass) {
+            if ($class->isMappedSuperclass || $class->reflClass->isAbstract()) {
                 continue;
             }
 
-            $proxyClassName = str_replace('\\', '', $class->name) . 'Proxy';
-            $proxyFileName = $proxyDir . $proxyClassName . '.php';
-            $this->_generateProxyClass($class, $proxyClassName, $proxyFileName, self::$_proxyClassTemplate);
+            $proxyFileName = $this->getProxyFileName($class->name, $proxyDir);
+
+            $this->_generateProxyClass($class, $proxyFileName, self::$_proxyClassTemplate);
+            $num++;
         }
+
+        return $num;
     }
 
     /**
      * Generates a proxy class file.
      *
      * @param $class
-     * @param $originalClassName
      * @param $proxyClassName
      * @param $file The path of the file to write to.
      */
-    private function _generateProxyClass($class, $proxyClassName, $fileName, $file)
+    private function _generateProxyClass($class, $fileName, $file)
     {
         $methods = $this->_generateMethods($class);
         $sleepImpl = $this->_generateSleep($class);
@@ -138,16 +167,19 @@ class ProxyFactory
             '<methods>', '<sleepImpl>', '<cloneImpl>'
         );
 
-        if(substr($class->name, 0, 1) == "\\") {
-            $className = substr($class->name, 1);
-        } else {
-            $className = $class->name;
-        }
+        $className = ltrim($class->name, '\\');
+        $proxyClassName = ClassUtils::generateProxyClassName($class->name, $this->_proxyNamespace);
+        $parts = explode('\\', strrev($proxyClassName), 2);
+        $proxyClassNamespace = strrev($parts[1]);
+        $proxyClassName = strrev($parts[0]);
 
         $replacements = array(
-            $this->_proxyNamespace,
-            $proxyClassName, $className,
-            $methods, $sleepImpl, $cloneImpl
+            $proxyClassNamespace,
+            $proxyClassName,
+            $className,
+            $methods,
+            $sleepImpl,
+            $cloneImpl
         );
 
         $file = str_replace($placeholders, $replacements, $file);
@@ -211,6 +243,15 @@ class ProxyFactory
 
                 $methods .= $parameterString . ')';
                 $methods .= "\n" . '    {' . "\n";
+                if ($this->isShortIdentifierGetter($method, $class)) {
+                    $identifier = lcfirst(substr($method->getName(), 3));
+
+                    $cast = in_array($class->fieldMappings[$identifier]['type'], array('integer', 'smallint')) ? '(int) ' : '';
+
+                    $methods .= '        if ($this->__isInitialized__ === false) {' . "\n";
+                    $methods .= '            return ' . $cast . '$this->_identifier["' . $identifier . '"];' . "\n";
+                    $methods .= '        }' . "\n";
+                }
                 $methods .= '        $this->__load();' . "\n";
                 $methods .= '        return parent::' . $method->getName() . '(' . $argumentString . ');';
                 $methods .= "\n" . '    }' . "\n";
@@ -218,6 +259,44 @@ class ProxyFactory
         }
 
         return $methods;
+    }
+
+    /**
+     * Check if the method is a short identifier getter.
+     *
+     * What does this mean? For proxy objects the identifier is already known,
+     * however accessing the getter for this identifier usually triggers the
+     * lazy loading, leading to a query that may not be necessary if only the
+     * ID is interesting for the userland code (for example in views that
+     * generate links to the entity, but do not display anything else).
+     *
+     * @param ReflectionMethod $method
+     * @param ClassMetadata $class
+     * @return bool
+     */
+    private function isShortIdentifierGetter($method, $class)
+    {
+        $identifier = lcfirst(substr($method->getName(), 3));
+        $cheapCheck = (
+            $method->getNumberOfParameters() == 0 &&
+            substr($method->getName(), 0, 3) == "get" &&
+            in_array($identifier, $class->identifier, true) &&
+            $class->hasField($identifier) &&
+            (($method->getEndLine() - $method->getStartLine()) <= 4)
+            && in_array($class->fieldMappings[$identifier]['type'], array('integer', 'bigint', 'smallint', 'string'))
+        );
+
+        if ($cheapCheck) {
+            $code = file($method->getDeclaringClass()->getFileName());
+            $code = trim(implode(" ", array_slice($code, $method->getStartLine() - 1, $method->getEndLine() - $method->getStartLine() + 1)));
+
+            $pattern = sprintf(self::PATTERN_MATCH_ID_METHOD, $method->getName(), $identifier);
+
+            if (preg_match($pattern, $code)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -290,7 +369,13 @@ class <proxyClassName> extends \<className> implements \Doctrine\ORM\Proxy\Proxy
             unset($this->_entityPersister, $this->_identifier);
         }
     }
-    
+
+    /** @private */
+    public function __isInitialized()
+    {
+        return $this->__isInitialized__;
+    }
+
     <methods>
 
     public function __sleep()

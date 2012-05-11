@@ -115,8 +115,6 @@ if ($page < 0) {
     $page = 1;
 }
 
-
-
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
 	$gradebook=	$_SESSION['gradebook'];
@@ -216,26 +214,28 @@ if ($is_allowedToEdit) {
 
 		$objExerciseTmp = new Exercise();
 		$check = Security::check_token('get');
+        $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId);
+        
 		if ($objExerciseTmp->read($exerciseId)) {
 			if ($check) {
 				switch ($choice) {
 					case 'delete' : // deletes an exercise
-						$objExerciseTmp->delete();						
-						require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-						$link_id = is_resource_in_course_gradebook(api_get_course_id(), 1 , $exerciseId, api_get_session_id());
-						if ($link_id !== false) {
-						    remove_resource_from_course_gradebook($link_id);
-						}
-						Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
+                        if ($exercise_action_locked == false) {
+                            $objExerciseTmp->delete();						
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 1 , $exerciseId, api_get_session_id());
+                            if ($link_info !== false) {
+                                remove_resource_from_course_gradebook($link_info['id']);
+                            }
+                            Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
+                        }
 						break;
 					case 'enable' : // enables an exercise
 						$objExerciseTmp->enable();
-						$objExerciseTmp->save();
-                        
+						$objExerciseTmp->save();                        
                         api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'visible', api_get_user_id());
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-
 						break;
 					case 'disable' : // disables an exercise
 						$objExerciseTmp->disable();
@@ -254,13 +254,15 @@ if ($is_allowedToEdit) {
 						Display :: display_confirmation_message(get_lang('ResultsEnabled'));
 						break;
 					case 'clean_results' : //clean student results
-							$quantity_results_deleted= $objExerciseTmp->clean_results();
-							Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'),$quantity_results_deleted));
-					break;
+                        if ($exercise_action_locked == false) {
+                            $quantity_results_deleted= $objExerciseTmp->clean_results();
+                            Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'),$quantity_results_deleted));
+                        }
+                        break;
 					case 'copy_exercise' : //copy an exercise
-							$objExerciseTmp->copy_exercise();
-							Display :: display_confirmation_message(get_lang('ExerciseCopied'));
-					break;
+                        $objExerciseTmp->copy_exercise();
+                        Display :: display_confirmation_message(get_lang('ExerciseCopied'));
+                        break;
 				}
 			}
 		}
@@ -453,6 +455,9 @@ if (!empty($exercise_list)) {
         if (!empty($exercise_list))
         foreach ($exercise_list as $row) {
             $my_exercise_id = $row['id'];                
+            
+            $locked = api_resource_is_locked_by_gradebook($my_exercise_id);
+            
             //echo '<div  id="tabs-'.$i.'">';
             $i++;                    
             //validacion when belongs to a session
@@ -570,8 +575,12 @@ if (!empty($exercise_list)) {
                                             
                     //Export
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
-                    //Clean exercise                    
-                    $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'),'',ICON_SIZE_SMALL),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));                      
+                    //Clean exercise      
+                    if ($locked == false) {
+                        $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'),'',ICON_SIZE_SMALL),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));                      
+                    } else {
+                        $actions .= Display::return_icon('clean_na.png', get_lang('ResourceLockedByGradebook'),'',ICON_SIZE_SMALL);
+                    }
                     //Visible / invisible
                     if ($row['active']) {
                         $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'),'',ICON_SIZE_SMALL) , 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                        
@@ -589,7 +598,11 @@ if (!empty($exercise_list)) {
                 
                 //Delete
                 if ($session_id == $row['session_id']) {
-                    $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
+                    if ($locked == false) {
+                        $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
+                    } else {
+                        $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'),'',ICON_SIZE_SMALL);
+                    }
                 }
 
 				// Number of questions

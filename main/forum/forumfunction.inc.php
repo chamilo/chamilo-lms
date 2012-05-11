@@ -84,9 +84,9 @@ function handle_forum_and_forumcategories($lp_id = null) {
         for ($i = 0; $i < count($list_threads); $i++) {
             delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);         
             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-            $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($list_threads[$i]['thread_id']), api_get_session_id());
-            if ($link_id !== false) {
-                remove_resource_from_course_gradebook($link_id);
+            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($list_threads[$i]['thread_id']), api_get_session_id());
+            if ($link_info !== false) {
+                remove_resource_from_course_gradebook($link_info['id']);
             }
         }
         $return_message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
@@ -1905,9 +1905,7 @@ function store_thread($values) {
             $maxqualify = $values['numeric_calification'];
             $weigthqualify = $values['weight_calification'];
             $resourcedescription = '';
-            $date = time();
-            //is_resource_in_course_gradebook($course_code, $resource_type, $resource_id);
-            add_resource_to_course_gradebook($coursecode, $resourcetype, $resourceid, $resourcename, $weigthqualify, $maxqualify, $resourcedescription, $date, 0, api_get_session_id());
+            add_resource_to_course_gradebook($values['category_id'], $coursecode, $resourcetype, $resourceid, $resourcename, $weigthqualify, $maxqualify, $resourcedescription, 0, api_get_session_id());
         }
 
         api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'ForumThreadAdded', api_get_user_id());
@@ -2006,8 +2004,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     global $forum_setting;
     global $current_forum;
     global $_user;
-    global $origin;
-    global $charset;
+    global $origin;    
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Setting the class and text of the form title and submit button.
@@ -2065,6 +2062,9 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
 
     if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ) {
 
+        //Loading gradebook select
+        load_gradebook_select_in_tool($form);
+        
         // Thread qualify        
         $form->applyFilter('numeric_calification', 'html_filter');
         $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
@@ -2097,10 +2097,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array ('rows' => 4, 'cols' => 34));
     $form->applyFilter('file_comment', 'html_filter');
     $form->addElement('html', '</div>');
-    $userid  = api_get_user_id();
-    $info    = api_get_user_info($userid);
-    $courseid = api_get_course_id();
-
+        
     $form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');
     $form->add_real_progress_bar('DocumentUpload', 'user_upload');
 
@@ -2496,17 +2493,26 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         $form->addElement('static', 'Group', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
         $form->applyFilter('numeric_calification', 'html_filter');
         $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-        $defaults['thread_qualify_gradebook'] = is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
+        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
+        
+        if (!empty($link_info)) {
+            $defaults['thread_qualify_gradebook'] = true;
+            $defaults['category_id'] = $link_info['category_id'];
+        }        
 
         if (!empty($defaults['thread_qualify_gradebook'])) {
             $form -> addElement('html', '<div id="options_field" style="display:block">');
         } else {
             $form -> addElement('html', '<div id="options_field" style="display:none">');
         }
+        
+        //Loading gradebook select
+        load_gradebook_select_in_tool($form);
+        
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'), 'value="'.$current_thread['thread_qualify_max'].'" style="width:40px"');
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'), 'value="'.$current_thread['thread_title_qualify'].'"');
         $form->applyFilter('calification_notebook_title', 'html_filter');
-        $form->addElement('text', 'weight_calification', get_lang('QualifyWeight'), 'value="'.$current_thread['thread_weight'].'" style="width:40px"');
+        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, '') , 'value="'.$current_thread['thread_weight'].'" style="width:40px"');
         $form->applyFilter('weight_calification', 'html_filter');
         $form->addElement('html', '</div>');
     }
@@ -2529,11 +2535,10 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         $form->addElement('checkbox', 'remove_attach', null, get_lang('DeleteAttachmentFile'));
     }
     // User upload
-    $form->addElement('html', '<br /><b><div class="row"><div class="label">'.$message.'</div></div></b><br /><br />');
+    $form->addElement('label', $message);
     $form->addElement('file', 'user_upload', get_lang('FileName'), '');
     $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array ('rows' => 4, 'cols' => 34));
-    $form->applyFilter('file_comment', 'html_filter');
-    $form->addElement('html', '</div><br /><br />');
+    $form->applyFilter('file_comment', 'html_filter');    
     if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
         if (empty($form_values) && !isset($_POST['SubmitPost'])) {
             //edit_added_resources('forum_post', $current_post['post_id']);
@@ -2550,9 +2555,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         $defaults['post_notification'] = true;
     }
 
-    if (!empty($form_values)) {
-        //$defaults['post_title']=Security::remove_XSS($form_values['post_title']);
-        //$defaults['post_text']=Security::remove_XSS($form_values['post_text']);
+    if (!empty($form_values)) {        
         $defaults['post_notification']  = Security::remove_XSS($form_values['post_notification']);
         $defaults['thread_sticky']      = Security::remove_XSS($form_values['thread_sticky']);
     }
@@ -2631,18 +2634,20 @@ function store_edit_post($values) {
     if (api_is_course_admin() == true) {
         $ccode = api_get_course_id();
         $sid = api_get_session_id();
-        $link_id = is_resource_in_course_gradebook($ccode, 5, $values['thread_id'], $sid);
+        
+                
+        $link_info = is_resource_in_course_gradebook($ccode, 5, $values['thread_id'], $sid);
+        $link_id = $link_info['id'];
+        
         $thread_qualify_gradebook = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null;
         if ($thread_qualify_gradebook != 1) {
-            if ($link_id !== false) {
+            if ($link_info !== false) {
                 remove_resource_from_course_gradebook($link_id);
             }
         } else {
-            if ($link_id === false && !$_GET['thread']) {
-                //$date_in_gradebook = date('Y-m-d H:i:s');
-                $date_in_gradebook = null;
+            if ($link_info === false && !$_GET['thread']) {                
                 $weigthqualify = $values['weight_calification'];
-                add_resource_to_course_gradebook($ccode, 5, $values['thread_id'], Database::escape_string(stripslashes($values['calification_notebook_title'])), $weigthqualify, $values['numeric_calification'], null, $date_in_gradebook, 0, $sid);
+                add_resource_to_course_gradebook($values['category_id'], $ccode, 5, $values['thread_id'], Database::escape_string(stripslashes($values['calification_notebook_title'])), $weigthqualify, $values['numeric_calification'], null, 0, $sid);
             }
         }
     }
@@ -3359,9 +3364,9 @@ function prepare4display($input) {
 
     if (!isset($search)) {
         if (isset($_POST['search_term'])) {
-            $search = html_filter($_POST['search_term']); // No html at all.
+            $search = $_POST['search_term']; // No html at all.
         } elseif (isset($_GET['search'])) {
-            $search = html_filter($_GET['search']);
+            $search = $_GET['search'];
         } else {
             $search = '';
         }

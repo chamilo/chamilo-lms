@@ -330,6 +330,11 @@ class Display {
     public static function display_error_message ($message, $filter = true) {
         echo self::return_message($message, 'error', $filter);
     }
+    
+    public static function return_message_and_translate($message, $type='normal', $filter = true) {
+        $message = get_lang($message);
+        echo self::return_message($message, $type, $filter);
+    }    
 
     /**
      * Returns a div html string with
@@ -776,7 +781,6 @@ class Display {
         $lis = '';
         $i = 1;
         foreach ($header_list as $item) {
-
             $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i));
             $lis .=self::tag('li', $item, $ul_attributes);
             $i++;
@@ -1149,9 +1153,10 @@ class Display {
             } else {
                 $my_course['id_session'] = $course_info['id_session'];
             }
+            //$label = get_lang(ucfirst($notification['tool'])).' '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate)";
+            $label = get_lang('_title_notification').": ".get_lang($type)." ($lastDate)";
             $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
-                         '<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" />
-                          </a>&nbsp;';
+                            Display::return_icon($notification['image'], $label).'</a>&nbsp;';
         }
         return $retvalue;
     }

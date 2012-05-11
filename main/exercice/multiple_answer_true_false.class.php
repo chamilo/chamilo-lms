@@ -42,19 +42,7 @@ class MultipleAnswerTrueFalse extends Question {
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
 		$obj_ex = $_SESSION['objExercise'];
-        
-		$html.='<div class="row">
-			     <div class="label">
-			         '.get_lang('Answers').'<br /><img src="../img/fill_field.png">
-			     </div>
-			     <div class="formw">';        
-        
-        $html2 ='<div class="row">
-                 <div class="label">               
-                 </div>
-                 <div class="formw">';
-        
-        $form -> addElement ('html', $html2);        
+                
         $form -> addElement ('html', '<table><tr>');  
         $renderer = & $form->defaultRenderer();
         $defaults = array();
@@ -77,8 +65,7 @@ class MultipleAnswerTrueFalse extends Question {
         $form -> addElement('hidden', 'options_count', 3);
                     
         $form -> addElement ('html', '</tr></table>');
-        $form -> addElement ('html', '</div></div>');
-       
+               
 		$html.='<table class="data_table">
 					<tr style="text-align: center;">
 						<th>
@@ -98,8 +85,7 @@ class MultipleAnswerTrueFalse extends Question {
         				    $html .='<th>'.get_lang('Comment').'</th>';
         				}
 				$html .= '</tr>';
-		$form -> addElement ('html', $html);
-
+        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 		
 		$correct = 0;
 		if (!empty($this -> id))	{

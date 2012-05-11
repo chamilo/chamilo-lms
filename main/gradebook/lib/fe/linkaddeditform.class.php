@@ -112,12 +112,16 @@ class LinkAddEditForm extends FormValidator
 		$this->addRule('weight_mask',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		if ($form_type == self :: TYPE_EDIT) {            
-            $parent_cat = Category :: load($link->get_category_id());     
-            $cat = Category :: load($parent_cat[0]->get_parent_id());
-            $global_weight = $cat[0]->get_weight();
+            $parent_cat = Category :: load($link->get_category_id());
             
-            $values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
-			//$defaults['weight'] = $link->get_weight();   
+            if ($parent_cat[0]->get_parent_id() == 0) {
+                $values['weight'] = $link->get_weight();                
+            } else {
+                $cat = Category :: load($parent_cat[0]->get_parent_id());
+                $global_weight = $cat[0]->get_weight();            
+                $values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
+            }
+			
             $defaults['weight_mask'] = $values['weight'] ;   
             $defaults['select_gradebook'] = $link->get_category_id();
             

@@ -1057,7 +1057,6 @@ $CourseCodeAlreadyExistExplained = "Lorsqu'un code de cours est dupliqué, le sy
 $CantDeleteReadonlyFiles = "Impossible de supprimer des fichiers qui sont en mode lecture seule.";
 $Uploaded = "Envoyé.";
 $Saved = "Sauvegardé.";
-$GotoCourse = "Aller au cours";
 $EmailSentFromDokeos = "E-mail envoyé depuis la plateforme";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Information au sujet de la dernière étape clôturée et de la suivante non clôturée.";
 $LatexCode = "Code LaTeX";

@@ -17,6 +17,7 @@
  * Constants definition
  */
 require_once 'database.constants.inc.php';
+
 /**
  * Database class definition
  * @package chamilo.database
@@ -43,17 +44,7 @@ class Database {
      */
     public static function get_statistic_database() {
         global $_configuration;
-        return $_configuration['statistics_database'];
-    }
-
-    /**
-     *	Returns the name of the SCORM database.
-     *  @todo use main_database
-     *	@deprecated
-     */
-    public static function get_scorm_database() {
-        global $_configuration;
-        return $_configuration['scorm_database'];
+        return $_configuration['main_database'];
     }
 
     /**
@@ -62,7 +53,7 @@ class Database {
      */
     public static function get_user_personal_database() {
         global $_configuration;
-        return $_configuration['user_personal_database'];
+        return $_configuration['main_database'];
     }
 
     /**
@@ -192,19 +183,7 @@ class Database {
     }
 
     /**
-     * This generic method returns the correct and complete name of any scorm
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_scorm_table($short_table_name) {
-        return self::format_table_name(self::get_scorm_database(), $short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any scorm
+     * This generic method returns the correct and complete name of any user
      * table of which you pass the short name as a parameter. Please, define
      * table names as constants in this library and use them instead of directly
      * using magic words in your tool code.
@@ -418,9 +397,17 @@ class Database {
         if (!isset($parameters['client_flags'])) {
             $parameters['client_flags'] = 0;
         }
-        return $parameters['persistent']
-            ? mysql_pconnect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['client_flags'])
-            : mysql_connect($parameters['server'], $parameters['username'], $parameters['password'], $parameters['new_link'], $parameters['client_flags']);
+        
+        $persistent = isset($parameters['persistent']) ? $parameters['persistent'] : null;
+        $server = isset($parameters['server']) ? $parameters['server'] : null;
+        $username = isset($parameters['username']) ? $parameters['username'] : null;
+        $password = isset($parameters['password']) ? $parameters['password'] : null;
+        $client_flag = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
+        $new_link = isset($parameters['new_link']) ? $parameters['new_link'] : null;
+        $client_flags = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
+        return $persistent
+            ? mysql_pconnect($server, $username, $password, $client_flags)
+            : mysql_connect($server, $username, $password, $new_link, $client_flags);
     }
 
     /**
@@ -696,6 +683,7 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
+                strpos($query, 'DROP TABLE IF EXISTS') === false &&      
                 strpos($query, 'thematic_advance') === false &&  
                 strpos($query, 'thematic_plan') === false &&  
                 strpos($query, 'track_c_countries') === false &&                        
@@ -781,9 +769,9 @@ class Database {
             if (empty($line) && $line !== false) {
                 $line = $caller['line'];
             }
-            $type = $owner['type'];
+            $type = isset($owner['type']) ? $owner['type'] : null;
             $function = $owner['function'];
-            $class = $owner['class'];
+            $class = isset($owner['class']) ? $owner['class'] : null;
             $server_type = api_get_setting('server_type');
             if (!empty($line) && !empty($server_type) && $server_type != 'production') {
                 $info = '<pre>' .

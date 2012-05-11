@@ -89,14 +89,7 @@ class Matching extends Question {
 		$form -> addElement('hidden', 'nb_options', $nb_options);
 
 		// DISPLAY MATCHES
-		$html='
-		<div class="row">
-			<div class="label">
-			'.get_lang('Answers').' <br /> <img src="../img/fill_field.png">
-			</div>
-			<div class="formw">
-				'.get_lang('MakeCorrespond').'
-				<table class="data_table">
+		$html='<table class="data_table">
 					<tr>
 						<th width="10px">
 							'.get_lang('Number').'
@@ -110,9 +103,9 @@ class Matching extends Question {
 						<th width="50px">
 							'.get_lang('Weighting').'
 						</th>
-
 					</tr>';
-		$form -> addElement ('html', $html);
+        
+		$form -> addElement ('label', get_lang('MakeCorrespond').'<br /> <img src="../img/fill_field.png">', $html);
 		
 		if ($nb_matches < 1) {
 			$nb_matches = 1;
@@ -146,13 +139,8 @@ class Matching extends Question {
 
 		$form -> addGroup($group);
 
-		// DISPLAY OPTIONS ////
-		$html='
-		<div class="row">
-			<div class="label">
-			</div>
-			<div class="formw"><br /><br />
-				<table class="data_table">
+		// DISPLAY OPTIONS
+		$html='<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="10px">
 							'.get_lang('Number').'
@@ -160,9 +148,9 @@ class Matching extends Question {
 						<th width="90%"
 							'.get_lang('Answer').'
 						</th>
-
 					</tr>';
-		$form -> addElement ('html', $html);
+		//$form -> addElement ('html', $html);
+        $form -> addElement ('label', null, $html);
 
 		if ($nb_options < 1) {
 			$nb_options = 1;

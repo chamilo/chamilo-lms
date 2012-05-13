@@ -269,7 +269,7 @@ function GetCurrentFolder()
 	if ( strpos( $sCurrentFolder, '..' ) || strpos( $sCurrentFolder, "\\" ))
 		SendError( 102, '' ) ;
 
-	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\:\*\?\"\<\>\|]),", $sCurrentFolder))
+	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\.\;\:\*\?\"\<\>\|]),", $sCurrentFolder))
 		SendError( 102, '' ) ;
 
 	return $sCurrentFolder ;
@@ -280,8 +280,9 @@ function SanitizeFolderName( $sNewFolderName )
 {
 	$sNewFolderName = stripslashes( $sNewFolderName ) ;
 
-	// Remove . \ / | : ? * " < >
+	// Remove . \ / | : ; . ? * " < > 
 	$sNewFolderName = preg_replace( '/\\.|\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFolderName ) ;
+	$sNewFolderName = preg_replace( '/\\.|\\\\|\\;|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFolderName ) ;
 
 	return $sNewFolderName ;
 }
@@ -305,7 +306,7 @@ function SanitizeFileName( $sNewFileName, $sMimeType = null )
 		$sNewFileName = preg_replace( '/\\.(?![^.]*$)/', '_', $sNewFileName ) ;
 
 	// Remove \ / | : ? * " < >
-	//$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
+	//$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\;|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ; 
 	$sNewFileName = replace_dangerous_char( $sNewFileName, 'strict' ) ;
 
 	$sNewFileName = php2phps( $sNewFileName ) ;

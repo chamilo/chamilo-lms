@@ -224,7 +224,6 @@ $(document).ready(function(){
 		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google', 'class' =>'span6' ));
 		//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
 		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
-		$form->addElement('style_submit_button', 'submit1', get_lang('SaveMP3'), 'class="save"');
 		$defaults = array();
 		$defaults['lang'] = $selected_language;    
 		$form->setDefaults($defaults);        

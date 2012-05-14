@@ -496,18 +496,17 @@ class EvalForm extends FormValidator
 				'class' => 'span1',
 				'maxlength' => '5'
 			));
+            $default_max = api_get_setting('gradebook_default_weight');
+            $defaults['max'] = isset($default_max) ?  $default_max : 100;
+            $this->setDefaults($defaults);            
 		}       
         
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
 			'rows' => '3',
 			'class' => 'span3',
-		));
-        
-        //var_dump(HTML_QuickForm::getRegisteredRules() );
+		));       
         
         $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
-       
-        
 		$this->addElement('checkbox', 'visible', null, get_lang('Visible'));
 		$this->addRule('weight_mask', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');

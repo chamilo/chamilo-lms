@@ -996,12 +996,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     	$teacher_id_list[] = $teacher['user_id'];
     }    
     
-    if (empty($hotpotatoe_where)) {
-        
-        $column             = empty($column) ? : Database::escape_string($column);
+    if (empty($hotpotatoe_where)) {        
+        $column             = !empty($column) ? Database::escape_string($column) : null;
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
-        $sql               .= " ORDER BY $column $direction ";
+        
+        if (!empty($column)) {
+            $sql               .= " ORDER BY $column $direction ";
+        }
         $sql               .= " LIMIT $from, $number_of_items";
 			
 		//var_dump($sql);

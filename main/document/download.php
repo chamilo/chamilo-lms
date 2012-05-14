@@ -74,17 +74,16 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     // Check visibility of document and paths    doc_url
     //var_dump($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
     $is_visible = false;
-    $course_info   = api_get_course_info(api_get_course_id());
-    $document_id = DocumentManager::get_document_id($course_info, $doc_url);
+    //$course_info   = api_get_course_info(api_get_course_id());
+    //$document_id = DocumentManager::get_document_id($course_info, $doc_url);
     
-    if ($document_id) {
+    //HotPotatoes_files
+    //if ($document_id) {
     	// Correct choice for strict security (only show if whole tree visible)
-	//$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+        //$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
         // Correct choice for usability
     	$is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
-    }
-    
-    //$is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
+    //}
     if (!api_is_allowed_to_edit() && !$is_visible) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.

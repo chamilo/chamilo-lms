@@ -157,8 +157,7 @@ $stok = Security::get_token();
                     
                     echo '<p>';
                     // we display the icon to subscribe or the text already subscribed
-                    echo '<div class="btn-toolbar">';
-                    
+                    echo '<div class="btn-toolbar">';                    
                        
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                         echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
@@ -179,7 +178,9 @@ $stok = Security::get_token();
                     
                     // If user is already subscribed to the course
                     if (!api_is_anonymous() && in_array($course['code'], $user_coursecodes)) {
-                        echo Display::label(get_lang("AlreadyRegisteredToCourse"), "label-info");
+                        echo '<br />';
+                        echo '<br />';
+                        echo Display::label(get_lang("AlreadyRegisteredToCourse"), "info");
                     }
                     echo '</div>';
                     

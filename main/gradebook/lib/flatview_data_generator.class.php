@@ -258,8 +258,8 @@ class FlatViewDataGenerator
                         $score[1] = $main_weight ;
                     }
                     
-                    $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);                    
-                    //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
+                    //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);                    
+                    $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                     
                     if (!isset($this->params['only_total_category'])) {
                         if (!$show_all) {                   
@@ -328,15 +328,12 @@ class FlatViewDataGenerator
             }            
             
             $item_total = round($item_total);
-			$total_score = array($item_value_total, $item_total);
-		
+			$total_score = array($item_value_total, $item_total);	
             
 			if (!$show_all) {
 				$row[] = $scoredisplay->display_score($total_score);                
-			} else {	
-				//$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
-                $row[] = $scoredisplay->display_score($total_score, SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS);                	
-				//$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+			} else {				
+                $row[] = $scoredisplay->display_score($total_score, SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS);
 			}
 			unset($score);
 			$data[] = $row;
@@ -358,8 +355,6 @@ class FlatViewDataGenerator
 
 		foreach ($selected_users as $user) {
 			$row = array ();
-			$item_value=0;
-			$item_total=0;
 			for ($count=0;$count < count($this->evals_links); $count++) {
 				$item = $this->evals_links [$count];
 				$score = $item->calc_score($user[0]);				

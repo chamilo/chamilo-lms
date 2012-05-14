@@ -158,6 +158,7 @@ class CatForm extends FormValidator {
 		}	
 
         $global_weight = api_get_setting('gradebook_default_weight');
+                
         if (isset($global_weight)) {
             $value = $global_weight;
         } else {
@@ -182,8 +183,7 @@ class CatForm extends FormValidator {
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					
 			$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('class'=>'span1','maxlength'=>'5'));
 			$this->addRule('certif_min_score', get_lang('ThisFieldIsRequired'), 'required');
-			$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');
-			//$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
+			$this->addRule('certif_min_score',get_lang('OnlyNumbers'),'numeric');			
 			$this->addRule(array('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		} else {
 		    $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
@@ -191,13 +191,14 @@ class CatForm extends FormValidator {
 		
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
-		$this->addElement('textarea', 'description', get_lang('Description'),array('class'=>'span3','cols' => '34'));        
-        
-        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0 && api_get_setting('teachers_can_change_grade_model_settings') == 'true') {
+		$this->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span3','cols' => '34'));        
+                
+        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0 && (api_is_platform_admin() || api_get_setting('teachers_can_change_grade_model_settings') == 'true')) {
+            
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                
-            $options = array(-1 => get_lang('none'));
+            $options = array(-1 => get_lang('None'));
             foreach ($grade_models as $item) {
                 $options[$item['id']] = $item['name'];
             }                                    

@@ -404,8 +404,7 @@ class PDF {
     }
     
     
-    public function set_header($course_data) {
-    	// $pdf->SetBasePath($basehref); 
+    public function set_header($course_data) {    	
                 
         $this->pdf->defaultheaderfontsize   = 10;   // in pts
         $this->pdf->defaultheaderfontstyle  = BI;   // blank, B, I, or BI
@@ -415,29 +414,22 @@ class PDF {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
             $teachers = '';
             if (!empty($teacher_list)) {                
-                foreach($teacher_list as $teacher) {
+                foreach ($teacher_list as $teacher) {
                     //$teachers[]= api_get_person_name($teacher['firstname'], $teacher['lastname']);
                     $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
-                }
+                }                              
                 if (count($teachers) > 1) {
                     $teachers = get_lang('Teachers').': '.implode(', ', $teachers);
                 } else {
                     $teachers = get_lang('Teacher').': '.implode('', $teachers);
                 }
-            }
-           
+                
+                //do not show the teacher list see BT#4080 only the current teacher name
+                $user_info = api_get_user_info();
+                $teachers = $user_info['complete_name'];                
+            }           
             
-            /*$img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
-            		if (file_exists($img)) {
-            $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
-            			$left_content = '<img src="'.$img.'">';			
-            		} else {
-            if (!empty($organization)) {
-            $html .= '<h2 align="left">'.$organization.'</h2>';
-            }
-            }*/
-            
-            //$left_content    = '';
+            $left_content    = '';
             $center_content  = '';
             $right_content   = $teachers;
         

@@ -51,11 +51,6 @@ class Display {
      * @param string Optional help file name
      */
     public static function display_header($tool_name ='', $help = null, $page_header = null) {        
-        /*
-        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
-        global $menu_navigation;        
-		global $htmlCSSXtra;        */
         self::$global_template = new Template($tool_name);      
         self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {                        
@@ -67,38 +62,28 @@ class Display {
         }
         echo self::$global_template->show_header_template();
     }
-    
-    /*
-     * 
-    public static function assign_template_variable($variable, $content) {
-        if (isset(self::$global_template)) {            
-            self::$global_template->assign($variable, $content);
-        } else {
-            //Dev message
-            echo 'You need to called the display_header first';
-            exit;
-        }
-    }*/
 
     /**
      * Displays the reduced page header (without banner)
      */
-    public static function display_reduced_header() {
-        global $_plugins, $lp_theme_css, $mycoursetheme, $user_theme, $platform_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $text_dir, $plugins, $_user, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
-        global $menu_navigation;
+    public static function display_reduced_header() {        
         global $show_learnpath;
-        //require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-        
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
         echo self::$global_template ->show_header_template();        
+    }
+    
+    /**
+     * Displays the reduced page header (without banner)
+     */
+    public static function set_header() {        
+        global $show_learnpath;
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);                     
     }
 
     /**
      * Display the page footer
      */
-    public static function display_footer() {
-        global $_plugins, $global_tpl;
+    public static function display_footer() {        
         echo self::$global_template ->show_footer_template();        
     }
 

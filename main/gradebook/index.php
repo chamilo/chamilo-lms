@@ -854,11 +854,11 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     
 	if (!empty($cats)) {
         
-        if (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true') {
+        if (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true')) {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                
-            $options = array('-1' => get_lang('none'));
+            $options = array('-1' => get_lang('None'));
             
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
@@ -867,7 +867,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             }
 
             $grade_model_id = $cats[0]->get_grade_model_id();        
-            
+                        
             //No children
             if (count($cats) == 1 && empty($grade_model_id)) {
                 if (!empty($grade_models)) {

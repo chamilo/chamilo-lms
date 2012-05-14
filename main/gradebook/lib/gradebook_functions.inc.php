@@ -12,6 +12,7 @@
 * @version april 2007
 */
 require_once 'gradebook_functions_users.inc.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 /**
  * Adds a resource to the unique gradebook of a given course
@@ -176,20 +177,19 @@ function build_edit_icons_cat($cat, $selectcat) {
         if (api_is_allowed_to_edit(null, true)) {
             
             //Locking button
-            if (api_get_setting('gradebook_locking_enabled') == 'true') {
+            if (api_get_setting('gradebook_locking_enabled') == 'true') {                
                 if ($cat->is_locked()) {
                     if (api_is_platform_admin()) {
-                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                
+                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                                        
                     } else {
                         $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('unlock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
                     }
+                    $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                 } else {
                     $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
-                }
-            }
-            
-            //PDF
-            $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+                    //$modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+                }                
+            }          
             
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 if ($cat->is_locked() && !api_is_platform_admin()) {
@@ -721,45 +721,59 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
 
     $html = '';
 
-    $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
-    
+    $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';    
     if (file_exists($img)) {
         $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
-        $html .= "<img src='$img'>";			
+        $organization = "<img src='$img'>";			
     } else {
         if (!empty($organization)) {			  
-            $html .= '<h2 align="left">'.$organization.'</h2>';
+            $organization = '<h2 align="left">'.$organization.'</h2>';
         }
     }
     
-    $grade_model_id = $cat[0]->get_grade_model_id();        
+    Display::$global_template->assign('organization', $organization);
+    
+    $parent_id = $cat[0]->get_parent_id();    
+    if (isset($cat[0]) && isset($parent_id)) {
+        if ($parent_id == 0) {
+            $grade_model_id = $cat[0]->get_grade_model_id();            
+        } else {
+            $parent_cat = Category::load($parent_id);            
+            $grade_model_id = $parent_cat[0]->get_grade_model_id();                    
+        }
+    }
+    
     $use_grade_model = true;
     if (empty($grade_model_id) || $grade_model_id == -1) {
         $use_grade_model = false;    
     }
     
-    //var_dump($use_grade_model);exit;
-        
-    if ($use_grade_model) {        
-        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+    if ($use_grade_model) {   
+        if ($parent_id == 0) {
+            $title = '<h2 align="center">'.get_lang('FlatView').'</h2>';    
+        } else {
+            $title = '<h2 align="center">'.$cat[0]->get_description().' - ('.$cat[0]->get_name().') </h2>';            
+        }
     } else {
-        $html .= '<h2 align="center">'.get_lang('FlatView').'</h2>';
+        $title = '<h2 align="center">'.get_lang('FlatView').'</h2>';
     }
-    $html .= '<table align="center" width="100%"><tr><td valign="top">';
+    
+    Display::$global_template->assign('pdf_title', $title);
 
-    $html .= '<table align="left" width="33%">';		
-    $session_name = api_get_session_name(api_get_session_id());
-    $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
-    if (!empty($session_name)) {
-        $html .= Display::tag('tr', Display::tag('td', get_lang('Session')).Display::tag('td', Display::tag('strong', $session_name)));
-    }		
-    $html .= Display::tag('tr', Display::tag('td', get_lang('Course')).Display::tag('td', Display::tag('strong', $course_code)));
-    $html .= Display::tag('tr', Display::tag('td', get_lang('Date')).Display::tag('td', Display::tag('strong', api_convert_and_format_date(date('Y-m-d', time()), DATE_TIME_FORMAT_LONG))));
-    $html .= Display::tag('tr', Display::tag('td', get_lang('Teacher')).Display::tag('td', Display::tag('strong', $teacher_list)));
-    $html .= '</table></td>';
-
-    $html .= '<td valign="top"><table align="left" width="33%">';
-
+    //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
+    //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
+    $user_info = api_get_user_info();    
+    $teacher_list = $user_info['complete_name'];
+    $session_name = api_get_session_name(api_get_session_id());    
+    if (!empty($session_name)) {        
+        Display::$global_template->assign('pdf_session', $session_name);
+    }	
+    
+    Display::$global_template->assign('pdf_course', $course_code);
+    Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
+    Display::$global_template->assign('pdf_teachers', $teacher_list);
+ 
+    /*
     if (!empty($total)) {			
         foreach($total as $label => $count) {
             $total_custom_score = round($count/count($user_results), 2) *100;
@@ -768,7 +782,8 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     }
     $html .= '</table></td>';		
     $html .= '<td valign="top"><table align="left" width="33%">';
-    $headers = $printable_data[0];
+    
+    $headers = $printable_data[0];    
     unset($headers[0]);
     unset($headers[1]);
     unset($headers[count($headers)+1]);
@@ -776,8 +791,9 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     foreach ($headers as $head) {			
         $html .= Display::tag('tr', Display::tag('td', Display::tag('strong', $head)));
     }		
-    $html .= '</table></td></table><br />';		
-
+    $html .= '</table></td></table><br />';
+    */
+    
     $columns = count($printable_data[0]);
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
 
@@ -815,14 +831,19 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         $table->setCellContents($row, $column, get_lang('NoResults'));
         $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
     }
-
-    $html .= $table->toHtml();
+    
+    Display::$global_template->assign('pdf_table', $table->toHtml());
 
     unset($printable_data);
     unset($table);
 
-    // Conversion of the created HTML report to a PDF report
-
+    // Conversion of the created HTML report to a PDF report    
+    $gradebook_tpl = Display::$global_template->get_template('gradebook/flatview.pdf.tpl');     
+    $gradebook_flatview = Display::$global_template->fetch($gradebook_tpl);
+    
+    //Header
+    $html = $gradebook_flatview;  
+    
     $html         = api_utf8_encode($html);
     $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
     $pdf = new PDF($page_format, $params['orientation']);

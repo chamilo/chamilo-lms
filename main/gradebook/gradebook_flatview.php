@@ -102,7 +102,10 @@ $flatviewtable->set_additional_parameters($parameters);
 if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {  
     $params = array();
     $params['only_total_category'] = true;
-    export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+    if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
+        Display :: set_header(null, false, false);
+        export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+    }
 }
     
 if (isset($_GET['exportpdf']))	{
@@ -110,10 +113,12 @@ if (isset($_GET['exportpdf']))	{
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
 	);
+    
     $export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
 
 	if ($export_pdf_form->validate()) {        
         $params = $export_pdf_form->exportValues();
+        Display :: set_header(null, false, false);
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));

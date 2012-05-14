@@ -93,10 +93,8 @@ class FlatViewDataGenerator
             if (!isset($this->params['only_total_category'])) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item = $this->evals_links[$count + $items_start];
-
                     //$headers[] = $item->get_name().' <br /> '.get_lang('Max').' '.$this->get_max_result_by_link($count + $items_start).' ';
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-
                     $weight = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight() *100, 2);
                     $headers[] = $item->get_name().' '.$weight.' % ';                
                 }
@@ -202,13 +200,15 @@ class FlatViewDataGenerator
             }
         }
         
-        $grade_model_id = $this->category->get_grade_model_id();
         $parent_id = $this->category->get_parent_id();
+        
         if ($parent_id == 0) {
             $main_weight  = $this->category->get_weight();
+            $grade_model_id = $this->category->get_grade_model_id();
         } else {
             $main_cat  = Category::load($parent_id, null, null);
             $main_weight = $main_cat[0]->get_weight();
+            $grade_model_id = $main_cat[0]->get_grade_model_id();
         }        
                 
         $use_grade_model = true;
@@ -228,10 +228,11 @@ class FlatViewDataGenerator
             
             $convert_using_the_global_weight = false;
             
-            if ($use_grade_model) {
+            if ($parent_id == 0) {
                 $course_code 	= api_get_course_id();            
                 $session_id		= api_get_session_id();
-                $allcat  = $this->category->get_subcategories(null, $course_code, $session_id);   
+                $allcat         = $this->category->get_subcategories(null, $course_code, $session_id);
+                                
                 foreach ($allcat as $sub_cat) {
                     $score 			= $sub_cat->calc_score($user_id);
                     $divide			= ( ($score[1])==0 ) ? 1 : $score[1];      
@@ -241,8 +242,7 @@ class FlatViewDataGenerator
 
                     //Fixing total when using one or multiple gradebooks                    
                     $percentage     = round($sub_cat->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$this->category->get_weight(), 2);
-                    $item_value     = $percentage*$item_value;
-                    
+                    $item_value     = $percentage*$item_value;                    
                     $item_total		+= $sub_cat->get_weight();
                     
                     if ($convert_using_the_global_weight) {
@@ -251,6 +251,7 @@ class FlatViewDataGenerator
                     }
                     
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                    
                     if (!isset($this->params['only_total_category'])) {
                         if (!$show_all) {                   
                             $row[] = $temp_score.' ';                   
@@ -317,7 +318,7 @@ class FlatViewDataGenerator
             $item_total = round($item_total);
 			$total_score = array($item_value_total, $item_total);
 			
-			if (!$show_all) {				
+			if (!$show_all) {
 				$row[] = $scoredisplay->display_score($total_score);
 			} else {
 				$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);

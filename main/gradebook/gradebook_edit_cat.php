@@ -120,7 +120,6 @@ if ($form->validate()) {
 	$cat->save();
     $parent_id = $cat->get_parent_id();
     
-    
     if ($parent_id == 0) {        
         //do something           
         if (isset($values['grade_model_id']) && !empty($values['grade_model_id'])) {

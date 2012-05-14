@@ -768,23 +768,11 @@ if (!empty($exercise_list)) {
             $count++;
         } // end foreach()
     } 
-} else {
-    if ($is_allowedToEdit && $origin != 'learnpath') {  
-        echo '<div id="no-data-view">';
-        echo '<h2>'.get_lang('Quiz').'</h2>';
-        echo Display::return_icon('quiz.png', '', array(), 64);
-        echo '<div class="controls">';    
-        echo Display::url(get_lang('NewEx'), 'exercise_admin.php?' . api_get_cidreq(), array('class' => 'btn'));
-        echo '</div>';
-        echo '</div>';
-    }
 }
 // end exercise list
-
-
-   
+  
 //Hotpotatoes results            
-
+$hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
@@ -816,6 +804,7 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 
 $nbrActiveTests = 0;
 if (isset($attribute['path']) && is_array($attribute['path'])) {
+    $hotpotatoes_exist = true;
     while (list($key, $path) = each($attribute['path'])) {
         $item = '';
         list ($a, $vis) = each($attribute['visibility']);
@@ -868,10 +857,18 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
     }
 }    
 echo '</table>';    
-Display :: display_footer();    
-exit;
 
-
+if (empty($exercise_list) && $hotpotatoes_exist == false) {
+     if ($is_allowedToEdit && $origin != 'learnpath') {  
+        echo '<div id="no-data-view">';
+        echo '<h2>'.get_lang('Quiz').'</h2>';
+        echo Display::return_icon('quiz.png', '', array(), 64);
+        echo '<div class="controls">';    
+        echo Display::url(get_lang('NewEx'), 'exercise_admin.php?' . api_get_cidreq(), array('class' => 'btn'));
+        echo '</div>';
+        echo '</div>';
+    }   
+}
 if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display :: display_footer();
 }

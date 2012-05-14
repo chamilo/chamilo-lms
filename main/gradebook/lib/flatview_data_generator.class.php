@@ -332,15 +332,15 @@ class FlatViewDataGenerator
 		
             
 			if (!$show_all) {
-				$row[] = $scoredisplay->display_score($total_score);
+				$row[] = $scoredisplay->display_score($total_score);                
 			} else {	
 				//$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
-                $row[] = $scoredisplay->display_score($total_score, SCORE_DIV_SIMPLE_WITH_CUSTOM);                	
+                $row[] = $scoredisplay->display_score($total_score, SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS);                	
 				//$row[] = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 			}
 			unset($score);
 			$data[] = $row;
-		}        
+		}
 		return $data;
 	}
 

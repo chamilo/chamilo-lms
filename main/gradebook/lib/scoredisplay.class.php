@@ -23,10 +23,11 @@ define('SCORE_DIV_PERCENT_WITH_CUSTOM',  9);    // X / Y (XX %) - Good!
 define('SCORE_CUSTOM',                  10);    // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM',  11);    // X - Good!
 
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS',  12);    // X (ex) - Good!
+
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
 define('SCORE_ONLY_CUSTOM',3);
-
 
 /**
  * Class to display scores according to the settings made by the platform admin.
@@ -55,8 +56,7 @@ class ScoreDisplay
 	/**
 	 * Compare the custom display of 2 scores, can be useful in sorting
 	 */
-	public static function compare_scores_by_custom_display ($score1, $score2)
-	{
+	public static function compare_scores_by_custom_display ($score1, $score2) {
 		if (!isset($score1)) {
 			return (isset($score2) ? 1 : 0);
 		} elseif (!isset($score2)) {
@@ -271,8 +271,7 @@ class ScoreDisplay
 	}
 	
     // Internal functions
-	private function display_default ($score, $type) {
-        
+	private function display_default ($score, $type) {        
 		switch ($type) {
 			case SCORE_DIV :			                // X / Y
 				return $this->display_as_div($score);
@@ -295,7 +294,23 @@ class ScoreDisplay
 		        if (!empty($custom)) {
 		            $custom = ' - '.$custom;
 		        }
-		        return $this->display_simple_score($score).$custom;		        
+		        return $this->display_simple_score($score).$custom;		
+                break;
+            case SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS:
+                $custom = $this->display_custom($score);                
+		        if (!empty($custom)) {
+		            $custom = ' - '.$custom;
+		        }                
+                //needs sudo apt-get install php5-intl
+                if (class_exists(NumberFormatter)) {
+                    $iso = api_get_language_isocode();                    
+                    $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
+                    $letters = $f->format($score[0]);  
+                    $letters = api_strtoupper($letters);
+                    $letters = " ($letters) ";
+                }
+		        return $this->display_simple_score($score).$letters.$custom;		 
+                break;
 		    case SCORE_CUSTOM:                          // Good!
 		        return $this->display_custom($score);
 		}
@@ -440,7 +455,7 @@ class ScoreDisplay
 		}
 	}
 
-	private function sort_display ($item1, $item2) {
+	private function sort_display($item1, $item2) {
 		if ($item1['score'] == $item2['score']) {
 			return 0;
 		} else {

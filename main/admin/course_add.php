@@ -17,8 +17,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
@@ -112,6 +112,20 @@ $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 
 $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
+
+//if (api_get_setting('gradebook'))
+
+$obj = new GradeModel();
+$grade_models = $obj->get_all();                
+$grade_model_options = array('-1' => get_lang('None'));            
+if (!empty($grade_models)) {
+    foreach ($grade_models as $item) {
+        $grade_model_options[$item['id']] = $item['name'];
+    }                
+}
+$form->addElement('select', 'gradebook_model_id', get_lang('GradeModel'), $grade_model_options);
+
+
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
 
@@ -135,11 +149,10 @@ $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course          = $form->exportValues();
-    $code            = $course['visual_code'];
+    $course          = $form->exportValues();    
     //$tutor_name      = $teachers[$course['tutor_id']];
     $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];
+    $course_teachers = $course['course_teachers'];    
     
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
     

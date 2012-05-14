@@ -2218,7 +2218,7 @@ function lang2db($string) {
  * Fills the course database with some required content and example content.
  * @version 1.2
  */
-function fill_Db_course($course_id, $course_repository, $language, $default_document_array = array(), $fill_with_exemplary_content = null) {
+function fill_db_course($course_id, $course_repository, $language, $default_document_array = array(), $fill_with_exemplary_content = null) {
     if (is_null($fill_with_exemplary_content)) {
         $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
     }

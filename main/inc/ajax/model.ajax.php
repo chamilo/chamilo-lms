@@ -291,15 +291,15 @@ switch ($action) {
         break;
     case 'get_grade_models':
         $columns = array('name', 'description', 'actions');
-        if(!in_array($sidx, $columns)) {
+        if (!in_array($sidx, $columns)) {
             $sidx = 'name';
-        }                  
+        }
         $result     = Database::select('*', "$obj->table ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         foreach($result as $item) {
             $new_result[] = $item;
-        } 
-        $result = $new_result;        
+        }
+        $result = $new_result;
         break;
     case 'get_usergroups':
         $columns = array('name', 'users', 'courses','sessions','actions');

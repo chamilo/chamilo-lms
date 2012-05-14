@@ -858,8 +858,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();                
-            $options = array('-1' => get_lang('None'));
-            
+            $options = array('-1' => get_lang('None'));            
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
                     $options[$item['id']] = $item['name'];

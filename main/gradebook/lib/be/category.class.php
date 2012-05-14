@@ -11,6 +11,7 @@
 
 require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
 require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 class Category implements GradebookItem
 {
@@ -306,8 +307,6 @@ class Category implements GradebookItem
 		}
 		
 		if (isset($this->name) && isset($this->user_id)) {
-			
-			
 			$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 			$sql = 'INSERT INTO '.$tbl_grade_categories.' (name,user_id,weight,visible';
 			if (isset($this->description)) {
@@ -322,6 +321,11 @@ class Category implements GradebookItem
             if (!empty($this->session_id)) {
             	$sql .= ', session_id';
             }
+            
+            if (isset($this->grade_model_id)) {
+                $sql .= ', grade_model_id ';
+            }
+
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
 					.','.Database::escape_string($this->get_weight())
@@ -336,16 +340,50 @@ class Category implements GradebookItem
 				 $sql .= ','.intval($this->get_parent_id());
 			}
             if (!empty($this->session_id)) {
-            $sql .= ', '.intval($this->get_session_id());
+                $sql .= ', '.intval($this->get_session_id());
+            }
+            if (isset($this->grade_model_id)) {
+                $sql .= ', '.intval($this->get_grade_model_id());
             }
 			$sql .= ')';			
 			Database::query($sql);
 			$id = Database::insert_id();
 			$this->set_id($id);
             
+            if (!empty($id)) {            
+                $parent_id = $this->get_parent_id();
+                $grade_model_id = $this->get_grade_model_id();
+                if ($parent_id == 0) {        
+                    //do something           
+                    if (isset($grade_model_id) && !empty($grade_model_id) && $grade_model_id != '-1') {
+                        $obj = new GradeModel();                             
+                        $components = $obj->get_components($grade_model_id);
+                        $default_weight_setting = api_get_setting('gradebook_default_weight');
+                        $default_weight = 100;
+                        if (isset($default_weight_setting)) {
+                            $default_weight = $default_weight_setting;
+                        }
+                        foreach ($components as $component) {
+                            $gradebook =  new Gradebook();
+                            $params = array();
+
+                            $params['name']             = $component['acronym'];
+                            $params['description']      = $component['title'];
+                            $params['user_id']          = api_get_user_id();
+                            $params['parent_id']        = $id;
+                            $params['weight']           = $component['percentage']/100*$default_weight;
+                            $params['session_id']       = api_get_session_id();
+                            $params['course_code']      = $this->get_course_code();
+                            
+                            $gradebook->save($params);                
+                        }
+                    }
+                }
+            }
+            
             $gradebook= new Gradebook();
-            $res    = $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
-        
+            $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));        
+            
 			return $id;
 		}
 	}
@@ -388,6 +426,42 @@ class Category implements GradebookItem
 			.' WHERE id = '.intval($this->id);
         
 		Database::query($sql);
+                
+        if (!empty($this->id)) {        
+            $parent_id = $this->get_parent_id();
+            $grade_model_id = $this->get_grade_model_id();
+            if ($parent_id == 0) {        
+                //do something           
+                if (isset($grade_model_id) && !empty($grade_model_id) && $grade_model_id != '-1') {
+                    $obj = new GradeModel();                             
+                    $components = $obj->get_components($grade_model_id);
+                    $default_weight_setting = api_get_setting('gradebook_default_weight');
+                    $default_weight = 100;
+                    if (isset($default_weight_setting)) {
+                        $default_weight = $default_weight_setting;
+                    }
+                    $final_weight = $this->get_weight();
+                    if (!empty($final_weight)) {
+                        $default_weight = $this->get_weight();
+                    }
+                    foreach ($components as $component) {
+                        $gradebook = new Gradebook();
+                        $params = array();
+
+                        $params['name']             = $component['acronym'];
+                        $params['description']      = $component['title'];
+                        $params['user_id']          = api_get_user_id();
+                        $params['parent_id']        = $this->id;
+                        $params['weight']           = $component['percentage']/100*$default_weight;
+                        $params['session_id']       = api_get_session_id();
+                        $params['course_code']      = $this->get_course_code();
+
+                        $gradebook->save($params);                
+                    }
+                }
+            }
+        }
+
         
         $gradebook= new Gradebook();
         $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
@@ -1220,7 +1294,7 @@ class Category implements GradebookItem
   	function lock($locked) {
   		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
   		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
-  		$rs = Database::query($sql);
+  		Database::query($sql);
   	}
     
     function lock_all_items($locked) {        

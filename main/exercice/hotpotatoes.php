@@ -203,17 +203,11 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
             "<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
             "<input type=\"hidden\" name=\"imgcount\" value=\"$imgcount\">\n",
             "<input type=\"hidden\" name=\"finish\" value=\"$finish\">\n";
-    echo GenerateHiddenList($imgparams);
-    /*if ($finish==0){ echo get_lang('DownloadFile');}
-    else {echo get_lang('DownloadImg');}
-    echo     " : ",
-            "<input type=\"file\" name=\"userFile\">\n",
-            "<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
-    //Display::display_icon('hotpotatoes.jpg','',array('align'=> 'right', 'style' => 'position: absolute; padding-top: 30px; margin-left: 500px;'));
+    echo GenerateHiddenList($imgparams);    
 
     echo '<legend>'.$nameTools.'</legend>';
     echo '<div class="row">';
-    echo '<div class="label" style="padding:10px">';
+    echo '<div style="padding:10px">';
     echo '<span class="form_required">*</span>';
     if ($finish == 0) {
         echo get_lang('DownloadFile').' : ';

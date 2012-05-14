@@ -239,7 +239,7 @@ class GradebookTable extends SortableTable {
 				$course_code	= api_get_course_id();
 				$session_id		= api_get_session_id();
 				$parent_id      = $item->get_id();
-				$cats = Category :: load ($parent_id, null, null, null, null, null, true);
+				$cats = Category :: load ($parent_id, null, null, null, null, null);
 			
 				$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);				
 				$alleval = $cats[0]->get_evaluations($stud_id);			

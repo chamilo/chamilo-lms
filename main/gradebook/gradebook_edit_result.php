@@ -33,11 +33,11 @@ if ($edit_result_form->validate()) {
 	$scores = ($values['score']);
 	foreach ($scores as $row) {
 		$resultedit = Result :: load (key($scores));
-		$row_value = $row ;
-		if ((!empty ($row_value)) || ($row_value == 0)) {
+		$row_value = $row;
+		if ($row_value != '' ) {            
 			$resultedit[0]->set_score(floatval(number_format($row_value, api_get_setting('gradebook_number_decimals'))));
-		}
-		$resultedit[0]->save();
+            $resultedit[0]->save();
+		}		
 		next($scores);
 	}
 	header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=');

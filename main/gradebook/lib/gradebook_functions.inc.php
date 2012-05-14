@@ -807,17 +807,25 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         }
     }
 
+    
     $table = new HTML_Table(array('class' => 'data_table'));
     $row = 0;
-    $column = 0;
+    $column = 0;    
+    
+    $table->setHeaderContents($row, $column, '#');$column++;
     foreach ($printable_data[0] as $printable_data_cell) {
         $table->setHeaderContents($row, $column, $printable_data_cell);
         $column++;
     }
     $row++;
     if ($has_data) {
+        $counter = 1;
         foreach ($printable_data[1] as &$printable_data_row) {
             $column = 0;
+            $table->setCellContents($row, $column, $counter); 
+            $table->updateCellAttributes($row, $column, 'align="center"');
+            $column++; $counter++;
+                
             foreach ($printable_data_row as &$printable_data_cell) {
                 $table->setCellContents($row, $column, $printable_data_cell);
                 $table->updateCellAttributes($row, $column, 'align="center"');

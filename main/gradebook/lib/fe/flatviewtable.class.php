@@ -459,7 +459,6 @@ class FlatViewTable extends SortableTable
 			echo $header;
 		}
 
-
 		// retrieve sorting type
 		if ($is_western_name_order) {
 			$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
@@ -476,13 +475,14 @@ class FlatViewTable extends SortableTable
 		$header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
 		$column = 0;
+        
 		if ($is_western_name_order) {
 			$this->set_header($column++, $header_names[1]);
 			$this->set_header($column++, $header_names[0]);
 		} else {
 			$this->set_header($column++, $header_names[0]);
 			$this->set_header($column++, $header_names[1]);
-		}
+		}        
 
 		while ($column < count($header_names)) {
 			$this->set_header($column, $header_names[$column], false);

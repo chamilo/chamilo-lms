@@ -169,7 +169,9 @@ class Category implements GradebookItem
      * @param int      session id (in case we are in a session)
      * @param bool     Whether to show all "session" categories (true) or hide them (false) in case there is no session id
 	 */
-	public function load ($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null) {        
+    	
+          
+	public function load($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $order_by = null) {        
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
 		if ( isset($id) && (int)$id === 0 ) {
@@ -188,10 +190,11 @@ class Category implements GradebookItem
 		}
 		if (isset($user_id)) {
 			$user_id = intval($user_id);
-			if ($paramcount != 0) { $sql .= ' AND';
+			if ($paramcount != 0) {                
+                $sql .= ' AND';
 			} else {
-			$sql .= ' WHERE';
-			 }
+                $sql .= ' WHERE';
+			}
 			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
@@ -225,12 +228,13 @@ class Category implements GradebookItem
             //}            
 			$paramcount ++;
 		}
+        
 		if (isset($parent_id)) {
 			$parent_id = Database::escape_string($parent_id);
 			if ($paramcount != 0) {
-			$sql .= ' AND';
+                $sql .= ' AND ';
 			} else {
-			$sql .= ' WHERE';
+                $sql .= ' WHERE ';
 			}
 			$sql .= ' parent_id = '.intval($parent_id);
 			$paramcount ++;
@@ -244,7 +248,13 @@ class Category implements GradebookItem
 			}
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
-		}		
+		}   
+        
+        if (!empty($order_by)) {        
+            if (!empty($order_by) && $order_by != '') {                
+                $sql .= ' '.$order_by;    
+            }
+        }
 		$result = Database::query($sql);
         $allcat = array();		
 		if (Database::num_rows($result) > 0) {
@@ -1043,16 +1053,14 @@ class Category implements GradebookItem
      * @param int      Session ID (optional)
      * @return  array   Array of subcategories
 	 */
-	public function get_subcategories ($stud_id = null, $course_code = null, $session_id = null) {
-		$cats = array();
+	public function get_subcategories ($stud_id = null, $course_code = null, $session_id = null, $order = null) {        
 		// 1 student
  		if (isset($stud_id)) { 
 			// special case: this is the root
-			if ($this->id == 0) {			    
+			if ($this->id == 0) {                
 				return Category::get_root_categories_for_student ($stud_id, $course_code, $session_id);
-			} else {
-			    				
-				return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1, $session_id );
+			} else {			    				
+				return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1, $session_id, $order);
 			}
 		} else {// all students
 			// course admin
@@ -1062,18 +1070,17 @@ class Category implements GradebookItem
 					return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
 				// inside a course
                 } elseif (!empty($this->course_code)) {                	
-					return Category::load(null, null, $this->course_code, $this->id, null, $session_id, false);
+					return Category::load(null, null, $this->course_code, $this->id, null, $session_id, $order);
                 } elseif (!empty($course_code)) {
-                    return Category::load(null, null, $course_code, $this->id, null, $session_id, false);
+                    return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
 				// course independent
                 } else {
 					return Category::load(null, api_get_user_id(), 0, $this->id, null);
                 }
-			}
-			// platform admin
-			elseif (api_is_platform_admin()) {
+			} elseif (api_is_platform_admin()) {
+                // platform admin
                 //we explicitly avoid listing subcats from another session
-				return Category::load(null, null, $course_code, $this->id, null, $session_id, false);
+				return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
             }
 		}
 		return array();

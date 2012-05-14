@@ -11,7 +11,6 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
-//class Template extends Smarty {
 class Template {
 	
 	var $style = 'default'; //see the template folder 
@@ -250,14 +249,14 @@ class Template {
 		return $this->style.'/'.$name;
     }	
     
-    /* Set course parameters */
+    /** Set course parameters */
     private function set_course_parameters() {                        
         //Setting course id
         $course_id = api_get_course_int_id();
         $this->course_id = $course_id;
     }
 	
-    /* Set user parameters */
+    /** Set user parameters */
 	private function set_user_parameters() {
 		$user_info = array();
 		$user_info['logged'] = 0;
@@ -278,7 +277,7 @@ class Template {
 		$this->assign('_u', $user_info);         
 	}	
 	
-    /* Set system parameters */
+    /** Set system parameters */
 	private function set_system_parameters() {
 		global $_configuration;
 		
@@ -303,6 +302,8 @@ class Template {
 		$this->assign('_s', $_s);	
 	}
     
+    /**
+     * Set theme, include CSS files  */
     function set_theme() {
         //$platform_theme = api_get_setting('stylesheets');
 		$this->theme = api_get_visual_theme();
@@ -339,6 +340,9 @@ class Template {
 		$this->assign('logo', $logo);
     }
     
+    /**
+     * Set header parameters
+     */
 	private function set_header_parameters() {
         $help       = $this->help;
 		$nameTools  = $this->title;
@@ -391,7 +395,7 @@ class Template {
 		
 		$this->assign('title_string', $title_string);
         
-        //Setting the theme
+        //Setting the theme and CSS files
         $this->set_theme();        
         
 		//Extra JS files
@@ -540,7 +544,10 @@ class Template {
 			header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
 		}
 	}
-
+    
+    /**
+     * Set footer parameteres
+     */
 	private function set_footer_parameters() {
 		global $_configuration;   
         
@@ -634,20 +641,16 @@ class Template {
         return null;
     }
     
-    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
-        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);
-        //parent::fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars , $no_output_filter);        
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {        
         $template = $this->twig->loadTemplate($template);    
         return $template->render($this->params);
     }
     
     public function assign($tpl_var, $value = null, $nocache = false) {
-        //parent::assign($tpl_var, $value, $nocache);
         $this->params[$tpl_var] = $value;
     }
     
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {
-        //parent::display($template, $cache_id, $compile_id, $parent);             
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {        
         echo $this->twig->render($template, $this->params);
     }
 }

@@ -40,25 +40,32 @@
 <h1>Chamilo - Server Dependencies</h1>
 
 <h2>Introduction</h2>
-<p>In the ever-evoluting web environment, Chamilo has to rely on state-of-the-art third-party
-  software in order to provide you with useful and practical features. Some of this third-party software
-  usually come bundled with your operating system, but some don't. This means that if that software is
-  not installed on your Chamilo server, along with Chamilo, you might not enjoy the best possible
-  experience with your Chamilo platform. To avoid this problem, most of the sofware we used is bundled
-  into a typical Chamilo install.</p><p>
-  However, if such a third-party software is too big to be included, or if it doesn't make sense to
-  includ it for whatever reason, you must make sure it is installed on your system.
-  This is the goal of this list: to help you keep a track of what software is needed and,
-  as much as possible, where to get the required information to install it.</p>
+<p>In the ever-evoluting web environment, Chamilo has to rely on 
+state-of-the-art third-party software in order to provide you with useful and 
+practical features. Some of this third-party software usually come bundled with
+your operating system, but some don't. This means that if that software is
+not installed on your Chamilo server, along with Chamilo, you might not enjoy 
+the best possible experience with your Chamilo platform. To avoid this problem,
+most of the sofware we used is bundled into a typical Chamilo install.</p>
+<p>
+However, if such a third-party software is too big to be included, or if it 
+doesn't make sense to include it for whatever reason, you must make sure it is 
+installed on your system. This is the goal of this list: to help you keep a 
+track of what software is needed and, as much as possible, where to get the 
+required information to install it.</p>
 
 <a name="dependencies"></a>
-<h2>Dependencies</h2>
+<h2>Dependencies - client-side</h2>
+<ul>
+  <li>Any modern browser (IE6 *excluded*). Safari is known to have small issues with the WYSIWYG editor.</li>
+  <li>Optional: Flash plugin (only required for a few features)</li>
+</ul>
+<h2>Dependencies - server-side</h2>
 <ul>
   <li> Apache 2+</li>
-  <li> PHP5.2.0+ with MySQL bindings and php-gd extension to allow
+  <li> PHP5.3.0+ with MySQL bindings and php-gd extension to allow
 Chamilo to resize pictures. Progressive upload bar and timezone features only 
-work with PHP5.2.0+. Chamilo doesn't officially support PHP 5.3 for now but it 
-has been strongly tested already and seems fine.</li>
+work with PHP5.2.0+, and the new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
   <li> MySQL database server 4 or 5</li>
 </ul><br />
 <a name="included_dependencies"></a>
@@ -83,6 +90,7 @@ has been strongly tested already and seems fine.</li>
   <li>WCAG_Rendering</li>
   <li>xajax </li>
   <li>jQuery</li>
+  <li>php5-intl</li>
 </ul>
 </div>
 <hr />

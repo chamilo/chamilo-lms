@@ -12,7 +12,7 @@
  * 
  */
 
-exit; //Uncomment this in order to execute the page
+//exit; //Uncomment this in order to execute the page
 
 
 require_once '../inc/global.inc.php';
@@ -75,14 +75,37 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
     $result = $client->call('WSGetUser', array('GetUser' => $params));
     echo '<h2>User created via webservices</h2>';
-    var_dump($result);
-    
+        
     //3.Adding user to the course TEST. The course TEST must be created manually in Chamilo
     
     $params = array('course'        => 'TEST', //Chamilo string course code
                     'user_id'       => $user_id,
                     'secret_key'    => $secret_key);
     $result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
+    
+    
+    // ------------------------
+    //Calling the WSSubscribeUserToCourse
+    /*
+    $course_array = array(   'original_course_id_name' => 'TEST',
+                             'original_course_id_value' => 'TEST'
+                            );
+    
+    $user_array     = array('original_user_id_value' =>  $user_id, 
+                            'original_user_id_name' => 'name');
+    $user_courses   = array();
+    
+    $user_courses[] = array (   'course_id' => $course_array,
+                                'user_id'   => $user_array,
+                                'status'    => '1'
+                            );
+    
+    $params = array (
+                    'userscourses'       => $user_courses,
+                    'secret_key'         => $secret_key);
+
+    $result = $client->call('WSSubscribeUserToCourse', array('subscribeUserToCourse' => $params));
+    var_dump($result);*/
     
     if ($result == 1) {
         echo "User $user_id added to course TEST";
@@ -95,6 +118,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
 // Check for an error
 $err = $client->getError();
+
 if ($err) {
     // Display the error
     echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
@@ -111,8 +135,8 @@ if ($client->fault) {
         echo '<h2>Error</h2><pre>' . $err . '</pre>';
     } else {
         // Display the result
-        //echo '<h2>Web service result</h2><pre/>';
-        //var_dump($result);
+        echo '<h2>Web service result</h2><pre/>';
+        var_dump($result);
 
     }
 }

@@ -801,7 +801,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
         echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
                 echo $key.'='.$value.'&amp;';
@@ -832,7 +832,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
         }
     }
     if ($current_lock_status == '1') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
                 echo $key.'='.$value.'&amp;';
@@ -841,7 +841,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
         echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_lock_status == '0') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.api_get_group_id().'&amp;';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
                 echo $key.'='.$value.'&amp;';
@@ -2155,17 +2155,16 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
-        $form->display();
-        echo '<br />';
+        
+        $iframe = null;
+        
         if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread') {
-            echo '<div class="row">
-                    <div class="label">'.get_lang('Thread').'
-                    </div>
-                    <div class="formw">';
-            echo "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
-            echo '	</div>
-                </div>';
+            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";            
         }
+        if (!empty($iframe)) {
+            $form->addElement('label', get_lang('Thread'), $iframe);
+        }
+        $form->display();
     }
 }
 
@@ -2227,27 +2226,29 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
-function show_qualify($option, $couser_id, $forum_id, $user_id, $thread_id) {
+function show_qualify($option, $user_id, $thread_id) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads		   = Database::get_course_table(TABLE_FORUM_THREAD);
     
-    $course_id = api_get_course_int_id();    
-
-    if ($user_id == strval(intval($user_id)) && $thread_id == strval(intval($thread_id)) && $option == 1) {
-
-        $sql = "SELECT qualify FROM ".$table_threads_qualify." WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
-        return $row[0];
+    $course_id = api_get_course_int_id(); 
+    $user_id = intval($user_id);
+    $thread_id = intval($thread_id);
+    
+    if (empty($user_id) || empty($thread_id)) {
+        return false;
     }
-
-    if ($user_id == strval(intval($user_id)) && $option == 2) {
-
-        $sql = "SELECT thread_qualify_max FROM ".$table_threads." WHERE c_id = $course_id AND thread_id=".$thread_id.";";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
-        return $row[0];
-    }
+    
+    switch ($option) {
+        case 1:
+            $sql = "SELECT qualify FROM ".$table_threads_qualify." WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id;
+            break;
+        case 2:
+             $sql = "SELECT thread_qualify_max FROM ".$table_threads." WHERE c_id = $course_id AND thread_id=".$thread_id.";";      
+            break;
+    }    
+    $rs = Database::query($sql);
+    $row = Database::fetch_array($rs);
+    return $row[0];
 }
 
 /**
@@ -2261,12 +2262,10 @@ function show_qualify($option, $couser_id, $forum_id, $user_id, $thread_id) {
  * @version October 2008, dokeos  1.8.6
  */
 function get_historical_qualify($user_id, $thread_id, $opt) {
-    $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
-    
+    $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);    
     $course_id = api_get_course_int_id();
-
-    $my_qualify_log = array();
-    $opt = Database::escape_string($opt);
+    $my_qualify_log = array();    
+    
     if ($opt == 'false') {
         $sql = "SELECT * FROM ".$table_threads_qualify_log." WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' and user_id='".Database::escape_string($user_id)."' ORDER BY qualify_time";
     } else {
@@ -3934,7 +3933,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
     global $_course, $_user;
 
     // The content of the mail    
-    $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$forum_id.'&amp;thread='.$thread_id;
+    $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;forum='.$forum_id.'&amp;thread='.$thread_id;
     $my_link = isset($link) ? $link : '';
     $my_message = isset($message) ? $message : '';
     $my_message .= $my_link;
@@ -4103,13 +4102,17 @@ function get_statistical_information($thread_id, $user_id, $course_id) {
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
  * @version octubre 2008, dokeos 1.8
  */
-function get_thread_user_post($course_code, $thread_id, $user_id ) {
+function get_thread_user_post($course_code, $thread_id, $user_id) {
     $table_posts =  Database::get_course_table(TABLE_FORUM_POST);
     $table_users =  Database::get_main_table(TABLE_MAIN_USER);
     $thread_id = intval($thread_id);
     $user_id = intval($user_id);
-    $course_id = api_get_course_int_id();
-
+    $course_info = api_get_user_info($course_code);
+    $course_id = $course_info['real_id'];
+        
+    if (empty($course_id)) {
+        $course_id = api_get_course_int_id();
+    }
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN  $table_users users
                 ON posts.poster_id=users.user_id
@@ -4120,7 +4123,7 @@ function get_thread_user_post($course_code, $thread_id, $user_id ) {
             ORDER BY posts.post_id ASC";
 
     $result = Database::query($sql);
-
+    $post_list = array();
     while ($row = Database::fetch_array($result)) {
         $row['status'] = '1';
         $post_list[] = $row;

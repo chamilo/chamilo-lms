@@ -1069,12 +1069,10 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	public function testshow_qualify() {
-	 	$option =  1;
-	 	$couser_id = 1;
-	 	$forum_id = 1;
+	 	$option =  1;	 	
 	 	$user_id = 1;
 	 	$thread_id = 1;
-		$res = show_qualify($option,$couser_id,$forum_id,$user_id,$thread_id);
+		$res = show_qualify($option,$user_id,$thread_id);
 		if(!is_numeric($res)){
 			$this->assertTrue(is_null($res));
 		} else {

@@ -1350,11 +1350,16 @@ class Display {
         return 'data_table';
     }
     
-    function page_header($title) {
-        return '<div class="page-header"><h1>'.Security::remove_XSS($title).'</h1></div>';
+    public function page_header($title, $second_title = null) {
+        $title = Security::remove_XSS($title);
+        if (!empty($second_title)) {
+            $second_title = Security::remove_XSS($second_title);
+            $title .= "<small> $second_title<small>";
+        }
+        return '<div class="page-header"><h1>'.$title.'</h1></div>';
     }
     
-    function page_subheader($title) {
+    public function page_subheader($title) {
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
     }
     

@@ -12,7 +12,7 @@ $to_origin			= Security::remove_XSS($_GET['origin']);
 
 $output = <<<EOF
 <div class="forum-body-form">
-     <table>
+     <table class="data_table">
          <form id="forum-thread-qualify" name="forum-thread-qualify" action="forumqualify.php">
          <input type="hidden" name="cidReq" value="{$my_cid_req}">
          <input type="hidden" name="forum" value="{$my_forum}">

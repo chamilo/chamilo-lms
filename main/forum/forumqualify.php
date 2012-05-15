@@ -11,6 +11,7 @@ $language_file = array('admin', 'forum');
 require_once '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
+
 $nameTools = get_lang('ToolForum');
 $this_section = SECTION_COURSES;
 
@@ -21,19 +22,21 @@ if (!$allowed_to_edit) {
 
 //are we in a lp ?
 $origin = '';
-$origin_string='';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
-$nameTools=get_lang('ToolForum');
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+
+block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
+           
+$nameTools = get_lang('ToolForum');
 
 /*     Including necessary files */
-
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-                                        $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-                                    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
-                                    </script>';
+                    $(document).ready(function(){ $(\'.hide-me\').slideUp() });
+                    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
+</script>';
 /*         MAIN DISPLAY SECTION */
 /*
     Retrieving forum and forum categorie information
@@ -44,8 +47,8 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 $current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
-$whatsnew_post_info=$_SESSION['whatsnew_post_info'];
-
+$group_id = api_get_group_id();
+        
 /*
     Header and Breadcrumbs
 */
@@ -63,12 +66,10 @@ if (!empty($gradebook) && $gradebook=='view') {
 if ($origin=='learnpath') {
     Display::display_reduced_header();
 } else {
-    if (!empty($_SESSION['toolgroup'])) {
-
-        $_clean['toolgroup']=(int)$_SESSION['toolgroup'];
+    if (!empty($group_id)) {
         $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
         $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-        $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+        $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
         $interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
         if ($message<>'PostDeletedSpecial') {
             $interbreadcrumb[]=array("url" => "viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
@@ -95,11 +96,10 @@ if ($origin=='learnpath') {
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         $interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
-        Display :: display_header('');
-        api_display_tool_title($nameTools);
-
+        Display :: display_header('');        
     }
 }
+
 
 /*
     Is the user allowed here?
@@ -124,7 +124,7 @@ if (($_GET['action']=='invisible' || $_GET['action']=='visible') && isset($_GET[
     $message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
 }
 if ($_GET['action']=='move' and isset($_GET['post'])) {
-    $message=move_post_form();
+    $message = move_post_form();
 }
 
 /*
@@ -141,13 +141,6 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
     /*
         Action Links
     */
-/*	echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
-    echo $my_url.'&amp;view=flat&amp;origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
-    echo $my_url.'&amp;view=threaded&amp;origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
-    echo $my_url.'&amp;view=nested&amp;origin='.$origin.'">'.get_lang('NestedView').'</a>';
-    $my_url = null;
-    echo '</div>';*/
     // the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
     // if one of the three levels is locked then the link should not be displayed
     if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
@@ -159,8 +152,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
             //new thread link
             if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-                    echo '&nbsp;&nbsp;';
-                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','',ICON_SIZE_MEDIUM).'</a>';*/
+                    echo '&nbsp;&nbsp;';                    
                 } else {
                     echo get_lang('ForumLocked');
                 }
@@ -194,7 +186,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
     // we are getting all the information about the current forum and forum category.
     // note pcool: I tried to use only one sql statement (and function) for this
     // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-    echo "<table class=\"data_table\" width=\"100%\">";
+    echo "<table class=\"data_table\">";
 
     // the thread
     echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
@@ -213,23 +205,20 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
     include_once 'viewpost.inc.php';
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
-
-$userinf=api_get_user_info(api_get_user_id());
 if ($allowed_to_edit) {
-    $current_thread=get_thread_information($_GET['thread']);
-    $userid=(int)$_GET['user_id'];
+    $current_thread=get_thread_information($_GET['thread']);    
     $threadid=$current_thread['thread_id'];
     //show current qualify in my form
     $qualify=current_qualify_of_thread($threadid, api_get_session_id());
     //show max qualify in my form
-    $max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
+    $max_qualify=show_qualify('2',$user_id,$threadid);
     require_once 'forumbody.inc.php';
-    $value_return = store_theme_qualify($userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id(),date("Y-m-d H:i:s"),api_get_session_id());
+    $value_return = store_theme_qualify($user_id,$threadid,$_REQUEST['idtextqualify'],api_get_user_id(),date("Y-m-d H:i:s"),api_get_session_id());
     $url='cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.Security::remove_XSS($_GET['post']).'&amp;origin='.$origin.'&amp;user_id='.Security::remove_XSS($_GET['user_id']);
-    $current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
+    $current_qualify_thread=show_qualify('1',$user_id,$threadid);
 
     if ($value_return[0]!=$_REQUEST['idtextqualify'] && $value_return[1]=='update') {
-        store_qualify_historical('1','',$_GET['forum'],$userid,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
+        store_qualify_historical('1','',$_GET['forum'],$user_id,$threadid,$_REQUEST['idtextqualify'],api_get_user_id());
     }
 
     if (!empty($_REQUEST['idtextqualify']) && $_REQUEST['idtextqualify'] > $max_qualify) {
@@ -237,12 +226,10 @@ if ($allowed_to_edit) {
         Display :: display_error_message($return_message,false);
     }
     
-    // show qualifications history
-    $user_id_thread = (int)$_GET['user_id'];
-    $opt=Database::escape_string($_GET['type']);
-    $qualify_historic = get_historical_qualify($user_id_thread, $threadid, $opt);
+    // show qualifications history    
+    $qualify_historic = get_historical_qualify($user_id, $threadid, $_GET['type']);    
+    $counter = count($qualify_historic);
     
-    $counter= count($qualify_historic);
     $act_qualify = $_REQUEST['idtextqualify'];
     if ($counter>0) {
         if (isset($_GET['gradebook'])){
@@ -250,34 +237,33 @@ if ($allowed_to_edit) {
         }
         echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
         if ($_GET['type'] == 'false') {
-
-            echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=true&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('MoreRecent').'</a>&nbsp;|
-                    '.get_lang('Older').'
-                  </div>';
+            $buttons = '<a class="btn" href="forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=true&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.
+                    get_lang('MoreRecent').'</a> <a class="btn disabled" >'.get_lang('Older').'</a>';
         } else {
-            echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:'.get_lang('MoreRecent').' |
-                    <a href="forumqualify.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=false&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('Older').'</a>&nbsp;
-                  </div>';
+            $buttons =  '<a class="btn disabled">'.get_lang('MoreRecent').'</a>
+                        <a class="btn" href="forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=false&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.
+                    get_lang('Older').'</a>';
         }
-        $table_list.= '<a name="history" /><br /><br /><table class="data_table" style="width:100%">';
+        
+        $table_list.= '<br /><div class="btn-group">'.$buttons.'</div>';
+        $table_list.= '<br /><table class="data_table">';
         $table_list.= '<tr>';
         $table_list.= '<th width="50%">'.get_lang('WhoChanged').'</th>';
         $table_list.= '<th width="10%">'.get_lang('NoteChanged').'</th>';
         $table_list.= '<th width="40%">'.get_lang('DateChanged').'</th>';
         $table_list.= '</tr>';
 
-        for($i=0;$i<count($qualify_historic);$i++) {
-                $my_user_info=api_get_user_info($qualify_historic[$i]['qualify_user_id']);
-                $name = api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']);
-                $table_list.= '<tr class="'.$class.'"><td>'.$name.'</td>';
-                $table_list.= '<td>'.$qualify_historic[$i]['qualify'].'</td>';
-                $table_list.= '<td>'.$qualify_historic[$i]['qualify_time'].'</td></tr>';
+        for ($i=0;$i<count($qualify_historic);$i++) {
+            $my_user_info=api_get_user_info($qualify_historic[$i]['qualify_user_id']);
+            $name = api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']);
+            $table_list.= '<tr class="'.$class.'"><td>'.$name.'</td>';
+            $table_list.= '<td>'.$qualify_historic[$i]['qualify'].'</td>';
+            $table_list.= '<td>'.api_convert_and_format_date($qualify_historic[$i]['qualify_time'], DATE_TIME_FORMAT_LONG).'</td></tr>';
         }
         $table_list.= '</table>';
         echo $table_list;
-
     } else {
-        echo get_lang('NotChanged');
+        //echo get_lang('NotChanged');
     }
 } else {
     api_not_allowed();

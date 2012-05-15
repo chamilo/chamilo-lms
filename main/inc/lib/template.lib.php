@@ -414,7 +414,9 @@ class Template {
             if (!api_is_anonymous()) {
                 //Do not include the global chat in LP
                 if ($this->show_learnpath == false) {
-                    $js_files[] = 'chat/js/chat.js';
+                    if ($this->show_footer == true) {
+                        $js_files[] = 'chat/js/chat.js';
+                    }
                 }
             }
 		}

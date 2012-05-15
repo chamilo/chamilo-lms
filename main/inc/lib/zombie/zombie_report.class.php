@@ -309,12 +309,12 @@ class ZombieReport implements Countable
         $result = $this->display_parameters($return);
         if ($this->perform_action()) {
             if ($return) {
-                $result = Display::return_confirmation_message(get_lang('Done'));
+                $result .= Display::return_confirmation_message(get_lang('Done'));
             } else {
                 Display::display_confirmation_message(get_lang('Done'));
             }
         }
-        $result = $this->display_data($return);
+        $result .= $this->display_data($return);
         if ($return) {
             return $result;
         }

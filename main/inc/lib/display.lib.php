@@ -101,6 +101,11 @@ class Display {
         global $_plugins, $global_tpl;
         echo self::$global_template ->show_footer_template();        
     }
+    
+    public static function page()
+    {
+        return new Page();
+    }
 
     /**
      * Displays the tool introduction of a tool.

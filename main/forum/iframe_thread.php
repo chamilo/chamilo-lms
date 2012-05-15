@@ -36,26 +36,8 @@ require_once '../inc/global.inc.php';
 
 // A notice for unauthorized people.
 api_protect_course_script(true);
-
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 $nameTools = get_lang('ToolForum');
-?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title></title>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets');?>/default.css";
-/*]]>*/
-</style>
-</head>
-<body>
-<?php
+Display::display_reduced_header();
 
 /* Including necessary files */
 

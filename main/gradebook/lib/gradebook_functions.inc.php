@@ -180,13 +180,15 @@ function build_edit_icons_cat($cat, $selectcat) {
             if (api_get_setting('gradebook_locking_enabled') == 'true') {                
                 if ($cat->is_locked()) {
                     if (api_is_platform_admin()) {
-                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.Display::return_icon('unlock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                                        
+                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.
+                                         Display::return_icon('lock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                                        
                     } else {
-                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('unlock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
+                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
                     }
                     $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                 } else {
-                    $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.Display::return_icon('lock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
+                    $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.
+                            Display::return_icon('unlock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
                     //$modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                 }                
             }          

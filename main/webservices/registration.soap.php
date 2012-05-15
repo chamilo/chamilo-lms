@@ -3357,6 +3357,33 @@ function WSEditSession($params) {
     return $output;
 }
 
+
+/* Register WSSubscribeUserToCourse function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+'originalUsersList',
+'complexType',
+'array',
+'',
+'SOAP-ENC:Array',
+array(),
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:originalUsersList[]')),'xsd:string'
+);
+
+$server->wsdl->addComplexType(
+	'subscribeUserToCourseParams',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+		'original_course_id_name' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
+	)
+);
+
 /* Register WSDeleteSession function */
 $server->wsdl->addComplexType(
     'deleteSessionParams',

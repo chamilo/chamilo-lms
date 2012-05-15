@@ -1030,7 +1030,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $user_list_id = array ();                        
             $duration_list = '';
             
-            $locked = api_resource_is_locked_by_gradebook($exercise_id);
+            $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
             			
             for ($i = 0; $i < $sizeof; $i++) {                
                 $revised = $results[$i]['revised'];	

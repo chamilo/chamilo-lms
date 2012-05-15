@@ -468,7 +468,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$is_assignment   = $row['has_properties'];
 			$id2             = $row['id']; //work id
 
-            $locked = api_resource_is_locked_by_gradebook($id2);
+            $locked = api_resource_is_locked_by_gradebook($id2, LINK_STUDENTPUBLICATION);
             
 			if ($is_allowed_to_edit && $locked == false) {
 			    // form edit directory
@@ -811,7 +811,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
-                    if (api_resource_is_locked_by_gradebook($id2)) {
+                    if (api_resource_is_locked_by_gradebook($id2, LINK_STUDENTPUBLICATION)) {
                         $action .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
                     } else {
@@ -1559,7 +1559,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);    
     $condition_session  = api_get_session_condition($session_id);
     
-    $locked = api_resource_is_locked_by_gradebook($work_id);
+    $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
     if (!empty($work_data)) {
         

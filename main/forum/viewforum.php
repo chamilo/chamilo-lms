@@ -142,7 +142,7 @@ if (($my_action == 'lock' OR $my_action == 'unlock') AND isset($_GET['content'])
 // Deleting.
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
     
-    $locked = api_resource_is_locked_by_gradebook($_GET['id']);
+    $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {    
         $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
         // Delete link    
@@ -405,7 +405,7 @@ if (is_array($threads)) {
                     echo '<a href="editpost.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($row['thread_id']).'&amp;post='.$row_post_id['post_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;id_attach='.$id_attach.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                     
                     if (api_resource_is_locked_by_gradebook($row['thread_id'])) {
-                        echo Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
+                        echo Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
                     } else {
                         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=delete&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     }

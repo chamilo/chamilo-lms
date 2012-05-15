@@ -823,7 +823,14 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
  * @version february 2006, dokeos 1.8
  */
 function display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters = '') {
-    $id = Security::remove_XSS($id);
+    $id = intval($id);
+    //check if the forum is blocked due 
+    if ($content == 'thread') {
+        if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
+            echo Display::return_icon('lock_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
+            return;
+        }
+    }
     if ($current_lock_status == '1') {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;';
         if (is_array($additional_url_parameters)) {

@@ -79,7 +79,7 @@ $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $current_user_id    = api_get_user_id();
 
-$locked = api_resource_is_locked_by_gradebook($exercise_id);
+$locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($objExercise)) {
 	$objExercise = new Exercise();

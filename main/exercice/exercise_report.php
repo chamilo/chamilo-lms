@@ -59,7 +59,7 @@ $course_id      = api_get_course_int_id();
 $exercise_id    = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 
 
-$locked = api_resource_is_locked_by_gradebook($exercise_id);
+$locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($exercise_id)) {
     api_not_allowed();

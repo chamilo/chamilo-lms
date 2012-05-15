@@ -5732,7 +5732,7 @@ function api_get_course_table_condition($and = true) {
  * @param int the item id (tool id, exercise id, lp id)
  * 
  */
-function api_resource_is_locked_by_gradebook($item_id, $course_code = null) {
+function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code = null) {
     if (api_is_platform_admin()) {
         return false;
     }
@@ -5742,7 +5742,8 @@ function api_resource_is_locked_by_gradebook($item_id, $course_code = null) {
         }
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $item_id = intval($item_id);
-        $sql = "SELECT locked FROM $table WHERE locked = 1 AND ref_id = $item_id AND type = 1 AND course_code = '$course_code' ";                        
+        $link_type = intval($link_type);
+        $sql = "SELECT locked FROM $table WHERE locked = 1 AND ref_id = $item_id AND type = $link_type AND course_code = '$course_code' ";                        
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return true;
@@ -5751,12 +5752,20 @@ function api_resource_is_locked_by_gradebook($item_id, $course_code = null) {
     return false;
 }
 
-function block_course_item_locked_by_gradebook($item_id, $course_code = null) {
+/**
+ * Blocks a page if the item was added in a gradebook
+ * 
+ * @param int       exercise id, work id, thread id,
+ * @param int       LINK_EXERCISE, LINK_STUDENTPUBLICATION, LINK_LEARNPATH LINK_FORUM_THREAD, LINK_ATTENDANCE see gradebook/lib/be/linkfactory
+ * @param string    course code
+ * @return boolean 
+ */
+function block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
     if (api_is_platform_admin()) {
         return false;
     }
     
-    if (api_resource_is_locked_by_gradebook($item_id, $course_code)) {
+    if (api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code)) {
         $message = Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         api_not_allowed(true, $message);
     }    

@@ -11,6 +11,7 @@
 * @author Julio Montoya <gugli100@gmail.com> adding security functions
 * @version april 2007
 */
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 require_once 'gradebook_functions_users.inc.php';
 require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
@@ -319,10 +320,6 @@ function build_edit_icons_link($link, $selectcat) {
  * @return   int     false on error or link ID
  */
 function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0) {
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);

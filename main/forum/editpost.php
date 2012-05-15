@@ -81,7 +81,7 @@ $current_forum          = get_forum_information($_GET['forum']); // Note: This h
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post           = get_post_information($_GET['post']);
 
-block_course_item_locked_by_gradebook($_GET['thread']);
+block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
 
 /* Header and Breadcrumbs */
 

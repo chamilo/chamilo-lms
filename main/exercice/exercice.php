@@ -214,7 +214,7 @@ if ($is_allowedToEdit) {
 
 		$objExerciseTmp = new Exercise();
 		$check = Security::check_token('get');
-        $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId);
+        $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
         
 		if ($objExerciseTmp->read($exerciseId)) {
 			if ($check) {
@@ -456,7 +456,7 @@ if (!empty($exercise_list)) {
         foreach ($exercise_list as $row) {
             $my_exercise_id = $row['id'];                
             
-            $locked = api_resource_is_locked_by_gradebook($my_exercise_id);
+            $locked = api_resource_is_locked_by_gradebook($my_exercise_id, LINK_EXERCISE);
             
             //echo '<div  id="tabs-'.$i.'">';
             $i++;                    

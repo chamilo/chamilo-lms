@@ -495,7 +495,7 @@ switch ($action) {
         //fixes bug when showing modification form		
         if (!empty($work_id)) {
             if ($is_allowed_to_edit) {
-                if (api_resource_is_locked_by_gradebook($work_id)) {
+                if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
                     echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
                 } else {
                     $form->display();
@@ -1023,7 +1023,7 @@ switch ($action) {
 		
 		if ($is_allowed_to_edit && !empty($_REQUEST['delete_dir'])) {
             $delete_dir_id = intval($_REQUEST['delete_dir']);
-            $locked = api_resource_is_locked_by_gradebook($delete_dir_id);
+            $locked = api_resource_is_locked_by_gradebook($delete_dir_id, LINK_STUDENTPUBLICATION);
             
             if ($locked == false) {
             
@@ -1062,7 +1062,7 @@ switch ($action) {
             $file_deleted = false;	
             $is_author = user_is_author($item_id);     
             $work_data = get_work_data_by_id($item_id);            
-            $locked = api_resource_is_locked_by_gradebook($work_data['parent_id']);
+            $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
             
             if ( ($is_allowed_to_edit && $locked == false) || ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
                 //we found the current user is the author

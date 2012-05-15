@@ -218,23 +218,21 @@ $Categories = SessionManager::get_all_session_category();
             <?php echo get_lang('SessionCategory') ?>
         </label>
         <div class="controls">
-           <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
-        <option value="0"><?php get_lang('None'); ?></option>       
-        <?php 
-          if (!empty($Categories)) {
-              foreach($Categories as $Rows) { ?>
-                <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-            <?php }
-          }
-        ?>
-    </select>
+            <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
+                <option value="0"><?php get_lang('None'); ?></option>       
+            <?php 
+            if (!empty($Categories)) {
+                foreach($Categories as $Rows) { ?>
+                    <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+                <?php }
+            }
+            ?>
+        </select>
         </div>        
     </div>   
     
- <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">
+ <div class="control-group">
+        <div class="controls">
             <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
         <div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
             <br />
@@ -243,17 +241,12 @@ $Categories = SessionManager::get_all_session_category();
             <br />
         </div>
         </div>        
-    </div>   
+</div>   
     
-
-    
- <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">
-    
-  <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
+ <div class="control-group">        
+        <div class="controls">                
     <label for="start_limit">
+        <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
     <?php echo get_lang('DateStartSession');?>
     </label> 
  
@@ -325,15 +318,12 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 
 
     
- <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">
-
-    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
-    <label for="end_limit">
-        <?php echo get_lang('DateEndSession') ?>
-    </label>
+ <div class="control-group">
+        <div class="controls">            
+            <label for="end_limit">
+                <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
+                <?php echo get_lang('DateEndSession') ?>
+            </label>
   <div id="end_date" style="display:none">
   <br />
   
@@ -411,13 +401,10 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
     </div>   
     
     
- <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">
-            <button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
-
-        </div>
+ <div class="control-group">        
+    <div class="controls">
+        <button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
+    </div>
 </div>
 </form>
 <script type="text/javascript">

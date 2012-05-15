@@ -105,24 +105,24 @@ if (!empty($return)) {
 }
 ?>
 
-<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form class="form-horizontal" method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <fieldset>
     <legend><?php echo $tool_name; ?></legend>    
     <input type="hidden" name="formSent" value="1">
     
-    <div class="row">
-        <div class="label">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('SessionName') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
             <input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>">
         </div>        
     </div>
-    <div class="row">
-        <div class="label">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('CoachName') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
             <select class="chzn-select" name="id_coach" style="width:380px;" title="<?php echo get_lang('Choose'); ?>" >
                 <option value="">----- <?php echo get_lang('None') ?> -----</option>
                 <?php foreach($Coaches as $enreg) { ?>
@@ -135,34 +135,30 @@ if (!empty($return)) {
         </select>
         </div>        
     </div>
-    <div class="row">
-        <div class="label">
+    <div class="control-group">
+        <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>
-        </div>
-        <div class="formw">
+        </label>
+        <div class="controls">
                 <select class="chzn-select" id="session_category" name="session_category" style="width:380px;" title="<?php echo get_lang('Select'); ?>">
         <option value="0"><?php get_lang('None'); ?></option>
         <?php
           if (!empty($Categories)) { 
               foreach($Categories as $Rows)  { ?>
-        <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+                <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
         <?php }
           }
          ?>
     </select>
         </div>        
     </div>
-    <div class="row">
-        <div class="label">
-        </div>
-        <div class="formw">
+    <div class="control-group">        
+        <div class="controls">
             <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
         </div>        
     </div>
-    <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">            
+    <div class="control-group">        
+        <div class="controls">            
             <div style="display:
             <?php
                 if($formSent){
@@ -189,12 +185,10 @@ if (!empty($return)) {
     </div>
     
     <div class="clear"></div> 
-    <div class="row">
-        <div class="label">
-        </div>
-        <div class="formw">
-            <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
+    <div class="control-group">        
+        <div class="controls">            
             <label for="start_limit">
+                <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
             <?php echo get_lang('DateStartSession');?>
             </label> 
             <div id="start_date" style="<?php echo ($year_start=="0000") ? "display:none" : "display:block" ; ?>">
@@ -258,18 +252,13 @@ if (!empty($return)) {
             ?>
               </select>
           </div>
-  
-            
         </div>        
     </div>
     
-    <div class="row">
-        <div class="label">            
-        </div>
-        <div class="formw">
- 
-            <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
+    <div class="control-group">        
+        <div class="controls">             
             <label for="end_limit">
+                <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
             <?php echo get_lang('DateEndSession') ?>
             </label>
           <div id="end_date" style="<?php echo ($year_end=="0000") ? "display:none" : "display:block" ; ?>">
@@ -343,22 +332,13 @@ if (!empty($return)) {
                 foreach($visibility_list as $key=>$item): ?>
                 <option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
                 <?php endforeach; ?>
-            </select>    
-                
+            </select>                    
     </div>
-
     </div>
-  </div>
-  
-     
+  </div>    
     
-   
-    
-    
-    <div class="row">
-        <div class="label">
-        </div>
-        <div class="formw">
+    <div class="control-group">        
+        <div class="controls">
             <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>    
         </div>        
     </div>

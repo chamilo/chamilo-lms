@@ -26,13 +26,12 @@ function get_users_in_course($course_id) {
 			 	AND scru.status=0
 			 	AND scru.course_code='$course_id' AND id_session ='$current_session' $order_clause ";
 	} else {
-		$sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code'
-			.' FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user'
-			.' WHERE course_rel_user.user_id=user.user_id'
-			.' AND course_rel_user.status='.STUDENT
-			." AND course_rel_user.course_code='".$course_id."'"
-			.$order_clause;
-	}
+		$sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code 
+                FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user 
+                WHERE   course_rel_user.user_id=user.user_id AND 
+                        course_rel_user.status='.STUDENT.' AND 
+                        course_rel_user.course_code = "'.$course_id.'" '.$order_clause;
+	}    
 	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
 }
@@ -41,7 +40,7 @@ function get_users_in_course($course_id) {
 function get_user_array_from_sql_result($result) {
 	$a_students = array();
 	while ($user = Database::fetch_array($result)) {
-		if (!array_key_exists($user['user_id'],$a_students)) {
+		if (!array_key_exists($user['user_id'], $a_students)) {
 			$a_current_student = array ();
 			$a_current_student[] = $user['user_id'];
 			$a_current_student[] = $user['username'];
@@ -70,15 +69,15 @@ function get_all_users ($evals = array(), $links = array()) {
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 			$tbl_res = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
-			$sql = 'SELECT user.user_id,lastname,firstname'
-					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
-					.' WHERE res.evaluation_id = '.intval($eval->get_id())
+			$sql = 'SELECT user.user_id,lastname, firstname, user.official_code 
+                    FROM '.$tbl_res.' as res, '.$tbl_user.' as user 
+                    WHERE res.evaluation_id = '.intval($eval->get_id())
 					.' AND res.user_id = user.user_id';
 			$result = Database::query($sql);
-			$users = array_merge($users,get_user_array_from_sql_result($result));
+			$users = array_merge($users, get_user_array_from_sql_result($result));
 		}
 	}
-
+    
 	foreach ($links as $link) {
 		// links are always in a course
 		$coursecode = $link->get_course_code();
@@ -104,7 +103,7 @@ function find_students($mask= '') {
 
 	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email' . ' FROM ' . $tbl_user . ' user';
+	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code ' . ' FROM ' . $tbl_user . ' user';
 	if (!api_is_platform_admin()) {
 		$sql .= ', ' . $tbl_cru . ' cru';
 	}

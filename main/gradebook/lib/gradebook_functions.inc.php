@@ -435,7 +435,8 @@ function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);
 	}
-	return array ($header_names, $newarray);
+    $return = array($header_names, $newarray);    
+	return $return;
 }
 
 
@@ -711,7 +712,7 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
 
     // HTML report creation first
-    $time = time();		
+    $time = time();
     $course_code = trim($cat[0]->get_course_code());
     $organization = api_get_setting('Institution');
 
@@ -783,38 +784,27 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
     Display::$global_template->assign('pdf_teachers', $teacher_list);
  
-    /*
-    if (!empty($total)) {			
-        foreach($total as $label => $count) {
-            $total_custom_score = round($count/count($user_results), 2) *100;
-            $html .= Display::tag('tr', Display::tag('td', $label).': '.Display::tag('td', Display::tag('strong', $total_custom_score.' %')));
-        }
-    }
-    $html .= '</table></td>';		
-    $html .= '<td valign="top"><table align="left" width="33%">';
-    
-    $headers = $printable_data[0];    
-    unset($headers[0]);
-    unset($headers[1]);
-    unset($headers[count($headers)+1]);
-
-    foreach ($headers as $head) {			
-        $html .= Display::tag('tr', Display::tag('td', Display::tag('strong', $head)));
-    }		
-    $html .= '</table></td></table><br />';
-    */
-    
-    $columns = count($printable_data[0]);
+    $columns  = count($printable_data[0]);
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
 
     if (api_is_western_name_order()) {
         // Choosing the right person name order according to the current language.
-        list($printable_data[0][0], $printable_data[0][1]) = array($printable_data[0][1], $printable_data[0][0]);
-        if ($has_data) {
-            foreach ($printable_data[1] as &$printable_data_row) {
-                list($printable_data_row[0], $printable_data_row[1]) = array($printable_data_row[1], $printable_data_row[0]);
+        $firstname_position = 0;
+        $lastname_position = 1;
+        if (!isset($params['join_firstname_lastname'])) {
+            
+            if (isset($params['show_usercode']) && $params['show_usercode'] ) {
+                $firstname_position ++;
+                $lastname_position ++;
+            }        
+            list($printable_data[0][$firstname_position], $printable_data[0][$lastname_position]) = array($printable_data[0][$lastname_position], $printable_data[0][$firstname_position]);
+            if ($has_data) {
+                foreach ($printable_data[1] as &$printable_data_row) {
+                    list($printable_data_row[$firstname_position], $printable_data_row[$lastname_position]) = array($printable_data_row[$lastname_position], $printable_data_row[$firstname_position]);
+                }
             }
         }
+        
     }
 
     

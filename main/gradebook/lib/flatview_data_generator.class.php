@@ -56,9 +56,17 @@ class FlatViewDataGenerator
 	 */
 	public function get_header_names($items_start = 0, $items_count = null , $show_detail = false) {
 		$headers = array();        
-		$headers[] = get_lang('LastName');
-		$headers[] = get_lang('FirstName');
+                
+        if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
+            $headers[] = get_lang('OfficialCode');
+        }
         
+        if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {            
+            $headers[] = get_lang('Name');		
+        } else {
+            $headers[] = get_lang('LastName');
+            $headers[] = get_lang('FirstName');
+        }
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
 		}
@@ -224,12 +232,21 @@ class FlatViewDataGenerator
         if (empty($grade_model_id) || $grade_model_id == -1) {
             $use_grade_model = false;    
         }        
-		foreach ($selected_users as $user) {            
+        
+		foreach ($selected_users as $user) {             
 			$row = array();            
 			$row[] = $user_id = $user[0];	//user id
-			$row[] = $user[2];	//last name
-			$row[] = $user[3];	//first name
-
+            
+            if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {       
+                $row[] = $user[4];	//official code
+            }            
+            if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {       
+                $row[] = api_get_person_name($user[3], $user[2]);	//last name			
+            } else {
+                $row[] = $user[2];	//last name
+                $row[] = $user[3];	//first name    
+            }
+          
 			$item_value = 0;
             $item_value_total = 0;
 			$item_total = 0;
@@ -337,7 +354,7 @@ class FlatViewDataGenerator
 			}
 			unset($score);
 			$data[] = $row;
-		}
+		}        
 		return $data;
 	}
 

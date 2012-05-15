@@ -62,6 +62,7 @@ class Autoload
         $result['AddCourseToSession'] = '/main/inc/lib/add_courses_to_session_functions.lib.php';
         $result['AddManySessionToCategoryFunctions'] = '/main/inc/lib/add_many_session_to_category_functions.lib.php';
         $result['Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
+        $result['AdminPage'] = '/main/admin/admin_page.class.php';
         $result['AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
         $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
@@ -211,8 +212,10 @@ class Autoload
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
         $result['ImagickWrapper'] = '/main/inc/lib/image.lib.php';
         $result['Import'] = '/main/inc/lib/import.lib.php';
+        $result['InactiveCourseReport'] = '/main/admin/inactive_course_report.class.php';
         $result['IndexManager'] = '/main/inc/lib/userportal.lib.php';
         $result['IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
+        $result['Install'] = '/main/install/install.class.php';
         $result['Javascript'] = '/main/inc/lib/javascript.class.php';
         $result['KeyAuth'] = '/main/auth/key/key_auth.class.php';
         $result['LearnpathLink'] = '/main/gradebook/lib/be/learnpathlink.class.php';
@@ -249,6 +252,7 @@ class Autoload
         $result['PEAR'] = '/main/inc/lib/pear/PEAR.php';
         $result['PEAR5'] = '/main/inc/lib/pear/PEAR5.php';
         $result['PEAR_Error'] = '/main/inc/lib/pear/PEAR.php';
+        $result['Page'] = '/main/inc/lib/page.class.php';
         $result['Pager'] = '/main/inc/lib/pear/Pager/Pager.php';
         $result['Pager_Common'] = '/main/inc/lib/pear/Pager/Common.php';
         $result['Pager_HtmlWidgets'] = '/main/inc/lib/pear/Pager/HtmlWidgets.php';
@@ -391,6 +395,7 @@ class Autoload
         $result['ch_yesno'] = '/main/survey/survey.lib.php';
         $result['db'] = '/main/inc/lib/db.lib.php';
         $result['document_processor'] = '/main/inc/lib/search/tool_processors/document_processor.class.php';
+        $result['iDatabase'] = '/main/install/i_database.class.php';
         $result['learnpath'] = '/main/newscorm/learnpath.class.php';
         $result['learnpathItem'] = '/main/newscorm/learnpathItem.class.php';
         $result['learnpathList'] = '/main/newscorm/learnpathList.class.php';
@@ -482,8 +487,13 @@ class AutoloadClassFinder
         $this->synch(Chamilo::path('/main'));
         ksort($this->map);
     }
+    
+    public function __invoke()
+    {
+        $this->run();
+    }
 
-    public function to_string()
+    public function __toString()
     {
         $result = array();
 

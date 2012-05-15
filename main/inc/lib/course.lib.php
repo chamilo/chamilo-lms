@@ -3710,5 +3710,35 @@ class CourseManager {
         return $result;
 	}    
     
+    /**
+     * 
+     * 
+     * @return ResultSet
+     */
+    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED)
+    {        
+        $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
+        $ceiling = date('Y-m-d H:i:s', $ceiling);        
+        $visibility_level = $visibility_level ? $visibility_level : '0';
+        
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT 
+                    c.*,
+                    cat.name AS category
+                FROM        
+                    $table_course AS c
+                LEFT JOIN    
+                    $table_category AS cat
+                ON
+                    c.category_code = cat.code
+                WHERE
+                    c.visibility >= $visibility_level AND                    
+                    c.last_visit<='$ceiling'
+        ";
+        
+        return ResultSet::create($sql);
+    }
+    
    
 } //end class CourseManager

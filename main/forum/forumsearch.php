@@ -34,8 +34,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 include 'forumfunction.inc.php';
 include 'forumconfig.inc.php';
 

@@ -504,8 +504,7 @@ function is_style($style) {
 function handle_search() {
     global $SettingsStored, $_configuration;
 
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';    
     $search_enabled = api_get_setting('search_enabled');
  
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');

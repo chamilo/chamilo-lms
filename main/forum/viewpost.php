@@ -7,18 +7,13 @@
 $language_file = 'forum';
 
 // Including the global initialization file.
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
-
-// Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-//require_once api_get_path(LIBRARY_PATH).'resourcelinker.lib.php';
 
 $nameTools = get_lang('ToolForum');
 

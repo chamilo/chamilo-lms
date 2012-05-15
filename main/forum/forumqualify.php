@@ -26,11 +26,6 @@ if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
-// including additional library scripts
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
-//require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
 $nameTools=get_lang('ToolForum');
 
 /*     Including necessary files */

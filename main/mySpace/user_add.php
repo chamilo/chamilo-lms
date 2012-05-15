@@ -10,7 +10,6 @@ require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'mail.lib.inc.php';
 
 // user permissions

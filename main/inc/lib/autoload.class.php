@@ -123,6 +123,9 @@ class Autoload
         $result['FillBlanks'] = '/main/exercice/fill_blanks.class.php';
         $result['FlatViewDataGenerator'] = '/main/gradebook/lib/flatview_data_generator.class.php';
         $result['FlatViewTable'] = '/main/gradebook/lib/fe/flatviewtable.class.php';
+        $result['FormElement'] = '/main/media/lib/form_element.class.php';
+        $result['FormElementTextarea'] = '/main/media/lib/form_element_textarea.class.php';
+        $result['FormRule'] = '/main/media/lib/form_rule.class.php';
         $result['FormValidator'] = '/main/inc/lib/formvalidator/FormValidator.class.php';
         $result['Forum'] = '/main/coursecopy/classes/Forum.class.php';
         $result['ForumCategory'] = '/main/coursecopy/classes/ForumCategory.class.php';
@@ -228,6 +231,8 @@ class Autoload
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';
+        $result['Media'] = '/main/media/model/media.class.php';
+        $result['MediaForm'] = '/main/media/lib/media_form.class.php';
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
         $result['MultipleAnswer'] = '/main/exercice/multiple_answer.class.php';
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
@@ -425,6 +430,7 @@ class Autoload
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
         $result['xmddoc'] = '/main/inc/lib/xmd.lib.php';
 
+
         return $result;
     }
 
@@ -487,7 +493,7 @@ class AutoloadClassFinder
         $this->synch(Chamilo::path('/main'));
         ksort($this->map);
     }
-    
+
     public function __invoke()
     {
         $this->run();

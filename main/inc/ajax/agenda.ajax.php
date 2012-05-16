@@ -14,19 +14,21 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
 
 if ($type =='course') {
-    // Access control
     api_protect_course_script(true);
 }
 
-$agenda = new Agenda();
+$group_id = api_get_group_id();
 
+$is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
+
+$agenda = new Agenda();
 $agenda->type = $type; //course,admin or personal
 
 switch ($action) {
-	case 'add_event':
-        if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+	case 'add_event':        
+        if ((!api_is_allowed_to_edit(null, true) && !$is_group_tutor) && $type == 'course') {
             break;
-        }
+        }        
 		echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], 
 		                        $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send'], $_REQUEST['add_as_annonuncement']);
 		break;		
@@ -69,9 +71,9 @@ switch ($action) {
 	case 'get_events':
 		$start 	= $_REQUEST['start'];
 		$end 	= $_REQUEST['end'];					
-		$events = $agenda->get_events($start, $end, api_get_user_id(), api_get_course_int_id());
-		echo $events;		
-		break;				
+		$events = $agenda->get_events($start, $end, api_get_course_int_id(), $group_id);
+		echo $events;
+		break;		
     case 'get_user_agenda':
     	//Used in the admin user list 
     	api_protect_admin_script();

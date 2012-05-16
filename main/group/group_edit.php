@@ -25,16 +25,16 @@ api_protect_course_script(true);
 
 /*	Libraries & settings */
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+$group_id = api_get_group_id();
 
 /*	Constants & variables */
-$current_group = GroupManager :: get_group_properties(api_get_group_id());
+$current_group = GroupManager :: get_group_properties($group_id);
 
 /*	Header */
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 
-$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id());
+$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false,true) && !$is_group_member) {
 	api_not_allowed(true);
@@ -125,43 +125,8 @@ $form->add_textfield('name', get_lang('GroupName'));
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
 
-
-// Search Members of group
-//$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
-//$renderer = & $form->defaultRenderer();
-//$renderer->setElementTemplate('<span>{element}</span> ');
-//$form->add_textfield('keyword', get_lang('GroupMembers'), false);
-//$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-
-// Getting all the users
-/*
-if (isset($_SESSION['id_session'])) {
-    $complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
-    $complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'], $_SESSION['id_session']);
-    $complete_user_list = array_merge($complete_user_list, $complete_user_list2);
-    
-} else {
-    $complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
-}
-
-foreach ($complete_user_list as $user_id => $o_course_user) {
-        if ((isset ($_GET['keyword']) && search_members_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
-        $groups_name = GroupManager :: get_user_group_name($user_id);
-        
-        if ($is_western_name_order) {
-                    $temp[] = $o_course_user['firstname'];
-                    $temp[] = $o_course_user['lastname'];
-                } else {
-                    $temp[] = $o_course_user['lastname'];
-                    $temp[] = $o_course_user['firstname'];
-                }
-
-                $temp[] = $o_course_user['role'];
-                $temp[] = implode(', ', $groups_name); //Group
-                $temp[] = $o_course_user['official_code'];
-    }
-}*/
 $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
+
 usort($complete_user_list, 'sort_users');
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
@@ -196,17 +161,18 @@ $group_tutors_element->setButtonAttributes('remove', array('class' => 'btn arrow
 
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
+
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
-    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);    
     $selected_users[] = $user['user_id'];
 }
 
 // possible : number_groups_left > 0 and is group member
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
-     if( $user['number_groups_left'] >0 || in_array($user['user_id'],$selected_users) ) 
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+     if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users) )  {
+        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+     }
 }
 
 $group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');

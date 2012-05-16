@@ -38,7 +38,7 @@ $(document).ready(function() {
 	$("#dialog-form").dialog({
 		autoOpen: false,
 		modal	: false, 
-		width	: 550, 
+		width	: 580, 
 		height	: 480,
         zIndex: 20000 // added because of qtip2
    	});
@@ -46,7 +46,7 @@ $(document).ready(function() {
     $("#simple-dialog-form").dialog({
 		autoOpen: false,
 		modal	: false, 
-		width	: 550, 
+		width	: 580, 
 		height	: 480,
         zIndex: 20000 // added because of qtip2
    	});
@@ -164,7 +164,7 @@ $(document).ready(function() {
 				$('#color_calendar').html('{{type_label}}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');				
-				$('#color_calendar').addClass('{{type}}_event');
+				$('#color_calendar').addClass('{{ type_event_class }}');
 				
 				allFields.removeClass( "ui-state-error" );		
 				$("#dialog-form").dialog("open");		
@@ -461,7 +461,7 @@ $(document).ready(function() {
                 <label></label>
                 <div class="controls">                    
                     <label class="checkbox inline" for="add_as_annonuncement">
-                        {{"AddAsAnnouncement"|get_lang}}
+                        {{ "AddAsAnnouncement"|get_lang }}
                         <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />                    
                     </label>                    
                 </div>

@@ -71,8 +71,7 @@ class Agenda {
 				$attributes['all_day'] 	= $all_day;
 				$id = Database::insert($this->tbl_personal_agenda, $attributes);
 				break;
-			case 'course':
-				//$attributes['user'] 		= api_get_user_id();
+			case 'course':				
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
@@ -84,27 +83,27 @@ class Agenda {
 				//simple course event
 				$id = Database::insert($this->tbl_course_agenda, $attributes);
                 
-                if ($id) {
-    				//api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), '','',$start, $end);                    
-                    $group_id = api_get_group_id();
+                if ($id) {    				
+                    $group_id = api_get_group_id();                  
+                    
                     if ((!is_null($users_to_send)) or (!empty($group_id))) {
                     
                         $send_to = self::separate_users_groups($users_to_send);                 
-                        
-                        if (isset($send_to['everyone']) && $send_to['everyone']) {
-                            api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), '','',$start,$end);    
+                          
+                        if (isset($send_to['everyone']) && $send_to['everyone']) {                            
+                            api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), $group_id ,'', $start, $end);    
                         } else {                        
                             // storing the selected groups
                             if (is_array($send_to['groups'])) {
-                                foreach ($send_to['groups'] as $group) {
-                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group,0,$start, $end);                                    
+                                foreach ($send_to['groups'] as $group) {                                    
+                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group,0, $start, $end);                                    
                                 }
                             }
     
                             // storing the selected users
-                            if (is_array($send_to['users'])) {      
-                                foreach ($send_to['users'] as $my_user_id) {                                     
-                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), 0, $my_user_id, $start,$end);                                    
+                            if (is_array($send_to['users'])) {                                
+                                foreach ($send_to['users'] as $to_user_id) {                                    
+                                    api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group_id, $to_user_id, $start, $end);                                    
                                 }
                             }
                         }
@@ -113,8 +112,7 @@ class Agenda {
                     if (isset($add_as_announcement) && !empty($add_as_announcement)) {
                       self::store_agenda_item_as_announcement($id);
                     }  
-                }             
-			
+                }			
 				break;
 			case 'admin':				
 				$attributes['title'] 		= $title;
@@ -261,7 +259,7 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
-	function get_events($start, $end, $user_id, $course_id = null, $group_id = null) {	
+	function get_events($start, $end, $course_id = null, $group_id = null) {	
 					
 		switch ($this->type) {
 			case 'admin':
@@ -424,6 +422,7 @@ class Agenda {
 				   WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
 		
 		$result = Database::query($sql);
+        $my_events = array();
 		if (Database::num_rows($result)) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 				$event = array();
@@ -454,9 +453,8 @@ class Agenda {
 	
 	function get_course_events($start, $end, $course_info, $group_id = 0) {
         
-		$course_id = $course_info['real_id'];
-        
-        $group_list = GroupManager::get_group_list(null, $course_info['code']);            
+		$course_id = $course_info['real_id'];        
+        $group_list = GroupManager::get_group_list(null, $course_info['code']);        
         $group_name_list = array();
         
         if (!empty($group_list)) {
@@ -470,7 +468,7 @@ class Agenda {
         } else {            
             $group_memberships = array_keys($group_name_list);            
         }
-        
+                
 		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA);
 		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
@@ -479,8 +477,8 @@ class Agenda {
         if (!empty($group_id)) {
             $group_memberships = array($group_id);
         }
-	
-		if (is_array($group_memberships) && count($group_memberships) >0) {
+        
+		if (is_array($group_memberships) && count($group_memberships) > 0) {
 		    if (api_is_allowed_to_edit()) {
 		        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             } else {
@@ -705,25 +703,25 @@ class Agenda {
     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
     * @return html code
     */
-    function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array()) {
+    function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array()) {
         $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
     
-        // adding the groups to the select form
-        
+        // adding the groups to the select form        
         if (isset($to_already_selected) && $to_already_selected==='everyone') {            
-        }
+        }        
         
         $html .=  '<option value="everyone">'.get_lang('Everyone').'</option>';
         
         if (is_array($group_list)) {
             $html .= '<optgroup label="'.get_lang('Groups').'">';
-            foreach($group_list as $this_group) {
-                //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) {
+            foreach ($group_list as $this_group) {                
+                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
                     // $to_already_selected is the array containing the groups (and users) that are already selected
-                    $html .=     "<option value=\"GROUP:".$this_group['id']."\">".
-                        $this_group['name']." &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-                        "</option>";
+                    $count_users = isset($this_group['count_users']) ? $this_group['count_users'] : $this_group['userNb']; 
+                    $count_users = " &ndash; $count_users ".get_lang('Users');
+                    
+                    $html .= '<option value="GROUP:'.$this_group['id'].'"> '.$this_group['name'].$count_users.'</option>';
+                    //$html .= "<option value=\"GROUP:".$this_group['id']."\"> ".$this_group['name']." ".get_lang('Users')."</option>";
                 }
             }
             $html .= '</optgroup>';            

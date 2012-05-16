@@ -1133,8 +1133,7 @@ function api_get_anonymous_id() {
     $sql = "SELECT user_id FROM $table WHERE status = 6";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
-        $row = Database::fetch_array($res);
-        //error_log('api_get_anonymous_id() returns '.$row['user_id'], 0);
+        $row = Database::fetch_array($res);        
         return $row['user_id'];
     }
     // No anonymous user was found.
@@ -2819,8 +2818,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
         $session_id = intval($session_id);
     } else {
         $session_id = api_get_session_id();
-    }
-    
+    }    
 
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);

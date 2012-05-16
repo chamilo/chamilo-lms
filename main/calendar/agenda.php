@@ -26,10 +26,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $origin = isset($_GET['origin']) ? $_GET['origin'] : null; 
 
 $this_section = SECTION_COURSES;
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 if (empty($action)) {
-	header('Location: agenda_js.php?type=course');
+    $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course';
+	header("Location: $url");
 	exit;
 }
 

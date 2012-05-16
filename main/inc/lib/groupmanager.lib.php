@@ -430,32 +430,38 @@ class GroupManager {
 	 * @param int $group_id The group from which properties are requested.
 	 * @return array All properties. Array-keys are name, tutor_id, description, maximum_number_of_students, directory and visibility of tools
 	 */
-	public static function get_group_properties ($group_id) {
+	public static function get_group_properties($group_id) {
 	    $course_id = api_get_course_int_id();
 		if (empty($group_id) or !is_integer(intval($group_id)) ) {
 			return null;
 		}
+        $result = array();
+        
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$sql = "SELECT * FROM $table_group WHERE c_id = $course_id AND id = ".Database::escape_string($group_id);
+		$sql = "SELECT * FROM $table_group WHERE c_id = $course_id AND id = ".intval($group_id);
 		$db_result = Database::query($sql);
-
-			$db_object = Database::fetch_object($db_result);
-			$result['id'] 							= $db_object->id;
-			$result['name'] 						= $db_object->name;
-			$result['tutor_id'] 					= isset($db_object->tutor_id)?$db_object->tutor_id:null;
-			$result['description']					= $db_object->description;
-			$result['maximum_number_of_students'] 	= $db_object->max_student;
-			$result['doc_state'] 					= $db_object->doc_state;
-			$result['work_state'] 					= $db_object->work_state;
-			$result['calendar_state'] 				= $db_object->calendar_state;
-			$result['announcements_state'] 			= $db_object->announcements_state;
-			$result['forum_state'] 					= $db_object->forum_state;
-			$result['wiki_state'] 					= $db_object->wiki_state;
-			$result['chat_state'] 					= $db_object->chat_state;
-			$result['directory'] 					= $db_object->secret_directory;
-			$result['self_registration_allowed'] 	= $db_object->self_registration_allowed;
-			$result['self_unregistration_allowed'] 	= $db_object->self_unregistration_allowed;
-
+        $db_object = Database::fetch_object($db_result);
+        
+        $result['id'] 							= $db_object->id;
+        $result['name'] 						= $db_object->name;
+        $result['tutor_id'] 					= isset($db_object->tutor_id)?$db_object->tutor_id:null;
+        $result['description']					= $db_object->description;
+        $result['maximum_number_of_students'] 	= $db_object->max_student;
+        $result['doc_state'] 					= $db_object->doc_state;
+        $result['work_state'] 					= $db_object->work_state;
+        $result['calendar_state'] 				= $db_object->calendar_state;
+        $result['announcements_state'] 			= $db_object->announcements_state;
+        $result['forum_state'] 					= $db_object->forum_state;
+        $result['wiki_state'] 					= $db_object->wiki_state;
+        $result['chat_state'] 					= $db_object->chat_state;
+        $result['directory'] 					= $db_object->secret_directory;
+        $result['self_registration_allowed'] 	= $db_object->self_registration_allowed;
+        $result['self_unregistration_allowed'] 	= $db_object->self_unregistration_allowed;
+        
+        $result['count_users'] 	= count(self::get_subscribed_users($group_id));
+        $result['count_tutor'] 	= count(self::get_subscribed_tutors($group_id));
+        $result['count_all'] = $result['count_users'] + $result['count_tutor'];
+        
 		return $result;
 	}
 	/**
@@ -745,7 +751,7 @@ class GroupManager {
 	 * @param int $group_id The group
          * @return array list of user id
 	 */
-	public static function get_users ($group_id) {
+	public static function get_users ($group_id, $load_extra_info = false) {
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
 		$course_id = api_get_course_int_id();
@@ -753,38 +759,60 @@ class GroupManager {
 		$res = Database::query($sql);
 		$users = array ();
 		while ($obj = Database::fetch_object($res)) {
-			$users[] = $obj->user_id;
+            if ($load_extra_info) {
+                $users[] = api_get_user_info($obj->user_id);
+            } else {
+                $users[] = $obj->user_id;
+            }
 		}
 		return $users;
 	}
+    
+    public function get_members_and_tutors($group_id) {
+        $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
+        $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
+        $course_id = api_get_course_int_id();
+		$group_id = intval($group_id);		
+		$sql = "SELECT user_id FROM $group_user_table WHERE c_id = $course_id AND group_id = $group_id";
+		$res = Database::query($sql);
+		$users = array();
         
+		while ($obj = Database::fetch_object($res)) {            
+            $users[] = api_get_user_info($obj->user_id);            
+		}
         
-        /**
-         * Returns users belonging to any of the group 
-         * 
-         * @param array $groups list of group ids
-         * @return array list of user ids
-         */
-        public static function get_groups_users($groups = array())
-        {
-            $result = array();
-            
-            $tbl_group_user = Database::get_course_table(TABLE_GROUP_USER); 
-            $course_id = api_get_course_int_id();
+        $sql = "SELECT user_id FROM $tutor_user_table WHERE c_id = $course_id AND group_id = $group_id";
+		$res = Database::query($sql);		
+		while ($obj = Database::fetch_object($res)) {            
+            $users[] = api_get_user_info($obj->user_id);            
+		}
         
-            $groups = array_map('intval', $groups);
-            $groups = implode(', ', $groups);	//protect individual elements with surrounding quotes
-            $sql = "SELECT DISTINCT user_id
-                    FROM $tbl_group_user gu
-                    WHERE c_id = $course_id AND gu.group_id IN ($groups)";
-            $rs = Database::query($sql);
-            while ($row = Database::fetch_array($rs)) 
-            {
-                $result[] = $row['user_id']; 
-            }
+		return $users;        
+    }
+        
+    /**
+        * Returns users belonging to any of the group 
+        * 
+        * @param array $groups list of group ids
+        * @return array list of user ids
+        */
+    public static function get_groups_users($groups = array()) {
+        $result = array();
+        $tbl_group_user = Database::get_course_table(TABLE_GROUP_USER); 
+        $course_id = api_get_course_int_id();
 
-            return $result;
+        $groups = array_map('intval', $groups);
+        $groups = implode(', ', $groups);	//protect individual elements with surrounding quotes
+        $sql = "SELECT DISTINCT user_id
+                FROM $tbl_group_user gu
+                WHERE c_id = $course_id AND gu.group_id IN ($groups)";
+        $rs = Database::query($sql);
+        while ($row = Database::fetch_array($rs)) {
+            $result[] = $row['user_id']; 
         }
+
+        return $result;
+    }
 
 	/**
 	 * Fill the groups with students.
@@ -1083,7 +1111,7 @@ class GroupManager {
 			$member['lastname']  = $user->lastname;
 			$member['email']     = $user->email;
             $member['username']  = $user->username;
-			$users[] = $member;
+			$users[$member['user_id']] = $member;
 		}
 		return $users;
 	}

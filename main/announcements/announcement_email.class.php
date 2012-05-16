@@ -222,6 +222,7 @@ class AnnouncementEmail
 
         $content = $this->announcement('content');
         $content = stripslashes($content);
+        $content = AnnouncementManager::parse_content($content, $this->course('code'));
 
         $user_firstname = $this->sender('firstName');
         $user_lastname = $this->sender('lastName');

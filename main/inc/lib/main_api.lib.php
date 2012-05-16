@@ -5736,13 +5736,14 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
     if (api_is_platform_admin()) {
         return false;
     }
-    if (api_get_setting('gradebook_locking_enabled') == 'true') {        
+    if (api_get_setting('gradebook_locking_enabled') == 'true') {
         if (empty($course_code)) {
             $course_code = api_get_course_id();
         }
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $item_id = intval($item_id);
         $link_type = intval($link_type);
+        $course_code = Database::escape_string($course_code);
         $sql = "SELECT locked FROM $table WHERE locked = 1 AND ref_id = $item_id AND type = $link_type AND course_code = '$course_code' ";                        
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

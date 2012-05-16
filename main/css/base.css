@@ -57,6 +57,40 @@ label, input, button, select, textarea, p {
     font-size: inherit;
 }
 
+.badge-group {          
+    width: 200px;
+    position: relative;
+}
+
+.badge-group .badge {
+    float:left;    
+    position:relative;
+}
+
+.badge-group  > :first-child {
+    z-index: 1000;    
+}
+
+.badge-group  > :nth-child(2) {
+    z-index: 900;    
+}
+
+.badge-group  > :nth-child(3) {
+    z-index: 800;    
+}
+.badge-group  > :nth-child(4) {
+    z-index: 700;    
+}
+.badge-group  > :nth-child(5) {
+    z-index: 600;    
+}
+
+
+.badge-group .badge:not(:first-child) {
+    margin-left: -13px;
+    padding-left: 15px;    
+}
+
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
     padding-left:30px;

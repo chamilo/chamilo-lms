@@ -319,13 +319,12 @@ class GradebookTable extends SortableTable {
                 if (!empty($data_array)) {
                     if (api_is_allowed_to_edit()) {
                         $main_weight = intval($main_cat[0]->get_weight());                
-                        if (intval($total_weight) == $main_weight) {
-                            //$label = Display::return_icon('accept.png', get_lang('Ok'));    
+                        if (intval($total_weight) == $main_weight) { 
                             $label = null;
-                            $total = Display::badge($total_weight.' / '.$main_weight, 'success');
+                            $total = score_badges(array($total_weight.' / '.$main_weight, '100%'));
                         } else {                                                       
                             $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $main_weight) );    
-                            $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                    
+                            $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                  
                         }
                         $row = array(null, null, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',null, $total.' '.$label, 'child_of' =>$parent_id);
                         $sortable_data[] = $row;
@@ -337,8 +336,8 @@ class GradebookTable extends SortableTable {
         if (api_is_allowed_to_edit()) {           
             if (count($main_cat) > 1) {
                 $main_weight = intval($main_cat[0]->get_weight());    
-                if (intval($total_categories_weight) == $main_weight) {                
-                    $total = Display::badge($total_categories_weight.' / '.$main_weight, 'success');
+                if (intval($total_categories_weight) == $main_weight) {                               
+                    $total = score_badges(array($total_categories_weight.' / '.$main_weight, '100%'));
                 } else {                                                                       
                     $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
                 }

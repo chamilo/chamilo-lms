@@ -840,3 +840,21 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
     exit;	
 }
+
+function score_badges($list_values) {
+    $counter = 1;
+    $badges = array();
+    foreach ($list_values as $value) {
+        $class = 'info';
+        if ($counter == 1) {
+            $class = 'success';    
+        }        
+        $counter++;
+        $badges[] = Display::badge($value, $class);        
+        
+    }
+    return Display::badge_group($badges);
+    
+                        
+    
+}

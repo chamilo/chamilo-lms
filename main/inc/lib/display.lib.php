@@ -1383,7 +1383,7 @@ class Display {
         return $div;
     }
     
-    function badge($count, $type ="warning") {        
+    function badge($count, $type ="warning") {  
         $class = '';
         
         switch ($type) {
@@ -1404,10 +1404,19 @@ class Display {
                 break;            
         }
         
-        if (!empty($count)) {
+        if (!empty($count)) {         
             return ' <span class="badge '.$class.'">'.$count.'</span>';
         }
         return null;
+    }
+    
+    function badge_group($badge_list) {
+        $html = '<div class="badge-group">';
+        foreach ($badge_list as $badge) {
+            $html .= $badge;
+        }
+        $html .= '</div>';
+        return $html;
     }
     
     function label($content, $type = null) {  

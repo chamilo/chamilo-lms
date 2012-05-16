@@ -121,7 +121,7 @@ class FlatViewDataGenerator
                  $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).$add_weight;                    
             }               
         } else {
-            if (!isset($this->params['only_total_category'])) {
+            if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item = $this->evals_links[$count + $items_start];                    
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];

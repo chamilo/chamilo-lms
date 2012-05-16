@@ -105,8 +105,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
-    $params['export_pdf'] = true;
-    
+    $params['export_pdf'] = true;       
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
         export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
@@ -122,10 +121,11 @@ if (isset($_GET['exportpdf']))	{
     $export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
 
 	if ($export_pdf_form->validate()) {        
+        $params = array();
         $params = $export_pdf_form->exportValues();
         Display :: set_header(null, false, false);
-        $params['join_firstname_lastname'] = true;
-        $params['show_usercode'] = true;
+        $params['join_firstname_lastname'] = true;        
+        $params['show_official_code'] = true;
         $params['export_pdf'] = true;        
         $params['only_total_category'] = false;
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
@@ -138,8 +138,7 @@ if (isset ($_GET['print']))	{
 	$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
-}
-       
+}       
         
 if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {    
 	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) {

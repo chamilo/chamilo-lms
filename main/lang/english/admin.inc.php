@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials";
+$CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
 $AdminBy = "Administration by";
 $AdministrationTools = "Administration";
 $State = "Portal status";
@@ -1540,4 +1540,6 @@ $GradebookDefaultWeightTitle = "Default weight in Gradebook";
 $GradebookDefaultWeightComment = "This weight will be use in all courses by default";
 $TeachersCanChangeScoreSettingsTitle = "Teachers can change the Gradebook score settings";
 $TeachersCanChangeScoreSettingsComment = "When editing the Gradebook settings";
+$GradebookEnableLockingTitle = "Enable locking of assessments by teachers";
+$GradebookEnableLockingComment = "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities";
 ?>

@@ -232,4 +232,5 @@ $SelectGradeModel = "Seleccionar un modelo de calificación";
 $AllMustWeight100 = "La suma debe ser de 100";
 $Components = "Componentes";
 $OnlyActiveWhenThereAreAnyComponents = "Esta opción está habilitada si tiene evaluaciones o categorías";
+$GradebookLockedAlert = "Esta evaluación ha sido bloqueada y no puede ser desbloqueada. Si necesita realmente desbloquearla, por favor contacte el administrador de la plataforma, explicando su razón (sino podría ser considerado como un intento de fraude).";
 ?>

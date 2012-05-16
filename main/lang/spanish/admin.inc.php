@@ -1543,4 +1543,6 @@ $GradebookDefaultWeightTitle = "Peso total por defecto en la herramienta \"Evalu
 $GradebookDefaultWeightComment = "Este peso será utilizado en todos los cursos";
 $TeachersCanChangeScoreSettingsTitle = "Los profesores pueden cambiar la configuración de puntuación de las Evaluaciones";
 $TeachersCanChangeScoreSettingsComment = "Al editar la configuración de las Evaluaciones";
+$GradebookEnableLockingTitle = "Activar bloqueo de Evaluaciones por los profesores";
+$GradebookEnableLockingComment = "Una vez activada, esta opción permitirá a los profesores bloquear cualquier evaluación dentro de su curso. Esto prohibirá al profesor cualquier modificación posterior de los resultados de sus alumnos en los recursos usados para esta evaluación: exámenes, lecciones, tareas, etc. El único rol autorizado a desbloquear una evaluación es el administrador. El profesor estará informado de esta posibilidad al intentar desbloquear la evaluación. El bloqueo como el desbloqueo estarán guardados en el registro de actividades importantes del sistema.";
 ?>

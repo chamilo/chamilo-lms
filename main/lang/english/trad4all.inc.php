@@ -1227,4 +1227,7 @@ $CourseList = "Course list";
 $NumberAbbreviation = "N°";
 $FirstnameAndLastname = "First Name and Last Name";
 $LastnameAndFirstname = "Last Name and First Name";
+$Plugins = "Plugins";
+$Detailed = "Detailed";
+$ResourceLockedByGradebook = "This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.";
 ?>

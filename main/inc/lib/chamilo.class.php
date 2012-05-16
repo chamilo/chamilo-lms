@@ -39,7 +39,12 @@ class Chamilo
     {
         return Uri::url($path, $params, $html);
     }
-
+    
+    public static function here($params = array(), $html = true)
+    {
+        return Uri::here($params, $html);
+    }
+        
     /**
      * Application web root
      */
@@ -56,6 +61,11 @@ class Chamilo
     public static function root()
     {
         return api_get_path(SYS_PATH);
+    }
+    
+    public static function root_courses()
+    {
+        return api_get_path(SYS_COURSE_PATH);
     }
 
     public static function path($path = '')

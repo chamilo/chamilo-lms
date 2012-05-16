@@ -9,13 +9,14 @@
 class Header
 {
 
-    public static function content_type($mime_type)
+    public static function content_type($mime_type, $charset = '')
     {
         if (empty($mime_type))
         {
             return;
         }
-        header('Content-type: ' . $mime_type);
+        $type = $charset ?  "$mime_type;charset=$charset" : $mime_type;
+        header('Content-type: ' . $type);
     }
 
     public static function content_type_xml()

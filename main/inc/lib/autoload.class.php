@@ -62,12 +62,31 @@ class Autoload
         $result['AddCourseToSession'] = '/main/inc/lib/add_courses_to_session_functions.lib.php';
         $result['AddManySessionToCategoryFunctions'] = '/main/inc/lib/add_many_session_to_category_functions.lib.php';
         $result['Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
+        $result['AdminPage'] = '/main/admin/admin_page.class.php';
         $result['AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
         $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';
+        $result['AssetAggregatedRenderer'] = '/main/inc/lib/external_media/renderer/asset_aggregated_renderer.class.php';
+        $result['AssetGoogleCalendarRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_google_calendar_renderer.class.php';
+        $result['AssetGoogleDocumentRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_document_renderer.class.php';
+        $result['AssetGoogleDocumentViewerRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_document_viewer_renderer.class.php';
+        $result['AssetGoogleMapRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_map_renderer.class.php';
+        $result['AssetGoogleWidgetRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_widget_renderer.class.php';
+        $result['AssetImageRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_image_renderer.class.php';
+        $result['AssetMaharaGroupRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_mahara_group_renderer.class.php';
+        $result['AssetMaharaPersonRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_mahara_person_renderer.class.php';
+        $result['AssetMediaRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_media_renderer.class.php';
+        $result['AssetMediaserverRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_mediaserver_renderer.class.php';
+        $result['AssetOembedRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_oembed_renderer.class.php';
+        $result['AssetOgRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_og_renderer.class.php';
+        $result['AssetPageRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_page_renderer.class.php';
+        $result['AssetRenderer'] = '/main/inc/lib/external_media/renderer/asset_renderer.class.php';
+        $result['AssetRssRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_rss_renderer.class.php';
+        $result['AssetScratchRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_scratch_renderer.class.php';
+        $result['AssetWikiRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_wiki_renderer.class.php';
         $result['AttendanceLink'] = '/main/gradebook/lib/be/attendancelink.class.php';
         $result['Auth'] = '/main/inc/lib/auth.lib.php';
         $result['Block'] = '/main/dashboard/block.class.php';
@@ -122,6 +141,9 @@ class Autoload
         $result['FillBlanks'] = '/main/exercice/fill_blanks.class.php';
         $result['FlatViewDataGenerator'] = '/main/gradebook/lib/flatview_data_generator.class.php';
         $result['FlatViewTable'] = '/main/gradebook/lib/fe/flatviewtable.class.php';
+        $result['FormElement'] = '/main/media/lib/form_element.class.php';
+        $result['FormElementTextarea'] = '/main/media/lib/form_element_textarea.class.php';
+        $result['FormRule'] = '/main/media/lib/form_rule.class.php';
         $result['FormValidator'] = '/main/inc/lib/formvalidator/FormValidator.class.php';
         $result['Forum'] = '/main/coursecopy/classes/Forum.class.php';
         $result['ForumCategory'] = '/main/coursecopy/classes/ForumCategory.class.php';
@@ -207,12 +229,15 @@ class Autoload
         $result['HotSpotDelineation'] = '/main/exercice/hotspot.class.php';
         $result['Html'] = '/main/inc/lib/html.class.php';
         $result['Html_Quickform_Rule_Date'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Date.php';
+        $result['HttpResource'] = '/main/inc/lib/external_media/renderer/http_resource.class.php';
         $result['Image'] = '/main/inc/lib/image.lib.php';
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
         $result['ImagickWrapper'] = '/main/inc/lib/image.lib.php';
         $result['Import'] = '/main/inc/lib/import.lib.php';
+        $result['InactiveCourseReport'] = '/main/admin/inactive_course_report.class.php';
         $result['IndexManager'] = '/main/inc/lib/userportal.lib.php';
         $result['IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
+        $result['Install'] = '/main/install/install.class.php';
         $result['Javascript'] = '/main/inc/lib/javascript.class.php';
         $result['KeyAuth'] = '/main/auth/key/key_auth.class.php';
         $result['LearnpathLink'] = '/main/gradebook/lib/be/learnpathlink.class.php';
@@ -225,6 +250,8 @@ class Autoload
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';
+        $result['Media'] = '/main/media/model/media.class.php';
+        $result['MediaForm'] = '/main/media/lib/media_form.class.php';
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
         $result['MultipleAnswer'] = '/main/exercice/multiple_answer.class.php';
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
@@ -249,6 +276,7 @@ class Autoload
         $result['PEAR'] = '/main/inc/lib/pear/PEAR.php';
         $result['PEAR5'] = '/main/inc/lib/pear/PEAR5.php';
         $result['PEAR_Error'] = '/main/inc/lib/pear/PEAR.php';
+        $result['Page'] = '/main/inc/lib/page.class.php';
         $result['Pager'] = '/main/inc/lib/pear/Pager/Pager.php';
         $result['Pager_Common'] = '/main/inc/lib/pear/Pager/Common.php';
         $result['Pager_HtmlWidgets'] = '/main/inc/lib/pear/Pager/HtmlWidgets.php';
@@ -391,6 +419,7 @@ class Autoload
         $result['ch_yesno'] = '/main/survey/survey.lib.php';
         $result['db'] = '/main/inc/lib/db.lib.php';
         $result['document_processor'] = '/main/inc/lib/search/tool_processors/document_processor.class.php';
+        $result['iDatabase'] = '/main/install/i_database.class.php';
         $result['learnpath'] = '/main/newscorm/learnpath.class.php';
         $result['learnpathItem'] = '/main/newscorm/learnpathItem.class.php';
         $result['learnpathList'] = '/main/newscorm/learnpathList.class.php';
@@ -483,7 +512,12 @@ class AutoloadClassFinder
         ksort($this->map);
     }
 
-    public function to_string()
+    public function __invoke()
+    {
+        $this->run();
+    }
+
+    public function __toString()
     {
         $result = array();
 

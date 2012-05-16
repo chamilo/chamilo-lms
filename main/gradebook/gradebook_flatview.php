@@ -105,6 +105,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
+    $params['export_pdf'] = true;
     
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
@@ -125,6 +126,7 @@ if (isset($_GET['exportpdf']))	{
         Display :: set_header(null, false, false);
         $params['join_firstname_lastname'] = true;
         $params['show_usercode'] = true;
+        $params['export_pdf'] = true;        
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));

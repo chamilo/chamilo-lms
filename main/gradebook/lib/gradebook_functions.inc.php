@@ -785,31 +785,22 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
 
     if (api_is_western_name_order()) {
-        // Choosing the right person name order according to the current language.
-        $firstname_position = 0;
-        $lastname_position = 1;
-        if (!isset($params['join_firstname_lastname'])) {
-            
-            if (isset($params['show_usercode']) && $params['show_usercode'] ) {
-                $firstname_position ++;
-                $lastname_position ++;
-            }        
-            list($printable_data[0][$firstname_position], $printable_data[0][$lastname_position]) = array($printable_data[0][$lastname_position], $printable_data[0][$firstname_position]);
+        // Choosing the right person name order according to the current language.        
+        if (!isset($params['join_firstname_lastname'])) {                  
+            //list($printable_data[0][$firstname_position], $printable_data[0][$lastname_position]) = array($printable_data[0][$lastname_position], $printable_data[0][$firstname_position]);
             if ($has_data) {
                 foreach ($printable_data[1] as &$printable_data_row) {
-                    list($printable_data_row[$firstname_position], $printable_data_row[$lastname_position]) = array($printable_data_row[$lastname_position], $printable_data_row[$firstname_position]);
+                    list($printable_data_row['firstname'], $printable_data_row['lastname']) = array($printable_data_row['lastname'], $printable_data_row['firstname']);
                 }
             }
-        }
-        
+        }        
     }
-
     
     $table = new HTML_Table(array('class' => 'data_table'));
     $row = 0;
     $column = 0;    
     
-    $table->setHeaderContents($row, $column, '#');$column++;
+    $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));$column++;
     foreach ($printable_data[0] as $printable_data_cell) {
         $table->setHeaderContents($row, $column, $printable_data_cell);
         $column++;
@@ -823,9 +814,17 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
             $table->updateCellAttributes($row, $column, 'align="center"');
             $column++; $counter++;
                 
-            foreach ($printable_data_row as &$printable_data_cell) {
+            foreach ($printable_data_row as $key => &$printable_data_cell) {
+                $attributes = array();
+                $attributes['align'] = 'center';                
+                if (in_array($key, array('name'))) {
+                    $attributes['align'] = 'left';
+                }
+                if (in_array($key, array('total'))) {
+                    $attributes['style'] = 'font-weight:bold';                    
+                }                
                 $table->setCellContents($row, $column, $printable_data_cell);
-                $table->updateCellAttributes($row, $column, 'align="center"');
+                $table->updateCellAttributes($row, $column, $attributes);
                 $column++;
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
@@ -836,6 +835,7 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         $table->setCellContents($row, $column, get_lang('NoResults'));
         $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
     }
+    
     
     Display::$global_template->assign('pdf_table', $table->toHtml());
 

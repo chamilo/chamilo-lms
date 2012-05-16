@@ -1541,4 +1541,6 @@ $AllowHRSkillsManagementTitle = "Permitir al perfil RRHH administrar las compete
 $AllowHRSkillsManagementComment = "El usuario podrá crear, editar competencias";
 $GradebookDefaultWeightTitle = "Peso total por defecto en la herramienta \"Evaluaciones\"";
 $GradebookDefaultWeightComment = "Este peso será utilizado en todos los cursos";
+$TeachersCanChangeScoreSettingsTitle = "Los profesores pueden cambiar la configuración de puntuación de las Evaluaciones";
+$TeachersCanChangeScoreSettingsComment = "Al editar la configuración de las Evaluaciones";
 ?>

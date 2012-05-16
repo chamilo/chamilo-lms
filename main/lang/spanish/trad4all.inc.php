@@ -1225,4 +1225,11 @@ $Reload = "Recargar";
 $TimeSpentLastXDays = "Tiempo dedicado en los últimos %s días";
 $TimeSpentBetweenXAndY = "Tiempo dedicado entre el %s y el %s";
 $GoToCourse = "Ir al curso";
+$SubTotal = "Total parcial";
+$Configure = "Configurar";
+$Regions = "Regiones";
+$CourseList = "Lista de cursos";
+$NumberAbbreviation = "N°";
+$FirstnameAndLastname = "Nombres y Apellidos";
+$LastnameAndFirstname = "Apellidos y Nombres";
 ?>

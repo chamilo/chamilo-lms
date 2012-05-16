@@ -3367,8 +3367,9 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:originalUsersList[]')),'xsd:string'
-);
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteSessionParams[]')),
+'tns:originalUsersList'
+);        
 
 $server->wsdl->addComplexType(
 	'subscribeUserToCourseParams',
@@ -3377,10 +3378,10 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
-		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'original_course_id_name' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
+		'original_user_id_values'   => array('name' => 'original_user_id_values',   'type' => 'tns:originalUsersList'),
+		'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
+		'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+		'original_course_id_name'   => array('name' => 'original_course_id_value',  'type' => 'xsd:string')
 	)
 );
 

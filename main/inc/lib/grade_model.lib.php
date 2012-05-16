@@ -157,8 +157,8 @@ class GradeModel extends Model {
         return null;
     }
         
-    public function save($params) {        
-	    $id = parent::save($params);
+    public function save($params, $show_query = false) {        
+	    $id = parent::save($params, $show_query);
 	    if (!empty($id)) {            
             foreach ($params['components'] as $component) {                
                 if (!empty($component['title']) && !empty($component['percentage']) && !empty($component['acronym'])) {
@@ -203,8 +203,8 @@ class GradeModelComponents extends Model {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
 	}    
     
-    public function save($params) {        
-	    $id = parent::save($params);  
+    public function save($params, $show_query = false) {        
+	    $id = parent::save($params, $show_query);  
         return $id;
     }
 }

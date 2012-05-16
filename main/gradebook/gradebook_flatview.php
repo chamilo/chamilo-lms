@@ -127,6 +127,7 @@ if (isset($_GET['exportpdf']))	{
         $params['join_firstname_lastname'] = true;
         $params['show_usercode'] = true;
         $params['export_pdf'] = true;        
+        $params['only_total_category'] = false;
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));
@@ -134,7 +135,7 @@ if (isset($_GET['exportpdf']))	{
 }
 
 if (isset ($_GET['print']))	{
-	$printable_data = get_printable_data ($cat[0], $users, $alleval, $alllinks);
+	$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
 }

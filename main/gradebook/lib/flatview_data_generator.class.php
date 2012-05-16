@@ -12,7 +12,6 @@
  */
 class FlatViewDataGenerator
 {
-
 	// Sorting types constants
 	const FVDG_SORT_LASTNAME = 1;
 	const FVDG_SORT_FIRSTNAME = 2;
@@ -67,8 +66,13 @@ class FlatViewDataGenerator
                 $headers[] = get_lang('LastnameAndFirstname');	
             }
         } else {
-            $headers[] = get_lang('LastName');
-            $headers[] = get_lang('FirstName');
+            if (api_is_western_name_order()) {
+                $headers[] = get_lang('FirstName');
+                $headers[] = get_lang('LastName');                
+            } else {
+                $headers[] = get_lang('LastName');
+                $headers[] = get_lang('FirstName');                
+            }
         }
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
@@ -109,8 +113,12 @@ class FlatViewDataGenerator
             $allcat  = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');   
             
             foreach ($allcat as $sub_cat) {
-                 $sub_cat_weight = 100*$sub_cat->get_weight()/$main_weight;                 
-                 $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).' '.$sub_cat_weight.' % ';
+                 $sub_cat_weight = 100*$sub_cat->get_weight()/$main_weight;
+                 $add_weight = " $sub_cat_weight %";
+                 if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
+                    $add_weight = null;
+                 }
+                 $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).$add_weight;                    
             }               
         } else {
             if (!isset($this->params['only_total_category'])) {
@@ -122,7 +130,7 @@ class FlatViewDataGenerator
                 }
             }            
         }
-        $headers[] = get_lang('GradebookQualificationTotal').' 100%';
+        $headers[] = api_strtoupper(get_lang('GradebookQualificationTotal'));
 		return $headers;
 	}
 	
@@ -178,12 +186,14 @@ class FlatViewDataGenerator
 		if ($items_count < 0) {
 			$items_count = 0;
 		}
+        
 		// copy users to a new array that we will sort
 		// TODO - needed ?
 		$usertable = array ();
 		foreach ($this->users as $user) {
 			$usertable[] = $user;
 		}
+        
 		// sort users array
 		if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
 			usort($usertable, array ('FlatViewDataGenerator','sort_by_last_name'));
@@ -240,7 +250,7 @@ class FlatViewDataGenerator
         if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {     
             $export_to_pdf = true;
         }
-        
+                
 		foreach ($selected_users as $user) {             
 			$row = array();     
             if ($export_to_pdf) {
@@ -265,11 +275,21 @@ class FlatViewDataGenerator
                 }
             } else {
                 if ($export_to_pdf) {
-                    $row['lastname']    = $user[2];	//last name
-                    $row['firstname']   = $user[3];	//first name    
+                    if (api_is_western_name_order()) {
+                        $row['firstname']   = $user[3];
+                        $row['lastname']    = $user[2];                        
+                    } else {
+                        $row['lastname']    = $user[2];
+                        $row['firstname']   = $user[3];
+                    }
                 } else {
-                    $row[]    = $user[2];	//last name
-                    $row[]   = $user[3];	//first name    
+                    if (api_is_western_name_order()) {
+                        $row[]   = $user[3];	//first name    
+                        $row[]   = $user[2];	//last name                        
+                    } else {
+                        $row[]   = $user[2];	//last name
+                        $row[]   = $user[3];	//first name                            
+                    }
                 }
             }
           
@@ -304,19 +324,11 @@ class FlatViewDataGenerator
                     //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);                    
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                     
-                    if (!isset($this->params['only_total_category'])) {
+                    if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {
-                            if ($export_to_pdf) {
-                                $row['score'] = $temp_score.' ';                   
-                            } else {
-                                $row[] = $temp_score.' ';                   
-                            }
+                           $row[] = $temp_score.' ';   
                         } else {                 
-                            if ($export_to_pdf) {
-                                $row['score'] = $temp_score;                        
-                            } else {
-                                $row[] = $temp_score;
-                            }
+                           $row[] = $temp_score;
                         }                    
                     }
                     $item_value_total +=$item_value;    
@@ -347,32 +359,20 @@ class FlatViewDataGenerator
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
                     //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                     
-                    if (!isset($this->params['only_total_category'])) {
+                    if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {                            
                             if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
                                                                 LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
                                 if (!empty($score[0])) {
-                                    if ($export_to_pdf) {
-                                        $row['score'] = $temp_score.' ';
-                                    } else {
-                                        $row[] = $temp_score.' ';
-                                    }                                        
+                                   $row[] = $temp_score.' ';                                        
                                 } else {
-                                    $row['score'] = '';
+                                   $row[] = '';
                                 }
                             } else {                                
-                                if ($export_to_pdf) {
-                                    $row['score'] = $temp_score.' ';
-                                } else {
-                                    $row[] = $temp_score.' ';
-                                }
+                                $row[] = $temp_score.' ';
                             }					
-                        } else {                            
-                            if ($export_to_pdf) {
-                                $row['score'] = $temp_score;
-                            } else {
-                                $row[] = $temp_score;
-                            }                            
+                        } else {                         
+                           $row[] = $temp_score;                           
                         }          
                     }
                     $item_value_total +=$item_value;              
@@ -396,7 +396,8 @@ class FlatViewDataGenerator
                     $row[] = $scoredisplay->display_score($total_score, SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS);
                 }
 			}
-			unset($score);
+			unset($score); 
+            //var_dump($row);exit;
 			$data[] = $row;
 		}        
 		return $data;

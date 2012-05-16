@@ -1232,4 +1232,5 @@ $CourseList = "Lista de cursos";
 $NumberAbbreviation = "N°";
 $FirstnameAndLastname = "Nombres y Apellidos";
 $LastnameAndFirstname = "Apellidos y Nombres";
+$Detailed = "Detallado";
 ?>

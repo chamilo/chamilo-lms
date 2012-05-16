@@ -43,11 +43,10 @@ class FillBlanks extends Question
 	 * function which redifines Question::createAnswersForm
 	 * @param the formvalidator instance
 	 */
-	function createAnswersForm ($form)
-	{
+	function createAnswersForm ($form) {
 		$defaults = array();
 		
-		if(!empty($this->id)) {
+		if (!empty($this->id)) {
 			$objAnswer = new answer($this->id);
 
 			// the question is encoded like this
@@ -78,31 +77,32 @@ class FillBlanks extends Question
 		}
 
 		// javascript
-		echo '<script type="text/javascript">
-			function FCKeditor_OnComplete( editorInstance )
-			{
-				if (window.attachEvent) {
+		echo '<script type="text/javascript">            
+			function FCKeditor_OnComplete( editorInstance ) {                
+				if (window.attachEvent) {                    
 					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
-				} else {
+				} else {                
 					editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
 				}
-
-			}
+			}            
+            
             var firstTime = true;
-            function updateBlanks() {
+            
+            function updateBlanks() {                
                 if (firstTime) {
                     field = document.getElementById("answer");
-                    var answer = field.value; }
-                else {
+                    var answer = field.value; 
+                } else {
                     var oEditor = FCKeditorAPI.GetInstance(\'answer\');
                     answer =  oEditor.GetXHTML( true ) ;
                 }
 
                 var blanks = answer.match(/\[[^\]]*\]/g);
                 var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('Weighting').'</label><div class=\"controls\"><table>";
-                if(blanks!=null){
-                    for(i=0 ; i<blanks.length ; i++){
-                        if(document.getElementById("weighting["+i+"]"))
+                    
+                if (blanks!=null) {
+                    for (i=0 ; i<blanks.length ; i++){
+                        if (document.getElementById("weighting["+i+"]"))
                             value = document.getElementById("weighting["+i+"]").value;
                         else
                             value = "10";
@@ -111,10 +111,10 @@ class FillBlanks extends Question
                     }
                 }
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
-                if(firstTime){
+                if (firstTime) {
                     firstTime = false;
 			';
-            if(count($a_weightings)>0) {
+            if (count($a_weightings)>0) {
                 foreach($a_weightings as $i=>$weighting) {
                     echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
                 }

@@ -836,7 +836,7 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         $file_name .= $course_code;
     }
     $file_name = api_get_utc_datetime();
-    $file_name = get_lang('FlatView').'_'.$file_name.'.pdf';
+    $file_name = get_lang('FlatView').'_'.$file_name;
     $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
     exit;	
 }

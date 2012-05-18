@@ -9,7 +9,7 @@
  */
 class Chamilo
 {
-    
+
     public static function name()
     {
         //@todo: add version
@@ -25,7 +25,6 @@ class Chamilo
     {
         return api_get_setting('server_type') == 'production';
     }
-        
 
     /**
      * Returns a full url from local/absolute path and parameters.
@@ -39,12 +38,12 @@ class Chamilo
     {
         return Uri::url($path, $params, $html);
     }
-    
+
     public static function here($params = array(), $html = true)
     {
         return Uri::here($params, $html);
     }
-        
+
     /**
      * Application web root
      */
@@ -62,10 +61,16 @@ class Chamilo
     {
         return api_get_path(SYS_PATH);
     }
-    
+
     public static function root_courses()
     {
         return api_get_path(SYS_COURSE_PATH);
+    }
+
+    public static function temp($ext = '')
+    {
+        $ext = $ext ? '.' . $ext : '';
+        return api_get_path(SYS_ARCHIVE_PATH) . uniqid() . $ext;
     }
 
     public static function path($path = '')

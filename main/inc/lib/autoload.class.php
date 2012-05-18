@@ -102,6 +102,7 @@ class Autoload
         $result['ClosureCompiler'] = '/main/inc/lib/closure_compiler.class.php';
         $result['CodeUtilities'] = '/main/inc/lib/code_utilities.class.php';
         $result['ConditionalLogin'] = '/main/inc/lib/conditional_login.class.php';
+        $result['Converter'] = '/main/inc/lib/system/text/converter.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
         $result['CourseArchiver'] = '/main/coursecopy/classes/CourseArchiver.class.php';
         $result['CourseBuilder'] = '/main/coursecopy/classes/CourseBuilder.class.php';
@@ -116,6 +117,8 @@ class Autoload
         $result['CourseRestorer'] = '/main/coursecopy/classes/CourseRestorer.class.php';
         $result['CourseSelectForm'] = '/main/coursecopy/classes/CourseSelectForm.class.php';
         $result['CourseSession'] = '/main/coursecopy/classes/CourseSession.class.php';
+        $result['CsvReader'] = '/main/inc/lib/system/io/csv_reader.class.php';
+        $result['CsvWriter'] = '/main/inc/lib/system/io/csv_writer.class.php';
         $result['CustomPages'] = '/main/inc/lib/custompages.lib.php';
         $result['DashboardManager'] = '/main/inc/lib/dashboard.lib.php';
         $result['DataForm'] = '/main/gradebook/lib/fe/dataform.class.php';
@@ -128,6 +131,8 @@ class Autoload
         $result['DokeosIndexer'] = '/main/inc/lib/search/DokeosIndexer.class.php';
         $result['DropboxLink'] = '/main/gradebook/lib/be/dropboxlink.class.php';
         $result['DummyCourseCreator'] = '/main/coursecopy/classes/DummyCourseCreator.class.php';
+        $result['Encoding'] = '/main/inc/lib/system/text/encoding.class.php';
+        $result['EncodingConverter'] = '/main/inc/lib/system/text/encoding_converter.class.php';
         $result['EntityGenerator'] = '/main/inc/lib/tools/entity_generator.class.php';
         $result['EvalForm'] = '/main/gradebook/lib/fe/evalform.class.php';
         $result['EvalLink'] = '/main/gradebook/lib/be/evallink.class.php';
@@ -138,6 +143,8 @@ class Autoload
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
         $result['FileManager'] = '/main/inc/lib/fileManage.lib.php';
+        $result['FileReader'] = '/main/inc/lib/system/io/file_reader.class.php';
+        $result['FileWriter'] = '/main/inc/lib/system/io/file_writer.class.php';
         $result['FillBlanks'] = '/main/exercice/fill_blanks.class.php';
         $result['FlatViewDataGenerator'] = '/main/gradebook/lib/flatview_data_generator.class.php';
         $result['FlatViewTable'] = '/main/gradebook/lib/fe/flatviewtable.class.php';
@@ -260,6 +267,7 @@ class Autoload
         $result['MyHorBar'] = '/main/inc/lib/pchart/MyHorBar.class.php';
         $result['MySpace'] = '/main/mySpace/myspace.lib.php';
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
+        $result['NewMediaForm'] = '/main/media/lib/new_media_form.class.php';
         $result['NotebookManager'] = '/main/inc/lib/notebook.lib.php';
         $result['Notification'] = '/main/inc/lib/notification.lib.php';
         $result['OLE'] = '/main/inc/lib/pear/OLE/OLE.php';
@@ -390,6 +398,9 @@ class Autoload
         $result['UserManager'] = '/main/inc/lib/usermanager.lib.php';
         $result['UserStore'] = '/main/auth/shibboleth/app/model/user.class.php';
         $result['UserTable'] = '/main/gradebook/lib/fe/usertable.class.php';
+        $result['Utf8'] = '/main/inc/lib/system/text/utf8.class.php';
+        $result['Utf8Decoder'] = '/main/inc/lib/system/text/utf8_decoder.class.php';
+        $result['Utf8Encoder'] = '/main/inc/lib/system/text/utf8_encoder.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['XapianIndexer'] = '/main/inc/lib/search/xapian/XapianIndexer.class.php';
         $result['ZombieManager'] = '/main/inc/lib/zombie/zombie_manager.class.php';
@@ -448,6 +459,7 @@ class Autoload
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
         $result['xmddoc'] = '/main/inc/lib/xmd.lib.php';
+
 
         return $result;
     }

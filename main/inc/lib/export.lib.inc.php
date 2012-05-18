@@ -25,9 +25,8 @@ class Export {
 	}
 
 	/**
-	 * Export tabular data to CSV-file
-	 * @param array $data
-	 * @param string $filename
+     * 
+     * @deprecated use export_table_csv_utf8 instead
 	 */
 	public static function export_table_csv ($data, $filename = 'export') {
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
@@ -46,6 +45,28 @@ class Export {
 		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
+		return false;
+	}
+    
+	/**
+	 * Export tabular data to CSV-file
+	 * @param array $data
+	 * @param string $filename
+	 */
+	public static function export_table_csv_utf8 ($data, $filename = 'export') {
+        if(empty($data)){
+            return false;
+        }
+        $path = Chamilo::temp();
+        $converter = new Utf8Encoder(null, true);
+        $file = FileWriter::create($path, $converter);
+        $file = CsvWriter::create($file);
+        foreach ($data as $row) {
+            $file->put($row);
+        }
+		$file->close();
+		DocumentManager :: file_send_for_download($path, true, $filename.'.csv');
+        unlink($path);
 		return false;
 	}
 

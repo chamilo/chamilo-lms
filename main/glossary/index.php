@@ -80,7 +80,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
         $list[] = array ($line[0], $line[1]);
     }    
     $filename = 'glossary_course_'.api_get_course_id();
-	Export::export_table_csv($list,$filename);
+	Export::export_table_csv_utf8($list, $filename);
 }
 
 Display::display_header($tool_name);
@@ -214,18 +214,17 @@ if (api_is_allowed_to_edit(null, true)) {
                         }
                     }
                 }  
-                $data = Import::csv_to_array($_FILES['file']['tmp_name']);                
-                
-                if (!empty($data)) {
-                    $good = 0;
-                    $bad = 0;                    
-                    foreach($data as $item) {                          
-                        if (GlossaryManager::save_glossary(array('glossary_title' => $item['term'], 'glossary_comment' => $item['definition']), false)) 
-                            $good++;
-                        else
-                            $bad++;
-                    }
-                }                
+                //$data = Import::csv_to_array($_FILES['file']['tmp_name']);     
+                $data = Import::csv_reader($_FILES['file']['tmp_name']);
+                $good = 0;
+                $bad = 0;                    
+                foreach($data as $item) {                          
+                    if (GlossaryManager::save_glossary(array('glossary_title' => $item['term'], 'glossary_comment' => $item['definition']), false)) 
+                        $good++;
+                    else
+                        $bad++;
+                }
+                      
                 Display::display_confirmation_message (get_lang ("TermsImported") . ':' . $good);
                 
                 if ($bad)

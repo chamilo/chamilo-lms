@@ -10,6 +10,11 @@
  * @package	 chamilo.library
  */
 class Import {
+    
+    static function csv_reader($path)
+    {
+        return new CsvReader($path);
+    }
 
 	/**
 	 * Reads a CSV-file into an array. The first line of the CSV-file should contain the array-keys.
@@ -27,6 +32,9 @@ class Import {
 	 *   ...
 	 * @param string $filename	The path to the CSV-file which should be imported.
 	 * @return array			Returns an array (in the system encoding) that contains all data from the CSV-file.
+     * 
+     * 
+     * @deprecated use cvs_reader instead
 	 */
 	function csv_to_array($filename) {
 		$result = array();

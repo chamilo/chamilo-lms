@@ -640,7 +640,7 @@ function fill_track_countries_table($track_countries_table) {
     $countries = file($file_path);
     $add_country_sql = "INSERT INTO $track_countries_table (id, code, country, counter) VALUES ";
     foreach ($countries as $line) {
-        $elems = split(',',$line);
+        $elems = explode(',',$line);
         $add_country_sql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
     }
     $add_country_sql = substr($add_country_sql,0,-1);

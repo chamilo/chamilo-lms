@@ -102,11 +102,6 @@ api_set_internationalization_default_encoding($charset);
 header('Content-Type: text/html; charset='. api_get_system_encoding());
 
 // Setting the error reporting levels.
-error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-
-/**
- * @todo: remove that
- */
 error_reporting(E_ALL);
 
 // Overriding the timelimit (for large campusses that have to be migrated).
@@ -148,7 +143,7 @@ if (is_already_installed_system()) {
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
 // Is valid request
-$is_valid_request = $_REQUEST['is_executable'];
+$is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
 foreach ($_POST as $request_index => $request_value) {
 	if (substr($request_index, 0, 4) == 'step') {
 		if ($request_index != $is_valid_request) {
@@ -209,8 +204,8 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 	$updateFromConfigFile = '';
 	unset($_GET['running']);
 } else {
-	$installType = $_GET['installType'];
-	$updateFromConfigFile = $_GET['updateFromConfigFile'];
+	$installType = isset($_GET['installType']) ? $_GET['installType'] : null;
+	$updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
@@ -827,7 +822,7 @@ if (@$_POST['step2']) {
     $current_step = 7;
     display_after_install_message($installType);
 
-} elseif ($_POST['step1'] || $badUpdatePath) {
+} elseif (@$_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }

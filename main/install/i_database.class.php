@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Install database. Provides access to the Database class and allows to add hooks
- * for logging, testing, etc during installation. 
- * 
- * 
+ * Install database. Provides access to the Database class and allows to add 
+ * hooks for logging, testing, etc during installation. 
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva

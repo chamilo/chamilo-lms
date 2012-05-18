@@ -30,16 +30,6 @@ require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
  * @return  boolean True on success, false on failure
  */
 function add_resource_to_course_gradebook($category_id, $course_code, $resource_type, $resource_id, $resource_name='', $weight=0, $max=0, $resource_description='',  $visible=0, $session_id = 0) {
-    /* See defines in lib/be/linkfactory.class.php
-    define('LINK_EXERCISE',1);
-    define('LINK_DROPBOX',2);
-    define('LINK_STUDENTPUBLICATION',3);
-    define('LINK_LEARNPATH',4);
-    define('LINK_FORUM_THREAD',5),
-    define('LINK_WORK',6);
-    */ 
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-   
     $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
@@ -72,16 +62,10 @@ function add_resource_to_course_gradebook($category_id, $course_code, $resource_
 }
 
 function block_students() {    
-	//if (!api_is_allowed_to_create_course()) {
     if (!api_is_allowed_to_edit()) {		
 		api_not_allowed();
 	}
 }
-
-/**
- * Returns the info header for the user result page
- * @param $userid
- */
 
 /**
  * Returns the course name from a given code
@@ -95,6 +79,7 @@ function get_course_name_from_code($code) {
 		return $col['title'];
 	}
 }
+
 /**
  * Builds an img tag for a gradebook item
  * @param string $type value returned by a gradebookitem's get_icon_name()
@@ -157,7 +142,6 @@ function get_icon_file_name ($type) {
 	return api_get_path(WEB_IMG_PATH).$icon;
 }
 
-
 /**
  * Builds the course or platform admin icons to edit a category
  * @param object $cat category object
@@ -210,11 +194,6 @@ function build_edit_icons_cat($cat, $selectcat) {
                                     <img src="../img/icons/22/move.png" border="0" title="' . get_lang('Move') . '" alt="" /></a>';*/
             } else {
                 //$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
-            }
-
-            if (empty($grade_model_id) || $grade_model_id == -1) {
-                /*$modify_icons .= ' <a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;cidReq='.$cat->get_course_code().'&selectcat=' . $cat->get_id() . '"> '.
-                    Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).' </a>';                            */
             }
             if ($cat->is_locked() && !api_is_platform_admin()) {
                 $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL);
@@ -371,8 +350,7 @@ function get_resource_from_course_gradebook($link_id) {
  * @return   bool    false on error, true on success
  */
 function remove_resource_from_course_gradebook($link_id) {
-    if ( empty($link_id) ) { return false; }
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+    if ( empty($link_id) ) { return false; }    
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
@@ -409,8 +387,7 @@ function get_course_id_by_link_id($id_link) {
 	return $array['id'];
 }
 
-function get_table_type_course($type) {
-	global $_configuration;
+function get_table_type_course($type) {	
 	global $table_evaluated;
 	return Database::get_course_table($table_evaluated[$type][0]);
 }
@@ -699,17 +676,18 @@ function load_gradebook_select_in_tool($form) {
     }
 }
 
-function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
-    // Beginning of PDF report creation
-
+/**
+ * PDF report creation
+ */
+function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {    
+    //Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
 
     // Reading report's CSS
     $css_file = api_get_path(SYS_CODE_PATH).'gradebook/print.css';
     $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
 
-    // HTML report creation first
-    $time = time();
+    // HTML report creation first    
     $course_code = trim($cat[0]->get_course_code());
     $organization = api_get_setting('Institution');
 
@@ -757,17 +735,20 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     }
     
     if ($use_grade_model) {   
-        if ($parent_id == 0) {
-            $title = '<h2 align="center">'.get_lang('FlatView').'</h2>';    
+        if ($parent_id == 0) {         
+            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed').'</h2>';
         } else {
-            $title = '<h2 align="center">'.$cat[0]->get_description().' - ('.$cat[0]->get_name().') </h2>';            
+            $title = '<h2 align="center"> '.api_strtoupper(get_lang('Average')).'<br />'.$cat[0]->get_description().' - ('.$cat[0]->get_name().')</h2>';
         }
     } else {
-        $title = '<h2 align="center">'.get_lang('FlatView').'</h2>';
+        if ($parent_id == 0) {
+            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed').'</h2>';
+        } else {
+            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'</h2>';
+        }
     }
     
     Display::$global_template->assign('pdf_title', $title);
-
     //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
     //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
     $user_info = api_get_user_info();    
@@ -783,59 +764,55 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
  
     $columns  = count($printable_data[0]);
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
-
-    if (api_is_western_name_order()) {
-        // Choosing the right person name order according to the current language.
-        $firstname_position = 0;
-        $lastname_position = 1;
-        if (!isset($params['join_firstname_lastname'])) {
-            
-            if (isset($params['show_usercode']) && $params['show_usercode'] ) {
-                $firstname_position ++;
-                $lastname_position ++;
-            }        
-            list($printable_data[0][$firstname_position], $printable_data[0][$lastname_position]) = array($printable_data[0][$lastname_position], $printable_data[0][$firstname_position]);
-            if ($has_data) {
-                foreach ($printable_data[1] as &$printable_data_row) {
-                    list($printable_data_row[$firstname_position], $printable_data_row[$lastname_position]) = array($printable_data_row[$lastname_position], $printable_data_row[$firstname_position]);
-                }
-            }
-        }
         
-    }
-
-    
     $table = new HTML_Table(array('class' => 'data_table'));
     $row = 0;
     $column = 0;    
     
-    $table->setHeaderContents($row, $column, '#');$column++;
+    $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
+    $column++;
     foreach ($printable_data[0] as $printable_data_cell) {
+        $printable_data_cell = strip_tags($printable_data_cell);
         $table->setHeaderContents($row, $column, $printable_data_cell);
         $column++;
     }
     $row++;
+    
     if ($has_data) {
         $counter = 1;
+        //var_dump($printable_data);exit;
         foreach ($printable_data[1] as &$printable_data_row) {
             $column = 0;
             $table->setCellContents($row, $column, $counter); 
             $table->updateCellAttributes($row, $column, 'align="center"');
-            $column++; $counter++;
+            $column++; 
+            $counter++;            
+            
+            foreach ($printable_data_row as $key => &$printable_data_cell) {
+                $attributes = array();
+                $attributes['align'] = 'center';                
+                $attributes['style'] = null;
                 
-            foreach ($printable_data_row as &$printable_data_cell) {
+                if ($key === 'name') {
+                    $attributes['align'] = 'left';
+                }
+                if ($key === 'total') {
+                    $attributes['style'] = 'font-weight:bold';                 
+                }
+                //var_dump($key, $printable_data_cell, $attributes);
                 $table->setCellContents($row, $column, $printable_data_cell);
-                $table->updateCellAttributes($row, $column, 'align="center"');
+                $table->updateCellAttributes($row, $column, $attributes);
                 $column++;
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
             $row++;
-        }
+        }   
+        //exit;
     } else {
         $column = 0;
         $table->setCellContents($row, $column, get_lang('NoResults'));
         $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
-    }
+    }    
     
     Display::$global_template->assign('pdf_table', $table->toHtml());
 
@@ -849,16 +826,35 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     //Header
     $html = $gradebook_flatview;  
     
-    $html         = api_utf8_encode($html);
+    $html = api_utf8_encode($html);
     $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
     $pdf = new PDF($page_format, $params['orientation']);
 
-    // Sending the created PDF report to the client
-    $file_name = date('YmdHi_', $time);
+    // Sending the created PDF report to the client    
+    $file_name = null;
     if (!empty($course_code)) {
-        $file_name .= $course_code.'_';
+        $file_name .= $course_code;
     }
-    $file_name .= get_lang('FlatView').'.pdf';
+    $file_name = api_get_utc_datetime();
+    $file_name = get_lang('FlatView').'_'.$file_name;
     $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
     exit;	
+}
+
+function score_badges($list_values) {
+    $counter = 1;
+    $badges = array();
+    foreach ($list_values as $value) {
+        $class = 'info';
+        if ($counter == 1) {
+            $class = 'success';    
+        }        
+        $counter++;
+        $badges[] = Display::badge($value, $class);        
+        
+    }
+    return Display::badge_group($badges);
+    
+                        
+    
 }

@@ -20,19 +20,22 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-
 /*	Libraries & config files */
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
 /*	MAIN CODE */
 
-$current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
-if (!is_array($current_group) ) {
-	//display some error message
+$group_id = api_get_group_id();
+$user_id = api_get_user_id();
+
+$current_group = GroupManager :: get_group_properties($group_id);
+
+if (empty($current_group)) {
+	api_not_allowed();
 }
+
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
@@ -44,7 +47,7 @@ $forums_of_groups = get_forums_of_group($current_group['id']);
 $forum_state_public = 0;
 if (is_array($forums_of_groups)) {
 	foreach ($forums_of_groups as $key => $value) {
-		if($value['forum_group_public_private'] == 'public') {
+		if ($value['forum_group_public_private'] == 'public') {
 			$forum_state_public = 1;
 		}
 	}
@@ -69,16 +72,16 @@ Display::display_introduction_section(TOOL_GROUP);
 /*
  * User wants to register in this group
  */
-if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
+if (!empty($_GET['selfReg']) && GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])) {
+	GroupManager :: subscribe_users($user_id, $current_group['id']);
 	Display :: display_normal_message(get_lang('GroupNowMember'));
 }
 
 /*
  * User wants to unregister from this group
  */
-if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
-	GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $current_group['id']);
+if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])) {
+	GroupManager :: unsubscribe_users($user_id, $current_group['id']);
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 echo '<div class="actions">';
@@ -88,7 +91,7 @@ echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGrou
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
+if (GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])) {
 	$subscribe_group = '<a class="btn" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
 }
 
@@ -96,7 +99,7 @@ if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], 
  * Unregister from group
  */
 $unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $current_group['id'])) {
+if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])) {
 	$unsubscribe_group = '<a class="btn" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
 }
 echo '&nbsp;</div>';
@@ -113,10 +116,6 @@ if (isset($_GET['action'])) {
 
 $course_code = $_course['sysCode'];
 $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), $course_code);
-
-/*
- * Group title and comment
- */
 
  /*
  * Edit the group
@@ -242,6 +241,7 @@ echo '</ul>';
  * List all the tutors of the current group
  */
 $tutors = GroupManager::get_subscribed_tutors($current_group['id']);
+
 $tutor_info = '';
 if (count($tutors) == 0) {
 	$tutor_info = get_lang('GroupNoneMasc');
@@ -361,23 +361,22 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 		$sql .= " LIMIT $from,$number_of_items";
 	} else {
 		if (api_is_allowed_to_edit()) {
-			$sql = "SELECT
-						user.user_id 	AS col0,
+			$sql = "SELECT DISTINCT
+						u.user_id 	AS col0,
 						".(api_is_western_name_order() ?
-						"user.firstname 	AS col1,
-						user.lastname 	AS col2,"
+						"u.firstname 	AS col1,
+						u.lastname 	AS col2,"
 						:
-						"user.lastname 	AS col1,
-						user.firstname 	AS col2,"
+						"u.lastname 	AS col1,
+						u.firstname 	AS col2,"
 						)."
-						user.email		AS col3
-						FROM ".$table_user." user, ".$table_group_user." group_rel_user
-						WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
-						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
+						u.email		AS col3
+						FROM ".$table_user." u INNER JOIN ".$table_group_user." gu ON (gu.user_id = u.user_id) AND gu.c_id = $course_id
+						WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'";
 			$sql .= " ORDER BY col$column $direction ";
-			$sql .= " LIMIT $from,$number_of_items";
+			$sql .= " LIMIT $from,$number_of_items";            
 		} else {
-			$sql = "SELECT
+			$sql = "SELECT DISTINCT
 						user.user_id 	AS col0,
 						". (api_is_western_name_order() ?
 						"user.firstname 	AS col1,

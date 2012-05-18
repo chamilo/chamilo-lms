@@ -37,19 +37,41 @@ if (api_is_platform_admin() && $type == 'admin') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
 	$type = 'course';
 }
+$is_group_tutor = false;
+
+$group_id = api_get_group_id();
+if (!empty($group_id)) {
+    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
+    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
+    $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
+}
 
 $tpl	= new Template(get_lang('Agenda'));
 
 $tpl->assign('use_google_calendar', 0);
 
+$can_add_events = 0;
+
 switch($type) {
 	case 'admin':		
         api_protect_admin_script();
 		$this_section = SECTION_PLATFORM_ADMIN;        
+        if (api_is_platform_admin()) {
+            $can_add_events = 1;
+        }
 		break;
 	case 'course':
         api_protect_course_script();
-		$this_section = SECTION_COURSES;
+		$this_section = SECTION_COURSES;        
+        if (api_is_allowed_to_edit()) {
+            $can_add_events = 1;
+        }
+        if (!empty($group_id)) {
+            if ($is_group_tutor) {
+                $can_add_events = 1;                
+            }                    
+        }
 		break;
 	case 'personal':
         if (api_is_anonymous()) {
@@ -61,19 +83,12 @@ switch($type) {
             $tpl->assign('google_calendar_url', $extra_field_data['google_calendar_url']);
         }
 		$this_section = SECTION_MYAGENDA;
+        if (!api_is_anonymous()) {
+            $can_add_events = 1;
+        }
 		break;
 }
 
-$can_add_events = 0;
-if (api_is_platform_admin() && $type == 'admin') {
-	$can_add_events = 1;
-}
-if (api_is_allowed_to_edit() && $type == 'course') {
-	$can_add_events = 1;	
-}
-if (!api_is_anonymous() && $type == 'personal') {
-	$can_add_events = 1;
-}
 
 //Setting translations
 $day_short 		= api_get_week_days_short();
@@ -102,14 +117,13 @@ if ($region_value == 'en') {
 $tpl->assign('region_value', 	$region_value);
 
 
-     $export_icon = '../img/export.png';
-            $export_icon_low = '../img/export_low_fade.png';
-            $export_icon_high = '../img/export_high_fade.png';
+$export_icon = '../img/export.png';
+$export_icon_low = '../img/export_low_fade.png';
+$export_icon_high = '../img/export_high_fade.png';
             
 $tpl->assign('export_ical_confidential_icon', 	Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
 
-
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true) OR $is_group_tutor) {
     if ($type == 'course') {
         $actions = display_courseadmin_links();
     }
@@ -118,9 +132,15 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 //Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
-//Calendar type label
 
-$tpl->assign('type_label', get_lang(ucfirst($type).'Calendar'));
+$type_event_class = $type.'_event';
+$type_label = get_lang(ucfirst($type).'Calendar');
+if ($type == 'course' && !empty($group_id)) {
+    $type_event_class = 'group_event';    
+    $type_label = get_lang('GroupCalendar');
+}
+$tpl->assign('type_label', $type_label);
+$tpl->assign('type_event_class', $type_event_class);
 
 //Current user can add event?
 $tpl->assign('can_add_events', $can_add_events);
@@ -131,15 +151,22 @@ $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
 $course_code  = api_get_course_id();
 
-if (api_is_allowed_to_edit() && $course_code != '-1' && $type == 'course') {
+if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
     $order = 'lastname';
     if (api_is_western_name_order) {
         $order = 'firstname';    
     }    
-    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
-    $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+    if (!empty($group_id)) {        
+        $group_list  = array($group_id => $group_properties);                
+        $user_list  = GroupManager::get_subscribed_users($group_id);
+    } else {
+        $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
+        $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+    }
+    
 
     $agenda = new Agenda();
+    //This will fill the select called #users_to_send_id
     $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
     $tpl->assign('visible_to', $select);
 }

@@ -278,77 +278,75 @@ if (is_array($extra_data)) {
 $form->setDefaults($defaults);
 
 if (api_get_setting('use_custom_pages') != 'true') {
-  // Load terms & conditions from the current lang
-  if (api_get_setting('allow_terms_conditions') == 'true') {
-    $get = array_keys($_GET);
-    if (isset($get)) {
-      if ($get[0] == 'legal'){
-        $language = api_get_interface_language();
-        $language = api_get_language_id($language);
-        $term_preview = LegalManager::get_last_condition($language);
-        if (!$term_preview) {
-          //look for the default language
-          $language = api_get_setting('platformLanguage');
-          $language = api_get_language_id($language);
-          $term_preview = LegalManager::get_last_condition($language);
+    // Load terms & conditions from the current lang
+    if (api_get_setting('allow_terms_conditions') == 'true') {
+        $get = array_keys($_GET);
+        if (isset($get)) {
+            if ($get[0] == 'legal') {
+                $language = api_get_interface_language();
+                $language = api_get_language_id($language);
+                $term_preview = LegalManager::get_last_condition($language);
+                if (!$term_preview) {
+                    //look for the default language
+                    $language = api_get_setting('platformLanguage');
+                    $language = api_get_language_id($language);
+                    $term_preview = LegalManager::get_last_condition($language);
+                }
+                $tool_name = get_lang('TermsAndConditions');
+                Display :: display_header($tool_name);
+
+                if (!empty($term_preview['content'])) {
+                    echo $term_preview['content'];
+                } else {
+                    echo get_lang('ComingSoon');
+                }
+                Display :: display_footer();
+                exit;
+            }
         }
-        $tool_name = get_lang('TermsAndConditions');
-        Display :: display_header('');
-        echo '<div class="actions-title">';
-        echo $tool_name;
-        echo '</div>';
-        if (!empty($term_preview['content'])) {
-          echo $term_preview['content'];
-        } else {
-          echo get_lang('ComingSoon');
+    }
+
+    $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
+    Display :: display_header($tool_name);
+    $form->addElement('header', $tool_name);
+
+    $home = api_get_path(SYS_PATH).'home/';
+    if ($_configuration['multiple_access_urls']) {
+        $access_url_id = api_get_current_access_url_id();
+        if ($access_url_id != -1) {
+            $url_info = api_get_access_url($access_url_id);
+            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+            $clean_url = replace_dangerous_char($url);
+            $clean_url = str_replace('/', '-', $clean_url);
+            $clean_url .= '/';
+            $home_old  = api_get_path(SYS_PATH).'home/';
+            $home = api_get_path(SYS_PATH).'home/'.$clean_url;
         }
-        Display :: display_footer();
-        exit;
-      }
     }
-  }
 
-  $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
-  Display :: display_header($tool_name);
-  $form->addElement('header', $tool_name);
 
-  $home = api_get_path(SYS_PATH).'home/';
-  if ($_configuration['multiple_access_urls']) {
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
-      $url_info = api_get_access_url($access_url_id);
-      $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-      $clean_url = replace_dangerous_char($url);
-      $clean_url = str_replace('/', '-', $clean_url);
-      $clean_url .= '/';
-      $home_old  = api_get_path(SYS_PATH).'home/';
-      $home = api_get_path(SYS_PATH).'home/'.$clean_url;
+    if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
+        $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+        $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+        $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+        if (!empty($open)) {
+            echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+        }
     }
-  }
 
-
-  if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-    $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
-    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-    if (!empty($open)) {
-      echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+    // Forbidden to self-register
+    if (api_get_setting('allow_registration') == 'false') {
+        api_not_allowed();
     }
-  }
 
-  // Forbidden to self-register
-  if (api_get_setting('allow_registration') == 'false') {
-    api_not_allowed();
-  }
-
-  //api_display_tool_title($tool_name);
-  if (api_get_setting('allow_registration') == 'approval') {
-    Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
-  }
-  //if openid was not found
-  if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-    Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
-  }
+    //api_display_tool_title($tool_name);
+    if (api_get_setting('allow_registration') == 'approval') {
+        Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
+    }
+    //if openid was not found
+    if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
+        Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+    }
 }
 
 

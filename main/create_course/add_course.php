@@ -149,7 +149,7 @@ if ($course_validation_feature) {
 
     if (!empty($terms_and_conditions_url)) {
         // Terms and conditions to be accepted before sending a course request.
-        $form->addElement('checkbox', 'legal', get_lang('IAcceptTermsAndConditions'), '', 1);
+        $form->addElement('checkbox', 'legal', null, get_lang('IAcceptTermsAndConditions'), 1);
         $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required');
         // Link to terms and conditions.
         $link_terms_and_conditions = '<script type="text/JavaScript">
@@ -158,12 +158,9 @@ if ($course_validation_feature) {
             window.open(theURL,winName,features);
         }
         //-->
-        </script>
-        <div class="row">
-        <div class="formw">
-        <a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
-        $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a></div></div>';
-        $form->addElement('html', $link_terms_and_conditions);
+        </script><a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
+        $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a>';
+        $form->addElement('label', null, $link_terms_and_conditions);
     }
 }
 

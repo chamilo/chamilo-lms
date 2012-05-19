@@ -854,7 +854,4 @@ function score_badges($list_values) {
         
     }
     return Display::badge_group($badges);
-    
-                        
-    
 }

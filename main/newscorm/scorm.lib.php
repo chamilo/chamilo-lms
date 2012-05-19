@@ -68,6 +68,7 @@ function removescormDir($dir) {
  * This function removes a directory if it exists
  * @param string			Dir path
  * @return boolean			True on success, false otherwise
+ * @deprecated
  * @uses removescormDir()	to actually remove the directory
  */
 function scorm_delete($file) {

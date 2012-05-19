@@ -998,10 +998,13 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
 							$params = array();                            							
-							$params['icon'] =  Display::return_icon('window_list.png', null, array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
-		
-							$session_box = Display :: get_session_title_box($session['details']['id']);
+                            
+                            $session_box = Display :: get_session_title_box($session['details']['id']);
+                            
+							$params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session['details']['id']), ICON_SIZE_LARGE);
+                            
 							$extra_info = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];		
+                            
                             if (api_is_drh()) {
                                 $session_link = $session_box['title'];
                                 $params['link'] = null;
@@ -1058,7 +1061,7 @@ class IndexManager {
                             
 							if ($count > 0) {
 								$session_box = Display :: get_session_title_box($session['details']['id']);                                
-                                $params['icon'] = Display::return_icon('window_list.png', null, array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+                                $params['icon'] = Display::return_icon('window_list.png', $session_box['title'], array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
                                 
                                 if (api_is_drh()) {
                                     $session_link = $session_box['title'];
@@ -1082,7 +1085,7 @@ class IndexManager {
 		
 						if ($count_courses_session > 0) {
                             $params = array();				
-							$params['icon'] = Display::return_icon('folder_blue.png', null, array(), ICON_SIZE_LARGE);
+							$params['icon'] = Display::return_icon('folder_blue.png', $category['details']['name'], array(), ICON_SIZE_LARGE);
                             
 							if (api_is_platform_admin()) {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';

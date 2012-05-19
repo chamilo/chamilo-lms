@@ -769,9 +769,6 @@ class CourseManager {
     	return $students;
     }
     
-    
-    
-    
     /**
      *	@return an array with the course info of all the courses (real and virtual) of which
      *	the current user is course admin
@@ -2800,10 +2797,18 @@ class CourseManager {
             $html .= '<div class="span7">';
                 $html .= ' <div class="row">';
 
-                    $html .= '<div class="span1">';                
+                    $html .= '<div class="span1">';
+                    
+                    if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';
                         $html .= $params['icon'];
                         $html .= '</a>';
+                    } else {
+                        $html .= '<div class="thumbnail">';
+                        $html .= $params['icon'];
+                        $html .= '</div>';
+                    }
+                    
                     $html .= '</div>';
 
                     $html .= '<div class="span6">';
@@ -2883,7 +2888,7 @@ class CourseManager {
                         $course['status'] = STUDENT;
                     }
 
-                    $params['icon'] = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
+                    $params['icon'] = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
                     
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {                        
@@ -2954,7 +2959,7 @@ class CourseManager {
         while ($row = Database::fetch_array($result)) {
             $params = array();            
             // We simply display the title of the category.
-            $params['icon'] = Display::return_icon('folder_yellow.png', null, array(), ICON_SIZE_LARGE);
+            $params['icon'] = Display::return_icon('folder_yellow.png', $row['title'], array(), ICON_SIZE_LARGE);
             $params['title'] = $row['title'];               
             $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
         }
@@ -3017,7 +3022,7 @@ class CourseManager {
             $show_notification = Display :: show_notification($course_info);
             
             // New code displaying the user's status in respect to this course.
-            $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
+            $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
             
             $params = array();
             $params['right_actions'] = '';
@@ -3186,9 +3191,7 @@ class CourseManager {
         }*/
     
         $is_coach = api_is_coach($course_info['id_session'], $course['code']);
-            
-        $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', null, array(), ICON_SIZE_LARGE);
-        
+                
         // Display course entry.        
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
@@ -3216,7 +3219,7 @@ class CourseManager {
         }
         
         $params = array();
-        $params['icon'] = $s_htlm_status_icon;
+        $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
         
@@ -3300,8 +3303,7 @@ class CourseManager {
             $output = array ($user_course_category, $html, $course_info['id_session'], $session, 'active' => $active, 'session_category_id' => $session_category_id);
         } else {
             $output = array ($course_info['user_course_cat'], $html);
-        }
-    
+        }    
         return $output;
     }
     

@@ -3,9 +3,13 @@
 /* Responsive Docs */
 
 /* Phone */
-@media (max-width: 479px) {
+@media (max-width: 480px) {
     /* No chat in mobiles */
     #chatmain {
+        display:none;
+    }
+    
+    .subnav .dropdown-toggle {
         display:none;
     }
     
@@ -37,11 +41,20 @@
     .notification-panel {
         display:none;
     }
+    
+    #course_tools .row .span4 {
+        float: left;        
+        width: 200px;
+    }
 }
 
 @media (max-width: 767px) {
     /* No chat in mobiles*/
     #chatmain {
+        display:none;
+    }
+    
+    .subnav .dropdown-toggle {
         display:none;
     }
     
@@ -143,6 +156,10 @@
         padding-left: 6px;
         padding-right: 6px;
     }
+    
+    .subnav .dropdown-toggle {
+        display:none;
+    }    
 }
 
 @media (max-width: 979px) {
@@ -172,4 +189,5 @@
 
 /* LARGE DESKTOP SCREENS */
 @media (min-width: 1210px) {
+    
 }

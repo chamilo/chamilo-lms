@@ -78,7 +78,7 @@ class GradeModel extends Model {
                 
         //Get components
         $nr_items = 2;
-        $max = 10;
+        $max      = 10;
                 
         // Setting the defaults
         
@@ -90,9 +90,14 @@ class GradeModel extends Model {
             if (!empty($components)) { 
                 $nr_items = count($components) -1;
             }
-        }
+        }        
+        
+        $form->addElement('hidden', 'maxvalue', '100');
+		$form->addElement('hidden', 'minvalue', '0');
                 
         $renderer = & $form->defaultRenderer();
+        
+        $component_array = array();
         
         for ($i = 0; $i <= $max;  $i++) {
             $counter = $i;
@@ -101,52 +106,48 @@ class GradeModel extends Model {
             $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span3'));        
             $form->addElement('hidden', 'components['.$i.'][id]',       null, array('class' => 'span3'));
             
-            $template_percentage =
-            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">
-                
-            <p>
+             $template_percentage =
+            '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">                
+                <p>
                 <label class="control-label">{label}</label>
                 <div class="controls">
+                    <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+                    {element} <!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --> % = ';
+            
+            $template_acronym = '
+            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
+            {element} {label} <!-- BEGIN error --><span class="form_error">{error}</span> <!-- END error -->';
 
-                    <!-- BEGIN required -->
-                    <span class="form_required">*</span>
-                    <!-- END required -->
-                    {element}
-                     % = ';
-
-                    $template_acronym = '
-                    <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
-                    {element} {label}';
-
-                    $template_title =
-                    '&nbsp{element}
-                    <a href="javascript:plusItem(' . ($counter+1) . ')">
-                        <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/icons/22/add.png" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img>
-                    </a>
-                    <a href="javascript:minItem(' . ($counter) . ')">
-                        <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="../img/delete.png" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img>
-                    </a>            
-                </div>
-            </p>
-            </div>';
+            $template_title =
+            '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
+             <a href="javascript:plusItem(' . ($counter+1) . ')">
+                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/icons/22/add.png" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img>
+            </a>
+            <a href="javascript:minItem(' . ($counter) . ')">
+                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="../img/delete.png" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img>
+            </a>            
+            </div></p></div>';
             
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
             
             if ($i == 0) {
-                //$form->addRule('components['.$i.'][percentage]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-                //$form->addRule('components['.$i.'][title]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-                //$form->addRule('components['.$i.'][acronym]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-                
+                $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('components['.$i.'][acronym]', get_lang('ThisFieldIsRequired'), 'required');                
             }
+            $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
+            
+            $form->addRule(array('components['.$i.'][percentage]', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
+            $form->addRule(array('components['.$i.'][percentage]', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');   
+            
+            $component_array[] = 'components['.$i.'][percentage]';
         }
-        //Required field
         
-        
-        
-        //$this->addRule('score', get_lang('OnlyNumbers'), 'numeric',null,'client');
-        
+        //New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
+        $form->addRule($component_array, get_lang('AllMustWeight100'), 'compare_fields', '==@100');   
+                
         $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
         	            
         if ($action == 'edit') {

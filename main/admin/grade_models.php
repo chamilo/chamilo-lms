@@ -113,11 +113,13 @@ switch ($action) {
 
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $obj->return_form($url, 'add');
-
+        
+        
+        
         // The validation or display
         if ($form->validate()) {            
-            if ($check) {
-                $values = $form->exportValues();       
+            if ($check) {     
+                $values = $form->exportValues();
                 $res    = $obj->save($values);            
                 if ($res) {
                     Display::display_confirmation_message(get_lang('ItemAdded'));

@@ -89,7 +89,7 @@ class AnnouncementEmail
             $sql = "SELECT user.user_id, user.email, user.lastname, user.firstname
                     FROM $tbl_course_user, $tbl_user
                     WHERE active = 1 AND 
-                          course_code='$course_code' AND
+                          course_code = '$course_code' AND
                           course_rel_user.user_id = user.user_id AND 
                           relation_type <> $rel_rh";
         }
@@ -101,7 +101,7 @@ class AnnouncementEmail
                     FROM $tbl_user 
                     INNER JOIN $tbl_session_course_user
                           ON $tbl_user.user_id = $tbl_session_course_user.id_user AND
-                             $tbl_session_course_user.course_code = $course_code AND
+                             $tbl_session_course_user.course_code = '$course_code' AND
                              $tbl_session_course_user.id_session = $session_id
                     WHERE
                         active = 1";

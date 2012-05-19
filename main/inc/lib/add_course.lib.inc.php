@@ -21,7 +21,7 @@ function generate_course_code($course_title, $encoding = null) {
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
     }
-    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, 20);
+    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, MAX_COURSE_LENGTH_CODE);
 }
 
 /**
@@ -36,10 +36,8 @@ function generate_course_code($course_title, $encoding = null) {
  * @todo Eliminate the global variables.
  */
 function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true) {
-
     global $prefixAntiNumber, $_configuration;
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-
     $wanted_code = generate_course_code($wanted_code);
     $keys_course_code = $wanted_code;
     if (!$use_code_indepedent_keys) {
@@ -52,7 +50,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
         $unique_prefix = '';
     }
 
-    $keys = array ();
+    $keys = array();
     $final_suffix = array('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
     $limit_numb_try = 100;
     $keys_are_unique = false;
@@ -2565,7 +2563,7 @@ function register_course($params) {
     $visual_code        = $params['visual_code'];
     $directory          = $params['directory'];
     $tutor_name         = $params['tutor_name'];
-    $description        = $params['description'];
+    //$description        = $params['description'];
 
     $category_code      = $params['category_code'];
     $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');        
@@ -2728,8 +2726,7 @@ function register_course($params) {
             if ($send_mail_to_admin == 'true') {
                 $siteName = api_get_setting('siteName');
                 $recipient_email = api_get_setting('emailAdministrator');
-                $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
-                $urlsite = api_get_path(WEB_PATH);
+                $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));                
                 $iname = api_get_setting('Institution');
                 $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
                 $message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";

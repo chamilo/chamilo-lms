@@ -46,10 +46,6 @@ while($obj = Database::fetch_object($res)) {
     $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
-$dbnamelength = strlen($_configuration['db_prefix']);
-// Ensure the database prefix + database name do not get over 40 characters.
-$maxlength = 40 - $dbnamelength;
-
 // Build the form.
 $form = new FormValidator('update_course');
 $form->addElement('header', '', $tool_name);
@@ -60,11 +56,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('size' => '20', 'maxlength' => 20));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule('visual_code', get_lang('Max'), 'maxlength', $maxlength);
+$form->addRule('visual_code', get_lang('Max'), 'maxlength', MAX_COURSE_LENGTH_CODE);
 
 //$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
 //$form->applyFilter('tutor_id', 'html_filter');

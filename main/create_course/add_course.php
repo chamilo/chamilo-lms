@@ -79,9 +79,9 @@ if (!api_is_allowed_to_create_course()) {
 }
 
 global $_configuration;
-$dbnamelength = strlen($_configuration['db_prefix']);
+//$dbnamelength = strlen($_configuration['db_prefix']);
 // Ensure the database prefix + database name do not get over 40 characters.
-$maxlength = 40 - $dbnamelength;
+$maxlength = 40;
 
 // Build the form.
 $form = new FormValidator('add_course');
@@ -98,8 +98,6 @@ $advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><sp
 $form -> addElement('advanced_settings',$advanced);
 $form -> addElement('html','<div id="options" style="display:none">');
 
-
-
 // Course category.
 $categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
 $form->applyFilter('category_code', 'html_filter');
@@ -107,10 +105,10 @@ $categories_select->addOption('-','');
 CourseManager::select_and_sort_categories($categories_select);
 
 
-// Course code.
-$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('size' => $maxlength, 'maxlength' => $maxlength));
+// Course code
+$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => MAX_COURSE_LENGTH_CODE));
 $form->applyFilter('wanted_code', 'html_filter');
-$form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
+$form->addRule('wanted_code', get_lang('Max'), 'maxlength', MAX_COURSE_LENGTH_CODE);
 
 /*if ($course_validation_feature) {
     $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
@@ -193,14 +191,12 @@ $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastNam
 
 $form->setDefaults($values);
 
- 
-
 // Validate the form.
 if ($form->validate()) {
     $course_values = $form->exportValues();
     
     $wanted_code        = $course_values['wanted_code'];
-    $tutor_name         = $course_values['tutor_name'];
+    //$tutor_name         = $course_values['tutor_name'];
     $category_code      = $course_values['category_code'];
     $title              = $course_values['title'];
     $course_language    = $course_values['course_language'];
@@ -214,25 +210,24 @@ if ($form->validate()) {
     }
 
     if ($wanted_code == '') {
-        $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));
+        $wanted_code = generate_course_code(api_substr($title, 0, MAX_COURSE_LENGTH_CODE));
     }
-
+    
     // Check whether the requested course code has already been occupied.
     if (!$course_validation_feature) {
         $course_code_ok = !CourseManager::course_code_exists($wanted_code);
     } else {
         $course_code_ok = !CourseRequestManager::course_code_exists($wanted_code);
     }
-
+    
     if ($course_code_ok) {
-        if (!$course_validation_feature) {            
+        if (!$course_validation_feature) {       
               
             $params = array();
             
             $params['title']                = $title;
             $params['exemplary_content']    = $exemplary_content;
-            $params['wanted_code']          = $wanted_code;
-            //$params['tutor_name']           = $tutor_name;
+            $params['wanted_code']          = $wanted_code;            
             $params['category_code']        = $category_code;
             $params['course_language']      = $course_language;            
              

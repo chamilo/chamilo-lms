@@ -71,6 +71,8 @@
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
+define('MAX_COURSE_LENGTH_CODE', 40);
+
 /**
  * Constants definition
  */
@@ -136,14 +138,11 @@ class CourseManager {
         
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $params['title'];    
-            // Check whether the requested course code has already been occupied.       
-            $dbnamelength = strlen($_configuration['db_prefix']);
-            // Ensure the database prefix + database name do not get over 40 characters.
-            $maxlength = 40 - $dbnamelength;
-            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, $maxlength));            
+            // Check whether the requested course code has already been occupied.                   
+            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, MAX_COURSE_LENGTH_CODE));            
         }
 
-        // Create the course immediately
+        // Create the course keys
         $keys = define_course_keys($params['wanted_code']);
         
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
@@ -633,8 +632,8 @@ class CourseManager {
      *	with the same code OR visual_code (visualcode), false otherwise
      */
     public static function course_code_exists($wanted_course_code) {
-        $wanted_course_code = Database::escape_string($wanted_course_code);
-        $result = Database::fetch_array(Database::query("SELECT COUNT(*) as number FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code'"));
+        $wanted_course_code = Database::escape_string($wanted_course_code);        
+        $result = Database::fetch_array(Database::query("SELECT COUNT(*) as number FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code'"));
         return $result['number'] > 0;
     }
 

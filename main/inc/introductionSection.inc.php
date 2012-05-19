@@ -22,7 +22,6 @@
  *	@package chamilo.include
  */
 
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 /*	Constants and variables */
@@ -121,7 +120,7 @@ $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
         WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = '".intval($session_id)."'";
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
-	$intro_dbResult = Database::fetch_array($intro_dbQuery);
+	$intro_dbResult = Database::fetch_array($intro_dbQuery);    
 	$intro_content = $intro_dbResult['intro_text'];	
 } else {
 	$intro_content = '';
@@ -187,8 +186,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
 		$thematic_advance_info['start_date'] = api_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG);
 		
-		$thematic_description_html = '
-									  <div class="thematic-postit">
+		$thematic_description_html = '<div class="thematic-postit">
 								  	  <div class="thematic-postit-top"><h3><a class="thematic-postit-head" style="" href="#"> '.$thematic_advance.'</h3></a></div>						 
 								  	  <div class="thematic-postit-center" style="display:none">';
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
@@ -221,7 +219,7 @@ $introduction_section .=  '</div>';
 
 $introduction_section .=  '<div class="span12">';
 if ($intro_dispDefault) {	
-	$intro_content = text_filter($intro_content); // parse [tex] codes
+	$intro_content = $intro_content;
 	if (!empty($intro_content))	{
 		$introduction_section .=  $intro_content;
 	}

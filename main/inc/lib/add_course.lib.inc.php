@@ -2458,10 +2458,10 @@ function fill_db_course($course_id, $course_repository, $language, $default_docu
         /* Introduction text */
 
         $intro_text='<p style="text-align: center;">
-                        <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" /></td>
+                        <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
                         <h2>'.lang2db(get_lang('IntroductionText')).'</h2>
                      </p>';
-        Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "', 0)");
+        Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','".$intro_text."', 0)");
         Database::query("INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "', 0)");
 
         // Wiki intro

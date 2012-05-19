@@ -61,8 +61,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 		<div class="normal-message" id="id_normal_message" style="display:none">';
 			$content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
 			$content .=  get_lang('PleaseStandBy');
-
-		$content .=  '</div>
+            $content .=  '</div>
 		<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
 	</div>';
 

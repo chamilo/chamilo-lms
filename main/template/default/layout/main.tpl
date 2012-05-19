@@ -1,5 +1,5 @@
 {% block header %}
-    {% include "default/layout/main_header.tpl" %}    
+{% include "default/layout/main_header.tpl" %}    
 {% endblock %}
 
 {% block body %}	

@@ -83,7 +83,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');
 
 	// Setting the rules
-	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
 
 	// The validation or display
 	if ($form->validate()) {
@@ -134,7 +134,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_
 	$form->setDefaults($defaults);
 
 	// Setting the rules
-	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
 
 	// The validation or display
 	if ($form->validate()) {

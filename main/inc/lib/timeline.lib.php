@@ -86,7 +86,7 @@ class Timeline extends Model {
         	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
         }
         
-        $form->addRule('headline', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
     
         // Setting the defaults
         $defaults = $this->get($id);
@@ -100,7 +100,7 @@ class Timeline extends Model {
         $form->setDefaults($defaults);
     
         // Setting the rules
-        $form->addRule('headline', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');               
+        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');               
 		return $form;                                
     }
     
@@ -128,8 +128,8 @@ class Timeline extends Model {
         $form->addElement('text', 'media_credit', get_lang('media_credit'), array('size' => '70'));
         $form->addElement('text', 'title_slide', get_lang('title_slide'), array('size' => '70'));
         
-        $form->addRule('headline', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('start_date', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
        
         
         //$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));	   
@@ -151,7 +151,7 @@ class Timeline extends Model {
         $form->setDefaults($defaults);
     
         // Setting the rules
-        $form->addRule('headline', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');               
+        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');               
 		return $form; 
         
     }

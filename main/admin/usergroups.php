@@ -107,7 +107,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 
     // Setting the rules
-    $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
     // The validation or display
     if ($form->validate()) {
@@ -146,7 +146,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
     $form->setDefaults($defaults);
 
     // Setting the rules
-    $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
     // The validation or display
     if ($form->validate()) {

@@ -6468,7 +6468,7 @@ class learnpath {
             if ($action != 'move') {
                 $form->addElement('text', 'title', get_lang('Title'), 'id="idTitle" class="learnpath_chapter_form" size="40%"');
                 $form->applyFilter('title', 'html_filter');
-                $form->addRule('title', '<div class="required">' . get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
                 //$form->addElement('textarea', 'description', get_lang('Description').' :', 'id="idDescription"');
             } else {
                 $form->addElement('hidden', 'title');

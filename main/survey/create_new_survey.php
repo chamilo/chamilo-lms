@@ -253,10 +253,10 @@ $form->addElement('style_submit_button', 'submit_survey', $text, 'class="'.$clas
 
 // Setting the rules
 if ($_GET['action'] == 'add') {
-	$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('survey_code', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('survey_code', '', 'maxlength', 20);
 }
-$form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 $form->addRule(array('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');

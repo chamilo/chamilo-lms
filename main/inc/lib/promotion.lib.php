@@ -192,7 +192,7 @@ class Promotion extends Model {
         $form->setDefaults($defaults);
     
         // Setting the rules
-        $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         
         return $form;
     }

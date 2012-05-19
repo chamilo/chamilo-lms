@@ -86,7 +86,7 @@ function edit_category_form($in_action) {
 		// --------------------
 		// setting the rules
 		// --------------------
-		$form->addRule('category_name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
+		$form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');	
 		// --------------------
 		// The validation or display
 		// --------------------
@@ -158,7 +158,7 @@ function add_category_form($in_action) {
 	$form->addElement('html_editor', 'category_description', get_lang('CategoryDescription'), null, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
 	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddTestCategory'), 'class="add"');	
 	// setting the rules
-	$form->addRule('category_name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
+	$form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');	
 	// The validation or display
 	if ($form->validate()) 
 	{

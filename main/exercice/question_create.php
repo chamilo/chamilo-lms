@@ -62,8 +62,8 @@ $form->addElement('style_submit_button', 'SubmitCreateQuestion', get_lang('Creat
 
 // setting the rules
 // $form->addRule('question_type', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('exercice', '<span class="required">'.get_lang('ThisFieldIsRequired').'</span>', 'required');
-$form->addRule('exercice', '<span class="required">'.get_lang('YouHaveToSelectATest').'</span>', 'numeric');
+$form->addRule('exercice', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('exercice', get_lang('YouHaveToSelectATest'), 'numeric');
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
 $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validquestiontype');
 

@@ -1483,7 +1483,7 @@ if ($_GET['action']=='searchpages') {
 		$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 	
 		// setting the rules
-		$form->addRule('search_term', '<span class="required">'.get_lang('ThisFieldIsRequired').'</span>', 'required');
+		$form->addRule('search_term', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addRule('search_term', get_lang('TooShort'),'minlength',3); //TODO: before fixing the pagination rules worked, not now	
 		if ($form->validate()) {
 			$form->display();

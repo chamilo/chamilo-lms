@@ -2133,9 +2133,9 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     $form->setDefaults(isset($defaults) ? $defaults : null);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
-    $form->addRule('post_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('post_title', get_lang('ThisFieldIsRequired'), 'required');
     if ($current_forum['allow_anonymous'] == 1 && !isset($_user['user_id'])) {
-        $form->addRule('poster_name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('poster_name', get_lang('ThisFieldIsRequired'), 'required');
     }
 
     // Validation or display
@@ -2570,7 +2570,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
 
-    $form->addRule('post_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('post_title', get_lang('ThisFieldIsRequired'), 'required');
 
     // Validation or display
     if ($form->validate()) {

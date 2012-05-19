@@ -876,8 +876,8 @@ function add_edit_template() {
     $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 
     // Setting the rules: the required fields.
-    $form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('template_text', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('template_text', get_lang('ThisFieldIsRequired'), 'required');
 
     // if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
     if ($form->validate()) {

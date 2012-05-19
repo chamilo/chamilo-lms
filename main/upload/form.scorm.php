@@ -53,7 +53,7 @@ $form->addElement('hidden', 'tool', $my_tool);
 
 $form->addElement('file','user_file',get_lang('FileToUpload'));
 $form->add_real_progress_bar('uploadScorm','user_file');
-$form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
 
 /*$select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
 foreach($content_origins as $index => $origin){

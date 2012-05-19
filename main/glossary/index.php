@@ -160,7 +160,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 $form->setDefaults($glossary_data);
 
                 // setting the rules
-                $form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('glossary_title', get_lang('ThisFieldIsRequired'), 'required');
 
                 // The validation or display
                 if ($form->validate()) {

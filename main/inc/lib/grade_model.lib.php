@@ -59,6 +59,7 @@ class GradeModel extends Model {
 		$oFCKeditor->CreateHtml();
 		
         $form = new FormValidator('grades', 'post', $url);
+        
         // Settting the form elements
         $header = get_lang('Add');
         
@@ -74,7 +75,7 @@ class GradeModel extends Model {
         $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));	   
 
         $form->addElement('label', get_lang('Components'));
-        
+                
         //Get components
         $nr_items = 2;
         $max = 10;
@@ -93,7 +94,7 @@ class GradeModel extends Model {
                 
         $renderer = & $form->defaultRenderer();
         
-        for ($i = 0; $i <= $max;  $i++) {    
+        for ($i = 0; $i <= $max;  $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
             $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
@@ -102,28 +103,50 @@ class GradeModel extends Model {
             
             $template_percentage =
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">
-            <p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
-            <label class="control-label">{label}</label>
-            <div class="controls"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->{element} % = ';
-            
-            $template_acronym = '
-            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
-            <!-- BEGIN error --><span class="form_error">{error}</span> <!-- END error -->{element} {label}';
+                
+            <p>
+                <label class="control-label">{label}</label>
+                <div class="controls">
 
-            $template_title =
-            '<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
-             <a href="javascript:plusItem(' . ($counter+1) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/icons/22/add.png" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img>
-            </a>
-            <a href="javascript:minItem(' . ($counter) . ')">
-                <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="../img/delete.png" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img>
-            </a>            
-            </div></p></div>';
+                    <!-- BEGIN required -->
+                    <span class="form_required">*</span>
+                    <!-- END required -->
+                    {element}
+                     % = ';
+
+                    $template_acronym = '
+                    <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
+                    {element} {label}';
+
+                    $template_title =
+                    '&nbsp{element}
+                    <a href="javascript:plusItem(' . ($counter+1) . ')">
+                        <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/icons/22/add.png" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img>
+                    </a>
+                    <a href="javascript:minItem(' . ($counter) . ')">
+                        <img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="min-' . $counter . '" src="../img/delete.png" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img>
+                    </a>            
+                </div>
+            </p>
+            </div>';
             
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
-            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');            
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
+            
+            if ($i == 0) {
+                //$form->addRule('components['.$i.'][percentage]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+                //$form->addRule('components['.$i.'][title]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+                //$form->addRule('components['.$i.'][acronym]', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+                
+            }
         }
+        //Required field
+        
+        
+        
+        //$this->addRule('score', get_lang('OnlyNumbers'), 'numeric',null,'client');
+        
         $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
         	            
         if ($action == 'edit') {
@@ -145,7 +168,7 @@ class GradeModel extends Model {
         $form->setDefaults($defaults);
     
         // Setting the rules
-        $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');               
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');               
 		return $form;                                
     }
     

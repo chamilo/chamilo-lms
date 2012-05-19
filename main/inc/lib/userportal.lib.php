@@ -1004,8 +1004,10 @@ class IndexManager {
 							$extra_info = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];		
                             if (api_is_drh()) {
                                 $session_link = $session_box['title'];
+                                $params['link'] = null;
                             } else {
                                 $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                $params['link'] = api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id'];
                             }
 							
 							$params['title'] = $session_link.$extra_info;
@@ -1060,15 +1062,17 @@ class IndexManager {
                                 
                                 if (api_is_drh()) {
                                     $session_link = $session_box['title'];
+                                    $params['link'] = null;
                                 } else {
-                                    $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                    $session_link   = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                                    $params['link'] =  api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id'];
                                 }
                                 
 								$params['title'] .=  $session_link;
 								$params['title'] .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
 								$params['title'] .=  (!empty($s['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
 								$params['title'] .=  '</span>';
-		
+                                
 								if (api_is_platform_admin()) {
 									$params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
 								}                                
@@ -1084,6 +1088,7 @@ class IndexManager {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';
 							}                            
 							$params['title'] .=  $category['details']['name'];
+                            $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'];
 							
 							if ($category['details']['date_end'] != '0000-00-00') {
 								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);

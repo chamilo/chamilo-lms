@@ -2796,17 +2796,30 @@ class CourseManager {
             $class = "course_item";
         }                     
         $html .= '<div class="'.$class.'">'; 
-            $html .= '<div class="row">';    
-            $html .= '<div class="span1">'.$params['icon'].'</div>';
-            $html .= '<div class="span6">';
-            $html .= '<h4>'.$params['title'].$params['notifications'].'</h4>';                    
-            if (!empty($params['teachers'])) {                    
-                $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
-            }                    
-            if (!empty($params['coaches'])) {                    
-                $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
-            }    
-            $html .= '</div>';                        
+            $html .= '<div class="row">';            
+            $html .= '<div class="span7">';
+                $html .= ' <div class="row">';
+
+                    $html .= '<div class="span1">';                
+                        $html .= '<a class="thumbnail" href="'.$params['link'].'">';
+                        $html .= $params['icon'];
+                        $html .= '</a>';
+                    $html .= '</div>';
+
+                    $html .= '<div class="span6">';
+                        $html .='<h3>'.$params['title'].$params['notifications'].'</h3>';
+                             
+                        if (!empty($params['teachers'])) {                    
+                            $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
+                        }                    
+                        if (!empty($params['coaches'])) {                    
+                            $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
+                        }
+                    $html .= '</div>';
+                $html .= '</div>';
+                
+            $html .= '</div>';    
+            
             $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';        
         $html .= '</div>';         
         $html .= '</div>';
@@ -2870,7 +2883,7 @@ class CourseManager {
                         $course['status'] = STUDENT;
                     }
 
-                    $status_icon = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
+                    $params['icon'] = Display::return_icon('blackboard.png', null, array(), ICON_SIZE_LARGE);
                     
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {                        
@@ -2895,9 +2908,7 @@ class CourseManager {
                         $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0&amp;autoreg=1">'.$course_info['title'].'</a>';
                     } else {
                         $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
-                    }
-                    
-                    $params['image'] = $status_icon;                    
+                    }                    
                                         
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                         $course_title .= $course_info['visual_code'];
@@ -2908,8 +2919,9 @@ class CourseManager {
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
                     
-                    $params['image'] = $course_title;
-                    $params['notifications'] = $show_notification;                    
+                    $params['title'] = $course_title;
+                    $params['link'] = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0&amp;autoreg=1';
+                    $params['notifications'] = $show_notification;
                     $html .= self::course_item_html($params, false);
                     $key++;
                 }
@@ -3040,12 +3052,9 @@ class CourseManager {
                 $course_title = Display::url($course_info['title'], $course_title_url);                
             } else {
                 $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
-            }
-            if (!empty($course_title_url)) {
-                $status_icon = Display::url($status_icon, $course_title_url);
-            }
-            // Start displaying the course block itself.            
+            }        
             
+            // Start displaying the course block itself
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $course_title .= $course_info['visual_code'];
             }
@@ -3053,7 +3062,8 @@ class CourseManager {
                 $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);
             }            
             
-            $params['icon'] = $status_icon;            
+            $params['link'] = $course_title_url;
+            $params['icon'] = $status_icon;         
             $params['title'] = $course_title;
             $params['teachers'] = $teachers;
             $params['notifications'] = $show_notification;
@@ -3205,11 +3215,9 @@ class CourseManager {
         	$session_title = $course_info['name'];
         }
         
-        if (!empty($session_url)) {
-            $s_htlm_status_icon = Display::url($s_htlm_status_icon, $session_url);
-        }
         $params = array();
         $params['icon'] = $s_htlm_status_icon;
+        $params['link'] = $session_url;
         $params['title'] = $session_title;
         
         $params['right_actions'] = '';
@@ -3240,8 +3248,7 @@ class CourseManager {
     
         $session_title .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
     
-        // Display the "what's new" icons
-        
+        // Display the "what's new" icons        
         $session_title .= Display :: show_notification($course_info);
         
         $params['title'] = $session_title;

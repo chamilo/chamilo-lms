@@ -3648,8 +3648,8 @@ a.forum_group_link {
 
 
 .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .subnav .nav > li > .logout {

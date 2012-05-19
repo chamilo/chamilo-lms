@@ -3,7 +3,7 @@
 ob_start();
 $nameTools = 'Cours';
 // name of the language file that needs to be included
-$language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
+$language_file = array ('admin', 'registration', 'index', 'tracking');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -101,7 +101,8 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 }
 
 // Database Table Definitions
-$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_user_course            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'show_message') {

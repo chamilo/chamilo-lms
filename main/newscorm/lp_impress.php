@@ -9,20 +9,24 @@
  * Code
  */
 
-exit;
-
 $_SESSION['whereami'] = 'lp/impress';
 $this_section = SECTION_COURSES;
 
 /* Libraries */
 require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
 
 //To prevent the template class
 $show_learnpath = true;
 
 api_protect_course_script();
+
+/* 
+ * Only activate impress if you're the admin 
+ */
+
+if (!api_is_platform_admin()) {
+    exit;
+}
 
 $lp_id = intval($_GET['lp_id']);
 

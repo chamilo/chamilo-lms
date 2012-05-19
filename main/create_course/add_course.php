@@ -42,13 +42,12 @@ if ($course_validation_feature) {
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-function setFocus(){
-    $("#title").focus();
+    function setFocus(){
+        $("#title").focus();
     }
     $(window).load(function () {
-      setFocus();
-    });
-    
+        setFocus();
+    });    
     
     function advanced_parameters() {
         if(document.getElementById(\'options\').style.display == \'none\') {
@@ -78,16 +77,11 @@ if (!api_is_allowed_to_create_course()) {
     exit;
 }
 
-global $_configuration;
-//$dbnamelength = strlen($_configuration['db_prefix']);
-// Ensure the database prefix + database name do not get over 40 characters.
-$maxlength = 40;
-
 // Build the form.
 $form = new FormValidator('add_course');
 
 // Form title
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // Title
 $form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex')), array('class' => 'span6', 'id' => 'title'));

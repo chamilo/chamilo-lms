@@ -27,7 +27,6 @@ if ($lp_controller_touched != 1) {
 
 /* Libraries */
 require_once 'back_compat.inc.php';
-require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 

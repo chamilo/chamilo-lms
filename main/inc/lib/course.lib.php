@@ -164,7 +164,7 @@ class CourseManager {
                     prepare_course_repository($course_info['directory'], $course_info['code']);
                     $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);                      
                     fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);                    
-                    self::update_course_ranking($course_info['real_id'], 0);
+                    //self::update_course_ranking($course_info['real_id'], 0, null);
                     
                     //Create gradebook_category for the new course and add a gradebook model for the course
                     if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {

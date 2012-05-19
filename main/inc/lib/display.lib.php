@@ -1364,8 +1364,25 @@ class Display {
         return '<div class="page-header"><h1>'.$title.'</h1></div>';
     }
     
-    public function page_subheader($title) {
+    public function page_subheader($title, $second_title = null) {
+        if (!empty($second_title)) {
+            $second_title = Security::remove_XSS($second_title);
+            $title .= "<small> $second_title<small>";
+        }
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
+    }
+    
+    public function description($list) {
+        $html = null;
+        if (!empty($list)) {
+            $html = '<dl class="dl-horizontal">';
+            foreach ($list as $item) {
+                $html .= '<dt>'.$item['title'].'</dd>';
+                $html .= '<dd>'.$item['content'].'</dt>';
+            }
+            $html .= '</dl>';
+        }
+        return $html;
     }
     
     function bar_progress($percentage, $show_percentage = true, $extra_info = null) {

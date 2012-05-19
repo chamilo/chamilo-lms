@@ -3278,44 +3278,22 @@ class Exercise {
 	}
 
 	function show_exercise_result_header($user_data, $date = null) {
-		$description = '';
+		$array = array();
+                    
+        if (!empty($user_data)) {
+            $array[] = array('title' => get_lang("User"), 'content' => $user_data);
+        }
+        
 		if (!empty($this->description)) {
-			$description = '<tr>
-        		<td style="font-weight:bold" width="10%">
-        			&nbsp;'.get_lang("Description").' :
-        		</td>
-        		<td width="90%">			
-        		'.$this->description.'
-        		</td>
-        	</tr>';
+            $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
+		}		
+        
+		if (!empty($date)) {			
+             $array[] = array('title' => get_lang("Date"), 'content' => $date);
 		}
-		$date_data = '';
-		if (!empty($date)) {
-			$date_data = '<tr>
-        		<td style="font-weight:bold" width="10%">
-        			&nbsp;'.get_lang("Date").' :
-        		</td>
-        		<td width="90%">			
-        		'.$date.'
-        		</td>
-        	</tr>';
-		}
-		$html = '<table width="100%">
-        	<tr>
-        	<td colspan="2">
-        		<h2>'.Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result').'</h2>
-        	</td>	
-        	</tr>		
-        	<tr>
-        		<td style="font-weight:bold" width="90px">&nbsp;'.get_lang('User').' : </td>
-        		<td>
-        		'.$user_data.'
-                </td>
-            </tr>            
-            '.$date_data.'
-        	'.$description.'
-        </table>
-        <br />';
+    
+		$html = Display::page_header(Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result'));
+        $html .= Display::description($array);        
 		return $html;
 	}
 	

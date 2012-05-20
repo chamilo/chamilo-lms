@@ -2037,7 +2037,7 @@ div.system_announcement {
 }
 
 #toolshortcuts_horizontal {    
-    padding: 8px 20px 2px 0px;
+    padding: 0px 20px 2px 0px;
     clear: right;
     margin-left: auto;
     margin-right: auto;
@@ -2046,7 +2046,7 @@ div.system_announcement {
 }
 
 #toolshortcuts_vertical {    
-    padding: 8px 0px 2px 0px;
+    padding: 0px 0px 2px 0px;
     clear: right;
     margin-left: auto;
     margin-right: auto;

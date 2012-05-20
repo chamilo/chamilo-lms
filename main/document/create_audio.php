@@ -238,7 +238,7 @@ $(document).ready(function(){
 		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
 		$form->addElement('hidden', 'text2voice_mode','pediaphon');
 		$form->addElement('hidden', 'document_id', $document_id);
-		$form->addElement('text', 'title', get_lang('Title'));
+		$form->addElement('text', 'title', get_lang('Title'), array('onclick' => 'update_voices(1);'));//set English default voice
 		$form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
 		$form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
 		$speed_options = array();
@@ -438,8 +438,9 @@ function downloadMP3_pediaphon($filepath, $dir){
 	$clean_title=trim($_POST['title']);
 	$clean_title= Database::escape_string($clean_title);
 	$clean_text=trim($_POST['text']);
-	if(empty($clean_title) || empty($clean_text)){
-		echo '<script>window.location.href="'.$location.'"</script>'; 
+	$clean_voices=Security::remove_XSS($_POST['voices']);
+	if(empty($clean_title) || empty($clean_text) || empty($clean_voices)){
+		echo '<script>window.location.href="'.$location.'"</script>';
 		return;
 	}
 	$clean_title=Security::remove_XSS($clean_title);
@@ -447,7 +448,6 @@ function downloadMP3_pediaphon($filepath, $dir){
 	$clean_title=str_replace(' ','_', $clean_title);//compound file names
 	$clean_text=Security::remove_XSS($clean_text);
 	$clean_lang=Security::remove_XSS($_POST['lang']);
-	$clean_voices=Security::remove_XSS($_POST['voices']);
 	$clean_speed=Security::remove_XSS($_POST['speed']);
 	
 	$extension='mp3';

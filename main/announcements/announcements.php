@@ -141,7 +141,7 @@ if(!empty($_GET['toolgroup'])){
 	} else {
 		$toolgroup = 0;
 	}
-	api_session_register("toolgroup");
+	Session::write("toolgroup", $toolgroup);
 }
 
 /*	Sessions */

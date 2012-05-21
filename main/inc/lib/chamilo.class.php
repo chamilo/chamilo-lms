@@ -3,9 +3,8 @@
 /**
  * Description of chamilo
  *
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
+ * @license see /license.txt
+ * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class Chamilo
 {
@@ -24,6 +23,15 @@ class Chamilo
     static function is_production_server()
     {
         return api_get_setting('server_type') == 'production';
+    }
+    
+    /**
+     *
+     * @return ChamiloSession
+     */
+    static function session()
+    {
+        return ChamiloSession::instance();
     }
 
     /**

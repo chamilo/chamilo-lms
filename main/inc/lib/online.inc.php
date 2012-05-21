@@ -95,7 +95,7 @@ function online_logout() {
     }
     require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
     exit_of_chat($uid);
-    api_session_destroy();
+    Session::destroy();
     global $logout_no_redirect;
     if (!$logout_no_redirect) {
         header("Location: index.php$query_string");

@@ -123,7 +123,7 @@ class FileReader implements Iterator
     }
 
     protected function convert($text)
-    {
+    {        
         return $this->converter->convert($text);
     }
 

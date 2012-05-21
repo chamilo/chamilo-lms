@@ -113,6 +113,7 @@ searchdb/*
 !searchdb/index.html
 
 main/inc/cache/*
+test_laurent.php
 syntax: regexp
 ^main/upload/users$
 

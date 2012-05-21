@@ -139,24 +139,24 @@ class TestMainApi extends UnitTestCase {
 
     function testApiSessionStart(){
         if (!headers_sent()) {
-            $res = api_session_start($already_sintalled=true);
+            $res = Chamilo::session()->start($already_sintalled=true);
         }
         $this->assertTrue(is_null($res));
     }
 
-    function testApiSessionRegister(){
-        $$variable[session_register]=false;
-        global $$variable;
-        if (!headers_sent()) {
-            $res=api_session_register($$variable);
-        }
-        $this->assertTrue(is_null($res));
-        $this->assertTrue(is_null($variable[session_register]));
-    }
+//    function testApiSessionRegister(){
+//        $$variable[session_register]=false;
+//        global $$variable;
+//        if (!headers_sent()) {
+//            $res=Session::register($$variable, $$variable);
+//        }
+//        $this->assertTrue(is_null($res));
+//        $this->assertTrue(is_null($variable[session_register]));
+//    }
 
     function testApiSessionUnregister() {
         $variable=strval($variable);
-        $res=api_session_unregister($variable);
+        $res=Session::erase($variable);
         $this->assertTrue(is_null($res));
         $this->assertTrue(is_null($_SESSION[$variable]=null));
     }
@@ -164,7 +164,7 @@ class TestMainApi extends UnitTestCase {
 	function testApiSessionClear() {
 		$variable = 'test';
 		 if (!headers_sent()) {
-			$res=api_session_clear($variable);
+			$res=Session::clear($variable);
 		 }
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -172,7 +172,7 @@ class TestMainApi extends UnitTestCase {
 
 	function testApiSessionDestroy(){
 		 if (!headers_sent()) {
-			$res=api_session_destroy();
+			$res=Session::destroy();
 		 }
 		$this->assertTrue(is_null($res));
 		//var_dump($res);

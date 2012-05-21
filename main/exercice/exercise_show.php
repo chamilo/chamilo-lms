@@ -667,8 +667,8 @@ if (!$is_allowedToEdit) {
 }
 
 //destroying the session
-api_session_unregister('questionList');
+Session::erase('questionList');
 unset ($questionList);
 
-api_session_unregister('exerciseResult');
+Session::erase('exerciseResult');
 unset ($exerciseResult);

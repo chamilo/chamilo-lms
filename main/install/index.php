@@ -63,7 +63,7 @@ $_setting = array(
 if (!empty($_POST['language_list'])) {
 	$search = array('../', '\\0');
 	$install_language = str_replace($search, '', urldecode($_POST['language_list']));
-	api_session_register('install_language');
+	Session::write('install_language',$install_language);
 } elseif (isset($_SESSION['install_language']) && $_SESSION['install_language']) {
 	$install_language = $_SESSION['install_language'];
 } else {

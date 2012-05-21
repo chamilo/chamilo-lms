@@ -112,7 +112,7 @@ if ($is_allowedToEdit) {
                 $objExercise = new Exercise();
                 $objExercise->read($fromExercise);
             }
-			api_session_register('objExercise');
+			Session::write('objExercise',$objExercise);
 		}
 		$displayMessage = get_lang('ItemAdded');
 //		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
@@ -145,7 +145,7 @@ if ($is_allowedToEdit) {
         }
 		// adds the question ID represented by $recup into the list of questions for the current exercise
 		$objExercise->addToList($recup);
-		api_session_register('objExercise');
+		Session::write('objExercise',$objExercise);
 
 //		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 //		exit();
@@ -207,7 +207,7 @@ if ($is_allowedToEdit) {
 				}
 			}
 		}
-		api_session_register('objExercise');
+		Session::write('objExercise',$objExercise);
 //		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 //		exit();
 	}

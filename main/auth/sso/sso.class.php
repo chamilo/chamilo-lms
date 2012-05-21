@@ -116,7 +116,7 @@ class sso {
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             // the user has permission to enter at this site
                                             $_user['user_id'] = $uData['user_id'];
-                                            api_session_register('_user');
+                                            Session::write('_user',$_user);
                                             event_login();
                                             // Redirect to homepage
                                             $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
@@ -125,7 +125,7 @@ class sso {
                                         } else {
                                             // user does not have permission for this site
                                             $loginFailed = true;
-                                            api_session_unregister('_uid');
+                                            Session::erase('_uid');
                                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                             exit;
                                         }
@@ -133,7 +133,7 @@ class sso {
                                         // there is no URL in the multiple 
                                         // urls list for this user
                                         $loginFailed = true;
-                                        api_session_unregister('_uid');
+                                        Session::erase('_uid');
                                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                         exit;
                                     }
@@ -144,18 +144,18 @@ class sso {
                                         //Check if this admin is admin on the  
                                         // principal portal
                                         $_user['user_id'] = $uData['user_id'];
-                                        api_session_register('_user');
+                                        Session::write('_user',$_user);
                                         event_login();
                                     } else {
                                         //Secondary URL admin wants to login 
                                         // so we check as a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             $_user['user_id'] = $uData['user_id'];
-                                            api_session_register('_user');
+                                            Session::write('_user',$_user);
                                             event_login();
                                         } else {
                                             $loginFailed = true;
-                                            api_session_unregister('_uid');
+                                            Session::erase('_uid');
                                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                             exit;
                                         }
@@ -164,7 +164,7 @@ class sso {
                             } else {
                                 //Single URL access (Only 1 portal)
                                 $_user['user_id'] = $uData['user_id'];
-                                api_session_register('_user');
+                                Session::write('_user',$_user);
                                 event_login();
                                 // Redirect to homepage
                                 /* Login was successfull, stay on Chamilo 
@@ -179,35 +179,35 @@ class sso {
                         } else {
                             // user account expired
                             $loginFailed = true;
-                            api_session_unregister('_uid');
+                            Session::erase('_uid');
                             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
                             exit;
                         }
                     } else {
                         //User not active
                         $loginFailed = true;
-                        api_session_unregister('_uid');
+                        Session::erase('_uid');
                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
                         exit;
                     }
                 } else {
                     //SHA1 of password is wrong
                     $loginFailed = true;
-                    api_session_unregister('_uid');
+                    Session::erase('_uid');
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_password');
                     exit;
                 }
             } else {
                 //Auth_source is wrong
                 $loginFailed = true;
-                api_session_unregister('_uid');
+                Session::erase('_uid');
                 header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_authentication_source');
                 exit;
             }
         } else {
             //No user by that login
             $loginFailed = true;
-            api_session_unregister('_uid');
+            Session::erase('_uid');
             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_not_found');
             exit;
         }

@@ -17,7 +17,7 @@ $current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
 if (isset ($_SESSION['objExercise'])) {
-	api_session_unregister('objExercise');
+	Session::erase('objExercise');
 }
 
 $this_section = SECTION_COURSES;

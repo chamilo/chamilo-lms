@@ -86,14 +86,14 @@ if (!empty($_GET['user']) or !empty($_GET['group'])) {
 	$_SESSION['group']=(int)$_GET['group'];
 }
 if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group']) and $_GET['group']=="none")) {
-	api_session_unregister("user");
-	api_session_unregister("group");
+	Session::erase("user");
+	Session::erase("group");
 }
 if (!$is_courseAdmin){
 	if (!empty($_GET['toolgroup'])){
 		//$_SESSION['toolgroup']=$_GET['toolgroup'];
 		$toolgroup=Security::remove_XSS($_GET['toolgroup']);
-		api_session_register('toolgroup');
+		Session::write('toolgroup',$toolgroup);
 	}
 }
 //It comes from the group tools. If it's define it overwrites $_SESSION['group']

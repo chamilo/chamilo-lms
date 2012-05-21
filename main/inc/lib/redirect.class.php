@@ -42,8 +42,17 @@ class Redirect
 //        {
 //            return;
 //        }
+        $no_redirection = isset($_SESSION['noredirection']) ? $_SESSION['noredirection'] : false;
+        
+        if($no_redirection){
+            unset($_SESSION['noredirection']);
+            return;
+        }
+        
         $url = isset($_SESSION['request_uri']) ? $_SESSION['request_uri'] : '';
         unset($_SESSION['request_uri']);
+        
+        
         if ($url)
         {
             self::navigate($url);

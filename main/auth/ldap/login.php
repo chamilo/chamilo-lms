@@ -29,7 +29,7 @@ if ($loginLdapSucces)
 	$loginFailed = false;
 	$uidReset = true;
 	$_user['user_id'] = $uData['user_id'];
-	api_session_register('_uid');
+	Session::write('_uid',$_uid);
     // Jand: copied from event_login in events.lib.php to enable login statistics:
     event_login();
 }

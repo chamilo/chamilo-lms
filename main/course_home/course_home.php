@@ -155,7 +155,7 @@ $course_code	= $return_result['code'];
 $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;
 
-api_session_unregister('toolgroup');
+Session::erase('toolgroup');
 
 $is_speacialcourse = CourseManager::is_special_course($course_code);
 
@@ -178,7 +178,7 @@ if (!$is_allowed_in_course) {
 if (!isset($coursesAlreadyVisited[$_cid])) {
     event_access_course();
     $coursesAlreadyVisited[$_cid] = 1;
-    api_session_register('coursesAlreadyVisited');
+    Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
 /*Auto lunch code */

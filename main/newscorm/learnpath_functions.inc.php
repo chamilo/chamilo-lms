@@ -1156,19 +1156,19 @@ function export_exercise($item_id) {
 
     /* Clears the exercise session */
     if (isset ($_SESSION['objExercise'])) {
-        api_session_unregister('objExercise');
+        Session::erase('objExercise');
     }
     if (isset ($_SESSION['objQuestion'])) {
-        api_session_unregister('objQuestion');
+        Session::erase('objQuestion');
     }
     if (isset ($_SESSION['objAnswer'])) {
-        api_session_unregister('objAnswer');
+        Session::erase('objAnswer');
     }
     if (isset ($_SESSION['questionList'])) {
-        api_session_unregister('questionList');
+        Session::erase('questionList');
     }
     if (isset ($_SESSION['exerciseResult'])) {
-        api_session_unregister('exerciseResult');
+        Session::erase('exerciseResult');
     }
 
     // If the object is not in the session:
@@ -1183,7 +1183,7 @@ function export_exercise($item_id) {
         }
 
         // Saves the object into the session.
-        api_session_register('objExercise');
+        Session::write('objExercise',$objExercise);
     }
 
     $exerciseTitle = $objExercise->selectTitle();
@@ -1197,7 +1197,7 @@ function export_exercise($item_id) {
         $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
 
         // Saves the question list into the session.
-        api_session_register('questionList');
+        Session::write('questionList',$questionList);
     }
 
     $nbrQuestions = sizeof($questionList);

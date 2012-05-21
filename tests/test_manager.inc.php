@@ -168,8 +168,8 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	    $_course['subscribe_allowed']    = $cData['subscribe'		 ];
 	    $_course['unubscribe_allowed']   = $cData['unsubscribe'		 ];
 	
-	    api_session_register('_cid');
-	    api_session_register('_course');
+	    Session::write('_cid',$_cid);
+	    Session::write('_course',$_course);
 	}
 	   
 	/*	Load the session	*/
@@ -206,7 +206,7 @@ function delete_test_course($course_code = 'TESTCOURSE') {
 		
 	//	Check api session destroy
 	if (!headers_sent() && session_id() != "") {
-		$res=api_session_destroy();
+		$res=Session::destroy();
 		}
 	}
 }

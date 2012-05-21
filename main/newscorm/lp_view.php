@@ -97,7 +97,7 @@ $_SESSION['lp_mode'] 	   = $_SESSION['oLP']->mode;
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
 if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
-    api_session_unregister($exerciseResult);
+    Session::erase($exerciseResult);
 }
 unset($_SESSION['objExercise']);
 unset($_SESSION['questionList']);

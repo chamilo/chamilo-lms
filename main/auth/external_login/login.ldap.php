@@ -53,7 +53,7 @@ if ($ldap_user !== false) {
   $loginFailed = false;
   $_user['user_id'] = $chamilo_user['user_id'];
   $_user['uidReset'] = true;  
-  api_session_register('_user');
+  Session::write('_user',$_user);
   $uidReset=true;
   event_login();
 

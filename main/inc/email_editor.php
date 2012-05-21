@@ -22,7 +22,7 @@ if (empty($_user['user_id'])) {
 
 if (empty($_SESSION['origin_url'])) {
 	$origin_url = $_SERVER['HTTP_REFERER'];
-	api_session_register('origin_url');
+	Session::write('origin_url',$origin_url);
 }
 
 /* Process the form and redirect to origin */
@@ -39,7 +39,7 @@ if (!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_
 		api_mail('',$email_administrator,$title,$text,get_lang('Anonymous'));
 	}
 	$orig = $_SESSION['origin_url'];
-	api_session_unregister('origin_url');
+	Session::erase('origin_url');
 	header('location:'.$orig);
 }
 

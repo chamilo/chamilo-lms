@@ -166,7 +166,7 @@ if ($form->validate()) {
 	    $message = 'ExerciseAdded';		
 	}
 	$exercise_id = $objExercise->id;
-	api_session_unregister('objExercise');
+	Session::erase('objExercise');
 	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
 	exit;
 } else {	

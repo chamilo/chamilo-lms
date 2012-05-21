@@ -4412,7 +4412,8 @@ function WSUnsuscribeUsersFromSession($params) {
 
 /* Register WSSuscribeCoursesToSession function */
 // Register the data structures used by the service
-$server->wsdl->addComplexType(
+
+/*$server->wsdl->addComplexType(
 'originalCoursesList',
 'complexType',
 'array',
@@ -4421,7 +4422,43 @@ $server->wsdl->addComplexType(
 array(),
 array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'string[]')),
 'xsd:string'
+);*/
+
+
+$server->wsdl->addComplexType(
+    'course_code_type',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(        
+        'course_code'   => array('name' => 'course_code',   'type' => 'xsd:string'),        
+    )
 );
+
+$server->wsdl->addComplexType(
+'originalCoursesList',
+'complexType',
+'array',
+'',
+'SOAP-ENC:Array',
+array(),
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_code_type[]')),
+'tns:course_code_type'
+);
+
+
+$server->wsdl->addComplexType(
+'subscribeCoursesToSessionParamsList',
+'complexType',
+'array',
+'',
+'SOAP-ENC:Array',
+array(),
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:subscribeCoursesToSessionParams[]')),
+'tns:subscribeCoursesToSessionParams'
+);
+
 
 $server->wsdl->addComplexType(
     'subscribeCoursesToSessionParams',
@@ -4431,9 +4468,9 @@ $server->wsdl->addComplexType(
     '',
     array(
         'original_course_id_values' => array('name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'),
-        'original_course_id_name'   => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'original_course_id_name'   => array('name' => 'original_course_id_name',   'type' => 'xsd:string'),
         'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-        'original_session_id_name'  => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
+        'original_session_id_name'  => array('name' => 'original_session_id_name',  'type' => 'xsd:string')
     )
 );
 
@@ -4498,39 +4535,45 @@ $server->register('WSSuscribeCoursesToSession',						// method name
 
 // Define the method WSSuscribeCoursesToSession
 function WSSuscribeCoursesToSession($params) {
+    global $debug;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
+    
+    if ($debug) error_log('WSSuscribeCoursesToSession: '.print_r($params, 1));
 
-       // initialisation
+    // initialisation
     $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
     $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-     $t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+    $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+    $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $t_cf                               = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
-       $coursessessions_params = $params['coursessessions'];
+    $coursessessions_params = $params['coursessessions'];
     $results = array();
     $orig_course_id_value = array();
     $orig_session_id_value = array();
-    foreach($coursessessions_params as $coursesession_param) {
+    foreach ($coursessessions_params as $coursesession_param) {
 
-        $original_session_id_value = $coursesession_param['original_session_id_value'];
-        $original_session_id_name = $coursesession_param['original_session_id_name'];
-        $original_course_id_name = $coursesession_param['original_course_id_name'];
-        $original_course_id_values = $coursesession_param['original_course_id_values'];
-         $orig_session_id_value[] = $original_session_id_value;
-         // get session id from original session id
+        $original_session_id_value  = $coursesession_param['original_session_id_value'];
+        $original_session_id_name   = $coursesession_param['original_session_id_name'];
+        $original_course_id_name    = $coursesession_param['original_course_id_name'];
+        $original_course_id_values  = $coursesession_param['original_course_id_values'];
+        $orig_session_id_value[]    = $original_session_id_value;
+        
+        // get session id from original session id
         $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
+        if ($debug) error_log($sql_session);
+        
         $res_session = Database::query($sql_session);
         $row_session = Database::fetch_row($res_session);
 
-         $id_session = $row_session[0];
+        $id_session = $row_session[0];
 
          if (empty($id_session)) {
             $results[] = 0;
@@ -4539,11 +4582,14 @@ function WSSuscribeCoursesToSession($params) {
 
         // Get course list from row_original_course_id_values
         $course_list = array();
-         foreach ($original_course_id_values as $row_original_course_list) {
-             $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$row_original_course_list'";
-             $res_course = Database::query($sql_course);
-             $row_course = Database::fetch_row($res_course);
-             if (empty($row_course[0])) {
+        foreach ($original_course_id_values as $row_original_course_list) {
+            
+            $course_code = Database::escape_string($row_original_course_list['course_code']);
+
+            $sql_course = "SELECT course_code FROM $t_cf cf, $t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
+            $res_course = Database::query($sql_course);
+            $row_course = Database::fetch_row($res_course);
+            if (empty($row_course[0])) {
                 continue; // course_code doesn't exist.
             } else {
                 $sql = "SELECT code FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
@@ -4554,17 +4600,17 @@ function WSSuscribeCoursesToSession($params) {
                 }
             }
             $course_list[] = $row_course[0];
-         }
+        }
 
         if (empty($course_list)) {
             $results[] = 0;
             continue;
         }
 
-         $orig_course_id_value[] = implode(',', $course_list);
+        $orig_course_id_value[] = implode(',', $course_list);
 
-         // Get general coach ID
-         $sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";
+        // Get general coach ID
+        $sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";
         $id_coach = Database::query($sql);
         $id_coach = Database::fetch_array($id_coach);
         $id_coach = $id_coach[0];
@@ -4577,9 +4623,8 @@ function WSSuscribeCoursesToSession($params) {
         $nbr_courses=count($existingCourses);
 
         // get list of users subscribed to this session
-        $sql="SELECT id_user
-            FROM $tbl_session_rel_user
-            WHERE id_session = '$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $sql= "SELECT id_user FROM $tbl_session_rel_user 
+               WHERE id_session = '$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $result=Database::query($sql);
         $user_list=Database::store_result($result);
 
@@ -4633,12 +4678,11 @@ function WSSuscribeCoursesToSession($params) {
         continue;
     }
 
-       $count_results = count($results);
+    $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
+    for ($i = 0; $i < $count_results; $i++) {
         $output[] = array('original_course_id_values' => $orig_course_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
     }
-
     return $output;
 }
 
@@ -4727,16 +4771,15 @@ function WSUnsuscribeCoursesFromSession($params) {
 
        // Initialisation
     $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);    
     $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-     $t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+    $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+    $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $t_cf                               = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
-       $coursessessions_params = $params['coursessessions'];
+    $coursessessions_params = $params['coursessessions'];
     $results = array();
     $orig_course_id_value = array();
     $orig_session_id_value = array();
@@ -4747,8 +4790,8 @@ function WSUnsuscribeCoursesFromSession($params) {
         $original_session_id_name = $coursesession_param['original_session_id_name'];
         $original_course_id_name = $coursesession_param['original_course_id_name'];
         $original_course_id_values = $coursesession_param['original_course_id_values'];
-         $orig_session_id_value[] = $original_session_id_value;
-         // Get session id from original session id
+        $orig_session_id_value[] = $original_session_id_value;
+        // Get session id from original session id
         $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
         $res_session = Database::query($sql_session);
         $row_session = Database::fetch_row($res_session);
@@ -4763,7 +4806,9 @@ function WSUnsuscribeCoursesFromSession($params) {
         // Get courses list from row_original_course_id_values
         $course_list = array();
          foreach ($original_course_id_values as $row_original_course_list) {
-             $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$row_original_course_list'";
+             $course_code = Database::escape_string($row_original_course_list['course_code']);
+             
+             $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
              $res_course = Database::query($sql_course);
              $row_course = Database::fetch_row($res_course);
              if (empty($row_course[0])) {
@@ -4810,12 +4855,11 @@ function WSUnsuscribeCoursesFromSession($params) {
         continue;
     }
 
-       $count_results = count($results);
+    $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
         $output[] = array('original_course_id_values' => $orig_course_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
     }
-
     return $output;
 }
 

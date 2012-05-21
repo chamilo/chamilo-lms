@@ -12,8 +12,7 @@
  * 
  */
 
-//exit; //Uncomment this in order to execute the page
-
+exit; //Uncomment this in order to execute the page
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -82,6 +81,23 @@ if (!empty($user_id) && is_numeric($user_id)) {
                     'user_id'       => $user_id,
                     'secret_key'    => $secret_key);
     $result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
+    
+    //4. Adding course Test to the Session Session1
+       
+    $course_id_list = array (
+                            array('course_code' => 'TEST1'), 
+                            array('course_code' => 'TEST2')
+                        );
+    $params = array('coursessessions' => array(
+                                                array('original_course_id_values'   => $course_id_list,
+                                                      'original_course_id_name'     => 'course_id_name',
+                                                      'original_session_id_value'   => '1',
+                                                      'original_session_id_name'    => 'session_id_value')      
+                                                ),    
+                    'secret_key' => $secret_key);
+    
+    $result = $client->call('WSSuscribeCoursesToSession', array('subscribeCoursesToSession' => $params));
+        
     
     
     // ------------------------

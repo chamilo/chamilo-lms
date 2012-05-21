@@ -105,7 +105,7 @@ $myrefresh_id = 0;
 if (!empty($_SESSION['refresh']) && $_SESSION['refresh'] == 1) {
     // Check if we should do a refresh of the oLP object (for example after editing the LP).
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
-    api_session_unregister('refresh');
+    Session::erase('refresh');
     $myrefresh = 1;
     if ($debug > 0) error_log('New LP - Refresh asked', 0);
 }
@@ -127,8 +127,8 @@ if (isset($_SESSION['lpobject'])) {
             if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);
             if ($myrefresh == 1) { $myrefresh_id = $oLP->get_id(); }
             $oLP = null;
-            api_session_unregister('oLP');
-            api_session_unregister('lpobject');
+            Session::erase('oLP');
+            Session::erase('lpobject');
         } else {
             $_SESSION['oLP'] = $oLP;
             $lp_found = true;
@@ -527,7 +527,7 @@ switch ($action) {
             // Remove lp from homepage if it is there.
             //$_SESSION['oLP']->toggle_visibility((int)$_GET['lp_id'],'i');
             $_SESSION['oLP']->delete(null,(int)$_GET['lp_id'],'remove');
-            api_session_unregister('oLP');
+            Session::erase('oLP');
             require 'lp_list.php';
         }
         break;

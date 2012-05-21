@@ -278,8 +278,8 @@ function lp_upload_quiz_action_handling() {
                         error_log('New LP - Course has changed, discard lp object', 0);
                     }
                     $oLP = null;
-                    api_session_unregister('oLP');
-                    api_session_unregister('lpobject');
+                    Session::erase('oLP');
+                    Session::erase('lpobject');
                 } else {
                     $_SESSION['oLP'] = $oLP;
                     $lp_found = true;

@@ -382,7 +382,7 @@ if ($_GET['source_id']) {
             break;
         case '5': // coming from learning path
             $from_learnpath = 'yes';
-            api_session_register('from_learnpath');
+            Session::write('from_learnpath',$from_learnpath);
             break;
         case '6': // coming from forum: reply
             $url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";

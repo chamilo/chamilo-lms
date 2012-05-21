@@ -97,7 +97,7 @@ $exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_
 
 /*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
 if (api_is_allowed_to_edit(null,true) && $_GET['preview'] == 1 ) {
-    api_session_unregister('objExercise');
+    Session::erase('objExercise');
 }
 
 // 1. Loading the $objExercise variable
@@ -115,7 +115,7 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
         $error = get_lang('ExerciseNotFound');
     } else {
         // Saves the object into the session
-        api_session_register('objExercise');
+        Session::write('objExercise',$objExercise);
         if ($debug) {error_log('1.1. $_SESSION[objExercise] was unset - set now - end'); };        
     }    
 }
@@ -356,7 +356,7 @@ if (!isset($_SESSION['questionList'])) {
     if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);    	
     }     
-    api_session_register('questionList');    
+    Session::write('questionList',$questionList);    
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
 } else {
 	if (isset($objExercise) && isset($_SESSION['objExercise'])) {		
@@ -367,7 +367,7 @@ if (!isset($_SESSION['questionList'])) {
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
 $quizStartTime = time();
-api_session_register('quizStartTime');
+Session::write('quizStartTime',$quizStartTime);
 
 //Real question count
 $question_count = 0;
@@ -432,9 +432,9 @@ if ($formSent && isset($_POST)) {
     
     
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
-    api_session_register('exerciseResult');
-    api_session_register('remind_list');     
-    api_session_register('exerciseResultCoordinates');
+    Session::write('exerciseResult',$exerciseResult);
+    Session::write('remind_list',$remind_list);     
+    Session::write('exerciseResultCoordinates',$exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
     

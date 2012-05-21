@@ -16,8 +16,7 @@ class ShibbolethSession
     public static function instance()
     {
         static $result = false;
-        if (empty($result))
-        {
+        if (empty($result)) {
             $result = new self();
         }
         return $result;
@@ -36,7 +35,7 @@ class ShibbolethSession
     function logout()
     {
         $_SESSION['_user'] = array();
-        
+
         $logout_no_redirect = true;
         online_logout();
     }
@@ -55,26 +54,25 @@ class ShibbolethSession
         global $_uid, $is_allowedCreateCourse, $is_platformAdmin, $_real_cid, $_courseUser, $is_courseAdmin;
         global $is_courseMember, $is_courseTutor, $is_courseCoach, $is_allowed_in_course, $is_sessionAdmin, $_gid;
         $_uid = $uid;
-        
+
         //is_allowedCreateCourse
         $user = User::store()->get_by_user_id($uid);
-        if (empty($user))
-        {
+        if (empty($user)) {
             return;
         }
-        
+
         $this->logout();
-        
-        api_session_start();
-        api_session_register('_uid');
-        
+
+        Chamilo::session()->start();
+        Session::write('_uid', $_uid);
+
         global $_user;
-        $_user = (array)$user;
+        $_user = (array) $user;
 
         $_SESSION['_user'] = $_user;
         $_SESSION['_user']['user_id'] = $_uid;
         $_SESSION['noredirection'] = true;
-        
+
         //must be called before 'init_local.inc.php'
         event_login();
 
@@ -87,7 +85,7 @@ class ShibbolethSession
 
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);
-        
+
         $no_redirection = true;
         require("$includePath/local.inc.php");
 

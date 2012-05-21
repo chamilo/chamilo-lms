@@ -97,6 +97,7 @@ class Autoload
         $result['Category'] = '/main/gradebook/lib/be/category.class.php';
         $result['Certificate'] = '/main/inc/lib/certificate.lib.php';
         $result['Chamilo'] = '/main/inc/lib/chamilo.class.php';
+        $result['ChamiloSession'] = '/main/inc/lib/chamilo_session.class.php';
         $result['Chat'] = '/main/inc/lib/chat.lib.php';
         $result['ClassManager'] = '/main/inc/lib/classmanager.lib.php';
         $result['ClosureCompiler'] = '/main/inc/lib/closure_compiler.class.php';
@@ -119,6 +120,8 @@ class Autoload
         $result['CourseSession'] = '/main/coursecopy/classes/CourseSession.class.php';
         $result['CsvReader'] = '/main/inc/lib/system/io/csv_reader.class.php';
         $result['CsvWriter'] = '/main/inc/lib/system/io/csv_writer.class.php';
+        $result['CurrentCourse'] = '/main/inc/lib/current_course.class.php';
+        $result['CurrentUser'] = '/main/inc/lib/current_user.class.php';
         $result['CustomPages'] = '/main/inc/lib/custom_pages.class.php';
         $result['DashboardManager'] = '/main/inc/lib/dashboard.lib.php';
         $result['DataForm'] = '/main/gradebook/lib/fe/dataform.class.php';
@@ -314,6 +317,8 @@ class Autoload
         $result['ScoreDisplayForm'] = '/main/gradebook/lib/fe/scoredisplayform.class.php';
         $result['ScormDocument'] = '/main/coursecopy/classes/ScormDocument.class.php';
         $result['Security'] = '/main/inc/lib/security.lib.php';
+        $result['Session'] = '/main/inc/lib/session.class.php';
+        $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
         $result['Shibboleth'] = '/main/auth/shibboleth/app/shibboleth.class.php';
         $result['ShibbolethConfig'] = '/main/auth/shibboleth/lib/shibboleth_config.class.php';
@@ -446,7 +451,6 @@ class Autoload
         $result['scormOrganization'] = '/main/newscorm/scormOrganization.class.php';
         $result['scormResource'] = '/main/newscorm/scormResource.class.php';
         $result['search_processor'] = '/main/inc/lib/search/tool_processors/search_processor.class.php';
-        $result['session_handler'] = '/main/inc/lib/session_handler.class.php';
         $result['sso'] = '/main/auth/sso/sso.class.php';
         $result['survey_manager'] = '/main/survey/survey.lib.php';
         $result['survey_question'] = '/main/survey/survey.lib.php';
@@ -459,7 +463,6 @@ class Autoload
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
         $result['xmddoc'] = '/main/inc/lib/xmd.lib.php';
-
 
         return $result;
     }

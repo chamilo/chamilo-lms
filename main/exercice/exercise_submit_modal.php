@@ -49,9 +49,9 @@ $nbrQuestions	= intval($_GET['nbrQuestions']);
 
 
 //clean extra session variables
-api_session_unregister('objExerciseExtra'.$exerciseId);
-api_session_unregister('exerciseResultExtra'.$exerciseId);
-api_session_unregister('questionListExtra'.$exerciseId);
+Session::erase('objExerciseExtra'.$exerciseId);
+Session::erase('exerciseResultExtra'.$exerciseId);
+Session::erase('questionListExtra'.$exerciseId);
 			
 //round-up the coordinates
 $coords = explode('/',$_GET['hotspot']);
@@ -143,8 +143,8 @@ if(is_array($choice)) {
 
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
 
-api_session_register('exerciseResult');
-api_session_register('exerciseResultCoordinates'); 
+Session::write('exerciseResult',$exerciseResult);
+Session::write('exerciseResultCoordinates',$exerciseResultCoordinates); 
 
 /* 
 // if it is the last question (only for a sequential exercise)
@@ -563,7 +563,7 @@ if ($links!='') {
 					
 	$_SESSION['hotspot_delineation_result'][$exerciseId][$questionid] = array($message, $exerciseResult[$questionid]);
 	//reseting the exerciseResult variable
-	api_session_register('exerciseResult');
+	Session::write('exerciseResult',$exerciseResult);
 	
 	//save this variables just in case the exercise loads an LP with other exercise
 	$_SESSION['objExerciseExtra'.$exerciseId] 	 = $_SESSION['objExercise'];

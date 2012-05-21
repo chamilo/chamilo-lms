@@ -111,7 +111,7 @@ if (!empty($_POST['submitAuth'])) {
 			if (Database::num_rows($result_last_login) > 0) {
 				$user_last_login_datetime = Database::fetch_array($result_last_login);
 				$user_last_login_datetime = $user_last_login_datetime[0];
-				api_session_register('user_last_login_datetime');
+				Session::write('user_last_login_datetime',$user_last_login_datetime);
 			}
 		}
 		Database::free_result($result_last_login);

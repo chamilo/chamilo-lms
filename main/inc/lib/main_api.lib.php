@@ -1312,6 +1312,10 @@ function api_get_course_info_by_id($id = null) {
 
 /* SESSION MANAGEMENT */
 
+/*
+ * DEPRECATED: @see Session
+ */
+
 /**
  * Starts the Chamilo session.
  *
@@ -1323,73 +1327,73 @@ function api_get_course_info_by_id($id = null) {
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to save into the session
  */
-function api_session_start($already_installed = true) {
-    global $_configuration;
-
-    /* Causes too many problems and is not configurable dynamically.
-    if ($already_installed) {
-        $session_lifetime = 360000;
-        if (isset($_configuration['session_lifetime'])) {
-            $session_lifetime = $_configuration['session_lifetime'];
-        }
-        //session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
-    }
-    */
-
-    if (!isset($_configuration['session_stored_in_db'])) {
-        $_configuration['session_stored_in_db'] = false;
-    }
-    if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
-        require_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
-        $session_handler = new session_handler();
-        @session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
-    }
-    
-    /* 
-     * Prevent Session fixation bug fixes  
-     * See http://support.chamilo.org/issues/3600
-     * http://php.net/manual/en/session.configuration.php
-     * @todo use session_set_cookie_params with some custom admin parameters
-     */
-        
-    //session.cookie_lifetime
-    
-    //the session ID is only accepted from a cookie
-    ini_set('session.use_only_cookies', 1);
-    
-    //HTTPS only if possible 
-    //ini_set('session.cookie_secure', 1);
-    
-    //session ID in the cookie is only readable by the server 
-    ini_set('session.cookie_httponly', 1);
-    
-    //Use entropy file    
-    //session.entropy_file
-    //ini_set('session.entropy_length', 128);
-    
-    //Do not include the identifier in the URL, and not to read the URL for identifiers.
-    ini_set('session.use_trans_sid', 0);    
-   
-    session_name('ch_sid');    
-    session_start();
-    
-    if (!isset($_SESSION['starttime'])) {
-        $_SESSION['starttime'] = time();
-    }
-
-    if ($already_installed) {
-        if (empty($_SESSION['checkDokeosURL'])) {
-            $_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
-            //$_SESSION['session_expiry'] = time() + $session_lifetime; // It is useless at the moment.
-        } elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH)) {
-            api_session_clear();
-            //$_SESSION['session_expiry'] = time() + $session_lifetime;
-        }
-    }
-    if ( isset($_SESSION['starttime']) && $_SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
-        $_SESSION['starttime'] = time();
-    }
-}
+//function api_session_start($already_installed = true) {
+//    global $_configuration;
+//
+//    /* Causes too many problems and is not configurable dynamically.
+//    if ($already_installed) {
+//        $session_lifetime = 360000;
+//        if (isset($_configuration['session_lifetime'])) {
+//            $session_lifetime = $_configuration['session_lifetime'];
+//        }
+//        //session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
+//    }
+//    */
+//
+//    if (!isset($_configuration['session_stored_in_db'])) {
+//        $_configuration['session_stored_in_db'] = false;
+//    }
+//    if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
+//        require_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
+//        $session_handler = new session_handler();
+//        @session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
+//    }
+//    
+//    /* 
+//     * Prevent Session fixation bug fixes  
+//     * See http://support.chamilo.org/issues/3600
+//     * http://php.net/manual/en/session.configuration.php
+//     * @todo use session_set_cookie_params with some custom admin parameters
+//     */
+//        
+//    //session.cookie_lifetime
+//    
+//    //the session ID is only accepted from a cookie
+//    ini_set('session.use_only_cookies', 1);
+//    
+//    //HTTPS only if possible 
+//    //ini_set('session.cookie_secure', 1);
+//    
+//    //session ID in the cookie is only readable by the server 
+//    ini_set('session.cookie_httponly', 1);
+//    
+//    //Use entropy file    
+//    //session.entropy_file
+//    //ini_set('session.entropy_length', 128);
+//    
+//    //Do not include the identifier in the URL, and not to read the URL for identifiers.
+//    ini_set('session.use_trans_sid', 0);    
+//   
+//    session_name('ch_sid');    
+//    session_start();
+//    
+//    if (!isset($_SESSION['starttime'])) {
+//        $_SESSION['starttime'] = time();
+//    }
+//
+//    if ($already_installed) {
+//        if (empty($_SESSION['checkDokeosURL'])) {
+//            $_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
+//            //$_SESSION['session_expiry'] = time() + $session_lifetime; // It is useless at the moment.
+//        } elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH)) {
+//            Session::clear();
+//            //$_SESSION['session_expiry'] = time() + $session_lifetime;
+//        }
+//    }
+//    if ( isset($_SESSION['starttime']) && $_SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
+//        $_SESSION['starttime'] = time();
+//    }
+//}
 
 /**
  * Saves a variable into the session
@@ -1399,10 +1403,10 @@ function api_session_start($already_installed = true) {
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to save into the session
  */
-function api_session_register($variable) {
-    global $$variable;
-    $_SESSION[$variable] = $$variable;
-}
+//function api_session_register($variable) {
+//    global $$variable;
+//    $_SESSION[$variable] = $$variable;
+//}
 
 /**
  * Removes a variable from the session.
@@ -1410,37 +1414,37 @@ function api_session_register($variable) {
  * @author Olivier Brouckaert
  * @param  string variable - the variable name to remove from the session
  */
-function api_session_unregister($variable) {
-    $variable = strval($variable);
-    if (isset($GLOBALS[$variable])) {
-        unset ($GLOBALS[$variable]);
-    }
-    if (isset($_SESSION[$variable])) {
-        unset($_SESSION[$variable]);
-    }
-}
+//function api_session_unregister($variable) {
+//    $variable = strval($variable);
+//    if (isset($GLOBALS[$variable])) {
+//        unset ($GLOBALS[$variable]);
+//    }
+//    if (isset($_SESSION[$variable])) {
+//        unset($_SESSION[$variable]);
+//    }
+//}
 
 /**
  * Clears the session
  *
  * @author Olivier Brouckaert
  */
-function api_session_clear() {
-    session_regenerate_id();
-    session_unset();    
-    $_SESSION = array();
-}
+//function api_session_clear() {
+//    session_regenerate_id();
+//    session_unset();    
+//    $_SESSION = array();
+//}
 
 /**
  * Destroys the session
  *
  * @author Olivier Brouckaert
  */
-function api_session_destroy() {
-    session_unset();
-    $_SESSION = array();
-    session_destroy();
-}
+//function api_session_destroy() {
+//    session_unset();
+//    $_SESSION = array();
+//    session_destroy();
+//}
 
 
 /* STRING MANAGEMENT */
@@ -1560,7 +1564,7 @@ function api_clear_anonymous($db_check = false) {
     global $_user;
     if (api_is_anonymous($_user['user_id'], $db_check)) {
         unset($_user['user_id']);
-        api_session_unregister('_uid');
+        Session::erase('_uid');
         return true;
     }
     return false;
@@ -1632,10 +1636,10 @@ function api_set_anonymous() {
     if ($user_id == 0) {
         return false;
     }
-    api_session_unregister('_user');
+    Session::erase('_user');
     $_user['user_id'] = $user_id;
     $_user['is_anonymous'] = true;
-    api_session_register('_user');
+    Session::write('_user',$_user);
     $GLOBALS['_user'] = $_user;
     return true;
 }
@@ -4525,7 +4529,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                 $is_courseAdmin = false;
                 $is_courseCoach = true;
                 $is_sessionAdmin = false;
-                api_session_register('_courseUser');
+                Session::write('_courseUser',$_courseUser);
             }
             elseif ($row[0]['session_admin_id'] == $userid) {
                 $_courseUser['role'] = 'Professor';

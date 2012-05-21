@@ -209,7 +209,7 @@ if (api_is_utf8($charset)) {
 }
 
 // Start session after the internationalization library has been initialized.
-api_session_start($already_installed);
+Chamilo::session()->start($already_installed);
 
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
  

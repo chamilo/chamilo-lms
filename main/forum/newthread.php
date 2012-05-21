@@ -86,7 +86,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 if (!empty($_GET['gidReq'])) {
     $toolgroup = intval($_GET['gidReq']);
-    api_session_register('toolgroup');
+    Session::write('toolgroup',$toolgroup);
 }
 
 /* Is the user allowed here? */

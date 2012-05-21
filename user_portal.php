@@ -186,4 +186,4 @@ $controller->tpl->assign('classes_block', 				$controller->return_classes_block(
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.
-api_session_unregister('session_id');
+Session::erase('session_id');

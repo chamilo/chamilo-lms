@@ -543,15 +543,15 @@ if ($form->validate()) {
         $_user['language'] 	= $values['language'];
         $_user['user_id']	= $user_id;
         $is_allowedCreateCourse = $values['status'] == 1;
-        api_session_register('_user');
-        api_session_register('is_allowedCreateCourse');
+        Session::write('_user',$_user);
+        Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
 
         //stats
         event_login();
         // last user login date is now
         $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
 
-        api_session_register('user_last_login_datetime');
+        Session::write('user_last_login_datetime',$user_last_login_datetime);
 
         /*
                      EMAIL NOTIFICATION

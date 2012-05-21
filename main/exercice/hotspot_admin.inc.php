@@ -295,7 +295,7 @@ if ($modifyAnswers) {
 
     // construction of the Answer object
     $objAnswer=new Answer($objQuestion -> id);        
-    api_session_register('objAnswer');
+    Session::write('objAnswer',$objAnswer);
 	if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is HOT_SPOT'."<br />\n";}
 		
 	if ($answerType == HOT_SPOT_DELINEATION) {

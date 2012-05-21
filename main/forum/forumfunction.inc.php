@@ -3860,7 +3860,7 @@ function set_notification($content,$id, $add_only = false) {
     if ($total <= 0) {
         $sql = "INSERT INTO $table_notification (c_id, $database_field, user_id) VALUES (".$course_id.", '".Database::escape_string($id)."','".Database::escape_string($_user['user_id'])."')";
         $result = Database::query($sql);
-        api_session_unregister('forum_notification');
+        Session::erase('forum_notification');
         get_notifications_of_user(0, true);
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
@@ -3868,7 +3868,7 @@ function set_notification($content,$id, $add_only = false) {
             $sql = "DELETE FROM $table_notification 
                     WHERE c_id = $course_id AND $database_field = '".Database::escape_string($id)."' AND user_id = '".Database::escape_string($_user['user_id'])."'";
             $result = Database::query($sql);
-            api_session_unregister('forum_notification');
+            Session::erase('forum_notification');
             get_notifications_of_user(0, true);
             return get_lang('YouWillNoLongerBeNotifiedOfNewPosts');
         }

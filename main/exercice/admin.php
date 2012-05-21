@@ -179,7 +179,7 @@ if (!is_object($objExercise)) {
 	    $objExercise->read($exerciseId);
 	}
 	// saves the object into the session
-	api_session_register('objExercise');
+	Session::write('objExercise',$objExercise);
 }
 
 // doesn't select the exercise ID if we come from the question pool
@@ -203,7 +203,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 				api_not_allowed();
 			}
 			// saves the object into the session
-			api_session_register('objQuestion');
+			Session::write('objQuestion',$objQuestion);
 		}
 	}
 
@@ -520,7 +520,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 	require 'question_list_admin.inc.php';
 }
 
-api_session_register('objExercise');
-api_session_register('objQuestion');
-api_session_register('objAnswer');
+Session::write('objExercise', $objExercise);
+Session::write('objQuestion', $objQuestion);
+Session::write('objAnswer', $objAnswer);
 Display::display_footer();

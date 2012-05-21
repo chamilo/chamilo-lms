@@ -712,9 +712,11 @@ class CourseManager {
     		if (!empty($sessions)) {
     			foreach($sessions as $session_item) {    				
     				$courses  = Tracking :: get_courses_followed_by_coach($user_id, $session_item['id']);    				
-    				foreach($courses as $course_item) {
-    					$courses_as_admin[$session_item['id']][$course_item] = $course_item;
-    				}
+    				if (is_array($courses)) {
+						foreach($courses as $course_item) {
+							$courses_as_admin[$session_item['id']][$course_item] = $course_item;
+						}
+					}
     			}
     		}
     	}

@@ -92,12 +92,8 @@ if (!empty($_GET['gidReq'])) {
 /* Is the user allowed here? */
 
 // The user is not allowed here if:
-// 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
-// 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
-// 3. new threads are not allowed and the user is not a course manager
-// 4. anonymous posts are not allowed and the user is not logged in
-// I have split this is several pieces for clarity.
 
+// 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) && (($current_forum_category['visibility'] && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)) {
     api_not_allowed();
 }
@@ -114,12 +110,14 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous'] <> 1) {
     api_not_allowed();
 }
 
+// 5. Check user access
 if ($current_forum['forum_of_group'] != 0) {
     $show_forum = GroupManager::user_has_access(api_get_user_id(), $current_forum['forum_of_group'], GROUP_TOOL_FORUM);
     if (!$show_forum) {
         api_not_allowed();
     }
 }
+
 $session_toolgroup = 0;
 if ($origin == 'group') {
     $session_toolgroup = intval($_SESSION['toolgroup']);

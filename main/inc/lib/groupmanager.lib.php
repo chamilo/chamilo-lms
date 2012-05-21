@@ -1301,8 +1301,6 @@ class GroupManager {
 		}
 	}
 
-
-
 	/**
 	 * Get all tutors for the current course.
 	 * @return array An array with firstname, lastname and user_id for all
@@ -1508,6 +1506,7 @@ class GroupManager {
 		}
 		return $user_array_out;
 	}
+    
 	/**
 	 * Check if a user has access to a certain group tool
 	 * @param int $user_id The user id
@@ -1518,6 +1517,16 @@ class GroupManager {
 	 * given course.
 	 */
 	public static function user_has_access($user_id, $group_id, $tool) {
+        
+        //Admin have access everywhere
+        if (api_is_platform_admin()) {
+            return true;
+        }
+        //Course admin also have access to everything
+        if (api_is_allowed_to_edit()) {
+            return true;
+        }
+        
 		switch ($tool) {
 			case GROUP_TOOL_FORUM :
 				$state_key = 'forum_state';
@@ -1577,6 +1586,7 @@ class GroupManager {
             return $user_is_in_group;
 		}
 	}
+    
 	/**
 	 * Get all groups where a specific user is subscribed
 	 */

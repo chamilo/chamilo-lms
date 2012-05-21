@@ -25,9 +25,7 @@ $(document).ready( function() {
     <section id="hot_courses">
         <div class="row">    
             <div class="span9">
-                <div class="page-header">
-                    <h2>{{"HottestCourses"|get_lang}}</h2>
-                </div>
+                {{"HottestCourses"|display_page_header}}                
             </div>
         {% for hot_course in hot_courses %}
             <div class="span9">

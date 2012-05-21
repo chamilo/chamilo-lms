@@ -606,7 +606,7 @@ class SystemAnnouncementManager {
 		$announcements = Database::query($sql);
 		$html = '';
 		if (Database::num_rows($announcements) > 0) {			
-			$html .=  Display::page_subheader(get_lang('SystemAnnouncements'));
+			$html .=  Display::page_header(get_lang('SystemAnnouncements'));
 			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
 			while ($announcement = Database::fetch_object($announcements)) {                
                 $content = $announcement->content;
@@ -616,7 +616,7 @@ class SystemAnnouncementManager {
                         $content = cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
                     }
                 }
-                $html .=  '<li><h1>'.$announcement->title.'</h1>'.$content.'</li>';                
+                $html .=  '<li><h2>'.$announcement->title.'</h2>'.$content.'</li>';                
 			}
 			$html .= '</ul></div>';
 		}

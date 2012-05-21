@@ -70,6 +70,11 @@ class Template {
         $this->twig->addFilter('var_dump',       new Twig_Filter_Function('var_dump'));        
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         
+        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+        $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
+        
+        
+        
         /*
         $lexer = new Twig_Lexer($this->twig, array(
             //'tag_comment'  => array('{*', '*}'),

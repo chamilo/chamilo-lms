@@ -1364,6 +1364,16 @@ class Display {
         return '<div class="page-header"><h1>'.$title.'</h1></div>';
     }
     
+    public function page_header_and_translate($title, $second_title = null) {
+        $title = get_lang($title);
+        return self::page_header($title, $second_title);
+    }
+    
+     public function page_subheader_and_translate($title, $second_title = null) {
+        $title = get_lang($title);
+        return self::page_subheader($title, $second_title);
+    }
+    
     public function page_subheader($title, $second_title = null) {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);

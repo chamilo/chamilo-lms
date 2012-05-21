@@ -13,14 +13,14 @@ class TestSessionHandler extends UnitTestCase {
 		$this->UnitTestCase('Session handler library - main/inc/lib/session_handler.class.test.php');
 	}
 	function testClose() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$res=$instancia->close();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	function testdestroy() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$sess_id='';
 		$res=$instancia->destroy($sess_id);
 		$this->assertTrue(is_bool($res));
@@ -28,7 +28,7 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testgarbage() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$lifetime='';
 		$res=$instancia->garbage($lifetime);
 		$this->assertTrue(is_bool($res));
@@ -36,7 +36,7 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testopen() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$path='';
 		$name='';
 		$res=$instancia->open($path,$name);
@@ -45,7 +45,7 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testread() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$sess_id='';
 		$res=$instancia->read($sess_id);
 		$this->assertTrue(is_string($res));
@@ -64,14 +64,14 @@ class TestSessionHandler extends UnitTestCase {
 	*/
 
 	function testsqlClose() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$res=$instancia->sqlClose();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	function testsqlConnect() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$res=$instancia->sqlConnect();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -84,7 +84,7 @@ class TestSessionHandler extends UnitTestCase {
 		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 		$query = 'select user_id from '.$tbl_user;
 
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$instancia->connection_handler = mysql_connect($_configuration['db_host'],
 												$_configuration['db_user'],
 												$_configuration['db_password']);
@@ -96,7 +96,7 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testwrite() {
-		$instancia = new session_handler();
+		$instancia = new SessionHandler();
 		$sess_id='';
 		$sess_value='';
 		$res=$instancia->write($sess_id,$sess_value);

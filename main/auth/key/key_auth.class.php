@@ -179,14 +179,14 @@ class KeyAuth
         /**
          * ! important this is to ensure we don't grant access for other parts 
          */
-        api_session_destroy();
+        Session::destroy();
 
         global $_user, $_uid;
         $_uid = $this->get_user_id();
         $_user = UserManager::get_user_info_by_id($_uid);
 
-        api_session_register('_user');
-        api_session_register('_uid');
+        Session::write('_user',$_user);
+        Session::write('_uid',$_uid);
         
         /**
          * We don't allow redirection since access is granted only for this call 
@@ -194,7 +194,7 @@ class KeyAuth
         global $no_redirection, $noredirection;
         $no_redirection = true;
         $noredirection = true;
-        api_session_register('noredirection');
+        Session::write('noredirection',$noredirection);
         
         return true;
     }

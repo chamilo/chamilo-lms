@@ -219,7 +219,7 @@ function ldap_put_user_info_locally($login, $info_array) {
     $loginFailed = false;
     $uidReset = true;
     $_user['user_id'] = $uData['user_id'];
-    api_session_register('_uid');
+    Session::write('_uid', $_uid);
 }
 
 /*

@@ -144,8 +144,8 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 	
 	$_user['user_id'] = $_SESSION['conditional_login']['uid'];
 	$_user['status']  = $uData['status'];
-	api_session_register('_user');
-	api_session_unregister('conditional_login');
+	Session::write('_user',$_user);
+	Session::erase('conditional_login');
 	$uidReset=true;
 	event_login();
 } 
@@ -332,17 +332,17 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                             
 											$_user['user_id'] = $uData['user_id'];
 											$_user['status']  = $uData['status'];                                            
-											api_session_register('_user');
+											Session::write('_user',$_user);
 											event_login();
 										} else {
 											$loginFailed = true;
-											api_session_unregister('_uid');
+											Session::erase('_uid');
 											header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 											exit;
 										}
 									} else {
 										$loginFailed = true;
-										api_session_unregister('_uid');
+										Session::erase('_uid');
 										header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 										exit;
 									}
@@ -352,18 +352,18 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										ConditionalLogin::check_conditions($uData);
 										$_user['user_id'] = $uData['user_id'];
 										$_user['status']  = $uData['status'];										
-										api_session_register('_user');
+										Session::write('_user',$_user);
 										event_login();
 									} else {
 										//This means a secondary admin wants to login so we check as he's a normal user
 										if (in_array($current_access_url_id, $my_url_list)) {
 											$_user['user_id'] = $uData['user_id'];
 											$_user['status']  = $uData['status'];											
-											api_session_register('_user');
+											Session::write('_user',$_user);
 											event_login();
 										} else {
 											$loginFailed = true;
-											api_session_unregister('_uid');
+											Session::erase('_uid');
 											header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 											exit;
 										}
@@ -374,25 +374,25 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status']  = $uData['status'];                                
                                 
-                                api_session_register('_user');
+                                Session::write('_user',$_user);
                                 event_login();                                
 							}
 						} else {
 							$loginFailed = true;
-							api_session_unregister('_uid');
+							Session::erase('_uid');
 							header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
 							exit;
 						}
 					} else {
 						$loginFailed = true;
-						api_session_unregister('_uid');
+						Session::erase('_uid');
 						header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 						exit;
 					}
 				} else {
 					// login failed: username or password incorrect
 					$loginFailed = true;
-					api_session_unregister('_uid');
+					Session::erase('_uid');
 					header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
 					exit;
 				}
@@ -494,7 +494,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                     error_log('Check the sso_referer URL in your script');
 					//Request comes from unknown source
 					$loginFailed = true;
-					api_session_unregister('_uid');
+					Session::erase('_uid');
 					header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=unrecognize_sso_origin');
 					exit;
 				}
@@ -536,17 +536,17 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 									$_user['user_id'] = $uData['user_id'];
 									$_user['status']  = $uData['status'];
 									
-									api_session_register('_user');
+									Session::write('_user',$_user);
 									event_login();
 								} else {
 									$loginFailed = true;
-									api_session_unregister('_uid');
+									Session::erase('_uid');
 									header('Location: index.php?loginFailed=1&error=account_expired');
 									exit;
 								}
 							} else {
 								$loginFailed = true;
-								api_session_unregister('_uid');
+								Session::erase('_uid');
 								header('Location: index.php?loginFailed=1&error=account_inactive');
 								exit;
 							}
@@ -659,10 +659,10 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			$is_allowedCreateCourse     = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
 			ConditionalLogin::check_conditions($uData);
 
-			api_session_register('_user');
+			Session::write('_user',$_user);
 			UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
-			api_session_register('is_platformAdmin');
-			api_session_register('is_allowedCreateCourse');
+			Session::write('is_platformAdmin',$is_platformAdmin);
+			Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
             
             // If request_uri is setted we have to go further to have course permissions
             if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
@@ -670,7 +670,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
                     //If we just want to reset info without redirecting user
                     unset($_SESSION['noredirection']);
                 } else {
-                    //require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php'; moved to autologin
                     LoginRedirection::redirect();
                 }
             }
@@ -679,12 +678,12 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			//exit("WARNING UNDEFINED UID !! ");
 		}
 	} else { // no uid => logout or Anonymous
-		api_session_unregister('_user');
-		api_session_unregister('_uid');
+		Session::erase('_user');
+		Session::erase('_uid');
 	}
     
-	api_session_register('is_platformAdmin');
-	api_session_register('is_allowedCreateCourse');
+	Session::write('is_platformAdmin',$is_platformAdmin);
+	Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
 } else { // continue with the previous values
     $_user                    = $_SESSION['_user'];
     $is_platformAdmin         = $_SESSION['is_platformAdmin'];
@@ -735,11 +734,11 @@ if (isset($cidReset) && $cidReset) {
             $_course['activate_legal']      = $course_data['activate_legal'];
             $_course['show_score']          = $course_data['show_score']; //used in the work tool
 
-			api_session_register('_cid');
-			api_session_register('_course');
+			Session::write('_cid',$_cid);
+			Session::write('_course',$_course);
             
 			//@TODO real_cid should be cid, for working with numeric course id
-			api_session_register('_real_cid');
+			Session::write('_real_cid',$_real_cid);
 
 			// if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode') == 'true') {
@@ -754,8 +753,8 @@ if (isset($cidReset) && $cidReset) {
 					$rs = Database::query($sql);
 					list($_SESSION['session_name']) = Database::fetch_array($rs);
 				} else {
-					api_session_unregister('session_name');
-					api_session_unregister('id_session');
+					Session::erase('session_name');
+					Session::erase('id_session');
 				}
 			}
 
@@ -770,9 +769,9 @@ if (isset($cidReset) && $cidReset) {
             header('location:'.api_get_path(WEB_PATH));
         }
     } else {
-        api_session_unregister('_cid');
-        api_session_unregister('_real_cid');
-        api_session_unregister('_course');
+        Session::erase('_cid');
+        Session::erase('_real_cid');
+        Session::erase('_course');
                 
         if (!empty($_SESSION)) {
                 foreach($_SESSION as $key=>$session_item) {
@@ -780,15 +779,15 @@ if (isset($cidReset) && $cidReset) {
                     continue;               
                 } else {
                     if(isset($_SESSION[$key])) {
-                        api_session_unregister($key);   
+                        Session::erase($key);   
                     }
                 }
             }   
         }             
         //Deleting session info 
         if (api_get_session_id()) {                
-            api_session_unregister('id_session');
-            api_session_unregister('session_name');
+            Session::erase('id_session');
+            Session::erase('session_name');
         }   
     }
 } else {
@@ -912,7 +911,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 }
             }                
             $_courseUser['role'] = $cuData['role'];
-            api_session_register('_courseUser');
+            Session::write('_courseUser',$_courseUser);
         }
                 
         //We are in a session course? Check session permissions
@@ -974,14 +973,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 } else {
                                     $is_courseAdmin = false;
                                 }
-                                api_session_register('_courseUser');
+                                Session::write('_courseUser',$_courseUser);
                                 break;                            
                             case '0': //student
                                 $is_courseMember     = true;
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
                                 $is_sessionAdmin     = false;
-                                api_session_register('_courseUser');
+                                Session::write('_courseUser',$_courseUser);
                                 break;
                             default: 
                                 //unregister user
@@ -989,7 +988,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
                                 $is_sessionAdmin     = false;
-                                api_session_unregister('_courseUser');                                
+                                Session::erase('_courseUser');                                
                                 break;
                         }						
 					} else {
@@ -998,7 +997,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         $is_courseTutor      = false;
                         $is_courseAdmin      = false;
                         $is_sessionAdmin     = false;
-                        api_session_unregister('_courseUser');
+                        Session::erase('_courseUser');
 					}
 				}
             }
@@ -1015,7 +1014,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         $is_courseTutor     = false;
         $is_courseCoach     = false;
         $is_sessionAdmin    = false;
-        api_session_unregister('_courseUser');
+        Session::erase('_courseUser');
     }    
     
 	//Checking the course access
@@ -1065,13 +1064,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	}
 
 	// save the states
-    api_session_register('is_courseAdmin');
-	api_session_register('is_courseMember');
-	api_session_register('is_courseTutor');
-    api_session_register('is_courseCoach');	
-	api_session_register('is_allowed_in_course');
+    Session::write('is_courseAdmin',$is_courseAdmin);
+	Session::write('is_courseMember',$is_courseMember);
+	Session::write('is_courseTutor',$is_courseTutor);
+    Session::write('is_courseCoach',$is_courseCoach);	
+	Session::write('is_allowed_in_course',$is_allowed_in_course);
     
-	api_session_register('is_sessionAdmin');    
+	Session::write('is_sessionAdmin',$is_sessionAdmin);    
 } else { // continue with the previous values
 
 	if (isset($_SESSION ['_courseUser'])) {
@@ -1095,12 +1094,12 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
 		if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
 			$gpData = Database::fetch_array($result);
 			$_gid = $gpData ['id'];
-			api_session_register('_gid');
+			Session::write('_gid',$_gid);
 		} else {
-            api_session_unregister('_gid');			
+            Session::erase('_gid');			
 		}
 	} elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
-		api_session_unregister('_gid');
+		Session::erase('_gid');
 	}
 } elseif (isset($_SESSION['_gid'])) { // continue with the previous values
 	$_gid = $_SESSION ['_gid'];

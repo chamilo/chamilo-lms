@@ -248,6 +248,6 @@ if (!api_is_allowed_to_edit(null,true)) {
     $objExercise->send_notification($arrques, $arrans, $origin);	
 }
 if (api_is_allowed_to_session_edit()) {
-	api_session_unregister('objExercise');
-	api_session_unregister('exe_id');
+	Session::erase('objExercise');
+	Session::erase('exe_id');
 }

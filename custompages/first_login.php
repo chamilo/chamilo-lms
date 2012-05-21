@@ -1,7 +1,6 @@
 <?php
 require_once('language.php');
 require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
-//require_once (api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'); moved to autologin
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 if (! isset($_SESSION['conditional_login']['uid']))

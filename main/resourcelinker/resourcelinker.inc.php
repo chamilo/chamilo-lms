@@ -29,8 +29,8 @@ include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 function unset_session_resources() {
 	$_SESSION['addedresource']='';
 	$_SESSION['addedresourceid']='';
-	api_session_unregister('addedresource');
-	api_session_unregister('addedresourceid');
+	Session::erase('addedresource');
+	Session::erase('addedresourceid');
 }
 
 /**

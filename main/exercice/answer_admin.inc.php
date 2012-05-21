@@ -595,7 +595,7 @@ if($modifyAnswers)
     $objAnswer=new Answer($questionId);
 
 
-    api_session_register('objAnswer');
+    Session::write('objAnswer', $objAnswer);
 
     if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
     {

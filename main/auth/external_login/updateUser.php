@@ -29,10 +29,10 @@ if ($new_user !== false) { //User can login
   $_user['user_id'] = $user['user_id'];
   $_user['uidReset'] = true;   
   $uidReset=true;              
-  api_session_register('_user');
+  Session::write('_user',$_user);
 } else { //User cannot login
   $loginFailed = true;         
-  api_session_unregister('_uid');   
+  Session::erase('_uid');   
   header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');  
   exit;
 } 

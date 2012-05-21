@@ -8,7 +8,7 @@
 /**
  *	@package chamilo.library
  */
-class session_handler {
+class SessionHandler {
 
 	// TODO: Hm, these variables are public.
 	public $connection;

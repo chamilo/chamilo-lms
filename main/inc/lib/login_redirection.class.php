@@ -52,9 +52,8 @@ Class LoginRedirection {
     }
 
     // Custom pages
-    if (api_get_setting('use_custom_pages') == 'true') {
-      require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
-      CustomPages::displayPage('index-logged');
+    if (CustomPages::enabled()) {
+      CustomPages::display(CustomPages::INDEX_LOGGED);
     }
     header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
     exit();

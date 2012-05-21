@@ -34,8 +34,8 @@ require_once '../exercice/hotpotatoes.lib.php';
 function unset_session_resources() {
     $_SESSION['addedresource'] = '';
     $_SESSION['addedresourceid'] = '';
-    api_session_unregister(addedresource);
-    api_session_unregister(addedresourceid);
+    Session::erase(addedresource);
+    Session::erase(addedresourceid);
 }
 
 /**
@@ -1701,8 +1701,8 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             $link .= $main_course_path.'document'.$docurl.'?'.api_get_cidreq();
             $openmethod = 2;
             $officedoc = false;
-            api_session_register('openmethod');
-            api_session_register('officedoc');
+            Session::write('openmethod',$openmethod);
+            Session::write('officedoc',$officedoc);
             break;
         case 'assignments':
             $link .= $main_dir_path.'work/work.php?origin='.$origin;

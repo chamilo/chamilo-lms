@@ -33,7 +33,7 @@ $_SESSION['id_session'] = $session_id;
 
 // Clear the exercise session just in case
 if (isset ($_SESSION['objExercise'])) {
-	api_session_unregister('objExercise');
+	Session::erase('objExercise');
 }
 
 $session_info   = SessionManager::fetch($session_id);

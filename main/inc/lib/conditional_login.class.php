@@ -22,9 +22,7 @@ class ConditionalLogin {
     }
 
 	public static function login() {
-		//require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php'; moved to autologin
 	    $_SESSION['conditional_login']['can_login'] = true;
 		LoginRedirection::redirect();
-	    exit();
 	}
 }

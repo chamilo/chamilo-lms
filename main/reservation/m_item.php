@@ -290,7 +290,7 @@ switch ($_GET['action']) {
 				echo $msg;
 				$_s_item['id'] = $_GET['item_id'];
 				$_s_item['name'] = $item['name'];
-				api_session_register('_s_item');
+				Session::write('_s_item',$_s_item);
 				//api_session_register('s_item_name');
 				//echo "<a href=\"m_item.php?action=add_classgroup\">".get_lang('MAddClassgroup')."</a>";
 				$table = new SortableTable('itemrights', array ('Rsys', 'get_num_itemrights'), array ('Rsys', 'get_table_itemrights'), 1);

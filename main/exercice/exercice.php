@@ -72,19 +72,19 @@ $exercicePath   = $exercicePath . "exercice.php";
    
 // Clear the exercise session
 if (isset ($_SESSION['objExercise'])) {
-	api_session_unregister('objExercise');
+	Session::erase('objExercise');
 }
 if (isset ($_SESSION['objQuestion'])) {
-	api_session_unregister('objQuestion');
+	Session::erase('objQuestion');
 }
 if (isset ($_SESSION['objAnswer'])) {
-	api_session_unregister('objAnswer');
+	Session::erase('objAnswer');
 }
 if (isset ($_SESSION['questionList'])) {
-	api_session_unregister('questionList');
+	Session::erase('questionList');
 }
 if (isset ($_SESSION['exerciseResult'])) {
-	api_session_unregister('exerciseResult');
+	Session::erase('exerciseResult');
 }
 
 //General POST/GET/SESSION/COOKIES parameters recovery

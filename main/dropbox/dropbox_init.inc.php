@@ -198,7 +198,7 @@ function confirmation (name)
 }
 </script>";
 
-api_session_register('javascript');
+Session::write('javascript',$javascript);
 
 $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">

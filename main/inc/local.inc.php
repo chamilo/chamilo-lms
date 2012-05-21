@@ -670,7 +670,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
                     //If we just want to reset info without redirecting user
                     unset($_SESSION['noredirection']);
                 } else {
-                    //require_once api_get_path(LIBRARY_PATH).'loginredirection.lib.php'; moved to autologin
                     LoginRedirection::redirect();
                 }
             }

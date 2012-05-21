@@ -23,19 +23,18 @@ $language_file = array('registration', 'index');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'login.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';moved to autoload
 
 // Custom pages
 // Had to move the form handling in here, because otherwise there would 
 // already be some display output.
 global $_configuration;
 
-if (api_get_setting('use_custom_pages') == 'true') {
-
+if (CustomPages::enabled()) {
     //Reset Password when user goes to the link
     if ($_GET['reset'] && $_GET['id']){
         $mesg = Login::reset_password($_GET["reset"], $_GET["id"], true);
-        CustomPages::displayPage('index-unlogged', array('info' => $mesg));
+        CustomPages::display(CustomPages::INDEX_UNLOGGED, array('info' => $mesg));
     }
 
     //Check email/username and do the right thing
@@ -75,12 +74,12 @@ if (api_get_setting('use_custom_pages') == 'true') {
                 Login::send_password_to_user($user, $by_username);
             }
         } else {
-            CustomPages::displayPage('lostpassword',array('error' => get_lang('NoUserAccountWithThisEmailAddress')));
+            CustomPages::display(CustomPages::LOST_PASSWORD, array('error' => get_lang('NoUserAccountWithThisEmailAddress')));
         }
     } else {
-        CustomPages::displayPage('lostpassword');
+        CustomPages::display(CustomPages::LOGGED_OUT);
     }
-    CustomPages::displayPage('index-unlogged', array('info' => get_lang('YourPasswordHasBeenEmailed')));
+    CustomPages::display(CustomPages::INDEX_UNLOGGED, array('info' => get_lang('YourPasswordHasBeenEmailed')));
 }
 
 $tool_name = get_lang('LostPassword');

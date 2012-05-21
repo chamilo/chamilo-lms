@@ -14,7 +14,7 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';moved to autoload
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
@@ -277,7 +277,7 @@ if (is_array($extra_data)) {
 
 $form->setDefaults($defaults);
 
-if (api_get_setting('use_custom_pages') != 'true') {
+if (!CustomPages::enabled()) {
   // Load terms & conditions from the current lang
   if (api_get_setting('allow_terms_conditions') == 'true') {
     $get = array_keys($_GET);
@@ -528,7 +528,7 @@ if ($form->validate()) {
             // 3. exit the page
             unset($user_id);
             
-            if (api_get_setting('use_custom_pages') != 'true') {
+            if (!CustomPages::enabled()) {
               Display :: display_footer();
             }
             exit;
@@ -610,14 +610,14 @@ if ($form->validate()) {
     // ?uidReset=true&uidReq=$_user['user_id']
 
     $display_text .= '<form action="'. $action_url. '"  method="post">'. "\n". '<button type="submit" class="next" name="next" value="'. get_lang('Next',null,$_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
-  if (api_get_setting('use_custom_pages') == 'true') {
-    CustomPages::displayPage('registration-feedback', array('info' => $display_text));
+  if (CustomPages::enabled()) {
+    CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
   }
     echo $display_text;
 } else {
   // Custom pages
-  if (api_get_setting('use_custom_pages') == 'true') {
-    CustomPages::displayPage('registration', array('form' => $form));
+  if (CustomPages::enabled()) {
+    CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
   } else {
     $form->display();
   }

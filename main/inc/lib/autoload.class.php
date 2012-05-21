@@ -119,7 +119,7 @@ class Autoload
         $result['CourseSession'] = '/main/coursecopy/classes/CourseSession.class.php';
         $result['CsvReader'] = '/main/inc/lib/system/io/csv_reader.class.php';
         $result['CsvWriter'] = '/main/inc/lib/system/io/csv_writer.class.php';
-        $result['CustomPages'] = '/main/inc/lib/custompages.lib.php';
+        $result['CustomPages'] = '/main/inc/lib/custom_pages.class.php';
         $result['DashboardManager'] = '/main/inc/lib/dashboard.lib.php';
         $result['DataForm'] = '/main/gradebook/lib/fe/dataform.class.php';
         $result['Debug'] = '/main/inc/lib/debug.lib.php';

@@ -37,7 +37,30 @@ require_once '../inc/global.inc.php';
 
 // Template's javascript
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
+var hide_bar = function() {    
+    $("#main_content .span3").hide(); 
+    $("#doc_form").removeClass("span9"); 
+    $("#doc_form").addClass("span11");   
+    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
+}
+
+$(document).ready(function() {    
+    $("#hide_bar_template").toggle(
+        function() { 
+            $("#main_content .span3").hide(); 
+            $("#doc_form").removeClass("span9"); 
+            $("#doc_form").addClass("span11");             
+            $(this).css({"background-image" : \'url("../img/hide2.png")\'})
+        },
+        function() { 
+            $("#main_content .span3").show(); 
+            $("#doc_form").removeClass("span11"); 
+            $("#doc_form").addClass("span9"); 
+            $(this).css("background-image", \'url("../img/hide0.png")\'); 
+        }            
+    );    
+});
 
 function InnerDialogLoaded() {
 	/*
@@ -78,8 +101,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'document.lib.php';
-require_once $lib_path.'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 if (api_is_in_group()) {
@@ -352,13 +373,10 @@ $last_edit_date = $document_info['lastedit_date'];
 
 if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {	
 	$action = api_get_self().'?id='.$document_data['id'];
-	$form = new FormValidator('formEdit', 'post', $action);
+	$form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
 
 	// Form title
 	$form->addElement('header', $nameTools);
-
-	$renderer = $form->defaultRenderer();
-
 	$form->addElement('hidden', 'filename');
 	$form->addElement('hidden', 'extension');
 	$form->addElement('hidden', 'file_path');
@@ -385,8 +403,9 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	if (($extension == 'htm' || $extension == 'html') && stripos($dir, '/HotPotatoes_files') === false) {
 		if (empty($readonly) && $readonly == 0) {
 			$_SESSION['showedit'] = 1;
-			$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
-			$form->add_html_editor('content', '', false, true, $html_editor_config);
+            $form->add_html_editor('content','', false, false, $html_editor_config);
+			//$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'content');
+			//$form->add_html_editor('content', '', false, true, $html_editor_config);
 		}
 	}
 
@@ -395,16 +414,15 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 
 		//Updated on field
 		$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
-        $display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';        
+        $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';        
 		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
 	$form->addElement('textarea', 'comment', get_lang('Comment'), 'rows="3" style="width:300px;"');
 	
-	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-		$checked =& $form->addElement('checkbox', 'readonly', get_lang('ReadOnly'));
+	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {		
+		$checked =& $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
 		if ($readonly == 1) {
 			$checked->setChecked(true);
 		}
@@ -441,7 +459,15 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
-	$form->display();	
+	echo '<div class="row-fluid" style="overflow:hidden">
+            <div class="span3">
+                    <div id="frmModel" style="overflow: visible;"></div>
+            </div>
+            <div id="hide_bar_template" class="span1"></div>
+            <div id="doc_form" class="span9">
+                    '.$form->return_form().'
+            </div>
+          </div>';
 }
 
 Display::display_footer();

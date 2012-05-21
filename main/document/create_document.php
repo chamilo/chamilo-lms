@@ -19,15 +19,32 @@ $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '
-<style>
-.formw {
-    margin-left:180px !important;
+<script>
+
+var hide_bar = function() {    
+    $("#main_content .span3").hide(); 
+    $("#doc_form").removeClass("span9"); 
+    $("#doc_form").addClass("span11");   
+    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
-form .label {
-     width: 160px !important;
-}
-</style>
-<script type="text/javascript">
+
+$(document).ready(function() {    
+    $("#hide_bar_template").toggle(
+        function() { 
+            $("#main_content .span3").hide(); 
+            $("#doc_form").removeClass("span9"); 
+            $("#doc_form").addClass("span11");             
+            $(this).css({"background-image" : \'url("../img/hide2.png")\'})
+        },
+        function() { 
+            $("#main_content .span3").show(); 
+            $("#doc_form").removeClass("span11"); 
+            $("#doc_form").addClass("span9"); 
+            $(this).css("background-image", \'url("../img/hide0.png")\'); 
+        }            
+    );    
+});
+
 function InnerDialogLoaded() {
 	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
@@ -137,9 +154,7 @@ function InnerDialogLoaded() {
 </script>';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 //I'm in the certification module?
 $is_certificate_mode = false;
@@ -290,7 +305,7 @@ if (isset ($group_properties)) {
 }
 
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']));
+$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']), null, array('class' =>'form-vertical' ));
 
 // form title
 $form->addElement('header', '', $nameTools);
@@ -301,14 +316,12 @@ if ($is_certificate_mode) {//added condition for certicate in gradebook
 		$form->addElement('hidden','selectcat', intval($_GET['selectcat']));
 
 }
-$renderer = & $form->defaultRenderer();
-
 // Hidden element with current directory
 $form->addElement('hidden', 'id');
 $defaults = array();
 $defaults['id'] = $folder_id;
-// Filename
 
+// Filename
 $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
 
 /**
@@ -334,16 +347,10 @@ if ($is_certificate_mode) {
 if (!empty($_SESSION['_gid'])) {
 	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
-
-
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
-
-// HTML-editor
-$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div><div class="clear"></div>', 'content');
-
 $form->add_html_editor('content','', false, false, $html_editor_config);
 
 // Comment-field
@@ -554,18 +561,6 @@ if ($form->validate()) {
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
 	
-	/*
-	TODO:check and delete this code
-	if (!$is_certificate_mode) {
-		if ($array_len > 1) {
-			if (empty($_SESSION['_gid'])) {
-				$url_dir = 'document.php?&curdirpath=/';
-				$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
-			}
-		}
-	}
-	*/ 
-	
 	// Interbreadcrumb for the current directory root path
 	if (empty($document_data['parents'])) {
 		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
@@ -596,8 +591,16 @@ if ($form->validate()) {
 		}
 		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
-	}
-	
-	$form->display();
+	}    
+    // HTML-editor
+    echo '<div class="row-fluid" style="overflow:hidden">
+            <div class="span3">
+                    <div id="frmModel" style="overflow: visible;"></div>
+            </div>
+            <div id="hide_bar_template" class="span1"></div>
+            <div id="doc_form" class="span9">
+                    '.$form->return_form().'
+            </div>
+          </div>';
 	Display :: display_footer();
 }

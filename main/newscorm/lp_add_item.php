@@ -36,7 +36,9 @@ function FCKeditor_OnComplete( editorInstance ) {
 }
 
 var hide_bar = function() {    
-    $("#main_content .span3").hide(); 
+    $("#main_content .span3").hide();
+    $("#doc_form").removeClass("span8"); 
+    $("#doc_form").addClass("span11");  
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
@@ -221,15 +223,18 @@ function confirmation(name) {
     }
 }
 
-$(document).ready(function() {
-    
+$(document).ready(function() {    
     $("#hide_bar_template").toggle(
         function() { 
             $("#main_content .span3").hide(); 
             $(this).css({'background-image' : 'url("../img/hide2.png")'})
+            $("#doc_form").removeClass("span8"); 
+            $("#doc_form").addClass("span11");   
         },
         function() { 
-            $("#main_content .span3").show(); 
+            $("#main_content .span3").show();
+            $("#doc_form").removeClass("span11"); 
+            $("#doc_form").addClass("span8"); 
             $(this).css('background-image', 'url("../img/hide0.png")'); 
         }            
     );    
@@ -269,7 +274,7 @@ if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
     echo '<div id="hide_bar_template" class="span1"></div>';
 }
 
-echo '<div class="span8">';
+echo '<div id="doc_form" class="span8">';
 
     if (isset($new_item_id) && is_numeric($new_item_id)) {        
         switch ($type) {

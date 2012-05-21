@@ -4431,9 +4431,9 @@ $server->wsdl->addComplexType(
     '',
     array(
         'original_course_id_values' => array('name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'),
-        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'original_course_id_name'   => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
         'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-        'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
+        'original_session_id_name'  => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
     )
 );
 
@@ -4484,7 +4484,6 @@ array(),
 array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeCoursesToSession[]')),
 'tns:result_subscribeCoursesToSession'
 );
-
 
 // Register the method to expose
 $server->register('WSSuscribeCoursesToSession',						// method name
@@ -4915,22 +4914,22 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'chamilo_username' => array('name' => 'chamilo_username', 'type' => 'xsd:string'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
+        'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
+        'chamilo_username'          => array('name' => 'chamilo_username',          'type' => 'xsd:string'),
+        'secret_key'                => array('name' => 'secret_key',                'type' => 'xsd:string')
     )
 );
 
 // Register the method to expose
-$server->register('WSUpdateUserApiKey',				// method name
+$server->register('WSUpdateUserApiKey',			// method name
     array('userApiKey' => 'tns:userApiKey'),	// input parameters
-    array('return' => 'xsd:string'),		// output parameters
-    'urn:WSRegistration',									// namespace
+    array('return' => 'xsd:string'),            // output parameters
+    'urn:WSRegistration',						// namespace
     'urn:WSRegistration#WSListCourses',			// soapaction
-    'rpc',													// style
-    'encoded',												// use
-    'This service return user api key'	// documentation
+    'rpc',										// style
+    'encoded',									// use
+    'This service return user api key'          // documentation
 );
 
 

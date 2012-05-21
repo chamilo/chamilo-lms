@@ -1,19 +1,19 @@
 {#  Actions  #}
-{% if actions is not null %}
+{% if actions != '' %}
     <div class="actions">
         {{ actions }}
     </div>
 {% endif %}
 
 {#  Page header #}
-{% if header is not null %}    
+{% if header != '' %}    
     <div class="page-header">
         <h1>{{ header }}</h1>
     </div>
 {% endif %}
 
 {#  Show messages #}
-{% if message is not null %}    
+{% if message != '' %}    
     <section id="messages">
         {{ message}}
     </section>

@@ -18,10 +18,8 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 // Setting the section (for the tabs).
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -33,22 +31,35 @@ api_protect_admin_script(true);
 // Setting breadcrumbs.
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
-$tool_name = get_lang('SystemAnnouncements');
+$tool_name = null;
 
 if (empty($_GET['lang'])) {
     $_GET['lang'] = $_SESSION['user_language_choice'];
 }
 
+if (isset($_GET['action'])) {
+    $interbreadcrumb[] = array ("url" => "system_announcements.php", "name" => get_lang('SystemAnnouncements'));
+    if ($_GET['action'] == 'add') {
+        $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('AddAnnouncement'));
+    } 
+    if ($_GET['action'] == 'edit') {
+        $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('Edit'));
+    } 
+} else {
+    $tool_name = get_lang('SystemAnnouncements');
+}
+
 // Displaying the header.
 Display :: display_header($tool_name);
 
-/* MAIN CODE */
-
 if ($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
     echo '<div class="actions">';
-    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('langAddAnnouncement'), array(), 32).'</a>';
+    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('AddAnnouncement'), array(), 32).'</a>';
     echo '</div>';
 }
+
+/* MAIN CODE */
+
 $form_action = '';
 $show_announcement_list = true;
 if (isset ($_GET['action']) && $_GET['action'] == 'make_visible') {

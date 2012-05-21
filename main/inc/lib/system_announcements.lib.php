@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 /**
  * @package chamilo.library
  */
@@ -10,6 +9,7 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 define('VISIBLE_GUEST', 1);
 define('VISIBLE_STUDENT', 2);
 define('VISIBLE_TEACHER', 3);
+
 /**
 *	This is the system announcements library for Dokeos.
 *
@@ -577,13 +577,12 @@ class SystemAnnouncementManager {
 	*/
 	public static function display_announcements_slider($visible, $id = null) {
 		$user_selected_language = Database::escape_string(api_get_interface_language());
-		$db_table 				= Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$table                  = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         
-        $cut_size = 500;
-		
+        $cut_size = 500;		
 		$now  = api_get_utc_datetime();
 		
-		$sql = "SELECT * FROM ".$db_table." 
+		$sql = "SELECT * FROM ".$table." 
 				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
 		
 		switch ($visible) {
@@ -606,9 +605,8 @@ class SystemAnnouncementManager {
 		$sql .= " ORDER BY date_start DESC";            	    
 		$announcements = Database::query($sql);
 		$html = '';
-		if (Database::num_rows($announcements) > 0) {				
-			$html .= '<div class="span9">';
-			$html .=  '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+		if (Database::num_rows($announcements) > 0) {			
+			$html .=  Display::page_subheader(get_lang('SystemAnnouncements'));
 			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
 			while ($announcement = Database::fetch_object($announcements)) {                
                 $content = $announcement->content;
@@ -620,7 +618,7 @@ class SystemAnnouncementManager {
                 }
                 $html .=  '<li><h1>'.$announcement->title.'</h1>'.$content.'</li>';                
 			}
-			$html .= '</ul></div></div>';			
+			$html .= '</ul></div>';
 		}
 		return $html;
 	}	

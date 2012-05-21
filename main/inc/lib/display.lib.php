@@ -788,6 +788,22 @@ class Display {
         $main_div = self::tag('div',$ul.$divs, $attributes);
         return $main_div ;
     }
+    
+    public static function tabs_only_link($header_list, $selected = null) {
+         $id = uniqid();
+         $i = 1;
+         $lis = null;
+         foreach ($header_list as $item) {
+            $class = null;
+            if ($i == $selected) {
+                $class = 'active';
+            }            
+            $item =self::tag('a', $item['content'], array('id'=>$id.'-'.$i, 'href' => $item['url']));
+            $lis .=self::tag('li', $item, array('class' => $class));
+            $i++;
+        }
+        return self::tag('ul',$lis, array('class' => 'nav nav-tabs'));        
+    }
 
     /**
      * In order to display a grid using jqgrid you have to:

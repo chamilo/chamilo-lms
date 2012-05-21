@@ -35,9 +35,6 @@ api_protect_course_script(true);
 // The section (tabs).
 $this_section = SECTION_COURSES;
 
-// Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 $nameTools = get_lang('ToolForum');
 
 // Are we in a lp ?
@@ -68,6 +65,7 @@ if (empty($current_forum)) {
 
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
+$is_group_tutor = false;
 
 if (!empty($group_id)) {
     //Group info & group category info
@@ -75,6 +73,8 @@ if (!empty($group_id)) {
         
     //User has access in the group?
     $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
+    
+    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
         
     //Course
     if (!api_is_allowed_to_edit(false, true) AND  //is a student
@@ -166,36 +166,39 @@ if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id']) &&
 
 // Student list
 
-if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(null, true)) {
-
-    switch($_GET['list']) {
+if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(null, true) || $is_group_tutor)) {
+    $active = null;
+    switch ($_GET['list']) {
         case 'qualify':
-            $student_list = get_thread_users_qualify($_GET['id'], api_get_course_int_id());
+            $student_list = get_thread_users_qualify($_GET['id']);
             $nrorow3 = -2;
+            $active = 2;
             break;
         case 'notqualify':
-            $student_list = get_thread_users_not_qualify($_GET['id'], api_get_course_int_id());
+            $student_list = get_thread_users_not_qualify($_GET['id']);
             $nrorow3 = -2;
+            $active = 3;
             break;
         default:
-            $student_list = get_thread_users_details($_GET['id'], api_get_course_int_id());
+            $student_list = get_thread_users_details($_GET['id']);
             $nrorow3 = Database::num_rows($student_list);
+            $active = 1;
             break;
     }
-    $table_list = '<p><br /><h3>'.get_lang('ThreadUsersList').': '.get_name_thread_by_id($_GET['id']).'</h3>';
+    
+    $table_list = Display::page_subheader(get_lang('ThreadUsersList').': '.get_name_thread_by_id($_GET['id']));
+    
     if ($nrorow3 > 0 || $nrorow3 == -2) {
-        $url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;content='.Security::remove_XSS($_GET['content'],STUDENT).'&amp;id='.Security::remove_XSS($_GET['id']);
-        $table_list .= '<br />
-                 <div style="width:50%">
-                 <table class="data_table" border="0">
-                    <tr>
-                        <th height="22"><a href="viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=all">'.get_lang('AllStudents').'</a></th>
-                        <th><a href="viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=qualify">'.get_lang('StudentsQualified').'</a></th>
-                        <th><a href="viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=notqualify">'.get_lang('StudentsNotQualified').'</a></th>
-                    </tr>
-                 </table></div>
-                 <div style="border:1px solid gray; width:99%; margin-top:5px; padding:4px; float:left">
-                 ';
+        $url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;content='.Security::remove_XSS($_GET['content'],STUDENT).'&amp;id='.intval($_GET['id']);
+        $tabs = array(
+                        array('content' =>  get_lang('AllStudents'),
+                               'url'    =>   'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=all'),
+                        array('content' =>  get_lang('StudentsQualified'),
+                               'url'    =>   'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=qualify'),
+                        array('content' =>  get_lang('StudentsNotQualified'),
+                               'url'    =>   'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=notqualify'),
+            );
+        $table_list .= Display::tabs_only_link($tabs, $active);
 
         $icon_qualify = 'blog_new.gif';
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';
@@ -240,9 +243,9 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
         }
 
         $table_list .= '</table></center>';
-        $table_list .= '<br /></div>';
+        $table_list .= '<br />';
     } else {
-        $table_list .= get_lang('NoParticipation');
+        $table_list .= Display::return_message(get_lang('NoParticipation'), 'warning');
     }
 }
 

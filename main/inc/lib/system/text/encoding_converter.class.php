@@ -30,7 +30,7 @@ class EncodingConverter extends Converter
         if (strtolower($from_encoding) == strtolower($to_encoding)) {
             return Converter::identity();
         } else {
-            new self($from_encoding, $to_encoding);
+            return new self($from_encoding, $to_encoding);
         }
     }
 
@@ -60,7 +60,12 @@ class EncodingConverter extends Converter
         if ($from == $to) {
             return $string;
         }
-        api_convert_encoding($string, $to, $from);
+        return api_convert_encoding($string, $to, $from);
+    }
+    
+    function reset()
+    {
+        ;
     }
 
 }

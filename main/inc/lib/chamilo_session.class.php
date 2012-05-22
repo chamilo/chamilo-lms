@@ -5,7 +5,15 @@
  * 
  * Usage:
  * 
- * Chamilo::session()->
+ * 
+ *      use ChamiloSession as Session;
+ * 
+ *      Session::read('name');
+ * 
+ * Or
+ * 
+ *      Chamilo::session()->...
+ *      session()->...
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva

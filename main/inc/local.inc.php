@@ -981,6 +981,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 $is_courseMember     = true;
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
+                                $is_courseCoach      = false;
                                 $is_sessionAdmin     = false;
                                 Session::write('_courseUser',$_courseUser);
                                 break;
@@ -990,6 +991,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
                                 $is_sessionAdmin     = false;
+                                $is_courseCoach      = false;
                                 Session::erase('_courseUser');                                
                                 break;
                         }						
@@ -999,6 +1001,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         $is_courseTutor      = false;
                         $is_courseAdmin      = false;
                         $is_sessionAdmin     = false;
+                        $is_courseCoach      = false;
                         Session::erase('_courseUser');
 					}
 				}

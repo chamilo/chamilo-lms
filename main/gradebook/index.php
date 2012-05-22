@@ -854,29 +854,23 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     
 	if (!empty($cats)) {
         
-        if (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true')) {
+        if ( (api_get_setting('gradebook_enable_grade_model') == 'true') && (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true'))) {
+            
             //Getting grade models
             $obj = new GradeModel();
-            $grade_models = $obj->get_all();                
-            $options = array('-1' => get_lang('None'));            
-            if (!empty($grade_models)) {
-                foreach ($grade_models as $item) {
-                    $options[$item['id']] = $item['name'];
-                }                
-            }
-
+            $grade_models = $obj->get_all();
             $grade_model_id = $cats[0]->get_grade_model_id();        
                         
             //No children
             if (count($cats) == 1 && empty($grade_model_id)) {
                 if (!empty($grade_models)) {
                 
-                    $form = new FormValidator('grade_model_settings');
-                    $form->addElement('select', 'grade_model', get_lang('SelectGradeModel'), $options);                
+                    $form = new FormValidator('grade_model_settings');                    
+                    $obj->fill_grade_model_select_in_form();                    
                     $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
 
                     if ($form->validate()) {
-                        $value = $form->exportValue('grade_model');                    
+                        $value = $form->exportValue('grade_model_id');                    
                         $gradebook = new Gradebook();
                         $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
 
@@ -899,7 +893,6 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                             $gradebook->save($params);
                         }
-
                         //Reloading cats
                         $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
                     } else {
@@ -909,7 +902,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             }
         }
         
-		$i = 0;     
+		$i = 0;
         
 		foreach ($cats as $cat) {			
 			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);            
@@ -923,9 +916,9 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 				//Create gradebook/add gradebook links
                 DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);				
 				
-				if (api_is_allowed_to_edit(null,true)) {
+				if (api_is_allowed_to_edit(null,true) && api_get_setting('gradebook_enable_grade_model') == 'true') {
 					//Showing the grading system
-					if (!empty($grade_models[$grade_model_id])) {                        
+					if (!empty($grade_models[$grade_model_id])) {             
                         Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);
                     }					
 				}                                

@@ -151,11 +151,13 @@ class CourseManager {
                     fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);                    
                     //self::update_course_ranking($course_info['real_id'], 0, null);
                     
-                    //Create gradebook_category for the new course and add a gradebook model for the course
-                    if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                        create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
-                    }                    
+                    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+                        //Create gradebook_category for the new course and add a gradebook model for the course
+                        if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                            create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
+                        }                    
+                    }
                     return $course_info;                    
                 }
             }

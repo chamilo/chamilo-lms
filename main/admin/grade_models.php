@@ -16,6 +16,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
+if (api_get_setting('gradebook_enable_grade_model') != 'true') {
+    api_not_allowed();
+}
+
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 

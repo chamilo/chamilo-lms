@@ -197,12 +197,16 @@ class CatForm extends FormValidator {
             
             //Getting grade models
             $obj = new GradeModel();
+            $obj->fill_grade_model_select_in_form($this);
+            /*
             $grade_models = $obj->get_all();                
             $options = array(-1 => get_lang('None'));
             foreach ($grade_models as $item) {
                 $options[$item['id']] = $item['name'];
             }                                    
             $this->addElement('select', 'grade_model_id', array(get_lang('GradeModel'), get_lang('OnlyActiveWhenThereAreAnyComponents')), $options);
+             * 
+             */
             
             //Freeze or not
             $course_code = api_get_course_id();

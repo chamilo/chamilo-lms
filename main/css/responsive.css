@@ -46,6 +46,17 @@
         float: left;        
         width: 212px;
     }
+    
+    footer {
+        border-top: 1px solid #CCCCCC;
+        background-color: #fff;
+        background-image: none;
+        color: #666;
+    }
+    
+    footer #footer_left a, footer #footer_center a, footer #footer_right a {
+        color : #999;
+    }       
 }
 
 @media (max-width: 767px) {

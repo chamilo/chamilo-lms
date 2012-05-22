@@ -157,6 +157,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wam
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'false', 'No');
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_grade_model_id', NULL, 'textfield', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1);
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0), ('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0);
 
@@ -209,7 +210,7 @@ DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17828' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.17971' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

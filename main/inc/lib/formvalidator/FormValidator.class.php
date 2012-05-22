@@ -132,10 +132,11 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
-        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
-        $this->registerElementType('style_button', $dir . 'Element/style_button.php', 'HTML_QuickForm_stylebutton');
+        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');        
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
+        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');        
+        $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
+        
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
         $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
         $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
@@ -145,6 +146,8 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');        
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
+        
+        
 
         // Modify the default templates
         $renderer = & $this->defaultRenderer();

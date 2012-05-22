@@ -51,15 +51,14 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylesubmitbutton($elementName=null, $value=null, $attributes=null,$img=null)
-    {
+    function HTML_QuickForm_stylesubmitbutton($elementName=null, $value=null, $attributes=null,$img=null) {
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = 'btn';
+        }
         HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value, $img);
         $this->setValue($value);
         $this->setType('submit');
     } //end constructor
-
-    // }}}
-    // {{{ freeze()
 
     /**
      * Freeze the element so that only its value is returned
@@ -67,8 +66,7 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function freeze()
-    {
+    function freeze() {
         return false;
     } //end func freeze
 
@@ -79,12 +77,8 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
     * Only return the value if it is found within $submitValues (i.e. if
     * this particular submit button was clicked)
     */
-    function exportValue(&$submitValues, $assoc = false)
-    {
+    function exportValue(&$submitValues, $assoc = false) {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
-    
-    
-
     // }}}
 } //end class HTML_QuickForm_submit

@@ -1235,4 +1235,6 @@ $LastnameAndFirstname = "Apellidos y Nombres";
 $Plugins = "Plugins";
 $Detailed = "Detallado";
 $ResourceLockedByGradebook = "Esta opción no está disponible porque la actividad está incluida en una evaluación que se encuentra bloqueada. Para desbloquear esta evaluación, comuníquese con el administrador de la plataforma.";
+$ConfirmToLockElement = "¿Está seguro de bloquear este elemento? Luego de bloquear este elemento no podrá editar los resultados de los estudiantes. Para desbloquearlo deberá contactar al administrador de la plataforma.";
+$ConfirmToUnLockElement = "¿Está seguro de desbloquear este elemento?";
 ?>

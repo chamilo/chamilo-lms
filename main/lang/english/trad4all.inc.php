@@ -1230,4 +1230,6 @@ $LastnameAndFirstname = "Last Name and First Name";
 $Plugins = "Plugins";
 $Detailed = "Detailed";
 $ResourceLockedByGradebook = "This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.";
+$ConfirmToLockElement = "Confirm to lock element";
+$ConfirmToUnLockElement = "Are you sure to unlock this element?";
 ?>

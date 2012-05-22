@@ -3831,3 +3831,24 @@ footer {
     text-decoration: none;
     font-weight: normal;
 }
+
+
+.bottom_actions {
+ 	background:#efefef;
+    border:1px solid #ccc;         
+    padding:10px;     
+    vertical-align:middle;    
+   
+    display: block;
+ 
+    width: 100%;
+  
+}
+
+.bottom_actions_fixed {
+    position: fixed;
+      z-index: 9001;  
+       bottom: 0;   
+    left: 0px;
+    
+}

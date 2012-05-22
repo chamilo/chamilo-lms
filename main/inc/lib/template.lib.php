@@ -29,7 +29,7 @@ class Template {
     
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false) {
                 
         //Twig settings        
         Twig_Autoloader::register();
@@ -73,8 +73,6 @@ class Template {
         $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         
-        
-        
         /*
         $lexer = new Twig_Lexer($this->twig, array(
             //'tag_comment'  => array('{*', '*}'),
@@ -87,6 +85,7 @@ class Template {
         //Page title
 		$this->title = $title;        
 		$this->show_learnpath = $show_learnpath;
+        $this->hide_global_chat = $hide_global_chat;
         		
 		//Setting system variables
 		$this->set_system_parameters();	
@@ -418,10 +417,8 @@ class Template {
 		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
                 //Do not include the global chat in LP
-                if ($this->show_learnpath == false) {
-                    if ($this->show_footer == true) {
-                        $js_files[] = 'chat/js/chat.js';
-                    }
+                if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+                    $js_files[] = 'chat/js/chat.js';                    
                 }
             }
 		}

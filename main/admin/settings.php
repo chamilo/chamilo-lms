@@ -180,8 +180,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
-                    $old_value = api_get_setting($key);                                        
-                    switch ($key) {                            
+                    $old_value = api_get_setting($key);                    
+                    switch ($key) {                        
                     	case 'header_extra_content':
                     		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);                    		
                     		$value = api_get_home_path().'/header_extra_content.txt';

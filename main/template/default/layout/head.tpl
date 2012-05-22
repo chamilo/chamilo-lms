@@ -27,7 +27,7 @@
 {{ css_style_print }}
 /*]]>*/
 </style>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 {% raw %}
@@ -58,9 +58,7 @@ var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
 {{ css_file_to_string}}
 {{ extra_headers}}
 
-<script type="text/javascript">
-
-    
+<script>    
 function get_url_params(q, attribute) {
     var vars;
     var hash;
@@ -76,6 +74,7 @@ function get_url_params(q, attribute) {
 }
 
 $(document).scroll(function() {
+    
     // Top bar scroll effect
     if ($('body').width() > 959) {
         if ($('.subnav').length) {
@@ -95,6 +94,7 @@ $(document).scroll(function() {
         }
     }
     
+    //Admin -> Settings toolbar 
     
     if ($('.new_actions').length) {
         if (!$('.new_actions').attr('data-top')) {
@@ -108,23 +108,55 @@ $(document).scroll(function() {
                 more_top = 50;
             }
             
-            $('.new_actions').attr('data-top', offset.top + more_top);
-            
+            $('.new_actions').attr('data-top', offset.top + more_top);            
         }
         
         if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
-            $('.new_actions').addClass('new_actions-fixed');
-              
+            $('.new_actions').addClass('new_actions-fixed');              
         } else {
             $('.new_actions').removeClass('new_actions-fixed');
         }
     }
     
-    
-    
+    //Bottom actions        
+    if ($('.bottom_actions').length) {        
+        if (!$('.bottom_actions').attr('data-top')) {
+            // If already fixed, then do nothing
+            if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
+            
+            // Remember top position
+            var offset = $('.bottom_actions').offset();            
+            $('.bottom_actions').attr('data-top', offset.top);            
+        }
+        
+        if ($('.bottom_actions').attr('data-top') > $('body').outerHeight())  {
+            if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {              
+                $('.bottom_actions').addClass('bottom_actions_fixed');
+            } else {
+                $('.bottom_actions').removeClass('bottom_actions_fixed');
+            }
+        } else {
+            if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {              
+                $('.bottom_actions').addClass('bottom_actions_fixed');
+            } else {
+                $('.bottom_actions').removeClass('bottom_actions_fixed');
+            }
+        }
+    }    
 });
 
-$(document).ready(function() {
+function isScrolledIntoView(elem) {
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+
+$(function() {
     
     //Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
@@ -142,7 +174,8 @@ $(document).ready(function() {
     //Fixes buttons to the new btn class
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
-    }
+    }    
+
 
     //Dropdown effect
     $('.dropdown-toggle').dropdown();   
@@ -196,8 +229,7 @@ $(document).ready(function() {
     //old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
-    },1000);
-    
+    },1000);    
     $('#navigation > li').hover(
         function () {
             $('a',$(this)).stop().animate({

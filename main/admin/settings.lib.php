@@ -106,7 +106,6 @@ function handle_plugins() {
     $all_plugins = $plugin_obj->read_plugins_from_path(); 
     $installed_plugins = $plugin_obj->get_installed_plugins(); 
 
-    
     //Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
@@ -1008,6 +1007,19 @@ function select_gradebook_number_decimals() {
     return array('0', '1', '2');
 }
 
+function select_gradebook_default_grade_model_id() {           
+    $grade_model = new GradeModel();
+    $models = $grade_model->get_all();
+    $options = array();    
+    $options[-1] = get_lang('None');
+    if (!empty($models)) {                    
+        foreach ($models as $model) {
+            $options[$model['id']] = $model['name'];
+        }
+    }                
+    return $options;
+}
+
 /**
  * Updates the gradebook score custom values using the scoredisplay class of the
  * gradebook module
@@ -1039,24 +1051,12 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     $form ->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
-    $default_values = array();
-    $count_settings = count($settings);
+    $default_values = array();    
     
-    foreach ($settings as $row) {             
-    	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
+    $i = 0;
+    foreach ($settings as $row) {       
+    	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; } 
         
-        $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
-        $form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
-
-        ($count_settings % 10) < 5 ? $b = $count_settings - 10 : $b = $count_settings;
-        if ($i % 10 == 0 and $i < $b AND $i != 0) {
-            $form->addElement('html', '<div align="right">');
-            $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-            $form->addElement('html', '</div>');
-        }
-
-        $i++;
-
         if ( $_configuration['multiple_access_urls']) {
             if (api_is_global_platform_admin()) {                
                 if ($row['access_url_locked'] == 0) {
@@ -1220,47 +1220,50 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 break;
             case 'link':
                 $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
-                break;
-            /*
-             * To populate its list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
-             * The functions being called must be added to the file settings.lib.php.
-             */
+                break;       
             case 'select':
+                /*
+                * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
+                * The functions being called must be added to the file settings.lib.php.
+                */
                 $form->addElement('select', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), call_user_func('select_'.$row['variable']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'custom':            	
             	break;            
-        }        
-        
-        if ($row['variable'] == 'pdf_export_watermark_enable') {
-        	$url =  PDF::get_watermark($course_code);
-            $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
-            if ($url != false) {                
-                $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
-                $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
-            }   
-            $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-            $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
         }
-        
-        if ($row['variable'] == 'timezone_value') {
-            $timezone = $row['selected_value'];
-            if (empty($timezone)) {
-                $timezone = _api_get_timezone();
-            }
-            $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
-        }        
-    }
+                                
+        switch ($row['variable']) {
+            case 'pdf_export_watermark_enable':
+                $url =  PDF::get_watermark($course_code);
+                $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+                if ($url != false) {                
+                    $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+                    $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
+                }   
+                $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+                break;
+            case 'timezone_value':
+                $timezone = $row['selected_value'];
+                if (empty($timezone)) {
+                    $timezone = _api_get_timezone();
+                }
+                $form->addElement('html', sprintf(get_lang('LocalTimeUsingPortalTimezoneXIsY'), $timezone, api_get_local_time()));
+                break;    
+        }   
+    } // end for
     
-    if (!empty($settings)) {
-        $form->addElement('html', '<div style="text-align: right; clear: both;">');
-        $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-        $form->addElement('html', '</div>');
+    if (!empty($settings)) {        
         $form->setDefaults($default_values); 
     }
-    return $form;
     
+    $form->addElement('html', '<div class="bottom_actions">');
+    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('html', '</div>');
+
+    
+    return $form;
 }
 
 /**

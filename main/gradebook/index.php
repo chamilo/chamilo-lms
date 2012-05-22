@@ -34,9 +34,6 @@ require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
 
 /*

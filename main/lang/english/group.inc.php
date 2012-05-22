@@ -96,4 +96,5 @@ $BackToGroupList = "Back to Groups list";
 $EditGroupCategory = "Edit group category";
 $NoStudents = "No student";
 $NoData = "No data available";
+$AllGroups = "All groups";
 ?>

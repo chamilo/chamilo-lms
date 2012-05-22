@@ -1548,4 +1548,18 @@ $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibbol
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
 $FacebookMainActivateTitle = "<h3>Facebook authentication</h3>";
 $FacebookMainActivateComment = "<p>First of all, you have create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps parameters, the site URL value should have a GET parameter 'action=fbconnect' (e.g. http://mychamilo.com/?action=fbconnect).</p>Then, <h5>edit file main/auth/external_login/facebook.conf.php</h5>and enter 'appId' and 'secret' values for &#36;facebook_config.<br/>Go to <a href='settings.php?category=Facebook'>Plugin</a> to add a configurable 'Facebook Login' button for your Chamilo campus.";
+$LanguagePriority1Title = "Language priority 1";
+$LanguagePriority2Title = "Language priority 2";
+$LanguagePriority3Title = "Language priority 3";
+$LanguagePriority4Title = "Language priority 4";
+$LanguagePriority5Title = "Language priority 5";
+$LanguagePriority1Comment = "The language with the highest priority";
+$UserLanguage = "User language";
+$UserSelectedLanguage = "User selected language";
+$TeachersCanChangeGradeModelSettingsTitle = "Teachers can change the Gradebook model settings";
+$TeachersCanChangeGradeModelSettingsComment = "When editing a Gradebook";
+$GradebookDefaultGradeModelTitle = "Default grade model";
+$GradebookDefaultGradeModelComment = "This value will be selected by default when creating a course";
+$GradebookEnableGradeModelTitle = "Enable Gradebook model";
+$GradebookEnableGradeModelComment = "Enables the auto creation of gradebook categories inside a course depending of the gradebook models.";
 ?>

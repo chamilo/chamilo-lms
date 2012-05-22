@@ -3,7 +3,7 @@
 /**
  * @package chamilo.webservices
  */
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
@@ -978,10 +978,6 @@ function WSCreateUserPasswordCrypted($params) {
     if (!UserManager::is_username_available($loginName)) {
         if ($debug) error_log("Username $loginName is not available");        
         return 0;
-        /*if (api_set_failure('login-pass already taken')) {
-            if ($debug) error_log('login-pass already taken');
-            return 0;
-        }*/
     }
 
     $sql = "INSERT INTO $table_user SET 
@@ -1102,28 +1098,26 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEditUserCredentials',                    // method name
-    array('editUserCredentials' => 'tns:editUserCredentials'),                      // input parameters
-    array('return' => 'xsd:string'),                // output parameters
-    'urn:WSRegistration',                                                       // namespace
-    'urn:WSRegistration#WSEditUserCredentials',          // soapaction
-    'rpc',                                                                                      // style
-    'encoded',                                                                          // use
-    'This service edits the username and password of a user'                     // documentation
+$server->register('WSEditUserCredentials',                      // method name
+    array('editUserCredentials' => 'tns:editUserCredentials'),  // input parameters
+    array('return' => 'xsd:string'),                            // output parameters
+    'urn:WSRegistration',                                       // namespace
+    'urn:WSRegistration#WSEditUserCredentials',                 // soapaction
+    'rpc',                                                      // style
+    'encoded',                                                  // use
+    'This service edits the username and password of a user'    // documentation
 );
 
 // Define the method WSEditUser
 function WSEditUserCredentials($params) {
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
+    
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
     $username = $params['username'];
@@ -1131,8 +1125,7 @@ function WSEditUserCredentials($params) {
 
     if (!empty($params['password'])) { $password = $params['password']; }
 
-    // Get user id from id wiener
-
+    // Get user id from the other system ID
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
     if ($user_id == 0) {
@@ -1154,15 +1147,17 @@ function WSEditUserCredentials($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
+    
     $sql = "UPDATE $table_user SET
             username='".Database::escape_string($username)."'";
+    
     if (!is_null($password)) {
         $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
         $sql .= ", password='".Database::escape_string($password)."' ";
     }
+    
     $sql .=     " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
-
     return  $return;
 }
 
@@ -3818,8 +3813,6 @@ function WSGetUser($params) {
     }    
     return $result;
 }
-
-
 
 /* Register WSUnsubscribeUserFromCourse function */
 // Register the data structures used by the service

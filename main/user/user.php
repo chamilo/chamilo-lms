@@ -34,7 +34,6 @@ api_protect_course_script(true);
 
 /*		Libraries	*/
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 global $_configuration;
 
@@ -317,7 +316,7 @@ if ($origin != 'learnpath') {
 	}
 	Display::display_header($tool_name, "User");
 } else {
-?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
+    Display::display_reduced_header();
 }
 
 if (isset($message)) {
@@ -350,11 +349,10 @@ if ( api_is_allowed_to_edit(null, true)) {
     }      
 
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
-
     $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
 		
 	if (api_get_setting('use_session_mode') == 'false') {
-		$actions .= ' <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
+		$actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
 	}
 
 	// Build search-form

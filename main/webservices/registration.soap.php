@@ -54,10 +54,8 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 
-
 /* Register WSCreateUsers function */
 // Register the data structures used by the service
-
 
 // Prepare input params
 $server->wsdl->addComplexType(
@@ -67,7 +65,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-            'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
+            'field_name'  => array('name' => 'field_name', 'type' => 'xsd:string'),
             'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
         )
 );
@@ -599,14 +597,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('WSCreateUsersPasswordCrypted',						    // method name
+$server->register('WSCreateUsersPasswordCrypted',                               // method name
     array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'),	// input parameters
-    array('return' => 'tns:results_createUsersPassEncrypt'),					// output parameters
+    array('return' => 'tns:results_createUsersPassEncrypt'),                    // output parameters
     'urn:WSRegistration',													    // namespace
-    'urn:WSRegistration#WSCreateUsersPasswordCrypted',					// soapaction
+    'urn:WSRegistration#WSCreateUsersPasswordCrypted',                          // soapaction
     'rpc',																	    // style
     'encoded',																    // use
-    'This service adds users to the system'									        // documentation
+    'This service adds users to the system'									    // documentation
 );
 
 // Define the method WSCreateUsersPasswordCrypted
@@ -837,7 +835,7 @@ $server->wsdl->addComplexType(
         'expiration_date'           => array('name' => 'expiration_date',           'type' => 'xsd:string'),
         'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
         'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
-        'extra'                     => array('name'     => 'extra',                 'type' => 'tns:extrasList'),
+        'extra'                     => array('name' => 'extra',                     'type' => 'tns:extrasList'),
         'secret_key'                => array('name' => 'secret_key',                'type' => 'xsd:string')
     )
 );

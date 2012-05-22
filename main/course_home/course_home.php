@@ -30,6 +30,9 @@
 
 /* 		INIT SECTION		*/
 
+
+use \ChamiloSession as Session;
+
 // Name of the language file that needs to be included.
 $language_file = 'course_home';
 $use_anonymous = true;

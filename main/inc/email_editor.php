@@ -9,6 +9,9 @@
  */
 
 // name of the language file that needs to be included
+
+use \ChamiloSession as Session;
+
 $language_file = "index";
 
 require_once '../inc/global.inc.php';

@@ -50,6 +50,9 @@
     *    @version 3.0
     *    @package chamilo.auth.ldap
 */
+
+use \ChamiloSession as Session;
+
 /**
  * Code
  */

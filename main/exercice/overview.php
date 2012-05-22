@@ -9,6 +9,9 @@
 /**
  * Code
  */
+
+use \ChamiloSession as Session;
+
 $language_file = 'exercice';
 require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';

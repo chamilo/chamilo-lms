@@ -17,6 +17,9 @@
 
 /*		CONSTANTS */
 
+use \ChamiloSession as Session;
+
+
 define('SYSTEM_INSTALLATION',                   1);
 define('INSTALL_TYPE_UPDATE',                   'update');
 define('FORM_FIELD_DISPLAY_LENGTH',             40);

@@ -10,6 +10,9 @@
 *       @todo This class is used?
 */
 
+
+use \ChamiloSession as Session;
+
 /**
  * INIT SECTION
  */

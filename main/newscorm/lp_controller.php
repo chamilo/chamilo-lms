@@ -8,6 +8,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
+
+use \ChamiloSession as Session;
+
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 

@@ -1,4 +1,7 @@
 <?php
+
+use \ChamiloSession as Session;
+
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestMainApi extends UnitTestCase {

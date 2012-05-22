@@ -24,6 +24,9 @@
  * @todo remove code duplication
  */
 
+
+use \ChamiloSession as Session;
+
 /**
  * This function deletes an item
  * @param integer 	$id: the item we want to delete

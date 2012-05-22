@@ -28,6 +28,9 @@
  */
 /*	INIT SECTION */
 
+use \ChamiloSession as Session;
+
+
 $language_file = 'dropbox';
 
 // This var disables the link in the breadcrumbs on top of the page

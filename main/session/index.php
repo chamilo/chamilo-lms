@@ -8,6 +8,9 @@
 /**
  * Code
  */
+
+use \ChamiloSession as Session;
+
 // Language files that should be included.
 $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;

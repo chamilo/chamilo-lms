@@ -1,5 +1,7 @@
 <?php
 
+namespace System;
+
 /**
  * Session Management
  * 
@@ -8,7 +10,7 @@
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-class Session implements ArrayAccess
+class Session implements \ArrayAccess
 {
 
     static function read($variable, $default = null)

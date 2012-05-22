@@ -17,6 +17,9 @@
  * Code
  */
 
+
+use \ChamiloSession as Session;
+
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 

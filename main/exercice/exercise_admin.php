@@ -11,6 +11,9 @@
  * Code
  */
 // name of the language file that needs to be included
+
+use \ChamiloSession as Session;
+
 $language_file='exercice';
 
 require_once 'exercise.class.php';

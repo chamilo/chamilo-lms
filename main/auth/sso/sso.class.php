@@ -1,4 +1,7 @@
 <?php
+
+use \ChamiloSession as Session;
+
 /* For licensing terms, see /license.txt */
 /**
  * This file contains the necessary elements to implement a Single Sign On 

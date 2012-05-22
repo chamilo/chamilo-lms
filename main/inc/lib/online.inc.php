@@ -16,6 +16,9 @@
  * @param int user id
  * @return void
  */
+
+use \ChamiloSession as Session;
+
 function LoginCheck($uid) {
 	global $_course, $_configuration;
 	$uid = (int) $uid;

@@ -10,6 +10,9 @@
  * Code
  * ALLOWED_TO_INCLUDE is defined in admin.php
  */
+
+use \ChamiloSession as Session;
+
 if (!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }

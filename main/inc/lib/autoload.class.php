@@ -317,7 +317,6 @@ class Autoload
         $result['ScoreDisplayForm'] = '/main/gradebook/lib/fe/scoredisplayform.class.php';
         $result['ScormDocument'] = '/main/coursecopy/classes/ScormDocument.class.php';
         $result['Security'] = '/main/inc/lib/security.lib.php';
-        $result['Session'] = '/main/inc/lib/session.class.php';
         $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
         $result['Shibboleth'] = '/main/auth/shibboleth/app/shibboleth.class.php';
@@ -360,6 +359,7 @@ class Autoload
         $result['SurveyTree'] = '/main/inc/lib/surveymanager.lib.php';
         $result['SurveyUtil'] = '/main/survey/survey.lib.php';
         $result['SystemAnnouncementManager'] = '/main/inc/lib/system_announcements.lib.php';
+        $result['System\Session'] = '/main/inc/lib/system/session.class.php';
         $result['TableSort'] = '/main/inc/lib/table_sort.class.php';
         $result['Template'] = '/main/inc/lib/template.lib.php';
         $result['Text_Diff'] = '/main/inc/lib/pear/Text/Diff.php';

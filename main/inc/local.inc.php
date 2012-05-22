@@ -137,6 +137,8 @@
 //	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 //}
 
+use \ChamiloSession as Session;
+
 //Conditional login
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){	
 	$uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);

@@ -1,5 +1,8 @@
 <?php
 
+use \ChamiloSession as Session;
+
+
 /**
  * Used to authenticate user with an access token. By default this method is disabled.
  * Method used primarily to make API calls:Rss, etc.

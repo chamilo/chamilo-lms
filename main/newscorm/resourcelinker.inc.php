@@ -17,6 +17,9 @@
 //$language_file = 'resourcelinker';
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
+
+use \ChamiloSession as Session;
+
 $use_anonymous = true;
 
 require_once 'back_compat.inc.php';

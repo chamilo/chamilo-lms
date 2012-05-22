@@ -1,5 +1,8 @@
 <?php
 
+use \ChamiloSession as Session;
+
+
 /**
  * Wrapper for the current course. Provide access to its data.
  *

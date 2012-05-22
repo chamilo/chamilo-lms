@@ -24,6 +24,9 @@
 /**
  * code
  */
+
+use \ChamiloSession as Session;
+
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 

@@ -21,6 +21,9 @@
  *  @package chamilo.forum
  */
 
+
+use \ChamiloSession as Session;
+
 // Language files that need to be included.
 $language_file = array ('forum', 'group');
 

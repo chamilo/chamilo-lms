@@ -4,6 +4,9 @@
 /**
                 Item-manager (add, edit & delete)
  */
+
+use \ChamiloSession as Session;
+
 require_once ('rsys.php');
 Rsys :: protect_script('m_item');
 $tool_name = get_lang('ResourceList');

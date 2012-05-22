@@ -5,6 +5,9 @@
  * @package chamilo.main
  */
 
+
+use \ChamiloSession as Session;
+
 define('CHAMILO_HOMEPAGE', true);
 
 $language_file = array('courses', 'index');

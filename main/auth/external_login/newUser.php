@@ -7,6 +7,9 @@
  
  You also have to implements the external_get_user_info function in functions.inc.php
  */
+
+use \ChamiloSession as Session;
+
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(dirname(__FILE__).'/functions.inc.php');

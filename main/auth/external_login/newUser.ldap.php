@@ -35,6 +35,9 @@
  *          - index.php?loginFailed=1&error=unrecognize_sso_origin');
  **/
 
+
+use \ChamiloSession as Session;
+
 require_once(dirname(__FILE__).'/ldap.conf.php');
 require_once(dirname(__FILE__).'/functions.inc.php');
 

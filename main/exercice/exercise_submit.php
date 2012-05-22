@@ -27,6 +27,9 @@
 /**
  * Code
  */
+
+use \ChamiloSession as Session;
+
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';

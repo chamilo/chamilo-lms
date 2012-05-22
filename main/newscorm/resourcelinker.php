@@ -15,6 +15,9 @@
 /* INIT SECTION */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
+
+use \ChamiloSession as Session;
+
 $use_anonymous = true;
 
 // Name of the language file that needs to be included.

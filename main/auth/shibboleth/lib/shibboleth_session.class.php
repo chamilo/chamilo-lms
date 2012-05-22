@@ -1,5 +1,8 @@
 <?php
 
+use \ChamiloSession as Session;
+
+
 /**
  * A Chamilo user session. Used as there is no session object so far provided by the core API.
  * Should be moved to the core library.Prefixed by Shibboleth to avoid name clashes.
@@ -88,7 +91,6 @@ class ShibbolethSession
 
         $no_redirection = true;
         require("$includePath/local.inc.php");
-
 
         return $_user;
     }

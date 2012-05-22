@@ -13,6 +13,9 @@
  * Constants declaration
  */
 
+use \ChamiloSession as Session;
+
+
 // USER STATUS CONSTANTS
 /** global status of a user: student */
 define('STUDENT', 5);

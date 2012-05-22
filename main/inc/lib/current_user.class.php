@@ -1,5 +1,8 @@
 <?php
 
+use \ChamiloSession as Session;
+
+
 /**
  * Wrapper for the current user - i.e. the logged in user. Provide access
  * to the current user's data.
@@ -34,7 +37,7 @@ class CurrentUser
         return $_user;
         //return Session::read('_user');
     }
-    
+
     public function is_anonymous()
     {
         return api_is_anonymous();
@@ -72,7 +75,7 @@ class CurrentUser
 
     public function user_id()
     {
-        return (int)$this->get('user_id');
+        return (int) $this->get('user_id');
     }
 
     public function language()
@@ -98,12 +101,7 @@ class CurrentUser
      */
     public function is_platform_admin()
     {
-        return (bool) Session::read('is_platformAdmin');
-        if ($_SESSION['is_platformAdmin']) {
-            return true;
-        }
-        global $_user;
-        return $allow_sessions_admins && $_user['status'] == SESSIONADMIN;
+        return (bool) Session::read('is_platformAdmin', false);
     }
 
     /**

@@ -20,6 +20,9 @@
  * variables based on the result.
  */
 //require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
+
+use \ChamiloSession as Session;
+
 require_once('authldap.php');
 
 $loginLdapSucces = ldap_login($login, $password);

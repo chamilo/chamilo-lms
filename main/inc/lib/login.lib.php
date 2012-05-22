@@ -1,5 +1,8 @@
 <?php
 
+use \ChamiloSession as Session;
+
+
 /* For licensing terms, see /license.txt */
 /**
  * 	Code library for login process

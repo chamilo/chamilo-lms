@@ -44,27 +44,10 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     
 var show_icon = "../img/view_more_stats.gif";
 var hide_icon = "../img/view_less_stats.gif";
-
-function lock_confirmation() {
-    if (confirm("' . get_lang('ConfirmToLockElement') . '?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function unlock_confirmation() {
-    if (confirm("' . get_lang('ConfirmToUnlockElement') . '?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 
 $(document).ready(function() {
 
@@ -456,7 +439,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $category_to_lock = Category :: load($_GET['category_id']);
             $category_to_lock[0]->lock_all_items(0);
-            $confirmation_message = get_lang('GradebookUnlockedAlert');
+            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
         }
         break;    
 }

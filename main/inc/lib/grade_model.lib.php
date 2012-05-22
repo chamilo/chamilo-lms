@@ -216,7 +216,19 @@ class GradeModel extends Model {
     public function delete($id) {
 	    parent::delete($id);
 	    //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-    }    
+    }
+    public function fill_grade_model_select_in_form($form) {
+        if (api_get_setting('teachers_can_change_grade_model_settings') == 'true' || api_is_platform_admin()) {
+            $grade_models = $this->get_all();                
+            $grade_model_options = array('-1' => get_lang('None'));            
+            if (!empty($grade_models)) {
+                foreach ($grade_models as $item) {
+                    $grade_model_options[$item['id']] = $item['name'];
+                }                
+            }
+            $form->addElement('select', 'gradebook_model_id', get_lang('GradeModel'), $grade_model_options);
+        }
+    }
 }
 
 class GradeModelComponents extends Model {

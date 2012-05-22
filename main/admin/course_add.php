@@ -109,18 +109,8 @@ $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
-//if (api_get_setting('gradebook'))
-
 $obj = new GradeModel();
-$grade_models = $obj->get_all();                
-$grade_model_options = array('-1' => get_lang('None'));            
-if (!empty($grade_models)) {
-    foreach ($grade_models as $item) {
-        $grade_model_options[$item['id']] = $item['name'];
-    }                
-}
-$form->addElement('select', 'gradebook_model_id', get_lang('GradeModel'), $grade_model_options);
-
+$obj->fill_grade_model_select_in_form($form);
 
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
@@ -157,6 +147,8 @@ if ($form->validate()) {
     //$course['tutor_name']           = $tutor_name;
     $course['user_id']              = $teacher_id;  
     $course['wanted_code']          = $course['visual_code'];
+    
+    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;            
     
     $course_info = CourseManager::create_course($course);
 

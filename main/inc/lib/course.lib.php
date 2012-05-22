@@ -99,21 +99,8 @@ define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
 define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
 define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
-define('USER_SEPARATOR', ' |'); //Use to show user names in userportal.php, footer, etc
-
-
-
-/**
- * Variables
- */
-/*
-$TABLECOURSE         = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSDOMAIN    = Database::get_main_table(TABLE_MAIN_CATEGORY);
-$TABLEUSER           = Database::get_main_table(TABLE_MAIN_USER);
-$TABLECOURSUSER      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLEANNOUNCEMENTS  = 'announcement';
-$coursesRepositories = $_configuration['root_sys'];
-*/
+//This constant is used to show separate user names in the course list (userportal), footer, etc
+define('USER_SEPARATOR', ' |'); 
 
 /**
  *	CourseManager Class
@@ -121,8 +108,7 @@ $coursesRepositories = $_configuration['root_sys'];
  */
 class CourseManager {
     
-    var $columns = array();
-    
+    var $columns = array();    
     
     /**
      * Creates a course

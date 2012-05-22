@@ -115,8 +115,7 @@ class FormValidator extends HTML_QuickForm
      * @param bool $track_submit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
-    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
-    {
+    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
 
         //Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
@@ -147,8 +146,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');        
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         
-        
-
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
@@ -163,29 +160,35 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($form_template);
 
         //Element template
+        if ($attributes['class'] == 'well form-inline') {
+            $element_template = '
+                    {label}  {element}                    
+            ';
+        } else {
 
-        $element_template = '   
-		<div class="control-group {error_class}">				
-            <label class="control-label">
-				<!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-				{label}
-			</label>
-			<div class="controls">
-				{element}
-				
-				<!-- BEGIN label_3 -->
-                    {label_3}
-                <!-- END label_3 -->
-                
-				<!-- BEGIN label_2 -->                    
-					<p class="help-block">{label_2}</p>
-				<!-- END label_2 -->
-				
-				<!-- BEGIN error -->
-					<span class="help-inline">{error}</span>
-				<!-- END error -->	
-			</div>
-		</div>';
+            $element_template = '   
+            <div class="control-group {error_class}">				
+                <label class="control-label">
+                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                    {label}
+                </label>
+                <div class="controls">
+                    {element}
+
+                    <!-- BEGIN label_3 -->
+                        {label_3}
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN label_2 -->                    
+                        <p class="help-block">{label_2}</p>
+                    <!-- END label_2 -->
+
+                    <!-- BEGIN error -->
+                        <span class="help-inline">{error}</span>
+                    <!-- END error -->	
+                </div>
+            </div>';
+        }
 
         $renderer->setElementTemplate($element_template);
 

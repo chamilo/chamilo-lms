@@ -233,5 +233,4 @@ $AllMustWeight100 = "The sum of all values must be 100";
 $Components = "Components";
 $OnlyActiveWhenThereAreAnyComponents = "This option is enabled if you have any evaluations or categories";
 $GradebookLockedAlert = "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).";
-$GradebookUnlockedAlert = "Are you sure you want to unlock this item?";
 ?>

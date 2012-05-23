@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS course (
   visual_code varchar(40) default NULL,
   department_name varchar(30) default NULL,
   department_url varchar(180) default NULL,
-  disk_quota int unsigned default NULL,
+  disk_quota bigint unsigned default NULL,
   last_visit datetime default NULL,
   last_edit datetime default NULL,
   creation_date datetime default NULL,
@@ -862,7 +862,7 @@ VALUES
 ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
 ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
 ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17985','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17999','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

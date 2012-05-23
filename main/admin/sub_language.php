@@ -5,10 +5,8 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
 require_once 'sub_language.class.php';
-require_once api_get_path(LIBRARY_PATH).'array.lib.php';
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 $htmlHeadXtra[] ='<script type="text/javascript">
@@ -58,31 +56,29 @@ $interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('Platfo
 $sublanguage_folder_error = false;
 
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-	$language_name=SubLanguageManager::get_name_of_language_by_id ($_GET['id']);
-	$sub_language_name=SubLanguageManager::get_name_of_language_by_id ($_GET['sub_language_id']);	
-	$all_data_of_language=SubLanguageManager::get_all_information_of_language($_GET['id']);
-	$all_data_of_sublanguage=SubLanguageManager::get_all_information_of_language($_GET['sub_language_id']);
-	$sub_language_file =api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];		
+	$language_name              = SubLanguageManager::get_name_of_language_by_id ($_GET['id']);
+	$sub_language_name          = SubLanguageManager::get_name_of_language_by_id ($_GET['sub_language_id']);	
+	$all_data_of_language       = SubLanguageManager::get_all_information_of_language($_GET['id']);
+	$all_data_of_sublanguage    = SubLanguageManager::get_all_information_of_language($_GET['sub_language_id']);
+	$sub_language_file          = api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];		
 	
 	if (!file_exists($sub_language_file) || !is_writable($sub_language_file)) {
 	    $sublanguage_folder_error = $sub_language_file.' '.get_lang('IsNotWritable');
-	}	
-	$my_language=$language_name;
-	if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {
-		$parent_id=intval($_GET['id']);
-		$language_id_exist=true;
+	}		
+	if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {		
+		$language_id_exist = true;
 	} else {
-		$language_id_exist=false;
+		$language_id_exist = false;
 	}
 } else {
 	$language_name='';
 	$language_id_exist=false;
 }
 
-$language_name=get_lang('RegisterTermsOfSubLanguageForLanguage').' ( '.strtolower($sub_language_name).' )';
-$dokeos_path_folder=api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
-//
-if (!is_dir($dokeos_path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) {
+$language_name = get_lang('RegisterTermsOfSubLanguageForLanguage').' ( '.strtolower($sub_language_name).' )';
+$path_folder = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
+
+if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) {
 	api_not_allowed(true);
 }
 
@@ -106,7 +102,6 @@ $html.='&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
 
 $html.='<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
 $html.='<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
-
 $html.='<input name="txt_search_word" type="text" size="50"  id="txt_search_word" value="'.Security::remove_XSS($_REQUEST['txt_search_word']).'" />';
 $html.="&nbsp;".'<button name="SubmitSearchLanguage" class="search" type="submit">'.get_lang('Search').'</button>';
 $html.='</form>';
@@ -117,9 +112,6 @@ if (!empty($sublanguage_folder_error)) {
     Display::display_warning_message($sublanguage_folder_error);
 }
 echo '<div id="div_message_information_id">&nbsp;</div>';
-
-
-
 
 /**
  * Search a term in the language

@@ -61,10 +61,10 @@ class SubLanguageManager {
      */
    public static function get_all_information_of_language ($parent_id) {
  		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE id="'.intval($parent_id).'"';
+		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE id = "'.intval($parent_id).'"';
 		$rs=Database::query($sql);
 		$all_information=array();
-		while ($row=Database::fetch_array($rs,'ASSOC')) {
+		while ($row=Database::fetch_array($rs, 'ASSOC')) {
 			$all_information=$row;
 		}
 		return $all_information;

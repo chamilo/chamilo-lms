@@ -390,15 +390,20 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
     // getting the arrays of files i.e notification, trad4all, etc
     $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
     //getting parent info
-    $parent_language = SubLanguageManager::get_all_information_of_language(intval($_REQUEST['id']));
+    $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));
+    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);    
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
-        include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
+        //loading english        
+        $path = $langpath.'english/'.$language_file_item.'.inc.php';        
+        if (file_exists($path)) {
+            include $path;
+        }
+        
         $lang_list_post = array_keys($GLOBALS);
         $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
         unset($lang_list_pre);
@@ -407,14 +412,14 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
         $english_language_array[$language_file_item] = compact($lang_list_result);
 
         //cleaning the variables
-        foreach($lang_list_result as $item) {
+        foreach ($lang_list_result as $item) {
             unset(${$item});
         }
         $parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (is_file($parent_file)) {
+        
+        if (file_exists($parent_file) && is_file($parent_file)) {
             include_once $parent_file;
         }
-
         //  parent language array
         $parent_language_array[$language_file_item] = compact($lang_list_result);
 
@@ -422,8 +427,9 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
         foreach($lang_list_result as $item) {
             unset(${$item});
         }
+        
         $sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (is_file($sub_file)) {
+        if (file_exists($sub_file) && is_file($sub_file)) {
             include $sub_file;
         }
 

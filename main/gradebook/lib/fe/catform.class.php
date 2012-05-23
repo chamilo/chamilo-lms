@@ -197,7 +197,7 @@ class CatForm extends FormValidator {
             
             //Getting grade models
             $obj = new GradeModel();
-            $obj->fill_grade_model_select_in_form($this);
+            $obj->fill_grade_model_select_in_form($this, 'grade_model_id');
             /*
             $grade_models = $obj->get_all();                
             $options = array(-1 => get_lang('None'));
@@ -218,7 +218,9 @@ class CatForm extends FormValidator {
             }
             
             if (count($test_cats) > 1 || !empty($links)) {
-                $this->freeze('grade_model_id');
+                if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+                    $this->freeze('grade_model_id');
+                }
             }
         }
                 

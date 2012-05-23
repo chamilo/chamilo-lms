@@ -217,7 +217,7 @@ class GradeModel extends Model {
 	    parent::delete($id);
 	    //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
-    public function fill_grade_model_select_in_form($form) {
+    public function fill_grade_model_select_in_form($form, $name = 'gradebook_model_id') {
         if (api_get_setting('gradebook_enable_grade_model') == 'false') {
             return false;
         }            
@@ -230,11 +230,11 @@ class GradeModel extends Model {
                     $grade_model_options[$item['id']] = $item['name'];
                 }                
             }
-            $form->addElement('select', 'gradebook_model_id', get_lang('GradeModel'), $grade_model_options);
+            $form->addElement('select', $name, get_lang('GradeModel'), $grade_model_options);
             $default = api_get_setting('gradebook_default_grade_model_id');
            
             if (!empty($default) && $default != '-1') {
-                $form->setDefaults(array('gradebook_model_id' => $default));
+                $form->setDefaults(array($name => $default));
             }
         }
     }

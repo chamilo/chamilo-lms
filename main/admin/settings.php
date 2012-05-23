@@ -79,6 +79,15 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
 	api_delete_setting_option($id);
 }
 
+$form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'well form-inline'));
+$form_search->addElement('text', 'search_field');
+$form_search->addElement('hidden', 'category', 'search_setting');
+$form_search->addElement('style_submit_button', 'submit_button', get_lang('Search'), 'value="submit_button", class="search"');         
+$form_search->setDefaults(array('search_field' => $_REQUEST['search_field']));
+
+$form_search_html = $form_search->return_form();
+
+
 $settings = null;
 
 // Build the form.
@@ -252,13 +261,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     }
 }
 
-
 $htmlHeadXtra[] = '<script>    
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
         
-    $(function(){
+    $(function() {
         $(".share_this_setting").on("click", function() {
             var my_img = $(this).find("img");
             var link = $(this);
@@ -344,14 +352,12 @@ foreach ($resultcategories as $row) {
     }
     $action_array[] = $url;
 }
+
 echo Display::actions($action_array);
 
-$form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'vertical'));
-$form_search->addElement('text', 'search_field');
-$form_search->addElement('hidden', 'category', 'search_setting');
-$form_search->addElement('style_submit_button', 'submit_button', get_lang('Search'), 'value="submit_button", class="search"');         
-$form_search->setDefaults(array('search_field' => $_REQUEST['search_field']));
-$form_search->display();
+echo '<br />';
+
+echo $form_search_html;
 
 if ($watermark_deleted) {    
     Display :: display_normal_message(get_lang('FileDeleted'));

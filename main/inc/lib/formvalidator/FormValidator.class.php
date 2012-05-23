@@ -51,8 +51,7 @@ class FormValidator extends HTML_QuickForm
      * @param array form_data 
      * @return FormValidator
      */
-    static function create($form_data)
-    {
+    static function create($form_data) {
         if (empty($form_data)) {
             return null;
         }
@@ -116,7 +115,6 @@ class FormValidator extends HTML_QuickForm
      * submitted by adding a special hidden field (default = true)
      */
     function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
-
         //Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
@@ -160,12 +158,9 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($form_template);
 
         //Element template
-        if ($attributes['class'] == 'well form-inline') {
-            $element_template = '
-                    {label}  {element}                    
-            ';
+        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {            
+            $element_template = ' {label}  {element} ';
         } else {
-
             $element_template = '   
             <div class="control-group {error_class}">				
                 <label class="control-label">
@@ -188,8 +183,8 @@ class FormValidator extends HTML_QuickForm
                     <!-- END error -->	
                 </div>
             </div>';
-        }
-
+        }        
+        
         $renderer->setElementTemplate($element_template);
 
         //Set Header template        
@@ -313,8 +308,8 @@ EOT;
     /**
      * Adds a button to the form to add resources.
      */
-    function add_resource_button()
-    {
+    function add_resource_button() {
+        $group = array();
         $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
         $group[] = $this->createElement('submit', 'add_resource', get_lang('Attachment'), 'class="link_alike"');
         $this->addGroup($group);
@@ -331,8 +326,7 @@ EOT;
      * @param string $label (optional)			Custom label to be shown
      * submits the form and the start of the progress bar.
      */
-    function add_progress_bar($delay = 2, $label = '')
-    {
+    function add_progress_bar($delay = 2, $label = '') {
         if (empty($label)) {
             $label = get_lang('PleaseStandBy');
         }

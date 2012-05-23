@@ -319,7 +319,7 @@ a.tag {
 
 /* Admin index.php */
 #settings .span6 {
-    min-height: 180px;
+    min-height: 200px;
 }
 
 /* user_portal course status icon */
@@ -3847,8 +3847,7 @@ footer {
 
 .bottom_actions_fixed {
     position: fixed;
-      z-index: 9001;  
-       bottom: 0;   
-    left: 0px;
-    
+    z-index: 9001;  
+    bottom: 0;   
+    left: 0px;    
 }

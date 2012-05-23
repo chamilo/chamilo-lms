@@ -1048,8 +1048,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
         
-    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
-    $form ->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
+    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']), null, array('sss'));
+    $form->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
     $default_values = array();    
     
@@ -1261,8 +1261,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $form->addElement('html', '<div class="bottom_actions">');
     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
     $form->addElement('html', '</div>');
-
-    
     return $form;
 }
 

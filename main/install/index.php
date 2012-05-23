@@ -42,6 +42,7 @@ session_start();
 
 // Including necessary libraries.
 require_once '../inc/lib/main_api.lib.php';
+require_once api_get_path(LIBRARY_PATH).'session.class.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
@@ -230,9 +231,9 @@ if (!isset($_GET['running'])) {
   	$urlForm 		= api_get_path(WEB_PATH);
 	$pathForm 		= api_get_path(SYS_PATH);
 
-	$emailForm = $_SERVER['SERVER_ADMIN'];
+	$emailForm      = $_SERVER['SERVER_ADMIN'];
 	$email_parts = explode('@', $emailForm);
-	if ($email_parts[1] == 'localhost') {
+	if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
 		$emailForm .= '.localdomain';
 	}
 	$adminLastName	= 'Doe';

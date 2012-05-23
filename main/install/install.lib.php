@@ -38,8 +38,11 @@ function is_already_installed_system() {
         return false; // Configuration file does not exist, install the system.
     }
     require $current_config_file;
-
-    $current_version = trim($_configuration['dokeos_version']);
+    
+    $current_version = null;
+    if (isset($_configuration['dokeos_version'])) {
+        $current_version = trim($_configuration['dokeos_version']);
+    }
     if (empty($current_version)) {
         $current_version = trim($_configuration['system_version']);
     }

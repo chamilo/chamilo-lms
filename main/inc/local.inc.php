@@ -879,9 +879,10 @@ $user_id    = isset($_user['user_id']) ? $_user['user_id'] : null;
 $is_courseAdmin     = false; //course teacher
 $is_courseTutor     = false; //course teacher - some rights
 $is_courseMember    = false; //course student
+$is_courseCoach     = false; //course coach
 
 //Course - User permissions
-$is_sessionAdmin    = false; 
+$is_sessionAdmin    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {    
     

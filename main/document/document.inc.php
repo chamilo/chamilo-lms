@@ -242,8 +242,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
-					preg_match('/html$/i', urldecode($url))  || 
-					preg_match('/htm$/i',  urldecode($url))  ||
+					//preg_match('/html$/i', urldecode($url))  || 
+					//preg_match('/htm$/i',  urldecode($url))  ||
 					preg_match('/swf$/i',  urldecode($url))  ||
 					preg_match('/png$/i',  urldecode($url))  ||
 					preg_match('/gif$/i',  urldecode($url))  ||
@@ -284,8 +284,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                      return $sound_preview ;
                 } elseif (
                     //Show preview sith yoxview
-						preg_match('/html$/i', urldecode($url))  || 
-						preg_match('/htm$/i',  urldecode($url))  ||
+						//preg_match('/html$/i', urldecode($url))  || 
+						//preg_match('/htm$/i',  urldecode($url))  ||
 						preg_match('/swf$/i',  urldecode($url))  || 
 						preg_match('/png$/i',  urldecode($url))  ||
 						preg_match('/gif$/i',  urldecode($url))  ||

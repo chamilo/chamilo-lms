@@ -861,7 +861,7 @@ VALUES
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
 ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
 ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
-('allow_session_admin_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
+('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17985','DatabaseVersion','', NULL, NULL, 0);
 
 /*
@@ -1205,8 +1205,8 @@ VALUES
 ('gradebook_locking_enabled', 'false', 'No'),
 ('gradebook_enable_grade_model', 'true', 'Yes'),
 ('gradebook_enable_grade_model', 'false', 'No'),
-('allow_session_admin_to_see_all_sessions', 'true', 'Yes'),
-('allow_session_admin_to_see_all_sessions', 'false', 'No');
+('allow_session_admins_to_see_all_sessions', 'true', 'Yes'),
+('allow_session_admins_to_see_all_sessions', 'false', 'No');
 
 UNLOCK TABLES;
 /*

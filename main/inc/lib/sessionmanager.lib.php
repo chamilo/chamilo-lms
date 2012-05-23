@@ -167,7 +167,7 @@ class SessionManager {
         $where = 'WHERE 1=1 ';
         $user_id = api_get_user_id();
 		
-        if (api_is_session_admin()==true) {
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
         
@@ -209,7 +209,8 @@ class SessionManager {
 
 		$where = 'WHERE 1=1 ';
 		$user_id = api_get_user_id();
-		if (api_is_session_admin()==true) {
+        
+		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}        
 

@@ -287,6 +287,7 @@ Display :: display_header($tool_name);
 // The action images.
 $action_images['platform']      = 'platform.png';
 $action_images['course']        = 'course.png';
+$action_images['session']       = 'session.png';
 $action_images['tools']         = 'tools.png';
 $action_images['user']          = 'user.png';
 $action_images['gradebook']     = 'gradebook.png';
@@ -302,7 +303,6 @@ $action_images['timezones']     = 'timezone.png';
 $action_images['extra']     	= 'wizard.png';
 $action_images['tracking']     	= 'statistics.png';
 $action_images['gradebook']     = 'gradebook.png';
-
 $action_images['search']        = 'search.png';
 $action_images['stylesheets']   = 'stylesheets.png';
 $action_images['templates']     = 'template.png';
@@ -311,14 +311,29 @@ $action_images['shibboleth']    = 'shibboleth.png';
 $action_images['facebook']      = 'facebook.png';
 
 // Grabbing the categories.
-$resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
+//$resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
 
 $action_array = array();
+$resultcategories = array();
 
+$resultcategories[] = array('category' => 'Platform');
+$resultcategories[] = array('category' => 'Course');
+$resultcategories[] = array('category' => 'Session');
+$resultcategories[] = array('category' => 'Languages');
+$resultcategories[] = array('category' => 'User');
+$resultcategories[] = array('category' => 'Tools');
+$resultcategories[] = array('category' => 'Editor');
+$resultcategories[] = array('category' => 'Security');
+$resultcategories[] = array('category' => 'Tuning');
+$resultcategories[] = array('category' => 'LDAP');
+$resultcategories[] = array('category' => 'Timezones');
+$resultcategories[] = array('category' => 'Tracking');
+$resultcategories[] = array('category' => 'CAS');
 $resultcategories[] = array('category' => 'Search');
 $resultcategories[] = array('category' => 'Stylesheets');
 $resultcategories[] = array('category' => 'Templates');
 $resultcategories[] = array('category' => 'Plugins');
+
 
 foreach ($resultcategories as $row) {
     $url = array();    

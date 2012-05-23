@@ -318,12 +318,10 @@ class Template {
 		
 		//Base CSS
 		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";        
+        
 		//Default theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
-        
-		//Course theme CSS
-		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";'."\n";
-        
+                
         $navigator_info = api_get_navigator();
         
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {

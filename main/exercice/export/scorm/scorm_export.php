@@ -91,14 +91,11 @@ class ScormAssessmentItem
 	/**
 	 * Print CSS inclusion
 	 */
-	function css()
-	{
-		if($this->standalone)
-		{
+	function css() {
+		if($this->standalone) {
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/course.css";'."\n";
+			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
@@ -309,13 +306,10 @@ class ScormSection
 	/**
 	 * Print CSS inclusion
 	 */
-	function css()
-	{
-
+	function css() {
 		$css = '<style type="text/css" media="screen, projection">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/course.css";'."\n";
+		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";		
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";

@@ -2775,7 +2775,7 @@ function readPropertiesInArchive($archive, $is_compressed = true) {
     details.
     tempnam() returns the temporary filename, or the string NULL upon failure.
     */
-    $zip_file = new pclZip($archive);
+    $zip_file = new PclZip($archive);
     $tmp_dir_name = dirname($archive) . '/tmp'.$uid.uniqid($uid);
     if (mkdir($tmp_dir_name, api_get_permissions_for_new_directories(), true)) {
         $unzipping_state = $zip_file->extract($tmp_dir_name);

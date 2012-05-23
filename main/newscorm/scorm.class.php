@@ -487,7 +487,7 @@ class scorm extends learnpath {
         $this->subdir = $new_dir;
         if ($this->debug > 1) { error_log("New LP - subdir is first set to : ".$this->subdir, 0); }
 
-        $zipFile = new pclZip($zip_file_path);
+        $zipFile = new PclZip($zip_file_path);
 
         // Check the zip content (real size and file extension).
 

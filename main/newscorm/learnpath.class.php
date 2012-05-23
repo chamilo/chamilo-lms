@@ -1777,7 +1777,7 @@ class learnpath {
 
         $file_base_name = str_replace('.' . $extension, '', $filename); // Filename without its extension.
 
-        $zipFile = new pclZip($file_path);
+        $zipFile = new PclZip($file_path);
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
         $package_type = '';

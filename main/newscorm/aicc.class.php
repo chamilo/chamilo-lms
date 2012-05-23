@@ -359,7 +359,7 @@ class aicc extends learnpath {
             $stopping_error = true;
         }
         */
-        $zipFile = new pclZip($zip_file_path);
+        $zipFile = new PclZip($zip_file_path);
 
         // Check the zip content (real size and file extension).
 

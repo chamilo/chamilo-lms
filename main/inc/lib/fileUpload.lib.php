@@ -561,9 +561,8 @@ function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_
  *
  * @return boolean true if it succeeds false otherwise
  */
-function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_filled_space) {
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-	$zip_file = new pclZip($uploaded_file['tmp_name']);
+function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_filled_space) {    
+	$zip_file = new PclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 	if (file_exists($uploaded_file)) {
@@ -677,8 +676,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	global $to_user_id;
 	global $to_group_id;
 	
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-	$zip_file = new pclZip($uploaded_file['tmp_name']);
+	$zip_file = new PclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 

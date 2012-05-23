@@ -333,6 +333,7 @@ $resultcategories[] = array('category' => 'Tools');
 $resultcategories[] = array('category' => 'Editor');
 $resultcategories[] = array('category' => 'Security');
 $resultcategories[] = array('category' => 'Tuning');
+$resultcategories[] = array('category' => 'Gradebook');
 $resultcategories[] = array('category' => 'LDAP');
 $resultcategories[] = array('category' => 'Timezones');
 $resultcategories[] = array('category' => 'Tracking');

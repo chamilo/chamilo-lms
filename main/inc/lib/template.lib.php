@@ -496,6 +496,7 @@ class Template {
 		$this->assign('extra_headers', $extra_headers);	
 	
 		$favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        
 		if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
 		    $access_url_id = api_get_current_access_url_id();
 		    if ($access_url_id != -1) {
@@ -505,7 +506,7 @@ class Template {
 		        $clean_url = str_replace('/', '-', $clean_url);
 		        $clean_url .= '/';
 		        $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
+                $icon_real_homep  = api_get_path(SYS_PATH).'home/'.$clean_url;
 
 		        //we create the new dir for the new sites
 		        if (is_file($icon_real_homep.'favicon.ico')) {

@@ -133,8 +133,46 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $message = array();
     
     if ($form->validate()) {       
-        $values = $form->exportValues();         
+        $values = $form->exportValues();   
         
+        $mark_all = false;
+        $un_mark_all = false;
+        
+        if ( $_configuration['multiple_access_urls']) {        
+            if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['mark_all'])) {
+                $mark_all = true;
+            }
+
+            if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['unmark_all'])) {
+                $un_mark_all = true;
+            }
+        }
+        
+        if ($mark_all || $un_mark_all) {
+            if (api_is_global_platform_admin()) {
+                $locked_settings = api_get_locked_settings();
+                foreach ($values as $key => $value) {
+                    if (!in_array($key, $locked_settings)) {
+                        
+                        $changeable = 0;
+                        if ($mark_all) {
+                            $changeable = 1;
+                        }
+                        
+                        $params = array('variable = ?' =>  array($key));
+                        $data = api_get_settings_params($params);                        
+                         
+                        if (!empty($data)) {
+                            foreach ($data as $item) {                
+                                $params = array('id' =>$item['id'], 'access_url_changeable' => $changeable);
+                                api_set_setting_simple($params);        
+                            }
+                        }
+                    }
+                }
+            }
+        }        
+                
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
          
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {       
@@ -273,7 +311,7 @@ $htmlHeadXtra[] = '<script>
             var link = $(this);
             $.ajax({
                 url: url,
-                data: {changeable:  $(this).attr("data_status"), id: $(this).attr("data_to_send") },
+                data: { changeable:  $(this).attr("data_status"), id: $(this).attr("data_to_send") },
                 success: function(data) {                
                     if (data == 1) {
                         if (link.attr("data_status") == 1) {

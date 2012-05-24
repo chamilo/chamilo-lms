@@ -5824,3 +5824,39 @@ function api_check_archive_dir() {
         api_not_allowed(true, $message);
     }
 }
+
+function api_get_locked_settings() {
+    return array(
+        'server_type',        
+        'permanently_remove_deleted_files',
+        'account_valid_duration',
+        'service_visio',
+        'service_ppt2lp',
+        'wcag_anysurfer_public_pages',
+        'upload_extensions_list_type',
+        'upload_extensions_blacklist',
+        'upload_extensions_whitelist',   
+        'upload_extensions_skip',    
+        'upload_extensions_replace_by',
+        'hide_dltt_markup',
+        'split_users_upload_directory',
+        'permissions_for_new_directories',
+        'permissions_for_new_files',
+        'platform_charset',
+        'service_visio',
+        'ldap_description',    
+        'cas_activate',
+        'cas_server',
+        'cas_server_uri',
+        'cas_port',
+        'cas_protocol',
+        'cas_add_user_activate',
+        'update_user_info_cas_with_ldap',    
+        'languagePriority1',
+        'languagePriority2',
+        'languagePriority3',
+        'languagePriority4',
+        'login_is_email',
+        'chamilo_database_version'    
+    );
+}

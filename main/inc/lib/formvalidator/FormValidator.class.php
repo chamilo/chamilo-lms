@@ -188,12 +188,23 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($element_template);
             
             //Display a gray div in the buttons
-            $button_element_template = '<div class="form-actions">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template, 'submit_in_actions');       
+            $button_element_template_simple = '<div class="form-actions">{label} {element}</div>';
+            $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');       
             
             //Display a gray div in the buttons + makes the button available when scrolling
-            $button_element_template = '<div class="form-actions bottom_actions">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template, 'submit_fixed_in_bottom');
+            $button_element_template_in_bottom = '<div class="form-actions bottom_actions">{label} {element}</div>';
+            $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');            
+            
+            //When you want to group buttons use something like this
+            /* $group = array();    
+               $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
+               $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));    
+                $form->addGroup($group, 'buttons_in_action');
+             */
+            $renderer->setElementTemplate($button_element_template_simple, 'buttons_in_action');
+            
+            $button_element_template_simple_right = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
+            $renderer->setElementTemplate($button_element_template_simple_right, 'buttons_in_action_right');
             
             /*
             $renderer->setElementTemplate($button_element_template, 'submit_button');            

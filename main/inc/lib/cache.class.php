@@ -10,12 +10,12 @@ class Cache
 {
 
     /**
-     * Retrive an item from the cache if item creation date is greater than limit.
+     * Retrieve an item from the cache if item creation date is greater than limit.
      * If item does not exists or is stale returns false.
      * 
-     * @param any $key
-     * @param int $limit
-     * @return false|object 
+     * @param any Identifier for the variable stored
+     * @param int If this limit is greater than last mod time of value, stale
+     * @return false|object Value kept in cache
      */
     static function get($key, $limit = 0)
     {
@@ -30,8 +30,8 @@ class Cache
     /**
      * Returnsn true if the cache has the item and it is not staled.
      * 
-     * @param any $key
-     * @param int $limit
+     * @param any Identifier for the variable stored
+     * @param int If this limit is greater than last mod time of value, stale
      * @return boolean
      */
     static function has($key, $limit = 0)
@@ -53,10 +53,10 @@ class Cache
     }
 
     /**
-     * Put something on the cache.
+     * Put something in cache.
      * 
-     * @param any $key
-     * @param string $value 
+     * @param any Identifier for the variable to be stored
+     * @param string Value to be stored
      */
     static function put($key, $value)
     {
@@ -67,7 +67,7 @@ class Cache
     /**
      * Remove an item from the cache.
      * 
-     * @param any $key 
+     * @param any Identifier for the variable to remove
      */
     static function remove($key)
     {
@@ -79,7 +79,7 @@ class Cache
     }
 
     /**
-     * Clear the cache. Remove all entries. 
+     * Clear the cache. Remove all entries.
      */
     static function clear()
     {
@@ -96,8 +96,9 @@ class Cache
     /**
      * Returns the file path based on the key.
      * 
-     * @param any $key
-     * @return string 
+     * @param any Identifier for the variable
+     * @return string Path of the file where this 
+     *                variable is/should-be stored
      */
     static function path($key = '')
     {
@@ -108,8 +109,8 @@ class Cache
      * Returns the internal string key from the external key.
      * For internal use.
      * 
-     * @param any $item
-     * @return string
+     * @param any Identifier for the variable
+     * @return string Unique ID generated to identify the variable
      */
     static function key($item)
     {

@@ -1653,7 +1653,7 @@ function api_set_anonymous() {
  */
 function api_get_last_failure() {
     global $api_failureList;
-    return $api_failureList[count($api_failureList) - 1];
+    return array_pop($api_failureList);
 }
 
 /**

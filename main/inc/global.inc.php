@@ -69,7 +69,7 @@ $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-check_php_version($includePath.'/');
+api_check_php_version($includePath.'/');
 
 // Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);

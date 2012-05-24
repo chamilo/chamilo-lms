@@ -122,7 +122,7 @@ class CourseManager {
         if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();
         }
-        if ($_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_courses']) && $_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
             $num = self::count_courses();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
                 return api_set_failure('PortalCoursesLimitReached');

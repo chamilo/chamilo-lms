@@ -77,6 +77,23 @@ class UserManager {
 	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
 		global $_user, $_configuration;
 
+                $access_url_id = 1;
+		if (api_get_multiple_access_url()) {		
+                  $access_url_id = api_get_current_access_url_id();
+                }
+		if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+                  $num = self::get_number_of_users();
+                  if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+                    return api_set_failure('portal users limit reached');
+                  }
+                }
+		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+                  $num = self::get_number_of_users(1);
+                  if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                    return api_set_failure('portal teachers limit reached');
+                  }
+                }
+		
 		$firstName 	= Security::remove_XSS($firstName);
 		$lastName	= Security::remove_XSS($lastName);
 		$loginName 	= Security::remove_XSS($loginName);
@@ -84,23 +101,6 @@ class UserManager {
 		
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
-                $access_url_id = 1;
-		if (api_get_multiple_access_url()) {		
-                  $access_url_id = api_get_current_access_url_id();
-                }
-		if ($_configuration[$access_url_id]['hosting_limit_users'] > 0) {
-                  $num = self::get_number_of_users();
-                  if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
-                    return api_set_failure('portal users limit reached');
-                  }
-                }
-		if ($status === 1 && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
-                  $num = self::get_number_of_users(1);
-                  if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
-                    return api_set_failure('portal teachers limit reached');
-                  }
-                }
-		
 
     	//Checking the user language
         $languages = api_get_languages();   

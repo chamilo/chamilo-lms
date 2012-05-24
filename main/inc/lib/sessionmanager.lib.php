@@ -62,7 +62,7 @@ class SessionManager {
         	if (api_get_multiple_access_url()) {
 	            $access_url_id = api_get_current_access_url_id();
         	}
-	        if ($_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
+	        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
         	    $num = self::count_sessions();
 	            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
         	        return get_lang('PortalSessionsLimitReached');

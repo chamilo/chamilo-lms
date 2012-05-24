@@ -117,7 +117,7 @@ class CourseManager {
      */
     function create_course($params) {           
         global $_configuration;
-        
+        // Check portal limits
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();

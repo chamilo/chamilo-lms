@@ -107,18 +107,21 @@ $extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['
  * Hosting settings - Allows you to set limits to the Chamilo portal when
  * hosting it for a third party. These settings can be overwritten by an
  * optionally-loaded extension file with only the settings (no comments).
+ * The settings use an index at the first level to represent the ID of the
+ * URL in case you use multi-url (otherwise it will always use 1, which is
+ * the ID of the only URL inside the access_url table).
  */
 // Set a maximum number of users. Default (0) = no limit
-$_configuration['hosting_limit_users'] = 0;
+$_configuration[1]['hosting_limit_users'] = 0;
 // Set a maximum number of teachers. Default (0) = no limit
-$_configuration['hosting_limit_teachers'] = 0;
+$_configuration[1]['hosting_limit_teachers'] = 0;
 // Set a maximum number of courses. Default (0) = no limit
-$_configuration['hosting_limit_courses'] = 0;
+$_configuration[1]['hosting_limit_courses'] = 0;
 // Set a maximum number of sessions. Default (0) = no limit
-$_configuration['hosting_limit_sessions'] = 0;
+$_configuration[1]['hosting_limit_sessions'] = 0;
 // Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
 // Default (0) = no limit
-$_configuration['hosting_limit_disk_space'] = 0;
+$_configuration[1]['hosting_limit_disk_space'] = 0;
 
 /**
  * Content Delivery Network (CDN) settings. Only use if you need a separate 

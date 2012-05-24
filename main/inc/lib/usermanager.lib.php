@@ -84,6 +84,23 @@ class UserManager {
 		
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+                $access_url_id = 1;
+		if (api_get_multiple_access_url()) {		
+                  $access_url_id = api_get_current_access_url_id();
+                }
+		if ($_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+                  $num = self::get_number_of_users();
+                  if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+                    return api_set_failure('portal users limit reached');
+                  }
+                }
+		if ($status === 1 && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+                  $num = self::get_number_of_users(1);
+                  if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                    return api_set_failure('portal teachers limit reached');
+                  }
+                }
+		
 
     	//Checking the user language
         $languages = api_get_languages();   
@@ -2364,11 +2381,15 @@ class UserManager {
 
     /**
      * Get the total count of users
+     * @param   int     Status of users to be counted
      * @return	mixed	Number of users or false on error
      */
-    public static function get_number_of_users() {
+    public static function get_number_of_users($status=0) {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT count(*) FROM $t_u";
+        if (is_int($status) && $status>0) {
+          $sql .= " WHERE status = $status ";
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
         	return (int) Database::result($res, 0, 0);

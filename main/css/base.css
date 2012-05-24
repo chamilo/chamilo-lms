@@ -3834,15 +3834,13 @@ footer {
 
 
 .bottom_actions {
- 	background:#efefef;
+ 	/*background:#efefef;
     border:1px solid #ccc;         
-    padding:10px;     
+    padding:10px;
     vertical-align:middle;    
-   
-    display: block;
- 
-    width: 100%;
-  
+    */
+    display: block; 
+    width: 100%;    
 }
 
 .bottom_actions_fixed {
@@ -3850,4 +3848,5 @@ footer {
     z-index: 9001;  
     bottom: 0;   
     left: 0px;    
+    margin-bottom: 0px;
 }

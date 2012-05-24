@@ -169,6 +169,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             if (isset($this->_attributes['class'])) {
                 $this->_attributes['class'] = 'btn '.$this->_attributes['class'];
             }
+            //var_dump($this->getName());                        
             return $this->_getTabs().'<button ' . $this->_getAttrString($this->_attributes) . ' >'.$this->getValue() .'</button>';
         }
     } //end func toHtml

@@ -128,7 +128,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
     }
     
-    $form = generate_settings_form($settings, $settings_by_access_list);    
+    $form = generate_settings_form($settings, $settings_by_access_list);
+    
     $message = array();
     
     if ($form->validate()) {       
@@ -376,7 +377,6 @@ if (isset($form) && $form->validate()) {
         }
     }
 }
-
 
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {

@@ -330,7 +330,7 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-$select_level = array ();
+$select_level = array();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 $form->addGroup($html_results_enabled);

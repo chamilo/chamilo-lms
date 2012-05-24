@@ -76,8 +76,7 @@ function handle_regions() {
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
-    echo '<br />';    
+    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';    
 }
 
 function handle_extensions() {    
@@ -108,7 +107,7 @@ function handle_plugins() {
 
     //Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="20px">';
@@ -164,8 +163,12 @@ function handle_plugins() {
         }
     }
     echo '</table>';
-    echo '<br />';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
+    
+    echo '<div class="form-actions bottom_actions">';        
+    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';                    
+    echo '</div>';
+    echo '</form>';
+    
 }
 
 /**
@@ -508,10 +511,10 @@ function handle_search() {
  
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
         
-    $renderer = & $form->defaultRenderer();
+    //$renderer = & $form->defaultRenderer();
     //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
     //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-    $renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
+    //$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
        
     $values = api_get_settings_options('search_enabled');   
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
@@ -1048,7 +1051,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
         
-    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']), null, array('sss'));
+    $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     $form->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
     $default_values = array();    
@@ -1256,11 +1259,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
     
     if (!empty($settings)) {        
         $form->setDefaults($default_values); 
-    }
-    
-    $form->addElement('html', '<div class="bottom_actions">');
-    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-    $form->addElement('html', '</div>');
+    }    
+    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');    
     return $form;
 }
 

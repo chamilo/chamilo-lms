@@ -19,7 +19,6 @@ define('TEACHER_HTML_FULLPAGE', 5);
  */
 class FormValidator extends HTML_QuickForm
 {
-
     /**
      * Create a form validator based on an array of form data:
      * 
@@ -98,7 +97,6 @@ class FormValidator extends HTML_QuickForm
             }
         }
         $result->setDefaults($defaults);
-
         return $result;
     }
 
@@ -158,8 +156,12 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($form_template);
 
         //Element template
-        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {            
+        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {         
             $element_template = ' {label}  {element} ';
+            $renderer->setElementTemplate($element_template);
+        } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
+            $element_template = ' {label}  {element} ';
+            $renderer->setElementTemplate($element_template);
         } else {
             $element_template = '   
             <div class="control-group {error_class}">				
@@ -183,9 +185,30 @@ class FormValidator extends HTML_QuickForm
                     <!-- END error -->	
                 </div>
             </div>';
+            $renderer->setElementTemplate($element_template);
+            
+            //Display a gray div in the buttons
+            $button_element_template = '<div class="form-actions">{label} {element}</div>';
+            $renderer->setElementTemplate($button_element_template, 'submit_in_actions');       
+            
+            //Display a gray div in the buttons + makes the button available when scrolling
+            $button_element_template = '<div class="form-actions bottom_actions">{label} {element}</div>';
+            $renderer->setElementTemplate($button_element_template, 'submit_fixed_in_bottom');
+            
+            /*
+            $renderer->setElementTemplate($button_element_template, 'submit_button');            
+            $renderer->setElementTemplate($button_element_template, 'submit');
+            $renderer->setElementTemplate($button_element_template, 'button');   
+             *
+             */
+            
+            
         }        
         
-        $renderer->setElementTemplate($element_template);
+            
+        
+
+        
 
         //Set Header template        
         $renderer->setHeaderTemplate('<legend>{header}</legend>');

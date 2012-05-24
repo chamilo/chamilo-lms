@@ -28,4 +28,3 @@ class HTML_QuickForm_Select_Language extends HTML_QuickForm_select
 		}
 	}
 }
-?>

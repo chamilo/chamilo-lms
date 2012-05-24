@@ -25,23 +25,16 @@ define('MAX_FORM_FIELD_LENGTH',                 80);
 
 /*		PHP VERSION CHECK */
 
-// PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5');
+// Including necessary libraries.
+require_once '../inc/lib/main_api.lib.php';
 
-if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
-	$global_error_code = 1;
-	// Incorrect PHP version.
-	require '../inc/global_error_message.inc.php';
-	die();
-}
+check_php_version('../inc/');
 
 /*		INITIALIZATION SECTION */
 
 ob_implicit_flush(true);
 session_start();
 
-// Including necessary libraries.
-require_once '../inc/lib/main_api.lib.php';
 require_once api_get_path(LIBRARY_PATH).'session.class.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';

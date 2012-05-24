@@ -13,6 +13,9 @@
  * Constants declaration
  */
 
+// PHP version requirement.
+define('REQUIRED_PHP_VERSION', '5.3');
+
 // USER STATUS CONSTANTS
 /** global status of a user: student */
 define('STUDENT', 5);
@@ -28,7 +31,7 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
-define('MIN_PHP_VERSION', '5.2.4');
+
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -178,8 +181,6 @@ define('IS_PHP_53', !((float)$php_version < 5.3));
 define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
 define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
 define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
-
 
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
@@ -5802,4 +5803,16 @@ function block_course_item_locked_by_gradebook($item_id, $link_type, $course_cod
         $message = Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         api_not_allowed(true, $message);
     }    
+}
+
+function check_php_version($my_inc_path = null) {
+    if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
+        $global_error_code = 1;
+        // Incorrect PHP version
+        $global_page = $my_inc_path.'global_error_message.inc.php';
+        if (file_exists($global_page)) {
+            require $global_page;    
+        }
+        exit;
+    }
 }

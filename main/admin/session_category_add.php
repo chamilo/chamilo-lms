@@ -14,7 +14,6 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 $xajax -> registerFunction ('search_coachs');

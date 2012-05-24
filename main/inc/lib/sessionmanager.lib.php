@@ -34,6 +34,7 @@ class SessionManager {
         if (Database::num_rows($r) != 1) { return array(); }
         return Database::fetch_array($r,'ASSOC');
     }
+    
 	 /**
 	  * Create a session
 	  * @author Carlos Vargas from existing code
@@ -57,17 +58,18 @@ class SessionManager {
       **/
 	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
 		global $_configuration;
+        
 		//Check portal limits
-	        $access_url_id = 1;
-        	if (api_get_multiple_access_url()) {
-	            $access_url_id = api_get_current_access_url_id();
-        	}
-	        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
-        	    $num = self::count_sessions();
-	            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
-        	        return get_lang('PortalSessionsLimitReached');
-	            }
-        	}
+        $access_url_id = 1;
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+        }
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
+            $num = self::count_sessions();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+                return get_lang('PortalSessionsLimitReached');
+            }
+        }
 
 		$name                 = Database::escape_string(trim($sname));
 		$year_start           = intval($syear_start);
@@ -83,7 +85,7 @@ class SessionManager {
 		$tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);        
     
-		if(is_int($coach_username)) {
+		if (is_int($coach_username)) {
 			$id_coach = $coach_username;
 		} else {
 			$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
@@ -149,11 +151,8 @@ class SessionManager {
 				Database::query($sql_insert);
 				$session_id = Database::insert_id();
                 
-                if (!empty($session_id)) {                	
-    				//Adding to the correct URL				
-    				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
-                    
-                    $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                if (!empty($session_id)) {     	
+    				//Adding to the correct URL                    
                     $access_url_id = api_get_current_access_url_id();
                     UrlManager::add_session_to_url($session_id,$access_url_id);            
     

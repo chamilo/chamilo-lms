@@ -61,9 +61,7 @@ function get_number_of_courses() {
  * Get course data to display
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $users_table        = Database :: get_main_table(TABLE_MAIN_USER);
-    $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);    
     
     $sql = "SELECT code AS col0, title AS col1, visual_code AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, 
             code AS col7, visibility AS col8, directory as col9 

@@ -489,23 +489,24 @@ foreach ($docs_and_folders  as $file) {
             
             if ($extension == 'ogg') {
                 $extension = 'oga';
-            }            
+            }          
             //$("#jplayer_inspector_'.$count.'").jPlayerInspector({jPlayer:$("#jquery_jplayer_'.$count.'")});
             $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
                                 ready: function() {                    
                                     $(this).jPlayer("setMedia", {                                        
                                         '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
                                     });
-                                },  
+                                },
                                 play: function() { // To avoid both jPlayers playing together.
                                     $(this).jPlayer("pauseOthers");
                                 },                                
                                 //errorAlerts: true,
                                 //warningAlerts: true,
                                 swfPath: "'.$js_path.'jquery-jplayer",
-                                supplied: "m4a, oga, mp3, ogg, wav",
+                                //supplied: "m4a, oga, mp3, ogg, wav",
+                                supplied: "'.$extension.'",
                                 wmode: "window",
-                                //solution: "flash, html",  // Do not change this setting otherwise 
+                                solution: "flash, html",  // Do not change this setting 
                                 cssSelectorAncestor: "#jp_container_'.$count.'", 
                             });  	 '."\n\n";
             $count++;      

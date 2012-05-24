@@ -37,7 +37,7 @@ define('USER_RELATION_TYPE_PARENT',		2); // should be deprecated is useless
 define('USER_RELATION_TYPE_FRIEND',		3);
 define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
-define('USER_RELATION_TYPE_DELETED',	6);
+define('USER_RELATION_TYPE_DELETED',     6);
 define('USER_RELATION_TYPE_RRHH',		7);
 /**
  * Class
@@ -636,8 +636,8 @@ class UserManager {
 			// 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
 			// 2. Applying the strict purifier.
 			// 3. Length limitation.
-      $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
-      return $toreturn;
+            $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
+            return $toreturn;
 		}
 		// 1. Applying the shallow purifier.
 		// 2. Length limitation.

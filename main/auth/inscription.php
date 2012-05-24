@@ -42,18 +42,20 @@ if ($display_all_form) {
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
     $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    
     //	EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
+    
     if (api_get_setting('login_is_email') == 'true') {
-      $form->applyFilter('email','trim');
-      if (api_get_setting('registration', 'email') != 'true') {
-        $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-      }
-      $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-      $form->addRule('email', get_lang('UserTaken'), 'username_available');
+        $form->applyFilter('email','trim');
+        if (api_get_setting('registration', 'email') != 'true') {
+            $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+        }
+        $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule('email', get_lang('UserTaken'), 'username_available');
     }
 
     $form->addRule('email', get_lang('EmailWrong'), 'email');
@@ -67,15 +69,15 @@ if ($display_all_form) {
         if (api_get_setting('registration', 'officialcode') == 'true')
             $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
-    //
+    
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-      $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
-      $form->applyFilter('username','trim');
-      $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-      $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-      $form->addRule('username', get_lang('UsernameWrong'), 'username');
-      $form->addRule('username', get_lang('UserTaken'), 'username_available');
+        $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
+        $form->applyFilter('username','trim');
+        $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule('username', get_lang('UsernameWrong'), 'username');
+        $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
@@ -397,9 +399,10 @@ if ($form->validate()) {
     // Added by Ivan Tcholakov, 06-MAR-2008.
     if (empty($values['official_code'])) {
         $values['official_code'] =  api_strtoupper($values['username']);
-    } 
+    }
+    
     if (api_get_setting('login_is_email') == 'true') {
-      $values['username'] = $values['email'];  
+        $values['username'] = $values['email'];  
     }
 
     // creating a new user

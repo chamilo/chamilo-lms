@@ -749,22 +749,22 @@ function WSCreateUsersPasswordCrypted($params) {
         }
 
         $sql = "INSERT INTO $table_user
-                                    SET lastname = '".Database::escape_string(trim($lastName))."',
-                                    firstname = '".Database::escape_string(trim($firstName))."',
-                                    username = '".Database::escape_string(trim($loginName))."',
-                                    status = '".Database::escape_string($status)."',
-                                    password = '".Database::escape_string($password)."',
-                                    email = '".Database::escape_string($email)."',
-                                    official_code	= '".Database::escape_string($official_code)."',
-                                    picture_uri 	= '".Database::escape_string($picture_uri)."',
-                                    creator_id  	= '".Database::escape_string($creator_id)."',
-                                    auth_source = '".Database::escape_string($auth_source)."',
-                                    phone = '".Database::escape_string($phone)."',
-                                    language = '".Database::escape_string($language)."',
-                                    registration_date = now(),
-                                    expiration_date = '".Database::escape_string($expiration_date)."',
-                                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                                    active = '".Database::escape_string($active)."'";
+                SET lastname = '".Database::escape_string(trim($lastName))."',
+                firstname = '".Database::escape_string(trim($firstName))."',
+                username = '".Database::escape_string(trim($loginName))."',
+                status = '".Database::escape_string($status)."',
+                password = '".Database::escape_string($password)."',
+                email = '".Database::escape_string($email)."',
+                official_code	= '".Database::escape_string($official_code)."',
+                picture_uri 	= '".Database::escape_string($picture_uri)."',
+                creator_id  	= '".Database::escape_string($creator_id)."',
+                auth_source = '".Database::escape_string($auth_source)."',
+                phone = '".Database::escape_string($phone)."',
+                language = '".Database::escape_string($language)."',
+                registration_date = now(),
+                expiration_date = '".Database::escape_string($expiration_date)."',
+                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                active = '".Database::escape_string($active)."'";
         $result = Database::query($sql);
         if ($result) {
             //echo "id returned";

@@ -168,6 +168,7 @@ define('LOG_GRADEBOOK_ID',                       'gradebook_id');
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 define('USERNAME_MAX_LENGTH', 40);
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
+
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');

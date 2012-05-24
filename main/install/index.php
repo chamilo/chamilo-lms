@@ -127,7 +127,7 @@ $software_url 		= 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
 
-if (is_already_installed_system()) {
+if (!is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
@@ -449,16 +449,18 @@ if ($encryptPassForm == '1') {
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 
-<div id="wrapper">
-	<div id="header">
-		<div id="header1" style="margin-bottom:10px;">	
-			<div id="logo">	   
-	        	<img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
-			</div>	
-        </div>
-	</div>
-<div id="main">
-    <div class="row-fluid">
+<div id="wrapper">	
+<div id="main" class="container">
+    <header>
+		<div class="row">
+            <div id="header_left" class="span4">
+                <div id="logo">	   
+                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
+                </div>	
+            </div>
+        </div>        
+	</header>    
+    <div class="row">
         <div class="span3">
             <div class="well">		
                 <ol>
@@ -470,13 +472,14 @@ if ($encryptPassForm == '1') {
                     <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
                     <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
                 </ol>
-            </div>
+            </div>            
+            <div id="note">
+				<a class="btn" href="../../documentation/installation_guide.html" target="_blank">
+                    <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+			</div>
         </div>
         <div class="span9">
-            <div id="note" style="float:right;">
-				<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
-			</div>
-            
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';

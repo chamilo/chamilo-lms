@@ -310,6 +310,9 @@ if ($encryptPassForm == '1') {
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>	
 	<script type="text/javascript" >
 		$(document).ready( function() {
+            
+            $("#button_please_wait").hide();
+            
 			 //checked
 			if ($('#singleDb1').attr('checked')==false) {
 					//$('#dbStatsForm').removeAttr('disabled');
@@ -332,9 +335,12 @@ if ($encryptPassForm == '1') {
 
 			//Blocking step6 button
     		$("#button_step6").click(function() {        		
-            	$("#button_step6").attr('disable', true);
-    			$("#button_step6").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+            	$("#button_step6").hide();
+    			$("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+                $("#button_please_wait").show();
+                $("#button_please_wait").attr('disabled', true);
     			$("#is_executable").attr("value",'step6');
+                //$("#button_step6").show();        
         	});    		
 	 	});
         
@@ -697,7 +703,11 @@ if (@$_POST['step2']) {
 	  	<td align="right">
 			<input type="hidden" name="is_executable" id="is_executable" value="-" />
 			<input type="hidden" name="step6" value="1" />
-	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>"><?php echo get_lang('InstallChamilo'); ?></button>
+	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
+                <?php echo get_lang('InstallChamilo'); ?>
+            </button>
+            
+            <button class="save" id="button_please_wait"></button>
 		</td>
 	</tr>
 	</table>
@@ -836,7 +846,6 @@ if (@$_POST['step2']) {
 </div> <!-- main end-->
 <div class="push"></div>
 </div><!-- wrapper end-->
-
 <footer></footer>
 </body>
 </html>

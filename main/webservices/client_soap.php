@@ -55,6 +55,7 @@ $params = array(    'firstname'                 => 'Jon',
                     'password'                  => $generate_password, // encrypted using sha1
                     'encrypt_method'            => 'sha1',
                     'language'                  => 'english',
+                    'official_code'             => 'official',
                     'phone'                     => '00000000',
                     'expiration_date'           => '0000-00-00',
                     'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
@@ -73,6 +74,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
                     'secret_key'                => $secret_key);
 
     $result = $client->call('WSGetUser', array('GetUser' => $params));
+    
     echo '<h2>User created via webservices</h2>';
         
     //3.Adding user to the course TEST. The course TEST must be created manually in Chamilo
@@ -80,7 +82,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
     $params = array('course'        => 'TEST', //Chamilo string course code
                     'user_id'       => $user_id,
                     'secret_key'    => $secret_key);
-    $result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
+    //$result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
     
     //4. Adding course Test to the Session Session1
        
@@ -96,7 +98,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
                                                 ),    
                     'secret_key' => $secret_key);
     
-    $result = $client->call('WSSuscribeCoursesToSession', array('subscribeCoursesToSession' => $params));
+    //$result = $client->call('WSSuscribeCoursesToSession', array('subscribeCoursesToSession' => $params));
         
     
     

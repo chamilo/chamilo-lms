@@ -530,19 +530,20 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
-        'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
-        'status' => array('name' => 'status', 'type' => 'xsd:string'),
-        'email' => array('name' => 'email', 'type' => 'xsd:string'),
-        'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
-        'password' => array('name' => 'password', 'type' => 'xsd:string'),
-        'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
-        'language' => array('name' => 'language', 'type' => 'xsd:string'),
-        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
-        'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'firstname'             => array('name' => 'firstname', 'type' => 'xsd:string'),
+        'lastname'              => array('name' => 'lastname', 'type' => 'xsd:string'),
+        'status'                => array('name' => 'status', 'type' => 'xsd:string'),
+        'email'                 => array('name' => 'email', 'type' => 'xsd:string'),
+        'loginname'             => array('name' => 'loginname', 'type' => 'xsd:string'),
+        'password'              => array('name' => 'password', 'type' => 'xsd:string'),
+        'encrypt_method'        => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
+        'language'              => array('name' => 'language', 'type' => 'xsd:string'),
+        'phone'                 => array('name' => 'phone', 'type' => 'xsd:string'),
+        'expiration_date'       => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'official_code'         => array('name' => 'official_code',    'type' => 'xsd:string'),
         'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
+        'original_user_id_value'=> array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'extra'                 => array('name' => 'extra', 'type' => 'tns:extrasList')
     )
 );
 
@@ -634,8 +635,9 @@ function WSCreateUsersPasswordCrypted($params) {
         $status = $user_param['status'];
         $email = $user_param['email'];
         $loginName = $user_param['loginname'];
-
-        $official_code = '';
+        
+        $official_code = $user_param['official_code'];
+        
         $language = '';
         $phone = '';
         $picture_uri = '';
@@ -833,6 +835,7 @@ $server->wsdl->addComplexType(
         'language'                  => array('name' => 'language',                  'type' => 'xsd:string'),
         'phone'                     => array('name' => 'phone',                     'type' => 'xsd:string'),
         'expiration_date'           => array('name' => 'expiration_date',           'type' => 'xsd:string'),
+        'official_code'             => array('name' => 'official_code',             'type' => 'xsd:string'),
         'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
         'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
         'extra'                     => array('name' => 'extra',                     'type' => 'tns:extrasList'),
@@ -841,14 +844,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSCreateUserPasswordCrypted',						// method name
+$server->register('WSCreateUserPasswordCrypted',                            // method name
     array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
     array('return' => 'xsd:string'),								        // output parameters
     'urn:WSRegistration',													// namespace
-    'urn:WSRegistration#WSCreateUserPasswordCrypted',					// soapaction
+    'urn:WSRegistration#WSCreateUserPasswordCrypted',                       // soapaction
     'rpc',																	// style
     'encoded',																// use
-    'This service adds users'									    // documentation
+    'This service adds users'                                               // documentation
 );
 
 // Define the method WSCreateUserPasswordCrypted
@@ -856,6 +859,7 @@ function WSCreateUserPasswordCrypted($params) {
     global $_user, $_configuration, $debug;    
     if ($debug) error_log('WSCreateUserPasswordCrypted');
     if ($debug) error_log(print_r($params,1));
+    
     if (!WSHelperVerifyKey($params)) {        
         return return_error(WS_ERROR_SECRET_KEY);
     }
@@ -872,8 +876,8 @@ function WSCreateUserPasswordCrypted($params) {
     $lastName               = $params['lastname'];
     $status                 = $params['status'];
     $email                  = $params['email'];
-    $loginName              = $params['loginname'];
-    $official_code          = '';
+    $loginName              = $params['loginname'];    
+    $official_code          = $params['official_code'];
     $language               = '';
     $phone                  = '';
     $picture_uri            = '';
@@ -910,8 +914,8 @@ function WSCreateUserPasswordCrypted($params) {
     
     if ($debug) error_log('Ready to create user');
     
-    if ($user_id > 0) {      
-        if ($debug) error_log('User found');
+    if ($user_id > 0) {
+        if ($debug) error_log('User found with id: '.$user_id);
         
         // Check whether user is not active
         //@todo why this condition exists??
@@ -999,8 +1003,7 @@ function WSCreateUserPasswordCrypted($params) {
     
     $result = Database::query($sql);
     
-    if ($result) {
-        //echo "id returned";
+    if ($result) {        
         $return = Database::insert_id();
         
         //Multiple URL

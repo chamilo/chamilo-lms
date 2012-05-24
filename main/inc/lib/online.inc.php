@@ -138,13 +138,12 @@ function user_is_online($user_id) {
 	
 }
 /**
- * Gives a list of people online now (and in the last $valid minutes)
- * @param   int         Number of minutes to account logins for
- * @param   bool		optionally if it's set to true shows who friends from social network is online otherwise just shows all users online
+ * Gives a list of people online now (and in the last $valid minutes) 
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
 function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false) {
     
+    // Time limit in seconds?
     if (empty($time_limit)) {
         $time_limit = api_get_setting('time_limit_whosonline');
     } else {
@@ -179,12 +178,15 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 		// 	who friends from social network is online
 		$query = "SELECT DISTINCT login_user_id, login_date
 				  FROM $track_online_table INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-				  WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' 
+				  WHERE     DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND 
+                            friend_user_id <> '".api_get_user_id()."' AND 
+                            relation_type='".USER_RELATION_TYPE_FRIEND."' AND 
+                            user_id = '".api_get_user_id()."' 
                   ORDER BY $column $direction 
                   LIMIT $from, $number_of_items";
 	} else {		
 		$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  
-                  WHERE DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
+                  WHERE u.status != ".ANONYMOUS." AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
                   ORDER BY $column $direction 
                   LIMIT $from, $number_of_items";
 	}
@@ -196,13 +198,17 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 				// 	friends from social network is online
 				$query = "SELECT distinct login_user_id,login_date
 							FROM $track_online_table track INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  
+							WHERE   track.access_url_id =  $access_url_id AND 
+                                    DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' AND 
+                                    friend_user_id <> '".api_get_user_id()."' AND 
+                                    relation_type='".USER_RELATION_TYPE_FRIEND."'  
                             ORDER BY $column $direction 
                             LIMIT $from, $number_of_items";                        
 			} else {
 				// all users online
-				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track  INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
-						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
+				$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." track  INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
+						  WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND 
+                                DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
                           ORDER BY $column $direction  
                           LIMIT $from, $number_of_items";
 			}
@@ -213,33 +219,21 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	/*$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u             
             GROUP by u.user_id  
             ORDER BY $column $direction  
-            LIMIT $from, $number_of_items";	
-    */
+            LIMIT $from, $number_of_items"; */
+    
 	$result = Database::query($query);
-	if ($result) {				
-		$validtime = mktime(date("H"),date("i")-$time_limit,date("s"),date("m"),date("d"),date("Y"));
-		$rarray = array();
-
-		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
-			$barray = array();
-			array_push($barray,$login_user_id);
-			array_push($barray,$login_date);
-
-			// YYYY-MM-DD HH:MM:SS, db date format
-			$hour = substr($login_date,11,2);
-			$minute = substr($login_date,14,2);
-			$secund = substr($login_date,17,2);
-			$month = substr($login_date,5,2);
-			$day = substr($login_date,8,2);
-			$year = substr($login_date,0,4);
-			// db timestamp
-			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
-
-			if ($dbtime>$validtime) {
-				array_push($rarray,$barray);
-			}
-		}
-		return $rarray;
+	if ($result) {		
+        $valid_date_time = new DateTime();        
+        $diff = "PT".$time_limit.'M';
+        $valid_date_time->sub(new DateInterval($diff));                        
+		$users_online = array();
+		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
+            $user_login_date = new DateTime($login_date);                       
+			if ($user_login_date > $valid_date_time) {
+				$users_online[] = $login_user_id;
+			}            
+		}        
+		return $users_online;
 	} else {
 		return false;
 	}
@@ -384,34 +378,24 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $valid, $co
     $from            = intval($from);
     $number_of_items = intval($number_of_items);
 
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." 
+	$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." 
               WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() 
-              LIMIT $from, $number_of_items
-             ";
+              LIMIT $from, $number_of_items ";
+              
 	$result = Database::query($query);
-	if (count($result)>0) {		
-		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
-		$rarray = array();
+	if ($result) {
+        $valid_date_time = new DateTime();          
+        $diff = "PT".$time_limit.'M';
+        $valid_date_time->sub(new DateInterval($diff));                        
+		$users_online = array();
 
-		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
-			$barray = array();
-			array_push($barray,$login_user_id);
-			array_push($barray,$login_date);
-
-			// YYYY-MM-DD HH:MM:SS, db date format
-			$hour = substr($login_date,11,2);
-			$minute = substr($login_date,14,2);
-			$secund = substr($login_date,17,2);
-			$month = substr($login_date,5,2);
-			$day = substr($login_date,8,2);
-			$year = substr($login_date,0,4);
-			// db timestamp
-			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
-			if ($dbtime >= $validtime) {
-				array_push($rarray,$barray);
-			}
+		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
+            $user_login_date = new DateTime($login_date);            
+			if ($user_login_date > $valid_date_time) {
+				$users_online[] = $login_user_id;
+			}            
 		}
-		return $rarray;
+		return $users_online;
 	} else {
 		return false;
 	}

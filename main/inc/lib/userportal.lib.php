@@ -124,6 +124,13 @@ class IndexManager {
 	
 		// Selecting the last login of the user.
 		$uid = $this->user_id;
+        
+           
+        //Changing global chat status to offline
+        if (api_get_setting('allow_global_chat') == 'true') {
+            $chat = new Chat();
+            $chat->set_user_status(0);
+        }       
 		
 		$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
 		$q_last_connection = Database::query($sql_last_connection);
@@ -158,7 +165,9 @@ class IndexManager {
 		}
 		exit_of_chat($uid);
 		Session::destroy();
-                $query_string = $query_string ? "$query_string&loggedout=true" : '?loggedout=true';
+     
+        
+        $query_string = $query_string ? "$query_string&loggedout=true" : '?loggedout=true';
 		header("Location: index.php$query_string");
 		exit();
 	}

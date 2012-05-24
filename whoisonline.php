@@ -23,16 +23,14 @@ $htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
 $this_section = SECTION_SOCIAL;
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
+$htmlHeadXtra[] = '<script>
+    
+function show_image(image,width,height) {
+    width = parseInt(width) + 20;
+    height = parseInt(height) + 20;
+    window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
+}
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-	function show_image(image,width,height) {
-		width = parseInt(width) + 20;
-		height = parseInt(height) + 20;
-		window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-	}
-
-</script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){
 		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
@@ -111,9 +109,9 @@ if ($_GET['chatid'] != '') {
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-		$user_list = who_is_online_in_this_course(0, 10, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+		$user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = who_is_online(0, 10);		
+		$user_list = who_is_online(0, 9);		
 	}
     
 	if (!isset($_GET['id'])) {	    		

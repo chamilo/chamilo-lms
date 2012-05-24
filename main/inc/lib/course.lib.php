@@ -3750,13 +3750,19 @@ class CourseManager {
 
     /**
      * Get courses count
+     * @param int Access URL ID (optional)
+     * @return int Number of courses
      */
-    public function count_courses() {
+    public function count_courses($access_url_id=null) {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT count(id) FROM $table_course";
+        $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT count(id) FROM $table_course c";
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+            $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+        }
         $res = Database::query($sql);
-	$row = Database::fetch_array($res,0);
-        return $row;
+	$row = Database::fetch_row($res);
+        return $row[0];
     }
    
 } //end class CourseManager

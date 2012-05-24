@@ -1771,13 +1771,20 @@ class SessionManager {
     	return false;
     }
     /**
-     *
+     * Get the number of sessions
+     * @param  int ID of the URL we want to filter on (optional)
+     * @return int Number of sessions
      */
-    public function count_sessions() {
+    public function count_sessions($access_url_id=null) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT count(id) FROM $session_table";
+        $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $sql = "SELECT count(id) FROM $session_table s";
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+            $sql .= ", $access_url_rel_session_table u ".
+                    " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
+        }
         $res = Database::query($sql);
-        $row = Database::fetch_array($res);
+        $row = Database::fetch_row($res);
         return $row[0];
     }
 }

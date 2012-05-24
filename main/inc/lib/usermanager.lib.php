@@ -2382,14 +2382,22 @@ class UserManager {
     /**
      * Get the total count of users
      * @param   int     Status of users to be counted
+     * @param   int     Access URL ID (optional)
      * @return	mixed	Number of users or false on error
      */
-    public static function get_number_of_users($status=0) {
+    public static function get_number_of_users($status=0, $access_url_id=null) {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT count(*) FROM $t_u";
+	$t_a = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql = "SELECT count(*) FROM $t_u u";
+        $sql2 = '';
         if (is_int($status) && $status>0) {
-          $sql .= " WHERE status = $status ";
+          $sql2 .= " WHERE u.status = $status ";
         }
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+          $sql .= ", $t_a a ";
+          $sql2 .= " AND a.access_url_id = $access_url_id AND u.user_id = a.user_id ";
+        }
+        $sql = $sql.$sql2;
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
         	return (int) Database::result($res, 0, 0);

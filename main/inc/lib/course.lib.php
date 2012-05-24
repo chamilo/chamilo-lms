@@ -118,6 +118,16 @@ class CourseManager {
     function create_course($params) {           
         global $_configuration;
         
+        $access_url_id = 1;
+        if (api_get_multiple_access_url()) {		
+            $access_url_id = api_get_current_access_url_id();
+        }
+        if ($_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
+            $num = self::count_courses();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
+                return api_set_failure('PortalCoursesLimitReached');
+            }
+        }
         if (empty($params['title'])) {
             return false;
         }        
@@ -2044,7 +2054,7 @@ class CourseManager {
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." WHERE course_code='".$course_code."'";
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
-        //if ($send_to_tutor_also = true) {
+        //if ($send_to_tutor_also = true) 
         // Proposed change:
         if ($send_to_tutor_also) {
         //
@@ -3737,6 +3747,16 @@ class CourseManager {
         
         return ResultSet::create($sql);
     }
-    
+
+    /**
+     * Get courses count
+     */
+    public function count_courses() {
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT count(id) FROM $table_course";
+        $res = Database::query($sql);
+	$row = Database::fetch_array($res,0);
+        return $row;
+    }
    
 } //end class CourseManager

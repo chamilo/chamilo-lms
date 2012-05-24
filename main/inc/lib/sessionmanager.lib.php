@@ -56,6 +56,19 @@ class SessionManager {
 	  * @return mixed       Session ID on success, error message otherwise
       **/
 	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
+		global $_configuration;
+		//Check portal limits
+	        $access_url_id = 1;
+        	if (api_get_multiple_access_url()) {
+	            $access_url_id = api_get_current_access_url_id();
+        	}
+	        if ($_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
+        	    $num = self::count_sessions();
+	            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+        	        return get_lang('PortalSessionsLimitReached');
+	            }
+        	}
+
 		$name                 = Database::escape_string(trim($sname));
 		$year_start           = intval($syear_start);
 		$month_start          = intval($smonth_start);
@@ -1756,5 +1769,15 @@ class SessionManager {
     		return true;
     	}
     	return false;
+    }
+    /**
+     *
+     */
+    public function count_sessions() {
+        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sql = "SELECT count(id) FROM $session_table";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        return $row[0];
     }
 }

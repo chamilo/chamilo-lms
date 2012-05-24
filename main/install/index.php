@@ -119,15 +119,11 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version 		= '1.9.0';
-$new_version_stable = false;
-$new_version_major 	= true;
-$software_name 		= 'Chamilo';
-$software_url 		= 'http://www.chamilo.org/';
+require_once __DIR__.'/version.php';
 
 // A protection measure for already installed systems.
 
-if (!is_already_installed_system()) {
+if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';

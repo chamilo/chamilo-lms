@@ -378,7 +378,7 @@ if( $form->validate()) {
 			//If any error ocurred during user creation, print it (api_failureList 
 			// stores values as separate words, so rework it
 			$message = '';
-			$message_bits = explode(' ',array_pop($api_failureList));
+			$message_bits = explode(' ',api_get_last_failure());
 			foreach ($message_bits as $bit) {
 				$message .= ucfirst($bit);
 			}

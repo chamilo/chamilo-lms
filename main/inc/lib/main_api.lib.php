@@ -5794,7 +5794,7 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
  * @param string    course code
  * @return boolean 
  */
-function block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
+function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
     if (api_is_platform_admin()) {
         return false;
     }
@@ -5805,7 +5805,7 @@ function block_course_item_locked_by_gradebook($item_id, $link_type, $course_cod
     }    
 }
 
-function check_php_version($my_inc_path = null) {
+function api_check_php_version($my_inc_path = null) {
     if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
         $global_error_code = 1;
         // Incorrect PHP version
@@ -5814,5 +5814,12 @@ function check_php_version($my_inc_path = null) {
             require $global_page;    
         }
         exit;
+    }
+}
+
+function api_check_archive_dir() {
+    if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');           
+        api_not_allowed(true, $message);
     }
 }

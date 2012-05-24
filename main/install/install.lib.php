@@ -1043,9 +1043,9 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.MIN_PHP_VERSION.'</td>
+                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (phpversion() < MIN_PHP_VERSION) {
+    if (phpversion() < REQUIRED_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';

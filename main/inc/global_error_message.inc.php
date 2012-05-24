@@ -27,7 +27,8 @@ $ErrorCode = 'Error code';
 
 // Error code 1.
 $IncorrectPhpVersionTitle = 'Incorrect PHP version';
-$IncorrectPhpVersionDescription = 'Scripting language version %s1 on your server is incorrect. PHP %s2 should be supported. %s3 Read the installation guide.';
+$IncorrectPhpVersionDescription = 'Warning: we have detected that your version of PHP is %s1. To install Chamilo, you need to have PHP %s2 or superior. If you don\'t know what we\'re talking about, please contact your hosting provider or your support team. 
+    %s3 Read the installation guide.';
 
 // Error code 2.
 $InstallationTitle = 'Chamilo has not been installed';
@@ -86,12 +87,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         $css_base_chamilo_file = $root_sys.$css_item;
         if (file_exists($css_base_chamilo_file)) {            
             $css_def .= @file_get_contents($css_base_chamilo_file);
-        }        
-    }
+        }
+    }    
     
-    
-    $css_def = str_replace("@import url('bootstrap.css');", '', $css_def);    
-	$css_def = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css_def);    
+    $css_def = str_replace("@import url('bootstrap.css');", '', $css_def);
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
 	$css_def = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css_def);
 	$css_def = str_replace('../../img/', $root_rel.'main/img/', $css_def);
@@ -111,7 +110,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$length = strlen($IncorrectPhpVersionDescription);
 				$read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
 				$IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
-				$IncorrectPhpVersionDescription .= '<br /><a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
+				$IncorrectPhpVersionDescription .= '<br /><a class="btn" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			}
 			$global_error_message['description'] = $IncorrectPhpVersionDescription;
 			break;
@@ -179,22 +178,24 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</head>
 		<body>
 		<div id="wrapper">
-			<div id="header">				
-                <div id="logo">    
-                    <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
-                </div>				
-				
+            <div id="main" class="container">
+                <header>
+                    <div class="row">
+                    <div id="header_left" class="span4">
+                        <div id="logo">
+                            <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
+                        </div>
+                    </div>                
+                </header>	
                 <ul class="breadcrumb">
                     <li><a href="#">{SECTION}</a></li>
-                </ul>				
-			</div>
-			<div class="clear"> </div>
-
-			<div id="main">
-				<div style="text-align: center;">
-						{DESCRIPTION}
-						{CODE}
-				</div>
+                </ul>
+                <section>
+                    <div style="text-align:center">
+                        {DESCRIPTION}
+                        {CODE}				
+                    </div>
+                </section>        
 			</div>
 			<div class="push"/></div>
 		</div>

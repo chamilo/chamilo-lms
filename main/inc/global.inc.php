@@ -24,20 +24,9 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
-// PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5');
-
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other intialisation files.
 $includePath = dirname(__FILE__);
-
-// PHP version check.
-if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
-    $global_error_code = 1;
-    // Incorrect PHP version.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
@@ -76,8 +65,11 @@ if (empty($_configuration['system_version'])) {
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 
+
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
+
+check_php_version($includePath.'/');
 
 // Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);
@@ -95,8 +87,8 @@ ini_set('auto_detect_line_endings', '1');
 require_once dirname(__FILE__).'/autoload.inc.php';
 
 require_once $lib_path.'database.lib.php';
-require_once $lib_path.'template.lib.php';
-require_once $lib_path.'display.lib.php';
+//require_once $lib_path.'template.lib.php'; moved to autoload
+//require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
 //require_once $lib_path.'image.lib.php';   moved to autoload
 require_once $lib_path.'array.lib.php';
@@ -107,13 +99,13 @@ require_once $lib_path.'events.lib.inc.php';
 
 require_once $lib_path.'model.lib.php';
 //require_once $lib_path.'sortable_table.class.php';  moved to autoload
-require_once $lib_path.'usermanager.lib.php';
-require_once $lib_path.'message.lib.php';
-require_once $lib_path.'social.lib.php';
-require_once $lib_path.'notification.lib.php';
+//require_once $lib_path.'usermanager.lib.php'; moved to autoload
+//require_once $lib_path.'message.lib.php'; moved to autoload
+//require_once $lib_path.'social.lib.php'; moved to autoload
+//require_once $lib_path.'notification.lib.php'; moved to autoload
 require_once $lib_path.'course.lib.php';
 //require_once $lib_path.'sessionmanager.lib.php'; moved to autoload
-require_once $lib_path.'tracking.lib.php';
+//require_once $lib_path.'tracking.lib.php'; moved to autoload
 
 //require_once $lib_path.'formvalidator/FormValidator.class.php'; moved to autoload
 require_once $lib_path.'online.inc.php';

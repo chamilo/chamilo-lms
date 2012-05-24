@@ -8,8 +8,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-
 // Create the form
 $form = new FormValidator('addlegal');
 
@@ -78,22 +76,8 @@ if( $form->validate()) {
 				}
 			}
 		}
-} else {
-	/*
-	if (!isset($_POST['language'])) {
-		$language = api_get_setting('platformLanguage');
-		$language = api_get_language_id($language);
-		$term_preview = LegalManager::get_last_condition($language);
-		$defaults['type']=$term_preview['type'];
-		if (!$term_preview) {
-			// there are not terms and conditions
-			$term_preview['type']=-1;
-			$defaults['type']=0;
-		}
-		$defaults['content']=$term_preview['content'];
-		$defaults['changes']=$term_preview['changes'];
-	}*/
 }
+
 $form->setDefaults($default);
 
 if(isset($_POST['send'])) {
@@ -103,43 +87,29 @@ $token = Security::get_token();
 
 $form->addElement('hidden','sec_token');
 $form->setConstants(array('sec_token' => $token));
-
-$text  = '<div class="row">
-		  	<div class="label"></div>
-			<div class="formw">
-				'.get_lang('DisplayTermsConditions').'
-			</div>
-		 </div>';
-
-$form->addElement('html',$text);
-
-//$form->addElement('select_language', 'language', get_lang('Language'),null,array('id'=>'language','onchange'=>'sendlang();'));
-
+$form->addElement('label', null, get_lang('DisplayTermsConditions'));
 
 if (isset($_POST['language'])) {
-//$form->addElement('html_editor', 'content', null, null, array('ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '250'));
+
 	$form->addElement('static', Security::remove_XSS($_POST['language']));
 	$form->addElement('hidden', 'language',Security::remove_XSS($_POST['language']));
 	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250'));
-	//$form->addElement('textarea', 'content', get_lang('Content'),array('cols'=>'120','rows'=>'10'));
+	
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
 	$form->addElement('radio', 'type', '', get_lang('PageLink') ,'1');
 	$form->addElement('textarea', 'changes', get_lang('ExplainChanges'),array('width'=>'20'));
 
-	$preview = LegalManager::show_last_condition($term_preview);
+    
+	$preview = LegalManager::show_last_condition($term_preview);    
+    
 	if ($term_preview['type']!=-1) {
-		$term_preview  = '<div class="row">
-				<div class="label">'.get_lang('Preview').'</div>
-				<div class="formw">
-				'.$preview.'
-				</div>
-				</div>';
-		$form->addElement('html',$term_preview);
+		$form->addElement('label', get_lang('Preview'),  $preview);
 	}
+    
 	// Submit & preview button
-
-		$navigator_info = api_get_navigator();
-		//ie6 fix
+    $navigator_info = api_get_navigator();
+    
+    //ie6 fix
 	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		$buttons = '<div class="row" align="center">
 				<div class="formw">
@@ -163,7 +133,7 @@ if (isset($_POST['language'])) {
 	$form->addElement('select_language', 'language', get_lang('Language'),null,array());
 	$buttons = '<div class="row">
 					<div class="formw">
-					<button type="submit" class="save" 	 name="send" value="load">'.get_lang('Load').'</button>
+					<button type="submit" class="save" name="send" value="load">'.get_lang('Load').'</button>
 					</div>
 				</div>';
 	$form->addElement('html',$buttons);
@@ -199,4 +169,3 @@ if (isset ($_GET['action'])) {
 
 $form->setDefaults($defaults);
 $form->display();
-?>

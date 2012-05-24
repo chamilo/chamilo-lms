@@ -13,8 +13,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
 require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-//require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';moved to autoload
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
@@ -248,8 +246,6 @@ if ($display_all_form) {
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="btn"');
-
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {
@@ -324,7 +320,6 @@ if (!CustomPages::enabled()) {
         }
     }
 
-
     if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
         $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
@@ -349,13 +344,12 @@ if (!CustomPages::enabled()) {
     }
 }
 
-
-
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
+    
     if (!$term_preview) {
         //we load from the platform
         $language = api_get_setting('platformLanguage');
@@ -367,6 +361,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             $term_preview = LegalManager::get_last_condition($language);
         }
     }
+    
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
@@ -374,25 +369,19 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
         $form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
         $form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
-    }
+    }    
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $term_preview  = '<div class="row">
-                    <div class="label">'.get_lang('TermsAndConditions').'</div>
-                    <div class="formw">
-                    '.$preview.'
-                    <br />
-                    </div>
-                    </div>';
-            $form->addElement('html', $term_preview);
+            $preview = LegalManager::show_last_condition($term_preview);    
+            $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
 }
 
+$form->addElement('button', 'submit', get_lang('RegisterUser'));
 
 if ($form->validate()) {
     /*
@@ -412,7 +401,6 @@ if ($form->validate()) {
     if (api_get_setting('login_is_email') == 'true') {
       $values['username'] = $values['email'];  
     }
-
 
     // creating a new user
     $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
@@ -508,6 +496,7 @@ if ($form->validate()) {
                 $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
                 $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
                 $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
+                
                 if (api_is_western_name_order()) {
                     $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
                     $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
@@ -532,9 +521,7 @@ if ($form->validate()) {
             exit;
         }
 
-        /*
-                  SESSION REGISTERING
-         */
+        /* SESSION REGISTERING */
         $_user['firstName'] = stripslashes($values['firstname']);
         $_user['lastName'] 	= stripslashes($values['lastname']);
         $_user['mail'] 		= $values['email'];
@@ -551,9 +538,7 @@ if ($form->validate()) {
 
         Session::write('user_last_login_datetime',$user_last_login_datetime);
 
-        /*
-                     EMAIL NOTIFICATION
-         */
+        /* EMAIL NOTIFICATION */
 
         if (strpos($values['email'], '@') !== false) {
             // Let us predefine some variables. Be sure to change the from address!
@@ -589,8 +574,7 @@ if ($form->validate()) {
         $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
     }
     $button_text = '';
-    if ($is_allowedCreateCourse) {
-        
+    if ($is_allowedCreateCourse) {        
         $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>\n";
         $action_url = '../create_course/add_course.php';
         $button_text = api_get_setting('course_validation') == 'true'
@@ -608,16 +592,16 @@ if ($form->validate()) {
     // ?uidReset=true&uidReq=$_user['user_id']
 
     $display_text .= '<form action="'. $action_url. '"  method="post">'. "\n". '<button type="submit" class="next" name="next" value="'. get_lang('Next',null,$_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
-  if (CustomPages::enabled()) {
-    CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
-  }
+    if (CustomPages::enabled()) {
+        CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
+    }
     echo $display_text;
 } else {
   // Custom pages
-  if (CustomPages::enabled()) {
-    CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
-  } else {
-    $form->display();
-  }
+    if (CustomPages::enabled()) {
+        CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
+    } else {
+        $form->display();
+    }
 }
 Display :: display_footer();

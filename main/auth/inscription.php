@@ -306,8 +306,9 @@ if (!CustomPages::enabled()) {
 
     $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
     Display :: display_header($tool_name);
-    $form->addElement('header', $tool_name);
-
+    
+    echo Display::page_header($tool_name);
+    
     $home = api_get_path(SYS_PATH).'home/';
     if ($_configuration['multiple_access_urls']) {
         $access_url_id = api_get_current_access_url_id();
@@ -327,7 +328,7 @@ if (!CustomPages::enabled()) {
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
-            echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+            echo '<div class="well_border">'.$open.'</div>';
         }
     }
 

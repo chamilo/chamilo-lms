@@ -151,7 +151,17 @@ class SessionManager {
 				Database::query($sql_insert);
 				$session_id = Database::insert_id();
                 
-                if (!empty($session_id)) {     	
+                if (!empty($session_id)) {
+                    /*
+                    Sends a message to the user_id = 1
+                                        
+                    $user_info = api_get_user_info(1);
+                    $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
+                    $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');                    
+                    $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;                                        
+                    api_mail_html($complete_name, $user_info['email'], $subject, $message);
+                    * 
+                    */                    
     				//Adding to the correct URL                    
                     $access_url_id = api_get_current_access_url_id();
                     UrlManager::add_session_to_url($session_id,$access_url_id);            

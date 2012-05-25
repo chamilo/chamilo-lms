@@ -1,7 +1,5 @@
 <?php
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-
 /**
 * @package chamilo.library
 */
@@ -302,6 +300,24 @@ class Certificate extends Model {
 	* Shows the student's certificate (HTML file)
 	*/
 	public function show() {
+        if (api_is_anonymous()) {            
+            if (api_get_setting('allow_public_certificates') != 'true') {
+                return false;
+            }            
+            if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
+                $gradebook = new Gradebook();
+                $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
+                if (!empty($gradebook_info['course_code'])) {
+                    $allow_public_certificates = api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']);
+                    if ($allow_public_certificates == 0) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+        
 		//Read file or preview file
 		if (!empty($this->certificate_data['path_certificate'])) {
 			$user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);

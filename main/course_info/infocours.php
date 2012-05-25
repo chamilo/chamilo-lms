@@ -317,8 +317,6 @@ if (is_settings_editable()) {
 		$disabled_output = "disabled";
 	$form->freeze();
 }
-
-
 $form->addElement('html', '</div></div>');
 
 // THEMATIC ADVANCE SETTINGS
@@ -334,6 +332,19 @@ $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")),
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 $form->addElement('html', '</div></div>');
+
+
+// Certificate settings
+$form->addElement('html', '<div><h3>'.Display::return_icon('certificate.png', Security::remove_XSS(get_lang('Certificates')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Certificates')).'</h3><div>');
+
+$group = array();
+$group[]=$form->createElement('radio', 'allow_public_certificates', get_lang('AllowPublicCertificates'), get_lang('Yes'), 1);
+$group[]=$form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
+$form->addGroup($group, '', array(get_lang("AllowPublicCertificates")), '');
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+$form->addElement('html', '</div></div>');
+
 
 
 // BBB SETTINGS
@@ -364,9 +375,6 @@ if ($video_conference_enabled) {
     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
     $form->addElement('html', '</div></div>');
 }
-
-
-
 
 // Get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
@@ -418,6 +426,8 @@ $values['email_alert_students_on_new_homework']     = api_get_course_setting('em
 
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
+$values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
+
 
 if ($video_conference_enabled) {
     
@@ -482,7 +492,7 @@ if ($form->validate() && is_settings_editable()) {
 				subscribe  			    = '".$update_values['subscribe']."',
 				unsubscribe  		    = '".$update_values['unsubscribe']."',
 				legal                   = '".$update_values['legal']."',
-				activate_legal          = '".$update_values['activate_legal']."',                        
+				activate_legal          = '".$update_values['activate_legal']."',
 				registration_code 	    = '".$update_values['course_registration_password']."'
 			WHERE code = '".$course_code."'";
 	Database::query($sql);

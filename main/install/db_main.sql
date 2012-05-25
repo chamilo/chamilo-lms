@@ -863,7 +863,8 @@ VALUES
 ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
 ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
 ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18037','DatabaseVersion','', NULL, NULL, 0);
+('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18042','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1209,7 +1210,9 @@ VALUES
 ('allow_session_admins_to_see_all_sessions', 'true', 'Yes'),
 ('allow_session_admins_to_see_all_sessions', 'false', 'No'),
 ('allow_skills_tool', 'true', 'Yes'),
-('allow_skills_tool', 'false', 'No');
+('allow_skills_tool', 'false', 'No'),
+('allow_public_certificates', 'true', 'Yes'),
+('allow_public_certificates', 'false', 'No');
 
 UNLOCK TABLES;
 /*

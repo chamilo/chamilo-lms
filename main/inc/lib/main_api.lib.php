@@ -2334,13 +2334,11 @@ function api_display_tool_title($title_element) {
  * @todo rewrite code so it is easier to understand
  */
 function api_display_tool_view_option() {
-
     if (api_get_setting('student_view_enabled') != 'true') { 
         return '';
     }
-
-    $output_string = '';
-
+    
+    
     $sourceurl = '';
     $is_framed = false;
     // Exceptions apply for all multi-frames pages
@@ -2378,20 +2376,22 @@ function api_display_tool_view_option() {
             //$sourceurl = str_replace('&', '&amp;', $sourceurl);
         }
     }
+    
+    $output_string = '';
     if (!empty($_SESSION['studentview'])) {
         if ($_SESSION['studentview'] == 'studentview') {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
+            $output_string .= '<a class="btn btn-mini btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+            $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
         }
     } else {
-        $output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+        $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
     }
     return $output_string;
 }

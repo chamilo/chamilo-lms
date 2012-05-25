@@ -202,14 +202,7 @@ function return_notification_menu() {
                     Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
         }        
     }
-    
-    if ($user_id && isset($course_id)) {
-        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
-            $html .= '<li>';
-            $html .= api_display_tool_view_option();
-            $html .= '</li>';
-        }
-    }
+  
     
     if (api_get_setting('accessibility_font_resize') == 'true') {
         $html .= '<li class="resize_font">';
@@ -464,7 +457,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 	 
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
-    $_course        = api_get_course_info();    
+    $_course        = api_get_course_info();
+    $user_id        = api_get_user_id();
+    $course_id      =  api_get_course_id();
+    
     
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -479,8 +475,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
     	
-        $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
-        
+        $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');        
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
         
         switch (api_get_setting('breadcrumbs_course_homepage')) {
@@ -501,8 +496,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 }
                 break;
         }
-        /*
-
+        /**
          * @todo could be useful adding the My courses in the breadcrumb
         $navigation_item_my_courses['title'] = get_lang('MyCourses');
         $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';        
@@ -566,17 +560,25 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         if (!empty($navigation_info['title'])) {
                      
             if ($navigation_info['url'] == '#') {
-                $final_navigation[$index] = '<span>'.$navigation_info['title'].'</span>';                
+                $final_navigation[$index] = $navigation_info['title'];
             } else {
-                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top"><span>'.$navigation_info['title'].'</span></a>';
+                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top">'.$navigation_info['title'].'</a>';
             }
             $counter++;
         }
     }
     
-    $html = '';
+    $html = '';    
+    
+    $view_as_student_link = null;
+    //User view as student
+    if ($user_id && isset($course_id)) {
+        if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+            $view_as_student_link = api_display_tool_view_option();            
+        }
+    }
 
-    if (!empty($final_navigation)) {        
+    if (!empty($final_navigation)) {       
         $lis = '';
         $i = 0;
         //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
@@ -584,10 +586,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));      
         $final_navigation_count = count($final_navigation);
         
-        if (!empty($final_navigation)) {
-            
-           // $home_link.= '<span class="divider">/</span>';
-            
+        if (!empty($final_navigation)) {            
+            // $home_link.= '<span class="divider">/</span>';            
             $lis.= Display::tag('li', $home_link);
             foreach ($final_navigation as $bread) {  
                 $bread_check = trim(strip_tags($bread));                
@@ -601,8 +601,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 }
             }
         } else {
-            $lis.= Display::tag('li', $home_link);    
+            $lis.= Display::tag('li', $home_link);
         }
+        
+        // view as student
+        if (!empty($view_as_student_link)) {
+            $lis.= Display::tag('li', $view_as_student_link, array('class' => 'pull-right'));
+        }
+        
         $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));        
     }
     return $html ;

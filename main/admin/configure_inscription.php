@@ -14,7 +14,6 @@ api_protect_admin_script();
 
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once api_get_path(INCLUDE_PATH).'lib/legal.lib.php';
 
 // Load terms & conditions from the current lang
 if (get_setting('allow_terms_conditions') == 'true') {
@@ -166,9 +165,7 @@ if (!empty($action)) {
 
 Display :: display_header($tool_name);
 
-echo '<div class="actions-title">';
-echo $tool_name;
-echo '</div>';
+echo Display::page_header($tool_name);
 
 // The following security condition has been removed, because it makes no sense here. See Bug #1846.
 //// Forbidden to self-register
@@ -421,20 +418,13 @@ if (get_setting('allow_terms_conditions') == 'true') {
         $form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $term_preview = '<div class="row">
-                    <div class="label">'.get_lang('TermsAndConditions').'</div>
-                    <div class="formw">
-                    '.$preview.'
-                    <br />
-                    </div>
-                    </div>';
-            $form->addElement('html', $term_preview);
+            $preview = LegalManager::show_last_condition($term_preview);          
+            $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('class' => 'save', 'disabled' => 'disabled'));
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('disabled' => 'disabled'));
 
 $defaults['status'] = STUDENT;
 
@@ -504,8 +494,7 @@ switch ($action){
         //Form of language
         api_display_language_form();
         echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
-        //echo '<div class="note">';
-        echo '<div style="border:1px solid #E1E1E1; padding:2px;">';
+        
         $open = '';
         if (file_exists($homep.$topf.'_'.$lang.$ext)) {
             $open = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
@@ -513,8 +502,11 @@ switch ($action){
             $open = @(string)file_get_contents($homep.$topf.$ext);
         }
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        echo $open;
-        echo '</div>';
+        if (!empty($open)) {
+            echo '<div class="well_border">';
+            echo $open;
+            echo '</div>';
+        }
         $form->display();
         break;
 }

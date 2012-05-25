@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS user (
   user_id int unsigned NOT NULL auto_increment,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
-  username varchar(40) NOT NULL default '',
+  username varchar(100) NOT NULL default '',
   password varchar(50) NOT NULL default '',
   auth_source varchar(50) default 'platform',
   email varchar(100) default NULL,
@@ -862,7 +862,7 @@ VALUES
 ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
 ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
 ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.17999','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18035','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

@@ -221,9 +221,10 @@ DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';
 
 ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
+ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17999' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18035' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

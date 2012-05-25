@@ -69,7 +69,19 @@ $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
+//Check the PHP version
 api_check_php_version($includePath.'/');
+
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$default_username_length = 40;
+if (api_get_setting('login_is_email') == true) {
+    $default_username_length = 100;
+}
+define('USERNAME_MAX_LENGTH', $default_username_length);
 
 // Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);

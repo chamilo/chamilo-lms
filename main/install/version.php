@@ -13,7 +13,7 @@
  */
 $new_version 		= '1.9.0';
 $new_version_status	= 'alpha';
-$new_version_last_id	= 9;
+$new_version_last_id	= 10;
 $new_version_stable 	= false;
 $new_version_major 	= true;
 $software_name 		= 'Chamilo';

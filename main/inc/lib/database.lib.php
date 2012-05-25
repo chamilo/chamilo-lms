@@ -683,6 +683,8 @@ class Database {
         if (strpos($query, 'c_')) {      	
         	//Check if the table contains inner joins 
         	if (
+                    
+                strpos($query, 'allow_public_certificates') === false &&
                 strpos($query, 'DROP TABLE IF EXISTS') === false &&      
                 strpos($query, 'thematic_advance') === false &&  
                 strpos($query, 'thematic_plan') === false &&  

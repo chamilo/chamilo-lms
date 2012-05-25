@@ -146,7 +146,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					$type = $picture_infos[2];
 
 					// Original picture
-					$big_temp = new image($image_repository);
+					$big_temp = new Image($image_repository);
 
 					    switch (!empty($type)) {
 						    case 2 : $temp->send_image('JPG', $picture_location);

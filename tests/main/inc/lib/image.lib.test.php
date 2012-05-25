@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 
 class TestImage extends UnitTestCase {
 
@@ -9,7 +9,7 @@ class TestImage extends UnitTestCase {
 	}
 
 	public function setUp(){
-		$this->timage = new image();
+		$this->timage = new Image();
 	}
 
 	public function tearDown(){

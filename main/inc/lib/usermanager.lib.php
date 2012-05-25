@@ -2826,10 +2826,11 @@ class UserManager {
 		}
 		return true;
 	}
-
-	/**
+    
+    /**
 	 * Gives a list of emails from all administrators
 	 * @author cvargas carlos.vargas@dokeos.com
+     * @deprecated
 	 * @return array
 	 */
 	 public function get_emails_from_all_administrators() {
@@ -2842,6 +2843,26 @@ class UserManager {
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
 				$return[$row['email']] = $row;
+			}
+		}
+		return $return;
+	 }
+     
+    /**
+	 * Returns a list of all admninistrators
+	 * @author jmontoya
+	 * @return array
+	 */
+	 public function get_all_administrators() {
+	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+
+	 	$sql = "SELECT user_id, username, firstname, lastname, email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
+	 	$result = Database::query($sql);
+		$return = array();
+		if (Database::num_rows($result)> 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[$row['user_id']] = $row;
 			}
 		}
 		return $return;
@@ -2950,77 +2971,8 @@ class UserManager {
 				<input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
 		</form>';
-	}
-	//deprecated
-	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {
-
-			$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-			$sql = "SELECT
-		                 u.user_id				AS col0,
-		                 u.official_code		AS col1,
-						 ".(api_is_western_name_order()
-		                 ? "u.firstname 			AS col2,
-		                 u.lastname 			AS col3,"
-		                 : "u.lastname 			AS col2,
-		                 u.firstname 			AS col3,")."
-		                 u.username				AS col4,
-		                 u.email				AS col5,
-		                 u.status				AS col6,
-		                 u.active				AS col7,
-		                 u.user_id				AS col8 ".
-		                 ", u.expiration_date      AS exp ".
-		            " FROM $user_table u ";
-
-		    // adding the filter to see the user's only of the current access_url		    
-		    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-		    }
-
-			if (isset ($keyword)) {
-				$keyword = Database::escape_string($keyword);
-				//OR u.official_code LIKE '%".$keyword."%'
-				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%' )";
-			}
-			$keyword_active = true;
-			//only active users
-			if ($keyword_active) {
-				$sql .= " AND u.active='1'";
-			}
-
-		    // adding the filter to see the user's only of the current access_url
-			if (api_get_multiple_access_url()) {
-		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-		    }
-
-		    if (!in_array($direction, array('ASC','DESC'))) {
-		    	$direction = 'ASC';
-		    }
-
-		    $column = intval($column);
-		    $from = intval($from);
-		    $number_of_items = intval($number_of_items);
-
-			$sql .= " ORDER BY col$column $direction ";
-			$sql .= " LIMIT $from,$number_of_items";
-			$res = Database::query($sql);
-
-			$users = array ();
-		    $t = time();
-			while ($user = Database::fetch_row($res)) {
-		        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
-		            // check expiration date
-		            $expiration_time = convert_sql_date($user[9]);
-		            // if expiration date is passed, store a special value for active field
-		            if ($expiration_time < $t) {
-		        	   $user[7] = '-1';
-		            }
-		        }
-		        // forget about the expiration date field
-		        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
-			}
-			return $users;
-		}
+	}    
+    
 	/**
 	 * Shows the user menu
 	 */
@@ -3268,7 +3220,6 @@ class UserManager {
 			}
 		}
 		return $affected_rows;
-
 	}
 
 

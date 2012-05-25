@@ -616,28 +616,30 @@ $header[] = array($actionLabel, false, array("style"=>"text-align:center"), arra
 
 $data = array();
 
-foreach ($main_question_list as $tabQuestion) {
-	$row = array();
-    
-    //This function checks if the question can be read
-    $question_type = get_question_type_for_question($selected_course, $tabQuestion['id']);
-    
-    if (empty($question_type)) {
-        continue;
-    }
-    
-	$row[] = get_a_tag_for_question($questionTagA, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question']);
-	$row[] = $question_type;
-	$row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
-	$row[] = $tabQuestion['level'];
-	$row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
-                $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
-                $answerType, $session_id, $exerciseId).
-                "&nbsp;".
-                get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
-                $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType, 
-                $session_id, $exerciseId);
-	$data[] = $row;
+if (is_array($main_question_list)) {
+    foreach ($main_question_list as $tabQuestion) {
+        $row = array();
+
+        //This function checks if the question can be read
+        $question_type = get_question_type_for_question($selected_course, $tabQuestion['id']);
+
+        if (empty($question_type)) {
+            continue;
+        }
+
+        $row[] = get_a_tag_for_question($questionTagA, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question']);
+        $row[] = $question_type;
+        $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
+        $row[] = $tabQuestion['level'];
+        $row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
+                    $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
+                    $answerType, $session_id, $exerciseId).
+                    "&nbsp;".
+                    get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
+                    $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType, 
+                    $session_id, $exerciseId);
+        $data[] = $row;
+    }    
 }
 Display :: display_sortable_table($header, $data, '', array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
 

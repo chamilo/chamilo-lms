@@ -59,42 +59,45 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_left_content = SocialManager::show_social_menu('home');	
-$social_right_content .= '<div class="span5">';            
+$social_left_content = SocialManager::show_social_menu('home');
+
+$social_right_content .= '<div class="span5">';
+
 $social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
-			
+
+$list = array(
+                array('title' => get_lang('Name'), 'content' => api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+                array('title' => get_lang('Email'), 'content' => $user_info['email']),
+        );
 // information current user		       
-$social_right_content .= '<div>
-    <p><strong>'.get_lang('Name').'</strong><br />
-    <span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p>
-    </div>
-    <div>
-    <p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p>
-    </div>
-    <div class="box_description_group_actions">
+$social_right_content .= '<div>'.Display::description($list).'</div>';
+$social_right_content .= '
+    <div class="form-actions">
     <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
         '.get_lang('EditProfile').'
     </a>
     </div>';
-                  
-            $skill = new Skill();
-            $skills =  $skill->get_user_skills(api_get_user_id(), true);
-            
-            $social_right_content .= '<div class="clear"></div>';            
-                $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
-                $lis = '';
-                if (!empty($skills)) {
-                    foreach($skills as $skill) {
-                        $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
-                    }                
-                    $social_right_content .= Display::tag('ul', $lis);
-                }
-                $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
-                $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);                
-            $social_right_content .= '</div>';
+    
+    if (api_get_setting('allow_skills_tool') == 'true') {
+        $skill = new Skill();
+        $skills =  $skill->get_user_skills(api_get_user_id(), true);            
+
+        $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
+        $lis = '';
+        if (!empty($skills)) {
+            foreach($skills as $skill) {
+                $lis .= Display::tag('li', Display::span($skill['name'], array('class'=>'label_tag skill')));
+            }                
+            $social_right_content .= Display::tag('ul', $lis);
+        }
+        $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
+        $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);
+    }
+    
+    $social_right_content .= '</div>';
                  
             //Search box
-			$social_right_content .= '<div class="span4">';					
+			$social_right_content .= '<div class="span4">';
     			$social_right_content .= UserManager::get_search_form('');
     			$social_right_content .= '<br />';
     			

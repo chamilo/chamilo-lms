@@ -16,6 +16,11 @@ require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
+if (api_get_setting('allow_skills_tool') != 'true') {
+    api_not_allowed();
+}
+
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 

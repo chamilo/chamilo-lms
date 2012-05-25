@@ -5,10 +5,7 @@
  *  @todo better organization of the class, methods and variables 
  * 
  **/
-
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
 class Template {
@@ -289,6 +286,7 @@ class Template {
 		$_p = array('web' 			=> api_get_path(WEB_PATH),
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
+                    'web_css' 		=> api_get_path(WEB_CSS_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
                     'web_img' 		=> api_get_path(WEB_IMG_PATH),
                     'web_plugin'    => api_get_path(WEB_PLUGIN_PATH),

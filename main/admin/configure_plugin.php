@@ -37,9 +37,9 @@ if (isset($plugin_info['settings_form'])) {
     if (isset($form)) {
         //We override the form attributes
         $attributes = array('action'=>api_get_self().'?name='.$plugin_name, 'method'=>'POST');
-        $form->updateAttributes($attributes);     
+        $form->updateAttributes($attributes);
         $content = Display::page_header($plugin_info['title']);
-        $content .= $form->toHtml();        
+        $content .= $form->toHtml();
     }
 } else {
     $message = Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning');
@@ -55,13 +55,13 @@ if (isset($form)) {
                                     array('Plugins', $access_url_id, $plugin_name, 'setting', "status")));
         foreach ($values as $key => $value) {
             $key = Database::escape_string($plugin_name.'_'.$key);
-            api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);        
+            api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);
+            
         }
         $message = Display::return_message(get_lang('Updated'), 'success');
     }
 }
-
-$tpl = new Template($tool_name);
+$tpl = new Template($tool_name, true, true, false, true, false);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

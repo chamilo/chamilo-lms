@@ -24,9 +24,18 @@ class Template {
     var $user_is_logged_in = false;
     var $twig = null;
     
+    /* Loads chamilo plugins */
+    var $load_plugins = false;
+    
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false) {
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
+        
+        //Page title
+		$this->title                = $title;        
+		$this->show_learnpath       = $show_learnpath;
+        $this->hide_global_chat     = $hide_global_chat;
+        $this->load_plugins         = $load_plugins;
                 
         //Twig settings        
         Twig_Autoloader::register();
@@ -67,7 +76,7 @@ class Template {
         $this->twig->addFilter('var_dump',       new Twig_Filter_Function('var_dump'));        
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         
-        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+        $this->twig->addFilter('display_page_header',    new Twig_Filter_Function('Display::page_header_and_translate'));
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         
         /*
@@ -78,12 +87,7 @@ class Template {
             //'tag_variable' => array('{$', '}'),
         ));        
         $this->twig->setLexer($lexer);*/
-   
-        //Page title
-		$this->title = $title;        
-		$this->show_learnpath = $show_learnpath;
-        $this->hide_global_chat = $hide_global_chat;
-        		
+   		
 		//Setting system variables
 		$this->set_system_parameters();	
 		
@@ -104,20 +108,22 @@ class Template {
         
         //Chamilo plugins
         if ($this->show_header) {
-            
-            $this->plugin = new AppPlugin();
-            
-            //1. Showing installed plugins in regions
-            $plugin_regions = $this->plugin->get_plugin_regions();                  
-            foreach ($plugin_regions as $region) {
-                $this->set_plugin_region($region);
-            }  
-            
-            //2. Loading the course plugin info
-            global $course_plugin;           
-            if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
-                //Load plugin get_langs
-                $this->plugin->load_plugin_lang_variables($course_plugin);                
+            if ($this->load_plugins) {
+                
+                $this->plugin = new AppPlugin();
+
+                //1. Showing installed plugins in regions
+                $plugin_regions = $this->plugin->get_plugin_regions();                  
+                foreach ($plugin_regions as $region) {
+                    $this->set_plugin_region($region);
+                }  
+
+                //2. Loading the course plugin info
+                global $course_plugin;           
+                if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
+                    //Load plugin get_langs
+                    $this->plugin->load_plugin_lang_variables($course_plugin);                
+                }
             }
         }
 	}
@@ -635,8 +641,8 @@ class Template {
     
     /* Sets the plugin content in a template variable */
     function set_plugin_region($plugin_region) {
-        if (!empty($plugin_region)) {          
-            $content = $this->plugin->load_region($plugin_region, $this);    
+        if (!empty($plugin_region)) {            
+            $content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);    
             $this->assign('plugin_'.$plugin_region, $content);                
         }
         return null;
@@ -651,7 +657,7 @@ class Template {
         $this->params[$tpl_var] = $value;
     }
     
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {        
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {    
         echo $this->twig->render($template, $this->params);
     }
 }

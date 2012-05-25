@@ -9,15 +9,12 @@ $title = $title ? "<h4>$title</h4>" : '';
 
 $css = $plugin->get_css();
 $css = $css ? "<style type=\"text/css\" scoped=\"scoped\">$css</style>" : '';
-
 $bullet = api_get_path(WEB_PLUGIN_PATH) . '/rss/resources/arrow-bullet.png';
 
-if (empty($rss))
-{
-    echo get_lang('no_rss');
+if (empty($rss)) {
+    Display::display_warning_message(get_lang('no_rss'));
     return;
 }
-
 
 echo<<<EOT
 <div class="well sidebar-nav rss">

@@ -9,7 +9,7 @@
 $strings['plugin_title'] = "RSS";
 $strings['plugin_comment'] = "Display RSS content.";
 
-$strings['rss'] = "Rss";
+$strings['rss'] = "RSS";
 $strings['block_title'] = "Block title";
 
 $strings['title'] = "Title";

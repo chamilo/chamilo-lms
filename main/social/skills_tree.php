@@ -17,6 +17,10 @@ $this_section = SECTION_MYPROFILE;
 
 api_block_anonymous_users();
 
+if (api_get_setting('allow_skills_tool') != 'true') {
+    api_not_allowed();
+}
+
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');

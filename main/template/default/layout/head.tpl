@@ -7,17 +7,13 @@
 <link rel="apple-touch-icon" sizes="72x72" href="{{ _p.web}}apple-touch-icon-72x72-precomposed.png" />
 <link rel="apple-touch-icon" sizes="114x114" href="{{ _p.web}}apple-touch-icon-114x114-precomposed.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-{# This fires some HTML5 errors #}
-{# <link rel="top"	href="{{ _p.web_main}}index.php" title="" />
-<link rel="courses" href="{{ _p.web_main}}auth/courses.php" title="{{"OtherCourses"|get_lang}}"/>
-<link rel="profil"  href="{{ _p.web_main}}auth/profile.php" title="{{"ModifyProfile"|get_lang}}"/>  #}
 <meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" /> 
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
 {#  Improve usability in portal devices #}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 <title>{{ title_string }}</title>
-<style type="text/css" media="screen">
+<style type="text/css" media="screen"> 
 /*<![CDATA[*/
 {{ css_style }}
 /*]]>*/

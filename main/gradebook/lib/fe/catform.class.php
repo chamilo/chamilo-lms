@@ -168,16 +168,19 @@ class CatForm extends FormValidator {
         $this->addRule('weight',get_lang('ThisFieldIsRequired'),'required');
 
         if (api_is_platform_admin() || api_is_drh()) {
-            //the magic should be here            
-            $skills = $this->category_object->get_skills();    
-            $this->addElement('select', 'skills', array(get_lang('Skills'), get_lang('SkillsAchievedWhenAchievingThisGradebook')), null, array('id'=>'skills', 'multiple'=>'multiple'));
-            $content = '';
-            if (!empty($skills)) {
-                foreach($skills as $skill) {                    
-                    $content .= Display::tag('li', $skill['name'].'<a id="deleteskill_'.$skill['id'].'" class="closebutton" href="#"></a>', array('id'=>'skill_'.$skill['id'], 'class'=>'bit-box')); 
+            if (api_get_setting('allow_skills_tool') == 'true') {
+            
+                //the magic should be here            
+                $skills = $this->category_object->get_skills();    
+                $this->addElement('select', 'skills', array(get_lang('Skills'), get_lang('SkillsAchievedWhenAchievingThisGradebook')), null, array('id'=>'skills', 'multiple'=>'multiple'));
+                $content = '';
+                if (!empty($skills)) {
+                    foreach($skills as $skill) {                    
+                        $content .= Display::tag('li', $skill['name'].'<a id="deleteskill_'.$skill['id'].'" class="closebutton" href="#"></a>', array('id'=>'skill_'.$skill['id'], 'class'=>'bit-box')); 
+                    }
                 }
+                $this->addElement('label', null, Display::tag('ul', $content, array('class'=>'holder holder_simple')));            
             }
-            $this->addElement('label', null, Display::tag('ul', $content, array('class'=>'holder holder_simple')));            
         }
         
 		if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {					

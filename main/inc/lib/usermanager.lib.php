@@ -2947,7 +2947,7 @@ class UserManager {
 	public static function get_search_form($query) {
 		return '
 		<form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
-				<input placeholder="'.get_lang('UsersGroups').'" type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+				<input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
 		</form>';
 	}

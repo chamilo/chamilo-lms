@@ -353,10 +353,13 @@ class IndexManager {
 	}
 	    
     function return_skills_links() {
-        $content = '<ul class="menulist">';      
-        $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
-        $content .= '</ul>';        
-        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
+        $html = '';
+        if (api_get_setting('allow_skills_tool') == 'true') {
+            $content = '<ul class="menulist">';      
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
+            $content .= '</ul>';        
+            $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
+        }
         return $html;
     }
 	

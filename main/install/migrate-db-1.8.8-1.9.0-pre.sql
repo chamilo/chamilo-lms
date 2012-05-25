@@ -203,7 +203,11 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_lo
 
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
 
--- skills
+-- Skills
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'false', 'No');
 
 CREATE TABLE IF NOT EXISTS skill ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, short_code varchar(100) NOT NULL, description TEXT NOT NULL, access_url_id int NOT NULL, icon varchar(255) NOT NULL, PRIMARY KEY (id));
 INSERT INTO skill (name) VALUES ('Root');
@@ -224,7 +228,7 @@ ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
 ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18035' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18037' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

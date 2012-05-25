@@ -42,8 +42,14 @@ class Template {
         
         $template_paths = array(
                 api_get_path(SYS_CODE_PATH).'template', //template folder
-                api_get_path(SYS_PLUGIN_PATH) //plugin folder
+                api_get_path(SYS_PLUGIN_PATH)           //plugin folder
         );
+        
+        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig';        
+        
+        if (!is_dir($cache_folder)) {
+            mkdir($cache_folder, api_get_permissions_for_new_directories());
+        }        
         
         $loader = new Twig_Loader_Filesystem($template_paths);
         
@@ -59,7 +65,7 @@ class Template {
                 );
         } else {
             $options = array (
-                'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'cache'             => $cache_folder, //path to the cache folder
                 'autoescape'        => false,
                 'debug'             => false,
                 'auto_reload'       => false,

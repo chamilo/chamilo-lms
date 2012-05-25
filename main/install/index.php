@@ -336,19 +336,9 @@ if ($encryptPassForm == '1') {
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
     			$("#is_executable").attr("value",'step6');
-                //$("#button_step6").show();        
         	});    		
 	 	});
         
-        /*
-        function check_db() {
-            var status = ($('#db_status').attr('class'));
-            if (status == 'confirmation-message') {
-                return true;    
-            }
-            return false;
-        }*/
-
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
 				$('#optional_param2').hide();

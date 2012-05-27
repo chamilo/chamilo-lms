@@ -298,6 +298,7 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'../../documentation/security.html', 	'label' => get_lang('SecurityGuide'));
 	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
 	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
+	$items[] = array('url'=>'http://www.chamilo.org/en/providers', 	'label' => get_lang('ChamiloOfficialServicesProviders'));	
 	
 	$blocks['chamilo']['items'] = $items; 
     $blocks['chamilo']['extra'] = null;

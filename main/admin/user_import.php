@@ -280,7 +280,7 @@ $tool_name = get_lang('ImportUserListXMLCSV');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
-$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC', true);
+$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 

@@ -594,3 +594,13 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($s_sql_update_logout_date);
     }
 }
+// Add language_measure_frequency to your main/inc/conf/configuration.php in 
+// order to generate language variables frequency measurements (you can then 
+// see them through main/cron/lang/langstats.php)
+// The langstat object will then be used in the get_lang() function.
+// This block can be removed to speed things up a bit as it should only ever
+// be used in development versions.
+if ($_configuration['language_measure_frequency'] == 1) {
+  require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
+  $langstats = new langstats();
+}

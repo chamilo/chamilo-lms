@@ -129,10 +129,18 @@ function get_lang($variable, $reserved = null, $language = null) {
         // For serving the function is_translated()
         $_api_is_translated, $_api_is_translated_call;
 	
-    global $used_lang_vars;        
-    if (!isset ($used_lang_vars))
+    global $used_lang_vars, $_configuration;
+    // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
+    // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
+    // The $langstats object is instanciated at the end of main/inc/global.inc.php
+    if ($_configuration['language_measure_frequency'] == 1) {
+      require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
+      global $langstats;
+      $langstats->add_use($variable,'');
+    }
+    if (!isset ($used_lang_vars)) {
     	$used_lang_vars = array();
-   	
+    }
     
     // Caching results from some API functions, for speed.
     static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;

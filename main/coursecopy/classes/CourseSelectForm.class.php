@@ -130,13 +130,17 @@ class CourseSelectForm
 						}
                         
 						echo '<blockquote>';
-						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
-						echo '<br />';
+                        
+                        echo '<div class="btn-group">';
+						echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
+                        echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";                        
+						echo '</div><br />';
+                        
 						foreach ($resources as $id => $resource) {
-                            echo ' <label class="checkbox">';
+                            echo '<label class="checkbox">';
 							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';							
 							$resource->show();
-							echo '</label>';							
+							echo '</label>';						
 						}
 						echo '</blockquote>';
 						echo '</div>';
@@ -411,14 +415,17 @@ class CourseSelectForm
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';
-					echo "[<a href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a> - <a href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('None')."</a>]";
-					echo '<br />';
-					foreach ($resources as $id => $resource) {
-						echo '<input type="checkbox" name="resource['.$course->code.']['.$id.']" id="resource['.$course->code.']['.$id.']"/>';
-						echo ' <label for="resource['.$course->code.']['.$id.']">';
+                    
+                    echo '<div class="btn-group">';
+					echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>"; 
+                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('None')."</a>";
+					echo '</div><br />';
+                    
+					foreach ($resources as $id => $resource) {                        
+						echo ' <label class="checkbox" for="resource['.$course->code.']['.$id.']">';
+                        echo '<input type="checkbox" name="resource['.$course->code.']['.$id.']" id="resource['.$course->code.']['.$id.']"/>';
 						$resource->show();
-						echo '</label>';
-						echo '<br />';
+						echo '</label>';						
 						echo "\n";
 					}
 					echo '</blockquote>';

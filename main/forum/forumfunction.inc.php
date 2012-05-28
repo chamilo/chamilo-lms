@@ -3988,28 +3988,22 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
  * @version May 2008, dokeos 1.8.5
  * @since May 2008, dokeos 1.8.5
  */
-function get_notifications_of_user($user_id = 0, $force = false) {
-    global $_course;
-
+function get_notifications_of_user($user_id = 0, $force = false) {    
     // Database table definition
-    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);        
-    $course = api_get_course_id();
+    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
     $course_id = api_get_course_int_id();
-    if (empty($course) || $course == -1) {
+    if (empty($course_id) || $course_id == -1) {
         return null;
     }
-    if ($user_id == 0) {
-        global $_user;
-        $user_id = $_user['user_id'];
+    if ($user_id == 0) {        
+        $user_id = api_get_user_id();
     }
 
-    $my_code = isset($_course['code']) ? $_course['code'] : '';
-
-    if (!isset($_SESSION['forum_notification']) || $_SESSION['forum_notification']['course'] != $my_code || $force = true) {
-        $_SESSION['forum_notification']['course'] = $my_code;
+    if (!isset($_SESSION['forum_notification']) || $_SESSION['forum_notification']['course'] != $course_id || $force = true) {
+        $_SESSION['forum_notification']['course'] = $course_id;
 
         $sql = "SELECT * FROM $table_notification WHERE c_id = $course_id AND user_id='".Database::escape_string($user_id)."'";
-        $result = Database::query($sql);
+        $result = Database::query($sql);        
         while ($row = Database::fetch_array($result)) {
             if (!is_null($row['forum_id'])) {
                 $_SESSION['forum_notification']['forum'][] = $row['forum_id'];
@@ -4030,8 +4024,10 @@ function get_notifications_of_user($user_id = 0, $force = false) {
  */
 function count_number_of_post_in_thread($thread_id) {
     $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
-    
+    $course_id      = api_get_course_int_id();
+    if (empty($course_id)) {
+        return 0;
+    }    
     $sql = "SELECT * FROM $table_posts WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' ";
     $result = Database::query($sql);
     return count(Database::store_result($result));

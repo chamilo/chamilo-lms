@@ -21,7 +21,7 @@ function generate_course_code($course_title, $encoding = null) {
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
     }
-    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, MAX_COURSE_LENGTH_CODE);
+    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, CourseManager::MAX_COURSE_LENGTH_CODE);
 }
 
 /**

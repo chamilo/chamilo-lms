@@ -100,9 +100,9 @@ CourseManager::select_and_sort_categories($categories_select);
 
 
 // Course code
-$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => MAX_COURSE_LENGTH_CODE));
+$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 $form->applyFilter('wanted_code', 'html_filter');
-$form->addRule('wanted_code', get_lang('Max'), 'maxlength', MAX_COURSE_LENGTH_CODE);
+$form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
 /*if ($course_validation_feature) {
     $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
@@ -202,7 +202,7 @@ if ($form->validate()) {
     }
 
     if ($wanted_code == '') {
-        $wanted_code = generate_course_code(api_substr($title, 0, MAX_COURSE_LENGTH_CODE));
+        $wanted_code = generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
     }
     
     // Check whether the requested course code has already been occupied.

@@ -64,49 +64,19 @@
 
 /*	INIT SECTION */
 
-/**
- * Configuration files
- */
-
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-
-define('MAX_COURSE_LENGTH_CODE', 40);
-
-/**
- * Constants definition
- */
-
-//LOGIC: course visibility and registration settings
-/*
-    COURSE VISIBILITY
-
-    MAPPING OLD SETTINGS TO NEW SETTINGS
-    -----------------------
-
-    NOT_VISIBLE_NO_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_REGISTERED, SUBSCRIBE_NOT_ALLOWED
-    NOT_VISIBLE_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_REGISTERED, SUBSCRIBE_ALLOWED
-    VISIBLE_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_OPEN_PLATFORM, SUBSCRIBE_ALLOWED
-    VISIBLE_NO_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_OPEN_PLATFORM, SUBSCRIBE_NOT_ALLOWED
-*/
-//OLD SETTINGS
-define('NOT_VISIBLE_NO_SUBSCRIPTION_ALLOWED', 0);
-define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
-define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
-define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
-
-//This constant is used to show separate user names in the course list (userportal), footer, etc
-define('USER_SEPARATOR', ' |'); 
 
 /**
  *	CourseManager Class
  *	@package chamilo.library
  */
 class CourseManager {
+    
+    CONST MAX_COURSE_LENGTH_CODE = 40;
+    
+    //This constant is used to show separate user names in the course list (userportal), footer, etc
+    CONST USER_SEPARATOR = ' |';   
     
     var $columns = array();    
     
@@ -135,7 +105,7 @@ class CourseManager {
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $params['title'];    
             // Check whether the requested course code has already been occupied.                   
-            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, MAX_COURSE_LENGTH_CODE));            
+            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE));            
         }
 
         // Create the course keys
@@ -1372,7 +1342,7 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = USER_SEPARATOR, $add_link_to_profile = false) {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
@@ -1431,7 +1401,7 @@ class CourseManager {
         }
     }
     
-    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = USER_SEPARATOR, $add_link_to_profile = false) {    
+    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {    
         $coachs_course = self::get_coachs_from_course($session_id, $course_code);
         $course_coachs = array();
                 
@@ -1461,7 +1431,7 @@ class CourseManager {
                 $coach_list[] = $coach['complete_name'];                
             }
             if (!empty($coach_list)) {
-    			$tutor_data = implode(USER_SEPARATOR, $coach_list);
+    			$tutor_data = implode(self::USER_SEPARATOR, $coach_list);
     		}    
         }
         return $tutor_data;
@@ -2918,7 +2888,7 @@ class CourseManager {
                         $course_title .= $course_info['visual_code'];
                     }                    
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {                        
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);                        
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);                        
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
@@ -3063,7 +3033,7 @@ class CourseManager {
                 $course_title .= $course_info['visual_code'];
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
             }            
             
             $params['link'] = $course_title_url;
@@ -3234,8 +3204,8 @@ class CourseManager {
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             if (api_get_setting('use_session_mode') == 'true' && !$nosession) {             
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR, true);
-                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], USER_SEPARATOR, true);
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], self::USER_SEPARATOR, true);
+                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);
                 
                 if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
                     $params['teachers'] = $teacher_list;

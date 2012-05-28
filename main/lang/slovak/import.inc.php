@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Názov stránky";
 $langExplanation = "Kliknutím na OK sa vytvorí stránka z agendou, fórom, menežérom dokumentov atď. Prihlásenie vaším menom, ako tvorcom Vam umožní ju meniť podľa potreby.";
 $langTooBig = "Buď ste nevybrali súbor na zaslanie, alebo je veľmi veľký";
 $langCouldNot = "Súbor nie je možné načítať";
@@ -11,6 +10,5 @@ $langCouldNotSendPage = "Tento súbor nie je vo formáte HTML a nemôe by&#357
 $langSendPage = "Stránka na načítanie";
 $langPageTitleModified = "Názov stránky bol zmenený";
 $langPageAdded = "Stránka pridaná";
-$langAddPage = "Pridať stránku";
 $Choose = "Vybrať";
 ?>

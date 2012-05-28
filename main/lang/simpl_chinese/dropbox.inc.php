@@ -7,7 +7,6 @@ $Ok = "确定";
 $Unknown = "未知";
 $SentOn = "在";
 $SentTo = "发送到";
-$SentBy = "发送人";
 $ReceivedFiles = "收到的文件";
 $SentFiles = "已发出的文件";
 $ReceivedTitle = "主题";

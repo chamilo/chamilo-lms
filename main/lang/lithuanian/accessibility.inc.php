@@ -2,13 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langClarContent = "<p><b>Teacher</b></";
-$test = "testas";
+$ClearContent = "<p><b>Teacher</b></";
 $WCAGImage = "Paveikslėlis";
 $WCAGLabel = "Paveikslėlio pavadinimas";
 $WCAGLink = "Nuoroda";
 $WCAGLinkLabel = "Nuorodos pavadinimas";
-$errorNoLabel = "Paveikslėlis neturi pavadinimo.";
+$ErrorNoLabel = "Paveikslėlis neturi pavadinimo.";
 $AllLanguages = "visos kalbos";
 $WCAGEditor = "WCAG teksto redaktorius";
 $WCAGGoMenu = "Meniu";

@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Заглавие на страницата";
 $langExplanation = "След като щракнете бутона \"OK\" ще се създаде сайт на курса. Ше можете да променяте курса както пожелаете, защото сте негов създател.";
 $langTooBig = "Не сте избрали файл за изпращане, или този е твърде голям.";
 $langCouldNot = "Файлът не може да бъде качен.";
@@ -11,6 +10,5 @@ $langCouldNotSendPage = "Този файл не е в HTML-формат и не 
 $langSendPage = "Страница за качване";
 $langPageTitleModified = "Заглавието на страницата е променено.";
 $langPageAdded = "Страницата е добавена.";
-$langAddPage = "Добавяне на страница";
 $Choose = "Изберете";
 ?>

@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Sayfa ismi";
 $langExplanation = "OK tıkladığınızda, Forum, Gündem, Belge Yönetimi vs. araçlarla birlikte bu dersin sitesi yaratılır. Kullanıcı adınız ve şifrenizle giriş yaparak siteyi isteğiniz şekilde düzenleyebilirsiniz.";
 $langTooBig = "Gönderilecek dosyayı seçmediniz veya dosya boyutu çok büyük";
 $langCouldNot = "Dosya gönderilemedi";
@@ -11,6 +10,5 @@ $langCouldNotSendPage = "Bu sayfa HTML formatýnda deðil bu nedenle gönderilem
 $langSendPage = "Gönderilecek sayfa";
 $langPageTitleModified = "Sayfa başlığı değiştirildi";
 $langPageAdded = "Sayfa eklendi";
-$langAddPage = "Sayfa ekle";
 $Choose = "Seç";
 ?>

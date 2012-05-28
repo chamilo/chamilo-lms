@@ -1568,4 +1568,5 @@ $GradebookEnableGradeModelTitle = "Enable Gradebook model";
 $GradebookEnableGradeModelComment = "Enables the auto creation of gradebook categories inside a course depending of the gradebook models.";
 $AllowSessionAdminsToSeeAllSessionsTitle = "Allow session administrators to see all sessions";
 $AllowSessionAdminsToSeeAllSessionsComment = "When this option is not enabled (default), session administrators can only see the sessions they have created. This is confusing in an open environment where session administrators might need to share support time between two sessions.";
+$AllowSkillsToolTitle = "Allow Skills tool";
 ?>

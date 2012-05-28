@@ -96,4 +96,5 @@ $BackToGroupList = "Nazaj na seznam skupin";
 $EditGroupCategory = "Uredi kategorijo skupine";
 $NoStudents = "Ni tečajnikov";
 $NoData = "Noben podatek ni na voljo";
+$AllGroups = "Vse skupine";
 ?>

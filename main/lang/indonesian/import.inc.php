@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Judul halaman";
 $langExplanation = "Begitu anda klik  OK, Situs berisi Forum, Agenda, Document manager dll. dibuat. Login anda sebagai kreator situs,  memungkinkan untuk memodifikasinya sesuai kebutuhan anda.";
 $langTooBig = "Anda tidak memilih file untuk dikirim, atau itu terlalu besar";
 $langCouldNot = "File tidak dapat dikirim";
@@ -11,5 +10,4 @@ $langCouldNotSendPage = "File ini tidak dalam format HTML dan tidak dapat diuplo
 $langSendPage = "Halaman untuk dikirim";
 $langPageTitleModified = "Judul halaman telah diubah";
 $langPageAdded = "Halaman ditambahkan";
-$langAddPage = "Tambahkan halaman";
 ?>

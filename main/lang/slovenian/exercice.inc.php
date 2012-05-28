@@ -493,4 +493,5 @@ $OralExpression = "Ustno (govorno) izražanje";
 $CongratulationsYouPassedTheTest = "Čestitam. Tvoj test je bil uspešno zaključen.";
 $YouDidNotReachTheMinimumScore = "Nisi dosegel minimalnega zahtevanega rezultata.";
 $EndTest = "Končaj test";
+$PassPercentage = "Prag uspešnosti[%]";
 ?>

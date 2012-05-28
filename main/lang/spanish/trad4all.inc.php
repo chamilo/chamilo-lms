@@ -1062,7 +1062,7 @@ $CourseCodeAlreadyExistExplained = "Cuando un código de curso se duplica, el si
 $CantDeleteReadonlyFiles = "No se puede eliminar los archivos que están configurados en modo de sólo lectura";
 $Uploaded = "Subido.";
 $Saved = "Guardado.";
-$Reset = "Reinicializar";
+$Reset = "Reiniciar";
 $EmailSentFromDokeos = "Correo electrónico enviado desde la plataforma";
 $InfoAboutLastDoneAdvanceAndNextAdvanceNotDone = "Información sobre el último paso terminado y el siguiente sin terminar.";
 $LatexCode = "Código LaTeX";
@@ -1235,6 +1235,6 @@ $LastnameAndFirstname = "Apellidos y Nombres";
 $Plugins = "Plugins";
 $Detailed = "Detallado";
 $ResourceLockedByGradebook = "Esta opción no está disponible porque la actividad está incluida en una evaluación que se encuentra bloqueada. Para desbloquear esta evaluación, comuníquese con el administrador de la plataforma.";
-$ConfirmToLockElement = "¿Está seguro de bloquear este elemento? Luego de bloquear este elemento no podrá editar los resultados de los estudiantes. Para desbloquearlo deberá contactar al administrador de la plataforma.";
-$ConfirmToUnLockElement = "¿Está seguro de desbloquear este elemento?";
+$ConfirmToLockElement = "¿Está seguro de querer bloquear este elemento? Después de bloquear este elemento no podrá editar los resultados de los estudiantes. Para desbloquearlo deberá contactar con el administrador de la plataforma.";
+$ConfirmToUnLockElement = "¿Está seguro de querer desbloquear este elemento?";
 ?>

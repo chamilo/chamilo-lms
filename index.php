@@ -10,7 +10,7 @@ define('CHAMILO_HOMEPAGE', true);
 $language_file = array('courses', 'index');
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
-// Maybe we should change this into an api function? an example: Coursemanager::unset();
+// Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';

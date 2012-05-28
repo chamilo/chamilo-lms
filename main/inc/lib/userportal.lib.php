@@ -151,7 +151,7 @@ class IndexManager {
 			if (is_array($extAuthSource[$uinfo['auth_source']])) {
 				$subarray = $extAuthSource[$uinfo['auth_source']];
 				if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
-					include_once ($subarray['logout']);
+					include_once $subarray['logout'];
 					$logout_function = $uinfo['auth_source'].'_logout';
 					if (function_exists($logout_function)) {
 						$logout_function($uinfo);
@@ -175,17 +175,14 @@ class IndexManager {
 	 * @return boolean
 	 */
 	function category_has_open_courses($category) {
-		global $setting_show_also_closed_courses;
-	
-		$user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
+		$setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 		$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $category = Database::escape_string($category);
 		$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
 		$sql_result = Database::query($sql_query);
 		while ($course = Database::fetch_array($sql_result)) {
 			if (!$setting_show_also_closed_courses) {
-				if ((api_get_user_id() > 0
-				&& $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-				|| ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+				if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
 					return true; //at least one open course
 				}
 			} else {
@@ -206,9 +203,7 @@ class IndexManager {
 	 * @todo does $_plugins need to be global?
 	 */
 	function display_anonymous_right_menu() {
-		global $loginFailed, $_user;
-	
-		$platformLanguage       	= api_get_setting('platformLanguage');		
+		global $loginFailed, $_user;        
 		$display_add_course_link	= api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');	
 		$current_user_id        	= api_get_user_id();
 	
@@ -267,7 +262,7 @@ class IndexManager {
 		return $html;
 	}
 	
-	
+	/* Includes a created page */
 	function return_home_page() {	
 
 		// Including the page for the news
@@ -329,6 +324,7 @@ class IndexManager {
     function return_help() { 
         $user_selected_language = api_get_interface_language();
         $sys_path               = api_get_path(SYS_PATH);
+        $platformLanguage       = api_get_setting('platformLanguage');
         
 		// Help section.
 		/* Hide right menu "general" and other parts on anonymous right menu. */
@@ -407,7 +403,7 @@ class IndexManager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
 	 */
 	function return_anonymous_course_list() {
-                $result = '';
+        $result = '';
 		$ctok = $_SESSION['sec_token'];
 		$stok = Security::get_token();
 	
@@ -415,13 +411,11 @@ class IndexManager {
 		$user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
 		$web_course_path = api_get_path(WEB_COURSE_PATH);
 		$category = Database::escape_string($_GET['category']);
-		global $setting_show_also_closed_courses;
+		$setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 	
 		// Database table definitions.
 		$main_course_table      = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$main_category_table    = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-	
-		$platformLanguage = api_get_setting('platformLanguage');
+		$main_category_table    = Database :: get_main_table(TABLE_MAIN_CATEGORY);		
 	
 		// Get list of courses in category $category.
 		$sql_get_course_list = "SELECT * FROM $main_course_table cours

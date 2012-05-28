@@ -46,7 +46,6 @@ $controller = new IndexManager($header_title);
 
 //Actions
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
-$setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
 if (!empty($_GET['logout'])) {
 	$controller->logout();
@@ -79,16 +78,12 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 	unset($_SESSION['info_current_user']);
 }
 //If we are not logged in and customapages activated
-if (!api_get_user_id() && CustomPages::enabled())
-{
-  if(Request::get('loggedout'))
-  {      
-    CustomPages::display(CustomPages::LOGGED_OUT);
-  }
-  else
-  {      
-    CustomPages::display(CustomPages::INDEX_UNLOGGED);
-  }
+if (!api_get_user_id() && CustomPages::enabled()) {
+    if (Request::get('loggedout')) {      
+        CustomPages::display(CustomPages::LOGGED_OUT);
+    } else {      
+        CustomPages::display(CustomPages::INDEX_UNLOGGED);
+    }
 }
 
 /**
@@ -151,9 +146,22 @@ if (!api_is_anonymous()) {
 	}
 }
 
-$controller->tpl->assign('hot_courses',             $controller->return_hot_courses());
-$controller->tpl->assign('announcements_block', 	$controller->return_announcements());
+$hot_courses = null;
+$announcements_block = null;
+
+// When loading a chamilo page do not include the hot courses and news
+
+if (!isset($_REQUEST['include'])) {
+    $hot_courses = $controller->return_hot_courses();    
+    $announcements_block = $controller->return_announcements();    
+}
+$controller->tpl->assign('hot_courses',             $hot_courses);    
+$controller->tpl->assign('announcements_block', 	$announcements_block);        
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
+
+
+
+
 
 $controller->tpl->assign('notice_block',			$controller->return_notice());
 $controller->tpl->assign('main_navigation_block',	$controller->return_navigation_links());

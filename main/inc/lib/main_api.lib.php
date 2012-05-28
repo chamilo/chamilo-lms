@@ -4028,11 +4028,14 @@ function api_set_setting_option($params) {
 }
 
 function api_set_setting_simple($params) {
-	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
+    $url_id = api_get_current_access_url_id();
+    
 	if (empty($params['id'])) {
+        $params['access_url'] = $url_id;
 		Database::insert($table, $params);
 	} else {
-		Database::update($table, $params, array('id = ? '=> $params['id']));
+		Database::update($table, $params, array('id = ? '=> array($params['id'])));
 	}		
 }
 

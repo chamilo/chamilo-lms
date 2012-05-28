@@ -12,9 +12,11 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 switch ($action) {
 	case 'update_changeable_setting':        
-        if (api_is_global_platform_admin()) {            
-            if (isset($_GET['id']) && !empty($_GET['id'])) {
-                $params = array('variable = ?' =>  array($_GET['id']));                
+        $url_id = api_get_current_access_url_id();
+        
+        if (api_is_global_platform_admin() && $url_id == 1) {            
+            if (isset($_GET['id']) && !empty($_GET['id'])) {                
+                $params = array('variable = ? ' =>  array($_GET['id']));
                 $data = api_get_settings_params($params);                
                 if (!empty($data)) {
                     foreach ($data as $item) {                

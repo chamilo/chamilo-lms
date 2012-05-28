@@ -87,22 +87,22 @@ $form_search->setDefaults(array('search_field' => $_REQUEST['search_field']));
 
 $form_search_html = $form_search->return_form();
 
+$url_id = api_get_current_access_url_id();
 
 $settings = null;
 
-// Build the form.
-if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
-    $my_category = Database::escape_string($_GET['category']);
-
-    if ($_configuration['access_url'] == 1) {        
-        $settings = api_get_settings($my_category, 'group', $_configuration['access_url']);        
+function get_settings($category = null) {
+    $url_id = api_get_current_access_url_id();
+    
+    if ($url_id == 1) {    
+        $settings = api_get_settings($category, 'group', $url_id);        
     } else {
-        $url_info = api_get_access_url($_configuration['access_url']);
+        $url_info = api_get_access_url($url_id);
         if ($url_info['active'] == 1) {
             // The default settings of Chamilo
-            $settings = api_get_settings($my_category, 'group', 1, 0);
+            $settings = api_get_settings($category, 'group', 1, 0);
             // The settings that are changeable from a particular site.
-            $settings_by_access = api_get_settings($my_category, 'group', $_configuration['access_url'], 1);
+            $settings_by_access = api_get_settings($category, 'group', $url_id, 1);
             
             $settings_by_access_list = array();
             foreach ($settings_by_access as $row) {
@@ -122,17 +122,24 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
     }
     
-    if (isset($_GET['category']) && $_GET['category'] == 'search_setting') {  
+    if (isset($category) && $category== 'search_setting') {  
         if (!empty($_REQUEST['search_field'])) {
             $settings = search_setting($_REQUEST['search_field']);                               
         }
     }
+    return $settings;
+}
+
+// Build the form.
+if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
+    $my_category = isset($_GET['category']) ? $_GET['category'] : null;
+    $settings = get_settings($my_category);
     
     $form = generate_settings_form($settings, $settings_by_access_list);
     
     $message = array();
     
-    if ($form->validate()) {       
+    if ($form->validate()) {    
         $values = $form->exportValues();   
         
         $mark_all = false;
@@ -157,22 +164,24 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         $changeable = 0;
                         if ($mark_all) {
                             $changeable = 1;
-                        }
+                        }                        
                         
                         $params = array('variable = ?' =>  array($key));
                         $data = api_get_settings_params($params);                        
                          
                         if (!empty($data)) {
                             foreach ($data as $item) {                
-                                $params = array('id' =>$item['id'], 'access_url_changeable' => $changeable);
-                                api_set_setting_simple($params);        
+                                $params = array('id' =>$item['id'], 'access_url_changeable' => $changeable);                                
+                                api_set_setting_simple($params);    
                             }
                         }
                     }
                 }
+                //Reload settings
+                $settings = get_settings($my_category);
+                $form = generate_settings_form($settings, $settings_by_access_list);
             }
-        }        
-                
+        }                
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
          
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {       
@@ -211,7 +220,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         foreach ($values as $key => $value) {          
             if (in_array($key, $settings_to_avoid)) { continue; }            
             $key = Database::escape_string($key);
-            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($_configuration['access_url'])."  AND type IN ('checkbox', 'radio') ";            
+            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";            
             $res = Database::query($sql);            
         }
         
@@ -266,7 +275,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             break;
                     }
                     if ($old_value != $value) $keys[] = $key;
-                    $result = api_set_setting($key, $value, null, null, $_configuration['access_url']);
+                    $result = api_set_setting($key, $value, null, null, $url_id);
                 } else {                
                     $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
                     $res = Database::query($sql);	                    
@@ -279,7 +288,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         }
                     }
                     foreach ($value as $subkey => $subvalue) {	             
-                        $result = api_set_setting($key, 'true', $subkey, null, $_configuration['access_url']);	
+                        $result = api_set_setting($key, 'true', $subkey, null, $url_id);	
                     }
                 	
                 }

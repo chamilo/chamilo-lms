@@ -1055,7 +1055,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
     
     $form->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
     
-    if ( $_configuration['multiple_access_urls'] && api_is_global_platform_admin()) {
+    $url_id = api_get_current_access_url_id();
+    
+    if ( $_configuration['multiple_access_urls'] && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();    
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
         $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));    
@@ -1071,12 +1073,22 @@ function generate_settings_form($settings, $settings_by_access_list) {
         if ( $_configuration['multiple_access_urls']) {
             if (api_is_global_platform_admin()) {                
                 if ($row['access_url_locked'] == 0) {
-                    if ($row['access_url_changeable'] == '1') {
-                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                    if ($url_id == 1) {
+                        if ($row['access_url_changeable'] == '1') {
+                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                    Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                        } else {
+                            $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                    Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                        }
                     } else {
-                        $form->addElement('html', '<div style="float: right;"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</a></div>');
+                        if ($row['access_url_changeable'] == '1') {
+                            $form->addElement('html', '<div style="float: right;">'.
+                                    Display::return_icon('shared_setting.png', get_lang('ChangeSharedSetting')).'</div>');
+                        } else {
+                            $form->addElement('html', '<div style="float: right;">'.
+                                    Display::return_icon('shared_setting_na.png', get_lang('ChangeSharedSetting')).'</div>');
+                        }
                     }
                 }                
             }

@@ -336,7 +336,7 @@ if (!empty($action)) {
 						  }                       
 					}
                     
-                    $class_add_in_tab = 'show_menu';
+                    $class_add_in_tab = 'class="show_menu"';
                     if (!$add_in_tab) {
                         $class_add_in_tab = 'class="hide_menu"';
                     }                    

@@ -3549,8 +3549,9 @@ a.forum_group_link {
     border-color: transparent;
 }
 
+/* Fixes the view as student/teacher button */
 .subnav .nav {
-    /* margin-bottom: 0; */
+    margin-bottom: 0;
 }
 
 .subnav .nav > li > a {

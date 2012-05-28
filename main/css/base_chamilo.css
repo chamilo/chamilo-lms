@@ -1702,15 +1702,6 @@ a.read {
     padding: 0 1px;
 }
 
-.subnav .nav > li:first-child > a,
-.subnav .nav > li:first-child > a:hover {
-    -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-            border-radius: 0;
-}
-
-
-
 /* Text resize icons in header */
 .resize_font { /* the canvas */
     margin: 0 5px 0 5px;

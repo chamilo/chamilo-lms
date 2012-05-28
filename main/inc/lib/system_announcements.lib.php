@@ -6,9 +6,7 @@
 /**
  * Code
  */
-define('VISIBLE_GUEST', 1);
-define('VISIBLE_STUDENT', 2);
-define('VISIBLE_TEACHER', 3);
+
 
 /**
 *	This is the system announcements library for Dokeos.
@@ -16,6 +14,11 @@ define('VISIBLE_TEACHER', 3);
 *	@package chamilo.library
 */
 class SystemAnnouncementManager {
+    
+    CONST VISIBLE_GUEST   = 1;
+    CONST VISIBLE_STUDENT = 2;
+    CONST VISIBLE_TEACHER = 3;
+    
 	/**
 	 * Displays all announcements
 	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
@@ -44,13 +47,13 @@ class SystemAnnouncementManager {
         ." AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
         
         switch ($visible) {
-            case VISIBLE_GUEST :
+            case self::VISIBLE_GUEST :
                 $sql .= " AND visible_guest = 1 ";
                 break;
-            case VISIBLE_STUDENT :
+            case self::VISIBLE_STUDENT :
                 $sql .= " AND visible_student = 1 ";
                 break;
-            case VISIBLE_TEACHER :
+            case self::VISIBLE_TEACHER :
                 $sql .= " AND visible_teacher = 1 ";
                 break;
         }
@@ -128,13 +131,13 @@ class SystemAnnouncementManager {
 				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
 				
 		switch ($visible) {
-			case VISIBLE_GUEST :
+			case self::VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
 				break;
-			case VISIBLE_STUDENT :
+			case self::VISIBLE_STUDENT :
 				$sql .= " AND visible_student = 1 ";
 				break;
-			case VISIBLE_TEACHER :
+			case self::VISIBLE_TEACHER :
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
@@ -219,19 +222,19 @@ class SystemAnnouncementManager {
 
 	public static function count_nb_announcement($start = 0, $user_id = '') {
 		$start = intval($start);
-		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+		$visibility = api_is_allowed_to_create_course() ? self::VISIBLE_TEACHER : self::VISIBLE_STUDENT;
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = 'SELECT id FROM '.$db_table.' WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
 		if (isset($user_id)) {
 			switch ($visibility) {
-				case VISIBLE_GUEST :
+				case self::VISIBLE_GUEST :
 					$sql .= " AND visible_guest = 1 ";
 					break;
-				case VISIBLE_STUDENT :
+				case self::VISIBLE_STUDENT :
 					$sql .= " AND visible_student = 1 ";
 					break;
-				case VISIBLE_TEACHER :
+				case self::VISIBLE_TEACHER :
 					$sql .= " AND visible_teacher = 1 ";
 					break;
 			}
@@ -496,8 +499,13 @@ class SystemAnnouncementManager {
 		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$visible			= intval($visible);
 		$announcement_id 	= intval($announcement_id);
-
-		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
+        
+        if (!in_array($user, array(self::VISIBLE_GUEST, self::VISIBLE_STUDENT, self::VISIBLE_TEACHER))) {
+            return false;
+        }
+        
+		$field = ($user == self::VISIBLE_TEACHER ? 'visible_teacher' : ($user == self::VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
+        
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		$res = Database::query($sql);
 		if ($res === false) {
@@ -586,13 +594,13 @@ class SystemAnnouncementManager {
 				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
 		
 		switch ($visible) {
-			case VISIBLE_GUEST :
+			case self::VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
 				break;
-			case VISIBLE_STUDENT :
+			case self::VISIBLE_STUDENT :
 				$sql .= " AND visible_student = 1 ";
 				break;
-			case VISIBLE_TEACHER :
+			case self::VISIBLE_TEACHER :
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}

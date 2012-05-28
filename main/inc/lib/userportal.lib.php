@@ -83,7 +83,7 @@ class IndexManager {
 		$announcement = intval($announcement);	
         
 		if (!api_is_anonymous() && $this->user_id) {
-			$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+			$visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
 			if ($show_slide) {
 				$announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);                
 			} else {
@@ -91,9 +91,9 @@ class IndexManager {
 			}
 		} else {
 			if ($show_slide) {
-				$announcements = SystemAnnouncementManager :: display_announcements_slider(VISIBLE_GUEST, $announcement);
+				$announcements = SystemAnnouncementManager :: display_announcements_slider(SystemAnnouncementManager::VISIBLE_GUEST, $announcement);
 			} else {
-				$announcements = SystemAnnouncementManager :: display_all_announcements(VISIBLE_GUEST, $announcement);
+				$announcements = SystemAnnouncementManager :: display_all_announcements(SystemAnnouncementManager::VISIBLE_GUEST, $announcement);
 			}
 		}
 		return $announcements;

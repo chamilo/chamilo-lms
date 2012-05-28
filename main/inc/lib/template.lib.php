@@ -647,9 +647,13 @@ class Template {
     
     /* Sets the plugin content in a template variable */
     function set_plugin_region($plugin_region) {
-        if (!empty($plugin_region)) {            
+        if (!empty($plugin_region)) {
             $content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);    
-            $this->assign('plugin_'.$plugin_region, $content);                
+            if (!empty($content)) {
+                $this->assign('plugin_'.$plugin_region, $content);                
+            } else {
+                $this->assign('plugin_'.$plugin_region, null);
+            }
         }
         return null;
     }

@@ -329,6 +329,7 @@ function return_menu() {
     // Displaying the tabs
     
     $lang = ''; //el for "Edit Language"
+    
     if (!empty($_SESSION['user_language_choice'])) {
         $lang = $_SESSION['user_language_choice'];
     } elseif (!empty($_SESSION['_user']['language'])) {
@@ -356,7 +357,7 @@ function return_menu() {
     } else {    
         $homep = api_get_path(SYS_PATH).'home/';
     }
-    
+        
     $ext      = '.html';
     $menutabs = 'home_tabs';
     $home_top = '';
@@ -367,7 +368,7 @@ function return_menu() {
         $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
     } else {
         //$errorMsg = get_lang('HomePageFilesNotReadable');
-    }
+    }    
         
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
    
@@ -459,20 +460,20 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     $session_name   = api_get_session_name($session_id);
     $_course        = api_get_course_info();
     $user_id        = api_get_user_id();
-    $course_id      =  api_get_course_id();
+    $course_id      = api_get_course_id();
     
     
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
     
-    /*
-     * if the user is a coach he can see the users who are logged in its session
-     */
+    /* If the user is a coach he can see the users who are logged in its session */
     $navigation = array();
+    
     // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
     // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
+    $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);    
     $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
+    
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
     	
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');        
@@ -570,8 +571,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     
     $html = '';    
     
-    $view_as_student_link = null;
-    //User view as student
+    /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
+    $view_as_student_link = null;        
     if ($user_id && isset($course_id)) {
         if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
             $view_as_student_link = api_display_tool_view_option();            
@@ -581,8 +582,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     if (!empty($final_navigation)) {       
         $lis = '';
         $i = 0;
-        //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
-       
+        //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));       
         //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));      
         $final_navigation_count = count($final_navigation);
         
@@ -594,8 +594,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 if (!empty($bread_check)) {
                     if ($final_navigation_count-1 > $i) {
                         $bread .= '<span class="divider">/</span>';
-                    }
-                    
+                    }                    
                     $lis.= Display::tag('li', $bread);
                     $i++;
                 }
@@ -604,7 +603,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             $lis.= Display::tag('li', $home_link);
         }
         
-        // view as student
+        // View as student/teacher link
         if (!empty($view_as_student_link)) {
             $lis.= Display::tag('li', $view_as_student_link, array('class' => 'pull-right'));
         }

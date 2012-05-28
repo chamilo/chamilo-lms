@@ -201,15 +201,6 @@ a.invisible:link, a.invisible:visited {
     height:16px;
     padding-right:4%;
 }
-#current {
-    color:#FFFFFF;
-    cursor:pointer;
-    display:block;    
-    overflow:hidden;
-    padding-bottom:6px;
-    margin-right:-3px;    
-	margin-right: 2px;
-}
 
 /* The tool shortcuts */
 #toolshortcuts {
@@ -219,6 +210,7 @@ a.invisible:link, a.invisible:visited {
     text-align:right;
     width:92%;
 }
+
 footer a:link, footer a:visited {
     color:#f1d40d;
 }

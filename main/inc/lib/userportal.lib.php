@@ -1,10 +1,6 @@
 <?php 
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-
 class IndexManager {
 	var $tpl 	= false; //An instance of the template engine
 	var $name 	= '';

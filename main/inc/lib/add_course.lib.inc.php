@@ -624,7 +624,7 @@ function create_course_tables($course_db_name = null) {
               post_id int,
               KEY user_id (user_id),
               KEY forum_id (forum_id),
-              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id ),
+              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id )
             )" . $charset_clause;
     Database::query($sql);
 

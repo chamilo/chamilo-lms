@@ -601,6 +601,14 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
 if ($_configuration['language_measure_frequency'] == 1) {
-  require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
-  $langstats = new langstats();
+    require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
+    $langstats = new langstats();
 }
+
+//Default quota for the course documents folder
+$default_quota = api_get_setting('default_document_quotum');
+//Just in case the setting is not correctly set 
+if (empty($default_quota)) {
+    $default_quota = 100000000;
+}
+define('DEFAULT_DOCUMENT_QUOTA', $default_quota);

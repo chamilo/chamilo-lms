@@ -12,25 +12,9 @@
 /**
  * Code
  */
-
-/* CONSTANTS */
-
-define('DISK_QUOTA_FIELD', 'disk_quota'); //name of the database field
-
-//Default quota for the course documents folder
-$default_quota = api_get_setting('default_document_quotum');
-//Just in case the setting is not correctly set 
-if (empty($default_quota)) {
-    $default_quota = 100000000;
-}
-define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
-/**
- *	@package chamilo.library
- */
 class DocumentManager {
     
     private function __construct() {
-
     }
 
     /**
@@ -45,12 +29,12 @@ class DocumentManager {
         $course_code  = Database::escape_string($course_info['code']);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $sql_query      = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
+        $sql_query      = "SELECT disk_quota FROM $course_table WHERE code = '$course_code'";
         $sql_result     = Database::query($sql_query);
         $course_quota   = null;
         if (Database::num_rows($sql_result)) {
             $result         = Database::fetch_array($sql_result);
-            $course_quota   = $result[DISK_QUOTA_FIELD];
+            $course_quota   = $result['disk_quota'];
         }
 
         if (is_null($course_quota) || empty($course_quota)) {
@@ -1182,15 +1166,10 @@ class DocumentManager {
 
         //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
         //so we remove that string in order to find correctly the origin file
-         
-        if (strpos($doc_path, 'HotPotatoes_files')) {       
-            $doc_path = str_replace(api_get_user_id(), '', $doc_path);
-            $doc_path = str_replace('.t.html', '', $doc_path);                       
-            $path_info = pathinfo($doc_path);            
-            $explode_result = explode('.', $path_info['basename']);            
-            $doc_path = str_replace($path_info['basename'], $explode_result[0].'.'.$path_info['extension'], $doc_path);
+        if (strpos($doc_path, 'HotPotatoes_files')) {
+            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
         }
-        
+
         if (!in_array($file_type, array('file','folder'))) {
             $file_type = 'file';
         }
@@ -2975,4 +2954,3 @@ class DocumentManager {
     }
 }
 //end class DocumentManager
-

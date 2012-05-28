@@ -84,7 +84,7 @@ $user_data['old_password'] = $user_data['password'];
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date'], null, date_default_timezone_get());
 unset($user_data['password']);
 
-$user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id, true));
+$user_data = array_merge($user_data, UserManager :: get_extra_user_data($user_id, true));
 
 // Create the form
 $form = new FormValidator('user_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));

@@ -94,10 +94,9 @@ if ($form->validate()) {
 			$sql .= " FROM $user_table u ORDER BY lastname,firstname";
 		}
 		$filename = 'export_users_'.date('Y-m-d_H-i-s');
-	}
-	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	}	
 	$data = array();
-	$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
+	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC',false);
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv') {
 		if($_configuration['password_encryption']!='none') {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber');

@@ -8,8 +8,6 @@
 /**
  * Code
  */
-/* LIBRARIES */
-
 
 /**
 *	This class provides methods for sessions management.

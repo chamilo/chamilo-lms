@@ -9,12 +9,6 @@
 /**
  * Code
  */
-// Constants for user extra field types.
-
-
-
-
-
 
 /**
  * Class
@@ -22,18 +16,19 @@
  */
 class UserManager {
     
-    CONST USER_FIELD_TYPE_TEXT = 		 		1;
-    CONST USER_FIELD_TYPE_TEXTAREA = 			2;
-    CONST USER_FIELD_TYPE_RADIO = 				3;
-    CONST USER_FIELD_TYPE_SELECT =              4;
-    CONST USER_FIELD_TYPE_SELECT_MULTIPLE =     5;
-    CONST USER_FIELD_TYPE_DATE =  				6;
-    CONST USER_FIELD_TYPE_DATETIME =  			7;
-    CONST USER_FIELD_TYPE_DOUBLE_SELECT =       8;
-    CONST USER_FIELD_TYPE_DIVIDER =  			9;
-    CONST USER_FIELD_TYPE_TAG =  				10;
-    CONST USER_FIELD_TYPE_TIMEZONE =  			11;
-    CONST USER_FIELD_TYPE_SOCIAL_PROFILE =  	12;
+    // Constants for user extra field types.    
+    CONST USER_FIELD_TYPE_TEXT =                    1;
+    CONST USER_FIELD_TYPE_TEXTAREA =                2;
+    CONST USER_FIELD_TYPE_RADIO =                   3;
+    CONST USER_FIELD_TYPE_SELECT =                  4;
+    CONST USER_FIELD_TYPE_SELECT_MULTIPLE =         5;
+    CONST USER_FIELD_TYPE_DATE =                    6;
+    CONST USER_FIELD_TYPE_DATETIME =                7;
+    CONST USER_FIELD_TYPE_DOUBLE_SELECT =           8;
+    CONST USER_FIELD_TYPE_DIVIDER =                 9;
+    CONST USER_FIELD_TYPE_TAG =                     10;
+    CONST USER_FIELD_TYPE_TIMEZONE =                11;
+    CONST USER_FIELD_TYPE_SOCIAL_PROFILE =          12;
 
 	private function __construct () {
 	}

@@ -83,8 +83,8 @@ $user_data['old_password'] = $user_data['password'];
 //@todo remove the date_default_timezone_get() see UserManager::create_user function
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date'], null, date_default_timezone_get());
 unset($user_data['password']);
-
-$user_data = array_merge($user_data, UserManager :: get_extra_user_data($user_id, true));
+$extra_data = UserManager :: get_extra_user_data($user_id, true);
+$user_data = array_merge($user_data, $extra_data);
 
 // Create the form
 $form = new FormValidator('user_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
@@ -255,71 +255,7 @@ if (!$user_data['platform_admin']) {
 
 // EXTRA FIELDS
 
-$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true);
-foreach ($extra as $id => $field_details) {
-	/*if ($field_details[6] == 0) {
-		continue;
-	}*/
-	switch ($field_details[2]) {
-		case USER_FIELD_TYPE_TEXT:
-			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_RADIO:
-			$group = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
-			}
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-			break;
-		case USER_FIELD_TYPE_SELECT:
-            $get_lang_variables = false;
-            if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
-                $get_lang_variables = true;
-            }
-            $options = array();
-            foreach($field_details[9] as $option_id => $option_details) {
-                if ($get_lang_variables) {
-                    $option_details[2] = get_lang($option_details[2]);
-                }
-                $options[$option_details[1]] = $option_details[2];
-            }
-            if ($get_lang_variables) {
-                $field_details[3] = get_lang($field_details[3]);
-            }
-            $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));		
-			break;
-		case USER_FIELD_TYPE_SELECT_MULTIPLE:
-			$options = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
-			break;
-		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_edit'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_edit'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-	}
-}
+UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true);
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');

@@ -78,6 +78,8 @@ class CourseManager {
     //This constant is used to show separate user names in the course list (userportal), footer, etc
     CONST USER_SEPARATOR = ' |';   
     
+    CONST COURSE_FIELD_TYPE_CHECKBOX = 10;
+    
     var $columns = array();    
     
     /**

@@ -177,6 +177,10 @@ UPDATE settings_current SET category = 'Session' WHERE variable IN ('show_tutor_
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0), ('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_wami_record', NULL, 'radio', 'Tools', 'false', 'EnableWebCamClipTitle', 'EnableWebCamClipComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_webcam_clip', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_webcam_clip', 'false', 'No');
+
 -- Course ranking
 CREATE TABLE track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT, c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);
 

@@ -58,7 +58,10 @@ input[type=button], input[type=submit] {
     border: 1px solid #CCCCCC;
 }
 .subnav a {
-    color:#333;
+    color:#fff;
+}
+.subnav a :hover {
+    color:#000;
 }
 
 .subnav #current a {    

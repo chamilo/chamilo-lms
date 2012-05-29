@@ -4,7 +4,7 @@
 {% block body %}
 
     {#  Plugin top  #}
-    {% if plugin_content_top is not null %}
+    {% if plugin_content_top %}
         <div id="plugin_content_top" class="span12">
             {{ plugin_content_top}}
         </div>
@@ -22,7 +22,7 @@
     </div>
     
     {#  Plugin bottom  #}    
-    {% if plugin_content_bottom is not null %}
+    {% if plugin_content_bottom %}
         <div id="plugin_content_bottom" class="span12">
             {{ plugin_content_bottom }}
         </div>

@@ -17,7 +17,7 @@ api_block_anonymous_users();
 
 if (isset($_GET['userid'])) {
 	$user_id = Security::remove_XSS($_GET['userid']);
-	$user = Usermanager::get_user_info_by_id($user_id);
+	$user = UserManager::get_user_info_by_id($user_id);
 	if (!$user) {
 		api_not_allowed();
 	}

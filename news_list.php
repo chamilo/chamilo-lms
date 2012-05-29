@@ -14,15 +14,13 @@ if (api_is_platform_admin()) {
 }
 
 if (api_is_anonymous()) {
-    $visibility = VISIBLE_GUEST;
+    $visibility = SystemAnnouncementManager::VISIBLE_GUEST;
 } else {
-    $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+    $visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
 }
-
 $content =  SystemAnnouncementManager ::display_announcements_slider($visibility, $_GET['id']);
 
 $tpl = new Template($tool_name);
-
 $tpl->assign('actions', $actions);
 //$tpl->assign('message', $message);
 $tpl->assign('content', $content);

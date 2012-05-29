@@ -100,9 +100,9 @@ CourseManager::select_and_sort_categories($categories_select);
 
 
 // Course code
-$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => MAX_COURSE_LENGTH_CODE));
+$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 $form->applyFilter('wanted_code', 'html_filter');
-$form->addRule('wanted_code', get_lang('Max'), 'maxlength', MAX_COURSE_LENGTH_CODE);
+$form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
 /*if ($course_validation_feature) {
     $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
@@ -164,10 +164,13 @@ if ($course_validation_feature) {
     }
 }
 
-$form -> addElement('html','</div>');
+$obj = new GradeModel();
+$obj->fill_grade_model_select_in_form($form);
+
+$form->addElement('html','</div>');
 
 // Submit button.
-$form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
+$form->addElement('button', 'submit', $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
 
 // The progress bar of this form.
 $form->add_progress_bar();
@@ -178,7 +181,6 @@ if (isset($_user['language']) && $_user['language'] != '') {
 } else {
     $values['course_language'] = api_get_setting('platformLanguage');
 }
-$values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
 $form->setDefaults($values);
 
@@ -196,12 +198,11 @@ if ($form->validate()) {
     if ($course_validation_feature) {
         $description     = $course_values['description'];
         $objetives       = $course_values['objetives'];
-        $target_audience = $course_values['target_audience'];
-        $status           = '0';
+        $target_audience = $course_values['target_audience'];        
     }
 
     if ($wanted_code == '') {
-        $wanted_code = generate_course_code(api_substr($title, 0, MAX_COURSE_LENGTH_CODE));
+        $wanted_code = generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
     }
     
     // Check whether the requested course code has already been occupied.
@@ -214,13 +215,13 @@ if ($form->validate()) {
     if ($course_code_ok) {
         if (!$course_validation_feature) {       
               
-            $params = array();
-            
+            $params = array();            
             $params['title']                = $title;
             $params['exemplary_content']    = $exemplary_content;
             $params['wanted_code']          = $wanted_code;            
             $params['category_code']        = $category_code;
-            $params['course_language']      = $course_language;            
+            $params['course_language']      = $course_language;
+            $params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;            
              
             $course_info = CourseManager::create_course($params); 
      
@@ -235,6 +236,7 @@ if ($form->validate()) {
                 $tpl->assign('course_url', $link);                
                 $tpl->assign('course_title', Display::url($title, $link));   
                 $tpl->assign('course_id', $course_info['code']);
+                
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
                 $message = $tpl->fetch($add_course_tpl);    
                 

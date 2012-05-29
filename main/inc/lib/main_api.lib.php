@@ -13,6 +13,9 @@
  * Constants declaration
  */
 
+// PHP version requirement.
+define('REQUIRED_PHP_VERSION', '5.3');
+
 use \ChamiloSession as Session;
 
 
@@ -30,8 +33,6 @@ define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-
-define('MIN_PHP_VERSION', '5.2.4');
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -162,12 +163,8 @@ define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
 
-
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-define('USERNAME_MAX_LENGTH', 40);
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
+
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
@@ -181,8 +178,6 @@ define('IS_PHP_53', !((float)$php_version < 5.3));
 define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
 define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
 define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
-
 
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
@@ -246,6 +241,22 @@ define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
 define('SESSION_RELATION_TYPE_RRHH', 1);
+
+//User image sizes
+define('USER_IMAGE_SIZE_ORIGINAL',	1);
+define('USER_IMAGE_SIZE_BIG', 		2);
+define('USER_IMAGE_SIZE_MEDIUM', 	3);
+define('USER_IMAGE_SIZE_SMALL',     4);
+
+// Relation type between users
+define('USER_UNKNOW',					0);
+define('USER_RELATION_TYPE_UNKNOW',		1);
+define('USER_RELATION_TYPE_PARENT',		2); // should be deprecated is useless
+define('USER_RELATION_TYPE_FRIEND',		3);
+define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
+define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
+define('USER_RELATION_TYPE_DELETED',     6);
+define('USER_RELATION_TYPE_RRHH',		7);
 
 
 /**
@@ -1776,22 +1787,18 @@ function api_get_session_info($session_id) {
  */
 function api_get_session_visibility($session_id) {
     $visibility = 0; //means that the session is still available
+    
+    if (api_is_platform_admin()) {
+        return SESSION_AVAILABLE;
+    }
+    
     if (!empty($session_id)) {
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $is_coach = api_is_coach();
-        $condition_date_end = "";
         
-        if ($is_coach) {
-            //@todo use api_get_utc_datetime()
-            $condition_date_end = " AND (CURDATE() > (SELECT adddate(date_end,nb_days_access_after_end) FROM $tbl_session WHERE id = $session_id) AND date_end != '0000-00-00') ";
-        } else {
-            $condition_date_end = " ";
-        }
-
-        $sql = "SELECT visibility, date_start, date_end FROM $tbl_session
-                WHERE id = $session_id $condition_date_end ";
+        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning FROM $tbl_session
+                WHERE id = $session_id ";
+        
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0 ) {
@@ -1800,7 +1807,7 @@ function api_get_session_visibility($session_id) {
             
             //I don't care the field visibility
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
-                $visibility = SESSION_AVAILABLE;    
+                return SESSION_AVAILABLE;    
             } else {
                 $time = time();
                      
@@ -1816,7 +1823,7 @@ function api_get_session_visibility($session_id) {
                 }
                 
                 //if date_end is set
-                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {                    
+                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {        
                     $row['date_end'] = $row['date_end'].' 00:00:00';
                     //only if date_start said that it was ok
                     
@@ -1831,8 +1838,44 @@ function api_get_session_visibility($session_id) {
                             $visibility = $row['visibility'];
                         }
                     }
-                }                
+                }             
             }
+            
+            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
+            $is_coach = api_is_coach();
+            
+            if ($is_coach) {
+                
+                //Test end date
+                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
+                    
+                    $end_date_for_coach = new DateTime($row['date_end']);
+                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
+                    
+                    $end_date_for_coach->add(new DateInterval($number_of_days));                    
+                    $today = new DateTime();                    
+                    
+                    if ($end_date_for_coach >= $today) {
+                        $visibility = SESSION_AVAILABLE;
+                    } else {
+                        $visibility = SESSION_INVISIBLE;
+                    }              
+                }
+                
+                //Test start date                
+                if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {                    
+                    $start_date_for_coach = new DateTime($row['date_start']);
+                    $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';                    
+                    $start_date_for_coach->sub(new DateInterval($number_of_days));
+                    
+                    $today = new DateTime();                                
+                    if ($start_date_for_coach < $today) {
+                        $visibility = SESSION_AVAILABLE;
+                    } else {
+                        $visibility = SESSION_INVISIBLE;
+                    }
+                }
+            }            
         } else {
             $visibility = SESSION_INVISIBLE;
         }
@@ -2158,13 +2201,13 @@ function api_is_coach($session_id = 0, $course_code = '') {
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
+    
 	if (!empty($course_code)) {		
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session_rc_ru.id_user = '".api_get_user_id()."'
 	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'";		
 	    $result = Database::query($sql);
-	    
 	    $sessionIsCoach = Database::store_result($result);	    
 	}
 	
@@ -2310,13 +2353,11 @@ function api_display_tool_title($title_element) {
  * @todo rewrite code so it is easier to understand
  */
 function api_display_tool_view_option() {
-
     if (api_get_setting('student_view_enabled') != 'true') { 
         return '';
     }
-
-    $output_string = '';
-
+    
+    
     $sourceurl = '';
     $is_framed = false;
     // Exceptions apply for all multi-frames pages
@@ -2354,20 +2395,22 @@ function api_display_tool_view_option() {
             //$sourceurl = str_replace('&', '&amp;', $sourceurl);
         }
     }
+    
+    $output_string = '';
     if (!empty($_SESSION['studentview'])) {
         if ($_SESSION['studentview'] == 'studentview') {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
+            $output_string .= '<a class="btn btn-mini btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+            $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
         }
     } else {
-        $output_string .= '<a href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+        $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
     }
     return $output_string;
 }
@@ -3988,11 +4031,14 @@ function api_set_setting_option($params) {
 }
 
 function api_set_setting_simple($params) {
-	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+	$table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
+    $url_id = api_get_current_access_url_id();
+    
 	if (empty($params['id'])) {
+        $params['access_url'] = $url_id;
 		Database::insert($table, $params);
 	} else {
-		Database::update($table, $params, array('id = ? '=> $params['id']));
+		Database::update($table, $params, array('id = ? '=> array($params['id'])));
 	}		
 }
 
@@ -5764,7 +5810,7 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
  * @param string    course code
  * @return boolean 
  */
-function block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
+function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course_code = null) {
     if (api_is_platform_admin()) {
         return false;
     }
@@ -5773,4 +5819,59 @@ function block_course_item_locked_by_gradebook($item_id, $link_type, $course_cod
         $message = Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
         api_not_allowed(true, $message);
     }    
+}
+
+function api_check_php_version($my_inc_path = null) {
+    if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
+        $global_error_code = 1;
+        // Incorrect PHP version
+        $global_page = $my_inc_path.'global_error_message.inc.php';
+        if (file_exists($global_page)) {
+            require $global_page;    
+        }
+        exit;
+    }
+}
+
+function api_check_archive_dir() {
+    if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');           
+        api_not_allowed(true, $message);
+    }
+}
+
+function api_get_locked_settings() {
+    return array(
+        'server_type',        
+        'permanently_remove_deleted_files',
+        'account_valid_duration',
+        'service_visio',
+        'service_ppt2lp',
+        'wcag_anysurfer_public_pages',
+        'upload_extensions_list_type',
+        'upload_extensions_blacklist',
+        'upload_extensions_whitelist',   
+        'upload_extensions_skip',    
+        'upload_extensions_replace_by',
+        'hide_dltt_markup',
+        'split_users_upload_directory',
+        'permissions_for_new_directories',
+        'permissions_for_new_files',
+        'platform_charset',
+        'service_visio',
+        'ldap_description',    
+        'cas_activate',
+        'cas_server',
+        'cas_server_uri',
+        'cas_port',
+        'cas_protocol',
+        'cas_add_user_activate',
+        'update_user_info_cas_with_ldap',    
+        'languagePriority1',
+        'languagePriority2',
+        'languagePriority3',
+        'languagePriority4',
+        'login_is_email',
+        'chamilo_database_version'    
+    );
 }

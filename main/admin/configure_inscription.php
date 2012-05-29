@@ -14,7 +14,6 @@ api_protect_admin_script();
 
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once api_get_path(INCLUDE_PATH).'lib/legal.lib.php';
 
 // Load terms & conditions from the current lang
 if (get_setting('allow_terms_conditions') == 'true') {
@@ -166,9 +165,7 @@ if (!empty($action)) {
 
 Display :: display_header($tool_name);
 
-echo '<div class="actions-title">';
-echo $tool_name;
-echo '</div>';
+echo Display::page_header($tool_name);
 
 // The following security condition has been removed, because it makes no sense here. See Bug #1846.
 //// Forbidden to self-register
@@ -279,117 +276,8 @@ if ($display_all_form) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-
-    // EXTRA FIELDS
-    $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
     $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    foreach ($extra as $id => $field_details) {
-        if ($field_details[6] == 0) {
-            continue;
-        }
-        switch($field_details[2]) {
-            case USER_FIELD_TYPE_TEXT:
-                $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-                $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-                $form->applyFilter('extra_'.$field_details[1], 'trim');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_TEXTAREA:
-                $form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-                //$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-                $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-                $form->applyFilter('extra_'.$field_details[1], 'trim');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_RADIO:
-                $group = array();
-                foreach ($field_details[9] as $option_id => $option_details) {
-                    $options[$option_details[1]] = $option_details[2];
-                    $group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
-                }
-                $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_SELECT:
-                $get_lang_variables = false;
-                if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
-                    $get_lang_variables = true;
-                }                
-                $options = array();
-                foreach($field_details[9] as $option_id => $option_details) {
-                    //$options[$option_details[1]] = $option_details[2];
-                    if ($get_lang_variables) {
-                        $options[$option_details[1]] = get_lang($option_details[2]);
-                    }
-                }
-                if ($get_lang_variables) {
-                    $field_details[3] = get_lang($field_details[3]);
-                }
-                
-                $form->addElement('select','extra_'.$field_details[1], $field_details[3], $options, '');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_SELECT_MULTIPLE:
-                $options = array();
-                foreach ($field_details[9] as $option_id => $option_details) {
-                    $options[$option_details[1]] = $option_details[2];
-                }
-                $form->addElement('select','extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_DATE:
-                $form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
-                $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-                $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-                $form -> setDefaults($defaults);
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                $form->applyFilter('theme', 'trim');
-                break;
-            case USER_FIELD_TYPE_DATETIME:
-                $form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
-                $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-                $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-                $form -> setDefaults($defaults);
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                $form->applyFilter('theme', 'trim');
-                break;
-            case USER_FIELD_TYPE_DOUBLE_SELECT:
-                foreach ($field_details[9] as $key => $element) {
-                    if ($element[2][0] == '*') {
-                        $values['*'][$element[0]] = str_replace('*', '', $element[2]);
-                    } else {
-                        $values[0][$element[0]] = $element[2];
-                    }
-                }
-
-                $group = '';
-                $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
-                $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
-                $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-
-                // recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-                if (key_exists('extra_'.$field_details[1], $extra_data)) {
-                    // exploding all the selected values (of both select forms)
-                    $selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
-                    $extra_data['extra_'.$field_details[1]] = array();
-
-                    // looping through the selected values and assigning the selected values to either the first or second select form
-                    foreach ($selected_values as $key => $selected_value) {
-                        if (key_exists($selected_value,$values[0])) {
-                            $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
-                        } else {
-                            $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
-                        }
-                    }
-                }
-                break;
-            case USER_FIELD_TYPE_DIVIDER:
-                $form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
-                break;
-        }
-    }
-
+    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
 }
 
 // Terms and conditions
@@ -421,20 +309,13 @@ if (get_setting('allow_terms_conditions') == 'true') {
         $form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $term_preview = '<div class="row">
-                    <div class="label">'.get_lang('TermsAndConditions').'</div>
-                    <div class="formw">
-                    '.$preview.'
-                    <br />
-                    </div>
-                    </div>';
-            $form->addElement('html', $term_preview);
+            $preview = LegalManager::show_last_condition($term_preview);          
+            $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('class' => 'save', 'disabled' => 'disabled'));
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('disabled' => 'disabled'));
 
 $defaults['status'] = STUDENT;
 
@@ -504,8 +385,7 @@ switch ($action){
         //Form of language
         api_display_language_form();
         echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
-        //echo '<div class="note">';
-        echo '<div style="border:1px solid #E1E1E1; padding:2px;">';
+        
         $open = '';
         if (file_exists($homep.$topf.'_'.$lang.$ext)) {
             $open = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
@@ -513,8 +393,11 @@ switch ($action){
             $open = @(string)file_get_contents($homep.$topf.$ext);
         }
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        echo $open;
-        echo '</div>';
+        if (!empty($open)) {
+            echo '<div class="well_border">';
+            echo $open;
+            echo '</div>';
+        }
         $form->display();
         break;
 }

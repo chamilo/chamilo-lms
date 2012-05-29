@@ -6,14 +6,14 @@
 	<div class="span9">
         
         {#  Plugin bottom  #}
-        {% if plugin_content_top is not null %}
+        {% if plugin_content_top %}
             <div id="plugin_content_top">
                 {{ plugin_content_top }}
             </div>
         {% endif %}
         
 		{#  ??  #}
-        {% if home_page_block is not null %}
+        {% if home_page_block %}
             <section id="home_page">
             {{ home_page_block}}
             </section>
@@ -31,7 +31,7 @@
         {% endif %}
 		
 		{#  Announcements  #}
-        {% if announcements_block is not null %}      
+        {% if announcements_block %}      
             <section id="announcements_page">
             {{ announcements_block }}
             </section>
@@ -41,7 +41,7 @@
 		{% include "default/layout/hot_courses.tpl" %}
         
         {#  Content bottom  #}
-        {% if plugin_content_bottom is not null %}       
+        {% if plugin_content_bottom %}       
             <div id="plugin_content_bottom">
                 {{plugin_content_bottom}}
             </div>
@@ -51,7 +51,7 @@
 		
 	{#  Right column  #}
 	<div class="span3">		        
-        {% if plugin_menu_top is not null %}
+        {% if plugin_menu_top %}
             <div id="plugin_menu_top">
                 {{plugin_menu_top}}
             </div>
@@ -95,7 +95,7 @@
 		{#  Plugin courses sidebar  #}		
         {#  Plugins for footer section  #}		
         
-        {% if plugin_menu_bottom is not null %}
+        {% if plugin_menu_bottom %}
             <div id="plugin_menu_bottom">
                 {{ plugin_menu_bottom }}
             </div>

@@ -32,16 +32,15 @@
                         {# logo #}
                         {{ logo }}
 
-                        {# plugin_header #}                            
+                        {# plugin_header left #}                            
                         {% if plugin_header_left is not null %}
                             <div id="plugin_header_left">
                                 {{ plugin_header_left }}
                             </div>
                         {% endif %}
                     </div>
-
-                    <div id="header_center" class="span3">                
-                        {# plugin_header #}        
+                    <div id="header_center" class="span3">
+                        {# plugin_header center #}
                         {% if plugin_header_center is not null %}
                             <div id="plugin_header_center">
                                 {{ plugin_header_center }}
@@ -49,13 +48,12 @@
                         {% endif %}
                         &nbsp;
                     </div>                                
-                    <div id="header_right" class="span5">   
-                        {# header right (notifications) #}    
+                    <div id="header_right" class="span5">                           
                         <ul id="notifications" class="nav nav-pills pull-right">        
                             {{ notification_menu }}
                         </ul>
 
-                        {# plugin_header #}        
+                        {# plugin_header right #}        
                         {% if plugin_header_right is not null %}
                             <div id="plugin_header_right">
                                 {{ plugin_header_right }}
@@ -65,7 +63,7 @@
                     </div>
                 </div>
 
-                {% if plugin_header_main is not null %}
+                {% if plugin_header_main %}
                     <div class="row">
                         <div class="span12">
                             <div id="plugin_header_main">
@@ -74,17 +72,21 @@
                         </div>
                     </div>
                 {% endif %}
-            </header>
-
-            {# menu #}
+                    
+                          {# menu #}
             {% if menu is not null %}
                 <div class="subnav">
                     {{ menu }} 
                 </div>
             {% endif %}
+            </header>
+
+      
 
             {# breadcrumb #}
-            {{ breadcrumb}}
+            {{ breadcrumb }}
+                
             <div class="row">
+            {# course navigation links/shortcuts need to be activated by the admin #}
             {% include "default/layout/course_navigation.tpl" %}
 {% endif %}

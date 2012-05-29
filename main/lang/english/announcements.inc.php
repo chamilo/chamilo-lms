@@ -60,4 +60,5 @@ $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $AddAsAnnouncement = "Add as an announcement";
+$AnnouncementForGroup = "Announcement for a group";
 ?>

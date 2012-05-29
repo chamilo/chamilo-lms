@@ -728,8 +728,7 @@ function search_additional_profile_fields($keyword)
  * platform administration > profiling. Only the fields that have predefined fields are usefull for such a filter.
  *
  */
-function display_extra_profile_fields_filter()
-{
+function display_extra_profile_fields_filter() {
 	// getting all the additional user profile fields
 	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
 
@@ -740,14 +739,14 @@ function display_extra_profile_fields_filter()
 		// $field_details[2] contains the type of the additional user profile field
 		switch($field_details[2]) {
 			// text fields cannot be used as a filter
-			case USER_FIELD_TYPE_TEXT:
+			case UserManager::USER_FIELD_TYPE_TEXT:
 				break;
 			// text area fields cannot be used as a filter
-			case USER_FIELD_TYPE_TEXTAREA:
+			case UserManager::USER_FIELD_TYPE_TEXTAREA:
 				break;
-			case USER_FIELD_TYPE_RADIO:
-			case USER_FIELD_TYPE_SELECT:
-			case USER_FIELD_TYPE_SELECT_MULTIPLE:
+			case UserManager::USER_FIELD_TYPE_RADIO:
+			case UserManager::USER_FIELD_TYPE_SELECT:
+			case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
 				$return .= '<optgroup label="'.$field_details[3].'">';
 				foreach($field_details[9] as $option_id => $option_details) {
 					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {

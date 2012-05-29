@@ -1533,4 +1533,16 @@ $EnableWamiRecordComment = "Wami-recorder je snemalnik zvoka, ki bazira na Flash
 $ChangeSharedSetting = "Spremeni nastavitev vidnosti drugih portalov";
 $GradebookDefaultWeightTitle = "Privzeta utež v redovalnici";
 $GradebookDefaultWeightComment = "Ta utež bo uporabljena privzeto v vseh tečajih";
+$ShibbolethMainActivateTitle = "Shibboleth avtentifikacija";
+$LdapDescriptionTitle = "LDAP avtentifikacija";
+$FacebookMainActivateTitle = "Facebook avtentifikacija";
+$UserLanguage = "Jezik uporabnika";
+$TeachersCanChangeGradeModelSettingsTitle = "Učitelj lahko spremeni nastavitve modela ocenjevanja";
+$TeachersCanChangeGradeModelSettingsComment = "Ko ureja redovalnico";
+$GradebookDefaultGradeModelTitle = "Privzeti model ocenjevanja";
+$GradebookDefaultGradeModelComment = "Ta vrednost bo izbrana kot privzeta pri ustvarjanju novega tečaja";
+$GradebookEnableGradeModelTitle = "Omogoči model ocenjevanja";
+$GradebookEnableGradeModelComment = "Omogoči avtomatično kreiranje kategorij redovalnice v tečaju v odvisnosti od modelov ocenjevanj.";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Dovoli administratorjem sej vpogled v vse seje";
+$AllowSessionAdminsToSeeAllSessionsComment = "Ko ta možnost ni omogočena (privzeto), administratorji sej vidijo zgolj seje, ki so jih sami ustvarili. To včasih ni zaželeno, še posebej v primerih, ko morajo administratorji sej deliti čas podprore med večimi sejami, po možnosti takimi, ki jih vse niso sami ustvarili.";
 ?>

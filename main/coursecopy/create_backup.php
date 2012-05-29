@@ -15,7 +15,10 @@ $language_file = array('exercice', 'admin', 'coursebackup');
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
+
 api_protect_course_script(true);
+
+api_check_archive_dir();
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
@@ -47,6 +50,8 @@ require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 echo Display::page_header($nameTools);
+
+
 
 /*	MAIN CODE */
 

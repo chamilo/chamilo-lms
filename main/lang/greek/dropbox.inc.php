@@ -2,15 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$FilingName = "Ονομα";
-$FilingOtherAs = "(new foldername) ==>";
-$FilingSelected = "Received/Sent (original folder)";
-$FilingRefile = "Refile selected files as";
-$FilingFolders = "View only folder";
 $BackList = "Επιστροφή στο Χώρο Ανταλλαγής Αρχείων";
 $ShowFeedback = "Show Feedback";
 $GiveFeedback = "Give / Edit Feedback";
-$JustUploadInList = "Ανέβασμα αρχείου από τον/την";
 $JustUploadInSelect = "--- Ανέβασμα αρχείου ---";
 $MailingNothingFor = "Τίποτε για";
 $MailingFileNotRegistered = "(όχι εγγεγραμμένος)";
@@ -26,7 +20,6 @@ $MailingZipDups = "Mailing zipfile must not contain duplicate files - it will no
 $MailingZipPhp = "Mailing zipfile must not contain php files - it will not be sent";
 $MailingZipEmptyOrCorrupt = "Mailing zipfile is empty or not a valid zipfile";
 $MailingWrongZipfile = "Mailing must be zipfile with STUDENTID or LOGINNAME";
-$MailingBackToDropbox = "Επιστροφή στο Χώρο Ανταλλαγής Αρχείων";
 $MailingConfirmSend = "Send content files to individual destinations ?";
 $MailingSend = "Send content files";
 $MailingNotYetSent = "Mailing content files have not yet been sent out...";
@@ -34,29 +27,19 @@ $MailingInSelect = "---Mailing---";
 $MailingAsUsername = "Mailing";
 $FileDeleted = "Το επιλεγμένο αρχείο έχει διαγραφεί από το Χώρο Ανταλλαγής Αρχείων.";
 $DocAdd = "Το αρχείο στάλθηκε με επιτυχία";
-$Recipient = "τον παραλήπτη";
 $Sender = "τον αποστολέα";
 $Author = "τον διδάσκοντα";
 $FileSize = "το μέγεθος του αρχείου";
 $Title = "τον τίτλο";
-$FirstDate = "την πρώτη ημερομηνία αποστολής";
-$LastDate = "την τελευταία ημερομηνία αποστολής";
-$OrderBy = "Ταξινόμηση με βάση";
 $OverwriteFile = "Θέλετε να αντικαταστήσετε το προηγούμενο αρχείο που στείλατε;";
-$LastUpdated = "Τελευταία ενημέρωση την";
 $Ok = "Αποστολή";
 $Unknown = "ανώνυμος";
 $SentOn = "την";
 $SentTo = "Στάλθηκε στον/στην";
-$SentBy = "Στάλθηκε από τον/την";
-$WorkDelete = "Διαγραφή από τον κατάλογο";
-$AllDocuments = "Σημείωση: Τα αρχεία θα διαγραφτούν μόνο από τον κατάλογό σας";
 $ConfirmDelete = "Σημείωση: Το αρχείο θα διαγραφτεί μόνο από τον κατάλογό σας";
-$RreceivedTitle = "ΕΙΣΕΡΧΟΜΕΝΑ ΑΡΧΕΙΑ";
 $SendTo = "Αποστολή στον/στην";
 $Description = "Περιγραφή αρχείου";
 $UploadFile = "Ανέβασμα αρχείου";
-$InstallError = "Can't install the necessary tables for the dropbox module. Παρακαλώ επικοινωνήστε με τον διαχειριστή συστήματος.";
 $ErrorCreatingDir = "Παρουσιάστηκε σφάλμα κατά τη δημιουργία καταλόγου. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $UploadError = "Παρουσιάστηκε σφάλμα κατά το ανέβασμα του αρχείου. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $TooBig = "Δεν έχετε επιλέξει κάποιο αρχείο να ανεβάσετε ή το αρχείο υπερβαίνει το επιτρεπτό όριο σε μέγεθος.";
@@ -64,8 +47,6 @@ $NoFileSpecified = "Δεν έχετε επιλέξει κάποιο αρχείο
 $NoUserSelected = "Παρακαλούμε επιλέξτε το χρήστη στον οποίο θέλετε να σταλεί το αρχείο.";
 $BadFormData = "Η αποστολή του αρχείου απέτυχε: Τα δεδομένα ήταν με λάθος μορφή. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $GeneralError = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
-$QueryError = "Error in database query. Παρακαλώ επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $Dropbox = "Χώρος Ανταλλαγής Αρχείων";
-$AliensNotAllowed = "Μόνο οι εγγεγραμμένοι χρήστες στην πλατφόρμα μπορούν να χρησιμοποιούν το dropbox. Δεν είστε εγγεγραμμένος χρήστης στην πλατφόρμα.";
 $Help = "Βοήθεια";
 ?>

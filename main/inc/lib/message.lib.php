@@ -37,9 +37,8 @@ class MessageManager
         $count = who_is_online_count();
 		$userlist = who_is_online(0, $count, null, null, 30, true);
 		$online_user_list = array();
-		foreach($userlist as $row) {
-			$receiver_id = $row[0];
-			$online_user_list[$receiver_id] = GetFullUserName($receiver_id).($current_user_id==$receiver_id?("&nbsp;(".get_lang('Myself').")"):(""));
+		foreach ($userlist as $user_id) {			
+			$online_user_list[$user_id] = GetFullUserName($user_id).($current_user_id==$user_id?("&nbsp;(".get_lang('Myself').")"):(""));
 		}
 		return $online_user_list;
 	}

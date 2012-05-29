@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Tytuł strony";
 $langExplanation = "Kliknięcie OK spowoduje utworzenie stron kursu z Forum, Terminarzem, Obszarem dokumentów itd. Tylko Ty, jako twórca kursu możesz te strony modyfikować";
 $langTooBig = "Nie wybrano żadnego pliku do wysłania lub jest on za duży";
 $langCouldNot = "Plik nie może być przesłany";
@@ -11,5 +10,4 @@ $langCouldNotSendPage = "Ten plik nie jest plikiem formatu HTML i nie mo&#380;e 
 $langSendPage = "Strona do wysłania";
 $langPageTitleModified = "Tytuł strony został zmodyfikowany";
 $langPageAdded = "Strona dodana";
-$langAddPage = "Dodaj stronę";
 ?>

@@ -54,11 +54,11 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('student_page_after_login', NULL, 'textfield', 'Platform', '', 'StudentPageAfterLoginTitle', 'StudentPageAfterLoginComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('teacher_page_after_login', NULL, 'textfield', 'Platform', '', 'TeacherPageAfterLoginTitle', 'TeacherPageAfterLoginComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('drh_page_after_login', NULL, 'textfield', 'Platform', '', 'DRHPageAfterLoginTitle', 'DRHPageAfterLoginComment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('sessionadmin_page_after_login', NULL, 'textfield', 'Platform', '', 'SessionAdminPageAfterLoginTitle', 'SessionAdminPageAfterLoginComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('sessionadmin_page_after_login', NULL, 'textfield', 'Session', '', 'SessionAdminPageAfterLoginTitle', 'SessionAdminPageAfterLoginComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('student_autosubscribe', NULL, 'textfield', 'Platform', '', 'StudentAutosubscribeTitle', 'StudentAutosubscribeComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('teacher_autosubscribe', NULL, 'textfield', 'Platform', '', 'TeacherAutosubscribeTitle', 'TeacherAutosubscribeComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('drh_autosubscribe', NULL, 'textfield', 'Platform', '', 'DRHAutosubscribeTitle', 'DRHAutosubscribeComment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('sessionadmin_autosubscribe', NULL, 'textfield', 'Platform', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('sessionadmin_autosubscribe', NULL, 'textfield', 'Session', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1);
@@ -68,10 +68,10 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES  ('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('languagePriority2', NULL, 'radio', 'Languages', 'user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('languagePriority3', NULL, 'radio', 'Languages', 'user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang', 'LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('languagePriority2', NULL, 'radio', 'Languages', 'user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('languagePriority3', NULL, 'radio', 'Languages', 'user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang', 'LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePriority1','platform_lang','PlatformLanguage'), ('languagePriority1','user_profil_lang','UserLanguage'), ('languagePriority1','user_selected_lang','UserSelectedLanguage'), ('languagePriority1','course_lang','CourseLanguage'), ('languagePriority2','platform_lang','PlatformLanguage'), ('languagePriority2','user_profil_lang','UserLanguage'), ('languagePriority2','user_selected_lang','UserSelectedLanguage'), ('languagePriority2','course_lang','CourseLanguage'), ('languagePriority3','platform_lang','PlatformLanguage'), ('languagePriority3','user_profil_lang','UserLanguage'), ('languagePriority3','user_selected_lang','UserSelectedLanguage'), ('languagePriority3','course_lang','CourseLanguage'), ('languagePriority4','platform_lang','PlatformLanguage'), ('languagePriority4','user_profil_lang','UserLanguage'), ('languagePriority4','user_selected_lang','UserSelectedLanguage'), ('languagePriority4','course_lang','CourseLanguage');
 -- Email is login 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0);
@@ -92,6 +92,11 @@ ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable_grade_model', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable_grade_model', 'false', 'No');
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'false', 'No');
@@ -107,6 +112,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_session_admins_to_see_all_sessions', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_session_admins_to_see_all_sessions', 'false', 'No');
 
 ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
@@ -156,7 +165,15 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_wami_record', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_public_certificates', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_public_certificates', 'false', 'No');
+
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1);
+
+UPDATE settings_current SET category = 'Session' WHERE variable IN ('show_tutor_data', 'use_session_mode', 'add_users_by_coach', 'show_session_coach', 'show_session_data', 'allow_coach_to_edit_course_session','hide_courses_in_sessions', 'show_groups_to_users');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2476;&#2494;&#2434;&#2482;&#2494;','bengali','bn','bengali',0), ('&#1575;&#1604;&#1589;&#1608;&#1605;&#1575;&#1604;&#1610;&#1577;','somali','so','somali',0);
 
@@ -191,7 +208,11 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_lo
 
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
 
--- skills
+-- Skills
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'false', 'No');
 
 CREATE TABLE IF NOT EXISTS skill ( id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, short_code varchar(100) NOT NULL, description TEXT NOT NULL, access_url_id int NOT NULL, icon varchar(255) NOT NULL, PRIMARY KEY (id));
 INSERT INTO skill (name) VALUES ('Root');
@@ -208,8 +229,11 @@ CREATE TABLE IF NOT EXISTS skill_rel_profile ( id INTEGER  NOT NULL AUTO_INCREME
 DELETE FROM settings_current WHERE variable = 'use_document_title';
 DELETE FROM settings_options WHERE variable = 'use_document_title';
 
+ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
+ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.17828' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18042' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
@@ -238,4 +262,4 @@ ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
 ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
 ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
 
-
+INSERT INTO course_setting(variable,value,category) VALUES ('allow_public_certificates', 0, 'certificates');

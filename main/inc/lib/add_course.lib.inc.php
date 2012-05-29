@@ -21,7 +21,7 @@ function generate_course_code($course_title, $encoding = null) {
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
     }
-    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, MAX_COURSE_LENGTH_CODE);
+    return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, CourseManager::MAX_COURSE_LENGTH_CODE);
 }
 
 /**
@@ -624,7 +624,7 @@ function create_course_tables($course_db_name = null) {
               post_id int,
               KEY user_id (user_id),
               KEY forum_id (forum_id),
-              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id ),
+              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id )
             )" . $charset_clause;
     Database::query($sql);
 
@@ -2320,6 +2320,8 @@ function fill_db_course($course_id, $course_repository, $language, $default_docu
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_students_on_new_homework',0,'work')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
+    Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
+    
 
     /*    Course homepage tools for platform admin only */
    
@@ -2775,7 +2777,7 @@ function readPropertiesInArchive($archive, $is_compressed = true) {
     details.
     tempnam() returns the temporary filename, or the string NULL upon failure.
     */
-    $zip_file = new pclZip($archive);
+    $zip_file = new PclZip($archive);
     $tmp_dir_name = dirname($archive) . '/tmp'.$uid.uniqid($uid);
     if (mkdir($tmp_dir_name, api_get_permissions_for_new_directories(), true)) {
         $unzipping_state = $zip_file->extract($tmp_dir_name);

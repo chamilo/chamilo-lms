@@ -16,8 +16,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
 require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-//require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';moved to autoload
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];
@@ -47,18 +45,20 @@ if ($display_all_form) {
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
     $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    
     //	EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
+    
     if (api_get_setting('login_is_email') == 'true') {
-      $form->applyFilter('email','trim');
-      if (api_get_setting('registration', 'email') != 'true') {
-        $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-      }
-      $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-      $form->addRule('email', get_lang('UserTaken'), 'username_available');
+        $form->applyFilter('email','trim');
+        if (api_get_setting('registration', 'email') != 'true') {
+            $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+        }
+        $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule('email', get_lang('UserTaken'), 'username_available');
     }
 
     $form->addRule('email', get_lang('EmailWrong'), 'email');
@@ -72,15 +72,15 @@ if ($display_all_form) {
         if (api_get_setting('registration', 'officialcode') == 'true')
             $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
-    //
+    
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-      $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
-      $form->applyFilter('username','trim');
-      $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-      $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-      $form->addRule('username', get_lang('UsernameWrong'), 'username');
-      $form->addRule('username', get_lang('UserTaken'), 'username_available');
+        $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
+        $form->applyFilter('username','trim');
+        $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+        $form->addRule('username', get_lang('UsernameWrong'), 'username');
+        $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
@@ -140,118 +140,10 @@ if ($display_all_form) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-    // EXTRA FIELDS
-    $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+    // EXTRA FIELDS    
     $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    foreach ($extra as $id => $field_details) {
-        if ($field_details[6] == 0) {
-            continue;
-        }
-        switch($field_details[2]) {
-            case USER_FIELD_TYPE_TEXT:
-                $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-                $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-                $form->applyFilter('extra_'.$field_details[1], 'trim');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_TEXTAREA:
-                $form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
-                //$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-                $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-                $form->applyFilter('extra_'.$field_details[1], 'trim');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_RADIO:
-                $group = array();
-                foreach ($field_details[9] as $option_id => $option_details) {
-                    $options[$option_details[1]] = $option_details[2];
-                    $group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />',$option_details[1]);
-                }
-                $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_SELECT:
-                $get_lang_variables = false;
-                if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
-                    $get_lang_variables = true;
-                }
-                $options = array();
-                foreach($field_details[9] as $option_id => $option_details) {
-                    if ($get_lang_variables) {
-                        $option_details[2] = get_lang($option_details[2]);
-                    }
-                    $options[$option_details[1]] = $option_details[2];
-                }
-                if ($get_lang_variables) {
-                    $field_details[3] = get_lang($field_details[3]);
-                }
-                $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
-                break;
-            case USER_FIELD_TYPE_SELECT_MULTIPLE:
-                $options = array();
-                foreach ($field_details[9] as $option_id => $option_details) {
-                    $options[$option_details[1]] = $option_details[2];
-                }
-                $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                break;
-            case USER_FIELD_TYPE_DATE:
-                $form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
-                $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-                $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-                $form -> setDefaults($defaults);
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                $form->applyFilter('theme', 'trim');
-                break;
-            case USER_FIELD_TYPE_DATETIME:
-                $form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
-                $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-                $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-                $form -> setDefaults($defaults);
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-                $form->applyFilter('theme', 'trim');
-                break;
-            case USER_FIELD_TYPE_DOUBLE_SELECT:
-                foreach ($field_details[9] as $key => $element) {
-                    if ($element[2][0] == '*') {
-                        $values['*'][$element[0]] = str_replace('*', '', $element[2]);
-                    } else {
-                        $values[0][$element[0]] = $element[2];
-                    }
-                }
-
-                $group = '';
-                $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
-                $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
-                $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-                if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-
-                // recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-                if (key_exists('extra_'.$field_details[1], $extra_data)) {
-                    // exploding all the selected values (of both select forms)
-                    $selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
-                    $extra_data['extra_'.$field_details[1]]  =array();
-
-                    // looping through the selected values and assigning the selected values to either the first or second select form
-                    foreach ($selected_values as $key => $selected_value) {
-                            if(is_array($values)){
-                            if (array_key_exists($selected_value, $values[0])) {
-                                $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
-                            } else {
-                                $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
-                            }
-                        }
-                    }
-                }
-                break;
-            case USER_FIELD_TYPE_DIVIDER:
-                $form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
-                break;
-        }
-    }
+    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
 }
-
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="btn"');
 
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
     $defaults['language'] = $_SESSION['user_language_choice'];
@@ -311,8 +203,9 @@ if (!CustomPages::enabled()) {
 
     $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
     Display :: display_header($tool_name);
-    $form->addElement('header', $tool_name);
-
+    
+    echo Display::page_header($tool_name);
+    
     $home = api_get_path(SYS_PATH).'home/';
     if ($_configuration['multiple_access_urls']) {
         $access_url_id = api_get_current_access_url_id();
@@ -327,13 +220,12 @@ if (!CustomPages::enabled()) {
         }
     }
 
-
     if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
         $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
-            echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+            echo '<div class="well_border">'.$open.'</div>';
         }
     }
 
@@ -352,13 +244,12 @@ if (!CustomPages::enabled()) {
     }
 }
 
-
-
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
+    
     if (!$term_preview) {
         //we load from the platform
         $language = api_get_setting('platformLanguage');
@@ -370,6 +261,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             $term_preview = LegalManager::get_last_condition($language);
         }
     }
+    
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
@@ -377,25 +269,19 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
         $form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
         $form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
-    }
+    }    
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $term_preview  = '<div class="row">
-                    <div class="label">'.get_lang('TermsAndConditions').'</div>
-                    <div class="formw">
-                    '.$preview.'
-                    <br />
-                    </div>
-                    </div>';
-            $form->addElement('html', $term_preview);
+            $preview = LegalManager::show_last_condition($term_preview);    
+            $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
 }
 
+$form->addElement('button', 'submit', get_lang('RegisterUser'));
 
 if ($form->validate()) {
     /*
@@ -411,11 +297,11 @@ if ($form->validate()) {
     // Added by Ivan Tcholakov, 06-MAR-2008.
     if (empty($values['official_code'])) {
         $values['official_code'] =  api_strtoupper($values['username']);
-    } 
-    if (api_get_setting('login_is_email') == 'true') {
-      $values['username'] = $values['email'];  
     }
-
+    
+    if (api_get_setting('login_is_email') == 'true') {
+        $values['username'] = $values['email'];  
+    }
 
     // creating a new user
     $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
@@ -511,6 +397,7 @@ if ($form->validate()) {
                 $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
                 $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
                 $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
+                
                 if (api_is_western_name_order()) {
                     $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
                     $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
@@ -535,9 +422,7 @@ if ($form->validate()) {
             exit;
         }
 
-        /*
-                  SESSION REGISTERING
-         */
+        /* SESSION REGISTERING */
         $_user['firstName'] = stripslashes($values['firstname']);
         $_user['lastName'] 	= stripslashes($values['lastname']);
         $_user['mail'] 		= $values['email'];
@@ -554,9 +439,7 @@ if ($form->validate()) {
 
         Session::write('user_last_login_datetime',$user_last_login_datetime);
 
-        /*
-                     EMAIL NOTIFICATION
-         */
+        /* EMAIL NOTIFICATION */
 
         if (strpos($values['email'], '@') !== false) {
             // Let us predefine some variables. Be sure to change the from address!
@@ -592,8 +475,7 @@ if ($form->validate()) {
         $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
     }
     $button_text = '';
-    if ($is_allowedCreateCourse) {
-        
+    if ($is_allowedCreateCourse) {        
         $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>\n";
         $action_url = '../create_course/add_course.php';
         $button_text = api_get_setting('course_validation') == 'true'
@@ -611,16 +493,16 @@ if ($form->validate()) {
     // ?uidReset=true&uidReq=$_user['user_id']
 
     $display_text .= '<form action="'. $action_url. '"  method="post">'. "\n". '<button type="submit" class="next" name="next" value="'. get_lang('Next',null,$_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
-  if (CustomPages::enabled()) {
-    CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
-  }
+    if (CustomPages::enabled()) {
+        CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
+    }
     echo $display_text;
 } else {
   // Custom pages
-  if (CustomPages::enabled()) {
-    CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
-  } else {
-    $form->display();
-  }
+    if (CustomPages::enabled()) {
+        CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
+    } else {
+        $form->display();
+    }
 }
 Display :: display_footer();

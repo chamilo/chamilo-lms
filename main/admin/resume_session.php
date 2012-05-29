@@ -11,8 +11,6 @@ $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -33,9 +31,7 @@ $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-$table_access_url_session           = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
 
 $id_session = (int)$_GET['id_session'];
 

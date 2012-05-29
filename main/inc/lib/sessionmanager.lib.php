@@ -8,8 +8,6 @@
 /**
  * Code
  */
-/* LIBRARIES */
-
 
 /**
 *	This class provides methods for sessions management.
@@ -34,6 +32,7 @@ class SessionManager {
         if (Database::num_rows($r) != 1) { return array(); }
         return Database::fetch_array($r,'ASSOC');
     }
+    
 	 /**
 	  * Create a session
 	  * @author Carlos Vargas from existing code
@@ -56,6 +55,20 @@ class SessionManager {
 	  * @return mixed       Session ID on success, error message otherwise
       **/
 	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
+		global $_configuration;
+        
+		//Check portal limits
+        $access_url_id = 1;
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+        }
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
+            $num = self::count_sessions();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+                return get_lang('PortalSessionsLimitReached');
+            }
+        }
+
 		$name                 = Database::escape_string(trim($sname));
 		$year_start           = intval($syear_start);
 		$month_start          = intval($smonth_start);
@@ -70,7 +83,7 @@ class SessionManager {
 		$tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);        
     
-		if(is_int($coach_username)) {
+		if (is_int($coach_username)) {
 			$id_coach = $coach_username;
 		} else {
 			$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
@@ -136,11 +149,18 @@ class SessionManager {
 				Database::query($sql_insert);
 				$session_id = Database::insert_id();
                 
-                if (!empty($session_id)) {                	
-    				//Adding to the correct URL				
-    				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
-                    
-                    $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                if (!empty($session_id)) {
+                    /*
+                    Sends a message to the user_id = 1
+                                        
+                    $user_info = api_get_user_info(1);
+                    $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
+                    $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');                    
+                    $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;                                        
+                    api_mail_html($complete_name, $user_info['email'], $subject, $message);
+                    * 
+                    */                    
+    				//Adding to the correct URL                    
                     $access_url_id = api_get_current_access_url_id();
                     UrlManager::add_session_to_url($session_id,$access_url_id);            
     
@@ -167,7 +187,7 @@ class SessionManager {
         $where = 'WHERE 1=1 ';
         $user_id = api_get_user_id();
 		
-        if (api_is_session_admin()==true) {
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
         
@@ -209,7 +229,8 @@ class SessionManager {
 
 		$where = 'WHERE 1=1 ';
 		$user_id = api_get_user_id();
-		if (api_is_session_admin()==true) {
+        
+		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}        
 
@@ -1755,5 +1776,22 @@ class SessionManager {
     		return true;
     	}
     	return false;
+    }
+    /**
+     * Get the number of sessions
+     * @param  int ID of the URL we want to filter on (optional)
+     * @return int Number of sessions
+     */
+    public function count_sessions($access_url_id=null) {
+        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $sql = "SELECT count(id) FROM $session_table s";
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+            $sql .= ", $access_url_rel_session_table u ".
+                    " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
+        }
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+        return $row[0];
     }
 }

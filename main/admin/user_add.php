@@ -105,9 +105,10 @@ $form->applyFilter('official_code', 'trim');
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
-if (api_get_setting('login_is_email') == 'true') { 
-  $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-  $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
+
+if (api_get_setting('login_is_email') == 'true') {
+    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
 // Phone
@@ -117,14 +118,16 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+
 // Username
-if (api_get_setting('login_is_email') != 'true') { 
-  $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
-  $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-  $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-  $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-  $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+if (api_get_setting('login_is_email') != 'true') {
+    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+    $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
+
 // Password
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
@@ -206,109 +209,8 @@ $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
-// EXTRA FIELDS
-//@todo MOVE this code in a useful class, this code is repete MANY times in Chamilo: user_edit.php, main/auth/inscription.php, etc, etc
-$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 $extra_data = UserManager::get_extra_user_data(0, true);
-
-foreach($extra as $id => $field_details) {
-	if ($field_details[6] == 1) { // only show extra fields that are visible
-		switch ($field_details[2]) {
-			case USER_FIELD_TYPE_TEXT:
-				$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-				$form->applyFilter('extra_'.$field_details[1], 'trim');
-				break;
-			case USER_FIELD_TYPE_TEXTAREA:
-				$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-				//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-				$form->applyFilter('extra_'.$field_details[1], 'trim');
-				break;
-			case USER_FIELD_TYPE_RADIO:
-				$group = array();
-				foreach ($field_details[9] as $option_id => $option_details) {
-					$options[$option_details[1]] = $option_details[2];
-					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
-				}
-				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-				break;
-			case USER_FIELD_TYPE_SELECT:
-			    $get_lang_variables = false;
-			    if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
-			        $get_lang_variables = true;
-			    }
-				$options = array();
-				foreach($field_details[9] as $option_id => $option_details) {
-				    if ($get_lang_variables) {
-				        $option_details[2] = get_lang($option_details[2]);
-				    }
-					$options[$option_details[1]] = $option_details[2];
-				}
-				if ($get_lang_variables) {
-				    $field_details[3] = get_lang($field_details[3]);
-				}
-				$form->addElement('select','extra_'.$field_details[1],$field_details[3], $options,array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));
-				break;
-			case USER_FIELD_TYPE_SELECT_MULTIPLE:
-				$options = array();
-				foreach($field_details[9] as $option_id => $option_details) {
-					$options[$option_details[1]] = $option_details[2];
-				}
-				$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
-				break;
-			case USER_FIELD_TYPE_DATE:
-				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_add'));
-				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-				$form -> setDefaults($defaults);
-				$form->applyFilter('theme', 'trim');
-				break;
-			case USER_FIELD_TYPE_DATETIME:
-				$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_add'));
-				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-				$form -> setDefaults($defaults);
-				$form->applyFilter('theme', 'trim');
-				break;
-			case USER_FIELD_TYPE_DOUBLE_SELECT:
-				foreach ($field_details[9] as $key => $element) {
-					if ($element[2][0] == '*') {
-						$values['*'][$element[0]] = str_replace('*','',$element[2]);
-					} else {
-						$values[0][$element[0]] = $element[2];
-					}
-				}
-
-				$group = '';
-				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
-				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
-				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-
-				// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-				if (key_exists('extra_'.$field_details[1], $extra_data)) {
-					// exploding all the selected values (of both select forms)
-					$selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
-					$extra_data['extra_'.$field_details[1]] = array();
-
-					// looping through the selected values and assigning the selected values to either the first or second select form
-					
-					foreach ($selected_values as $key => $selected_value) {
-						if (key_exists($selected_value, $values[0])) {
-							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
-						} else {
-							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
-						}
-					}
-				}
-				break;
-			case USER_FIELD_TYPE_DIVIDER:
-				$form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
-				break;
-		}
-	}
-}
+UserManager::set_extra_fields_in_form($form, $extra_data, 'user_add');
 
 // Set default values
 $defaults['admin']['platform_admin'] = 0;
@@ -327,7 +229,7 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-$select_level = array ();
+$select_level = array();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 $form->addGroup($html_results_enabled);
@@ -367,56 +269,67 @@ if( $form->validate()) {
 		}
 		$active = intval($user['active']);
     
-    if(api_get_setting('login_is_email') == 'true') {
-      $username = $email;
-    }
+        if (api_get_setting('login_is_email') == 'true') {
+            $username = $email;
+        }
 
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
-
-		if (!empty($picture['name'])) {
-			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-			UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
-		}
-
-		$extras = array();
-		foreach($user as $key => $value) {
-			if (substr($key, 0, 6) == 'extra_') { //an extra field
-				$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+		Security::clear_token();
+		$tok = Security::get_token();
+		if ($user_id === false) {
+			//If any error ocurred during user creation, print it (api_failureList 
+			// stores values as separate words, so rework it
+			$message = '';
+			$message_bits = explode(' ',api_get_last_failure());
+			foreach ($message_bits as $bit) {
+				$message .= ucfirst($bit);
 			}
-		}
+		} else {
 
-		if ($platform_admin) {
-			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-			Database::query($sql);
-		}
-		if (!empty($email) && $send_mail) {
-			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+ 			if (!empty($picture['name'])) {
+				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
+			}
 
-			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			$email_admin = api_get_setting('emailAdministrator');
-
-			if ($_configuration['multiple_access_urls']) {
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1) {
-					$url = api_get_access_url($access_url_id);
-					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+			$extras = array();
+			foreach($user as $key => $value) {
+				if (substr($key, 0, 6) == 'extra_') { //an extra field
+					$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 				}
 			}
-			else {
-				$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+
+			if ($platform_admin) {
+				$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
+				Database::query($sql);
 			}
-			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+			if (!empty($email) && $send_mail) {
+				$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
+				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+
+				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+				$email_admin = api_get_setting('emailAdministrator');
+
+				if ($_configuration['multiple_access_urls']) {
+					$access_url_id = api_get_current_access_url_id();
+					if ($access_url_id != -1) {
+						$url = api_get_access_url($access_url_id);
+						$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+					}
+				}
+				else {
+					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+				}
+				@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+			}
+			$message = get_lang('UserAdded');
 		}
-		Security::clear_token();
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-			$tok = Security::get_token();
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
+			header('Location: user_add.php?message='.urlencode($message).'&sec_token='.$tok);
 			exit ();
 		} else {
 			$tok = Security::get_token();
-			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
+			header('Location: user_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
 			exit ();
 		}
 	}

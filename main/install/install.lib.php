@@ -38,8 +38,11 @@ function is_already_installed_system() {
         return false; // Configuration file does not exist, install the system.
     }
     require $current_config_file;
-
-    $current_version = trim($_configuration['dokeos_version']);
+    
+    $current_version = null;
+    if (isset($_configuration['dokeos_version'])) {
+        $current_version = trim($_configuration['dokeos_version']);
+    }
     if (empty($current_version)) {
         $current_version = trim($_configuration['system_version']);
     }
@@ -1040,9 +1043,9 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementContent">';
     echo '<table class="requirements">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.MIN_PHP_VERSION.'</td>
+                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (phpversion() < MIN_PHP_VERSION) {
+    if (phpversion() < REQUIRED_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
@@ -2015,39 +2018,7 @@ function get_countries_list_from_array($combo = false) {
  * Lockis settings that can't be changed in other portals 
  */
 function locking_settings() {
-    $access_url_locked_settings = array(
-        'server_type',        
-        'permanently_remove_deleted_files',
-        'account_valid_duration',
-        'service_visio',
-        'service_ppt2lp',
-        'wcag_anysurfer_public_pages',
-        'upload_extensions_list_type',
-        'upload_extensions_blacklist',
-        'upload_extensions_whitelist',   
-        'upload_extensions_skip',    
-        'upload_extensions_replace_by',
-        'hide_dltt_markup',
-        'split_users_upload_directory',
-        'permissions_for_new_directories',
-        'permissions_for_new_files',
-        'platform_charset',
-        'service_visio',
-        'ldap_description',    
-        'cas_activate',
-        'cas_server',
-        'cas_server_uri',
-        'cas_port',
-        'cas_protocol',
-        'cas_add_user_activate',
-        'update_user_info_cas_with_ldap',    
-        'languagePriority1',
-        'languagePriority2',
-        'languagePriority3',
-        'languagePriority4',
-        'login_is_email',
-        'chamilo_database_version'    
-    );
+    $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     foreach ($access_url_locked_settings as $setting) {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";

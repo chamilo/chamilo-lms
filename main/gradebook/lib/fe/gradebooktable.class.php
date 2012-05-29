@@ -49,7 +49,7 @@ class GradebookTable extends SortableTable {
         $this->set_header($column++, get_lang('Description'), false);
 
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Weight'),'','width="80px"');
+			$this->set_header($column++, get_lang('Weight'),'','width="40px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Result'), false);
@@ -63,7 +63,7 @@ class GradebookTable extends SortableTable {
 		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Modify'), false, 'width="150px"');
+			$this->set_header($column++, get_lang('Modify'), false, 'width="180px"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (				
 				'setvisible' => get_lang('SetVisible'),
@@ -531,7 +531,7 @@ class GradebookTable extends SortableTable {
 					$text = $item->get_name();
 				}
 
-				$text .= "&nbsp;".Display::label($item->get_type_name()).$show_message;
+				$text .= "&nbsp;".Display::label($item->get_type_name(), 'info').$show_message;
 				$cc = $this->currentcat->get_course_code();
 				if (empty($cc)) {
 					$text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';

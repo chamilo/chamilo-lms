@@ -17,7 +17,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -56,11 +55,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => MAX_COURSE_LENGTH_CODE));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule('visual_code', get_lang('Max'), 'maxlength', MAX_COURSE_LENGTH_CODE);
+$form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
 //$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
 //$form->applyFilter('tutor_id', 'html_filter');
@@ -109,18 +108,8 @@ $form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
 $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
-//if (api_get_setting('gradebook'))
-
 $obj = new GradeModel();
-$grade_models = $obj->get_all();                
-$grade_model_options = array('-1' => get_lang('None'));            
-if (!empty($grade_models)) {
-    foreach ($grade_models as $item) {
-        $grade_model_options[$item['id']] = $item['name'];
-    }                
-}
-$form->addElement('select', 'gradebook_model_id', get_lang('GradeModel'), $grade_model_options);
-
+$obj->fill_grade_model_select_in_form($form);
 
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
@@ -158,9 +147,11 @@ if ($form->validate()) {
     $course['user_id']              = $teacher_id;  
     $course['wanted_code']          = $course['visual_code'];
     
+    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;            
+    
     $course_info = CourseManager::create_course($course);
 
-    header('Location: course_list.php');
+    header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
     exit;
 }
 

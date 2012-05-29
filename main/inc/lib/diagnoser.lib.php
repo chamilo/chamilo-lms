@@ -98,8 +98,8 @@ class Diagnoser
         // General Functions
 
         $version = phpversion();
-        $status = $version > MIN_PHP_VERSION ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= '.MIN_PHP_VERSION, null, get_lang('PHPVersionInfo'));
+        $status = $version > REQUIRED_PHP_VERSION ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= '.REQUIRED_PHP_VERSION, null, get_lang('PHPVersionInfo'));
 
         $setting = ini_get('output_buffering');
         $req_setting = 1;

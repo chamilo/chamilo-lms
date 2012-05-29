@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Lapas virsraksts";
 $langExplanation = "Tiklīdz nospiedīsiet OK, tiks izveidota kursa mājas lapa ar Forumu, Plānotāju, Dokumentu, u.t.t. veidošanas instrumentiem.<br> Atkārtoti piesakoties sistēmā ar savu lietotājvārdu un paroli, Tu varēsi veidot un labot šo Kursu.";
 $langTooBig = "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra";
 $langCouldNot = "Failu nebija iespējams augšupielādēt.";
@@ -11,6 +10,5 @@ $langCouldNotSendPage = "Šis fails nav HTML formātā un netika augšupielādē
 $langSendPage = "Lapa, kas augšupjāielādē";
 $langPageTitleModified = "Lapas virsraksts tika mainīts";
 $langPageAdded = "Lapa pievienota";
-$langAddPage = "Pievienot lapu";
 $Choose = "Pārlūkot";
 ?>

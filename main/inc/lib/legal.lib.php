@@ -33,7 +33,7 @@ class LegalManager {
 		$time = time();
 
 		if ($last['content'] != $content) {
-			$version = intval(Legalmanager::get_last_condition_version($language));
+			$version = intval(LegalManager::get_last_condition_version($language));
 			$version++;
 			 $sql = "INSERT INTO $legal_table
 						SET language_id = '".Database::escape_string($language)."',

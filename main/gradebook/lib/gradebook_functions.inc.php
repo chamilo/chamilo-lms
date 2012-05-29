@@ -13,7 +13,6 @@
 */
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 require_once 'gradebook_functions_users.inc.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 /**
  * Adds a resource to the unique gradebook of a given course
@@ -153,7 +152,7 @@ function build_edit_icons_cat($cat, $selectcat) {
     
     $selectcat = $selectcat->get_id();
     
-	if ($show_message===false) {
+	if ($show_message === false) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
         
@@ -161,22 +160,26 @@ function build_edit_icons_cat($cat, $selectcat) {
         
         if (api_is_allowed_to_edit(null, true)) {
             
+            
+            
             //Locking button
-            if (api_get_setting('gradebook_locking_enabled') == 'true') {                
+            if (api_get_setting('gradebook_locking_enabled') == 'true') {            
+                
                 if ($cat->is_locked()) {
                     if (api_is_platform_admin()) {
-                        $modify_icons .= '&nbsp;<a onclick="javascrip:unlock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.
-                                         Display::return_icon('lock.png', get_lang('Unlock'),'',ICON_SIZE_SMALL).'</a>';                                        
+                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.
+                                         Display::return_icon('lock.png', get_lang('UnLockEvaluation'),'',ICON_SIZE_SMALL).'</a>';                                        
                     } else {
                         $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
                     }
-                    $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+                    $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'', ICON_SIZE_SMALL).'</a>';
                 } else {
-                    $modify_icons .= '&nbsp;<a onclick="javascrip:lock_confirmation()" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.
-                            Display::return_icon('unlock.png', get_lang('Lock'),'',ICON_SIZE_SMALL).'</a>';                
+                    $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.
+                            Display::return_icon('unlock.png', get_lang('LockEvaluation'),'',ICON_SIZE_SMALL).'</a>';                
+                    $modify_icons .= '&nbsp;<a href="#" >'.Display::return_icon('pdf_na.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                     //$modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                 }                
-            }          
+            }
             
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 if ($cat->is_locked() && !api_is_platform_admin()) {
@@ -185,7 +188,11 @@ function build_edit_icons_cat($cat, $selectcat) {
                     $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
                 }
             }
-
+            
+            $modify_icons .= '<a href="gradebook_edit_all.php?&selectcat=' . $cat->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).'</a>';
+            
+            $modify_icons .= '<a href="gradebook_flatview.php?'.api_get_self().'&selectcat=' . $cat->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'', ICON_SIZE_SMALL).'</a>';
+            
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 
             //no move ability for root categories

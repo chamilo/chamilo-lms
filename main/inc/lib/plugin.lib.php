@@ -128,9 +128,9 @@ class AppPlugin {
         return $this->plugin_regions;
     }
     
-    function load_region($region, $main_template) {
+    function load_region($region, $main_template, $forced = false) {
         ob_start();		
-        $this->get_all_plugin_contents_by_region($region, $main_template);		
+        $this->get_all_plugin_contents_by_region($region, $main_template, $forced);
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
@@ -142,7 +142,7 @@ class AppPlugin {
      * @todo add caching
      * @param string $plugin_name 
      */
-    function load_plugin_lang_variables($plugin_name) {
+    function load_plugin_lang_variables($plugin_name) {        
         global $language_interface;
         $root = api_get_path(SYS_PLUGIN_PATH);                                    
 
@@ -150,10 +150,11 @@ class AppPlugin {
         $english_path = $root.$plugin_name."/lang/english.php";  
         
         if (is_readable($english_path)) {                        
-            include $english_path;            
+            include $english_path;
+            
             foreach ($strings as $key => $string) {                                            
                 //$$key = $string;
-                $GLOBALS[$key] = $string;                
+                $GLOBALS[$key] = $string;  
             }                        
         }
 
@@ -180,15 +181,15 @@ class AppPlugin {
      * @param obj   template obj
      * @todo improve this function
      */
-    function get_all_plugin_contents_by_region($region, $template) {
+    function get_all_plugin_contents_by_region($region, $template, $forced = false) {
         global $_plugins;
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
         //if (1) {
-            foreach ($_plugins[$region] as $plugin_name) {
-                //Load the plugin information
+            //Load the plugin information
+            foreach ($_plugins[$region] as $plugin_name) {                
                 
                 //The plugin_info variable is available inside the plugin index                
-                $plugin_info = $this->get_plugin_info($plugin_name);                
+                $plugin_info = $this->get_plugin_info($plugin_name, $forced);                
                 
                 //We also know where the plugin is
                 $plugin_info['current_region'] = $region;    
@@ -212,7 +213,8 @@ class AppPlugin {
                         $_template['plugin_info'] = $plugin_info;
                     }
                     
-                    //Setting the plugin info available in the template if exists                    
+                    //Setting the plugin info available in the template if exists      
+                    
                     $template->assign($plugin_name, $_template);
 
                     //Loading the Twig template plugin files if exists
@@ -237,7 +239,6 @@ class AppPlugin {
     }
     
     /**
-     *
      * Loads plugin info 
      * @staticvar array $plugin_data
      * @param string plugin name
@@ -250,7 +251,8 @@ class AppPlugin {
         if (isset($plugin_data[$plugin_name]) && $forced == false) {            
             return $plugin_data[$plugin_name]; 
         } else {
-            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";            
+            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
+            
             $plugin_info = array();
             if (file_exists($plugin_file)) {
                 require $plugin_file;            

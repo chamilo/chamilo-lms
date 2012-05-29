@@ -3,7 +3,7 @@
 /**
  * @package chamilo.webservices
  */
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
@@ -54,10 +54,8 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 
-
 /* Register WSCreateUsers function */
 // Register the data structures used by the service
-
 
 // Prepare input params
 $server->wsdl->addComplexType(
@@ -67,7 +65,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-            'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
+            'field_name'  => array('name' => 'field_name', 'type' => 'xsd:string'),
             'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
         )
 );
@@ -532,19 +530,20 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
-        'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
-        'status' => array('name' => 'status', 'type' => 'xsd:string'),
-        'email' => array('name' => 'email', 'type' => 'xsd:string'),
-        'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
-        'password' => array('name' => 'password', 'type' => 'xsd:string'),
-        'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
-        'language' => array('name' => 'language', 'type' => 'xsd:string'),
-        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
-        'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'firstname'             => array('name' => 'firstname', 'type' => 'xsd:string'),
+        'lastname'              => array('name' => 'lastname', 'type' => 'xsd:string'),
+        'status'                => array('name' => 'status', 'type' => 'xsd:string'),
+        'email'                 => array('name' => 'email', 'type' => 'xsd:string'),
+        'loginname'             => array('name' => 'loginname', 'type' => 'xsd:string'),
+        'password'              => array('name' => 'password', 'type' => 'xsd:string'),
+        'encrypt_method'        => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
+        'language'              => array('name' => 'language', 'type' => 'xsd:string'),
+        'phone'                 => array('name' => 'phone', 'type' => 'xsd:string'),
+        'expiration_date'       => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'official_code'         => array('name' => 'official_code',    'type' => 'xsd:string'),
         'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
+        'original_user_id_value'=> array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'extra'                 => array('name' => 'extra', 'type' => 'tns:extrasList')
     )
 );
 
@@ -599,14 +598,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('WSCreateUsersPasswordCrypted',						    // method name
+$server->register('WSCreateUsersPasswordCrypted',                               // method name
     array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'),	// input parameters
-    array('return' => 'tns:results_createUsersPassEncrypt'),					// output parameters
+    array('return' => 'tns:results_createUsersPassEncrypt'),                    // output parameters
     'urn:WSRegistration',													    // namespace
-    'urn:WSRegistration#WSCreateUsersPasswordCrypted',					// soapaction
+    'urn:WSRegistration#WSCreateUsersPasswordCrypted',                          // soapaction
     'rpc',																	    // style
     'encoded',																    // use
-    'This service adds users to the system'									        // documentation
+    'This service adds users to the system'									    // documentation
 );
 
 // Define the method WSCreateUsersPasswordCrypted
@@ -636,8 +635,9 @@ function WSCreateUsersPasswordCrypted($params) {
         $status = $user_param['status'];
         $email = $user_param['email'];
         $loginName = $user_param['loginname'];
-
-        $official_code = '';
+        
+        $official_code = $user_param['official_code'];
+        
         $language = '';
         $phone = '';
         $picture_uri = '';
@@ -749,22 +749,22 @@ function WSCreateUsersPasswordCrypted($params) {
         }
 
         $sql = "INSERT INTO $table_user
-                                    SET lastname = '".Database::escape_string(trim($lastName))."',
-                                    firstname = '".Database::escape_string(trim($firstName))."',
-                                    username = '".Database::escape_string(trim($loginName))."',
-                                    status = '".Database::escape_string($status)."',
-                                    password = '".Database::escape_string($password)."',
-                                    email = '".Database::escape_string($email)."',
-                                    official_code	= '".Database::escape_string($official_code)."',
-                                    picture_uri 	= '".Database::escape_string($picture_uri)."',
-                                    creator_id  	= '".Database::escape_string($creator_id)."',
-                                    auth_source = '".Database::escape_string($auth_source)."',
-                                    phone = '".Database::escape_string($phone)."',
-                                    language = '".Database::escape_string($language)."',
-                                    registration_date = now(),
-                                    expiration_date = '".Database::escape_string($expiration_date)."',
-                                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                                    active = '".Database::escape_string($active)."'";
+                SET lastname = '".Database::escape_string(trim($lastName))."',
+                firstname = '".Database::escape_string(trim($firstName))."',
+                username = '".Database::escape_string(trim($loginName))."',
+                status = '".Database::escape_string($status)."',
+                password = '".Database::escape_string($password)."',
+                email = '".Database::escape_string($email)."',
+                official_code	= '".Database::escape_string($official_code)."',
+                picture_uri 	= '".Database::escape_string($picture_uri)."',
+                creator_id  	= '".Database::escape_string($creator_id)."',
+                auth_source = '".Database::escape_string($auth_source)."',
+                phone = '".Database::escape_string($phone)."',
+                language = '".Database::escape_string($language)."',
+                registration_date = now(),
+                expiration_date = '".Database::escape_string($expiration_date)."',
+                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                active = '".Database::escape_string($active)."'";
         $result = Database::query($sql);
         if ($result) {
             //echo "id returned";
@@ -835,22 +835,23 @@ $server->wsdl->addComplexType(
         'language'                  => array('name' => 'language',                  'type' => 'xsd:string'),
         'phone'                     => array('name' => 'phone',                     'type' => 'xsd:string'),
         'expiration_date'           => array('name' => 'expiration_date',           'type' => 'xsd:string'),
+        'official_code'             => array('name' => 'official_code',             'type' => 'xsd:string'),
         'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
         'original_user_id_value'    => array('name' => 'original_user_id_value',    'type' => 'xsd:string'),
-        'extra'                     => array('name'     => 'extra',                 'type' => 'tns:extrasList'),
+        'extra'                     => array('name' => 'extra',                     'type' => 'tns:extrasList'),
         'secret_key'                => array('name' => 'secret_key',                'type' => 'xsd:string')
     )
 );
 
 // Register the method to expose
-$server->register('WSCreateUserPasswordCrypted',						// method name
+$server->register('WSCreateUserPasswordCrypted',                            // method name
     array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
     array('return' => 'xsd:string'),								        // output parameters
     'urn:WSRegistration',													// namespace
-    'urn:WSRegistration#WSCreateUserPasswordCrypted',					// soapaction
+    'urn:WSRegistration#WSCreateUserPasswordCrypted',                       // soapaction
     'rpc',																	// style
     'encoded',																// use
-    'This service adds users'									    // documentation
+    'This service adds users'                                               // documentation
 );
 
 // Define the method WSCreateUserPasswordCrypted
@@ -858,6 +859,7 @@ function WSCreateUserPasswordCrypted($params) {
     global $_user, $_configuration, $debug;    
     if ($debug) error_log('WSCreateUserPasswordCrypted');
     if ($debug) error_log(print_r($params,1));
+    
     if (!WSHelperVerifyKey($params)) {        
         return return_error(WS_ERROR_SECRET_KEY);
     }
@@ -874,8 +876,8 @@ function WSCreateUserPasswordCrypted($params) {
     $lastName               = $params['lastname'];
     $status                 = $params['status'];
     $email                  = $params['email'];
-    $loginName              = $params['loginname'];
-    $official_code          = '';
+    $loginName              = $params['loginname'];    
+    $official_code          = $params['official_code'];
     $language               = '';
     $phone                  = '';
     $picture_uri            = '';
@@ -912,8 +914,8 @@ function WSCreateUserPasswordCrypted($params) {
     
     if ($debug) error_log('Ready to create user');
     
-    if ($user_id > 0) {      
-        if ($debug) error_log('User found');
+    if ($user_id > 0) {
+        if ($debug) error_log('User found with id: '.$user_id);
         
         // Check whether user is not active
         //@todo why this condition exists??
@@ -978,10 +980,6 @@ function WSCreateUserPasswordCrypted($params) {
     if (!UserManager::is_username_available($loginName)) {
         if ($debug) error_log("Username $loginName is not available");        
         return 0;
-        /*if (api_set_failure('login-pass already taken')) {
-            if ($debug) error_log('login-pass already taken');
-            return 0;
-        }*/
     }
 
     $sql = "INSERT INTO $table_user SET 
@@ -1005,8 +1003,7 @@ function WSCreateUserPasswordCrypted($params) {
     
     $result = Database::query($sql);
     
-    if ($result) {
-        //echo "id returned";
+    if ($result) {        
         $return = Database::insert_id();
         
         //Multiple URL
@@ -1102,28 +1099,26 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEditUserCredentials',                    // method name
-    array('editUserCredentials' => 'tns:editUserCredentials'),                      // input parameters
-    array('return' => 'xsd:string'),                // output parameters
-    'urn:WSRegistration',                                                       // namespace
-    'urn:WSRegistration#WSEditUserCredentials',          // soapaction
-    'rpc',                                                                                      // style
-    'encoded',                                                                          // use
-    'This service edits the username and password of a user'                     // documentation
+$server->register('WSEditUserCredentials',                      // method name
+    array('editUserCredentials' => 'tns:editUserCredentials'),  // input parameters
+    array('return' => 'xsd:string'),                            // output parameters
+    'urn:WSRegistration',                                       // namespace
+    'urn:WSRegistration#WSEditUserCredentials',                 // soapaction
+    'rpc',                                                      // style
+    'encoded',                                                  // use
+    'This service edits the username and password of a user'    // documentation
 );
 
 // Define the method WSEditUser
 function WSEditUserCredentials($params) {
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
+    
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
     $username = $params['username'];
@@ -1131,8 +1126,7 @@ function WSEditUserCredentials($params) {
 
     if (!empty($params['password'])) { $password = $params['password']; }
 
-    // Get user id from id wiener
-
+    // Get user id from the other system ID
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
     if ($user_id == 0) {
@@ -1154,15 +1148,17 @@ function WSEditUserCredentials($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
+    
     $sql = "UPDATE $table_user SET
             username='".Database::escape_string($username)."'";
+    
     if (!is_null($password)) {
         $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
         $sql .= ", password='".Database::escape_string($password)."' ";
     }
+    
     $sql .=     " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
-
     return  $return;
 }
 
@@ -3818,8 +3814,6 @@ function WSGetUser($params) {
     }    
     return $result;
 }
-
-
 
 /* Register WSUnsubscribeUserFromCourse function */
 // Register the data structures used by the service

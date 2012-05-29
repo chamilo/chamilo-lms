@@ -750,8 +750,7 @@ class SocialManager extends UserManager {
             $html .= '<div class="span'.$column_size.'">';            
             
             $html .= '<ul id="online_grid_container" class="thumbnails">';            
-			foreach ($user_list as $user) {
-				$uid = $user[0];
+			foreach ($user_list as $uid) {
 				$user_info = api_get_user_info($uid);				
 				//Anonymous users can't have access to the profile
 				if (!api_is_anonymous()) {
@@ -780,8 +779,11 @@ class SocialManager extends UserManager {
                 $html .= '<li class="span'.($column_size/3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';				
 			}			
             $counter = $_SESSION['who_is_online_counter'];
-            $html .= '</ul></div>';
-            $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            
+            $html .= '</ul></div>';            
+            if (count($user_list) >= 9) {
+                $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            }
             if ($add_row) {
                 $html .= '</div>';    
             }

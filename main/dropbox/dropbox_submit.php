@@ -259,7 +259,7 @@ if (isset($_GET['mailingIndex'])) {
 
 	    require api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
 
-		$zipFile = new pclZip($mailing_file);
+		$zipFile = new PclZip($mailing_file);
 		$goodFiles  = array();
 		$zipContent = $zipFile->listContent();
 		$ucaseFiles = array();

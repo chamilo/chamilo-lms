@@ -28,23 +28,17 @@ define('MAX_FORM_FIELD_LENGTH',                 80);
 
 /*		PHP VERSION CHECK */
 
-// PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5');
+// Including necessary libraries.
+require_once '../inc/lib/main_api.lib.php';
 
-if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
-	$global_error_code = 1;
-	// Incorrect PHP version.
-	require '../inc/global_error_message.inc.php';
-	die();
-}
+api_check_php_version('../inc/');
 
 /*		INITIALIZATION SECTION */
 
 ob_implicit_flush(true);
 session_start();
 
-// Including necessary libraries.
-require_once '../inc/lib/main_api.lib.php';
+require_once api_get_path(LIBRARY_PATH).'session.class.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
@@ -128,11 +122,7 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version 		= '1.9.0';
-$new_version_stable = false;
-$new_version_major 	= true;
-$software_name 		= 'Chamilo';
-$software_url 		= 'http://www.chamilo.org/';
+require_once __DIR__.'/version.php';
 
 // A protection measure for already installed systems.
 
@@ -233,9 +223,9 @@ if (!isset($_GET['running'])) {
   	$urlForm 		= api_get_path(WEB_PATH);
 	$pathForm 		= api_get_path(SYS_PATH);
 
-	$emailForm = $_SERVER['SERVER_ADMIN'];
+	$emailForm      = $_SERVER['SERVER_ADMIN'];
 	$email_parts = explode('@', $emailForm);
-	if ($email_parts[1] == 'localhost') {
+	if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
 		$emailForm .= '.localdomain';
 	}
 	$adminLastName	= 'Doe';
@@ -319,6 +309,9 @@ if ($encryptPassForm == '1') {
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>	
 	<script type="text/javascript" >
 		$(document).ready( function() {
+            
+            $("#button_please_wait").hide();
+            
 			 //checked
 			if ($('#singleDb1').attr('checked')==false) {
 					//$('#dbStatsForm').removeAttr('disabled');
@@ -341,21 +334,14 @@ if ($encryptPassForm == '1') {
 
 			//Blocking step6 button
     		$("#button_step6").click(function() {        		
-            	$("#button_step6").attr('disable', true);
-    			$("#button_step6").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+            	$("#button_step6").hide();
+    			$("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+                $("#button_please_wait").show();
+                $("#button_please_wait").attr('disabled', true);
     			$("#is_executable").attr("value",'step6');
         	});    		
 	 	});
         
-        /*
-        function check_db() {
-            var status = ($('#db_status').attr('class'));
-            if (status == 'confirmation-message') {
-                return true;    
-            }
-            return false;
-        }*/
-
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
 				$('#optional_param2').hide();
@@ -458,16 +444,18 @@ if ($encryptPassForm == '1') {
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 
-<div id="wrapper">
-	<div id="header">
-		<div id="header1" style="margin-bottom:10px;">	
-			<div id="logo">	   
-	        	<img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
-			</div>	
-        </div>
-	</div>
-<div id="main">
-    <div class="row-fluid">
+<div id="wrapper">	
+<div id="main" class="container">
+    <header>
+		<div class="row">
+            <div id="header_left" class="span4">
+                <div id="logo">	   
+                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
+                </div>	
+            </div>
+        </div>        
+	</header>    
+    <div class="row">
         <div class="span3">
             <div class="well">		
                 <ol>
@@ -479,13 +467,14 @@ if ($encryptPassForm == '1') {
                     <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
                     <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
                 </ol>
-            </div>
+            </div>            
+            <div id="note">
+				<a class="btn" href="../../documentation/installation_guide.html" target="_blank">
+                    <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                </a>
+			</div>
         </div>
         <div class="span9">
-            <div id="note" style="float:right;">
-				<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
-			</div>
-            
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
@@ -703,7 +692,11 @@ if (@$_POST['step2']) {
 	  	<td align="right">
 			<input type="hidden" name="is_executable" id="is_executable" value="-" />
 			<input type="hidden" name="step6" value="1" />
-	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>"><?php echo get_lang('InstallChamilo'); ?></button>
+	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
+                <?php echo get_lang('InstallChamilo'); ?>
+            </button>
+            
+            <button class="save" id="button_please_wait"></button>
 		</td>
 	</tr>
 	</table>
@@ -842,7 +835,6 @@ if (@$_POST['step2']) {
 </div> <!-- main end-->
 <div class="push"></div>
 </div><!-- wrapper end-->
-
 <footer></footer>
 </body>
 </html>

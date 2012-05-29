@@ -60,82 +60,62 @@ if ($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
 
 /* MAIN CODE */
 
-$form_action = '';
 $show_announcement_list = true;
-if (isset ($_GET['action']) && $_GET['action'] == 'make_visible') {
-    switch ($_GET['person']) {
-        case VISIBLE_TEACHER :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_TEACHER, true);
-            break;
-        case VISIBLE_STUDENT :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_STUDENT, true);
-            break;
-        case VISIBLE_GUEST :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_GUEST, true);
-            break;
-    }
-}
-
-if (isset ($_GET['action']) && $_GET['action'] == 'make_invisible') {
-    switch ($_GET['person']) {
-        case VISIBLE_TEACHER :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_TEACHER, false);
-            break;
-        case VISIBLE_STUDENT :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_STUDENT, false);
-            break;
-        case VISIBLE_GUEST :
-            SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_GUEST, false);
-            break;
-    }
-}
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Form was posted?
 if (isset ($_POST['action'])) {
     $action_todo = true;
 }
 
-// Delete an announcement.
-if (isset ($_GET['action']) && $_GET['action'] == 'delete') {
-    SystemAnnouncementManager :: delete_announcement($_GET['id']);
-    Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
-}
-
-// Delete selected announcements.
-if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected') {
-    foreach($_POST['id'] as $index => $id) {
-        SystemAnnouncementManager :: delete_announcement($id);
-    }
-    Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
-    $action_todo = false;
-}
-
-// Add an announcement.
-if (isset ($_GET['action']) && $_GET['action'] == 'add') {
-    $values['action'] = 'add';
-    // Set default time window: NOW -> NEXT WEEK
-    $values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
-    $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
-    $action_todo = true;
-}
-
-// Edit an announcement.
-if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
-
-    $announcement 				= SystemAnnouncementManager :: get_announcement($_GET['id']);
-    $values['id'] 				= $announcement->id;
-    $values['title'] 			= $announcement->title;
-    $values['content']			= $announcement->content;
-    $values['start'] 			= api_get_local_time($announcement->date_start);
-    $values['end'] 				= api_get_local_time($announcement->date_end);
-    $values['visible_teacher'] 	= $announcement->visible_teacher;
-    $values['visible_student'] 	= $announcement->visible_student ;
-    $values['visible_guest'] 	= $announcement->visible_guest ;
-    $values['lang'] 			= $announcement->lang;
-    $values['action']			= 'edit';
-    $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
-    $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
-    $action_todo = true;
+//Actions
+switch($action) {
+    case 'make_visible':
+    case 'make_invisible':
+        $status = false;
+        if ($action == 'make_visible') {
+            $status = true;
+        }
+        SystemAnnouncementManager :: set_visibility($_GET['id'], $_GET['person'], $status);
+        break;
+    case 'delete':
+        // Delete an announcement.
+        SystemAnnouncementManager :: delete_announcement($_GET['id']);
+        Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
+        break;
+    
+    case 'delete_selected':
+        foreach($_POST['id'] as $index => $id) {
+            SystemAnnouncementManager :: delete_announcement($id);
+        }
+        Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
+        $action_todo = false;
+        break;
+    case 'add':
+        // Add an announcement.
+        $values['action'] = 'add';
+        // Set default time window: NOW -> NEXT WEEK
+        $values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
+        $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
+        $action_todo = true;
+        break;
+    case 'edit':
+        // Edit an announcement.
+        $announcement 				= SystemAnnouncementManager :: get_announcement($_GET['id']);
+        $values['id'] 				= $announcement->id;
+        $values['title'] 			= $announcement->title;
+        $values['content']			= $announcement->content;
+        $values['start'] 			= api_get_local_time($announcement->date_start);
+        $values['end'] 				= api_get_local_time($announcement->date_end);
+        $values['visible_teacher'] 	= $announcement->visible_teacher;
+        $values['visible_student'] 	= $announcement->visible_student ;
+        $values['visible_guest'] 	= $announcement->visible_guest ;
+        $values['lang'] 			= $announcement->lang;
+        $values['action']			= 'edit';
+        $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
+        $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
+        $action_todo = true;
+        break;
 }
 
 if ($action_todo) {
@@ -144,7 +124,6 @@ if ($action_todo) {
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
         $form_title = get_lang('EditNews');
     }
-
     $form = new FormValidator('system_announcement');
     $form->addElement('header', '', $form_title);
     $form->add_textfield('title', get_lang('Title'), true, array('size'=>'60px'));
@@ -259,9 +238,9 @@ if ($show_announcement_list) {
         $row[] = $announcement->title;        
         $row[] = api_convert_and_format_date($announcement->date_start);
         $row[] = api_convert_and_format_date($announcement->date_end);
-        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
-        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
-        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
+        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".SystemAnnouncementManager::VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
+        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".SystemAnnouncementManager::VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
+        $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".SystemAnnouncementManager::VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('ShowOrHide'))."</a>";
         
         $row[] = $announcement->lang;
         $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";

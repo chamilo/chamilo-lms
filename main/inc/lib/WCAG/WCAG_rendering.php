@@ -70,7 +70,7 @@ class WCAG_Rendering {
 		$imageFile = $_POST['imagefile'];
 		$imageLabel = $_POST['imageLabel'];
 		if ((strlen($imageFile) > 0) and (strlen($imageLabel) == 0)) {
-			return get_lang('errorNoLabel');
+			return get_lang('ErrorNoLabel');
 		}
 		return '';
 	}

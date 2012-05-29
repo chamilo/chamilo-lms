@@ -42,9 +42,7 @@ require_once 'testcategory.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php'; // for group filtering
 
 /*	Constants and variables */
 $is_allowedToEdit 			= api_is_allowed_to_edit(null,true);

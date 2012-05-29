@@ -43,7 +43,6 @@ require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
 /* Libraries */
-require_once $lib_path.'document.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'fileDisplay.lib.php';
 //require_once $lib_path.'tablesort.lib.php';moved to autoload
@@ -320,15 +319,14 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), api_get_course_id(), true);
 
         $new_content_html = $content_html['content'];
-
         $path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
 
         $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
-
         $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-        echo '<style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
+        Display::display_reduced_header();
+        echo '<style>body {background:none;}</style><style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
         echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
         print_r($new_content_html);
         exit;
@@ -494,23 +492,24 @@ foreach ($docs_and_folders  as $file) {
             
             if ($extension == 'ogg') {
                 $extension = 'oga';
-            }            
+            }          
             //$("#jplayer_inspector_'.$count.'").jPlayerInspector({jPlayer:$("#jquery_jplayer_'.$count.'")});
             $jquery .= ' $("#jquery_jplayer_'.$count.'").jPlayer({                                
                                 ready: function() {                    
                                     $(this).jPlayer("setMedia", {                                        
                                         '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
                                     });
-                                },  
+                                },
                                 play: function() { // To avoid both jPlayers playing together.
                                     $(this).jPlayer("pauseOthers");
                                 },                                
                                 //errorAlerts: true,
                                 //warningAlerts: true,
                                 swfPath: "'.$js_path.'jquery-jplayer",
-                                supplied: "m4a, oga, mp3, ogg, wav",
+                                //supplied: "m4a, oga, mp3, ogg, wav",
+                                supplied: "'.$extension.'",
                                 wmode: "window",
-                                //solution: "flash, html",  // Do not change this setting otherwise 
+                                solution: "flash, html",  // Do not change this setting 
                                 cssSelectorAncestor: "#jp_container_'.$count.'", 
                             });  	 '."\n\n";
             $count++;      

@@ -5,10 +5,7 @@
  *  @todo better organization of the class, methods and variables 
  * 
  **/
-
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH).'plugin.lib.php';
 require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
 class Template {
@@ -27,17 +24,32 @@ class Template {
     var $user_is_logged_in = false;
     var $twig = null;
     
+    /* Loads chamilo plugins */
+    var $load_plugins = false;
+    
     var $params = array();
 	
-	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false) {
+	function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
+        
+        //Page title
+		$this->title                = $title;        
+		$this->show_learnpath       = $show_learnpath;
+        $this->hide_global_chat     = $hide_global_chat;
+        $this->load_plugins         = $load_plugins;
                 
         //Twig settings        
         Twig_Autoloader::register();
         
         $template_paths = array(
                 api_get_path(SYS_CODE_PATH).'template', //template folder
-                api_get_path(SYS_PLUGIN_PATH) //plugin folder
+                api_get_path(SYS_PLUGIN_PATH)           //plugin folder
         );
+        
+        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig';        
+        
+        if (!is_dir($cache_folder)) {
+            mkdir($cache_folder, api_get_permissions_for_new_directories());
+        }        
         
         $loader = new Twig_Loader_Filesystem($template_paths);
         
@@ -53,7 +65,7 @@ class Template {
                 );
         } else {
             $options = array (
-                'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
+                'cache'             => $cache_folder, //path to the cache folder
                 'autoescape'        => false,
                 'debug'             => false,
                 'auto_reload'       => false,
@@ -70,10 +82,8 @@ class Template {
         $this->twig->addFilter('var_dump',       new Twig_Filter_Function('var_dump'));        
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
         
-        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+        $this->twig->addFilter('display_page_header',    new Twig_Filter_Function('Display::page_header_and_translate'));
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
-        
-        
         
         /*
         $lexer = new Twig_Lexer($this->twig, array(
@@ -83,11 +93,7 @@ class Template {
             //'tag_variable' => array('{$', '}'),
         ));        
         $this->twig->setLexer($lexer);*/
-   
-        //Page title
-		$this->title = $title;        
-		$this->show_learnpath = $show_learnpath;
-        		
+   		
 		//Setting system variables
 		$this->set_system_parameters();	
 		
@@ -108,20 +114,22 @@ class Template {
         
         //Chamilo plugins
         if ($this->show_header) {
-            
-            $this->plugin = new AppPlugin();
-            
-            //1. Showing installed plugins in regions
-            $plugin_regions = $this->plugin->get_plugin_regions();                  
-            foreach ($plugin_regions as $region) {
-                $this->set_plugin_region($region);
-            }  
-            
-            //2. Loading the course plugin info
-            global $course_plugin;           
-            if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
-                //Load plugin get_langs
-                $this->plugin->load_plugin_lang_variables($course_plugin);                
+            if ($this->load_plugins) {
+                
+                $this->plugin = new AppPlugin();
+
+                //1. Showing installed plugins in regions
+                $plugin_regions = $this->plugin->get_plugin_regions();                  
+                foreach ($plugin_regions as $region) {
+                    $this->set_plugin_region($region);
+                }  
+
+                //2. Loading the course plugin info
+                global $course_plugin;           
+                if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
+                    //Load plugin get_langs
+                    $this->plugin->load_plugin_lang_variables($course_plugin);                
+                }
             }
         }
 	}
@@ -290,6 +298,7 @@ class Template {
 		$_p = array('web' 			=> api_get_path(WEB_PATH),
 					'web_course'	=> api_get_path(WEB_COURSE_PATH),
 					'web_main' 		=> api_get_path(WEB_CODE_PATH),
+                    'web_css' 		=> api_get_path(WEB_CSS_PATH),
 					'web_ajax' 		=> api_get_path(WEB_AJAX_PATH),
                     'web_img' 		=> api_get_path(WEB_IMG_PATH),
                     'web_plugin'    => api_get_path(WEB_PLUGIN_PATH),
@@ -319,12 +328,10 @@ class Template {
 		
 		//Base CSS
 		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";        
+        
 		//Default theme CSS
 		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
-        
-		//Course theme CSS
-		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/course.css";'."\n";
-        
+                
         $navigator_info = api_get_navigator();
         
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
@@ -418,10 +425,8 @@ class Template {
 		if (api_get_setting('allow_global_chat') == 'true') {            
             if (!api_is_anonymous()) {
                 //Do not include the global chat in LP
-                if ($this->show_learnpath == false) {
-                    if ($this->show_footer == true) {
-                        $js_files[] = 'chat/js/chat.js';
-                    }
+                if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+                    $js_files[] = 'chat/js/chat.js';                    
                 }
             }
 		}
@@ -499,6 +504,7 @@ class Template {
 		$this->assign('extra_headers', $extra_headers);	
 	
 		$favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        
 		if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
 		    $access_url_id = api_get_current_access_url_id();
 		    if ($access_url_id != -1) {
@@ -508,7 +514,7 @@ class Template {
 		        $clean_url = str_replace('/', '-', $clean_url);
 		        $clean_url .= '/';
 		        $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
+                $icon_real_homep  = api_get_path(SYS_PATH).'home/'.$clean_url;
 
 		        //we create the new dir for the new sites
 		        if (is_file($icon_real_homep.'favicon.ico')) {
@@ -590,10 +596,10 @@ class Template {
                     }
                     if (count($coachs_email) > 1) {
                         $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);                        
+                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);                        
                     } elseif (count($coachs_email) == 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, USER_SEPARATOR);
+                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
                     }
@@ -619,7 +625,7 @@ class Template {
                     if (count($mail) > 1) { 
                         $label = get_lang('Teachers');    
                     }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, USER_SEPARATOR);                
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);                
                 }                
                 $this->assign('teachers', $teacher_data);     
             }
@@ -641,9 +647,13 @@ class Template {
     
     /* Sets the plugin content in a template variable */
     function set_plugin_region($plugin_region) {
-        if (!empty($plugin_region)) {          
-            $content = $this->plugin->load_region($plugin_region, $this);    
-            $this->assign('plugin_'.$plugin_region, $content);                
+        if (!empty($plugin_region)) {
+            $content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);    
+            if (!empty($content)) {
+                $this->assign('plugin_'.$plugin_region, $content);                
+            } else {
+                $this->assign('plugin_'.$plugin_region, null);
+            }
         }
         return null;
     }
@@ -657,7 +667,7 @@ class Template {
         $this->params[$tpl_var] = $value;
     }
     
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {        
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) {    
         echo $this->twig->render($template, $this->params);
     }
 }

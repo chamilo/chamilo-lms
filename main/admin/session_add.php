@@ -15,7 +15,6 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 
 $xajax = new xajax();
@@ -35,7 +34,6 @@ $interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('Session
 
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
 function search_coachs($needle) {
 	global $tbl_user;
@@ -92,10 +90,8 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function fill_coach_field (username) {
-
 	document.getElementById("coach_username").value = username;
 	document.getElementById("ajax_list_coachs").innerHTML = "";
-
 }
 </script>';
 

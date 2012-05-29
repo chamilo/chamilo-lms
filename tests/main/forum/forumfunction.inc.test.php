@@ -699,7 +699,7 @@ class TestForumFunction extends UnitTestCase {
 	
 	 public function testget_thread_users_details() {
 		$thread_id = 1;
-		$res = get_thread_users_details($thread_id, $db_name = null);
+		$res = get_thread_users_details($thread_id);
 		if(!is_null($res)){
 			$this->assertTrue(is_resource($res));
 		} else {

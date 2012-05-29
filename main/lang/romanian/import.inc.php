@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Titlul paginii";
 $langExplanation = "Odata ce vei apasa OK,un site de internet cu Forum, Agenda, Document manager etc. va fi creat. Contul tau, in calitate de creator al siteului iti permite sa-l modifici dupa cerintele tale.";
 $langTooBig = "Nu ai ales sa trimti nici un fisier, sau este prea mare.";
 $langCouldNot = "Fisierul nu a putut fi transferat";
@@ -11,5 +10,4 @@ $langCouldNotSendPage = "Fisierul nu este in format HTML si nu poate fi transfer
 $langSendPage = "Pagina de transferat";
 $langPageTitleModified = "Titlul paginii a fost modificat";
 $langPageAdded = "Pagina adaugata";
-$langAddPage = "Adauga o pagina";
 ?>

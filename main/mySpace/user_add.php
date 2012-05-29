@@ -5,6 +5,8 @@
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
+exit; //@deprecated file seems to be unused
+
 // including necessary libraries
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -160,69 +162,13 @@ if (api_is_session_admin()) {
 			$session_list[$session['id']]=$session['name'];
 		}
 	}
-
 	//asort($session_list);
 	//api_asort($session_list, SORT_STRING);
 	api_natsort($session_list);
-
 	$form->addElement('select', 'session_id', get_lang('Session'), $session_list);
 }
 
-
-// EXTRA FIELDS
-$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-foreach ($extra as $id => $field_details) {
-	switch ($field_details[2]) {
-		case USER_FIELD_TYPE_TEXT:
-			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			break;
-		case USER_FIELD_TYPE_RADIO:
-			$group = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
-			}
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-			break;
-		case USER_FIELD_TYPE_SELECT:
-			$options = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
-			break;
-		case USER_FIELD_TYPE_SELECT_MULTIPLE:
-			$options = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
-			break;
-		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3]);
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			$form->applyFilter('theme', 'trim');
-			break;
-	}
-}
-
+UserManager::set_extra_fields_in_form($form, null, 'registration');
 
 // Set default values
 $defaults['admin']['platform_admin'] = 0;

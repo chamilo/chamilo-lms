@@ -9,41 +9,27 @@
 /**
  * Code
  */
-// Constants for user extra field types.
-define('USER_FIELD_TYPE_TEXT',		 		1);
-define('USER_FIELD_TYPE_TEXTAREA',			2);
-define('USER_FIELD_TYPE_RADIO',				3);
-define('USER_FIELD_TYPE_SELECT',             4);
-define('USER_FIELD_TYPE_SELECT_MULTIPLE',	5);
-define('USER_FIELD_TYPE_DATE', 				6);
-define('USER_FIELD_TYPE_DATETIME', 			7);
-define('USER_FIELD_TYPE_DOUBLE_SELECT',      8);
-define('USER_FIELD_TYPE_DIVIDER', 			9);
-define('USER_FIELD_TYPE_TAG', 				10);
-define('USER_FIELD_TYPE_TIMEZONE', 			11);
-define('USER_FIELD_TYPE_SOCIAL_PROFILE', 	12);
 
-//User image sizes
-define('USER_IMAGE_SIZE_ORIGINAL',	1);
-define('USER_IMAGE_SIZE_BIG', 		2);
-define('USER_IMAGE_SIZE_MEDIUM', 	3);
-define('USER_IMAGE_SIZE_SMALL', 	4);
-
-
-// Relation type between users
-define('USER_UNKNOW',					0);
-define('USER_RELATION_TYPE_UNKNOW',		1);
-define('USER_RELATION_TYPE_PARENT',		2); // should be deprecated is useless
-define('USER_RELATION_TYPE_FRIEND',		3);
-define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
-define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
-define('USER_RELATION_TYPE_DELETED',	6);
-define('USER_RELATION_TYPE_RRHH',		7);
 /**
  * Class
  * @package chamilo.include.user
  */
 class UserManager {
+    
+    // Constants for user extra field types.    
+    CONST USER_FIELD_TYPE_TEXT =                    1;
+    CONST USER_FIELD_TYPE_TEXTAREA =                2;
+    CONST USER_FIELD_TYPE_RADIO =                   3;
+    CONST USER_FIELD_TYPE_SELECT =                  4;
+    CONST USER_FIELD_TYPE_SELECT_MULTIPLE =         5;
+    CONST USER_FIELD_TYPE_DATE =                    6;
+    CONST USER_FIELD_TYPE_DATETIME =                7;
+    CONST USER_FIELD_TYPE_DOUBLE_SELECT =           8;
+    CONST USER_FIELD_TYPE_DIVIDER =                 9;
+    CONST USER_FIELD_TYPE_TAG =                     10;
+    CONST USER_FIELD_TYPE_TIMEZONE =                11;
+    CONST USER_FIELD_TYPE_SOCIAL_PROFILE =          12;
+
 	private function __construct () {
 	}
 
@@ -76,6 +62,23 @@ class UserManager {
 	  */
 	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
 		global $_user, $_configuration;
+
+        $access_url_id = 1;
+		if (api_get_multiple_access_url()) {		
+            $access_url_id = api_get_current_access_url_id();
+        }
+		if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+            $num = self::get_number_of_users();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+            return api_set_failure('portal users limit reached');
+            }
+        }
+		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+            $num = self::get_number_of_users(1);
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+            return api_set_failure('portal teachers limit reached');
+            }
+        }
 
 		$firstName 	= Security::remove_XSS($firstName);
 		$lastName	= Security::remove_XSS($lastName);
@@ -619,8 +622,8 @@ class UserManager {
 			// 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
 			// 2. Applying the strict purifier.
 			// 3. Length limitation.
-      $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
-      return $toreturn;
+            $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
+            return $toreturn;
 		}
 		// 1. Applying the shallow purifier.
 		// 2. Length limitation.
@@ -1172,14 +1175,14 @@ class UserManager {
 			// Check if enumerated field, if the option is available
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
-				case USER_FIELD_TYPE_TAG :
+				case self::USER_FIELD_TYPE_TAG :
 					//4. Tags are process here comes from main/auth/profile.php
 					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
 					return true;
 				break;
-				case USER_FIELD_TYPE_RADIO:
-				case USER_FIELD_TYPE_SELECT:
-				case USER_FIELD_TYPE_SELECT_MULTIPLE:
+				case self::USER_FIELD_TYPE_RADIO:
+				case self::USER_FIELD_TYPE_SELECT:
+				case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
 					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
 					$resuo = Database::query($sqluo);
 					$values = split(';',$fvalues);
@@ -1399,8 +1402,8 @@ class UserManager {
 			return false;
 		}
 
-		if (!empty($fieldoptions) && in_array($fieldtype, array(USER_FIELD_TYPE_RADIO, USER_FIELD_TYPE_SELECT, USER_FIELD_TYPE_SELECT_MULTIPLE, USER_FIELD_TYPE_DOUBLE_SELECT))) {
-			if ($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT) {
+		if (!empty($fieldoptions) && in_array($fieldtype, array(self::USER_FIELD_TYPE_RADIO, self::USER_FIELD_TYPE_SELECT, self::USER_FIELD_TYPE_SELECT_MULTIPLE, self::USER_FIELD_TYPE_DOUBLE_SELECT))) {
+			if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
 				$twolist = explode('|', $fieldoptions);
 				$counter = 0;
 				foreach ($twolist as $individual_list) {
@@ -1491,7 +1494,7 @@ class UserManager {
 		$result = Database::query($sql);
 
 		// we create an array with all the options (will be used later in the script)
-		if ($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT) {
+		if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
 			$twolist = explode('|', $fieldoptions);
 			$counter = 0;
 			foreach ($twolist as $individual_list) {
@@ -1607,7 +1610,7 @@ class UserManager {
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
-				if ($row['type'] == USER_FIELD_TYPE_TAG) {
+				if ($row['type'] == self::USER_FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
 					$extra_data['extra_'.$row['fvar']] = $tags;
 				} else {
@@ -1623,7 +1626,7 @@ class UserManager {
 					if (Database::num_rows($resu) > 0) {
 						$rowu = Database::fetch_array($resu);
 						$fval = $rowu['fval'];
-						if ($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE) {
+						if ($row['type'] ==  self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
 							$fval = split(';',$rowu['fval']);
 						}
 					} else {
@@ -1632,13 +1635,13 @@ class UserManager {
 					}
                     // We get here (and fill the $extra_data array) even if there is no user with data (we fill it with default values)
 					if ($prefix) {
-						if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
+						if ($row['type'] ==  self::USER_FIELD_TYPE_RADIO) {
 							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
 						} else {
 							$extra_data['extra_'.$row['fvar']] = $fval;
 						}
 					} else {
-						if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
+						if ($row['type'] ==  self::USER_FIELD_TYPE_RADIO) {
 							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
 						} else {
 							$extra_data[$row['fvar']] = $fval;
@@ -1647,7 +1650,6 @@ class UserManager {
 				}
 			}
 		}
-
 		return $extra_data;
 	}
 
@@ -1689,7 +1691,7 @@ class UserManager {
 				if (Database::num_rows($resu) > 0) {
 					$rowu = Database::fetch_array($resu);
 					$fval = $rowu['fval'];
-					if ($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE) {
+					if ($row['type'] ==  self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
 						$fval = split(';',$rowu['fval']);
 					}
 				}
@@ -2364,11 +2366,23 @@ class UserManager {
 
     /**
      * Get the total count of users
+     * @param   int     Status of users to be counted
+     * @param   int     Access URL ID (optional)
      * @return	mixed	Number of users or false on error
      */
-    public static function get_number_of_users() {
+    public static function get_number_of_users($status=0, $access_url_id=null) {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT count(*) FROM $t_u";
+	$t_a = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql = "SELECT count(*) FROM $t_u u";
+        $sql2 = '';
+        if (is_int($status) && $status>0) {
+          $sql2 .= " WHERE u.status = $status ";
+        }
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+          $sql .= ", $t_a a ";
+          $sql2 .= " AND a.access_url_id = $access_url_id AND u.user_id = a.user_id ";
+        }
+        $sql = $sql.$sql2;
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
         	return (int) Database::result($res, 0, 0);
@@ -2796,23 +2810,23 @@ class UserManager {
 			UserManager::add_tag($tags,$user_id, $field_id);
 		}
 		return true;
-	}
-
-	/**
-	 * Gives a list of emails from all administrators
-	 * @author cvargas carlos.vargas@dokeos.com
+	}  
+     
+    /**
+	 * Returns a list of all admninistrators
+	 * @author jmontoya
 	 * @return array
 	 */
-	 public function get_emails_from_all_administrators() {
+	 public function get_all_administrators() {
 	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-	 	$sql = "SELECT email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
+	 	$sql = "SELECT user_id, username, firstname, lastname, email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
 	 	$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
-				$return[$row['email']] = $row;
+				$return[$row['user_id']] = $row;
 			}
 		}
 		return $return;
@@ -2918,80 +2932,11 @@ class UserManager {
 	public static function get_search_form($query) {
 		return '
 		<form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">				
-				<input placeholder="'.get_lang('UsersGroups').'" type="text" size="25" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+				<input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
 				<button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
 		</form>';
-	}
-	//deprecated
-	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {
-
-			$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-			$sql = "SELECT
-		                 u.user_id				AS col0,
-		                 u.official_code		AS col1,
-						 ".(api_is_western_name_order()
-		                 ? "u.firstname 			AS col2,
-		                 u.lastname 			AS col3,"
-		                 : "u.lastname 			AS col2,
-		                 u.firstname 			AS col3,")."
-		                 u.username				AS col4,
-		                 u.email				AS col5,
-		                 u.status				AS col6,
-		                 u.active				AS col7,
-		                 u.user_id				AS col8 ".
-		                 ", u.expiration_date      AS exp ".
-		            " FROM $user_table u ";
-
-		    // adding the filter to see the user's only of the current access_url		    
-		    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-		    }
-
-			if (isset ($keyword)) {
-				$keyword = Database::escape_string($keyword);
-				//OR u.official_code LIKE '%".$keyword."%'
-				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%' )";
-			}
-			$keyword_active = true;
-			//only active users
-			if ($keyword_active) {
-				$sql .= " AND u.active='1'";
-			}
-
-		    // adding the filter to see the user's only of the current access_url
-			if (api_get_multiple_access_url()) {
-		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-		    }
-
-		    if (!in_array($direction, array('ASC','DESC'))) {
-		    	$direction = 'ASC';
-		    }
-
-		    $column = intval($column);
-		    $from = intval($from);
-		    $number_of_items = intval($number_of_items);
-
-			$sql .= " ORDER BY col$column $direction ";
-			$sql .= " LIMIT $from,$number_of_items";
-			$res = Database::query($sql);
-
-			$users = array ();
-		    $t = time();
-			while ($user = Database::fetch_row($res)) {
-		        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
-		            // check expiration date
-		            $expiration_time = convert_sql_date($user[9]);
-		            // if expiration date is passed, store a special value for active field
-		            if ($expiration_time < $t) {
-		        	   $user[7] = '-1';
-		            }
-		        }
-		        // forget about the expiration date field
-		        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
-			}
-			return $users;
-		}
+	}    
+    
 	/**
 	 * Shows the user menu
 	 */
@@ -3239,7 +3184,6 @@ class UserManager {
 			}
 		}
 		return $affected_rows;
-
 	}
 
 
@@ -3413,6 +3357,7 @@ class UserManager {
 	    }
 	    return $result;
 	}
+    
 	/**
 	 * This function returns an icon path that represents the favicon of the website of which the url given. Defaults to the current Chamilo favicon
 	 * @param	string	URL of website where to look for favicon.ico
@@ -3479,5 +3424,210 @@ class UserManager {
             }
         }
         return false;
+    }
+    
+    function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false) {
+        $user_id = intval($user_id);
+        
+        // EXTRA FIELDS
+        $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+        $jquery_ready_content = null;
+        
+        foreach ($extra as $field_details) {
+            
+            if (!$admin_permissions) {
+                if ($field_details[6] == 0) {
+                    continue;
+                }
+            }
+            
+            switch($field_details[2]) {
+                case self::USER_FIELD_TYPE_TEXT:
+                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_TEXTAREA:
+                    $form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+                    //$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_RADIO:
+                    $group = array();
+                    foreach ($field_details[9] as $option_id => $option_details) {
+                        $options[$option_details[1]] = $option_details[2];
+                        $group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+                    }
+                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_SELECT:
+                    $get_lang_variables = false;
+                    if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
+                        $get_lang_variables = true;
+                    }                
+                    $options = array();
+                    foreach($field_details[9] as $option_id => $option_details) {
+                        //$options[$option_details[1]] = $option_details[2];
+                        if ($get_lang_variables) {
+                            $options[$option_details[1]] = get_lang($option_details[2]);
+                        }
+                    }
+                    if ($get_lang_variables) {
+                        $field_details[3] = get_lang($field_details[3]);
+                    }
+
+                    $form->addElement('select','extra_'.$field_details[1], $field_details[3], $options, array('class'=>'chzn-select', 'id'=>'extra_'.$field_details[1]));
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
+                    $options = array();
+                    foreach ($field_details[9] as $option_id => $option_details) {
+                        $options[$option_details[1]] = $option_details[2];
+                    }
+                    $form->addElement('select','extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_DATE:
+                    $form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
+                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+                    $form -> setDefaults($defaults);
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    $form->applyFilter('theme', 'trim');
+                    break;
+                case self::USER_FIELD_TYPE_DATETIME:
+                    $form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
+                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+                    $form -> setDefaults($defaults);
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+                    $form->applyFilter('theme', 'trim');
+                    break;
+                case self::USER_FIELD_TYPE_DOUBLE_SELECT:
+                    foreach ($field_details[9] as $key => $element) {
+                        if ($element[2][0] == '*') {
+                            $values['*'][$element[0]] = str_replace('*', '', $element[2]);
+                        } else {
+                            $values[0][$element[0]] = $element[2];
+                        }
+                    }
+
+                    $group = '';
+                    $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
+                    $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
+                    $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+                    
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    }
+
+                    // recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+                    if (key_exists('extra_'.$field_details[1], $extra_data)) {
+                        // exploding all the selected values (of both select forms)
+                        $selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
+                        $extra_data['extra_'.$field_details[1]] = array();
+
+                        // looping through the selected values and assigning the selected values to either the first or second select form
+                        foreach ($selected_values as $key => $selected_value) {
+                            if (key_exists($selected_value,$values[0])) {
+                                $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+                            } else {
+                                $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+                            }
+                        }
+                    }
+                    break;
+                case self::USER_FIELD_TYPE_DIVIDER:
+                    $form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+                    break;
+                case self::USER_FIELD_TYPE_TAG:
+                    //the magic should be here
+                    $user_tags = UserManager::get_user_tags(api_get_user_id(),$field_details[0]);
+
+                    $tag_list = '';
+                    if (is_array($user_tags) && count($user_tags)> 0) {
+                        foreach ($user_tags as $tag) {
+                            $tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
+                        }
+                    }
+
+                    $multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
+                                    '.$tag_list.'
+                                    </select>';
+
+                    $form->addElement('label',$field_details[3], $multi_select);
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+                    $complete_text = get_lang('StartToType');
+                    //if cache is set to true the jquery will be called 1 time
+                    $jquery_ready_content = <<<EOF
+                    $("#extra_$field_details[1]").fcbkcomplete({
+                        json_url: "$url?a=search_tags&field_id=$field_details[0]",
+                        cache: false,
+                        filter_case: true,
+                        filter_hide: true,
+                        complete_text:"$complete_text",
+                        firstselected: true,
+                        //onremove: "testme",
+                        //onselect: "testme",
+                        filter_selected: true,
+                        newel: true
+                    });
+EOF;
+                    break;
+                case self::USER_FIELD_TYPE_TIMEZONE:
+                    $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], api_get_timezones(), '');
+                    if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    break;
+                case self::USER_FIELD_TYPE_SOCIAL_PROFILE:
+                    // get the social network's favicon
+                    $icon_path = UserManager::get_favicon_from_url($extra_data['extra_'.$field_details[1]], $field_details[4]);
+                    // special hack for hi5
+                    $leftpad = '1.7'; $top = '0.4'; $domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $leftpad = '3'; $top = '0';}
+                    // print the input field
+                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 60, 'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '));
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+                    break;
+            }
+        }
+        $return = array();
+        $return['jquery_ready_content'] = $jquery_ready_content;
+        return $return;
+    }
+    
+    function get_user_field_types() {
+        $types = array();
+        $types[self::USER_FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
+        $types[self::USER_FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');
+        $types[self::USER_FIELD_TYPE_RADIO]           = get_lang('FieldTypeRadio');
+        $types[self::USER_FIELD_TYPE_SELECT]          = get_lang('FieldTypeSelect');
+        $types[self::USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
+        $types[self::USER_FIELD_TYPE_DATE]            = get_lang('FieldTypeDate');
+        $types[self::USER_FIELD_TYPE_DATETIME]        = get_lang('FieldTypeDatetime');
+        $types[self::USER_FIELD_TYPE_DOUBLE_SELECT]   = get_lang('FieldTypeDoubleSelect');
+        $types[self::USER_FIELD_TYPE_DIVIDER]         = get_lang('FieldTypeDivider');
+        $types[self::USER_FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
+        $types[self::USER_FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
+        $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
     }
 }

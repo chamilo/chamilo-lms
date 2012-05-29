@@ -232,4 +232,5 @@ $SelectGradeModel = "Izberi model ocenjevanja";
 $AllMustWeight100 = "Vsota vseh vrednosti mora biti 100";
 $Components = "Komponente";
 $OnlyActiveWhenThereAreAnyComponents = "Ta možnost je omogočena v primeru, da imate kakršnokoli ocenjevanje ali kategorije";
+$GradebookLockedAlert = "Ta naloga je zaklenjena. Ne morete je odkleniti. Če želite odklenjeno, se obrnite na upravitelja platforme in objasnite razloge, zakaj želite odklenjeno (brez obrazložitve se lahko smatra, da gre za poskus zlorabe orodja).";
 ?>

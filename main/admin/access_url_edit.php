@@ -12,6 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 //api_protect_admin_script();
 api_protect_global_admin_script();
+
 if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;
@@ -103,7 +104,7 @@ if( $form->validate()) {
 }
 
 
-$form->addElement('text','url', 'URL',array('size'=>'30'));
+$form->addElement('text','url', 'URL', array('class'=>'span6'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 $form->addElement('textarea','description',get_lang('Description'));

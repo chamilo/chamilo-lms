@@ -317,10 +317,10 @@ if ($ajax_search) {
 				$result_list=array();
 				foreach ($new_field_list as $new_field) {
 					$varname = 'field_'.$new_field['variable'];
-					if (Usermanager::is_extra_field_available($new_field['variable'])) {
+					if (UserManager::is_extra_field_available($new_field['variable'])) {
 						if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
 							$use_extra_fields = true;
-							$extra_field_result[]= Usermanager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+							$extra_field_result[]= UserManager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
 						}
 					}
 				}

@@ -1742,8 +1742,7 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access   public
      */
-    function toHtml ($in_data = null) {
-         
+    function toHtml ($in_data = null) {         
         if (!is_null($in_data)) {
             $this->addElement('html', $in_data);
         }

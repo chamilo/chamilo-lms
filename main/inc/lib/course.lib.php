@@ -64,56 +64,8 @@
 
 /*	INIT SECTION */
 
-/**
- * Configuration files
- */
-
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-
-define('MAX_COURSE_LENGTH_CODE', 40);
-
-/**
- * Constants definition
- */
-
-//LOGIC: course visibility and registration settings
-/*
-    COURSE VISIBILITY
-
-    MAPPING OLD SETTINGS TO NEW SETTINGS
-    -----------------------
-
-    NOT_VISIBLE_NO_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_REGISTERED, SUBSCRIBE_NOT_ALLOWED
-    NOT_VISIBLE_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_REGISTERED, SUBSCRIBE_ALLOWED
-    VISIBLE_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_OPEN_PLATFORM, SUBSCRIBE_ALLOWED
-    VISIBLE_NO_SUBSCRIPTION_ALLOWED
-    --> COURSE_VISIBILITY_OPEN_PLATFORM, SUBSCRIBE_NOT_ALLOWED
-*/
-//OLD SETTINGS
-define('NOT_VISIBLE_NO_SUBSCRIPTION_ALLOWED', 0);
-define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
-define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
-define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
-
-define('USER_SEPARATOR', ' |'); //Use to show user names in userportal.php, footer, etc
-
-
-
-/**
- * Variables
- */
-/*
-$TABLECOURSE         = Database::get_main_table(TABLE_MAIN_COURSE);
-$TABLECOURSDOMAIN    = Database::get_main_table(TABLE_MAIN_CATEGORY);
-$TABLEUSER           = Database::get_main_table(TABLE_MAIN_USER);
-$TABLECOURSUSER      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLEANNOUNCEMENTS  = 'announcement';
-$coursesRepositories = $_configuration['root_sys'];
-*/
 
 /**
  *	CourseManager Class
@@ -121,8 +73,14 @@ $coursesRepositories = $_configuration['root_sys'];
  */
 class CourseManager {
     
-    var $columns = array();
+    CONST MAX_COURSE_LENGTH_CODE = 40;
     
+    //This constant is used to show separate user names in the course list (userportal), footer, etc
+    CONST USER_SEPARATOR = ' |';   
+    
+    CONST COURSE_FIELD_TYPE_CHECKBOX = 10;
+    
+    var $columns = array();    
     
     /**
      * Creates a course
@@ -131,7 +89,17 @@ class CourseManager {
      */
     function create_course($params) {           
         global $_configuration;
-        
+        // Check portal limits
+        $access_url_id = 1;
+        if (api_get_multiple_access_url()) {		
+            $access_url_id = api_get_current_access_url_id();
+        }
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_courses']) && $_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
+            $num = self::count_courses();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
+                return api_set_failure('PortalCoursesLimitReached');
+            }
+        }
         if (empty($params['title'])) {
             return false;
         }        
@@ -139,7 +107,7 @@ class CourseManager {
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $params['title'];    
             // Check whether the requested course code has already been occupied.                   
-            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, MAX_COURSE_LENGTH_CODE));            
+            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE));            
         }
 
         // Create the course keys
@@ -165,11 +133,13 @@ class CourseManager {
                     fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);                    
                     //self::update_course_ranking($course_info['real_id'], 0, null);
                     
-                    //Create gradebook_category for the new course and add a gradebook model for the course
-                    if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                        create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
-                    }                    
+                    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+                        //Create gradebook_category for the new course and add a gradebook model for the course
+                        if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                            create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
+                        }                    
+                    }
                     return $course_info;                    
                 }
             }
@@ -1374,7 +1344,7 @@ class CourseManager {
         return $teachers;
     }
     
-    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = USER_SEPARATOR, $add_link_to_profile = false) {
+    public static function get_teacher_list_from_course_code_to_string($course_code, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
     	$teacher_list = self::get_teacher_list_from_course_code($course_code);
     	$teacher_string = '';
     	$list = array();
@@ -1433,7 +1403,7 @@ class CourseManager {
         }
     }
     
-    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = USER_SEPARATOR, $add_link_to_profile = false) {    
+    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {    
         $coachs_course = self::get_coachs_from_course($session_id, $course_code);
         $course_coachs = array();
                 
@@ -1463,7 +1433,7 @@ class CourseManager {
                 $coach_list[] = $coach['complete_name'];                
             }
             if (!empty($coach_list)) {
-    			$tutor_data = implode(USER_SEPARATOR, $coach_list);
+    			$tutor_data = implode(self::USER_SEPARATOR, $coach_list);
     		}    
         }
         return $tutor_data;
@@ -2056,7 +2026,7 @@ class CourseManager {
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." WHERE course_code='".$course_code."'";
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
-        //if ($send_to_tutor_also = true) {
+        //if ($send_to_tutor_also = true) 
         // Proposed change:
         if ($send_to_tutor_also) {
         //
@@ -2920,7 +2890,7 @@ class CourseManager {
                         $course_title .= $course_info['visual_code'];
                     }                    
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {                        
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);                        
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);                        
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
@@ -3065,7 +3035,7 @@ class CourseManager {
                 $course_title .= $course_info['visual_code'];
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], USER_SEPARATOR, true);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
             }            
             
             $params['link'] = $course_title_url;
@@ -3236,8 +3206,8 @@ class CourseManager {
     
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             if (api_get_setting('use_session_mode') == 'true' && !$nosession) {             
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], USER_SEPARATOR, true);
-                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], USER_SEPARATOR, true);
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], self::USER_SEPARATOR, true);
+                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);
                 
                 if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
                     $params['teachers'] = $teacher_list;
@@ -3749,6 +3719,22 @@ class CourseManager {
         
         return ResultSet::create($sql);
     }
-    
+
+    /**
+     * Get courses count
+     * @param int Access URL ID (optional)
+     * @return int Number of courses
+     */
+    public function count_courses($access_url_id=null) {
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT count(id) FROM $table_course c";
+        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+            $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+        }
+        $res = Database::query($sql);
+	$row = Database::fetch_row($res);
+        return $row[0];
+    }
    
 } //end class CourseManager

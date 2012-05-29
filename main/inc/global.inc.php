@@ -24,20 +24,9 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
-// PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5');
-
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other intialisation files.
 $includePath = dirname(__FILE__);
-
-// PHP version check.
-if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
-    $global_error_code = 1;
-    // Incorrect PHP version.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
@@ -76,8 +65,23 @@ if (empty($_configuration['system_version'])) {
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 
+
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
+
+//Check the PHP version
+api_check_php_version($includePath.'/');
+
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$default_username_length = 40;
+if (api_get_setting('login_is_email') == true) {
+    $default_username_length = 100;
+}
+define('USERNAME_MAX_LENGTH', $default_username_length);
 
 // Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);
@@ -95,8 +99,8 @@ ini_set('auto_detect_line_endings', '1');
 require_once dirname(__FILE__).'/autoload.inc.php';
 
 require_once $lib_path.'database.lib.php';
-require_once $lib_path.'template.lib.php';
-require_once $lib_path.'display.lib.php';
+//require_once $lib_path.'template.lib.php'; moved to autoload
+//require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
 //require_once $lib_path.'image.lib.php';   moved to autoload
 require_once $lib_path.'array.lib.php';
@@ -107,13 +111,13 @@ require_once $lib_path.'events.lib.inc.php';
 
 require_once $lib_path.'model.lib.php';
 //require_once $lib_path.'sortable_table.class.php';  moved to autoload
-require_once $lib_path.'usermanager.lib.php';
-require_once $lib_path.'message.lib.php';
-require_once $lib_path.'social.lib.php';
-require_once $lib_path.'notification.lib.php';
+//require_once $lib_path.'usermanager.lib.php'; moved to autoload
+//require_once $lib_path.'message.lib.php'; moved to autoload
+//require_once $lib_path.'social.lib.php'; moved to autoload
+//require_once $lib_path.'notification.lib.php'; moved to autoload
 require_once $lib_path.'course.lib.php';
 //require_once $lib_path.'sessionmanager.lib.php'; moved to autoload
-require_once $lib_path.'tracking.lib.php';
+//require_once $lib_path.'tracking.lib.php'; moved to autoload
 
 //require_once $lib_path.'formvalidator/FormValidator.class.php'; moved to autoload
 require_once $lib_path.'online.inc.php';
@@ -390,15 +394,20 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
     // getting the arrays of files i.e notification, trad4all, etc
     $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
     //getting parent info
-    $parent_language = SubLanguageManager::get_all_information_of_language(intval($_REQUEST['id']));
+    $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));
+    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);    
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
-        include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
+        //loading english        
+        $path = $langpath.'english/'.$language_file_item.'.inc.php';        
+        if (file_exists($path)) {
+            include $path;
+        }
+        
         $lang_list_post = array_keys($GLOBALS);
         $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
         unset($lang_list_pre);
@@ -407,14 +416,14 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
         $english_language_array[$language_file_item] = compact($lang_list_result);
 
         //cleaning the variables
-        foreach($lang_list_result as $item) {
+        foreach ($lang_list_result as $item) {
             unset(${$item});
         }
         $parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (is_file($parent_file)) {
+        
+        if (file_exists($parent_file) && is_file($parent_file)) {
             include_once $parent_file;
         }
-
         //  parent language array
         $parent_language_array[$language_file_item] = compact($lang_list_result);
 
@@ -422,8 +431,9 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
         foreach($lang_list_result as $item) {
             unset(${$item});
         }
+        
         $sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (is_file($sub_file)) {
+        if (file_exists($sub_file) && is_file($sub_file)) {
             include $sub_file;
         }
 
@@ -584,3 +594,21 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($s_sql_update_logout_date);
     }
 }
+// Add language_measure_frequency to your main/inc/conf/configuration.php in 
+// order to generate language variables frequency measurements (you can then 
+// see them through main/cron/lang/langstats.php)
+// The langstat object will then be used in the get_lang() function.
+// This block can be removed to speed things up a bit as it should only ever
+// be used in development versions.
+if ($_configuration['language_measure_frequency'] == 1) {
+    require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
+    $langstats = new langstats();
+}
+
+//Default quota for the course documents folder
+$default_quota = api_get_setting('default_document_quotum');
+//Just in case the setting is not correctly set 
+if (empty($default_quota)) {
+    $default_quota = 100000000;
+}
+define('DEFAULT_DOCUMENT_QUOTA', $default_quota);

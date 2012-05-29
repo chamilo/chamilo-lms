@@ -1589,17 +1589,16 @@ function get_thread_information($thread_id) {
  * @todo     this function need to be improved
  * @version octubre 2008, dokeos 1.8
  */
-function get_thread_users_details($thread_id, $course_id = null) {
+function get_thread_users_details($thread_id) {
     $t_posts               = Database :: get_course_table(TABLE_FORUM_POST);
     $t_users               = Database :: get_main_table(TABLE_MAIN_USER);
     $t_course_user         = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     
-    if (empty($course_id)) {
-        $course_id = api_get_course_int_id();
-    } else {
-        $course_id = intval($course_id);
-    }
+    $course_code = api_get_course_id();
+    $course_code = Database::escape_string($course_code);
+    
+    $course_id = api_get_course_int_id();
 
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
@@ -1614,13 +1613,14 @@ function get_thread_users_details($thread_id, $course_id = null) {
         //not showing coaches
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
                   FROM $t_posts , $t_users user, $t_session_rel_user session_rel_user_rel_course
-                  WHERE poster_id = user.user_id
-                  AND user.user_id = session_rel_user_rel_course.id_user
-                  AND session_rel_user_rel_course.status<>'2'
-                  AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND thread_id = '".Database::escape_string($thread_id)."'
-                  AND id_session = '".api_get_session_id()."'
-                  AND course_code = '".$course_id."' $orderby ";
+                  WHERE poster_id = user.user_id AND
+                  user.user_id = session_rel_user_rel_course.id_user AND
+                  session_rel_user_rel_course.status<>'2' AND
+                  session_rel_user_rel_course.id_user NOT IN ($user_to_avoid) AND
+                  thread_id = '".Database::escape_string($thread_id)."' AND
+                  id_session = '".api_get_session_id()."' AND
+                  c_id = $course_id AND                      
+                  course_code = '".$course_code."' $orderby ";
 
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
@@ -1629,8 +1629,9 @@ function get_thread_users_details($thread_id, $course_id = null) {
                   AND user.user_id = course_user.user_id
                   AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                   AND thread_id = '".Database::escape_string($thread_id)."'
-                  AND course_user.status NOT IN('1')
-                  AND course_code = '".$course_id."' $orderby";
+                  AND course_user.status NOT IN('1') AND
+                  c_id = $course_id AND 
+                  course_code = '".$course_code."' $orderby";        
     }
     $result = Database::query($sql);
     return $result;
@@ -1645,19 +1646,17 @@ function get_thread_users_details($thread_id, $course_id = null) {
  * @todo     this function need to be improved
  * @version octubre 2008, dokeos 1.8
  */
-function get_thread_users_qualify($thread_id, $course_id = null) {
-    $t_posts = Database :: get_course_table(TABLE_FORUM_POST);
-    $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $t_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+function get_thread_users_qualify($thread_id) {
+    $t_posts            = Database :: get_course_table(TABLE_FORUM_POST);
+    $t_qualify          = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $t_users            = Database :: get_main_table(TABLE_MAIN_USER);
+    $t_course_user      = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     
-    if (empty($course_id)) {
-        $course_id = api_get_course_int_id();
-    } else {
-        $course_id = intval($course_id);
-    }    
-
+    $course_id = api_get_course_int_id();
+    $course_code = api_get_course_id();    
+    $course_code = Database::escape_string($course_code);
+    
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
         $orderby = 'ORDER BY user.firstname, user.lastname ';
@@ -1679,7 +1678,9 @@ function get_thread_users_qualify($thread_id, $course_id = null) {
                   AND qualify.thread_id = '".Database::escape_string($thread_id)."
                   AND thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'
-                  AND course_code = '".$course_id."'
+                  AND course_code = '".$course_code."' AND
+                  qualify.c_id = $course_id AND
+                  post.c_id = $course_id 
                   $orderby ";
     } else {
           $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
@@ -1695,7 +1696,9 @@ function get_thread_users_qualify($thread_id, $course_id = null) {
                                      AND qualify.thread_id = '".Database::escape_string($thread_id)."'
                                      AND post.thread_id = '".Database::escape_string($thread_id)."'
                                      AND course_user.status not in('1')
-                                     AND course_code = '".$course_id."'
+                                     AND course_code = '".$course_code."' AND
+                                     qualify.c_id = $course_id AND
+                                     post.c_id = $course_id 
                                      $orderby ";
     }
     $result = Database::query($sql);
@@ -1711,7 +1714,7 @@ function get_thread_users_qualify($thread_id, $course_id = null) {
  * @todo     i'm a horrible function fix me
  * @version octubre 2008, dokeos 1.8
  */
-function get_thread_users_not_qualify($thread_id, $course_id = null) {
+function get_thread_users_not_qualify($thread_id) {
     $t_posts            = Database :: get_course_table(TABLE_FORUM_POST);
     $t_qualify          = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $t_users            = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1725,13 +1728,10 @@ function get_thread_users_not_qualify($thread_id, $course_id = null) {
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if (empty($course_id)) {
-        $course_id = api_get_course_int_id();
-    } else {
-        $course_id = intval($course_id);
-    }
+    $course_id = api_get_course_int_id();
+    $course_code = api_get_course_id();    
 
-    $sql1 = "select user_id FROM  $t_qualify WHERE thread_id = '".$thread_id."'";
+    $sql1 = "select user_id FROM  $t_qualify WHERE c_id = $course_id AND thread_id = '".$thread_id."'";
     $result1 = Database::query($sql1);
     $cad = '';
     while ($row = Database::fetch_array($result1)) {
@@ -1756,7 +1756,7 @@ function get_thread_users_not_qualify($thread_id, $course_id = null) {
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
                   AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'
-                  AND course_code = '".$course_id."' $orderby ";
+                  AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
                   FROM $t_posts post, $t_users user,$t_course_user course_user
@@ -1766,7 +1766,7 @@ function get_thread_users_not_qualify($thread_id, $course_id = null) {
                   AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                   AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND course_user.status not in('1')
-                  AND course_code = '".$course_id."' $orderby";
+                  AND course_code = '".$course_code."' AND post.c_id = $course_id  $orderby";
     }
     $result = Database::query($sql);
     return $result;
@@ -3991,28 +3991,22 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
  * @version May 2008, dokeos 1.8.5
  * @since May 2008, dokeos 1.8.5
  */
-function get_notifications_of_user($user_id = 0, $force = false) {
-    global $_course;
-
+function get_notifications_of_user($user_id = 0, $force = false) {    
     // Database table definition
-    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);        
-    $course = api_get_course_id();
+    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
     $course_id = api_get_course_int_id();
-    if (empty($course) || $course == -1) {
+    if (empty($course_id) || $course_id == -1) {
         return null;
     }
-    if ($user_id == 0) {
-        global $_user;
-        $user_id = $_user['user_id'];
+    if ($user_id == 0) {        
+        $user_id = api_get_user_id();
     }
 
-    $my_code = isset($_course['code']) ? $_course['code'] : '';
-
-    if (!isset($_SESSION['forum_notification']) || $_SESSION['forum_notification']['course'] != $my_code || $force = true) {
-        $_SESSION['forum_notification']['course'] = $my_code;
+    if (!isset($_SESSION['forum_notification']) || $_SESSION['forum_notification']['course'] != $course_id || $force = true) {
+        $_SESSION['forum_notification']['course'] = $course_id;
 
         $sql = "SELECT * FROM $table_notification WHERE c_id = $course_id AND user_id='".Database::escape_string($user_id)."'";
-        $result = Database::query($sql);
+        $result = Database::query($sql);        
         while ($row = Database::fetch_array($result)) {
             if (!is_null($row['forum_id'])) {
                 $_SESSION['forum_notification']['forum'][] = $row['forum_id'];
@@ -4033,8 +4027,10 @@ function get_notifications_of_user($user_id = 0, $force = false) {
  */
 function count_number_of_post_in_thread($thread_id) {
     $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
-    
+    $course_id      = api_get_course_int_id();
+    if (empty($course_id)) {
+        return 0;
+    }    
     $sql = "SELECT * FROM $table_posts WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' ";
     $result = Database::query($sql);
     return count(Database::store_result($result));

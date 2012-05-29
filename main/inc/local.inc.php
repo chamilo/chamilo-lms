@@ -881,9 +881,10 @@ $user_id    = isset($_user['user_id']) ? $_user['user_id'] : null;
 $is_courseAdmin     = false; //course teacher
 $is_courseTutor     = false; //course teacher - some rights
 $is_courseMember    = false; //course student
+$is_courseCoach     = false; //course coach
 
 //Course - User permissions
-$is_sessionAdmin    = false; 
+$is_sessionAdmin    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {    
     
@@ -914,11 +915,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             }                
             $_courseUser['role'] = $cuData['role'];
             Session::write('_courseUser',$_courseUser);
-        }
+        }        
                 
         //We are in a session course? Check session permissions
-        if (!empty($session_id))  {            
-            
+        if (!empty($session_id))  {          
             //I'm not the teacher of the course 
             if ($is_courseAdmin == false) {
                 // this user has no status related to this course
@@ -1025,7 +1025,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	//Checking the course access
     $is_allowed_in_course = false;  
     
-	if (isset($_course)) {        
+	if (isset($_course)) {   
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
                 $is_allowed_in_course = true;
@@ -1050,14 +1050,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     
     // check the session visibility
 	if ($is_allowed_in_course == true) {
-		//if I'm in a session
-		
+        
+		//if I'm in a session		
 		if ($session_id != 0) {
 			if (!$is_platformAdmin) {
-				// admin and session coach are *not* affected to the invisible session mode
-				// the coach is not affected because he can log in some days after the end date of a session
-				$session_visibility = api_get_session_visibility($session_id);                  
+				// admin is not affected to the invisible session mode
                 
+				$session_visibility = api_get_session_visibility($session_id);                  
+                                                
                 switch ($session_visibility) {                    
                     case SESSION_INVISIBLE:
                         $is_allowed_in_course = false;
@@ -1069,13 +1069,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	}
 
 	// save the states
-    Session::write('is_courseAdmin',$is_courseAdmin);
-	Session::write('is_courseMember',$is_courseMember);
-	Session::write('is_courseTutor',$is_courseTutor);
-    Session::write('is_courseCoach',$is_courseCoach);	
-	Session::write('is_allowed_in_course',$is_allowed_in_course);
+    Session::write('is_courseAdmin', $is_courseAdmin);
+	Session::write('is_courseMember', $is_courseMember);
+	Session::write('is_courseTutor', $is_courseTutor);
+    Session::write('is_courseCoach', $is_courseCoach);	
+	Session::write('is_allowed_in_course', $is_allowed_in_course);
     
-	Session::write('is_sessionAdmin',$is_sessionAdmin);    
+	Session::write('is_sessionAdmin', $is_sessionAdmin);    
 } else { // continue with the previous values
 
 	if (isset($_SESSION ['_courseUser'])) {

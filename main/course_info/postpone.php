@@ -71,8 +71,6 @@ $currentCourseExpirationDate	= $currentCourseExtentionData['expiration_date'];
 <h3>
 	<?php echo $nameTools ?>
 </h3>
-<?php //echo get_lang('SubTitle'); ?>
-
 
 This script  would be  called  by
 	professor,

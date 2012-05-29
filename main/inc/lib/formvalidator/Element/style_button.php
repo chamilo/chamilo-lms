@@ -37,10 +37,6 @@ require_once 'HTML/QuickForm/element.php';
  */
 class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 {
-	// {{{ properties
-	/* Path to image */
-
-
     // {{{ constructor
     /**
      * Class constructor
@@ -52,8 +48,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylebutton($elementName=null, $elementLabel=null, $attributes=null)
-    {
+    function HTML_QuickForm_stylebutton($elementName=null, $elementLabel=null, $attributes=null) {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
 
     } //end constructor
@@ -174,6 +169,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
             if (isset($this->_attributes['class'])) {
                 $this->_attributes['class'] = 'btn '.$this->_attributes['class'];
             }
+            //var_dump($this->getName());                        
             return $this->_getTabs().'<button ' . $this->_getAttrString($this->_attributes) . ' >'.$this->getValue() .'</button>';
         }
     } //end func toHtml

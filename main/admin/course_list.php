@@ -61,9 +61,7 @@ function get_number_of_courses() {
  * Get course data to display
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $users_table        = Database :: get_main_table(TABLE_MAIN_USER);
-    $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);    
     
     $sql = "SELECT code AS col0, title AS col1, visual_code AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, 
             code AS col7, visibility AS col8, directory as col9 
@@ -230,10 +228,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);
-    $renderer =& $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->addElement('text', 'keyword', get_lang('keyword'));
+    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);        
+    $form->addElement('text', 'keyword', null);
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
     

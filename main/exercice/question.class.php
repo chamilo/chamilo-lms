@@ -28,7 +28,7 @@ define('MULTIPLE_ANSWER_TRUE_FALSE',    11);
 define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
 define('ORAL_EXPRESSION', 		13);
 
-if (!class_exists('Category')) include_once("testcategory.class.php");	// hub 12-10-2011
+if (!class_exists('Category')) include_once("testcategory.class.php");
 
 /**
 	QUESTION CLASS
@@ -50,7 +50,7 @@ abstract class Question
 	public $level;
 	public $picture;
 	public $exerciseList;  // array with the list of exercises which this question is in
-	public $category;	// hub 12-10-2011
+	public $category;
 	private $isContent;
     public $course;        
 	static $typePicture = 'new_question.png';
@@ -84,7 +84,7 @@ abstract class Question
 		$this->position=1;
 		$this->picture='';
 		$this->level = 1;
-		$this->category=0;	// hub 12-10-2011
+		$this->category=0;
         $this->extra='';
 		$this->exerciseList=array();
 		$this->course = api_get_course_info();
@@ -139,7 +139,7 @@ abstract class Question
                 $objQuestion->level			= (int) $object->level;
                 $objQuestion->extra         = $object->extra;
                 $objQuestion->course        = $course_info;
-                $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);	// hub 12-10-2011
+                $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);
 
                 $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
@@ -664,7 +664,7 @@ abstract class Question
 					level		='".Database::escape_string($level)."'
 				WHERE c_id = $c_id  AND id='".Database::escape_string($id)."'";
 			Database::query($sql);
-			$this->saveCategory($category);	// hub 12-10-2011
+			$this->saveCategory($category);
 			if (!empty($exerciseId)) {
 				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id);
 			}
@@ -964,7 +964,7 @@ abstract class Question
 			$sql="DELETE FROM $TBL_REPONSES WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
 			Database::query($sql);
 
-			// hub 12-10-2011 remove the category of this question in the question_rel_category table
+			// remove the category of this question in the question_rel_category table
 			$sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND c_id=".api_get_course_int_id();
 			Database::query($sql);
 			
@@ -1167,8 +1167,6 @@ abstract class Question
         
         $form->addElement('select', 'questionLevel',get_lang('Difficulty'), $select_level);
         
-        
-		// HUB 12-10-2011
 		// categories
 		$tabCat = array();
 		$tabCat = Testcategory::getCategoriesIdAndName(); 
@@ -1195,7 +1193,7 @@ abstract class Question
 		$defaults['questionName']           = $this -> question;
 		$defaults['questionDescription']    = $this -> description;
 		$defaults['questionLevel']          = $this -> level;
-		$defaults['questionCategory']       = $this->category; // hub 12-10-2011
+		$defaults['questionCategory']       = $this->category;
 		
         //Came from he question pool        
         if (isset($_GET['fromExercise'])) {   
@@ -1221,7 +1219,7 @@ abstract class Question
 		$this -> updateTitle($form->getSubmitValue('questionName'));
 		$this -> updateDescription($form->getSubmitValue('questionDescription'));
 		$this -> updateLevel($form->getSubmitValue('questionLevel'));
-		$this->updateCategory($form->getSubmitValue('questionCategory'));	// hub 12-10-2011
+		$this->updateCategory($form->getSubmitValue('questionCategory'));
 		$this -> save($objExercise -> id);
 		// modify the exercise
 		$objExercise->addToList($this -> id);

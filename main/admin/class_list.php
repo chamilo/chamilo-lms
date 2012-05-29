@@ -63,9 +63,9 @@ function get_class_data($from, $number_of_items, $column, $direction) {
 function modify_filter($class_id) {
     $class_id = Security::remove_XSS($class_id);
     $result = '<a href="class_information.php?id='.$class_id.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>';
-    $result .= ' <a href="class_edit.php?idclass='.$class_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+    $result .= ' <a href="class_edit.php?idclass='.$class_id.'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>';
     $result .= ' <a href="subscribe_user2class.php?idclass='.$class_id.'">'.Display::return_icon('add_multiple_users.gif', get_lang('AddUsersToAClass')).'</a>';
-    $result .= ' <a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    $result .= ' <a href="class_list.php?action=delete_class&amp;class_id='.$class_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
     return $result;
 }
 
@@ -74,9 +74,6 @@ require api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 
 $tool_name = get_lang('ClassList');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-
-//Display :: display_header($tool_name);
-//api_display_tool_title($tool_name);
 
 if (isset($_POST['action'])) {
     switch ($_POST['action']) {
@@ -110,7 +107,7 @@ $form = new FormValidator('search_simple', 'get', '', '', null, false);
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('keyword'));
-$form->addElement('submit', 'submit', get_lang('Search'));
+$form->addElement('button', 'submit', get_lang('Search'));
 $content .= $form->return_form();
 
 // Create the sortable table with class information

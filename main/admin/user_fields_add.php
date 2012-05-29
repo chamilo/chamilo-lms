@@ -121,19 +121,7 @@ $form->applyFilter('fieldtitle','trim');
 $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 
 // Field type
-$types = array();
-$types[USER_FIELD_TYPE_TEXT]  = get_lang('FieldTypeText');
-$types[USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
-$types[USER_FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
-$types[USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
-$types[USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-$types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
-$types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
-$types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
-$types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
-$types[USER_FIELD_TYPE_TAG] 		= get_lang('FieldTypeTag');
-$types[USER_FIELD_TYPE_TIMEZONE]	= get_lang('FieldTypeTimezone');
-$types[USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
+$types = UserManager::get_user_field_types();
 
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');

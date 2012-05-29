@@ -120,7 +120,9 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
 	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
     
-    $items[] = array('url'=>'grade_models.php',             'label' => get_lang('GradeModel'));
+    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+        $items[] = array('url'=>'grade_models.php',             'label' => get_lang('GradeModel'));
+    }
     
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { 
     	$items[] = array('url'=>'ldap_import_students.php', 	'label' => get_lang('ImportLDAPUsersIntoCourse'));
@@ -266,19 +268,20 @@ if (api_is_platform_admin()) {
     
     //Skills
     
-    $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
-    $blocks['skills']['label'] = get_lang('Skills');
+    if (api_get_setting('allow_skills_tool') == 'true') {
     
-    $items = array();
-    $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
-    $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
-    $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
-    
-    $blocks['skills']['items'] = $items;
-    $blocks['skills']['extra'] = null;
-    $blocks['skills']['search_form'] = null;
-    
+        $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
+        $blocks['skills']['label'] = get_lang('Skills');
 
+        $items = array();
+        $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
+        $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
+        $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
+
+        $blocks['skills']['items'] = $items;
+        $blocks['skills']['extra'] = null;
+        $blocks['skills']['search_form'] = null;
+    }
 	
 	/* Chamilo.org */
 	
@@ -295,6 +298,7 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'../../documentation/security.html', 	'label' => get_lang('SecurityGuide'));
 	$items[] = array('url'=>'../../documentation/optimization.html', 	'label' => get_lang('OptimizationGuide'));
 	$items[] = array('url'=>'http://www.chamilo.org/extensions', 	'label' => get_lang('ChamiloExtensions'));	
+	$items[] = array('url'=>'http://www.chamilo.org/en/providers', 	'label' => get_lang('ChamiloOfficialServicesProviders'));	
 	
 	$blocks['chamilo']['items'] = $items; 
     $blocks['chamilo']['extra'] = null;
@@ -340,7 +344,7 @@ function version_check() {
     if ($row['selected_value'] == 'false') {        
         $return .= get_lang('VersionCheckExplanation');
         $return .= '<form class="well" action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';        
-        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
+        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
         $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';
     } else {
@@ -397,7 +401,7 @@ function check_system_version() {
             $version_info = trim(@fread($handle, 1024));
 
             if ($system_version != $version_info) {
-                $output = '<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitDokeos')).'</span>';
+                $output = '<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
             } else {
                 $output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
             }

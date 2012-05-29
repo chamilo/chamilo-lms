@@ -2864,6 +2864,9 @@ class Exercise {
         
         //Fixes multiple answer question in order to be exact 
         if ($answerType == MULTIPLE_ANSWER) {
+            $diff = @array_diff($answer_correct_array, $real_answers);
+            /*
+             * All good answers or nothing works like exact
             $counter = 1;            
             $correct_answer = true;
             foreach ($real_answers as $my_answer) {
@@ -2873,12 +2876,15 @@ class Exercise {
                     break;
                 }
                 $counter++;    
-            }            
+            }*/  
             if ($debug) error_log(" answer_correct_array: ".print_r($answer_correct_array, 1)."");
             if ($debug) error_log(" real_answers: ".print_r($real_answers, 1)."");
-            if ($debug) error_log(" correct_answer: ".$correct_answer);
+            //if ($debug) error_log(" correct_answer: ".$correct_answer);
                         
-            if ($correct_answer == false) {
+            /*if ($correct_answer == false) {
+                $questionScore = 0;
+            }*/
+            if (!empty($diff)) {
                 $questionScore = 0;
             }
         } 

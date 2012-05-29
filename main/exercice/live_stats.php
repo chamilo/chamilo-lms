@@ -31,7 +31,7 @@ $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header(get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
 
 //jqgrid will use this URL to do the selects
 
@@ -83,10 +83,8 @@ $(function() {
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, array('class'=> 'actions'));
 
-echo '<h2>'.$objExercise->name.'</h2>';
-
-echo Display::tag('h4', get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
-
+//echo Display::page_header($objExercise->name);
+//echo Display::page_header(get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
 echo Display::grid_html('live_stats');  
 
 Display::display_footer();

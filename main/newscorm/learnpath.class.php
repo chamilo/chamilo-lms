@@ -1777,7 +1777,7 @@ class learnpath {
 
         $file_base_name = str_replace('.' . $extension, '', $filename); // Filename without its extension.
 
-        $zipFile = new pclZip($file_path);
+        $zipFile = new PclZip($file_path);
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
         $package_type = '';
@@ -5311,8 +5311,7 @@ class learnpath {
      * @return string
      */
     public function display_item($item_id, $iframe = true, $msg = '') {
-        $course_id = api_get_course_int_id();
-        global $_course; // It will disappear.
+        $course_id = api_get_course_int_id();        
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -5545,8 +5544,7 @@ class learnpath {
      * @return	string	HTML form
      */
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '') {
-        $course_id = api_get_course_int_id();
-        global $charset;
+        $course_id = api_get_course_int_id();        
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 
@@ -5823,7 +5821,7 @@ class learnpath {
                 'prerequisite' => $row['prerequisite'],
                 'max_time_allowed' => $row['max_time_allowed']
             );
-        }        
+        }   
 
         $legend = '<legend>';        
         if ($action == 'add')
@@ -5852,13 +5850,13 @@ class learnpath {
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($action != 'add') {
                     if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                        $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                        $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                     } else {
                         $arrHide[] = $arrLP[$i]['id'];
                     }
                 } else {
                     if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                        $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                        $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 }
             }
 
@@ -5872,7 +5870,7 @@ class learnpath {
         $return .= '<td class="label"><label for="previous">' . get_lang('Position') . ' :</label></td>';
         $return .= '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="previous" name="previous" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -5882,7 +5880,7 @@ class learnpath {
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
 
@@ -6064,13 +6062,13 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
             }
         }
         if (is_array($arrLP)) {
@@ -6084,7 +6082,7 @@ class learnpath {
         $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -6094,7 +6092,7 @@ class learnpath {
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
 
@@ -6162,26 +6160,17 @@ class learnpath {
      */
     public function display_thread_form($action = 'add', $id = 0, $extra_info = '') {
         $course_id = api_get_course_int_id();
-        global $charset;
-        echo '<style>
-                div.row div.label {
-                    width:110px;
-                }
-                div.row div.formw {
-                    width: 82%;
-                }
-                </style>';
-
+        if (empty($course_id)) {
+            return null;
+        }                
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_forum = Database :: get_course_table(TABLE_FORUM_THREAD);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
-        }
-        elseif (is_numeric($extra_info)) {
-            $sql_forum = "SELECT thread_title as title
-                            FROM " . $tbl_forum . "
-                            WHERE c_id = ".$course_id." AND thread_id = " . $extra_info;
+        } elseif (is_numeric($extra_info)) {
+            $sql_forum = "SELECT thread_title as title FROM $tbl_forum
+                            WHERE c_id = $course_id AND thread_id = " . $extra_info;
 
             $result = Database::query($sql_forum);
             $row = Database :: fetch_array($result);
@@ -6193,7 +6182,7 @@ class learnpath {
             $item_description = '';
         }
 
-        $return = '<div style="">';
+        $return = null;
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6231,19 +6220,20 @@ class learnpath {
 
         unset ($this->arrMenu);
 
+        $return .= '<form method="POST">';
         if ($action == 'add')
-            $return .= '<p class="lp_title">' . get_lang('CreateTheForum') . '&nbsp;:</p>';
+            $return .= '<legend>' . get_lang('CreateTheForum') . '</legend>';
         elseif ($action == 'move') $return .= '<p class="lp_title">' . get_lang('MoveTheCurrentForum') . '&nbsp;:</p>';
         else
-            $return .= '<p class="lp_title">' . get_lang('EditCurrentForum') . '&nbsp;:</p>';
-
-        $return .= '<form method="POST">';
+            $return .= '<legend>' . get_lang('EditCurrentForum') . '</legend>';
+        
+        
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
         $return .= '<tr>';
-        $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '&nbsp;:</label></td>';
+        $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
         );
@@ -6251,27 +6241,27 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
             }
         }
         if ($arrLP != null) {
             reset($arrLP);
         }
 
-        $return .= "\t\t\t\t" . '</select>';
+        $return .= '</select>';
         $return .= '</td>';
         $return .= '</tr>';
         $return .= '<tr>';
-        $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '&nbsp;:</label></td>';
+        $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="previous" name="previous" size="1">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -6280,7 +6270,7 @@ class learnpath {
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
         $return .= "\t\t\t\t" . '</select>';
@@ -6288,7 +6278,7 @@ class learnpath {
         $return .= '</tr>';
         if ($action != 'move') {
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . '&nbsp;:</label></td>';
+            $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
             $return .= '<td class="input"><input id="idTitle" name="title" type="text" value="' . $item_title . '" /></td>';
             $return .= '</tr>';
             $return .= '<tr>';
@@ -6316,7 +6306,7 @@ class learnpath {
             }
 
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '&nbsp;:</label></td>';
+            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '</label></td>';
             $return .= '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">' . get_lang('NoPrerequisites') . '</option>';
 
             foreach ($arrHide as $key => $value) {
@@ -6329,13 +6319,12 @@ class learnpath {
                     $return .= '<option value="' . $key . '">' . $value['value'] . '</option>';
                 }
             }
-
             $return .= "</select></td>";
             $return .= '</tr>';
 
         }
         $return .= '<tr>';
-        $return .= '<td colspan="2">
+        $return .= '<td></td><td>
                     <button class="save" name="submit_button" type="submit" value="'.get_lang('Ok').'" />'.get_lang('Ok').'</button></td>';
         $return .= '</tr>';
         $return .= '</table>';
@@ -6985,13 +6974,13 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent_item_id == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
             }
         }
 
@@ -7007,7 +6996,7 @@ class learnpath {
         $return .= '<td class="input">';
         
         $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -7187,7 +7176,7 @@ class learnpath {
         $return .= '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         //$parent_item_id = $_SESSION['parent_item_id'];
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
+        $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
         );
@@ -7195,13 +7184,13 @@ class learnpath {
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
                 if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= "\t\t\t\t\t" . '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
             }
         }
 
@@ -7215,7 +7204,7 @@ class learnpath {
         $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
         $return .= '<td class="input">';
         $return .= "\t\t\t\t" . '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
-        $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -7224,7 +7213,7 @@ class learnpath {
                 else
                     $selected = '';
 
-                $return .= "\t\t\t\t\t" . '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
         $return .= "\t\t\t\t" . '</select>';

@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Tiêu đề trang";
 $langExplanation = "Sau khi bấm OK, một website sẽ được tạo ra với đầy đủ các chuyên mục. Bạn chỉ cần đăng nhập và hiệu chỉnh website theo ý thích.";
 $langTooBig = "Bạn không chọn tệp nào, hoặc là kích thước tệp quá lớn";
 $langCouldNot = "File không thể gửi";
@@ -11,5 +10,4 @@ $langCouldNotSendPage = "This file is not in HTML format and could not be sent. 
 $langSendPage = "Trang gửi đi";
 $langPageTitleModified = "The title of the page has been modified";
 $langPageAdded = "Page added";
-$langAddPage = "Thêm trang";
 ?>

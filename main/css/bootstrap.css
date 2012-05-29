@@ -623,7 +623,7 @@ select,
   padding: 4px;
   margin-bottom: 9px;
   font-size: 13px;
-  line-height: 18px;
+  line-height: 19px;
   color: #555555;
   border: 1px solid #cccccc;
   -webkit-border-radius: 3px;
@@ -689,7 +689,7 @@ input[type="file"] {
   line-height: 28px;
 }
 input[type="file"] {
-  line-height: 18px \9;
+  line-height: 19px \9;
 }
 select {
   width: 220px;

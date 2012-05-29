@@ -1981,12 +1981,13 @@ input.maininput:focus {
 
 /* LP tool*/
 
-div.lp_resource {
-    padding:5px 10px;
-    /* width:380px;     */
+.lp_resource {
+    padding:5px 10px;    
     list-style-type: none;
     margin: 0;
     padding: 0;
+    float:left;
+    width:70%;
 }
 
 .lp_resource_element, .lp_resource_element_no_link {
@@ -2000,7 +2001,22 @@ div.lp_resource {
     text-shadow: 0 1px 1px #F6F6F6;
     margin:5px;
     padding:5px;    
+    list-style: none outside none;    
 }   
+
+.lp_resource_element_new {
+    background-image:-moz-linear-gradient(top,#fefefe,#eee);
+    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
+    border: 1px solid #CCCCCC;
+    color: #444444;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 0 1px 1px #F6F6F6;
+    margin:5px;
+    padding:5px;    
+    list-style: none outside none; 
+}
 
 .doc_resource {
     margin:6px;
@@ -2008,7 +2024,7 @@ div.lp_resource {
 
 div.lp_tree {
     height: 100%;
-    overflow: auto;
+    /* overflow: auto;*/
     padding: 3px 10px 3px 0;
 }
 
@@ -2224,10 +2240,11 @@ div.admin_section h4 {
 }
 #lp_item_list {
     width:90%;
-    
+    margin:0px;
 }
 #lp_item_list, #lp_item_list li {
     list-style-type: none;
+    float:left;
 }
 
 #lp_item_list ul, #lp_item_list li{
@@ -2240,11 +2257,12 @@ div.admin_section h4 {
 }
 
 #lp_item_list .empty {
-    height:20px;
+    height:5px;
 }
 
 #lp_item_list .item_data {
     padding:5px 0px 5px 0px;
+    float:left;
 }
 
 .ui-state-highlight {

@@ -453,7 +453,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
 	$score          = Database::escape_string($score);
 	$answer         = Database::escape_string($answer);
 	$question_id    = Database::escape_string($question_id);
-	$exe_id          = Database::escape_string($exe_id);
+	$exe_id         = Database::escape_string($exe_id);
 	$position 		= Database::escape_string($position);
     $now            = api_get_utc_datetime();
 	$user_id        = api_get_user_id();
@@ -471,8 +471,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
     if (!exercise_time_control_is_valid($exercise_id)) {
         if ($debug) error_log("exercise_time_control_is_valid is false");
     	$score = 0;
-    	$answer = 0;
-    	$j = 0;
+    	$answer = 0;    	
 	}
 	
     

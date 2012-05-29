@@ -119,7 +119,7 @@ class Answer {
 			$this->answer[$i]				= $object->answer;
 			$this->correct[$i]				= $object->correct;
 			$this->comment[$i]				= $object->comment;
-			$this->weighting[$i]			= $object->ponderation;
+			$this->weighting[$i]			= $object->ponderation;            
 			$this->position[$i]				= $object->position;
 			$this->hotspot_coordinates[$i]	= $object->hotspot_coordinates;
 			$this->hotspot_type[$i]			= $object->hotspot_type;
@@ -178,7 +178,7 @@ class Answer {
 		}		
 		
 		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {		    
-		    $this->answer[$i]   = $doubt_data->answer;
+		    $this->answer[$i]       = $doubt_data->answer;
 			$this->correct[$i]		= $doubt_data->correct;
 			$this->comment[$i]		= $doubt_data->comment;
 			$this->weighting[$i]	= $doubt_data->ponderation;

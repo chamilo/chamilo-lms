@@ -1915,6 +1915,7 @@ class Exercise {
 		$organs_at_risk_hit = 0;
 
 		$questionScore = 0;
+        
 		if ($debug) error_log('Start answer loop ');
         
         $answer_correct_array = array();
@@ -1923,7 +1924,8 @@ class Exercise {
 			$answer             = $objAnswerTmp->selectAnswer($answerId);			
 			$answerComment      = $objAnswerTmp->selectComment($answerId);
 			$answerCorrect      = $objAnswerTmp->isCorrect($answerId);
-			$answerWeighting    = $objAnswerTmp->selectWeighting($answerId);
+			$answerWeighting    = (float)$objAnswerTmp->selectWeighting($answerId);            
+            
 			$numAnswer          = $objAnswerTmp->selectAutoId($answerId);
             
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
@@ -2000,21 +2002,25 @@ class Exercise {
 						while ($row = Database::fetch_array($resultans)) {
 							$ind = $row['answer'];
 							$choice[$ind] = 1;
-						}
-						$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+						}						
 						$studentChoice = $choice[$numAnswer];  
                         $real_answers[$answerId] = (bool)$studentChoice;
-						if ($studentChoice == $answerCorrect) {
+						if ($studentChoice) {
 							$questionScore  +=$answerWeighting;							                            
 						}
 					} else {
+                        //echo '+---';
+                        //var_dump($numAnswer);
+                        //var_dump($choice);
 						$studentChoice = $choice[$numAnswer];
-						if ($studentChoice == $answerCorrect) {
-							$questionScore  +=$answerWeighting;
-						}
+                        //var_dump($studentChoice .' - '.$answerCorrect);
+						if (isset($studentChoice)) {
+							$questionScore  += $answerWeighting;
+                            //var_dump($questionScore.' '.$answerWeighting);
+						}                        
                         $real_answers[$answerId] = (bool)$studentChoice;
 					}
-                    $totalScore     +=$answerWeighting;
+                    $totalScore     += $answerWeighting;
                     
                     if ($debug) error_log("studentChoice: $studentChoice");
 					break;
@@ -2864,7 +2870,9 @@ class Exercise {
         
         //Fixes multiple answer question in order to be exact 
         if ($answerType == MULTIPLE_ANSWER) {
+            //var_dump($answer_correct_array, $real_answers);
             $diff = @array_diff($answer_correct_array, $real_answers);
+            //var_dump($diff);
             /*
              * All good answers or nothing works like exact
             $counter = 1;            
@@ -3077,9 +3085,10 @@ class Exercise {
 			} elseif ($answerType == MULTIPLE_ANSWER) {
 				if ($choice != 0) {
 					$reply = array_keys($choice);
+                    
                     if ($debug) error_log("reply ".print_r($reply, 1)."");
 					for ($i = 0; $i < sizeof($reply); $i++) {
-						$ans = $reply[$i];
+						$ans = $reply[$i];                        
 						exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
 					}
 				} else {

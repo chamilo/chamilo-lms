@@ -142,6 +142,9 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $message = '';
 
 switch ($action) {
+    case PortfolioController::ACTION_SHARE:
+        $message = Portfolio::controller()->run()->message();
+        break;
 	case 'download':
 		$document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
 		// Check whether the document is in the database

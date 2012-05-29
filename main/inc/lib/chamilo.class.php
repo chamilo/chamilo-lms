@@ -42,6 +42,15 @@ class Chamilo
     {
         return ChamiloSession::instance();
     }
+    
+    /**
+     *
+     * @return CurrentUser
+     */
+    static function user()
+    {
+        return ChamiloSession::instance()->user();
+    }
 
     /**
      * Returns a full url from local/absolute path and parameters.

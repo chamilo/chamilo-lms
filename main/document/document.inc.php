@@ -222,6 +222,10 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             if ($filetype == 'file') {
                 $copy_to_myfiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
+            $send_to = '';
+//            if ($filetype == 'file') {
+//                $send_to = Portfolio::share($document_data['id'], array('style' => 'float:right;'));
+//            }
         }
         
         $pdf_icon = '';
@@ -239,7 +243,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 			if ( preg_match('/mp3$/i',  urldecode($url))  ||
 			     (preg_match('/wav$/i',  urldecode($url)) && !preg_match('/_chnano_.wav$/i',  urldecode($url)))  ||
 			     preg_match('/ogg$/i',  urldecode($url))) {			         
-			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+			     return '<span style="float:left" '.$visibility_class.'>'.$title.'</span>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
             } elseif (
                 //Show preview sith yoxview
 					preg_match('/html$/i', urldecode($url))  || 
@@ -262,14 +266,14 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 				if ($visibility == false) {
 					$class = "thickbox invisible";
 				}								
-				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" style="float:left">'.$title.'</a>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {
 				$url = 'showinframes.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 			    //No plugin just the old and good showinframes.php page 			
-            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+            	return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			}          
         } else {
-            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
+            return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
         }
         //end copy files to users myfiles
     } else {

@@ -53,7 +53,7 @@ class CurrentUser
         return $this->get('lastName');
     }
 
-    public function mail()
+    public function email()
     {
         return $this->get('mail');
     }

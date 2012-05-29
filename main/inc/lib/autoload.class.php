@@ -490,11 +490,12 @@ class Autoload
         $map = &self::map();
         if (isset($map[$class_name])) {
             $path = $root . $map[$class_name];
-            require_once $path;
-            return true;
-        } else {
-            return false;
+            if (file_exists($path) && is_file($path)) {
+                require_once $path;
+                return true;
+            }
         }
+        return false;
     }
 
 }

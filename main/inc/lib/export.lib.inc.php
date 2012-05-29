@@ -67,6 +67,7 @@ class Export {
 		$file->close();
 		DocumentManager :: file_send_for_download($path, true, $filename.'.csv');
         unlink($path);
+        exit;
 		return false;
 	}
 

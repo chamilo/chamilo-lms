@@ -115,8 +115,7 @@ $origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST[
 
 $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
 $title 			        = isset($_REQUEST['title']) ? Database::escape_string($_REQUEST['title']) : '';
-$uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : '1';
-
+$uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
 
 // get data for publication assignment
 $has_expired = false;
@@ -368,7 +367,7 @@ switch ($action) {
     case 'edit':
 	case 'upload_form': //can be add or edit work
         $is_author = false;        
-		if (empty($item_id)) { 
+		if (empty($item_id)) {
 			$parent_data = get_work_data_by_id($work_id);            
 			$parent_data['qualification'] = intval($parent_data['qualification']);
 			
@@ -394,8 +393,15 @@ switch ($action) {
 			}			
 			
 			//Get the author ID for that document from the item_property table	
-            $is_author 			= user_is_author($item_id);              
+            $is_author 			= user_is_author($item_id);   
+            if (!$is_author) {
+                Display::display_warning_message(get_lang('NotAllowed'));	
+                Display::display_footer();
+            }
 		}        
+        
+        
+        
 		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
 	
 		// form title

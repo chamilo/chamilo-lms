@@ -1567,6 +1567,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         } else {
             $extra_conditions = " work.post_group_id = '0' ";            
         }
+
         if ($is_allowed_to_edit) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
@@ -1868,6 +1869,7 @@ function user_is_author($item_id, $user_id = null) {
     $is_author 			= false;            
     $item_to_edit_data 	= api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());					
     $is_allowed_to_edit = api_is_allowed_to_edit();
+    
     if ($is_allowed_to_edit) {
         $is_author = true;
     } else {
@@ -1876,7 +1878,8 @@ function user_is_author($item_id, $user_id = null) {
         }
     }
     if (!$is_author) {
-        api_not_allowed();
+        //api_not_allowed();
+        return false;
     }
     return $is_author;
 }

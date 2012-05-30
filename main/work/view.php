@@ -16,13 +16,14 @@ if (empty($id) || empty($work)) {
 $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
+$course_info = api_get_course_info();
 
-if (user_is_author($id)) {
+if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) {
     $url_dir = 'work.php?&id=' . $my_folder_data['id'];
     $interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);	
     $interbreadcrumb[] = array ('url' => '#','name' =>  $work['title']);	
 
-    if (api_is_allowed_to_edit() || ($work['user_id'] == api_get_user_id() && $work['active'] == 1 && $work['accepted'] == 1)) {
+    if (($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) || api_is_allowed_to_edit() || ($work['user_id'] == api_get_user_id() && $work['active'] == 1 && $work['accepted'] == 1)) {
         $tpl = new Template();		
         $tpl->assign('work', $work);
         $template = $tpl->get_template('work/view.tpl');	

@@ -16,8 +16,6 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 $this_section = SECTION_COURSES;
 
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');

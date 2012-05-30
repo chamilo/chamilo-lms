@@ -4846,6 +4846,7 @@ class learnpath {
             );
         }
         
+        
         $this->tree_array($arrLP);        
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
@@ -4853,6 +4854,7 @@ class learnpath {
         $elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
+            $title_cut = cut($arrLP[$i]['title'], 25);
             if (($i % 2) == 0) {
                 $oddclass = 'row_odd';
             } else {
@@ -4864,12 +4866,12 @@ class learnpath {
 
             $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-            	$icon = '<img align="left" src="../img/lp_' . $icon_name . '.png" style="margin-right:3px;" />';
+            	$icon = '<img src="../img/lp_' . $icon_name . '.png" />';
             } else {
             	if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-            		$icon = '<img align="left" src="../img/lp_' . $icon_name . '.gif" style="margin-right:3px;" />';
+            		$icon = '<img src="../img/lp_' . $icon_name . '.gif"  />';
             	} else {
-            		$icon = '<img align="left" src="../img/folder_document.gif" style="margin-right:3px;" />';
+            		$icon = '<img src="../img/folder_document.gif" />';
             	}
             }
 
@@ -4898,14 +4900,14 @@ class learnpath {
                     }
                 }
             }
-            $return_audio .= Display::span($title.$icon).Display::tag('td', $audio, array('style'=>''));
+            $return_audio .= Display::span($icon.' '.$title).Display::tag('td', $audio, array('style'=>''));
             $return_audio .= '</td>';
 			$move_icon = '';
 			$edit_icon = '';
 			$delete_icon = '';
             
             if ($is_allowed_to_edit) {
-                if (!$update_audio OR $update_audio <> 'true') {					
+                if (!$update_audio OR $update_audio <> 'true') {                    
                     $move_icon .= '<a class="moved" href="#">';
 					$move_icon .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                     $move_icon .= '</a>';
@@ -4926,7 +4928,7 @@ class learnpath {
                 $delete_icon .= '</a>';
             }
             if ($update_audio != 'true') {
-            	$row = $move_icon.Display::span($title.$icon).Display::span($audio.$edit_icon.$delete_icon, array('class'=>'button_actions'));
+            	$row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$delete_icon, array('class'=>'button_actions'));
             } else {
             	$row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));            	
             }           
@@ -4983,12 +4985,16 @@ class learnpath {
             }            
         }    
         
-        $return = '<ul id="lp_item_list" class="well">';
+        $return = '<ul id="lp_item_list">';
+        
+        $return .='<h4>'.$this->name.'</h4><br>';
+        
         $tree = self::print_recursive($elements, $default_data, $default_content);
+        
         if (!empty($tree)) {
             $return .= $tree;
         } else {
-            $return .= Display::return_message(get_lang("DragAndDropElementHere"));
+            $return .= Display::return_message(get_lang("DragAndDropAnElementHere"));
         }
         $return .= '</ul>';
         if ($update_audio == 'true') {
@@ -4999,7 +5005,7 @@ class learnpath {
     
     function print_recursive($elements, $default_data, $default_content) {
         $return = '';
-        foreach($elements as $key => $item) {
+        foreach ($elements as $key => $item) {
             if (isset($item['load_data']) || empty($item['data'])) {
                 $item['data'] = $default_data[$item['load_data']];        			
                 $item['type'] = $default_content[$item['load_data']]['item_type'];
@@ -7643,8 +7649,7 @@ class learnpath {
      * @return string
      */
     public function get_documents() {
-    	$course_info = api_get_course_info();
-    	require_once api_get_path(LIBRARY_PATH).'document.lib.php';    	
+    	$course_info = api_get_course_info();    	
     	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, 0, true);           
     	return $document_tree;      
     }
@@ -7687,11 +7692,12 @@ class learnpath {
 
         while ($row_quiz = Database :: fetch_array($res_quiz)) {
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
-            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';            
             
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
+            
+            $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
             
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . 
                         Security :: remove_XSS(cut($row_quiz['title'], 80)).
@@ -7729,11 +7735,11 @@ class learnpath {
             if ($item_visibility != 2)  {
                 $return .= '<li class="lp_resource_element" data_id="'.$row_link['id'].'" data_type="'.TOOL_LINK.'" title="'.$row_link['title'].'" >';
                 
-                $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
-                
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= '</a> ';
+                
+                $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
                 
                 $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
                             $row_link['title'].
@@ -7800,11 +7806,12 @@ class learnpath {
             $return .= '<li class="lp_resource_element" data_id="'.$forum['forum_id'].'" data_type="'.TOOL_FORUM.'" title="'.$forum['forum_title'].'" >';
 
             if (!empty($forum['forum_id'])) {
-                $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
                 
                 $return .= '<a class="moved" href="#">';
 				$return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                 $return .= ' </a>';
+                
+                $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
                     
                 $return .= '<a style="cursor:hand" onclick="javascript: toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle">
                                 <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
@@ -7818,10 +7825,13 @@ class learnpath {
             if (is_array($a_threads)) {
                 foreach ($a_threads as $thread) {
                     $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';                    
-                    $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
+                    
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-                    $return .= ' </a>';                    
+                    $return .= ' </a>';
+                    
+                    $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
+                    
                     $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . Security :: remove_XSS($thread['thread_title']) . '</a>';
                     $return .= '</li>';
                 }

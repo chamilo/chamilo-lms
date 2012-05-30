@@ -364,11 +364,13 @@ switch ($action) {
                 $_SESSION['oLP']->delete_item($_GET['id']);
                 $is_success = true;
             }
+            require 'lp_add_item.php';
+            /*
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
-                require 'lp_build.php';
+                
             } else {
                 require 'lp_admin_view.php';
-            }
+            }*/
         }
         break;
 

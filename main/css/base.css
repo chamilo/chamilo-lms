@@ -2001,7 +2001,7 @@ input.maininput:focus {
     margin: 0;
     padding: 0;
     float:left;
-    width:50%;
+    width:100%;
 }
 
 .lp_resource_element, .lp_resource_element_no_link {
@@ -2026,16 +2026,9 @@ input.maininput:focus {
     margin:6px;
 }
 
-div.lp_tree {
-    height: 100%;
-    /* overflow: auto;*/
-    padding: 3px 10px 3px 0;
-}
-
 table.lp_build td.tree {
     border:none;
 }
-
 #resource_tab {
     min-height:380px;
 }
@@ -2244,12 +2237,17 @@ div.admin_section h4 {
 }
 #lp_item_list, #lp_item_list li {
     list-style-type: none;
-    float:left;
+    /* float:left;*/
 }
 
 #lp_item_list ul, #lp_item_list li{
-    float:left;
+    /* float:left;*/
     width:100%;
+}
+
+#lp_item_list .item_data {
+    padding:5px 0px 5px 0px;
+    /* float:left;*/
 }
 
 #lp_item_list .item {
@@ -2260,10 +2258,6 @@ div.admin_section h4 {
     height:5px;
 }
 
-#lp_item_list .item_data {
-    padding:5px 0px 5px 0px;
-    float:left;
-}
 
 .ui-state-highlight {
     height:25px;
@@ -3461,7 +3455,7 @@ a.forum_group_link {
     margin-bottom: -90em;
     cursor:pointer;
     background-color:#eee;
-    margin-left: 0px !important;    
+    margin-left: 4px !important;    
     background-image: url("../img/hide0.png"); 
     background-repeat: no-repeat; 
     background-position: center center;    
@@ -3874,8 +3868,16 @@ footer {
 .doc_folder {
     margin-right:5px;
     margin-top:5px;
+        width: 100%;
+    float:left;
 }
 
 .doc_resource{
-   margin: 5px;    
+    margin: 5px;
+    width: 100%;
+    float:left;
+}
+
+.lp_resource_element_new {
+    border: 1px dotted green;
 }

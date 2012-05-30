@@ -2436,12 +2436,11 @@ class DocumentManager {
         return $html;
     }
     
-    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false) {    	
-    	$course_info = api_get_course_info($course_info['code']);    	
-    	if (empty($course_info) || !is_array($course_info)) {
+    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false) {    	  	
+    	if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
     		return '';
-    	}    		
-    	$user_id = api_get_user_id();    	
+    	}
+    	$user_id = api_get_user_id();
     	$user_in_course = false;
         
     	if (api_is_platform_admin()) {
@@ -2665,24 +2664,24 @@ class DocumentManager {
     				}
     				    
     				$return .= '<ul class="lp_resource">';
-                     
                     
-                        $return .= '<li class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+                        $return .= '<li class="doc_folder "  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+                        
                         if ($lp_id) {    				    				
                             $return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
                         } else {
                             $return .= '<span style="margin-left:16px">&nbsp;</span>';
                         }                      
-                        $return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
-
+                        $return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
                         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';    				
-                        $return .= '</li>
-                                    <div style="display: none;" id="res_'.$resource['id'].'">';
-
+                        $return .= '</li>';
+                        
+                        $return .= '<div id="res_'.$resource['id'].'" style="display: none;" >';
                         if (isset($resource['files'])) {    					
                             $return .= self::write_resources_tree($course_info, $session_id, $resource['files'], $num +1, $lp_id, $target, $add_move_button);
                         }
                         $return .= '</div>';
+                        
                     $return .= '</ul>';
     			} else {
     				if (!is_array($resource)) {    				
@@ -2715,9 +2714,9 @@ class DocumentManager {
     					
     					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));    					 
     					
-                        $return .= '<li class="doc_resource " data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
+                        $return .= '<li class="doc_resource lp_resource_element" data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
                         
-                        $return .= '<div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';
+                        $return .= '<div class="item_data" style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';
                         
                         if ($add_move_button) {
                             $return .= '<a class="moved" href="#">';

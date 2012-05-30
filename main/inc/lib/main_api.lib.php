@@ -780,8 +780,9 @@ function api_protect_course_script($print_headers = false) {
     	return true;
     }
     $course_info = api_get_course_info();
-    if (isset($course_info) && !empty($course_info['visibility'])) {
-    	switch($course_info['visibility']) {
+        
+    if (isset($course_info) && isset($course_info['visibility'])) {        
+    	switch ($course_info['visibility']) {
     		default:
     		case 0: //Completely closed: the course is only accessible to the teachers.
     			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {

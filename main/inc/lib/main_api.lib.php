@@ -2712,6 +2712,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
         $show_headers = 1;
     }
+    
     $tpl = new Template(null, $show_headers, $show_headers);
     $tpl->assign('content', $msg);	
     if (($user!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
@@ -2730,18 +2731,22 @@ function api_not_allowed($print_headers = false, $message = null) {
             $tpl->display_one_col_template();
             exit;
         }
-        // If the user has no user ID, then his session has expired
-        require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+        // If the user has no user ID, then his session has expired        
         $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
-        $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="btn"');
+        
+        //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
+        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3')); //new
+        
+        //$form->addElement('password', 'password', get_lang('Password'), array('size' => 17)); //old
+        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
 
         $content = Display::return_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', 'error', false);
 
-        $content .= '<div style="margin: 0 auto; width: 200px;">';		
+        $content .= '<div class="well_login">';		
         $content .= $form->return_form();
         $content .='</div>';
+        
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();	
         exit;
@@ -2755,8 +2760,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
 	if( !isset($_COOKIE["TestCookie"]) && empty($_COOKIE["TestCookie"]) ) {
 		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-	}
-	else {
+	} else {
 		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
 	}
     $msg = Display::div($msg, array('align'=>'center'));

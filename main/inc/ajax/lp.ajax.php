@@ -27,7 +27,7 @@ switch ($action) {
             $sections	= explode('^', $new_order);            
             $new_array = array();
             $i = 0;
-            foreach($sections as $items) {
+            foreach ($sections as $items) {
             	list($id, $parent_id) = explode('|', $items);
             	$new_array[$i]['id'] = intval($id);
             	$new_array[$i]['parent_id'] = intval($parent_id);

@@ -92,12 +92,10 @@ $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 Display::display_header(null, 'Path');
-//api_display_tool_title($therow['name']);
-
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
+
 ?>
-<script type='text/javascript'>
+<script>
 
 var newOrderData= "";
 //source code found in http://www.swartzfager.org/blog/dspNestedList.cfm

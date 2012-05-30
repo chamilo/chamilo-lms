@@ -28,73 +28,10 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  * @param subject           email subject
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
+ * @deprecated use api_mail_html()
  */
 function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = '') {
-	if (!api_valid_email($recipient_email)) {
-		return 0;
-	}
-    //global $regexp_rfc3696; // Deprecated, 13-OCT-2010.
-    global $platform_email;
-
-    $mail = new PHPMailer();
-    $mail->Mailer  = $platform_email['SMTP_MAILER'];
-    $mail->Host    = $platform_email['SMTP_HOST'];
-    $mail->Port    = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
-
-    if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-    }
-
-    $mail->Priority = 3; // 5 = low, 1 = high
-    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-    $mail->IsHTML(0);
-    $mail->SMTPKeepAlive = true;
-
-    // Attachments
-    // $mail->AddAttachment($path);
-    // $mail->AddAttachment($path, $filename);
-
-    if ($sender_email != '') {
-        $mail->From         = $sender_email;
-        $mail->Sender       = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
-    }
-
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
-    $mail->Subject = $subject;    
-    $mail->Body    = $message;
-
-    // Only valid addresses are accepted.
-    //if (eregi($regexp_rfc3696, $recipient_email)) { // Deprecated, 13-OCT-2010.
-    if (api_valid_email($recipient_email)) {
-        $mail->AddAddress($recipient_email, $recipient_name);
-    }
-
-    if ($extra_headers != '') {
-        $mail->AddCustomHeader($extra_headers);
-    }
-
-    // Send the mail message.
-    if (!$mail->Send()) {
-        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
-        return 0;
-    }
-
-    // Clear all the addresses.
-    $mail->ClearAddresses();
-    return 1;
+	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, $sender_email, $extra_headers);
 }
 
 /**
@@ -138,7 +75,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     $mail->Priority = 3; // 5 = low, 1 = high
     $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-    $mail->IsHTML(0);
+        
     $mail->SMTPKeepAlive = true;
 
     if (($sender_email != '') && ($sender_name != '')) {
@@ -196,7 +133,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	            $x++;
 	         }
 	    }
-    }    
+    }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 
@@ -242,6 +179,10 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                     break;
             }
         }
+    } else {
+        if (!empty($extra_headers)) {
+            $mail->AddCustomHeader($extra_headers);
+        }
     }
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
@@ -250,6 +191,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // Send the mail message.
     if (!$mail->Send()) {
         //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
+        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
         return 0;
     }
 

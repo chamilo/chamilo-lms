@@ -2498,10 +2498,10 @@ class DocumentManager {
 					"ORDER BY docs.title ASC";
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc, 'ASSOC');
-    	$return 	= '';
+    	
     	
     	$resources_sorted = array();
-    	    	
+        $return 	= '';    	    	
     	if ($lp_id) {
 	    	$return .= '<div class="lp_resource_element">';    	
 	    	$return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);    	
@@ -2565,11 +2565,10 @@ class DocumentManager {
 
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
     	
-    	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target, $add_move_button);
+    	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target, $add_move_button, true);
     	    	
     	$return .= $write_result ;
-    	
-    	$return = Display::div($return, array('class'=>'lp_resource'));    	
+    	    	
     	$img_path = api_get_path(WEB_IMG_PATH);
     	
     	if ($lp_id == false) {
@@ -2593,9 +2592,11 @@ class DocumentManager {
     		function testResources(id, img) {
 	    		if (document.getElementById(id).style.display=='block'){
 	    			document.getElementById(id).style.display='none';
+                    var id = id.split('_')[1];
 	    			document.getElementById('img_'+id).src='".$img_path."nolines_plus.gif';
 	    		} else {
 	    			document.getElementById(id).style.display='block';
+                    var id = id.split('_')[1];
     				document.getElementById('img_'+id).src='".$img_path."nolines_minus.gif';
     			}
     		}
@@ -2615,7 +2616,7 @@ class DocumentManager {
     * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
     * @return	string	The HTML list
     */
-    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false) {
+    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $first = false) {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
     	
     	$img_path 		= api_get_path(WEB_IMG_PATH);
@@ -2623,6 +2624,7 @@ class DocumentManager {
     	$web_code_path 	= api_get_path(WEB_CODE_PATH);
     	
     	$return = '';
+        
     	if (count($resources_sorted) > 0) {
     		foreach ($resources_sorted as $key => $resource) {              
     			$title = isset($resource['title']) ? $resource['title'] : null;
@@ -2663,8 +2665,9 @@ class DocumentManager {
     				}
     				    
     				$return .= '<ul class="lp_resource">';
+                     
                     
-                        $return .= '<div class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; margin-right:5px;">';
+                        $return .= '<li class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
                         if ($lp_id) {    				    				
                             $return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
                         } else {
@@ -2673,7 +2676,7 @@ class DocumentManager {
                         $return .= '<img alt="" src="'.$img_path.'lp_folder.gif" title="" align="absmiddle" />&nbsp;';    				
 
                         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';    				
-                        $return .= '</div>
+                        $return .= '</li>
                                     <div style="display: none;" id="res_'.$resource['id'].'">';
 
                         if (isset($resource['files'])) {    					
@@ -2712,7 +2715,7 @@ class DocumentManager {
     					
     					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));    					 
     					
-                        $return .= '<li class="doc_resource lp_resource_element" data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
+                        $return .= '<li class="doc_resource " data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
                         
                         $return .= '<div style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';
                         

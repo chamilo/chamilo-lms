@@ -267,3 +267,10 @@ ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
 ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
 
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_public_certificates', 0, 'certificates');
+
+ALTER TABLE user_api_key ADD COLUMN api_end_point text DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
+

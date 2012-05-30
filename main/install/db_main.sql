@@ -2490,6 +2490,11 @@ CREATE TABLE IF NOT EXISTS user_api_key (
     user_id int unsigned NOT NULL,
     api_key char(32) NOT NULL,
     api_service char(10) NOT NULL default 'dokeos',
+    api_end_point text DEFAULT NULL,
+    created_date datetime DEFAULT NULL,
+    validity_start_date datetime DEFAULT NULL,
+    validity_end_date datetime DEFAULT NULL,
+    description text DEFAULT NULL,
     PRIMARY KEY (id)
 );
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);

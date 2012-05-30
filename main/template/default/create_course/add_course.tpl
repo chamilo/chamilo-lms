@@ -1,9 +1,10 @@
 {{just_created_link}}
 <h3>{{'JustCreated'|get_lang}} {{course_title}}</h3>
-    <hr />
+<hr />
 <h3>{{'ThingsToDo'|get_lang}}</h3>
+<br />
 
-<div class="row">
+<div id="course_thing_to_do" class="row">
     <div class="span3">
         <div class="thumbnail">
             <img src="{{_p.web_img}}icons/64/home.png"/>

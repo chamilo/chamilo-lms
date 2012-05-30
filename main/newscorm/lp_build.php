@@ -152,7 +152,7 @@ if (isset($is_success) && $is_success === true) {
     
     echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=view&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Display"), get_lang('DisplayComment'), 'view.png');
     
-    echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Settings"), null, 'settings.png');
+    echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Settings"), null, 'reference.png');
     
 
     

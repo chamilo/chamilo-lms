@@ -169,7 +169,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_public_certificates', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_public_certificates', 'false', 'No');
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1);
 
@@ -239,8 +238,13 @@ ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
 UPDATE language SET english_name = 'basque' , dokeos_folder = 'basque' where english_name = 'euskera';
 UPDATE language SET english_name = 'turkish', dokeos_folder = 'turkish' where english_name = 'turkce';
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'false', 'No');
+
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18102' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18109' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

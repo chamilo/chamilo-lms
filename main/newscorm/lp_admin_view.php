@@ -168,23 +168,20 @@ $(function() {
 			/*Only process elements with an id attribute (in order to skip the blank,
 				unmovable <li> elements.*/
 				
-			if ($(this).attr("id"))
-				{
-					/*Build a string of data with the child's ID and parent ID, 
-					 using the "|" as a delimiter between the two IDs and the "^" 
-					 as a record delimiter (these delimiters were chosen in case the data
-					 involved includes more common delimiters like commas within the content)
-					*/
-					newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
-					
-					//Determine if this child is a containter
-					if ($(this).is(".container"))
-						{
-						  //Process the child elements of the container
-						  processChildren($(this).attr("id"));
-						}
-				}
-				
+			if ($(this).attr("id")) {
+                /*Build a string of data with the child's ID and parent ID, 
+                    using the "|" as a delimiter between the two IDs and the "^" 
+                    as a record delimiter (these delimiters were chosen in case the data
+                    involved includes more common delimiters like commas within the content)
+                */
+                newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
+
+                //Determine if this child is a containter
+                if ($(this).is(".container")) {
+                    //Process the child elements of the container
+                    processChildren($(this).attr("id"));
+                }
+            }				
 		});  //end of children loop		
 	} //end of processChildren function	
 });

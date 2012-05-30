@@ -9,8 +9,18 @@ api_protect_course_script(true);
 $action = $_REQUEST['a'];
 
 $course_id = api_get_course_int_id(); 
+$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);        
 
 switch ($action) {    
+    case 'add_lp_item':
+        if (api_is_allowed_to_edit(null, true)) {            
+            if ($_SESSION['oLP']) {
+                //Updating the lp.modified_on            
+                $_SESSION['oLP']->set_modified_on();                
+                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $_REQUEST['title']);                
+            }
+        }
+        break;   
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
             $new_order   = $_POST['new_order'];
@@ -23,7 +33,6 @@ switch ($action) {
             	$new_array[$i]['parent_id'] = intval($parent_id);
             	$i++;
             }            
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);        
             $counter = 1;
             for ($i=0; $i < count($new_array); $i++) {
             	$params = array();   

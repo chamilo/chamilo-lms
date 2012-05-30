@@ -864,7 +864,8 @@ VALUES
 ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
 ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
 ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18042','DatabaseVersion','', NULL, NULL, 0);
+('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18043','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -1212,7 +1213,9 @@ VALUES
 ('allow_skills_tool', 'true', 'Yes'),
 ('allow_skills_tool', 'false', 'No'),
 ('allow_public_certificates', 'true', 'Yes'),
-('allow_public_certificates', 'false', 'No');
+('allow_public_certificates', 'false', 'No'),
+('enable_webcam_clip', 'true', 'Yes'),
+('enable_webcam_clip', 'false', 'No');
 
 UNLOCK TABLES;
 /*

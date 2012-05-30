@@ -23,8 +23,139 @@ include 'learnpath_functions.inc.php';
 include 'resourcelinker.inc.php';
 
 $language_file = 'learnpath';
+
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
+
+var newOrderData= "";
+
+function processChildren(parentId) {
+    //Loop through the children of the UL element defined by the parentId
+    var ulParentID= "UL_" + parentId;
+    $("#" + ulParentID).children().each(function () {
+
+        /*Only process elements with an id attribute (in order to skip the blank,
+            unmovable <li> elements.*/
+
+        if ($(this).attr("id")) {
+            /*Build a string of data with the childs ID and parent ID, 
+                using the "|" as a delimiter between the two IDs and the "^" 
+                as a record delimiter (these delimiters were chosen in case the data
+                involved includes more common delimiters like commas within the content)
+            */
+            newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
+
+            //Determine if this child is a containter
+            if ($(this).is(".container")) {
+                //Process the child elements of the container
+                processChildren($(this).attr("id"));
+            }
+        }				
+    });  //end of children loop		
+} //end of processChildren function	
+   
+$(function() {
+
+    $(".item_data").live("mouseover", function(event) {        
+        $(".button_actions", this).show();        
+    });
+    
+    $(".item_data").live("mouseout", function() {
+        $(".button_actions",this).hide();
+    });
+    
+    $(".button_actions").hide();
+
+  $( ".lp_resource" ).sortable({
+        items: ".lp_resource_element ",        
+        handle: ".moved", //only the class "moved"
+        cursor: "move",
+        connectWith: "#lp_item_list",
+        placeholder: "ui-state-highlight", //defines the yellow highlight        
+    });
+    
+    $("#lp_item_list").sortable({ 
+		items: "li",
+		handle: ".moved", //only the class "moved" 
+		cursor: "move",
+		placeholder: "ui-state-highlight", //defines the yellow highlight             
+        update: function(event, ui) {
+        
+            //Walk through the direct descendants of the lp_item_list <ul>
+            $("#lp_item_list").children().each(function () {
+			
+                /*Only process elements with an id attribute (in order to skip the blank,
+                unmovable <li> elements.*/
+
+                if ($(this).attr("id")) {
+                        /*Build a string of data with the child s ID and parent ID, 
+                        using the "|" as a delimiter between the two IDs and the "^" 
+                        as a record delimiter (these delimiters were chosen in case the data
+                        involved includes more common delimiters like commas within the content)
+                        */
+                        newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
+
+                        //Determine if this child is a containter
+                        if ($(this).is(".li_container")) {
+                            //Process the child elements of the container
+                            processChildren($(this).attr("id"));
+                        }
+                    }
+            }); //end of lp_item_list children loop
+            
+            var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+            $.post("'.$ajax_url.'", order, function(reponse){
+                $("#message").html(reponse);
+            });        
+        },
+        receive: function(event, ui) {
+        
+            var id = $(ui.item).attr("data_id");            
+            var type = $(ui.item).attr("data_type");
+            var title = $(ui.item).attr("title");
+
+            if (ui.item.parent()[0]) {
+                var parent_id = $(ui.item.parent()[0]).attr("id");
+                var previous_id = $(ui.item.prev()).attr("id");
+                    
+                if (parent_id) {
+                    parent_id = parent_id.split("_")[1];                    
+                    var params = {
+                            "a": "add_lp_item",
+                            "id": id,
+                            "parent_id": parent_id,
+                            "previous_id": previous_id,
+                            "type": type,
+                            "title" : title
+                        };
+                     $.ajax({
+                        type: "GET",
+                        url: "'.$ajax_url.'",
+                        data: params,                        
+                        async: false, 
+                        success: function(data) {
+                            if (data == -1) {
+                                
+                            } else {
+                                $(ui.item).attr("id", data);
+                                $(ui.item).addClass("lp_resource_element_new");
+                                $(ui.item).removeClass("lp_resource_element");
+                                $(ui.item).removeClass("doc_resource");
+                                
+                                
+                            }
+                        }
+                    });
+                }
+            }
+        }
+	});	
+
+
+  
+});
+
 
 var temp    = false;
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
@@ -247,7 +378,7 @@ $(document).ready(function() {
 echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row-fluid" style="overflow:hidden">';
-echo '<div class="span3">';
+echo '<div class="span4">';
 
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
@@ -255,7 +386,7 @@ if ($type == 'document' && !isset($_GET['file'])) {
     $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ' : ' class="lp_tree" ';
     echo '<div  '.$style.'>';
     // Build the tree with the menu items in it.
-    echo $_SESSION['oLP']->build_tree();
+    echo $_SESSION['oLP']->build_tree();    
     echo '</div>';
     // Show the template list.
     echo '<p style="border-bottom:1px solid #ddd; margin:0; padding:2px;"></p>';
@@ -264,7 +395,8 @@ if ($type == 'document' && !isset($_GET['file'])) {
 } else {
     echo '<div class="lp_tree">';
     // Build the tree with the menu items in it.
-    echo $_SESSION['oLP']->build_tree();
+    //echo $_SESSION['oLP']->build_tree();
+    echo $_SESSION['oLP']->return_new_tree();
     echo '</div>';
 }
 echo '</div>';

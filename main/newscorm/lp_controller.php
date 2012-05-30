@@ -8,7 +8,6 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-
 use \ChamiloSession as Session;
 
 $debug = 0;

@@ -39,7 +39,7 @@ return array(
 	'english' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'esperanto' =>        array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'estonian' =>         array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
-	'euskera' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
+	'basque'  =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'finnish' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'french' =>           array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'frisian' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
@@ -99,7 +99,7 @@ return array(
 	'tamil' =>            array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'thai' =>             array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'trad_chinese' =>     array(  'format' => 'title last_name first_name',  'sort_by' => 'last_name'   ), // Eastern order
-	'turkce' =>           array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
+	'turkish' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'ukrainian' =>        array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 	'vietnamese' =>       array(  'format' => 'title last_name first_name',  'sort_by' => 'last_name'   ), // Eastern order
 	'welsh' =>            array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),

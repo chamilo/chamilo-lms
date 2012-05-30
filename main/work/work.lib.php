@@ -104,10 +104,9 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
  
  */
 function display_tool_options($uploadvisibledisabled, $origin) {
-	global $group_properties, $gradebook;
+	global $gradebook;
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-	$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
+	
 	if (!$is_allowed_to_edit) {
 		return;
 	}
@@ -1568,21 +1567,23 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         } else {
             $extra_conditions = " work.post_group_id = '0' ";            
         }
-
         if ($is_allowed_to_edit) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-            $extra_conditions .= ' AND work.active IN (1) ';            
+            $extra_conditions .= ' AND work.active IN (1) ';         
+            
             if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {            
                 $extra_conditions .= " AND u.user_id = ".api_get_user_id()." ";
             } else {
                 $extra_conditions .= '';
             }
-        }        
+        }
+        
         $extra_conditions .= " AND parent_id  = ".$work_id."  ";        
   
         $select = 'DISTINCT work.id as id, title as file, url, sent_date, contains_file, has_properties, view_properties, 
                     qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
+        
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
         $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
                 
@@ -1598,7 +1599,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         $result = Database::query($sql);
         $works = array();
         
-        while ($work = Database::fetch_array($result, 'ASSOC')) {                
+        while ($work = Database::fetch_array($result, 'ASSOC')) {
            //var_dump($work);
             $item_id = $work['id'];            
             
@@ -1670,7 +1671,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 //Actions
                 $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&id='.$work_id.'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']);                    
-                $action = '';                
+                $action = '';     
                 if ($is_allowed_to_edit) {
                     if ($locked) {
                         if ($qualification_exists) {
@@ -1703,12 +1704,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
                     } else {
                         $action .= '<a href="'.$url.'&amp;action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-                    }
+                    }                 
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {                        
                     if (api_is_allowed_to_session_edit(false, true)) {
-                    $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
+                        $action .= '<a href="'.$url.'&amp;action=edit&item_id='.$item_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
-                    $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+                        $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         $action .= '<a href="'.$url.'&amp;action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';

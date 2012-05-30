@@ -52,10 +52,8 @@ api_protect_course_script(true);
 
 // Including necessary files
 require_once 'work.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
@@ -117,7 +115,7 @@ $origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST[
 
 $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
 $title 			        = isset($_REQUEST['title']) ? Database::escape_string($_REQUEST['title']) : '';
-$uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : '';
+$uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : '1';
 
 
 // get data for publication assignment

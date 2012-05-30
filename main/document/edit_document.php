@@ -39,22 +39,26 @@ require_once '../inc/global.inc.php';
 $htmlHeadXtra[] = '
 <script>
 var hide_bar = function() {    
-    $("#main_content .span3").hide(); 
+    $("#main_content .span2").hide(); 
     $("#doc_form").removeClass("span9"); 
     $("#doc_form").addClass("span11");   
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
-$(document).ready(function() {    
+$(document).ready(function() {   
+    if ($(window).width() <= 800 ) {
+        $("#main_content .span2").hide();
+    }
+    
     $("#hide_bar_template").toggle(
         function() { 
-            $("#main_content .span3").hide(); 
+            $("#main_content .span2").hide(); 
             $("#doc_form").removeClass("span9"); 
             $("#doc_form").addClass("span11");             
             $(this).css({"background-image" : \'url("../img/hide2.png")\'})
         },
         function() { 
-            $("#main_content .span3").show(); 
+            $("#main_content .span2").show(); 
             $("#doc_form").removeClass("span11"); 
             $("#doc_form").addClass("span9"); 
             $(this).css("background-image", \'url("../img/hide0.png")\'); 
@@ -460,10 +464,10 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
 	echo '<div class="row-fluid" style="overflow:hidden">
-            <div class="span3">
-                    <div id="frmModel" style="overflow: visible;"></div>
+            <div class="span2" style="width:180px">
+                <div id="frmModel" style="overflow: visible;"></div>
             </div>
-            <div id="hide_bar_template" class="span1"></div>
+            <div id="hide_bar_template"></div>
             <div id="doc_form" class="span9">
                     '.$form->return_form().'
             </div>

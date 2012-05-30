@@ -388,7 +388,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('English','english','en','english',1),
 ('Espa&ntilde;ol','spanish','es','spanish',1),
 ('Esperanto','esperanto','eo','esperanto',0),
-('Euskara','euskera','eu','euskera',0),
+('Euskara','basque','eu','basque',0),
 ('&#1601;&#1575;&#1585;&#1587;&#1740;','persian','fa','persian',0),
 ('Fran&ccedil;ais','french','fr','french',1),
 ('Furlan','friulian','fur','friulian',0),
@@ -423,7 +423,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('Suomi','finnish','fi','finnish',0),
 ('Svenska','swedish','sv','swedish',0),
 ('&#3652;&#3607;&#3618;','thai','th','thai',0),
-('T&uuml;rk&ccedil;e','turkce','tr','turkce',0),
+('T&uuml;rk&ccedil;e','turkish','tr','turkish',0),
 ('&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;','ukrainian','uk','ukrainian',0),
 ('Ti&#7871;ng Vi&#7879;t','vietnamese','vi','vietnamese',0),
 ('Kiswahili','swahili','sw','swahili',0),
@@ -865,7 +865,7 @@ VALUES
 ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
 ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
 ('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18043','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18102','DatabaseVersion','', NULL, NULL, 0);
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),

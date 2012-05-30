@@ -236,8 +236,11 @@ DELETE FROM settings_options WHERE variable = 'use_document_title';
 ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
 ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
 
+UPDATE language SET english_name = 'basque' , dokeos_folder = 'basque' where english_name = 'euskera';
+UPDATE language SET english_name = 'turkish', dokeos_folder = 'turkish' where english_name = 'turkce';
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18042' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18102' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

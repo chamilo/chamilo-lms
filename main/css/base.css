@@ -153,6 +153,15 @@ form .formw input {
     padding: 19px;
 }
 
+.well_login {
+    margin: 0 auto; 
+    width: 200px;
+}
+
+.well_login button {
+    margin-left: 0px;
+}
+
 #progress_bar img {
     height:26px;
 }
@@ -1981,13 +1990,18 @@ input.maininput:focus {
 
 /* LP tool*/
 
+
+#lp_overview .thumbnail {
+    text-align: center;    
+}
+
 .lp_resource {
     padding:5px 10px;    
     list-style-type: none;
     margin: 0;
     padding: 0;
     float:left;
-    width:70%;
+    width:50%;
 }
 
 .lp_resource_element, .lp_resource_element_no_link {
@@ -2004,18 +2018,8 @@ input.maininput:focus {
     list-style: none outside none;    
 }   
 
-.lp_resource_element_new {
-    background-image:-moz-linear-gradient(top,#fefefe,#eee);
-    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
-    border: 1px solid #CCCCCC;
-    color: #444444;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    text-shadow: 0 1px 1px #F6F6F6;
-    margin:5px;
-    padding:5px;    
-    list-style: none outside none; 
+.lp_resource_element_new a {
+   font-size: 14px;
 }
 
 .doc_resource {
@@ -2034,9 +2038,6 @@ table.lp_build td.tree {
 
 #resource_tab {
     min-height:380px;
-}
-
-#logo {    
 }
 
 div.system_announcement {
@@ -2065,7 +2066,6 @@ div.system_announcement {
     text-align: right;
     width: 98%;
 }
-
 
 div.admin_section {
      min-height: 260px;
@@ -2737,6 +2737,8 @@ form .formw .freeze {
     color:#999;
 }
 
+
+
 /* jsPlumb */
 
 .skill_root {
@@ -3073,7 +3075,7 @@ a:active{
     margin-right: 4px;    
 }
 
-.thumbnail .caption {
+#online_grid_container .thumbnail .caption {
     text-align:center;
 }
 
@@ -3847,13 +3849,16 @@ footer {
     font-weight: normal;
 }
 
+.ui-state-highlight_lp {
+    border: 1px solid #FEAA18; 
+    background: #FFB738; 
+    color: #363636;
+    height:20px;
+    width: 70%;
+}
 
-.bottom_actions {
- 	/*background:#efefef;
-    border:1px solid #ccc;         
-    padding:10px;
-    vertical-align:middle;    
-    */
+
+.bottom_actions {	
     display: block; 
     width: 100%;    
 }
@@ -3864,4 +3869,13 @@ footer {
     bottom: 0;   
     left: 0px;    
     margin-bottom: 0px;
+}
+
+.doc_folder {
+    margin-right:5px;
+    margin-top:5px;
+}
+
+.doc_resource{
+   margin: 5px;    
 }

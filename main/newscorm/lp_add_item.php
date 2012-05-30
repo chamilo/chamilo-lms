@@ -60,14 +60,14 @@ $(function() {
     $(".item_data").live("mouseover", function(event) {        
         $(".button_actions", this).show();        
     });
-    
+
     $(".item_data").live("mouseout", function() {
         $(".button_actions",this).hide();
     });
-    
+
     $(".button_actions").hide();
 
-  $( ".lp_resource" ).sortable({
+    $( ".lp_resource" ).sortable({
         items: ".lp_resource_element ",        
         handle: ".moved", //only the class "moved"
         cursor: "move",
@@ -75,7 +75,7 @@ $(function() {
         placeholder: "ui-state-highlight", //defines the yellow highlight        
     });
     
-    $("#lp_item_list").sortable({ 
+    $("#lp_item_list").sortable({
 		items: "li",
 		handle: ".moved", //only the class "moved" 
 		cursor: "move",
@@ -107,7 +107,7 @@ $(function() {
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
             $.post("'.$ajax_url.'", order, function(reponse){
                 $("#message").html(reponse);
-            });        
+            });            
         },
         receive: function(event, ui) {
         
@@ -135,25 +135,22 @@ $(function() {
                         data: params,                        
                         async: false, 
                         success: function(data) {
-                            if (data == -1) {
-                                
+                            if (data == -1) {                                
                             } else {
+                            
+                                $(".normal-message").hide();
                                 $(ui.item).attr("id", data);
                                 $(ui.item).addClass("lp_resource_element_new");
+                                $(ui.item).addClass("record li_container");
                                 $(ui.item).removeClass("lp_resource_element");
-                                $(ui.item).removeClass("doc_resource");
-                                
-                                
-                            }
+                                $(ui.item).removeClass("doc_resource");                                
+                            }                            
                         }
                     });
                 }
-            }
-        }
-	});	
-
-
-  
+            }//            
+        }//end receive
+	});      
 });
 
 
@@ -306,7 +303,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
             'name' => get_lang('ToolGradebook')
         );
 }
-
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());

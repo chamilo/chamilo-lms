@@ -38,7 +38,7 @@ api_check_php_version('../inc/');
 ob_implicit_flush(true);
 session_start();
 
-require_once api_get_path(LIBRARY_PATH).'session.class.php';
+require_once api_get_path(SYS_PATH).'main/inc/autoload.inc.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';

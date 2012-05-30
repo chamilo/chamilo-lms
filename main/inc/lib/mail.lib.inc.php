@@ -179,6 +179,10 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                     break;
             }
         }
+    } else {
+        if (!empty($extra_headers)) {
+            $mail->AddCustomHeader($extra_headers);
+        }
     }
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
@@ -187,6 +191,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // Send the mail message.
     if (!$mail->Send()) {
         //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
+        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
         return 0;
     }
 

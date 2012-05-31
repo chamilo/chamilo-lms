@@ -115,27 +115,32 @@ $(document).scroll(function() {
     }
     
     //Bottom actions        
-    if ($('.bottom_actions').length) {        
+    if ($('.bottom_actions').length) {
+        
         if (!$('.bottom_actions').attr('data-top')) {
             // If already fixed, then do nothing
             if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
             
             // Remember top position
             var offset = $('.bottom_actions').offset();            
-            $('.bottom_actions').attr('data-top', offset.top);            
+            $('.bottom_actions').attr('data-top', offset.top);          
         }
         
-        if ($('.bottom_actions').attr('data-top') > $('body').outerHeight())  {
+        if ($('.bottom_actions').attr('data-top') > $('body').outerHeight()) {
             if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {              
                 $('.bottom_actions').addClass('bottom_actions_fixed');
+                $('.bottom_actions').css("width", "100%");
             } else {
+                $('.bottom_actions').css("width", "");
                 $('.bottom_actions').removeClass('bottom_actions_fixed');
             }
         } else {
             if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {              
                 $('.bottom_actions').addClass('bottom_actions_fixed');
+                $('.bottom_actions').css("width", "100%");
             } else {
                 $('.bottom_actions').removeClass('bottom_actions_fixed');
+                $('.bottom_actions').css("width", "");
             }
         }
     }    

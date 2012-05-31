@@ -100,17 +100,16 @@ class IndexManager {
 			}
 		}
 		return $announcements;
-	}
-	
-	
+	}	
 		
 	/**
 	 * This function handles the logout and is called whenever there is a $_GET['logout']
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 */
-	function logout() {
+	function logout() {        
 		global $_configuration, $extAuthSource;
+        
 		// Variable initialisation.
 		$query_string = '';
 	
@@ -122,8 +121,7 @@ class IndexManager {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 	
 		// Selecting the last login of the user.
-		$uid = $this->user_id;
-        
+		$uid = $this->user_id;        
            
         //Changing global chat status to offline
         if (api_get_setting('allow_global_chat') == 'true') {

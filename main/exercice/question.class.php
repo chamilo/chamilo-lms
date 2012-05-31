@@ -1242,15 +1242,15 @@ abstract class Question
 	/**
 	 * Displays the menu of question types
 	 */
-	static function display_type_menu ($feedbacktype = 0) {
+	static function display_type_menu ($feedback_type = 0) {
 		global $exerciseId;
         $course_id = api_get_course_int_id();
         
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::get_question_type_list();
 
-		if (!isset($feedbacktype)) $feedbacktype=0;
-		if ($feedbacktype==1) {
+		if (!isset($feedback_type)) $feedback_type=0;
+		if ($feedback_type==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			//$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]);  
@@ -1300,7 +1300,7 @@ abstract class Question
 		echo '<li>';
 		echo '<div class="icon_image_content">';
 		if ($show_quiz_edition) {
-			if ($feedbacktype==1) {
+			if ($feedback_type==1) {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
 			} else {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';

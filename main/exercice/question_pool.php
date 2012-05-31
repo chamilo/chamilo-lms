@@ -384,7 +384,7 @@ $new_question_list['-1']  = get_lang('All');
 $objExercise = new Exercise();
 $objExercise->read($fromExercise);
 foreach ($question_list as $key=>$item) {
-    if ($objExercise->feedbacktype == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+    if ($objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
         if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
             continue;
         }
@@ -488,7 +488,7 @@ else {
 		$filter .= ' AND qu.type='.$answerType.' ';
 	}
 //	// why these lines ?
-//  if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+//  if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 //      $filter .= ' AND qu.type <> '.HOT_SPOT_DELINEATION.' ';
 //  }
 //  // fwhy
@@ -525,7 +525,7 @@ else {
                 if ($courseCategoryId > 0 && Testcategory::getCategoryForQuestion($question_obj->id, $selected_course)) {
                 	continue;
                 }
-                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                    if ($question_obj->type == HOT_SPOT_DELINEATION)  {
                      continue;
                    }

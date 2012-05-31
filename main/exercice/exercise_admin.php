@@ -209,7 +209,7 @@ if ($form->validate()) {
 	}
 	echo '</div>';	
 	
-	if ($objExercise->feedbacktype==1)
+	if ($objExercise->feedback_type==1)
 		Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
 		
 	if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {

@@ -137,7 +137,7 @@ if (!empty($question_list)) {
 	 	if ($show_results) { 	    
             // display question category, if any
  	        Testcategory::displayCategoryAndTitle($questionId, $display_category_name );	 	    
-		    echo $objQuestionTmp->return_header($objExercise->feedbacktype, $counter);
+		    echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
 		}
 		$counter++;	
 		if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {

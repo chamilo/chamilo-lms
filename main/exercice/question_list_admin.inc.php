@@ -135,7 +135,7 @@ $(function() {
 
 echo '<div class="actionsbig">';
 //we filter the type of questions we can add
-Question :: display_type_menu ($objExercise->feedbacktype);
+Question :: display_type_menu ($objExercise->feedback_type);
 echo '</div><div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();

@@ -415,7 +415,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     $nro_question = $current_question; // - 1;
                  	$questionId   = $key;                    
                     // gets the student choice for this question
@@ -950,7 +950,7 @@ if (!empty($error)) {
                 $i++;
                 continue;
             } else {
-                if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     // if the user has already answered this question
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object

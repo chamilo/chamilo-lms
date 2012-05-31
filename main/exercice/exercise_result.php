@@ -110,7 +110,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$feedback_type           = $objExercise->feedbacktype;
+$feedback_type           = $objExercise->feedback_type;
 $exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -215,9 +215,8 @@ if ($origin != 'learnpath') {
 
 //	Updates the empty exercise
 
-$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
+$quiz_duration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 
-$feed = $objExercise->feedbacktype; 
 if (api_is_allowed_to_session_edit()) {	
 	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');	
 }
@@ -237,7 +236,7 @@ if ($origin != 'learnpath') {
 	Display::display_footer();
 } else {
 	$lp_mode =  $_SESSION['lp_mode'];
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$safe_lp_id.'&lp_item_id='.$safe_lp_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$feed;
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$safe_lp_id.'&lp_item_id='.$safe_lp_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
 	//echo $total_score.','.$total_weight;	exit;	
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 	echo '<script type="text/javascript">'.$href.'</script>'."\n";

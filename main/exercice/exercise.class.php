@@ -40,7 +40,7 @@ class Exercise {
 	public $active;
 	public $timeLimit;
     public $attempts;
-    public $feedbacktype;
+    public $feedback_type;
 	public $end_time;
 	public $start_time;
 	public $questionList;  // array with the list of this exercise's questions
@@ -123,7 +123,7 @@ class Exercise {
 			$this->active                   = $object->active;
 			$this->results_disabled         = $object->results_disabled;
 			$this->attempts                 = $object->max_attempt;
-			$this->feedbacktype             = $object->feedback_type;
+			$this->feedback_type            = $object->feedback_type;
 			$this->propagate_neg            = $object->propagate_neg;
 			$this->randomByCat              = $object->random_by_category;
 			$this->text_when_finished       = $object->text_when_finished; 
@@ -208,7 +208,7 @@ class Exercise {
 	 * @return - numeric - exercise attempts
 	 */
 	function selectFeedbackType() {
-		return $this->feedbacktype;
+		return $this->feedback_type;
 	}
 
 
@@ -504,7 +504,7 @@ class Exercise {
 	 * @param - numeric $attempts - exercise max attempts
 	 */
 	function updateFeedbackType($feedback_type) {
-		$this->feedbacktype=$feedback_type;
+		$this->feedback_type=$feedback_type;
 	}
 
 	/**
@@ -652,7 +652,7 @@ class Exercise {
 		$sound                  = $this->sound;
 		$type                   = $this->type;
 		$attempts               = $this->attempts;
-		$feedbacktype           = $this->feedbacktype;
+		$feedback_type           = $this->feedback_type;
 		$random                 = $this->random;
 		$random_answers         = $this->random_answers;
 		$active                 = $this->active;
@@ -666,7 +666,7 @@ class Exercise {
 		$session_id             = api_get_session_id();
 		 
 		//If direct we do not show results
-		if ($feedbacktype == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+		if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
 			$results_disabled = 0;
 		} else {
 			$results_disabled = intval($this->results_disabled);
@@ -697,7 +697,7 @@ class Exercise {
 					random         ='".Database::escape_string($random)."',
 					random_answers ='".Database::escape_string($random_answers)."',
 					active         ='".Database::escape_string($active)."',
-					feedback_type  ='".Database::escape_string($feedbacktype)."',
+					feedback_type  ='".Database::escape_string($feedback_type)."',
 					start_time     = '$start_time',
 					end_time       = '$end_time',
 					max_attempt    ='".Database::escape_string($attempts)."',
@@ -736,7 +736,7 @@ class Exercise {
 						'".Database::escape_string($active)."',
 						'".Database::escape_string($results_disabled)."',
 						'".Database::escape_string($attempts)."',
-						'".Database::escape_string($feedbacktype)."',
+						'".Database::escape_string($feedback_type)."',
 						'".Database::escape_string($expired_time)."',
 						'".Database::escape_string($session_id)."',
 						'".Database::escape_string($review_answers)."',

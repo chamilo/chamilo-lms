@@ -356,7 +356,7 @@ class UniqueAnswer extends Question {
 			<tr>
 				<td><i>'.get_lang("Choice").'</i> </td>
 				<td><i>'. get_lang("ExpectedChoice").'</i></td>
-				<td><i>'. get_lang("Answer").'</i></td>';
+				<td><i>'. get_lang("Answer").'</i></td>';        
 				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
     				$header .= '<td><i>'.get_lang("Comment").'</i></td>';
 				} else { 

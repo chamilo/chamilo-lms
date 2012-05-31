@@ -12,9 +12,6 @@
 
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 // Protection
 api_protect_course_script();
@@ -68,12 +65,15 @@ if ($is_allowed_in_course == false) {
     api_not_allowed(true);
 }
 
+
+
 //Check user visibility
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }
+
 
 //TODO:clean all code
 
@@ -88,6 +88,7 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 
 $pathinfo = pathinfo($header_file);
+
 if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
 		echo '<br/>';
@@ -99,6 +100,6 @@ if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web
 		echo '</applet>';
 	echo '</div>';
 } else {
-	if ($pathinfo['extension']=='swf') { $width='83%'; $height='83%';} else {$width='100%'; $height='100%';}	
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+	if ($pathinfo['extension']=='swf') { $width='83%'; $height='83%';} else {$width='100%'; $height='100%';}
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';
 }

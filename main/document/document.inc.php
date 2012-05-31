@@ -262,9 +262,9 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 				//$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;
 				//Simpler version of showinframesmin.php with no headers 
 				$url = 'show_content.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid.'&width=700&height=500';
-				$class = 'thickbox';
+				$class = 'ajax';
 				if ($visibility == false) {
-					$class = "thickbox invisible";
+					$class = "ajax invisible";
 				}								
 				return '<a href="'.$url.'" class="'.$class.'" title="'.$tooltip_title_alt.'" style="float:left">'.$title.'</a>'.$force_download_html.$send_to.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
 			} else {

@@ -2573,8 +2573,8 @@ class DocumentManager {
     	if ($lp_id == false) {
     		$return .= "<script>    		
     		    	$('.doc_folder').mouseover(function() {	
-    					var my_id = this.id.split('_')[2];    						
-    					$('#'+my_id).show();
+    					var my_id = this.id.split('_')[2];
+    					$('#res_'+my_id).show();
     				});
     				
     				$('.close_div').click(function() {
@@ -2665,7 +2665,7 @@ class DocumentManager {
     				    
     				$return .= '<ul class="lp_resource">';
                     
-                        $return .= '<li class="doc_folder "  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+                        $return .= '<li class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
                         
                         if ($lp_id) {    				    				
                             $return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '"  '.$onclick.' >';
@@ -2713,8 +2713,12 @@ class DocumentManager {
     					}
     					
     					$link = Display::url('<img alt="" src="'.$img.'" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));    					 
-    					
-                        $return .= '<li class="doc_resource lp_resource_element" data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
+                        
+    					if ($lp_id == false) {
+                            $return .= '<li class="doc_resource" data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
+                        } else {
+                            $return .= '<li class="doc_resource lp_resource_element" data_id="'.$key.'" data_type="document" title="'.$my_file_title.'" >';
+                        }
                         
                         $return .= '<div class="item_data" style="margin-left:' . (($num +1) * 18) . 'px;margin-right:5px;">';
                         

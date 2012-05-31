@@ -22,8 +22,6 @@ api_protect_admin_script();
 
 // Database table definitions
 $table_admin 	= Database::get_main_table(TABLE_MAIN_ADMIN);
-$table_user 	= Database::get_main_table(TABLE_MAIN_USER);
-$database 		= Database::get_main_database();
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -229,7 +227,6 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-$select_level = array();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 $form->addGroup($html_results_enabled);
@@ -238,23 +235,20 @@ $form->addGroup($html_results_enabled);
 if( $form->validate()) {
 	$check = Security::check_token('post');
 	if ($check) {
-		$user = $form->exportValues();
-
-		$picture_element = & $form->getElement('picture');
-		$picture = $picture_element->getValue();
-		$picture_uri = '';
-		$lastname = $user['lastname'];
-		$firstname = $user['firstname'];
-		$official_code = $user['official_code'];
-		$email = $user['email'];
-		$phone = $user['phone'];
-		$username = $user['username'];
-		$status = intval($user['status']);
-		$language = $user['language'];
-		$picture = $_FILES['picture'];
+		$user = $form->exportValues();			
+		$lastname       = $user['lastname'];
+		$firstname      = $user['firstname'];
+		$official_code  = $user['official_code'];
+		$email          = $user['email'];
+		$phone          = $user['phone'];
+		$username       = $user['username'];
+		$status         = intval($user['status']);
+		$language       = $user['language'];
+		$picture        = $_FILES['picture'];
 		$platform_admin = intval($user['admin']['platform_admin']);
-		$send_mail = intval($user['mail']['send_mail']);
-		$hr_dept_id = intval($user['hr_dept_id']);
+		$send_mail      = intval($user['mail']['send_mail']);
+		$hr_dept_id     = intval($user['hr_dept_id']);
+        
 		if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
 			$auth_source = $user['password']['auth_source'];
 			$password = 'PLACEHOLDER';
@@ -262,18 +256,21 @@ if( $form->validate()) {
 			$auth_source = PLATFORM_AUTH_SOURCE;
 			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
 		}
+        
 		if ($user['radio_expiration_date'] == '1') {
 			$expiration_date = $user['expiration_date'];
 		} else {
 			$expiration_date = '0000-00-00 00:00:00';
 		}
+        
 		$active = intval($user['active']);
     
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
 
-		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
+		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, null, null, $send_mail);
+        
 		Security::clear_token();
 		$tok = Security::get_token();
 		if ($user_id === false) {
@@ -285,41 +282,19 @@ if( $form->validate()) {
 				$message .= ucfirst($bit);
 			}
 		} else {
-
  			if (!empty($picture['name'])) {
 				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
 			}
-
 			$extras = array();
-			foreach($user as $key => $value) {
+			foreach ($user as $key => $value) {
 				if (substr($key, 0, 6) == 'extra_') { //an extra field
-					$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 				}
 			}
-
 			if ($platform_admin) {
 				$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
 				Database::query($sql);
-			}
-			if (!empty($email) && $send_mail) {
-				$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-
-				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-				$email_admin = api_get_setting('emailAdministrator');
-
-				if ($_configuration['multiple_access_urls']) {
-					$access_url_id = api_get_current_access_url_id();
-					if ($access_url_id != -1) {
-						$url = api_get_access_url($access_url_id);
-						$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-					}
-				}
-				else {
-					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-				}
-				@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 			}
 			$message = get_lang('UserAdded');
 		}

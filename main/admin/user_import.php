@@ -120,16 +120,13 @@ function save_data($users) {
 	if (!isset($inserted_in_course)) {
 		$inserted_in_course = array();
 	}
-	require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+	require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';	
 	$send_mail = $_POST['sendMail'] ? 1 : 0;
 	if (is_array($users)) {
 		foreach ($users as $index => $user)	{
 			$user = complete_missing_data($user);
-
 			$user['Status'] = api_status_key($user['Status']);
-
-			$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
+			$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
 			if (!is_array($user['Courses']) && !empty($user['Courses'])) {
 				$user['Courses'] = array($user['Courses']);
 			}
@@ -169,15 +166,6 @@ function save_data($users) {
 					$value 	= $user[$extras[1]];
 					UserManager::update_extra_field_value($user_id, $key,$value);
 				}
-			}
-
-			if ($send_mail) {
-				$recipient_name = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-				$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$user['UserName']."\n".get_lang('Pass')." : ".$user['Password']."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
-				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-				$email_admin = api_get_setting('emailAdministrator');
-				@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name, $email_admin);
 			}
 		}
 	}

@@ -106,13 +106,10 @@ foreach($Sessions as $session){
 					$expiration_date='0000-00-00 00:00:00';
 					$active=1;
 					// Ajout de l'utilisateur
-					if (UserManager::is_username_available($username))
-					{
+					if (UserManager::is_username_available($username)) {
 						$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
 						$UserAdd[]=$user_id;
-					}
-					else
-					{
+					} else {
 						$user = UserManager::get_user_info($username);
 						$user_id=$user['user_id'];
 						UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);

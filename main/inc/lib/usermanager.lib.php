@@ -60,10 +60,11 @@ class UserManager {
 	  * if it exists, $_user['user_id'] is the creator id. If a problem arises,
 	  * it stores the error message in global $api_failureList
 	  */
-	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
+	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false) {
 		global $_user, $_configuration;
-
+        $original_password = $password;
         $access_url_id = 1;
+        
 		if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();
         }
@@ -139,20 +140,37 @@ class UserManager {
 		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
-			$return = Database::insert_id();
-			
-			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+			$return = Database::insert_id();			
 			if (api_get_multiple_access_url()) {		
 				UrlManager::add_user_to_url($return, api_get_current_access_url_id());				
 			} else {
 				//we are adding by default the access_url_user table with access_url_id = 1
 				UrlManager::add_user_to_url($return, 1);
 			}
+            
+            if (!empty($email) && $send_mail) {
+				$recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
+				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+
+				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+				$email_admin = api_get_setting('emailAdministrator');
+
+				if ($_configuration['multiple_access_urls']) {
+					$access_url_id = api_get_current_access_url_id();
+					if ($access_url_id != -1) {
+						$url = api_get_access_url($access_url_id);
+						$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+					}
+				} else {
+					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+				}                
+				@api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);                
+			}           
 
 			// Add event to system log			
 			$user_id_manager = api_get_user_id();
 			$user_info = api_get_user_info($return);
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager,null,$user_info);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager, null, $user_info);
 
 		} else {
 			//echo "false - failed" ;
@@ -419,26 +437,45 @@ class UserManager {
 	 * @param	array	A series of additional fields to add to this user as extra fields (optional, defaults to null)
 	 * @return boolean true if the user information was updated
 	 */
-	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '') {
+	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0) {
 		global $_configuration;
+        $original_password = $password;
+        
+        $user_info = api_get_user_info($user_id, false, true);
+        
+        if ($reset_password == 0) {
+			$password = null;
+			$auth_source = $user_info['auth_source'];
+		} elseif($reset_password == 1) {
+			$original_password = $password = api_generate_password();
+			$auth_source = PLATFORM_AUTH_SOURCE;
+		} elseif($reset_password == 2) {
+			$password = $password;
+			$auth_source = PLATFORM_AUTH_SOURCE;
+		} elseif($reset_password == 3) {
+			$password = $password;
+			$auth_source = $auth_source;
+		}
+        
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
+        
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		
 		//Checking the user language
         $languages = api_get_languages();   
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
-        }
-		
+        }		
         
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',
 				username='".Database::escape_string($username)."',
 				language='".Database::escape_string($language)."',";
+        
 		if (!is_null($password)) {
-			if($encrypt_method == '') {
+			if ($encrypt_method == '') {
 				$password = api_get_encrypted_password($password);
 			} else {
 				if ($_configuration['password_encryption'] === $encrypt_method ) {
@@ -476,6 +513,25 @@ class UserManager {
 				$res = $res && self::update_extra_field_value($user_id,$fname,$fvalue);
 			}
 		}
+        
+        if (!empty($email) && $send_email) {
+			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+
+			if ($_configuration['multiple_access_urls']) {
+				$access_url_id = api_get_current_access_url_id();
+				if ($access_url_id != -1) {
+					$url = api_get_access_url($access_url_id);
+					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+				}
+			} else {
+				$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+			}            
+			@api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+        }
+        
 		return $return;
 	}
 

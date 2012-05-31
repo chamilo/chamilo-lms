@@ -21,12 +21,12 @@ if (! isset($_SESSION['conditional_login']['uid']))
 </html>
 <?php
 if (isset($_POST['submit'])){
-  $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
-  $u['phone'] = $_POST['phone_number'];
-  $password = null; // we don't want to change the password 
-  $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], $password, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'],'');
-  if ($updated) {
+    $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+    $u['phone'] = $_POST['phone_number'];
+    $password = null; // we don't want to change the password 
+    $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], $password, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'],'');
+    if ($updated) {
     ConditionalLogin::login();
-  }
+    }
 }
 ?>

@@ -938,7 +938,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
  * @param array Non-standard user array
  * @return array Standard user array
  */
-function _api_format_user($user) {
+function _api_format_user($user, $add_password = false) {
     $result = array();
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
@@ -1022,6 +1022,11 @@ function _api_format_user($user) {
 		$result['user_is_online_in_chat'] = intval($user['user_is_online_in_chat']);
 	}	
     
+    
+    if ($add_password) {
+        $result['password'] = $user['password'];
+    }
+    
     return $result;
 }
 
@@ -1032,7 +1037,7 @@ function _api_format_user($user) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '', $check_if_user_is_online = false) {    
+function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {    
     if ($user_id == '') {
         return _api_format_user($GLOBALS['_user']);
     }
@@ -1054,7 +1059,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false) {
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        $user =  _api_format_user($result_array);        
+        $user =  _api_format_user($result_array, $show_password);        
         return $user;
     }	
     return false;

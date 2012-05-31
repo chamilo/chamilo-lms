@@ -8,7 +8,6 @@
 
 use \ChamiloSession as Session;
 
-
 $language_file = array('registration', 'admin');
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];
@@ -304,7 +303,7 @@ if ($form->validate()) {
     }
 
     // creating a new user
-    $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
+    $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null, 1, 0, null, null, true);
 
         // Terms & Conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -391,9 +390,7 @@ if ($form->validate()) {
                 $admin_list = Database::fetch_array($result_list);
                 $emailto = $admin_list['email'];
 
-                // 2. send mail to the platform admin
-                $emailfromaddr 	 = api_get_setting('emailAdministrator');
-                $emailfromname 	 = api_get_setting('siteName');
+                // 2. send mail to the platform admin                
                 $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
                 $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
                 $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
@@ -417,7 +414,7 @@ if ($form->validate()) {
             unset($user_id);
             
             if (!CustomPages::enabled()) {
-              Display :: display_footer();
+                Display :: display_footer();
             }
             exit;
         }
@@ -440,7 +437,9 @@ if ($form->validate()) {
         Session::write('user_last_login_datetime',$user_last_login_datetime);
 
         /* EMAIL NOTIFICATION */
-
+        //already added in UserManager::add_user();
+        
+        /*
         if (strpos($values['email'], '@') !== false) {
             // Let us predefine some variables. Be sure to change the from address!
             $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
@@ -466,9 +465,9 @@ if ($form->validate()) {
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
             @api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-        }
+        }*/
     }
-
+    $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
     $display_text =  '<p>'.get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
 
     if (!empty ($values['email'])) {

@@ -278,7 +278,8 @@ if ($_SESSION['status'][$course_code] == 5) {
 $_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
-$margin_left = '290px';
+$margin_left = '305px';
+
 if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $display_none = ';display:none;';
     $margin_left = '12px';
@@ -315,10 +316,8 @@ if (Database::num_rows($res_media) > 0) {
 ?>
 
 <div id="learning_path_main" style="width:100%;height:100%;">
-
     <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
         <!-- header -->
-
         <div id="header">        
             <table>
                 <tr>
@@ -334,7 +333,6 @@ if (Database::num_rows($res_media) > 0) {
                 </tr>
             </table>
         </div>
-
         <!-- end header -->
 
         <!-- Author image preview -->        
@@ -372,7 +370,7 @@ if (Database::num_rows($res_media) > 0) {
         </div>
         <!-- end media player layout -->
 
-        <!-- TOC layout -->        
+        <!-- TOC layout -->
         <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc(); ?>

@@ -205,7 +205,20 @@ if (!$jplayer_supported) {
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
-    $show_web_odf  = true;
+    $show_web_odf  = true;    
+    $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
+    $htmlHeadXtra[] = '
+    <script charset="utf-8">        
+        function init() {
+                var odfelement = document.getElementById("odf"),
+                odfcanvas = new odf.OdfCanvas(odfelement);
+                odfcanvas.load("'.$file_url_web.'");
+        }
+        $(document).ready(function() {        
+            window.setTimeout(init, 0);
+        });        
+  </script>';
 }
 
 if ($jplayer_supported) {
@@ -243,39 +256,40 @@ if ($jplayer_supported) {
 
 Display::display_header('');
 
-if ($jplayer_supported) {
-    echo '<div align="center">';
-    $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
-    echo '</div>';
+$execute_iframe = true;
+
+echo '<div align="center">';
+$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+
+if ($show_web_odf) {        
+    //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
+    echo '<div id="odf"></div>';
+    $execute_iframe = false;
+}
+echo '</div>';
     
+if ($jplayer_supported) {        
     echo '<br /><div class="span12" style="margin:0 auto; width:100%; text-align:center;">';
     echo DocumentManager::generate_video_preview($document_data);
-    echo '</div>';
-    
-} else {
-    echo '<div align="center">';
-    $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';
-
-    if ($show_web_odf) {
-        //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
-    }
-    echo "</div>";    
+    echo '</div>'; 
+    $execute_iframe = false;
 }
 
 if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
-	echo '<div align="center">';
-		echo '<br/>';
-		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
-			echo '<param name="SoundFileURL" value="'.$file_url_web.'" />';
-			echo '<param name="ShowSaveButton" value="false" />';
-			echo '<param name="ShowTime" value="true" />';
-			echo '<param name="ShowRecordButton" value="false" />';
-		echo '</applet>';
-	echo '</div>';
-} else {
-	//echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+    echo '<div align="center">';
+        echo '<br/>';
+        echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
+            echo '<param name="SoundFileURL" value="'.$file_url_web.'" />';
+            echo '<param name="ShowSaveButton" value="false" />';
+            echo '<param name="ShowTime" value="true" />';
+            echo '<param name="ShowRecordButton" value="false" />';
+        echo '</applet>';
+    echo '</div>';
+    $execute_iframe = false;
 }
 
+if ($execute_iframe) {
+    echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+}
 Display::display_footer();

@@ -76,8 +76,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('languagePr
 -- Email is login 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('login_is_email','true','Yes'),('login_is_email','false','No') ;
--- INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0);
--- INSERT INTO settings_options (variable, value, display_text) VALUES ('activate_send_event_by_mail', 'true', 'Yes'),('activate_send_event_by_mail', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('scorm_cumulative_session_time','true','Yes'), ('scorm_cumulative_session_time','false','No');
 CREATE TABLE event_type ( id int unsigned NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, name_lang_var varchar(50) NOT NULL, desc_lang_var varchar(50) NOT NULL,`extendable_variables` varchar(255) NOT NULL, PRIMARY KEY (id));
@@ -210,6 +208,15 @@ ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'main/auth/courses.php', 'CourseCatalog');
 
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
+
+-- Event mail
+
+CREATE TABLE event_email_template (  id int(11) NOT NULL AUTO_INCREMENT,  message text,  subject varchar(255) DEFAULT NULL,  event_type_name varchar(255) DEFAULT NULL,  activated tinyint(4) NOT NULL DEFAULT '0',  language_id int(11) DEFAULT NULL,  PRIMARY KEY (id));
+ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
+CREATE TABLE event_sent (  id int(11) NOT NULL AUTO_INCREMENT,  user_from int(11) NOT NULL,  user_to int(11) DEFAULT NULL,  event_type_name varchar(100) DEFAULT NULL,  PRIMARY KEY (`id`));ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
+CREATE TABLE user_rel_event_type (  id int(11) NOT NULL AUTO_INCREMENT,  user_id int(11) NOT NULL,  event_type_name varchar(255) NOT NULL,  PRIMARY KEY (`id`));ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('activate_email_template', 'true', 'Yes'),('activate_email_template', 'false', 'No');
 
 -- Skills
 

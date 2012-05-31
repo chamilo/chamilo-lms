@@ -866,7 +866,9 @@ VALUES
 ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
 ('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
+('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
 ('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18109','DatabaseVersion','', NULL, NULL, 0);
+
 
 /*
 ('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
@@ -878,9 +880,6 @@ VALUES
 ('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
 ('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
 ('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
-('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
-('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
-('activate_send_event_by_mail', NULL, 'radio', 'Platform', 'false', 'ActivateSendEventByMailTitle', 'ActivateSendEventByMailComment', NULL, NULL, 0),
 */
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1218,13 +1217,11 @@ VALUES
 ('enable_webcam_clip', 'true', 'Yes'),
 ('enable_webcam_clip', 'false', 'No'),
 ('platform_unsubscribe_allowed', 'true', 'Yes'),
-('platform_unsubscribe_allowed', 'false', 'No');
+('platform_unsubscribe_allowed', 'false', 'No'),
+('activate_email_template', 'true', 'Yes'),
+('activate_email_template', 'false', 'No');
 
 UNLOCK TABLES;
-/*
-('activate_send_event_by_mail', 'true', 'Yes'),
-('activate_send_event_by_mail', 'false', 'No'),
-*/
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
 
@@ -2897,27 +2894,36 @@ CREATE TABLE IF NOT EXISTS skill_rel_profile (
 --
 -- Table structure for event email sending
 --
-DROP TABLE IF EXISTS event_type;
-CREATE TABLE IF NOT EXISTS event_type (
-  id smallint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  name_lang_var varchar(50) NOT NULL,
-  desc_lang_var varchar(50) NOT NULL,
-  extendable_variables varchar(255) NOT NULL,
+DROP TABLE IF EXISTS event_email_template;
+CREATE TABLE event_email_template (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  message text,
+  subject varchar(255) DEFAULT NULL,
+  event_type_name varchar(255) DEFAULT NULL,
+  activated tinyint(4) NOT NULL DEFAULT '0',
+  language_id int(11) DEFAULT NULL,
   PRIMARY KEY (id)
 );
-ALTER TABLE event_type ADD INDEX ( name );
+ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
 
-DROP TABLE IF EXISTS event_type_email_template;
-CREATE TABLE IF NOT EXISTS event_type_email_template (
-  id int unsigned NOT NULL AUTO_INCREMENT,
-  event_type_id int unsigned NOT NULL,
-  language_id smallint unsigned NOT NULL,
-  message text NOT NULL,
-  subject varchar(255) NOT NULL,
-  PRIMARY KEY (id)
+DROP TABLE IF EXISTS event_sent;
+CREATE TABLE event_sent (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_from int(11) NOT NULL,
+  user_to int(11) DEFAULT NULL,
+  event_type_name varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 );
-ALTER TABLE event_type_email_template ADD INDEX ( language_id );
+ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
+
+DROP TABLE IF EXISTS user_rel_event_type;
+CREATE TABLE user_rel_event_type (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id int(11) NOT NULL,
+  event_type_name varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
 
 --
 -- Table structure for LP custom storage API

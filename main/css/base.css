@@ -3881,6 +3881,6 @@ footer {
     border: 1px dotted green;
 }
 
-.course_thing_to_do .thumbnail {
+#course_thing_to_do .thumbnail {
     text-align: center;    
 }

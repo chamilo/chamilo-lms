@@ -382,14 +382,16 @@ $resultcategories[] = array('category' => 'Editor');
 $resultcategories[] = array('category' => 'Security');
 $resultcategories[] = array('category' => 'Tuning');
 $resultcategories[] = array('category' => 'Gradebook');
-$resultcategories[] = array('category' => 'LDAP');
 $resultcategories[] = array('category' => 'Timezones');
 $resultcategories[] = array('category' => 'Tracking');
-$resultcategories[] = array('category' => 'CAS');
 $resultcategories[] = array('category' => 'Search');
 $resultcategories[] = array('category' => 'Stylesheets');
 $resultcategories[] = array('category' => 'Templates');
 $resultcategories[] = array('category' => 'Plugins');
+$resultcategories[] = array('category' => 'LDAP');
+$resultcategories[] = array('category' => 'CAS');
+$resultcategories[] = array('category' => 'Shibboleth');
+$resultcategories[] = array('category' => 'Facebook');
 
 
 foreach ($resultcategories as $row) {

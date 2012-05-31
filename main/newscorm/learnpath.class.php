@@ -4815,6 +4815,146 @@ class learnpath {
     }
     
     public function return_new_tree($update_audio = 'false') {
+        
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';        
+        echo '
+        <script>
+        var newOrderData= "";
+        function processChildren(parentId) {
+            //Loop through the children of the UL element defined by the parentId
+            var ulParentID= "UL_" + parentId;
+            $("#" + ulParentID).children().each(function () {
+
+                /*Only process elements with an id attribute (in order to skip the blank,
+                    unmovable <li> elements.*/
+
+                if ($(this).attr("id")) {
+                    /*Build a string of data with the childs ID and parent ID, 
+                        using the "|" as a delimiter between the two IDs and the "^" 
+                        as a record delimiter (these delimiters were chosen in case the data
+                        involved includes more common delimiters like commas within the content)
+                    */
+                    newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
+
+                    //Determine if this child is a containter
+                    if ($(this).is(".container")) {
+                        //Process the child elements of the container
+                        processChildren($(this).attr("id"));
+                    }
+                }				
+            });  //end of children loop		
+        } //end of processChildren function	
+
+        $(function() {
+
+            $(".item_data").live("mouseover", function(event) {        
+                $(".button_actions", this).show();        
+            });
+
+            $(".item_data").live("mouseout", function() {
+                $(".button_actions",this).hide();
+            });
+
+            $(".button_actions").hide();
+
+            $( ".lp_resource" ).sortable({
+                items: ".lp_resource_element ",        
+                handle: ".moved", //only the class "moved"
+                cursor: "move",
+                connectWith: "#lp_item_list",
+                placeholder: "ui-state-highlight", //defines the yellow highlight        
+
+                start: function(event, ui) {        
+                    $(ui.item).css("width", "160px");            
+                    $(ui.item).find(".item_data").attr("style", "");
+
+                },
+                stop: function(event, ui) {        
+                    $(ui.item).css("width", "100%");
+                },
+            });
+
+            $("#lp_item_list").sortable({
+                items: "li",
+                handle: ".moved", //only the class "moved" 
+                cursor: "move",
+                placeholder: "ui-state-highlight", //defines the yellow highlight             
+
+                update: function(event, ui) {
+
+                    //Walk through the direct descendants of the lp_item_list <ul>
+                    $("#lp_item_list").children().each(function () {
+
+                        /*Only process elements with an id attribute (in order to skip the blank,
+                        unmovable <li> elements.*/
+
+                        if ($(this).attr("id")) {
+                                /*Build a string of data with the child s ID and parent ID, 
+                                using the "|" as a delimiter between the two IDs and the "^" 
+                                as a record delimiter (these delimiters were chosen in case the data
+                                involved includes more common delimiters like commas within the content)
+                                */
+                                newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
+
+                                //Determine if this child is a containter
+                                if ($(this).is(".li_container")) {
+                                    //Process the child elements of the container
+                                    processChildren($(this).attr("id"));
+                                }
+                            }
+                    }); //end of lp_item_list children loop
+
+                    var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+                    $.post("'.$ajax_url.'", order, function(reponse){
+                        $("#message").html(reponse);
+                    });            
+                },
+                receive: function(event, ui) {
+
+                    var id = $(ui.item).attr("data_id");            
+                    var type = $(ui.item).attr("data_type");
+                    var title = $(ui.item).attr("title");
+
+                    if (ui.item.parent()[0]) {
+                        var parent_id = $(ui.item.parent()[0]).attr("id");
+                        var previous_id = $(ui.item.prev()).attr("id");
+
+                        if (parent_id) {
+                            parent_id = parent_id.split("_")[1];                    
+                            var params = {
+                                    "a": "add_lp_item",
+                                    "id": id,
+                                    "parent_id": parent_id,
+                                    "previous_id": previous_id,
+                                    "type": type,
+                                    "title" : title
+                                };
+                            $.ajax({
+                                type: "GET",
+                                url: "'.$ajax_url.'",
+                                data: params,                        
+                                async: false, 
+                                success: function(data) {
+                                    if (data == -1) {                                
+                                    } else {
+
+                                        $(".normal-message").hide();
+                                        $(ui.item).attr("id", data);
+                                        $(ui.item).addClass("lp_resource_element_new");                                
+                                        $(ui.item).find(".item_data").attr("style", "");
+                                        $(ui.item).addClass("record li_container");
+                                        $(ui.item).removeClass("lp_resource_element");
+                                        $(ui.item).removeClass("doc_resource");                                
+                                    }                            
+                                }
+                            });
+                        }
+                    }//            
+                }//end receive
+            });      
+        });
+        </script>';
+        
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
         
         $course_id = api_get_course_int_id();
@@ -4824,7 +4964,7 @@ class learnpath {
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         $result = Database::query($sql);
-        $arrLP = array ();
+        $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
             $row['title'] = Security :: remove_XSS($row['title']);
             $row['description'] = Security :: remove_XSS($row['description']);
@@ -4925,10 +5065,21 @@ class learnpath {
 
                 $delete_icon .= ' <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
                 $delete_icon .= Display::return_icon('delete.png', get_lang('_delete_learnpath_module'), array(), ICON_SIZE_TINY);
-                $delete_icon .= '</a>';
+                $delete_icon .= '</a>';                
+         
+                $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
+      
+                if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'chapter') {
+                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
+                }
+                
+                //if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'chapter') {
+                    $moves_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');
+                //}
+                
             }
             if ($update_audio != 'true') {
-            	$row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$delete_icon, array('class'=>'button_actions'));
+            	$row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$prerequisities_icon.$moves_icon.$delete_icon, array('class'=>'button_actions'));
             } else {
             	$row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));            	
             }           
@@ -4984,9 +5135,11 @@ class learnpath {
             	}
             }            
         }    
+        if ($update_audio == 'false') {
+            $return = '<div class="lp_tree well">';
+        }
         
-        $return = '<ul id="lp_item_list">';
-        
+        $return .= '<ul id="lp_item_list">';        
         $return .='<h4>'.$this->name.'</h4><br>';
         
         $tree = self::print_recursive($elements, $default_data, $default_content);
@@ -4999,7 +5152,9 @@ class learnpath {
         $return .= '</ul>';
         if ($update_audio == 'true') {
             $return = $return_audio;
-        }        
+        } else {
+            $return .= '</div>';
+        }
         return $return;
     }
     

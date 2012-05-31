@@ -24,147 +24,8 @@ include 'resourcelinker.inc.php';
 
 $language_file = 'learnpath';
 
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
 $htmlHeadXtra[] = '
 <script>
-
-var newOrderData= "";
-
-function processChildren(parentId) {
-    //Loop through the children of the UL element defined by the parentId
-    var ulParentID= "UL_" + parentId;
-    $("#" + ulParentID).children().each(function () {
-
-        /*Only process elements with an id attribute (in order to skip the blank,
-            unmovable <li> elements.*/
-
-        if ($(this).attr("id")) {
-            /*Build a string of data with the childs ID and parent ID, 
-                using the "|" as a delimiter between the two IDs and the "^" 
-                as a record delimiter (these delimiters were chosen in case the data
-                involved includes more common delimiters like commas within the content)
-            */
-            newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
-
-            //Determine if this child is a containter
-            if ($(this).is(".container")) {
-                //Process the child elements of the container
-                processChildren($(this).attr("id"));
-            }
-        }				
-    });  //end of children loop		
-} //end of processChildren function	
-   
-$(function() {
-
-    $(".item_data").live("mouseover", function(event) {        
-        $(".button_actions", this).show();        
-    });
-
-    $(".item_data").live("mouseout", function() {
-        $(".button_actions",this).hide();
-    });
-
-    $(".button_actions").hide();
-
-    $( ".lp_resource" ).sortable({
-        items: ".lp_resource_element ",        
-        handle: ".moved", //only the class "moved"
-        cursor: "move",
-        connectWith: "#lp_item_list",
-        placeholder: "ui-state-highlight", //defines the yellow highlight        
-            
-        start: function(event, ui) {        
-            $(ui.item).css("width", "160px");            
-            $(ui.item).find(".item_data").attr("style", "");
-            
-        },
-        stop: function(event, ui) {        
-            $(ui.item).css("width", "100%");
-        },
-    });
-    
-    $("#lp_item_list").sortable({
-		items: "li",
-		handle: ".moved", //only the class "moved" 
-		cursor: "move",
-		placeholder: "ui-state-highlight", //defines the yellow highlight             
-    
-        update: function(event, ui) {
-        
-            //Walk through the direct descendants of the lp_item_list <ul>
-            $("#lp_item_list").children().each(function () {
-			
-                /*Only process elements with an id attribute (in order to skip the blank,
-                unmovable <li> elements.*/
-
-                if ($(this).attr("id")) {
-                        /*Build a string of data with the child s ID and parent ID, 
-                        using the "|" as a delimiter between the two IDs and the "^" 
-                        as a record delimiter (these delimiters were chosen in case the data
-                        involved includes more common delimiters like commas within the content)
-                        */
-                        newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
-
-                        //Determine if this child is a containter
-                        if ($(this).is(".li_container")) {
-                            //Process the child elements of the container
-                            processChildren($(this).attr("id"));
-                        }
-                    }
-            }); //end of lp_item_list children loop
-            
-            var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-            $.post("'.$ajax_url.'", order, function(reponse){
-                $("#message").html(reponse);
-            });            
-        },
-        receive: function(event, ui) {
-        
-            var id = $(ui.item).attr("data_id");            
-            var type = $(ui.item).attr("data_type");
-            var title = $(ui.item).attr("title");
-
-            if (ui.item.parent()[0]) {
-                var parent_id = $(ui.item.parent()[0]).attr("id");
-                var previous_id = $(ui.item.prev()).attr("id");
-                    
-                if (parent_id) {
-                    parent_id = parent_id.split("_")[1];                    
-                    var params = {
-                            "a": "add_lp_item",
-                            "id": id,
-                            "parent_id": parent_id,
-                            "previous_id": previous_id,
-                            "type": type,
-                            "title" : title
-                        };
-                     $.ajax({
-                        type: "GET",
-                        url: "'.$ajax_url.'",
-                        data: params,                        
-                        async: false, 
-                        success: function(data) {
-                            if (data == -1) {                                
-                            } else {
-                            
-                                $(".normal-message").hide();
-                                $(ui.item).attr("id", data);
-                                $(ui.item).addClass("lp_resource_element_new");                                
-                                $(ui.item).find(".item_data").attr("style", "");
-                                $(ui.item).addClass("record li_container");
-                                $(ui.item).removeClass("lp_resource_element");
-                                $(ui.item).removeClass("doc_resource");                                
-                            }                            
-                        }
-                    });
-                }
-            }//            
-        }//end receive
-	});      
-});
-
-
 var temp    = false;
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
@@ -309,10 +170,11 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 
 switch ($type) {
     case 'chapter':
+        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
         $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
-        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
         break;
     default:
         $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewStep'));
@@ -383,10 +245,8 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<div class="row-fluid" style="overflow:hidden">';
 echo '<div id="lp_sidebar" class="span4">';
 
-echo '<div class="lp_tree well">';
-// Build the tree with the menu items in it
 echo $_SESSION['oLP']->return_new_tree(); //echo $_SESSION['oLP']->build_tree();
-echo '</div>';    
+
 
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {    

@@ -55,8 +55,6 @@ $};'.$_SESSION['oLP']->get_js_dropdown_array().'</script>';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -98,13 +96,13 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-Display::display_header(null,'Path');
+Display::display_header(get_lang('Edit'),'Path');
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 ?>
@@ -146,21 +144,14 @@ $path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
 
 if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
-    $count_items = count($_SESSION['oLP']->ordered_items);
-    $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ' : ' class="lp_tree" ';
-    echo '<div '.$style.'>';
-    // Build the tree with the menu items in it.
-    echo $_SESSION['oLP']->build_tree();
-    echo '</div>';
+    echo $_SESSION['oLP']->return_new_tree();
+    
     // Show the template list
     echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
     echo '<br />';
     echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 } else {
-    echo '<div class="lp_tree" style="height:90%" >';
-    // Build the tree with the menu items in it.
-    echo $_SESSION['oLP']->build_tree();
-    echo '</div>';
+    echo $_SESSION['oLP']->return_new_tree();    
 }
         
 echo '</div>';

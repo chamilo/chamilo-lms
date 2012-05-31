@@ -337,8 +337,7 @@ switch ($action) {
                 exit;
             }
         }
-    break;
-
+        break;
     case 'build':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);  
@@ -351,29 +350,6 @@ switch ($action) {
             require 'lp_build.php';
         }
         break;
-
-    case 'delete_item':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if ($debug > 0) error_log('New LP - delete item action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
-        else {
-            $_SESSION['refresh'] = 1;
-            if (is_numeric($_GET['id'])) {
-                $_SESSION['oLP']->delete_item($_GET['id']);
-                $is_success = true;
-            }
-            require 'lp_add_item.php';
-            /*
-            if (isset($_GET['view']) && $_GET['view'] == 'build') {
-                
-            } else {
-                require 'lp_admin_view.php';
-            }*/
-        }
-        break;
-
     case 'edit_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -700,23 +676,23 @@ switch ($action) {
             }
         }
         break;
-
     case 'deleteitem':
-    case 'delete_item':
+    case 'delete_item':        
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - delete item action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
-        else {
-            $_SESSION['refresh'] = 1;
+        else {            
+            //$_SESSION['refresh'] = 1;
             if (!empty($_REQUEST['id'])) {
                 $_SESSION['oLP']->delete_item($_REQUEST['id']);
-            }
-            require 'lp_admin_view.php';
+            }            
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']);                        
+            header('Location: '.$url);
+            exit;
         }
         break;
-
     case 'edititemprereq':
     case 'edit_item_prereq':
         if (!$is_allowed_to_edit) {

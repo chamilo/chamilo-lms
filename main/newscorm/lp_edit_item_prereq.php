@@ -67,16 +67,15 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
 // Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-Display::display_header(null,'Path');
-//api_display_tool_title($therow['name']);
+Display::display_header(get_lang('Prerequisites'),'Path');
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -110,13 +109,7 @@ echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row-fluid">';
 echo '<div class="span3">';
-
-
-echo '<div class="lp_tree">';
-    // Build the tree with the menu items in it.
-    echo $_SESSION['oLP']->build_tree();
-echo '</div>';
-
+    echo $_SESSION['oLP']->return_new_tree();
 echo '</div>';
 echo '<div class="span9">';
 

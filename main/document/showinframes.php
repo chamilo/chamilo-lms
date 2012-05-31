@@ -26,9 +26,6 @@
  */
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 // Protection
 api_protect_course_script();
@@ -86,9 +83,17 @@ if ($is_allowed_in_course == false) {
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
 
-
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
+}
+
+$pathinfo = pathinfo($header_file);
+
+$jplayer_supported_files = array('mp4', 'ogv','flv');
+$jplayer_supported = false;
+
+if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
+    $jplayer_supported = true;
 }
 
 $group_id = api_get_group_id();
@@ -169,52 +174,95 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                 //   });';
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-<!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
--->
-</script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+if (!$jplayer_supported) {
+    $htmlHeadXtra[] = '<script type="text/javascript">
+    <!--
+        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+    -->
+    </script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 
-$htmlHeadXtra[] = '
+    $htmlHeadXtra[] = '<script>
+    <!--
+        var updateContentHeight = function() {
+            //HeaderHeight = document.getElementById("header").offsetHeight;
+            //FooterHeight = document.getElementById("footer").offsetHeight;
+            //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
+            my_iframe = document.getElementById("mainFrame");
+            //this doesnt seem to work in IE 7,8,9
+            new_height = my_iframe.contentWindow.document.body.scrollHeight;
+            my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+        };
 
-<script type="text/javascript">
-<!--
-    var updateContentHeight = function() {
-        //HeaderHeight = document.getElementById("header").offsetHeight;
-        //FooterHeight = document.getElementById("footer").offsetHeight;
-        //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
-        my_iframe = document.getElementById("mainFrame");
-        //this doesnt seem to work in IE 7,8,9
-        new_height = my_iframe.contentWindow.document.body.scrollHeight;
-        my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
-    };
-
-    // Fixes the content height of the frame
-    window.onload = function() {
-        updateContentHeight();
-        '.$js_glossary_in_documents.'
-    }
--->
-</script>';
-
-$pathinfo = pathinfo($header_file);
+        // Fixes the content height of the frame
+        window.onload = function() {
+            updateContentHeight();
+            '.$js_glossary_in_documents.'
+        }
+    -->
+    </script>';
+}
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
 }
 
+if ($jplayer_supported) {
+    
+    $extension = api_strtolower($pathinfo['extension']);
+    
+    $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
+    $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
+
+    $jquery = ' $("#jquery_jplayer_1").jPlayer({                                
+                    ready: function() {                    
+                        $(this).jPlayer("setMedia", {                                        
+                            '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
+                        });
+                    },                    
+                    errorAlerts: true,
+                    warningAlerts: true,
+                    //swfPath: "../inc/lib/javascript/jquery-jplayer",
+                     swfPath: "'.$js_path.'jquery-jplayer",
+                    //supplied: "m4a, oga, mp3, ogg, wav",
+                    supplied: "'.$extension.'",                        
+                    //wmode: "window",
+                    solution: "flash, html",  // Do not change this setting 
+                    cssSelectorAncestor: "#jp_container_1", 
+                });';
+    
+    $htmlHeadXtra[] = '<script>
+        $(document).ready( function() {            
+            //Experimental changes to preview mp3, ogg files        
+            '.$jquery.'            
+        });
+    </script>';
+}
+
 Display::display_header('');
 
-echo "<div align=\"center\">";
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';
+if ($jplayer_supported) {
+    echo '<div align="center">';
+    $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+    echo '</div>';
+    
+    echo '<br /><div class="span12" style="margin:0 auto; width:100%; text-align:center;">';
+    echo DocumentManager::generate_video_preview($document_data);
+    echo '</div>';
+    
+} else {
+    echo '<div align="center">';
+    $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';
 
-if ($show_web_odf) {
-    //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
+    if ($show_web_odf) {
+        //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
+    }
+    echo "</div>";    
 }
-echo "</div>";
 
 if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
@@ -226,8 +274,8 @@ if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web
 			echo '<param name="ShowRecordButton" value="false" />';
 		echo '</applet>';
 	echo '</div>';
+} else {
+	//echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
 }
-else{
-	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" height="600"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
-}
+
 Display::display_footer();

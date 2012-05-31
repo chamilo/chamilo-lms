@@ -38,7 +38,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 
-
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
@@ -478,7 +477,7 @@ $lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview
 */
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
-$file_list = $format_list = '';
+$format_list = '';
 $count = 1;
 
 if (!empty($docs_and_folders))

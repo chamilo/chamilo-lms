@@ -13,12 +13,9 @@
  */
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 
 api_protect_course_script();
 api_block_anonymous_users();
-
 
 if ($_user['user_id']!= api_get_user_id() || api_get_user_id()==0 || $_user['user_id']==0) {
 	api_not_allowed();
@@ -45,7 +42,7 @@ $urlcontents=Security::remove_XSS($_GET['image']);//A URL to the image on Pixlr.
 
 $title = Database::escape_string(str_replace('_',' ',$filename));
 $current_session_id = api_get_session_id();
-$groupId=$_SESSION['_gid'];
+$groupId= api_get_group_id();
 $relativeUrlPath=$_SESSION['paint_dir'];
 $currentTool=$_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -104,15 +101,14 @@ if ($content_type[0] != "image") {
 }
 
 //Verify that the file is an image. Fileinfo method
-if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
-	$finfo = new finfo(FILEINFO_MIME);
-	$current_mime=$finfo->buffer($contents);
-	finfo_close($finfo);
-	if(strpos($current_mime, 'image')===false) {
-		echo "Invalid mime type file";
-		exit;
-	}
+$finfo = new finfo(FILEINFO_MIME);
+$current_mime=$finfo->buffer($contents);
+finfo_close($finfo);
+if(strpos($current_mime, 'image')===false) {
+    echo "Invalid mime type file";
+    exit;
 }
+
 
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
@@ -121,11 +117,9 @@ $title = $title.'.'.$extension;
 if($currentTool=='document/createpaint'){		
 	//check save as and prevent rewrite an older file with same name	
 	if (0 != $groupId){
-	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-	$group_properties  = GroupManager :: get_group_properties($groupId);
-	$groupPath = $group_properties['directory'];
-	}
-	else{
+        $group_properties  = GroupManager :: get_group_properties($groupId);
+        $groupPath = $group_properties['directory'];
+	} else {
 		$groupPath ='';
 	}	
 	
@@ -181,10 +175,9 @@ if (!isset($_SESSION['exit_pixlr'])) {
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php';
 	echo '<script>window.parent.location.href="'.$location.'"</script>';					 
 	api_not_allowed(true);
-}
-else{	
+} else {	
 	echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('PleaseStandBy').'</div>';
-	$location=api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.Security::remove_XSS($_SESSION['exit_pixlr']);
+	$location=api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($_SESSION['exit_pixlr']);
 	echo '<script>window.parent.location.href="'.$location.'"</script>';
 	unset($_SESSION['exit_pixlr']);
 }

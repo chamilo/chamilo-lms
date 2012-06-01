@@ -109,6 +109,8 @@ if (api_is_in_group()) {
 }
 
 $course_info = api_get_course_info();
+$group_id = api_get_group_id();
+
 
 $dir = '/';
 

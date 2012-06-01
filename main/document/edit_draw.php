@@ -23,12 +23,12 @@ $_SESSION['whereami'] = 'document/editdraw';
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 api_protect_course_script();
 api_block_anonymous_users();
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());    
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+
 if (empty($document_data)) {
     api_not_allowed();
 } else {    
@@ -36,12 +36,16 @@ if (empty($document_data)) {
     $file_path      = $document_data['path'];
     $dir            = dirname($document_data['path']);
     $parent_id      = DocumentManager::get_document_id(api_get_course_info(), $dir);
+    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
 }
+
 
 $dir= str_replace('\\', '/',$dir);//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
 
 /* Constants & Variables */
 $current_session_id=api_get_session_id();
+$group_id = api_get_group_id();
+
 //path for svg-edit save
 $_SESSION['draw_dir']=Security::remove_XSS($dir);
 if ($_SESSION['draw_dir']=='/'){
@@ -85,17 +89,31 @@ if (!is_dir($filepath)) {
 }
 
 //groups //TODO:clean
-if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {	
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
+if (!empty($group_id)) {
+	$req_gid = '&amp;gidReq='.$group_id;
+	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace'));
 	$group_document = true;
-	$noPHP_SELF = true;	
+	$noPHP_SELF = true;
 }
 
+$is_certificate_mode = DocumentManager::is_certificate_mode($dir);
+
 if (!$is_certificate_mode)
-	$interbreadcrumb[]=array("url"=>"./document.php?id=".$document_id.$req_gid, "name"=> get_lang('Documents'));
+	$interbreadcrumb[]= array("url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
 else
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+
+// Interbreadcrumb for the current directory root path
+if (empty($document_data['parents'])) {
+    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+} else {    
+    foreach($document_data['parents'] as $document_sub_data) {
+        if ($document_data['title'] == $document_sub_data['title']) {
+            continue;
+        }
+        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+    }
+}
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
@@ -107,8 +125,7 @@ event_access_tool(TOOL_DOCUMENT);
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-		
+		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';		
 		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

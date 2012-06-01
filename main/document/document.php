@@ -134,7 +134,7 @@ if (api_get_group_id()) {
 
 //Actions
 
-$document_id = intval($_REQUEST['id']);
+$document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $message = '';
@@ -272,10 +272,8 @@ if (isset($document_id) && empty($action)) {
     	$curdirpath = Security::remove_XSS($_POST['curdirpath']);
     } else {
     	$curdirpath = '/';
-    }
-    
-    $curdirpathurl = urlencode($curdirpath);
-    
+    }    
+    $curdirpathurl = urlencode($curdirpath);    
 } else {
 	// What's the current path?
 	// We will verify this a bit further down
@@ -286,6 +284,7 @@ if (isset($document_id) && empty($action)) {
 	} else {
 		$curdirpath = '/';
 	}
+    
 	
 	$curdirpathurl = urlencode($curdirpath);
 	

@@ -21,7 +21,6 @@ $_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;
 
 require_once 'document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools = get_lang('PhotoRetouching');
 

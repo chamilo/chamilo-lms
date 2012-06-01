@@ -84,7 +84,7 @@ class CoursesController { // extends Controller {
         $browse_course_categories = $this->model->browse_course_categories();        
         
         if ($action == 'display_random_courses') {
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 20);
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
         } else {
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category

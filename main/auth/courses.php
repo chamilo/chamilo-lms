@@ -23,7 +23,7 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     $htmlHeadXtra[] = '
-    <script type="text/javascript">
+    <script>
     	$(document).ready(function() {
 	        $(\'.ajax\').live(\'click\', function() {
 	            var url     = this.href;

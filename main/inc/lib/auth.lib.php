@@ -450,19 +450,41 @@ class Auth
         
         if (!empty($random_value)) {
             $random_value = intval($random_value);
-            $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course ) AS someRandId 
-            WHERE course.id >= someRandId.randId $without_special_courses";
-        
+                  
+            $sql = "SELECT COUNT(*) FROM $tbl_course";
+            $result = Database::query($sql);
+            list($num_records) = Database::fetch_row($result);
+            
             if ($_configuration['multiple_access_urls']) {
+            
                 $url_access_id = api_get_current_access_url_id();                
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+            
+                $sql = "SELECT COUNT(*) FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course ON (url_rel_course.course_code=course.code) 
+                        WHERE access_url_id = $url_access_id ";
+                $result = Database::query($sql);
+                list($num_records) = Database::fetch_row($result);
                 
-                //$table_course_ranking ranking
-                //AND ranking.c_id
-                $sql = "SELECT * FROM $tbl_course course, (SELECT CEIL(MAX($tbl_course.id) * RAND()) AS randId FROM $tbl_course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=$tbl_course.code) WHERE access_url_id = $url_access_id ) AS someRandId
-                        WHERE course.id AND course.id >= someRandId.randId $without_special_courses $without_special_courses";
+                $sql = "SELECT course.id FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course 
+                        ON (url_rel_course.course_code=course.code) 
+                        WHERE   access_url_id = $url_access_id AND 
+                                RAND()*$num_records< $random_value
+                                $without_special_courses ORDER BY RAND() LIMIT 0, $random_value";                                
+            } else {
+                $sql = "SELECT id FROM $tbl_course course WHERE RAND()*$num_records< $random_value $without_special_courses ORDER BY RAND() LIMIT 0, $random_value";
             }
+            
+            $result = Database::query($sql);
+            $id_in = null;
+            while (list($id) = Database::fetch_row($result)){
+                if ($id_in) {
+                    $id_in.=",$id"; 
+                } else { 
+                    $id_in="$id";
+                }
+            }            
+            $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
+            
         } else {
             $category_code = Database::escape_string($category_code);
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";

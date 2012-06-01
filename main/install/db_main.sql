@@ -867,7 +867,7 @@ VALUES
 ('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
 ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18109','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18142','DatabaseVersion','', NULL, NULL, 0);
 
 
 /*
@@ -1533,6 +1533,9 @@ CREATE TABLE IF NOT EXISTS access_url_rel_user (
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);
+
+-- Adding admin to the first portal
+INSERT INTO access_url_rel_user VALUES(1, 1);
 
 DROP TABLE IF EXISTS access_url_rel_course;
 CREATE TABLE IF NOT EXISTS access_url_rel_course (

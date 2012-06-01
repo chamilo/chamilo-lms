@@ -231,6 +231,15 @@ if (defined('SYSTEM_INSTALLATION')) {
         }                
     }    
     
+    //Adding admin user in the access_url_rel_user  table
+    $sql = "SELECT user_id FROM admin WHERE user_id = 1";
+    $result = iDatabase::query($sql);
+    
+    if (Database::num_rows($result)) {
+        $sql = "INSERT INTO access_url_rel_user VALUES(1, 1)";
+        iDatabase::query($sql);
+    }
+    
     //Adds the c_XXX courses tables see #3910
     require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
     global $_configuration;

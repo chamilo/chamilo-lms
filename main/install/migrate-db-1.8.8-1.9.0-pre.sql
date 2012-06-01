@@ -251,7 +251,7 @@ INSERT INTO settings_options (variable, value, display_text) values ('platform_u
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18109' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18142' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

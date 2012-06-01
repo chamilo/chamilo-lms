@@ -859,15 +859,15 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id().")
                 INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
             )";
+            
         }
            
         if (strpos($extra_where_conditions, 'group_all')) {        
-            $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);
-            $extra_where_conditions = str_replace("AND group_id = 'group_all'", '', $extra_where_conditions);
-            
+            $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);            
+            $extra_where_conditions = str_replace("AND group_id = 'group_all'", '', $extra_where_conditions);            
             $sql_inner_join_tbl_user = " 
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name
+                SELECT u.user_id, firstname, lastname, email, username, '' as group_name, '' as group_id
                 FROM $TBL_USER u                 
             )";
         }
@@ -888,7 +888,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (empty($sql_inner_join_tbl_user)) {
              $sql_inner_join_tbl_user = " 
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name
+                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, , '' as group_id
                 FROM $TBL_USER u                 
             )";
         }
@@ -914,7 +914,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     exe_user_id,
                     te.exe_duration, 
                     propagate_neg,
-					revised, group_name
+					revised, 
+                    group_name,
+                    group_id
                 FROM
                     $TBL_EXERCICES  AS ce 
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
@@ -927,9 +929,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND orig_lp_item_id = 0
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
-         
-         // sql for hotpotatoes tests for teacher / tutor view
-    
+        
+         // sql for hotpotatoes tests for teacher / tutor view    
         $hpsql = "SELECT 
                     $first_and_last_name , 
                     username,
@@ -996,17 +997,17 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     	$teacher_id_list[] = $teacher['user_id'];
     }    
     
-    if (empty($hotpotatoe_where)) {        
+    if (empty($hotpotatoe_where)) {      
         $column             = !empty($column) ? Database::escape_string($column) : null;
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
         
         if (!empty($column)) {
             $sql               .= " ORDER BY $column $direction ";
-        }
+        }        
         $sql               .= " LIMIT $from, $number_of_items";
 			
-		//var_dump($sql);
+		
         $results = array();
         
         $resx = Database::query($sql);

@@ -103,13 +103,11 @@ switch ($action) {
         $count = get_count_work($work_id);        
         break;
 	case 'get_exercise_results':
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-		require_once $libpath.'groupmanager.lib.php';
+		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
         $exercise_id = $_REQUEST['exerciseId'];
 		$count = get_count_exam_results($exercise_id);
 		break;
-    case 'get_sessions':
-        require_once $libpath.'sessionmanager.lib.php';        
+    case 'get_sessions':           
         $count = SessionManager::get_count_admin();
         break;
     case 'get_timelines':
@@ -123,24 +121,20 @@ switch ($action) {
         $count      = $obj->get_count();
         break;
     case 'get_careers':        
-        require_once $libpath.'career.lib.php';
         $obj        = new Career();
         $count      = $obj->get_count();
         break;
-    case 'get_promotions':
-       require_once $libpath.'promotion.lib.php';        
-        $obj        = new Promotion();        
+    case 'get_promotions':       
+        $obj        = new Promotion();
         $count      = $obj->get_count();   
         break;
-    case 'get_grade_models':        
-        require_once $libpath.'grade_model.lib.php';
+    case 'get_grade_models':
         $obj        = new GradeModel();
         $count      = $obj->get_count();
         break;
-    case 'get_usergroups':
-        require_once $libpath.'usergroup.lib.php';        
-        $obj        = new UserGroup();        
-        $count      = $obj->get_count();   
+    case 'get_usergroups':        
+        $obj        = new UserGroup();
+        $count      = $obj->get_count();
         break;
     default:
         exit;   

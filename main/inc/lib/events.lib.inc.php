@@ -25,6 +25,7 @@ $TABLETRACK_EXERCICES 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK
 //$TABLETRACK_SUBSCRIPTIONS   = $_configuration['statistics_database'].".track_e_subscriptions"; // this table is never use
 $TABLETRACK_LASTACCESS 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
 $TABLETRACK_DEFAULT 	    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+$course_tracking_table		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 /* FUNCTIONS */
 /**
@@ -1109,4 +1110,23 @@ function get_comments($id,$question_id) {
     $comm = Database::result($sqlres,0,"teacher_comment");
     return $comm;
 }
-
+ 
+/** 
+ * User logs in for the first time to a course
+ * @param	string 	Course code
+ * @param	int	User ID
+ * @param	int	Session ID
+ */
+function event_course_login($course_code, $user_id, $session_id) {
+    global $course_tracking_table;
+    //@todo use api_get_utc_datetime
+    $time		 = api_get_datetime();
+    $course_code = Database::escape_string($course_code);
+    $user_id	 = Database::escape_string($user_id);
+    $session_id  = Database::escape_string($session_id);
+    $sql	= "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)
+         VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+    Database::query($sql);
+    //Course catalog stats modifications see #4191
+    CourseManager::update_course_ranking(null, null, null, null, true, false);
+}

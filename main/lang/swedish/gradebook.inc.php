@@ -11,6 +11,7 @@ $Landscape = "Liggande";
 $DeleteAll = "Ta bort alla";
 $ViewResult = "Visa resultat";
 $AddStudent = "Lägg till användare";
+$Score = "Presterat";
 $Location = "Plats";
 $FileType = "Filtyp";
 $ExampleCSVFile = "CSV-filexempel";

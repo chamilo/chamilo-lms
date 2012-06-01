@@ -70,4 +70,5 @@ $SubmitRegistrationCode = "Ange registreringskod";
 $CourseCategoryDeleted = "Kurskategorin borttagen";
 $CategorySortingDone = "Kategorisortering avslutad";
 $CourseCategoryEditStored = "Kategorin uppdaterad";
+$Compose = "Skriv";
 ?>

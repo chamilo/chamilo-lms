@@ -199,4 +199,5 @@ $ChooseAtLeastOneCheckbox = "Välj minst ett bra svar";
 $ExerciseEdited = "Provet har ändrats";
 $ExerciseDeleted = "Provet har tagits bort";
 $ValidateAnswer = "Spara och rätta mina svar";
+$StartTest = "Starta test";
 ?>

@@ -34,7 +34,7 @@ $langSubCat = "underkategorier";
 $langMenuGeneral = "Allmänt";
 $langMenuUser = "Användare";
 $langMenuAdmin = "Plattformsadministratör";
-$langUsersOnLineList = "Uppkopplade, anv�ndarlista";
+$langUsersOnLineList = "Uppkopplade användare";
 $langTotalOnLine = "Totalt uppkopplade";
 $langRefresh = "Ladda om";
 $langMe = "jag";
@@ -66,4 +66,5 @@ $FolderCreated = "Ny mapp skapad";
 $LinkAdded = "Länk tillagd";
 $AnnouncementAdded = "Tillkännagivande har lagts till";
 $AgendaAdded = "Kalenderpost skapad";
+$PendingInvitations = "Inbjudan avvaktar svar";
 ?>

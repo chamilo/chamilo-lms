@@ -502,7 +502,7 @@ $AfterApproval = "Después de ser aprobado";
 $StudentViewEnabledTitle = "Activar la Vista de estudiante";
 $StudentViewEnabledComment = "Habilitar la Vista de estudiante, que permite que un profesor o un administrador pueda ver un curso como lo vería un estudiante";
 $TimeLimitWhosonlineTitle = "Límite de tiempo de Usuarios en línea";
-$TimeLimitWhosonlineComment = "Este límite de tiempo define cuantos segundos han de pasar despúes de la última acción de un usuario para seguir considerándolo *en línea*";
+$TimeLimitWhosonlineComment = "Este límite de tiempo define cuantos minutos han de pasar despúes de la última acción de un usuario para seguir considerándolo *en línea*";
 $ExampleMaterialCourseCreationTitle = "Material de ejemplo para la creación de un curso";
 $ExampleMaterialCourseCreationComment = "Crear automáticamente material de ejemplo al crear un nuevo curso";
 $AccountValidDurationTitle = "Validez de la cuenta";
@@ -1059,6 +1059,8 @@ $EditTopRegister = "Editar Aviso";
 $InsertTabs = "Insertar Tabs";
 $EditTabs = "Editar Tabs";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "La evaluación necesita tener un certificado para poder relacionarlo a una competencia";
+$PlatformUnsubscribeTitle = "Permitir darse de baja de la plataforma";
+$PlatformUnsubscribeComment = "Al activar esta opción, se permitirá a cualquier usuario eliminar definitivamente su propia cuenta y todos los datos relacionados a la misma desde la plataforma. Esto es una acción radical, pero es necesario que los portales abiertos al público donde los usuarios pueden registrarse automáticamente. Una entrada adicional se publicará en el perfil del usuario de darse de baja después de la confirmación.";
 $BabyOrange = "Niños naranja";
 $BlueLagoon = "Laguna azul";
 $CoolBlue = "Azul fresco";
@@ -1547,7 +1549,60 @@ $GradebookEnableLockingTitle = "Activar bloqueo de Evaluaciones por los profesor
 $GradebookEnableLockingComment = "Una vez activada, esta opción permitirá a los profesores bloquear cualquier evaluación dentro de su curso. Esto prohibirá al profesor cualquier modificación posterior de los resultados de sus alumnos en los recursos usados para esta evaluación: exámenes, lecciones, tareas, etc. El único rol autorizado a desbloquear una evaluación es el administrador. El profesor estará informado de esta posibilidad al intentar desbloquear la evaluación. El bloqueo como el desbloqueo estarán guardados en el registro de actividades importantes del sistema.";
 $LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>LDAP authentication : <br />See I. below to configure LDAP <br />See II. below to activate LDAP authentication </li><br /><br /><li> Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />See I. below to configure LDAP <br />CAS manage user authentication, LDAP activation isn't required. </li><br /></ul></div><br /><h4>I. LDAP configuration</h4><h5>Edit file main/auth/external_login/ldap.conf.php </h5>-&gt; Edit values of array <code>&#36;extldap_config</code> <br /><br />Parameters are <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; To update correspondences between user and LDAP attributes, edit array <code>&#36;extldap_user_correspondance</code> <br />Array values are &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activate LDAP authentication </h4><h5>Edit file main/inc/conf/configuration.php </h5>-&gt; Uncomment lines <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : LDAP users use same fields than platform users to login. <br />N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.</div>";
 $ShibbolethMainActivateTitle = "<h3>Autenticación Shibboleth</h3>";
+$ShibbolethMainActivateComment = "En primer lugar, tiene que configurar Shibboleth para su servidor web.
+
+Para configurarlo en Chamilo:
+
+editar el archivo  <strong> main/auth/shibboleth/config/aai.class.php</strong>
+
+Modificar valores de $result con el nombre de los atributos de Shibboleth
+
+    $result->unique_id = 'mail';
+    $result->firstname = 'cn';
+    $result->lastname = 'uid';
+    $result->email = 'mail';
+    $result->language = '-';
+    $result->gender = '-';
+    $result->address = '-';
+    $result->staff_category = '-';
+    $result->home_organization_type = '-';
+    $result->home_organization = '-';
+    $result->affiliation = '-';
+    $result->persistent_id = '-';
+    ...
+
+Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
 $LdapDescriptionTitle = "<h3>Autentificacion LDAP</h3>";
 $FacebookMainActivateTitle = "Autenticación con Facebook";
+$FacebookMainActivateComment = "En primer lugar, se tiene que crear una aplicación de Facebook (ver https://developers.facebook.com/apps) con una cuenta de Facebook. En los parámetros de aplicaciones de Facebook, el valor de dirección URL del sitio debe tener \"una acción = fbconnect\" un parámetro GET (http://mychamilo.com/?action=fbconnect, por ejemplo).
+
+Entonces, editar el archivo <strong> main/auth/external_login/facebook.conf.php </strong>
+
+e ingresar en \"appId\" y \"secret\" los valores de $facebook_config.
+
+Ir a Plug-in para añadir un botón configurable \"Facebook Login\" para el campus de Chamilo.";
 $LanguagePriority1Title = "Prioridad del idioma 1";
+$LanguagePriority2Title = "Prioridad del idioma 2";
+$LanguagePriority3Title = "Prioridad del idioma 3";
+$LanguagePriority4Title = "Prioridad del idioma 4";
+$LanguagePriority5Title = "Prioridad del idioma 5";
+$LanguagePriority1Comment = "El idioma con la más alta prioridad";
+$LanguagePriority2Comment = "Prioridad del idioma 2";
+$LanguagePriority3Comment = "Prioridad del idioma 3";
+$LanguagePriority4Comment = "Prioridad del idioma 4";
+$LanguagePriority5Comment = "La menor prioridad entre los idiomas";
+$UserLanguage = "Idioma del usuario";
+$UserSelectedLanguage = "Idioma del usuario seleccionado";
+$TeachersCanChangeGradeModelSettingsTitle = "Los profesores pueden cambiar el modelo de calificación dentro del cuaderno de evaluaciones";
+$TeachersCanChangeGradeModelSettingsComment = "Cuando se edita una evaluación";
+$GradebookDefaultGradeModelTitle = "Modelo de calificación por defecto";
+$GradebookDefaultGradeModelComment = "Este valor será seleccionado por defecto cuando se crea un curso";
+$GradebookEnableGradeModelTitle = "Habilitar el modelo de calificación en el cuaderno de evaluaciones";
+$GradebookEnableGradeModelComment = "Permite utilizar un modelo de calificacíón en el cuaderno de evaluaciones";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Permitir a los administradores de sesion de ver todas las sesiones";
+$AllowSessionAdminsToSeeAllSessionsComment = "Cuando esta opción no esta activada, los administradores de sesión puede ver solamente sus sesiones.";
+$AllowSkillsToolTitle = "Habilitar la herramienta de Competencias";
+$AllowSkillsToolComment = "Los usuarios pueden ver sus competencias en la red social y en un bloque en la página principal.";
+$AllowPublicCertificatesTitle = "Permitir certificados públicos";
+$AllowPublicCertificatesComment = "Los certificados pueden ser vistos por personas no registradas en el portal.";
 ?>

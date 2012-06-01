@@ -493,4 +493,5 @@ $OralExpression = "Expresión Oral";
 $CongratulationsYouPassedTheTest = "Felicitaciones ha aprobado el ejercicio.";
 $YouDidNotReachTheMinimumScore = "No ha alcanzado el puntaje mínimo.";
 $EndTest = "Terminar ejercicio";
+$PassPercentage = "Porcentaje de éxito";
 ?>

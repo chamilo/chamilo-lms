@@ -84,4 +84,7 @@ $ViewMySharedProfile = "Min delade profil";
 $UserStatistics = "Statistik för användaren";
 $EditUser = "Ändra användaren";
 $ViewUser = "Visa användaren";
+$Invitations = "Inbjudningar";
+$MyFiles = "Mina filer";
+$SocialGroups = "Sociala grupper";
 ?>

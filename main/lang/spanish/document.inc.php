@@ -216,6 +216,8 @@ $HelpDefaultDirDocuments = "INFORMACIÓN VISIBLE SÓLO POR EL PROFESORADO:
 Esta carpeta contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos, pero si un archivo está oculto cuando es insertado en un documento web los estudiantes tampoco podrán verlo en el documento. Cuando inserte un archivo en un documento web hágalo visible previamente. Las carpetas pueden seguir ocultas.";
 $HelpSharedFolder = "Esta carpeta contiene los archivos que los estudiantes (y Ud.) envían a un curso a través del editor si no lo hacen desde la herramienta grupos. Por defecto serán visibles por cualquier profesor, pero estarán ocultos para otros estudiantes salvo que accedan a ellos mediante un acceso directo. Si hace visible la carpeta de un estudiante otros estudiantes podrán ver todo lo que contenga.";
 $TemplateImage = "Imagen de la plantilla";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Para reproducir el contenido multimedia tendrá que o bien actualizar su navegador a una versión reciente o actualizar su plugin de Flash. Compruebe si el archivo tiene una extensión correcta.";
+$UpdateRequire = "Actualización necesaria";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nombre del certificado";
 $CopyToMyFiles = "Copiar en mi área personal de archivos";

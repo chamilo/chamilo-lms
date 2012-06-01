@@ -91,6 +91,7 @@ $ClearSearchResults = "Clear search results";
 $SendInvitation = "Send invitation";
 $SocialInvitationToFriends = "Invite to join my group of friends";
 $MyCertificates = "My certificates";
+$UnsubscribeFromPlatformSuccess = "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later.";
 $ToChangeYourEmailMustTypeYourPassword = "In order to change your e-mail address, you are required to confirm your password";
 $Invitations = "Invitations";
 $MyGroups = "My groups";
@@ -199,4 +200,6 @@ $SocialGroups = "Social groups";
 $CreateASocialGroup = "Create a social group";
 $EditMembersList = "Edit members list";
 $IAmAHRM = "I am a human resources manager";
+$UnsubscribeFromPlatform = "If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.";
+$UnsubscribeFromPlatformConfirm = "Yes, I want to remove this account completely. No data will remain on the server and I will be unable to login again, unless I create a completely new account.";
 ?>

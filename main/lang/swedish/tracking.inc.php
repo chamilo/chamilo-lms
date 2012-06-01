@@ -142,6 +142,11 @@ $LastConnexion = "Senast aktiv";
 $Attempts = "Försök";
 $LimitDate = "Datumbegränsning";
 $NoComment = "Ingen kommentar";
+$Messages = "Meddelande";
 $Print = "Skriv ut";
+$TimeSpentInTheCourse = "Nedlagd tid";
 $NoConnexion = "Ingen anslutning";
+$Ranking = "Rangordning";
+$BestResultInCourse = "Bästa resultatet i kursen";
+$BestAttempt = "Bästa försök";
 ?>

@@ -216,6 +216,8 @@ $HelpDefaultDirDocuments = "VISIBLE INFORMATION ONLY FOR THE TEACHER:
 This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.";
 $HelpSharedFolder = "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content.";
 $TemplateImage = "Template's icon";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension.";
+$UpdateRequire = "Update require";
 $MoveElement = "Move element";
 $CertificateName = "Name";
 $CopyToMyFiles = "Copy to my private file area";

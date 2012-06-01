@@ -730,6 +730,7 @@ $Until = "Until";
 $FirstPage = "First page";
 $LastPage = "Last page";
 $Coachs = "Coachs";
+$DragAndDropAnElementHere = "Drag and drop an element here";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $CalendarList = "Calendar list of attendances";
 $AttendanceCalendarDescription = "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.";

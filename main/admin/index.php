@@ -7,7 +7,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking','coursebackup');
+$language_file = array('admin', 'tracking','coursebackup', 'events');
 
 // Resetting the course id.
 $cidReset = true;
@@ -151,6 +151,10 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
+
+    /* event settings */
+    $items[] = array('url'=>'event_type.php', 		'label' => get_lang('events_title'));
+    
     
     if (!empty($_configuration['multiple_access_urls'])) {
 		if (api_is_global_platform_admin()) {

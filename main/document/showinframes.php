@@ -260,7 +260,12 @@ $execute_iframe = true;
 
 echo '<div align="center">';
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+
+if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';    
+} else {
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';    
+}
 
 if ($show_web_odf) {        
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));

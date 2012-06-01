@@ -637,22 +637,17 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 
 function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
     
-    $form = '<form name="move_to" action="'.api_get_self().'" method="POST">';
-    $form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />';
+    $form = new FormValidator('move_to', 'post', api_get_self());
     
-    $form .= '<div class="row">';
-    $form .= '<div class="label">';
-    $form .= get_lang('MoveTo');
-    $form .= '</div>';
+    // Form title
+    $form->addElement('hidden', 'move_file', $move_file);
+   
+    $options = array();
     
-    $form .= '<div class="formw">';
-
-    $form .= '<select name="move_to">';
-
     // Group documents cannot be uploaded in the root
     if ($group_dir == '') {
         if ($curdirpath != '/') {
-            $form .= '<option value="/">'.get_lang('Documents').'</option>';
+            $options['/'] = get_lang('Documents');            
         }
 
         if (is_array($folders)) {
@@ -686,7 +681,8 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                     if (empty($path_displayed)) {
                         $path_displayed = get_lang('Untitled');
                     }
-                    $form .= '<option value="'.$folder.'">'.$path_displayed.'</option>';
+                    $options[$folder] = $path_displayed;
+                    //$form .= '<option value="'.$folder.'">'.$path_displayed.'</option>';
                 }
             }
         }
@@ -696,27 +692,14 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                 $path_displayed = get_titles_of_path($folder);                
                 $display_folder = substr($path_displayed,strlen($group_dir));
                 $display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
-                $form .= '<option value="'.$folder.'">'.$display_folder.'</option>';
+                //$form .= '<option value="'.$folder.'">'.$display_folder.'</option>';
+                $options[$folder] = $display_folder;
             }
         }
-    }
-
-    $form .= '		</select>';
-    $form .= '	</div>';
-    $form .= '  </div>';
-
-    $form .= '<div class="row">';
-    $form .= '	<div class="label"></div>';
-    $form .= '	<div class="formw">';
-    $form .= '		<button type="submit" class="next" name="move_file_submit">'.get_lang('MoveElement').'</button>';
-    $form .= '	</div>';
-    $form .= '</div>';
-
-    $form .= '</form>';
-
-    $form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
-
-    return $form;
+    }    
+    $form->addElement('select', 'move_to', get_lang('MoveTo'), $options);
+    $form->addElement('button', 'move_file_submit', get_lang('MoveElement'));    
+    return $form->return_form();
 }
 
 /**

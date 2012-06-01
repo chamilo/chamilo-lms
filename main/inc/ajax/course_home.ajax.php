@@ -81,9 +81,7 @@ switch ($action) {
 			if (api_is_anonymous()) {
 				exit;
 			}		
-		}
-		
-		
+		}		
 		echo Display::tag('h2', $course_info['name']);
 		echo '<br />';
 	

@@ -300,6 +300,8 @@ if (isset($_POST['save_audio'])) {
     }
     Display::display_confirmation_message(get_lang('ItemUpdated'));
 }
+echo $_SESSION['oLP']->build_action_menu();
+
 echo $_SESSION['oLP']->overview();
 
 /* FOOTER */

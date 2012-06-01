@@ -250,8 +250,7 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<div class="row-fluid" style="overflow:hidden">';
 echo '<div id="lp_sidebar" class="span4">';
 
-echo $_SESSION['oLP']->return_new_tree(); //echo $_SESSION['oLP']->build_tree();
-
+echo $_SESSION['oLP']->return_new_tree(null, true); 
 
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {    

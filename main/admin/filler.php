@@ -62,7 +62,7 @@ if (count($output)>0) {
     Display::display_normal_message($result,false);
 }
 ?>
-<div class="admin_section">
+<div class="well_border">
   <h4><?php Display::display_icon('bug.gif', 'DataFiller'); echo ' '.api_ucfirst(get_lang('DataFiller'));?></h4>
   <div><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
   <ul>

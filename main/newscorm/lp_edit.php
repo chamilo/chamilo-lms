@@ -54,6 +54,9 @@ function activate_end_date() {
 
 Display::display_header(get_lang('CourseSettings'), 'Path');
 
+echo $_SESSION['oLP']->build_action_menu();
+
+
 // Action links
 //echo '<div class="actions">';
 $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;

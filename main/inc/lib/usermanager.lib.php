@@ -164,8 +164,28 @@ class UserManager {
 				} else {
 					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 				}                
-				@api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);                
-			}           
+
+
+			/* MANAGE EVENT WITH MAIL */
+			if(EventsMail::check_if_using_class('user_registration'))
+                        {
+                            $values["about_user"] = $return;
+                            $values["portal"] = $_configuration['root_web'];
+                            $values["password"] = $original_password;
+                            
+                            $values["send_to"] = array($return);
+                            $values["prior_lang"] = null;
+                            
+                            EventsDispatcher::events('user_registration', $values);
+                        }
+                        else
+                        {
+                            @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
+                        }
+              
+			}
+			/* ENDS MANAGE EVENT WITH MAIL */ 
+          
 
 			// Add event to system log			
 			$user_id_manager = api_get_user_id();

@@ -16,7 +16,15 @@ $sessionDeletedTitle ='Suppression d\'une session';
 $sessionCategoryCreatedTitle = 'Création d\'une catégorie de session';
 $sessionCategoryDeletedTitle = 'Suppression d\'une catégorie de session';
 $settingsChangedTitle = 'Changement d\'un paramètre de configuration';
-$userSubscribedTitle = 'Inscription d\'un utilisateur';
+$userRegistrationTitle = 'Inscription d\'un utilisateur';
 $userUnsubscribedTitle = 'Désinscription d\'un utilisateur';
+$allCoursesPassedTitle = 'Huit cours réussis';
+$notifManagerTitle = 'Envoi du mail au n+1';
+$subscribeUserToCourseTitle = 'Inscription de l\'utilisateur à un cours';
+
+$availables_keys = 'Clés disponibles. Utilisez-les entre (( )).';
+$checkbox_activated = 'Activé ?';
+
+$unsaved_changes = 'Voulez-vous abandonner les changements que vous avez faits ?';
 
 ?>

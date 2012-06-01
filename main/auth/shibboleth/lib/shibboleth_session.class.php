@@ -38,9 +38,7 @@ class ShibbolethSession
     function logout()
     {
         $_SESSION['_user'] = array();
-
-        $logout_no_redirect = true;
-        online_logout();
+        online_logout(null, false);
     }
 
     /**

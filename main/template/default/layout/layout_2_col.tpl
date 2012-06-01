@@ -15,7 +15,11 @@
 		{#  ??  #}
         {% if home_page_block %}
             <section id="home_page">
-            {{ home_page_block}}
+                <div class="row">
+                    <div class="span9">
+                    {{ home_page_block}}
+                    </div>
+                </div>
             </section>
         {% endif %}
 		

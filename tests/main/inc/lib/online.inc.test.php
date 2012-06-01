@@ -24,10 +24,8 @@ class TestOnline extends UnitTestCase {
 	}
 
 	function testonline_logout(){
-		global $_configuration, $extAuthSource;
-		global $logout_no_redirect;
-		$logout_no_redirect = 'prueba';
-		$res=online_logout();
+		global $_configuration, $extAuthSource;		
+		$res=online_logout(null, true);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}

@@ -720,10 +720,13 @@ $big_image_width    = $big_image_size['width'];
 $big_image_height   = $big_image_size['height'];
 $url_big_image      = $big_image.'?rnd='.time();
 
+$show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
+
 if (api_get_setting('allow_social_tool') == 'true') {
+    
 	echo '<div class="row-fluid">';
 		echo '<div class="span3">';
-		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false);
+		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
 		echo '</div>';
 		echo '<div class="span9">';
         $form->display();			

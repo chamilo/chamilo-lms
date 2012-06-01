@@ -470,13 +470,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			$osso = new sso();
 		}
 		if (isset($_SESSION['_user']['user_id'])) {
-			if ($logout) {
-                
-				// Prevent index.php to redirect
-				global $logout_no_redirect;
-				$logout_no_redirect = TRUE;
+			if ($logout) {		
 				// Make custom redirect after logout
-				online_logout();
+				online_logout($_SESSION['_user']['user_id'], false);
 				$osso->logout(); //redirects and exits
 			}
 		} elseif(!$logout) {

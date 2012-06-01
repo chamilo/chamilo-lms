@@ -51,21 +51,24 @@ function LoginCheck($uid) {
  * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
  * @author Fernando P. García <fernando@develcuy.com>
  */
-function online_logout() {
+function online_logout($user_id = null, $logout_redirect = false) {
     global $_configuration, $extAuthSource;
-    // variable initialisation
-    $query_string='';
-
-    if (!empty($_SESSION['user_language_choice'])) {
-        $query_string='?language='.$_SESSION['user_language_choice'];
-    }
-
+  
     // Database table definition
     $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-    // selecting the last login of the user
-    $uid = intval($_GET['uid']);
-    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
+    if (empty($user_id)) {
+        $user_id = intval($_GET['uid']);    
+    }
+    
+    //Changing global chat status to offline
+    if (api_get_setting('allow_global_chat') == 'true') {
+        $chat = new Chat();
+        $chat->set_user_status(0);
+    }
+    
+    // selecting the last login of the user    
+    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$user_id' ORDER BY login_date DESC LIMIT 0,1";
     $q_last_connection=Database::query($sql_last_connection);
     if (Database::num_rows($q_last_connection)>0) {
         $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
@@ -76,14 +79,14 @@ function online_logout() {
         $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
-    LoginDelete($uid); //from inc/lib/online.inc.php - removes the "online" status
+    LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
 
     //the following code enables the use of an external logout function.
     //example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
     // then a function called ldap_logout() inside that file
     // (using *authent_name*_logout as the function name) and the following code
     // will find and execute it
-    $uinfo = api_get_user_info($uid);
+    $uinfo = api_get_user_info($user_id);
     if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
         if (is_array($extAuthSource[$uinfo['auth_source']])) {
             $subarray = $extAuthSource[$uinfo['auth_source']];
@@ -96,12 +99,13 @@ function online_logout() {
             }
         }
     }
+    
     require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
-    exit_of_chat($uid);
-    Session::destroy();
-    global $logout_no_redirect;
-    if (!$logout_no_redirect) {
-        header("Location: index.php$query_string");
+    exit_of_chat($user_id);
+    
+    Session::destroy();        
+    if ($logout_redirect) {
+        header("Location: index.php");
         return;
     }
 }

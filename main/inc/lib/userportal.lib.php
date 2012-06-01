@@ -103,76 +103,16 @@ class IndexManager {
 	}	
 		
 	/**
-	 * This function handles the logout and is called whenever there is a $_GET['logout']
-	 *
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * Alias for the online_logout() function	 
 	 */
 	function logout() {        
-		global $_configuration, $extAuthSource;
-        
-		// Variable initialisation.
-		$query_string = '';
-	
-		if (!empty($_SESSION['user_language_choice'])) {
-			$query_string = '?language='.$_SESSION['user_language_choice'];
-		}
-	
-		// Database table definition.
-		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-	
-		// Selecting the last login of the user.
-		$uid = $this->user_id;        
-           
-        //Changing global chat status to offline
-        if (api_get_setting('allow_global_chat') == 'true') {
-            $chat = new Chat();
-            $chat->set_user_status(0);
-        }       
-		
-		$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
-		$q_last_connection = Database::query($sql_last_connection);
-		if (Database::num_rows($q_last_connection) > 0) {
-			$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-		}
-	
-		if (!isset($_SESSION['login_as'])) {
-			$current_date = date('Y-m-d H:i:s', time());
-			$s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
-			Database::query($s_sql_update_logout_date);
-		}
-		LoginDelete($uid); // From inc/lib/online.inc.php - removes the "online" status.
-	
-		// The following code enables the use of an external logout function.
-		// Example: define a $extAuthSource['ldap']['logout'] = 'file.php' in configuration.php.
-		// Then a function called ldap_logout() inside that file
-		// (using *authent_name*_logout as the function name) and the following code
-		// will find and execute it.
-		$uinfo = api_get_user_info($uid);
-		if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
-			if (is_array($extAuthSource[$uinfo['auth_source']])) {
-				$subarray = $extAuthSource[$uinfo['auth_source']];
-				if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
-					include_once $subarray['logout'];
-					$logout_function = $uinfo['auth_source'].'_logout';
-					if (function_exists($logout_function)) {
-						$logout_function($uinfo);
-					}
-				}
-			}
-		}
-		exit_of_chat($uid);
-		Session::destroy();
-     
-        
-        $query_string = $query_string ? "$query_string&loggedout=true" : '?loggedout=true';
-		header("Location: index.php$query_string");
-		exit();
+        online_logout($this->user_id, true);
 	}
 	
 	/**
 	 * This function checks if there are courses that are open to the world in the platform course categories (=faculties)
 	 *
-	 * @param unknown_type $category
+	 * @param string $category
 	 * @return boolean
 	 */
 	function category_has_open_courses($category) {

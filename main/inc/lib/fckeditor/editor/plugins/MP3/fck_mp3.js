@@ -47,7 +47,7 @@ if ( oFakeImage )
 }
 
 function window_onload(tab_to_select)
-{ 
+{
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
@@ -123,7 +123,6 @@ function LoadSelection()
 //#### The OK button was hit.
 function Ok()
 {
-	
 	if ( GetE('mpUrl').value.length == 0 )
 	{
 		window.parent.SetSelectedTab( 'Info' ) ;
@@ -200,7 +199,8 @@ function updateMovie(e)
 }
 
 var ePreview ;
-function SetPreviewElement( previewEl ) {
+function SetPreviewElement( previewEl )
+{
 	ePreview = previewEl ;
 
 	if ( GetE('mpUrl').value.length > 0 )
@@ -238,6 +238,11 @@ function BrowseServer()
 
 function SetUrl( url )
 {
+	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/MP3\/fck_mp3.\html/, "");
+	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
+	url = PrefixeUrl + url;
+	// 
+
 	document.getElementById('mpUrl').value = url ;
 	//updatePreview();
 	Ok();

@@ -20,6 +20,7 @@
  * == END LICENSE ==
  *
  * This is the File Manager Connector for PHP.
+
  */
 function CombinePaths( $sBasePath, $sFolder )
 {
@@ -126,6 +127,7 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 		else
 		{
 			$permissions = 0777 ;
+			// $permissions = 0770 ;
 			if ( isset( $Config['ChmodOnFolderCreate'] ) )
 			{
 				$permissions = $Config['ChmodOnFolderCreate'] ;
@@ -149,7 +151,10 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 				$to_group_id = $group_properties['id'];
 			}
 
-			$folder_path = substr($folderPath, strpos($folderPath, $repository_path) + strlen($repository_path) - 1);
+			$folder_path=preg_replace("/^.*".TOOL_DOCUMENT."/", "", $folderPath);	// 
+			$folder_path=preg_replace("/\/$/", "", $folder_path);	// should be done in 1 regexp I guess ... 
+			// $folder_path = substr($folderPath, strpos($folderPath, $repository_path) + strlen($repository_path) - 1);
+			
 			$folder_name = explode('/', $folder_path);
 			$folder_name = $folder_name[count($folder_name) - 1];
 			$doc_id = add_document($_course, $folder_path, 'folder', 0, $folder_name);
@@ -269,7 +274,7 @@ function GetCurrentFolder()
 	if ( strpos( $sCurrentFolder, '..' ) || strpos( $sCurrentFolder, "\\" ))
 		SendError( 102, '' ) ;
 
-	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\.\;\:\*\?\"\<\>\|]),", $sCurrentFolder))
+	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\:\*\?\"\<\>\|]),", $sCurrentFolder))
 		SendError( 102, '' ) ;
 
 	return $sCurrentFolder ;
@@ -280,9 +285,8 @@ function SanitizeFolderName( $sNewFolderName )
 {
 	$sNewFolderName = stripslashes( $sNewFolderName ) ;
 
-	// Remove . \ / | : ; . ? * " < > 
+	// Remove . \ / | : ? * " < >
 	$sNewFolderName = preg_replace( '/\\.|\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFolderName ) ;
-	$sNewFolderName = preg_replace( '/\\.|\\\\|\\;|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFolderName ) ;
 
 	return $sNewFolderName ;
 }
@@ -306,7 +310,7 @@ function SanitizeFileName( $sNewFileName, $sMimeType = null )
 		$sNewFileName = preg_replace( '/\\.(?![^.]*$)/', '_', $sNewFileName ) ;
 
 	// Remove \ / | : ? * " < >
-	//$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\;|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ; 
+	//$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
 	$sNewFileName = replace_dangerous_char( $sNewFileName, 'strict' ) ;
 
 	$sNewFileName = php2phps( $sNewFileName ) ;

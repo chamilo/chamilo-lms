@@ -32,13 +32,13 @@ var FCKTools	= oEditor.FCKTools ;
 window.document.dir = FCKLang.Dir ;
 
 // We have to avoid javascript errors if some language variables have not been defined.
-FCKLang['UploadSelectFileFirst']	= FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
+FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
-FCKLang['FileRenamed']				= FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
-FCKLang['InvalidFileType']			= FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
-FCKLang['SecurityError']				= FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
-FCKLang['ConnectorDisabled']		= FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
-FCKLang['UploadError']				= FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
+FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
+FCKLang['InvalidFileType'] = FCKLang['InvalidFileType'] ? FCKLang['InvalidFileType'] : 'Invalid file type.' ;
+FCKLang['SecurityError'] = FCKLang['SecurityError'] ? FCKLang['SecurityError'] : 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
+FCKLang['ConnectorDisabled'] = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
+FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
 
 //#### Dialog Tabs
 
@@ -65,18 +65,21 @@ lib_path = FCK.GetUrl( lib_path, FCK.SEMI_ABSOLUTE_URL ) ;
 // This is the semi-absolute URL of the audio player.
 var player = lib_path + 'mediaplayer/player.swf' ;
 
+
 // Get the selected audio (if available).
 var oFakeImage = dialog.Selection.GetSelectedElement() ;
 var oEmbed ;
 
-if ( oFakeImage ) {
+if ( oFakeImage )
+{
 	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckmp3') )
 		oEmbed = FCK.GetRealElement( oFakeImage ) ;
 	else
 		oFakeImage = null ;
 }
 
-window.onload = function() {
+window.onload = function()
+{
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
@@ -98,7 +101,8 @@ window.onload = function() {
 	SelectField( 'txtUrl' ) ;
 }
 
-function LoadSelection() {
+function LoadSelection()
+{
 	if ( ! oEmbed ) return ;
 
 	var flashvars = GetAttribute( oEmbed, 'flashvars', '' ).toString() ;
@@ -130,8 +134,8 @@ function LoadSelection() {
 }
 
 //#### The OK button was hit.
-function Ok() {
-	
+function Ok()
+{
 	if ( GetE('txtUrl').value.length == 0 )
 	{
 		dialog.SetSelectedTab( 'Info' ) ;
@@ -177,13 +181,16 @@ function UpdateEmbed( e )
 
 var ePreview ;
 
-function SetPreviewElement( previewEl ) {
+function SetPreviewElement( previewEl )
+{
 	ePreview = previewEl ;
+
 	if ( GetE( 'txtUrl' ).value.length > 0 )
 		UpdatePreview() ;
 }
 
-function UpdatePreview() {	
+function UpdatePreview()
+{
 	if ( !ePreview )
 		return;
 
@@ -221,10 +228,21 @@ function BrowseServer()
 	OpenFileBrowser( FCKConfig.MP3BrowserURL, FCKConfig.MP3BrowserWindowWidth, FCKConfig.MP3BrowserWindowHeight ) ;
 }
 
-function SetUrl( url ) {	
+function SetUrl( url )
+{
+	//url = FCK.GetSelectedUrl( url ) ;
 	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
+
+	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/audio\/fck_audio.\html/, "");
+	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
+	url = PrefixeUrl + url;
+	// 
+
+
 	GetE('txtUrl').value = url ;
+
 	UpdatePreview() ;
+
 	dialog.SetSelectedTab( 'Info' ) ;
 }
 

@@ -18,8 +18,7 @@ function reports_modules_scorm_init_forEachCourses($course_code, $course_id, $co
 		$reports_modules_scorm_toolid.' as tool_id, '.
 		'lp.id as child_id, lp.name as child_name, '.
 		"'".$course_db."'".' as course_db from '.
-		Database::get_course_table(TABLE_LP_MAIN, $course_db).
-		' lp',
+		Database::get_course_table(TABLE_LP_MAIN).' lp',
 		'values_query_function' => 'reports_modules_scorm_packageVal'));		
 
 	// sco level

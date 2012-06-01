@@ -65,11 +65,11 @@ function reports_template_CourseArticulate_getSQL() {
 
 	// SCORM Data
 	$scormData = array();
-	foreach (CourseManager::get_real_course_list() as $code => $details) {
-		$list = Database::query('select l.id as lid, l.name as lname, li.id as liid, li.title as lititle '.
-					' from '.Database::get_course_table(TABLE_LP_MAIN, $details['db_name']).' l, '.
-					' '.Database::get_course_table(TABLE_LP_ITEM, $details['db_name']).' li '.
-					' where l.id = li.lp_id');
+    $course_list = CourseManager::get_real_course_list();
+	foreach ($course_list as $code => $details) {
+		$list = Database::query('SELECT l.id as lid, l.name as lname, li.id as liid, li.title as lititle '.
+					' FROM '.Database::get_course_table(TABLE_LP_MAIN).' l, '.Database::get_course_table(TABLE_LP_ITEM).' li '.
+					' WHERE l.c_id = '.$details['real_id'].' AND li.c_id = '.$details['real_id'].' AND l.id = li.lp_id');
 		while ($lpItem = Database::fetch_assoc($list)) {
 			$scormData[] = array('coursedb' => $details['db_name'],
 						'lid' => $lpItem['lid'],

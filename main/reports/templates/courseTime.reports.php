@@ -1,5 +1,5 @@
 <?php
-
+/*
 $reports_template['courseTime'] = array(
 	'description' => 'Time spent by students in each courses',
 	'getSQL' => 'reports_template_courseTime_getSQL',
@@ -9,7 +9,7 @@ $reports_template['courseTime'] = array(
 	<span class="font_normal_07em_black">This test does not need any particular settings</span><br />
 	<input type="hidden" class="link" value="format" />
 </span>
-');
+');*/
 
 function reports_template_courseTime_getSQL() {
 	// fetch columns

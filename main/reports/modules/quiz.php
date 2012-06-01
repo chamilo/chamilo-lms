@@ -16,9 +16,7 @@ function reports_modules_quiz_init_forEachCourses($course_code, $course_id, $cou
 		'select '.$course_id.' as course_id, '.
 		$reports_modules_quiz_toolid.' as tool_id, '.
 		'q.id as child_id, q.title as child_name, '.
-		"'".$course_code."'".' as course_code from '.
-		Database::get_course_table(TABLE_QUIZ_TEST, $course_db).
-		' q',
+		"'".$course_code."'".' as course_code from '.Database::get_course_table(TABLE_QUIZ_TEST).' q ',
 		'values_query_function' => 'reports_modules_quiz_quizVal'));		
 }
 

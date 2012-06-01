@@ -242,8 +242,8 @@ class EventsMail
     {
         foreach ($event_config[$event_name]["available_keyvars"] as $key => $word) 
         {
-            $message = str_replace('%' . $key . '%', $event_data[$word], $message);
-            $subject = str_replace('%' . $key . '%', $event_data[$word], $subject);
+            $message = str_replace('((' . $key . '))', $event_data[$word], $message);
+            $subject = str_replace('((' . $key . '))', $event_data[$word], $subject);
         }
     }
 

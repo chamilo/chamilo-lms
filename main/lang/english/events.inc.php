@@ -22,7 +22,7 @@ $allCoursesPassedTitle = 'Eight succeeded courses';
 $notifManagerTitle = 'Sending mail to n+1';
 $subscribeUserToCourseTitle = 'Subscribe a user to a course';
 
-$availables_keys = 'Available keys. Use them between %%.';
+$availables_keys = 'Available keys. Use them between (( )).';
 $checkbox_activated = 'Activated ?';
 $unsaved_changes = 'You have some unsaved changes. Do you want to abandon them ?';
 ?>

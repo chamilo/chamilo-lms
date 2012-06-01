@@ -22,7 +22,7 @@ $allCoursesPassedTitle = 'Huit cours réussis';
 $notifManagerTitle = 'Envoi du mail au n+1';
 $subscribeUserToCourseTitle = 'Inscription de l\'utilisateur à un cours';
 
-$availables_keys = 'Clés disponibles. Utilisez-les entre %%.';
+$availables_keys = 'Clés disponibles. Utilisez-les entre (( )).';
 $checkbox_activated = 'Activé ?';
 
 $unsaved_changes = 'Voulez-vous abandonner les changements que vous avez faits ?';

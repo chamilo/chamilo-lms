@@ -4,17 +4,21 @@
 $language_file = array('admin','events');
 $cidReset = true;
 require_once '../inc/global.inc.php';
+require_once '../inc/conf/events.conf.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$tool_name = get_lang('EventsTitle');
+$tool_name = get_lang('events_title');
 
 $action = isset($_POST['action'])?$_POST['action']:null;
-$eventId = isset($_POST['eventId'])?$_POST['eventId']:null;
+//$eventId = isset($_POST['eventId'])?$_POST['eventId']:null;
+$eventName = isset($_POST['eventList'])?$_POST['eventList']:null;
 $eventUsers = isset($_POST['eventUsers'])?$_POST['eventUsers']:null;
 $eventMessage = isset($_POST['eventMessage'])?$_POST['eventMessage']:null;
 $eventSubject = isset($_POST['eventSubject'])?$_POST['eventSubject']:null;
+$eventMessageLanguage = isset($_POST['languages'])?$_POST['languages']:null;
+$activated = isset($_POST['activated'])?$_POST['activated']:0;
 
 if($action == 'modEventType') {
 	if($eventUsers) {
@@ -23,39 +27,39 @@ if($action == 'modEventType') {
 	else {
 		$users = array();
 	}
-	
-	eventType_mod($eventId,$users,$eventMessage,$eventSubject);
+
+        save_event_type_message($eventName,$users,$eventMessage,$eventSubject, $eventMessageLanguage, $activated);
+        
 	// echo mysql_error();
 	header('location: event_type.php');
 	exit;
 }
 
-$ets = eventType_getAll();
+$ets = get_all_event_types();
 
+$languages = api_get_languages();
 
 $ajaxPath = api_get_path(WEB_CODE_PATH).'inc/ajax/events.ajax.php';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 
 Display::display_header($tool_name);
 
+$key_lang = get_lang('unsaved_changes');
+
+$users = UserManager::get_user_list();
+
 ?>
 
 <script language="javascript">
-	var usersList;
+	var usersList = <?php print json_encode($users) ?>;
 	var eventTypes = <?php print json_encode($ets) ?>;
+	var eventsConfig = <?php print json_encode($event_config) ?>;
+        var currentLanguage = <?php print json_encode(api_get_interface_language()) ?>;
+        var flagContentHasChanged = false;
+        
+        var key_lang = "<?php print $key_lang ?>";
 
-	$(document).ready(function(){
-		ajax({action:"getUsers"},function(data) {
-				usersList = data;
-			}
-		);
-		
-		// ajax({action:"getEventTypes"},function(data) {
-				// eventTypes = data;
-				// showEventTypes(data);
-			// }
-		// );
-	});
+	
 
 	function ajax(params,func) {
 		$.ajax({
@@ -75,18 +79,11 @@ Display::display_header($tool_name);
 		);
 	}
 	
-	// function showEventTypes(data) {
-		// $.each(data,function(ind,item) {
-				// addOption($('#eventList'),item.id,item.name);
-			// }
-		// );
-	// }
-	
 	function getCurrentEventTypeInd() {
 		var ind=false;
 		$.each(eventTypes,function(i,item)
 			{
-				if(item.id == $('#eventList option:selected').first().attr('value')) {
+				if(item.event_type_name == $('#eventList option:selected').first().attr('value')) {
 					ind=i;
 					return false;
 				}
@@ -95,33 +92,92 @@ Display::display_header($tool_name);
 		
 		return ind;
 	}
+        
+        function getCurrentEventTypeName()
+        {
+            var name = false;
+		
+            return $('#eventList option:selected').first().attr('value');
+        }
 	
 	function showEventType() {
+            cleanInput();
 		eInd = getCurrentEventTypeInd();
+                currentEventName = getCurrentEventTypeName();
+                
+                $("span#activated_checkbox").css("display", "inline"); // make checkbox visible
+                $('input[name=activated]').attr('checked', false);
+                
+                
+                if(typeof(eventsConfig[currentEventName])!='undefined')
+                {
+                    if(eventsConfig[currentEventName].self_sent == true) // if registration, only sent to self_user
+                    {
+                        $(".registration_case").css("display", "none");
+                    }
+                    else
+                    {
+                        $(".registration_case").css("display", "block");
+                    }
+                }
+                else
+                {
+                    $(".registration_case").css("display", "block");
+                }
+
+                // List of events configuration
+                $('#eventName').attr('value', currentEventName);
+//                $('#descLangVar').text(eventsConfig[currentEventName].desc_lang_var);
+                
+                // set message and subject accoding to the current interface language
+                $.each(eventTypes,function(key,value)
+                {
+                    if(eventTypes[key]["event_type_name"] == currentEventName)
+                    {
+                            $('#eventNameTitle').text(eventTypes[key]["nameLangVar"]);
+                    }
+                    
+                    if(eventTypes[key]["event_type_name"] == currentEventName && eventTypes[key]["activated"] == 1)
+                    {
+                        $('input[name=activated]').attr('checked', true);
+                    }
+                    
+                    if(eventTypes[key]["event_type_name"] == currentEventName && eventTypes[key]["dokeos_folder"] == currentLanguage)
+                    {
+                        
+                            $('#eventMessage').val(eventTypes[key]["message"]);
+                            $('#eventSubject').val(eventTypes[key]["subject"]);
+
+                    }
+                });
+                
+                // displays the available keys for the mail template (related to an event name)
+                $('#keys').find('li').remove();
+                if(typeof(eventsConfig[currentEventName]["available_keyvars"])!='undefined')
+                {
+                    $.each(eventsConfig[currentEventName]["available_keyvars"],function(key,value) 
+                    {
+                        $('#keys').append('<li>'+key+'</li>');
+                    });
+                }
 		
-		$('#eventId').attr('value',eventTypes[eInd].id);
-		$('#eventName').attr('value',eventTypes[eInd].name);
-		$('#eventNameTitle').text(eventTypes[eInd].nameLangVar);
-		$('#eventMessage').text(eventTypes[eInd].message);
-		$('#eventSubject').attr('value',eventTypes[eInd].subject);
-		$('#descLangVar').text(eventTypes[eInd].descLangVar);
-				
-		ajax({action:"getEventTypeUsers","id":eventTypes[eInd].id},function(data) {
-				removeAllOption($('#usersSubList'));
-				
-				refreshUsersList();
-				
-				usersIds = new Array();
-				
-				$.each(data,function(ind,item) {
-					addOption($('#usersSubList'),item.user_id,item.firstname + ' '+item.lastname);
-					usersIds[ind] = item.value;
-					removeOption($('#usersList'),item.user_id);
-				});
-				
-				$('#eventUsers').attr('value',usersIds.join(';'));
-			}
-		);
+                
+                    ajax({action:"get_event_users", eventName:currentEventName},function(data) {
+                                    removeAllOption($('#usersSubList'));
+
+                                    refreshUsersList();
+//
+                                    usersIds = new Array();
+
+                                    $.each(data,function(ind,item) {
+                                            addOption($('#usersSubList'),item.user_id,item.firstname + ' '+item.lastname);
+                                            usersIds[ind] = item.value;
+                                            removeOption($('#usersList'),item.user_id);
+                                    });
+
+                                    $('#eventUsers').attr('value',usersIds.join(';'));
+                            }
+                    );
 	}
 	
 	function submitForm() {
@@ -145,7 +201,7 @@ Display::display_header($tool_name);
 	function addOption(select,value,text) {
 		select.append('<option value="'+value+'">'+text+'</option>');
 	}
-	
+        
 	function removeOption(select,value) {
 		select.find('option[value='+value+']').remove();
 	}
@@ -163,56 +219,132 @@ Display::display_header($tool_name);
 			removeOption(src,val);
 		});
 	}
+        
+        /**
+         * Change the message of the mail according to the selected language
+         */
+        function changeLanguage()
+        {
+            cleanInput();
+            currentEventName = getCurrentEventTypeName();
+            $.each(eventTypes,function(key,value)
+            {
+                if(eventTypes[key]["event_type_name"] == currentEventName && eventTypes[key]["dokeos_folder"] == $('#languages option:selected').first().attr('value'))
+                {
+                        $('#eventSubject').val(eventTypes[key]["subject"]);
+                        $('#eventMessage').val(eventTypes[key]["message"]);
+                }
+            });
+            
+        }
+        
+        /**
+         * Set flag at true if message and/or content was changed
+         */
+        function contentChanged()
+        {
+            flagContentHasChanged = true;
+        }
+        
+        /**
+         * Asks if user want to abandon the changes he's done
+         */
+        function confirmMessage(sender)
+        {
+            if(flagContentHasChanged == true)
+            {
+                if(confirm(key_lang))
+                {
+                    flagContentHasChanged = false;
+                    if(sender == "eventList")
+                    {
+                        cleanInput();
+                        showEventType();
+                    }
+                    else if(sender == "languages")
+                    {
+                        cleanInput();
+                        changeLanguage();
+                    }
+                }
+            }
+            else
+            {
+                if(sender == "eventList")
+                    showEventType();
+                else if(sender == "languages")
+                    changeLanguage();
+            }
+        }
+        
+        /**
+         * Empty the input and the textarea
+         */
+        function cleanInput()
+        {
+            $('#eventMessage').val("");
+            $('#eventSubject').val("");
+        }
 </script>
 
-<h3><?php print get_lang('EventsTitle') ?></h3>
+<h3><?php print get_lang('events_title') ?></h3>
+
+<form method="POST" onSubmit="return submitForm(); ">
 
 <table id="" width="90%">
 	<tr>
 		<td width="5%">
-			<h4><?php print get_lang('EventsListTitle'); ?></h4>
+			<h4><?php print get_lang('events_listTitle'); ?></h4>
 		</td>
 		<td width="5%">
-			<h4><?php print get_lang('EventsUserListTile'); ?></h4>
+			<h4><?php print get_lang('events_userListTile'); ?></h4>
 		</td>
 		<td width="5%">
 			&nbsp;
 		</td>
 		<td width="5%">
-			<h4><?php print get_lang('EventsUserSubListTile'); ?></h4>
+			<h4><?php print get_lang('events_userSubListTile'); ?></h4>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<select multiple="1" id="eventList" onChange="showEventType()">
+			<select multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
 				<?php
 					
-					foreach($ets as $et) {
-						print '<option value="'.$et['id'].'">'.$et['nameLangVar'].'</option>';
+					foreach($event_config as $key => $config) {
+						print '<option value="'.$key.'">'.get_lang($config['name_lang_var']).'</option>';
 					}
 					
 				?>
 			</select>
 		</td>
 		<td>
-			<select multiple="1" id="usersList"></select>
+			<select multiple="1" id="usersList" class="registration_case"></select>
 		</td>
-		<td valign="middle">
+		<td valign="middle" class="registration_case">
 			<button class="arrowr" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'></button>
 			<br />
 			<button class="arrowl" onclick='moveUsers($("#usersSubList"),$("#usersList")); return false;'></button>
 		</td>
 		<td>
-			<select multiple="1" id="usersSubList"></select>
+                    <select multiple="1" id="usersSubList" class="registration_case"></select>
 		</td>
 	</tr>
 </table>
-
+    <br />
+<span id="activated_checkbox"><label for="activated" style="display:inline;"><?php print get_lang('checkbox_activated'); ?></label><input type="checkbox" name="activated" value="1" /></span>
 <br />
 
 <h2 id="eventNameTitle"></h2>
 
-<form method="POST" onSubmit="return submitForm(); ">
+
+    
+        <select id="languages" name="languages" style="margin-top:20px;" onclick='confirmMessage(this.name); return false;'>
+            <?php foreach($languages["name"] as $key => $value){ $english_name = $languages['folder'][$key]; ?>
+            <option value="<?php echo $english_name; ?>" <?php echo ($english_name == api_get_interface_language()) ? "selected=selected" : ""; ?>><?php echo $value; ?></option>
+            <?php } ?>
+        </select>
+
 	<input type="hidden" name="action" value="modEventType" />
 	<input type="hidden" name="eventId" id="eventId" />
 	<input type="hidden" name="eventUsers" id="eventUsers" />
@@ -220,21 +352,35 @@ Display::display_header($tool_name);
 	
 	<br />
 	
-	<div id="descLangVar">
-	</div>
+<!--	<div id="descLangVar">
+	</div>-->
 	<br />
 	
-	<label for="eventSubject"><h4><?php print get_lang('EventsLabelSubject'); ?></h4></label>
-	<input type="text" id="eventSubject" name="eventSubject" />
+	<label for="eventSubject"><h4><?php print get_lang('events_labelSubject'); ?></h4></label>
+        <input type="text" id="eventSubject" name="eventSubject" onchange="contentChanged(); return false;" />
 	<br /><br />
-	<label for="eventMessage"><h4><?php print get_lang('EventsLabelMessage'); ?></h4></label>
-	<textarea cols="100" rows="10" name="eventMessage" id="eventMessage">
-	
-	</textarea>
+        <table>
+            <tr>
+                <td>
+                    <label for="eventMessage"><h4><?php print get_lang('events_labelMessage'); ?></h4></label>
+                </td>
+                <td class="available_keys" style="padding-left: 30px;">
+                    <h4><?php print get_lang('availables_keys'); ?></h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea cols="100" rows="10" name="eventMessage" id="eventMessage" onchange="contentChanged(); return false;"></textarea>
+                </td>
+                <td class="available_keys">
+                    <div id="keys" style="padding-left: 50px;"><ul></ul></div>
+                </td>
+            </tr>
+        </table>
 
 <br /><br />
 
-<input type="submit" value="<?php print get_lang('EventsButtonMod'); ?>" />
+<input type="submit" value="<?php print get_lang('events_btnMod'); ?>" />
 
 </form>
 

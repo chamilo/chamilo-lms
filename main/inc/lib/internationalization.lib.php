@@ -133,7 +133,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
     // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
     // The $langstats object is instanciated at the end of main/inc/global.inc.php
-    if ($_configuration['language_measure_frequency'] == 1) {
+    if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
       require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
       global $langstats;
       $langstats->add_use($variable,'');

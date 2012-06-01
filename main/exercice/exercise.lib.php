@@ -850,7 +850,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         
         //Hack in order to filter groups
         $sql_inner_join_tbl_user = '';
-                
+        
         if (strpos($extra_where_conditions, 'group_id')) {
             $sql_inner_join_tbl_user = " 
             (
@@ -870,6 +870,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 SELECT u.user_id, firstname, lastname, email, username, '' as group_name, '' as group_id
                 FROM $TBL_USER u                 
             )";
+            $sql_inner_join_tbl_user = null;
         }
         
         if (strpos($extra_where_conditions, 'group_none')) {
@@ -885,10 +886,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         }
         
         //All
+        $is_empty_sql_inner_join_tbl_user = false;
+        
         if (empty($sql_inner_join_tbl_user)) {
+            $is_empty_sql_inner_join_tbl_user = true;
              $sql_inner_join_tbl_user = " 
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, , '' as group_id
+                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id
                 FROM $TBL_USER u                 
             )";
         }
@@ -929,6 +933,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND orig_lp_item_id = 0
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
+        //var_dump($sql);
         
          // sql for hotpotatoes tests for teacher / tutor view    
         $hpsql = "SELECT 
@@ -997,7 +1002,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     	$teacher_id_list[] = $teacher['user_id'];
     }    
     
-    if (empty($hotpotatoe_where)) {      
+    if (empty($hotpotatoe_where)) {
         $column             = !empty($column) ? Database::escape_string($column) : null;
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
@@ -1014,12 +1019,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $results[] = $rowx;
         }
-    
+            
         $list_info = array();
     
-        // Print test results.
-        $lang_nostartdate = get_lang('NoStartDate') . ' / ';    
-        
         if (is_array($results)) {
 			
             $users_array_id = array();
@@ -1033,6 +1035,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             
             $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
             			
+            $group_list_info = array();
+            
             for ($i = 0; $i < $sizeof; $i++) {                
                 $revised = $results[$i]['revised'];	
                 
@@ -1046,9 +1050,26 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $user = $results[$i]['firstname'] . $results[$i]['lastname'];                    
                     $user_groups = displayGroupsForUser('<br/>', $results[$i]['user_id']);
                 } else {                    
-                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                              
+                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];                              
                 }
+                
+                //Add all groups by user
+                
+                $group_name_list = null;
+                
+                if ($is_empty_sql_inner_join_tbl_user) {                    
+                    $group_list = GroupManager::get_group_ids(api_get_course_int_id(), $results[$i]['user_id']);
+                    
+                    foreach ($group_list as $id) {                                                                        
+                        if (!isset($group_list_info[$id])) {
+                            $result = GroupManager::get_group_properties($id);
+                            $group_list_info[$id] = $result;
+                        }
+                        $group_name_list .= $group_list_info[$id]['name'].' ';                        
+                    }
+                    $results[$i]['group_name'] = $group_name_list;                    
+                }                
+                
                 $user_list_id[] = $results[$i]['exe_user_id'];
                 $id = $results[$i]['exe_id'];   
                

@@ -1074,6 +1074,7 @@ class GroupManager {
 		$result &= !self :: is_tutor_of_group($user_id, $group_id);
 		return $result;
 	}
+    
 	/**
 	 * Can a user unsubscribe to a specified group in a course
 	 * @param int $user_id
@@ -1085,6 +1086,7 @@ class GroupManager {
 		$result = self :: is_subscribed($user_id, $group_id);
 		return $result;
 	}
+    
 	/**
 	 * Get all subscribed users from a group
 	 * @param int $group_id

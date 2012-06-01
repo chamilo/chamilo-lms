@@ -62,7 +62,7 @@ if(!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
 }
 
 $current_session_id = api_get_session_id();
-$groupId=$_SESSION['_gid'];
+$groupId    =  api_get_group_id();
 $relativeUrlPath=$_SESSION['draw_dir'];
 $currentTool=$_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -142,8 +142,8 @@ unset($_SESSION['draw_file']);
 unset($_SESSION['whereami']);
 
 echo '<script language="javascript" type="text/javascript">';
-if($suffix!= 'png'){	
-	if ($relativeUrlPath==''){$relativeUrlPath='/';};
+if ($suffix!= 'png'){	
+	if ($relativeUrlPath==''){$relativeUrlPath='/';};    
 	$interbreadcrumb=api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&curdirpath='.	urlencode($relativeUrlPath);
 	echo 'alert("'.get_lang('FileSavedAs').': '.$title.'");';	
 	echo 'window.top.location.href="'.$interbreadcrumb.'";';//return to current document list

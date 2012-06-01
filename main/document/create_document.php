@@ -29,15 +29,12 @@ var hide_bar = function() {
 }
 
 $(document).ready(function() {
-    if ($(window).width() <= 800 ) {
-        $("#template_col").hide();
+    if ($(window).width() <= 785 ) {
+        hide_bar();      
     }
     $("#hide_bar_template").toggle(
         function() { 
-            $("#template_col").hide(); 
-            $("#doc_form").removeClass("span9"); 
-            $("#doc_form").addClass("span11");             
-            $(this).css({"background-image" : \'url("../img/hide2.png")\'})
+          hide_bar();
         },
         function() { 
             $("#template_col").show(); 
@@ -597,7 +594,7 @@ if ($form->validate()) {
 	}    
     // HTML-editor
     echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:180px">
+            <div id="template_col" class="span2" style="width:162px">
                 <div id="frmModel" style="overflow: visible;"></div>
             </div>
             <div id="hide_bar_template"></div>

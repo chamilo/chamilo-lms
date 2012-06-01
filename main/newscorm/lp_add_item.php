@@ -200,6 +200,11 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
     #resExercise .ui-selected { background: #F39814; color: white; }
     #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
     #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+    
+    /* Fixes LP toolbar */
+    #resource_tab li a {
+        padding: 5px 4px;
+    }
 </style>
     
 <script>
@@ -258,11 +263,9 @@ echo '</div>';
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {    
     echo '<div id="hide_bar_template" ></div>';    
 }
-if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {    
-    echo '<div id="doc_form" class="span7">';
-} else {
-    echo '<div id="doc_form" class="span8">';
-}
+
+echo '<div id="doc_form" class="span8">';
+
 if (isset($new_item_id) && is_numeric($new_item_id)) {        
     switch ($type) {
         case 'chapter':

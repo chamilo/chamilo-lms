@@ -142,6 +142,8 @@ class Autoload
         $result['EvalLink'] = '/main/gradebook/lib/be/evallink.class.php';
         $result['Evaluation'] = '/main/gradebook/lib/be/evaluation.class.php';
         $result['Event'] = '/main/coursecopy/classes/Event.class.php';
+        $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
+        $result['EventsDispatcher'] = '/main/inc/lib/events_dispatcher.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';

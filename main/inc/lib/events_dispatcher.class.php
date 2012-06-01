@@ -1,7 +1,5 @@
 <?php
-
-require_once api_get_path(CONFIGURATION_PATH).'events.conf.php';
-require_once api_get_path(LIBRARY_PATH).'events_email.lib.php';
+include_once api_get_path(CONFIGURATION_PATH).'events.conf.php';
 
 /**
  * 

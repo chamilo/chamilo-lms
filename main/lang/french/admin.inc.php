@@ -3,6 +3,12 @@
 for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Activer l'authentification CAS permettra aux utilisateurs de s'identifier à l'aide de leur compte CAS<br/>Vous trouverez dans les <a href='settings.php?category=CAS'>Plugin</a> un bouton 'Login CAS', parametrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
+$MailTemplateRegistrationMessage = "Cher(ère) ((firstname)) ((lastname)), Vous êtes inscrit(e) sur
+((sitename) avec les paramètres suivants: Nom d'utilisateur :
+((username)) Mot de passe : ((password)) L'adresse de ((sitename)) est :
+((url)) En cas de problème, n'hésitez pas à prendre contact avec nous
+Cordialement, le responsable ((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationTitle = "Nouvel inscrit sur ((sitename))";
 $AdminBy = "Administration  par";
 $AdministrationTools = "Administration";
 $State = "Etat du système";

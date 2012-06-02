@@ -1555,20 +1555,20 @@ Para configurarlo en Chamilo:
 
 editar el archivo  <strong> main/auth/shibboleth/config/aai.class.php</strong>
 
-Modificar valores de $result con el nombre de los atributos de Shibboleth
+Modificar valores de \$result con el nombre de los atributos de Shibboleth
 
-    $result->unique_id = 'mail';
-    $result->firstname = 'cn';
-    $result->lastname = 'uid';
-    $result->email = 'mail';
-    $result->language = '-';
-    $result->gender = '-';
-    $result->address = '-';
-    $result->staff_category = '-';
-    $result->home_organization_type = '-';
-    $result->home_organization = '-';
-    $result->affiliation = '-';
-    $result->persistent_id = '-';
+    \$result->unique_id = 'mail';
+    \$result->firstname = 'cn';
+    \$result->lastname = 'uid';
+    \$result->email = 'mail';
+    \$result->language = '-';
+    \$result->gender = '-';
+    \$result->address = '-';
+    \$result->staff_category = '-';
+    \$result->home_organization_type = '-';
+    \$result->home_organization = '-';
+    \$result->affiliation = '-';
+    \$result->persistent_id = '-';
     ...
 
 Ir a Plug-in para añadir el botón 'Shibboleth Login' en su campus de Chamilo.";
@@ -1578,7 +1578,7 @@ $FacebookMainActivateComment = "En primer lugar, se tiene que crear una aplicaci
 
 Entonces, editar el archivo <strong> main/auth/external_login/facebook.conf.php </strong>
 
-e ingresar en \"appId\" y \"secret\" los valores de $facebook_config.
+e ingresar en \"appId\" y \"secret\" los valores de \$facebook_config.
 
 Ir a Plug-in para añadir un botón configurable \"Facebook Login\" para el campus de Chamilo.";
 $LanguagePriority1Title = "Prioridad del idioma 1";

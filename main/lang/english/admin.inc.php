@@ -3,6 +3,12 @@
 for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
+$MailTemplateRegistrationMessage = "Dear ((firstname)) ((lastname)),\n\nYou are registered on
+((sitename)) with the following settings:\n\nUsername :
+((username))\nPass : ((password))\n\nThe address of ((sitename)) is :
+((url))\n\nIn case of trouble, contact us.\n\nYours sincerely
+\n((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationTitle = "New user on ((sitename))";
 $AdminBy = "Administration by";
 $AdministrationTools = "Administration";
 $State = "Portal status";

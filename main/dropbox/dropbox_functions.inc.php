@@ -104,7 +104,7 @@ function handle_multiple_actions() {
 */
 function delete_category($action, $id) {
     $course_id = api_get_course_int_id();
-    
+
 	global $dropbox_cnf;
 	global $_user, $is_courseAdmin, $is_courseTutor;
 
@@ -148,39 +148,23 @@ function delete_category($action, $id) {
 *
 * @return html code of the form that appears in a message box.
 *
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function display_move_form($part, $id, $target = array(), $extra_params) {
-	
-	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'&'.$extra_params.'">';
-    echo '<legend>'.get_lang('MoveFileTo').'</legend>';
-	echo '<input type="hidden" name="id" value="'.Security::remove_XSS($id).'">';
-	echo '<input type="hidden" name="part" value="'.Security::remove_XSS($part).'">';
-	echo '
-			<div class="row">
-				<div class="label">
-					<span class="form_required">*</span> '.get_lang('MoveFileTo').'
-				</div>
-				<div class="formw">';
-	echo '<select name="move_target">';
-	echo '<option value="0">'.get_lang('Root').'</option>';
-	foreach ($target as $key => $category) {
-		echo '<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
-	}
-	echo  '</select>';
-	echo '	</div>
-			</div>';
+* @author Julio Montoya - function rewritten
 
-	echo '<div class="row">
-			<div class="label">
-			</div>
-			<div class="formw">
-				<button class="next" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
-			</div>
-		</div>';
-	echo '</form>';
-	echo '<div style="clear: both;"></div>';
+*/
+function display_move_form($part, $id, $target = array(), $extra_params = array()) {
+    $form = new FormValidator('form1', 'post', api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'&'.$extra_params);
+	$form->addElement('header', get_lang('MoveFileTo'));
+    $form->addElement('hidden', 'id', intval($id));
+    $form->addElement('hidden', 'part', Security::remove_XSS($part));
+
+    $options = array('0' => get_lang('Root'));
+	foreach ($target as $category) {
+        $options[$category['cat_id']] = $category['cat_name'];
+	}
+    $form->addElement('select', 'move_target', get_lang('MoveFileTo'), $options);
+    $form->addElement('button', 'do_move', get_lang('MoveFile'));
+    $form->display();
+
 }
 
 /**
@@ -336,7 +320,7 @@ function store_addcategory() {
 	if ($_POST['category_name'] == '') {
 		return array('type' => 'error', 'message' => get_lang('ErrorPleaseGiveCategoryName'));
 	}
-	
+
 	if (!$_POST['edit_id']) {
 		$session_id = api_get_session_id();
 		// step 3a, we check if the category doesn't already exist
@@ -368,13 +352,12 @@ function store_addcategory() {
 * @param $id this is the id of the category we are editing.
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+  @author Julio Montoya UI changes
+ *
 * @version march 2006
 */
 function display_addcategory_form($category_name = '', $id = '', $action) {
-    $course_id = api_get_course_int_id();
-     
 	global $dropbox_cnf;
-    
     $course_id = api_get_course_int_id();
 	$title = get_lang('AddNewCategory');
 
@@ -410,44 +393,24 @@ function display_addcategory_form($category_name = '', $id = '', $action) {
 		$text = get_lang('CreateCategory');
 		$class = 'add';
 	}
-	echo '<form name="add_new_category" method="post" action="'.api_get_self().'?view="'.Security::remove_XSS($_GET['view']).'">'."\n";
-    echo '<legend>'.$title.'</legend>';
-	if (isset($id) AND $id != '') {
-		echo '<input name="edit_id" type="hidden" value="'.Security::remove_XSS($id).'">';
-	}
-	echo '<input name="action" type="hidden" value="'.Security::remove_XSS($action).'">';
-	echo '<input name="target" type="hidden" value="'.$target.'">';
-    echo '	<div class="row">
-				<div class="label">
-					<span class="form_required">*</span> '.get_lang('CategoryName').'
-				</div>
-				<div class="formw">';
-	if ($_POST AND empty($_POST['category_name'])) {
-		echo '<span class="form_error">'.get_lang('ThisFieldIsRequired').'. '.get_lang('ErrorPleaseGiveCategoryName').'<span><br />';
-	}
-	if ($_POST AND !empty($_POST['category_name'])) {
-		echo '<span class="form_error">'.get_lang('CategoryAlreadyExistsEditIt').'<span><br />';
-	}
-	echo '			<input type="text" id="category_title" name="category_name" value="'.Security::remove_XSS($category_name).'" />
-				</div>
-			</div>';
 
-	echo '	<div class="row">
-				<div class="label">
-				</div>
-				<div class="formw">
-					<button class="'.$class.'" type="submit" name="StoreCategory">'.$text.'</button>
-				</div>
-			</div>';
-	echo '	<div class="row">
-				<div class="label">
-				</div>
-				<div class="formw">
-					<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>
-				</div>
-			</div>';
-	echo '</form>';
-	echo '<div style="clear: both;"></div>';
+    $form = new FormValidator('add_new_category', 'post', api_get_self().'?view="'.Security::remove_XSS($_GET['view']));
+    $form->addElement('header', $title);
+
+	if (isset($id) AND $id != '') {
+        $form->addElement('hidden', 'edit_id', intval($id));
+	}
+    $form->addElement('hidden', 'action', Security::remove_XSS($action));
+    $form->addElement('hidden', 'target', Security::remove_XSS($target));
+
+    $form->addElement('text', 'category_name', get_lang('CategoryName'));
+    $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('button', 'StoreCategory', $text);
+
+    $defaults = array();
+    $defaults['category_name'] = $category_name;
+    $form->setDefaults($defaults);
+    $form->display();
 }
 
 /**
@@ -464,12 +427,12 @@ function display_add_form() {
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="javascript: return checkForm(this);">
 	<legend><?php echo get_lang('UploadNewFile'); ?></legend>
-    
-	<div class="row">
-		<div class="label">
+
+	<div class="control-group">
+		<label>
 			<span class="form_required">*</span><?php echo get_lang('UploadFile'); ?>:
-		</div>
-		<div class="formw">
+		</label>
+		<div class="controls">
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf('maxFilesize'); ?>' />
 				<input type="file" name="file" size="20" <?php if (dropbox_cnf('allowOverwrite')) echo 'onChange="javascript: checkfile(this.value);"'; ?> />
 				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid; ?>" />
@@ -485,13 +448,10 @@ function display_add_form() {
 	<?php
 	if (dropbox_cnf('allowOverwrite')) {
 		?>
-		<div class="row">
-			<div class="label">
-
-			</div>
-			<div class="formw">
-				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" />
-				<label for="cb_overwrite">
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">
+                    <input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" />
 				<?php echo get_lang('OverwriteFile'); ?>
 				</label>
 			</div>
@@ -500,15 +460,15 @@ function display_add_form() {
 	}
 	?>
 
-	<div class="row">
-		<div class="label">
+	<div class="control-group">
+		<label class="control-label">
 			<?php echo get_lang('SendTo'); ?>
-		</div>
-		<div class="formw">
+		</label>
+		<div class="controls">
 	<?php
 
 	//list of all users in this course and all virtual courses combined with it
-	if (api_get_session_id()) {	    
+	if (api_get_session_id()) {
 		$complete_user_list_for_dropbox = array();
 		if (api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
 			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
@@ -516,23 +476,23 @@ function display_add_form() {
 		$complete_user_list2 = CourseManager::get_coach_list_from_course_code($course_info['code'], api_get_session_id());
 		$complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox, $complete_user_list2);
 	} else {
-		if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {		    
+		if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
 			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
 		} else {
 			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code'], false);
 		}
 	}
-	
+
     if (!empty($complete_user_list_for_dropbox)) {
     	foreach ($complete_user_list_for_dropbox as $k => $e) {
     	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
     	}
     	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
     }
-    
+
 	?>
 
-				<select name="recipients[]" size="
+    <select name="recipients[]" size="
 	<?php
 	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) {
 		echo 10;
@@ -590,16 +550,13 @@ function display_add_form() {
     	echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
     }
 
-	echo '
-			</select>
+	echo '</select>
 		</div>
 	</div>';
 
 	echo '
-		<div class="row">
-			<div class="label">
-			</div>
-			<div class="formw">
+		<div class="control-group">
+			<div class="controls">
 				<button type="Submit" class="upload" name="submitWork">'.get_lang('Upload', '').'</button>
 			</div>
 		</div>
@@ -662,8 +619,8 @@ function isCourseMember($user_id) {
 * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server
 */
 function removeUnusedFiles() {
-    $course_id = api_get_course_int_id(); 
-    
+    $course_id = api_get_course_int_id();
+
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM " . dropbox_cnf('tbl_file') . " f
@@ -695,14 +652,14 @@ function removeUnusedFiles() {
 * @todo check if this function is still necessary.
 */
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
-    $course_id = api_get_course_int_id(); 
-        
+    $course_id = api_get_course_int_id();
+
 	global $dropbox_cnf;
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
 			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON f.id = p.file_id
-			WHERE f.c_id = $course_id AND p.c_id = $course_id AND 
+			WHERE f.c_id = $course_id AND p.c_id = $course_id AND
 			p.dest_user_id = '" . $mailingPseudoId . "'";
     $result = Database::query($sql);
 
@@ -718,7 +675,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
 * @todo check if this function is still necessary.
 */
 function removeMoreIfMailing($file_id) {
-    $course_id = api_get_course_int_id(); 
+    $course_id = api_get_course_int_id();
 	global $dropbox_cnf;
     // when deleting a mailing zip-file (posted to mailingPseudoId):
     // 1. the detail window is no longer reachable, so
@@ -895,7 +852,7 @@ function store_add_dropbox() {
 	$b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
 
 	if ($b_send_mail) {
-		foreach ($new_work_recipients as $recipient_id) {			
+		foreach ($new_work_recipients as $recipient_id) {
 			$recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
 			@api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
 				get_lang('NewDropboxFileUploaded'),
@@ -978,8 +935,8 @@ function format_feedback($feedback) {
 * @version march 2006
 */
 function feedback_form() {
-    $course_id = api_get_course_int_id(); 
-    
+    $course_id = api_get_course_int_id();
+
 	global $dropbox_cnf;
 
 	$return = get_lang('AddNewFeedback').'<br />';
@@ -1037,9 +994,9 @@ function zip_download($array) {
 	global $_course;
 	global $dropbox_cnf;
 	global $files;
-    
-    $course_id = api_get_course_int_id();    
-	
+
+    $course_id = api_get_course_int_id();
+
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 	// zip library for creation of the zipfile
@@ -1047,14 +1004,14 @@ function zip_download($array) {
 
 	// place to temporarily stash the zipfiles
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH);
-	
+
 	array_map('intval', $array);
 
 	// note: we also have to add the check if the user has received or sent this file.
 	$sql = "SELECT distinct file.filename, file.title, file.author, file.description
 			FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person
 			WHERE file.c_id = $course_id AND
-			person.c_id = $course_id AND   
+			person.c_id = $course_id AND
 			file.id IN (".implode(', ',$array).")
 			AND file.id=person.file_id
 			AND person.user_id='".api_get_user_id()."'";
@@ -1065,15 +1022,15 @@ function zip_download($array) {
 	}
 
 	// Step 3: create the zip file and add all the files to it
-	$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";	
-	$zip_folder = new PclZip($temp_zip_file);	
-	foreach ($files as $key => $value) {	    
+	$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
+	$zip_folder = new PclZip($temp_zip_file);
+	foreach ($files as $key => $value) {
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 	}
-	
-	/* 
+
+	/*
 	 * @todo if you want the overview code fix it by yourself
-	 * 
+	 *
 	// Step 1: create the overview file and add it to the zip
 	$overview_file_content = generate_html_overview($files, array('filename'), array('title'));
 	$overview_file = $temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].' '.$_user['lastname'] : $_user['lastname'].' '.$_user['firstname'], 'strict').'.html';
@@ -1086,11 +1043,11 @@ function zip_download($array) {
 	//$zip_folder->add($overview_file, PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
 
 	// Step 5: send the file for download;
-	
+
 	$name = 'dropbox-'.api_get_utc_datetime().'.zip';
 	DocumentManager::file_send_for_download($temp_zip_file, true, $name);
 	@unlink($temp_zip_file);
-	exit;		
+	exit;
 }
 
 /**
@@ -1173,7 +1130,7 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 function get_total_number_feedback($file_id = '') {
 	global $dropbox_cnf;
 	$course_id = api_get_course_int_id();
-	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']." 
+	$sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']."
 			WHERE c_id = $course_id GROUP BY file_id";
 	$result = Database::query($sql);
 	while ($row=Database::fetch_array($result)) {

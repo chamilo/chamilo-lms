@@ -23,7 +23,7 @@ use \ChamiloSession as Session;
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
-if ($lp_controller_touched != 1) {    
+if ($lp_controller_touched != 1) {
     header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
     exit;
 }
@@ -40,10 +40,10 @@ api_protect_course_script();
 
 $lp_id      = intval($_GET['lp_id']);
 
-// Check if the learning path is visible for student - (LP requisites) 
+// Check if the learning path is visible for student - (LP requisites)
 if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
     api_not_allowed();
-}     
+}
 
 //Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
@@ -125,19 +125,19 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
 
 if (!isset($src)) {
     $src = '';
-       
+
     switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {         	
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);                     
-                
+            if ($prereq_check === true) {
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
+
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
-                $file_info = parse_url($src); 
-                $file_info = pathinfo($file_info['path']);                 
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {                	
+                $file_info = parse_url($src);
+                $file_info = pathinfo($file_info['path']);
+                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
                     //$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?src='.$src;
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
                 }
@@ -196,18 +196,18 @@ if ($debug) {
 
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
     global $src;
-    
+
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
-    
+
     $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);    
+    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id           = intval($_GET['lp_item_id']);
     $safe_id                = $lp_id;
     $safe_exe_id            = intval($_REQUEST['exeId']);
-    
+
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
-		
+
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
         if ($debug) error_log($sql);
         $res = Database::query($sql);
@@ -216,10 +216,10 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $time_start_date = api_strtotime($row_dates['start_date'],'UTC');
         $time_exe_date   = api_strtotime($row_dates['exe_date'],'UTC');
 
-        $mytime 	= ((int)$time_exe_date-(int)$time_start_date);        
+        $mytime 	= ((int)$time_exe_date-(int)$time_start_date);
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
-        
+
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".$safe_item_id."'";
         if ($debug) error_log($sql_upd_max_score);
         Database::query($sql_upd_max_score);
@@ -227,11 +227,11 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
         $res_last_attempt = Database::query($sql_last_attempt);
         if ($debug) error_log($sql_last_attempt);
-        
+
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
         	$lp_item_view_id  = $row_last_attempt[0];
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime 
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime
                               WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
             if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
@@ -244,7 +244,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.$safe_exe_id.'&origin=learnpath&learnpath_id='.$lp_id.'&learnpath_item_id='.$lp_id.'&fb_type='.Security::remove_XSS($_GET['fb_type']);
+        $src = api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$safe_exe_id;
         if ($debug) error_log('Calling URL: '.$src);
     }
     $autostart = 'false';
@@ -312,13 +312,13 @@ if (Database::num_rows($res_media) > 0) {
     while ($row_media= Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
     }
-}                
+}
 ?>
 
 <div id="learning_path_main" style="width:100%;height:100%;">
     <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
         <!-- header -->
-        <div id="header">        
+        <div id="header">
             <table>
                 <tr>
                     <td>
@@ -335,9 +335,9 @@ if (Database::num_rows($res_media) > 0) {
         </div>
         <!-- end header -->
 
-        <!-- Author image preview -->        
-        <div id="author_image">   
-            <div id="author_icon">                        
+        <!-- Author image preview -->
+        <div id="author_image">
+            <div id="author_icon">
                 <?php
                 if ($_SESSION['oLP']->get_preview_image()!='') {
                     $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
@@ -348,13 +348,13 @@ if (Database::num_rows($res_media) > 0) {
                 } else {
                     echo Display :: display_icon('unknown_250_100.jpg');
                 }
-                ?>                              
+                ?>
             </div>
-            <div id="lp_navigation_elem">                          
+            <div id="lp_navigation_elem">
                 <?php echo $navigation_bar; ?>
                 <div id="progress_bar">
                     <?php echo $progress_bar; ?>
-                </div>    
+                </div>
             </div>
         </div>
         <!-- end image preview Layout -->
@@ -385,7 +385,7 @@ if (Database::num_rows($res_media) > 0) {
                 <?php } ?>
             </div>
         </div>
-        <!-- end TOC layout -->        
+        <!-- end TOC layout -->
     </div>
     <!-- end left Zone -->
 
@@ -396,7 +396,7 @@ if (Database::num_rows($res_media) > 0) {
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {
             echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
-        } else {            
+        } else {
             echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:600px"></iframe>';
         }
     ?>

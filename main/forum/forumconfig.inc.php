@@ -42,7 +42,7 @@ define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
 // if this setting is true then an I-frame will be displayed when replying
 $forum_setting['show_thread_iframe_on_reply']=true;
 // if this setting is true then students and teachers can check a checkbox so that they receive a mail when somebody replies to the thread
-$forum_setting['allow_post_notificiation']=true;
+$forum_setting['allow_post_notification']=true;
 // when this setting is true then the course admin can post threads that are important. These posts remain on top all the time (until made unsticky)
 // these special posts are indicated with a special icon also
 $forum_setting['allow_sticky']=true;

@@ -26,7 +26,7 @@
 use \ChamiloSession as Session;
 
 // Language file that need to be included.
-$language_file = array('forum', 'document');
+$language_file = array('forum', 'document', 'gradebook');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';

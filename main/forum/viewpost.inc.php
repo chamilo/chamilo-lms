@@ -24,7 +24,7 @@ if (isset($rows)) {
         if ($counter == 1) {
             echo Display::page_subheader($name);
         }
-        
+
         echo "<div ".$style."><table class=\"data_table\">";
         // the style depends on the status of the message: approved or not
         //echo 'dd'.$row['status'];

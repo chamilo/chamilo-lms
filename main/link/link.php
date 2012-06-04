@@ -41,12 +41,12 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     		}
     	}
      });
-     
+
      function check_url(id, url) {
      	var url = "'.api_get_path(WEB_AJAX_PATH).'link.ajax.php?a=check_url&url=" +url;
      	var loading = " '.addslashes(Display::return_icon('loading1.gif')).'";
-     	$("#url_id_"+id).html(loading);  
-    	$("#url_id_"+id).load(url);    
+     	$("#url_id_"+id).html(loading);
+    	$("#url_id_"+id).load(url);
      }
  </script>';
 
@@ -122,21 +122,21 @@ function MM_popupMsg(msg) { //v1.0
 $nameTools = get_lang('Links');
 
 if (isset($_GET['action'])) {
-	$check_token = Security::check_token('request');    
+	$check_token = Security::check_token('request');
 	if ($check_token) {
 		switch ($_GET['action']) {
 			case 'addlink':
 				if ($link_submitted) {
 					if (!addlinkcategory("link")) {	// Here we add a link
 						unset($submit_link);
-					}				
+					}
 				}
 				break;
 			case 'addcategory':
 				if ($category_submitted) {
 					if (!addlinkcategory('category')) {	// Here we add a category
 						unset($submit_category);
-					}				
+					}
 				}
 				break;
 			case 'importcsv':
@@ -144,14 +144,14 @@ if (isset($_GET['action'])) {
 					import_csvfile();
 				}
 				break;
-			case 'deletelink':			
-				deletelinkcategory('link'); // Here we delete a link				
+			case 'deletelink':
+				deletelinkcategory('link'); // Here we delete a link
 				break;
 			case 'deletecategory':
-				deletelinkcategory('category'); // Here we delete a category				
+				deletelinkcategory('category'); // Here we delete a category
 				break;
 			case 'editlink':
-				editlinkcategory('link'); // Here we edit a link			
+				editlinkcategory('link'); // Here we edit a link
 				break;
 			case 'editcategory':
 				editlinkcategory('category'); // Here we edit a category
@@ -174,34 +174,35 @@ Display::display_introduction_section(TOOL_LINK);
 
 if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	echo '<div class="actions">';
-	if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
-		if (!empty($_POST['lp_id'])){			
+	if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
+		if (!empty($_POST['lp_id'])){
 			$lp_id = Security::remove_XSS($_POST['lp_id']);
 		} else {
 			$lp_id = Security::remove_XSS($_GET['lp_id']);
-		}		
-		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";		
+		}
+		echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
 	} else {
 		//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-	}	
+	}
 	echo '</div>';
-		
+
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submit_link)
 	if (($_GET['action'] == 'addlink' || $_GET['action'] == 'editlink') && empty($_POST['submitLink'])) {
-		
-		
-		
+
+
+
 		if ($category == '') {
 			$category = 0;
-		}        
+		}
 		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
         if ($_GET['action'] == 'addlink') {
 			echo '<legend>'.get_lang('LinkAdd').'</legend>';
 		} else {
 			echo '<legend>'.get_lang('LinkMod').'</legend>';
-		}        
+		}
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
+
 		if ($_GET['action'] == 'editlink') {
 		    $clean_link_id = intval($_GET['id']);
             $link_info = get_link_info($_GET['id']);
@@ -216,9 +217,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
                 }
                 $target_link = $link_info['target'];
             }
-            
 			echo '<input type="hidden" name="id" value="'.$clean_link_id.'" />';
-		}
+		} else {
+            $target_link = "_blank";
+        }
+        
 		echo '	<div class="control-group">
 					<label class="control-label">
 						<span class="form_required">*</span> URL
@@ -275,7 +278,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</div>';
 		}
 		echo '	<div class="control-group">
-					<label class="control-label">						
+					<label class="control-label">
 					</label>
 					<div class="controls">
 						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('OnHomepage').'?</label>
@@ -290,7 +293,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
         $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
 		foreach ($targets as $target_id => $target) {
 			$selected = '';
-			if ($target_id == $target_link) { 
+			if ($target_id == $target_link) {
 				$selected = ' selected="selected"';
 			}
 			echo '    	<option value="'.$target_id.'"'.$selected.'>'.$target.'</option> ';
@@ -301,17 +304,17 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             </span>
 					</div>
 				</div>';
- 
+
 		if (api_get_setting('search_enabled') == 'true') {
 			require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 			$specific_fields = get_specific_field_list();
-            
+
 			echo '	<div class="control-group">
 						<label class="control-label">
 							'.get_lang('SearchFeatureDoIndexLink').'
 						</label>
 						<div class="controls">
-                            <label for="index_document"> 
+                            <label for="index_document">
 							<input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked">
                             '.get_lang('Yes').'
                             </label>
@@ -339,7 +342,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 								<input name="%s" type="text" value="%s"/>
 							</div>
 						</div>';
-				
+
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
 		}
@@ -351,11 +354,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					<div class="controls">
 						<button class="btn save" type="submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
-				</div>';		
-		echo '</form>';		
-	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {        
+				</div>';
+		echo '</form>';
+	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {
 		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
-        
+
         if ($_GET['action'] == 'addcategory') {
 			echo '<legend>'.get_lang('CategoryAdd').'</legend>';
 			$my_cat_title = get_lang('CategoryAdd');
@@ -363,7 +366,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '<legend>'.get_lang('CategoryMod').'</legend>';
 			$my_cat_title = get_lang('CategoryMod');
 		}
-        
+
 		echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
 		if ($_GET['action'] == 'editcategory') {
 			echo '<input type="hidden" name="id" value="'.$id.'" />';
@@ -411,9 +414,9 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	echo '<div class="actions">';
 	if (api_is_allowed_to_edit(null, true)) {
 		$urlview = Security::remove_XSS($urlview);
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.Display::return_icon('new_link.png', get_lang('LinkAdd'),'',ICON_SIZE_MEDIUM).'</a>';		
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.Display::return_icon('new_link.png', get_lang('LinkAdd'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'',ICON_SIZE_MEDIUM).'</a>';
-			
+
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}
 	// Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
@@ -422,7 +425,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	$resultcategories = Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {
-	    $resultcategories = Database::query($sqlcategories);        
+	    $resultcategories = Database::query($sqlcategories);
 		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '0';
@@ -435,14 +438,14 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 		echo '">'.Display::return_icon('view_tree.png', $showall,'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	echo '</div>';
-	
+
 	// Displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE c_id = $course_id AND category_id=0 OR category_id IS NULL";
 	$result = Database::query($sqlLinks);
 	$numberofzerocategory = Database::num_rows($result);
-	
+
 	if ($numberofzerocategory !== 0) {
-	    echo '<table class="data_table">';	    
+	    echo '<table class="data_table">';
 		echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
 		echo '</table>';
 		showlinksofcategory(0);

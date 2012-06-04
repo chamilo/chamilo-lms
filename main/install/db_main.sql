@@ -499,7 +499,7 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
-  legal_agreement INTEGER DEFAULT 0, 
+  legal_agreement INTEGER DEFAULT 0,
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)
@@ -867,7 +867,8 @@ VALUES
 ('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
 ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18142','DatabaseVersion','', NULL, NULL, 0);
+('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18149','DatabaseVersion','', NULL, NULL, 0);
 
 
 /*
@@ -1167,7 +1168,7 @@ VALUES
 ('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
 ('allow_users_to_change_email_with_no_password', 'false', 'No'),
 ('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
-('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'), 
+('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'),
 ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
 ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'),
 ('use_custom_pages','true','Yes'),
@@ -1219,7 +1220,9 @@ VALUES
 ('platform_unsubscribe_allowed', 'true', 'Yes'),
 ('platform_unsubscribe_allowed', 'false', 'No'),
 ('activate_email_template', 'true', 'Yes'),
-('activate_email_template', 'false', 'No');
+('activate_email_template', 'false', 'No'),
+ ('enable_iframe_inclusion', 'true', 'Yes'),
+('enable_iframe_inclusion', 'false', 'No');
 
 UNLOCK TABLES;
 
@@ -2874,7 +2877,7 @@ CREATE TABLE IF NOT EXISTS skill_rel_user (
   user_id int NOT NULL,
   skill_id int NOT NULL,
   acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  assigned_by int NOT NULL, 
+  assigned_by int NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -2962,7 +2965,7 @@ CREATE TABLE IF NOT EXISTS track_course_ranking (
  id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
  c_id  int unsigned not null,
  session_id  int unsigned not null default 0,
- url_id  int unsigned not null default 0, 
+ url_id  int unsigned not null default 0,
  accesses int unsigned not null default 0,
  total_score int unsigned not null default 0,
  users int unsigned not null default 0,
@@ -2978,7 +2981,7 @@ DROP TABLE IF EXISTS user_rel_course_vote;
 CREATE TABLE IF NOT EXISTS user_rel_course_vote (
   id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
   c_id int unsigned not null,
-  user_id int unsigned not null,  
+  user_id int unsigned not null,
   session_id int unsigned not null default 0,
   url_id int unsigned not null default 0,
   vote int unsigned not null default 0
@@ -2997,7 +3000,7 @@ CREATE TABLE IF NOT EXISTS chat (
 	message		TEXT NOT NULL,
 	sent		DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 	recd		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (id)	
+	PRIMARY KEY (id)
 );
 
 ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);

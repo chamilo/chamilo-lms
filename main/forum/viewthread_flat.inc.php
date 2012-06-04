@@ -17,10 +17,10 @@ if (isset($current_thread['thread_id'])){
 
     $clean_forum_id  = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);
-    $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);   
-    
+    $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);
+
     foreach ($rows as $row) {
-        
+
         echo '<table width="100%" class="forum_table" cellspacing="5" border="0">';
         // the style depends on the status of the message: approved or not
         if ($row['visible']=='0') {
@@ -34,14 +34,14 @@ if (isset($current_thread['thread_id'])){
         }
         echo "<tr>";
         echo "<td rowspan=\"3\" class=\"$leftclass\">";
-        
+
         if ($row['user_id']=='0') {
             $name = prepare4display($row['poster_name']);
         } else {
             $name = api_get_person_name($row['firstname'], $row['lastname']);
         }
         $username = sprintf(get_lang('LoginX'), $row['username']);
-        
+
         if ($origin!='learnpath') {
             if (api_get_course_setting('allow_user_image_forum')) {
                 echo '<br />'.display_user_image($row['user_id'],$name).'<br />';
@@ -52,7 +52,7 @@ if (isset($current_thread['thread_id'])){
         }
 
         $group_id = api_get_group_id();
-        
+
         echo api_convert_and_format_date($row['post_date']).'<br /><br />';
         // get attach id
         $attachment_list=get_attachment($row['post_id']);
@@ -84,19 +84,19 @@ if (isset($current_thread['thread_id'])){
 
         $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_id());
         $current_qualify_thread = show_qualify('1', $row['poster_id'],$_GET['thread']);
-        
+
         if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
             $my_forum_id = $clean_forum_id;
-            if (isset($_GET['gradebook'])) {            
+            if (isset($_GET['gradebook'])) {
                 $info_thread = get_thread_information($clean_thread_id);
                 $my_forum_id = $info_thread['forum_id'];
-            }        
-            if ($increment > 0 && $locked == false) {            
+            }
+            if ($increment > 0 && $locked == false) {
                  echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$my_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".
                         Display::return_icon('quiz.gif',get_lang('Qualify'))."</a> ";
-            }            
+            }
         }
-        
+
         if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
             if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
                 if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
@@ -128,37 +128,39 @@ if (isset($current_thread['thread_id'])){
         // The post title
 
         echo "</tr>";
-        
+
         //  The post title
         echo "<tr>";
         echo Display::tag('td', prepare4display($row['post_title']), array('class'=>'forum_message_post_title'));
         echo "</tr>";
-        
+
         // The post message
         echo "<tr>";
-        
+
         // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
         echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
         echo "</tr>";
 
         // The check if there is an attachment
 
-        $attachment_list=get_attachment($row['post_id']);
+        $attachment_list = get_attachment($row['post_id']);
         if (!empty($attachment_list)) {
-            echo '<tr><td height="50%">';
+            echo '<tr><td colspan="2" height="50%">';
             $realname=$attachment_list['path'];
             $user_filename=$attachment_list['filename'];
 
             echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-            echo '<a href="download.php?file=';
-            echo $realname;
-            echo ' "> '.$user_filename.' </a>';
-            echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+            echo '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
+
             if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
-            echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
+                echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
             }
+            echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             echo '</td></tr>';
         }
+
+
+
 
         // The post has been displayed => it can be removed from the what's new array
         unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

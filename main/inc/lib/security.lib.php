@@ -50,7 +50,7 @@ class Security {
 
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $found = strpos($true_path.'/', $checker_path);
-        
+
         if ($found === 0) {
             return true;
         } else {
@@ -260,7 +260,7 @@ class Security {
     	if ($filter_terms) {
     		$var = self::filter_terms($var);
     	}
-    	
+
         if ($user_status == COURSEMANAGERLOWSECURITY) {
             return $var;  // No filtering.
         }
@@ -282,8 +282,13 @@ class Security {
             $config->set('HTML.TidyLevel', 'light');
             $config->set('Core.ConvertDocumentToFragment', false);
             $config->set('Core.RemoveProcessingInstructions', true);
+
+            if (api_get_setting('enable_iframe_inclusion') == 'true') {
+                $config->set('Filter.Custom', array(new HTMLPurifier_Filter_AllowIframes()));
+            }
+
             //Shows _target attribute in anchors
-            $config->set('Attr.AllowedFrameTargets', array('_blank','_top','_self', '_parent')); 
+            $config->set('Attr.AllowedFrameTargets', array('_blank','_top','_self', '_parent'));
             if ($user_status == STUDENT) {
                 global $allowed_html_student;
                 $config->set('HTML.SafeEmbed', true);
@@ -308,52 +313,55 @@ class Security {
             $config->set('CSS.Proprietary', true);
             $purifier[$user_status] = new HTMLPurifier($config);
         }
+
+
+
         if (is_array($var)) {
             return $purifier[$user_status]->purifyArray($var);
         } else {
             return $purifier[$user_status]->purify($var);
         }
     }
-    
-    
+
+
     /**
-     * 
-     * Filter content 
+     *
+     * Filter content
      * @param	string content to be filter
      * @return 	string
      */
     function filter_terms($text) {
     	static $bad_terms = array();
-    	    	
-    	if (empty($bad_terms)) {    		
-    		$list = api_get_setting('filter_terms');    	    	
-    		$list = explode("\n", $list);    		
-    		$list = array_filter($list);    		
+
+    	if (empty($bad_terms)) {
+    		$list = api_get_setting('filter_terms');
+    		$list = explode("\n", $list);
+    		$list = array_filter($list);
     		if (!empty($list)) {
     			foreach($list as $term) {
     				$term = str_replace(array("\r\n", "\r", "\n", "\t"), '', $term);
-    				$html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding()); 
+    				$html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
     				$bad_terms[] = $term;
-    				if ($term != $html_entities_value) {    				 
+    				if ($term != $html_entities_value) {
     					$bad_terms[] = $html_entities_value;
     				}
     			}
     			$bad_terms = array_filter($bad_terms);
     		}
     	}
-    	    	
-    	$replace = '***';    	
+
+    	$replace = '***';
     	if (!empty($bad_terms)) {
     		//Fast way
     		$new_text = str_ireplace($bad_terms, $replace, $text, $count);
-    		
+
     		//We need statistics
     		/*
     		if (strlen($new_text) != strlen($text)) {
     			$table = Database::get_main_table(TABLE_STATISTIC_TRACK_FILTERED_TERMS);
     			$attributes = array();
-    			
-    			
+
+
     			$attributes['user_id'] 		=
     			$attributes['course_id'] 	=
     			$attributes['session_id'] 	=
@@ -364,11 +372,11 @@ class Security {
     		}
     		*/
     		$text = $new_text;
-    		
-    	}        	
+
+    	}
 		return $text;
     }
-    
+
 
     /**
      * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
@@ -411,5 +419,5 @@ class Security {
             return '';
         }
         return $image_path;
-    }   
+    }
 }

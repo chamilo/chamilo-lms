@@ -4,16 +4,14 @@
 <link href="http://www.chamilo.org" rel="copyright" />
 {{ favico }}
 <link rel="apple-touch-icon" href="{{ _p.web}}apple-touch-icon.png" />
-<link rel="apple-touch-icon" sizes="72x72" href="{{ _p.web}}apple-touch-icon-72x72-precomposed.png" />
-<link rel="apple-touch-icon" sizes="114x114" href="{{ _p.web}}apple-touch-icon-114x114-precomposed.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" /> 
+<meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
 {#  Improve usability in portal devices #}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 <title>{{ title_string }}</title>
-<style type="text/css" media="screen"> 
+<style type="text/css" media="screen">
 /*<![CDATA[*/
 {{ css_style }}
 /*]]>*/
@@ -54,23 +52,23 @@ var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
 {{ css_file_to_string}}
 {{ extra_headers}}
 
-<script>    
+<script>
 function get_url_params(q, attribute) {
     var vars;
     var hash;
     if (q != undefined) {
         q = q.split('&');
         for(var i = 0; i < q.length; i++){
-            hash = q[i].split('=');            
+            hash = q[i].split('=');
             if (hash[0] == attribute) {
                 return hash[1];
-            }            
+            }
         }
-    }    
+    }
 }
 
 $(document).scroll(function() {
-    
+
     // Top bar scroll effect
     if ($('body').width() > 959) {
         if ($('.subnav').length) {
@@ -89,45 +87,45 @@ $(document).scroll(function() {
             }
         }
     }
-    
-    //Admin -> Settings toolbar 
-    
+
+    //Admin -> Settings toolbar
+
     if ($('.new_actions').length) {
         if (!$('.new_actions').attr('data-top')) {
             // If already fixed, then do nothing
             if ($('.new_actions').hasClass('new_actions-fixed')) return;
             // Remember top position
             var offset = $('.new_actions').offset();
-            
+
             var more_top = 0;
             if ($('.subnav').hasClass('new_actions-fixed')) {
                 more_top = 50;
             }
-            
-            $('.new_actions').attr('data-top', offset.top + more_top);            
+
+            $('.new_actions').attr('data-top', offset.top + more_top);
         }
-        
+
         if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
-            $('.new_actions').addClass('new_actions-fixed');              
+            $('.new_actions').addClass('new_actions-fixed');
         } else {
             $('.new_actions').removeClass('new_actions-fixed');
         }
     }
-    
-    //Bottom actions        
+
+    //Bottom actions
     if ($('.bottom_actions').length) {
-        
+
         if (!$('.bottom_actions').attr('data-top')) {
             // If already fixed, then do nothing
             if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
-            
+
             // Remember top position
-            var offset = $('.bottom_actions').offset();            
-            $('.bottom_actions').attr('data-top', offset.top);          
+            var offset = $('.bottom_actions').offset();
+            $('.bottom_actions').attr('data-top', offset.top);
         }
-        
+
         if ($('.bottom_actions').attr('data-top') > $('body').outerHeight()) {
-            if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {              
+            if ( ($('.bottom_actions').attr('data-top') - $('body').outerHeight() - $('.bottom_actions').outerHeight()) >= $(this).scrollTop()) {
                 $('.bottom_actions').addClass('bottom_actions_fixed');
                 $('.bottom_actions').css("width", "100%");
             } else {
@@ -135,7 +133,7 @@ $(document).scroll(function() {
                 $('.bottom_actions').removeClass('bottom_actions_fixed');
             }
         } else {
-            if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {              
+            if ( ($('.bottom_actions').attr('data-top') -  $('.bottom_actions').outerHeight()) <= $(this).scrollTop()) {
                 $('.bottom_actions').addClass('bottom_actions_fixed');
                 $('.bottom_actions').css("width", "100%");
             } else {
@@ -143,7 +141,7 @@ $(document).scroll(function() {
                 $('.bottom_actions').css("width", "");
             }
         }
-    }    
+    }
 });
 
 function isScrolledIntoView(elem) {
@@ -158,7 +156,7 @@ function isScrolledIntoView(elem) {
 
 
 $(function() {
-    
+
     //Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
@@ -171,19 +169,19 @@ $(function() {
             });
         });
     }
-    
+
     //Fixes buttons to the new btn class
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
-    }    
+    }
 
 
     //Dropdown effect
-    $('.dropdown-toggle').dropdown();   
-    
-    //Responsive effect 
+    $('.dropdown-toggle').dropdown();
+
+    //Responsive effect
     $(".collapse").collapse();
-    
+
     //Global popup
     $('.ajax').on('click', function() {
             var url     = this.href;
@@ -191,46 +189,46 @@ $(function() {
             if ($("#dialog").length == 0) {
                 dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
             }
-            
+
             width_value = 580;
             height_value = 450;
             resizable_value = true;
-            
-            new_param = get_url_params(url, 'width');            
+
+            new_param = get_url_params(url, 'width');
             if (new_param) {
-                width_value = new_param; 
+                width_value = new_param;
             }
-            
-            new_param = get_url_params(url, 'height')            
+
+            new_param = get_url_params(url, 'height')
             if (new_param) {
-                height_value = new_param; 
+                height_value = new_param;
             }
-            
+
             new_param = get_url_params(url, 'resizable');
             if (new_param) {
-                resizable_value = new_param; 
+                resizable_value = new_param;
             }
-         
+
             // load remote content
             dialog.load(
-                            url,                    
+                            url,
                             {},
                             function(responseText, textStatus, XMLHttpRequest) {
                                     dialog.dialog({
-                                            modal       : true, 
-                                            width       : width_value, 
+                                            modal       : true,
+                                            width       : width_value,
                                             height      : height_value,
                                             resizable   : resizable_value,
-                                    });	                    
+                                    });
             });
             //prevent the browser to follow the link
             return false;
     });
-    
+
     //old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
-    },1000);    
+    },1000);
     $('#navigation > li').hover(
         function () {
             $('a',$(this)).stop().animate({
@@ -245,12 +243,12 @@ $(function() {
     );
 
     /*
-    $(".td_actions").hide();    
-    
+    $(".td_actions").hide();
+
     $(".td_actions").parent('tr').mouseover(function() {
        $(".td_actions").show();
     });
-    
+
     $(".td_actions").parent('tr').mouseout(function() {
         $(".td_actions").hide();
     });*/

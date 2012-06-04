@@ -2688,32 +2688,35 @@ function api_not_found($print_headers = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false, $message = null) {
-
     $home_url   = api_get_path(WEB_PATH);
-    $user       = api_get_user_id(); //0 if not defined
+    $user_id    = api_get_user_id(); //0 if not defined
     $course     = api_get_course_id();
 
     global $this_section;
+
+    if (!isset($user_id)) {
+        //Why the CustomPages::enabled() need to be to set the request_uri
+        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    }
+    
+    if (CustomPages::enabled() && !isset($user_id)) {
+        CustomPages::display(CustomPages::INDEX_UNLOGGED);
+    }
+    /* Default behaviour
     if (CustomPages::enabled() && !isset($_SESSION['_user']['user_id'])) {
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
-    }
+    }*/
 
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
 
-    if ($origin == 'learnpath') {
-	   $htmlHeadXtra[]= '<style type="text/css" media="screen, projection">
-					/*<![CDATA[*/
-	                @import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
-	                /*]]>*/
-	                </style>';
-    }
-
+    $msg = null;
     if (isset($message)) {
-        $msg = Display::div($message, array('align'=>'center'));
+        $msg = $message;
     } else {
         $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
     }
+
     $msg = Display::div($msg, array('align'=>'center'));
 
     $show_headers = 0;
@@ -2723,7 +2726,8 @@ function api_not_allowed($print_headers = false, $message = null) {
 
     $tpl = new Template(null, $show_headers, $show_headers);
     $tpl->assign('content', $msg);
-    if (($user!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+
+    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
@@ -2733,12 +2737,13 @@ function api_not_allowed($print_headers = false, $message = null) {
 
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
         //only display form and return to the previous URL if there was a course ID included
-        if ($user!=0 && !api_is_anonymous()) {
+        if ($user_id!=0 && !api_is_anonymous()) {
             //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
             $tpl->assign('content', $msg);
             $tpl->display_one_col_template();
             exit;
         }
+
         // If the user has no user ID, then his session has expired
         $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
 
@@ -2760,11 +2765,11 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if ($user!=0 && !api_is_anonymous()) {
+    if ($user_id !=0 && !api_is_anonymous()) {
         $tpl->display_one_col_template();
         exit;
     }
-
+    $msg = null;
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
 	if( !isset($_COOKIE["TestCookie"]) && empty($_COOKIE["TestCookie"]) ) {
 		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);

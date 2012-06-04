@@ -15,8 +15,8 @@ $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 
 if (!$result) {
-	api_not_allowed(true);	
-}  
+	api_not_allowed(true);
+}
 
 $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
 
@@ -25,20 +25,22 @@ $question_list = $objExercise->get_validated_question_list();
 $data = array();
 //Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
 $headers = array(
-	get_lang('Question'), 
+	get_lang('Question'),
+    get_lang('QuestionType'),
 	get_lang('NumberOfStudentsWhoTryTheExercise'),
-	get_lang('LowestScore'), 
+	get_lang('LowestScore'),
 	get_lang('AverageScore'),
 	get_lang('HighestScore'),
-	get_lang('Weighting')	
+	get_lang('Weighting')
 );
 
 if (!empty($question_list)) {
 	foreach($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
 		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-		
+
 		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
+        $data[$question_id]['type'] 						= $question_obj->get_question_type_name();
 		$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
 		$data[$question_id]['lowest_score'] 				= round($exercise_stats['min'], 2);
 		$data[$question_id]['average_score'] 				= round($exercise_stats['average'], 2);
@@ -56,9 +58,9 @@ foreach ($headers as $header) {
 	$column++;
 }
 $row++;
-foreach ($data as $row_table) {	
+foreach ($data as $row_table) {
 	$column = 0;
-	foreach ($row_table as $cell) {		
+	foreach ($row_table as $cell) {
 		$table->setCellContents($row, $column, $cell);
 		$table->updateCellAttributes($row, $column, 'align="center"');
 		$column++;

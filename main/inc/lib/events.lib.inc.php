@@ -620,71 +620,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 					'$event_value_type',
 					'$event_value')";
 	$res = Database::query($sql);
-	
-	//Sending notifications to users @todo check this
-    $send_event_setting = api_get_setting('activate_send_event_by_mail');
-    if (!empty($send_event_setting) && $send_event_setting == 'true') {
-        global $language_file;
-
-        //prepare message
-        list($message, $subject) = get_event_message_and_subject($event_type);
-        $mail_body=$message;
-        if (is_array($notification_infos)) {
-            foreach ($notification_infos as $variable => $value) {
-                $mail_body = str_replace('%'.$variable.'%',$value,$mail_body);
-            }
-        }
-
-        //prepare mail common variables
-        if (empty($subject)) {
-            $subject = $event_type;
-        }
-        $mail_subject = '['.api_get_setting('siteName').'] '.$subject;
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('emailAdministrator');
-        $emailfromaddr = api_get_setting('emailAdministrator');
-        $emailfromname = api_get_setting('siteName');
-
-        //Send mail to all subscribed users
-        $users_arr = get_users_subscribed_to_event($event_type);
-        foreach ($users_arr as $user) {
-            $recipient_name = api_get_person_name($user['firstname'], $user['lastname']);
-            $email = $user['email'];
-            @api_mail($recipient_name, $email, $mail_subject, $mail_body, $sender_name, $email_admin);
-        }
-    }
 	return true;
-}
-
-/**
- * Get the message and the subject for a event
- *
- * @param string event's name
- */
-function get_event_message_and_subject($event_name){
-    $event_name = Database::escape_string($event_name);
-    $sql = 'SELECT m.message, m.subject FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
-		.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' m
-		WHERE m.event_type_id = e.id '.
-		"AND e.name = '$event_name'";
-
-    $res = Database::store_result(Database::query($sql),'ASSOC');
-    
-    $ret = array();
-	
-    if ( isset($res[0]['message']) ) {
-        $ret[0] = $res[0]['message'];
-    } else {
-	$ret[0] = '';
-    }
-	
-    if ( isset($res[0]['subject']) ) {
-	$ret[1] = $res[0]['subject'];
-    } else {
-	$ret[1] = '';
-    }
-	
-    return $ret;
 }
 
 /**

@@ -82,9 +82,9 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 }
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {
-    if (Request::get('loggedout')) {      
+    if (Request::get('loggedout')) {
         CustomPages::display(CustomPages::LOGGED_OUT);
-    } else {      
+    } else {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 }
@@ -141,10 +141,10 @@ $controller->set_login_form();
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
 	$controller->tpl->assign('profile_block', $controller->return_profile_block());
-	
+
 	if (api_is_platform_admin()) {
 		$controller->tpl->assign('course_block',			$controller->return_course_block());
-	} else {		
+	} else {
 		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
 	}
 }
@@ -155,12 +155,14 @@ $announcements_block = null;
 // When loading a chamilo page do not include the hot courses and news
 
 if (!isset($_REQUEST['include'])) {
-    $hot_courses = $controller->return_hot_courses();    
-    $announcements_block = $controller->return_announcements();    
+    if (api_get_setting('show_hot_courses') == 'true') {
+        $hot_courses = $controller->return_hot_courses();
+    }
+    $announcements_block = $controller->return_announcements();
 }
 
-$controller->tpl->assign('hot_courses',             $hot_courses);    
-$controller->tpl->assign('announcements_block', 	$announcements_block);        
+$controller->tpl->assign('hot_courses',             $hot_courses);
+$controller->tpl->assign('announcements_block', 	$announcements_block);
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 
 $controller->tpl->assign('notice_block',			$controller->return_notice());

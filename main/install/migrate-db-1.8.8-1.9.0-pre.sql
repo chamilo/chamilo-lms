@@ -171,6 +171,11 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_iframe_inclusion', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_iframe_inclusion', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_hot_courses', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_hot_courses', 'false', 'No');
+
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1);
 
@@ -255,7 +260,7 @@ INSERT INTO settings_options (variable, value, display_text) values ('platform_u
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18149' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18163' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

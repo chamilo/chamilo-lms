@@ -868,7 +868,8 @@ VALUES
 ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
 ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
 ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.9.0.18149','DatabaseVersion','', NULL, NULL, 0);
+('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18163','DatabaseVersion','', NULL, NULL, 0);
 
 
 /*
@@ -1222,7 +1223,9 @@ VALUES
 ('activate_email_template', 'true', 'Yes'),
 ('activate_email_template', 'false', 'No'),
  ('enable_iframe_inclusion', 'true', 'Yes'),
-('enable_iframe_inclusion', 'false', 'No');
+('enable_iframe_inclusion', 'false', 'No'),
+('show_hot_courses', 'true', 'Yes'),
+('show_hot_courses', 'false', 'No');
 
 UNLOCK TABLES;
 

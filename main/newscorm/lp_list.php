@@ -109,7 +109,7 @@ $flat_list  = $list->get_flat_list();
 
 
 if (!empty($flat_list)) {
-    
+
     echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
     $is_allowed_to_edit ? $colspan = 9 : $colspan = 3;
 
@@ -129,11 +129,11 @@ if (!empty($flat_list)) {
         </tr>
         <?php
     }
-    
+
     /* CURRENT DIRECTORY */
-    
+
     echo '<tr>';
-           
+
     if ($is_allowed_to_edit) {
         echo '<th width="50%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('PublicationDate').'</th>';
@@ -153,7 +153,7 @@ if (!empty($flat_list)) {
     $current        = 0;
     $autolunch_exists = false;
     foreach ($flat_list as $id => $details) {
-        
+
         // Validacion when belongs to a session
         $session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
@@ -165,48 +165,48 @@ if (!empty($flat_list)) {
         // Check if the learnpath is visible for student.
         if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, api_get_user_id())) {
             continue;
-        }        
+        }
         $start_time =  $end_time = '';
-        if (!$is_allowed_to_edit) {           
-            $time_limits = false;  
-                      
+        if (!$is_allowed_to_edit) {
+            $time_limits = false;
+
             //This is an old LP (from a migration 1.8.7) so we do nothing
             if ((empty($details['created_on']) ||  $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
                 $time_limits = false;
             }
-            
+
             //Checking if expired_on is ON
             if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
-                $time_limits = true;  
-            }            
+                $time_limits = true;
+            }
             if ($time_limits) {
                 // check if start time
                 if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
-                    !empty($details['expired_on'])    && $details['expired_on'] != '0000-00-00 00:00:00') { 
-                    $start_time = api_strtotime($details['publicated_on'],'UTC');                
-                    $end_time   = api_strtotime($details['expired_on'],'UTC');                                      
-                    $now        = time();          
-                    $is_actived_time = false;                
-                                        
+                    !empty($details['expired_on'])    && $details['expired_on'] != '0000-00-00 00:00:00') {
+                    $start_time = api_strtotime($details['publicated_on'],'UTC');
+                    $end_time   = api_strtotime($details['expired_on'],'UTC');
+                    $now        = time();
+                    $is_actived_time = false;
+
                     if ($now > $start_time && $end_time > $now ) {
                         $is_actived_time = true;
                     }
-                                    
+
                     if (!$is_actived_time) {
                     	continue;
-                    }                
+                    }
                 }
             }
-            $start_time =  $end_time = '';         
+            $start_time =  $end_time = '';
         } else {
             if (!empty($details['publicated_on'])) {
                 $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG);
             }
-            if (!empty($details['expired_on'])) {                
-                $end_time   = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG);   
+            if (!empty($details['expired_on'])) {
+                $end_time   = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG);
             }
-        }           
-            
+        }
+
         $counter++;
         if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }
 
@@ -214,10 +214,10 @@ if (!empty($flat_list)) {
         $name = Security::remove_XSS($details['lp_name']);
         if ($is_allowed_to_edit) {
         	//&nbsp;'.$details['lp_proximity'].'
-            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');            
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
             $extra = '<div class ="lp_content_type_label">'.$dsp_desc .'</div>';
         }
-        
+
         /*$image = '<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
         <div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
                 $image . '</a></div>*/
@@ -227,7 +227,7 @@ if (!empty($flat_list)) {
         }
         $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
             		'<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'),'',ICON_SIZE_SMALL).'<a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
-        
+
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';
         $dsp_export = '';
@@ -240,44 +240,17 @@ if (!empty($flat_list)) {
         $dsp_debug = '';
         $dsp_order = '';
 
-        // Select course theme.
-        if (!empty($platform_theme)) {
-            $mystyle = $platform_theme;
-        }
-
-        if (!empty($user_theme)) {
-            $mystyle = $user_theme;
-        }
-
-        if (!empty($mycoursetheme)) {
-            $mystyle = $mycoursetheme;
-        }
-
-        $lp_theme_css = $mystyle;
-
-        
         $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
 
-          
-          
-          
-        if ($is_allowed_to_edit) {            
+        if ($is_allowed_to_edit) {
             $dsp_progress = '<td>'.$progress.'</td>';
         } else {
-            //$dsp_progress = '<td><div style="width:125px;">'.learnpath::get_progress_bar('%',$progress)).'</div></td>';
             $dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
-            /*$dsp_progress = '<td align="center">                                    
-                                <div class="progress progress-striped">                                    
-                                    <div class="bar" style="width: '.$progress.';"></div>                                            
-                                </div>
-                                '.$progress.'                                    
-                            </td>';*/
         }
-        
-        
+
         $dsp_edit = '<td class="td_actions">';
         $dsp_edit_close = '</td>';
-        
+
         if ($is_allowed_to_edit) {
 
             /*
@@ -315,10 +288,10 @@ if (!empty($flat_list)) {
                     //"</a>";
             }*/
 
-  
+
             // EDIT LP
             if ($current_session == $details['lp_session']) {
-                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_SMALL).'</a>';				
+                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_SMALL).'</a>';
             } else {
                 $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'),'',ICON_SIZE_SMALL);
             }
@@ -339,7 +312,7 @@ if (!empty($flat_list)) {
             // Session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
             //if ($current_session == $details['lp_session']) {
             if ($details['lp_visibility'] == 0) {
-                $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'),'',ICON_SIZE_SMALL)."</a>";                        
+                $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'),'',ICON_SIZE_SMALL)."</a>";
             } else {
                 $dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .Display::return_icon('visible.png', get_lang('Hide'),'',ICON_SIZE_SMALL)."</a>";
             }
@@ -353,7 +326,7 @@ if (!empty($flat_list)) {
                 if ($details['lp_published'] == "i") {
                     $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
 					Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
-                        
+
                 } else {
                     $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
                 }
@@ -361,35 +334,33 @@ if (!empty($flat_list)) {
                 $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL);
             }
 
-      /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE 
+      /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE
 
-        SERIOUSGAME MODE is a special mode where : 
+        SERIOUSGAME MODE is a special mode where :
            * If a user exits the learning path before finishing it, he comes back where he left next time he tries
            * When lp status is completed, user can still modify the attempt (adds/time change score, and browse it)
            * It is thus a mix betwenn multiple attempt and mono attempt
       */
             if ($current_session == $details['lp_session']) {
               if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) { //seriousgame mode | next = single
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
                     Display::return_icon('reload.png', get_lang('PreventMultipleAttempts'),'',ICON_SIZE_SMALL).
                   '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 1) { //single mode | next = multiple
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .                  
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .
                    Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).
                   '</a>';
               }
               if ($details['seriousgame_mode'] == 0 && $details['lp_prevent_reinit'] == 0) { //multiple mode | next = seriousgame
-                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .Display::return_icon('reload.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).                  
+                $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_attempt_mode&lp_id='.$id.'">' .Display::return_icon('reload.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL).
                   '</a>';
               }
             } else {
                 $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'',ICON_SIZE_SMALL);
             }
 
-
             /* FUll screen VIEW */
-
             if ($current_session == $details['lp_session']) {
 
                 /* Default view mode settings (fullscreen/embedded) */
@@ -401,10 +372,10 @@ if (!empty($flat_list)) {
                          Display::return_icon('view_left_right.png', get_lang('ViewModeEmbedded'),'',ICON_SIZE_SMALL).'</a>';
                 } elseif ($details['lp_view_mode'] == 'embedframe') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        Display::return_icon('view_nofullscreen.png', get_lang('ViewModeEmbedFrame'),'',ICON_SIZE_SMALL).'</a>';              	
+                        Display::return_icon('view_nofullscreen.png', get_lang('ViewModeEmbedFrame'),'',ICON_SIZE_SMALL).'</a>';
                 }
             } else {
-                if ($details['lp_view_mode'] == 'fullscreen'){				
+                if ($details['lp_view_mode'] == 'fullscreen'){
                     $dsp_default_view = Display::return_icon('view_fullscreen_na.png', get_lang('ViewModeEmbedded'),'',ICON_SIZE_SMALL);
 				}
 				else{
@@ -437,39 +408,39 @@ if (!empty($flat_list)) {
                 }
              }
 
-       
+
              /* Export */
 
             if ($details['lp_type'] == 1) {
                 $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
-                
+
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");                
+                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");
             } else {
-                $dsp_disk = Display::return_icon('export_scorm_na.png', get_lang('Export'), array(), ICON_SIZE_SMALL);                
+                $dsp_disk = Display::return_icon('export_scorm_na.png', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
-            
-            //Copy            
+
+            //Copy
             $copy = Display::url(Display::return_icon('cd.gif', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
-            
+
             /* Auto Lunch LP code*/
-            $lp_auto_lunch_icon = '';            
-            if (api_get_course_setting('enable_lp_auto_launch') == 1) {                            
-                if ($details['autolaunch'] == 1 && $autolunch_exists == false) {  
-                    $autolunch_exists = true;                            
+            $lp_auto_lunch_icon = '';
+            if (api_get_course_setting('enable_lp_auto_launch') == 1) {
+                if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
+                    $autolunch_exists = true;
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
-                        <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>'; 
+                        <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>';
                 } else {
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=1&lp_id='.$id.'">
-                        <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 
-                }   
+                        <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>';
+                }
             }
-            
+
             //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
             	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
             //}
-            
+
             /* DELETE COMMAND */
 
             if ($current_session == $details['lp_session']) {
@@ -478,17 +449,17 @@ if (!empty($flat_list)) {
 				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'',ICON_SIZE_SMALL).'</a>';
             } else {
                 $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'',ICON_SIZE_SMALL);
-            }           
-            
-                        
+            }
+
+
             /* COLUMN ORDER	 */
-            
+
             // Only active while session mode is not active
 
             if ($current_session == 0) {
                 if ($details['lp_display_order'] == 1 && $max != 1) {
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
-                         '.Display::return_icon('down.png', get_lang('MoveDown'),'',ICON_SIZE_SMALL).'</a>					
+                         '.Display::return_icon('down.png', get_lang('MoveDown'),'',ICON_SIZE_SMALL).'</a>
 						<img src="../img/blanco.png" border="0" alt="" title="" />';
                 } elseif ($current == $max-1 && $max != 1) {
                     $dsp_order .= '<img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
@@ -503,16 +474,16 @@ if (!empty($flat_list)) {
                 }
             }
             if ($is_allowed_to_edit) {
-                $start_time = Display::tag('td', Display::div($start_time, array('class'=>'small')));                
+                $start_time = Display::tag('td', Display::div($start_time, array('class'=>'small')));
                 $end_time   = Display::tag('td', Display::div($end_time,   array('class'=>'small')));
-            } else {                  
-                $start_time  = $end_time= '';                
-            }            
+            } else {
+                $start_time  = $end_time= '';
+            }
         } else { // end if ($is_allowedToEdit)
             //Student
-            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>'; 
-        } 
-        
+            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+        }
+
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
              $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
@@ -526,11 +497,10 @@ if (!empty($flat_list)) {
         echo '<div id="no-data-view">';
         echo '<h2>'.get_lang('LearningPaths').'</h2>';
         echo Display::return_icon('scorms.png', '', array(), 64);
-        echo '<div class="controls">';    
+        echo '<div class="controls">';
         echo Display::url(get_lang('_add_learnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'btn'));
         echo '</div>';
-        echo '</div>'; 
+        echo '</div>';
     }
 }
-
 Display::display_footer();

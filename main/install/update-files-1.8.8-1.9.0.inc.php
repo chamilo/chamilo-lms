@@ -68,6 +68,11 @@ EOP;
         fwrite($fh,$string);
 	fwrite($fh, '?>');
 	fclose($fh);
+	//Adds events.conf file
+	if (! file_exists(api_get_path(CONFIGURATION_PATH).'events.conf.php')) {
+		copy(api_get_path(CONFIGURATION_PATH).'events.conf.dist.php', api_get_path(CONFIGURATION_PATH).'events.conf.php');
+	}
+
 
 } else {
 

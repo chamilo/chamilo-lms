@@ -1,19 +1,21 @@
 <?php
 
+/**
+ * 
+ * Manages the email sending action when a event requires it.
+ *
+ */
 class EventsMail 
 {
 
     /**
-     * Manages and sends email according to an event
+     * Sends email according to an event
      *
-     * @param type $event_name the name of the event that was triggered
-     * @param type $values what to put in the mail
-     * @param array
-     * 
-     * Keys needed :
-     * - $event_data["about_user"] (= $user_id)
+     * @param string $event_name the name of the event that was triggered
+     * @param array $event_data what to put in the mail
      * 
      * Possible key :
+     * - $event_data["about_user"] (= $user_id)
      * - $event_data["prior_lang"]
      * 
      * Warning :
@@ -35,14 +37,15 @@ class EventsMail
         $email_admin = api_get_setting('emailAdministrator');
         // basic  keys
         $event_data["sitename"] = api_get_setting('siteName');
-        $event_data["administrator_name"] = api_get_person_name(api_get_setting('administratorName'));
-        $event_data["administrator_surname"] = api_get_person_name(api_get_setting('administratorSurname'));
+        $event_data["administrator_name"] = api_get_setting('administratorName');
+        $event_data["administrator_surname"] = api_get_setting('administratorSurname');
         $event_data["administrator_phone"] = api_get_setting('administratorTelephone');
         $event_data["administrator_email"] = api_get_setting('emailAdministrator');
+        $event_data["portal"] = api_get_path(WEB_PATH);
         
         // Fill the array's cells with info regarding the user that fired the event
         // (for the keys in the template)
-        if(isset($event_data["about_user"]))
+        if ( isset($event_data["about_user"]) ) 
         {
             $about_user = api_get_user_info($event_data["about_user"]);
             $event_data["firstname"] = $about_user["firstname"];
@@ -88,7 +91,7 @@ class EventsMail
                 $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 
                 // checks if there's a file we need to join to the mail
-                if(isset($values["certificate_pdf_file"]))
+                if (isset($values["certificate_pdf_file"]))
                 {
                     $message = str_replace("\n", "<br />", $message);                  
                     @api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin, null, array($values['certificate_pdf_file']));
@@ -98,8 +101,8 @@ class EventsMail
                     @api_mail($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin);
                 }
                 
-                // If the mail only need to be send once (we know that thanks to the events.conf, we log it in the table
-                if($event_config[$event_name]["sending_mail_once"])
+                // If the mail only need to be send once (we know that thanks to the events.conf), we log it in the table
+                if ($event_config[$event_name]["sending_mail_once"])
                 {
                     $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
                         (user_from, user_to, event_type_name)
@@ -148,7 +151,7 @@ class EventsMail
             @api_mail($recipient_name, $value["email"], $subject, $message, $sender_name, $email_admin);
             
             // If the mail only need to be send once (we know that thanks to the events.conf, we log it in the table
-            if($event_config[$event_name]["sending_mail_once"])
+            if ($event_config[$event_name]["sending_mail_once"])
             {
                 $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
                     (user_from, user_to, event_type_name)
@@ -163,10 +166,13 @@ class EventsMail
      * Checks if a message in a language exists, if the event is activated 
      * and if "manage event" is checked in admin panel.
      * If yes to three, we can use this class, else we still use api_mail. 
+     *
+     * @param string $event_name
+     * @return boolean 
      */
     public static function check_if_using_class($event_name) 
     {
-	if(api_get_setting('activate_email_template') === 'false')
+	if (api_get_setting('activate_email_template') === 'false')
 	{
 		return false;
 	}
@@ -191,9 +197,9 @@ class EventsMail
     /**
      * Get the record containing the good message and subject
      *
-     * @param type $event_name
-     * @param type $language
-     * @return type 
+     * @param string $event_name
+     * @param string $language
+     * @return array 
      */
     private static function getMessage($event_name, $language)
     {
@@ -207,10 +213,10 @@ class EventsMail
     /**
      * Get the correct message, meaning in the specified language or in english if previous one doesn't exist
      *
-     * @param type $message
-     * @param type $subject
-     * @param type $language
-     * @param type $result 
+     * @param string $message
+     * @param string $subject
+     * @param string $language
+     * @param array $result 
      */
     private static function getCorrectMessage(&$message, &$subject, $language, $result)
     {
@@ -231,12 +237,12 @@ class EventsMail
     }
     
     /**
-     * Replaces the %key% by the good values
+     * Replaces the ((key)) by the good values
      *
-     * @param type $message
-     * @param type $subject
-     * @param type $event_config
-     * @param type $event_name 
+     * @param string $message
+     * @param string $subject
+     * @param array $event_config
+     * @param string $event_name 
      */
     private static function formatMessage(&$message, &$subject, $event_config, $event_name, &$event_data)
     {

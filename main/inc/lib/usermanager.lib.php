@@ -170,7 +170,6 @@ class UserManager {
 			if(EventsMail::check_if_using_class('user_registration'))
                         {
                             $values["about_user"] = $return;
-                            $values["portal"] = $_configuration['root_web'];
                             $values["password"] = $original_password;
                             
                             $values["send_to"] = array($return);
@@ -182,9 +181,9 @@ class UserManager {
                         {
                             @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
                         }
+			/* ENDS MANAGE EVENT WITH MAIL */ 
               
 			}
-			/* ENDS MANAGE EVENT WITH MAIL */ 
           
 
 			// Add event to system log			

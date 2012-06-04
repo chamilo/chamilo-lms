@@ -18,7 +18,7 @@ class EventsDispatcher
         // and execute every actions with the values
         foreach ($event_config[$event_name]["actions"] as $func) 
         {
-            if(!function_exists($func)) // if the function doesn't exist, we log
+            if (!function_exists($func)) // if the function doesn't exist, we log
             {
                 error_log("EventsDispatcher warning : ".$func." does not exist.");
             }
@@ -33,7 +33,7 @@ class EventsDispatcher
                 error_log("EventsDispatcher warning : ".$event_name."_".$func."_filter_func does not exist.");
             }
 
-            if(!$execute) // if the filter says we cannot send the mail, we get out of here
+            if (!$execute) // if the filter says we cannot send the mail, we get out of here
             {
                 return false;
             }

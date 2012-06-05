@@ -258,6 +258,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'false', 'No');
 
+DROP TABLE IF EXISTS access_url_rel_session;
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.18163' WHERE variable = 'chamilo_database_version';

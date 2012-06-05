@@ -31,13 +31,6 @@ class TestUrlManager extends UnitTestCase {
         //var_dump($res);
 	}
 
-	function testadd_session_to_url() {
-		$session_id=1; //arbitrary session name - isn't checked in the function anyway
-		$res=UrlManager::add_session_to_url($session_id, $url_id=1);
-		$this->assertTrue($res);
-        UrlManager::delete_url_rel_session($session_id,$url_id);
-	}
-
 	function testadd_user_to_url() {
 		$user_id=1;
 		$url_id=1;
@@ -65,14 +58,6 @@ class TestUrlManager extends UnitTestCase {
 		$course_code='';
 		$url_id='';
 		$res=UrlManager::delete_url_rel_course($course_code, $url_id);
-		$this->assertTrue(is_bool($res));
-        //var_dump($res);
-	}
-
-	function testdelete_url_rel_session() {
-		$session_id='';
-		$url_id='';
-		$res=UrlManager::delete_url_rel_session($session_id, $url_id);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
@@ -140,16 +125,6 @@ class TestUrlManager extends UnitTestCase {
 		//var_dump($resu);
 	}
 
-	function testrelation_url_session_exist() {
-		$session_id=1;
-		$url_id=1;
-		$res=UrlManager::relation_url_session_exist($session_id, $url_id);
-		if(!is_numeric($res)){
-			$this->assertTrue(is_bool($res));
-		}
-		//var_dump($res);
-	}
-
 	function testrelation_url_user_exist() {
 		$user_id=1;
 		$url_id=1;
@@ -183,14 +158,6 @@ class TestUrlManager extends UnitTestCase {
 		$access_url_id=1;
 		$res=UrlManager::update_urls_rel_course($course_list,$access_url_id);
 		if(!is_null($res)) $this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	function testupdate_urls_rel_session(){
-		$session_list=array();
-		$access_url_id=1;
-		$res=UrlManager::update_urls_rel_session($session_list,$access_url_id);
-		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 

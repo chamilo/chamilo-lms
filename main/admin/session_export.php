@@ -48,31 +48,14 @@ if ($_POST['formSent']) {
 	if (empty($session_id)) {
 		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
-
-		
-		if ($_configuration['multiple_access_urls']) {
-			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){
-			$sql = "SELECT id, name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
-				ON (s.id= session_rel_url.session_id) INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
-				WHERE access_url_id = $access_url_id
-				ORDER BY id";
-
-			}
-		}
 		$result=Database::query($sql);
-	}
-	else
-	{
+	} else {
 		$sql = "SELECT id,name,username,date_start,date_end,visibility,session_category_id
 				FROM $tbl_session
 				INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach
 				WHERE id='$session_id'";
-
 		$result = Database::query($sql);
-
 	}
 
 	if(Database::num_rows($result))
@@ -251,20 +234,7 @@ Display::display_header($tool_name);
 
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
-
-if ($_configuration['multiple_access_urls']) {
-	$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1){
-	$sql = "SELECT id, name FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
-		ON (s.id= session_rel_url.session_id)
-		WHERE access_url_id = $access_url_id
-		ORDER BY name";
-	}
-}
-
-
-$result=Database::query($sql);
+$result = Database::query($sql);
 
 $Sessions=Database::store_result($result);
 

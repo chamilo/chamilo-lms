@@ -59,11 +59,11 @@ if (Database::num_rows($rs)>0) {
 
 $action = $_GET['action'];
 
-$url_id = api_get_current_access_url_id();     
+$url_id = api_get_current_access_url_id();
 
 
 switch($action) {
-    case 'add_user_to_url':        
+    case 'add_user_to_url':
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
@@ -123,7 +123,7 @@ echo Display::page_header(Display::return_icon('session.png', get_lang('Session'
 <!-- General properties -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="2">
+  <th align="center" colspan="2">
       <?php echo get_lang('GeneralProperties'); ?>
       <a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>">
           <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
@@ -188,31 +188,14 @@ echo Display::page_header(Display::return_icon('session.png', get_lang('Session'
 		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
 	</td>
 </tr>
-
-<?php 
-
-$multiple_url_is_on = api_get_multiple_access_url();
-
-if ($multiple_url_is_on) {
-    echo '<tr><td>';   
-    echo 'URL';    
-    echo '</td>';
-    echo '<td>';
-    $url_list = UrlManager::get_access_url_from_session($id_session);
-    foreach($url_list as $url_data) {
-        echo $url_data['url'].'<br />';
-    }        
-    echo '</td></tr>';
-}
-?>
 </table>
 <br />
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="4"><?php echo get_lang('CourseList'); ?>
+  <th align="center" colspan="4"><?php echo get_lang('CourseList'); ?>
   	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
-        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>  
+        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
   </th>
 </tr>
 <tr>
@@ -275,9 +258,9 @@ if ($session['nbr_courses'] == 0){
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>   
+                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;                
+				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
@@ -290,7 +273,7 @@ if ($session['nbr_courses'] == 0){
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="4"><?php echo get_lang('UserList'); ?>
+  <th align="center" colspan="4"><?php echo get_lang('UserList'); ?>
   	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
         <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
     </a></th>
@@ -303,10 +286,10 @@ if ($session['nbr_users']==0) {
 	echo '<tr>
 			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
 		</tr>';
-} else {    
+} else {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-    
-    if ($multiple_url_is_on) {           
+
+    if ($multiple_url_is_on) {
         $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
@@ -330,21 +313,21 @@ if ($session['nbr_users']==0) {
         if (!empty($user['user_id'])) {
             $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
         }
-        
+
         $link_to_add_user_in_url = '';
-        
+
         if ($multiple_url_is_on) {
-            if ($user['access_url_id'] != $url_id) {            
+            if ($user['access_url_id'] != $url_id) {
                 $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_SMALL);
                 $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_SMALL);
                 $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
-            }                
+            }
         }
 		echo '<tr>
                 <td width="90%">
                     <b>'.$user_link.'</b>
                 </td>
-                <td>               
+                <td>
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
                     <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>

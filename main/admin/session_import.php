@@ -39,7 +39,7 @@ $purification_option_for_usernames = false;
 
 $inserted_in_course = array();
 
-global $_configuration;                            
+global $_configuration;
 
 if ($_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name'])) {
@@ -110,7 +110,7 @@ if ($_POST['formSent']) {
                             // When it is applicable, adding the access_url rel user relationship too.
                             Database::query($sql);
                             $return = Database::insert_id();
-                            
+
                             if ($_configuration['multiple_access_urls']) {
                                 if (api_get_current_access_url_id() != -1) {
                                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -173,12 +173,12 @@ if ($_POST['formSent']) {
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
                         list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
-                        
+
                         if (empty($title)) {
                             $title = $course_code;
                         }
-                        
-                        $course_info = CourseManager::create_course($title, $course_code, lang2db($description), false, 
+
+                        $course_info = CourseManager::create_course($title, $course_code, lang2db($description), false,
                                                                     api_get_person_name($firstname, $lastname, null, null, $language), '', $language, $user_id);
                     }
                 }*/
@@ -299,19 +299,6 @@ if ($_POST['formSent']) {
                                 Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'");
                             }
                         }
-
-                        // Associate the session with access_url.
-                        global $_configuration;
-                        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-                        if ($_configuration['multiple_access_urls']) {
-                            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                            $access_url_id = api_get_current_access_url_id();
-                            UrlManager::add_session_to_url($session_id, $access_url_id);
-                        } else {
-                            // We fill by default the access_url_rel_session table.
-                            UrlManager::add_session_to_url($session_id, 1);
-                        }
-
 
                         // Adding users to the new session.
                         foreach ($node_session->User as $node_user) {
@@ -632,19 +619,19 @@ if ($_POST['formSent']) {
                                     id_session='$session_id'";
                             $rs_course = Database::query($sql_course);
                             $course_counter++;
-                            
+
                             $course_split = array();
                             $pattern = "/\[(.*?)\]/";
                             preg_match_all($pattern, $course, $matches);
                             if (isset($matches[1])) {
-                                $course_coaches = $matches[1][0]; 
+                                $course_coaches = $matches[1][0];
                                 $course_users   = $matches[1][1];
                             }
-                            
+
                             $course_users   = explode(',', $course_users);
                             $course_coaches = explode(',', $course_coaches);
                             var_dump($course_coaches, $course_users);
-                            
+
                             // Adding coaches to session course user
                             if (!empty($course_coaches)) {
                                 foreach ($course_coaches as $course_coach) {
@@ -663,7 +650,7 @@ if ($_POST['formSent']) {
                             }
 
                             $users_in_course_counter = 0;
-                            
+
                             // Adding the relationship "Session - Course - User".
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);

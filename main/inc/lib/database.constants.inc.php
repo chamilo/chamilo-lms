@@ -2,16 +2,16 @@
 /* For licensing terms, see /license.txt */
 /**
  *	This is the database constants definition for Chamilo
- *  This file is called by database.lib.php and database.mysqli.lib.php  
- *  
+ *  This file is called by database.lib.php and database.mysqli.lib.php
+ *
  *  @todo the table constants have all to start with TABLE_
  *        This is because of the analogy with the tool constants TOOL_
  *
- *	@package chamilo.library 
+ *	@package chamilo.library
  */
 
 /**
- * CONSTANTS 
+ * CONSTANTS
  */
 
 //See #3910 defines the default prefix for the single course database
@@ -81,7 +81,6 @@ define('TABLE_MAIN_SEARCH_ENGINE_REF',      'search_engine_ref');
 define('TABLE_MAIN_ACCESS_URL', 'access_url');
 define('TABLE_MAIN_ACCESS_URL_REL_USER',    'access_url_rel_user');
 define('TABLE_MAIN_ACCESS_URL_REL_COURSE',  'access_url_rel_course');
-define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
 
 // Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
@@ -113,7 +112,7 @@ define('TABLE_MAIN_LEGAL', 'legal');
 // Dashboard blocks plugin
 define('TABLE_MAIN_BLOCK', 'block');
 
-// Statistic database tables 
+// Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS',        'track_e_lastaccess');
 define('TABLE_STATISTIC_TRACK_E_ACCESS',            'track_e_access');
 define('TABLE_STATISTIC_TRACK_E_LOGIN',             'track_e_login');

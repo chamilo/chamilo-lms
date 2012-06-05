@@ -11,7 +11,7 @@ class BBBPlugin extends Plugin
 
     //When creating a new course this settings are added to the course
     public $course_settings = array(
-                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+//                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
                     array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
     );
 

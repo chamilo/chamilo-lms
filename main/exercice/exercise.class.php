@@ -2013,12 +2013,12 @@ class Exercise {
                         //var_dump($numAnswer);
                         //var_dump($choice);
 						$studentChoice = $choice[$numAnswer];
+                        $real_answers[$answerId] = (bool)$studentChoice;
                         //var_dump($studentChoice .' - '.$answerCorrect);
 						if (isset($studentChoice)) {
 							$questionScore  += $answerWeighting;
                             //var_dump($questionScore.' '.$answerWeighting);
 						}
-                        $real_answers[$answerId] = (bool)$studentChoice;
 					}
                     $totalScore     += $answerWeighting;
 
@@ -2842,9 +2842,7 @@ class Exercise {
 
         if ($debug) error_log('-- end answer loop --');
 
-
 		// destruction of Answer
-
 		if (!$saved_results && $answerType == HOT_SPOT) {
 			$queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
 			$resfree        = Database::query($queryfree);
@@ -2892,8 +2890,10 @@ class Exercise {
             /*if ($correct_answer == false) {
                 $questionScore = 0;
             }*/
+
+            //This makes the result non exact
             if (!empty($diff)) {
-                $questionScore = 0;
+                //$questionScore = 0;
             }
         }
 

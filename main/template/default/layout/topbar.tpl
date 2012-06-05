@@ -9,13 +9,13 @@
                     <span class="icon-bar"></span>
                 </a>
                 <a class="brand" href="{{ _p.web }}">{{"siteName"|get_setting }}</a>
-                
+
                 {% if _u.logged %}
-                    
+
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li class="active"><a href="{{ _p.web }}user_portal.php">{{"MyCourses"|get_lang }}</a></li>
-                        {# 
+                        {#
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Teaching'|get_lang }}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -49,17 +49,17 @@
                                 <li><a href="{{ _p.web_main }}admin/settings.php?category=Regions">{{"Regions"|get_lang }}</a></li>
                             </ul>
                         </li>
-                        
+
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"> + {{'New'|get_lang }}<b class="caret"></b></a>
-                            <ul class="dropdown-menu">                                
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Add'|get_lang }}<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
                                 <li><a href="{{ _p.web_main }}admin/user_add.php">{{"User"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}admin/course_add.php">{{"Course"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}admin/session_add.php">{{"Session"|get_lang }}</a></li>                                
+                                <li><a href="{{ _p.web_main }}admin/session_add.php">{{"Session"|get_lang }}</a></li>
                             </ul>
                         </li>
-                        
-                        
+
+
                         {% endif %}
                     </ul>
                     {% endif %}
@@ -87,7 +87,7 @@
                         <li><a href="{{ _p.web }}index.php?logout=logout">{{"Logout"|get_lang }}</a></li>
                     </ul>
                     {% endif %}
-                </div>         
+                </div>
             </div> <!-- /container-->
         </div><!-- /navbar-inner -->
     </div><!-- /navbar -->

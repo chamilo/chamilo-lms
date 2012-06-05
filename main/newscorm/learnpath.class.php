@@ -441,11 +441,17 @@ class learnpath {
 					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
                     INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
                     ON quiz_question.id = quiz_rel_question.question_id
-                    WHERE   quiz_rel_question.exercice_id = ' . $id." AND
+                    WHERE   quiz_rel_question.exercice_id = '.$id." AND
 	            			quiz_question.c_id = $course_id AND
 	            			quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
+
+            //Disabling the exercise if we add it inside a LP
+            $exercise = new Exercise();
+            $exercise->read($id);
+            $exercise->disable();
+            $exercise->save();
         } else {
             $max_score = 100;
         }
@@ -531,7 +537,7 @@ class learnpath {
                             SET previous_item_id = " . $new_item_id . "
                             WHERE c_id = $course_id AND id = " . $next;
 
-            $res_update_next = Database::query($sql_update_next);
+            Database::query($sql_update_next);
 
             // Update the item that should be before the new item.
             $sql_update_previous = "
@@ -539,7 +545,7 @@ class learnpath {
                             SET next_item_id = " . $new_item_id . "
                             WHERE c_id = $course_id AND id = " . $tmp_previous;
 
-            $res_update_previous = Database::query($sql_update_previous);
+            Database::query($sql_update_previous);
 
             // Update all the items after the new item.
             $sql_update_order = "
@@ -552,7 +558,7 @@ class learnpath {
                                 parent_item_id = " . $parent . " AND
                                 display_order > " . $display_order;
 
-            $res_update_previous = Database::query($sql_update_order);
+            Database::query($sql_update_order);
 
             // Update the item that should come after the new item.
             $sql_update_ref = "UPDATE " . $tbl_lp_item . "

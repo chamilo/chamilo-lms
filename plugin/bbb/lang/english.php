@@ -8,7 +8,7 @@
 
 //Needed in order to show the plugin title
 $strings['plugin_title']        = "Videoconference";
-$strings['plugin_comment']      = "Adds a videoconference room Chamilo courses using BigBlueButton (BBB)";
+$strings['plugin_comment']      = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
 
 $strings['Videoconference']     = "Videoconference";
 $strings['MeetingOpened']       = "Meeting opened";

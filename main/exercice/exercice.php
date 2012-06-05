@@ -532,7 +532,8 @@ if (!empty($exercise_list)) {
 
                 $lp_blocked = '';
                 if ($added_to_lp) {
-                    $lp_blocked = Display::label(get_lang('AddedToALP'), 'info');
+                    //$lp_blocked = Display::label(get_lang('AddedToALP'), 'info');
+                    $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class'=> 'lp_content_type_label'));
                 }
 
                 //Showing exercise title
@@ -555,6 +556,10 @@ if (!empty($exercise_list)) {
                     $results_text = $count == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
                     $title .= '<span class="exercise_tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
                     $class_tip = 'link_tooltip';
+                }
+
+                if ($added_to_lp) {
+                    //$title .= Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class'=> 'lp_content_type_label'));
                 }
 
                 $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';

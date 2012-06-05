@@ -22,7 +22,7 @@ api_protect_super_admin($user_id);
 $htmlHeadXtra[] = '
 <script>
 <!--
-function enable_expiration_date() { //v2.0
+function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
 	document.user_edit.radio_expiration_date[1].checked=true;
 }
@@ -37,12 +37,15 @@ function password_switch_radio_button(){
 }
 
 function display_drh_list(){
+    var $radios = $("input:radio[name=platform_admin]");
 	if(document.getElementById("status_select").value=='.COURSEMANAGER.') {
 		document.getElementById("id_platform_admin").style.display="block";
 	} else if (document.getElementById("status_select").value=='.STUDENT.') {
 		document.getElementById("id_platform_admin").style.display="none";
+        $radios.filter("[value=0]").attr("checked", true);
 	} else {
 		document.getElementById("id_platform_admin").style.display="none";
+        $radios.filter("[value=0]").attr("checked", true);
 	}
 }
 
@@ -125,7 +128,7 @@ $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
 
-if (api_get_setting('login_is_email') == 'true') { 
+if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
@@ -148,7 +151,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 
-if (api_get_setting('login_is_email') != 'true') {    
+if (api_get_setting('login_is_email') != 'true') {
     $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -303,7 +306,7 @@ if ( $form->validate()) {
 		$firstname = $user['firstname'];
         $password = $user['password'];
         $auth_source = $user['auth_source'];
-        
+
 		$official_code = $user['official_code'];
 		$email = $user['email'];
 		$phone = $user['phone'];
@@ -320,12 +323,17 @@ if ( $form->validate()) {
 			$expiration_date='0000-00-00 00:00:00';
 		}
 		$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
-	
-        if (api_get_setting('login_is_email') == 'true') { 
+
+        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
+        if ($platform_admin == 1) {
+            $status = COURSEMANAGER;
+        }
+
+        if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
 		UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language, null, $send_mail, $reset_password);
-        
+
 		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
 			$up = UserManager::update_openid($user_id,$user['openid']);
 		}
@@ -343,7 +351,7 @@ if ( $form->validate()) {
 			if(substr($key, 0, 6) == 'extra_') { //an extra field
 				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 			}
-		}		
+		}
 		$tok = Security::get_token();
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
 		exit();

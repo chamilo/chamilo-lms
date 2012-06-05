@@ -20,7 +20,7 @@ require_once 'CourseDescription.class.php';
 require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php'; 
+require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
@@ -47,54 +47,54 @@ class CourseRestorer
 	 * The course-object
 	 */
 	var $course;
-	
+
 	var $destination_course_info;
-	
+
 	/**
 	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
 	 * FILE_OVERWRITE)
 	 */
-	var $file_option;	
+	var $file_option;
 	var $set_tools_invisible_by_default;
 	var $skip_content;
-    
+
     var $tools_to_restore = array(
                             'events',
                             'announcements',
                             'tool_intro',
                             'surveys',
-                            'documents', 
-                            'quizzes', 
+                            'documents',
+                            'quizzes',
                             'glossary',
                             'learnpaths',
-                            'links', 
+                            'links',
                             'course_descriptions',
                             'wiki',
                             'thematic',
                             'attendance',
                             'scorm_documents');
-    
+
     /** Setting per tool */
     var $tool_copy_settings = array();
-    
+
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now)
-     * 
-     **/    
+     *
+     **/
     var $add_text_in_items = false;
-    
+
 	/**
 	 * Create a new CourseRestorer
 	 */
 	function __construct($course) {
-		$this->course							= $course;		
+		$this->course							= $course;
 		$course_info 							= api_get_course_info($this->course->code);
-		$this->course_origin_id 				= $course_info['real_id'];		
+		$this->course_origin_id 				= $course_info['real_id'];
 		$this->file_option 						= FILE_RENAME;
 		$this->set_tools_invisible_by_default 	= false;
 		$this->skip_content 					= array();
 	}
-    
+
 	/**
 	 * Set the file-option
 	 * @param constant $options What to do with files with same name (FILE_SKIP,
@@ -104,10 +104,10 @@ class CourseRestorer
 		$this->file_option = $option;
 	}
     function set_add_text_in_items($status) {
-        $this->add_text_in_items = $status;        
-    }    
+        $this->add_text_in_items = $status;
+    }
     function set_tool_copy_settings($array) {
-        $this->tool_copy_settings = $array;        
+        $this->tool_copy_settings = $array;
     }
 
 	/**
@@ -115,27 +115,27 @@ class CourseRestorer
 	 * @param 	string 	The code of the Chamilo-course in
 	 * @param	int		The session id
 	 * @param	bool	Course settings are going to be restore?
-	 
+
 	 */
 	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false, $respect_base_content = false) {
-		if ($destination_course_code == '') {			
+		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->destination_course_info = $course_info;
 			$this->course->destination_path = $course_info['path'];
 		} else {
 			$course_info = api_get_course_info($destination_course_code);
-			$this->destination_course_info = $course_info;			
+			$this->destination_course_info = $course_info;
 			$this->course->destination_path = $course_info['path'];
-		}		
+		}
 		$this->destination_course_id = $course_info['real_id'];
-        
+
         if (empty($this->course)) {
             return false;
         }
 
 		// Source platform encoding - reading/detection
-		// The correspondent data field has been added as of version 1.8.6.1     
-        
+		// The correspondent data field has been added as of version 1.8.6.1
+
 		if (empty($this->course->encoding)) {
 			// The archive has been created by a system which is prior to 1.8.6.1 version.
 			// In this case we have to detect the encoding.
@@ -153,12 +153,12 @@ class CourseRestorer
 
 		// Encoding conversion of the course, if it is needed.
 		$this->course->to_system_encoding();
-        
+
         foreach ($this->tools_to_restore as $tool) {
             $function_build = 'restore_'.$tool;
             $this->$function_build($session_id, $respect_base_content, $destination_course_code);
         }
-        
+
         /*
 		$this->restore_links($session_id);
 		$this->restore_documents($session_id, $destination_course_code);
@@ -169,9 +169,9 @@ class CourseRestorer
 		$this->restore_wiki($session_id);
 		$this->restore_thematic($session_id);
 		$this->restore_attendance($session_id);
-		
+
 		if (!empty($session_id)) {
-			
+
 		} else {
 			//$this->restore_links();
 			$this->restore_tool_intro();
@@ -189,7 +189,7 @@ class CourseRestorer
 			//$this->restore_thematic();
 			//$this->restore_attendance();
 		}*/
-		
+
 		if ($update_course_settings) {
 		    $this->restore_course_settings($destination_course_code);
 		}
@@ -234,7 +234,7 @@ class CourseRestorer
 				}
 			}
 		}
-		
+
 		/*
 		// Restore the linked-resources
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
@@ -246,10 +246,10 @@ class CourseRestorer
 						foreach ($to_ids as $index => $to_id) {
 							$to_resource = $this->course->resources[$to_type][$to_id];
 							$sql = "INSERT INTO ".$table." SET
-								 
-									source_type = '".$type."', 
-									source_id = '".$resource->destination_id."', 
-									resource_type='".$to_type."', 
+
+									source_type = '".$type."',
+									source_id = '".$resource->destination_id."',
+									resource_type='".$to_type."',
 									resource_id='".$to_resource->destination_id."' ";
 							Database::query($sql);
 						}
@@ -257,53 +257,52 @@ class CourseRestorer
 				}
 		}*/
 	}
-	
+
 	/**
 	 * Restore only harmless course settings: course_language, visibility, department_name,department_url, subscribe, unsubscribe ,category_code
-	 * 
+	 *
 	 * @return unknown_type
 	 */
-	function restore_course_settings($destination_course_code) {	    
+	function restore_course_settings($destination_course_code) {
 	    $origin_course_info = api_get_course_info($destination_course_code);
 	    $course_info = $this->course->info;
 	    $params['course_language'] = $course_info['language'];
 	    $params['visibility']      = $course_info['visibility'];
 	    $params['department_name'] = $course_info['department_name'];
 	    $params['department_url']  = $course_info['department_url'];
-	    
+
 	    $params['category_code']   = $course_info['categoryCode'];
 	    $params['subscribe']       = $course_info['subscribe_allowed'];
-	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];	  
-	    CourseManager::update_attributes($origin_course_info['real_id'], $params);	    
+	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];
+	    CourseManager::update_attributes($origin_course_info['real_id'], $params);
 	}
-    
+
 	/**
 	 * Restore documents
      * @param   int session id
-     * 
+     *
 	 */
 	function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '') {
-		$perm 			= api_get_permissions_for_new_directories();		
+		$perm 			= api_get_permissions_for_new_directories();
         $course_info 	= api_get_course_info($destination_course_code);
-        
-		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
+        if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 
 			$table = Database :: get_course_table(TABLE_DOCUMENT);
-			$resources = $this->course->resources;			
+			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
-			    
+
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				//$dirs = explode('/', dirname($document->path));
-				      
+
                 if (empty($document->item_properties[0]['id_session'])) {
                     $my_session_id = 0;
                 } else {
                     $my_session_id = $session_id;
-                }                
-                
+                }
+
 		    	if ($document->file_type == FOLDER) {
-		    	    
+
 		    		$visibility = $document->item_properties[0]['visibility'];
 		    		if (!empty($document->title))  {
 		    		    $title  = $document->title;
@@ -315,52 +314,84 @@ class CourseRestorer
 		    		if (!is_dir($path.'document'.$new)) {
 		    			//var_dump($path.'document'.$new);
 						$created_dir = create_unexisting_directory($course_info, api_get_user_id(), $my_session_id, 0, 0 ,$path.'document', $new, $title, $visibility);
-		    		}                    
+		    		}
 		    	} elseif ($document->file_type == DOCUMENT) {
 		    	    /*
-                    echo 'option'; var_dump($this->file_option);                    
+                    echo 'option'; var_dump($this->file_option);
                     echo 'file type'; var_dump($document->file_type);
-                    echo 'session'; var_dump($session_id);                    
+                    echo 'session'; var_dump($session_id);
                     echo 'file _exists';  var_dump($path.$document->path); var_dump(file_exists($path.$document->path));
                     */
-                        
+
                     if (!is_dir($path.dirname($document->path))) {
                         continue;
-                        $visibility = $document->item_properties[0]['visibility'];                    
-                        $new        = substr($document->path, 8);            
+                        $visibility = $document->item_properties[0]['visibility'];
+                        $new        = substr($document->path, 8);
                         if (!empty($document->title))  {
                             $title      = $document->title;
                         } else {
                             $title      = basename($new);
                         }
-                        
-                        // This code fixes the possibility for a file without a directory entry to be 
+
+                        // This code fixes the possibility for a file without a directory entry to be
                         $created_dir = create_unexisting_directory($destination_course, api_get_user_id(), $my_session_id, 0, 0 , $path.'document', $new, $title, $visibility, true);
                     }
-                    
-					if (file_exists($path.$document->path)) {	
+
+					if (file_exists($path.$document->path)) {
 					    //var_dump ('enter');
+
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
-								$origin_path = $this->course->backup_path.'/'.$document->path;
+                                $origin_path = $this->course->backup_path.'/'.$document->path;
 								if (file_exists($origin_path)) {
-									copy($origin_path, $path.$document->path);
-								}                                                                
-                                //Replace old course code with the new destination code 
-                                
-                                $file_info = pathinfo($path.$document->path);                                    
+        						    copy($origin_path, $path.$document->path);
+                                    $sql = "SELECT id FROM ".$table." WHERE c_id = ".$this->destination_course_id." AND path = '/".self::DBUTF8escapestring(substr($document->path, 9))."'";
+        						    $res = Database::query($sql);
+                                    $count = Database::num_rows($res);
+                                    if ($count == 0) {
+                                        $sql = "INSERT INTO $table SET
+    												path 		= '/".self::DBUTF8escapestring(substr($document->path, 9))."',
+    												c_id 		= ".$this->destination_course_id.",
+    												comment 	= '".self::DBUTF8escapestring($document->comment)."',
+    												title 		= '".self::DBUTF8escapestring($document->title)."' ,
+    												filetype	='".$document->file_type."',
+    												size		= '".$document->size."',
+    												session_id 	= '$my_session_id'";
+                                    	Database::query($sql);
+    									$document_id = Database::insert_id();
+                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
+                                        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+                                    } else {
+                                        $obj = Database::fetch_object($res);
+                                        $sql = "UPDATE ".$table." SET
+                                            path 		= '/".self::DBUTF8escapestring(substr($document->path, 9))."',
+											c_id 		= ".$this->destination_course_id.",
+											comment 	= '".self::DBUTF8escapestring($document->comment)."',
+											title 		= '".self::DBUTF8escapestring($document->title)."' ,
+											filetype	='".$document->file_type."',
+											size		= '".$document->size."',
+											session_id 	= '$my_session_id'
+                                            WHERE c_id = ".$this->destination_course_id." AND path = '/".self::DBUTF8escapestring(substr($document->path, 9))."'";
+                                        Database::query($sql);
+                                        api_item_property_update($course_info, TOOL_DOCUMENT, $obj->id, 'default', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+                                    }
+								}
+                                //Replace old course code with the new destination code
+
+                                $file_info = pathinfo($path.$document->path);
                                 if (in_array($file_info['extension'], array('html','htm'))) {
-                                    $content    = file_get_contents($path.$document->path);  
+                                    $content    = file_get_contents($path.$document->path);
                                     if (UTF8_CONVERT) $content = utf8_encode($content);
-                                    $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
-                                    $result     = file_put_contents($path.$document->path,$content);                                   
-                                }                                
-                                
+                                    $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);
+                                    $result     = file_put_contents($path.$document->path,$content);
+
+                                }
+
 								$sql = "SELECT id FROM ".$table." WHERE c_id = ".$this->destination_course_id." AND path='/".substr($document->path, 9)."'";
 								$res = Database::query($sql);
 								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
-								$sql = "UPDATE ".$table." SET comment = '".self::DBUTF8escapestring($document->comment)."', title='".self::DBUTF8escapestring($document->title)."', size='".$document->size."' 
+								$sql = "UPDATE ".$table." SET comment = '".self::DBUTF8escapestring($document->comment)."', title='".self::DBUTF8escapestring($document->title)."', size='".$document->size."'
 										WHERE c_id = ".$this->destination_course_id." AND id = '".$obj->id."'";
 								Database::query($sql);
 								break;
@@ -396,7 +427,7 @@ class CourseRestorer
 									$orig_base_folder = $document_path[1];
 									$orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
 									//echo '$orig_base_path'; var_dump($orig_base_path);
-                                    
+
 									if (is_dir($orig_base_path)) {
 
 										$new_base_foldername = $orig_base_folder;	// e.g: "carpeta1"
@@ -432,131 +463,134 @@ class CourseRestorer
 										$basedir_dest_path 	= dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
 										//$dest_filename 		= basename($dest_document_path);  				// e.g: "collaborative.png"
 										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
-										
+
 										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
 										copy_folder_course_session($basedir_dest_path, $base_path_document, $session_id, $course_info, $document, $this->course_origin_id);
-							
+
                                         if (file_exists($course_path.$document->path)) {
                                             copy($course_path.$document->path, $dest_document_path);
-                                        }                                        
-                                        
+                                        }
+
                                         //Replace old course code with the new destination code see BT#1985
                                         if (file_exists($dest_document_path)) {
-                                            $file_info = pathinfo($dest_document_path);                                    
+                                            $file_info = pathinfo($dest_document_path);
                                             if (in_array($file_info['extension'], array('html','htm'))) {
-                                                $content    = file_get_contents($dest_document_path);                                    
+                                                $content    = file_get_contents($dest_document_path);
                                                 if (UTF8_CONVERT) $content = utf8_encode($content);
-                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content, $this->course->code, $this->course->destination_path);                                   
-                                                $result     = file_put_contents($dest_document_path,$content);                                   
+                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content, $this->course->code, $this->course->destination_path);
+                                                $result     = file_put_contents($dest_document_path,$content);
                                             }
-                                        }                                        
-                                        
-										$sql = "INSERT INTO $table SET 
+                                        }
+
+										$sql = "INSERT INTO $table SET
 												path 		= '$path_title',
-												c_id 		= ".$this->destination_course_id.",  
-												comment 	= '".self::DBUTF8escapestring($document->comment)."', 
+												c_id 		= ".$this->destination_course_id.",
+												comment 	= '".self::DBUTF8escapestring($document->comment)."',
 												title 		= '".self::DBUTF8escapestring(basename($path_title))."' ,
-												filetype	='".$document->file_type."', 
-												size		= '".$document->size."', 
+												filetype	='".$document->file_type."',
+												size		= '".$document->size."',
 												session_id 	= '$my_session_id'";
 
 										Database::query($sql);
 										$document_id = Database::insert_id();
-                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;                            
-                                        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);                                   
-                                            
-									} else {									    
+                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
+                                        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+
+									} else {
+
 									    if (file_exists($path.$document->path)) {
 										      copy($path.$document->path, $path.$new_file_name);
 									    }
-                                        
+
                                         //Replace old course code with the new destination code see BT#1985
                                         if (file_exists($path.$new_file_name)) {
-                                            $file_info = pathinfo($path.$new_file_name);                                    
+                                            $file_info = pathinfo($path.$new_file_name);
                                             if (in_array($file_info['extension'], array('html','htm'))) {
-                                                $content    = file_get_contents($path.$new_file_name);   
+                                                $content    = file_get_contents($path.$new_file_name);
                                                 if (UTF8_CONVERT) $content = utf8_encode($content);
-                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
-                                                $result     = file_put_contents($path.$new_file_name, $content);                                   
+                                                $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);
+                                                $result     = file_put_contents($path.$new_file_name, $content);
                                             }
-                                        }                                       
-                                        
+                                        }
+
 										$sql = "INSERT INTO ".$table." SET
-														c_id 		= ".$this->destination_course_id.",   
-														path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."', 
-														comment 	= '".self::DBUTF8escapestring($document->comment)."', 
+														c_id 		= ".$this->destination_course_id.",
+														path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
+														comment 	= '".self::DBUTF8escapestring($document->comment)."',
 														title 		= '".self::DBUTF8escapestring($document->title)."' ,
-														filetype	='".$document->file_type."', 
-														size		= '".$document->size."', 
+														filetype	='".$document->file_type."',
+														size		= '".$document->size."',
 														session_id 	= '$my_session_id'";
 										Database::query($sql);
-										
+
 										$document_id = Database::insert_id();
-                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;                            
-                                        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);                                    
-    										
+                                        $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
+                                        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+
 									}
 
 								} else {
+
 									copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
-                                    
+
                                     //Replace old course code with the new destination code see BT#1985
                                     if (file_exists($path.$new_file_name)) {
-                                        $file_info = pathinfo($path.$new_file_name);                                    
+                                        $file_info = pathinfo($path.$new_file_name);
                                         if (in_array($file_info['extension'], array('html','htm'))) {
-                                            $content    = file_get_contents($path.$new_file_name);              
+                                            $content    = file_get_contents($path.$new_file_name);
                                             if (UTF8_CONVERT) $content = utf8_encode($content);
-                                            $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
-                                            $result     = file_put_contents($path.$new_file_name, $content);                                   
+                                            $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);
+                                            $result     = file_put_contents($path.$new_file_name, $content);
                                         }
-                                    }                                    
+                                    }
 									$sql = "INSERT INTO ".$table." SET
-												c_id 		= ".$this->destination_course_id.",    
-												path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."', 
-												comment 	= '".self::DBUTF8escapestring($document->comment)."', 
+												c_id 		= ".$this->destination_course_id.",
+												path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
+												comment 	= '".self::DBUTF8escapestring($document->comment)."',
 												title 		= '".self::DBUTF8escapestring($document->title)."' ,
-												filetype	='".$document->file_type."', 
-												size		= '".$document->size."', 
+												filetype	='".$document->file_type."',
+												size		= '".$document->size."',
 												session_id 	= '$my_session_id'";
 									Database::query($sql);
-																											
+
 									$document_id = Database::insert_id();
-                                    $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;                            
-                                    api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);                                    
-                            
+                                    $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
+                                    api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+
 								}
 								break;
 
 						} // end switch
 					} else { // end if file exists
+
 						//make sure the source file actually exists
 						if (is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
 						    //echo 'Copying';
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
-                            
+
                             //Replace old course code with the new destination code see BT#1985
                             if (file_exists($path.$document->path)) {
-                                $file_info = pathinfo($path.$document->path);                                    
+                                $file_info = pathinfo($path.$document->path);
                                 if (in_array($file_info['extension'], array('html','htm'))) {
-                                    $content    = file_get_contents($path.$document->path);    
+                                    $content    = file_get_contents($path.$document->path);
                                     if (UTF8_CONVERT) $content = utf8_encode($content);
-                                    $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);                                   
-                                    $result     = file_put_contents($path.$document->path, $content);                                   
+                                    $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);
+                                    $result     = file_put_contents($path.$document->path, $content);
                                 }
-                            }                            
-                            
-							$sql = "INSERT INTO ".$table." SET 
-							                 c_id = ".$this->destination_course_id.", 
-							                 path = '/".substr($document->path, 9)."', 
-							                 comment = '".self::DBUTF8escapestring($document->comment)."', 
+                            }
+
+							$sql = "INSERT INTO ".$table." SET
+							                 c_id = ".$this->destination_course_id.",
+							                 path = '/".substr($document->path, 9)."',
+							                 comment = '".self::DBUTF8escapestring($document->comment)."',
 							                 title = '".self::DBUTF8escapestring($document->title)."' ,
-							                 filetype='".$document->file_type."', 
-							                 size= '".$document->size."', 
-							                 session_id = '$my_session_id'";										
+							                 filetype='".$document->file_type."',
+							                 size= '".$document->size."',
+							                 session_id = '$my_session_id'";
 							Database::query($sql);
 							$document_id = Database::insert_id();
-							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;							
+							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
 							api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
 						} else {
 						    //echo 'not Copying';
@@ -588,14 +622,14 @@ class CourseRestorer
 					}*/
 				} // end folder
 			} // end for each
-			
+
     		// Delete sessions for the copy the new folder in session
     		unset($_SESSION['new_base_foldername']);
     		unset($_SESSION['orig_base_foldername']);
     		unset($_SESSION['new_base_path']);
 		}
 	}
-    
+
 	/**
 	 * Restore scorm documents
 	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
@@ -667,12 +701,12 @@ class CourseRestorer
 			$table_forum 	= Database::get_course_table(TABLE_FORUM);
 			$table_topic 	= Database::get_course_table(TABLE_FORUM_THREAD);
 			$table_post 	= Database::get_course_table(TABLE_FORUM_POST);
-			
+
 			$resources 		= $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum)
 			{
 				$cat_id = $this->restore_forum_category($forum->category_id);
-				$sql = "INSERT INTO ".$table_forum." SET 
+				$sql = "INSERT INTO ".$table_forum." SET
 					forum_title = '".self::DBUTF8escapestring($forum->title).
 					"', c_id= '".$this->destination_course_id.
 					"', forum_comment = '".self::DBUTF8escapestring($forum->description).
@@ -729,7 +763,7 @@ class CourseRestorer
     				}
     			}
 			}
-			$sql = "INSERT INTO ".$forum_cat_table." SET 
+			$sql = "INSERT INTO ".$forum_cat_table." SET
 				c_id = ".$this->destination_course_id." ,
 				cat_title = '".self::DBUTF8escapestring($title).
 				"', cat_comment = '".self::DBUTF8escapestring($forum_cat->description).
@@ -751,7 +785,7 @@ class CourseRestorer
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
 		$sql = "INSERT INTO ".$table." SET
-			c_id = ".$this->destination_course_id." , 
+			c_id = ".$this->destination_course_id." ,
 			thread_title = '".self::DBUTF8escapestring($topic->title).
 			"', forum_id = ".(int)self::DBUTF8escapestring($forum_id).
 			", thread_date = '".self::DBUTF8escapestring($topic->time).
@@ -798,7 +832,7 @@ class CourseRestorer
 		$resources = $this->course->resources;
 		$post = $resources[RESOURCE_FORUMPOST][$id];
 		$sql = "INSERT INTO ".$table_post." SET
-				c_id = ".$this->destination_course_id." , 
+				c_id = ".$this->destination_course_id." ,
 				post_title = '".self::DBUTF8escapestring($post->title).
 			"', post_text = '".self::DBUTF8escapestring($post->text).
 			"', thread_id = ".(int)self::DBUTF8escapestring($topic_id).
@@ -832,13 +866,13 @@ class CourseRestorer
     				$condition_session = " , session_id = '$session_id' ";
     			}
 
-				$sql = "INSERT INTO ".$link_table." SET 
-				            c_id            = ".$this->destination_course_id." , 
-				            url             = '".self::DBUTF8escapestring($link->url)."', 
-				            title           = '".self::DBUTF8escapestring($link->title)."', 
-				            description     = '".self::DBUTF8escapestring($link->description)."', 
-				            category_id     = '".$cat_id."', 
-				            on_homepage     = '".$link->on_homepage."', 
+				$sql = "INSERT INTO ".$link_table." SET
+				            c_id            = ".$this->destination_course_id." ,
+				            url             = '".self::DBUTF8escapestring($link->url)."',
+				            title           = '".self::DBUTF8escapestring($link->title)."',
+				            description     = '".self::DBUTF8escapestring($link->description)."',
+				            category_id     = '".$cat_id."',
+				            on_homepage     = '".$link->on_homepage."',
 				            display_order   = '".($max_order+1)."' $condition_session";
 
 				Database::query($sql);
@@ -855,7 +889,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
 				$sql = "DELETE FROM ".$tool_intro_table." WHERE c_id = ".$this->destination_course_id."  AND id='".self::DBUTF8escapestring($tool_intro->id)."'";
-				Database::query($sql);  
+				Database::query($sql);
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course($tool_intro->intro_text,$this->course->code,$this->course->destination_path);
 				$sql = "INSERT INTO ".$tool_intro_table." SET c_id = ".$this->destination_course_id." , id='".self::DBUTF8escapestring($tool_intro->id)."', intro_text = '".self::DBUTF8escapestring($tool_intro->intro_text)."'";
 				Database::query($sql);
@@ -864,7 +898,7 @@ class CourseRestorer
 			}
 		}
 	}
-    
+
 	/**
 	 * Restore a link-category
 	 */
@@ -892,7 +926,7 @@ class CourseRestorer
 		}
 		return $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id;
 	}
-    
+
 	/**
 	 * Restore events
 	 */
@@ -904,11 +938,11 @@ class CourseRestorer
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
 
-				$sql = "INSERT INTO ".$table." SET 
-        				c_id = ".$this->destination_course_id." , 
-        				title = '".self::DBUTF8escapestring($event->title)."', 
-        				content = '".self::DBUTF8escapestring($event->content)."', 
-        				start_date = '".$event->start_date."', 
+				$sql = "INSERT INTO ".$table." SET
+        				c_id = ".$this->destination_course_id." ,
+        				title = '".self::DBUTF8escapestring($event->title)."',
+        				content = '".self::DBUTF8escapestring($event->content)."',
+        				start_date = '".$event->start_date."',
         				end_date = '".$event->end_date."'";
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
@@ -974,7 +1008,7 @@ class CourseRestorer
 				if (!empty($session_id)) {
 					$session_id = intval($session_id);
 					$condition_session = " , session_id = '$session_id' ";
-				}  
+				}
 				$sql = "INSERT INTO ".$table." SET c_id = ".$this->destination_course_id." , description_type = '".self::DBUTF8escapestring($cd->description_type)."',title = '".self::DBUTF8escapestring($cd->title)."', content = '".self::DBUTF8escapestring($description_content)."' $condition_session";
 				Database::query($sql);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::insert_id();
@@ -994,7 +1028,7 @@ class CourseRestorer
 				$announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($announcement->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table." " ."SET
-							c_id = ".$this->destination_course_id." , 
+							c_id = ".$this->destination_course_id." ,
 							title = '".self::DBUTF8escapestring($announcement->title)."'," .
 							"content = '".self::DBUTF8escapestring($announcement->content)."', " .
 							"end_date = '".$announcement->date."', " .
@@ -1044,7 +1078,7 @@ class CourseRestorer
 			}
 		}
 	}
-    
+
 	/**
 	 * Restore Quiz
 	 */
@@ -1064,9 +1098,9 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				if ($id != -1) {		   
+				if ($id != -1) {
                     if ($respect_base_content) {
-                        $my_session_id = $quiz->session_id; 
+                        $my_session_id = $quiz->session_id;
                         if (!empty($quiz->session_id)) {
                             $my_session_id = $session_id;
                         }
@@ -1081,17 +1115,17 @@ class CourseRestorer
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
-					
-					global $_custom;					
+
+					global $_custom;
 					if (isset($_custom['exercises_clean_dates_when_restoring']) && $_custom['exercises_clean_dates_when_restoring']) {
 						$quiz->start_time = null;
 						$quiz->end_time   = null;
 					}
-					
+
 
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui." SET
-						c_id = ".$this->destination_course_id." , 
+						c_id = ".$this->destination_course_id." ,
 						title = '".self::DBUTF8escapestring($quiz->title).
 						"', description = '".self::DBUTF8escapestring($quiz->description).
 						"', type = '".$quiz->quiz_type.
@@ -1120,12 +1154,12 @@ class CourseRestorer
 					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
 					//$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : 1;
 					$sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id." , question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
-					Database::query($sql);     
+					Database::query($sql);
 				}
 			}
 		}
 	}
-    
+
 	/**
 	 * Restore quiz-questions
 	 */
@@ -1146,19 +1180,19 @@ class CourseRestorer
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
-			$sql = "INSERT INTO ".$table_que." SET 
-						c_id = ".$this->destination_course_id." , 
-						question = '".self::DBUTF8escapestring($question->question)."', 
-						description = '".self::DBUTF8escapestring($question->description)."', 
-						ponderation = '".self::DBUTF8escapestring($question->ponderation)."', 
-						position = '".self::DBUTF8escapestring($question->position)."', 
-						type='".self::DBUTF8escapestring($question->quiz_type)."', 
-						picture='".self::DBUTF8escapestring($question->picture)."', 
-						level='".self::DBUTF8escapestring($question->level)."', 
+			$sql = "INSERT INTO ".$table_que." SET
+						c_id = ".$this->destination_course_id." ,
+						question = '".self::DBUTF8escapestring($question->question)."',
+						description = '".self::DBUTF8escapestring($question->description)."',
+						ponderation = '".self::DBUTF8escapestring($question->ponderation)."',
+						position = '".self::DBUTF8escapestring($question->position)."',
+						type='".self::DBUTF8escapestring($question->quiz_type)."',
+						picture='".self::DBUTF8escapestring($question->picture)."',
+						level='".self::DBUTF8escapestring($question->level)."',
 						extra='".self::DBUTF8escapestring($question->extra)."'";
 			Database::query($sql);
 			$new_id = Database::insert_id();
-            
+
 			if ($question->quiz_type == MATCHING) { // for answer type matching
                 $answerid = 0;
                 $t = array();
@@ -1166,7 +1200,7 @@ class CourseRestorer
                     $t[$answer['position']] = $answer;
                 }
                 foreach ($t as $index => $answer) {
-                    $sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '".$index."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";                    
+                    $sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '".$index."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
 			} else {
@@ -1179,28 +1213,28 @@ class CourseRestorer
 					$sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '". ($index +1)."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
-			}         
-            //@todo check this  
+			}
+            //@todo check this
             $course_id = api_get_course_int_id();
-            
+
             //Moving quiz_question_options
-            if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {                
-                $question_option_list = Question::readQuestionOption($id, $course_id);                
-                $old_option_ids = array();            
+            if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
+                $question_option_list = Question::readQuestionOption($id, $course_id);
+                $old_option_ids = array();
                 foreach ($question_option_list  as $item) {
-                    $old_id = $item['id'];                    
-                    unset($item['id']);                    
+                    $old_id = $item['id'];
+                    unset($item['id']);
                     $item['question_id'] = $new_id;
                     $item['c_id'] = $this->destination_course_id;
                     $question_option_id = Database::insert($table_options, $item);
                     $old_option_ids[$old_id] = $question_option_id;
-                }                               
-                $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));                
-                foreach ($new_answers as $answer_item) {                	
+                }
+                $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));
+                foreach ($new_answers as $answer_item) {
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
                     $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
-                }                
-            }            
+                }
+            }
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
 		return $new_id;
@@ -1216,9 +1250,9 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
 
-				$sql_check = 'SELECT survey_id FROM '.$table_sur.' 
+				$sql_check = 'SELECT survey_id FROM '.$table_sur.'
 							WHERE 	c_id = '.$this->destination_course_id.' AND
-									code = "'.self::DBUTF8escapestring($survey->code).'" AND 
+									code = "'.self::DBUTF8escapestring($survey->code).'" AND
 									lang = "'.self::DBUTF8escapestring($survey->lang).'" ';
 
 				$result_check = Database::query($sql_check);
@@ -1231,7 +1265,7 @@ class CourseRestorer
 
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " ."SET
-						c_id = ".$this->destination_course_id." ,                                                                                         	 
+						c_id = ".$this->destination_course_id." ,
 						code = '".self::DBUTF8escapestring($survey->code)."', " .
 						"title = '".self::DBUTF8escapestring($survey->title)."', " .
 						"subtitle = '".self::DBUTF8escapestring($survey->subtitle)."', " .
@@ -1265,7 +1299,7 @@ class CourseRestorer
 							$survey_code = $temp_survey_code;
 
 							$sql = "INSERT INTO ".$table_sur." " ."SET
-									c_id = ".$this->destination_course_id." , 
+									c_id = ".$this->destination_course_id." ,
 									code = '".self::DBUTF8escapestring($survey_code)."', " .
 									"title = '".self::DBUTF8escapestring($survey->title)."', " .
 									"subtitle = '".self::DBUTF8escapestring($survey->subtitle)."', " .
@@ -1389,7 +1423,7 @@ class CourseRestorer
 					"sort = 				'".self::DBUTF8escapestring($question->sort)."', " .
 					"shared_question_id = 	'".self::DBUTF8escapestring($question->shared_question_id)."', " .
 					"max_value = 			'".self::DBUTF8escapestring($question->max_value)."' ";
-			
+
 			Database::query($sql);
 
 			$new_id = Database::insert_id();
@@ -1398,7 +1432,7 @@ class CourseRestorer
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$answer['option_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['option_text'], $this->course->code, $this->course->destination_path);
 
-				$sql = "INSERT INTO ".$table_ans." SET 
+				$sql = "INSERT INTO ".$table_ans." SET
 						c_id = ".$this->destination_course_id." ,
 						question_id = '".self::DBUTF8escapestring($new_id)."', " .
 						"option_text = '".self::DBUTF8escapestring($answer['option_text'])."', " .
@@ -1412,7 +1446,7 @@ class CourseRestorer
 
 		return $new_id;
 	}
-    
+
 	/**
 	 * Restore learnpaths
 	 */
@@ -1428,19 +1462,19 @@ class CourseRestorer
 			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
-				
-				$condition_session = "";				  
-				if (!empty($session_id)) {			    
+
+				$condition_session = "";
+				if (!empty($session_id)) {
                     if ($respect_base_content) {
-                        $my_session_id = $lp->session_id; 
+                        $my_session_id = $lp->session_id;
                         if (!empty($lp->session_id)) {
                             $my_session_id = $session_id;
                         }
-                        $condition_session = " , session_id = '$my_session_id' ";                        
+                        $condition_session = " , session_id = '$my_session_id' ";
                     } else {
                         $session_id = intval($session_id);
-                        $condition_session = " , session_id = '$session_id' ";  
-                    }					
+                        $condition_session = " , session_id = '$session_id' ";
+                    }
 				}
 
 				//Adding the author's image
@@ -1456,21 +1490,21 @@ class CourseRestorer
 						}
 					}
 				}
-                
+
                 if ($this->add_text_in_items) {
                     $lp->name = $lp->name.' '.get_lang('Copy');
                 }
-                                
+
                 if (isset($this->tool_copy_settings['learnpaths'])) {
                     if (isset($this->tool_copy_settings['learnpaths']['reset_dates']) && $this->tool_copy_settings['learnpaths']['reset_dates']) {
                         $lp->created_on     = api_get_utc_datetime();
                         $lp->modified_on    = api_get_utc_datetime();
-                        $lp->publicated_on  = null;                    
+                        $lp->publicated_on  = null;
                     }
                 }
 
 				$sql = "INSERT INTO ".$table_main." SET
-						c_id 				= ".$this->destination_course_id." ,								                                                                               
+						c_id 				= ".$this->destination_course_id." ,
 						lp_type             = '".$lp->lp_type."', " .
 						"name               = '".self::DBUTF8escapestring($lp->name)."', " .
 						"path               = '".self::DBUTF8escapestring($lp->path)."', " .
@@ -1501,11 +1535,11 @@ class CourseRestorer
 					$sql = "INSERT INTO $table_tool SET c_id = ".$this->destination_course_id." , name='".self::DBUTF8escapestring($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
 					Database::query($sql);
 				}
-				
+
 				if ($new_lp_id) {
-					api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'LearnpathAdded', api_get_user_id(), 0, 0, 0, 0, $session_id);					
+					api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'LearnpathAdded', api_get_user_id(), 0, 0, 0, 0, $session_id);
                     //Set the new LP to visible
-                    api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'invisible', api_get_user_id(), 0, 0, 0, 0, $session_id);					
+                    api_item_property_update($this->destination_course_info, TOOL_LEARNPATH, $new_lp_id, 'invisible', api_get_user_id(), 0, 0, 0, 0, $session_id);
 				}
 
 				$new_item_ids 		= array();
@@ -1540,7 +1574,7 @@ class CourseRestorer
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = self::DBUTF8escapestring($item['path']);
-                    
+
                     //@todo Check this validation, why if is session we leave the path the same?
 					/*if (strval(intval($path)) === $path) {
 						if (!empty($session_id)) {
@@ -1549,11 +1583,11 @@ class CourseRestorer
 							$path = $this->get_new_id($item['item_type'], $path);
 						}
 					}*/
-                    
+
                     $path = $this->get_new_id($item['item_type'], $path);
 
 					$sql = "INSERT INTO ".$table_item." SET
-							c_id = ".$this->destination_course_id." ,                                                                           	 
+							c_id = ".$this->destination_course_id." ,
 							lp_id = '".			self::DBUTF8escapestring($new_lp_id)."', " .
 							"item_type='".			self::DBUTF8escapestring($item['item_type'])."', " .
 							"ref = '".				self::DBUTF8escapestring($ref)."', " .
@@ -1571,9 +1605,9 @@ class CourseRestorer
 							"parameters='".			self::DBUTF8escapestring($item['parameters'])."', " .
 							"audio='".				self::DBUTF8escapestring($item['audio'])."', " .
 							"launch_data = '".		self::DBUTF8escapestring($item['launch_dataprereq_type'])."'";
-					
+
 					Database::query($sql);
-                    
+
 					$new_item_id = Database::insert_id();
 					//save a link between old and new item IDs
 					$new_item_ids[$item['id']] = $new_item_id;
@@ -1597,7 +1631,7 @@ class CourseRestorer
 						if ($lp->lp_type =='2') {
 							// if is an sco
 							$old_refs[$new_item_id]= $ref;
-						} else {                                                        
+						} else {
                             $old_refs[$new_item_id]= $new_item_ids[$ref];
 						}
 					}
@@ -1665,53 +1699,53 @@ class CourseRestorer
 	 * @todo I fixed this crappy function jmontoya
 	 */
 	function restore_student_publication() {
-		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);		
+		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 		$work_table    			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);		
-		
+		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
 		//query in student publication
 
 	/*	$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.' (c_id, id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
 		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id) ';
 */
-		$sql = 'SELECT c_id, id, url, title,description,author,active,accepted,post_group_id, sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,qualificator_id,session_id 
-		      FROM '.$work_table.' 
+		$sql = 'SELECT c_id, id, url, title,description,author,active,accepted,post_group_id, sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,qualificator_id,session_id
+		      FROM '.$work_table.'
 		      WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" AND active IN (0, 1) ';
-		
+
 		$result = Database::query($sql);
 		$folders = Database::store_result($result, 'ASSOC');
-        
+
 		foreach ($folders  as $folder) {
 		    $old_id = $folder['id'];
-            
-            unset($folder['id']);    
+
+            unset($folder['id']);
 			$folder['c_id'] = $this->destination_course_id;
-            $folder['parent_id'] = 0;             
+            $folder['parent_id'] = 0;
 			$new_id = Database::insert($work_table, $folder);
-            
+
             if ($new_id) {
                  //query in item property
-                $sql = 'SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type, lastedit_user_id,to_group_id,to_user_id,visibility,start_visible, end_visible 
-                           FROM '.$item_property_table.' ip INNER JOIN '.$work_table.' sp ON ip.ref=sp.id 
-                           WHERE  sp.c_id = '.$this->course_origin_id.' AND 
+                $sql = 'SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type, lastedit_user_id,to_group_id,to_user_id,visibility,start_visible, end_visible
+                           FROM '.$item_property_table.' ip INNER JOIN '.$work_table.' sp ON ip.ref=sp.id
+                           WHERE  sp.c_id = '.$this->course_origin_id.' AND
                                   ip.c_id = '.$this->course_origin_id.' AND
                                   tool="work" AND sp.id = '.$old_id.'';
-                        
+
                 $result = Database::query($sql);
                 $sub_folders = Database::store_result($result, 'ASSOC');
                 foreach ($sub_folders  as $sub_folder) {
                     $sub_folder['c_id'] = $this->destination_course_id;
-                    $sub_folder['ref'] = $new_id;                   
+                    $sub_folder['ref'] = $new_id;
                     $new_item_id = Database::insert($item_property_table, $sub_folder);
-                }              
-                   
-                $sql = 'SELECT sa.id, sa.expires_on,sa.ends_on,sa.add_to_calendar, sa.enable_qualification, sa.publication_id 
-                          FROM '.$work_assignment_table.' sa INNER JOIN '.$work_table.' sp ON sa.publication_id=sp.id 
-                          WHERE   sp.c_id = '.$this->course_origin_id.' AND 
+                }
+
+                $sql = 'SELECT sa.id, sa.expires_on,sa.ends_on,sa.add_to_calendar, sa.enable_qualification, sa.publication_id
+                          FROM '.$work_assignment_table.' sa INNER JOIN '.$work_table.' sp ON sa.publication_id=sp.id
+                          WHERE   sp.c_id = '.$this->course_origin_id.' AND
                                   sa.c_id = '.$this->course_origin_id.' AND
                                   filetype="folder" AND sp.id = '.$old_id.'';
-                
+
                 $result = Database::query($sql);
                 $assing_list = Database::store_result($result, 'ASSOC');
                 foreach($assing_list  as $assign) {
@@ -1721,8 +1755,8 @@ class CourseRestorer
                 }
             }
 		}
-		
-		$destination='../../courses/'.$this->course->destination_path.'/work/';		
+
+		$destination='../../courses/'.$this->course->destination_path.'/work/';
 		$origin='../../courses/'.$this->course->info['path'].'/work/';
 		self::allow_create_all_directory($origin,$destination,false);
 	}
@@ -1766,13 +1800,13 @@ class CourseRestorer
 	 */
 	function get_new_id($tool,$ref) {
 		//transform $tool into one backup/restore constant
-        
+
         //just in case you copy the tool in the same course
         //error_log($this->course_origin_id .' - '.$this->destination_course_id);
         if ($this->course_origin_id == $this->destination_course_id) {
             return $ref;
         }
-                
+
 		if ($tool == 'hotpotatoes') { $tool = 'document'; }
 		if (!empty($this->course->resources[$tool][$ref]->destination_id)) {
 			return $this->course->resources[$tool][$ref]->destination_id;
@@ -1800,8 +1834,8 @@ class CourseRestorer
 
 				$sql = "INSERT INTO ".$table_glossary." SET  c_id = ".$this->destination_course_id." , name = '".self::DBUTF8escapestring($glossary->name)."', description = '".self::DBUTF8escapestring($glossary->description)."', display_order='".self::DBUTF8escapestring($glossary->display_order)."' $condition_session ";
 				Database::query($sql);
-				$my_id = Database::get_last_insert_id();				
-				api_item_property_update($this->destination_course_info, TOOL_GLOSSARY, $my_id,"GlossaryAdded", api_get_user_id());				
+				$my_id = Database::get_last_insert_id();
+				api_item_property_update($this->destination_course_info, TOOL_GLOSSARY, $my_id,"GlossaryAdded", api_get_user_id());
 				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = Database::insert_id();
 
 			}
@@ -1825,7 +1859,7 @@ class CourseRestorer
 				$wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($wiki->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO $table_wiki (c_id, page_id, reflink, title, content, user_id, group_id, dtime, progress, version, session_id) VALUES (
-							".$this->destination_course_id." , 
+							".$this->destination_course_id." ,
 							'".self::DBUTF8escapestring($wiki->page_id)."',
 							'".self::DBUTF8escapestring($wiki->reflink)."',
 							'".self::DBUTF8escapestring($wiki->title)."',
@@ -1849,7 +1883,7 @@ class CourseRestorer
 			}
 		}
 	}
-	
+
 	/**
 	* Restore Thematics
 	*/
@@ -1858,34 +1892,34 @@ class CourseRestorer
 			$table_thematic 		= Database :: get_course_table(TABLE_THEMATIC);
 			$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
 			$table_thematic_plan    = Database :: get_course_table(TABLE_THEMATIC_PLAN);
-		
+
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
-	
+
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$thematic->content 	  = DocumentManager::replace_urls_inside_content_html_from_copy_course($thematic->content, $this->course->code, $this->course->destination_path);
 				$thematic->params['c_id']  = $this->destination_course_id;
 				$doc = '';
 				$thematic->params['id'] = null;
 				$last_id = Database::insert($table_thematic, $thematic->params, false);
-				
+
 				if (is_numeric($last_id)) {
 					api_item_property_update($this->destination_course_info, 'thematic', $last_id, "ThematicAdded", api_get_user_id());
-					
-					foreach($thematic->thematic_advance_list as $thematic_advance) {						
-						unset($thematic_advance['id']);						
+
+					foreach($thematic->thematic_advance_list as $thematic_advance) {
+						unset($thematic_advance['id']);
 						$thematic_advance['attendance_id'] = 0;
 						$thematic_advance['thematic_id'] = $last_id;
 						$thematic_advance['c_id']  = $this->destination_course_id;
 						$my_id = Database::insert($table_thematic_advance, $thematic_advance, false);
-						
+
 						if (is_numeric($my_id)) {
 							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
 						}
 					}
-					
+
 					foreach($thematic->thematic_plan_list as $thematic_plan) {
-						unset($thematic_advance['id']);						
+						unset($thematic_advance['id']);
 						$thematic_plan['thematic_id'] 	= $last_id;
 						$thematic_plan['c_id']  		= $this->destination_course_id;
 						$my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
@@ -1893,37 +1927,37 @@ class CourseRestorer
 							api_item_property_update($this->destination_course_info, 'thematic_plan', $my_id, "ThematicPlanAdded", api_get_user_id());
 						}
 					}
-					
+
 				}
 			}
 		}
 	}
-	
+
 	/**
 	* Restore Attendance
 	*/
-	
+
 	function restore_attendance($session_id = 0) {
 		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
 			$table_attendance 		   = Database :: get_course_table(TABLE_ATTENDANCE);
 			$table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
-				
+
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
-	
+
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path);
 				$doc = '';
 				$obj->params['id'] = null;
 				$obj->params['c_id'] = $this->destination_course_id;
-				
+
 				$last_id = Database::insert($table_attendance, $obj->params);
-	
+
 				if (is_numeric($last_id)) {
 					api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", api_get_user_id());
-					
+
 					foreach($obj->attendance_calendar as $attendance_calendar) {
-						unset($attendance_calendar['id']);						
+						unset($attendance_calendar['id']);
 						$attendance_calendar['attendance_id'] = $last_id;
 						$attendance_calendar['c_id'] = $this->destination_course_id;
 						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar);
@@ -1931,14 +1965,14 @@ class CourseRestorer
 						if (is_numeric($my_id)) {
 							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
 						}*/
-					}	
+					}
 				}
 			}
 		}
 	}
-	
+
 	function DBUTF8escapestring($str) {
 		if (UTF8_CONVERT) $str = utf8_encode($str);
 		return Database::escape_string($str);
-	}	
+	}
 }

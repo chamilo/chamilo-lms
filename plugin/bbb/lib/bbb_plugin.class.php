@@ -1,7 +1,14 @@
 <?php
+/* For licensing terms, see /license.txt */
 
+/* To showing the plugin course icons you need to add these icons:
+     * main/img/icons/22/plugin_name.png
+     * main/img/icons/64/plugin_name.png
+     * main/img/icons/64/plugin_name_na.png
+*/
 class BBBPlugin extends Plugin
 {
+
     //When creating a new course this settings are added to the course
     public $course_settings = array(
                     array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),

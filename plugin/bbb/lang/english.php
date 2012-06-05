@@ -7,8 +7,8 @@
  */
 
 //Needed in order to show the plugin title
-$strings['plugin_title']        = "BigBlueButton (BBB)";
-$strings['plugin_comment']      = "Adds a videoconference room Chamilo courses";
+$strings['plugin_title']        = "Videoconference";
+$strings['plugin_comment']      = "Adds a videoconference room Chamilo courses using BigBlueButton (BBB)";
 
 $strings['Videoconference']     = "Videoconference";
 $strings['MeetingOpened']       = "Meeting opened";
@@ -46,3 +46,7 @@ $strings['tool_enable_help'] = "Choose whether you want to enable the BigBlueBut
 
 $strings['big_blue_button_welcome_message'] = 'Welcome message';
 $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
+
+$strings['plugin_tool_bbb'] = 'Video';
+
+

@@ -56,7 +56,7 @@ if (api_is_platform_admin()) {
 //	COURSE ADMIN ONLY VIEW
 
 // Start of tools for CourseAdmins (teachers/tutors)
-if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {    
+if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	$content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
 			$content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
@@ -74,23 +74,24 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         </div>';
 	}
 
-    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);    
-	$items = CourseHome::show_tools_category($my_list);    
-    $content .= return_block(get_lang('Authoring'),  $items);    
-	
+    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
+	$items = CourseHome::show_tools_category($my_list);
+    $content .= return_block(get_lang('Authoring'),  $items);
+
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
-    $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
     
+    $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
+
     $my_list = array_merge($my_list,$list2);
     $items =  CourseHome::show_tools_category($my_list);
-	
-    $content .= return_block(get_lang('Interaction'),  $items);        
-	
+
+    $content .= return_block(get_lang('Interaction'),  $items);
+
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-    $items = CourseHome::show_tools_category($my_list);	
-        
+    $items = CourseHome::show_tools_category($my_list);
+
     $content .= return_block(get_lang('Administration'),  $items);
-    
+
 } elseif (api_is_coach()) {
 	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
 
@@ -112,11 +113,11 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	if (count($my_list) > 0) {
         $content .= '<div class="row">';
         $content .= CourseHome::show_tools_category($my_list);
-        $content .= '</div>'; 
+        $content .= '</div>';
 	}
 }
 
-function return_block($title, $content) {    
+function return_block($title, $content) {
     $html = '<div class="row"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row">'.$content.'</div>';
     return $html;
 }

@@ -17,10 +17,14 @@ class Plugin {
     protected $fields = array();
 
     private $settings = null;
-    private $strings = null;
+    private $strings = null; //translation strings
 
     /**
      * When creating a new course this settings are added to the course in the course_info/infocours.php
+     * To showing the plugin course icons you need to add these icons:
+     * main/img/icons/22/plugin_name.png
+     * main/img/icons/64/plugin_name.png
+     * main/img/icons/64/plugin_name_na.png
      * @example
      * $course_settings = array(
                     array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),

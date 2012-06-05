@@ -225,7 +225,7 @@ class Plugin {
         $sql = "SELECT name FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name' ";
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
-            $tool_link = "../../plugin/$plugin_name/start.php";
+            $tool_link = "$plugin_name/start.php";
             $visibility = string2binary(api_get_setting('course_create_active_tools', $plugin_name));
             $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' ".$visibility."','0', 'squaregrey.gif','NO','_self','plugin','0')";
             $r = Database::query($sql_course);

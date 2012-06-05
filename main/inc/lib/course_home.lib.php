@@ -622,6 +622,8 @@ class CourseHome {
             foreach ($all_tools_list as & $tool) {
                 $item = array();
 
+                $tool['original_link'] = $tool['link'];
+
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // display links to lp only for current session
                     if (api_get_session_id() != $tool['session_id']) {
@@ -703,7 +705,7 @@ class CourseHome {
                 $tool_link_params = array();
 
                 //$tool['link'] = htmlspecialchars($tool['link']) ;
-
+                //@todo this visio stuff should be removed
                 if (strpos($tool['name'],'visio_') !== false) {
                     $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
                                               'href'    => '"javascript: void(0);"',
@@ -734,11 +736,15 @@ class CourseHome {
 
                 $tool_name = self::translate_tool_name($tool);
 
+                // Including Courses Plugins
+                // Creating title and the link
+
                 if (isset($tool['category']) &&  $tool['category'] == 'plugin') {
                     $plugin_info = $app_plugin->get_plugin_info($tool['name']);
                     if (isset($plugin_info) && isset($plugin_info['title'])) {
                         $tool_name = $plugin_info['title'];
                     }
+                    $tool_link_params['href'] = api_get_path(WEB_PLUGIN_PATH).$tool['original_link'].'?'.api_get_cidreq();
                 }
 
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);

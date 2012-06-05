@@ -17,7 +17,7 @@
 /*	   INIT SECTION */
 
 // Language files that need to be included
-$language_file = array('create_course', 'course_info', 'admin');
+$language_file = array('create_course', 'course_info', 'admin', 'gradebook');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
@@ -41,12 +41,6 @@ $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_code 				= $_course['sysCode'];
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
-$video_conference_enabled = false;
-if (api_get_setting('bbb_tool_enable') == 'true') {
-    $video_conference_enabled = true;
-}
-
-
 //LOGIC FUNCTIONS
 function is_settings_editable() {
 	return $GLOBALS['course_info_is_editable'];
@@ -61,7 +55,7 @@ $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
-        $show_delete_watermark_text_message = true;        
+        $show_delete_watermark_text_message = true;
     }
 }
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
@@ -120,14 +114,14 @@ $form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Secur
 $image_html = '';
 
 // Sending image
-if ($form->validate() && is_settings_editable()) {	
+if ($form->validate() && is_settings_editable()) {
     // update course picture
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
         $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
     }
 }
-    
+
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
 if (file_exists($course_path.'/course-pic85x85.png')) {
@@ -174,11 +168,11 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $url =  PDF::get_watermark($course_code);
     $form->add_textfield('pdf_export_watermark_text', get_lang('PDFExportWatermarkTextTitle'), false, array('size' => '60'));
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
-    if ($url != false) {        
+    if ($url != false) {
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
         $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>');
     }
-    $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+    $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 }
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
@@ -303,9 +297,9 @@ if (api_get_setting('allow_course_theme') == 'true') {
 	$group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
-    
+
 	$group = array();
-	$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));    
+	$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
     $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 }
 
@@ -347,34 +341,10 @@ $form->addElement('html', '</div></div>');
 
 
 
-// BBB SETTINGS
+// Plugin course settings
 
-if ($video_conference_enabled) {
-    $form->addElement('html', '<div><h3>'.Display::return_icon('visio.png', Security::remove_XSS(get_lang('VideoConferenceSettings')),'', ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('VideoConferenceSettings')).'</h3><div>');
-    
-//    $form->add_textfield('big_blue_button_welcome_message', get_lang('big_blue_button_welcome_message'), false, array('class' => 'span5'));
-    
-/*    $form->add_textfield('big_blue_button_meeting_name', get_lang('big_blue_button_meeting_name'), false, array('class' => 'span5'));
-    
-    
-    $form->add_textfield('big_blue_button_attendee_password', get_lang('big_blue_button_attendee_password'), false, array('class' => 'span5'));
-    $form->add_textfield('big_blue_button_moderator_password', get_lang('big_blue_button_moderator_password'), false, array('class' => 'span5'));
-    
-    
-    
-    $form->addElement('checkbox', 'big_blue_button_open_new_window', array(null, null, get_lang('big_blue_button_open_new_window')), null);
-    
-    $form->addElement('checkbox', 'big_blue_button_student_must_wait_until_moderator', array(null, null, get_lang('big_blue_button_student_must_wait_until_moderator')), null);    
-    
-    $form->addElement('datepicker', 'big_blue_button_join_start_date', array(get_lang('big_blue_button_join_start_date')), null);
-    $form->addElement('datepicker', 'big_blue_button_join_end_date', array(get_lang('big_blue_button_join_end_date')), null);*/
-    
-    $form->add_textfield('big_blue_button_max_students_allowed', get_lang('big_blue_button_max_students_allowed'), false, array('class' => 'span5'));    
-    $form->addElement('checkbox', 'big_blue_button_record_and_store', array(null, null, get_lang('big_blue_button_record_and_store')), null);
-
-    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-    $form->addElement('html', '</div></div>');
-}
+$app_plugin = new AppPlugin();
+$app_plugin->add_course_settings_form($form);
 
 // Get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
@@ -428,62 +398,32 @@ $values['enable_lp_auto_launch']                    = api_get_course_setting('en
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 $values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
 
-
-if ($video_conference_enabled) {
-    
-    $values['big_blue_button_welcome_message']      = api_get_course_setting('big_blue_button_welcome_message');
-    $values['big_blue_button_max_students_allowed'] = api_get_course_setting('big_blue_button_max_students_allowed');  
-    
-    
-    /*$values['big_blue_button_meeting_name']         = api_get_course_setting('big_blue_button_meeting_name');
-    
-    $values['big_blue_button_attendee_password']    = api_get_course_setting('big_blue_button_attendee_password');
-    $values['big_blue_button_moderator_password']   = api_get_course_setting('big_blue_button_moderator_password');    
-      
-    $values['big_blue_button_open_new_window']                     = api_get_course_setting('big_blue_button_open_new_window');
-    $values['big_blue_button_student_must_wait_until_moderator']   = api_get_course_setting('big_blue_button_student_must_wait_until_moderator');
-    
-    $start_date = api_get_course_setting('big_blue_button_join_start_date');
-    if (empty($start_date)) {
-        $start_date = date('Y-m-d 12:00:00');        
-    }
-    
-    $values['big_blue_button_join_start_date']      = $start_date;
-    
-    $end_date = api_get_course_setting('big_blue_button_join_end_date');
-    if (empty($end_date)) {
-        $end_date = date('Y-m-d 18:00:00');        
-    }
-    
-    $values['big_blue_button_join_end_date']        = $end_date;       
-    */
-     $values['big_blue_button_record_and_store']     = api_get_course_setting('big_blue_button_record_and_store');
-}
+$app_plugin->set_course_settings_defaults($values);
 
 $form->setDefaults($values);
 
 // Validate form
-if ($form->validate() && is_settings_editable()) {	    
+if ($form->validate() && is_settings_editable()) {
     $update_values = $form->exportValues();
-       
+
     $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
-    
-    if (!empty($pdf_export_watermark_path['name'])) {        
-        $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name'], $course_code);        
+
+    if (!empty($pdf_export_watermark_path['name'])) {
+        $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name'], $course_code);
         unset($update_values['pdf_export_watermark_path']);
     }
-    
+
     //Variables that will be saved in the TABLE_MAIN_COURSE table
-    $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',  
+    $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',
     								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
-    
+
 	foreach ($update_values as $index =>$value) {
 		$update_values[$index] = Database::escape_string($value);
-	}    
-	unset($value);	
+	}
+	unset($value);
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
-				title 				    = '".$update_values['title']."',				
+				title 				    = '".$update_values['title']."',
 				course_language 	    = '".$update_values['course_language']."',
 				category_code 		    = '".$update_values['category_code']."',
 				department_name  	    = '".$update_values['department_name']."',
@@ -496,36 +436,16 @@ if ($form->validate() && is_settings_editable()) {
 				registration_code 	    = '".$update_values['course_registration_password']."'
 			WHERE code = '".$course_code."'";
 	Database::query($sql);
-        
-    if ($video_conference_enabled) {       
-        /*
-        if (isset($update_values['big_blue_button_open_new_window']) && $update_values['big_blue_button_open_new_window']) {
-            $update_values['big_blue_button_open_new_window'] = 1;
-        } else {
-            $update_values['big_blue_button_open_new_window'] = 0;
-        }        
-        if (isset($update_values['big_blue_button_student_must_wait_until_moderator']) && $update_values['big_blue_button_student_must_wait_until_moderator']) {
-            $update_values['big_blue_button_student_must_wait_until_moderator'] = 1;
-        } else {
-            $update_values['big_blue_button_student_must_wait_until_moderator'] = 0;
-        }
-        */
-        if (isset($update_values['big_blue_button_record_and_store']) && $update_values['big_blue_button_record_and_store']) {
-            $update_values['big_blue_button_record_and_store'] = 1;
-        } else {
-            $update_values['big_blue_button_record_and_store'] = 0;
-        }        
-    }
-    
+
 	// Update course_settings table - this assumes those records exist, otherwise triggers an error
-	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);   
-    
+	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
+
     foreach ($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {
-            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id()), true));
-        }    	
-    }    
+            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
+        }
+    }
 	$cidReset = true;
 	$cidReq = $course_code;
 	require '../inc/local.inc.php';
@@ -547,7 +467,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 echo '<script>
 $(function() {
 	$("#course_settings").accordion({
-		autoHeight: false,		
+		autoHeight: false,
 		header: "div > h3"
 	});
 });

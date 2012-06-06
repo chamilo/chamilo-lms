@@ -2688,6 +2688,7 @@ function api_not_found($print_headers = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false, $message = null) {
+    Header::response_code(403);
     $home_url   = api_get_path(WEB_PATH);
     $user_id    = api_get_user_id(); //0 if not defined
     $course     = api_get_course_id();

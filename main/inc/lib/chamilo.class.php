@@ -42,7 +42,7 @@ class Chamilo
     {
         return ChamiloSession::instance();
     }
-    
+
     /**
      *
      * @return CurrentUser
@@ -93,10 +93,43 @@ class Chamilo
         return api_get_path(SYS_COURSE_PATH);
     }
 
-    public static function temp($ext = '')
+    /**
+     * Returns a temporary file - one that is automatically deleted at the end
+     * of the script.
+     * 
+     * @param string $ext
+     * @return Temp 
+     */
+    public static function temp_file($ext = '')
     {
         $ext = $ext ? '.' . $ext : '';
-        return api_get_path(SYS_ARCHIVE_PATH) . uniqid() . $ext;
+        Temp::set_temp_root(api_get_path(SYS_ARCHIVE_PATH) . 'temp');
+        $path = Temp::get_temporary_name() . $ext;
+        return Temp::create($path);
+    }
+
+    /**
+     * Returns a temporary directory - one that is automatically deleted at the end
+     * of the script.
+     * 
+     * @param string $ext
+     * @return Temp 
+     */
+    public static function temp_dir()
+    {
+        $ext = $ext ? '.' . $ext : '';
+        Temp::set_temp_root(api_get_path(SYS_ARCHIVE_PATH) . 'temp');
+        $path = Temp::get_temporary_name() . $ext;
+        return Temp::dir($path);
+    }
+
+    /**
+     *
+     * @return Zip
+     */
+    public static function temp_zip()
+    {
+        return Zip::create(self::temp_file('zip'));
     }
 
     public static function path($path = '')

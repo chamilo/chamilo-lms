@@ -1660,7 +1660,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                     $link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
-                } 
+                }
+                
+                $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
                 
                 $work['qualification'] = $qualification_string;
 
@@ -1724,7 +1726,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }                                       
                 $work['qualificator_id'] = $qualificator_id;
-                $work['actions'] = $link_to_download.$action;
+                $work['actions'] = $send_to.$link_to_download.$action;
                 $works[] = $work;
             }            
         }

@@ -28,14 +28,16 @@ class ResultSet implements Countable, Iterator
     protected $limit_offset = null;
     protected $orderby_column = null;
     protected $orderby_direction = null;
+    protected $return_type = null;
 
-    function __construct($sql, $limit_count = null, $limit_offset = null, $orderby_column = null, $orderby_direction = null)
+    function __construct($sql, $limit_count = null, $limit_offset = null, $orderby_column = null, $orderby_direction = null, $return_type = null)
     {
         $this->sql = $sql;
         $this->limit_count = $limit_count;
         $this->limit_offset = $limit_offset;
         $this->orderby_column = $orderby_column;
         $this->orderby_direction = $direction;
+        $this->return_type = $return_type;
     }
 
     public function sql()
@@ -53,8 +55,7 @@ class ResultSet implements Countable, Iterator
 
         if (strpos($sql, ' ORDER ') || strpos($sql, ' LIMIT ') || strpos($sql, ' OFFSET ')) {
             $sql = "SELECT * FROM ($sql) AS dat ";
-        }else
-        {
+        } else {
             $sql .= ' ';
         }
 
@@ -94,6 +95,14 @@ class ResultSet implements Countable, Iterator
         return $this->count;
     }
 
+    public function first()
+    {
+        foreach ($this as $item) {
+            return $item;
+        }
+        return null;
+    }
+
     /**
      *
      * @param int $count
@@ -122,6 +131,13 @@ class ResultSet implements Countable, Iterator
         return $result;
     }
 
+    public function return_type($value)
+    {
+        $result = clone($this);
+        $result->return_type = $value;
+        return $result;
+    }
+
     public function current()
     {
         return $this->current;
@@ -134,7 +150,16 @@ class ResultSet implements Countable, Iterator
 
     public function next()
     {
-        $this->current = Database::fetch_assoc($this->handle());
+        $data = Database::fetch_assoc($this->handle());
+        if (!$data) {
+            $this->current = $this->return_type ? null : array();
+        } else if (empty($this->return_type)) {
+            $this->current = $data;
+        } else if ($this->return_type == 'object') {
+            $this->current = (object) $data;
+        } else {
+            $this->current = new $this->return_type($data);
+        }
         $this->index++;
         return $this->current;
     }

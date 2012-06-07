@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 * Reports
 * @author Arnaud Ligot <arnaud@cblue.be>
@@ -11,7 +10,6 @@
 // name of the language file that needs to be included
 $language_file = array('reportlib');
 $cidReset = true;
-
 
 // including files 
 require_once '../inc/global.inc.php';
@@ -30,8 +28,7 @@ $tool_name=get_lang('Reports');
 
 // Displaying the header
 foreach (array('jquery.js','jquery-ui-1.8.5.custom.min.js', 'jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js)
-	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
-
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
 
 // FIXME
 $htmlHeadXtra[] = '    <style type="text/css">
@@ -126,62 +123,60 @@ reports_loadTemplates();
 Display::display_header($tool_name);
 
 ?>
-		<div id="reportsBuilderWizard">
-			<h3><?php get_lang('Reports'); ?></h3>
-			<div id='wizardContent'>
-			<p><?php echo get_lang('PleaseFillFormToBuildReport'); ?></p>
-			<h5 id="status"></h5>
-			<form id="reportsBuilderWizardForm" method="post" action="reports.php" class="bbq">
-				<div id="fieldWrapper">
-				<span class="step" id="first">
-					<span class="font_normal_07em_black"><?php echo get_lang('PleaseChooseReportType'); ?></span><br />
-					<label for="type"><?php echo get_lang('ReportType'); ?></label><br />
-					<select class="input_field_12em link required" name="type" id="type">
+    <div id="reportsBuilderWizard">
+        <h3><?php get_lang('Reports'); ?></h3>
+            <div id='wizardContent'>
+                <p><?php echo get_lang('PleaseFillFormToBuildReport'); ?></p>
+                <h5 id="status"></h5>
+                <form id="reportsBuilderWizardForm" method="post" action="reports.php" class="bbq">
+                <div id="fieldWrapper">
+                    <span class="step" id="first">
+                        <span class="font_normal_07em_black"><?php echo get_lang('PleaseChooseReportType'); ?></span><br />
+                        <label for="type"><?php echo get_lang('ReportType'); ?></label><br />
+                        <select class="input_field_12em link required" name="type" id="type">
 <?php
-foreach($reports_template as $key => $value)
+foreach ($reports_template as $key => $value) {
 	echo '<option value="'.$key.'">'.$value['description'].'</option>';
+}
 ?>
-					</select><br />
-				</span>
+                        </select><br />
+                    </span>
 <?php
-foreach($reports_template as $key => $value)
+foreach ($reports_template as $key => $value) {
 	echo $value['wizard'];
+}
 ?>
-				<span id="format" class="step submit_step">
-					<span class="font_normal_07em_black"><?php echo get_lang('ReportFormat'); ?></span><br />
-
-					<select name="format" id="format">
-						<option value="html">HTML</option>
-						<option value="csv">CSV</option>
-						<option value="sql">SQL</option>
-						<option value="link"><?php echo get_lang('ReportTypeLink'); ?></option>
-					</select><br />
-				</span>
-				</div>
-				<div id="wizardNavigation"> 							
-					<input class="navigation_button" id="back" value="<?php echo get_lang('Back'); ?>" type="reset" />
-					<input class="navigation_button" id="next" value="<?php echo get_lang('Next'); ?>" type="submit" />
-				</div>
-			</form>
-			<hr />
-			</div>
-			<div id="wizardShowButton">
-				<?php echo get_lang('ShowWizard'); ?>
-			</div>		
-			<p id="data"></p>
-
-		</div>
-
-
-		<div id="result" class="result">
-		</div>
-		<div id="result2" class="result">
-		</div>
-		<div id="result3" class="result">
-		</div>
-		<div id="result4" class="result">
-		</div>
-    <script type="text/javascript">
+                    <span id="format" class="step submit_step">
+                        <span class="font_normal_07em_black"><?php echo get_lang('ReportFormat'); ?></span><br />
+                        <select name="format" id="format">
+                            <option value="html">HTML</option>
+                            <option value="csv">CSV</option>
+                            <option value="sql">SQL</option>
+                            <option value="link"><?php echo get_lang('ReportTypeLink'); ?></option>
+                        </select><br />
+                    </span>
+                </div>
+                <div id="wizardNavigation">
+                    <input class="navigation_button" id="back" value="<?php echo get_lang('Back'); ?>" type="reset" />
+                    <input class="navigation_button" id="next" value="<?php echo get_lang('Next'); ?>" type="submit" />
+                </div>
+            </form>
+        <hr />
+    </div>
+    <div id="wizardShowButton">
+        <?php echo get_lang('ShowWizard'); ?>
+    </div>		
+    <p id="data"></p>
+</div>
+<div id="result" class="result">
+</div>
+<div id="result2" class="result">
+</div>
+<div id="result3" class="result">
+</div>
+<div id="result4" class="result">
+</div>
+<script type="text/javascript">
 			$(function(){
 				$("#wizardShowButton").hide();
 				$("#wizardShowButton").click(function() {
@@ -214,11 +209,8 @@ foreach($reports_template as $key => $value)
 				}
 			});
 		}
-    </script>
+</script>
 
 <?
-
 // Footer
 Display::display_footer();
-
-?>

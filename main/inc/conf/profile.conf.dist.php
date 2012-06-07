@@ -39,4 +39,3 @@ function personal_check_official_code($code, $valueToReturnIfOk, $valueToReturnI
 // For stats
 define('NB_LINE_OF_EVENTS', 15);
 
-?>

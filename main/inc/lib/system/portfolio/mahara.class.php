@@ -25,13 +25,20 @@ class Mahara extends Portfolio
      */
     function __construct($url)
     {
-        parent::__construct('Mahara', null);
+        $name = md5($url);
+        parent::__construct($name, null);
         $this->url = $url;
     }
 
     function get_url()
     {
         return $this->url;
+    }
+    
+    function get_title(){
+        $result = parent::get_title();
+        $result = $result ? $result : 'Mahara';
+        return $result;
     }
 
     /**

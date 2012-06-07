@@ -32,7 +32,7 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
 //$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
-$htmlHeadXtra[] = '<script type="text/javascript">        
+$htmlHeadXtra[] = '<script type="text/javascript">
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
 		document.getElementById(\'start_date_div\').style.display = \'block\';
@@ -48,7 +48,7 @@ function activate_end_date() {
         document.getElementById(\'end_date_div\').style.display = \'none\';
     }
 }
-       
+
 </script>';
 
 
@@ -151,7 +151,7 @@ $form->applyFilter('lp_author', 'html_filter');
 // LP image
 $form->add_progress_bar();
 if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
-    $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';    
+    $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
     $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
@@ -214,7 +214,7 @@ $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array(
 $form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));    
+    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
@@ -231,14 +231,20 @@ $defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($
 $defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
 
 $form->setDefaults($defaults);
-echo '<table><tr><td width="550px">';
-$form -> display();
-if ($_SESSION['oLP']->get_hide_toc_frame() == 1  ){
-  $display_img='none';
-}
-else{
-  $display_img='block';
-}
-echo '</td><td id="lp_layout_column" style="display:'.$display_img.'"valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
 
+echo '<div class="row">';
+
+if ($_SESSION['oLP']->get_hide_toc_frame() == 1) {
+    echo '<div class="span12">';
+    $form -> display();
+    echo '</div>';
+} else{
+    echo '<div class="span6">';
+    $form -> display();
+    echo '</div>';
+    echo '<div class="span6" align="center">';
+    echo '<img src="../img/course_setting_layout.png" />';
+    echo '</div>';
+}
+echo '</div>';
 Display::display_footer();

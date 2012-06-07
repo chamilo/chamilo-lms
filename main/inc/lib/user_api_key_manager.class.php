@@ -66,7 +66,7 @@ class UserApiKeyManager
      * @param string $description
      * @return AccessToken 
      */
-    public static function create_token($user_id = null, $api_key = null, $api_service = null, $api_end_point = null, $validity_start_date = null, $validity_end_date = null, $description)
+    public static function create_token($user_id = null, $api_key = null, $api_service = null, $api_end_point = null, $validity_start_date = null, $validity_end_date = null, $description = '')
     {
         $time = time();
         $user_id = $user_id ? $user_id : Chamilo::user()->user_id();

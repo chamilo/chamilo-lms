@@ -237,8 +237,8 @@ CREATE TABLE IF NOT EXISTS skill ( id int NOT NULL AUTO_INCREMENT, name varchar(
 INSERT INTO skill (name) VALUES ('Root');
 
 CREATE TABLE IF NOT EXISTS skill_rel_gradebook ( id int NOT NULL AUTO_INCREMENT, gradebook_id int NOT NULL, skill_id int NOT NULL, type varchar(10) NOT NULL, PRIMARY KEY (id));
-CREATE TABLE IF NOT EXISTS skill_rel_skill ( skill_id int NOT NULL, parent_id int NOT NULL, relation_type int NOT NULL, level int NOT NULL);
-INSERT INTO skill_rel_skill VALUES(1, 0, 0, 0);
+CREATE TABLE IF NOT EXISTS skill_rel_skill (id int NOT NULL AUTO_INCREMENT, skill_id int NOT NULL, parent_id int NOT NULL, relation_type int NOT NULL, level int NOT NULL, PRIMARY KEY (id));
+INSERT INTO skill_rel_skill VALUES(1, 1, 0, 0, 0);
 
 CREATE TABLE IF NOT EXISTS skill_rel_user ( id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL, skill_id int NOT NULL, acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',assigned_by int NOT NULL,PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS skill_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255)  NOT NULL, description TEXT  NOT NULL, PRIMARY KEY (id));
@@ -260,8 +260,15 @@ INSERT INTO settings_options (variable, value, display_text) values ('platform_u
 
 DROP TABLE IF EXISTS access_url_rel_session;
 
+ALTER TABLE usergroup_rel_session   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_course    ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_user      ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE admin                   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+
+
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18163' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18188' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
@@ -297,4 +304,3 @@ ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
-

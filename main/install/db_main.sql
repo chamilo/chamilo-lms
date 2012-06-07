@@ -70,6 +70,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS admin;
 CREATE TABLE IF NOT EXISTS admin (
+  id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id int unsigned NOT NULL default '0',
   UNIQUE KEY user_id (user_id)
 );
@@ -869,7 +870,7 @@ VALUES
 ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
 ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18163','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18188','DatabaseVersion','', NULL, NULL, 0);
 
 
 /*
@@ -2796,18 +2797,21 @@ CREATE TABLE IF NOT EXISTS usergroup (
 
 DROP TABLE IF EXISTS usergroup_rel_user;
 CREATE TABLE IF NOT EXISTS usergroup_rel_user    (
+    id 			INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     usergroup_id INT NOT NULL,
     user_id 	INT NOT NULL
 );
 
 DROP TABLE IF EXISTS usergroup_rel_course;
 CREATE TABLE IF NOT EXISTS usergroup_rel_course  (
+    id 			INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     usergroup_id INT NOT NULL,
     course_id 	INT NOT NULL
 );
 
 DROP TABLE IF EXISTS usergroup_rel_session;
 CREATE TABLE IF NOT EXISTS usergroup_rel_session (
+    id 			INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     usergroup_id INT NOT NULL,
     session_id  INT NOT NULL
 );
@@ -2858,13 +2862,15 @@ CREATE TABLE IF NOT EXISTS skill_rel_gradebook (
 
 DROP TABLE IF EXISTS skill_rel_skill;
 CREATE TABLE IF NOT EXISTS skill_rel_skill (
+  id int NOT NULL AUTO_INCREMENT,
   skill_id int NOT NULL,
   parent_id int NOT NULL,
   relation_type int NOT NULL,
-  level int NOT NULL
+  level int NOT NULL,
+  PRIMARY KEY (id)
 );
 
-INSERT INTO skill_rel_skill VALUES(1, 0, 0, 0);
+INSERT INTO skill_rel_skill VALUES(1, 1, 0, 0, 0);
 
 DROP TABLE IF EXISTS skill_rel_user;
 CREATE TABLE IF NOT EXISTS skill_rel_user (

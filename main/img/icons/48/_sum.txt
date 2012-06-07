@@ -290,3 +290,4 @@ scorm_builder			modif nuvola
 scormbuilder_na.png  		modif nuvola
 text2audio			modif nuvola
 audio				nuvola
+webcam				gnome

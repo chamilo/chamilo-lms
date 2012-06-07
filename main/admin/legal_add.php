@@ -37,8 +37,8 @@ if( $form->validate()) {
 				$submit  = $values['send'];
 			}
 
-			$default[content]=$content;
-			if (isset($values['language'])){
+			$default['content']=$content;
+			if (isset($values['language'])) {
 				if($submit=='back') {
 					header('Location: legal_add.php');
 					exit;
@@ -87,28 +87,27 @@ $token = Security::get_token();
 
 $form->addElement('hidden','sec_token');
 $form->setConstants(array('sec_token' => $token));
-$form->addElement('label', null, get_lang('DisplayTermsConditions'));
+$form->addElement('header', get_lang('DisplayTermsConditions'));
 
 if (isset($_POST['language'])) {
 
 	$form->addElement('static', Security::remove_XSS($_POST['language']));
 	$form->addElement('hidden', 'language',Security::remove_XSS($_POST['language']));
 	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250'));
-	
+
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
 	$form->addElement('radio', 'type', '', get_lang('PageLink') ,'1');
 	$form->addElement('textarea', 'changes', get_lang('ExplainChanges'),array('width'=>'20'));
 
-    
-	$preview = LegalManager::show_last_condition($term_preview);    
-    
+	$preview = LegalManager::show_last_condition($term_preview);
+
 	if ($term_preview['type']!=-1) {
 		$form->addElement('label', get_lang('Preview'),  $preview);
 	}
-    
+
 	// Submit & preview button
     $navigator_info = api_get_navigator();
-    
+
     //ie6 fix
 	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		$buttons = '<div class="row" align="center">
@@ -120,7 +119,7 @@ if (isset($_POST['language'])) {
 			</div>';
 			$form->addElement('html',$buttons);
 	} else {
-	$buttons = '<div class="row" align="center">
+        $buttons = '<div class="row" align="center">
 					<div class="formw">
 					<button type="submit" class="back" 	 name="send" value="back">'.get_lang('Back').'</button>
 					<button type="submit" class="search" name="send" value="preview">'.get_lang('Preview').'</button>
@@ -131,12 +130,7 @@ if (isset($_POST['language'])) {
 	}
 } else {
 	$form->addElement('select_language', 'language', get_lang('Language'),null,array());
-	$buttons = '<div class="row">
-					<div class="formw">
-					<button type="submit" class="save" name="send" value="load">'.get_lang('Load').'</button>
-					</div>
-				</div>';
-	$form->addElement('html',$buttons);
+	$form->addElement('button', 'send', get_lang('Load'));
 
 }
 
@@ -154,9 +148,7 @@ function sendlang(){
 
 // action menu
 echo '<div class="actions">';
-echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.Display::return_icon('search.gif',get_lang('EditTermsAndConditions'),'').get_lang('AllVersions').'</a>&nbsp;&nbsp;
-	  </div><br />';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.Display::return_icon('search.gif',get_lang('EditTermsAndConditions'),'').get_lang('AllVersions').'</a>';
 echo '</div>';
 
 if (isset ($_GET['action'])) {
@@ -169,3 +161,4 @@ if (isset ($_GET['action'])) {
 
 $form->setDefaults($defaults);
 $form->display();
+Display :: display_footer();

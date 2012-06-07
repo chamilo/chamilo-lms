@@ -10,15 +10,11 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('TermsAndConditions');
 Display :: display_header($tool_name);
 
-require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-
 $parameters['sec_token'] = Security::get_token();
 
 // action menu
 echo '<div class="actions">';
-echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">'.Display::return_icon('edit.gif',get_lang('EditTermsAndConditions'),'').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;
-	  </div><br />';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">'.Display::return_icon('edit.gif',get_lang('EditTermsAndConditions'),'').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
 // Actions
@@ -45,11 +41,4 @@ function get_legal_data_mask($id, $params=null, $row=null) {
 function count_mask() {
 	return LegalManager::count();
 }
-
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display :: display_footer();
-?>

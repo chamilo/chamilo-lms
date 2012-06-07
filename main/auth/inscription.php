@@ -44,13 +44,13 @@ if ($display_all_form) {
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
     $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
-    
+
     //	EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
-    
+
     if (api_get_setting('login_is_email') == 'true') {
         $form->applyFilter('email','trim');
         if (api_get_setting('registration', 'email') != 'true') {
@@ -71,7 +71,7 @@ if ($display_all_form) {
         if (api_get_setting('registration', 'officialcode') == 'true')
             $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
-    
+
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
         $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
@@ -139,7 +139,7 @@ if ($display_all_form) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-    // EXTRA FIELDS    
+    // EXTRA FIELDS
     $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
     UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
 }
@@ -200,11 +200,15 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
+    $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']:$_user['language']));
+
+    if (api_get_setting('allow_terms_conditions') == 'true') {
+        $tool_name = get_lang('TermsAndConditions');
+    }
     Display :: display_header($tool_name);
-    
+
     echo Display::page_header($tool_name);
-    
+
     $home = api_get_path(SYS_PATH).'home/';
     if ($_configuration['multiple_access_urls']) {
         $access_url_id = api_get_current_access_url_id();
@@ -248,7 +252,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
-    
+
     if (!$term_preview) {
         //we load from the platform
         $language = api_get_setting('platformLanguage');
@@ -260,7 +264,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             $term_preview = LegalManager::get_last_condition($language);
         }
     }
-    
+
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
@@ -268,13 +272,13 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
         $form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
         $form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
-    }    
+    }
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);    
+            $preview = LegalManager::show_last_condition($term_preview);
             $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
@@ -297,9 +301,9 @@ if ($form->validate()) {
     if (empty($values['official_code'])) {
         $values['official_code'] =  api_strtoupper($values['username']);
     }
-    
+
     if (api_get_setting('login_is_email') == 'true') {
-        $values['username'] = $values['email'];  
+        $values['username'] = $values['email'];
     }
 
     // creating a new user
@@ -317,7 +321,7 @@ if ($form->validate()) {
             }
         }
     }
-    
+
     // Register extra fields
     $extras = array();
     foreach ($values as $key => $value) {
@@ -325,7 +329,7 @@ if ($form->validate()) {
             $extras[substr($key,6)] = $value;
         }
     }
-    
+
     //update the extra fields
     $count_extra_field = count($extras);
     if ($count_extra_field > 0) {
@@ -390,11 +394,11 @@ if ($form->validate()) {
                 $admin_list = Database::fetch_array($result_list);
                 $emailto = $admin_list['email'];
 
-                // 2. send mail to the platform admin                
+                // 2. send mail to the platform admin
                 $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
                 $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
                 $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
-                
+
                 if (api_is_western_name_order()) {
                     $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
                     $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
@@ -412,7 +416,7 @@ if ($form->validate()) {
             }
             // 3. exit the page
             unset($user_id);
-            
+
             if (!CustomPages::enabled()) {
                 Display :: display_footer();
             }
@@ -438,7 +442,7 @@ if ($form->validate()) {
 
         /* EMAIL NOTIFICATION */
         //already added in UserManager::add_user();
-        
+
         /*
         if (strpos($values['email'], '@') !== false) {
             // Let us predefine some variables. Be sure to change the from address!
@@ -474,7 +478,7 @@ if ($form->validate()) {
         $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
     }
     $button_text = '';
-    if ($is_allowedCreateCourse) {        
+    if ($is_allowedCreateCourse) {
         $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>\n";
         $action_url = '../create_course/add_course.php';
         $button_text = api_get_setting('course_validation') == 'true'

@@ -15,5 +15,5 @@ $portfolios = array();
 //$portfolios[] = $_mahara_portfolio;
 
 $download_portfolio = new Portfolio\Download();
-$download_portfolio->set_title(get_lang('download'));
+$download_portfolio->set_title(get_lang('Download'));
 $portfolios[] = $download_portfolio;

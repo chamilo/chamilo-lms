@@ -108,7 +108,7 @@ class ChamiloSession extends System\Session
             if (!isset($session['checkChamiloURL'])) {
                 $session['checkChamiloURL'] = api_get_path(WEB_PATH);
             } else if ($session['checkChamiloURL'] != api_get_path(WEB_PATH)) {
-                Session::clear();
+                self::clear();
             }
         }
 

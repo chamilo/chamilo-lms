@@ -16,4 +16,4 @@ $portfolios = array();
 
 $download_portfolio = new Portfolio\Download();
 $download_portfolio->set_title(get_lang('download'));
-$portfolios[] = $_download_portfolio;
+$portfolios[] = $download_portfolio;

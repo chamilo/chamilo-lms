@@ -865,25 +865,11 @@ VALUES
 ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
 ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
 ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
-('enable_enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
 ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
 ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18188','DatabaseVersion','', NULL, NULL, 0);
-
-
-/*
-('show_tabs', 'custom_tab_1', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom1', 1),
-('show_tabs', 'custom_tab_2', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom2', 1),
-('show_tabs', 'custom_tab_3', 'checkbox', 'Platform', 'false', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsCustom3', 1),
-('custom_tab_1_name', NULL, 'textfield', 'Platform', 'Reports', 'CustomTab1NameTitle', 'CustomTab1NameComment', NULL, NULL, 0),
-('custom_tab_1_url', NULL, 'textfield', 'Platform', '/main/reports/', 'CustomTab1URLTitle', 'CustomTab1URLComment', NULL, NULL, 0),
-('custom_tab_2_name', NULL, 'textfield', 'Platform', '', 'CustomTab2NameTitle', 'CustomTab2NameComment', NULL, NULL, 0),
-('custom_tab_2_url', NULL, 'textfield', 'Platform', '', 'CustomTab2URLTitle', 'CustomTab2URLComment', NULL, NULL, 0),
-('custom_tab_3_name', NULL, 'textfield', 'Platform', '', 'CustomTab3NameTitle', 'CustomTab3NameComment', NULL, NULL, 0),
-('custom_tab_3_url', NULL, 'textfield', 'Platform', '', 'CustomTab3URLTitle', 'CustomTab3URLComment', NULL, NULL, 0),
-*/
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18189','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1217,8 +1203,6 @@ VALUES
 ('allow_skills_tool', 'false', 'No'),
 ('allow_public_certificates', 'true', 'Yes'),
 ('allow_public_certificates', 'false', 'No'),
-('enable_webcam_clip', 'true', 'Yes'),
-('enable_webcam_clip', 'false', 'No'),
 ('platform_unsubscribe_allowed', 'true', 'Yes'),
 ('platform_unsubscribe_allowed', 'false', 'No'),
 ('activate_email_template', 'true', 'Yes'),

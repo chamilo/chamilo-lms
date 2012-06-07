@@ -199,17 +199,24 @@ $(document).ready(function(){
 
     $options = $options_pedia = array();
     $selected_language = null;
-    
-    while ($row = Database::fetch_array($result_select)) {          
+    //$selected_language = api_get_language_isocode();//lang default is the course language
+	//lang default is a default message
+	$selected_language = "defaultmessage";
+	$options_pedia['defaultmessage'] =get_lang('FirstSelectALanguage');
+	$options['defaultmessage'] =get_lang('FirstSelectALanguage'); 
+	
+    while ($row = Database::fetch_array($result_select)) {       
         if (api_get_setting('platformLanguage')==$row['english_name']) {        
-            $selected_language = $row['isocode'];
+            //$selected_language = $row['isocode'];//lang default is the default platform language
         }
+		
         $options[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
+
         if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){		
             $options_pedia[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
         }        
     }
-    
+	
 	$icon = Display::return_icon('text2audio.png', get_lang('HelpText2Audio'),'',ICON_SIZE_MEDIUM);
 	echo '<div class="page-header"><h2>'.$icon.get_lang('HelpText2Audio').'</h2></div>'; 
 	
@@ -238,7 +245,7 @@ $(document).ready(function(){
 		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
 		$form->addElement('hidden', 'text2voice_mode','pediaphon');
 		$form->addElement('hidden', 'document_id', $document_id);
-		$form->addElement('text', 'title', get_lang('Title'), array('onclick' => 'update_voices(1);'));//set English default voice
+		$form->addElement('text', 'title', get_lang('Title'));
 		$form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
 		$form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());            
 		$speed_options = array();
@@ -267,17 +274,20 @@ $(document).ready(function(){
 		var voiceslist=document.form2.voices     
 		var voices=new Array()
 		
+		<!--Default message -->
+		voices[0]=["<?php echo get_lang('FirstSelectALanguage'); ?>"]
+		
 		<!--German -->
-		voices[0]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
+		voices[1]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
 		
 		<!--English -->
-		voices[1]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
+		voices[2]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
 		
 		<!--Spanish -->
-		voices[2]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
+		voices[3]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
 		
 		<!--French -->
-		voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
+		voices[4]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
 			
 			 
 		function update_voices(selectedvoicegroup){

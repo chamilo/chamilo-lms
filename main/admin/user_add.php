@@ -20,9 +20,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script();
 
-// Database table definitions
-$table_admin 	= Database::get_main_table(TABLE_MAIN_ADMIN);
-
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 <!--
@@ -235,7 +232,7 @@ $form->addGroup($html_results_enabled);
 if( $form->validate()) {
 	$check = Security::check_token('post');
 	if ($check) {
-		$user = $form->exportValues();			
+		$user = $form->exportValues();
 		$lastname       = $user['lastname'];
 		$firstname      = $user['firstname'];
 		$official_code  = $user['official_code'];
@@ -248,7 +245,7 @@ if( $form->validate()) {
 		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail      = intval($user['mail']['send_mail']);
 		$hr_dept_id     = intval($user['hr_dept_id']);
-        
+
 		if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
 			$auth_source = $user['password']['auth_source'];
 			$password = 'PLACEHOLDER';
@@ -256,25 +253,25 @@ if( $form->validate()) {
 			$auth_source = PLATFORM_AUTH_SOURCE;
 			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
 		}
-        
+
 		if ($user['radio_expiration_date'] == '1') {
 			$expiration_date = $user['expiration_date'];
 		} else {
 			$expiration_date = '0000-00-00 00:00:00';
 		}
-        
+
 		$active = intval($user['active']);
-    
+
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
 
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, null, null, $send_mail);
-        
+
 		Security::clear_token();
 		$tok = Security::get_token();
 		if ($user_id === false) {
-			//If any error ocurred during user creation, print it (api_failureList 
+			//If any error ocurred during user creation, print it (api_failureList
 			// stores values as separate words, so rework it
 			$message = '';
 			$message_bits = explode(' ',api_get_last_failure());
@@ -293,8 +290,7 @@ if( $form->validate()) {
 				}
 			}
 			if ($platform_admin) {
-				$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-				Database::query($sql);
+                UserManager::add_user_as_admin($user_id);
 			}
 			$message = get_lang('UserAdded');
 		}

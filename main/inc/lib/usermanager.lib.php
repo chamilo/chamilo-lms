@@ -3695,4 +3695,23 @@ EOF;
         $types[self::USER_FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
     }
+
+    function add_user_as_admin($user_id) {
+        $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
+        $user_id = intval($user_id);
+
+        if (!self::is_admin($user_id)) {
+            $sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
+            Database::query($sql);
+        }
+    }
+
+    function remove_user_admin($user_id) {
+        $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
+        $user_id = intval($user_id);
+        if (self::is_admin($user_id)) {
+            $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
+            Database::query($sql);
+        }
+    }
 }

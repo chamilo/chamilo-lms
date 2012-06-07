@@ -339,11 +339,9 @@ if ( $form->validate()) {
 		}
 		if ($user_id != $_SESSION['_uid']) {
 			if ($platform_admin == 1) {
-				$sql = "INSERT IGNORE INTO $table_admin SET user_id = '".$user_id."'";
-				Database::query($sql);
+                UserManager::add_user_as_admin($user_id);
 			} else {
-				$sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
-				Database::query($sql);
+                UserManager::remove_user_admin($user_id);
 			}
 		}
 

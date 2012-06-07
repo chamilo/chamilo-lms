@@ -264,7 +264,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 						$temp_user_id = $uData['user_id'];
 
 						$term_and_condition_status = api_check_term_condition($temp_user_id);//false or true
-                        
+
 						if ($term_and_condition_status === false) {
                             $_SESSION['term_and_condition'] = array('user_id'   => $temp_user_id,
                                                                     'login'     => $login,
@@ -295,17 +295,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 							global $_configuration;
 
                             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-								$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-
 								//Check if user is an admin
-								$sql = "SELECT user_id FROM $admin_table
-										WHERE user_id = '".intval($uData['user_id'])."' LIMIT 1";
-								$result = Database::query($sql);
-
-								$my_user_is_admin = false;
-								if (Database::num_rows($result) > 0) {
-									$my_user_is_admin = true;
-								}
+                                $my_user_is_admin = UserManager::is_admin($uData['user_id']);
 
 								// This user is subscribed in these sites => $my_url_list
 								$my_url_list = api_get_access_url_from_user($uData['user_id']);

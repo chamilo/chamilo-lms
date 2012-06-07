@@ -7,6 +7,32 @@ $cidReset = true;
 
 exit; //@deprecated file seems to be unused
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // including necessary libraries
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);

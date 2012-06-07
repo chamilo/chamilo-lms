@@ -45,9 +45,6 @@ $this_section = SECTION_COURSES;
 /* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
 
-// Database table definitions
-$main_admin_table       = Database::get_main_table(TABLE_MAIN_ADMIN);
-
 if ($debug){ error_log('Entering exercise_result.php: '.print_r($_POST,1));}
 
 // general parameters passed via POST/GET
@@ -65,7 +62,7 @@ if (empty($objExercise)) {
 	if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
 		header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
 		exit;
-	}	
+	}
     api_not_allowed();
 }
 
@@ -93,7 +90,7 @@ $show_results     = false;
 $show_only_score  = false;
 
 if ($objExercise->results_disabled == 0) {
-    $show_results = true;	
+    $show_results = true;
 }
 
 if ($objExercise->results_disabled == 2) {
@@ -121,7 +118,7 @@ $safe_lp_id              = $exercise_stat_info['orig_lp_id'];
 $safe_lp_item_id         = $exercise_stat_info['orig_lp_item_id'];
 $safe_lp_item_view_id    = $exercise_stat_info['orig_lp_item_view_id'];
 
-if ($origin == 'learnpath') {		
+if ($origin == 'learnpath') {
 ?>
 	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
@@ -133,21 +130,21 @@ if ($origin == 'learnpath') {
 
 $i = $total_score = $total_weight = 0;
 
-//We check if the user attempts before sending to the exercise_result.php                
+//We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
-    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);                
-    if ($attempt_count >= $objExercise->selectAttempts()) {        
+    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
+    if ($attempt_count >= $objExercise->selectAttempts()) {
         Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()), false);
         if ($origin != 'learnpath') {
             //we are not in learnpath tool
             Display::display_footer();
-        }                                      
+        }
         exit;
     }
 }
 
 
-$user_info   = api_get_user_info(api_get_user_id());     
+$user_info   = api_get_user_info(api_get_user_id());
 if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
@@ -172,43 +169,43 @@ if (!empty($question_list)) {
 	foreach ($question_list as $questionId) {
 	    // destruction of the Question object
 		unset($objQuestionTmp);
-		
+
 		// gets the student choice for this question
 		$choice                = $exerciseResult[$questionId];
-	    
+
 		// creates a temporary Question object
 		$objQuestionTmp        = Question :: read($questionId);
-			
-		//this variable commes from exercise_submit_modal.php	
-	
-		//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId]; 
-		
+
+		//this variable commes from exercise_submit_modal.php
+
+		//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId];
+
 		if ($show_results) {
 		    // show category
 		    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
-	    	// show titles    	
+	    	// show titles
 	    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
-	    	$counter++;    	
+	    	$counter++;
 		}
-		
+
 	    // We're inside *one* question. Go through each possible answer for this question
-	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);	    
-	   	
-	    $total_score     += $result['score'];    
-	    $total_weight    += $result['weight'];    
+	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+
+	    $total_score     += $result['score'];
+	    $total_weight    += $result['weight'];
 	} // end foreach() block that loops over all questions
 }
 
 if ($origin != 'learnpath') {
     if ($show_results || $show_only_score) {
         echo '<div id="question_score">';
-        echo get_lang('YourTotalScore')." ";	
+        echo get_lang('YourTotalScore')." ";
         if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
     	    $total_score = 0;
-        }     
+        }
         echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
         echo '</div>';
-    }    
+    }
 }
 
 // Tracking of results
@@ -217,8 +214,8 @@ if ($origin != 'learnpath') {
 
 $quiz_duration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 
-if (api_is_allowed_to_session_edit()) {	
-	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');	
+if (api_is_allowed_to_session_edit()) {
+	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '');
 }
 
 //If is not valid
@@ -232,12 +229,12 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 //Unset session for clock time
 exercise_time_control_delete($objExercise->id);
 
-if ($origin != 'learnpath') {	
+if ($origin != 'learnpath') {
 	Display::display_footer();
 } else {
 	$lp_mode =  $_SESSION['lp_mode'];
 	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$safe_lp_id.'&lp_item_id='.$safe_lp_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
-	//echo $total_score.','.$total_weight;	exit;	
+	//echo $total_score.','.$total_weight;	exit;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 	echo '<script type="text/javascript">'.$href.'</script>'."\n";
 	//record the results in the learning path, using the SCORM interface (API)
@@ -246,8 +243,8 @@ if ($origin != 'learnpath') {
 }
 
 // Send notification..
-if (!api_is_allowed_to_edit(null,true)) {	
-    $objExercise->send_notification($arrques, $arrans, $origin);	
+if (!api_is_allowed_to_edit(null,true)) {
+    $objExercise->send_notification($arrques, $arrans, $origin);
 }
 if (api_is_allowed_to_session_edit()) {
 	Session::erase('objExercise');

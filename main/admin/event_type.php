@@ -29,7 +29,7 @@ if($action == 'modEventType') {
 	}
 
         save_event_type_message($eventName,$users,$eventMessage,$eventSubject, $eventMessageLanguage, $activated);
-        
+
 	// echo mysql_error();
 	header('location: event_type.php');
 	exit;
@@ -40,8 +40,6 @@ $ets = get_all_event_types();
 $languages = api_get_languages();
 
 $ajaxPath = api_get_path(WEB_CODE_PATH).'inc/ajax/events.ajax.php';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
-
 Display::display_header($tool_name);
 
 $key_lang = get_lang('unsaved_changes');
@@ -56,10 +54,10 @@ $users = UserManager::get_user_list();
 	var eventsConfig = <?php print json_encode($event_config) ?>;
         var currentLanguage = <?php print json_encode(api_get_interface_language()) ?>;
         var flagContentHasChanged = false;
-        
+
         var key_lang = "<?php print $key_lang ?>";
 
-	
+
 
 	function ajax(params,func) {
 		$.ajax({
@@ -70,7 +68,7 @@ $users = UserManager::get_user_list();
 			}
 		);
 	}
-	
+
 	function refreshUsersList() {
 		removeAllOption($('#usersList'));
 		$.each(usersList,function(ind,item) {
@@ -78,7 +76,7 @@ $users = UserManager::get_user_list();
 			}
 		);
 	}
-	
+
 	function getCurrentEventTypeInd() {
 		var ind=false;
 		$.each(eventTypes,function(i,item)
@@ -87,28 +85,28 @@ $users = UserManager::get_user_list();
 					ind=i;
 					return false;
 				}
-			}	
+			}
 		)
-		
+
 		return ind;
 	}
-        
+
         function getCurrentEventTypeName()
         {
             var name = false;
-		
+
             return $('#eventList option:selected').first().attr('value');
         }
-	
+
 	function showEventType() {
             cleanInput();
 		eInd = getCurrentEventTypeInd();
                 currentEventName = getCurrentEventTypeName();
-                
+
                 $("span#activated_checkbox").css("display", "inline"); // make checkbox visible
                 $('input[name=activated]').attr('checked', false);
-                
-                
+
+
                 if(typeof(eventsConfig[currentEventName])!='undefined')
                 {
                     if(eventsConfig[currentEventName].self_sent == true) // if registration, only sent to self_user
@@ -128,7 +126,7 @@ $users = UserManager::get_user_list();
                 // List of events configuration
                 $('#eventName').attr('value', currentEventName);
 //                $('#descLangVar').text(eventsConfig[currentEventName].desc_lang_var);
-                
+
                 // set message and subject accoding to the current interface language
                 $.each(eventTypes,function(key,value)
                 {
@@ -136,32 +134,32 @@ $users = UserManager::get_user_list();
                     {
                             $('#eventNameTitle').text(eventTypes[key]["nameLangVar"]);
                     }
-                    
+
                     if(eventTypes[key]["event_type_name"] == currentEventName && eventTypes[key]["activated"] == 1)
                     {
                         $('input[name=activated]').attr('checked', true);
                     }
-                    
+
                     if(eventTypes[key]["event_type_name"] == currentEventName && eventTypes[key]["dokeos_folder"] == currentLanguage)
                     {
-                        
+
                             $('#eventMessage').val(eventTypes[key]["message"]);
                             $('#eventSubject').val(eventTypes[key]["subject"]);
 
                     }
                 });
-                
+
                 // displays the available keys for the mail template (related to an event name)
                 $('#keys').find('li').remove();
                 if(typeof(eventsConfig[currentEventName]["available_keyvars"])!='undefined')
                 {
-                    $.each(eventsConfig[currentEventName]["available_keyvars"],function(key,value) 
+                    $.each(eventsConfig[currentEventName]["available_keyvars"],function(key,value)
                     {
                         $('#keys').append('<li>'+key+'</li>');
                     });
                 }
-		
-                
+
+
                     ajax({action:"get_event_users", eventName:currentEventName},function(data) {
                                     removeAllOption($('#usersSubList'));
 
@@ -179,47 +177,47 @@ $users = UserManager::get_user_list();
                             }
                     );
 	}
-	
+
 	function submitForm() {
 		if($('#eventId')) {
 			usersIds = new Array();
-			
+
 			$('#usersSubList option').each(function(ind,item)
 				{
 					usersIds[ind] = item.value;
 				}
 			);
-			
+
 			$('#eventUsers').attr('value',usersIds.join(';'));
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	function addOption(select,value,text) {
 		select.append('<option value="'+value+'">'+text+'</option>');
 	}
-        
+
 	function removeOption(select,value) {
 		select.find('option[value='+value+']').remove();
 	}
-	
+
 	function removeAllOption(select) {
 		select.find('option').remove();
 	}
-	
+
 	function moveUsers(src,dest) {
 		src.find('option:selected').each(function(index,opt) {
 			text = opt.text;
 			val = opt.value;
-			
+
 			addOption(dest,val,text);
 			removeOption(src,val);
 		});
 	}
-        
+
         /**
          * Change the message of the mail according to the selected language
          */
@@ -235,9 +233,9 @@ $users = UserManager::get_user_list();
                         $('#eventMessage').val(eventTypes[key]["message"]);
                 }
             });
-            
+
         }
-        
+
         /**
          * Set flag at true if message and/or content was changed
          */
@@ -245,7 +243,7 @@ $users = UserManager::get_user_list();
         {
             flagContentHasChanged = true;
         }
-        
+
         /**
          * Asks if user want to abandon the changes he's done
          */
@@ -276,7 +274,7 @@ $users = UserManager::get_user_list();
                     changeLanguage();
             }
         }
-        
+
         /**
          * Empty the input and the textarea
          */
@@ -310,11 +308,11 @@ $users = UserManager::get_user_list();
 		<td>
 			<select multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
 				<?php
-					
+
 					foreach($event_config as $key => $config) {
 						print '<option value="'.$key.'">'.get_lang($config['name_lang_var']).'</option>';
 					}
-					
+
 				?>
 			</select>
 		</td>
@@ -338,7 +336,7 @@ $users = UserManager::get_user_list();
 <h2 id="eventNameTitle"></h2>
 
 
-    
+
         <select id="languages" name="languages" style="margin-top:20px;" onclick='confirmMessage(this.name); return false;'>
             <?php foreach($languages["name"] as $key => $value){ $english_name = $languages['folder'][$key]; ?>
             <option value="<?php echo $english_name; ?>" <?php echo ($english_name == api_get_interface_language()) ? "selected=selected" : ""; ?>><?php echo $value; ?></option>
@@ -349,13 +347,13 @@ $users = UserManager::get_user_list();
 	<input type="hidden" name="eventId" id="eventId" />
 	<input type="hidden" name="eventUsers" id="eventUsers" />
 	<input type="hidden" id="eventName" />
-	
+
 	<br />
-	
+
 <!--	<div id="descLangVar">
 	</div>-->
 	<br />
-	
+
 	<label for="eventSubject"><h4><?php print get_lang('events_labelSubject'); ?></h4></label>
         <input type="text" id="eventSubject" name="eventSubject" onchange="contentChanged(); return false;" />
 	<br /><br />

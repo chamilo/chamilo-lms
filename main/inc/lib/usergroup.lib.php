@@ -16,14 +16,20 @@ require_once 'model.lib.php';
 class UserGroup extends Model {
 
     var $columns = array('id', 'name','description');
-    
+
 	public function __construct() {
         $this->table                        =  Database::get_main_table(TABLE_USERGROUP);
         $this->usergroup_rel_user_table     =  Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table   =  Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table  =  Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
 	}
-    
+
+    public function get_count() {
+        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        return $row['count'];
+    }
+
+
     /**
      * Displays the title + grid
      */
@@ -31,44 +37,44 @@ class UserGroup extends Model {
         // action links
         echo '<div class="actions">';
        	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
-	   //echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
-        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('langAddClasses'),'','32').'</a>';   
-        echo '</div>';   
-        echo Display::grid_html('usergroups');  
-    } 
-    
+	   //echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';
+        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('langAddClasses'),'','32').'</a>';
+        echo '</div>';
+        echo Display::grid_html('usergroups');
+    }
+
      /**
      * Gets a list of course ids by user group
      * @param   int     user group id
-     * @return  array   
-     */     
-    public function get_courses_by_usergroup($id) {        
+     * @return  array
+     */
+    public function get_courses_by_usergroup($id) {
         $results = Database::select('course_id',$this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
-        if (!empty($results)) {    
+        if (!empty($results)) {
             foreach($results as $row) {
-                $array[]= $row['course_id'];            
+                $array[]= $row['course_id'];
             }
-        }                       
+        }
         return $array;
-    }    
-    
+    }
+
     /**
      * Gets a list of session ids by user group
      * @param   int     user group id
-     * @return  array   
+     * @return  array
      */
     public function get_sessions_by_usergroup($id) {
         $results = Database::select('session_id',$this->usergroup_rel_session_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
-        if (!empty($results)) {    
+        if (!empty($results)) {
             foreach($results as $row) {
-                $array[]= $row['session_id'];            
+                $array[]= $row['session_id'];
             }
-        }                
+        }
         return $array;
-    }      
-    
+    }
+
     /**
      * Gets a list of user ids by user group
      * @param   int     user group id
@@ -82,14 +88,14 @@ class UserGroup extends Model {
         }
         $results = Database::select('user_id', $this->usergroup_rel_user_table, $conditions, true);
         $array = array();
-        if (!empty($results)) {    
+        if (!empty($results)) {
             foreach($results as $row) {
-                $array[]= $row['user_id'];            
+                $array[]= $row['user_id'];
             }
-        }                       
-        return $array; 	
+        }
+        return $array;
     }
-    
+
     /**
      * Gets the usergroup id list by user id
      * @param   int user id
@@ -97,37 +103,37 @@ class UserGroup extends Model {
     public function get_usergroup_by_user($id) {
         $results = Database::select('usergroup_id',$this->usergroup_rel_user_table, array('where'=>array('user_id = ?'=>$id)));
         $array = array();
-        if (!empty($results)) {    
+        if (!empty($results)) {
             foreach($results as $row) {
-                $array[]= $row['usergroup_id'];            
+                $array[]= $row['usergroup_id'];
             }
-        }                       
-        return $array;  
-    }    
-    
-    
+        }
+        return $array;
+    }
+
+
     /**
      * Subscribes sessions to a group  (also adding the members of the group in the session and course)
      * @param   int     usergroup id
      * @param   array   list of session ids
     */
-    function subscribe_sessions_to_usergroup($usergroup_id, $list) {        
+    function subscribe_sessions_to_usergroup($usergroup_id, $list) {
         $current_list = self::get_sessions_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
-     
+
         $delete_items = $new_items = array();
-        if (!empty($list)) {                
+        if (!empty($list)) {
             foreach ($list as $session_id) {
                 if (!in_array($session_id, $current_list)) {
                 	$new_items[] = $session_id;
-                }           	
+                }
             }
-        }            
-        if (!empty($current_list)) {  
+        }
+        if (!empty($current_list)) {
             foreach($current_list as $session_id) {
         	   if (!in_array($session_id, $list)) {
                     $delete_items[] = $session_id;
-                }  
+                }
             }
         }
 
@@ -136,7 +142,7 @@ class UserGroup extends Model {
             foreach($delete_items as $session_id) {
                 if (!empty($user_list)) {
                     foreach($user_list as $user_id) {
-                        
+
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                         /*foreach ($course_list as $course_data) {
                             foreach($user_list as $user_id) {
@@ -147,14 +153,14 @@ class UserGroup extends Model {
                 }
                 Database::delete($this->usergroup_rel_session_table, array('usergroup_id = ? AND session_id = ?'=>array($usergroup_id, $session_id)));
             }
-        }     
-        
+        }
+
         //Addding new relationships
         if (!empty($new_items)) {
-            foreach($new_items as $session_id) {                
+            foreach($new_items as $session_id) {
                 $params = array('session_id'=>$session_id, 'usergroup_id'=>$usergroup_id);
-                Database::insert($this->usergroup_rel_session_table, $params); 
-            
+                Database::insert($this->usergroup_rel_session_table, $params);
+
                 if (!empty($user_list)) {
                     SessionManager::suscribe_users_to_session($session_id, $user_list, null, false);
                 }
@@ -168,85 +174,85 @@ class UserGroup extends Model {
             }
         }
     }
-    
+
     /**
      * Subscribes courses to a group (also adding the members of the group in the course)
      * @param   int     usergroup id
      * @param   array   list of course ids
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list) {
-          
+
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
-     
+
         $delete_items = $new_items = array();
-        if (!empty($list)) {                
+        if (!empty($list)) {
             foreach ($list as $id) {
                 if (!in_array($id, $current_list)) {
                     $new_items[] = $id;
-                }               
+                }
             }
         }
-        if (!empty($current_list)) {         
+        if (!empty($current_list)) {
             foreach($current_list as $id) {
                 if (!in_array($id, $list)) {
                     $delete_items[] = $id;
-                }  
+                }
             }
         }
-        
+
         //Deleting items
         if (!empty($delete_items)) {
             foreach($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);     
+                $course_info = api_get_course_info_by_id($course_id);
                 if (!empty($user_list)) {
-                    foreach($user_list as $user_id) {                                   
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);                    
+                    foreach($user_list as $user_id) {
+                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
                     }
                 }
                 Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
             }
         }
-        
+
         //Addding new relationships
         if (!empty($new_items)) {
-            foreach($new_items as $course_id) {                
-                $course_info = api_get_course_info_by_id($course_id);    
+            foreach($new_items as $course_id) {
+                $course_info = api_get_course_info_by_id($course_id);
                 if (!empty($user_list)) {
-                    foreach($user_list as $user_id) {         
+                    foreach($user_list as $user_id) {
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
-                 
+
                 $params = array('course_id'=>$course_id, 'usergroup_id'=>$usergroup_id);
                 Database::insert($this->usergroup_rel_course_table, $params);
             }
         }
-    }   
-    
+    }
+
      /**
      * Subscribes users to a group
      * @param   int     usergroup id
      * @param   array   list of user ids
      */
     function subscribe_users_to_usergroup($usergroup_id, $list) {
-        $current_list    = self::get_users_by_usergroup($usergroup_id);  
+        $current_list    = self::get_users_by_usergroup($usergroup_id);
         $course_list  = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
-        
+
         $delete_items = $new_items = array();
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {
                 	$new_items[] = $user_id;
-                }           	
+                }
             }
         }
         if (!empty($current_list)) {
             foreach($current_list as $user_id) {
         	   if (!in_array($user_id, $list)) {
                     $delete_items[] = $user_id;
-                }  
+                }
             }
         }
 
@@ -257,7 +263,7 @@ class UserGroup extends Model {
                 if (!empty($course_list)) {
                     foreach($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);                    
+                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
                     }
                 }
                 //Removing sessions

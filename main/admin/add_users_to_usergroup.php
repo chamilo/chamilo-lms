@@ -13,7 +13,6 @@ $cidReset = true;
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -36,7 +35,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 }
 
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";
@@ -69,17 +68,17 @@ function validate_filter() {
         document.formulaire.submit();
 }
 
-function checked_in_no_group(checked) {    
+function checked_in_no_group(checked) {
     $("#first_letter_user")
     .find("option")
-    .attr("selected", false);    
-        document.formulaire.form_sent.value="2"; 
+    .attr("selected", false);
+        document.formulaire.form_sent.value="2";
     document.formulaire.submit();
 }
 
 function change_select(val) {
     $("#user_with_any_group_id").attr("checked", false);
-    document.formulaire.form_sent.value="2"; 
+    document.formulaire.form_sent.value="2";
     document.formulaire.submit();
 }
 
@@ -105,18 +104,18 @@ $id = intval($_GET['id']);
 $first_letter_user = '';
 
 if ($_POST['form_sent']) {
-    $form_sent              = $_POST['form_sent'];    
+    $form_sent              = $_POST['form_sent'];
     $elements_posted        = $_POST['elements_in_name'];
     $first_letter_user      = $_POST['firstLetterUser'];
-         
+
     if (!is_array($elements_posted)) {
         $elements_posted=array();
     }
     if ($form_sent == 1) {
-        //added a parameter to send emails when registering a user        
+        //added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
-        exit;        
+        exit;
     }
 }
 
@@ -124,7 +123,7 @@ if ($_POST['form_sent']) {
 //Filter by Extra Fields
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
-    if (is_array($new_field_list) && count($new_field_list)>0 ) {        
+    if (is_array($new_field_list) && count($new_field_list)>0 ) {
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             if (UserManager::is_extra_field_available($new_field['variable'])) {
@@ -149,15 +148,13 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 }
-//var_dump($final_result);
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
-
 $list_all    = $usergroup->get_users_by_usergroup();
 
 $order = array('lastname');
 if (api_is_western_name_order()) {
-    $order = array('firstname');	
+    $order = array('firstname');
 }
 
 $elements_not_in = $elements_in = array();
@@ -171,26 +168,26 @@ if (!empty($complete_user_list)) {
             }
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
-        
-        if (in_array($item['user_id'], $list_in)) {       
+
+        if (in_array($item['user_id'], $list_in)) {
             $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
-            $elements_in[$item['user_id']] = $person_name;             
-        }        
+            $elements_in[$item['user_id']] = $person_name;
+        }
     }
 }
-  
+
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
 
 if ($user_with_any_group) {
     $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
     $new_user_list = array();
-    foreach($user_list as $item) {
+    foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
             $new_user_list[] = $item;
-        }        
+        }
     }
-    $user_list = $new_user_list;        
-} else {    
+    $user_list = $new_user_list;
+} else {
     $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
 }
 
@@ -203,8 +200,8 @@ if (!empty($user_list)) {
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
         $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
-        if (in_array($item['user_id'], $list_in)) {                        
-            //$elements_in[$item['user_id']] = $person_name;             
+        if (in_array($item['user_id'], $list_in)) {
+            //$elements_in[$item['user_id']] = $person_name;
         } else {
             $elements_not_in[$item['user_id']] = $person_name;
         }
@@ -222,12 +219,12 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';       
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <?php
-echo '<legend>'.$data['name'].': '.$tool_name.'</legend>'; 
+echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
@@ -287,12 +284,13 @@ if(!empty($errorMsg)) {
 <?php } ?>
 <tr>
   <td align="center">
-  <div id="content_source">      
+  <div id="content_source">
         <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
       <br />
-        <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id"> 
-        <label for="user_with_any_group_id"><?php echo get_lang('UsersRegisteredInNoGroup'); ?></label>
-        
+        <label class="control-label">
+            <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
+            <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
+        </label>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

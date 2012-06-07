@@ -14,7 +14,6 @@ require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'group_portal_manager.lib.php';
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -22,7 +21,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script();
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 textarea = "";
 num_characters_permited = 255;
 function text_longitud(){
@@ -36,10 +35,6 @@ function text_longitud(){
 </script>';
 
 // Database table definitions
-$table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
-$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
-$database 		= Database::get_main_database();
-
 if (!empty($_GET['message'])) {
 	$message = urldecode($_GET['message']);
 }
@@ -49,7 +44,7 @@ $tool_name = get_lang('AddGroups');
 
 // Create the form
 $form = new FormValidator('group_add');
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // name
 $form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
@@ -108,11 +103,10 @@ if( $form->validate()) {
 		$url 			= $values['url'];
 		$status 		= intval($values['visibility']);
 		$picture 		= $_FILES['picture'];
-    $parent_group_id = intval($values['parent_group']); 
+        $parent_group_id = intval($values['parent_group']);
 
 		$group_id = GroupPortalManager::add($name, $description, $url, $status);
-    GroupPortalManager::set_parent_group($group_id,$parent_group_id);
-
+        GroupPortalManager::set_parent_group($group_id,$parent_group_id);
 
 		if (!empty($picture['name'])) {
 			$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
@@ -144,7 +138,7 @@ if( $form->validate()) {
 		Security::clear_token();
 		$tok = Security::get_token();
 		header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupAdded')).'&sec_token='.$tok);
-			exit ();
+        exit ();
 	}
 } else {
 	if (isset($_POST['submit'])) {

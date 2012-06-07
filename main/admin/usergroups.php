@@ -10,7 +10,6 @@ $language_file = array('admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
@@ -24,7 +23,7 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));    
+    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Classes'));
@@ -47,7 +46,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
 
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
-//The order is important you need to check the the $column variable in the model.ajax.php file 
+//The order is important you need to check the the $column variable in the model.ajax.php file
 $columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions'));
 
 //Column config
@@ -58,11 +57,11 @@ $column_model   = array(
                         array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
                         array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
-                       );            
-//Autowidth             
+                       );
+//Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto 
-$extra_params['height'] = 'auto'; 
+//height auto
+$extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
@@ -70,18 +69,18 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
                     .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
                     .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
-                    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'                                       
-                    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\'; 
+                    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
+                    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
                  }';
 ?>
 <script>
 $(function() {
-<?php 
+<?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);       
-?> 
+    echo Display::grid_js('usergroups',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);
+?>
 });
-</script>   
+</script>
 <?php
 // Tool introduction
 Display::display_introduction_section(get_lang('Classes'));
@@ -96,11 +95,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 
     $_SESSION['notebook_view'] = 'creation_date';
     //@todo move this in the career.lib.php
-    
+
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
     // Settting the form elements
-    $form->addElement('header', '', get_lang('Add'));
+    $form->addElement('header', get_lang('Add'));
     $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
     $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
@@ -113,10 +112,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();       
-            $res = $usergroup->save($values);            
+            $values = $form->exportValues();
+            $res = $usergroup->save($values);
             if ($res) {
-                Display::display_confirmation_message(get_lang('Added'));
+                Display::display_confirmation_message(get_lang('ItemAdded'));
             }
         }
         Security::clear_token();
@@ -152,7 +151,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();            
+            $values = $form->exportValues();
             $res = $usergroup->update($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('Updated'));
@@ -178,7 +177,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GE
     }
     $usergroup->display();
 } else {
-    $usergroup->display();   
+    $usergroup->display();
 }
 
 Display :: display_footer();

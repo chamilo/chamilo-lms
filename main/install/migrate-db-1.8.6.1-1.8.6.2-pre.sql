@@ -58,7 +58,6 @@ ALTER TABLE message ADD INDEX idx_message_parent(parent_id);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10,'tags','tags',0,0);
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
 
 UPDATE settings_current SET selected_value = '1.8.6.2.9928' WHERE variable = 'dokeos_database_version';
@@ -81,7 +80,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('message_max_upload_filesize', NULL, 'textfield', 'Tools', '20971520', 'MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0);
 
-ALTER TABLE message ADD COLUMN update_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00'; 
+ALTER TABLE message ADD COLUMN update_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00';
 
 UPDATE settings_current SET category = 'Languages' WHERE variable = 'hide_dltt_markup';
 UPDATE settings_current SET category = 'Languages' WHERE variable = 'platform_charset';
@@ -137,7 +136,7 @@ ALTER TABLE wiki ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id
 ALTER TABLE tool ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE item_property ADD id_session INT NOT NULL DEFAULT 0;
-ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session); 
+ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session);
 ALTER TABLE quiz ADD COLUMN expired_time int NOT NULL DEFAULT '0' AFTER feedback_type;
 ALTER TABLE group_info ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);
 ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);

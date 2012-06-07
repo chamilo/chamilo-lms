@@ -9,6 +9,7 @@
 use \ChamiloSession as Session;
 
 $language_file = array('registration', 'admin');
+
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];
 }
@@ -23,15 +24,16 @@ if (!empty($_SESSION['user_language_choice'])) {
 } else {
     $user_selected_language = get_setting('platformLanguage');
 }
+
 $form = new FormValidator('registration');
+
 if (api_get_setting('allow_terms_conditions') == 'true') {
-    $display_all_form = !isset($_SESSION['update_term_and_condition'][1]);
+    $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
 } else {
-    $display_all_form = true;
+    $user_already_registered_show_terms = false;
 }
 
-if ($display_all_form) {
-
+if ($user_already_registered_show_terms == false) {
     if (api_is_western_name_order()) {
         //	FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -87,6 +89,7 @@ if ($display_all_form) {
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
+
     if (CHECK_PASS_EASY_TO_FIND)
         $form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
 
@@ -202,11 +205,11 @@ if (!CustomPages::enabled()) {
 
     $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']:$_user['language']));
 
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
     }
-    Display :: display_header($tool_name);
 
+    Display :: display_header($tool_name);
     echo Display::page_header($tool_name);
 
     $home = api_get_path(SYS_PATH).'home/';
@@ -268,11 +271,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     // Version and language
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
-    // Password
-    if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-        $form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
-        $form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
-    }
+
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
@@ -287,11 +286,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 $form->addElement('button', 'submit', get_lang('RegisterUser'));
 
 if ($form->validate()) {
-    /*
-      STORE THE NEW USER DATA INSIDE THE MAIN DATABASE
-     */
     $values = $form->exportValues();
-
     $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
 
     if (api_get_setting('allow_registration_as_teacher') == 'false') {
@@ -306,10 +301,118 @@ if ($form->validate()) {
         $values['username'] = $values['email'];
     }
 
-    // creating a new user
-    $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null, 1, 0, null, null, true);
+    if ($user_already_registered_show_terms && api_get_setting('allow_terms_conditions') == 'true') {
+        $user_id = $_SESSION['term_and_condition']['user_id'];
+        $is_admin = UserManager::is_admin($user_id);
+        Session::write('is_platformAdmin', $is_admin);
+    } else {
+        // Creates a new user
+        $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null, 1, 0, null, null, true);
 
-        // Terms & Conditions
+        // Register extra fields
+        $extras = array();
+        foreach ($values as $key => $value) {
+            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                $extras[substr($key,6)] = $value;
+            }
+        }
+
+        //update the extra fields
+        $count_extra_field = count($extras);
+        if ($count_extra_field > 0) {
+            foreach ($extras as $key => $value) {
+                UserManager::update_extra_field_value($user_id, $key, $value);
+            }
+        }
+
+        if ($user_id) {
+            // storing the extended profile
+            $store_extended = false;
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
+            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
+                $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
+                $store_extended = true;
+            }
+            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
+                $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
+                $store_extended = true;
+            }
+            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
+                $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
+                $store_extended = true;
+            }
+            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
+                $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
+                $store_extended = true;
+            }
+            if ($store_extended) {
+                $sql .= implode(',', $sql_set);
+                $sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
+                Database::query($sql);
+            }
+
+            // if there is a default duration of a valid account then we have to change the expiration_date accordingly
+            if (api_get_setting('account_valid_duration') != '') {
+                $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
+                Database::query($sql);
+            }
+
+            // if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
+            if (api_get_setting('allow_registration') == 'approval') {
+                $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
+                // 1. set account inactive
+                $sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
+                Database::query($sql);
+
+                $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+
+                if ($_configuration['multiple_access_urls']) {
+                    $access_url_id = api_get_current_access_url_id();
+                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                    $sql_get_id_admin = "SELECT admin.user_id FROM ".$tbl_url_rel_user." as url,  ".$table_main_admin." as admin WHERE access_url_id='".$access_url_id."' AND admin.user_id=url.user_id";
+                } else {
+                    $sql_get_id_admin = "SELECT * FROM ".$table_main_admin;
+                }
+                $result = Database::query($sql_get_id_admin);
+                while ($row = Database::fetch_array($result)) {
+
+                    $sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
+                    $result_list = Database::query($sql_admin_list);
+                    $admin_list = Database::fetch_array($result_list);
+                    $emailto = $admin_list['email'];
+
+                    // 2. send mail to the platform admin
+                    $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
+                    $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
+                    $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
+
+                    if (api_is_western_name_order()) {
+                        $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                        $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                    } else {
+                        $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                        $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                    }
+                    $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
+                    $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
+                    $emailbody		.= get_lang('ManageUser',null,$values['language']).': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
+
+                    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+                    $email_admin = api_get_setting('emailAdministrator');
+                    @api_mail('', $emailto, $emailsubject, $emailbody, $sender_name, $email_admin);
+                }
+                // 3. exit the page
+                unset($user_id);
+
+                if (!CustomPages::enabled()) {
+                    Display :: display_footer();
+                }
+                exit;
+            }
+        }
+    }
+
+    // Terms & Conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
         // update the terms & conditions
         if (isset($values['legal_accept_type'])) {
@@ -320,182 +423,57 @@ if ($form->validate()) {
                 UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
             }
         }
+        $values = api_get_user_info($user_id);
     }
 
-    // Register extra fields
-    $extras = array();
-    foreach ($values as $key => $value) {
-        if (substr($key, 0, 6) == 'extra_') { //an extra field
-            $extras[substr($key,6)] = $value;
-        }
-    }
+    /* SESSION REGISTERING */
+    $_user['firstName'] = stripslashes($values['firstname']);
+    $_user['lastName'] 	= stripslashes($values['lastname']);
+    $_user['mail'] 		= $values['email'];
+    $_user['language'] 	= $values['language'];
+    $_user['user_id']	= $user_id;
+    $is_allowedCreateCourse = $values['status'] == 1;
 
-    //update the extra fields
-    $count_extra_field = count($extras);
-    if ($count_extra_field > 0) {
-        foreach ($extras as $key => $value) {
-            $myres = UserManager::update_extra_field_value($user_id, $key, $value);
-        }
-    }
+    Session::write('_user', $_user);
+    Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-    if ($user_id) {
-        // storing the extended profile
-        $store_extended = false;
-        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
-        if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
-            $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
-            $store_extended = true;
-        }
-        if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
-            $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
-            $store_extended = true;
-        }
-        if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
-            $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
-            $store_extended = true;
-        }
-        if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
-            $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
-            $store_extended = true;
-        }
-        if ($store_extended) {
-            $sql .= implode(',', $sql_set);
-            $sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
-            Database::query($sql);
-        }
+    //stats
+    event_login();
 
-        // if there is a default duration of a valid account then we have to change the expiration_date accordingly
-        if (api_get_setting('account_valid_duration') != '') {
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
-            Database::query($sql);
-        }
+    // last user login date is now
+    $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
 
-        // if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
-        if (api_get_setting('allow_registration') == 'approval') {
-            $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-            // 1. set account inactive
-            $sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
-            Database::query($sql);
-
-            $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-
-            if ($_configuration['multiple_access_urls']) {
-                $access_url_id = api_get_current_access_url_id();
-                $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                $sql_get_id_admin = "SELECT admin.user_id FROM ".$tbl_url_rel_user." as url,  ".$table_main_admin." as admin WHERE access_url_id='".$access_url_id."' AND admin.user_id=url.user_id";
-            } else {
-                $sql_get_id_admin = "SELECT * FROM ".$table_main_admin;
-            }
-            $result = Database::query($sql_get_id_admin);
-            while ($row = Database::fetch_array($result)) {
-
-                $sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
-                $result_list = Database::query($sql_admin_list);
-                $admin_list = Database::fetch_array($result_list);
-                $emailto = $admin_list['email'];
-
-                // 2. send mail to the platform admin
-                $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
-                $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
-                $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
-
-                if (api_is_western_name_order()) {
-                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                } else {
-                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                }
-                $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
-                $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
-                $emailbody		.= get_lang('ManageUser',null,$values['language']).': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
-
-                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                $email_admin = api_get_setting('emailAdministrator');
-                @api_mail('', $emailto, $emailsubject, $emailbody, $sender_name, $email_admin);
-            }
-            // 3. exit the page
-            unset($user_id);
-
-            if (!CustomPages::enabled()) {
-                Display :: display_footer();
-            }
-            exit;
-        }
-
-        /* SESSION REGISTERING */
-        $_user['firstName'] = stripslashes($values['firstname']);
-        $_user['lastName'] 	= stripslashes($values['lastname']);
-        $_user['mail'] 		= $values['email'];
-        $_user['language'] 	= $values['language'];
-        $_user['user_id']	= $user_id;
-        $is_allowedCreateCourse = $values['status'] == 1;
-        Session::write('_user',$_user);
-        Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
-
-        //stats
-        event_login();
-        // last user login date is now
-        $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
-
-        Session::write('user_last_login_datetime',$user_last_login_datetime);
-
-        /* EMAIL NOTIFICATION */
-        //already added in UserManager::add_user();
-
-        /*
-        if (strpos($values['email'], '@') !== false) {
-            // Let us predefine some variables. Be sure to change the from address!
-            $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
-            $email = $values['email'];
-            $emailfromaddr = api_get_setting('emailAdministrator');
-            $emailfromname = api_get_setting('siteName');
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg',null,$_user['language']).' '.api_get_setting('siteName');
-
-            // The body can be as long as you wish, and any combination of text and variables
-            $portal_url = $_configuration['root_web'];
-            if ($_configuration['multiple_access_urls']) {
-                $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1 ){
-                    $url = api_get_access_url($access_url_id);
-                    $portal_url = $url['url'];
-                }
-            }
-
-            $emailbody = get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings',null,$_user['language'])."\n\n".get_lang('Username',null,$_user['language']).' : '.$values['username']."\n".get_lang('Pass',null,$_user['language']).' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('Is',null,$_user['language']).' : '.$portal_url."\n\n".get_lang('Problem',null,$_user['language'])."\n\n".get_lang('Formula',null,$_user['language']).",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager',null,$_user['language']).' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email',null,$_user['language']).' : '.api_get_setting('emailAdministrator');
-
-            // Here we are forming one large header line
-            // Every header must be followed by a \n except the last
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $email_admin = api_get_setting('emailAdministrator');
-            @api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-        }*/
-    }
+    Session::write('user_last_login_datetime', $user_last_login_datetime);
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
-    $display_text =  '<p>'.get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
+    $display_text =  '<p>'.get_lang('Dear',null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
 
-    if (!empty ($values['email'])) {
-        $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
-    }
-    $button_text = '';
-    if ($is_allowedCreateCourse) {
-        $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>\n";
-        $action_url = '../create_course/add_course.php';
-        $button_text = api_get_setting('course_validation') == 'true'
-            ? get_lang('CreateCourseRequest', null, $_user['language'])
-            : get_lang('CourseCreate', null, $_user['language']);
-    } else {
-        if (api_get_setting('allow_students_to_browse_courses') == 'true')
-            $action_url = 'courses.php?action=subscribe';
-        else
-            $action_url = api_get_path(WEB_PATH).'user_portal.php';
-        $display_text.='<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>\n";
-
+    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
         $button_text = get_lang('Next',null,$_user['language']);
-    }
-    // ?uidReset=true&uidReq=$_user['user_id']
+        $action_url = api_get_path(WEB_PATH).'user_portal.php';
 
-    $display_text .= '<form action="'. $action_url. '"  method="post">'. "\n". '<button type="submit" class="next" name="next" value="'. get_lang('Next',null,$_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
+    } else {
+        if (!empty ($values['email'])) {
+            $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
+        }
+        $button_text = '';
+
+        if ($is_allowedCreateCourse) {
+            $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>";
+            $action_url = '../create_course/add_course.php';
+            $button_text = api_get_setting('course_validation') == 'true'
+                ? get_lang('CreateCourseRequest', null, $_user['language'])
+                : get_lang('CourseCreate', null, $_user['language']);
+        } else {
+            if (api_get_setting('allow_students_to_browse_courses') == 'true')
+                $action_url = 'courses.php?action=subscribe';
+            else
+                $action_url = api_get_path(WEB_PATH).'user_portal.php';
+            $display_text.='<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>";
+            $button_text = get_lang('Next',null,$_user['language']);
+        }
+    }
+    $display_text .= '<form action="'. $action_url. '"  method="post">
+                    <button type="submit" class="next" name="next" value="'. get_lang('Next', null, $_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
     }

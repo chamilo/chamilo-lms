@@ -72,11 +72,11 @@ if ($_configuration['multiple_access_urls']) {
     if ($access_url_id != -1) {
         $url_info = api_get_access_url($access_url_id);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        
+
         $clean_url = replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        
+
 
         $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
         $homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
@@ -124,7 +124,7 @@ if (!empty($action)) {
                     $home_top = trim(stripslashes($_POST['register_top']));
                 }
                 // Write
-                
+
                 if (file_exists($homep.$topf.'_'.$lang.$ext)) {
                     if (is_writable($homep.$topf.'_'.$lang.$ext)) {
                         $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
@@ -184,7 +184,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 
 $form = new FormValidator('registration');
 if (get_setting('allow_terms_conditions') == 'true') {
-    $display_all_form = !isset($_SESSION['update_term_and_condition'][1]);
+    $display_all_form = !isset($_SESSION['update_term_and_condition']['user_id']);
 } else {
     $display_all_form = true;
 }
@@ -300,16 +300,17 @@ if (get_setting('allow_terms_conditions') == 'true') {
     // Version and language //password
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
-    if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-        $form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
-        $form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
-    }
+
+    /*if (isset($_SESSION['term_and_condition']['user_id']) && isset($_SESSION['term_and_condition']['password'])) {
+        $form->addElement('hidden', 'login', $_SESSION['term_and_condition']['user_id']);
+        $form->addElement('hidden', 'password', $_SESSION['term_and_condition']['password']);
+    }*/
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);          
+            $preview = LegalManager::show_last_condition($term_preview);
             $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
@@ -385,7 +386,7 @@ switch ($action){
         //Form of language
         api_display_language_form();
         echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
-        
+
         $open = '';
         if (file_exists($homep.$topf.'_'.$lang.$ext)) {
             $open = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);

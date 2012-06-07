@@ -132,11 +132,6 @@
 //require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
-//moved to autologin
-//if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-//	require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-//}
-
 use \ChamiloSession as Session;
 
 //Conditional login
@@ -192,20 +187,19 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		unset($_user['user_id']);
 	}
 
-	//$_SESSION['info_current_user'][1] is user name
-	//$_SESSION['info_current_user'][2] is current password encrypted
-	//$_SESSION['update_term_and_condition'][1] is current user id, of user in session
 	if (api_get_setting('allow_terms_conditions')=='true') {
-		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
-			$user_id = $_SESSION['update_term_and_condition'][1];    // user id
+		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['term_and_condition']['user_id'])) {
+			$user_id = $_SESSION['term_and_condition']['user_id'];    // user id
 			// update the terms & conditions
-
+            $legal_type = null;
 			//verify type of terms and conditions
-			$info_legal = explode(':',$_POST['legal_info']);
-			$legal_type = LegalManager::get_type_of_terms_and_conditions($info_legal[0],$info_legal[1]);
+            if (isset($_POST['legal_info'])) {
+                $info_legal = explode(':', $_POST['legal_info']);
+                $legal_type = LegalManager::get_type_of_terms_and_conditions($info_legal[0], $info_legal[1]);
+            }
 
 			//is necessary verify check
-			if ($legal_type==1) {
+			if ($legal_type == 1) {
 				if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
 					$legal_option=true;
 				} else {
@@ -213,8 +207,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 				}
 			}
+
 			//no is check option
-			if ($legal_type==0) {
+			if ($legal_type == 0) {
 				$legal_option=true;
 			}
 
@@ -242,6 +237,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		$cas_login = cas_is_authenticated();
 	}
 	if ( ( isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
+
 		// $login && $password are given to log in
 		if ( $cas_login  && empty($_POST['login']) ) {
 			$login = $cas_login;
@@ -261,29 +257,24 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
 			if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
 				//the authentification of this user is managed by Chamilo itself
-				$password = trim(stripslashes($password));
+                $password = api_get_encrypted_password(trim(stripslashes($password)));
 
-				if (api_get_setting('allow_terms_conditions')=='true') {
-					if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
-						$password=$_POST['password'];
-					} else {
-                        $password = api_get_encrypted_password($password);
-					}
-				} else {
-					$password = api_get_encrypted_password($password);
-				}
 				if (api_get_setting('allow_terms_conditions')=='true') {
 					if ($password == $uData['password'] AND (trim($login) == $uData['username']) OR $cas_login ) {
 						$temp_user_id = $uData['user_id'];
-						$term_and_condition_status=api_check_term_condition($temp_user_id);//false or true
-						if ($term_and_condition_status===false) {
-							$_SESSION['update_term_and_condition']=array(true,$temp_user_id);
-							$_SESSION['info_current_user']=array(true,$login,$password);
+
+						$term_and_condition_status = api_check_term_condition($temp_user_id);//false or true
+                        
+						if ($term_and_condition_status === false) {
+                            $_SESSION['term_and_condition'] = array('user_id'   => $temp_user_id,
+                                                                    'login'     => $login,
+                                                                    'password'  => $password,
+                                                                    'update_term_status' => true,
+                            );
 							header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
 							exit;
 						} else {
-							unset($_SESSION['update_term_and_condition']);
-							unset($_SESSION['info_current_user']);
+							unset($_SESSION['term_and_condition']);
 						}
 					}
 				}

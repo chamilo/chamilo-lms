@@ -2698,7 +2698,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         //Why the CustomPages::enabled() need to be to set the request_uri
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
     }
-    
+
     if (CustomPages::enabled() && !isset($user_id)) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
@@ -5122,19 +5122,21 @@ function api_get_tools_lists($my_tool = null) {
  */
 function api_check_term_condition($user_id) {
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+
         //check if exists terms and conditions
         if (LegalManager::count() == 0) {
             return true;
         }
+
         // Check the last user version_id passed
-        $sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
-                WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
-        $resv = Database::query($sqlv);
-        if (Database::num_rows($resv) > 0) {
-            $rowv = Database::fetch_row($resv);
+        $sql = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
+                WHERE field_value <> '' AND field_variable = 'legal_accept' AND user_id = ".intval($user_id);
+
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $rowv = Database::fetch_row($res);
             $rowv = $rowv[0];
             $user_conditions = explode(':', $rowv);
             $version = $user_conditions[0];

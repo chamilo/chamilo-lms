@@ -261,7 +261,11 @@ ALTER TABLE usergroup_rel_course    ADD COLUMN id INTEGER NOT NULL AUTO_INCREMEN
 ALTER TABLE usergroup_rel_user      ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 ALTER TABLE admin                   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
+-- Remove settings entry that doesnt exist anymore
 
+DELETE FROM settings_current WHERE variable = "read_more_limit";
+DELETE FROM settings_current WHERE variable = "user_order_by";
+DELETE FROM settings_options WHERE variable = "user_order_by";
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.18189' WHERE variable = 'chamilo_database_version';

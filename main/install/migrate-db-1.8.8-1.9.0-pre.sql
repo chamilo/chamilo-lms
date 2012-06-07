@@ -46,6 +46,8 @@ INSERT INTO settings_options (variable, value, display_text) values ('cas_add_us
 INSERT INTO settings_options (variable, value, display_text) values ('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP');
 INSERT INTO settings_options (variable, value, display_text) values ('cas_add_user_activate', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('update_user_info_cas_with_ldap', NULL, 'radio', 'CAS', 'true', 'UpdateUserInfoCasWithLdapTitle', 'UpdateUserInfoCasWithLdapComment', NULL, NULL, 1, 0, 1);
+
 -- Custom Pages
 --INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope) VALUES ('use_custom_pages','radio','Platform','false','UseCustomPages','UseCustomPagesComment', 'platform');
 --INSERT INTO settings_options (variable, value, display_text) VALUES ('use_custom_pages', 'true', 'Yes'), ('use_custom_pages', 'false', 'No');
@@ -107,6 +109,11 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_session_admins_to_see_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_session_admins_to_see_all_sessions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_session_admins_to_see_all_sessions', 'false', 'No');
+
+-- Shibboleth and Facebook auth and ldap
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, accessurl_changeable) VALUES ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, accessurl_changeable) VALUES ('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 1, 0, 1);
 
 ALTER TABLE course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN legal_agreement INTEGER DEFAULT 0;

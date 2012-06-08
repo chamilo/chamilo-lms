@@ -1830,13 +1830,15 @@ FCK.GetSelectedFlashUrl = function ( url )
 // Conversion of selected by the file managers URLs.
 FCK.GetSelectedUrl = function ( url )
 {
-    url = FCK.GetUrl ( url, DOCUMENT_RELATIVE_URL ) ;
+    /* Why you suppose that the url is relative? */
+    //url = FCK.GetUrl ( url, DOCUMENT_RELATIVE_URL ) ;
 
-    if ( FCK.GetUrlType (url) != RELATIVE_URL )
-    {
+    //Searching the correct type
+    my_type =  FCK.GetUrlType (url)
+    url = FCK.GetUrl ( url, my_type);
+    if ( FCK.GetUrlType (url) != RELATIVE_URL ) {
         url = FCK.GetUrl ( url, SEMI_ABSOLUTE_URL ) ;
     }
-
     return url ;
 }
 

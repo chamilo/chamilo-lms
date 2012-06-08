@@ -14,7 +14,9 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+$id_session = (int)$_GET['id_session'];
+
+SessionManager::protect_session_edit($id_session);
 
 $tool_name = get_lang('SessionOverview');
 
@@ -33,7 +35,7 @@ $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY)
 
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-$id_session = (int)$_GET['id_session'];
+
 
 $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id

@@ -160,7 +160,7 @@ class SessionManager {
                     api_mail_html($complete_name, $user_info['email'], $subject, $message);
                     *
                     */
-    				
+
     				// add event to system log
     				$user_id = api_get_user_id();
     				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
@@ -184,15 +184,13 @@ class SessionManager {
         $where = 'WHERE 1=1 ';
         $user_id = api_get_user_id();
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
-            $where.=" WHERE s.session_admin_id = $user_id ";
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+            $where.=" AND s.session_admin_id = $user_id ";
         }
 
-        $query_rows = "SELECT count(*) as total_rows
-         FROM $tbl_session s
-            LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-            INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-        $where ";
+        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s
+                        LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                        INNER JOIN $tbl_user u ON s.id_coach = u.user_id $where ";
         $result_rows = Database::query($query_rows);
         $recorset = Database::fetch_array($result_rows);
         $num = $recorset['total_rows'];
@@ -211,7 +209,7 @@ class SessionManager {
 		$where = 'WHERE 1=1 ';
 		$user_id = api_get_user_id();
 
-		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
+		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}
 
@@ -1728,6 +1726,7 @@ class SessionManager {
     	}
     	return false;
     }
+
     /**
      * Get the number of sessions
      * @param  int ID of the URL we want to filter on (optional)
@@ -1739,5 +1738,17 @@ class SessionManager {
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         return $row[0];
+    }
+
+    function protect_session_edit($id) {
+        api_protect_admin_script(true);
+
+        $session_info = self::fetch($id);
+
+        if (api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
+            if ($session_info['session_admin_id'] != api_get_user_id()) {
+                api_not_allowed(true);
+            }
+        }
     }
 }

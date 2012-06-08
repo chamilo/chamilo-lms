@@ -15,16 +15,14 @@ require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
-//$xajax->debugOn();
 $xajax -> registerFunction ('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
-
 $id_session = intval($_GET['id_session']);
+
+SessionManager::protect_session_edit($id_session);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
@@ -76,13 +74,13 @@ function search_users($needle, $type) {
 	global $tbl_user,$tbl_session_rel_user,$id_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
-    
+
 	if (!empty($needle) && !empty($type)) {
-        
+
         //normal behaviour
         if ($type == 'any_session' && $needle == 'false')  {
             $type = 'multiple';
-            $needle = '';            
+            $needle = '';
         }
 
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
@@ -93,7 +91,7 @@ function search_users($needle, $type) {
 
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$cond_user_id = '';
-        
+
         //Only for single & multiple
         if (in_array($type, array('single','multiple')))
 		if (!empty($id_session)) {
@@ -128,17 +126,17 @@ function search_users($needle, $type) {
                 break;
             case 'any_session':
                 $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
-                        WHERE   s.id_user IS null AND user.status<>'.DRH.' AND 
+                        WHERE   s.id_user IS null AND user.status<>'.DRH.' AND
                                 user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
                         $order_clause;
                 break;
-		}   
-    
+		}
+
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1) {              
+			if ($access_url_id != -1) {
                 switch($type) {
                     case 'single':
                         $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
@@ -152,16 +150,16 @@ function search_users($needle, $type) {
                     case 'multiple':
                         $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                        WHERE access_url_id = '.$access_url_id.' AND 
+                        WHERE access_url_id = '.$access_url_id.' AND
                                 '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
                         $order_clause;
                         break;
                     case 'any_session' :
                         $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                        WHERE   access_url_id = '.$access_url_id.' AND 
+                        WHERE   access_url_id = '.$access_url_id.' AND
                                 s.id_user IS null AND
-                                user.status<>'.DRH.' AND 
+                                user.status<>'.DRH.' AND
                                 user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
                         $order_clause;
                         break;
@@ -233,7 +231,7 @@ function validate_filter() {
 		document.formulaire.submit();
 }
 
-function checked_in_no_session(checked) {    
+function checked_in_no_session(checked) {
     $("#first_letter_user")
     .find("option")
     .attr("selected", false);
@@ -259,13 +257,13 @@ if($_POST['form_sent']) {
 	$firstLetterUser       = $_POST['firstLetterUser'];
 	$firstLetterSession    = $_POST['firstLetterSession'];
 	$UserList              = $_POST['sessionUsersList'];
-    
+
 	if (!is_array($UserList)) {
 		$UserList=array();
 	}
 
 	if ($form_sent == 1) {
-		//added a parameter to send emails when registering a user		
+		//added a parameter to send emails when registering a user
 		SessionManager::suscribe_users_to_session($id_session, $UserList, null, true);
 		header('Location: resume_session.php?id_session='.$id_session);
 		exit;
@@ -326,7 +324,7 @@ if ($ajax_search) {
 				}
 			}
 		}
-        
+
 		if ($use_extra_fields) {
 			$final_result = array();
 			if (count($extra_field_result)>1) {
@@ -392,16 +390,16 @@ if ($ajax_search) {
 
 		foreach ($Users as $user) {
 			if ($user['id_session'] != $id_session)
-				$nosessionUsersList[$user['user_id']] = $user ;            
+				$nosessionUsersList[$user['user_id']] = $user ;
 		}
-        
+
 		$user_anonymous=api_get_anonymous_id();
 		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
 			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
 		}
-        
+
 		//filling the correct users in list
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
@@ -539,13 +537,13 @@ if(!empty($errorMsg)) {
 		?>
 	  </select>
 	  </div>
-        <input type="checkbox" onchange="checked_in_no_session(this.checked);" name="user_with_any_session" id="user_with_any_session_id"> 
+        <input type="checkbox" onchange="checked_in_no_session(this.checked);" name="user_with_any_session" id="user_with_any_session_id">
         <label for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
 	<?php
   	  }
   	  unset($nosessionUsersList);
   	 ?>
-  
+
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

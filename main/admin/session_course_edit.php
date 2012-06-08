@@ -9,13 +9,10 @@ $language_file='admin';
 $cidReset=true;
 
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/sessionmanager.lib.php';
-// setting the section (for the tabs)
-/*$this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();*/
+$id_session = intval($_GET['id_session']);
+SessionManager::protect_session_edit($id_session);
 
-$id_session=intval($_GET['id_session']);
 $course_code=trim(stripslashes($_GET['course_code']));
 
 $formSent=0;
@@ -94,7 +91,7 @@ global $_configuration;
 if ($_configuration['multiple_access_urls']) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id) WHERE status='1' AND access_url_id = $access_url_id ".$order_clause; 
+    $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id) WHERE status='1' AND access_url_id = $access_url_id ".$order_clause;
 } else {
     $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 }

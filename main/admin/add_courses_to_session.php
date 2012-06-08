@@ -19,15 +19,14 @@ require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.ph
 
 $id_session = intval($_GET['id_session']);
 
+SessionManager::protect_session_edit($id_session);
+
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
-// Access restrictions
-api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -115,7 +114,7 @@ if ($_POST['formSent']) {
 
 	$rs = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
 	$existingCourses = Database::store_result($rs);
-    
+
     // Updating only the RRHH users?? why?
 	//$sql="SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
     $sql        = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session ";
@@ -134,10 +133,10 @@ if ($_POST['formSent']) {
 		if(!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code) VALUES('$id_session','$enreg_course')";
 			Database::query($sql_insert_rel_course);
-            
+
             $course_info = api_get_course_info($enreg_course);
             CourseManager::update_course_ranking($course_info['real_id'], $id_session);
-            
+
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
 			$nbr_users=0;
@@ -160,7 +159,7 @@ if ($_POST['formSent']) {
             CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
 			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-            
+
 		}
 	}
 	$nbr_courses=count($CourseList);

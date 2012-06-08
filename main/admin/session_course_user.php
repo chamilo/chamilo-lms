@@ -16,8 +16,8 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
+$id_session = intval($_GET['id_session']);
+SessionManager::protect_session_edit($id_session);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -32,9 +32,9 @@ $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE)
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name= get_lang('EditSessionCoursesByUser');
-$id_session=intval($_GET['id_session']);
-$id_user=intval($_GET['id_user']);
+$tool_name = get_lang('EditSessionCoursesByUser');
+
+$id_user = intval($_GET['id_user']);
 
 if (empty($id_user) || empty($id_session)) {
 	header('Location: resume_session.php?id_session='.$id_session);
@@ -125,9 +125,9 @@ echo '<legend>'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete
 
 $nosessionCourses = $sessionCourses = array();
 // actual user
-$sql="SELECT code, title, visual_code, srcru.id_session " .
-			"FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru  " .
-			"ON course.code = srcru.course_code  WHERE srcru.id_user = $id_user AND id_session = $id_session";
+$sql = "SELECT code, title, visual_code, srcru.id_session
+        FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru
+        ON course.code = srcru.course_code  WHERE srcru.id_user = $id_user AND id_session = $id_session";
 
 //all
 $sql_all="SELECT code, title, visual_code, src.id_session " .

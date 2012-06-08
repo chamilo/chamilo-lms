@@ -14,15 +14,14 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+$id_session = intval($_GET['id_session']);
+SessionManager::protect_session_edit($id_session);
 
 // Database Table Definitions
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-$id_session = intval($_GET['id_session']);
 
 if (empty($id_session)) {
     api_not_allowed();
@@ -46,7 +45,7 @@ if ($action == 'delete') {
 		foreach ($idChecked as $id){
 			$my_temp[]= Database::escape_string($id);// forcing the escape_string
 		}
-		$idChecked = $my_temp;        
+		$idChecked = $my_temp;
 		$idChecked="'".implode("','", $idChecked)."'";
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
 		$nbr_affected_rows=Database::affected_rows();

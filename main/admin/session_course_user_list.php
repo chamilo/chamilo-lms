@@ -8,9 +8,8 @@
  */
 $language_file = array('admin', 'registration');
 $cidReset = true;
-require_once '../inc/global.inc.php';
 
-api_protect_admin_script(true);
+require_once '../inc/global.inc.php';
 
 $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course                         = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -20,6 +19,8 @@ $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSIO
 $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $id_session = intval($_GET['id_session']);
+SessionManager::protect_session_edit($id_session);
+
 if (empty($id_session )) {
     api_not_allowed();
 }
@@ -41,10 +42,10 @@ if (is_array($idChecked)) {
 	$idChecked = $my_temp;
 }
 
-$sql = "SELECT s.name, c.title  FROM $tbl_session_rel_course src 
+$sql = "SELECT s.name, c.title  FROM $tbl_session_rel_course src
 		INNER JOIN $tbl_session s ON s.id = src.id_session
 		INNER JOIN $tbl_course c ON c.code = src.course_code
-		WHERE src.id_session='$id_session' AND src.course_code='".Database::escape_string($course_code)."' "; 
+		WHERE src.id_session='$id_session' AND src.course_code='".Database::escape_string($course_code)."' ";
 
 $result = Database::query($sql);
 
@@ -55,12 +56,12 @@ if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 
 
 switch($action) {
-    case 'delete':     
+    case 'delete':
         if (is_array($idChecked) && count($idChecked)>0 ) {
             array_map('intval', $idChecked);
             $idChecked = implode(',',$idChecked);
         }
-        if (!empty($idChecked)) { 
+        if (!empty($idChecked)) {
             Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".$course_code."' AND id_user IN($idChecked)");
             $nbr_affected_rows = Database::affected_rows();
             Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".$course_code."'");
@@ -68,8 +69,8 @@ switch($action) {
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit();
         break;
-    case 'add':          
-        SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);          
+    case 'add':
+        SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit;
         break;
@@ -79,11 +80,11 @@ switch($action) {
 $limit  = 20;
 $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
-        
-//scru.status<>2  scru.course_code='".$course_code."' 
+
+//scru.status<>2  scru.course_code='".$course_code."'
 $sql = "SELECT DISTINCT u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
-             FROM $tbl_session_rel_user s INNER JOIN $tbl_user u ON (u.user_id=s.id_user) LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id=scru.id_user AND  scru.course_code = '".$course_code."' )      
-             WHERE s.id_session='$id_session' 
+             FROM $tbl_session_rel_user s INNER JOIN $tbl_user u ON (u.user_id=s.id_user) LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id=scru.id_user AND  scru.course_code = '".$course_code."' )
+             WHERE s.id_session='$id_session'
              ORDER BY $sort $direction LIMIT $from,".($limit+1);
 
 if ($direction == 'desc') {
@@ -166,7 +167,7 @@ foreach ($Users as $key=>$enreg) {
         <?php } ?>
         <td><?php echo api_htmlentities($enreg['username'],ENT_QUOTES,$charset); ?></td>
         <td>
-        <?php if ($enreg['is_subscribed']) { ?> 
+        <?php if ($enreg['is_subscribed']) { ?>
             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
                 <?php Display::display_icon('delete.png', get_lang('Delete')); ?>
             </a>
@@ -175,7 +176,7 @@ foreach ($Users as $key=>$enreg) {
                 <?php Display::display_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL); ?>
             </a>
         <?php }  ?>
-            
+
         </td>
     </tr>
     <?php

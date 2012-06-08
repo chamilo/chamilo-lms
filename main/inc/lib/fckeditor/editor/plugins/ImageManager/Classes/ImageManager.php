@@ -179,8 +179,7 @@ class ImageManager
 	 *                        'image'=>imageInfo array() false if not image,
 	 *                        'stat' => filestat)</code>
 	 */
-	function getFiles($path)
-	{
+	function getFiles($path) {
 		$files = array();
 		$dirs = array();
 
@@ -189,17 +188,18 @@ class ImageManager
 
 		$path = Files::fixPath($path);
 		$base = Files::fixPath($this->getBaseDir());
-		$fullpath = Files::makePath($base,$path);
 
+		$fullpath = Files::makePath($base,$path);
 
 		$d = @dir($fullpath);
 
-		if(empty($d)) {
+		if (empty($d)) {
 			$path = Files::fixPath('/');
 			$base = Files::fixPath($this->getBaseDir());
 			$fullpath = Files::makePath($base,$path);
 			$d = @dir($fullpath);
 		}
+
 
 		$in_group = api_is_in_group();
 		$user_id = api_get_user_id();
@@ -216,11 +216,8 @@ class ImageManager
 			$files_templates[] = $row[0];
 		}
 
-		while (false !== ($entry = $d->read()))
-		{
-
+		while (false !== ($entry = $d->read())) {
 			if (in_array($entry,$files_templates)) continue;
-
 			if (substr($entry,0,1) != '.'          //not a dot file or directory
 				&& strpos($entry, '_DELETED_') === false
 				&& strpos($entry, 'chat_files') === false
@@ -229,7 +226,6 @@ class ImageManager
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false)))
 			{
 				$is_dir = is_dir($fullpath.$entry);
-
 				if ($is_dir) {
 					$dir_entry = Files::fixPath($fullpath.$entry);
 					/*
@@ -267,20 +263,17 @@ class ImageManager
 					$full = Files::fixPath($fullpath.$entry);
 					$count = $this->countFiles($full);
 					$dirs[$relative] = array('fullpath'=>$full,'entry'=>$entry,'count'=>$count);
-				}
-				else if(is_file($fullpath.$entry) && !$this->isThumb($entry) && !$this->isTmpFile($entry))
-				{
+				} else if(is_file($fullpath.$entry) && !$this->isThumb($entry) && !$this->isTmpFile($entry)) {
 					$img = $this->getImageInfo($fullpath.$entry);
-
-					if(!(!is_array($img)&&$this->config['validate_images']))
-					{
+					if(!(!is_array($img)&&$this->config['validate_images'])) {
 					    global $_course;
-					    if (isset($_course['dbName']) && $_course<>'-1') {
+
+					    if (!empty($_course) && isset($_course['code'])) {
 							//checking visibility
 							$base_dir = substr($fullpath.$entry, 0, strpos($fullpath.$entry,'/document/')+9);
 							$new_dir  = substr($fullpath.$entry, strlen($base_dir));
-							$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-							$visible_status= api_get_item_visibility($_course,TOOL_DOCUMENT,$doc_id);
+							$doc_id = DocumentManager::get_document_id($_course, $new_dir);
+							$visible_status = api_get_item_visibility($_course, TOOL_DOCUMENT, $doc_id);
 						}
 
 						//Teachers can access to hidden files and directories as they can in the tool documents
@@ -290,7 +283,7 @@ class ImageManager
 						}
 						*/
 
-						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;
+						$file['url'] = Files::makePath($this->config['base_url'], $path).$entry;
 						$file['relative'] = $path.$entry;
 						$file['fullpath'] = $fullpath.$entry;
 						$file['image'] = $img;
@@ -303,8 +296,7 @@ class ImageManager
 		$d->close();
 		ksort($dirs);
 		ksort($files);
-
-		Return array($dirs, $files);
+		return array($dirs, $files);
 	}
 
 	/**

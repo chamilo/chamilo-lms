@@ -322,11 +322,9 @@ class Exercise {
 	function updateRandomByCat($in_randombycat) {
 	 if ($in_randombycat == 1) {
 	 		$this->randomByCat = 1;
-		}
-		else if ($in_randombycat == 2) {
+		} else if ($in_randombycat == 2) {
 	 		$this->randomByCat = 2;
-		}
-		else {
+		} else {
 			$this->randomByCat = 0;
 		}
 	}
@@ -362,7 +360,6 @@ class Exercise {
 	 * @author - Juan Carlos Raï¿½a
 	 */
 	function selectRandomAnswers() {
-		$this->random_answers;
 		return $this->random_answers;
 	}
 
@@ -628,10 +625,10 @@ class Exercise {
 		$this->results_disabled = true;
 	}
 
-	function enable_results()
-	{
+	function enable_results() {
 		$this->results_disabled = false;
 	}
+
 	function updateResultsDisabled($results_disabled) {
 		$this->results_disabled = intval($results_disabled);
 	}
@@ -1264,10 +1261,10 @@ class Exercise {
 		$ic_slide->addCourseId($course_id);
 		$ic_slide->addToolId(TOOL_QUIZ);
 		$xapian_data = array(
-		SE_COURSE_ID => $course_id,
-		SE_TOOL_ID => TOOL_QUIZ,
-		SE_DATA => array('type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int)$this->id),
-		SE_USER => (int)api_get_user_id(),
+            SE_COURSE_ID => $course_id,
+            SE_TOOL_ID => TOOL_QUIZ,
+            SE_DATA => array('type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int)$this->id),
+            SE_USER => (int)api_get_user_id(),
 		);
 		$ic_slide->xapian_data = serialize($xapian_data);
 		$exercise_description = $all_specific_terms .' '. $this->description;

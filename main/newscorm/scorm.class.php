@@ -33,7 +33,7 @@ class scorm extends learnpath {
     public $zipname = ''; // Keeps the zipfile safe for the object's life so that we can use it if no title avail.
     public $lastzipnameindex = 0; // Keeps an index of the number of uses of the zipname so far.
     public $manifest_encoding = 'UTF-8';
-    public $debug = 0;
+    public $debug = 5;
 
     /**
      * Class constructor. Based on the parent constructor.
@@ -263,9 +263,9 @@ class scorm extends learnpath {
      * @return	bool	Returns -1 on error
      */
     function import_manifest($course_code, $use_max_score = 1) {
-        if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }        
+        if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];        
+        $course_id = $course_info['real_id'];
 
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -363,13 +363,7 @@ class scorm extends learnpath {
 
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
-                $sql_item = "INSERT INTO $new_lp_item " .
-                        "(c_id, lp_id,item_type,ref,title," .
-                        "path,min_score,max_score, $field_add" .
-                        "parent_item_id,previous_item_id,next_item_id," .
-                        "prerequisite,display_order,launch_data," .
-                        "parameters) " .
-                        "VALUES " .
+                $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters) VALUES " .
                         "($course_id, $lp_id, '$type','".$identifier."','".$title."'," .
                         "'$path',0,$max_score, $value_add" .
                         "$parent, $previous, 0, " .
@@ -462,15 +456,15 @@ class scorm extends learnpath {
      */
     function import_package($zip_file_info, $current_dir = '') {
         if ($this->debug > 0) { error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0); }
-        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+
         $maxFilledSpace = DocumentManager :: get_course_quota();
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
         if ($this->debug > 1) { error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
-        $course_rel_dir  = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
-        $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Sbsolute system path for this course.
-        $current_dir = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
+        $course_rel_dir     = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
+        $course_sys_dir     = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
+        $current_dir        = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
         if ($this->debug > 1) { error_log('New LP - import_package() - current_dir = '.$current_dir, 0); }
 
          //$uploaded_filename = $_FILES['userFile']['name'];
@@ -499,7 +493,7 @@ class scorm extends learnpath {
         $manifest_list = array();
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        foreach($zipContentArray as $thisContent) {
+        foreach ($zipContentArray as $thisContent) {
             //error_log('Looking at  '.$thisContent['filename'], 0);
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 $this->set_error_msg("File $file contains a PHP script");
@@ -571,21 +565,23 @@ class scorm extends learnpath {
             $saved_dir = getcwd();
             chdir($course_sys_dir.$new_dir);
             $unzippingState = $zipFile->extract();
-            for($j = 0; $j < count($unzippingState); $j++) {
+            for ($j = 0; $j < count($unzippingState); $j++) {
                 $state = $unzippingState[$j];
 
                 // TODO: Fix relative links in html files (?)
                 $extension = strrchr($state['stored_filename'], '.');
                 if ($this->debug >= 1) { error_log('New LP - found extension '.$extension.' in '.$state['stored_filename'], 0); }
-
             }
 
             if (!empty($new_dir)) {
                 $new_dir = $new_dir.'/';
             }
             // Rename files, for example with \\ in it.
+
+            if ($this->debug >= 1) { error_log('New LP - try to open: '.$course_sys_dir.$new_dir, 0); }
+
             if ($dir = @opendir($course_sys_dir.$new_dir)) {
-                if ($this->debug == 1) { error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0); }
+                if ($this->debug >= 1) { error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0); }
                 while ($file=readdir($dir)) {
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
@@ -596,7 +592,10 @@ class scorm extends learnpath {
                         //$safe_file = replace_dangerous_char($file, 'strict');
                         $find_str = array('\\', '.php', '.phtml');
                         $repl_str = array('/', '.txt', '.txt');
-                        $safe_file = str_replace($find_str, $repl_str,$file);
+                        $safe_file = str_replace($find_str, $repl_str, $file);
+
+                        if ($this->debug >= 1) { error_log('Comparing:  '.$safe_file, 0); }
+                        if ($this->debug >= 1) { error_log('and:  '.$file, 0); }
 
                         if ($safe_file != $file) {
                             //@rename($course_sys_dir.$new_dir, $course_sys_dir.'/'.$safe_file);
@@ -609,13 +608,13 @@ class scorm extends learnpath {
                                         $mybasedir = $mybasedir.$mysubdir.'/';
                                         if (!is_dir($mybasedir)) {
                                             @mkdir($mybasedir, api_get_permissions_for_new_directories());
-                                            if ($this->debug == 1) { error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.', 0); }
+                                            if ($this->debug >= 1) { error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.', 0); }
                                         }
                                     }
                                 }
                             }
                             @rename($course_sys_dir.$new_dir.$file,$course_sys_dir.$new_dir.$safe_file);
-                            if ($this->debug == 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
+                            if ($this->debug >= 1) { error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file, 0); }
                         }
                         //set_default_settings($course_sys_dir, $safe_file, $filetype);
                     }
@@ -625,7 +624,7 @@ class scorm extends learnpath {
                 chdir($saved_dir);
 
                 api_chmod_R($course_sys_dir.$new_dir, api_get_permissions_for_new_directories());
-                if ($this->debug > 1) { error_log('New LP - changed back to init dir', 0); }
+                if ($this->debug > 1) { error_log('New LP - changed back to init dir: '.$course_sys_dir.$new_dir, 0); }
             }
         } else {
             return '';

@@ -121,9 +121,7 @@ class learnpath {
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-
-            //$id = Database::escape_integer($id);
-            $lp_id = $this->escape_string($lp_id);
+            $lp_id = intval($lp_id);
             $sql = "SELECT * FROM $lp_table WHERE id = '$lp_id' AND c_id = $course_id";
             if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0); }
             $res = Database::query($sql);
@@ -144,7 +142,7 @@ class learnpath {
                 $this->path             = $row['path'];
                 $this->preview_image    = $row['preview_image'];
                 $this->author           = $row['author'];
-                $this->hide_toc_frame = $row['hide_toc_frame'];
+                $this->hide_toc_frame   = $row['hide_toc_frame'];
                 $this->lp_session_id    = $row['session_id'];
                 $this->use_max_score    = $row['use_max_score'];
 
@@ -5486,7 +5484,6 @@ class learnpath {
                     $return .= $msg;
 
                 $return .= '<h3>'.$row['title'].'</h3>';
-                //var_dump($row);
                 switch ($row['item_type']) {
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
@@ -8059,8 +8056,11 @@ class learnpath {
         }
         $zip_files = $zip_files_abs = $zip_files_dist = array();
 
+        //Removes ./ at the end of the path
+        $this->path = str_replace('/.', '', $this->path);
+
         if (is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')) {
-            // Remove the possible . at the end of the path.
+            // Remove the possible . at the end of the path
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
             $dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
             mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
@@ -8113,6 +8113,7 @@ class learnpath {
                     $inc_docs = $item->get_resources_from_source(null, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
                 else
                     $inc_docs = $item->get_resources_from_source();
+
                 // Give a child element <item> to the <organization> element.
                 $my_item_id = $item->get_id();
                 $my_item = $xmldoc->createElement('item');
@@ -8152,13 +8153,15 @@ class learnpath {
 
                 // Get the path of the file(s) from the course directory root.
                 $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
-                
-                //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
-                $my_xml_file_path = $my_file_path;
+
+                //$my_xml_file_path = $my_file_path;
+                $my_xml_file_path = str_replace('/document/learning_path/'.$this->path, '', $my_file_path );
+
                 $my_sub_dir = dirname($my_file_path);
                 $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
                 //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
                 $my_xml_sub_dir = $my_sub_dir;
+
                 // Give a <resource> child to the <resources> element
                 $my_resource = $xmldoc->createElement('resource');
                 $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
@@ -8180,7 +8183,9 @@ class learnpath {
 
                 // Dependency to other files - not yet supported.
                 $i = 1;
+
                 foreach ($inc_docs as $doc_info) {
+
                     if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
                     $my_dep = $xmldoc->createElement('resource');
                     $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
@@ -8664,10 +8669,12 @@ class learnpath {
                 }
             }
         }
+
         $organizations->appendChild($organization);
         $root->appendChild($organizations);
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
+
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
@@ -8677,11 +8684,16 @@ class learnpath {
             if (empty($file_path)) { continue; }
             //error_log(__LINE__.'getting document from '.$sys_course_path.$_course['path'].'/'.$file_path.' removing '.$sys_course_path.$_course['path'].'/',0);
             $dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
+
+            $dest_file = str_replace('/document/learning_path/'.$this->path, '', $dest_file);
+            var_dump($dest_file);
+
             $this->create_path($dest_file);
             //error_log('copy '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/'.$file_path.' to '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/'.$file_path,0);
             //echo $main_path.$file_path.'<br />';
             @copy($sys_course_path.$_course['path'].'/'.$file_path, $dest_file);
-            // Check if the file needs a link update.
+
+            // Check if the file needs a link update
             if (in_array($file_path, array_keys($link_updates))) {
                 $string = file_get_contents($dest_file);
                 unlink($dest_file);
@@ -8702,6 +8714,7 @@ class learnpath {
                 file_put_contents($dest_file, $string);
             }
         }
+
         foreach ($zip_files_abs as $file_path) {
             if (empty($file_path)) { continue; }
             //error_log(__LINE__.'checking existence of '.$main_path.$file_path.'', 0);
@@ -8732,6 +8745,7 @@ class learnpath {
                 file_put_contents($dest_file, $string);
             }
         }
+
         if (is_array($links_to_create)) {
             foreach ($links_to_create as $file => $link) {
                $file_content = '<!DOCTYPE html
@@ -8746,9 +8760,10 @@ class learnpath {
         <div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div>
     </body>
 </html>';
-                file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
+            file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
             }
         }
+
         // Add non exportable message explanation.
         $lang_not_exportable = get_lang('ThisItemIsNotExportable');
         $file_content = '<!DOCTYPE html

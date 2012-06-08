@@ -20,10 +20,8 @@ api_protect_course_script();
 if (!isset($_course)) {
     api_not_allowed(true);
 }
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $doc_url = $_GET['doc_url'];
-
 // Change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
@@ -68,15 +66,16 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	// Launch event
 	event_download($doc_url);
 }
-
+//var_dump($sys_course_path.$doc_url, $sys_course_path.'/');
+//var_dump(Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/'));
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
-    $full_file_name = $sys_course_path.$doc_url;    
+    $full_file_name = $sys_course_path.$doc_url;
     // Check visibility of document and paths    doc_url
     //var_dump($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
     $is_visible = false;
     //$course_info   = api_get_course_info(api_get_course_id());
     //$document_id = DocumentManager::get_document_id($course_info, $doc_url);
-    
+
     //HotPotatoes_files
     //if ($document_id) {
     	// Correct choice for strict security (only show if whole tree visible)
@@ -87,7 +86,7 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     if (!api_is_allowed_to_edit() && !$is_visible) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.
-    }    
+    }
     DocumentManager::file_send_for_download($full_file_name);
 }
 exit;

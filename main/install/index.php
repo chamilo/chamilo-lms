@@ -213,7 +213,7 @@ if (!isset($_GET['running'])) {
 	$dbPassForm		= '';
  	$dbPrefixForm   = '';
 	$dbNameForm		= 'chamilo';
-	
+
 	$dbStatsForm    = 'chamilo';
 	$dbScormForm    = 'chamilo';
 	$dbUserForm		= 'chamilo';
@@ -301,17 +301,17 @@ if ($encryptPassForm == '1') {
 <head>
 	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
-		/*<![CDATA[*/        
+		/*<![CDATA[*/
 		@import "../css/base.css";
-		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";        
+		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
 		/*]]>*/
 	</style>
-	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>	
+	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>
 	<script type="text/javascript" >
 		$(document).ready( function() {
-            
+
             $("#button_please_wait").hide();
-            
+
 			 //checked
 			if ($('#singleDb1').attr('checked')==false) {
 					//$('#dbStatsForm').removeAttr('disabled');
@@ -324,60 +324,60 @@ if ($encryptPassForm == '1') {
 					$('#dbStatsForm').attr('value','chamilo_main');
 					$('#dbUserForm').attr('value','chamilo_main');
 			}
-            
+
 			$("button").addClass('btn');
-            
+
     		//Allow Chamilo install in IE
     		$("button").click(function() {
     			$("#is_executable").attr("value",$(this).attr("name"));
     		});
 
 			//Blocking step6 button
-    		$("#button_step6").click(function() {        		
+    		$("#button_step6").click(function() {
             	$("#button_step6").hide();
     			$("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
     			$("#is_executable").attr("value",'step6');
-        	});    		
+        	});
 	 	});
-        
+
 		function show_hide_tracking_and_user_db (my_option) {
 			if (my_option=='singleDb1') {
 				$('#optional_param2').hide();
-				$('#optional_param4').hide();				
-				
+				$('#optional_param4').hide();
+
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			} else if (my_option=='singleDb0') {
 				$('#optional_param2').show();
 				$('#optional_param4').show();
-				
+
 				$('#dbStatsForm').attr('value','chamilo_main');
 				$('#dbUserForm').attr('value','chamilo_main');
 			}
 		}
 
 		init_visibility=0;
-		function show_hide_option() {			
+		function show_hide_option() {
 			if (init_visibility == 0) {
 				$('#optional_param1').show();
-						
-				if ($('#singleDb1').attr("checked") == true) {										
+
+				if ($('#singleDb1').attr("checked") == true) {
 					//$('#optional_param2').hide();
 					//$('#optional_param4').hide();
 					$('#optional_param5').hide();
-				} else {					
+				} else {
 					//$('#optional_param2').show();
 					//$('#optional_param4').show();
-					$('#optional_param5').show();  					
-                }	
-                
+					$('#optional_param5').show();
+                }
+
 				//document.getElementById('optional_param2').style.display = '';
 				if (document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = '';
 				}
-				
+
 				//document.getElementById('optional_param5').style.display = '';
 				//document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
@@ -396,7 +396,7 @@ if ($encryptPassForm == '1') {
 				init_visibility = 0;
 			}
 			return false;
-		}	
+		}
 
         $(document).ready( function() {
             $(".advanced_parameters").click(function() {
@@ -439,25 +439,33 @@ if ($encryptPassForm == '1') {
                     }
             });
         }
-    </script>        
+    </script>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 
-<div id="wrapper">	
+<div id="wrapper">
 <div id="main" class="container">
     <header>
 		<div class="row">
             <div id="header_left" class="span4">
-                <div id="logo">	   
-                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />        
-                </div>	
+                <div id="logo">
+                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+                </div>
             </div>
-        </div>        
-	</header>    
+        </div>
+        <div class="subnav">
+            <ul class="nav nav-pills">
+                <li id="current">
+                    <a target="_top" href="index.php"><?php echo get_lang('Homepage'); ?></a>
+                </li>
+            </ul>
+        </div>
+	</header>
+    <br />
     <div class="row">
         <div class="span3">
-            <div class="well">		
+            <div class="well">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
                     <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
@@ -467,7 +475,7 @@ if ($encryptPassForm == '1') {
                     <li <?php step_active('6'); ?>><?php echo get_lang('PrintOverview'); ?></li>
                     <li <?php step_active('7'); ?>><?php echo get_lang('Installing'); ?></li>
                 </ol>
-            </div>            
+            </div>
             <div id="note">
 				<a class="btn" href="../../documentation/installation_guide.html" target="_blank">
                     <?php echo get_lang('ReadTheInstallationGuide'); ?>
@@ -478,17 +486,17 @@ if ($encryptPassForm == '1') {
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
-    
+
     $instalation_type_label = '';
-    if ($installType == 'new'){ 
-        $instalation_type_label  = get_lang('NewInstallation'); 
+    if ($installType == 'new'){
+        $instalation_type_label  = get_lang('NewInstallation');
     }elseif ($installType == 'update') {
         $update_from_version = isset($update_from_version) ? $update_from_version : null;
         $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
     }
     if (!empty($instalation_type_label)) {
     	echo "<h2>$instalation_type_label</h2><hr />";
-    }        
+    }
     ?>
 	<input type="hidden" name="updatePath"           value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
 	<input type="hidden" name="urlAppendPath"        value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
@@ -540,11 +548,11 @@ if (@$_POST['step2']) {
 	//STEP 3 : LICENSE
 	display_license_agreement();
 } elseif (@$_POST['step3']) {
-	//STEP 4 : MYSQL DATABASE SETTINGS	
+	//STEP 4 : MYSQL DATABASE SETTINGS
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
 } elseif (@$_POST['step4']) {
 	//STEP 5 : CONFIGURATION SETTINGS
-	
+
 	//if update, try getting settings from the database...
 	if ($installType == 'update') {
 		$db_name = $dbNameForm;
@@ -618,22 +626,22 @@ if (@$_POST['step2']) {
 	</div>
     <div class="RequirementContent">
 		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-	</div><br />	
-    
-	<blockquote>        
+	</div><br />
+
+	<blockquote>
     <?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
-	<?php else: ?>	
-	<?php endif; 
-    
+	<?php else: ?>
+	<?php endif;
+
 	if (api_is_western_name_order()) {
 		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
 	} else {
 		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
 	}
-	
-    echo get_lang('AdminEmail').' : '.$emailForm; ?><br />    
+
+    echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
@@ -641,7 +649,7 @@ if (@$_POST['step2']) {
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
 	<?php //echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
-	
+
 	<?php
 	if (!$singleDbForm) {
 		//Showing this data only in case a user migrates from a 3 main databases (main, user, tracking)
@@ -660,7 +668,7 @@ if (@$_POST['step2']) {
 			echo '<br />';
 		}
 	}
-	
+
 	//echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
 	<?php //echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
@@ -676,13 +684,13 @@ if (@$_POST['step2']) {
 	</blockquote>
 
 	<?php if ($installType == 'new'): ?>
-	<div style="background-color:#FFFFFF">	
+	<div style="background-color:#FFFFFF">
 		<div class="warning-message">
 		<center>
 			<h3><?php echo get_lang('Warning'); ?> !</h3>
 			<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
 		</center>
-		</div>	
+		</div>
 	</div>
 	<?php endif; ?>
 
@@ -695,7 +703,7 @@ if (@$_POST['step2']) {
 	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
                 <?php echo get_lang('InstallChamilo'); ?>
             </button>
-            
+
             <button class="save" id="button_please_wait"></button>
 		</td>
 	</tr>
@@ -705,7 +713,7 @@ if (@$_POST['step2']) {
 } elseif (@$_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
-	
+
 	if ($installType == 'update') {
 
 		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -720,7 +728,7 @@ if (@$_POST['step2']) {
 		$perm_file = api_get_permissions_for_new_files();
 
 		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
-        
+
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
@@ -730,7 +738,7 @@ if (@$_POST['step2']) {
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
 		}
-		
+
 		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {
@@ -784,24 +792,24 @@ if (@$_POST['step2']) {
                 Database::query("SET NAMES 'utf8';");
 
             case '1.8.7':
-            case '1.8.7.1': 
+            case '1.8.7.1':
                 include 'update-db-1.8.7-1.8.8.inc.php';
-                include 'update-files-1.8.7-1.8.8.inc.php';                                            
+                include 'update-files-1.8.7-1.8.8.inc.php';
             case '1.8.8':
             case '1.8.8.2':
-                //Only updates the configuration.inc.php with the new version 
+                //Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
-			case '1.8.8.4':				
+			case '1.8.8.4':
 				include 'update-db-1.8.8-1.9.0.inc.php';
 				//include 'update-files-1.8.8-1.9.0.inc.php';
 				//Only updates the configuration.inc.php with the new version
 				include 'update-configuration.inc.php';
-				
+
                 break;
             default:
 				break;
 		}
-	} else {        
+	} else {
 		set_file_folder_permissions();
 		database_server_connect();
 

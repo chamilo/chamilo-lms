@@ -26,6 +26,7 @@
         {% include "default/layout/topbar.tpl" %}
 
         <div id="main" class="container">
+
             <header>
                 <div class="row">
                     <div id="header_left" class="span4">
@@ -73,16 +74,18 @@
                     </div>
                 {% endif %}
 
-            {# menu #}
-            {% if menu is not null %}
-                <div class="subnav">
-                    {{ menu }}
-                </div>
-            {% endif %}
+                {# menu #}
+                {% if menu is not null %}
+                    <div class="subnav">
+                        {{ menu }}
+                    </div>
+                {% endif %}
+
+                {# breadcrumb #}
+                {{ breadcrumb }}
             </header>
 
-            {# breadcrumb #}
-            {{ breadcrumb }}
+
 
             <div class="row">
             {# course navigation links/shortcuts need to be activated by the admin #}

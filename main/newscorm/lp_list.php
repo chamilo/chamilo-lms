@@ -503,4 +503,6 @@ if (!empty($flat_list)) {
         echo '</div>';
     }
 }
+$course_info = api_get_course_info();
+$result = learnpath::generate_learning_path_folder($course_info);
 Display::display_footer();

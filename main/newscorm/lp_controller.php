@@ -442,9 +442,7 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
             require 'lp_view_item.php';
         }
-
         break;
-
     case 'upload':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -489,7 +487,6 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php';
         } else {
             $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
-            var_dump($result);exit;
             if (!$result) {
                 require 'lp_list.php';
             }

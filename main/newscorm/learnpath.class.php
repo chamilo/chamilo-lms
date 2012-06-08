@@ -5271,9 +5271,11 @@ class learnpath {
         return $return;
     }
 
-    public function generate_lp_folder($course) {
-    	$filepath = '';
-    	//Creating learning_path folder
+    /**
+     * Creates the default learning path folder
+     */
+    public function generate_learning_path_folder($course) {
+        //Creating learning_path folder
     	$dir = '/learning_path';
     	$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
     	$folder = null;
@@ -5282,8 +5284,13 @@ class learnpath {
     	} else {
     		$folder = true;
     	}
+        return $folder;
+    }
 
+    public function generate_lp_folder($course) {
+    	$filepath = '';
     	$dir = '/learning_path/';
+        $folder = self::generate_learning_path_folder($course);
     	//Creating LP folder
     	if ($folder) {
     		//Limits title size

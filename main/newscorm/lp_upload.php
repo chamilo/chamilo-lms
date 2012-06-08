@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     	$maker = Database::escape_string($_REQUEST['content_maker']);
     }
 
+
+
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';

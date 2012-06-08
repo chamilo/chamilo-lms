@@ -1742,10 +1742,8 @@ class SessionManager {
 
     function protect_session_edit($id) {
         api_protect_admin_script(true);
-
         $session_info = self::fetch($id);
-
-        if (api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
+        if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
             if ($session_info['session_admin_id'] != api_get_user_id()) {
                 api_not_allowed(true);
             }

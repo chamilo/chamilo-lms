@@ -27,7 +27,7 @@ $ErrorCode = 'Error code';
 
 // Error code 1.
 $IncorrectPhpVersionTitle = 'Incorrect PHP version';
-$IncorrectPhpVersionDescription = 'Warning: we have detected that your version of PHP is %s1. To install Chamilo, you need to have PHP %s2 or superior. If you don\'t know what we\'re talking about, please contact your hosting provider or your support team. 
+$IncorrectPhpVersionDescription = 'Warning: we have detected that your version of PHP is %s1. To install Chamilo, you need to have PHP %s2 or superior. If you don\'t know what we\'re talking about, please contact your hosting provider or your support team.
     %s3 Read the installation guide.';
 
 // Error code 2.
@@ -52,11 +52,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$theme = 'chamilo/';
 	$css_path = 'main/css/';
-    $css_file              = $css_path.$theme.'default.css';    
+    $css_file              = $css_path.$theme.'default.css';
     $bootstrap_file        = $css_path.'bootstrap.css';
 	$css_base_file         = $css_path.'base.css';
-	$css_base_chamilo_file = $css_path.'base_chamilo.css';		
-    
+	$css_base_chamilo_file = $css_path.'base_chamilo.css';
+
     $css_list = array($css_base_file, $css_base_chamilo_file, $bootstrap_file, $css_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
@@ -70,8 +70,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$pos = $test_pos + 1;
 			}
 			$root_rel = substr($root_rel, 0, $pos);
-		}
-		elseif (strpos($root_rel, '/courses/') !== false) {
+		} elseif (strpos($root_rel, '/courses/') !== false) {
 			$pos = 0;
 			while (($test_pos = strpos(substr($root_rel, $pos, strlen($root_rel)), '/courses/')) !== false) {
 				$pos = $test_pos + 1;
@@ -81,15 +80,15 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	}
 
 	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
-	
+
 	$css_def = '';
     foreach ($css_list as $css_item) {
         $css_base_chamilo_file = $root_sys.$css_item;
-        if (file_exists($css_base_chamilo_file)) {            
+        if (file_exists($css_base_chamilo_file)) {
             $css_def .= @file_get_contents($css_base_chamilo_file);
         }
-    }    
-    
+    }
+
     $css_def = str_replace("@import url('bootstrap.css');", '', $css_def);
 	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
 	$css_def = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css_def);
@@ -119,7 +118,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['title'] = $InstallationTitle;
 			if (($pos = strpos($InstallationDescription, '%s')) === false) {
 				$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
-			}			
+			}
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
                                         <p class="download-info">
@@ -160,7 +159,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$global_error_message['encoding'] = 'UTF-8';
 	$global_error_message['css'] = $css_def;
 	$global_error_message['chamilo_logo'] = $root_rel.$css_path.$theme.'images/header-logo.png';
-		
+
 
 // {ORGANISATION}	moved from the header
 	$global_error_message_page =
@@ -168,7 +167,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 <!DOCTYPE html>
 <html>
 		<head>
-			<title>{TITLE}</title>			
+			<title>{TITLE}</title>
             <meta charset="{ENCODING}" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
@@ -181,34 +180,44 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             <div id="main" class="container">
                 <header>
                     <div class="row">
-                    <div id="header_left" class="span4">
-                        <div id="logo">
-                            <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">        
+                        <div id="header_left" class="span4">
+                            <div id="logo">
+                                <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">
+                            </div>
                         </div>
-                    </div>                
-                </header>	
-                <ul class="breadcrumb">
-                    <li><a href="#">{SECTION}</a></li>
-                </ul>
+                    </div>
+
+                    <div class="subnav">
+                        <ul class="nav nav-pills">
+                            <li id="current">
+                                <a target="_top" href="index.php">Homepage</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li><a href="#">{SECTION}</a></li>
+                    </ul>
+                </header>
+                <br />
                 <section>
                     <div style="text-align:center">
                         {DESCRIPTION}
-                        {CODE}				
+                        {CODE}
                     </div>
-                </section>        
+                </section>
 			</div>
 			<div class="push"/></div>
 		</div>
 
 		<footer>
             <div class="container">
-                <div class="row">  
+                <div class="row">
                     <div style="text-align: center;">
                     &nbsp;<br />{POWERED_BY}
                     </div>
                 </div>
                 </div>
-			
+
 		</footer>
 		</body>
 </html>

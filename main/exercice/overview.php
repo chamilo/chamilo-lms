@@ -160,13 +160,13 @@ if (!empty($attempts)) {
 	//Hiding score and answer
 	switch($objExercise->results_disabled) {
 		case EXERCISE_FEEDBACK_TYPE_END:
-			$header_names = array(get_lang('Attempt'), get_lang('Date'), get_lang('Score'), get_lang('Details'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
 			break;
 		case EXERCISE_FEEDBACK_TYPE_DIRECT:
-			$header_names = array(get_lang('Attempt'), get_lang('Date'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'));
 			break;
 		case EXERCISE_FEEDBACK_TYPE_EXAM:
-			$header_names = array(get_lang('Attempt'), get_lang('Date'), get_lang('Score'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
 			break;
 	}
 	$row = 0;

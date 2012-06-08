@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     $stopping_error = false;
 
     $s = $_FILES['user_file']['name'];
-     
+
     // Get name of the zip file without the extension.
     $info = pathinfo($s);
     $filename = $info['basename'];
@@ -44,12 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
-    
-
     require_once 'learnpath.class.php';
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
-   
-    
+
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {
     	$proximity = Database::escape_string($_REQUEST['content_proximity']);
@@ -58,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     if (!empty($_REQUEST['content_maker'])) {
     	$maker = Database::escape_string($_REQUEST['content_maker']);
     }
-    
+
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
@@ -69,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
             }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
-                $oScorm->import_manifest(api_get_course_id(),$_REQUEST['use_max_score']);
+                $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
             } else {
                 // Show error message stored in $oScrom->error_msg.
             }
@@ -107,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
     }
 } elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
     // end if is_uploaded_file
-    
+
     // If file name given to get in claroline/upload/, try importing this way.
 
     // A file upload has been detected, now deal with the file...

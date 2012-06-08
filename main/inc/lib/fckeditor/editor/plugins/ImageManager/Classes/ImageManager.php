@@ -245,7 +245,7 @@ class ImageManager
 
 				if ($is_dir && !$this->isThumbDir($entry)) {
 				    global $_course;
-					if (isset($_course['dbName']) && $_course<>'-1') {
+					if (isset($_course) && !empty($_course) && isset($_course['code'])) {
 						//checking visibility
 						$base_dir = substr($dir_entry, 0, strpos($dir_entry,'/document/')+9);
 						$new_dir  = substr($dir_entry, strlen($base_dir),-1); //
@@ -482,21 +482,18 @@ class ImageManager
 	 * image dimensions will be accepted.
 	 * @return null
 	 */
-	function processUploads()
-	{
+	function processUploads() {
 		if (!$this->isValidBase())
 			return;
 
 		$relative = null;
-
-		if(isset($_POST['dir']))
+		if (isset($_POST['dir']))
 			$relative = rawurldecode($_POST['dir']);
 		else
 			return;
 
 		//check for the file, and must have valid relative path
-		if(isset($_FILES['upload']) && $this->validRelativePath($relative))
-		{
+		if(isset($_FILES['upload']) && $this->validRelativePath($relative)) {
 			return $this->_processFiles($relative, $_FILES['upload']);
 		}
 	}
@@ -516,18 +513,15 @@ class ImageManager
 	function _processFiles($relative, $file)
 	{
 		global $_course;
-		if($file['error']!=0)
-		{
+		if($file['error']!=0) {
 			return false;
 		}
 
-		if(!is_file($file['tmp_name']))
-		{
+		if(!is_file($file['tmp_name'])) {
 			return false;
 		}
 
-		if(!is_uploaded_file($file['tmp_name']))
-		{
+		if(!is_uploaded_file($file['tmp_name'])) {
 			Files::delFile($file['tmp_name']);
 			return false;
 		}
@@ -536,36 +530,29 @@ class ImageManager
 		$file_name = $file['name'];
 		$extension = explode('.', $file_name);
 		$count = count($extension);
-		if ($count == 1)
-		{
+		if ($count == 1) {
 			$extension = '';
-		}
-		else
-		{
+		} else {
 			$extension = strtolower($extension[$count - 1]);
 		}
 
 		// Checking for image by file extension first, using the configuration file.
-		if (!in_array($extension, $this->config['accepted_extensions']))
-		{
+		if (!in_array($extension, $this->config['accepted_extensions'])) {
 			Files::delFile($file['tmp_name']);
 			return false;
 		}
 
 		// Second, filtering using a special function of the system.
 		$result = filter_extension($file_name);
-		if (($result == 0) || ($file_name != $file['name']))
-		{
+		if (($result == 0) || ($file_name != $file['name'])) {
 			Files::delFile($file['tmp_name']);
 			return false;
 		}
 
 		// Checking for a valid image by reading binary file (partially in most cases).
-		if ($this->config['validate_images'])
-		{
+		if ($this->config['validate_images']) {
 			$imgInfo = @getImageSize($file['tmp_name']);
-			if(!is_array($imgInfo))
-			{
+			if(!is_array($imgInfo)) {
 				Files::delFile($file['tmp_name']);
 				return false;
 			}
@@ -578,7 +565,7 @@ class ImageManager
 		//no copy error
 		if (!is_int($result)) {
 
-	   	    if (isset($_course['dbName']) && $_course<>'-1') {
+	   	    if (isset($_course) && !empty($_course) && isset($_course['code'])) {
 				//adding the document to the DB
 				global $to_group_id;
 
@@ -757,7 +744,7 @@ class ImageManager
 		if(Files::delFile($fullpath)){
 			//deleting from the DB
 			global $_course;
-			if (isset($_course['dbName']) && $_course<>'-1') {
+			if (isset($_course) && !empty($_course) && isset($_course['code'])) {
 				$document_path = substr($fullpath, strpos($fullpath,'/document/')+9, strlen($fullpath)); //   /shared_folder/4/name
 				DocumentManager::delete_document($_course,$document_path,$fullpath);
 			}
@@ -781,7 +768,7 @@ class ImageManager
 		// now we use the default delete_document function
 		//return Files::delFolder($fullpath,true); //delete recursively.
 		global $_course;
-		if (isset($_course['dbName']) && $_course<>'-1') {
+		if (isset($_course) && !empty($_course) && isset($_course['code'])) {
 			$path_dir = substr($fullpath, strpos($fullpath,'/document/')+9,-1); //
 			$base_dir  = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
 			return DocumentManager::delete_document($_course,$path_dir,$base_dir);
@@ -827,19 +814,17 @@ class ImageManager
 				// now the create_unexisting_directory will create the folder
 				//$result = Files::createFolder($fullpath);
 
-					global $_course;
-					if (isset($_course['dbName']) && $_course<>'-1') {
-					//@todo make this str to functions
+                global $_course;
+                if (isset($_course) && !empty($_course) && isset($_course['code'])) {
+                //@todo make this str to functions
 					$base_dir = substr($path, 0, strpos($path,'/document/')+9); //
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
 					$created_dir = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0,0, $base_dir, $new_dir,$newDir);
 					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 					$current_session_id = api_get_session_id();
 					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
-				}
-				else
-				{
-				 	Return Files::createFolder($fullpath);
+				} else {
+				 	return Files::createFolder($fullpath);
 				}
 				return true;
 			}

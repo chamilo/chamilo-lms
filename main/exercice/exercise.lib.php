@@ -844,8 +844,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 
 		$sqlFromOption                      = "";
 		$sqlWhereOption                     = "";           // for hpsql
-	    $sql_inner_join_tbl_user            = "";
-
+	    
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
         //Hack in order to filter groups

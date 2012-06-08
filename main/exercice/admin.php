@@ -248,20 +248,20 @@ if ($cancelQuestion) {
 
 if (isset($clone_question) && !empty($objExercise->id)) {
 	$old_question_obj = Question::read($clone_question);
-	$old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');	
-	
+	$old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
+
 	$new_id = $old_question_obj->duplicate();
 	$new_question_obj = Question::read($new_id);
 	$new_question_obj->addToList($exerciseId);
-	
+
 	// This should be moved to the duplicate function
 	$new_answer_obj = new Answer($clone_question);
 	$new_answer_obj->read();
 	$new_answer_obj->duplicate($new_id);
-    
+
     //Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
-    
+
 	header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
 	exit;
 }
@@ -309,8 +309,8 @@ if ($modifyIn == 'thisExercise') {
 		$noPHP_SELF=true;
 	}
 }
-$htmlHeadXtra[] = '<script type="text/javascript"> 
-        
+$htmlHeadXtra[] = '<script type="text/javascript">
+
 function multiple_answer_true_false_onchange(variable) {
         var result = variable.checked;
         var id = variable.id;
@@ -320,10 +320,10 @@ function multiple_answer_true_false_onchange(variable) {
         	result = 1;
         } else {
             result = 0;
-        }       
+        }
         document.getElementById(weight_id).value = array_result[result];
 }
-              
+
 
 </script>';
 
@@ -443,7 +443,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 Display::display_header($nameTools,'Exercise');
 
 $course_id = api_get_course_int_id();
-	
+
 $show_quiz_edition = true;
 if (isset($exerciseId) && !empty($exerciseId)) {
 	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
@@ -477,11 +477,15 @@ if ($inATest) {
     }
 
     $maxScoreAllQuestions = 0;
-    foreach ($objExercise->questionList as $q) {
-    $oQ = Question::read($q);
-    $maxScoreAllQuestions += $oQ->selectWeighting();
+    if (!empty($objExercise->questionList)) {
+        foreach ($objExercise->questionList as $q) {
+            $question = Question::read($q);
+            if ($question) {
+                $maxScoreAllQuestions += $question->selectWeighting();
+            }
+        }
     }
-    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(),$maxScoreAllQuestions).'</span>';
+    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions).'</span>';
     echo '</div>';
 } else if (isset($_GET['newQuestion'])) {
 	// we are in create a new question from question pool not in a test
@@ -492,7 +496,7 @@ if ($inATest) {
 	// If we are in question_poolbut not in an test, go back to question create in pool
 	echo '<div class="actions">';
 	echo '<a href="question_pool.php">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
-	echo '</div>';	
+	echo '</div>';
 }
 
 if (isset($_GET['message'])) {
@@ -504,18 +508,18 @@ if (isset($_GET['message'])) {
 if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = Security::remove_XSS($_REQUEST['answerType']);
-	echo '<input type="hidden" name="Type" value="'.$type.'" />';	
+	echo '<input type="hidden" name="Type" value="'.$type.'" />';
 	require 'question_admin.inc.php';
 }
 
-if (isset($_GET['hotspotadmin'])) {    
+if (isset($_GET['hotspotadmin'])) {
     if (!is_object($objQuestion)) {
         $objQuestion = Question :: read($_GET['hotspotadmin']);
     }
     if (!$objQuestion) {
         api_not_allowed();
-    }    
-	require 'hotspot_admin.inc.php';    
+    }
+	require 'hotspot_admin.inc.php';
 }
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {

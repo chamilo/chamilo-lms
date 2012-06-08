@@ -2357,6 +2357,7 @@ function api_display_tool_title($title_element) {
  *
  * @author Roan Embrechts
  * @author Patrick Cool
+ * @author Julio Montoya, changes added in Chamilo
  * @version 1.2
  * @todo rewrite code so it is easier to understand
  */
@@ -2364,7 +2365,6 @@ function api_display_tool_view_option() {
     if (api_get_setting('student_view_enabled') != 'true') {
         return '';
     }
-
 
     $sourceurl = '';
     $is_framed = false;
@@ -2472,7 +2472,12 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     $is_allowed_coach_to_edit 	= api_is_coach();
     $session_visibility 		= api_get_session_visibility($my_session_id);
 
-    $is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
+    //Admins can edit anything
+    if (api_is_platform_admin(false)) {
+        return true;
+    }
+
+    $is_courseAdmin = api_is_course_admin();
 
     if (!$is_courseAdmin && $tutor) {   // If we also want to check if the user is a tutor...
         $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
@@ -2488,8 +2493,8 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
         } else {
             $is_courseAdmin = $is_courseAdmin;
         }
-
     }
+
     if (!$is_courseAdmin && $session_coach) {
         $is_courseAdmin = $is_courseAdmin || api_is_coach();
     }

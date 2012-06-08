@@ -30,7 +30,7 @@ if (!api_is_allowed_to_edit()) {
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', '256M');
 	ini_set('max_execution_time', 1800);
-    //ini_set('post_max_size', "512M");     
+    //ini_set('post_max_size', "512M");
 }
 
 // Breadcrumbs
@@ -60,8 +60,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',false);
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	$cb = new CourseBuilder();
-	$course = $cb->build();	
-    
+	$course = $cb->build();
+
     $hidden_fields = array();
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course']    = $_POST['destination_course'];
@@ -84,24 +84,24 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         while ($obj = Database::fetch_object($res)) {
             $options[$obj->code] = $obj->title;
         }
-    
+
         $form = new FormValidator('copy_course', 'post', 'copy_course.php');
         $form->addElement('header','' );
         $form->addElement('select','destination_course', get_lang('SelectDestinationCourse'), $options);
-        
+
         $group = array();
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('LetMeSelectItems'), 'select_items');
         $form->addGroup($group, '', get_lang('SelectOptionForBackup'));
-        
+
         $group = array();
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameSkip'), FILE_SKIP);
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameRename'), FILE_RENAME);
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
         $form->addGroup($group, '', get_lang('SameFilename'));
-        
+
         $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'),'class="save"');
-        
+
         $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
         $form->display();
 

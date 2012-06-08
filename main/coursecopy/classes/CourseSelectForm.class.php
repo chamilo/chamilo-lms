@@ -33,9 +33,8 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_WIKI]				= get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]			= get_lang('Thematic');
 		$resource_titles[RESOURCE_ATTENDANCE]		= get_lang('Attendance');
-
 ?>
-		<script type="text/javascript">
+		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){
@@ -89,6 +88,8 @@ class CourseSelectForm
 		echo get_lang('SelectResources');
 		echo '</p>';
 
+        Display::display_normal_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
+
 		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
@@ -99,11 +100,11 @@ class CourseSelectForm
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
-		}	
-		
+		}
+
 		$element_count = 0;
-        foreach ($course->resources as $type => $resources) {		    
-            if (count($resources) > 0) {                    			    
+        foreach ($course->resources as $type => $resources) {
+            if (count($resources) > 0) {
 				switch ($type) {
 					//Resources to avoid
 					case RESOURCE_LINKCATEGORY :
@@ -113,8 +114,8 @@ class CourseSelectForm
 					case RESOURCE_QUIZQUESTION:
 					case RESOURCE_SURVEYQUESTION:
 					case RESOURCE_SURVEYINVITATION:
-					case RESOURCE_SCORM:					
-						break;		    
+					case RESOURCE_SCORM:
+						break;
                     default :
 						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript:exp('."'$type'".');" />&nbsp;';
 						echo '<b onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
@@ -123,24 +124,24 @@ class CourseSelectForm
     						Display::display_warning_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
     						Display::display_warning_message(get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'));
 						}
-						if ($type == RESOURCE_DOCUMENT) {                        
+						if ($type == RESOURCE_DOCUMENT) {
                             if (api_get_setting('show_glossary_in_documents') != 'none') {
                                 Display::display_warning_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
                             }
 						}
-                        
+
 						echo '<blockquote>';
-                        
+
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
-                        echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";                        
+                        echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
 						echo '</div><br />';
-                        
+
 						foreach ($resources as $id => $resource) {
                             echo '<label class="checkbox">';
-							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';							
+							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
 							$resource->show();
-							echo '</label>';						
+							echo '</label>';
 						}
 						echo '</blockquote>';
 						echo '</div>';
@@ -151,7 +152,7 @@ class CourseSelectForm
 		}
 
 		if ($avoid_serialize) {
-			/*Documents are avoided due the huge amount of memory that the serialize php function "eats" 
+			/*Documents are avoided due the huge amount of memory that the serialize php function "eats"
 			(when there are directories with hundred/thousand of files) */
 			// this is a known issue of serialize
 			$course->resources['document']= null;
@@ -164,7 +165,7 @@ class CourseSelectForm
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
-		
+
 		if (empty($element_count)) {
 		    Display::display_warning_message(get_lang('NoDataAvailable'));
 		} else {
@@ -231,7 +232,7 @@ class CourseSelectForm
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
 		$table_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-		
+
 		$course_id 		= $course_info['real_id'];
 
 		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
@@ -246,13 +247,13 @@ class CourseSelectForm
 						$condition_session = ' AND d.session_id ='.$session_id;
 					}
 
-					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size 
-							FROM '.$table_doc.' d, '.$table_prop.' p 
+					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+							FROM '.$table_doc.' d, '.$table_prop.' p
 							WHERE 	d.c_id = '.$course_id.' AND
 									p.c_id = '.$course_id.' AND
-									tool 	= \''.TOOL_DOCUMENT.'\' AND 
-									p.ref 	= d.id AND p.visibility != 2 AND 
-									d.id 	= '.$resource_item.$condition_session.' 
+									tool 	= \''.TOOL_DOCUMENT.'\' AND
+									p.ref 	= d.id AND p.visibility != 2 AND
+									d.id 	= '.$resource_item.$condition_session.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -415,17 +416,17 @@ class CourseSelectForm
 					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';
-                    
+
                     echo '<div class="btn-group">';
-					echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>"; 
+					echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>";
                     echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('None')."</a>";
 					echo '</div><br />';
-                    
-					foreach ($resources as $id => $resource) {                        
+
+					foreach ($resources as $id => $resource) {
 						echo ' <label class="checkbox" for="resource['.$course->code.']['.$id.']">';
                         echo '<input type="checkbox" name="resource['.$course->code.']['.$id.']" id="resource['.$course->code.']['.$id.']"/>';
 						$resource->show();
-						echo '</label>';						
+						echo '</label>';
 						echo "\n";
 					}
 					echo '</blockquote>';

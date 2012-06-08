@@ -16,23 +16,23 @@
             <li><a href="#content" accesskey="2">{{"WCAGGoContent"|get_lang}}</a></li>
         </ul>
     </div>
-    <div id="wrapper">    
-        {# Bug and help notifications #}		
+    <div id="wrapper">
+        {# Bug and help notifications #}
         <ul id="navigation" class="notification-panel">
             {{ help_content }}
             {{ bug_notification_link }}
-        </ul>    
+        </ul>
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
 
-        <div id="main" class="container">     
+        <div id="main" class="container">
             <header>
-                <div class="row">                
-                    <div id="header_left" class="span4">                
+                <div class="row">
+                    <div id="header_left" class="span4">
                         {# logo #}
                         {{ logo }}
 
-                        {# plugin_header left #}                            
+                        {# plugin_header left #}
                         {% if plugin_header_left is not null %}
                             <div id="plugin_header_left">
                                 {{ plugin_header_left }}
@@ -47,13 +47,13 @@
                             </div>
                         {% endif %}
                         &nbsp;
-                    </div>                                
-                    <div id="header_right" class="span5">                           
-                        <ul id="notifications" class="nav nav-pills pull-right">        
+                    </div>
+                    <div id="header_right" class="span5">
+                        <ul id="notifications" class="nav nav-pills pull-right">
                             {{ notification_menu }}
                         </ul>
 
-                        {# plugin_header right #}        
+                        {# plugin_header right #}
                         {% if plugin_header_right is not null %}
                             <div id="plugin_header_right">
                                 {{ plugin_header_right }}
@@ -72,20 +72,18 @@
                         </div>
                     </div>
                 {% endif %}
-                    
-                          {# menu #}
+
+            {# menu #}
             {% if menu is not null %}
                 <div class="subnav">
-                    {{ menu }} 
+                    {{ menu }}
                 </div>
             {% endif %}
             </header>
 
-      
-
             {# breadcrumb #}
             {{ breadcrumb }}
-                
+
             <div class="row">
             {# course navigation links/shortcuts need to be activated by the admin #}
             {% include "default/layout/course_navigation.tpl" %}

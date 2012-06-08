@@ -5271,7 +5271,7 @@ class learnpath {
         return $return;
     }
 
-    public function generate_lp_folder($course, $dir) {
+    public function generate_lp_folder($course) {
     	$filepath = '';
     	//Creating learning_path folder
     	$dir = '/learning_path';
@@ -5325,7 +5325,7 @@ class learnpath {
         $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
 
         if (empty($_POST['dir']) && empty($_GET['dir'])) {
-        	$result = $this->generate_lp_folder($_course, $dir);
+        	$result = $this->generate_lp_folder($_course);
         	$dir 		= $result['dir'];
         	$filepath 	= $result['filepath'];
         }
@@ -6966,7 +6966,7 @@ class learnpath {
                             }
                         } else {
                         	global $_course;
-							$result = $this->generate_lp_folder($_course, '');
+							$result = $this->generate_lp_folder($_course);
 							$relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
 							$relative_prefix = '../../';
                         }
@@ -8102,10 +8102,20 @@ class learnpath {
         $org_title = $xmldoc->createElement('title', api_utf8_encode($this->get_name()));
         $organization->appendChild($org_title);
 
+
+        $folder_name = 'document_scorm';
+
+        // Removes the learning_path/scorm_folder path when exporting see #4841
+        $path_to_remove = null;
+        $result = $this->generate_lp_folder($_course);
+        if (isset($result['dir']) && strpos($result['dir'], 'learning_path')) {
+            $path_to_remove = 'document'.$result['dir'];
+            $path_to_replace = $folder_name.'/';
+        }
+
         // For each element, add it to the imsmanifest structure, then add it to the zip.
         // Always call the learnpathItem->scorm_export() method to change it to the SCORM format.
         $link_updates = array();
-
         foreach ($this->items as $index => $item) {
             if (!in_array($item->type, array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION))) {
                 // Get included documents from this item.
@@ -8155,7 +8165,10 @@ class learnpath {
                 $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
 
                 //$my_xml_file_path = $my_file_path;
-                $my_xml_file_path = str_replace('/document/learning_path/'.$this->path, '', $my_file_path );
+                if (!empty($path_to_remove)) {
+                    $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
+                }
+
 
                 $my_sub_dir = dirname($my_file_path);
                 $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
@@ -8185,7 +8198,6 @@ class learnpath {
                 $i = 1;
 
                 foreach ($inc_docs as $doc_info) {
-
                     if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
                     $my_dep = $xmldoc->createElement('resource');
                     $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
@@ -8656,7 +8668,8 @@ class learnpath {
                     $my_resource = $xmldoc->createElement('resource');
                     $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                     $my_resource->setAttribute('type', 'webcontent');
-                    $my_resource->setAttribute('href', 'document/'.$my_xml_file_path);
+
+                    $my_resource->setAttribute('href', $folder_name.'/'.$my_xml_file_path);
                     // adlcp:scormtype can be either 'sco' or 'asset'.
                     $my_resource->setAttribute('adlcp:scormtype', 'asset');
                     // xml:base is the base directory to find the files declared in this resource.
@@ -8675,18 +8688,22 @@ class learnpath {
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
 
+
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
 
         //error_log(print_r($zip_files,true), 0);
+
+
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) { continue; }
             //error_log(__LINE__.'getting document from '.$sys_course_path.$_course['path'].'/'.$file_path.' removing '.$sys_course_path.$_course['path'].'/',0);
             $dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
 
-            $dest_file = str_replace('/document/learning_path/'.$this->path, '', $dest_file);
-            var_dump($dest_file);
+            if (!empty($path_to_remove)) {
+                $dest_file = str_replace($path_to_remove, $path_to_replace, $dest_file);
+            }
 
             $this->create_path($dest_file);
             //error_log('copy '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/'.$file_path.' to '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/'.$file_path,0);
@@ -8800,10 +8817,10 @@ class learnpath {
     </body>
 </html>
 EOD;
-        if (!is_dir($archive_path.$temp_dir_short.'/document')) {
-            @mkdir($archive_path.$temp_dir_short.'/document', api_get_permissions_for_new_directories());
+        if (!is_dir($archive_path.$temp_dir_short.'/'.$folder_name)) {
+            @mkdir($archive_path.$temp_dir_short.'/'.$folder_name, api_get_permissions_for_new_directories());
         }
-        file_put_contents($archive_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
+        file_put_contents($archive_path.$temp_dir_short.'/'.$folder_name.'/non_exportable.html', $file_content);
 
         // Add the extra files that go along with a SCORM package.
         $main_code_path = api_get_path(SYS_CODE_PATH).'newscorm/packaging/';

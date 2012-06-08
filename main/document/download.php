@@ -66,8 +66,6 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	// Launch event
 	event_download($doc_url);
 }
-//var_dump($sys_course_path.$doc_url, $sys_course_path.'/');
-//var_dump(Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/'));
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;
     // Check visibility of document and paths    doc_url

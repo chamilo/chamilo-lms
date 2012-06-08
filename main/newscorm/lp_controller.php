@@ -17,7 +17,7 @@ if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'export') {
         // Only needed on export.
-        $language_file[] = 'hotspot';        
+        $language_file[] = 'hotspot';
     }
 }
 $language_file[] = 'course_home';
@@ -47,7 +47,7 @@ function setFocus(){
     $("#idTitle").focus();
 }
 $(window).load(function () {
-    setFocus();    
+    setFocus();
 });
 </script>
 <style>
@@ -58,14 +58,14 @@ form .label {
     font-weight: normal;
     color: #ffffff;
     text-transform: none;
-    background: none;  
+    background: none;
     border-radius: none;
     color: #404040;
-    float: left;    
+    float: left;
     line-height: 18px;
     padding-top: 6px;
     text-align: right;
-    width: 150px;    
+    width: 150px;
     text-shadow:none;
 }
 </style>';
@@ -247,7 +247,7 @@ switch ($action) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
-                    
+
                     $_SESSION['post_time'] = $_POST['post_time'];
                     if ($_POST['type'] == TOOL_DOCUMENT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
@@ -259,9 +259,9 @@ switch ($action) {
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
-                    }                  
+                    }
                     // Display.
-                    require 'lp_add_item.php';                    
+                    require 'lp_add_item.php';
                 }
             } else {
                 require 'lp_add_item.php';
@@ -284,14 +284,14 @@ switch ($action) {
             } else {
                 $_SESSION['post_time'] = $_REQUEST['post_time'];
 
-                if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {                	
+                if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
                 	$publicated_on  = $_REQUEST['publicated_on'];
                 	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
                 } else {
                 	$publicated_on = null;
                 }
-                
-                if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {                	
+
+                if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
                 	$expired_on   = $_REQUEST['expired_on'];
                 	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
                 } else {
@@ -340,7 +340,7 @@ switch ($action) {
         break;
     case 'build':
         if (!$is_allowed_to_edit) {
-            api_not_allowed(true);  
+            api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - build action triggered', 0);
 
@@ -456,7 +456,7 @@ switch ($action) {
         chdir($cwdir);
         require 'lp_list.php';
         break;
-        
+
     case 'copy':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -464,7 +464,7 @@ switch ($action) {
         if ($debug > 0) error_log('New LP - export action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for copy', 0); require 'lp_list.php'; }
         else {
-            $_SESSION['oLP']->copy();            
+            $_SESSION['oLP']->copy();
         }
         require 'lp_list.php';
         break;
@@ -481,15 +481,15 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
-        
+
         if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
             api_not_allowed();
         }
-                
         if ($debug > 0) error_log('New LP - export action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php'; 
+        if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php';
         } else {
-            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);            
+            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
+            var_dump($result);exit;
             if (!$result) {
                 require 'lp_list.php';
             }
@@ -610,14 +610,14 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
-            
+
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];
             	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
             } else {
             	$publicated_on = null;
             }
-            
+
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
             	$expired_on   = $_REQUEST['expired_on'];
             	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
@@ -641,7 +641,7 @@ switch ($action) {
                 $specific_fields = get_specific_field_list();
                 foreach ($specific_fields as $specific_field) {
                     $_SESSION['oLP']->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
-                    $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));                    
+                    $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
                     if (!empty($new_values)) {
                         array_walk($new_values, 'trim');
                         delete_all_specific_field_value(api_get_course_id(), $specific_field['id'], TOOL_LEARNPATH, $_SESSION['oLP']->lp_id);
@@ -652,7 +652,7 @@ switch ($action) {
                             }
                         }
                     }
-                }        
+                }
             }
             require 'lp_build.php';
         }
@@ -677,18 +677,18 @@ switch ($action) {
         }
         break;
     case 'deleteitem':
-    case 'delete_item':        
+    case 'delete_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - delete item action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
-        else {            
+        else {
             //$_SESSION['refresh'] = 1;
             if (!empty($_REQUEST['id'])) {
                 $_SESSION['oLP']->delete_item($_REQUEST['id']);
-            }            
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']);                        
+            }
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']);
             header('Location: '.$url);
             exit;
         }
@@ -763,7 +763,7 @@ switch ($action) {
             require 'lp_content.php';
         }
         break;
-    case 'view':        
+    case 'view':
         if ($debug > 0)
             error_log('New LP - view action triggered', 0);
         if (!$lp_found) {
@@ -773,7 +773,7 @@ switch ($action) {
             if ($debug > 0) {error_log('New LP - Trying to set current item to ' . $_REQUEST['item_id'], 0); }
             if ( !empty($_REQUEST['item_id']) ) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
-            }           
+            }
             require 'lp_view.php';
         }
         break;
@@ -910,7 +910,7 @@ switch ($action) {
             if ($debug > 0) {error_log('New LP - Trying to impress this LP item to ' . $_REQUEST['item_id'], 0); }
             if ( !empty($_REQUEST['item_id']) ) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
-            }           
+            }
             require 'lp_impress.php';
         }
         break;

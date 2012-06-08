@@ -613,6 +613,8 @@ class CourseHome {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $is_platform_admin  = api_is_platform_admin();
 
+        $session_id = api_get_session_id();
+
         $i = 0;
         $items = array();
         $app_plugin = new AppPlugin();
@@ -626,7 +628,7 @@ class CourseHome {
 
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // display links to lp only for current session
-                    if (api_get_session_id() != $tool['session_id']) {
+                    if ($session_id != $tool['session_id']) {
                         continue;
                     }
                     // check if the published learnpath is visible for student
@@ -636,7 +638,7 @@ class CourseHome {
                     }
                 }
 
-                if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
+                if ($session_id != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
                     continue;
                 }
 
@@ -647,16 +649,19 @@ class CourseHome {
                 $item['extra'] = null;
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
-                    if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                        $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-                        $link['cmd'] = 'hide=yes';
-                        $lnk[] = $link;
+                    if ($session_id == -1 ) {
+                        if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
+                            $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
+                            $link['cmd'] = 'hide=yes';
+                            $lnk[] = $link;
+                        }
+                        if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
+                            $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
+                            $link['cmd'] = 'restore=yes';
+                            $lnk[] = $link;
+                        }
                     }
-                    if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                        $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-                        $link['cmd'] = 'restore=yes';
-                        $lnk[] = $link;
-                    }
+                    
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }

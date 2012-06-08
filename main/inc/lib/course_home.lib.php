@@ -649,7 +649,7 @@ class CourseHome {
                 $item['extra'] = null;
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
-                    if ($session_id == -1 ) {
+                    if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
                             $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             $link['cmd'] = 'hide=yes';
@@ -661,7 +661,7 @@ class CourseHome {
                             $lnk[] = $link;
                         }
                     }
-                    
+
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }

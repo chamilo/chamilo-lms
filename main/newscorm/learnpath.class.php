@@ -8058,6 +8058,7 @@ class learnpath {
             closedir($handle);
         }
         $zip_files = $zip_files_abs = $zip_files_dist = array();
+
         if (is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')) {
             // Remove the possible . at the end of the path.
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
@@ -8065,6 +8066,7 @@ class learnpath {
             mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
             $zip_files_dist = copyr($current_course_path.'/scorm/'.$this->path, $dest_path_to_scorm_folder, array('imsmanifest'), $zip_files);
         }
+
         // Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it).
         // This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
         // Aggregation Model official document, secion "2.3 Content Packaging".
@@ -8085,7 +8087,6 @@ class learnpath {
         $root->appendChild($metadata);
 
         $organizations = $xmldoc->createElement('organizations');
-
         $resources = $xmldoc->createElement('resources');
 
         // Build the only organization we will use in building our learnpaths.
@@ -8151,7 +8152,7 @@ class learnpath {
 
                 // Get the path of the file(s) from the course directory root.
                 $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
-
+                
                 //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
                 $my_xml_file_path = $my_file_path;
                 $my_sub_dir = dirname($my_file_path);
@@ -8162,6 +8163,7 @@ class learnpath {
                 $my_resource = $xmldoc->createElement('resource');
                 $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                 $my_resource->setAttribute('type', 'webcontent');
+
                 $my_resource->setAttribute('href', $my_xml_file_path);
                 // adlcp:scormtype can be either 'sco' or 'asset'.
                 if ($item->type == 'sco') {
@@ -8212,8 +8214,7 @@ class learnpath {
                                     $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
-                                }
-                                elseif (empty($file_path)) {
+                                } elseif (empty($file_path)) {
                                     /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
                                     if (strpos($document_root, -1) == '/') {
                                         $document_root = substr(0, -1, $document_root);
@@ -8289,8 +8290,7 @@ class learnpath {
                                     $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $relative_path);
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
-                                }
-                                elseif (strstr($file_path,$main_path) !== false) {
+                                } elseif (strstr($file_path,$main_path) !== false) {
                                     // The calculated real path is really inside Chamilo's root path.
                                     // Reduce file path to what's under the DocumentRoot.
                                     $file_path = substr($file_path, strlen($root_path));
@@ -8300,8 +8300,7 @@ class learnpath {
                                     $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                     $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                     $my_dep->setAttribute('xml:base', '');
-                                }
-                                elseif (empty($file_path)) {
+                                } elseif (empty($file_path)) {
                                     /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
                                     if(strpos($document_root,-1) == '/') {
                                         $document_root = substr(0, -1, $document_root);
@@ -8427,8 +8426,7 @@ class learnpath {
                         $my_resource->appendChild($my_file);
                         $resources->appendChild($my_resource);
                     }
-                }
-                elseif ($item->type == TOOL_QUIZ) {
+                } elseif ($item->type == TOOL_QUIZ) {
                     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                     $exe_id = $item->path; // Should be using ref when everything will be cleaned up in this regard.
                     $exe = new Exercise();
@@ -8459,7 +8457,6 @@ class learnpath {
                                 if ($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent) {
                                     $item_temp -> appendChild($my_item);
                                 }
-
                             }
                         }
                     } else {
@@ -8539,8 +8536,7 @@ class learnpath {
                                         $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => 'document/'.$file_path);
                                         $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                         $my_dep->setAttribute('xml:base', '');
-                                    }
-                                    elseif (empty($file_path)) {
+                                    } elseif (empty($file_path)) {
                                         /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH),api_get_path(REL_PATH)));
                                         if (strpos($document_root,-1) == '/') {
                                             $document_root = substr(0, -1, $document_root);
@@ -8574,8 +8570,7 @@ class learnpath {
                                         $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                         $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                         $my_dep->setAttribute('xml:base', '');
-                                    }
-                                    elseif (empty($file_path)) {
+                                    } elseif (empty($file_path)) {
                                         /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
                                         if (strpos($document_root,-1) == '/') {
                                             $document_root = substr(0, -1, $document_root);
@@ -8666,7 +8661,6 @@ class learnpath {
                     $my_file->setAttribute('href', 'document/'.$my_xml_file_path);
                     $my_resource->appendChild($my_file);
                     $resources->appendChild($my_resource);
-
                 }
             }
         }
@@ -8765,9 +8759,7 @@ class learnpath {
         <title>'.$lang_not_exportable.'</title>
         <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
     </head>
-    <body dir="'.api_get_text_direction().'">
-';
-
+    <body dir="'.api_get_text_direction().'">';
         $file_content .=
 <<<EOD
         <style>

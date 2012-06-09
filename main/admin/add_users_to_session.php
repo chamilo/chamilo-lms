@@ -49,14 +49,6 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if (!api_is_platform_admin()) {
-	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql);
-	if(Database::result($rs,0,0)!=$_user['user_id']) {
-		api_not_allowed(true);
-	}
-}
-
 //checking for extra field with filter on
 
 $extra_field_list= UserManager::get_extra_fields();

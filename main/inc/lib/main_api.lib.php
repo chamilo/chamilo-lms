@@ -769,14 +769,15 @@ function api_valid_email($address) {
  *
  * This is only the first proposal, test and improve!
  * @param boolean       Option to print headers when displaying error message. Default: false
+ * @param boolean       Whether session admins should be allowed or not.
  * @return boolean      True if the user has access to the current course or is out of a course context, false otherwise
  * @todo replace global variable
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false) {
+function api_protect_course_script($print_headers = false, $allow_session_admins = false) {
     global $is_allowed_in_course;
     $is_visible = false;
-    if (api_is_platform_admin()) {
+    if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
     $course_info = api_get_course_info();
@@ -2048,6 +2049,7 @@ function api_get_self() {
 
 /**
  * Checks whether current user is a platform administrator
+ * @param boolean Whether session admins should be considered admins or not
  * @return boolean True if the user has platform admin rights,
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function

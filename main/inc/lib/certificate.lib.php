@@ -314,22 +314,33 @@ class Certificate extends Model {
     }
     
     /**
-    * Shows the student's certificate (HTML file)
+    * Shows the student's certificate (HTML file). If the global setting 
+    * allow_public_certificates is set to 'false', no certificate can be printed.
+    * If the global allow_public_certificates is set to 'true' and the course
+    * setting allow_public_certificates is set to 0, no certificate *in this
+    * course* can be printed (for anonymous users). Connected users can always
+    * print them.
     */
     public function show() {
+        // Special rules for anonymous users
         if (api_is_anonymous()) {            
             if (api_get_setting('allow_public_certificates') != 'true') {
+                // The "non-public" setting is set, so do not print
                 return false;
-            }            
+            }
+            // Check the course-level setting to make sure the certificate can
+            //  be printed publicly
             if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
                 $gradebook = new Gradebook();
                 $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
                 if (!empty($gradebook_info['course_code'])) {
                     $allow_public_certificates = api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']);
                     if ($allow_public_certificates == 0) {
+                        // Printing not allowed
                         return false;
                     }
                 } else {
+                    // No course ID defined (should never get here)
                     return false;
                 }
             }

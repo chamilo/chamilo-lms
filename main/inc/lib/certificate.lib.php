@@ -79,7 +79,7 @@ class Certificate extends Model {
 			$this->certification_web_user_path = $web_path_info['dir'].'certificate/';			
 			
 			if (!is_dir($path_info['dir'])) {
-				mkdir($path_info['dir'],0777);
+				mkdir($path_info['dir'], 0777, true);
 			}
 					
 			if (!is_dir($this->certification_user_path)) {

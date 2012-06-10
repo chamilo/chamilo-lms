@@ -1326,6 +1326,10 @@ class DocumentManager {
         }
         $sql    = 'SELECT document_id FROM '.$tbl_category.' WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
         $rs     = Database::query($sql);
+        $num    = Database::num_rows($rs);
+        if ($num == 0) {
+            return null;
+        }
         $row    = Database::fetch_array($rs);
         return $row['document_id'];
     }

@@ -541,6 +541,10 @@ if ($form->validate()) {
 				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
 			$certificate_condition = '';
 			if ($is_certificate_mode) {
+				$df = DocumentManager::get_default_certificate_id($_course['code']);
+                                if (!isset($df)) {
+                                    DocumentManager::attach_gradebook_certificate ($_course['code'],$document_id);
+				}
 				$certificate_condition = '&certificate=true';
 			}
 			header('Location: document.php?id='.$folder_id.$selectcat.$certificate_condition);

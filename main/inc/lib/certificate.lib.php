@@ -1,19 +1,21 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
-* @package chamilo.library
-*/
+ * The certificates class is used to generate certificates from inside the
+ * gradebook tool.
+ * @package chamilo.library.certificates
+ */
 class Certificate extends Model {
     var $table;
     var $columns = array('id','cat_id','score_certificate','created_at','path_certificate');
     /**
      * Certification data 
-     * */
+     */
     var $certificate_data = array();
     
     /**
      * Student's certification path
-     * */    
+     */    
     var $certification_user_path = null;  
     var $certification_web_user_path = null;  
     var $html_file     = null;
@@ -23,7 +25,10 @@ class Certificate extends Model {
     //If true every time we enter to the certificate URL we would generate a new certificate
     // (good thing because we can edit the certificate and all users will have the latest certificate bad because we load everytime)
     var $force_certificate_generation = true;  //default true
-    
+    /**
+     * Constructor
+     * @param	int	ID of the certificate. If no ID given, take user_id and try to generate one
+     */
     public function __construct($certificate_id = null) {
         $this->table             =  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->certificate_data = null;
@@ -88,6 +93,11 @@ class Certificate extends Model {
         }        
     }
     
+    /**
+     * Deletes the current certificate object. This is generally triggered by
+     * the teacher from the gradebook tool to re-generate the certificate because
+     * the original version wa flawed.
+     */
     public function delete() {
         
         if (!empty($this->certificate_data)) {
@@ -241,6 +251,7 @@ class Certificate extends Model {
     } 
     
     /**
+     * Generates a QR code for the certificate. The QR code embeds the text given
      * @param    string    Text to be added in the QR code
      * @param    string    file path of the image
      * */
@@ -253,6 +264,12 @@ class Certificate extends Model {
         }
     }
     
+    /**
+     * Transforms certificate tags into text values. This function is very static
+     * (it doesn't allow for much flexibility in terms of what tags are printed).
+     * @param array Contains two array entris: first are the headers, second is an array of contents
+     * @return string The translated string
+     */
     private function parse_certificate_variables($array) {
         $text = '';        
         $headers = $array[0];

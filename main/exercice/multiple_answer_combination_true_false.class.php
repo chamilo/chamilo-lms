@@ -9,7 +9,7 @@
 /**
  * Code
  */
-if(!class_exists('MultipleAnswerCombinationTrueFalse')):
+if(class_exists('MultipleAnswerCombinationTrueFalse')) { return true; }
 require 'multiple_answer_combination.class.php';
 /**
 	CLASS MultipleAnswer
@@ -36,4 +36,3 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination {
         $this->options = array('1'=>get_lang('True'),'0' =>get_lang('False'), '2' =>get_lang('DontKnow'));
 	}
 }
-endif;

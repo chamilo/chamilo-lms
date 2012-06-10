@@ -323,29 +323,37 @@ class Certificate extends Model {
     */
     public function show() {
         // Special rules for anonymous users
+        $failed = false;
         if (api_is_anonymous()) {            
             if (api_get_setting('allow_public_certificates') != 'true') {
                 // The "non-public" setting is set, so do not print
-                return false;
-            }
-            // Check the course-level setting to make sure the certificate can
-            //  be printed publicly
-            if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-                $gradebook = new Gradebook();
-                $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
-                if (!empty($gradebook_info['course_code'])) {
-                    $allow_public_certificates = api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']);
-                    if ($allow_public_certificates == 0) {
-                        // Printing not allowed
-                        return false;
+                $failed = true;
+            } else {
+                // Check the course-level setting to make sure the certificate
+                //  can be printed publicly
+                if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
+                    $gradebook = new Gradebook();
+                    $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
+                    if (!empty($gradebook_info['course_code'])) {
+                        $allow_public_certificates = api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']);
+                        if ($allow_public_certificates == 0) {
+                            // Printing not allowed
+                            $failed = true;
+                        }
+                    } else {
+                        // No course ID defined (should never get here)
+                        Display :: display_reduced_header();
+                        Display :: display_warning_message(get_lang('NoCertificateAvailable'));
+                        exit;
                     }
-                } else {
-                    // No course ID defined (should never get here)
-                    return false;
                 }
             }
         }
-        
+        if ($failed) {
+            Display :: display_reduced_header();
+            Display :: display_warning_message(get_lang('CertificateExistsButNotPublic'));
+            exit;
+        }
         //Read file or preview file
         if (!empty($this->certificate_data['path_certificate'])) {
             $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);

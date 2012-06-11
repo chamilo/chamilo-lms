@@ -444,7 +444,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLETOOLANNOUNCEMENTS . "` (
         $add_to_all_tables
-        id mediumint unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL auto_increment,
         title text,
         content mediumtext,
         end_date date default NULL,
@@ -695,7 +695,7 @@ function create_course_tables($course_db_name = null) {
     // Exercise tool - Tests/exercises
     $sql = "CREATE TABLE `".$TABLEQUIZ . "` (
         $add_to_all_tables
-        id mediumint unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL auto_increment,
         title varchar(255) NOT NULL,
         description text default NULL,
         sound varchar(255) default NULL,
@@ -728,7 +728,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLEQUIZQUESTIONLIST . "` (
         $add_to_all_tables
-        id mediumint unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL auto_increment,
         question TEXT NOT NULL,
         description text default NULL,
         ponderation float(6,2) NOT NULL default 0,
@@ -748,8 +748,8 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLEQUIZANSWERSLIST . "` (
         $add_to_all_tables
-        id mediumint unsigned NOT NULL,
-        question_id mediumint unsigned NOT NULL,
+        id int unsigned NOT NULL,
+        question_id int unsigned NOT NULL,
         answer text NOT NULL,
         correct mediumint unsigned default NULL,
         comment text default NULL,
@@ -781,9 +781,9 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLEQUIZQUESTION . "` (
         $add_to_all_tables
-        question_id mediumint unsigned NOT NULL,
-        exercice_id mediumint unsigned NOT NULL,
-        question_order mediumint unsigned NOT NULL default 1,
+        question_id int unsigned NOT NULL,
+        exercice_id int unsigned NOT NULL,
+        question_order int unsigned NOT NULL default 1,
         PRIMARY KEY (c_id, question_id,exercice_id)
         )" . $charset_clause;
     Database::query($sql);
@@ -814,7 +814,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLETOOLCOURSEDESC . "` (
         $add_to_all_tables
-        id TINYINT UNSIGNED NOT NULL auto_increment,
+        id int UNSIGNED NOT NULL auto_increment,
         title VARCHAR(255),
         content TEXT,
         session_id int default 0,
@@ -1519,7 +1519,7 @@ function create_course_tables($course_db_name = null) {
             comment longtext NOT NULL ,
             author_id int NOT NULL default 0,
             date_creation datetime NOT NULL default '0000-00-00 00:00:00',
-            blog_id mediumint NOT NULL default 0,
+            blog_id int NOT NULL default 0,
             post_id int NOT NULL default 0,
             task_id int default NULL ,
             parent_comment_id int NOT NULL default 0,
@@ -1537,7 +1537,7 @@ function create_course_tables($course_db_name = null) {
             title varchar( 250 ) NOT NULL default '',
             full_text longtext NOT NULL ,
             date_creation datetime NOT NULL default '0000-00-00 00:00:00',
-            blog_id mediumint NOT NULL default 0,
+            blog_id int NOT NULL default 0,
             author_id int NOT NULL default 0,
             PRIMARY KEY (c_id, post_id )
         )" . $charset_clause . " COMMENT = 'Table with posts / blog.';";
@@ -1554,7 +1554,7 @@ function create_course_tables($course_db_name = null) {
             rating_type enum( 'post', 'comment' ) NOT NULL default 'post',
             item_id int NOT NULL default 0,
             user_id int NOT NULL default 0,
-            rating mediumint NOT NULL default 0,
+            rating int NOT NULL default 0,
             PRIMARY KEY (c_id, rating_id )
         )" . $charset_clause . " COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
@@ -1577,8 +1577,8 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `" . $tbl_blogs_tasks . "` (
         	$add_to_all_tables
-            task_id mediumint NOT NULL AUTO_INCREMENT ,
-            blog_id mediumint NOT NULL default 0,
+            task_id int NOT NULL AUTO_INCREMENT ,
+            blog_id int NOT NULL default 0,
             title varchar( 250 ) NOT NULL default '',
             description text NOT NULL ,
             color varchar( 10 ) NOT NULL default '',
@@ -1593,9 +1593,9 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
         	$add_to_all_tables
-            blog_id mediumint NOT NULL default 0,
+            blog_id int NOT NULL default 0,
             user_id int NOT NULL default 0,
-            task_id mediumint NOT NULL default 0,
+            task_id int NOT NULL default 0,
             target_date date NOT NULL default '0000-00-00',
             PRIMARY KEY (c_id, blog_id , user_id , task_id )
         )" . $charset_clause . " COMMENT = 'Table with tasks assigned to a user in a blog';";

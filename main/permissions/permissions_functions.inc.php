@@ -488,15 +488,12 @@ function display_role_list($current_course_roles, $current_platform_roles)
 * @version 1.0
 */
 function get_roles($content,$id, $scope='course') {
-    $course_id  = api_get_course_int_id();
-    
-	if($content=='user')
-	{
+    $course_id  = api_get_course_int_id();    
+	if($content=='user') {
 		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = user_id;
 	}
-	if($content=='group')
-	{
+	if($content=='group') {
 		$table=Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = 'group_id';
 	}
@@ -506,11 +503,9 @@ function get_roles($content,$id, $scope='course') {
 	//$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
 	$sql="SELECT role_id FROM $table WHERE c_id = $course_id AND $id_field = '$id' AND scope='".$scope."'";
 	$result=Database::query($sql);
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result)) {
 		$current_roles[]=$row['role_id'];
 	}
-
 	return $current_roles;
 }
 
@@ -558,30 +553,26 @@ function get_all_roles($content='course') {
 */
 function get_roles_permissions($content,$id, $scope='course') {
     $course_id = api_get_course_int_id();
-	if($content == 'user')
-	{
+	if($content == 'user') {
 		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = 'user_id';
 	}
 
-	if($content == 'group')
-	{
+	if($content == 'group') {
 		$table = Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = 'group_id';
 	}
 
 	// course roles or platform roles
 	$scope = 'course';
-	if($scope == 'course')
-	{
+	if($scope == 'course') {
 		$table_role = Database::get_course_table(TABLE_ROLE);
 		$table_role_permissions = Database::get_course_table(TABLE_ROLE_PERMISSION);
         
         $role_condition = " role.c_id = $course_id AND role_permissions.c_id = $course_id AND ";
 	}
 
-	if($scope == 'platform')
-	{
+	if ($scope == 'platform') {
 		$table_role = Database::get_main_table(TABLE_ROLE);
 		$table_role_permissions = Database::get_main_table(TABLE_ROLE_PERMISSION);
         $role_condition = '';
@@ -604,10 +595,10 @@ function get_roles_permissions($content,$id, $scope='course') {
 			role.role_id = role_permissions.role_id";
 
 	$result = Database::query($sql);
-
-	while($row=Database::fetch_array($result))
+    $current_role_permissions = array();
+	while($row=Database::fetch_array($result)) {
 		$current_role_permissions[$row['tool']][]=$row['action'];
-
+    }
 	return $current_role_permissions;
 }
 
@@ -623,37 +614,29 @@ function get_roles_permissions($content,$id, $scope='course') {
 function assign_role($content, $action, $id, $role_id, $scope='course') {
     $course_id = api_get_course_int_id();
 	// Which database are we using (depending on the $content parameter)
-	if($content=='user')
-	{
+	if($content=='user') {
 		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = 'user_id';
-	}
-	elseif($content=='group')
-	{
+	} elseif($content=='group') {
 		$table=Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = 'group_id';
-	}
-	else
-	{
+	} else {
 		return  get_lang('Error');
 	}
 
 	// grating a right
-	if($action=='grant')
-	{
-		$sql="INSERT INTO $table (c_id, role_id, scope,  $id_field) VALUES ($course_id, '".Database::escape_string($role_id)."','".Database::escape_string($scope)."','".Database::escape_string($id)."')";
+	if($action=='grant') {
+		$sql="INSERT INTO $table (c_id, role_id, scope, $id_field) VALUES ($course_id, '".Database::escape_string($role_id)."','".Database::escape_string($scope)."','".Database::escape_string($id)."')";
 		$result=Database::query($sql);
-		if($result)
-		{
+		if ($result) {
 			$result_message=get_lang('RoleGranted');
 		}
 	}
-	if($action=='revoke')
-	{
+    
+	if($action=='revoke') {
 		$sql="DELETE FROM $table WHERE c_id = $course_id AND $id_field = '".Database::escape_string($id)."' AND role_id='".Database::escape_string($role_id)."'";
 		$result=Database::query($sql);
-		if($result)
-		{
+		if ($result) {
 			$result_message=get_lang('RoleRevoked');
 		}
 	}

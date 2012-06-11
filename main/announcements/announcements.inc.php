@@ -586,7 +586,7 @@ class AnnouncementManager  {
 		echo "</td>";
 		echo "<td>";
 
-		echo "<select name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>";
+		echo "<select id=\"selectedform\" name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>";
 		echo '</select>';
 
 		echo "</td>";
@@ -656,7 +656,7 @@ class AnnouncementManager  {
 		$ref_array_users	= self::get_course_users();
 
 		// we construct the form of the already selected groups / users
-		echo "<select name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
+		echo "<select id=\"selectedform\" name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
 		if (is_array($to_already_selected)) {
 			foreach($to_already_selected as $groupuser) {
 				list($type,$id)=explode(":",$groupuser);
@@ -843,7 +843,7 @@ class AnnouncementManager  {
             }
             $result = Javascript::tag($src);
 
-            $code = Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment');
+            $code = Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment', 'Everybody');
             $result .= Javascript::tag_code($code);
             return $result;
 	}

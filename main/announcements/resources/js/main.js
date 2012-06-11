@@ -1,3 +1,44 @@
+
+
+
+$(document).ready(function () {
+    $("#emailTitle").focus();
+});
+
+function toggle_sendto()
+{
+    var list = $('#recipient_list');
+    var overview = $('#recipient_overview');
+    if(list.css('display') == 'none'){
+        list.show();
+        overview.hide();
+    }
+    else
+    {
+        list.hide();
+        overview.show();
+    }
+    
+    var selected = $('#selectedform');
+    var content = list_box_content(selected[0])
+    content = (content == '') ? lang.Everybody : content;
+    overview.text(content);
+}
+
+function list_box_content(box)
+{
+    if(box.options.length == 0)
+    {
+        return '';
+    }
+    var values = [];
+    var i;
+    for (i = 0; i < box.options.length; i++) {
+        values[i] = box.options[i].text;
+    }
+    return values.join(', ');
+}
+
 // Begin javascript menu swapper
 
 function move(fbox, tbox) {

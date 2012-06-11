@@ -261,8 +261,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) values ('platform_unsubscribe_allowed', 'false', 'No');
 
-DROP TABLE IF EXISTS access_url_rel_session;
-
 ALTER TABLE usergroup_rel_session       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 ALTER TABLE usergroup_rel_course        ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 ALTER TABLE usergroup_rel_user          ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
@@ -276,7 +274,7 @@ DELETE FROM settings_current WHERE variable = "user_order_by";
 DELETE FROM settings_options WHERE variable = "user_order_by";
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18283' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18292' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

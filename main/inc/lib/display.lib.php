@@ -577,7 +577,7 @@ class Display {
             //Checking the img/ folder
             $icon = $w_code_path.'img/'.$image;            
         }
-        
+        $icon = api_get_cdn_path($icon); 
         if ($return_only_path) {
             return $icon;
         }

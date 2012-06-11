@@ -605,7 +605,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
         if ($is_template == 0) {
             if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon('wizard.png', get_lang('AddAsTemplate'),array(), ICON_SIZE_SMALL).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon('wizard.png', get_lang('AddAsTemplate'),array(), ICON_SIZE_SMALL).'</a>';
             }
             if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates') {//allow attach certificate to course
                 $visibility_icon_certificate='nocertificate';
@@ -619,9 +619,9 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                     $certificate=get_lang('NoDefaultCertificate');
                 }
                 if (isset($_GET['selectcat'])) {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon_certificate.'.png" border="0" title="'.$certificate.'" alt="" /></a>';
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon_certificate.'.png" border="0" title="'.$certificate.'" alt="" /></a>';
                     if ($is_preview) {
-                        $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" >'.
+                        $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" >'.
 						Display::return_icon('preview_view.png', $preview,'',ICON_SIZE_SMALL).'</a>';
                     }
                 }

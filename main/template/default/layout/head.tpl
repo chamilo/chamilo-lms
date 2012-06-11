@@ -2,6 +2,7 @@
 <link href="http://www.chamilo.org/documentation.php" rel="help" />
 <link href="http://www.chamilo.org/team.php" rel="author" />
 <link href="http://www.chamilo.org" rel="copyright" />
+{{ prefetch}}
 {{ favico }}
 <link rel="apple-touch-icon" href="{{ _p.web}}apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />

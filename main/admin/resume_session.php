@@ -45,10 +45,6 @@ $rs      = Database::query($sql);
 $session = Database::store_result($rs);
 $session = $session[0];
 
-if(!api_is_platform_admin() && $session['session_admin_id'] != $_user['user_id']) {
-	api_not_allowed(true);
-}
-
 $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
 $rs = Database::query($sql);
 $session_category = '';

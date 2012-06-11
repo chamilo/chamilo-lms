@@ -219,6 +219,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         
         foreach ($values as $key => $value) {          
             if (in_array($key, $settings_to_avoid)) { continue; }            
+            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
             $key = Database::escape_string($key);
             $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";            
             $res = Database::query($sql);            
@@ -233,6 +234,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                
         foreach ($values as $key => $value) {
             if (in_array($key, $settings_to_avoid)) { continue; }
+            // Avoid form elements which have nothing to do with settings
+            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
             //
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {

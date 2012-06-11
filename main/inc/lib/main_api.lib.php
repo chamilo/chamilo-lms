@@ -631,6 +631,31 @@ function api_get_path($path_type, $path = null) {
     return null;
 }
 
+/**
+ * Gets a modified version of the path for the CDN, if defined in 
+ * configuration.php
+ * @param string The path of the resource without CDN
+ * @return string The path of the resource converted to CDN
+ * @author Yannick Warnier <ywarnier@beeznst.org>
+ */
+function api_get_cdn_path($web_path) {
+    global $_configuration;
+    $web_root = api_get_path(WEB_PATH);
+    $ext = substr($web_path,strrpos($web_path,'.'));
+    if (isset($ext[2])) { // faster version of strlen to check if len>2
+        // Check for CDN definitions
+        if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
+            foreach ($_configuration['cdn'] as $host => $exts) {
+                if (in_array($ext,$exts)) {
+                    //Use host as defined in $_configuration['cdn'], without
+                    // trailing slash
+                    return str_replace($web_root,$host.'/',$web_path);
+                }
+            }
+        }
+    }
+    return $web_path;
+}
 
 /**
  * @return bool     Return true if CAS authentification is activated
@@ -769,14 +794,15 @@ function api_valid_email($address) {
  *
  * This is only the first proposal, test and improve!
  * @param boolean       Option to print headers when displaying error message. Default: false
+ * @param boolean       Whether session admins should be allowed or not.
  * @return boolean      True if the user has access to the current course or is out of a course context, false otherwise
  * @todo replace global variable
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false) {
+function api_protect_course_script($print_headers = false, $allow_session_admins = false) {
     global $is_allowed_in_course;
     $is_visible = false;
-    if (api_is_platform_admin()) {
+    if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
     $course_info = api_get_course_info();
@@ -2048,6 +2074,7 @@ function api_get_self() {
 
 /**
  * Checks whether current user is a platform administrator
+ * @param boolean Whether session admins should be considered admins or not
  * @return boolean True if the user has platform admin rights,
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function

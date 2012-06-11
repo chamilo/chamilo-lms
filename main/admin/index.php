@@ -194,12 +194,13 @@ if (api_get_setting('use_session_mode') == 'true') {
 	}
 	$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
 	$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
-	$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
 	
-    if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required 
-    	$items[] = array('url'=>'user_move_stats.php', 	'label' => get_lang('MoveUserStats'));
-    }            
-    $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
+    if (api_is_platform_admin()) {
+        if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required 
+        	$items[] = array('url'=>'user_move_stats.php', 	'label' => get_lang('MoveUserStats'));
+        }            
+        $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
+    }
     $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
     
     $blocks['sessions']['items'] = $items;

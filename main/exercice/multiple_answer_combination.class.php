@@ -9,7 +9,7 @@
 /**
  * Code
  */
-if(!class_exists('MultipleAnswerCombination')):
+if(class_exists('MultipleAnswerCombination')) { return true; }
 
 /**
 	CLASS MultipleAnswer
@@ -229,5 +229,4 @@ class MultipleAnswerCombination extends Question {
 
 }
 
-endif;
 ?>

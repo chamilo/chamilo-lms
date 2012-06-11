@@ -327,10 +327,10 @@ class Template {
         }
 		
 		//Base CSS
-		$style_html = '@import "'.api_get_path(WEB_CSS_PATH).'base.css";'."\n";        
+		$style_html = '@import "'.api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css').'";'."\n";        
         
 		//Default theme CSS
-		$style_html .= '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/default.css";'."\n";
+		$style_html .= '@import "'.api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css').'";'."\n";
                 
         $navigator_info = api_get_navigator();
         
@@ -338,12 +338,12 @@ class Template {
 			$style_html .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
 		}
         
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css";'."\n";        
-        $style_html .= '@import "'.api_get_path(WEB_CSS_PATH).'responsive.css";'."\n";   
+        $style_html .= '@import "'.api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css').'";'."\n";        
+        $style_html .= '@import "'.api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css').'";'."\n";   
 		
 		$this->assign('css_style', $style_html);
 		
-		$style_print = '@import "'.api_get_path(WEB_CSS_PATH).$this->theme.'/print.css";'."\n";
+		$style_print = '@import "'.api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css').'";'."\n";
         
 		$this->assign('css_style_print', $style_print);        
         
@@ -481,11 +481,21 @@ class Template {
                 }
                 </style>';
         }
+        // Implementation of prefetch. 
+        // See http://cdn.chamilo.org/main/img/online.png for details
+        $prefetch = '';
+        if (!empty($_configuration['cdn_enable'])) {
+            $prefetch .= '<meta http-equiv="x-dns-prefetch-control" content="on">';
+            foreach ($_configuration['cdn'] as $host => $exts) {
+                $prefetch .= '<link rel="dns-prefetch" href="'.$host.'">';
+            }
+        }
 	
 		global $this_section;        
         
         //@todo minify CSS and JS 
         
+                $this->assign('prefetch', $prefetch);
 		$this->assign('css_file_to_string', $css_file_to_string);
 		$this->assign('js_file_to_string',  $js_file_to_string);
         

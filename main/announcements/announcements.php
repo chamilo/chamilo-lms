@@ -613,7 +613,7 @@ if ($display_form) {
 					</label>
 					<div class="controls">';
 		if (isset($_GET['id']) && is_array($to)) {
-			echo '&nbsp;';
+			echo '<span id="recipient_overview">&nbsp;</span>';
 		} elseif (isset($_GET['remind_inactive'])) {
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
@@ -753,7 +753,7 @@ if ($display_form) {
 	echo '</form><br />';
 
 	if ((isset($_GET['action']) && isset($_GET['id']) && is_array($to))||isset($_GET['remindallinactives'])||isset($_GET['remind_inactive'])) {
-		echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
+		echo '<script>toggle_sendto();</script>';
 	}
 
 } // displayform

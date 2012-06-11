@@ -633,23 +633,21 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
  * @param int $etId
  * @return type
  */
-function get_all_event_types()
-{
+function get_all_event_types() {
     global $event_config;
 
     $sql = 'SELECT etm.id, event_type_name, activated, language_id, message, subject, dokeos_folder
             FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' etm
             INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
-            ON etm.language_id = l.id;
-            ';
+            ON etm.language_id = l.id';
 
-    $events_types = Database::store_result(Database::query($sql),'ASSOC');
-	// echo $sql;
+    $events_types = Database::store_result(Database::query($sql),'ASSOC');    
+	
     $to_return = array();
     foreach ($events_types as $et) {
         $et['nameLangVar'] = get_lang($event_config[$et["event_type_name"]]["name_lang_var"]);
-	$et['descLangVar'] = get_lang($event_config[$et["event_type_name"]]["desc_lang_var"]);
-	$to_return[] = $et;
+        $et['descLangVar'] = get_lang($event_config[$et["event_type_name"]]["desc_lang_var"]);
+        $to_return[] = $et;
     }
     return $to_return;
 }
@@ -660,15 +658,14 @@ function get_all_event_types()
  * @param int $etId
  * @return type
  */
-function get_users_subscribed_to_event($event_name){
+function get_users_subscribed_to_event($event_name) {
     $event_name = Database::escape_string($event_name);
     $sql = 'SELECT u.* FROM '. Database::get_main_table(TABLE_MAIN_USER).' u,'
 						.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
 						.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' ue
 			WHERE ue.user_id = u.user_id
-			AND e.name = \''.$event_name.'\'
+			AND e.name = "'.$event_name.'"
 			AND e.id = ue.event_type_id';
-
     return Database::store_result(Database::query($sql),'ASSOC');
 }
 
@@ -677,15 +674,12 @@ function get_users_subscribed_to_event($event_name){
  *
  * @param string $event_name
  */
-function get_event_users($event_name)
-{
-    $sql = 'SELECT user.* FROM '.Database::get_main_table(TABLE_MAIN_USER).' user
-	JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser ON relUser.user_id = user.user_id
-	WHERE relUser.event_type_name = "'.$event_name.'"
-	';
-
+function get_event_users($event_name) {
+    $event_name = Database::escape_string($event_name);
+    $sql = 'SELECT user.* FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser 
+            ON relUser.user_id = user.user_id
+            WHERE relUser.event_type_name = "'.$event_name.'"';
     $events_types = Database::store_result(Database::query($sql),'ASSOC');
-
 	return $events_types;
 }
 
@@ -699,27 +693,25 @@ function get_event_users($event_name)
  * @param string $eventMessageLanguage
  * @param int $activated
  */
-function save_event_type_message($event_name,$users,$message,$subject, $event_message_language, $activated)
-{
+function save_event_type_message($event_name, $users, $message, $subject, $event_message_language, $activated) {
+    $event_name = Database::escape_string($event_name);
+    $activated = intval($activated);
+    $event_message_language = Database::escape_string($event_message_language);
+    
     // Deletes then re-adds the users linked to the event
-    $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).'
-	WHERE event_type_name = "'.$event_name.'"
-	';
+    $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' WHERE event_type_name = "'.$event_name.'"	';
     Database::query($sql);
 
     foreach ($users as $user) {
-        $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).'
-		(user_id,event_type_name)
-		VALUES('.intval($user).',"'.  Database::escape_string($event_name).'")
-		';
-	Database::query($sql);
+        $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name)
+            VALUES('.intval($user).',"'.  $event_name.'")';
+        Database::query($sql);
     }
 
     // check if this template in this language already exists or not
     $sql = 'SELECT COUNT(id) as total FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
-		WHERE event_type_name = "'.$event_name.'" AND language_id = (SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
-                    WHERE dokeos_folder = "'.$event_message_language.'")
-                ';
+            WHERE event_type_name = "'.$event_name.'" AND language_id = (
+                    SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' WHERE dokeos_folder = "'.$event_message_language.'")';
     $sql = Database::store_result(Database::query($sql),'ASSOC');
 
     // if already exists, we update
@@ -728,57 +720,45 @@ function save_event_type_message($event_name,$users,$message,$subject, $event_me
             SET message = "'.Database::escape_string($message).'",
             subject = "'.Database::escape_string($subject).'",
             activated = '.$activated.'
-            WHERE event_type_name = "'.Database::escape_string($event_name).'" AND language_id = (SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
-                WHERE dokeos_folder = "'.$event_message_language.'")
-            ';
+            WHERE event_type_name = "'.$event_name.'" AND language_id = (SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
+                WHERE dokeos_folder = "'.$event_message_language.'")';
         Database::query($sql);
     } else { // else we create a new record
         // gets the language_-_id
-        $lang_id = '(SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
-                WHERE dokeos_folder = "'.$event_message_language.'")';
+        $lang_id = '(SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' 
+                    WHERE dokeos_folder = "'.$event_message_language.'")';
         $lang_id = Database::store_result(Database::query($lang_id),'ASSOC');
-
-        $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
-            (event_type_name, language_id, message, subject, activated)
-            VALUES("'.Database::escape_string($event_name).'", '.$lang_id[0]["id"].', "'.Database::escape_string($message).'",
-            "'.Database::escape_string($subject).'", '.$activated.')
-            ';
-        Database::query($sql);
+        
+        if (!empty($lang_id[0]["id"])) {
+            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' (event_type_name, language_id, message, subject, activated)
+                VALUES("'.$event_name.'", '.$lang_id[0]["id"].', "'.Database::escape_string($message).'", "'.Database::escape_string($subject).'", '.$activated.')';
+            Database::query($sql);
+        }
     }
 
     // set activated at every save
     $sql = 'UPDATE '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
                 SET activated = '.$activated.'
-                WHERE event_type_name = "'.Database::escape_string($event_name).'"
-                ';
+                WHERE event_type_name = "'.$event_name.'"';
     Database::query($sql);
 }
 
-function eventType_mod($etId,$users,$message,$subject) {
+function eventType_mod($etId, $users, $message, $subject) {
 	$etId = intval($etId);
 
-	$sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).'
-	WHERE event_type_id = '.$etId.'
-	';
-
+	$sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' WHERE event_type_id = '.$etId.'	';
 	Database::query($sql);
 
-	foreach($users as $user) {
-		$sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).'
-		(user_id,event_type_id)
-		VALUES('.intval($user).','.$etId.')
-		';
-
+	foreach ($users as $user) {
+		$sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_id)
+            VALUES('.intval($user).','.$etId.') ';
 		Database::query($sql);
 	}
 
 	$sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).'
-	SET message = "'.Database::escape_string($message).'",
-	subject = "'.Database::escape_string($subject).'"
-	WHERE event_type_id = '.$etId.'
-	';
-
-
+            SET message = "'.Database::escape_string($message).'",
+                subject = "'.Database::escape_string($subject).'"
+                WHERE event_type_id = '.$etId.'';
 	Database::query($sql);
 }
 
@@ -789,8 +769,7 @@ function eventType_mod($etId,$users,$message,$subject) {
 function get_last_attempt_date_of_exercise($exe_id) {
 	$exe_id = intval($exe_id);
 	$track_attempts 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-	$track_exercises 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-
+	
 	$sql_track_attempt 		= 'SELECT max(tms) as last_attempt_date FROM '.$track_attempts.' WHERE exe_id='.$exe_id;
 
 	$rs_last_attempt 		= Database::query($sql_track_attempt);

@@ -238,10 +238,7 @@ function BrowseServer()
 
 function SetUrl( url )
 {
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/MP3\/fck_mp3.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-	url = PrefixeUrl + url;
-	// 
+	url = FCK.GetSelectedUrl ( url ) ;
 
 	document.getElementById('mpUrl').value = url ;
 	//updatePreview();

@@ -438,12 +438,6 @@ function SetUrl( url, width, height, alt )
 {
 	url = FCK.GetSelectedUrl ( url ) ;
 
-	// search the URLPrefix like it is the configuration.php file
-    /*
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/dialog\/fck_image.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-	url = PrefixeUrl + url ;
-    */
 	if ( sActualBrowser == 'Link' ) {
 		GetE('txtLnkUrl').value = url ;
 		UpdatePreview() ;

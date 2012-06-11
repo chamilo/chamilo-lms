@@ -228,21 +228,10 @@ function BrowseServer()
 	OpenFileBrowser( FCKConfig.MP3BrowserURL, FCKConfig.MP3BrowserWindowWidth, FCKConfig.MP3BrowserWindowHeight ) ;
 }
 
-function SetUrl( url )
-{
-	//url = FCK.GetSelectedUrl( url ) ;
-	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
-
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/audio\/fck_audio.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-	url = PrefixeUrl + url;
-	// 
-
-
+function SetUrl( url ) {
+	url = FCK.GetSelectedUrl( url ) ;
 	GetE('txtUrl').value = url ;
-
 	UpdatePreview() ;
-
 	dialog.SetSelectedTab( 'Info' ) ;
 }
 

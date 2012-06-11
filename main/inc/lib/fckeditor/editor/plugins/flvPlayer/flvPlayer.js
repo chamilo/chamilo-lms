@@ -363,15 +363,9 @@ var sActualBrowser ;
 
 
 function SetUrl( url ) {
-
-    url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
-		PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/flvPlayer\/flvPlayer\.html/, "");
-		PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-		url = PrefixeUrl + url;
-		// 
-
-    if ( sActualBrowser == 'flv' )
-    {
+    url = FCK.GetSelectedUrl( url ) ;
+    
+    if ( sActualBrowser == 'flv' ) {
         GetE('txtURL').value = url ;
         GetE('txtWidth').value = 320 ;
         GetE('txtHeight').value = 240 ;

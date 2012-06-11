@@ -8,6 +8,6 @@ CustomPages looks for alternatives in this directory, and displays them if prese
 - lostpassword-feedback.php for the password recovery feedback page
 
 Important note :
+Enable the use_custom_pages setting
+
 If you pull this feature from a repo, not through an upgrade or install process, you have to exectute the following SQL statements in the main database or this option won't appear in the admin interface :
-	INSERT INTO settings_options (variable, value, display_text) VALUES ('use_custom_pages', 'true', 'Yes'), ('use_custom_pages', 'false', 'No');
-	INSERT INTO settings_current (variable, type, category, selected_value, title, comment, scope) VALUES ('use_custom_pages','radio','Platform','false','UseCustomPages','UseCustomPagesComment', 'platform');

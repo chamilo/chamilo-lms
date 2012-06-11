@@ -21,7 +21,8 @@
  *
  * Configuration file for the File Manager Connector for PHP.
  */
-// Modifications by Ivan Tcholakov, JUN-2009.
+
+// Modifications by Ivan Tcholakov, JUN-2009. 
 
 // Some language variables are needed.
 $language_file = array('create_course');
@@ -46,38 +47,34 @@ if (api_is_in_course()) {
 	if (!api_is_in_group()) {
 		// 1. We are inside a course and not in a group.
 		if (api_is_allowed_to_edit()) {
-			//			$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
-			$Config['UserFilesPath'] = '/'.$_configuration['course_folder'].api_get_course_path().'/document/'; // 
+			$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
 		} else {
-			// 1.2. Student
+			// 1.2. Student	
 			$current_session_id = api_get_session_id();
-			if($current_session_id==0) {
-				// $Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/'; // 
-					$Config['UserFilesPath'] = '/'.$_configuration['course_folder'].api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';//
+			if($current_session_id==0)
+			{
+				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 			}
-			else {
-				// $Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';						
-				$Config['UserFilesPath'] = '/'.$_configuration['course_folder'].api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';		
+			else
+			{
+				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';		
 			}
 		}
 	} else {
 		// 2. Inside a course and inside a group.
 		global $group_properties;
-		//		$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/'; // 
-		$Config['UserFilesPath'] = '/'.$_configuration['course_folder'].api_get_course_path().'/document'.$group_properties['directory'].'/';//
+		$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
 	}
 } else {
 	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
 		// 3. Platform administration activities.
-		//		$Config['UserFilesPath'] = api_get_path(REL_PATH).'home/default_platform_document/';//
-		$Config['UserFilesPath'] = '/home/default_platform_document/';//
+		$Config['UserFilesPath'] = api_get_path(REL_PATH).'home/default_platform_document/';
 	} else {
 		// 4. The user is outside courses.
-    $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'rel');
-		$Config['UserFilesPath'] = $my_path['dir'].'my_files/';		
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'rel');
+		$Config['UserFilesPath'] = $my_path['dir'].'my_files/';
 	}
 }
-
 
 
 // Fill the following value it you prefer to specify the absolute path for the

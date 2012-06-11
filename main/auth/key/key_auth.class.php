@@ -2,18 +2,11 @@
 
 use \ChamiloSession as Session;
 
-
 /**
  * Used to authenticate user with an access token. By default this method is disabled.
- * Method used primarily to make API calls:Rss, etc.
+ * Method used primarily to make API calls: Rss, file upload.
  * 
- * Access is granted only for the services that are enabled. 
- * 
- * You need to call 
- * 
- *      KeyAuth::enable_services('my_service');
- * 
- * to enable this access method for a specific service before a call to global.inc.php.
+ * Access is granted only for the services that are enabled.  
  * 
  * To be secured this method must 
  * 
@@ -23,14 +16,39 @@ use \ChamiloSession as Session;
  * This authentication method is session less. This is to ensure that the navigator 
  * do not receive an access cookie that will grant it access to other parts of the
  * application.
- *
+ * 
+ * 
+ * Usage:
+ * 
+ * Enable KeyAuth for a specific service. Add the following lines so that 
+ * the key authentication method is enabled for a specific service before 
+ * calling global.inc.php.
+ * 
+ *      include_once '.../main/inc/autoload.inc.php';
+ *      KeyAuth::enable_services('my_service');
+ *      include_once '.../main/inc/global.inc.php';
+ * 
+ * 
+ * Enable url access for a short period of time:
+ * 
+ *      token = KeyAuth::create_temp_token();
+ *      url = '...?access_token=' . $token ;
+ * 
+ * @see AccessToken
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class KeyAuth
 {
 
+    const PARAM_ACCESS_TOKEN = 'access_token';
+
     protected static $services = array();
+
+    public static function create_temp_token($service = null, $duration = 60, $user_id = null)
+    {
+        return UserApiKeyManager::create_temp_token($service, $duration, $user_id);
+    }
 
     /**
      * Returns enabled services
@@ -52,15 +70,11 @@ class KeyAuth
     {
         $args = func_get_args();
         $names = array();
-        foreach ($args as $arg)
-        {
-            if (is_object($arg))
-            {
+        foreach ($args as $arg) {
+            if (is_object($arg)) {
                 $f = array($arg, 'get_service_name');
                 $name = call_user_func($f);
-            }
-            else
-            {
+            } else {
                 $name = $arg;
             }
             $name = substr($name, 0, 10);
@@ -72,20 +86,46 @@ class KeyAuth
     {
         $args = func_get_args();
         $names = array();
-        foreach ($args as $name)
-        {
+        foreach ($args as $name) {
             $name = substr($name, 0, 10);
             unset(self::$services[$name]);
         }
+    }
+
+    public static function is_service_enabled($service)
+    {
+        $services = self::get_services();
+        foreach ($services as $s) {
+            if ($s == $service) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function clear_services()
     {
         self::$services[$name] = array();
     }
-    
+
     /**
-     * @return Returns true if authentication method is enabled. False otherwise.
+     * Enable key authentication for the default service - i.e. chamilo 
+     */
+    public static function enable()
+    {
+        self::enable_services(UserApiKeyManager::default_service());
+    }
+
+    public static function disable()
+    {
+        self::$services[$name] = array();
+    }
+
+    /**
+     * Returns true if the key authentication method is enabled. False otherwise.
+     * Default to false.
+     * 
+     * @return bool
      */
     public static function is_enabled()
     {
@@ -98,8 +138,7 @@ class KeyAuth
     public static function instance()
     {
         static $result = null;
-        if(empty($result))
-        {
+        if (empty($result)) {
             $result = new self();
         }
         return $result;
@@ -111,60 +150,52 @@ class KeyAuth
     }
 
     /**
-     * Returns true if security accepts to run otherwise returns false.
+     * Returns true if authentication accepts to run otherwise returns false.
      * 
      * @return boolean 
      */
     public function accept()
     {
-        $user_id = $this->get_user_id();
-        if (empty($user_id))
-        {
+        /**
+         * Authentication method must be enabled 
+         */
+        if (!self::is_enabled()) {
             return false;
         }
 
-        $services = $this->get_services();
-        if (empty($services))
-        {
+        $token = $this->get_access_token();
+        if ($token->is_empty()) {
             return false;
         }
 
-        $token = $this->get_token();
-        if (empty($token))
-        {
+        $key = UserApiKeyManager::get_by_id($token->get_id());
+        if (empty($key)) {
             return false;
         }
 
-//        $control = $this->get_control();
-//        if (empty($control))
-//        {
-//            return false;
-//        }
-
-        $user = UserManager::get_user_info_by_id($user_id);
-        if (empty($user))
-        {
+        /**
+         * The service corresponding to the key must be enabled. 
+         */
+        $service = $key['api_service'];
+        if (!self::is_service_enabled($service)) {
             return false;
         }
 
-        if ($user['active'] != 1)
-        {
+        /**
+         * User associated with the key must be active 
+         */
+        $user = UserManager::get_user_info_by_id($token->get_user_id());
+        if (empty($user)) {
+            return false;
+        }
+        if (!$user['active']) {
             return false;
         }
 
-        foreach ($services as $service)
-        {
-            $keys = UserManager::get_api_keys($user_id, $service);
-            $keys = $keys ? $keys : array();
-            foreach ($keys as $key)
-            {
-                if ($key == $token)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        /**
+         * Token must be valid. 
+         */
+        return $token->is_valid();
     }
 
     /**
@@ -175,8 +206,7 @@ class KeyAuth
      */
     public function login()
     {
-        if (!$this->accept())
-        {
+        if (!$this->accept()) {
             return false;
         }
         /**
@@ -184,52 +214,49 @@ class KeyAuth
          */
         Session::destroy();
 
-        global $_user, $_uid;
-        $_uid = $this->get_user_id();
-        $_user = UserManager::get_user_info_by_id($_uid);
-
-        Session::write('_user',$_user);
-        Session::write('_uid',$_uid);
-        
         /**
          * We don't allow redirection since access is granted only for this call 
          */
         global $no_redirection, $noredirection;
         $no_redirection = true;
         $noredirection = true;
-        Session::write('noredirection',$noredirection);
+        Session::write('noredirection', $noredirection);
         
+        $user_id = $this->get_user_id();
+        $course_code = $this->get_course_code();
+        $group_id = $this->get_group_id();
+        
+        Login::init_user($user_id, true);
+        Login::init_course($course_code, true);
+        Login::init_group($group_id, true);
+
         return true;
     }
 
     /**
-     * Returns the request user id parameter
+     * Returns the request access token
      * 
-     * @return int 
+     * @return AccessToken
      */
+    public function get_access_token()
+    {
+        $string = Request::get(self::PARAM_ACCESS_TOKEN);
+        return AccessToken::parse($string);
+    }
+    
     public function get_user_id()
     {
-        return (int) Request::get('user_id');
+        return $this->get_access_token()->get_user_id();
     }
-
-    /**
-     * Returns the request security token parameter
-     * 
-     * @return string 
-     */
-    public function get_token()
+    
+    public function get_course_code()
     {
-        return Request::get('token');
+        return Request::get('cidReq', 0);
     }
-
-    /**
-     * Returns the control token parameter
-     * 
-     * @return string 
-     */
-    public function get_control()
+    
+    public function get_group_id()
     {
-        return Request::get('control');
+        return Request::get('gidReq', 0);
     }
 
 }

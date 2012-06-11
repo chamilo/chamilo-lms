@@ -56,6 +56,7 @@ class Autoload
          */
         $result = array();
         $result['AbstractLink'] = '/main/gradebook/lib/be/abstractlink.class.php';
+        $result['AccessToken'] = '/main/inc/lib/access_token.class.php';
         $result['Accessurleditcoursestourl'] = '/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php';
         $result['Accessurleditsessionstourl'] = '/main/inc/lib/access_url_edit_sessions_to_url_functions.lib.php';
         $result['Accessurledituserstourl'] = '/main/inc/lib/access_url_edit_users_to_url_functions.lib.php';
@@ -154,9 +155,6 @@ class Autoload
         $result['FillBlanks'] = '/main/exercice/fill_blanks.class.php';
         $result['FlatViewDataGenerator'] = '/main/gradebook/lib/flatview_data_generator.class.php';
         $result['FlatViewTable'] = '/main/gradebook/lib/fe/flatviewtable.class.php';
-        $result['FormElement'] = '/main/media/lib/form_element.class.php';
-        $result['FormElementTextarea'] = '/main/media/lib/form_element_textarea.class.php';
-        $result['FormRule'] = '/main/media/lib/form_rule.class.php';
         $result['FormValidator'] = '/main/inc/lib/formvalidator/FormValidator.class.php';
         $result['Forum'] = '/main/coursecopy/classes/Forum.class.php';
         $result['ForumCategory'] = '/main/coursecopy/classes/ForumCategory.class.php';
@@ -237,7 +235,7 @@ class Autoload
         $result['HTML_QuickForm_xbutton'] = '/main/inc/lib/pear/HTML/QuickForm/xbutton.php';
         $result['HTML_Table'] = '/main/inc/lib/pear/HTML/Table.php';
         $result['HTML_Table_Storage'] = '/main/inc/lib/pear/HTML/Table/Storage.php';
-        $result['Header'] = '/main/inc/lib/header.class.php';
+        $result['Header'] = '/main/inc/lib/system/web/header.class.php';
         $result['HotSpot'] = '/main/exercice/hotspot.class.php';
         $result['HotSpotDelineation'] = '/main/exercice/hotspot.class.php';
         $result['Html'] = '/main/inc/lib/html.class.php';
@@ -263,9 +261,11 @@ class Autoload
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';
-        $result['Media'] = '/main/media/model/media.class.php';
-        $result['MediaForm'] = '/main/media/lib/media_form.class.php';
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
+        $result['Model\Course'] = '/main/inc/lib/course.class.php';
+        $result['Model\Document'] = '/main/inc/lib/document.class.php';
+        $result['Model\ItemProperty'] = '/main/inc/lib/item_property.class.php';
+        $result['Model\StudentPublication'] = '/main/inc/lib/student_publication.class.php';
         $result['MultipleAnswer'] = '/main/exercice/multiple_answer.class.php';
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
         $result['MultipleAnswerCombinationTrueFalse'] = '/main/exercice/multiple_answer_combination_true_false.class.php';
@@ -273,8 +273,6 @@ class Autoload
         $result['MyHorBar'] = '/main/inc/lib/pchart/MyHorBar.class.php';
         $result['MySpace'] = '/main/mySpace/myspace.lib.php';
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
-        $result['NetworkCredential'] = '/main/inc/lib/system/net/network_credential.class.php';
-        $result['NewMediaForm'] = '/main/media/lib/new_media_form.class.php';
         $result['NotebookManager'] = '/main/inc/lib/notebook.lib.php';
         $result['Notification'] = '/main/inc/lib/notification.lib.php';
         $result['OLE'] = '/main/inc/lib/pear/OLE/OLE.php';
@@ -300,9 +298,11 @@ class Autoload
         $result['PclZip'] = '/main/inc/lib/pclzip/pclzip.lib.php';
         $result['Plugin'] = '/main/inc/lib/plugin.class.php';
         $result['Portfolio'] = '/main/inc/lib/portfolio.class.php';
+        $result['PortfolioBulkAction'] = '/main/inc/lib/portfolio.class.php';
         $result['PortfolioController'] = '/main/inc/lib/portfolio.class.php';
         $result['PortfolioShare'] = '/main/inc/lib/portfolio.class.php';
         $result['Portfolio\Artefact'] = '/main/inc/lib/system/portfolio/artefact.class.php';
+        $result['Portfolio\Download'] = '/main/inc/lib/system/portfolio/download.class.php';
         $result['Portfolio\Mahara'] = '/main/inc/lib/system/portfolio/mahara.class.php';
         $result['Portfolio\Portfolio'] = '/main/inc/lib/system/portfolio/portfolio.class.php';
         $result['Portfolio\User'] = '/main/inc/lib/system/portfolio/user.class.php';
@@ -315,8 +315,8 @@ class Autoload
         $result['Quiz'] = '/main/coursecopy/classes/Quiz.class.php';
         $result['QuizQuestion'] = '/main/coursecopy/classes/QuizQuestion.class.php';
         $result['Redirect'] = '/main/inc/lib/redirect.class.php';
-        $result['Request'] = '/main/inc/lib/request.class.php';
-        $result['RequestServer'] = '/main/inc/lib/request_server.class.php';
+        $result['Request'] = '/main/inc/lib/system/web/request.class.php';
+        $result['RequestServer'] = '/main/inc/lib/system/web/request_server.class.php';
         $result['Resource'] = '/main/coursecopy/classes/Resource.class.php';
         $result['Result'] = '/main/gradebook/lib/be/result.class.php';
         $result['ResultSet'] = '/main/inc/lib/result_set.class.php';
@@ -372,6 +372,7 @@ class Autoload
         $result['SystemAnnouncementManager'] = '/main/inc/lib/system_announcements.lib.php';
         $result['System\Session'] = '/main/inc/lib/system/session.class.php';
         $result['TableSort'] = '/main/inc/lib/table_sort.class.php';
+        $result['Temp'] = '/main/inc/lib/system/io/temp.class.php';
         $result['Template'] = '/main/inc/lib/template.lib.php';
         $result['Text_Diff'] = '/main/inc/lib/pear/Text/Diff.php';
         $result['Text_Diff3'] = '/main/inc/lib/pear/Text/Diff3.php';
@@ -408,6 +409,7 @@ class Autoload
         $result['Uri'] = '/main/inc/lib/uri.class.php';
         $result['UrlManager'] = '/main/inc/lib/urlmanager.lib.php';
         $result['User'] = '/main/auth/shibboleth/app/model/user.class.php';
+        $result['UserApiKeyManager'] = '/main/inc/lib/user_api_key_manager.class.php';
         $result['UserDataGenerator'] = '/main/gradebook/lib/user_data_generator.class.php';
         $result['UserForm'] = '/main/gradebook/lib/fe/userform.class.php';
         $result['UserGroup'] = '/main/inc/lib/usergroup.lib.php';
@@ -419,6 +421,7 @@ class Autoload
         $result['Utf8Encoder'] = '/main/inc/lib/system/text/utf8_encoder.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['XapianIndexer'] = '/main/inc/lib/search/xapian/XapianIndexer.class.php';
+        $result['Zip'] = '/main/inc/lib/zip.class.php';
         $result['ZombieManager'] = '/main/inc/lib/zombie/zombie_manager.class.php';
         $result['ZombieReport'] = '/main/inc/lib/zombie/zombie_report.class.php';
         $result['_Admin'] = '/main/auth/shibboleth/app/model/scaffold/admin.class.php';
@@ -447,6 +450,7 @@ class Autoload
         $result['db'] = '/main/inc/lib/db.lib.php';
         $result['document_processor'] = '/main/inc/lib/search/tool_processors/document_processor.class.php';
         $result['iDatabase'] = '/main/install/i_database.class.php';
+        $result['langstats'] = '/main/cron/lang/langstats.class.php';
         $result['learnpath'] = '/main/newscorm/learnpath.class.php';
         $result['learnpathItem'] = '/main/newscorm/learnpathItem.class.php';
         $result['learnpathList'] = '/main/newscorm/learnpathList.class.php';

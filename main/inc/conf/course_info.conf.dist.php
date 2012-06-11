@@ -41,5 +41,3 @@ $canReportExpirationDate			= true; // Needs to be true
 											// is not automaticly called
 //$linkToChangeDiskQuota			= 'changeQuota.php';
 $urlScriptToReportExpirationDate	= 'postpone.php'; // external script to postpone the expiration of course.
-
-?>

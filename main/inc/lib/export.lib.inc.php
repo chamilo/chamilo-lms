@@ -57,7 +57,7 @@ class Export {
         if(empty($data)){
             return false;
         }
-        $path = Chamilo::temp();
+        $path = Chamilo::temp_file();
         $converter = new Utf8Encoder(null, true);
         $file = FileWriter::create($path, $converter);
         $file = CsvWriter::create($file);

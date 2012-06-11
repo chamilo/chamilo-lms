@@ -163,4 +163,3 @@ $_configuration['deny_delete_users'] = false;
 // Version settings
 $_configuration['system_version']    = '{NEW_VERSION}';
 $_configuration['system_stable']     = NEW_VERSION_STABLE;
-?>

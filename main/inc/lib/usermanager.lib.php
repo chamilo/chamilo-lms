@@ -2318,7 +2318,7 @@ class UserManager {
         $service_name = Database::escape_string($api_service);
         if (is_string($service_name) === false) { return false;}
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $sql = "SELECT id, api_key FROM $t_api WHERE user_id = ".$user_id." AND api_service='".$api_service."';";
+        $sql = "SELECT * FROM $t_api WHERE user_id = $user_id AND api_service='$api_service';";
         $res = Database::query($sql);
         if ($res === false) return false; //error during query
         $num = Database::num_rows($res);

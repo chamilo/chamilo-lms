@@ -3,6 +3,11 @@
 for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus.";
+$UsersRegisteredInAnyGroup = "Users registered in any group";
+$ShowHotCoursesComment = "The hot courses list will be added in the index page";
+$ShowHotCoursesTitle = "Show hot courses";
+$EnableIframeInclusionComment = "Allowing arbitrary iframes in the HTML Editor will enhance the edition capabilities of the users, but it can represent a security risk. Please make sure you can rely on your users (i.e. you know who they are) before enabling this feature.";
+$EnableIframeInclusionTitle = "Allow iframes in HTML Editor";
 $MailTemplateRegistrationMessage = "Dear ((firstname)) ((lastname)),\n\nYou are registered on
 ((sitename)) with the following settings:\n\nUsername :
 ((username))\nPass : ((password))\n\nThe address of ((sitename)) is :
@@ -335,7 +340,7 @@ $NoCoursesForThisUser = "This user isn't subscribed in a course";
 $NoClassesForThisUser = "This user isn't subscribed in a class";
 $NoCoursesForThisClass = "This class isn't subscribed in a course";
 $langOpenToTheWorld = "Open - access allowed for the whole world";
-$OpenToThePlatform = " Open - access allowed for users registered on the platform";
+$OpenToThePlatform = "Open - access allowed for users registered on the platform";
 $langPrivate = " Private - access authorized to course members only";
 $langCourseVisibilityClosed = "Completely closed: the course is only accessible to the teachers.";
 $langSubscription = "Subscription";
@@ -999,7 +1004,7 @@ $HTMLText = "HTML";
 $PageLink = "Page Link";
 $DisplayTermsConditions = "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register.";
 $AllowTermsAndConditionsTitle = "Enable terms and conditions";
-$AllowTermsAndConditionsComment = "This option will display the Terms and Conditions in the register form for new users";
+$AllowTermsAndConditionsComment = "This option will display the Terms and Conditions in the register form for new users. Need to be configured first in the portal administration page.";
 $Load = "Load";
 $AllVersions = "All versions";
 $EditTermsAndConditions = "Edit terms and conditions";

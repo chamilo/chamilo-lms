@@ -2,7 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom avtentifikacijo z njihovimi obstoječimi CAS avtentifikacijskimi podatki";
+$CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom avtentifikacijo z njihovimi obstoječimi CAS avtentifikacijskimi podatki.<br>
+Obiščite 
+<a href=\"settings.php?category=CAS\">Vtiči</a>
+za dodajanje in prilagoditev 'CAS Prijava' gumba za vaš Chamilo portal.";
+$MailTemplateRegistrationMessage = "Spoštovani((firstname)) ((lastname)),\n\nRegistrirani ste v portal ((sitename)) z naslednjimi podatki:\n\nUporabniško ime : ((username))\nGeslo : ((password))\n\nSpletni naslov portala((sitename)) je : ((url))\n\nV primeru težav se obrnite na upravitelja portala.\n\nVaš upravitelj  \n((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationTitle = "Nov uporabnik v ((sitename))";
 $AdminBy = "Upravlja";
 $AdministrationTools = "Upravljanje";
 $State = "Stanje sistema";
@@ -17,7 +22,7 @@ $langExist = "obstaja";
 $ShowBackLinkOnTopOfCourseTree = "Prikaži povezavo 'nazaj' v drevesu kategorij/tečajev";
 $ShowNumberOfCourses = "Prikaži število tečajev";
 $DisplayTeacherInCourselistTitle = "Prikaži učitelja v naslovu tečaja";
-$DisplayTeacherInCourselistComment = "Prikaži učitelja v komentarju seznama tečajev";
+$DisplayTeacherInCourselistComment = "Prikaži učitelja v seznama tečajev";
 $DisplayCourseCodeInCourselistComment = "Prikaži kodo tečaja v komentarju seznama tečajev";
 $DisplayCourseCodeInCourselistTitle = "Prikaži kodo tečaja v naslovu tečaja";
 $ThereAreNoVirtualCourses = "Na platformi ni nobenih navideznih tečajev.";

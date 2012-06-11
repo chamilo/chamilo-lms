@@ -102,4 +102,5 @@ $CreateTheLink = "Importera en länk";
 $MoveCurrentLink = "Flytta den aktuella länken";
 $EditCurrentLink = "Ändra den aktuella länken";
 $Url = "Url";
+$CourseSettings = "Inställningar";
 ?>

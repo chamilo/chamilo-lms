@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Cet exercice fait partie d'un parcour d'apprentissage, il n'est donc pas accessible par les étudiants depuis cette page. Si vous voulez rendre cet exercice disponible depuis l'outil exercice vous devez en faire une copie en utilisant l'icône \"copie\"";
 $langExercice = "Test";
 $langActivate = "afficher";
 $langDeactivate = "masquer";
@@ -482,4 +483,16 @@ $SelectAQuestionToReview = "Sélectionnez une question à réviser";
 $ReviewQuestionLater = "Réviser cette question plus tard";
 $NumberStudentWhoSelectedIt = "Nombre d'étudiants l'ayant sélectionnée";
 $QuestionsAlreadyAnswered = "Questions répondues";
+$StudentsWhoAreTakingTheExerciseRightNow = "Les étudiants qui sont en train de passer l'exercice en ce moment.";
+$ReportByQuestion = "Rapport par question";
+$LiveResults = "Résultats en directe";
+$RecordAnswer = "Enregistrer la réponse";
+$UseTheMessageBelowToAddSomeComments = "Utiliser le message ci-dessous pour ajouter un commentaire";
+$SendRecord = "Envoyer un enregistrement";
+$DownloadLatestRecord = "Télécharger une enregistrement";
+$OralExpression = "Expression orale";
+$CongratulationsYouPassedTheTest = "Félicitations vous avez réussi le test!";
+$YouDidNotReachTheMinimumScore = "Vous avez déjà atteint le score minimum";
+$EndTest = "Fin du test";
+$PassPercentage = "Moyenne (%)";
 ?>

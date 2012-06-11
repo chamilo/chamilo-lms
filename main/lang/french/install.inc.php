@@ -125,4 +125,8 @@ $PHPVersionError = "Votre version de PHP ne suffit pas pour les pré-requis d'in
 $ExtensionSessionsNotAvailable = "Extension de sessions non disponible";
 $ExtensionZlibNotAvailable = "Extension Zlib non disponible";
 $ExtensionPCRENotAvailable = "Extension PCRE non disponible";
+$DatabaseXWillBeCreated = "La base de donnée %s va être créée";
+$ADatabaseWithTheSameNameAlreadyExists = "Une base de donnée avec le meme nom existe déjà";
+$UserXCantHaveAccessInTheDatabaseX = "L'utilisateur %s n'a pas accès à la base de donnée %s";
+$DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "La base de donnée %s ne peut pas être crée, l'utilisateur %s n'a pas suffisamment de permissions.";
 ?>

@@ -3,6 +3,9 @@
 for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS";
+$UsersRegisteredInAnyGroup = "Usuario registrado en ningun curso";
+$EnableIframeInclusionTitle = "Permitir iframes en el editor HTML";
+$MailTemplateRegistrationTitle = "Nuevo usuario en ((sitename))";
 $AdminBy = "Administrado por:";
 $AdministrationTools = "Administración";
 $State = "Estado del sistema";

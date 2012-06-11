@@ -228,4 +228,11 @@ $SelectGradebook = "Sélectionner l'évaluation";
 $CheckYourGradingModelValues = "Veuillez vérifier les valeurs de votre modèle d'évaluation";
 $SkillsAchievedWhenAchievingThisGradebook = "Compétences acquises lors de l'obtention de ce certificat";
 $AddGradebook = "Ajouter évaluation";
+$SelectGradeModel = "Sélectionnez un modèle de note";
+$AllMustWeight100 = "La somme de toutes les valeurs doit être égale à 100";
+$Components = "Composants";
+$OnlyActiveWhenThereAreAnyComponents = "Cette option est activée si vous avez des évaluations ou des catégories";
+$GradebookLockedAlert = "Ce cahier de notes a été bloqué. Vous ne pouvez pas le débloquer en tant qu'enseignant. S'il est réellement nécessaire de le débloquer, veuillez contacter un administrateur de la plateforme en expliquer la raison pour laquelle vous avez besoin de le débloquer (autrement, cela pourrait être considéré comme une tentative de fraude).";
+$NoStudentCertificatesAvailableYet = "Aucun certificat étudiant disponible pour l'instant. Pour générer son certificat, l'étudiant doit aller dans l'outil de cahier de notes et cliquer sur l'icône de certificat, qui n'apparaîtra que lorsqu'il aura atteint les objectifs du cours.";
+$CertificateExistsButNotPublic = "Le certificat référencé existe, mais n'a pas été rendu public. Veuillez vous connecter au portail principal avant de le visualiser.";
 ?>

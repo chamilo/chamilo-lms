@@ -2,7 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisible for students but you have access as teacher.";
 $DeleteAllAttendances = "Delete all created attendances";
+$Unsubscribe = "Unsubscribe";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $Title = "Title";
 $By = "By";
@@ -1233,4 +1235,5 @@ $Detailed = "Detailed";
 $ResourceLockedByGradebook = "This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.";
 $ConfirmToLockElement = "Are you sure you want to lock this item? After locking this item you can't edit the user results. To unlock it, you need to contact the platform administrator.";
 $ConfirmToUnLockElement = "Are you sure you want to unlock this element?";
+$Default = "Default";
 ?>

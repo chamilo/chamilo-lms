@@ -791,4 +791,7 @@ $CannotMoveField = "Kan inte flytta fältet";
 $FieldMovedUp = "Fältet flyttades upp";
 $FieldShown = "Fältet är nu synligt för användaren";
 $FieldHidden = "Fältet är nu osynligt för användaren";
+$CreateBackup = "Säkerhetskopiera";
+$MessagesSent = "Antalet skickade meddelanden";
+$MessagesReceived = "Antalet mottagna meddelanden";
 ?>

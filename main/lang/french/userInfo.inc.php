@@ -91,6 +91,7 @@ $ClearSearchResults = "Nettoyer les résultats de la recherche";
 $SendInvitation = "Envoyer invitation";
 $SocialInvitationToFriends = "Inviter à se joindre à mon groupe d'amis";
 $MyCertificates = "Mes certificats";
+$UnsubscribeFromPlatformSuccess = "Votre compte %s a été complètement effacer de ce portail. Merci d'avoir utiliser notre portail. Nous espérons vous revoir bientôt.";
 $ToChangeYourEmailMustTypeYourPassword = "Afin de modifier votre adresse e-mail, veuillez confirmer votre mot de passe";
 $Invitations = "Invitations";
 $MyGroups = "Mes groupes";
@@ -199,4 +200,6 @@ $SocialGroups = "Groupes sociaux";
 $CreateASocialGroup = "Créer un groupe social";
 $EditMembersList = "Éditer liste de membres";
 $IAmAHRM = "Je suis un responsable des ressources humaines";
+$UnsubscribeFromPlatform = "Si vous voulez vous désinscrire complètement de ce campus et voir toutes vos informations effacées de la base de données, veuillez appuyer sur le bouton ci-dessous et confirmer.";
+$UnsubscribeFromPlatformConfirm = "Oui, je veux effacer ce compte de façon définive. Toutes les informations liées à ce compter seront irrémédiablement effacées et il ne sera plus possible de se connecter avec ce compte.";
 ?>

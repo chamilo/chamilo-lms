@@ -66,5 +66,6 @@ $FolderCreated = "Ny mapp skapad";
 $LinkAdded = "Länk tillagd";
 $AnnouncementAdded = "Tillkännagivande har lagts till";
 $AgendaAdded = "Kalenderpost skapad";
+$Messages = "Meddelande";
 $PendingInvitations = "Inbjudan avvaktar svar";
 ?>

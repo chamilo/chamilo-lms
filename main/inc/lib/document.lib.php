@@ -2184,11 +2184,18 @@ class DocumentManager {
                     if (!empty($docid)) {
                     	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 						$params = array();
+                        
                         if (!empty($title)) {
                         	$params['title'] = get_document_title($title);
                         } else {
-                        	$params['title']  = get_document_title($files['file']['name']);
+                            if (isset($if_exists) && $if_exists == 'rename') {
+                                $new_path = basename($new_path);                   
+                                $params['title']  = get_document_title($new_path);                                
+                            } else {
+                                $params['title']  = get_document_title($files['file']['name']);
+                            }
                         }
+                        
                         if (!empty($comment)) {
                         	$params['comment'] = trim($comment);
                         }

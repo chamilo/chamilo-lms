@@ -161,12 +161,15 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
  */
 function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upload_path, $user_id, $to_group_id = 0, $to_user_id = null, $maxFilledSpace = '', $unzip = 0, $what_if_file_exists = '', $output = true) {
 	if (!$user_id) die('Not a valid user.');
-
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
-	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
+	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']); 
 	$current_session_id    = api_get_session_id();
+    
+    if (empty($maxFilledSpace)) {
+        $maxFilledSpace = DocumentManager::get_course_quota();
+    }    
 	
 	// Check if there is enough space to save the file
 	if (!DocumentManager::enough_space($uploaded_file['size'], $maxFilledSpace)) {
@@ -174,7 +177,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
             Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		}
 		return false;
-	}
+	}    
 
 	// If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
@@ -185,14 +188,15 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
             Display::display_error_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'));
 	    }
 		return false;
-	} else {
+	} else {        
 		// Clean up the name, only ASCII characters should stay. (and strict)
 		$clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
+        
 		// No "dangerous" files
-		$clean_name = disable_dangerous_file($clean_name);
+		$clean_name = disable_dangerous_file($clean_name);        
         
 		if (!filter_extension($clean_name)) {
-		    if ($output){
+		    if ($output) {
                 Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		    }
 			return false;
@@ -226,7 +230,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-
+            
 			// What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
@@ -268,7 +272,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							return $file_path;
 						}
 					} else {
-					    if ($output){
+					    if ($output) {
 						  Display::display_error_message(get_lang('UplUnableToSaveFile'));
 					    }
 						return false;
@@ -276,11 +280,11 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 					break;
 
 				// Rename the file if it exists
-				case 'rename':
+				case 'rename':                    
 					$new_name = unique_name($where_to_save, $clean_name);
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
-
+                    
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
 
 						chmod($store_path, $files_perm);
@@ -299,13 +303,15 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 						}
 						return $new_file_path;
 					} else {
-						Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                        if ($output) {
+                            Display::display_error_message(get_lang('UplUnableToSaveFile'));
+                        }
 						return false;
 					}
 					break;
 
 				// Only save the file if it doesn't exist or warn user if it does exist
-				default:
+				default:                    
 					if (file_exists($store_path)) {
 					    if ($output) {
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
@@ -316,6 +322,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 
 							// Put the document data in the database
 							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name);
+                            
 							if ($document_id) {
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);

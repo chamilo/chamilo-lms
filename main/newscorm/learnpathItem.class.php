@@ -1521,8 +1521,7 @@ class learnpathItem {
 										} else {
 											if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' complete', 0); }
 										}
-										//error_log('status of document'.$status);
-										//var_dump($returnstatus);
+										
 										//$returnstatus = true;
 										if ($returnstatus  && $this->prevent_reinit == 1) {
 											// I would prefer check in the database.
@@ -1541,7 +1540,6 @@ class learnpathItem {
 											$status_array = Database :: fetch_row($rs_lp);
 											$status	= $status_array[0];
 
-											//var_dump($status);
 											$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 											if (!$returnstatus && empty($this->prereq_alert)){
 												$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -2592,4 +2590,46 @@ class learnpathItem {
 		if (self::debug > 2) { error_log('New LP - End of learnpathItem::write_to_db()', 0); }
 	 	return true;
 	 }
+     
+     function add_audio() {
+        $course_info = api_get_course_info();
+        $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/';
+        
+        if (!is_dir($filepath.'audio')) {
+            mkdir($filepath.'audio', api_get_permissions_for_new_directories());
+            $audio_id = add_document($course_info, '/audio', 'folder', 0, 'audio');
+            api_item_property_update($course_info, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(), null, null, null, null, api_get_session_id());
+        }
+        
+        $key = 'file';
+        
+        if (!isset($_FILES[$key]['name']) || !isset($_FILES[$key]['tmp_name'])) {
+            return false;
+        }        
+        $result = DocumentManager::upload_document($_FILES, '/audio', null, null, 0, 'rename', false, false);        
+        $file_path = null;
+        
+        if ($result) {
+            $file_path = basename($result['path']);           
+            
+            // Store the mp3 file in the lp_item table.
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file_path)."' 
+                                WHERE c_id = {$course_info['real_id']} AND id = '".Database::escape_string($this->db_id)."'";
+            Database::query($sql_insert_audio);
+        }
+        return $file_path;        
+    }
+    
+    function remove_audio() {
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $course_id = api_get_course_int_id();        
+        if (empty($this->db_id)) {
+            return false;
+        }
+        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";        
+        Database::query($sql);
+    }
+     
+     
 }

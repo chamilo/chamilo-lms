@@ -126,14 +126,6 @@ if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action
 }
 
 $htmlHeadXtra[] = AnnouncementManager::to_javascript();
-$htmlHeadXtra[] = '<script type="text/javascript">
-function setFocus(){
-    $("#emailTitle").focus();
-}
-$(document).ready(function () {
-    setFocus();
-});
-</script>';
 
 /*	Filter user/group */
 
@@ -617,7 +609,7 @@ if ($display_form) {
 	if (empty($_SESSION['toolgroup'])) {
 		echo '	<div class="control-group">
 					<label class="control-label">'.
-						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
+						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
 					</label>
 					<div class="controls">';
 		if (isset($_GET['id']) && is_array($to)) {
@@ -652,7 +644,7 @@ if ($display_form) {
 				$content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
 			}
 		} else {
-			echo get_lang('Everybody');
+			echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
 		}
 		AnnouncementManager::show_to_form($to);
 		echo '		</div>
@@ -678,8 +670,8 @@ if ($display_form) {
 			echo '<div class="control-group">
 				  <div class="controls">
 				  <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
-				  '.get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;
-				  <a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
+				  '.get_lang('EmailOption').': <span id="recipient_overview">'.get_lang('MyGroup').'</span>
+				  <a href="#" onclick="toggle_sendto();">'.get_lang('ModifyRecipientList').'</a>';
 			      AnnouncementManager::show_to_form_group($_SESSION['toolgroup']);
 			echo '</div></div>';
 	}

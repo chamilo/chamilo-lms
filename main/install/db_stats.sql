@@ -131,17 +131,18 @@ ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAU
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
-  exe_id int default NULL,
-  user_id int NOT NULL default 0,
-  question_id int NOT NULL default 0,
-  answer text NOT NULL,
-  teacher_comment text NOT NULL,
-  marks float(6,2) NOT NULL default 0,
-  course_code varchar(40) NOT NULL default '',
-  position int default 0,
-  tms datetime NOT NULL default '0000-00-00 00:00:00',
-  session_id INT NOT NULL DEFAULT 0,
-  filename VARCHAR(255) DEFAULT NULL
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    exe_id int default NULL,
+    user_id int NOT NULL default 0,
+    question_id int NOT NULL default 0,
+    answer text NOT NULL,
+    teacher_comment text NOT NULL,
+    marks float(6,2) NOT NULL default 0,
+    course_code varchar(40) NOT NULL default '',
+    position int default 0,
+    tms datetime NOT NULL default '0000-00-00 00:00:00',
+    session_id INT NOT NULL DEFAULT 0,
+    filename VARCHAR(255) DEFAULT NULL
 );
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 
@@ -150,13 +151,14 @@ ALTER TABLE track_e_attempt ADD INDEX (session_id);
 
 DROP TABLE IF EXISTS track_e_attempt_recording;
 CREATE TABLE track_e_attempt_recording (
-  exe_id int unsigned NOT NULL, 
-  question_id int unsigned NOT NULL,  
-  marks int NOT NULL,  
-  insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
-  author int unsigned NOT NULL,  
-  teacher_comment text NOT NULL,
-  session_id INT NOT NULL DEFAULT 0
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    exe_id int unsigned NOT NULL, 
+    question_id int unsigned NOT NULL,  
+    marks int NOT NULL,  
+    insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
+    author int unsigned NOT NULL,  
+    teacher_comment text NOT NULL,
+    session_id INT NOT NULL DEFAULT 0
 );
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
@@ -164,14 +166,15 @@ ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 
 DROP TABLE IF EXISTS track_e_hotpotatoes;
 CREATE TABLE track_e_hotpotatoes (
-  exe_name VARCHAR( 255 ) NOT NULL ,
-  exe_user_id int unsigned DEFAULT NULL ,
-  exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
-  exe_cours_id varchar(40) NOT NULL ,
-  exe_result smallint default 0 NOT NULL ,
-  exe_weighting smallint default 0 NOT NULL,
-  KEY exe_user_id (exe_user_id),
-  KEY exe_cours_id (exe_cours_id)
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    exe_name VARCHAR( 255 ) NOT NULL ,
+    exe_user_id int unsigned DEFAULT NULL ,
+    exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
+    exe_cours_id varchar(40) NOT NULL ,
+    exe_result smallint default 0 NOT NULL ,
+    exe_weighting smallint default 0 NOT NULL,
+    KEY exe_user_id (exe_user_id),
+    KEY exe_cours_id (exe_cours_id)
 );
 
 DROP TABLE IF EXISTS track_e_links;
@@ -293,25 +296,27 @@ ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
 --
 -- Table structure for LP custom storage API
 --
-DROP TABLE IF EXISTS stored_values;
-CREATE TABLE stored_values (
-        user_id INT NOT NULL,
-        sco_id INT NOT NULL,
-        course_id CHAR(40) NOT NULL,
-        sv_key CHAR(64) NOT NULL,
-        sv_value TEXT NOT NULL
+DROP TABLE IF EXISTS track_stored_values;
+CREATE TABLE IF NOT EXISTS track_stored_values (
+    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL    
 );
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
 
-DROP TABLE IF EXISTS stored_values_stack;
-CREATE TABLE stored_values_stack (
-        user_id INT NOT NULL,
-        sco_id INT NOT NULL,
-        stack_order INT NOT NULL,
-        course_id CHAR(40) NOT NULL,
-        sv_key CHAR(64) NOT NULL,
-        sv_value TEXT NOT NULL
+DROP TABLE IF EXISTS track_stored_value_stack;
+CREATE TABLE IF NOT EXISTS track_stored_values_stack (
+    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	stack_order INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
 );
-ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);

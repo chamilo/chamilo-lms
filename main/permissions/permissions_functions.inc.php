@@ -81,8 +81,8 @@ function store_one_permission($content, $action, $id, $tool,$permission) {
 	//}
 
 	// Which database are we using (depending on the $content parameter)
-	if($content=='user')
-	{
+    
+	if ($content=='user') {
 		$table=Database::get_course_table(TABLE_PERMISSION_USER);
 		$id_field = user_id;
 	}
@@ -101,8 +101,7 @@ function store_one_permission($content, $action, $id, $tool,$permission) {
 	if($action=='grant') {
 		$sql="INSERT INTO $table (c_id, $id_field,tool,action) VALUES ($course_id, '".Database::escape_string($id)."','".Database::escape_string($tool)."','".Database::escape_string($permission)."')";
 		$result=Database::query($sql);
-		if($result)
-		{
+		if($result) {
 			$result_message=get_lang('PermissionGranted');
 		}
 	}

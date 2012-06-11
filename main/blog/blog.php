@@ -302,43 +302,10 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<?php Blog::get_personal_task_list(); ?>
 				</td>
 			</tr>
-		</table>
-		<!--
-		<br />
-		<table width="100%">
-			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('FavoriteBlogs') ?></td>
-			</tr>
-			<tr>
-				<td class="blog_menu">
-					<ul>
-						<li>Favorite 1</li>
-						<li>Favorite 2</li>
-						<li>Favorite 3</li>
-					</ul>
-				</td>
-			</tr>
-		</table>
-		<br />
-		<table width="100%">
-			<tr>
-				<td class="blog_menu_title"><?php echo get_lang('TopTen') ?></td>
-			</tr>
-			<tr>
-				<td class="blog_menu">
-					<ul>
-						<li>Blog 1</li>
-						<li>Blog 2</li>
-						<li>Blog 3</li>
-					</ul>
-				</td>
-			</tr>
-		</table>
-	-->
+		</table>		
 	</td>
 	<td valign="top" class="blog_right">
 		<?php
-
 
 if ($error)
 	Display :: display_error_message($message);
@@ -376,16 +343,13 @@ if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 
 switch ($current_page) {
 	case 'new_post' :
-		if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_add', $user_task ? $task_id : 0)) {
 			// we show the form if
 			// 1. no post data
 			// 2. there is post data and the required field is empty
-			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title'])))
-			{
+			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
 				// if there is post data there is certainly an error in the form
-				if ($_POST)
-				{
+				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
 			Blog :: display_form_new_post($blog_id);
@@ -425,7 +389,7 @@ switch ($current_page) {
 				{
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-			Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
+                Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
 			}
 			else
 			{

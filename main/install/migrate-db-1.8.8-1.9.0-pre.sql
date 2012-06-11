@@ -261,10 +261,11 @@ INSERT INTO settings_options (variable, value, display_text) values ('platform_u
 
 DROP TABLE IF EXISTS access_url_rel_session;
 
-ALTER TABLE usergroup_rel_session   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE usergroup_rel_course    ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE usergroup_rel_user      ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE admin                   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_session       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_course        ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_user          ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE admin                       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE reservation_category_rights ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
 -- Remove settings entry that doesnt exist anymore
 
@@ -273,20 +274,25 @@ DELETE FROM settings_current WHERE variable = "user_order_by";
 DELETE FROM settings_options WHERE variable = "user_order_by";
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18219' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18283' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
 --CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);
-CREATE TABLE stored_values (user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
-CREATE TABLE stored_values_stack (user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
-ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+CREATE TABLE track_stored_values (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+
+CREATE TABLE track_stored_values_stack (id int unsigned not null AUTO_INCREMENT PRIMARY KEY,user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
 ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
 ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;
+
+ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
 -- xxUSERxx
 

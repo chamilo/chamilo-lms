@@ -32,8 +32,8 @@ switch ($_GET["cmd"]) {
       echo "Are you sure you are willing to erease all storage api data (no backup)? <a href='cli.php?cmd=clear_stapi_confirm' >Yes</a>";
       break;
     case "clear_stapi_confirm":
-      Database::query("delete from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES));
-      Database::query("delete from ".Database::get_main_table(TABLE_MAIN_STORED_STACK));
+      Database::query("delete from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES));
+      Database::query("delete from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK));
       echo "Done";
       break;
     default:

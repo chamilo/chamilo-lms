@@ -72,7 +72,7 @@ function storage_can_set($sv_user) {
 
 function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$sql = "select sv_value
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
 		where user_id= '$sv_user'
 		and sco_id = '$sv_sco'
 		and course_id = '$sv_course'
@@ -96,7 +96,7 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
 
 	// get leaders
 	$sql_leaders = "select u.user_id, firstname, lastname, email, username, sv_value as value
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." sv,
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." sv,
 			".Database::get_main_table(TABLE_MAIN_USER)." u
 		where u.user_id=sv.user_id
 		and sco_id = '$sv_sco'
@@ -104,7 +104,7 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
 		and sv_key = '$sv_key'
 		order by sv_value ".($sv_asc ? "ASC": "DESC")." limit $sv_length";
 //	$sql_data = "select sv.user_id as user_id, sv_key as variable, sv_value as value
-//		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." sv
+//		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." sv
 //		where sv.user_id in (select u2.user_id from ($sql_leaders) u2)
 //		and sco_id = '$sv_sco'
 //		and course_id = '$sv_course'";
@@ -128,8 +128,8 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
 
 function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
 	$sql = "select count(list.user_id) as position 
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." search,
-			".Database::get_main_table(TABLE_MAIN_STORED_VALUES)." list
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." search,
+			".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." list
 		where search.user_id= '$sv_user'
 		and search.sco_id = '$sv_sco'
 		and search.course_id = '$sv_course'
@@ -151,7 +151,7 @@ function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $
 
 function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 	$sv_value = Database::escape_string($sv_value);
-	$sql = "replace into ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)."
+	$sql = "replace into ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
 		(user_id, sco_id, course_id, sv_key, sv_value)
 		values
 		('$sv_user','$sv_sco','$sv_course','$sv_key','$sv_value')";
@@ -161,7 +161,7 @@ function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 
 function storage_getall($sv_user, $sv_course, $sv_sco) {
 	$sql = "select sv_key, sv_value
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
 		where user_id= '$sv_user'
 		and sco_id = '$sv_sco'
 		and course_id = '$sv_course'";
@@ -180,7 +180,7 @@ function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 	$sv_value = Database::escape_string($sv_value);
 	Database::query("start transaction");
 	$sqlorder = "select ifnull((select max(stack_order) 
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
@@ -189,7 +189,7 @@ function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 	$resorder = Database::query($sqlorder);
 	$row = Database::fetch_assoc($resorder);
 	$stack_order = (1 + $row['stack_order']);
-	$sqlinsert = "insert into ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+	$sqlinsert = "insert into ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		(user_id, sco_id, course_id, sv_key, stack_order, sv_value)
 		values
 		('$sv_user', '$sv_sco', '$sv_course', '$sv_key', '$stack_order', '$sv_value')";
@@ -207,7 +207,7 @@ function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
 	Database::query("start transaction");
 	$sqlselect = "select sv_value, stack_order
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
@@ -218,7 +218,7 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$rowselect = Database::fetch_assoc($resselect);
 	$stack_order = $rowselect['stack_order'];
 	$sqldelete = "delete
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
@@ -242,7 +242,7 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
 
 function storage_stack_length($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$sql = "select count(*) as length
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
@@ -254,7 +254,7 @@ function storage_stack_length($sv_user, $sv_course, $sv_sco, $sv_key) {
 
 function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$sql = "delete
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'
@@ -265,7 +265,7 @@ function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key) {
 
 function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
 	$sql = "select stack_order as stack_order, sv_value as value
-		from ".Database::get_main_table(TABLE_MAIN_STORED_VALUES_STACK)."
+		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
 		where user_id= '$sv_user'
 		and sco_id='$sv_sco'
 		and course_id='$sv_course'

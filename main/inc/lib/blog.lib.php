@@ -1219,7 +1219,7 @@ class Blog {
 			echo '<div class="control-group">
 						<label class="control-label">
 							' . get_lang('AddAnAttachment') . '
-						</div>
+						</label>
 						<div class="controls">
 							<input type="file" name="user_upload"/>
 						</div>
@@ -1236,9 +1236,7 @@ class Blog {
 					</div>';
 
 			// submit
-			echo '<div class="control-group">
-						<label class="control-label">
-						</label>
+			echo '<div class="control-group">						
 						<div class="controls">
 								 <input type="hidden" name="action" value="" />
 								 <input type="hidden" name="new_post_submit" value="true" />
@@ -1298,15 +1296,14 @@ class Blog {
 			$oFCKeditor->ToolbarSet = 'Project';
 		}
 		$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
-		echo '<div class="formw">';
+		echo '<div class="controls">';
 		echo $oFCKeditor->Create();
 		echo '</div>';
 
 		// submit
-		echo '	<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
+		echo '	<div class="control-group">
+					
+					<div class="controls">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="edit_post_submit" value="true" />
 							 <input type="hidden" name="post_id" value="' . (int)$_GET['post_id'] . '" />
@@ -1475,31 +1472,31 @@ class Blog {
 		echo '<legend>'.get_lang('AddTask').'</legend>';
 
 		// task title
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span>' . get_lang('Title') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<input name="task_name" type="text" size="70" />
 					</div>
 				</div>';
 
 		// task comment
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						' . get_lang('Description') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<textarea name="task_description" cols="45"></textarea>
 					</div>
 				</div>';
 
 		// task management
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						' . get_lang('TaskManager') . '
-					</div>
-					<div class="formw">';
+					</label>
+					<div class="controls">';
 								echo "\t\t\t" . '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
 									echo "\t\t\t\t" . '<tr>' . "\n";
 										echo "\t\t\t\t\t" . '<th colspan="2" style="width:223px;">' . get_lang('ArticleManager') . '</th>' . "\n";
@@ -1521,11 +1518,11 @@ class Blog {
 
 
 		// task color
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						' . get_lang('Color') . '
-					</div>
-					<div class="formw">';
+					</label>
+					<div class="controls">';
 		echo '		   	<select name="task_color" id="color" style="width: 150px; background-color: #eeeeee" onchange="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value" onkeypress="document.getElementById(\'color\').style.backgroundColor=\'#\'+document.getElementById(\'color\').value">';
 								foreach ($colors as $color)
 								{
@@ -1537,10 +1534,8 @@ class Blog {
 				</div>';
 
 		// submit
-		echo '	<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
+		echo '	<div class="control-group">					
+					<div class="controls">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_task_submit" value="true" />
 						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
@@ -1703,31 +1698,31 @@ class Blog {
 		echo '<legend>'.get_lang('AssignTask').'</legend>';
 
 		// user
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span>' . get_lang('SelectUser') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						'.$select_user_list.'
 					</div>
 				</div>';
 
 		// task
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span>' . get_lang('SelectTask') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						'.$select_task_list.'
 					</div>
 				</div>';
 
 		// date
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						<span class="form_required">*</span>' . get_lang('SelectTargetDate') . '
-					</div>
-					<div class="formw">';
+					</label>
+					<div class="controls">';
 		echo '			    <select name="task_day">';
 								for($i=1; $i<=31; $i++)
 								{
@@ -1769,10 +1764,10 @@ class Blog {
 				</div>';
 
 		// submit
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 					</div>
-					<div class="formw">
+					<div class="controls">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="assign_task_submit" value="true" />
 						<button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button>
@@ -2360,36 +2355,34 @@ class Blog {
 			$oFCKeditor->ToolbarSet = 'ProjectComment';
 		}
 		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
-		echo '<div class="formw">';
+		echo '<div class="controls">';
 		echo $oFCKeditor->Create() ;
 		echo '
 				</div>';
 
 		// attachment
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						' . get_lang('AddAnAttachment') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<input type="file" name="user_upload"/>
 					</div>
 				</div>';
 
 		// attachment comment
-		echo '	<div class="row">
-					<div class="label">
+		echo '	<div class="control-group">
+					<label class="control-label">
 						' . get_lang('FileComment') . '
-					</div>
-					<div class="formw">
+					</label>
+					<div class="controls">
 						<textarea name="post_file_comment" cols="34" /></textarea>
 					</div>
 				</div>';
 
 		// attachment comment
-		echo '	<div class="row">
-					<div class="label">
-					</div>
-					<div class="formw">
+		echo '	<div class="control-group">					
+					<div class="controls">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="comment_parent_id" id="comment_parent_id" value="0" />';
 									if(isset($_GET['task_id']))

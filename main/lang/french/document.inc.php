@@ -214,6 +214,8 @@ $CreateFolder = "Créer le dossier";
 $HelpDefaultDirDocuments = "Ce répertoire contient les fichiers par défaut. Vous pouvez supprimer des fichiers ou en ajouter de nouveaux, mais si un fichier invisible est inséré dans un document web, les apprenants ne pourront pas voir ce fichier dans le document. Lorsque vous insérez un fichier dans un document, assurez-vous qu'il soit visible. Les répertoires, eux, peuvent rester invisibles.";
 $HelpSharedFolder = "Ce répertoire contient les fichiers que d'autres apprenants (ou vous-même) ont envoyé dans un cours au travers de l'éditeur en ligne (à l'exception de l'outil de groupe). Par défaut, ils seront visibles par tous les enseignants, mais resteront invisibles pour les autres apprenants (sauf par accès direct au fichier). Si vous rendez un répertoire apprenant visible, les autres apprenants pourront voir l'ensemble de son contenu.";
 $TemplateImage = "Icône du modèle";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Pour exécuter ce média vous devez mettre à jour votre navigateur ou votre plugin Flash. Vérifier également si le fichier à l'extention correcte.";
+$UpdateRequire = "Mise à jour nécessaire";
 $MoveElement = "Déplacer élément";
 $CertificateName = "Nom du certificat";
 $CopyToMyFiles = "Copier dans mon dossier personnel de fichiers";
@@ -267,4 +269,5 @@ $DirExists = "Opération impossible, un répertoire du même nom existe déjà (
 $DocMv = "Document déplacé.";
 $NoSVGImagesInImagesGalleryPath = "Il n'y a aucune image SVG dans le répertoire de galerie d'images";
 $NoSVGImages = "Aucune image SVG";
+$WamiNeedFilename = "Avant d'activer l'enregistrement il faut donner un nom de fichier.";
 ?>

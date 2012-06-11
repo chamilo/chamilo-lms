@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Already registered in course";
 $lang_already_enrolled = "already enrolled";
 $lang_my_personnal_course_list = "My courses list";
 $lang_course_enrollment = "Course user";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.";
 $langExercice = "Test";
 $langActivate = "Show";
 $langDeactivate = "Hide";

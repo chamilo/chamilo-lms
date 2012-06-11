@@ -59,4 +59,6 @@ $ButtonPublishAnnouncement = "Publier annonce";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Cher utilisateur,
 
 Votre compte a été activé. Vous pouvez à présent vous connecter et consulter vos cours.";
+$AddAsAnnouncement = "Ajouter une annonce";
+$AnnouncementForGroup = "Annonce pour un groupe";
 ?>

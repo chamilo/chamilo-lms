@@ -233,4 +233,6 @@ $AllMustWeight100 = "The sum of all values must be 100";
 $Components = "Components";
 $OnlyActiveWhenThereAreAnyComponents = "This option is enabled if you have any evaluations or categories";
 $GradebookLockedAlert = "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).";
+$NoStudentCertificatesAvailableYet = "No student certificate available yet. Please note that, to generate his certificate, a student has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives.";
+$CertificateExistsButNotPublic = "The requested certificate exists on this portal, but it has not been made public. Please login to view it.";
 ?>

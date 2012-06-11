@@ -145,6 +145,7 @@ $NoComment = "Ingen kommentar";
 $Messages = "Meddelande";
 $Print = "Skriv ut";
 $TimeSpentInTheCourse = "Nedlagd tid";
+$AvgMessages = "Meddelande";
 $NoConnexion = "Ingen anslutning";
 $Ranking = "Rangordning";
 $BestResultInCourse = "Bästa resultatet i kursen";

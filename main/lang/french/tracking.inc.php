@@ -316,5 +316,7 @@ $NumberOfForumsInLearnpath = "Nombre de forums dans le parcours";
 $NumberOfAssignmentsInLearnpath = "Nombre de travaux dans le parcours";
 $NumberOfAnnouncementsInCourse = "Nombre d'annonces dans le parcours";
 $CurrentCoursesReport = "Rapport de cours courants";
+$NumberOfPublishedExercises = "# d'exerices publiés";
+$NumberOfPublishedLps = "# de parcours publiés";
 $EventType = "Type d'événement";
 ?>

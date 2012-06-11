@@ -25,4 +25,10 @@ $GlossaryManagement = "Gestion du glossaire";
 $TermMoved = "Le terme a été déplacé";
 $ShowGlossaryInExtraToolsTitle = "Afficher les termes du glossaire dans les outils extra";
 $ShowGlossaryInExtraToolsComment = "Indiquez si vous désirez afficher les termes du glossaire dans les outils de parcours et exercices";
+$ImportGlossary = "Importer le glossaire";
+$ReplaceGlossary = "Remplacer le glossaire";
+$CannotDeleteGlossary = "Le glossaire ne peut pas être supprimer";
+$TermsImported = "Termes importés";
+$TermsNotImported = "Termes pas importés";
+$ExportGlossaryAsCSV = "Exporter le glossaire sous forme de fichier CSV";
 ?>

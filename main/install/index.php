@@ -45,6 +45,9 @@ require_once 'install.lib.php';
 require_once 'install.class.php';
 require_once 'i_database.class.php';
 
+// This value is use in database::query in order to prompt errors
+Database::$log_queries = true;
+
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the
 // global array-type variable $_setting.

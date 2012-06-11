@@ -23,6 +23,9 @@ require_once 'database.constants.inc.php';
  * @package chamilo.database
  */
 class Database {
+    
+    /* Variable use only in the installation process to log errors. See the Database::query function */
+    static $log_queries = false;
 
     /*
         Accessor methods
@@ -680,10 +683,9 @@ class Database {
         //@todo remove this before the stable release
         
         //Check if the table contains a c_ (means a course id)
-        if (strpos($query, 'c_')) {      	
+        if (strpos($query, 'c_')) {	
         	//Check if the table contains inner joins 
-        	if (
-                    
+        	if (                    
                 strpos($query, 'allow_public_certificates') === false &&
                 strpos($query, 'DROP TABLE IF EXISTS') === false &&      
                 strpos($query, 'thematic_advance') === false &&  
@@ -797,6 +799,30 @@ class Database {
                 }
                 $info .= '</pre>';
                 echo $info;
+            }
+            
+            if (isset(self::$log_queries) && self::$log_queries) {
+                error_log("----------------  SQL error ---------------- ");
+                error_log($query);
+                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
+                error_log($info);
+                $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
+                error_log($info);
+                
+                if (empty($type)) {
+                    if (!empty($function)) {
+                        $info = 'FUNCTION: ' . $function;
+                        error_log($info);
+                    }
+                } else {
+                    if (!empty($class) && !empty($function)) {
+                        $info .= 'CLASS: ' . $class;
+                        error_log($info);
+                        $info .= 'METHOD: ' . $function;
+                        error_log($info);
+                    }
+                }
+                error_log("---------------- end ----------------");
             }
         }
         return $result;

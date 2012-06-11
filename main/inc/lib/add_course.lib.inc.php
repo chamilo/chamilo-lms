@@ -438,6 +438,7 @@ function create_course_tables($course_db_name = null) {
     $TBL_METADATA               = $course_db_name . 'metadata';
 
     $add_to_all_tables = ' c_id INT NOT NULL, ';
+    
 
     /*  Announcement tool	*/
 
@@ -615,15 +616,15 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
-    Database::query($sql);
-
+    Database::query($sql);    
+    
     // Forum Mailcue
     $sql = "
         CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
          id int NOT NULL auto_increment,
-         thread_id int default NULL,
-         user_id int default NULL,
+         user_id int default NULL, 
+         thread_id int default NULL, 
          post_id int default NULL,
          PRIMARY KEY (id, c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
@@ -645,13 +646,14 @@ function create_course_tables($course_db_name = null) {
     // Forum notification
     $sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
     		  $add_to_all_tables
+              id int NOT NULL auto_increment,
               user_id int,
               forum_id int,
               thread_id int,
               post_id int,
               KEY user_id (user_id),
               KEY forum_id (forum_id),
-              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id )
+              PRIMARY KEY  (id, c_id, user_id, forum_id, thread_id, post_id )
             )" . $charset_clause;
     Database::query($sql);
 
@@ -1340,9 +1342,7 @@ function create_course_tables($course_db_name = null) {
     	 PRIMARY KEY  (c_id, id)
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPVIEW` (
     	$add_to_all_tables" .
@@ -1356,24 +1356,16 @@ function create_course_tables($course_db_name = null) {
          PRIMARY KEY  (c_id, id)
     	)" . $charset_clause; // lp's progress for this user
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (lp_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (user_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (session_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (
     	$add_to_all_tables
@@ -1403,14 +1395,10 @@ function create_course_tables($course_db_name = null) {
 
     	)" . $charset_clause;                   // contains the audio file that goes with the learning path step
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEMVIEW` (
     	$add_to_all_tables
@@ -1430,19 +1418,13 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY  (c_id, id)
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_item_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(
     	 $add_to_all_tables" .
@@ -1460,14 +1442,10 @@ function create_course_tables($course_db_name = null) {
     	"PRIMARY KEY  (c_id, id)".
         ")" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPIVINTERACTION` ADD INDEX (lp_iv_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVOBJECTIVE`(
     	$add_to_all_tables" .
@@ -1482,14 +1460,10 @@ function create_course_tables($course_db_name = null) {
     	"PRIMARY KEY  (c_id, id) ".
         ")" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `$TABLELPIVOBJECTIVE` ADD INDEX (lp_iv_id) ";
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     /* Blogs */
 
@@ -1505,9 +1479,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, blog_id )
         )" . $charset_clause . " COMMENT = 'Table with blogs in this course';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "ALTER TABLE `".$tbl_blogs . "` ADD INDEX ( session_id ) ";
     Database::query($sql);
@@ -1527,9 +1499,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, comment_id )
         )" . $charset_clause . " COMMENT = 'Table with comments on posts in a blog';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_blogs_posts . "` (
@@ -1543,9 +1513,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, post_id )
         )" . $charset_clause . " COMMENT = 'Table with posts / blog.';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_blogs_rating . "` (
@@ -1559,9 +1527,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, rating_id )
         )" . $charset_clause . " COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_blogs_rel_user . "` (
@@ -1571,9 +1537,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY ( c_id, blog_id , user_id )
         )" . $charset_clause . " COMMENT = 'Table representing users subscribed to a blog';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_blogs_tasks . "` (
@@ -1587,9 +1551,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, task_id )
         )" . $charset_clause . " COMMENT = 'Table with tasks for a blog';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
@@ -1601,9 +1563,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, blog_id , user_id , task_id )
         )" . $charset_clause . " COMMENT = 'Table with tasks assigned to a user in a blog';";
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql ="CREATE TABLE  `" .$tbl_blogs_attachment."` (
     	  $add_to_all_tables
@@ -1618,9 +1578,7 @@ function create_course_tables($course_db_name = null) {
           PRIMARY KEY  (c_id, id)
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_permission_group . "` (
@@ -1632,9 +1590,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, id)
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_permission_user . "` (
@@ -1646,65 +1602,57 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY (c_id, id )
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_permission_task . "` (
         	$add_to_all_tables
-            id int NOT NULL AUTO_INCREMENT ,
+            id int NOT NULL AUTO_INCREMENT,
             task_id int NOT NULL default 0,
             tool varchar( 250 ) NOT NULL default '',
             action varchar( 250 ) NOT NULL default '',
             PRIMARY KEY (c_id, id )
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_role . "` (
-        	$add_to_all_tables
-            role_id int NOT NULL AUTO_INCREMENT ,
+        	$add_to_all_tables            
+            role_id int NOT NULL AUTO_INCREMENT,
             role_name varchar( 250 ) NOT NULL default '',
             role_comment text,
             default_role tinyint default 0,
-            PRIMARY KEY (c_id, role_id )
+            PRIMARY KEY (c_id, role_id)
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
-
+    Database::query($sql);
+    
     $sql = "
         CREATE TABLE `" . $tbl_role_group . "` (
         	$add_to_all_tables
+            id int NOT NULL AUTO_INCREMENT,
             role_id int NOT NULL default 0,
             scope varchar( 20 ) NOT NULL default 'course',
             group_id int NOT NULL default 0,
-            PRIMARY KEY  (group_id )
+            PRIMARY KEY  (id, c_id, group_id )
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     $sql = "
         CREATE TABLE `" . $tbl_role_permissions . "` (
         	$add_to_all_tables
+            id int NOT NULL AUTO_INCREMENT,
             role_id int NOT NULL default 0,
             tool varchar( 250 ) NOT NULL default '',
             action varchar( 50 ) NOT NULL default '',
             default_perm tinyint NOT NULL default 0,
-            PRIMARY KEY  ( c_id, role_id, tool, action )
+            PRIMARY KEY  (id, c_id, role_id, tool, action )
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
-
+    Database::query($sql);
+    
     $sql = "
         CREATE TABLE `" . $tbl_role_user . "` (
         	$add_to_all_tables
@@ -1714,9 +1662,7 @@ function create_course_tables($course_db_name = null) {
             PRIMARY KEY  ( c_id, role_id, user_id )
         )" . $charset_clause;
 
-    if (!Database::query($sql)) {
-        error_log($sql, 0);
-    }
+    Database::query($sql);
 
     /*
      * Course Config Settings
@@ -1821,6 +1767,7 @@ function create_course_tables($course_db_name = null) {
       value int NOT NULL default '0',
       PRIMARY KEY  (c_id, question_option_id)
     )" . $charset_clause;
+    
     $result = Database::query($sql);
 
     $sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (

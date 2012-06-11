@@ -25,6 +25,9 @@ require_once 'database.constants.inc.php';
  *	@package chamilo.library
  */
 class Database {
+    
+    /* Variable use only in the installation process to log errors. See the Database::query function */
+    static $log_queries = false;
 
     /*
         Accessor methods
@@ -660,6 +663,7 @@ class Database {
      */
     public static function query($query, $connection = null, $file = null, $line = null) {
         global $database_connection;
+        
         $result = @$database_connection->query($query);
         if ($database_connection->errno) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
@@ -706,6 +710,31 @@ class Database {
                 $info .= '</pre>';
                 echo $info;
             }
+            
+            if (isset(self::$log_queries) && self::$log_queries) {
+                error_log("----------------  SQL error ---------------- ");
+                error_log($query);
+                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
+                error_log($info);
+                $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
+                error_log($info);
+                
+                if (empty($type)) {
+                    if (!empty($function)) {
+                        $info = 'FUNCTION: ' . $function;
+                        error_log($info);
+                    }
+                } else {
+                    if (!empty($class) && !empty($function)) {
+                        $info .= 'CLASS: ' . $class;
+                        error_log($info);
+                        $info .= 'METHOD: ' . $function;
+                        error_log($info);
+                    }
+                }
+                error_log("---------------- end ----------------");
+            }
+            
         }
         return $result;
     }

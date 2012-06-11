@@ -43,8 +43,7 @@ if (isset($_GET['action']) AND isset($_GET['permission']) AND isset($_GET['tool'
 }
 
 // deleting a role
-if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='delete')
-{
+if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='delete') {
 	//deleting the assignments fo this role: users
 	$table=Database::get_course_table(TABLE_ROLE_USER);
 	$sql="DELETE FROM $table WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
@@ -64,19 +63,15 @@ if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='del
 	$table_role=Database::get_course_table(TABLE_ROLE);
 	$sql="DELETE FROM $table_role WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
 	$result=Database::query($sql);
-
 	$result_message=get_lang('RoleDeleted');
 }
 
 // displaying the return message of the actions
-if (isset($result_message))
-{
+if (isset($result_message)) {
 	Display::display_normal_message($result_message);
 }
 
-// ===================================================
 // 		ADDING A NEW ROLE (FORM AND LINK)
-// ===================================================
 echo '<img src="../img/add.png" /> <a href="roles.php?action=add">'.get_lang('AddRole').'</a>';
 
 if ($_GET['action']=='add')
@@ -262,17 +257,5 @@ if ($_GET['role_id'])
 		echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('StorePermissions')."\">";
 	}
 	echo "</form>";
-
-
 }
-
-
-
-
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();
-?>

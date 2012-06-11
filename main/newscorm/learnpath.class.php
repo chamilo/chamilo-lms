@@ -7475,12 +7475,12 @@ class learnpath {
 
         $row = Database::fetch_assoc($result);
         $s_title = $row['title'];
-
+        $audio_player = null;
         // We display an audio player if needed.
-        if (!empty ($row['audio'])) {
-            $return .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
-            $return .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $return .= '<script type="text/javascript">
+        if (!empty($row['audio'])) {
+            $audio_player .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+            $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
+            $audio_player .= '<script type="text/javascript">
                                         var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                                         s1.addParam("allowscriptaccess","always");
                                         s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
@@ -7498,6 +7498,11 @@ class learnpath {
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
         $return .= '</div>';
+        
+        if (!empty($audio_player)) {
+            $return .= '<br />'.$audio_player;
+        }
+        
         return $return;
     }
 

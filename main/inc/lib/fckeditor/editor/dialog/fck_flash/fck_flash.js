@@ -234,12 +234,7 @@ function BrowseServer()
 function SetUrl( url, width, height )
 {
 	url = FCK.GetSelectedFlashUrl( url ) ;
-	// search the URLPrefix like it is the configuration.php file
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/dialog\/fck_flash.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-	url = PrefixeUrl + url ;
-	// 
-
+ 
 	GetE('txtUrl').value = url ;
 
 	if ( width )

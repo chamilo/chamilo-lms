@@ -230,14 +230,7 @@ function BrowseServer()
 
 function SetUrl( url )
 {
-	//url = FCK.GetSelectedUrl( url ) ;
 	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
-
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/audio\/fck_audio.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");
-	url = PrefixeUrl + url;
-	// 
-
 
 	GetE('txtUrl').value = url ;
 

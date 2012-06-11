@@ -280,10 +280,6 @@ function BrowseServer()
 function SetUrl( url )
 {
 	url = FCK.GetSelectedUrl( url ) ;
-	PrefixeUrl = self.location.href.replace(/\/main\/inc\/lib\/fckeditor\/editor\/plugins\/fckEmbedMovies\/fck_embedmovies.\html/, "");
-	PrefixeUrl = PrefixeUrl.replace(/http:\/\/[^\/]+/, "");	
-	url = PrefixeUrl + url;
-	// 
 	
 	GetE( 'txtUrl' ).value = url ;
 

@@ -261,10 +261,11 @@ INSERT INTO settings_options (variable, value, display_text) values ('platform_u
 
 DROP TABLE IF EXISTS access_url_rel_session;
 
-ALTER TABLE usergroup_rel_session   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE usergroup_rel_course    ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE usergroup_rel_user      ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE admin                   ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_session       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_course        ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE usergroup_rel_user          ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE admin                       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE reservation_category_rights ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
 -- Remove settings entry that doesnt exist anymore
 
@@ -273,7 +274,7 @@ DELETE FROM settings_current WHERE variable = "user_order_by";
 DELETE FROM settings_options WHERE variable = "user_order_by";
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18219' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18283' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
@@ -288,6 +289,10 @@ ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv
 
 ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
 ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;
+
+ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
 -- xxUSERxx
 

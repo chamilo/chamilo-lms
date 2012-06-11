@@ -870,7 +870,7 @@ VALUES
 ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
 ('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18219','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18283','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2348,25 +2348,22 @@ CREATE TABLE IF NOT EXISTS reservation_category (
   PRIMARY KEY  ( id )
 );
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table reservation category_rights
 --
 
 DROP TABLE IF EXISTS reservation_category_rights;
-CREATE TABLE IF NOT EXISTS  reservation_category_rights  (
-   category_id  int NOT NULL default 0,
-   class_id  int NOT NULL default 0,
-   m_items  tinyint NOT NULL default 0
+CREATE TABLE IF NOT EXISTS reservation_category_rights  (
+    id  int unsigned NOT NULL auto_increment,
+    category_id  int NOT NULL default 0,
+    class_id  int NOT NULL default 0,
+    m_items  tinyint NOT NULL default 0,
+    PRIMARY KEY  ( id )
 );
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table  item reservation
 --
-
 DROP TABLE IF EXISTS reservation_item;
 CREATE TABLE IF NOT EXISTS  reservation_item  (
    id  int unsigned NOT NULL auto_increment,

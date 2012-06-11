@@ -307,6 +307,11 @@ $this_section = SECTION_GLOBAL;
 require $includePath.'/local.inc.php';
 
 //Include Chamilo Mail conf this is added here because the api_get_setting works
+
+//Fixes bug in Chamilo 1.8.7.1 array was not set
+$administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
+$administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
+ 
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 if (file_exists($mail_conf)) {
 	require_once $mail_conf; 

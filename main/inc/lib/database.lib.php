@@ -816,9 +816,9 @@ class Database {
                     }
                 } else {
                     if (!empty($class) && !empty($function)) {
-                        $info .= 'CLASS: ' . $class;
+                        $info = 'CLASS: ' . $class;
                         error_log($info);
-                        $info .= 'METHOD: ' . $function;
+                        $info = 'METHOD: ' . $function;
                         error_log($info);
                     }
                 }

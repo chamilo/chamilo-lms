@@ -3720,6 +3720,7 @@ footer {
     position: relative;
     width: 94%;
 }
+
 #author_name {
     float: left;
     text-align:center;
@@ -3727,6 +3728,12 @@ footer {
     font-size: 11px;
     color: #888;
     margin-top: 2px;
+}
+
+#lp_media_file {
+    float: left;
+    text-align:center;
+    width: 94%;    
 }
 
 #learning_path_toc {

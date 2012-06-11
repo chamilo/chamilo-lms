@@ -4997,17 +4997,17 @@ class learnpath {
             $return_audio  .= '<td align="center">';
 
             $audio = '';
-            /*
+            
             if (!$update_audio OR $update_audio <> 'true') {
-                if (!empty ($arrLP[$i]['audio'])) {
-                    $audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
+                if (!empty($arrLP[$i]['audio'])) {
+                    /*$audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
                     $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
                     $audio .= '<script type="text/javascript">
                                     var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
                                     s1.addParam("allowscriptaccess","always");
                                     s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $arrLP[$i]['audio'] . '");
                                     s1.write("container' . $i . '");
-                                </script>';
+                                </script>';*/
                 } else {
                     $audio .= '';
                 }
@@ -5018,7 +5018,7 @@ class learnpath {
                         $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br /><input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
                     }
                 }
-            }*/
+            }
             $return_audio .= Display::span($icon.' '.$title).Display::tag('td', $audio, array('style'=>''));
             $return_audio .= '</td>';
 			$move_icon = '';
@@ -5187,7 +5187,7 @@ class learnpath {
         $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'',ICON_SIZE_MEDIUM).'</a>';
 //		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'',ICON_SIZE_MEDIUM).'</a>';
         
-        //$return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
+        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
         
         $return .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
         $return .= '</div>';

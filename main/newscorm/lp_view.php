@@ -17,7 +17,6 @@
  * Code
  */
 
-
 use \ChamiloSession as Session;
 
 $_SESSION['whereami'] = 'lp/view';
@@ -364,10 +363,13 @@ if (Database::num_rows($res_media) > 0) {
         </div>
 
         <!-- media player layout -->
-        <?php $style_media = (($show_audioplayer) ? ' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"' : 'style="height:15px"'); ?>
-        <div id="media"  <?php echo $style_media; ?>>
-            <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
-        </div>
+        <?php 
+        if ($show_audioplayer) {
+            echo '<div id="lp_media_file">';            
+            echo $mediaplayer;
+            echo '</div>';
+        }        
+        ?>         
         <!-- end media player layout -->
 
         <!-- TOC layout -->

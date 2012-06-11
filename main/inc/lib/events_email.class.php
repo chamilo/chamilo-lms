@@ -113,9 +113,9 @@ class EventsMail
             }
         }
         
-        // Second, we send to people linked to the event ========================================================
+        // Second, we send to people linked to the event
         // So, we get everyone
-        $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname FROM ' . Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER) . ' ue 
+        $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER) . ' ue 
                 INNER JOIN '.Database::get_main_table(TABLE_MAIN_USER).' u ON u.user_id = ue.user_id
                 WHERE event_type_name = "' . $event_name . '"';
         $result = Database::store_result(Database::query($sql), 'ASSOC');
@@ -177,7 +177,7 @@ class EventsMail
 		return false;
 	}
 
-        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_MAIN_EVENT_EMAIL_TEMPLATE) . ' em 
+        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em 
         INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l on em.language_id = l.id
         WHERE em.event_type_name = "' . $event_name . '" and l.dokeos_folder = "english" and em.activated = 1
         ';
@@ -203,7 +203,7 @@ class EventsMail
      */
     private static function getMessage($event_name, $language)
     {
-        $sql = 'SELECT message, subject, l.dokeos_folder FROM ' . Database::get_main_table(TABLE_MAIN_EVENT_EMAIL_TEMPLATE) . ' em 
+        $sql = 'SELECT message, subject, l.dokeos_folder FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em 
                     INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l on em.language_id = l.id
                     WHERE em.event_type_name = "' . $event_name . '" and (l.dokeos_folder = "' . $language . '" OR l.dokeos_folder = "english") and em.message <> ""
                     ';
@@ -252,7 +252,4 @@ class EventsMail
             $subject = str_replace('((' . $key . '))', $event_data[$word], $subject);
         }
     }
-
 }
-
-?>

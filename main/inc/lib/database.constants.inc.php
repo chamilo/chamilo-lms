@@ -314,9 +314,9 @@ define('TABLE_TRACK_STORED_VALUES',			'track_stored_values');
 define('TABLE_TRACK_STORED_VALUES_STACK',   'track_stored_values_stack');
 
 //Event tables
-define('TABLE_MAIN_EVENT_EMAIL_TEMPLATE','event_email_template');
-define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');
-define('TABLE_EVENT_SENT','event_sent');
+define('TABLE_EVENT_EMAIL_TEMPLATE',        'event_email_template');
+define('TABLE_EVENT_TYPE_REL_USER',         'user_rel_event_type');
+define('TABLE_EVENT_SENT',                  'event_sent');
 
 define('TABLE_MAIN_SKILL',                  'skill');
 define('TABLE_MAIN_SKILL_REL_SKILL',        'skill_rel_skill');

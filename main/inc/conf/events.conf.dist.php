@@ -14,27 +14,50 @@
  * 
  */
 global $event_config;
+
 $event_config = array(
+    'portal_homepage_edited' => array( // key for "user registration" event
+        'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
+            'portal_homepage_edited_send_email' // don't forget to actually write this function at the end of this file
+        ),
+        'self_sent' => false, // this key states that we can't add user to this event through the admin panel
+        'name_lang_var' => get_lang('portal_homepage_edited'),
+        'desc_lang_var' => get_lang('portal_homepage_edited'),
+        'available_keyvars' => array (// keys used for the mail template
+            'url'           => 'portal',
+            'sitename'      => 'sitename',
+            'firstname'     => 'firstname',
+            'lastname'      => 'lastname',
+            'username'      => 'username',
+            'usermail'      => 'usermail',
+            'password'      => 'password',
+            'user_lang'     => 'language',
+            'admin_name'    => 'administrator_name',
+            'admin_surname' => 'administrator_surname',
+            'admin_phone'   => 'administrator_phone',
+            'admin_email'   => 'administrator_email',
+        )
+    ),
     'user_registration' => array( // key for "user registration" event
-	'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
+        'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
             'event_send_mail' // don't forget to actually write this function at the end of this file
         ),
         'self_sent' => true, // this key states that we can't add user to this event through the admin panel
         'name_lang_var' => get_lang('userRegistrationTitle'),
         'desc_lang_var' => get_lang('userRegistrationComment'),
-        'available_keyvars' => array( // keys used for the mail template
-            'url' => 'portal',
-            'sitename' => 'sitename',
-            'firstname' => 'firstname',
-            'lastname' => 'lastname',
-            'username' => 'username',
-            'usermail' => 'usermail',
-            'password' => 'password',
-            'user_lang' => 'language',
-            'admin_name' => 'administrator_name',
+        'available_keyvars' => array (// keys used for the mail template
+            'url'           => 'portal',
+            'sitename'      => 'sitename',
+            'firstname'     => 'firstname',
+            'lastname'      => 'lastname',
+            'username'      => 'username',
+            'usermail'      => 'usermail',
+            'password'      => 'password',
+            'user_lang'     => 'language',
+            'admin_name'    => 'administrator_name',
             'admin_surname' => 'administrator_surname',
-            'admin_phone' => 'administrator_phone',
-            'admin_email' => 'administrator_email',
+            'admin_phone'   => 'administrator_phone',
+            'admin_email'   => 'administrator_email',
         )
     ),
 );

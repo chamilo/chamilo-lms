@@ -145,6 +145,7 @@ class Autoload
         $result['Event'] = '/main/coursecopy/classes/Event.class.php';
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['EventsDispatcher'] = '/main/inc/lib/events_dispatcher.class.php';
+        $result['EventEmailTemplate'] = '/main/inc/lib/event_email_template.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';

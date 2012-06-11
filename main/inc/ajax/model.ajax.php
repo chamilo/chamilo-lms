@@ -120,7 +120,11 @@ switch ($action) {
         $obj        = new Gradebook();
         $count      = $obj->get_count();
         break;
-    case 'get_careers':        
+    case 'get_event_email_template':
+        $obj        = new EventEmailTemplate();
+        $count      = $obj->get_count();        
+        break;
+    case 'get_careers':
         $obj        = new Career();
         $count      = $obj->get_count();
         break;
@@ -253,6 +257,23 @@ switch ($action) {
         } 
         $result = $new_result;
         break;
+    case 'get_event_email_template': 
+        $columns = array('subject', 'message', 'event_type_name', 'language_id', 'activated', 'actions');                
+        if(!in_array($sidx, $columns)) {
+        	$sidx = 'subject';
+        }
+        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
+        $new_result = array();
+        foreach ($result as $item) {
+            $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'admin/event_controller.php?action=delete&id='.$item['id']);
+       
+            /*if (!$item['status']) {
+                $item['name'] = '<font style="color:#AAA">'.$item['subject'].'</font>';
+            }*/
+            $new_result[] = $item;
+        } 
+        $result = $new_result;        
+        break;   
     case 'get_careers': 
         $columns = array('name', 'description', 'actions');                
         if(!in_array($sidx, $columns)) {
@@ -321,7 +342,7 @@ switch ($action) {
 //var_dump($result);
 
 $allowed_actions = array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 
-                         'get_sessions', 'get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_grade_models');
+                         'get_sessions', 'get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_grade_models', 'get_event_email_template');
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
     $response           = new stdClass();           

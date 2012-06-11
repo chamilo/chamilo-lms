@@ -666,7 +666,8 @@ function get_users_subscribed_to_event($event_name) {
 			WHERE ue.user_id = u.user_id
 			AND e.name = "'.$event_name.'"
 			AND e.id = ue.event_type_id';
-    return Database::store_result(Database::query($sql),'ASSOC');
+    $return = Database::store_result(Database::query($sql),'ASSOC');
+    return json_encode($return);
 }
 
 /**
@@ -676,11 +677,16 @@ function get_users_subscribed_to_event($event_name) {
  */
 function get_event_users($event_name) {
     $event_name = Database::escape_string($event_name);
-    $sql = 'SELECT user.* FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser 
+    $sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser 
             ON relUser.user_id = user.user_id
             WHERE relUser.event_type_name = "'.$event_name.'"';
-    $events_types = Database::store_result(Database::query($sql),'ASSOC');
-	return $events_types;
+    
+    //For tests
+    //$sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER);
+        
+    $user_list = Database::store_result(Database::query($sql), 'ASSOC');    
+    return json_encode($user_list);
+	
 }
 
 /**

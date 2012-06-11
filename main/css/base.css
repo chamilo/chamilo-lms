@@ -3665,10 +3665,9 @@ a.forum_group_link {
     padding-left: 13px;
 }
 
-
 .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .subnav .nav > li > .logout {

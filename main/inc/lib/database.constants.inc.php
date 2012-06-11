@@ -309,9 +309,8 @@ define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 define('TABLE_NOTIFICATION',               'notification');
 
 //Storage api tables
-define('TABLE_MAIN_STORED_VALUES',			'stored_values');
-define('TABLE_MAIN_STORED_VALUES_STACK',		'stored_values_stack');
-
+define('TABLE_TRACK_STORED_VALUES',			'track_stored_values');
+define('TABLE_TRACK_STORED_VALUES_STACK',   'track_stored_values_stack');
 
 //Event tables
 define('TABLE_MAIN_EVENT_EMAIL_TEMPLATE','event_email_template');

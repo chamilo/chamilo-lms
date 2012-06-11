@@ -2906,7 +2906,7 @@ CREATE TABLE event_sent (
   user_from int(11) NOT NULL,
   user_to int(11) DEFAULT NULL,
   event_type_name varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (id)
 );
 ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
 
@@ -2915,36 +2915,9 @@ CREATE TABLE user_rel_event_type (
   id int(11) NOT NULL AUTO_INCREMENT,
   user_id int(11) NOT NULL,
   event_type_name varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (id)
 );
 ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
-
---
--- Table structure for LP custom storage API
---
-DROP TABLE IF EXISTS stored_value;
-CREATE TABLE IF NOT EXISTS stored_values (
-	user_id INT NOT NULL,
-	sco_id INT NOT NULL,
-	course_id CHAR(40) NOT NULL,
-	sv_key CHAR(64) NOT NULL,
-	sv_value TEXT NOT NULL
-);
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
-
-DROP TABLE IF EXISTS stored_value_stack;
-CREATE TABLE IF NOT EXISTS stored_values_stack (
-	user_id INT NOT NULL,
-	sco_id INT NOT NULL,
-	stack_order INT NOT NULL,
-	course_id CHAR(40) NOT NULL,
-	sv_key CHAR(64) NOT NULL,
-	sv_value TEXT NOT NULL
-);
-ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
-
 
 -- Course ranking
 

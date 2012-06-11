@@ -154,8 +154,8 @@ if (defined('SYSTEM_INSTALLATION')) {
 			"report_keys", //@todo add the "track_" prefix see #3967
         	"report_values",
         	"report_keys",
-        	"stored_values",
-        	"stored_values_stack",
+        	"track_stored_values",
+        	"track_stored_values_stack",
         );
         
         if ($dbNameForm != $dbStatsForm) {

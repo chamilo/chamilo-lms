@@ -40,7 +40,7 @@ function reports_template_Generic_getSQL() {
 	foreach ($sv as $k => $v) {
 		$query = 'select sec_to_time(sv.sv_value) as "'.$v.'" ';
 		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= ' left outer join '.Database::get_main_database().'.stored_values sv ';
+		$query .= ' left outer join '.Database::get_main_table(TABLE_TRACK_STORED_VALUES).' sv ';
 		$query .= 'on sv.user_id = u.user_id and sv_key = "'.$k.'" ';
 		$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
 		$query .= ' order by u.user_id ';

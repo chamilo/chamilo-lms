@@ -278,12 +278,13 @@ UPDATE settings_current SET selected_value = '1.9.0.18219' WHERE variable = 'cha
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
 --CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);
-CREATE TABLE stored_values (user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
-CREATE TABLE stored_values_stack (user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL );
-ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+CREATE TABLE track_stored_values (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+
+CREATE TABLE track_stored_values_stack (id int unsigned not null AUTO_INCREMENT PRIMARY KEY,user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
 ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
 ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;

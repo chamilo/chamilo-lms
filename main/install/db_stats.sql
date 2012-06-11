@@ -293,25 +293,27 @@ ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
 --
 -- Table structure for LP custom storage API
 --
-DROP TABLE IF EXISTS stored_values;
-CREATE TABLE stored_values (
-        user_id INT NOT NULL,
-        sco_id INT NOT NULL,
-        course_id CHAR(40) NOT NULL,
-        sv_key CHAR(64) NOT NULL,
-        sv_value TEXT NOT NULL
+DROP TABLE IF EXISTS track_stored_values;
+CREATE TABLE IF NOT EXISTS track_stored_values (
+    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL    
 );
-ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
 
-DROP TABLE IF EXISTS stored_values_stack;
-CREATE TABLE stored_values_stack (
-        user_id INT NOT NULL,
-        sco_id INT NOT NULL,
-        stack_order INT NOT NULL,
-        course_id CHAR(40) NOT NULL,
-        sv_key CHAR(64) NOT NULL,
-        sv_value TEXT NOT NULL
+DROP TABLE IF EXISTS track_stored_value_stack;
+CREATE TABLE IF NOT EXISTS track_stored_values_stack (
+    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	stack_order INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
 );
-ALTER TABLE stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);

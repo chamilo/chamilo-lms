@@ -75,7 +75,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('login_is_email','true','Yes'),('login_is_email','false','No') ;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('scorm_cumulative_session_time','true','Yes'), ('scorm_cumulative_session_time','false','No');
-CREATE TABLE event_type ( id int unsigned NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, name_lang_var varchar(50) NOT NULL, desc_lang_var varchar(50) NOT NULL,`extendable_variables` varchar(255) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE event_type ( id int unsigned NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, name_lang_var varchar(50) NOT NULL, desc_lang_var varchar(50) NOT NULL, extendable_variables varchar(255) NOT NULL, PRIMARY KEY (id));
 ALTER TABLE event_type ADD INDEX ( name );
 CREATE TABLE event_type_email_template ( id int unsigned NOT NULL AUTO_INCREMENT, event_type_id int NOT NULL, language_id int NOT NULL, message text NOT NULL, subject varchar(60) NOT NULL, PRIMARY KEY (id));
 ALTER TABLE event_type_email_template ADD INDEX ( language_id );
@@ -222,16 +222,19 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_lo
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
 
 -- Event mail
-
-CREATE TABLE event_email_template (  id int(11) NOT NULL AUTO_INCREMENT,  message text,  subject varchar(255) DEFAULT NULL,  event_type_name varchar(255) DEFAULT NULL,  activated tinyint(4) NOT NULL DEFAULT '0',  language_id int(11) DEFAULT NULL,  PRIMARY KEY (id));
+CREATE TABLE event_email_template (  id int NOT NULL AUTO_INCREMENT,  message text,  subject varchar(255) DEFAULT NULL,  event_type_name varchar(255) DEFAULT NULL,  activated tinyint NOT NULL DEFAULT '0',  language_id int DEFAULT NULL, PRIMARY KEY (id));
 ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
-CREATE TABLE event_sent (  id int(11) NOT NULL AUTO_INCREMENT,  user_from int(11) NOT NULL,  user_to int(11) DEFAULT NULL,  event_type_name varchar(100) DEFAULT NULL,  PRIMARY KEY (`id`));ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
-CREATE TABLE user_rel_event_type (  id int(11) NOT NULL AUTO_INCREMENT,  user_id int(11) NOT NULL,  event_type_name varchar(255) NOT NULL,  PRIMARY KEY (`id`));ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
+
+CREATE TABLE event_sent (  id int NOT NULL AUTO_INCREMENT,  user_from int NOT NULL,  user_to int DEFAULT NULL,  event_type_name varchar(100) DEFAULT NULL,  PRIMARY KEY (id));
+ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
+
+CREATE TABLE user_rel_event_type (  id int NOT NULL AUTO_INCREMENT,  user_id int NOT NULL,  event_type_name varchar(255) NOT NULL, PRIMARY KEY (id));
+ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('activate_email_template', 'true', 'Yes'),('activate_email_template', 'false', 'No');
 
 -- Skills
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_skills_tool', 'false', 'No');
@@ -274,7 +277,7 @@ DELETE FROM settings_current WHERE variable = "user_order_by";
 DELETE FROM settings_options WHERE variable = "user_order_by";
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18292' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18302' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

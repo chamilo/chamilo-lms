@@ -872,7 +872,7 @@ VALUES
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
 ('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18292','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18302','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2897,21 +2897,21 @@ CREATE TABLE IF NOT EXISTS skill_rel_profile (
 --
 DROP TABLE IF EXISTS event_email_template;
 CREATE TABLE event_email_template (
-  id int(11) NOT NULL AUTO_INCREMENT,
+  id int NOT NULL AUTO_INCREMENT,
   message text,
   subject varchar(255) DEFAULT NULL,
   event_type_name varchar(255) DEFAULT NULL,
-  activated tinyint(4) NOT NULL DEFAULT '0',
-  language_id int(11) DEFAULT NULL,
+  activated tinyint NOT NULL DEFAULT '0',
+  language_id int DEFAULT NULL,
   PRIMARY KEY (id)
 );
 ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
 
 DROP TABLE IF EXISTS event_sent;
 CREATE TABLE event_sent (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_from int(11) NOT NULL,
-  user_to int(11) DEFAULT NULL,
+  id int NOT NULL AUTO_INCREMENT,
+  user_from int NOT NULL,
+  user_to int DEFAULT NULL,
   event_type_name varchar(100) DEFAULT NULL,
   PRIMARY KEY (id)
 );
@@ -2919,8 +2919,8 @@ ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
 
 DROP TABLE IF EXISTS user_rel_event_type;
 CREATE TABLE user_rel_event_type (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
   event_type_name varchar(255) NOT NULL,
   PRIMARY KEY (id)
 );

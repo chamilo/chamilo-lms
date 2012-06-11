@@ -77,7 +77,6 @@ class CourseSelectForm
 
 		//get destination course title
 		if (!empty($hidden_fields['destination_course'])) {
-			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
 			echo get_lang('DestinationCourse').' : '.$course_infos['title'];

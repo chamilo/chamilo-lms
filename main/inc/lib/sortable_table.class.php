@@ -879,11 +879,12 @@ class SortableTable extends HTML_Table {
 	 * @param int $from Index of the first item to return.
 	 * @param int $per_page The number of items to return
 	 * @param int $column The number of the column on which the data should be
+     * @param bool $sort Whether to sort or not
 	 * sorted
 	 * @param string $direction In which order should the data be sorted (ASC
 	 * or DESC)
 	 */
-	public function get_table_data ($from = null, $per_page = null, $column = null, $direction = null) {
+	public function get_table_data ($from = null, $per_page = null, $column = null, $direction = null, $sort = null) {
 		if (!is_null($this->get_data_function)) {			
 			return call_user_func($this->get_data_function, $from, $this->per_page, $this->column, $this->direction);
 		}

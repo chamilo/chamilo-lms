@@ -118,7 +118,7 @@ function users_list_in_chat() {
 		$extra_condition = api_get_session_condition($session_id, false);
 	}
     $extra_condition.= " AND c_id = $course_id ";
- 	$sql = 'SELECT user_id,last_connection FROM '.$tbl_chat_connected.$extra_condition;
+ 	$sql = 'SELECT user_id, last_connection FROM '.$tbl_chat_connected.$extra_condition;
  	$result = Database::query($sql);
  	while ($row = Database::fetch_array($result, 'ASSOC')) {
  		$list_users_in_chat[] = $row;

@@ -174,42 +174,46 @@ while ($is_editing_block=Database::fetch_array($result)) {
 }
 
 // saving a change
-if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
-    if(empty($_POST['title'])) {
-        Display::display_error_message(get_lang("NoWikiPageTitle"));
-    } elseif(!double_post($_POST['wpost_id'])) {
-        //double post
-    } elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version']) {
-        //prevent concurrent users and double version
-        Display::display_error_message(get_lang("EditedByAnotherUser"));
-    } else {
-        $return_message=save_wiki();
-        Display::display_confirmation_message($return_message, false);
+echo '<div style="overflow:hidden">';
+    if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
+        if(empty($_POST['title'])) {
+            Display::display_error_message(get_lang("NoWikiPageTitle"));
+        } elseif(!double_post($_POST['wpost_id'])) {
+            //double post
+        } elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version']) {
+            //prevent concurrent users and double version
+            Display::display_error_message(get_lang("EditedByAnotherUser"));
+        } else {
+            $return_message=save_wiki();
+            Display::display_confirmation_message($return_message, false);
+        }
     }
-}
+echo '</div>';
 
 //saving a new wiki entry
-if (isset($_POST['SaveWikiNew'])) {
-    if (empty($_POST['title'])) {
-        Display::display_error_message(get_lang("NoWikiPageTitle"));
-    } elseif (strtotime(get_date_from_select('startdate_assig')) > strtotime(get_date_from_select('enddate_assig'))) {
-        Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
-    } elseif(!double_post($_POST['wpost_id'])) {
-        //double post
-    } else {
-       $_clean['assignment']=Database::escape_string($_POST['assignment']); // for mode assignment
-       if ($_clean['assignment']==1) {
-              auto_add_page_users($_clean['assignment']);
-       } else {
-            $return_message=save_new_wiki();
-            if ($return_message==false) {
-                Display::display_error_message(get_lang('NoWikiPageTitle'), false);
-            } else {
-                Display::display_confirmation_message($return_message, false);
-            }
-       }
+echo '<div style="overflow:hidden">';
+    if (isset($_POST['SaveWikiNew'])) {
+        if (empty($_POST['title'])) {
+            Display::display_error_message(get_lang("NoWikiPageTitle"));
+        } elseif (strtotime(get_date_from_select('startdate_assig')) > strtotime(get_date_from_select('enddate_assig'))) {
+            Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
+        } elseif(!double_post($_POST['wpost_id'])) {
+            //double post
+        } else {
+           $_clean['assignment']=Database::escape_string($_POST['assignment']); // for mode assignment
+           if ($_clean['assignment']==1) {
+                  auto_add_page_users($_clean['assignment']);
+           } else {
+                $return_message=save_new_wiki();
+                if ($return_message==false) {
+                    Display::display_error_message(get_lang('NoWikiPageTitle'), false);
+                } else {
+                    Display::display_confirmation_message($return_message, false);
+                }
+           }
+        }
     }
-}
+echo '</div>';
 
 
 // check last version
@@ -1600,6 +1604,7 @@ if ($_GET['action']=='links') {
 
 
 // Display the form for adding a new wiki page
+echo '<div style="overflow:hidden">';
 if ($_GET['action']=='addnew') {
     if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
         api_not_allowed();
@@ -1625,8 +1630,7 @@ if ($_GET['action']=='addnew') {
     }
 
 }
-
-
+echo '</div>';
 
 // Show home page
 

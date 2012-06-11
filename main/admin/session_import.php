@@ -15,7 +15,6 @@ api_protect_admin_script(true);
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 $form_sent = 0;
 $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
@@ -643,8 +642,7 @@ if ($_POST['formSent']) {
                             
                             $course_users   = explode(',', $course_users);
                             $course_coaches = explode(',', $course_coaches);
-                            var_dump($course_coaches, $course_users);
-                            
+                                                        
                             // Adding coaches to session course user
                             if (!empty($course_coaches)) {
                                 foreach ($course_coaches as $course_coach) {

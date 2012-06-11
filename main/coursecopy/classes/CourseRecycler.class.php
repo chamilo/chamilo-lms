@@ -153,8 +153,7 @@ class CourseRecycler
                 " AND ".$table_post.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_mail_queue.
-                " USING ".$table_mail_queue." INNER JOIN ".$table_post.
+            $sql = "DELETE FROM ".$table_mail_queue." USING ".$table_mail_queue." INNER JOIN ".$table_post.
                 " WHERE c_id = ".$this->course_id." AND  ".$table_mail_queue.".post_id = ".$table_post.".post_id".
                 " AND ".$table_post.".forum_id IN(".$forum_ids.");";
             Database::query($sql);

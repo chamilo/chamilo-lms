@@ -20,10 +20,8 @@ class TestChatFunctions extends UnitTestCase {
 
 	function testuser_connected_in_chat () {
 		$course_code = 'COURSETEST';
-		$user_id=1;
-		$course_info = api_get_course_info($course_code);
-		$database_name = $course_info['dbName'];
-		$res = user_connected_in_chat($user_id,$database_name);
+		$user_id = 1;
+		$res = user_connected_in_chat($user_id);
  		$this->assertTrue(is_bool($res));
 	}
 

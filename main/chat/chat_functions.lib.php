@@ -10,16 +10,15 @@
  * @param integer the user id
  * @param string the database name
  * @return boolean
+ * @todo this function need more parameters seems not to be use anymore
+ * @deprecated fix this function or create another
  */
 function user_connected_in_chat ($user_id) {
  	$tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
-
+    $user_id 	= intval($user_id);
  	$session_id = api_get_session_id();
     $group_id   = api_get_group_id();	
-    
-	$user_id 	= intval($user_id);
-    $course_id  = api_get_course_int_id();
-    
+    $course_id  = api_get_course_int_id();    
 	$extra_condition = '';
 	
 	if (!empty($group_id)) {
@@ -39,12 +38,10 @@ function user_connected_in_chat ($user_id) {
  * @return void
  */
 function exit_of_chat($user_id) {
-	$user_id = intval($user_id);
-    $course_id = api_get_course_int_id();
-	$list_course = array();
- 	$list_course = CourseManager::get_courses_list_by_user_id($user_id);
+	$user_id = intval($user_id);    
+ 	$list_course = CourseManager::get_courses_list_by_user_id($user_id);    
     
-    $session_id = api_get_session_id();
+    /*$session_id = api_get_session_id();
     $group_id   = api_get_group_id();	
 	
 	$extra_condition = '';
@@ -53,15 +50,16 @@ function exit_of_chat($user_id) {
 	} else {
 		$extra_condition = api_get_session_condition($session_id);
 	}
-    $extra_condition.= " AND course_id = $course_id";
+    $extra_condition.= " AND course_id = $course_id";*/
+    
     $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
     
  	foreach ($list_course as $course) {
  		$response = user_connected_in_chat($user_id);
- 		if ($response === true) { 			
- 			$sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE c_id = '.$course['real_id'].' AND user_id='.$user_id.$extra_condition;
+ 		//if ($response === true) {
+ 			$sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE c_id = '.$course['real_id'].' AND user_id = '.$user_id;
  			Database::query($sql);
- 		}
+ 		//}
  	}
 }
 

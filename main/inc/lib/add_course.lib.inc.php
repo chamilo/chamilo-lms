@@ -619,12 +619,13 @@ function create_course_tables($course_db_name = null) {
 
     // Forum Mailcue
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUMMAILCUE . "` (
+        CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
+         id int NOT NULL auto_increment,
          thread_id int default NULL,
          user_id int default NULL,
          post_id int default NULL,
-        PRIMARY KEY  ( c_id, thread_id, user_id, post_id )
+         PRIMARY KEY (id, c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
     Database::query($sql);
 

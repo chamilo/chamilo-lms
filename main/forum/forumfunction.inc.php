@@ -2984,30 +2984,14 @@ function send_notification_mails($thread_id, $reply_info) {
 
     // The forum category, the forum, the thread and the reply are visible to the user.
     if ($send_mails) {
-        send_notifications($current_thread['forum_id'], $thread_id);
-        /*
-        $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT DISTINCT user.firstname, user.lastname, user.email, user.user_id
-                FROM $table_posts post, $table_user user
-                WHERE post.thread_id='".Database::escape_string($thread_id)."'
-                AND post.post_notification='1'
-                AND post.poster_id=user.user_id";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            send_mail($row, $current_thread);
-        }
-        */
-    } else {
-        /*
-        $sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' AND post_notification='1'";
-        $result = Database::query($sql);
-        */
+        send_notifications($current_thread['forum_id'], $thread_id);    
+    } else {        
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
         $sql = "SELECT * FROM $table_notification WHERE c_id = ".api_get_course_int_id()." AND (forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."' ) ";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $sql_mailcue = "INSERT INTO $table_mailcue (c_id, thread_id, post_id) VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."')";
-            $result_mailcue = Database::query($sql_mailcue);
+            Database::query($sql_mailcue);
         }
     }
 }

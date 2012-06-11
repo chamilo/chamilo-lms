@@ -43,21 +43,21 @@ class SystemManagementPage extends AdminPage
         $message = get_lang('RemoveOldDatabaseMessage');
         $url = $this->url(array(self::PARAM_ACTION => 'drop_old_databases'));
         $go = get_lang('go');
-        $url = api_get_current_access_url_id();
+        $access_url_id = api_get_current_access_url_id();
         $message2 = '';
-        if ($url === 1) {
-          if (api_is_windows_os()) {
-              $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuresOnWindows');
-          } else {
-              $dir = api_get_path(SYS_PATH);
-              $du = exec('du -sh '.$dir,$err);
-              list($size,$none) = explode("\t",$du);
-              $limit = $_configuration[$url]['hosting_limit_disk_space'];
-              $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'),$size,$limit);
-          }
+        if ($access_url_id === 1) {
+            if (api_is_windows_os()) {
+                $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuresOnWindows');
+            } else {
+                $dir = api_get_path(SYS_PATH);
+                $du = exec('du -sh ' . $dir, $err);
+                list($size, $none) = explode("\t", $du);
+                $limit = $_configuration[$url]['hosting_limit_disk_space'];
+                $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
+            }
         }
         if (!empty($message2)) {
-            $message2 = '<li>'.$message2.'</li>';
+            $message2 = '<li>' . $message2 . '</li>';
         }
         echo <<<EOT
         <ul>

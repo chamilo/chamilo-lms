@@ -9,8 +9,15 @@ function toggle_sendto()
 {
     var list = $('#recipient_list');
     var overview = $('#recipient_overview');
-    list.toggle();
-    overview.toggle();
+    if(list.css('display') == 'none'){
+        list.show();
+        overview.hide();
+    }
+    else
+    {
+        list.hide();
+        overview.show();
+    }
     
     var selected = $('#selectedform');
     var content = list_box_content(selected[0])

@@ -195,7 +195,7 @@ class Database {
     }
 
     public static function get_course_chat_connected_table($database_name = '') {
-        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), CHAT_CONNECTED_TABLE);
+        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), TABLE_CHAT_CONNECTED);
     }
 
     /*

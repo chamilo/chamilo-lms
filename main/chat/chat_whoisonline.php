@@ -36,7 +36,7 @@ if (!empty($course)) {
 	$tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_course			= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
-	$tbl_chat_connected			= Database::get_course_table(CHAT_CONNECTED_TABLE);
+	$tbl_chat_connected			= Database::get_course_table(TABLE_CHAT_CONNECTED);
 
 	$query = "SELECT username FROM $tbl_user WHERE user_id='".$user_id."'";
 	$result = Database::query($query);

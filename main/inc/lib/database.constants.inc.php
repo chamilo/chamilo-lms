@@ -153,7 +153,7 @@ define('TABLE_AGENDA_REPEAT_NOT',               'calendar_event_repeat_not');
 define('TABLE_AGENDA_ATTACHMENT',               'calendar_event_attachment');
 define('TABLE_ANNOUNCEMENT',                    'announcement');
 define('TABLE_ANNOUNCEMENT_ATTACHMENT',         'announcement_attachment');
-define('TABLE_CHAT_CONNECTED',                  'chat_connected'); // @todo: probably no longer in use !!!
+define('TABLE_CHAT_CONNECTED',                  'chat_connected');
 define('TABLE_COURSE_DESCRIPTION',              'course_description');
 define('TABLE_DOCUMENT',                        'document');
 define('TABLE_ITEM_PROPERTY',                   'item_property');
@@ -164,7 +164,6 @@ define('TABLE_TOOL_INTRO',                      'tool_intro');
 define('TABLE_SCORMDOC',                        'scormdocument');
 define('TABLE_STUDENT_PUBLICATION',             'student_publication');
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT',  'student_publication_assignment');
-define('CHAT_CONNECTED_TABLE',                  'chat_connected');
 
 // Course forum tables
 define('TABLE_FORUM_CATEGORY',              'forum_category');

@@ -20,7 +20,7 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'chat_functions.lib.php';
 
 $tbl_user 				= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_chat_connected 	= Database::get_course_table(CHAT_CONNECTED_TABLE);
+$tbl_chat_connected 	= Database::get_course_table(TABLE_CHAT_CONNECTED);
 
 $course_id = api_get_course_int_id();
 

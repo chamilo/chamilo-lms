@@ -12,7 +12,7 @@
  * @return boolean
  */
 function user_connected_in_chat ($user_id) {
- 	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
+ 	$tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
 
  	$session_id = api_get_session_id();
     $group_id   = api_get_group_id();	
@@ -54,7 +54,7 @@ function exit_of_chat($user_id) {
 		$extra_condition = api_get_session_condition($session_id);
 	}
     $extra_condition.= " AND course_id = $course_id";
-    $tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
+    $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
     
  	foreach ($list_course as $course) {
  		$response = user_connected_in_chat($user_id);
@@ -90,7 +90,7 @@ function disconnect_user_of_chat() {
 			$date_count_time_seconds=$date_db_h*3600 + $date_db_m*60 + $date_db_s;
 			if ($cd_date == $date_db_date) {
 				if (($cd_count_time_seconds - $date_count_time_seconds) > 5) {					
-                    $tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);					
+                    $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);					
 			 		$sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE c_id = '.$course_id.' AND user_id ='.$list_info_user['user_id'];
 			 		Database::query($sql);
 				}
@@ -105,7 +105,7 @@ function disconnect_user_of_chat() {
  */
 function users_list_in_chat() {
 	$list_users_in_chat = array();
- 	$tbl_chat_connected = Database::get_course_table(CHAT_CONNECTED_TABLE);
+ 	$tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
     $course_id = api_get_course_int_id();
     
  	$session_id = api_get_session_id();

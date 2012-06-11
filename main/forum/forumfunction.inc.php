@@ -1861,7 +1861,6 @@ function store_thread($values) {
     global $current_forum;
     global $origin;
 
-    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
 
@@ -1981,10 +1980,11 @@ function store_thread($values) {
         }
         $reply_info['new_post_id'] = $last_post_id;
         $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
+        
         if ($my_post_notification == 1) {
             set_notification('thread', $last_thread_id, true);
         }
-
+        
         send_notification_mails($last_thread_id, $reply_info);
 
         session_unregister('formelements');
@@ -2440,7 +2440,9 @@ function store_reply($values) {
         if ($my_post_notification == 1) {
             set_notification('thread', $values['thread_id'], true);
         }
+        
         send_notification_mails($values['thread_id'], $values);
+        
         session_unregister('formelements');
         session_unregister('origin');
         session_unregister('breadcrumbs');
@@ -2964,8 +2966,7 @@ function get_unaproved_messages($forum_id) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function send_notification_mails($thread_id, $reply_info) {
-    $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+function send_notification_mails($thread_id, $reply_info) {    
     $table_mailcue			= Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
     // First we need to check if
@@ -2976,23 +2977,27 @@ function send_notification_mails($thread_id, $reply_info) {
     $current_thread	= get_thread_information($thread_id);
     $current_forum	= get_forum_information($current_thread['forum_id']);
     $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+    
     if ($current_thread['visibility'] == '1' && $current_forum['visibility'] == '1' && ($current_forum_category && $current_forum_category['visibility'] == '1') && $current_forum['approval_direct_post'] != '1') {
         $send_mails = true;
     } else {
         $send_mails = false;
     }
-
-    // The forum category, the forum, the thread and the reply are visible to the user.
+    
+    // The forum category, the forum, the thread and the reply are visible to the user    
     if ($send_mails) {
         send_notifications($current_thread['forum_id'], $thread_id);    
     } else {        
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-        $sql = "SELECT * FROM $table_notification WHERE c_id = ".api_get_course_int_id()." AND (forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."' ) ";
+        $sql = "SELECT * FROM $table_notification WHERE c_id = ".api_get_course_int_id()." AND (forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."' ) ";        
+        
         $result = Database::query($sql);
+        $user_id = api_get_user_id();
         while ($row = Database::fetch_array($result)) {
-            $sql_mailcue = "INSERT INTO $table_mailcue (c_id, thread_id, post_id) VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."')";
+            $sql_mailcue = "INSERT INTO $table_mailcue (c_id, thread_id, post_id, user_id) 
+                            VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."', '$user_id' )";            
             Database::query($sql_mailcue);
-        }
+        }        
     }
 }
 
@@ -3940,7 +3945,6 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
 
     $current_thread = get_thread_information($thread_id);
     $current_forum  = get_forum_information($current_thread['forum_id']);
-
     $email_subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
 
 

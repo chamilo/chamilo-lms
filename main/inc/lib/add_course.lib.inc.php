@@ -617,13 +617,14 @@ function create_course_tables($course_db_name = null) {
     $sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
     Database::query($sql);
 
+    
+    
     // Forum Mailcue
     $sql = "
         CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
          id int NOT NULL auto_increment,
-         thread_id int default NULL,
-         user_id int default NULL,
+         thread_id int default NULL,         
          post_id int default NULL,
          PRIMARY KEY (id, c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
@@ -645,13 +646,14 @@ function create_course_tables($course_db_name = null) {
     // Forum notification
     $sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
     		  $add_to_all_tables
+              id int NOT NULL auto_increment,
               user_id int,
               forum_id int,
               thread_id int,
               post_id int,
               KEY user_id (user_id),
               KEY forum_id (forum_id),
-              PRIMARY KEY  ( c_id, user_id, forum_id, thread_id, post_id )
+              PRIMARY KEY  (id, c_id, user_id, forum_id, thread_id, post_id )
             )" . $charset_clause;
     Database::query($sql);
 

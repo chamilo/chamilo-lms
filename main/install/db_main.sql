@@ -714,6 +714,7 @@ VALUES
 ('extendedprofile_registrationrequired', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyDiplomas', 0),
 ('extendedprofile_registrationrequired', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyTeach', 0),
 ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea', 0),
+('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 0),
 ('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone', 0),
 ('add_users_by_coach',NULL,'radio','Session','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL, 0),
 ('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL, 0),
@@ -1209,7 +1210,7 @@ VALUES
 ('platform_unsubscribe_allowed', 'false', 'No'),
 ('activate_email_template', 'true', 'Yes'),
 ('activate_email_template', 'false', 'No'),
-('enable_iframe_inclusion', 'true', 'Yes'),
+ ('enable_iframe_inclusion', 'true', 'Yes'),
 ('enable_iframe_inclusion', 'false', 'No'),
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
@@ -1537,6 +1538,14 @@ CREATE TABLE IF NOT EXISTS access_url_rel_course (
   access_url_id int unsigned NOT NULL,
   course_code char(40) NOT NULL,
   PRIMARY KEY (access_url_id, course_code)
+);
+
+
+DROP TABLE IF EXISTS access_url_rel_session;
+CREATE TABLE IF NOT EXISTS access_url_rel_session (
+  access_url_id int unsigned NOT NULL,
+  session_id int unsigned NOT NULL,
+  PRIMARY KEY (access_url_id, session_id)
 );
 
 --

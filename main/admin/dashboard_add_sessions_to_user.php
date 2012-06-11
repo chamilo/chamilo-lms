@@ -36,6 +36,7 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 // Database Table Definitions
 $tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_rel_access_url = 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // initializing variables
 $id_session=intval($_GET['id_session']);
@@ -63,7 +64,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 }
 
 function search_sessions($needle,$type) {
-	global $_configuration, $tbl_session, $user_id;
+	global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -79,8 +80,13 @@ function search_sessions($needle,$type) {
 			$without_assigned_sessions = " AND s.id NOT IN(".implode(',',$assigned_sessions_id).")";
 		}
 
-        $sql = "SELECT s.id, s.name FROM $tbl_session s
+		if ($_configuration['multiple_access_urls']) {
+			$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+						WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
+		} else {
+			$sql = "SELECT s.id, s.name FROM $tbl_session s
 				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
+		}
 
 		$rs	= Database::query($sql);
 
@@ -189,11 +195,16 @@ if (isset($_POST['firstLetterSession'])) {
 	$needle = "$needle%";
 }
 
-$sql 	= " SELECT s.id, s.name FROM $tbl_session s
-        WHERE  s.name LIKE '$needle%' $without_assigned_sessions
-        ORDER BY s.name
-        ";
-
+if ($_configuration['multiple_access_urls']) {
+	$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()." 
+                ORDER BY s.name";
+} else {
+	$sql 	= " SELECT s.id, s.name FROM $tbl_session s
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions 
+                ORDER BY s.name
+                ";
+}
 
 $result	= Database::query($sql);
 ?>

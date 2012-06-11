@@ -450,7 +450,7 @@ function create_course_tables($course_db_name = null) {
         end_date date default NULL,
         display_order mediumint NOT NULL default 0,
         email_sent tinyint default 0,
-        session_id smallint default 0,
+        session_id int default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -526,7 +526,7 @@ function create_course_tables($course_db_name = null) {
          cat_comment text,
          cat_order int NOT NULL default 0,
          locked int NOT NULL default 0,
-         session_id smallint unsigned NOT NULL default 0,
+         session_id int unsigned NOT NULL default 0,
          PRIMARY KEY (c_id, cat_id)
         )" . $charset_clause;
     Database::query($sql);
@@ -700,7 +700,7 @@ function create_course_tables($course_db_name = null) {
         description text default NULL,
         sound varchar(255) default NULL,
         type tinyint unsigned NOT NULL default 1,
-        random smallint(6) NOT NULL default 0,
+        random int NOT NULL default 0,
         random_answers tinyint unsigned NOT NULL default 0,
         active tinyint NOT NULL default 0,
         results_disabled INT UNSIGNED NOT NULL DEFAULT 0,
@@ -710,7 +710,7 @@ function create_course_tables($course_db_name = null) {
         end_time datetime NOT NULL default '0000-00-00 00:00:00',
         feedback_type int NOT NULL default 0,
         expired_time int NOT NULL default '0',
-        session_id smallint default 0,
+        session_id int default 0,
         propagate_neg INT NOT NULL DEFAULT 0,
         review_answers INT NOT NULL DEFAULT 0,
         random_by_category INT NOT NULL DEFAULT 0,
@@ -817,7 +817,7 @@ function create_course_tables($course_db_name = null) {
         id TINYINT UNSIGNED NOT NULL auto_increment,
         title VARCHAR(255),
         content TEXT,
-        session_id smallint default 0,
+        session_id int default 0,
         description_type tinyint unsigned NOT NULL default 0,
         progress INT NOT NULL default 0,
         PRIMARY KEY (c_id, id)
@@ -842,7 +842,7 @@ function create_course_tables($course_db_name = null) {
         added_tool tinyint unsigned default 1,
         target enum('_self','_blank') NOT NULL default '_self',
         category varchar(20) not null default 'authoring',
-        session_id smallint default 0,
+        session_id int default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -980,11 +980,11 @@ function create_course_tables($course_db_name = null) {
         url TEXT NOT NULL,
         title varchar(150) default NULL,
         description text,
-        category_id smallint unsigned default NULL,
-        display_order smallint unsigned NOT NULL default 0,
+        category_id int unsigned default NULL,
+        display_order int unsigned NOT NULL default 0,
         on_homepage enum('0','1') NOT NULL default '0',
         target char(10) default '_self',
-        session_id smallint default 0,
+        session_id int default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -995,11 +995,11 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLETOOLLINKCATEGORIES . "` (
         $add_to_all_tables
-        id smallint unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL auto_increment,
         category_title varchar(255) NOT NULL,
         description text,
         display_order mediumint unsigned NOT NULL default 0,
-        session_id smallint default 0,
+        session_id int default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -1036,7 +1036,7 @@ function create_course_tables($course_db_name = null) {
         linksto text NOT NULL,
         tag text NOT NULL,
         user_ip varchar(39) NOT NULL,
-        session_id smallint default 0,
+        session_id int default 0,
         PRIMARY KEY (c_id, id),
         KEY reflink (reflink),
         KEY group_id (group_id),
@@ -1084,7 +1084,7 @@ function create_course_tables($course_db_name = null) {
         user_id int NOT NULL,
         type text NOT NULL,
         group_id int DEFAULT NULL,
-        session_id smallint default 0,
+        session_id int default 0,
         KEY (c_id, id),
         PRIMARY KEY  ( c_id, id, user_id )
         )" . $charset_clause;
@@ -1106,7 +1106,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLETOOLONLINELINK . "` (
         $add_to_all_tables
-        id smallint unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL auto_increment,
         name char(50) NOT NULL default '',
         url char(100) NOT NULL,
         PRIMARY KEY (c_id, id)
@@ -1116,11 +1116,12 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `".$TABLETOOLCHATCONNECTED . "` (
         $add_to_all_tables
+        id int unsigned NOT NULL auto_increment,
         user_id int unsigned NOT NULL default '0',
         last_connection datetime NOT NULL default '0000-00-00 00:00:00',
         session_id  INT NOT NULL default 0,
         to_group_id INT NOT NULL default 0,
-        PRIMARY KEY  ( `c_id`, `user_id`, `last_connection` )
+        PRIMARY KEY  (c_id, id, user_id, last_connection)
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1137,7 +1138,7 @@ function create_course_tables($course_db_name = null) {
         name varchar(100) default NULL,
         category_id int unsigned NOT NULL default 0,
         description text,
-        max_student smallint unsigned NOT NULL default 8,
+        max_student int unsigned NOT NULL default 8,
         doc_state tinyint unsigned NOT NULL default 1,
         calendar_state tinyint unsigned NOT NULL default 0,
         work_state tinyint unsigned NOT NULL default 0,
@@ -1148,7 +1149,7 @@ function create_course_tables($course_db_name = null) {
         secret_directory varchar(255) default NULL,
         self_registration_allowed tinyint unsigned NOT NULL default '0',
         self_unregistration_allowed tinyint unsigned NOT NULL default '0',
-        session_id smallint unsigned NOT NULL default 0,
+        session_id int unsigned NOT NULL default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
@@ -1166,11 +1167,11 @@ function create_course_tables($course_db_name = null) {
         forum_state tinyint unsigned NOT NULL default 1,
         wiki_state tinyint unsigned NOT NULL default 1,
         chat_state tinyint unsigned NOT NULL default 1,
-        max_student smallint unsigned NOT NULL default 8,
+        max_student int unsigned NOT NULL default 8,
         self_reg_allowed tinyint unsigned NOT NULL default 0,
         self_unreg_allowed tinyint unsigned NOT NULL default 0,
-        groups_per_user smallint unsigned NOT NULL default 0,
-        display_order smallint unsigned NOT NULL default 0,
+        groups_per_user int unsigned NOT NULL default 0,
+        display_order int unsigned NOT NULL default 0,
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
@@ -1242,7 +1243,7 @@ function create_course_tables($course_db_name = null) {
         upload_date datetime NOT NULL default '0000-00-00 00:00:00',
         last_upload_date datetime NOT NULL default '0000-00-00 00:00:00',
         cat_id int NOT NULL default 0,
-        session_id SMALLINT UNSIGNED NOT NULL,
+        session_id int UNSIGNED NOT NULL,
         PRIMARY KEY (c_id, id),
         UNIQUE KEY UN_filename (filename)
         )" . $charset_clause);
@@ -1257,7 +1258,7 @@ function create_course_tables($course_db_name = null) {
         feedback_date datetime NOT NULL default '0000-00-00 00:00:00',
         feedback text default '',
         cat_id int NOT NULL default 0,
-        session_id SMALLINT UNSIGNED NOT NULL,
+        session_id int UNSIGNED NOT NULL,
         PRIMARY KEY (c_id, file_id, dest_user_id)
         )" . $charset_clause);
 
@@ -1278,7 +1279,7 @@ function create_course_tables($course_db_name = null) {
               received tinyint unsigned NOT NULL default 0,
               sent tinyint unsigned NOT NULL default 0,
               user_id int NOT NULL default 0,
-              session_id smallint NOT NULL default 0,
+              session_id int NOT NULL default 0,
               PRIMARY KEY  (c_id, cat_id)
               )" . $charset_clause;
     Database::query($sql);
@@ -1307,7 +1308,7 @@ function create_course_tables($course_db_name = null) {
     	$add_to_all_tables
     	" .
         "id             int unsigned        auto_increment," .  // unique ID, generated by MySQL
-        "lp_type        smallint unsigned   not null," .                    // lp_types can be found in the main database's lp_type table
+        "lp_type        int unsigned   not null," .                    // lp_types can be found in the main database's lp_type table
         "name           varchar(255)        not null," .                    // name is the text name of the learning path (e.g. Word 2000)
         "ref            tinytext            null," .                        // ref for SCORM elements is the SCORM ID in imsmanifest. For other learnpath types, just ignore
         "description    text                null,".                         // textual description
@@ -1347,7 +1348,7 @@ function create_course_tables($course_db_name = null) {
         "id             int unsigned        auto_increment," .  // unique ID from MySQL
         "lp_id          int unsigned        not null," .                    // learnpath ID from 'lp'
         "user_id        int unsigned        not null," .                    // user ID from main.user
-        "view_count     smallint unsigned   not null default 0," .          // integer counting the amount of times this learning path has been attempted
+        "view_count     int unsigned   not null default 0," .          // integer counting the amount of times this learning path has been attempted
         "last_item      int unsigned        not null default 0," .          // last item seen in this view
         "progress       int unsigned        default 0," .
         "session_id     int                 not null default 0,
@@ -1445,7 +1446,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(
     	 $add_to_all_tables" .
         "id             bigint unsigned     auto_increment," .
-        "order_id       smallint unsigned   not null default 0,".           // internal order (0->...) given by Dokeos
+        "order_id       int unsigned   not null default 0,".           // internal order (0->...) given by Dokeos
         "lp_iv_id       bigint unsigned     not null," .                    // identifier of the related sco_view
         "interaction_id varchar(255)        not null default ''," .         // sco-specific, given by the sco
         "interaction_type   varchar(255)    not null default ''," .         // literal values, SCORM-specific (see p.63 of SCORM 1.2 RTE)
@@ -1471,7 +1472,7 @@ function create_course_tables($course_db_name = null) {
     	$add_to_all_tables" .
         "id             bigint unsigned     auto_increment," .
         "lp_iv_id       bigint unsigned     not null," .                    // identifier of the related sco_view
-        "order_id       smallint unsigned   not null default 0,".           // internal order (0->...) given by Dokeos
+        "order_id       int unsigned   not null default 0,".           // internal order (0->...) given by Dokeos
         "objective_id   varchar(255)        not null default ''," .         // sco-specific, given by the sco
         "score_raw      float unsigned      not null default 0," .          // score
         "score_max      float unsigned      not null default 0," .          // max score
@@ -1494,12 +1495,12 @@ function create_course_tables($course_db_name = null) {
     $sql = "
         CREATE TABLE `" . $tbl_blogs . "` (
             $add_to_all_tables
-            blog_id smallint NOT NULL AUTO_INCREMENT ,
+            blog_id int NOT NULL AUTO_INCREMENT ,
             blog_name varchar( 250 ) NOT NULL default '',
             blog_subtitle varchar( 250 ) default NULL ,
             date_creation datetime NOT NULL default '0000-00-00 00:00:00',
             visibility tinyint unsigned NOT NULL default 0,
-            session_id smallint default 0,
+            session_id int default 0,
             PRIMARY KEY (c_id, blog_id )
         )" . $charset_clause . " COMMENT = 'Table with blogs in this course';";
 
@@ -1769,7 +1770,7 @@ function create_course_tables($course_db_name = null) {
               survey_type int NOT NULL default 0,
               show_form_profile int NOT NULL default 0,
               form_fields TEXT NOT NULL,
-              session_id SMALLINT unsigned NOT NULL default 0,
+              session_id int unsigned NOT NULL default 0,
               PRIMARY KEY  (c_id, survey_id)
             )" . $charset_clause;
     $result = Database::query($sql);
@@ -1786,7 +1787,7 @@ function create_course_tables($course_db_name = null) {
               invitation_date datetime NOT NULL,
               reminder_date datetime NOT NULL,
               answered int NOT NULL default 0,
-              session_id SMALLINT(5) UNSIGNED NOT NULL default 0,
+              session_id int UNSIGNED NOT NULL default 0,
               PRIMARY KEY  (c_id, survey_invitation_id)
             )" . $charset_clause;
     $result = Database::query($sql);
@@ -1850,7 +1851,7 @@ function create_course_tables($course_db_name = null) {
               name varchar(255) NOT NULL,
               description text not null,
               display_order int,
-              session_id smallint default 0,
+              session_id int default 0,
               PRIMARY KEY  (c_id, glossary_id)
             )" . $charset_clause;
     $result = Database::query($sql);

@@ -11,7 +11,11 @@ class Request
 
     public static function get($key, $default = null)
     {
-        return isset($_GET[$key]) ? $_GET[$key] : $default;
+        return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
+    }
+    
+    public static function has($key){
+        return isset($_REQUEST[$key]);
     }
     
     /**

@@ -2,7 +2,6 @@
 
 use \ChamiloSession as Session;
 
-
 /* For licensing terms, see /license.txt */
 /**
  * 	Code library for login process
@@ -262,20 +261,22 @@ class Login
                     $is_allowedCreateCourse = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
                     ConditionalLogin::check_conditions($uData);
 
-                    Session::write('_user',$_user);
+                    Session::write('_user', $_user);
                     UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
-                    Session::write('is_platformAdmin',$is_platformAdmin);
-                    Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
+                    Session::write('is_platformAdmin', $is_platformAdmin);
+                    Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-                    // If request_uri is setted we have to go further to have course permissions
-                    if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-                        if (isset($_SESSION['noredirection'])) {
-                            //If we just want to reset info without redirecting user
-                            unset($_SESSION['noredirection']);
-                        } else {
-                            LoginRedirection::redirect();
-                        }
-                    }
+//                  
+//                    
+//                    // If request_uri is setted we have to go further to have course permissions
+//                    if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
+//                        if (isset($_SESSION['noredirection'])) {
+//                            //If we just want to reset info without redirecting user
+//                            unset($_SESSION['noredirection']);
+//                        } else {
+//                            LoginRedirection::redirect();
+//                        }
+//                    }
                 } else {
                     header('location:' . api_get_path(WEB_PATH));
                     //exit("WARNING UNDEFINED UID !! ");
@@ -285,8 +286,8 @@ class Login
                 Session::erase('_uid');
             }
 
-            Session::write('is_platformAdmin',$is_platformAdmin);
-            Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
+            Session::write('is_platformAdmin', $is_platformAdmin);
+            Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
         } else { // continue with the previous values
             $_user = $_SESSION['_user'];
             $is_platformAdmin = $_SESSION['is_platformAdmin'];
@@ -315,6 +316,7 @@ class Login
      */
     static function init_course($course_id, $reset)
     {
+        global $_configuration;
         global $is_platformAdmin;
         global $is_allowedCreateCourse;
         global $_user;
@@ -331,7 +333,7 @@ class Login
         global $is_sessionAdmin;
         global $is_allowed_in_course;
 
-        if (isset($reset) && $reset) {
+        if ($reset) {
             // Course session data refresh requested or empty data        
             if ($course_id) {
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -373,11 +375,11 @@ class Login
                     $_course['activate_legal'] = $course_data['activate_legal'];
                     $_course['show_score'] = $course_data['show_score']; //used in the work tool
 
-                    Session::write('_cid',$_cid);
-                    Session::write('_course',$_course);
+                    Session::write('_cid', $_cid);
+                    Session::write('_course', $_course);
 
                     //@TODO real_cid should be cid, for working with numeric course id
-                    Session::write('_real_cid',$_real_cid);
+                    Session::write('_real_cid', $_real_cid);
 
                     // if a session id has been given in url, we store the session
                     if (api_get_setting('use_session_mode') == 'true') {
@@ -520,7 +522,7 @@ class Login
         //Course - User permissions
         $is_sessionAdmin = false;
 
-        if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
+        if ($reset) {
 
             if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
 
@@ -528,7 +530,7 @@ class Login
                 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT * FROM $course_user_table
                    WHERE user_id  = '" . $user_id . "' AND relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
-                   AND course_code = '$cidReq'";
+                   AND course_code = '$course_id'";
                 $result = Database::query($sql);
 
                 $cuData = null;
@@ -548,7 +550,7 @@ class Login
                         }
                     }
                     $_courseUser['role'] = $cuData['role'];
-                    Session::write('_courseUser',$_courseUser);
+                    Session::write('_courseUser', $_courseUser);
                 }
 
                 //We are in a session course? Check session permissions
@@ -610,14 +612,14 @@ class Login
                                         } else {
                                             $is_courseAdmin = false;
                                         }
-                                        Session::write('_courseUser',$_courseUser);
+                                        Session::write('_courseUser', $_courseUser);
                                         break;
                                     case '0': //student
                                         $is_courseMember = true;
                                         $is_courseTutor = false;
                                         $is_courseAdmin = false;
                                         $is_sessionAdmin = false;
-                                        Session::write('_courseUser',$_courseUser);
+                                        Session::write('_courseUser', $_courseUser);
                                         break;
                                     default:
                                         //unregister user
@@ -701,13 +703,13 @@ class Login
             }
 
             // save the states
-            Session::write('is_courseAdmin',$is_courseAdmin);
-            Session::write('is_courseMember',$is_courseMember);
-            Session::write('is_courseTutor',$is_courseTutor);
-            Session::write('is_courseCoach',$is_courseCoach);
-            Session::write('is_allowed_in_course',$is_allowed_in_course);
+            Session::write('is_courseAdmin', $is_courseAdmin);
+            Session::write('is_courseMember', $is_courseMember);
+            Session::write('is_courseTutor', $is_courseTutor);
+            Session::write('is_courseCoach', $is_courseCoach);
+            Session::write('is_allowed_in_course', $is_allowed_in_course);
 
-            Session::write('is_sessionAdmin',$is_sessionAdmin);
+            Session::write('is_sessionAdmin', $is_sessionAdmin);
         } else { // continue with the previous values
             if (isset($_SESSION ['_courseUser'])) {
                 $_courseUser = $_SESSION ['_courseUser'];
@@ -744,7 +746,7 @@ class Login
                 if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
                     $gpData = Database::fetch_array($result);
                     $_gid = $gpData ['id'];
-                    Session::write('_gid',$_gid);
+                    Session::write('_gid', $_gid);
                 } else {
                     Session::erase('_gid');
                 }

@@ -223,9 +223,9 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 $copy_to_myfiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
             $send_to = '';
-//            if ($filetype == 'file') {
-//                $send_to = Portfolio::share($document_data['id'], array('style' => 'float:right;'));
-//            }
+            if ($filetype == 'file') {
+                $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
+            }
         }
         
         $pdf_icon = '';

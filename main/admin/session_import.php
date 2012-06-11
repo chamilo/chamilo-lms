@@ -740,7 +740,8 @@ if ($_POST['formSent']) {
                             $inserted_in_course[$vcourse['code']] = $vcourse['title'];
                         }
                     }
-
+                    $access_url_id = api_get_current_access_url_id();
+                    UrlManager::add_session_to_url($session_id, $access_url_id);
                     $sql_update_users = "UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'";
                     Database::query($sql_update_users);
                 }

@@ -1,6 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
- * 
  * Events' configuration
  * Used to configure each event and to link them to functions the event'll fire.
  * The flow is like the following :
@@ -10,8 +11,7 @@
  * 4. that switch will see if the function actually exists (if not, we get dont do anything)
  * 5. then it will see if a filter for that function exists (if it does, the filter is executed)
  * 6. if the filter says it's ok, the function linked to the event is executed
- * 7. and that function will actually call the truly interesting function with the good require_once
- * 
+ * 7. and that function will actually call the truly interesting function with the good require_once 
  */
 global $event_config;
 
@@ -73,9 +73,8 @@ $event_config = array(
  * @param array $values (passing by reference)
  * @return boolean 
  */
-function user_registration_event_send_mail_filter_func(&$values)
-{
-        return true;
+function user_registration_event_send_mail_filter_func(&$values) {
+    return true;
 }
 
 /**
@@ -86,8 +85,7 @@ function user_registration_event_send_mail_filter_func(&$values)
  * @param string $event_name
  * @param array $params 
  */
-function event_send_mail($event_name, $params) {
-    require_once api_get_path(LIBRARY_PATH).'events_email.class.php';
+function event_send_mail($event_name, $params) {    
     EventsMail::send_mail($event_name, $params);
 }
 
@@ -101,14 +99,11 @@ function event_send_mail($event_name, $params) {
 function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
     if ($user_to == null) {
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
-                WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'";
-                ';
+                WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'"';
     } else {
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
-                WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'";
-                ';
-    }
-    
+                WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'"';
+    }    
     $result = Database::store_result(Database::query($sql), 'ASSOC');
     return $result[0]["total"];
 }

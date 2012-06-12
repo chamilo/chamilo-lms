@@ -110,7 +110,11 @@ if (defined('SYSTEM_INSTALLATION')) {
             $result = Database::fetch_array($result);
             $session_mode  = $result['selected_value'];            
                         
-            if ($session_mode == 'false') {
+            if ($session_mode == 'true') {
+                
+                $sql = "UPDATE $dbNameForm.settings_current SET selected_value = 'true' WHERE variable='use_session_mode' ";                
+                $result = iDatabase::query($sql);
+                
                 $sql = "SELECT * FROM $dbNameForm.class";
                 $result = iDatabase::query($sql);
                 $count = 0;                    	
@@ -140,6 +144,25 @@ if (defined('SYSTEM_INSTALLATION')) {
                         iDatabase::insert($new_table, $values);
                     }
                 }
+                
+                $sql = "SELECT * FROM $dbNameForm.course_rel_class";
+                $result = iDatabase::query($sql);
+                $new_table = "$dbNameForm.usergroup_rel_course";
+                
+                if (Database::num_rows($result)) {
+                    while ($row = iDatabase::fetch_array($result, 'ASSOC')) {
+                        $course_code = $row['course_code'];
+                        $course_code = addslashes($course_code);
+                        $sql_course = "SELECT id from $dbNameForm.course WHERE code = '$course_code'";
+                        $result_course = iDatabase::query($sql_course);
+                        $result_course = Database::fetch_array($result_course);
+                        $course_id  = $result_course['id'];
+                        $values = array('usergroup_id' => $mapping_classes[$row['class_id']],
+                                        'course_id' => $course_id);
+                        iDatabase::insert($new_table, $values);
+                    }
+                }
+                
                 Log::notice("#classes added $classes_added");                
             }
         }

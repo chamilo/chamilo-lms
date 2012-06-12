@@ -168,17 +168,15 @@ function display_studentsdelete_form() {
 	<div class="control-group">
         <label class="control-label"><?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?></label>
 	<div class="controls">
-    <label class="radio" for="student_delete_own_publication_2">
-        <input id="student_delete_own_publication_2" class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
-                    <?php echo get_lang('Yes'); ?>
-    </label>
+        <label class="radio" for="student_delete_own_publication_2">
+            <input id="student_delete_own_publication_2" class="checkbox" type="radio" name="student_delete_own_publication" value="1" <?php if ($current_course_setting_value == 1) echo 'checked'; ?> />
+                        <?php echo get_lang('Yes'); ?>
+        </label>
         <label class="radio" for="student_delete_own_publication_1">
 		<input id="student_delete_own_publication_1" class="checkbox" type="radio" name="student_delete_own_publication" value="0"		
 			<?php if ($current_course_setting_value == 0) echo 'checked'; ?> />
 				<?php echo get_lang('No'); ?>
-</label>
-
-			
+        </label>			
 		</div>
 </div>
 
@@ -973,16 +971,16 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	$result 	= Database::query($sql);
 	$title 		= Database::fetch_row($result);
 	global $gradebook;
-
-	$form = '<form name="move_to_form" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
-	$form .= '<div class="row"><div class="form_header">'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</div></div>';
+    //@todo use formvalidator please!
+	$form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
+	$form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title[0]).'</legend>';
 	$form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
 	$form .= '<input type="hidden" name="action" value="move_to" />';
-	$form .= '<div class="row">
-				<div class="label">
+	$form .= '<div class="control-group">
+				<label>
 					<span class="form_required">*</span>'.get_lang('Select').'
-				</div>
-				<div class="formw">';
+				</label>
+				<div class="controls">';
 	$form .= ' <select name="move_to_id">';
 
 	//group documents cannot be uploaded in the root
@@ -1018,9 +1016,8 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	$form .= '</select>';
 	$form .= '	</div>
 			</div>';
-	$form .= '<div class="row">
-					<div class="label"></div>
-					<div class="formw">
+	$form .= '<div class="control-group">					
+					<div class="controls">
 						<button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
 					</div>
 				</div>';

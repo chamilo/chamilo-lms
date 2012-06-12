@@ -176,7 +176,8 @@ if (api_is_platform_admin()) {
 
 /* Sessions */
 
-if (api_get_setting('use_session_mode') == 'true') {
+//if (api_get_setting('use_session_mode') == 'true') {
+if (true) {
 	
 	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
@@ -203,6 +204,7 @@ if (api_get_setting('use_session_mode') == 'true') {
         }            
         $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
     }
+    
     $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
     
     $blocks['sessions']['items'] = $items;
@@ -210,7 +212,7 @@ if (api_get_setting('use_session_mode') == 'true') {
 
 } elseif (api_is_platform_admin()) {
 
-	$blocks['classes']['items'] = $items;	
+	/*$blocks['classes']['items'] = $items;	
 	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'), array(), ICON_SIZE_SMALL, false);
 	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
 	
@@ -224,10 +226,12 @@ if (api_get_setting('use_session_mode') == 'true') {
 	$items[] = array('url'=>'class_add.php', 	'label' => get_lang('AddClasses'));
 	$items[] = array('url'=>'class_import.php', 	'label' => get_lang('ImportClassListCSV'));
 	$items[] = array('url'=>'class_user_import.php', 	'label' => get_lang('AddUsersToAClass'));
-	$items[] = array('url'=>'subscribe_class2course.php', 	'label' => get_lang('AddClassesToACourse'));
+	$items[] = array('url'=>'subscribe_class2course.php', 	'label' => get_lang('AddClassesToACourse'));    
+    
+    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
 	
 	$blocks['classes']['items'] = $items;
-    $blocks['classes']['extra'] = null;
+    $blocks['classes']['extra'] = null;*/
     
 }
 

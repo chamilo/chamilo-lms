@@ -170,26 +170,20 @@ class EventsMail
      * @param string $event_name
      * @return boolean 
      */
-    public static function check_if_using_class($event_name) 
-    {
-	if (api_get_setting('activate_email_template') === 'false')
-	{
-		return false;
-	}
+    public static function check_if_using_class($event_name) {
+        if (api_get_setting('activate_email_template') === 'false') {
+            return false;
+        }
+        $current_language = api_get_interface_language();
 
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em 
         INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l on em.language_id = l.id
-        WHERE em.event_type_name = "' . $event_name . '" and l.dokeos_folder = "english" and em.activated = 1
-        ';
+        WHERE em.event_type_name = "' . $event_name . '" and l.dokeos_folder = "'.$current_language.'" and em.activated = 1';
 
-        $exists = Database::store_result(Database::query($sql), 'ASSOC');
-
-        if ($exists[0]["total"]) 
-	{
-            return true;
-        } 
-	else 
-	{
+        $exists = Database::store_result(Database::query($sql), 'ASSOC');                
+        if ($exists[0]["total"])  {
+            return true;            
+        } else {
             return false;
         }
     }

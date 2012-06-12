@@ -166,23 +166,17 @@ class UserManager {
 				}                
 
 
-			/* MANAGE EVENT WITH MAIL */
-			if(EventsMail::check_if_using_class('user_registration'))
-                        {
-                            $values["about_user"] = $return;
-                            $values["password"] = $original_password;
-                            
-                            $values["send_to"] = array($return);
-                            $values["prior_lang"] = null;
-                            
-                            EventsDispatcher::events('user_registration', $values);
-                        }
-                        else
-                        {
-                            @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
-                        }
-			/* ENDS MANAGE EVENT WITH MAIL */ 
-              
+                /* MANAGE EVENT WITH MAIL */
+                if (EventsMail::check_if_using_class('user_registration')) {
+                    $values["about_user"] = $return;
+                    $values["password"] = $original_password;
+                    $values["send_to"] = array($return);
+                    $values["prior_lang"] = null;
+                    EventsDispatcher::events('user_registration', $values);
+                } else {
+                    @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
+                }
+                /* ENDS MANAGE EVENT WITH MAIL */              
 			}
           
 
@@ -755,31 +749,28 @@ class UserManager {
 	}
         
 	public static function get_user_list_by_ids($ids = array(), $active = null) 
-        {
-            if(empty($ids))
-            {
-                return array();
-            }
-            
-            $ids = is_array($ids) ? $ids : array($ids);            
-            $ids = array_map('intval', $ids);       
-            $ids = implode(',', $ids);
-            
-            $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT * FROM $tbl_user WHERE user_id IN ($ids)";
-            if(! is_null($active))
-            {
-                $sql .= ' AND active=' . ($active ? '1' : '0'); 
-            }
-            
-            $rs = Database::query($sql);
-            $result = array();
-            while ($row = Database::fetch_array($rs)) 
-            {
-                $result[] = $row;
-            }
-            return $result;
+    {
+        if(empty($ids)) {
+            return array();
         }
+
+        $ids = is_array($ids) ? $ids : array($ids);            
+        $ids = array_map('intval', $ids);       
+        $ids = implode(',', $ids);
+
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT * FROM $tbl_user WHERE user_id IN ($ids)";
+        if(!is_null($active)) {
+            $sql .= ' AND active=' . ($active ? '1' : '0'); 
+        }
+
+        $rs = Database::query($sql);
+        $result = array();
+        while ($row = Database::fetch_array($rs)) {
+            $result[] = $row;
+        }
+        return $result;
+    }
 
 	/**
 	* Get a list of users of which the given conditions match with an = 'cond'
@@ -815,6 +806,7 @@ class UserManager {
 		}
 		return $return_array;
 	}
+    
 
     /**
     * Get a list of users of which the given conditions match with a LIKE '%cond%'
@@ -1094,11 +1086,7 @@ class UserManager {
 		return self::update_user_picture($user_id);
 	}
 
-/*
------------------------------------------------------------
-	PRODUCTIONS FUNCTIONS
------------------------------------------------------------
-*/
+    /* PRODUCTIONS FUNCTIONS */
 
 	/**
 	 * Returns an XHTML formatted list of productions for a user, or FALSE if he
@@ -1290,7 +1278,7 @@ class UserManager {
 				while ($rowufv = Database::fetch_array($resufv)) {
 					if ($n > 1) {
 						$sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
-						$resd = Database::query($sqld);
+						Database::query($sqld);
 						$n--;
 					}
 					$rowufv = Database::fetch_array($resufv);
@@ -1301,8 +1289,7 @@ class UserManager {
 					}
 					return true;
 				}
-			}
-			elseif ($n == 1) {
+			} elseif ($n == 1) {
 				//we need to update the current record
 				$rowufv = Database::fetch_array($resufv);
 				if ($rowufv['field_value'] != $fvalues) {
@@ -1596,12 +1583,12 @@ class UserManager {
 		while ($row = Database::fetch_array($result)) {
 			// deleting the option
 			$sql_delete_option = "DELETE FROM $table_field_options WHERE id='".Database::escape_string($row['id'])."'";
-			$result_delete_option = Database::query($sql_delete_option);
+			Database::query($sql_delete_option);
 			$return['deleted_options']++;
 
 			// deleting the answer of the user who has chosen this option
 			$sql_delete_option_value = "DELETE FROM $table_field_options_values WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-			$result_delete_option_value = Database::query($sql_delete_option_value);
+			Database::query($sql_delete_option_value);
 			$return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
 		}
 
@@ -1814,6 +1801,7 @@ class UserManager {
 		// all the information of the field
 		$sql = "SELECT * FROM $table_field WHERE field_type='".Database::escape_string($field_type)."'";
 		$result = Database::query($sql);
+        $return = array();
 		while ($row = Database::fetch_array($result)) {
 			$return[] = $row['id'];
 		}
@@ -2792,14 +2780,6 @@ class UserManager {
 		$user_id = intval($user_id);
 		$field_id = intval($field_id);
 
-		//&&  (substr($tag,strlen($tag)-1) == '@')
-		/*$sent_by_user = false;
-		if ( substr($tag,0,1) == '@')  {
-			//is a value sent by the list
-			$sent_by_user = true;
-			$tag = substr($tag,1,strlen($tag)-2);
-		}
-		*/
 		$tag_id = UserManager::get_tag_id($tag,$field_id);
 		/* IMPORTANT
 		 *  @todo we don't create tags with numbers
@@ -2843,6 +2823,7 @@ class UserManager {
 			}
 		}
 	}
+    
 	/**
 	 * Deletes an user tag
 	 * @param int user id

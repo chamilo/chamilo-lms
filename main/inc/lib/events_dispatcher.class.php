@@ -11,13 +11,13 @@ include_once api_get_path(CONFIGURATION_PATH).'events.conf.php';
  */
 class EventsDispatcher 
 {
-    public static function events($event_name, $event_data)
+    public static function events($event_name, $event_data = array())
     {
         global $event_config;
         // get the config for the event passed in parameter ($event_name)
         // and execute every actions with the values
-        foreach ($event_config[$event_name]["actions"] as $func) 
-        {
+        
+        foreach ($event_config[$event_name]["actions"] as $func) {
             if (!function_exists($func)) // if the function doesn't exist, we log
             {
                 error_log("EventsDispatcher warning : ".$func." does not exist.");
@@ -42,5 +42,3 @@ class EventsDispatcher
         }
     }
 }
-
-?>

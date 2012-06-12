@@ -5,7 +5,10 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-//The event type is so mess that I'm giving me the freedom to try to do a "symfony controller" style
+if (api_get_setting('activate_email_template') != 'true') {
+    api_not_allowed();
+}
+
 class eventController { // extends Controller {
     public function showAction()
     {
@@ -47,26 +50,26 @@ switch ($action) {
     case 'new':
         $event_controller->newAction();
         break;
-    case 'listing':
-        $content = $event_controller->listingAction();
-        break;
     case 'delete' :
         $event_controller->deleteAction($_GET['id']);
         $content = $event_controller->listingAction();
-        break;        
+        break;
+    default:
+    case 'listing':
+        $content = $event_controller->listingAction();
+        break;
 }
 
 //jqgrid will use this URL to do the selects
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_event_email_template';
 
-
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Subject'), get_lang('Message'), get_lang('EventTypeName'), get_lang('Language'), get_lang('Status'), get_lang('Actions'));
+$columns        = array(get_lang('Subject'), get_lang('EventTypeName'), get_lang('Language'), get_lang('Status'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
                         array('name'=>'subject',        'index'=>'subject',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'message',        'index'=>'message', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
+//                        array('name'=>'message',        'index'=>'message', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'event_type_name',        'index'=>'event_type_name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'language_id',        'index'=>'language_id',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'activated',        'index'=>'activated',        'width'=>'80',   'align'=>'left'),
@@ -83,6 +86,9 @@ $(function() {
     '.Display::grid_js('event_email_template',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).' 
 });
 </script>';
+
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Events'));
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);

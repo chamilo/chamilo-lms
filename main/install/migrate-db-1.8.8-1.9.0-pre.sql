@@ -276,6 +276,12 @@ DELETE FROM settings_current WHERE variable = "read_more_limit";
 DELETE FROM settings_current WHERE variable = "user_order_by";
 DELETE FROM settings_options WHERE variable = "user_order_by";
 
+ALTER TABLE user_api_key ADD COLUMN api_end_point text DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
+ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
+
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.18302' WHERE variable = 'chamilo_database_version';
 
@@ -310,11 +316,4 @@ ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
 ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
 ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
 ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
-
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_public_certificates', 0, 'certificates');
-
-ALTER TABLE user_api_key ADD COLUMN api_end_point text DEFAULT NULL;
-ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
-ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
-ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
-ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;

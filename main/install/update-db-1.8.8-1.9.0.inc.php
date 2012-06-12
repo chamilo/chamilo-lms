@@ -243,17 +243,57 @@ if (defined('SYSTEM_INSTALLATION')) {
     //Adds the c_XXX courses tables see #3910
     require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
     global $_configuration;
+    
+    drop_course_tables();    
     create_course_tables();
     
     $prefix = '';
     if ($singleDbForm) {
         $prefix =  get_config_param('table_prefix');
     }
+    
+    function check_work($folder_id, $work_url, $work_table, $base_work_dir) {            
+        $uniq_id = uniqid();
+        //Looking for subfolders
+        $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='folder'";             
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                check_work($row['id'], $row['url'], $work_table, $base_work_dir);
+            }
+        }
+        
+        //Moving the subfolder in the root
+        $new_url = '/'.basename($work_url).'_mv_'.$uniq_id;              
+        $new_url = Database::escape_string($new_url);
+        $sql = "UPDATE $work_table SET url = '$new_url', parent_id = 0 WHERE id = $folder_id";
+        iDatabase::query($sql);
+        
+        if (is_dir($base_work_dir.$work_url)) {
+            rename($base_work_dir.$work_url, $base_work_dir.$new_url);
+            
+            //Rename all files inside the folder                        
+            $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='file'";             
+            $result = Database::query($sql);
+            
+            if (Database::num_rows($result)) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {                                
+                    $new_url = "work".$new_url.'/'.basename($row['url']);     
+                    $new_url = Database::escape_string($new_url);
+                    $sql = "UPDATE $work_table SET url = '$new_url', parent_id = $folder_id, contains_file = '1' WHERE id = {$row['id']}";                                
+                    iDatabase::query($sql);
+                }
+            }
+        }
+        
+        
+    }
 
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
     Log::notice('Starting migration: '.$old_file_version.' - '.$new_file_version);
-    
+
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
@@ -262,9 +302,9 @@ if (defined('SYSTEM_INSTALLATION')) {
             Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
             iDatabase::select_db($dbNameForm);
-            $res = iDatabase::query("SELECT id, code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+            $res = iDatabase::query("SELECT id, code, db_name, directory, course_language, id as real_id FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-            if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
+            if ($res === false) { die('Error while querying the courses list in update_db-1.8.8-1.9.0.inc.php'); }
 			
             $errors = array();
               
@@ -297,6 +337,125 @@ if (defined('SYSTEM_INSTALLATION')) {
                             }
                         }
                     }                    
+                    
+                    $work_table = $row_course['db_name'].".student_publication";
+                    $item_table = $row_course['db_name'].".item_property";
+                    if ($singleDbForm) {
+                        $work_table = "$prefix{$row_course['db_name']}_student_publication";
+                        $item_table = $row_course['db_name'].".item_property";
+                    }
+                    
+                    if (!$singleDbForm) {
+                        // otherwise just use the main one
+                        iDatabase::select_db($row_course['db_name']);
+                    } else {
+                        iDatabase::select_db($dbNameForm);
+                    }                    	
+
+                    
+                    /* Fixes the work subfolder and work with no parent issues */
+                    
+                    //1. Searching for works with no parents
+                    $sql 	= "SELECT * FROM $work_table WHERE parent_id = 0 AND filetype ='file'";
+                    $result = Database::query($sql);
+                    
+                    $work_list = array();
+                    
+                    if (Database::num_rows($result)) {
+                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                            $work_list[] = $row;
+                        }
+                    }
+                    
+                    $today = api_get_utc_datetime();
+                    $user_id = 1;                    
+                    require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+                    
+                    $sys_course_path 	= api_get_path(SYS_COURSE_PATH);
+                    $course_dir 		= $sys_course_path . $row_course['directory'];
+                    $base_work_dir 		= $course_dir . '/work';                   
+                    
+                    //2. Looping if there are works with no parents
+                    if (!empty($work_list)) {                        
+                        $work_dir_created = array();
+                        
+                        foreach ($work_list as $work) {                            
+                            $session_id = intval($work['session_id']);
+                            $group_id   = intval($work['post_group_id']);
+                            $work_key   = $session_id.$group_id;
+                            
+                            //Only create the folder once
+                            if (!isset($work_dir_created[$work_key])) {
+                                
+                                $dir_name = "default_tasks_".$group_id."_".$session_id;
+                                
+                                //2.1 Creating a new work folder
+                                $sql = "INSERT INTO $work_table SET
+                                                url         		= 'work/".$dir_name."',
+                                                title               = 'Tasks',
+                                                description 		= '',
+                                                author      		= '',
+                                                active              = '1',
+                                                accepted			= '1',
+                                                filetype            = 'folder',
+                                                post_group_id       = '$group_id',
+                                                sent_date           = '".$today."',                                            
+                                                parent_id           = '0',
+                                                qualificator_id     = '',                                            
+                                                user_id 			= '".$user_id."'";                                
+                                iDatabase::query($sql);
+
+                                $id = Database::insert_id();
+                                //2.2 Adding the folder in item property
+                                if ($id) {
+                                    //api_item_property_update($row_course, 'work', $id, 'DirectoryCreated', $user_id, $group_id, null, 0, 0 , $session_id);                                    
+                                    $sql = "INSERT INTO $item_table (tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, to_group_id, visibility, id_session)
+                                            VALUES ('work','$id','$today', '$user_id', '$today', 'DirectoryCreated','$user_id', '$group_id', '1', '$session_id')";
+                                    
+                                    iDatabase::query($sql);
+                                    $work_dir_created[$work_key] = $id;                                    
+                                    create_unexisting_work_directory($base_work_dir, $dir_name);
+                                    $final_dir = $base_work_dir.'/'.$dir_name;
+                                }
+                            } else {
+                                $final_dir = $base_work_dir.'/'.$dir_name;
+                            }
+                            
+                            //2.3 Updating the url
+                            if (!empty($work_dir_created[$work_key])) {
+                                $parent_id = $work_dir_created[$work_key];                                
+                                $new_url = "work/".$dir_name.'/'.basename($work['url']);
+                                $new_url = Database::escape_string($new_url);
+                                $sql = "UPDATE $work_table SET url = '$new_url', parent_id = $parent_id, contains_file = '1' WHERE id = {$work['id']}";                                
+                                iDatabase::query($sql);     
+                                if (is_dir($final_dir)) {                                    
+                                    rename($course_dir.'/'.$work['url'], $course_dir.'/'.$new_url);
+                                }
+                            }                                                        
+                        }
+                    }
+                    
+                    //3.0 Moving subfolders to the root
+                    $sql 	= "SELECT * FROM $work_table WHERE parent_id <> 0 AND filetype ='folder'";             
+                    $result = Database::query($sql);
+                    $work_list = array();
+                    
+                    if (Database::num_rows($result)) {
+                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                            $work_list[] = $row;
+                        }
+                        if (!empty($work_list)) {                            
+                            foreach ($work_list as $work_folder) {                                
+                                $folder_id = $work_folder['id'];                                
+                                check_work($folder_id, $work_folder['url'], $work_table, $base_work_dir);                                
+                            }
+                        }
+                    }                    
+                    
+                    /* End of work fix */
+                    
+                    
+                    
                     
                     //Course tables to be migrated
                     $table_list = array(
@@ -390,7 +549,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     );
                     
                     Log::notice('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
-                    Install::message('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+                    //Install::message('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
                     
                     $count = $old_count = 0;
                     foreach ($table_list as $table) {

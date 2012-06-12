@@ -108,3 +108,4 @@ function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
     return $result[0]["total"];
 }
 
+@include 'events.conf.local.php';

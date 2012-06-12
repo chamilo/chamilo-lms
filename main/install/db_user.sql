@@ -8,6 +8,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP TABLE IF EXISTS personal_agenda;
 CREATE TABLE personal_agenda (
   id int NOT NULL auto_increment,
   user int unsigned,
@@ -20,6 +21,8 @@ CREATE TABLE personal_agenda (
   all_day int NOT NULL DEFAULT 0,
   PRIMARY KEY id (id)
 );
+
+DROP TABLE IF EXISTS personal_agenda_repeat;
 CREATE TABLE personal_agenda_repeat (
   cal_id INT DEFAULT 0 NOT NULL,
   cal_type VARCHAR(20),
@@ -28,11 +31,15 @@ CREATE TABLE personal_agenda_repeat (
   cal_days CHAR(7),
   PRIMARY KEY (cal_id)
 );
+
+DROP TABLE IF EXISTS personal_agenda_repeat_not;
 CREATE TABLE personal_agenda_repeat_not (
   cal_id INT NOT NULL,
   cal_date INT NOT NULL,
   PRIMARY KEY ( cal_id, cal_date )
 );
+
+DROP TABLE IF EXISTS user_course_category;
 CREATE TABLE user_course_category (
   id int unsigned NOT NULL auto_increment,
   user_id int unsigned NOT NULL default 0,
@@ -40,6 +47,7 @@ CREATE TABLE user_course_category (
   sort int, 
   PRIMARY KEY  (id)
 );
+
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);

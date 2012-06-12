@@ -2975,7 +2975,7 @@ ALTER TABLE chat ADD INDEX idx_chat_to_user (to_user);
 ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 
 -- Grade Model
-
+DROP TABLE IF EXISTS grade_model;
 CREATE TABLE grade_model (
   id INTEGER  NOT NULL AUTO_INCREMENT,
   name VARCHAR(255)  NOT NULL,
@@ -2983,6 +2983,7 @@ CREATE TABLE grade_model (
   PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS grade_components;
 CREATE TABLE grade_components (
   id INTEGER  NOT NULL AUTO_INCREMENT,
   percentage VARCHAR(255)  NOT NULL,

@@ -398,11 +398,9 @@ switch ($action) {
                 Display::display_warning_message(get_lang('NotAllowed'));	
                 Display::display_footer();
             }
-		}        
-        
-        
-        
-		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&curdirpath=" . rtrim(Security :: remove_XSS($curdirpath),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
+		} 
+                        
+		$form = new FormValidator('form', 'POST', api_get_self() . "?action=upload&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', array('enctype' => "multipart/form-data"));
 	
 		// form title
 		if ($item_id) {
@@ -558,11 +556,12 @@ switch ($action) {
 					
 					// Compose a unique file name to avoid any conflict
 					$new_file_name = api_get_unique_id();
-								
+                    $curdirpath = basename($my_folder_data['url']);
+                    
 					//if we come from the group tools the groupid will be saved in $work_table
 					$result = @move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
                     if ($result) {
-                        $url = 'work'.$curdirpath.'/'.$new_file_name;
+                        $url = 'work/'.$curdirpath.'/'.$new_file_name;
                         $contains_file = 1;
                     }
 				}

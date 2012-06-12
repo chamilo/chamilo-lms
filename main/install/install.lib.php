@@ -1625,6 +1625,7 @@ return $html;
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
     echo "<tr ".$tr_attribute.">";
     echo "<td>$parameter_name&nbsp;&nbsp;</td>";
+    
     if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
         echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>";
     } else {
@@ -1656,12 +1657,14 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
             $dbHostForm     	= get_config_param('dbHost');
+            
             $dbUsernameForm 	= get_config_param('dbLogin');
             $dbPassForm     	= get_config_param('dbPass');
             $dbPrefixForm   	= get_config_param('dbNamePrefix');
             $enableTrackingForm = get_config_param('is_trackingEnabled');
             $singleDbForm   	= get_config_param('singleDbEnabled');
-            $dbNameForm     	= get_config_param('mainDbName');
+            $dbHostForm     	= get_config_param('mainDbName');
+                        
             $dbStatsForm    	= get_config_param('statsDbName');
             $dbScormForm    	= get_config_param('scormDbName');
             $dbUserForm     	= get_config_param('user_personal_database');
@@ -1688,6 +1691,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                 $dbScormExists = false;
             }
         }
+        
         if (empty($dbUserForm)) {
             $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
         }
@@ -1730,23 +1734,19 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     $example_password = get_lang('EG').' '.api_generate_password();
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
-    //Fields for the four standard Chamilo databases    
-    if ($installType != INSTALL_TYPE_UPDATE) {        
-        /*echo '<tr><td colspan="3">';
-        echo '<a href="#;" onclick="javascript:show_hide_option();" id="optionalparameters">
-        	  <img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters').'</a>';
-        echo '</td></tr>';*/
-    }
-    ?>    
-    <input type="hidden" name="enableTrackingForm" value="1" />
-    <?php   
-    
+    echo '<input type="hidden" name="enableTrackingForm" value="1" />';
+        
     $style = '';    
     if ($installType == INSTALL_TYPE_UPDATE) {
         $style = '';
     } 
        
-    //Database Name
+    //Database Name fix replace weird chars
+    if ($installType != INSTALL_TYPE_UPDATE) {
+        $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
+        $dbNameForm = replace_dangerous_char($dbNameForm);        
+    }
+    
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
     
     //Only for updates we show this options

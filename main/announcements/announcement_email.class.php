@@ -17,7 +17,8 @@ class AnnouncementEmail
      *
      * @return AnnouncementEmail
      */
-    public static function create($course, $announcement) {
+    public static function create($course, $announcement)
+    {
         return new self($course, $announcement);
     }
 
@@ -25,7 +26,8 @@ class AnnouncementEmail
     protected $announcement = null;
     public $session_id = null;
 
-    function __construct($course, $announcement) {
+    function __construct($course, $announcement)
+    {
         if (empty($course)) {
             $course = api_get_course_int_id();
             $course = CourseManager::get_course_information_by_id($course);
@@ -134,12 +136,12 @@ class AnnouncementEmail
             // if to_group_id = 0 then it is sent to everybody
             $group_id = $row['to_group_id'];
             if (!empty($group_id)) {
-                $result['groups'][] = (int)$group_id;
+                $result['groups'][] = (int) $group_id;
             }
             // if to_user_id <> 0 then it is sent to a specific user
             $user_id = $row['to_user_id'];
             if (!empty($user_id)) {
-                $result['users'][] = (int)$user_id;
+                $result['users'][] = (int) $user_id;
             }
         }
         return $result;
@@ -156,16 +158,19 @@ class AnnouncementEmail
     {
         $sent_to = $this->sent_to_info();
         $users = $sent_to['users'];
+        $users = $users ? $users : array();
         $groups = $sent_to['groups'];
+
+        if ($users) {
+            $users = UserManager::get_user_list_by_ids($users, true);
+        } else {
+            $users = self::all_users();
+        }
 
         if (!empty($groups)) {
             $group_users = GroupManager::get_groups_users($groups);
             $group_users = UserManager::get_user_list_by_ids($group_users, true);
             $users = array_merge($users, $group_users);
-        }
-
-        if (empty($users)) {
-            $users = self::all_users();
         }
 
         return $users;
@@ -239,8 +244,7 @@ class AnnouncementEmail
         $sql = "SELECT * FROM $tbl_announcement_attachment WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
         $course_path = $this->course('directory');
-        while ($row = Database::fetch_array($rs))
-        {
+        while ($row = Database::fetch_array($rs)) {
             $path = api_get_path(SYS_COURSE_PATH) . $course_path . '/upload/announcements/' . $row['path'];
             $filename = $row['filename'];
             $result[] = array('path' => $path, 'filename' => $filename);
@@ -276,7 +280,8 @@ class AnnouncementEmail
     /**
      * Store that emails where sent
      */
-    public function log_mail_sent() {
+    public function log_mail_sent()
+    {
         $id = $this->announcement('id');
         $course_id = $this->course('id');
 
@@ -284,4 +289,5 @@ class AnnouncementEmail
         $sql = "UPDATE $tbl_announcement SET email_sent=1 WHERE c_id = $course_id AND id=$id AND session_id = {$this->session_id} ";
         Database::query($sql);
     }
+
 }

@@ -222,7 +222,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             $target_link = "_blank";
         }
         
-		echo '	<div class="control-group">
+		echo '	<div class="control-group url">
 					<label class="control-label">
 						<span class="form_required">*</span> URL
 					</label>
@@ -230,7 +230,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<input type="text" name="urllink" class="span6" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
 					</div>
 				</div>';
-		echo '	<div class="control-group">
+		echo '	<div class="control-group title">
 					<label class="control-label">
 						'.get_lang('LinkName').'
 					</label>
@@ -238,7 +238,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<input type="text" name="title" class="span6" value="' . Security::remove_XSS($title) . '" />
 					</div>
 				</div>';
-		echo '	<div class="control-group">
+		echo '	<div class="control-group metadata">
 					<label class="control-label">
 						'.get_lang('Metadata').'
 					</label>
@@ -246,7 +246,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<a href="../metadata/index.php?eid='.urlencode('Link.'.$clean_link_id).'">'.get_lang('AddMetadata').'</a>
 					</div>
 				</div>';
-		echo '	<div class="control-group">
+		echo '	<div class="control-group description">
 					<label class="control-label">
 						'.get_lang('Description').'
 					</label>
@@ -259,7 +259,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		$resultcategories = Database::query($sqlcategories);
 
 		if (Database::num_rows($resultcategories)) {
-			echo '	<div class="control-group">
+			echo '	<div class="control-group category">
 						<label class="control-label">
 							'.get_lang('Category').'
 						</label>
@@ -277,14 +277,14 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '		</div>
 					</div>';
 		}
-		echo '	<div class="control-group">
+		echo '	<div class="control-group onhomepage">
 					<label class="control-label">
 					</label>
 					<div class="controls">
 						<input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('OnHomepage').'?</label>
 					</div>
 				</div>';
-		echo '	<div class="control-group" id="div_target">
+		echo '	<div class="control-group target" id="div_target">
 					<label class="control-label">
 						'.get_lang('LinkTarget').'
 					</label>
@@ -309,7 +309,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 			$specific_fields = get_specific_field_list();
 
-			echo '	<div class="control-group">
+			echo '	<div class="control-group index">
 						<label class="control-label">
 							'.get_lang('SearchFeatureDoIndexLink').'
 						</label>
@@ -371,7 +371,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		if ($_GET['action'] == 'editcategory') {
 			echo '<input type="hidden" name="id" value="'.$id.'" />';
 		}
-		echo '	<div class="control-group">
+		echo '	<div class="control-group category">
 					<label class="control-label">
 						<span class="form_required">*</span> '.get_lang('CategoryName').'
 					</label>
@@ -380,7 +380,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</div>
 				</div>';
 
-		echo '	<div class="control-group">
+		echo '	<div class="control-group description">
 					<label class="control-label">
 						'.get_lang('Description').'
 					</label>

@@ -195,7 +195,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		if ($category == '') {
 			$category = 0;
 		}
-		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+		echo '<form class="form-horizontal link" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
         if ($_GET['action'] == 'addlink') {
 			echo '<legend>'.get_lang('LinkAdd').'</legend>';
 		} else {
@@ -357,7 +357,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 				</div>';
 		echo '</form>';
 	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {
-		echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
+		echo '<form class="form-horizontal link" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
 
         if ($_GET['action'] == 'addcategory') {
 			echo '<legend>'.get_lang('CategoryAdd').'</legend>';

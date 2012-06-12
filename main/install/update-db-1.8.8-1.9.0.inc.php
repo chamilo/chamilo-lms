@@ -102,9 +102,45 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
         
         if (INSTALL_TYPE_UPDATE == 'update') {
-            $session_mod = api_get_setting('use_session_mode');
-            if ($session_mod == 'false') {
+            
+            //Migrate classes to the new classes (usergroups)
+            
+            $sql = "SELECT selected_value FROM $dbNameForm.settings_current WHERE variable='use_session_mode' ";
+            $result = iDatabase::query($sql);
+            $result = Database::fetch_array($result);
+            $session_mode  = $result['selected_value'];            
+                        
+            if ($session_mode == 'false') {
+                $sql = "SELECT * FROM $dbNameForm.class";
+                $result = iDatabase::query($sql);
+                $count = 0;                    	
+                $new_table = "$dbNameForm.usergroup";
+                $classes_added = 0;
+                $mapping_classes = array();
+                if (Database::num_rows($result)) {
+                    while($row = iDatabase::fetch_array($result, 'ASSOC')) {
+                        $old_id = $row['id'];
+                        unset($row['id']);
+                        unset($row['code']);
+                        $new_user_group_id = Database::insert($new_table, $row);
+                        $mapping_classes[$old_id] = $new_user_group_id;
+                        if (is_numeric($id)) {
+                            $classes_added ++;
+                        }
+                    }
+                }
                 
+                $sql = "SELECT * FROM $dbNameForm.class_user";
+                $result = iDatabase::query($sql);
+                $new_table = "$dbNameForm.usergroup_rel_user";
+                if (Database::num_rows($result)) {
+                    while ($row = iDatabase::fetch_array($result, 'ASSOC')) {   
+                        $values = array('usergroup_id' => $mapping_classes[$row['class_id']],
+                                        'user_id' => $row['user_id']);
+                        iDatabase::insert($new_table, $values);
+                    }
+                }
+                Log::notice("#classes added $classes_added");                
             }
         }
         

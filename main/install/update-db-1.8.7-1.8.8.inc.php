@@ -211,7 +211,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             iDatabase::select_db($dbNameForm);
             $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-            if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
+            if ($res === false) { die('Error while querying the courses list in update_db-1.8.7.1-1.8.8.inc.php'); }
 
             if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
@@ -247,7 +247,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                                  Log::error('Error in '.$query.': '.iDatabase::error());
                             }
                         }
-                    }                    
+                    }            
                     
                     $table_lp_item_view = $row_course['db_name'].".lp_item_view";
                     $table_lp_view = $row_course['db_name'].".lp_view";
@@ -404,10 +404,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
     }
     */
-
-
 } else {
-
     echo 'You are not allowed here !';
-
 }

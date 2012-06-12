@@ -714,6 +714,10 @@ class Database {
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
+                
+                error_log('error #'.self::errno($connection));
+                error_log('error: '.self::error($connection));
+                
                 $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
                 error_log($info);
                 $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);

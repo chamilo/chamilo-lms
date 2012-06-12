@@ -804,9 +804,12 @@ class Database {
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
-                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
-                error_log($info);
-                $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
+                
+                error_log('error #'.self::errno($connection));
+                error_log('error: '.self::error($connection)); 
+                
+                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);                
+                $info .= ' +'.(empty($line) ? ' unknown ' : $line);
                 error_log($info);
                 
                 if (empty($type)) {
@@ -816,10 +819,8 @@ class Database {
                     }
                 } else {
                     if (!empty($class) && !empty($function)) {
-                        $info = 'CLASS: ' . $class;
-                        error_log($info);
-                        $info = 'METHOD: ' . $function;
-                        error_log($info);
+                        $info = 'CLASS: ' . $class.' METHOD: '.$function;
+                        error_log($info);                        
                     }
                 }
                 error_log("---------------- end ----------------");

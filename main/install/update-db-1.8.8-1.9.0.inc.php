@@ -317,13 +317,12 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
                 
                 foreach ($list as $row_course) {
-                    // Now use the $c_q_list
-                    
                     if (!$singleDbForm) { // otherwise just use the main one
                         iDatabase::select_db($row_course['db_name']);
                     }
                     Log::notice('Course db ' . $row_course['db_name']);
 
+                    // Now use the $c_q_list
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
@@ -340,6 +339,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     
                     $work_table = $row_course['db_name'].".student_publication";
                     $item_table = $row_course['db_name'].".item_property";
+                    
                     if ($singleDbForm) {
                         $work_table = "$prefix{$row_course['db_name']}_student_publication";
                         $item_table = $row_course['db_name'].".item_property";
@@ -351,7 +351,9 @@ if (defined('SYSTEM_INSTALLATION')) {
                     } else {
                         iDatabase::select_db($dbNameForm);
                     }                    	
-
+                 
+                    
+                    /* Start work fix */
                     
                     /* Fixes the work subfolder and work with no parent issues */
                     
@@ -452,11 +454,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
                     }                    
                     
-                    /* End of work fix */
-                    
-                    
-                    
-                    
+                    /*  End of work fix  */
+                 
                     //Course tables to be migrated
                     $table_list = array(
                     					'announcement',
@@ -553,55 +552,68 @@ if (defined('SYSTEM_INSTALLATION')) {
                     
                     $count = $old_count = 0;
                     foreach ($table_list as $table) {
+                        $just_table_name = $table;
                     	$old_table = $row_course['db_name'].".".$table;
                     	if ($singleDbForm) {
                     		$old_table = "$prefix{$row_course['db_name']}_".$table;
+                            $just_table_name = "$prefix{$row_course['db_name']}_".$table;
                     	}
+                        
                     	$course_id = $row_course['id'];
+                        
                     	$new_table = DB_COURSE_PREFIX.$table;
-                    	
-                    	if (!$singleDbForm) {
+                        
+                        if (!$singleDbForm) {
                     		// otherwise just use the main one
                     		iDatabase::select_db($row_course['db_name']);
                     	} else {
                     		iDatabase::select_db($dbNameForm);
-                    	}                    	
-                    	
-                    	//Count of rows
-                    	$sql 	= "SELECT count(*) FROM $old_table";
-                    	$result = iDatabase::query($sql);
-                    	
-                    	$old_count = 0;
-                    	if ($result) {
-                    		$row 		= iDatabase::fetch_row($result);
-                    		$old_count = $row[0];
-                    	} else {
-                    		Log::error("Seems that the table $old_table doesn't exists ");
-                    	}                    	
-                    	Log::notice("# rows in $old_table: $old_count");
-                    	
-                    	$sql = "SELECT * FROM $old_table";
-                    	$result = iDatabase::query($sql);
-                    	
-                    	$count = 0;                    	
-                    	while($row = iDatabase::fetch_array($result, 'ASSOC')) {
-                    		$row['c_id'] = $course_id;
-                    		iDatabase::select_db($dbNameForm);
-                    		$id = iDatabase::insert($new_table, $row);
-                    		if (is_numeric($id)) {
-                    			$count++;
-                    		} else {
-                    			$errors[$old_table][] = $row;                    			
-                    		}
-                    	}                    	
-                    	Log::notice("# rows inserted in $new_table: $count");
-                    	
-                    	if ($old_count != $count) {
-                    		Log::error("ERROR count of new and old table doesn't match: $old_count - $new_table");
-                    		Log::error("Check the results: ");
-                            Log::error(print_r($errors, 1));
-                    		error_log(print_r($errors, 1));
                     	}
+                    	
+                    	//Count of rows                    	
+                        $sql 	= "SHOW TABLES LIKE '$just_table_name'";
+                        $result = iDatabase::query($sql);
+                        
+                        if (Database::num_rows($result)) {        
+                        
+                            $sql 	= "SELECT count(*) FROM $old_table";
+                            $result = iDatabase::query($sql);
+
+                            $old_count = 0;
+                            if ($result) {
+                                $row 		= iDatabase::fetch_row($result);
+                                $old_count = $row[0];
+                            } else {
+                                Log::error("Count(*) in table $old_table failed");
+                            }                       
+                        
+                            Log::notice("# rows in $old_table: $old_count");
+
+                            $sql = "SELECT * FROM $old_table";
+                            $result = iDatabase::query($sql);
+
+                            $count = 0;                    	
+                            while($row = iDatabase::fetch_array($result, 'ASSOC')) {
+                                $row['c_id'] = $course_id;
+                                iDatabase::select_db($dbNameForm);
+                                $id = iDatabase::insert($new_table, $row);
+                                if (is_numeric($id)) {
+                                    $count++;
+                                } else {
+                                    $errors[$old_table][] = $row;                    			
+                                }
+                            }                    	
+                            Log::notice("#rows inserted in $new_table: $count");
+
+                            if ($old_count != $count) {
+                                Log::error("ERROR count of new and old table doesn't match: $old_count - $new_table");
+                                Log::error("Check the results: ");
+                                Log::error(print_r($errors, 1));
+                                error_log(print_r($errors, 1));
+                            }
+                        } else {
+                            Log::error("Seems that the table $old_table doesn't exists ");
+                        }
                     }
                     Log::notice('<<<------- end  -------->>');
                 }

@@ -67,10 +67,12 @@ if (defined('SYSTEM_INSTALLATION')) {
          * Update the databases "pre" migration
          */
         include '../lang/english/create_course.inc.php';
+        
         if ($languageForm != 'english') {
             // languageForm has been escaped in index.php
             include '../lang/'.$languageForm.'/create_course.inc.php';
         }
+        
         // Get the main queries list (m_q_list)
         $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
         
@@ -98,6 +100,14 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
         }
+        
+        if (INSTALL_TYPE_UPDATE == 'update') {
+            $session_mod = api_get_setting('use_session_mode');
+            if ($session_mod == 'false') {
+                
+            }
+        }
+        
 
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
@@ -167,23 +177,6 @@ if (defined('SYSTEM_INSTALLATION')) {
 	        iDatabase::select_db($dbNameForm);
         }
         
-        //Renaming user tables in the main DB
-        $user_tables = array(
-            'personal_agenda',
-            'personal_agenda_repeat',
-            'personal_agenda_repeat_not',
-            'user_course_category',
-        );
-                
-        if ($dbNameForm != $dbUserForm) {
-        	Database::select_db($dbUserForm);
-	        foreach ($user_tables as $table) {
-	        	$sql = "ALTER TABLE $dbUserForm.$table RENAME $dbNameForm.$table";
-	        	Database::query($sql);
-	        }
-	        Database::select_db($dbNameForm);
-        }
-        
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
         
@@ -213,8 +206,8 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
         
-        //Moving User DB to the main database
-        $users_table = array(
+        //Moving user database to the main database
+        $users_tables = array(
         			"personal_agenda",
         			"personal_agenda_repeat",
         			"personal_agenda_repeat_not",
@@ -223,12 +216,12 @@ if (defined('SYSTEM_INSTALLATION')) {
         
         if ($dbNameForm != $dbUserForm) {
         	iDatabase::select_db($dbUserForm);
-        	foreach($users_table as $table) {
+        	foreach ($users_tables as $table) {
         		$sql = "ALTER TABLE $dbUserForm.$table RENAME  $dbNameForm.$table";
         		iDatabase::query($sql);
         	}
         	iDatabase::select_db($dbNameForm);
-        }                
+        }
     }    
     
     //Adding admin user in the access_url_rel_user  table
@@ -250,44 +243,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     $prefix = '';
     if ($singleDbForm) {
         $prefix =  get_config_param('table_prefix');
-    }
-    
-    function check_work($folder_id, $work_url, $work_table, $base_work_dir) {            
-        $uniq_id = uniqid();
-        //Looking for subfolders
-        $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='folder'";             
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                check_work($row['id'], $row['url'], $work_table, $base_work_dir);
-            }
-        }
-        
-        //Moving the subfolder in the root
-        $new_url = '/'.basename($work_url).'_mv_'.$uniq_id;              
-        $new_url = Database::escape_string($new_url);
-        $sql = "UPDATE $work_table SET url = '$new_url', parent_id = 0 WHERE id = $folder_id";
-        iDatabase::query($sql);
-        
-        if (is_dir($base_work_dir.$work_url)) {
-            rename($base_work_dir.$work_url, $base_work_dir.$new_url);
-            
-            //Rename all files inside the folder                        
-            $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='file'";             
-            $result = Database::query($sql);
-            
-            if (Database::num_rows($result)) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {                                
-                    $new_url = "work".$new_url.'/'.basename($row['url']);     
-                    $new_url = Database::escape_string($new_url);
-                    $sql = "UPDATE $work_table SET url = '$new_url', parent_id = $folder_id, contains_file = '1' WHERE id = {$row['id']}";                                
-                    iDatabase::query($sql);
-                }
-            }
-        }
-        
-        
     }
 
     // Get the courses databases queries list (c_q_list)
@@ -452,7 +407,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                                 check_work($folder_id, $work_folder['url'], $work_table, $base_work_dir);                                
                             }
                         }
-                    }                    
+                    }         
                     
                     /*  End of work fix  */
                  
@@ -622,4 +577,40 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
 } else {
     echo 'You are not allowed here !';
+}
+
+function check_work($folder_id, $work_url, $work_table, $base_work_dir) {
+    $uniq_id = uniqid();
+    //Looking for subfolders
+    $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='folder'";             
+    $result = Database::query($sql);
+
+    if (Database::num_rows($result)) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            check_work($row['id'], $row['url'], $work_table, $base_work_dir);
+        }
+    }
+
+    //Moving the subfolder in the root
+    $new_url = '/'.basename($work_url).'_mv_'.$uniq_id;              
+    $new_url = Database::escape_string($new_url);
+    $sql = "UPDATE $work_table SET url = '$new_url', parent_id = 0 WHERE id = $folder_id";
+    iDatabase::query($sql);
+
+    if (is_dir($base_work_dir.$work_url)) {
+        rename($base_work_dir.$work_url, $base_work_dir.$new_url);
+
+        //Rename all files inside the folder                        
+        $sql 	= "SELECT * FROM $work_table WHERE parent_id = $folder_id AND filetype ='file'";             
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {                                
+                $new_url = "work".$new_url.'/'.basename($row['url']);     
+                $new_url = Database::escape_string($new_url);
+                $sql = "UPDATE $work_table SET url = '$new_url', parent_id = $folder_id, contains_file = '1' WHERE id = {$row['id']}";                                
+                iDatabase::query($sql);
+            }
+        }
+    }
 }

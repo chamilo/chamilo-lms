@@ -89,6 +89,10 @@ class Model {
         return Database::select('*', $this->table, $options);
     }
     
+    public function get_all_for_export($options = null) {
+        return Database::select('name, description', $this->table, $options);
+    }
+    
     /**
      * Get the count of elements
      */

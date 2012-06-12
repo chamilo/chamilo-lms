@@ -610,10 +610,14 @@ function database_server_connect() {
  * @param type $database_name
  * @return boolean 
  */
-function database_exists($database_name) {
-    $select_database = @Database::select_db($database_name);
-    $show_database = false;
-    $result = @Database::query("SHOW DATABASES LIKE '".Database::escape_string($database_name)."' ");
+function database_exists($database_name) {    
+    if (empty($database_name)) {
+        return false;
+    }    
+    $select_database = @Database::select_db($database_name);    
+    $show_database = false;    
+    $sql = "SHOW DATABASES LIKE '".addslashes($database_name)."'";    
+    $result = @Database::query($sql);
     if (Database::num_rows($result)) {
         $show_database = true;
     }    

@@ -66,12 +66,14 @@ function is_already_installed_system() {
  */
 function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
     if (extension_loaded($extension_name)) {
-        return '<strong><font color="green">'.$return_success.'</font></strong>';
+        return Display::label($return_success, 'success');
     } else {
         if ($optional) {
-            return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
+            return Display::label($return_failure, 'warning');
+            //return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
         } else {
-            return '<strong><font color="red">'.$return_failure.'</font></strong>';
+            return Display::label($return_failure, 'important');
+            //return '<strong><font color="red">'.$return_failure.'</font></strong>';
         }
     }
 }
@@ -85,9 +87,10 @@ function check_extension($extension_name, $return_success = 'Yes', $return_failu
 function check_php_setting($php_setting, $recommended_value, $return_success = false, $return_failure = false) {
     $current_php_value = get_php_setting($php_setting);
     if ($current_php_value == $recommended_value) {
-        return '<strong><font color="green">'.$current_php_value.' '.$return_success.'</font></strong>';
+        return Display::label($current_php_value.' '.$return_success, 'success');
     } else {
-        return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
+        return Display::label($current_php_value.' '.$return_success, 'important');
+        //return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
     }
 }
 
@@ -219,12 +222,14 @@ function detect_browser_language() {
  */
 function check_writable($folder, $suggestion = false) {
     if (is_writable(api_get_path(SYS_CODE_PATH).$folder)) {
-        return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
+        return Display::label(get_lang('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
+            return Display::label(get_lang('NotWritable'), 'info');
+            //return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
         } else {
-            return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+            return Display::label(get_lang('NotWritable'), 'important');
+            //return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
         }
     }
 }
@@ -1027,6 +1032,7 @@ function display_language_selection() { ?>
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
+    global $_setting;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
@@ -1185,6 +1191,52 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementHeading"><h2>'.get_lang('DirectoryAndFilePermissions').'</h2>';
     echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
     echo '<div class="RequirementContent">';
+    
+    $course_attempt_name = '__XxTestxX__';
+    $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;    
+    
+    //Just in case
+    @unlink($course_dir.'/test.txt');
+    @rmdir($course_dir);
+    
+    $perms_dir = array('0777', '0755', '0775', '0770', '0750', '0700');
+    $perms_fil = array('0666', '0644', '0664', '0660', '0640', '0600');
+    
+    $course_test_was_created = false;
+    
+    $dir_perm_verified = '0777';
+    foreach ($perms_dir as $perm) {
+        $r = mkdir($course_dir, $perm);        
+        if ($r === true) { 
+            $dir_perm_verified = $perm;
+            $course_test_was_created = true;
+            break;
+        }
+    }
+    
+    $fil_perm_verified = '0666';
+    
+    if (is_dir($course_dir)) {    
+        foreach ($perms_fil as $perm) {
+            $r = @touch($course_dir.'/test.txt',$perm);
+            if ($r === true) { 
+                $fil_perm_verified = $perm;
+                break;
+            }
+        }
+    }   
+    
+    @unlink($course_dir.'/test.txt');
+    @rmdir($course_dir);
+    
+    $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
+    $_SESSION['permissions_for_new_files']       = $_setting['permissions_for_new_files'] = $fil_perm_verified;
+    
+    $dir_perm = Display::label($dir_perm_verified, 'info');
+    $file_perm = Display::label($fil_perm_verified, 'info');
+    
+    $course_test_was_created  = $course_test_was_created == true ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
+
     echo '<table class="requirements">
             <tr>
                 <td class="requirements-item">chamilo/main/inc/conf/</td>
@@ -1204,8 +1256,24 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </tr>
             <tr>
                 <td class="requirements-item">chamilo/courses/</td>
-                <td class="requirements-value">'.check_writable('../courses/').'</td>
+                <td class="requirements-value">'.check_writable('../courses/').' </td>
             </tr>
+            
+            <tr>
+                <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
+                <td class="requirements-value">'.$course_test_was_created.' </td>
+            </tr>
+            
+            <tr>
+                <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
+                <td class="requirements-value">'.$dir_perm.' </td>
+            </tr>
+            
+            <tr>
+                <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
+                <td class="requirements-value">'.$file_perm.' </td>
+            </tr>
+            
             <tr>
                 <td class="requirements-item">chamilo/home/</td>
                 <td class="requirements-value">'.check_writable('../home/').'</td>
@@ -1259,12 +1327,9 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </table>
         <?php
     } else {
-
         $error = false;
-
         // First, attempt to set writing permissions if we don't have them yet
-
-        $perm = api_get_permissions_for_new_directories();
+        $perm = api_get_permissions_for_new_directories();        
         $perm_file = api_get_permissions_for_new_files();
 
         $notwritable = array();
@@ -1299,6 +1364,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
+        
+        if ($course_test_was_created == false) {
+            $error = true;
+        }
+        
 
         $checked_writable = api_get_path(SYS_PATH).'home/';
         if (!is_writable($checked_writable)) {
@@ -2024,4 +2094,21 @@ function locking_settings() {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
         Database::query($sql);
     }
+}
+
+function update_dir_and_files_permissions() {    
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
+    $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
+    $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
+    
+    $sql = "UPDATE $table SET selected_value = '".$permissions_for_new_directories."' WHERE variable  = 'permissions_for_new_directories'";
+    Database::query($sql);
+     
+    $sql = "UPDATE $table SET selected_value = '".$permissions_for_new_files."' WHERE variable  = 'permissions_for_new_files'";
+    Database::query($sql);
+    
+    unset($_SESSION['permissions_for_new_directories']);
+    unset($_SESSION['permissions_for_new_files']);
+    
+    
 }

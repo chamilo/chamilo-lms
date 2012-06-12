@@ -130,3 +130,5 @@ fill_track_countries_table($track_countries_table);
 load_database_script('db_user.sql');
 
 locking_settings();
+
+update_dir_and_files_permissions();

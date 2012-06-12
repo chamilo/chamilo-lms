@@ -679,14 +679,12 @@ function get_event_users($event_name) {
     $event_name = Database::escape_string($event_name);
     $sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser 
             ON relUser.user_id = user.user_id
-            WHERE relUser.event_type_name = "'.$event_name.'"';
-    
+            WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';    
     //For tests
     //$sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER);
         
     $user_list = Database::store_result(Database::query($sql), 'ASSOC');    
-    return json_encode($user_list);
-	
+    return json_encode($user_list);	
 }
 
 /**
@@ -709,15 +707,14 @@ function save_event_type_message($event_name, $users, $message, $subject, $event
     Database::query($sql);
 
     foreach ($users as $user) {
-        $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name)
-            VALUES('.intval($user).',"'.  $event_name.'")';
+        $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name) VALUES('.intval($user).',"'.  $event_name.'")';
         Database::query($sql);
     }
-
+    $language_id = api_get_language_id($event_message_language);
     // check if this template in this language already exists or not
     $sql = 'SELECT COUNT(id) as total FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
-            WHERE event_type_name = "'.$event_name.'" AND language_id = (
-                    SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' WHERE dokeos_folder = "'.$event_message_language.'")';
+            WHERE event_type_name = "'.$event_name.'" AND language_id = '.$language_id;
+    
     $sql = Database::store_result(Database::query($sql),'ASSOC');
 
     // if already exists, we update

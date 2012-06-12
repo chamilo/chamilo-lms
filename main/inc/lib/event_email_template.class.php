@@ -33,7 +33,13 @@ class EventEmailTemplate extends Model {
      */
 	public function display() {
 		// action links
-		$content = Display::actions(array(array('url' => 'event_type.php' , 'content' => get_lang('Add'))));
+		$content = Display::actions(array(
+                array(
+                    'url' => 'event_type.php' , 
+                    'content' => Display::return_icon('new_document.png', get_lang('Add'), array(), ICON_SIZE_MEDIUM)
+                 )
+            )
+        );
         $content .= Display::grid_html('event_email_template');  
         return $content;
 	}

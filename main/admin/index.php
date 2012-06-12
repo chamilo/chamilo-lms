@@ -152,9 +152,11 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
 
-    /* event settings */
-    $items[] = array('url'=>'event_type.php', 		'label' => get_lang('events_title'));
+    /* Event settings */
     
+    if (api_get_setting('activate_email_template') == 'true') { 
+        $items[] = array('url'=>'event_controller.php?action=listing', 		'label' => get_lang('events_title'));
+    }   
     
     if (!empty($_configuration['multiple_access_urls'])) {
 		if (api_is_global_platform_admin()) {

@@ -173,6 +173,10 @@ if (!empty($action)) {
 					fputs($fp, $home_top);
 					fclose($fp);
 				}
+                
+                if (EventsMail::check_if_using_class('portal_homepage_edited')) {              
+                    EventsDispatcher::events('portal_homepage_edited');
+                }
 
 				break;
 			case 'edit_notice':

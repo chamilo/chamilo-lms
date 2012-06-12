@@ -18,7 +18,7 @@ global $event_config;
 $event_config = array(
     'portal_homepage_edited' => array( // key for "user registration" event
         'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
-            'portal_homepage_edited_send_email' // don't forget to actually write this function at the end of this file
+            'event_send_mail' // don't forget to actually write this function at the end of this file
         ),
         'self_sent' => false, // this key states that we can't add user to this event through the admin panel
         'name_lang_var' => get_lang('portal_homepage_edited'),
@@ -86,8 +86,7 @@ function user_registration_event_send_mail_filter_func(&$values)
  * @param string $event_name
  * @param array $params 
  */
-function event_send_mail($event_name, $params)
-{
+function event_send_mail($event_name, $params) {
     require_once api_get_path(LIBRARY_PATH).'events_email.class.php';
     EventsMail::send_mail($event_name, $params);
 }
@@ -99,23 +98,18 @@ function event_send_mail($event_name, $params)
  * @param int $user_to
  * @return boolean 
  */
-function check_if_mail_already_sent($event_name, $user_from, $user_to = null)
-{
-    if ($user_to == null)
-    {
+function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
+    if ($user_to == null) {
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
                 WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'";
                 ';
-    }
-    else
-    {
+    } else {
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
                 WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'";
                 ';
     }
     
     $result = Database::store_result(Database::query($sql), 'ASSOC');
-
     return $result[0]["total"];
 }
 

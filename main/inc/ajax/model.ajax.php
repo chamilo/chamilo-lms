@@ -258,13 +258,16 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_event_email_template': 
-        $columns = array('subject', 'message', 'event_type_name', 'language_id', 'activated', 'actions');                
+        $columns = array('subject', 'event_type_name', 'language_id', 'activated', 'actions');                
         if(!in_array($sidx, $columns)) {
         	$sidx = 'subject';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
         $new_result = array();
         foreach ($result as $item) {
+            $language_info = api_get_language_info($item['language_id']);
+            $item['language_id'] = $language_info['english_name'];
+            $item['actions'] = Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'admin/event_type.php?action=edit&event_type_name='.$item['event_type_name']);
             $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'admin/event_controller.php?action=delete&id='.$item['id']);
        
             /*if (!$item['status']) {

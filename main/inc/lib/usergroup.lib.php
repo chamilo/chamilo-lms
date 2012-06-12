@@ -28,6 +28,11 @@ class UserGroup extends Model {
         $row = Database::select('count(*) as count', $this->table, array(),'first');
         return $row['count'];
     }
+    
+    public function get_id_by_name($name) {
+        $row = Database::select('id', $this->table, array('where' => array('name = ?', $name)),'first');
+        return $row['id'];
+    }
 
 
     /**
@@ -37,8 +42,12 @@ class UserGroup extends Model {
         // action links
         echo '<div class="actions">';
        	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
-	   //echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';
+	   
         echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('langAddClasses'),'','32').'</a>';
+        
+        echo Display::url(Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM), 'usergroup_import.php');
+        echo Display::url(Display::return_icon('export_csv.png', get_lang('Export'), array(), ICON_SIZE_MEDIUM), 'usergroup_export.php');
+
         echo '</div>';
         echo Display::grid_html('usergroups');
     }
@@ -236,7 +245,7 @@ class UserGroup extends Model {
      * @param   array   list of user ids
      */
     function subscribe_users_to_usergroup($usergroup_id, $list) {
-        $current_list    = self::get_users_by_usergroup($usergroup_id);
+        $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list  = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
 
@@ -296,5 +305,11 @@ class UserGroup extends Model {
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
+    }
+    
+    function usergroup_exists($name) {        
+		$sql = "SELECT * FROM $this->table WHERE name='".Database::escape_string($name)."'";
+		$res = Database::query($sql);
+		return Database::num_rows($res) != 0;
     }
 }

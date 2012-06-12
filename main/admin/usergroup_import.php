@@ -110,7 +110,7 @@ $form->display();
 
 <blockquote>
   <b>name;description</b>  <br />
-  User group 1;My user group 1
+  User group 1;My user group description
 </blockquote>
 <?php
 

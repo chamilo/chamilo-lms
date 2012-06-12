@@ -220,6 +220,9 @@ if ($add_type == 'multiple') {
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+
+echo '<a href="usergroup_user_import.php">'.Display::return_icon('import_csv.png',get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
+
 echo '</div>';
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">

@@ -71,8 +71,9 @@ class learnpathItem {
 	 * @param	integer	User ID
 	 * @return	boolean	True on success, false on failure
 	 */
-	public function __construct($id, $user_id, $course_id = null) {
+	public function __construct($id, $user_id = null, $course_id = null) {
 		// Get items table.
+		if (!isset($user_id)) { $user_id = api_get_user_id(); }
 		if (self::debug > 0) { error_log('New LP - In learnpathItem constructor: '.$id.','.$user_id, 0); }
 
         if (empty($course_id)) {

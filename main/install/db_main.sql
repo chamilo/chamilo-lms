@@ -872,7 +872,7 @@ VALUES
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
 ('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18361','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18381','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1358,6 +1358,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     session_id int DEFAULT NULL,
     document_id int unsigned DEFAULT NULL,
     locked int NOT NULL DEFAULT 0,
+    default_lowest_eval_exclude TINYINT default null,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;

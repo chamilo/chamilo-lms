@@ -83,6 +83,10 @@ set_time_limit(0);
 
 $form = new FormValidator('import_classes');
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+$group = array();
+$group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example_class.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
+//$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
+$form->addGroup($group, '', get_lang('FileType'), '<br/>');
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 
 if ($form->validate()) {
@@ -100,7 +104,7 @@ if ($form->validate()) {
         }
         $error_message .= '</ul>';
         $error_message .= get_lang('Error');
-        Display :: display_error_message($error_message);
+        Display :: display_error_message($error_message, false);
     }
 }
 

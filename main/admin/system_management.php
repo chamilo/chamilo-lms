@@ -41,10 +41,16 @@ class SystemManagementPage extends AdminPage
     function display_default()
     {
         $message = get_lang('RemoveOldDatabaseMessage');
+        $message_table = get_lang('RemoveOldTables');
+        
+        $message_table .= "<br />".implode(' , ', self::get_tables_to_delete());        
         $url = $this->url(array(self::PARAM_ACTION => 'drop_old_databases'));
-        $go = get_lang('go');
+        $url_table = $this->url(array(self::PARAM_ACTION => 'drop_old_tables'));
+        
+        $go = get_lang('Go');
         $access_url_id = api_get_current_access_url_id();
         $message2 = '';
+        
         if ($access_url_id === 1) {
             if (api_is_windows_os()) {
                 $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuresOnWindows');
@@ -63,7 +69,11 @@ class SystemManagementPage extends AdminPage
         <ul>
         <li>
             <div>$message</div>        
-            <a href=$url>$go</a>
+            <a class="btn" href=$url>$go</a>
+        </li>
+        <li>
+            <div>$message_table</div>        
+            <a class="btn" href=$url_table>$go</a>
         </li>
         $message2
         </ul>
@@ -109,6 +119,36 @@ EOT;
         $sql = "SELECT id, code, db_name, directory, course_language FROM $course_db WHERE target_course_code IS NULL AND db_name IS NOT NULL ORDER BY code";
         return new ResultSet($sql);
     }
+    
+    function drop_old_tables()
+    {
+        $tables_to_remove = self::get_tables_to_delete();
+        
+        $number_tables_deleted = 0;
+        $tables_deleted = '';
+        foreach ($tables_to_remove as $table) {
+            //Deleting  tables
+            $drop_table = "DROP TABLE $table";            
+            $success = Database::query($drop_table);    
+            $success =true;
+            if ($success) {
+                $tables_deleted .= $table.'<br />';
+                $number_tables_deleted++;
+            }
+        }
+        
+        Display::display_confirmation_message(get_lang('OldTablesDeleted') . ' ' . $number_tables_deleted);
+        Display::display_confirmation_message($tables_deleted, false);
+    }
+    
+    function get_tables_to_delete() {
+        $tables_to_remove = array(
+            Database::get_main_table(TABLE_MAIN_CLASS),
+            Database::get_main_table(TABLE_MAIN_CLASS_USER),
+            Database::get_main_table(TABLE_MAIN_COURSE_CLASS),
+        );
+        return $tables_to_remove;
+    }
 
     function drop_old_databases()
     {
@@ -131,6 +171,8 @@ EOT;
         }
         
         Display::display_confirmation_message(get_lang('OldDatabasesDeleted') . ' ' . count($result));
+        
+        
         return $result;
     }
 

@@ -18,7 +18,7 @@ global $event_config;
 $event_config = array(
     'portal_homepage_edited' => array( // key for "user registration" event
         'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
-            'event_send_mail' // don't forget to actually write this function at the end of this file
+            'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => false, // this key states that we can't add user to this event through the admin panel
         'name_lang_var' => get_lang('portal_homepage_edited'),
@@ -40,7 +40,7 @@ $event_config = array(
     ),
     'user_registration' => array( // key for "user registration" event
         'actions' => array( // we link this event to a bunch of functions that will be triggered when the event is fired
-            'event_send_mail' // don't forget to actually write this function at the end of this file
+            'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => true, // this key states that we can't add user to this event through the admin panel
         'name_lang_var' => get_lang('userRegistrationTitle'),
@@ -62,50 +62,5 @@ $event_config = array(
     ),
 );
 
-/**============================================================================
- * 
- * Filter functions
- *  
- */
-
-/**
- * user_registration - send_mail filter
- * @param array $values (passing by reference)
- * @return boolean 
- */
-function user_registration_event_send_mail_filter_func(&$values) {
-    return true;
-}
-
-/**
- * For the sake of genericity, this function is a switch.
- * It's called by EventsDispatcher and fires the good function
- * with the good require_once.
- * 
- * @param string $event_name
- * @param array $params 
- */
-function event_send_mail($event_name, $params) {    
-    EventsMail::send_mail($event_name, $params);
-}
-
-/**
- * Internal function checking if the mail was already sent from that user to that user
- * @param string $event_name
- * @param int $user_from
- * @param int $user_to
- * @return boolean 
- */
-function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
-    if ($user_to == null) {
-        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
-                WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'"';
-    } else {
-        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
-                WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'"';
-    }    
-    $result = Database::store_result(Database::query($sql), 'ASSOC');
-    return $result[0]["total"];
-}
 
 @include 'events.conf.local.php';

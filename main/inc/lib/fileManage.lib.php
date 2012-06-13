@@ -157,6 +157,24 @@ function removeDir($dir) {
 	return true;
 }
 
+
+/**
+ * Return true if folder is empty 
+ * @author : hubert.borderiou@grenet.fr
+ * @param string $in_folder : folder path on disk
+ * @return 1 if folder is empty, 0 otherwise
+*/
+
+function folder_is_empty($in_folder) {
+    $tab_folder_content = scandir($in_folder);
+    $folder_is_empty = 0;
+    if ((count($tab_folder_content) == 2 && in_array(".", $tab_folder_content) && in_array("..", $tab_folder_content)) || (count($tab_folder_content) < 2)) {
+        $folder_is_empty = 1;
+    }
+    return $folder_is_empty;
+}
+
+
 /**
  * Renames a file or a directory
  *

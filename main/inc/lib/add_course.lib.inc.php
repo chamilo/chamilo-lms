@@ -2039,6 +2039,7 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
+        
         $course_documents_folder_images = $sys_course_path.$course_repository.'/document/images/gallery/';
         $course_documents_folder_audio = $sys_course_path.$course_repository.'/document/audio/';
         $course_documents_folder_flash = $sys_course_path.$course_repository.'/document/flash/';
@@ -2317,7 +2318,7 @@ function fill_db_course($course_id, $course_repository, $language, $default_docu
     /*    Documents   */
 
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id,path,title,filetype,size) VALUES ($course_id,'/images','".get_lang('Images')."','folder','0')");
-    $example_doc_id = Database :: insert_id();
+    $example_doc_id = Database :: insert_id();    
     Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')");
@@ -2337,8 +2338,12 @@ function fill_db_course($course_id, $course_repository, $language, $default_docu
     Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/video','".get_lang('Video')."','folder','0')");
-    $example_doc_id = Database :: insert_id();
+    $example_doc_id = Database :: insert_id();    
     Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+    
+    Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/video/flv','FLV','folder','0')");
+    $example_doc_id = Database :: insert_id();    
+    Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");    
 
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/chat_files','".get_lang('ChatFiles')."','folder','0')");
     $example_doc_id = Database :: insert_id();
@@ -2669,8 +2674,7 @@ function register_course($params) {
             }
 
             // Adding the course to an URL.
-            global $_configuration;
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+            global $_configuration;            
             if ($_configuration['multiple_access_urls']) {
                 $url_id = 1;
                 if (api_get_current_access_url_id() != -1) {

@@ -206,7 +206,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     echo GenerateHiddenList($imgparams);    
 
     echo '<legend>'.$nameTools.'</legend>';
-    echo '<div class="row">';
+    echo '<div class="control-group">';
     echo '<div style="padding:10px">';
     echo '<span class="form_required">*</span>';
     if ($finish == 0) {
@@ -216,7 +216,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     }
     echo '</div>';
 
-    echo '<div class="formw">';
+    echo '<div class="control-group">';
 
     echo '<div style="float:left;padding:10px" >
             <input type="file" name="userFile"><br /><br />

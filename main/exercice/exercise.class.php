@@ -3332,9 +3332,10 @@ class Exercise {
 		$max_attempt = filter_var($max_attempt,FILTER_SANITIZE_NUMBER_INT);
 		$feedback = filter_var($feedback,FILTER_SANITIZE_NUMBER_INT);
 		$sid = api_get_session_id();
+        $course_id = api_get_course_int_id();
 		// Save a new quiz
-		$sql = "INSERT INTO $tbl_quiz (title,type,random,active,results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
-                " VALUES('".Database::escape_string($title)."',$type,$random,$active, $results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
+		$sql = "INSERT INTO $tbl_quiz (c_id, title,type,random,active,results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
+                " VALUES('$course_id', '".Database::escape_string($title)."',$type,$random,$active, $results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
 		$rs = Database::query($sql);
 		$quiz_id = Database::get_last_insert_id();
 		return $quiz_id;

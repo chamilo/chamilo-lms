@@ -197,6 +197,7 @@ function lp_upload_quiz_action_handling() {
             $l++;
         }
     }
+    
     // Get answers
     for ($i = 0; $i < count($question_name_index_init); $i++) {
         for ($j = $question_name_index_init[$i]; $j <= $question_name_index_end[$i]; $j++) {
@@ -216,7 +217,9 @@ function lp_upload_quiz_action_handling() {
             }
         }
     }
+    
     $quiz_title = $quiz[2]; // Quiz title
+    
     if ($quiz_title != '') {
         // Variables
         $type = 2;
@@ -225,44 +228,48 @@ function lp_upload_quiz_action_handling() {
         // added to the XLS are not shown, which is confusing
         $feedback = 0; 
         // Quiz object
-        $quiz_object = new Exercise();
+        $quiz_object = new Exercise();        
+        $quiz_id = $quiz_object->create_quiz($quiz_title, $expired_time, $type, $random, $active, $results, $max_attempt, $feedback);
         
-        $quiz_id = $quiz_object->create_quiz(($quiz_title), $expired_time, $type, $random, $active, $results, $max_attempt, $feedback);
-        // insert into the item_property table
-        api_item_property_update($_course, TOOL_QUIZ, $quiz_id, 'QuizAdded', api_get_user_id());
-        // Import questions
-        for ($i = 0; $i < $number_questions; $i++) {
-            // Create questions
-            $question_title = $question[$i][2]; // Question name
-            if ($question_title != '') {
-                $question_id = Question::create_question($quiz_id, ($question_title));
-            }
-            $unique_answer = new UniqueAnswer();
-            if (is_array($new_answer[$i])) {
-                $id = 1;
-                $answers_data = $new_answer[$i];
-                foreach ($answers_data as $answer_data) {
-                    $answer = $answer_data[2];
-                    $correct = 0;
-                    $score = 0;
-                    $comment = '';
-                    if (strtolower($answer_data[3]) == 'x') {
-                        $correct = 1;
-                        $score = $score_list[$i][3];
-                        $comment = $feedback_true_list[$i][2];
-                    } else {
-                        $comment = $feedback_false_list[$i][2];                    	
+        if ($quiz_id) {           
+        
+            // insert into the item_property table
+            api_item_property_update($_course, TOOL_QUIZ, $quiz_id, 'QuizAdded', api_get_user_id());
+            
+            // Import questions
+            for ($i = 0; $i < $number_questions; $i++) {
+                // Create questions
+                $question_title = $question[$i][2]; // Question name
+                if ($question_title != '') {
+                    $question_id = Question::create_question($quiz_id, ($question_title));
+                }
+                $unique_answer = new UniqueAnswer();
+                if (is_array($new_answer[$i])) {
+                    $id = 1;
+                    $answers_data = $new_answer[$i];
+                    foreach ($answers_data as $answer_data) {
+                        $answer = $answer_data[2];
+                        $correct = 0;
+                        $score = 0;
+                        $comment = '';
+                        if (strtolower($answer_data[3]) == 'x') {
+                            $correct = 1;
+                            $score = $score_list[$i][3];
+                            $comment = $feedback_true_list[$i][2];
+                        } else {
+                            $comment = $feedback_false_list[$i][2];                    	
+                        }
+    /*
+                        if ($id == 1) {
+                            $comment = $feedback_true_list[$i][2];
+                        } elseif ($id == 2) {
+                            $comment = $feedback_false_list[$i][2];
+                        }
+    */
+                        // Create answer
+                        $unique_answer->create_answer($id, $question_id, $answer, $comment, $score, $correct);
+                        $id++;
                     }
-/*
-                    if ($id == 1) {
-                        $comment = $feedback_true_list[$i][2];
-                    } elseif ($id == 2) {
-                        $comment = $feedback_false_list[$i][2];
-                    }
-*/
-                    // Create answer
-                    $unique_answer->create_answer($id, $question_id, ($answer), ($comment), $score, $correct);
-                    $id++;
                 }
             }
         }

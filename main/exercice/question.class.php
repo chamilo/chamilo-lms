@@ -1370,10 +1370,12 @@ abstract class Question
 
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $quiz_id = filter_var($quiz_id,FILTER_SANITIZE_NUMBER_INT);
-        $max_score = filter_var($max_score,FILTER_SANITIZE_NUMBER_FLOAT);
-        $type = filter_var($type,FILTER_SANITIZE_NUMBER_INT);
-        $level = filter_var($level,FILTER_SANITIZE_NUMBER_INT);
+        
+        $quiz_id = intval($quiz_id);
+        $max_score = (float) $max_score;
+        $type = intval($type);
+        $level = intval($level);
+        
         // Get the max position
         $sql = "SELECT max(position) as max_position"
                ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
@@ -1384,13 +1386,12 @@ abstract class Question
         $max_position = $row_max->max_position +1;
 
         // Insert the new question
-        $sql = "INSERT INTO $tbl_quiz_question"
-              ." (c_id, question,ponderation,position,type,level) "
-              ." VALUES($course_id, '".Database::escape_string($question_name)."',"
-              ." $max_score , $max_position, $type, $level)";
+        $sql = "INSERT INTO $tbl_quiz_question (c_id, question, ponderation, position, type, level) 
+                VALUES ($course_id, '".Database::escape_string($question_name)."', '$max_score', $max_position, $type, $level)";
         $rs = Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
+        
         // Get the max question_order
         $sql = "SELECT max(question_order) as max_order "
               ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";

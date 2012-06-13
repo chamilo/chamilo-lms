@@ -311,3 +311,9 @@ function lp_upload_quiz_action_handling() {
         }
     }
 }
+
+
+if ($origin != 'learnpath') {
+    //so we are not in learnpath tool
+    Display :: display_footer();
+}

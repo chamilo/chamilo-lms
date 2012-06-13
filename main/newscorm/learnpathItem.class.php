@@ -725,6 +725,7 @@ class learnpathItem {
 		//error_log(str_repeat(' ',$recursivity).'Analyse file '.$abs_path, 0);
 		$files_list = array();
 		$type = $this->get_type();
+        
 		switch ($type) {
 			case TOOL_DOCUMENT :
 			case TOOL_QUIZ:
@@ -734,8 +735,10 @@ class learnpathItem {
 				if (is_file($abs_path)) {
 					// for now, read the whole file in one go (that's gonna be a problem when the file is too big).
 					$info = pathinfo($abs_path);
+                                        
 					$ext = $info['extension'];
-					switch(strtolower($ext)) {
+                    
+					switch (strtolower($ext)) {
 						case 'html':
 						case 'htm':
 						case 'shtml':
@@ -745,12 +748,13 @@ class learnpathItem {
 							$file_content = file_get_contents($abs_path);
 							// Get an array of attributes from the HTML source.
 							$attributes = DocumentManager::parse_HTML_attributes($file_content, $wanted_attributes);
-							// Look at 'src' attributes in this file.
+                                                        
+							// Look at 'src' attributes in this file                            
 							foreach ($wanted_attributes as $attr) {
 								if (isset($attributes[$attr])) {
 									// Find which kind of path these are (local or remote).
 									$sources = $attributes[$attr];
-
+                                    
 									foreach ($sources as $source) {
 										// Skip what is obviously not a resource.
 										if (strpos($source, "+this.")) continue; // javascript code - will still work unaltered.
@@ -759,15 +763,15 @@ class learnpathItem {
 										if (strpos($source, ';') && !strpos($source, '&amp;')) continue; // Avoid code - that should help.
 
 										if ($attr == 'value') {
-											if (strpos($source , 'mp3file')) {
+											if (strpos($source , 'mp3file')) {                                                
 												$files_list[] = array(substr($source, 0, strpos($source , '.swf') + 4), 'local', 'abs');
 												$mp3file = substr($source , strpos($source , 'mp3file=') + 8);
 												if (substr($mp3file, 0, 1) == '/')
 													$files_list[] = array($mp3file, 'local', 'abs');
 												else
 													$files_list[] = array($mp3file, 'local', 'rel');
-											}
-											elseif (strpos($source, 'flv=') === 0) {
+											} elseif (strpos($source, 'flv=') === 0) {
+                                                
 												$source = substr($source, 4);
 												if (strpos($source, '&') > 0) {
 													$source = substr($source, 0, strpos($source, '&'));
@@ -786,6 +790,7 @@ class learnpathItem {
 												continue; // Skipping anything else to avoid two entries (while the others can have sub-files in their url, flv's can't).
 											}
 										}
+                                        
 										if (strpos($source, '://') > 0) {
 
 											// Cut at '?' in a URL with params.
@@ -808,8 +813,7 @@ class learnpathItem {
 														// We didn't find any trace of current portal.
 														$files_list[] = array($second_part, 'remote', 'url');
 													}
-												}
-												elseif(strpos($second_part, '=') > 0) {
+												} elseif(strpos($second_part, '=') > 0) {
 													if (substr($second_part, 0, 1) === '/') {
 														// Link starts with a /, making it absolute (relative to DocumentRoot).
 														$files_list[] = array($second_part, 'local', 'abs');
@@ -817,8 +821,7 @@ class learnpathItem {
 														if (count($in_files_list) > 0) {
 															$files_list = array_merge($files_list, $in_files_list);
 														}
-													}
-													elseif(strstr($second_part, '..') === 0) {
+													} elseif(strstr($second_part, '..') === 0) {
 														// Link is relative but going back in the hierarchy.
 														$files_list[] = array($second_part, 'local', 'rel');
 														$dir = dirname($abs_path);
@@ -889,6 +892,7 @@ class learnpathItem {
 													}
 												}
 											}
+                                            
 											// Found some protocol there.
 											if (strpos($source, api_get_path(WEB_PATH)) !== false) {
 												// We found the current portal url.
@@ -903,15 +907,14 @@ class learnpathItem {
 											}
 										} else {
 											// No protocol found, make link local.
-											if (substr($source, 0, 1) === '/') {
+											if (substr($source, 0, 1) === '/') {                                                
 												// Link starts with a /, making it absolute (relative to DocumentRoot).
 												$files_list[] = array($source, 'local', 'abs');
 												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT, $source, $recursivity + 1);
 												if (count($in_files_list) > 0) {
 													$files_list = array_merge($files_list, $in_files_list);
 												}
-											}
-											elseif (strstr($source, '..') === 0) {
+											} elseif (strstr($source, '..') === 0) {
 												// Link is relative but going back in the hierarchy.
 												$files_list[] = array($source, 'local', 'rel');
 												$dir = dirname($abs_path);
@@ -921,10 +924,15 @@ class learnpathItem {
 													$files_list = array_merge($files_list, $in_files_list);
 												}
 											} else {
+                                                
 												// No starting '/', making it relative to current document's path.
+                                                if (strpos($source, 'width=') || strpos($source, 'autostart=')) {
+                                                    continue;
+                                                }
+                                                        
 												if (substr($source, 0, 2) == './') {
 													$source = substr($source, 2);
-												}
+												}                                                
 												$files_list[] = array($source, 'local', 'rel');
 												$dir = dirname($abs_path);
 												$new_abs_path = realpath($dir.'/'.$source);
@@ -961,7 +969,7 @@ class learnpathItem {
 					$checked_array_list[] = $files_list[$idx];
 				}
 			}
-		}
+		}        
 		return $checked_array_list;
 	}
 

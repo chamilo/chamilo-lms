@@ -412,16 +412,16 @@ if (!empty($flat_list)) {
              /* Export */
 
             if ($details['lp_type'] == 1) {
-                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
+                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
 
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(Display::return_icon('export_scorm.png', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");
+                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");
             } else {
-                $dsp_disk = Display::return_icon('export_scorm_na.png', get_lang('Export'), array(), ICON_SIZE_SMALL);
+                $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
 
             //Copy
-            $copy = Display::url(Display::return_icon('cd.gif', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
+            $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
             /* Auto Lunch LP code*/
             $lp_auto_lunch_icon = '';

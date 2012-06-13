@@ -3038,9 +3038,5 @@ class DocumentManager {
     public function get_web_odf_extension_list(){
         return array('ods', 'odt');
     }
-    
-    function show_file_container($path, $extension) {
-        
-    }
 }
 //end class DocumentManager

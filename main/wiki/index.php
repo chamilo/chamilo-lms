@@ -152,6 +152,7 @@ Display::display_introduction_section(TOOL_WIKI);
 
 
 //release of blocked pages to prevent concurrent editions
+echo '<div style="overflow:hidden">';
 $sql = "SELECT * FROM $tbl_wiki WHERE c_id = $course_id AND is_editing != '0' ".$condition_session;
 $result=Database::query($sql);
 while ($is_editing_block=Database::fetch_array($result)) {
@@ -172,9 +173,9 @@ while ($is_editing_block=Database::fetch_array($result)) {
         Database::query($sql);
     }
 }
-
+echo '</div>';
 // saving a change
-echo '<div style="overflow:hidden">';
+
     if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
         if(empty($_POST['title'])) {
             Display::display_error_message(get_lang("NoWikiPageTitle"));
@@ -188,7 +189,7 @@ echo '<div style="overflow:hidden">';
             Display::display_confirmation_message($return_message, false);
         }
     }
-echo '</div>';
+
 
 //saving a new wiki entry
 echo '<div style="overflow:hidden">';
@@ -232,6 +233,7 @@ if ($_GET['view']) {
     }
 
     ///restore page
+   
     if ($_GET['action']=='restorepage') {
         //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
         if (($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && intval($_GET['group_id'])==0)) {
@@ -298,21 +300,21 @@ if ($_GET['view']) {
     }
 }
 
-
-if ($_GET['action']=='deletewiki') {
-    if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-        if ($_GET['delete'] == 'yes') {
-            $return_message=delete_wiki();
-            Display::display_confirmation_message($return_message);
+echo '<div style="overflow:hidden">';
+    if ($_GET['action']=='deletewiki') {
+        if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+            if ($_GET['delete'] == 'yes') {
+                $return_message=delete_wiki();
+                Display::display_confirmation_message($return_message);
+            }
         }
     }
-}
 
 
-if ($_GET['action']=='discuss' && $_POST['Submit']) {
-    Display::display_confirmation_message(get_lang('CommentAdded'));
-}
-
+    if ($_GET['action']=='discuss' && $_POST['Submit']) {
+        Display::display_confirmation_message(get_lang('CommentAdded'));
+    }
+echo '</div>';
 
 
 /* WIKI WRAPPER */
@@ -1630,7 +1632,7 @@ if ($_GET['action']=='addnew') {
     }
 
 }
-echo '</div>';
+
 
 // Show home page
 
@@ -2660,6 +2662,7 @@ if ($_GET['action']=='discuss') {
             Display::display_normal_message(get_lang('DiscussNotAvailable'));
     }
 }
+echo '</div>'; // echo "<div style="overflow:hidden">";
 echo "</div>"; // echo "<div id='mainwiki'>";
 echo "</div>"; // echo "<div id='wikiwrapper'>";
 

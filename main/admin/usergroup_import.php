@@ -39,8 +39,7 @@ function validate_data($classes) {
  */
 function save_data($classes) {
     $number_of_added_classes = 0;
-    $usergroup = new UserGroup();
-    var_dump($classes);
+    $usergroup = new UserGroup();    
     foreach ($classes as $index => $class) {
         $id = $usergroup->save($class);
         if ($id) {

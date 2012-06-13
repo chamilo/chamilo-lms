@@ -1907,74 +1907,98 @@ class DocumentManager {
         $orig_course_info 	= api_get_course_info($origin_course_code);
         $orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
         $destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
+        $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
+        
+        $user_id = api_get_user_id();
+        
+        if (!empty($orig_source_html)) {
+            foreach ($orig_source_html as $source) {                
+
+                // get information about source url
+                $real_orig_url	= $source[0];	// url
+                $scope_url  	= $source[1];   // scope (local, remote)
+                $type_url		= $source[2];	// tyle (rel, abs, url)
 
 
-        foreach ($orig_source_html as $source) {
+                // Get path and query from origin url
+                $orig_parse_url  = parse_url($real_orig_url);
+                $real_orig_path  = $orig_parse_url['path'];
+                $real_orig_query = $orig_parse_url['query'];
 
-            // get information about source url
-            $real_orig_url	= $source[0];	// url
-            $scope_url  	= $source[1];   // scope (local, remote)
-            $type_url		= $source[2];	// tyle (rel, abs, url)
-
-
-            // Get path and query from origin url
-            $orig_parse_url  = parse_url($real_orig_url);
-            $real_orig_path  = $orig_parse_url['path'];
-            $real_orig_query = $orig_parse_url['query'];
-
-            // Replace origin course code by destination course code from origin url query
-            $dest_url_query = '';
-            if (!empty($real_orig_query)) {
-                $dest_url_query = '?'.$real_orig_query;
-                if (strpos($dest_url_query,$origin_course_code) !== false) {
-                    $dest_url_query = str_replace($origin_course_code, $destination_course_code, $dest_url_query);
+                // Replace origin course code by destination course code from origin url query
+                $dest_url_query = '';
+                
+                if (!empty($real_orig_query)) {
+                    $dest_url_query = '?'.$real_orig_query;
+                    if (strpos($dest_url_query,$origin_course_code) !== false) {
+                        $dest_url_query = str_replace($origin_course_code, $destination_course_code, $dest_url_query);
+                    }
                 }
-            }
 
-            if ($scope_url == 'local') {
-                if ( $type_url == 'abs' || $type_url == 'rel') {
-                    $document_file = strstr($real_orig_path, 'document');
-                    if (strpos($real_orig_path,$document_file) !== false) {
-                        $origin_filepath        = $orig_course_path.$document_file;
-                        $destination_filepath   = $dest_course_path.$document_file;
+                if ($scope_url == 'local') {
+                    if ($type_url == 'abs' || $type_url == 'rel') {                        
+                        $document_file = strstr($real_orig_path, 'document');
+                        
+                        if (strpos($real_orig_path,$document_file) !== false) {
+                            $origin_filepath        = $orig_course_path.$document_file;
+                            $destination_filepath   = $dest_course_path.$document_file;
 
-                        // copy origin file inside destination course
-                        if (file_exists($origin_filepath)) {
-
-                            $filepath_dir = dirname($destination_filepath);
-                            if (!is_dir($filepath_dir)) {
-                                $perm = api_get_permissions_for_new_directories();
-                                @mkdir($filepath_dir, $perm, true);
+                            // copy origin file inside destination course
+                            if (file_exists($origin_filepath)) {
+                                $filepath_dir = dirname($destination_filepath);
+                                
+                                if (!is_dir($filepath_dir)) {
+                                    $perm = api_get_permissions_for_new_directories();
+                                    $result = @mkdir($filepath_dir, $perm, true);                                    
+                                    if ($result) {
+                                        $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $filepath_dir);                                
+                                    
+                                        //Add to item properties to the new folder
+                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'folder', 0, basename($filepath_to_add));
+                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                    }
+                                }
+                                
+                                if (!file_exists($destination_filepath)) {
+                                    $result = @copy($origin_filepath, $destination_filepath);
+                                    if ($result) {                 
+                                    
+                                        $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $destination_filepath);
+                                        $size = filesize($destination_filepath);
+                                                                        
+                                        //Add to item properties to the file
+                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'file', $size, basename($filepath_to_add));
+                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                    }
+                                    
+                                }
                             }
-                            if (!file_exists($destination_filepath)) {
-                                @copy($origin_filepath, $destination_filepath);
+
+                            // Replace origin course path by destination course path
+                            if (strpos($content_html,$real_orig_url) !== false) {
+                                //$origin_course_code
+                                $url_course_path = str_replace($orig_course_info['path'].'/'.$document_file, '', $real_orig_path);
+                                $destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;
+
+                                //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
+                                if (strpos($real_orig_path, $origin_course_code) === false) {
+                                    $url_course_path = $real_orig_path;
+                                    $destination_url = $real_orig_path;
+                                }
+                                $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                             }
                         }
 
-                        // Replace origin course path by destination course path
-                        if (strpos($content_html,$real_orig_url) !== false) {
-                            //$origin_course_code
-                            $url_course_path = str_replace($orig_course_info['path'].'/'.$document_file, '', $real_orig_path);
-                            $destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;
+                        // replace origin course code by destination course code  from origin url
+                        if (strpos($real_orig_url, '?') === 0) {
+                            $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
+                            $content_html = str_replace($real_orig_url, $dest_url, $content_html);
+                        }                        
+                    } else {
+                        if ($type_url == 'url') {
 
-                            //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
-                            if (strpos($real_orig_path, $origin_course_code) === false) {
-                                $url_course_path = $real_orig_path;
-                                $destination_url = $real_orig_path;
-                            }
-                            $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                         }
-                    }
-
-                    // replace origin course code by destination course code  from origin url
-                    if (strpos($real_orig_url, '?') === 0) {
-                        $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
-                        $content_html = str_replace($real_orig_url, $dest_url, $content_html);
-                    }
-                } else {
-                    if ($type_url == 'url') {
-
                     }
                 }
             }

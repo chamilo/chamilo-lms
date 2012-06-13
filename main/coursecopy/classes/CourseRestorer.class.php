@@ -29,9 +29,9 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
-define('FILE_SKIP', 		1);
-define('FILE_RENAME', 		2);
-define('FILE_OVERWRITE', 	3);
+define('FILE_SKIP',             1);
+define('FILE_RENAME',           2);
+define('FILE_OVERWRITE',        3);
 
 define('UTF8_CONVERT', 		false);
 
@@ -289,7 +289,7 @@ class CourseRestorer
 
 			$table = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
-
+            
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
@@ -300,7 +300,7 @@ class CourseRestorer
                 } else {
                     $my_session_id = $session_id;
                 }
-
+                
 		    	if ($document->file_type == FOLDER) {
 
 		    		$visibility = $document->item_properties[0]['visibility'];
@@ -321,8 +321,7 @@ class CourseRestorer
                     echo 'file type'; var_dump($document->file_type);
                     echo 'session'; var_dump($session_id);
                     echo 'file _exists';  var_dump($path.$document->path); var_dump(file_exists($path.$document->path));
-                    */
-
+                    */                    
                     if (!is_dir($path.dirname($document->path))) {
                         continue;
                         $visibility = $document->item_properties[0]['visibility'];
@@ -338,7 +337,7 @@ class CourseRestorer
                     }
 
 					if (file_exists($path.$document->path)) {
-					    //var_dump ('enter');
+					    //var_dump($this->file_option);
 
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
@@ -379,6 +378,7 @@ class CourseRestorer
                                 //Replace old course code with the new destination code
 
                                 $file_info = pathinfo($path.$document->path);
+                                
                                 if (in_array($file_info['extension'], array('html','htm'))) {
                                     $content    = file_get_contents($path.$document->path);
                                     if (UTF8_CONVERT) $content = utf8_encode($content);

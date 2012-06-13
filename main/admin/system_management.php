@@ -118,7 +118,7 @@ EOT;
         foreach ($courses as $course) {
             $drop_statement = 'DROP DATABASE ' . $course['db_name'];
             $success = Database::query($drop_statement);
-            if ($sucess) {
+            if ($success) {
                 /*
                  * Note that Database::update do not supports null statements so
                  * we do it by hand here.

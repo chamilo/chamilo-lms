@@ -8113,8 +8113,7 @@ class learnpath {
         $org_title = $xmldoc->createElement('title', api_utf8_encode($this->get_name()));
         $organization->appendChild($org_title);
 
-
-        $folder_name = 'document_scorm';
+        $folder_name = 'document';
 
         // Removes the learning_path/scorm_folder path when exporting see #4841
         $path_to_remove = null;

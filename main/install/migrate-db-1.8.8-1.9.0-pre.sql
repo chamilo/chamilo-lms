@@ -92,10 +92,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable_grade_model', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_enable_grade_model', 'false', 'No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'false', 'No');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_grade_model_settings', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_grade_model_settings', 'false', 'No');
@@ -103,6 +99,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_c
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_locking_enabled', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_locking_enabled', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('teachers_can_change_score_settings', 'false', 'No');
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_users_to_change_email_with_no_password', 'true', 'Yes');
@@ -211,13 +211,14 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 UPDATE settings_current SET selected_value = 'true' WHERE variable = 'more_buttons_maximized_mode';
 
 --Grade model
-CREATE TABLE grade_model (id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255)  NOT NULL, description TEXT , PRIMARY KEY (id));
+CREATE TABLE grade_model (id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, description TEXT, default_lowest_eval_exclude TINYINT default null, default_external_eval_prefix VARCHAR(140) default null, PRIMARY KEY (id));
 CREATE TABLE grade_components (id INTEGER  NOT NULL AUTO_INCREMENT, percentage VARCHAR(255)  NOT NULL, title VARCHAR(255)  NOT NULL, acronym VARCHAR(255)  NOT NULL, grade_model_id INTEGER NOT NULL, PRIMARY KEY (id));
 ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
+
 UPDATE settings_current SET title = 'DatabaseVersion' WHERE variable = 'chamilo_database_version';
 ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 
-INSERT INTO settings_options(variable,value,display_text) VALUES ('page_after_login', 'main/auth/courses.php', 'CourseCatalog');
+INSERT INTO settings_options(variable, value, display_text) VALUES ('page_after_login', 'main/auth/courses.php', 'CourseCatalog');
 
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
 
@@ -283,7 +284,7 @@ ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18302' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18361' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

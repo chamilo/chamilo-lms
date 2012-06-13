@@ -855,9 +855,9 @@ VALUES
 ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
 ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
 ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1),
+('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
 ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
-('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
 ('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 0),
 ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
 ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
@@ -872,7 +872,7 @@ VALUES
 ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
 ('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
 ('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18302','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18361','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1346,35 +1346,35 @@ CREATE TABLE IF NOT EXISTS openid_association (
 --
 DROP TABLE IF EXISTS gradebook_category;
 CREATE TABLE IF NOT EXISTS gradebook_category (
-  id int NOT NULL auto_increment,
-  name text NOT NULL,
-  description text,
-  user_id int NOT NULL,
-  course_code varchar(40) default NULL,
-  parent_id int default NULL,
-  weight float NOT NULL,
-  visible tinyint NOT NULL,
-  certif_min_score int DEFAULT NULL,
-  session_id int DEFAULT NULL,
-  document_id int unsigned DEFAULT NULL,
-  locked int NOT NULL DEFAULT 0,
+    id int NOT NULL auto_increment,
+    name text NOT NULL,
+    description text,
+    user_id int NOT NULL,
+    course_code varchar(40) default NULL,
+    parent_id int default NULL,
+    weight float NOT NULL,
+    visible tinyint NOT NULL,
+    certif_min_score int DEFAULT NULL,
+    session_id int DEFAULT NULL,
+    document_id int unsigned DEFAULT NULL,
+    locked int NOT NULL DEFAULT 0,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
-  id int unsigned NOT NULL auto_increment,
-  name text NOT NULL,
-  description text,
-  user_id int NOT NULL,
-  course_code varchar(40) default NULL,
-  category_id int default NULL,
-  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
-  weight FLOAT NOT NULL,
-  max float unsigned NOT NULL,
-  visible int NOT NULL,
-  type varchar(40) NOT NULL default 'evaluation',
-  locked int NOT NULL DEFAULT 0,
-  PRIMARY KEY  (id)
+    id int unsigned NOT NULL auto_increment,
+    name text NOT NULL,
+    description text,
+    user_id int NOT NULL,
+    course_code varchar(40) default NULL,
+    category_id int default NULL,
+    created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
+    weight FLOAT NOT NULL,
+    max float unsigned NOT NULL,
+    visible int NOT NULL,
+    type varchar(40) NOT NULL default 'evaluation',
+    locked int NOT NULL DEFAULT 0,
+    PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE IF NOT EXISTS gradebook_link (
@@ -2977,20 +2977,23 @@ ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 -- Grade Model
 DROP TABLE IF EXISTS grade_model;
 CREATE TABLE grade_model (
-  id INTEGER  NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255)  NOT NULL,
-  description TEXT ,
-  PRIMARY KEY (id)
+    id INTEGER  NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255)  NOT NULL,
+    description TEXT,
+    default_lowest_eval_exclude TINYINT default null,
+    default_external_eval TINYINT default null,
+    default_external_eval_prefix VARCHAR(140) default null,
+    PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS grade_components;
 CREATE TABLE grade_components (
-  id INTEGER  NOT NULL AUTO_INCREMENT,
-  percentage VARCHAR(255)  NOT NULL,
-  title VARCHAR(255)  NOT NULL,
-  acronym VARCHAR(255)  NOT NULL,
-  grade_model_id INTEGER NOT NULL,
-  PRIMARY KEY (id)
+    id INTEGER  NOT NULL AUTO_INCREMENT,
+    percentage VARCHAR(255)  NOT NULL,
+    title VARCHAR(255)  NOT NULL,
+    acronym VARCHAR(255)  NOT NULL,
+    grade_model_id INTEGER NOT NULL,
+    PRIMARY KEY (id)
 );
 
 ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;

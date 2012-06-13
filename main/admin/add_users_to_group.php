@@ -13,8 +13,6 @@ $cidReset=true;
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

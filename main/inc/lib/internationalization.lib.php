@@ -548,8 +548,7 @@ function _api_get_timezone() {
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
     if ($use_users_timezone == 'true') {
-        // Get the timezone based on user preference, if it exists
-        require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+        // Get the timezone based on user preference, if it exists        
         $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
         if ($timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];

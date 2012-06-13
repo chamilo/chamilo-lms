@@ -111,7 +111,7 @@ class CourseBuilder {
 		$course_id        = $course_info['real_id'];		
         
         foreach ($this->tools_to_build as $tool) {
-            $function_build = 'build_'.$tool;
+            $function_build = 'build_'.$tool;            
             $this->$function_build($session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]);
         }
 		
@@ -182,15 +182,20 @@ class CourseBuilder {
 		
 		$table_doc   = Database::get_course_table(TABLE_DOCUMENT);
 		$table_prop  = Database::get_course_table(TABLE_ITEM_PROPERTY);
-		
-		if (!empty($course_code) && !empty($session_id)) {			
-
+        
+        //Remove chat_files and shared_folder files
+        $avoid_paths = " path NOT LIKE '/shared_folder%' AND 
+                         path NOT LIKE '/chat_files%' ";        
+        //$avoid_paths = " 1 = 1 ";
+        
+		if (!empty($course_code) && !empty($session_id)) {
 			$session_id  = intval($session_id);
             if ($with_base_content) {
                 $session_condition = api_get_session_condition($session_id, true, true);                
             } else {
                 $session_condition = api_get_session_condition($session_id, true);
             }
+            
 			if (!empty($this->course->type) && $this->course->type=='partial') {
 			    $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM $table_doc d, $table_prop p 
 			            WHERE 	d.c_id = $course_id AND 
@@ -198,17 +203,21 @@ class CourseBuilder {
 			            		tool = '".TOOL_DOCUMENT."' AND 
 			            		p.ref = d.id AND 
 			            		p.visibility != 2 AND 
-			            		path NOT LIKE '/images/gallery%' 
+			            		path NOT LIKE '/images/gallery%' AND
+                                $avoid_paths
 			            		$session_condition 
 			    		ORDER BY path";
 			} else {
 	        	$sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM $table_doc d, $table_prop p 
 	        	        WHERE 	d.c_id = $course_id AND 
 			            		p.c_id = $course_id AND
-	        					tool = '".TOOL_DOCUMENT."' AND 
-	        					p.ref = d.id AND p.visibility != 2 $session_condition 
+	        					tool = '".TOOL_DOCUMENT."' AND
+                                $avoid_paths AND
+	        					p.ref = d.id AND 
+                                p.visibility != 2 $session_condition 
 	        			ORDER BY path";
 			}
+            
  
 			$db_result = Database::query($sql);
 			while ($obj = Database::fetch_object($db_result)) {
@@ -221,14 +230,25 @@ class CourseBuilder {
         		$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p 
 						WHERE 	d.c_id = '.$course_id.' AND 
 			            		p.c_id = '.$course_id.' AND
-								tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path  NOT LIKE \'/images/gallery%\' AND d.session_id = 0 ORDER BY path';
+								tool = \''.TOOL_DOCUMENT.'\' AND 
+                                p.ref = d.id AND 
+                                p.visibility != 2 AND 
+                                path NOT LIKE \'/images/gallery%\' AND
+                                '.$avoid_paths.'AND
+                                d.session_id = 0 
+                        ORDER BY path';
 	        else
 	        	$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size  
 	        			FROM '.$table_doc.' d, '.$table_prop.' p
 	        			WHERE 	d.c_id = '.$course_id.' AND 
 			            		p.c_id = '.$course_id.' AND 
-	        					tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.session_id = 0 ORDER BY path';
- 
+	        					tool = \''.TOOL_DOCUMENT.'\' AND 
+                                p.ref = d.id AND 
+                                p.visibility != 2 AND
+                                '.$avoid_paths.' AND
+                                d.session_id = 0 
+                        ORDER BY path';
+            
 			$db_result = Database::query($sql);
 			while ($obj = Database::fetch_object($db_result)) {
 				$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
@@ -252,6 +272,7 @@ class CourseBuilder {
 		$this->build_forum_topics();
 		$this->build_forum_posts();
 	}
+    
 	/**
 	 * Build a forum-category
 	 */

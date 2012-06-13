@@ -82,52 +82,70 @@ function save_data($users_classes) {
     $user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
     
     $usergroup = new UserGroup();
-
+    
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
     $csv_data = array ();
-    
-    foreach ($users_classes as $user_class) {
-        
-        $sql1 = "SELECT user_id FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
-        $res1 = Database::query($sql1);
-        $obj1 = Database::fetch_object($res1);
-        
-        $usergroup = new UserGroup();
-        $id = $usergroup->get_id_by_name($user_class['ClassName']);        
-        if ($obj1 && $id) {
-            $csv_data[$id]['user_list'][] = $obj1->user_id;
+    if (!empty($users_classes)) {
+        foreach ($users_classes as $user_class) {
+            $sql1 = "SELECT user_id FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
+            $res1 = Database::query($sql1);
+            $obj1 = Database::fetch_object($res1);
+
+            $usergroup = new UserGroup();
+            $id = $usergroup->get_id_by_name($user_class['ClassName']);   
+            
+            if ($obj1 && $id) {
+                $csv_data[$id]['user_list'][] = $obj1->user_id;
+                $csv_data[$id]['user_list_name'][] = $user_class['UserName'];
+                $csv_data[$id]['class_name'] = $user_class['ClassName'];
+            }
         }
     }
     
     // Logic for processing the request (data + UI options).
-    
-    foreach ($csv_data as $class_id => $user_data) {
-        $user_list = $user_data['user_list'];
-        $usergroup->subscribe_users_to_usergroup($class_id, $user_list);
         
-        
-        /*
-        $sql = "SELECT class_id FROM $class_user_table cu WHERE cu.user_id = $user_id";
-        $res = Database::query($sql);
-        while ($obj = Database::fetch_object($res)) {
-            $db_subscriptions[$obj->class_id] = 1;
-        }
-        $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
-        $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
-        
-        // Subscriptions for new classes.
-        if ($_POST['subscribe']) {
-            foreach ($to_subscribe as $class_id) {
-                ClassManager::add_user($user_id, $class_id);
+    if (!empty($csv_data)) {
+        foreach ($csv_data as $class_id => $user_data) {
+            $user_list = $user_data['user_list'];
+            
+            $class_name = $user_data['class_name'];
+            $user_list_name = $user_data['user_list_name'];
+            
+            $usergroup->subscribe_users_to_usergroup($class_id, $user_list);
+
+            /*
+            $sql = "SELECT class_id FROM $class_user_table cu WHERE cu.user_id = $user_id";
+            $res = Database::query($sql);
+            while ($obj = Database::fetch_object($res)) {
+                $db_subscriptions[$obj->class_id] = 1;
             }
-        }
-        // Unsubscription from previous classes.
-        if ($_POST['unsubscribe']) {
-            foreach ($to_unsubscribe as $class_id) {
-                ClassManager::unsubscribe_user($user_id, $class_id);
+            $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
+            $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
+
+            // Subscriptions for new classes.
+            if ($_POST['subscribe']) {
+                foreach ($to_subscribe as $class_id) {
+                    ClassManager::add_user($user_id, $class_id);
+                }
             }
-        }*/
+            // Unsubscription from previous classes.
+            if ($_POST['unsubscribe']) {
+                foreach ($to_unsubscribe as $class_id) {
+                    ClassManager::unsubscribe_user($user_id, $class_id);
+                }
+            }*/
+            $message = Display::return_message(get_lang('Class').': '.$class_name.'<br />', 'normal', false);
+            $message .= Display::return_message(get_lang('Users').': '.implode(', ', $user_list_name));
+            
+            return $message;
+
+        }
     }
+    
+   
+    
+    
+    
 }
 
 /**
@@ -171,14 +189,15 @@ if ($form->validate()) {
     $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_classes);    
     if (count($errors) == 0) {        
-        save_data($users_classes);
-        header('Location: usergroup_user_import.php?action=show_message&message='.urlencode(get_lang('FileImported')));
-        exit();
+        $return = save_data($users_classes);        
     }
 }
 
 Display :: display_header($tool_name);
 echo Display::page_header($tool_name);
+if (isset($return) && $return) {
+    echo $return;
+}
 
 if (count($errors) != 0) {
     $error_message = "\n";

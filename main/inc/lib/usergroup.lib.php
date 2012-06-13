@@ -249,7 +249,9 @@ class UserGroup extends Model {
         $course_list  = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
 
-        $delete_items = $new_items = array();
+        $delete_items = array();
+        $new_items = array();
+        
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {

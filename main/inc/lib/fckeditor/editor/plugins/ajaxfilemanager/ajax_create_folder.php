@@ -34,7 +34,7 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_NEWFOLDER) {
 } elseif (file_exists(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder'])) {
     $error = ERR_FOLDER_EXISTS;
 } else {
-    include_once(CLASS_FILE);
+    include_once CLASS_FILE;
     $file = new file();
     if ($file->mkdir(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder'], 0775)) {
         include_once CLASS_MANAGER;
@@ -59,8 +59,6 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_NEWFOLDER) {
 
         foreach ($pathInfo as $k => $v) {
             switch ($k) {
-
-
                 case "ctime";
                 case "mtime":
                 case "atime":

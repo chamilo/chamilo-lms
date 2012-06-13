@@ -200,9 +200,9 @@ class CourseSelectForm
 	}
 
 	function display_hidden_scorm_directories($course) {
-			if(is_array($course->resources)){
+        if (is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
-				if(count($resources) > 0) {
+				if (count($resources) > 0) {
 					switch($type) {
 						case RESOURCE_SCORM:
 							foreach ($resources as $id=>$resource) {

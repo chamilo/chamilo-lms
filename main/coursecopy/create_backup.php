@@ -51,8 +51,6 @@ require_once 'classes/CourseSelectForm.class.php';
 // Display the tool title
 echo Display::page_header($nameTools);
 
-
-
 /*	MAIN CODE */
 
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')) {

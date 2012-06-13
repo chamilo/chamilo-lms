@@ -40,6 +40,7 @@ class CourseArchiver
 		$perm_dirs = api_get_permissions_for_new_directories();
 
 		CourseArchiver::clean_backup_dir();
+        
 		// Create a temp directory
 		$tmp_dir_name = 'CourseArchiver_'.api_get_unique_id();
 		$backup_dir   = api_get_path(SYS_ARCHIVE_PATH).$tmp_dir_name.'/';
@@ -51,29 +52,27 @@ class CourseArchiver
 		$zip_file = $user['user_id'].'_'.$course->code.'_'.date("Ymd-His").'.zip';
 		$php_errormsg = '';
 		$res = @mkdir($backup_dir, $perm_dirs);
-		if ($res === false)
-		{
+		if ($res === false) {
 			//TODO set and handle an error message telling the user to review the permissions on the archive directory
       		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created',0);
 		}
 		// Write the course-object to the file
 		$fp = @fopen($course_info_file, 'w');
-		if ($fp === false)
-		{
+		if ($fp === false) {
       		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
 		}
+        
 		$res = @fwrite($fp, base64_encode(serialize($course)));
-		if ($res === false)
-		{
+		if ($res === false) {
       		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
 		}
+        
 		$res = @fclose($fp);
-		if ($res === false)
-		{
+		if ($res === false) {
       		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
 		}
 
-		// Copy all documents to the temp-dir
+		// Copy all documents to the temp-dir        
 		if (is_array($course->resources[RESOURCE_DOCUMENT])) {
 			foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
 				if ($document->file_type == DOCUMENT) {

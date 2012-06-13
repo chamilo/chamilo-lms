@@ -287,8 +287,10 @@ if ($is_allowedToEdit) {
 				if (my_delete($documentPath . $file)) {
 					update_db_info("delete", $file);
 				}
-				my_delete($documentPath . $uploadPath . "/" . $fld . "/");
-				break;
+				// hotpotatoes folder may contains several tests so don't delete folder if not empty : http://support.chamilo.org/issues/2165
+				if (!(strstr($uploadPath, DIR_HOTPOTATOES) && !folder_is_empty($documentPath . $uploadPath . "/" . $fld . "/"))) {
+    				my_delete($documentPath . $uploadPath . "/" . $fld . "/");
+				}				break;
 			case 'enable' : // enables an exercise
 				$newVisibilityStatus = "1"; //"visible"
 				$query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='" . Database :: escape_string($file) . "'";

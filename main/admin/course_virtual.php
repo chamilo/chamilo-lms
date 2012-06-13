@@ -23,17 +23,7 @@ if (isset($extra_lang_file)) include(api_get_path(INCLUDE_PATH)."../lang/english
 if (isset($extra_lang_file)) include(api_get_path(INCLUDE_PATH)."../lang/".$language_interface."/".$extra_lang_file.".inc.php");
 
 /*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-
-/*
------------------------------------------------------------
 	Constants
------------------------------------------------------------
 */
 
 define ("CREATE_VIRTUAL_COURSE_OPTION", "create_virtual_course");

@@ -26,9 +26,7 @@ api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Including a configuration file.
 require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';

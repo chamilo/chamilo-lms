@@ -11,12 +11,11 @@ $language_file = 'admin';
 
 $cidReset = true;
 
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 api_protect_admin_script();
+
 $classes = $_GET['classes'];
 $form_sent = 0;
 $error_message = '';

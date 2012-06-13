@@ -14,9 +14,6 @@ $cidReset=true;
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
 global $_configuration;
 
 // create an ajax object

@@ -1,7 +1,6 @@
 README
 <br/><br/>
-This plugin add a button to allow user to login to Chamilo with there Facebook account.<br/><br/>
-You have to activate your Facebook authentification to display this button.<br/>
-You have to configure your Facebook authentification to have the button works.<br/>
-To activate and configure Facebook authentification, for your Chamilo platform, go to Administration > Configuration settings > Facebook<br/>
-This plugin has been done to be added in the login_top region, but you can put it where you want.<br/>
+This plugin adds a button to allow users to log into Chamilo with their Facebook account.<br/><br/>
+To display this button on your portal, you have to enable the Facebook authentification and configure it.<br/>
+To enable and configure the Facebook authentification on your Chamilo platform, go to Administration > Configuration settings > Facebook<br/>
+This plugin has been developed to be added to the login_top or login_bottom region in Chamilo, but you can put it in whichever region you want.<br/>

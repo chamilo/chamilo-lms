@@ -117,15 +117,18 @@ if (isset($lp_item->audio) && !empty($lp_item->audio))  {
                     s1.addParam("allowscriptaccess","always");
                     s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $lp_item->audio . '");
                     s1.write("preview");
-                </script>';
-    
+                </script>';    
     $form->addElement('label', get_lang('Preview'), $player);
 }
 $form->addElement('button', 'submit', get_lang('Edit'));
 
+$course_info = api_get_course_info();
+$document_tree = DocumentManager::get_document_preview($course_info, null, null, 0, false, '/audio', 'lp_controller.php?action=add_audio&id='.$lp_item_id);
 
-//RemoveAudio
 $form->display();
+
+echo '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
+echo $document_tree;
 echo '</div>';
 
 echo '</div>';

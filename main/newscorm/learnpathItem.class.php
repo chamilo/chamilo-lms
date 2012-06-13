@@ -2621,6 +2621,21 @@ class learnpathItem {
         return $file_path;        
     }
     
+     function add_audio_from_documents($doc_id) {
+        $course_info = api_get_course_info();              
+        $document_data = DocumentManager::get_document_data_by_id($doc_id, $course_info['code']);
+                
+        if (!empty($document_data)) {            
+            $file_path = basename($document_data['path']);            
+            // Store the mp3 file in the lp_item table.
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file_path)."' 
+                                 WHERE c_id = {$course_info['real_id']} AND id = '".Database::escape_string($this->db_id)."'";
+            Database::query($sql_insert_audio);
+        }
+        return $file_path;        
+    }
+    
     function remove_audio() {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();        

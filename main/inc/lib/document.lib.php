@@ -2500,7 +2500,7 @@ class DocumentManager {
         return $html;
     }
 
-    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false) {
+    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
     	if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
     		return '';
     	}
@@ -2548,23 +2548,31 @@ class DocumentManager {
 
     	//$condition_session = " AND (id_session = '$session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
     	$condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
-
+        
+        $add_folder_filter = null;
+        if (!empty($filter_by_folder)) {
+            $add_folder_filter = " AND docs.path LIKE '".Database::escape_string($filter_by_folder)."%'";
+        }
+        
 		$sql_doc = "SELECT last.visibility, docs.*
 					FROM  $tbl_item_prop AS last, $tbl_doc AS docs
-    	            WHERE docs.id = last.ref ".
-    	            "   AND docs.path LIKE '".$path.$added_slash."%' ".
-    	            "   AND docs.path NOT LIKE '%_DELETED_%' ".
-    	            "   AND last.tool = '".TOOL_DOCUMENT."' $condition_session ".
-    	            "   AND last.visibility = '1' AND ".
-    	            "	docs.c_id = {$course_info['real_id']} AND
-    	            	last.c_id = {$course_info['real_id']} ".
-					"ORDER BY docs.title ASC";
+    	            WHERE   docs.id = last.ref AND 
+                            docs.path LIKE '".$path.$added_slash."%' AND 
+                            docs.path NOT LIKE '%_DELETED_%' AND 
+                            last.tool = '".TOOL_DOCUMENT."' $condition_session AND
+                            last.visibility = '1' AND 
+                            docs.c_id = {$course_info['real_id']} AND 
+                            last.c_id = {$course_info['real_id']} 
+                            $add_folder_filter
+                    ORDER BY docs.title ASC";
+        
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc, 'ASSOC');
 
 
     	$resources_sorted = array();
         $return 	= '';
+        
     	if ($lp_id) {
 	    	$return .= '<div class="lp_resource_element">';
 	    	$return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
@@ -2628,7 +2636,7 @@ class DocumentManager {
 
     	$new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
 
-    	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target, $add_move_button, true);
+    	$write_result = self::write_resources_tree($course_info, $session_id, $new_array, 0, $lp_id, $target, $add_move_button, $overwrite_url);
 
     	$return .= $write_result ;
 
@@ -2679,7 +2687,7 @@ class DocumentManager {
     * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
     * @return	string	The HTML list
     */
-    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $first = false) {
+    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $overwrite_url = null) {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
     	$img_path 		= api_get_path(WEB_IMG_PATH);
@@ -2728,7 +2736,6 @@ class DocumentManager {
     				}
 
     				$return .= '<ul class="lp_resource">';
-
                         $return .= '<li class="doc_folder"  id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
 
                         if ($lp_id) {
@@ -2742,10 +2749,9 @@ class DocumentManager {
 
                         $return .= '<div id="res_'.$resource['id'].'" style="display: none;" >';
                         if (isset($resource['files'])) {
-                            $return .= self::write_resources_tree($course_info, $session_id, $resource['files'], $num +1, $lp_id, $target, $add_move_button);
+                            $return .= self::write_resources_tree($course_info, $session_id, $resource['files'], $num +1, $lp_id, $target, $add_move_button, $overwrite_url);
                         }
                         $return .= '</div>';
-
                     $return .= '</ul>';
     			} else {
     				if (!is_array($resource)) {
@@ -2767,9 +2773,15 @@ class DocumentManager {
     						//LP URL
     						$lp_id = $this->lp_id;
     						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
+                            if (!empty($overwrite_url)) {
+                                $url = $overwrite_url.'&document_id='.$key;
+                            }
     					} else {
     						//Direct document URL
     						$url  = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$key;
+                            if (!empty($overwrite_url)) {
+                                $url = $overwrite_url.'&document_id='.$key;
+                            }                            
     					}
     					$img = $img_path.$icon;
     					if (!file_exists($img_sys_path.$icon)) {
@@ -2904,8 +2916,6 @@ class DocumentManager {
                 SE_USER      => api_get_user_id(),
                 );
 
-                //var_dump($xapian_data); echo '<pre>';
-
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $di = new DokeosIndexer();
                 $return = $di->connectDb(null, null, $lang);
@@ -3027,6 +3037,10 @@ class DocumentManager {
 
     public function get_web_odf_extension_list(){
         return array('ods', 'odt');
+    }
+    
+    function show_file_container($path, $extension) {
+        
     }
 }
 //end class DocumentManager

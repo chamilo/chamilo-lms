@@ -466,6 +466,10 @@ if ($encryptPassForm == '1') {
         </div>
 	</header>
     <br />
+    
+    <?php 
+    echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
+    ?>
     <div class="row">
         <div class="span3">
             <div class="well">
@@ -487,8 +491,7 @@ if ($encryptPassForm == '1') {
         </div>
         <div class="span9">
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-<?php
-    echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
+<?php   
 
     $instalation_type_label = '';
     if ($installType == 'new'){
@@ -498,7 +501,7 @@ if ($encryptPassForm == '1') {
         $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
     }
     if (!empty($instalation_type_label)) {
-    	echo "<h2>$instalation_type_label</h2><hr />";
+    	echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
     }
     ?>
 	<input type="hidden" name="updatePath"           value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />

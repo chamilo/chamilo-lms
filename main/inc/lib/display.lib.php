@@ -827,9 +827,9 @@ class Display {
     }
     
     public static function form_row($label, $form_item) {
-        $label = self::div($label, array('class' =>'label'));
-        $form_item = self::div($form_item, array('class' =>'formw'));
-        return self::div($label.$form_item, array('class'=>'row'));
+        $label = self::span($label, array('class' =>'control-label'));
+        $form_item = self::div($form_item, array('class' =>'controls'));
+        return self::div($label.$form_item, array('class'=>'control-group'));
     }
 
     /**

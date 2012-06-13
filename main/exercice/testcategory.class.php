@@ -320,7 +320,7 @@ class Testcategory {
 			$in_courseid = api_get_course_int_id();
 		}		
 	 	$tabcatobject = Testcategory::getCategoryListInfo("", $in_courseid);
-	 	$tabresult = array("0"=>get_lang('NoCategory'));
+	 	$tabresult = array("0"=>get_lang('NoCategorySelected'));
 	 	for ($i=0; $i < count($tabcatobject); $i++) {
 	 		$tabresult[$tabcatobject[$i]->id] = $tabcatobject[$i]->name;
 	 	}

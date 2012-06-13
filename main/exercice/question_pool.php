@@ -276,14 +276,13 @@ if ($displayMessage != "") {
 	$displayMessage = "";
 }
 
-//Title
-echo '<h2>'.$nameTools.' - '.$titleAdd.'</h2>';
-
 //Form
-echo '<form name="question_pool" method="GET" action="'.$url.'">';	 
+echo '<form class="form-horizontal" name="question_pool" method="GET" action="'.$url.'">';	 
+//Title
+echo '<legend>'.$nameTools.' - '.$titleAdd.'</legend>';
 if (isset($type)) {
 	echo '<input type="hidden" name="type" value="1">';
-}    
+}
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
 // Session list, if sessions are used.

@@ -46,7 +46,7 @@ $column_model   = array(
                         array('name'=>'firstname',  'index'=>'firstname',       'width'=>'100', 'align'=>'left'),
                         array('name'=>'lastname',   'index'=>'lastname',        'width'=>'100', 'align'=>'left'),
                         array('name'=>'start_date', 'index'=>'start_date',      'width'=>'100', 'align'=>'left'),
-                        array('name'=>'question',   'index'=>'count_questions', 'width'=>'100', 'align'=>'left'),
+                        array('name'=>'question',   'index'=>'count_questions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false'),
                         array('name'=>'score',      'index'=>'score',           'width'=>'100', 'align'=>'left','sortable'=>'false'),
                        );            
 //Autowidth             

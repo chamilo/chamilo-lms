@@ -753,6 +753,7 @@ function create_course_tables($course_db_name = null) {
         CREATE TABLE `".$TABLEQUIZANSWERSLIST . "` (
         $add_to_all_tables
         id int unsigned NOT NULL,
+        id_auto int NOT NULL AUTO_INCREMENT,
         question_id int unsigned NOT NULL,
         answer text NOT NULL,
         correct mediumint unsigned default NULL,
@@ -761,11 +762,9 @@ function create_course_tables($course_db_name = null) {
         position mediumint unsigned NOT NULL default 1,
         hotspot_coordinates text,
         hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
-        destination text NOT NULL,
-        id_auto int NOT NULL AUTO_INCREMENT,
+        destination text NOT NULL,        
         answer_code char(10) default '',
-        PRIMARY KEY (c_id, id, question_id),
-        UNIQUE KEY id_auto (id_auto)
+        PRIMARY KEY (c_id, id_auto)  
         )" . $charset_clause;
     Database::query($sql);
 
@@ -2452,10 +2451,11 @@ function fill_db_course($course_id, $course_repository, $language, $default_docu
 
         /*  Exercise tool */
 
-        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','','')");
-        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','','')");
-        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','','')");
-        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST  VALUES ($course_id,  '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','','')");
+        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1')");
+        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2')");
+        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3')");
+        Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4')");
+        
         $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
         Database::query('INSERT INTO '.$TABLEQUIZ . ' (c_id, title, description, type, random, random_answers, active, results_disabled )

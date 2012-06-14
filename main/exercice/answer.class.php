@@ -107,7 +107,7 @@ class Answer {
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$questionId=$this->questionId;
         
-		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination, id_auto FROM
+		$sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
 		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
 
 		$result=Database::query($sql);
@@ -473,7 +473,7 @@ class Answer {
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
 		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES ";
-		for ($i=1;$i <= $this->new_nbrAnswers;$i++) {
+		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
 			$answer					= Database::escape_string($this->new_answer[$i]);
 			$correct				= Database::escape_string($this->new_correct[$i]);
 			$comment				= Database::escape_string($this->new_comment[$i]);

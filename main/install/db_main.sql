@@ -879,7 +879,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18394','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18407','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -902,7 +902,6 @@ ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), va
 --
 -- Dumping data for table settings_options
 --
-
 
 /*!40000 ALTER TABLE settings_options DISABLE KEYS */;
 LOCK TABLES settings_options WRITE;
@@ -2938,14 +2937,14 @@ ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
 
 DROP TABLE IF EXISTS track_course_ranking;
 CREATE TABLE IF NOT EXISTS track_course_ranking (
- id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
- c_id  int unsigned not null,
- session_id  int unsigned not null default 0,
- url_id  int unsigned not null default 0,
- accesses int unsigned not null default 0,
- total_score int unsigned not null default 0,
- users int unsigned not null default 0,
- creation_date datetime not null
+    id   int unsigned not null PRIMARY KEY AUTO_INCREMENT,
+    c_id  int unsigned not null,
+    session_id  int unsigned not null default 0,
+    url_id  int unsigned not null default 0,
+    accesses int unsigned not null default 0,
+    total_score int unsigned not null default 0,
+    users int unsigned not null default 0,
+    creation_date datetime not null
 );
 
 ALTER TABLE track_course_ranking ADD INDEX idx_tcc_cid (c_id);
@@ -2955,12 +2954,12 @@ ALTER TABLE track_course_ranking ADD INDEX idx_tcc_creation_date (creation_date)
 
 DROP TABLE IF EXISTS user_rel_course_vote;
 CREATE TABLE IF NOT EXISTS user_rel_course_vote (
-  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
-  c_id int unsigned not null,
-  user_id int unsigned not null,
-  session_id int unsigned not null default 0,
-  url_id int unsigned not null default 0,
-  vote int unsigned not null default 0
+    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+    c_id int unsigned not null,
+    user_id int unsigned not null,
+    session_id int unsigned not null default 0,
+    url_id int unsigned not null default 0,
+    vote int unsigned not null default 0
 );
 
 ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);

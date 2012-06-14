@@ -302,7 +302,7 @@ ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18394' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.9.0.18407' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';

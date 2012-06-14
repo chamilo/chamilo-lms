@@ -8,8 +8,7 @@
 class Agenda {
 	var $events = array();
 	var $type   = 'personal'; // personal, admin or course
-	 
-	
+	 	
 	function __construct() {
 		//Table definitions
 		$this->tbl_global_agenda 	= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);  
@@ -41,9 +40,9 @@ class Agenda {
 	 * 
 	 * Adds an event to the calendar
      * 
-	 * @param   int		start tms
-	 * @param   int		end tms
-     * @param   string all day (true, false)
+	 * @param   string  start datetime format: 2012-06-14 09:00:00
+	 * @param   string  end datetime format: 2012-06-14 09:00:00
+     * @param   string  all day (true, false)
 	 * @param   string  view agendaDay, agendaWeek, month @todo seems not to be used
      * @param   string  title 
      * @param   string  content
@@ -51,12 +50,9 @@ class Agenda {
      * @param   bool    add event as a *course* announcement
      * 	 
 	 */
-	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array(), $add_as_announcement = false) {
-		
-		$start 		= date('Y-m-d H:i:s', $start);
-		$end 		= date('Y-m-d H:i:s', $end);			
+	function add_event($start, $end, $all_day, $view, $title, $content, $users_to_send = array(), $add_as_announcement = false) {				
 		$start 		= api_get_utc_datetime($start);
-		$end 		= api_get_utc_datetime($end);				
+        $end 		= api_get_utc_datetime($end);
 		$all_day 	= isset($all_day) && $all_day == 'true' ? 1:0;
 		
 		$attributes = array();
@@ -197,12 +193,21 @@ class Agenda {
         return -1;
     }
 	
+    /**
+     * Edits an event
+     * 
+     * @param int       event id
+  	 * @param string    start datetime format: 2012-06-14 09:00:00
+	 * @param string    end datetime format: 2012-06-14 09:00:00
+     * @param int       event is all day? 1|0
+     * @param string    view
+     * @param string    event title
+     * @param string    event content 
+     */
 	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {		
-		$start 		= date('Y-m-d H:i:s', $start);
 		$start 		= api_get_utc_datetime($start);
 		
 		if ($all_day == '0') {
-			$end 		= date('Y-m-d H:i:s', $end);		
 			$end 		= api_get_utc_datetime($end);			
 		}
 		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
@@ -413,7 +418,7 @@ class Agenda {
 	 */
 	function get_personal_events($start, $end) {
 		$start 	= intval($start);
-		$end	= intval($end);		
+		$end	= intval($end);	
 		$start  = api_get_utc_datetime($start);	
 		$end  	= api_get_utc_datetime($end);
 		$user_id = api_get_user_id();
@@ -692,9 +697,12 @@ class Agenda {
 		return $my_events;		
 	}
 	
-	//Format needed for the Fullcalendar js lib	
-	function format_event_date($utc_time) {		
-		return date('c', api_strtotime(api_get_local_time($utc_time)));
+    /**
+     * Format needed for the Fullcalendar js lib
+     *  @param string UTC time
+     */    
+	function format_event_date($utc_time) {		        
+        return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}
     
     

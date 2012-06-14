@@ -109,7 +109,7 @@ $(document).ready(function() {
 		monthNames: 	{{month_names}},
 		monthNamesShort:{{month_names_short}},
 		dayNames: 		{{day_names}},
-		dayNamesShort: 	{{day_names_short}},		
+		dayNamesShort: 	{{day_names_short}},        
         firstHour: 8,
         firstDay: 1, 
 		selectable	: true,
@@ -125,10 +125,10 @@ $(document).ready(function() {
         },
 		//add event
 		select: function(start, end, allDay, jsEvent, view) {
-			/* When selecting one day or several days */			
-			var start_date 	= Math.round(start.getTime() / 1000);
-			var end_date 	= Math.round(end.getTime() / 1000);
-			
+			//Removing UTC stuff                        
+            var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
+            var end_date  = $.datepicker.formatDate("yy-mm-dd", end) + " " + end.toTimeString().substr(0, 8);
+                       
 			$('#visible_to_input').show();
 			$('#add_as_announcement_div').show();			
 			$('#visible_to_read_only').hide();
@@ -166,7 +166,8 @@ $(document).ready(function() {
 				$('#color_calendar').addClass('label_tag');				
 				$('#color_calendar').addClass('{{ type_event_class }}');
 				
-				allFields.removeClass( "ui-state-error" );		
+				allFields.removeClass( "ui-state-error" );
+                
 				$("#dialog-form").dialog("open");		
 				
 				$("#dialog-form").dialog({				
@@ -192,9 +193,12 @@ $(document).ready(function() {
 						$("#content").attr('value', '');					
 					}
 				});		
-	            //prevent the browser to follow the link
+	            //Don't follow the link
 	            return false;
 				calendar.fullCalendar('unselect');
+                //Reload events
+                calendar.fullCalendar("refetchEvents");
+                calendar.fullCalendar("rerenderEvents");              
 			}
 		},	
 		eventRender: function(event, element) {        
@@ -205,7 +209,7 @@ $(document).ready(function() {
                     },
 		            content: event.attachment,
 		            position: { at:'top right' , my:'bottom right'},	
-		        }).removeData('qtip'); // this is an special hack to add multipl qtip in the same target!
+		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
                 
             }
             
@@ -220,15 +224,17 @@ $(document).ready(function() {
 			}
 	        
 	    },
-		eventClick: function(calEvent, jsEvent, view) {
-             
-            var start_date 	= Math.round(calEvent.start.getTime() / 1000);
+		eventClick: function(calEvent, jsEvent, view) {             
+            //var start_date 	= Math.round(calEvent.start.getTime() / 1000);
+            var start_date = $.datepicker.formatDate("yy-mm-dd", calEvent.start) + " " + calEvent.start.toTimeString().substr(0, 8);
+            
             if (calEvent.allDay == 1) {				
                 var end_date 	= '';				
             } else {			
                 var end_date 	= '';	
                 if (calEvent.end && calEvent.end != '') {
-                    var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
+                    //var end_date 	= Math.round(calEvent.end.getTime() / 1000);				
+                    var end_date  = $.datepicker.formatDate("yy-mm-dd", calEvent.end) + " " + calEvent.end.toTimeString().substr(0, 8);
                 }
             }
 

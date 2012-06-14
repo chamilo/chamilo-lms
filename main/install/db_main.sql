@@ -2985,8 +2985,8 @@ ALTER TABLE chat ADD INDEX idx_chat_from_user (from_user);
 -- Grade Model
 DROP TABLE IF EXISTS grade_model;
 CREATE TABLE grade_model (
-    id INTEGER  NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255)  NOT NULL,
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
     description TEXT,
     default_lowest_eval_exclude TINYINT default null,
     default_external_eval TINYINT default null,
@@ -2996,7 +2996,7 @@ CREATE TABLE grade_model (
 
 DROP TABLE IF EXISTS grade_components;
 CREATE TABLE grade_components (
-    id INTEGER  NOT NULL AUTO_INCREMENT,
+    id INTEGER NOT NULL AUTO_INCREMENT,
     percentage VARCHAR(255)  NOT NULL,
     title VARCHAR(255)  NOT NULL,
     acronym VARCHAR(255)  NOT NULL,
@@ -3005,3 +3005,26 @@ CREATE TABLE grade_components (
 );
 
 ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
+
+DROP TABLE IF EXISTS course_type;
+CREATE TABLE course_type (
+    id int unsigned not null auto_increment primary key,
+    name varchar(50) not null, 
+    translation_var char(40) default 'UndefinedCourseTypeLabel', 
+    description TEXT default '', 
+    props text default ''
+);
+
+INSERT INTO course_type (id, name) VALUES (1, 'All tools');
+INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
+
+ALTER TABLE course add course_type_id int unsigned default 1;
+
+DROP TABLE IF EXISTS usergroup_rel_question;
+CREATE TABLE usergroup_rel_question (
+    id int unsigned not null auto_increment primary key,
+    c_id int unsigned not null,
+    question_id int unsigned not null,
+    usergroup_id int unsigned not null,
+    coefficient float(6,2)
+);

@@ -740,6 +740,7 @@ function create_course_tables($course_db_name = null) {
         picture varchar(50) default NULL,
         level   int unsigned NOT NULL default 0,
         extra   varchar(255) default NULL,
+        question_code char(10) default '',
         PRIMARY KEY (c_id, id)
         )" . $charset_clause;
     Database::query($sql);
@@ -762,6 +763,7 @@ function create_course_tables($course_db_name = null) {
         hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
         destination text NOT NULL,
         id_auto int NOT NULL AUTO_INCREMENT,
+        answer_code char(10) default '',
         PRIMARY KEY (c_id, id, question_id),
         UNIQUE KEY id_auto (id_auto)
         )" . $charset_clause;

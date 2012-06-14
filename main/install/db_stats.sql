@@ -320,3 +320,10 @@ CREATE TABLE IF NOT EXISTS track_stored_values_stack (
 );
 ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
 ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+
+DROP TABLE IF EXISTS track_e_attempt_coeff;
+CREATE TABLE track_e_attempt_coeff (
+    id int unsigned not null auto_increment primary key,
+    attempt_id INT NOT NULL, 
+    marks_coeff float(6,2)
+);

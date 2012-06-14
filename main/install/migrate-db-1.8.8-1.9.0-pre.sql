@@ -279,6 +279,16 @@ ALTER TABLE usergroup_rel_user          ADD COLUMN id INTEGER NOT NULL AUTO_INCR
 ALTER TABLE admin                       ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 ALTER TABLE reservation_category_rights ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
+
+CREATE TABLE course_type (id int unsigned not null auto_increment primary key, name varchar(50) not null, translation_var char(40) default 'UndefinedCourseTypeLabel', description TEXT default '', props text default '');
+
+INSERT INTO course_type (id, name) VALUES (1, 'All tools');
+INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
+
+ALTER TABLE course add course_type_id int unsigned default 1;
+
+CREATE TABLE usergroup_rel_question (id int unsigned not null auto_increment primary key, c_id int unsigned not null, question_id int unsigned not null, usergroup_id int unsigned not null, coefficient float(6,2));
+
 -- Remove settings entry that doesnt exist anymore
 
 DELETE FROM settings_current WHERE variable = "read_more_limit";
@@ -312,6 +322,8 @@ ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREM
 ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
 
+CREATE TABLE track_e_attempt_coeff ( id int unsigned not null auto_increment primary key, attempt_id INT NOT NULL, marks_coeff float(6,2));
+
 -- xxUSERxx
 
 -- xxCOURSExx
@@ -326,3 +338,6 @@ ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
 ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
 ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
 INSERT INTO course_setting(variable,value,category) VALUES ('allow_public_certificates', 0, 'certificates');
+
+ALTER TABLE quiz_answer ADD COLUMN answer_code char(10) default '';
+ALTER TABLE quiz_question ADD COLUMN question_code char(10) default '';

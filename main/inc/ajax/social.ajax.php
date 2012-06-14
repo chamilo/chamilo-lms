@@ -6,7 +6,7 @@
 $language_file = array('messages','userInfo');
 require_once '../global.inc.php';
 
-$action = $_GET['a'];
+$action = isset($_GET['a']) ? $_GET['a'] : null;
 
 $current_user_id	 = api_get_user_id();
 switch ($action) {	
@@ -160,6 +160,7 @@ switch ($action) {
 	
 					//------Blog posts
 					$result = get_blog_post_from_user($course_code, $user_id);
+                    
 					if (!empty($result)) {
 						api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
 						echo '<div style="background:#FAF9F6; padding:0px;">';

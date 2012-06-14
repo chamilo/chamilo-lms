@@ -668,6 +668,7 @@ if ($show_full_profile) {
 		
 		//--Productions
 		$production_list =  UserManager::build_production_list($user_id);
+        
 		$product_content  = '';
 		if (!empty($production_list)) {						
             $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';

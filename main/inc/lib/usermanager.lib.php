@@ -2275,24 +2275,19 @@ class UserManager {
 					$file_list[] = $file;
 				}
 				if (count($file_list) > 0) {
-					$return = $course;
-					$return .= '<ul>';
+					$return = "<h4>$course</h4>";
+					$return .= '<ul class="thumbnails">';
 				}
 				foreach ($file_list as $file) {
-
-
-
-					if($resourcetype=="all")
-					{
-						$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-					}
-					elseif($resourcetype=="images")
-					{
+					if ($resourcetype=="all") {
+						$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a></li>';
+					} elseif($resourcetype=="images") {
 						//get extension
 						$ext = explode('.', $file);
-						if($ext[1]=='jpg' || $ext[1]=='jpeg'|| $ext[1]=='png' || $ext[1]=='gif' || $ext[1]=='bmp' || $ext[1]=='tif')
-						{
-						$return .= '<li style="display:inline;"><a href="'.$web_path.urlencode($file).'" target="_blank"><img src="'.$web_path.urlencode($file).'" width="80" height="60"></a>';
+						if ($ext[1]=='jpg' || $ext[1]=='jpeg'|| $ext[1]=='png' || $ext[1]=='gif' || $ext[1]=='bmp' || $ext[1]=='tif') {
+                            $return .= '<li class="span2"><a class="thumbnail" href="'.$web_path.urlencode($file).'" target="_blank">
+                                            <img src="'.$web_path.urlencode($file).'" ></a>
+                                        </li>';
 						}
 					}
 				}

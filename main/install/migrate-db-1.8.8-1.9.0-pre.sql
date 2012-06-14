@@ -130,7 +130,7 @@ ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
 ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
 ALTER TABLE gradebook_link ADD COLUMN locked INT DEFAULT 0;
 ALTER TABLE gradebook_category ADD COLUMN locked INT DEFAULT 0;
-ALTER TABLE gradebook_category ADD COLUMN default_lowest_eval_exclude TINYINT default null,
+ALTER TABLE gradebook_category ADD COLUMN default_lowest_eval_exclude TINYINT default null;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_hr_skills_management', 'true', 'Yes');
@@ -291,9 +291,9 @@ CREATE TABLE usergroup_rel_question (id int unsigned not null auto_increment pri
 
 -- Remove settings entry that doesnt exist anymore
 
-DELETE FROM settings_current WHERE variable = "read_more_limit";
-DELETE FROM settings_current WHERE variable = "user_order_by";
-DELETE FROM settings_options WHERE variable = "user_order_by";
+DELETE FROM settings_current WHERE variable = 'read_more_limit';
+DELETE FROM settings_current WHERE variable = 'user_order_by';
+DELETE FROM settings_options WHERE variable = 'user_order_by';
 
 ALTER TABLE user_api_key ADD COLUMN api_end_point text DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;

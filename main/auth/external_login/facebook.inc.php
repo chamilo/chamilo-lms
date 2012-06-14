@@ -11,7 +11,7 @@
  * Please edit the facebook.conf.php file to adapt it to your fb application parameter
  **/
 require_once dirname(__FILE__).'/../../inc/global.inc.php';
-require_once dirname(__FILE__).'/facebook.conf.php';
+require_once dirname(__FILE__).'/facebook.init.php';
 require_once dirname(__FILE__).'/facebook-php-sdk/src/facebook.php';
 require_once dirname(__FILE__).'/functions.inc.php';
 

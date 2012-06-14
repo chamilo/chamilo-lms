@@ -6,7 +6,7 @@
 
 //Includes the configuration file
 require_once dirname(__FILE__).'/../../inc/global.inc.php';
-require_once dirname(__FILE__).'/ldap.conf.php';
+require_once dirname(__FILE__).'../../inc/conf/auth.conf.php';
 
 /**
  * Returns a transcoded and trimmed string
@@ -15,8 +15,7 @@ require_once dirname(__FILE__).'/ldap.conf.php';
  * @return string 
  * @author ndiechburg <noel@cblue.be>
  **/
-function extldap_purify_string($string)
-{
+function extldap_purify_string($string) {
   global $extldap_config;
   if(isset($extldap_config['encoding'])) {
     return trim(api_to_system_encoding($string, $extldap_config['encoding']));
@@ -141,8 +140,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password=fa
  * configuration array declared in ldap.conf.php file
  *
  * @param array ldap user
- * @param array correspondance array (if not set use extldap_user_correspondance declared 
- * in ldap.conf.php
+ * @param array correspondance array (if not set use extldap_user_correspondance declared in auth.conf.php
  * @return array userinfo array
  * @author ndiechburg <noel@cblue.be>
  **/
@@ -186,4 +184,46 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
   }
   return $chamilo_user;
 }
-?>
+
+
+
+/**
+ * Please declare here all the function you use in extldap_user_correspondance
+ * All these functions must have an $ldap_user parameter. This parameter is the 
+ * array returned by the ldap for the user
+ **/
+/**
+ * example function for email
+ **/
+/*
+function extldap_get_email($ldap_user){
+  return $ldap_user['cn'].$ldap['sn'].'@gmail.com';
+}
+ */
+function extldap_get_status($ldap_user){
+    return STUDENT;
+}
+function extldap_get_admin($ldap_user){
+    return false;
+}
+
+
+/**
+ * return the string used to search a user in ldap
+ *
+ * @param string username
+ * @return string the serach string
+ * @author ndiechburg <noel@cblue.be>
+ **/
+function extldap_get_user_search_string($username) {
+    global $extldap_config;
+    // init
+    $filter = '('.$extldap_config['user_search'].')';
+    // replacing %username% by the actual username
+    $filter = str_replace('%username%',$username,$filter);
+    // append a global filter if needed
+    if (isset($extldap_config['filter']) && $extldap_config['filter'] != "")
+    $filter = '(&'.$filter.'('.$extldap_config['filter'].'))';
+
+    return $filter;
+}

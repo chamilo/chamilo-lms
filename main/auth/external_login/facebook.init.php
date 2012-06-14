@@ -17,19 +17,16 @@
 require_once dirname(__FILE__).'/facebook-php-sdk/src/facebook.php';
 
 global $facebook_config; 
-/** 
- * Decomment those lines and put your facebook app parameters here
- * Find them here : https://developers.facebook.com/apps/
- **/
-/*$facebook_config = array('appId'=> 'APPID',
-		'secret' => 'secret app',
-		'return_url' => api_get_path(WEB_PATH).'?action=fbconnect');
- */
 
+//Loads the portal facebook settings
+require_once dirname(__FILE__).'../../inc/conf/auth.conf.php';
+
+/** 
+ * See facebook section of the auth.conf.php file
+*/
 global $facebook;
 $facebook = new Facebook(array(
 			'appId'  => $facebook_config['appId'],
 			'secret' => $facebook_config['secret']
 			));
 require_once dirname(__FILE__).'/facebook.inc.php';
-?>

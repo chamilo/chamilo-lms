@@ -12,7 +12,8 @@
 /**
  * Initialisation
  */
-require_once 'openid.conf.php';
+require_once dirname(__FILE__).'../../inc/conf/auth.conf.php';
+
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';
 
@@ -235,21 +236,19 @@ function openid_association($op_endpoint) {
  * ?
  */
 function openid_association_request($public) {
-  require_once(api_get_path(SYS_CODE_PATH).'auth/openid/openid.conf.php');
 
-  $request = array(
-    'openid.ns' => OPENID_NS_2_0,
-    'openid.mode' => 'associate',
-    'openid.session_type' => 'DH-SHA1',
-    'openid.assoc_type' => 'HMAC-SHA1'
-  );
+    $request = array(
+        'openid.ns' => OPENID_NS_2_0,
+        'openid.mode' => 'associate',
+        'openid.session_type' => 'DH-SHA1',
+        'openid.assoc_type' => 'HMAC-SHA1'
+    );
 
-  if ($request['openid.session_type'] == 'DH-SHA1' || $request['openid.session_type'] == 'DH-SHA256') {
-    $cpub = _openid_dh_long_to_base64($public);
-    $request['openid.dh_consumer_public'] = $cpub;
-  }
-
-  return $request;
+    if ($request['openid.session_type'] == 'DH-SHA1' || $request['openid.session_type'] == 'DH-SHA256') {
+        $cpub = _openid_dh_long_to_base64($public);
+        $request['openid.dh_consumer_public'] = $cpub;
+    }
+    return $request;
 }
 
 /**

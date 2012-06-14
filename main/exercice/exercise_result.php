@@ -242,6 +242,8 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 exercise_time_control_delete($objExercise->id);
 
 if ($origin != 'learnpath') {
+    echo '<hr>';
+    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
 	Display::display_footer();
 } else {
 	$lp_mode =  $_SESSION['lp_mode'];

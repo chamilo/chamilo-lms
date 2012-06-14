@@ -955,7 +955,7 @@ class CourseRestorer
 
 				if (!empty($this->course->orig)) {
 
-					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->orig);
+					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
 					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
@@ -1045,7 +1045,7 @@ class CourseRestorer
 				//Copy announcement attachment file
 				if (!empty($this->course->orig)) {
 
-					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->orig);
+					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
 					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE c_id = '.$this->destination_course_id.' AND announcement_id = '.$id;
 					$attachment_event = Database::query($sql);

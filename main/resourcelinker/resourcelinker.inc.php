@@ -246,35 +246,37 @@ function display_addedresource_link($type, $id, $style='')
 	{
 		$styling = ' class="'.$style.'"';
 	}
+    
+    $course_id = api_get_course_int_id();
 
 	switch ($type)
 	{
 		case 'Agenda':
-			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $TABLEAGENDA WHERE id=$id");
+			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+			$result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
 			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Ad_Valvas':
-			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id");
+			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+			$result = Database::query("SELECT * FROM $tbl_announcement WHERE c_id = $course_id AND id=$id");
 			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
-		case 'Link':Database::get_course_table(TABLE_LINK,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id");
+		case 'Link':Database::get_course_table(TABLE_LINK);
+			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
 			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Exercise':
-			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
+			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND  id=$id");
 			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Forum':
-			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id");
+			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
+			$result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
 			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
@@ -301,8 +303,8 @@ function display_addedresource_link($type, $id, $style='')
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post->topic_id.'&amp;forum='.$post->forum_id.'"'.$styling.'>'.$post->post_title."</a><br />\n";
 			break;
 		case 'Document':
-			$dbTable = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
-			$result = Database::query("SELECT * FROM $dbTable WHERE id=$id");
+			$dbTable = Database::get_course_table(TABLE_DOCUMENT);
+			$result = Database::query("SELECT * FROM $dbTable WHERE c_id = $course_id AND id=$id");
 			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link

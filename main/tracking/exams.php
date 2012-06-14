@@ -55,8 +55,9 @@ if ($global) {
 	$form->addElement('hidden','view','admin');
 } else {
 	//Get exam lists
-	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$_course['db_name']);	
-	$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' ORDER BY quiz.title ASC";
+	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    $course_id = api_get_course_int_id();
+	$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id AND active='1' ORDER BY quiz.title ASC";
 	$resultExercices = Database::query($sqlExercices);	
 	$exercise_list[0] = get_lang('All');
 	while($a_exercices = Database::fetch_array($resultExercices)) {

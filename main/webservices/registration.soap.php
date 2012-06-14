@@ -2649,10 +2649,8 @@ function WSCourseDescription($params) {
     }
 
     $course_ifo = api_get_course_info($course_code);
-
-    $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_ifo['dbName']);
-
-    $sql = "SELECT * FROM $t_course_desc";
+    $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+    $sql = "SELECT * FROM $t_course_desc WHERE c_id = {$course_ifo['real_id']} ";
     $result = Database::query($sql);
 
     $default_titles = array(
@@ -2820,9 +2818,8 @@ function WSEditCourseDescription($params) {
             }
         }
 
-        $course_ifo = api_get_course_info($course_code);
-
-        $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
+        $course_info = api_get_course_info($course_code);
+        $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 
         $course_desc_id = Database::escape_string($course_desc_id);
         $course_desc_title = Database::escape_string($course_desc_title);
@@ -2835,14 +2832,15 @@ function WSEditCourseDescription($params) {
         }
 
         // Check whether data already exits into course_description table.
-        $sql_check_id = "SELECT * FROM $t_course_desc WHERE id ='$course_desc_id'";
+        $sql_check_id = "SELECT * FROM $t_course_desc WHERE c_id = {$course_info['real_id']} AND id ='$course_desc_id'";
         $res_check_id = Database::query($sql_check_id);
 
         if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' WHERE id = '".$course_desc_id."'";
+            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' 
+                    WHERE c_id = {$course_info['real_id']} AND id = '".$course_desc_id."'";
             Database::query($sql);
         } else {
-            $sql = "INSERT IGNORE INTO $t_course_desc SET id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";
+            $sql = "INSERT IGNORE INTO $t_course_desc SET c_id = {$course_info['real_id']} , id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";
             Database::query($sql);
         }
 

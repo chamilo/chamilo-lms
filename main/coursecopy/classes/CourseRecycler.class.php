@@ -432,8 +432,8 @@ class CourseRecycler
     */
     function recycle_attendance($session_id = 0) {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
-            $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE, $this->course->destination_db);
-            $table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR, $this->course->destination_db);
+            $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE);            
+            $table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
            
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {

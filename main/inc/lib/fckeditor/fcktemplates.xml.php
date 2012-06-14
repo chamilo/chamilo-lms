@@ -217,14 +217,18 @@ function load_personal_templates($user_id = 0) {
     }
 
     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+    $table_document = Database::get_course_table(TABLE_DOCUMENT);
+    
+    $course_id = api_get_course_int_id();
 
     // The sql statement for getting all the user defined templates
     $sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
             FROM ".$table_template." template, ".$table_document." document
-            WHERE user_id='".Database::escape_string($user_id)."'
-            AND course_code='".Database::escape_string(api_get_course_id())."'
-            AND document.id = template.ref_doc";
+            WHERE 
+                user_id='".Database::escape_string($user_id)."' AND 
+                course_code='".Database::escape_string(api_get_course_id())."' AND
+                document.c_id = $course_id AND 
+                document.id = template.ref_doc";
 
     $result_template = Database::query($sql);
 

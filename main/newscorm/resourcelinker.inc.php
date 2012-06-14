@@ -1103,8 +1103,8 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             break;
 
         case 'Exercise':
-            $TBL_EXERCICES  = Database::get_course_table(TABLE_QUIZ_TEST,$_course['dbName']);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id");
+            $TBL_EXERCICES  = Database::get_course_table(TABLE_QUIZ_TEST);
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
 
             if ($builder == 'builder') { $origin = 'builder'; }
@@ -1122,9 +1122,9 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             break;
 
         case 'HotPotatoes':
-              $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
+              $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
             $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id");
+            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
               $name = GetQuizName($path, $documentPath);

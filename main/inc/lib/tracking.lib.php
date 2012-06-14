@@ -509,16 +509,19 @@ class Tracking {
 
     function get_exercise_student_average_best_attempt($exercise_list, $user_id, $course_code, $session_id) {
         $result = 0;
-        foreach($exercise_list as $exercise_data) {
-            $exercise_id = $exercise_data['id'];            
-            $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id , $course_code, $session_id);
-                      
-            if (!empty($best_attempt)) {                
-                $result += $best_attempt['exe_result']/$best_attempt['exe_weighting'];                
+        if (!empty($exercise_list)) {
+            foreach ($exercise_list as $exercise_data) {
+                $exercise_id = $exercise_data['id'];            
+                $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id , $course_code, $session_id);
+
+                if (!empty($best_attempt)) {                
+                    $result += $best_attempt['exe_result']/$best_attempt['exe_weighting'];                
+                }
             }
+            $result = $result/ count($exercise_list);
+            $result = round($result, 2)*100;
         }
-        $result = $result/ count($exercise_list);
-        $result = round($result, 2)*100;
+        
         return $result.'%';        
         
     }

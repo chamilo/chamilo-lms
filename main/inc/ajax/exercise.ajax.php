@@ -24,12 +24,13 @@ switch ($action) {
         }    
         
         // 1. Setting variables needed by jqgrid 
-        $action = $_GET['a'];
-        $exercise_id = intval($_GET['exercise_id']);
-        $page  = intval($_REQUEST['page']); //page
-        $limit = intval($_REQUEST['rows']); //quantity of rows
-        $sidx  = $_REQUEST['sidx'];         //index to filter         
-        $sord  = $_REQUEST['sord'];         //asc or desc
+        $action         = $_GET['a'];
+        $exercise_id    = intval($_GET['exercise_id']);
+        $page           = intval($_REQUEST['page']); //page
+        $limit          = intval($_REQUEST['rows']); //quantity of rows
+        $sidx           = $_REQUEST['sidx'];         //index to filter         
+        $sord           = $_REQUEST['sord'];         //asc or desc
+        
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc'; 
         }
@@ -41,9 +42,9 @@ switch ($action) {
         $user_table            = Database::get_main_table(TABLE_MAIN_USER);
         $track_attempt         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         
-        $minutes = intval($_REQUEST['minutes']);        
-        $now    = time() - 60*$minutes; //1 hour
-        $now    = api_get_utc_datetime($now);
+        $minutes        = intval($_REQUEST['minutes']);        
+        $now            = time() - 60*$minutes; //1 hour
+        $now            = api_get_utc_datetime($now);
         
         $where_condition = " orig_lp_id = 0 AND exe_exo_id = $exercise_id AND start_date > '$now' ";
         $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise WHERE $where_condition ";
@@ -69,21 +70,21 @@ switch ($action) {
             $start = 0;
         }        
         
-        $sql = "SELECT count_questions, exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
-                FROM $user_table u INNER JOIN (
-                    SELECT  t.exe_user_id, count(question_id) as count_questions, status,
+        $sql = "SELECT exe_id,  exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+                FROM $user_table u 
+                INNER JOIN (
+                    SELECT  t.exe_id, t.exe_user_id, status,
                     start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
                     FROM  $track_exercise  t LEFT JOIN $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
                     WHERE t.status = 'incomplete' AND
                           $where_condition  
-                GROUP BY exe_user_id                    
+                    GROUP BY exe_user_id
                 ) as aa
-                ON aa.exe_user_id = user_id                    
-                ORDER BY $sidx $sord LIMIT $start, $limit";
-        //echo $sql;
-        $result = Database::query($sql);
-        $results = array();
+                ON aa.exe_user_id = user_id              
+                ORDER BY $sidx $sord LIMIT $start, $limit";          
         
+        $result = Database::query($sql);
+        $results = array();        
         while ($row = Database::fetch_array($result,'ASSOC')){
             $results[] = $row;
         }        
@@ -98,6 +99,17 @@ switch ($action) {
             foreach($results as $row) {
                 //$user_info = api_get_user_info($row['exe_user_id']);
                 //print_r($row);
+                $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
+                            SELECT 1 as count_question_id FROM  $track_attempt a 
+                            WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
+                            GROUP by question_id
+                        ) as count_table";                            
+                $result_count = Database::query($sql);
+                $count_questions = Database::fetch_array($result_count,'ASSOC');                
+                $count_questions = $count_questions['count_question_id'];
+                
+                $row['count_questions'] = $count_questions;
+                
                 $response->rows[$i]['id'] = $row['exe_id'];                 
                 $array = array( $row['firstname'], 
                                 $row['lastname'], 
@@ -137,7 +149,7 @@ switch ($action) {
         if (api_is_allowed_to_session_edit()) {
         	            
             //"all" or "simple" strings means that there's one or all questions           
-            $type                   = $_REQUEST['type'];            
+            $type                   = $_REQUEST['type'];         
             
             //Normal questions choices
             $choice                 = $_REQUEST['choice'];
@@ -147,7 +159,8 @@ switch ($action) {
             
             //There is a reminder?
             $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
-               
+            
+            //Attempt id
             $exe_id                 = $_REQUEST['exe_id'];
             
             if ($debug) error_log("exe_id = $exe_id ");
@@ -170,7 +183,7 @@ switch ($action) {
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);           
             
             $attempt_list = array();
-              
+            
             //First time here we create an attempt (getting the exe_id)
             if (empty($exercise_stat_info)) {           
             	/* 
@@ -229,14 +242,15 @@ switch ($action) {
             
             // Getting the total weight if the request is simple
             $total_weight = 0;
-            if ($type == 'simple') {                
-                foreach($question_list as $my_question_id) {
+            
+            if ($type == 'simple') {           
+                foreach ($question_list as $my_question_id) {
                     $objQuestionTmp  = Question :: read($my_question_id);
                     $total_weight   += $objQuestionTmp->selectWeighting();
                 }
-            }
-            
-           unset($objQuestionTmp);
+            }          
+                        
+            unset($objQuestionTmp);
             
             //Looping the question list
             
@@ -259,14 +273,23 @@ switch ($action) {
             	    $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])? $_REQUEST['free_choice'][$my_question_id]: null;            	                	    
             	}  
             	
-                if ($type == 'all') {  
+                if ($type == 'all') {
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }      
             	
             	//this variable commes from exercise_submit_modal.php
-            	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
-            	
-            	// Deleting old attempt
+            	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];                
+                
+                if ($type == 'simple') {
+                    //Getting old attempt in order to decress the total score 
+                    $old_result = $objExercise->manage_answer($exe_id, $my_question_id, null, 'exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());                                                     	
+                    
+                    //Removing old score
+                    $total_score = $total_score - $old_result['score'];                                        
+                } else {                    
+                }
+                
+                // Deleting old attempt
                 if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {          
                     if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
                     delete_attempt($exe_id, api_get_user_id() , api_get_course_id(), api_get_session_id(), $my_question_id);
@@ -275,15 +298,17 @@ switch ($action) {
                     }
             	    $total_score  -= $attempt_list[$my_question_id]['marks'];            	    
             	}
+                
             	
             	// We're inside *one* question. Go through each possible answer for this question
             	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice,'exercise_result', $hot_spot_coordinates, true, false, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
-            	  	
-                $total_score     += $result['score'];
                 
+                //Adding the new score 
+                $total_score += $result['score'];              
+                                
                 if ($debug) error_log("total_score: $total_score ");
                 if ($debug) error_log("total_weight: $total_weight ");
-                                
+                
                 update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $exercise_stat_info['exe_duration'], $question_list, 'incomplete', $remind_list);
                 
                  // Destruction of the Question object

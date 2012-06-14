@@ -4159,14 +4159,16 @@ function get_name_thread_by_id($thread_id) {
  * @param string db course name
  * @return string
  */
-
 function get_all_post_from_user($user_id, $course_code) {
     $j = 0;
     $forums = get_forums('', $course_code);
     krsort($forums);
     $forum_results = '';
 
-     foreach ($forums as $forum) {
+    foreach ($forums as $forum) {         
+        if ($forum['visibility'] == 0) {
+            continue;
+        }
         if ($j <= 4) {
              $threads = get_threads($forum['forum_id'], $course_code);
 
@@ -4175,7 +4177,11 @@ function get_all_post_from_user($user_id, $course_code) {
                  $i = 0;
                  $hand_forums = '';
                  $post_counter = 0;
-                 foreach($threads as $thread) {
+                 
+                 foreach ($threads as $thread) {
+                     if ($thread['visibility'] ==0 ) {
+                         continue;
+                     }
                      if ($i <= 4) {
                          $post_list = get_thread_user_post_limit($course_code, $thread['thread_id'], $user_id, 1);
                          $post_counter = count($post_list);

@@ -568,14 +568,16 @@ if (defined('SYSTEM_INSTALLATION')) {
                     foreach ($table_list as $table) {
                         $just_table_name = $table;
                     	$old_table = $row_course['db_name'].".".$table;
+                        
                     	if ($singleDbForm) {
                     		$old_table = "$prefix{$row_course['db_name']}_".$table;
                             $just_table_name = "$prefix{$row_course['db_name']}_".$table;
                     	}
                         
-                    	$course_id = $row_course['id'];
-                        
+                    	$course_id = $row_course['id'];                        
                     	$new_table = DB_COURSE_PREFIX.$table;
+                        
+                        //Use the old database (if this is the case)
                         
                         if (!$singleDbForm) {
                     		// otherwise just use the main one
@@ -588,7 +590,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                         $sql 	= "SHOW TABLES LIKE '$just_table_name'";
                         $result = iDatabase::query($sql);
                         
-                        if (Database::num_rows($result)) {        
+                        if (Database::num_rows($result)) {
                         
                             $sql 	= "SELECT count(*) FROM $old_table";
                             $result = iDatabase::query($sql);
@@ -606,10 +608,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $sql = "SELECT * FROM $old_table";
                             $result = iDatabase::query($sql);
 
-                            $count = 0;                    	
+                            $count = 0;
+                            
+                            /* Loads the main database */
+                            iDatabase::select_db($dbNameForm);
+                            
                             while($row = iDatabase::fetch_array($result, 'ASSOC')) {
-                                $row['c_id'] = $course_id;
-                                iDatabase::select_db($dbNameForm);
+                                $row['c_id'] = $course_id;                                
                                 $id = iDatabase::insert($new_table, $row);
                                 if (is_numeric($id)) {
                                     $count++;

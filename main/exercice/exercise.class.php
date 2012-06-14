@@ -1916,7 +1916,7 @@ class Exercise {
 		if ($debug) error_log('Start answer loop ');
 
         $answer_correct_array = array();
-
+        
 		for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 			$answer             = $objAnswerTmp->selectAnswer($answerId);
 			$answerComment      = $objAnswerTmp->selectComment($answerId);
@@ -1939,7 +1939,7 @@ class Exercise {
 				case UNIQUE_ANSWER :
 				case UNIQUE_ANSWER_NO_OPTION :
 					if ($from_database) {
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
+						 $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
 						$resultans = Database::query($queryans);
 						$choice = Database::result($resultans,0,"answer");
 
@@ -1994,27 +1994,25 @@ class Exercise {
 				case MULTIPLE_ANSWER : //2
 					if ($from_database) {
 						$choice = array();
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
 						$resultans = Database::query($queryans);
 						while ($row = Database::fetch_array($resultans)) {
 							$ind = $row['answer'];
 							$choice[$ind] = 1;
-						}
-						$studentChoice = $choice[$numAnswer];
+						}               
+                       
+						$studentChoice = $choice[$numAnswer];                                                
                         $real_answers[$answerId] = (bool)$studentChoice;
+                        
 						if ($studentChoice) {
 							$questionScore  +=$answerWeighting;
-						}
-					} else {
-                        //echo '+---';
-                        //var_dump($numAnswer);
-                        //var_dump($choice);
+                        }
+					} else {                        
 						$studentChoice = $choice[$numAnswer];
                         $real_answers[$answerId] = (bool)$studentChoice;
-                        //var_dump($studentChoice .' - '.$answerCorrect);
+                        
 						if (isset($studentChoice)) {
-							$questionScore  += $answerWeighting;
-                            //var_dump($questionScore.' '.$answerWeighting);
+							$questionScore  += $answerWeighting;                            
 						}
 					}
                     $totalScore     += $answerWeighting;

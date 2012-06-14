@@ -1,1 +1,1 @@
-for more information open documentation/index.html in your favorite browser or less favorite browser.
+For more information on Chamilo, open documentation/index.html in this directory with a web browser.

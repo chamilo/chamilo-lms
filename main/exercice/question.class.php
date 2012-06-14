@@ -861,8 +861,8 @@ abstract class Question
      * @param - integer $exerciseId - exercise ID
      * @param - boolean $fromSave - comming from $this->save() or not
 	 */
-	function addToList($exerciseId, $fromSave = FALSE) {
-		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course['db_name']);
+	function addToList($exerciseId, $fromSave = false) {
+		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$id = $this->id;
 		// checks if the exercise ID is not in the list
 		if (!in_array($exerciseId,$this->exerciseList)) {

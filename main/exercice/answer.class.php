@@ -454,8 +454,7 @@ class Answer {
 				"position = '".Database::escape_string($position)."', " .
 				"destination = '".Database::escape_string($destination)."' " .
 				"WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."' " .
-				"AND question_i = '".Database::escape_string($questionId)."'";
-
+				"AND question_id = '".Database::escape_string($questionId)."'";
 		Database::query($sql);
 	}
 

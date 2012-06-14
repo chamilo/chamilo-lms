@@ -85,7 +85,7 @@ abstract class Question
 		$this->picture='';
 		$this->level = 1;
 		$this->category=0;
-        $this->extra='';
+        $this->extra=''; // This variable is used when loading an exercise like an scenario with an special hotspot: final_overlap, final_missing, final_excess
 		$this->exerciseList=array();
 		$this->course = api_get_course_info();
 	}

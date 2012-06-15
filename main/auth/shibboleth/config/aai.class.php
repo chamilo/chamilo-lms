@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Shibboleth configuration for the AAI federation.
  *
@@ -39,8 +41,8 @@ class aai
         );
 
         $result->update_fields = array(
-            'firstname'     => false,
-            'lastname'      => false,
+            'firstname'     => true,
+            'lastname'      => true,
             'email'         => true,
             'status'        => false,
             'persistent_id' => true,

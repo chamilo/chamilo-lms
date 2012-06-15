@@ -8,4 +8,3 @@ with a web server security directive.
 
 Modify configuration to your federation's needs.
 
-Add a login url/redirection to chamilo/main/auth/login.php.

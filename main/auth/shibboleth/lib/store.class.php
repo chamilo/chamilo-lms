@@ -1,5 +1,9 @@
 <?php
 
+namespace Shibboleth;
+
+use \Database;
+
 /**
  * A database store. Used interact with the database - save objects, run queries.
  * 

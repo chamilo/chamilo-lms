@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Display the Request another status/additional rights. The request is emailed
  * to the shibboleth and platform administrators for processing.

@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Scaffold script. Generates the required database models for the Shibboleth
  * plugin. 

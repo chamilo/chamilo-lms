@@ -1,6 +1,11 @@
 <?php
 
+namespace Shibboleth;
+
 use \ChamiloSession as Session;
+use \Chamilo;
+use \Database;
+use \Redirect;
 
 
 /**

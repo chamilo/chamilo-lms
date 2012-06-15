@@ -9,6 +9,8 @@
 echo '<?php';
 ?>
 
+namespace Shibboleth;
+
 /**
  *
  * Model for table <?php echo $table_name ?> 

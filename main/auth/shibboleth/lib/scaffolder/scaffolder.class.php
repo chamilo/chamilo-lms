@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Scaffolder. Genereate code templates from the database layout.
  * See /template/ for the code being generated

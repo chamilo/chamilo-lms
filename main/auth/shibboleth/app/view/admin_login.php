@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Administratrive login. Useful when the standard login is not available anymore
  * which is usually the case. 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Shibboleth configuration. All configuration for the Shibboleth authentication
  * plugin: field names mapping, etc.

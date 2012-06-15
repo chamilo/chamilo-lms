@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Returns Shibboleth user's values based on Shibboleth's configuration.
  * Shibboleth returns not only whether a user is authenticated but returns as

@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Represent a Shibboleth user. Not to be missunderstand with a Chamilo user
  * since they don't have the same attributes.

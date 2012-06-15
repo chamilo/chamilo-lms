@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Various Unit Tests. Note that those tests create users in the database but
  * don't delete them.
@@ -122,8 +124,8 @@ class ShibbolethTest
         $fields = Shibboleth::config()->update_fields;
         self::assert($fields['email']);
         self::assert($fields['persistent_id']);
-        self::assert(!$fields['firstname']);
-        self::assert(!$fields['lastname']);
+        self::assert($fields['firstname']);
+        self::assert($fields['lastname']);
         self::assert(!$fields['status']);
 
         self::helper()->setup_teacher();
@@ -142,10 +144,10 @@ class ShibbolethTest
         $user = User::store()->get_by_shibboleth_id($shib_user->unique_id);
 
         self::assert($user->email == $new_shib_user->email);
-        self::assert($user->shibb_persistent_id == $new_shib_user->persistent_id);
+        self::assert($value = ($user->shibb_persistent_id == $new_shib_user->persistent_id));
 
-        self::assert($user->firstname == $shib_user->firstname);
-        self::assert($user->lastname == $shib_user->lastname);
+        self::assert($user->firstname == $new_shib_user->firstname);
+        self::assert($user->lastname == $new_shib_user->lastname);
         self::assert($user->status == $shib_user->status);
         self::assert(!empty($user->password));
         self::assert(!empty($user->username));

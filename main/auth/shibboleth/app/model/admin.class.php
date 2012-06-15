@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 require_once dirname(__FILE__) . '/scaffold/admin.class.php';
 
 /**

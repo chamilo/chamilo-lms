@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Run unit tests. Server needs to be a test server to run those.
  * 

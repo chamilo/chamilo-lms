@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva

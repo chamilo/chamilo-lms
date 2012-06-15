@@ -1,5 +1,9 @@
 <?php
 
+namespace Shibboleth;
+
+use \Display;
+
 /**
  * Utility display functions tailored for the Shibboleth pluging.
  * 

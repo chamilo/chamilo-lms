@@ -1,5 +1,10 @@
 <?php
 
+namespace Shibboleth;
+
+use \Redirect;
+use \Display;
+
 /**
  * Controller for the Shibboleth authentication system. 
  *
@@ -64,7 +69,7 @@ class ShibbolethController
 
         if ($is_new_user && $user->status_request)
         {
-            Shibboleth::redirect('main/auth/shibboleth/app/view/request.php');
+            Shibboleth::redirect('/main/auth/shibboleth/app/view/request.php');
         }
         else
         {

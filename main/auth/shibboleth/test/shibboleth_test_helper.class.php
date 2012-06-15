@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Helper functions for the tests. Set up various dummy user types: teacher, student, etc.
  *

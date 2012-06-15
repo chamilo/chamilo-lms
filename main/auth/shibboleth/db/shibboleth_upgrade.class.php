@@ -1,5 +1,9 @@
 <?php
 
+namespace Shibboleth;
+
+use \Database;
+
 /**
  * Migrate the datatabase. Adds needed fields by Shibboleth to the User table.
  * Upgrade is checked at each user login so there is no need to manually run

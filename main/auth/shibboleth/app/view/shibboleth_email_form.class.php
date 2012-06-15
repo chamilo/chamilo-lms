@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Enter email form. When the email is mandatory and the Shibboleth email user field
  * is empty the system display this form and ask the user to provide an email.

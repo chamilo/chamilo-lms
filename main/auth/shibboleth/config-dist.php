@@ -1,5 +1,7 @@
 <?php
 
+namespace Shibboleth;
+
 /**
  * Example of a config.php file. Not used. Configuration must appear in 
  * config.php.

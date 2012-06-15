@@ -1,5 +1,9 @@
 <?php
 
+namespace Shibboleth;
+
+use \Redirect;
+
 /**
  * Shibboleth main class. Provides access to various Shibboleth sub components and
  * provides the high level functionalities.
@@ -19,20 +23,13 @@ class Shibboleth
 
     public static function format_status($status)
     {
-        if ($status == Shibboleth::TEACHER_STATUS)
-        {
+        if ($status == Shibboleth::TEACHER_STATUS) {
             return 'Teacher';
-        }
-        else if ($status == Shibboleth::STUDENT_STATUS)
-        {
+        } else if ($status == Shibboleth::STUDENT_STATUS) {
             return 'Student';
-        }
-        else if ($status == Shibboleth::UNKNOWN_STATUS)
-        {
+        } else if ($status == Shibboleth::UNKNOWN_STATUS) {
             return 'Unknown';
-        }
-        else
-        {
+        } else {
             return '???';
         }
     }
@@ -94,8 +91,7 @@ class Shibboleth
 
     public static function redirect($url = '')
     {
-        if (empty($url))
-        {
+        if (empty($url)) {
             $url = isset($_SESSION['shibb_direct_url']) ? $_SESSION['shibb_direct_url'] : '';
             unset($_SESSION['shibb_direct_url']);
 
@@ -111,25 +107,23 @@ class Shibboleth
              *       If any interest or question, please contact Nicolas.Rod_at_adm.unige.ch
              *
              */
-            if ($url)
-            {
-                //needed to log the user in his courses. Normally it is done by visiting /chamilo/index.php    
-                $include_path = api_get_path(INCLUDE_PATH);
-                require("$include_path/local.inc.php");
-
-                if (strpos($url, '?') === false)
-                {
-                    $url = "$url?";
-                }
-
-                $rootWeb = api_get_path('WEB_PATH');
-                $first_slash_pos = strpos($rootWeb, '/', 8);
-                $rootWeb_wo_uri = substr($rootWeb, 0, $first_slash_pos);
-                $url = $rootWeb_wo_uri . $course_url . '_stop';
-                Redirect::go($url);
-            }
         }
-        Redirect::go();
+        if ($url) {
+            //needed to log the user in his courses. Normally it is done by visiting /chamilo/index.php    
+//            $include_path = api_get_path(INCLUDE_PATH);
+//            require("$include_path/local.inc.php");
+//
+//            if (strpos($url, '?') === false) {
+//                $url = "$url?";
+//            }
+//
+//            $rootWeb = api_get_path('WEB_PATH');
+//            $first_slash_pos = strpos($rootWeb, '/', 8);
+//            $rootWeb_wo_uri = substr($rootWeb, 0, $first_slash_pos);
+//            $url = $rootWeb_wo_uri . $course_url . '_stop';
+            Redirect::go($url);
+        }
+        Redirect::home();
     }
 
     /**
@@ -144,22 +138,21 @@ class Shibboleth
         $shibb_user->shibb_persistent_id = $shibb_user->persistent_id;
 
         $user = User::store()->get_by_shibboleth_id($shibb_user->unique_id);
-        if (empty($user))
-        {
+        if (empty($user)) {
             $shibb_user->auth_source == self::NAME;
             return User::create($shibb_user)->save();
         }
 
         $shibb_user->status_request = false;
         $fields = self::config()->update_fields;
-        foreach ($fields as $key => $updatable)
-        {
-            if ($updatable)
-            {
+        foreach ($fields as $key => $updatable) {
+            if ($updatable) {
                 $user->{$key} = $shibb_user->{$key};
             }
             $user->auth_source == self::NAME;
         }
+        $user->shibb_unique_id = $user->unique_id;
+        $user->shibb_persistent_id = $user->persistent_id;
         $user->save();
         return $result;
     }
@@ -178,11 +171,9 @@ class Shibboleth
         $map = self::config()->affiliation_status;
 
         $rights = array();
-        foreach ($affiliations as $affiliation)
-        {
+        foreach ($affiliations as $affiliation) {
             $affiliation = strtolower($affiliation);
-            if (isset($map[$affiliation]))
-            {
+            if (isset($map[$affiliation])) {
                 $right = $map[$affiliation];
                 $rights[$right] = $right;
             }
@@ -192,13 +183,11 @@ class Shibboleth
         $student_status = isset($rights[self::STUDENT_STATUS]);
 
         //if the user has got teacher rights, we doesn't check anything else
-        if ($teacher_status)
-        {
+        if ($teacher_status) {
             return self::TEACHER_STATUS;
         }
 
-        if ($student_status)
-        {
+        if ($student_status) {
             return self::STUDENT_STATUS;
         }
 
@@ -217,23 +206,19 @@ class Shibboleth
      */
     public static function infer_status_request($user)
     {
-        if ($user->status == self::TEACHER_STATUS)
-        {
+        if ($user->status == self::TEACHER_STATUS) {
             return false;
         }
-        if ($user->status == self::UNKNOWN_STATUS)
-        {
+        if ($user->status == self::UNKNOWN_STATUS) {
             return true;
         }
 
         $config = Shibboleth::config();
         $affiliations = $user->affiliation;
         $affiliations = is_array($affiliations) ? $affiliations : array($affiliations);
-        foreach ($affiliations as $affiliation)
-        {
+        foreach ($affiliations as $affiliation) {
             $result = isset($config->affiliation_status_request[$affiliation]) ? $config->affiliation_status_request[$affiliation] : false;
-            if ($result)
-            {
+            if ($result) {
                 return true;
             }
         }
@@ -268,8 +253,7 @@ EOT;
         $header = "From: $email \n";
 
         $shibb_admin_email = Shibboleth::config()->admnistrator_email;
-        if ($shibb_admin_email)
-        {
+        if ($shibb_admin_email) {
             $header .= "Cc: $shibb_admin_email";
         }
 

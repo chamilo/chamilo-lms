@@ -128,7 +128,6 @@ if (isset($document_data['parents'])) {
     }
 }
 
-///////////////////////////////////////////////////////////
 //make some vars
 $webcamuserid=api_get_user_id();
 
@@ -136,8 +135,6 @@ Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-
-$webcamname = date('YmdHis') . '.jpg';
 ?>
 
 <div align="center">	
@@ -146,12 +143,14 @@ $webcamname = date('YmdHis') . '.jpg';
 </div>
 <div align="center" style="padding-left:50px;">
 <table><tr><td valign=top>
+<h3><?php echo get_lang('LocalInputImage'); ?></h3>
 <!-- First, include the JPEGCam JavaScript Library -->
 	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/webcam.js"></script>
 	
 	<!-- Configure a few settings -->
 	<script language="JavaScript">
 		var clip_filename='video_clip.jpg';
+		//var clip_filename='<?php //echo date('YmdHis') . '.jpg'; ?>';
 		webcam.set_swf_url ( '<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam//webcam.swf?blackboard.png' );
 		webcam.set_shutter_sound( true,'<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/shutter.mp3' ); // true play shutter click sound
 		webcam.set_quality( 90 ); // JPEG quality (1 - 100)
@@ -165,29 +164,27 @@ $webcamname = date('YmdHis') . '.jpg';
 	</script>
 	
 	<!-- Some buttons for controlling things -->
-	<br/><form>
+	<br/>
+    <form>
     <br/>
-   
-       <?php echo get_lang('TakingOnePhoto'); ?>
-		<input type=button value="<?php echo get_lang('Shutter'); ?>" onClick="webcam.freeze()">
-		<input type=button value="<?php echo get_lang('Reset'); ?>" onClick="webcam.reset()">
-        <input type=button value="<?php echo get_lang('UploadClip'); ?>" onClick="do_upload()">
+		<input type=button value="<?php echo get_lang('Snapshot'); ?>" onClick="webcam.freeze()">
+		<input type=button value="<?php echo get_lang('Clean'); ?>" onClick="webcam.reset()">
+        <input type=button value="<?php echo get_lang('Send'); ?>" onClick="do_upload()">
+        &nbsp;&nbsp;||&nbsp;&nbsp;
+        <input type=button value="<?php echo get_lang('Auto'); ?>" onClick="start_video()">
+		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()"> 
         <br/>
-         <?php echo get_lang('BurstMode'); ?>
-		<input type=button value="<?php echo get_lang('Record'); ?>" onClick="start_video()">
-		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()">
-        &nbsp;&nbsp;<?php echo get_lang('Configure'); ?>&nbsp;&nbsp;
-        <input type=button value="<?php echo get_lang('Flash'); ?>" onClick="webcam.configure()">
+        <input type=button value="<?php echo get_lang('Configure'); ?>" onClick="webcam.configure()">
+		 
 	</form>
-
-
+    
 	<!-- Code to handle the server response (see webcam_receiver.php) -->
 	<script language="JavaScript">
 		webcam.set_hook( 'onComplete', 'my_completion_handler' );
 		
 		function do_upload() {
 			// upload to server
-			//document.getElementById('upload_results').innerHTML = '<h1>Uploading...</h1>';
+			document.getElementById('upload_results').innerHTML = '<h3><?php echo get_lang('Uploading'); ?>...</h3>';
 			webcam.upload();
 		}
 		
@@ -202,12 +199,9 @@ $webcamname = date('YmdHis') . '.jpg';
 				// show JPEG image in page
 				document.getElementById('upload_results').innerHTML = 
 				'<div style="width: 320px;">' +
-					//'<h1>Upload Successful!</h1>' + 
-					//'<h3>JPEG URL: ' + image_url + '</h3>' + 
-					//'<h3>Clip sent</h3>' + 
+					'<h3><?php echo get_lang('ClipSent'); ?></h3>' + 
 					'<img src="' + image_url + '">' +
 					'</div>';
-				
 				// reset camera for another shot
 				webcam.reset();
 			}
@@ -217,24 +211,36 @@ $webcamname = date('YmdHis') . '.jpg';
 	
      <script language=javascript>
 	   var internaval=null;
-	   
+	   var timeout=null;
+	   var counter=0;
+	   var fps=1000;//one frame per second
+	   var maxclip=25;//maximum number of clips
+	   var maxtime=60000;//stop after one minute
+	
 	   function stop_video() {
 			interval=window.clearInterval(interval);
 	   }
-	   
+
 	   function start_video() {
 		   	webcam.set_stealth( true ); // do not freeze image upon capture
-		 	interval=window.setInterval("clip_send_video()",1000);// each second
+		 	interval=window.setInterval("clip_send_video()",fps);
 	   }
 	   
 	   function clip_send_video() {
-		   webcam.snap();// clip and upload
+		   counter++
+		   timeout=setTimeout('stop_video()',maxtime);
+		   if(maxclip>=counter){
+		       webcam.snap();// clip and upload
+		   }
+		   else {
+			   interval=window.clearInterval(interval);
+		   }
 	   }
  </script>
     
     
 	</td><td width=50>&nbsp;</td><td valign=top>
-		<div id="upload_results" style="background-color:#eee;"></div>
+		<div id="upload_results" style="background-color:#ffffff;"></div>
 	</td></tr></table>
 </div>
 

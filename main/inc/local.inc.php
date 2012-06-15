@@ -665,8 +665,8 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 	Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
 } else { // continue with the previous values
     $_user                    = $_SESSION['_user'];
-    $is_platformAdmin         = $_SESSION['is_platformAdmin'];
-    $is_allowedCreateCourse   = $_SESSION['is_allowedCreateCourse'];
+    $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
+    $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
 /*  COURSE INIT */
@@ -1060,11 +1060,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 		$_courseUser       = $_SESSION ['_courseUser'];
 	}
 
-    $is_courseAdmin       = $_SESSION ['is_courseAdmin'];
-    $is_courseTutor       = $_SESSION ['is_courseTutor'];
-    $is_courseCoach       = $_SESSION ['is_courseCoach'];
-	$is_courseMember      = $_SESSION ['is_courseMember'];
-	$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
+    $is_courseAdmin       = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
+    $is_courseTutor       = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;
+    $is_courseCoach       = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
+	$is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
+	$is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
 }
 
 /*  GROUP INIT */

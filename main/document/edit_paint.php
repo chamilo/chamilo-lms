@@ -6,7 +6,7 @@
  *	@package chamilo.document
  *  @todo used the document_id instead of the curdirpath
  *
- * @author Juan Carlos Ra�a Trabado
+ * @author Juan Carlos Raña Trabado
  * @since 30/january/2011
 */
 /**
@@ -151,7 +151,24 @@ $target=$target_path;
 
 $locktarget="true";
 $locktitle="false";
-$credentials="true";
+
+if ($_SERVER['HTTP_HOST']=="localhost") {
+	$path_and_file= api_get_path(SYS_SERVER_ROOT_PATH).'/crossdomain.xml';
+	if (!file_exists($path_and_file)) {
+		$crossdomain='<?xml version="1.0"?>
+			<!DOCTYPE cross-domain-policy SYSTEM "http://www.adobe.com/xml/dtds/cross-domain-policy.dtd">
+			<cross-domain-policy>
+				<allow-access-from domain="cdn.pixlr.com" />
+				<site-control permitted-cross-domain-policies="master-only"/>
+				<allow-http-request-headers-from domain="cnd.pixlr.com" headers="*" secure="true"/>
+			</cross-domain-policy>';//more open domain="*"
+		@file_put_contents($path_and_file, $crossdomain);
+	}
+	$credentials="true";
+}
+else {
+	$credentials="false";
+}
 
 //make temp images
 $temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/images';

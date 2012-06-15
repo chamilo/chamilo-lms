@@ -115,6 +115,7 @@ searchdb/*
 main/inc/cache/*
 test_laurent.php
 *.orig
+main/auth/shibboleth/config.php
 syntax: regexp
 ^main/upload/users$
 

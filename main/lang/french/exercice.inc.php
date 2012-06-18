@@ -495,4 +495,6 @@ $CongratulationsYouPassedTheTest = "Félicitations vous avez réussi le test!";
 $YouDidNotReachTheMinimumScore = "Vous avez déjà atteint le score minimum";
 $EndTest = "Fin du test";
 $PassPercentage = "Moyenne (%)";
+$NoCategorySelected = "Aucune catégorie n'est sélectionnée";
+$ExerciseAverage = "Moyenne de l'exercice";
 ?>

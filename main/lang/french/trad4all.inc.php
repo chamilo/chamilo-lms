@@ -39,7 +39,7 @@ $Up = "monter";
 $Theme = "Thème graphique";
 $TheListIsEmpty = "La liste est vide.";
 $langUniqueSelect = "Choix multiple";
-$CreateCategory = "Créer dossier";
+$CreateCategory = "Créer une catégorie";
 $SendFile = "Importer le document";
 $SaveChanges = "Enregistrer les modifications";
 $SearchTerm = "Rechercher terme";
@@ -1233,4 +1233,5 @@ $ResourceLockedByGradebook = "Cette option n'est pas disponible parceque cette a
 $ConfirmToLockElement = "Etes-vous sur de vouloir fermer cet élément? Une foix cet élément fermé vous ne pourrez plus éditer les résultats des utilisateurs. Pour réouvrir un élément fermer vous devez prendre contacte avec votre administrateur.";
 $ConfirmToUnLockElement = "Etes-vous sur de vouloir réouvrir cet élément?";
 $Default = "Option par défaut";
+$ReturnToCourseHomepage = "Retour à la page d'accueil";
 ?>

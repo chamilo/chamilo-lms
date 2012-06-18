@@ -75,7 +75,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $current_forum_category = get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => get_lang('ForumCategories'));
+$interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),'name' => get_lang('Forum'));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {

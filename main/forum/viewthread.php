@@ -22,7 +22,7 @@ api_protect_course_script(true);
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$nameTools = get_lang('ForumCategories');
+$nameTools = get_lang('Forum');
 
 // Are we in a lp ?
 $origin = '';

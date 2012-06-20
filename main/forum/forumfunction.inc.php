@@ -1101,7 +1101,7 @@ function get_forum_categories($id = '') {
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $course_id = api_get_course_int_id();
-    $condition_session .= "AND forum_categories.c_id = $course_id ";
+    $condition_session .= "AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if ($id == '') {
        $sql = "SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
@@ -1155,6 +1155,7 @@ function get_forums_in_category($cat_id) {
             WHERE forum.forum_category='".Database::escape_string($cat_id)."'
                 AND forum.forum_id=item_properties.ref
                 AND item_properties.visibility=1
+                AND item_properties.c_id = $course_id
                 AND item_properties.tool='".TOOL_FORUM."' AND
                 forum.c_id = $course_id
                 ORDER BY forum.forum_order ASC";
@@ -1164,6 +1165,7 @@ function get_forums_in_category($cat_id) {
                 		forum.forum_id				= item_properties.ref AND
                 		item_properties.visibility<>2 AND
                 		item_properties.tool		= '".TOOL_FORUM."' AND
+                        item_properties.c_id = $course_id AND
                 		forum.c_id 					= $course_id
                 ORDER BY forum_order ASC";
     }
@@ -1571,6 +1573,7 @@ function get_thread_information($thread_id) {
 
     $sql = "SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
             WHERE 	item_properties.tool= '".TOOL_FORUM_THREAD."' AND
+                    item_properties.c_id = $course_id AND
             		item_properties.ref	= '".Database::escape_string($thread_id)."' AND
     				threads.thread_id	= '".Database::escape_string($thread_id)."' AND
     				threads.c_id = $course_id
@@ -1791,8 +1794,9 @@ function get_forum_information($forum_id) {
     $sql = "SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
             WHERE 	item_properties.tool	= '".TOOL_FORUM."' AND
             		item_properties.ref		= '".Database::escape_string($forum_id)."' AND
+                    item_properties.c_id    = '".api_get_course_int_id()." AND
     				forums.forum_id			= '".Database::escape_string($forum_id)."' AND
-    				forums.c_id = ".api_get_course_int_id()."
+    				forums.c_id = ".api_get_course_int_id()."                     
    			";
 
     $result = Database::query($sql);

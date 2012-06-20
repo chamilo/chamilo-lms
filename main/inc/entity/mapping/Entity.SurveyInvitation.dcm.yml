@@ -1,0 +1,47 @@
+Entity\SurveyInvitation:
+  type: entity
+  table: c_survey_invitation
+  repositoryClass: Entity\Repository\SurveyInvitationRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_invitation_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_code:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+    user:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    invitation_code:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    invitation_date:
+      type: datetime
+      nullable: false
+    reminder_date:
+      type: datetime
+      nullable: false
+    answered:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

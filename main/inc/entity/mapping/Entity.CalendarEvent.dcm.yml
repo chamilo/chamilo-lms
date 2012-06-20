@@ -1,0 +1,44 @@
+Entity\CalendarEvent:
+  type: entity
+  table: c_calendar_event
+  repositoryClass: Entity\Repository\CalendarEventRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: true
+    start_date:
+      type: datetime
+      nullable: false
+    end_date:
+      type: datetime
+      nullable: false
+    parent_event_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    all_day:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

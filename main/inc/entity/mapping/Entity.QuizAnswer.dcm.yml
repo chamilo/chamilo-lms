@@ -1,0 +1,59 @@
+Entity\QuizAnswer:
+  type: entity
+  table: c_quiz_answer
+  repositoryClass: Entity\Repository\QuizAnswerRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id_auto:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    answer:
+      type: text
+      nullable: false
+    correct:
+      type: integer
+      unsigned: false
+      nullable: true
+    comment:
+      type: text
+      nullable: true
+    ponderation:
+      type: float
+      nullable: false
+    position:
+      type: integer
+      unsigned: false
+      nullable: false
+    hotspot_coordinates:
+      type: text
+      nullable: true
+    hotspot_type:
+      type: string
+      length: null
+      fixed: false
+      nullable: true
+    destination:
+      type: text
+      nullable: false
+    answer_code:
+      type: string
+      length: 10
+      fixed: true
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

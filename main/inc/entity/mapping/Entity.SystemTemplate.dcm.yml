@@ -1,0 +1,31 @@
+Entity\SystemTemplate:
+  type: entity
+  table: system_template
+  repositoryClass: Entity\Repository\SystemTemplateRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: false
+    image:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

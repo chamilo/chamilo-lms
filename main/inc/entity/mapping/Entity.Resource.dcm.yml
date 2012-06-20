@@ -1,0 +1,36 @@
+Entity\Resource:
+  type: entity
+  table: c_resource
+  repositoryClass: Entity\Repository\ResourceRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    source_type:
+      type: string
+      length: 50
+      fixed: false
+      nullable: true
+    source_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    resource_type:
+      type: string
+      length: 50
+      fixed: false
+      nullable: true
+    resource_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

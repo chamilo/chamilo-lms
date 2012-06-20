@@ -1,0 +1,57 @@
+Entity\TrackEAttempt:
+  type: entity
+  table: track_e_attempt
+  repositoryClass: Entity\Repository\TrackEAttemptRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    exe_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    answer:
+      type: text
+      nullable: false
+    teacher_comment:
+      type: text
+      nullable: false
+    marks:
+      type: float
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    position:
+      type: integer
+      unsigned: false
+      nullable: true
+    tms:
+      type: datetime
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    filename:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

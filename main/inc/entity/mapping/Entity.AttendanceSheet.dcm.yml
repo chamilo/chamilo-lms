@@ -1,0 +1,26 @@
+Entity\AttendanceSheet:
+  type: entity
+  table: c_attendance_sheet
+  repositoryClass: Entity\Repository\AttendanceSheetRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_calendar_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    presence:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

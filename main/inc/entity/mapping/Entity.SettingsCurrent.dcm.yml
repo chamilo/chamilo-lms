@@ -1,0 +1,72 @@
+Entity\SettingsCurrent:
+  type: entity
+  table: settings_current
+  repositoryClass: Entity\Repository\SettingsCurrentRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    variable:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    subkey:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    type:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    category:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    selected_value:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    comment:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    scope:
+      type: string
+      length: 50
+      fixed: false
+      nullable: true
+    subkeytext:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    access_url:
+      type: integer
+      unsigned: false
+      nullable: false
+    access_url_changeable:
+      type: integer
+      unsigned: false
+      nullable: false
+    access_url_locked:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

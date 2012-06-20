@@ -1,0 +1,34 @@
+Entity\WikiMailcue:
+  type: entity
+  table: c_wiki_mailcue
+  repositoryClass: Entity\Repository\WikiMailcueRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    type:
+      type: text
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

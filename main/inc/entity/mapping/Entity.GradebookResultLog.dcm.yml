@@ -1,0 +1,33 @@
+Entity\GradebookResultLog:
+  type: entity
+  table: gradebook_result_log
+  repositoryClass: Entity\Repository\GradebookResultLogRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    id_result:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    evaluation_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    created_at:
+      type: datetime
+      nullable: false
+    score:
+      type: float
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,58 @@
+Entity\CourseSetting:
+  type: entity
+  table: c_course_setting
+  repositoryClass: Entity\Repository\CourseSettingRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    variable:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    subkey:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    type:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    category:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    value:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    comment:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    subkeytext:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

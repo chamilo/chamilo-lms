@@ -1,0 +1,37 @@
+Entity\WikiDiscuss:
+  type: entity
+  table: c_wiki_discuss
+  repositoryClass: Entity\Repository\WikiDiscussRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    publication_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    userc_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    comment:
+      type: text
+      nullable: false
+    p_score:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    dtime:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

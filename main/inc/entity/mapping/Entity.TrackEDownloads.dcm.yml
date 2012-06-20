@@ -1,0 +1,36 @@
+Entity\TrackEDownloads:
+  type: entity
+  table: track_e_downloads
+  repositoryClass: Entity\Repository\TrackEDownloadsRepository
+  fields:
+    down_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    down_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    down_date:
+      type: datetime
+      nullable: false
+    down_cours_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    down_doc_path:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    down_session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

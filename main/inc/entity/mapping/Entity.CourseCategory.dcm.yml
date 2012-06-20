@@ -1,0 +1,47 @@
+Entity\CourseCategory:
+  type: entity
+  table: course_category
+  repositoryClass: Entity\Repository\CourseCategoryRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    parent_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    tree_pos:
+      type: integer
+      unsigned: false
+      nullable: true
+    children_count:
+      type: smallint
+      nullable: true
+    auth_course_child:
+      type: string
+      length: null
+      fixed: false
+      nullable: true
+    auth_cat_child:
+      type: string
+      length: null
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,27 @@
+Entity\TrackEOpen:
+  type: entity
+  table: track_e_open
+  repositoryClass: Entity\Repository\TrackEOpenRepository
+  fields:
+    open_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    open_remote_host:
+      type: text
+      nullable: false
+    open_agent:
+      type: text
+      nullable: false
+    open_referer:
+      type: text
+      nullable: false
+    open_date:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

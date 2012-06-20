@@ -1,0 +1,19 @@
+Entity\AccessUrlRelCourse:
+  type: entity
+  table: access_url_rel_course
+  repositoryClass: Entity\Repository\AccessUrlRelCourseRepository
+  fields:
+    access_url_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    course_code:
+      id: true
+      type: string
+      length: 40
+      fixed: true
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

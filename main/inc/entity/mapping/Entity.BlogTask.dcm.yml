@@ -1,0 +1,38 @@
+Entity\BlogTask:
+  type: entity
+  table: c_blog_task
+  repositoryClass: Entity\Repository\BlogTaskRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    task_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    blog_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    color:
+      type: string
+      length: 10
+      fixed: false
+      nullable: false
+    system_task:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,39 @@
+Entity\ThematicAdvance:
+  type: entity
+  table: c_thematic_advance
+  repositoryClass: Entity\Repository\ThematicAdvanceRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    thematic_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    content:
+      type: text
+      nullable: true
+    start_date:
+      type: datetime
+      nullable: false
+    duration:
+      type: integer
+      unsigned: false
+      nullable: false
+    done_advance:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,34 @@
+Entity\GradeComponents:
+  type: entity
+  table: grade_components
+  repositoryClass: Entity\Repository\GradeComponentsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    percentage:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    acronym:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    grade_model_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

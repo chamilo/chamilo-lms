@@ -1,0 +1,28 @@
+Entity\OnlineLink:
+  type: entity
+  table: c_online_link
+  repositoryClass: Entity\Repository\OnlineLinkRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 50
+      fixed: true
+      nullable: false
+    url:
+      type: string
+      length: 100
+      fixed: true
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

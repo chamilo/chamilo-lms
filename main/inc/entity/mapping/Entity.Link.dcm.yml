@@ -1,0 +1,51 @@
+Entity\Link:
+  type: entity
+  table: c_link
+  repositoryClass: Entity\Repository\LinkRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    url:
+      type: text
+      nullable: false
+    title:
+      type: string
+      length: 150
+      fixed: false
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    on_homepage:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    target:
+      type: string
+      length: 10
+      fixed: true
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

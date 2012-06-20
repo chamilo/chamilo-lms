@@ -36,20 +36,16 @@ class CodeUtilities
         $content = self::remove_comments($content); //comments may contains class declaration we don't want to capture.      
 
         $matches = array();
-        if (preg_match_all($cls_pattern, $content, $matches))
-        {
+        if (preg_match_all($cls_pattern, $content, $matches)) {
             $matches = reset($matches);
-            foreach ($matches as $match)
-            {
+            foreach ($matches as $match) {
                 $match = str_replace("\n", ' ', $match);
                 $match = str_replace('{', ' ', $match);
                 $words = explode(' ', $match);
-                foreach ($words as $word)
-                {
+                foreach ($words as $word) {
                     $word = trim($word);
                     //we capture the interface/class name with the current pattern
-                    if (strtolower($word) != 'class' && strtolower($word) != 'interface' && strtolower($word) != 'implements' && strtolower($word) != 'extends' && !empty($word))
-                    {
+                    if (strtolower($word) != 'class' && strtolower($word) != 'interface' && strtolower($word) != 'implements' && strtolower($word) != 'extends' && !empty($word)) {
                         $result[] = $word;
                         break; //we only take the first name as we don't want to capture the name of the interface or of the parent class name
                     }
@@ -62,20 +58,10 @@ class CodeUtilities
     static function get_namespace($content)
     {
         $namespace_pattern = self::NAMESPACE_PATTERN;
-        if (preg_match($namespace_pattern, $content, $matches))
-        {
+        if (preg_match($namespace_pattern, $content, $matches)) {
             $result = end($matches);
-            if (self::is_valid_identifier($result))
-            {
-                return $result;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
+            return trim($result);
+        } else {
             return false;
         }
     }

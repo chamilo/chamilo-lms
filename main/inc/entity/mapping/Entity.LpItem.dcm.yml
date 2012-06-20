@@ -1,0 +1,94 @@
+Entity\LpItem:
+  type: entity
+  table: c_lp_item
+  repositoryClass: Entity\Repository\LpItemRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    lp_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    item_type:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+    ref:
+      type: text
+      nullable: false
+    title:
+      type: string
+      length: 511
+      fixed: false
+      nullable: false
+    description:
+      type: string
+      length: 511
+      fixed: false
+      nullable: false
+    path:
+      type: text
+      nullable: false
+    min_score:
+      type: float
+      nullable: false
+    max_score:
+      type: float
+      nullable: true
+    mastery_score:
+      type: float
+      nullable: true
+    parent_item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    previous_item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    next_item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    prerequisite:
+      type: text
+      nullable: true
+    parameters:
+      type: text
+      nullable: true
+    launch_data:
+      type: text
+      nullable: false
+    max_time_allowed:
+      type: string
+      length: 13
+      fixed: true
+      nullable: true
+    terms:
+      type: text
+      nullable: true
+    search_did:
+      type: integer
+      unsigned: false
+      nullable: true
+    audio:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,25 @@
+Entity\SpecificField:
+  type: entity
+  table: specific_field
+  repositoryClass: Entity\Repository\SpecificFieldRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 1
+      fixed: true
+      nullable: false
+    name:
+      type: string
+      length: 200
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

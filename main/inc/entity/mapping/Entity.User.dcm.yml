@@ -1,0 +1,123 @@
+Entity\User:
+  type: entity
+  table: user
+  repositoryClass: Entity\Repository\UserRepository
+  fields:
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    lastname:
+      type: string
+      length: 60
+      fixed: false
+      nullable: true
+    firstname:
+      type: string
+      length: 60
+      fixed: false
+      nullable: true
+    username:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    password:
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    auth_source:
+      type: string
+      length: 50
+      fixed: false
+      nullable: true
+    email:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    status:
+      type: boolean
+      nullable: false
+    official_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    phone:
+      type: string
+      length: 30
+      fixed: false
+      nullable: true
+    picture_uri:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    creator_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    competences:
+      type: text
+      nullable: true
+    diplomas:
+      type: text
+      nullable: true
+    openarea:
+      type: text
+      nullable: true
+    teach:
+      type: text
+      nullable: true
+    productions:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    chatcall_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    chatcall_date:
+      type: datetime
+      nullable: false
+    chatcall_text:
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    language:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    registration_date:
+      type: datetime
+      nullable: false
+    expiration_date:
+      type: datetime
+      nullable: false
+    active:
+      type: boolean
+      nullable: false
+    openid:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    theme:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    hr_dept_id:
+      type: smallint
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

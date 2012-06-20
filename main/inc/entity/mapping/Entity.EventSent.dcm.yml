@@ -1,0 +1,28 @@
+Entity\EventSent:
+  type: entity
+  table: event_sent
+  repositoryClass: Entity\Repository\EventSentRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_from:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_to:
+      type: integer
+      unsigned: false
+      nullable: true
+    event_type_name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

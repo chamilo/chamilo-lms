@@ -1,0 +1,28 @@
+Entity\Tag:
+  type: entity
+  table: tag
+  repositoryClass: Entity\Repository\TagRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    tag:
+      type: string
+      length: 255
+      fixed: true
+      nullable: false
+    field_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    count:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

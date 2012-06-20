@@ -1,0 +1,96 @@
+Entity\Quiz:
+  type: entity
+  table: c_quiz
+  repositoryClass: Entity\Repository\QuizRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    sound:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    type:
+      type: boolean
+      nullable: false
+    random:
+      type: integer
+      unsigned: false
+      nullable: false
+    random_answers:
+      type: boolean
+      nullable: false
+    active:
+      type: boolean
+      nullable: false
+    results_disabled:
+      type: integer
+      unsigned: false
+      nullable: false
+    access_condition:
+      type: text
+      nullable: true
+    max_attempt:
+      type: integer
+      unsigned: false
+      nullable: false
+    start_time:
+      type: datetime
+      nullable: false
+    end_time:
+      type: datetime
+      nullable: false
+    feedback_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    expired_time:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    propagate_neg:
+      type: integer
+      unsigned: false
+      nullable: false
+    review_answers:
+      type: integer
+      unsigned: false
+      nullable: false
+    random_by_category:
+      type: integer
+      unsigned: false
+      nullable: false
+    text_when_finished:
+      type: text
+      nullable: true
+    display_category_name:
+      type: integer
+      unsigned: false
+      nullable: false
+    pass_percentage:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

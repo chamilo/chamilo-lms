@@ -1,0 +1,31 @@
+Entity\BlogTaskRelUser:
+  type: entity
+  table: c_blog_task_rel_user
+  repositoryClass: Entity\Repository\BlogTaskRelUserRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    blog_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    task_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    target_date:
+      type: date
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

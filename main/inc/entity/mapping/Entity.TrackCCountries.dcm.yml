@@ -1,0 +1,29 @@
+Entity\TrackCCountries:
+  type: entity
+  table: track_c_countries
+  repositoryClass: Entity\Repository\TrackCCountriesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    country:
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    counter:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,28 @@
+Entity\SkillRelGradebook:
+  type: entity
+  table: skill_rel_gradebook
+  repositoryClass: Entity\Repository\SkillRelGradebookRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    gradebook_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    skill_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    type:
+      type: string
+      length: 10
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

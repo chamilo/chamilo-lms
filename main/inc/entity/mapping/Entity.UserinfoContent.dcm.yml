@@ -1,0 +1,37 @@
+Entity\UserinfoContent:
+  type: entity
+  table: c_userinfo_content
+  repositoryClass: Entity\Repository\UserinfoContentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    definition_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    editor_ip:
+      type: string
+      length: 39
+      fixed: false
+      nullable: true
+    edition_time:
+      type: datetime
+      nullable: true
+    content:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

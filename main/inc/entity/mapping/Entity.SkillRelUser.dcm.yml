@@ -1,0 +1,30 @@
+Entity\SkillRelUser:
+  type: entity
+  table: skill_rel_user
+  repositoryClass: Entity\Repository\SkillRelUserRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    skill_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    acquired_skill_at:
+      type: datetime
+      nullable: false
+    assigned_by:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

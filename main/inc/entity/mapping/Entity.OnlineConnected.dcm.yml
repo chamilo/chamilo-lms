@@ -1,0 +1,21 @@
+Entity\OnlineConnected:
+  type: entity
+  table: c_online_connected
+  repositoryClass: Entity\Repository\OnlineConnectedRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    last_connection:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

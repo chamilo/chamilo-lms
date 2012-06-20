@@ -1,0 +1,35 @@
+Entity\UserRelCourseVote:
+  type: entity
+  table: user_rel_course_vote
+  repositoryClass: Entity\Repository\UserRelCourseVoteRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    c_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    vote:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

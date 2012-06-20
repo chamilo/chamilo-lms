@@ -1,0 +1,42 @@
+Entity\TrackCourseRanking:
+  type: entity
+  table: track_course_ranking
+  repositoryClass: Entity\Repository\TrackCourseRankingRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    c_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    accesses:
+      type: integer
+      unsigned: false
+      nullable: false
+    total_score:
+      type: integer
+      unsigned: false
+      nullable: false
+    users:
+      type: integer
+      unsigned: false
+      nullable: false
+    creation_date:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

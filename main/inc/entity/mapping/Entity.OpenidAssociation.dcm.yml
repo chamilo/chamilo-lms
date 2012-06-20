@@ -1,0 +1,38 @@
+Entity\OpenidAssociation:
+  type: entity
+  table: openid_association
+  repositoryClass: Entity\Repository\OpenidAssociationRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    idp_endpoint_uri:
+      type: text
+      nullable: false
+    session_type:
+      type: string
+      length: 30
+      fixed: false
+      nullable: false
+    assoc_handle:
+      type: text
+      nullable: false
+    assoc_type:
+      type: text
+      nullable: false
+    expires_in:
+      type: bigint
+      nullable: false
+    mac_key:
+      type: text
+      nullable: false
+    created:
+      type: bigint
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

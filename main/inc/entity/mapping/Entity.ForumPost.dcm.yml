@@ -1,0 +1,56 @@
+Entity\ForumPost:
+  type: entity
+  table: c_forum_post
+  repositoryClass: Entity\Repository\ForumPostRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    post_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    post_title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    post_text:
+      type: text
+      nullable: true
+    thread_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    forum_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    poster_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    poster_name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    post_date:
+      type: datetime
+      nullable: true
+    post_notification:
+      type: boolean
+      nullable: true
+    post_parent_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    visible:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

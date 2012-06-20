@@ -1,0 +1,37 @@
+Entity\BlogPost:
+  type: entity
+  table: c_blog_post
+  repositoryClass: Entity\Repository\BlogPostRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    post_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    full_text:
+      type: text
+      nullable: false
+    date_creation:
+      type: datetime
+      nullable: false
+    blog_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    author_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

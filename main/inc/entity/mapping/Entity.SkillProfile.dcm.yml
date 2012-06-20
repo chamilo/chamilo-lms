@@ -1,0 +1,23 @@
+Entity\SkillProfile:
+  type: entity
+  table: skill_profile
+  repositoryClass: Entity\Repository\SkillProfileRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,30 @@
+Entity\UsergroupRelQuestion:
+  type: entity
+  table: usergroup_rel_question
+  repositoryClass: Entity\Repository\UsergroupRelQuestionRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    c_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    usergroup_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    coefficient:
+      type: float
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,34 @@
+Entity\StudentPublicationAssignment:
+  type: entity
+  table: c_student_publication_assignment
+  repositoryClass: Entity\Repository\StudentPublicationAssignmentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    expires_on:
+      type: datetime
+      nullable: false
+    ends_on:
+      type: datetime
+      nullable: false
+    add_to_calendar:
+      type: boolean
+      nullable: false
+    enable_qualification:
+      type: boolean
+      nullable: false
+    publication_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

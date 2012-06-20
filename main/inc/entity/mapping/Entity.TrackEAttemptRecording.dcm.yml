@@ -1,0 +1,41 @@
+Entity\TrackEAttemptRecording:
+  type: entity
+  table: track_e_attempt_recording
+  repositoryClass: Entity\Repository\TrackEAttemptRecordingRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    exe_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    marks:
+      type: integer
+      unsigned: false
+      nullable: false
+    insert_date:
+      type: datetime
+      nullable: false
+    author:
+      type: integer
+      unsigned: false
+      nullable: false
+    teacher_comment:
+      type: text
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

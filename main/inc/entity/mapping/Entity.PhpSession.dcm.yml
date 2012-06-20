@@ -1,0 +1,32 @@
+Entity\PhpSession:
+  type: entity
+  table: php_session
+  repositoryClass: Entity\Repository\PhpSessionRepository
+  fields:
+    session_id:
+      id: true
+      type: string
+      length: 32
+      fixed: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    session_name:
+      type: string
+      length: 10
+      fixed: false
+      nullable: false
+    session_time:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_start:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_value:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

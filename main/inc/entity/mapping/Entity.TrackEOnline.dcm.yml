@@ -1,0 +1,40 @@
+Entity\TrackEOnline:
+  type: entity
+  table: track_e_online
+  repositoryClass: Entity\Repository\TrackEOnlineRepository
+  fields:
+    login_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    login_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    login_date:
+      type: datetime
+      nullable: false
+    login_ip:
+      type: string
+      length: 39
+      fixed: false
+      nullable: false
+    course:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    access_url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

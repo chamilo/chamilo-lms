@@ -1,0 +1,35 @@
+Entity\EventEmailTemplate:
+  type: entity
+  table: event_email_template
+  repositoryClass: Entity\Repository\EventEmailTemplateRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    message:
+      type: text
+      nullable: true
+    subject:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    event_type_name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    activated:
+      type: boolean
+      nullable: false
+    language_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

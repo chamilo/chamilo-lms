@@ -1,0 +1,38 @@
+Entity\SpecificFieldValues:
+  type: entity
+  table: specific_field_values
+  repositoryClass: Entity\Repository\SpecificFieldValuesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    tool_id:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    ref_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    field_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    value:
+      type: string
+      length: 200
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

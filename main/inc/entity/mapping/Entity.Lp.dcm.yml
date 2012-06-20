@@ -1,0 +1,122 @@
+Entity\Lp:
+  type: entity
+  table: c_lp
+  repositoryClass: Entity\Repository\LpRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    lp_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    ref:
+      type: text
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    path:
+      type: text
+      nullable: false
+    force_commit:
+      type: boolean
+      nullable: false
+    default_view_mod:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+    default_encoding:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    content_maker:
+      type: text
+      nullable: false
+    content_local:
+      type: string
+      length: 32
+      fixed: false
+      nullable: false
+    content_license:
+      type: text
+      nullable: false
+    prevent_reinit:
+      type: boolean
+      nullable: false
+    js_lib:
+      type: text
+      nullable: false
+    debug:
+      type: boolean
+      nullable: false
+    theme:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    preview_image:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    author:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    prerequisite:
+      type: integer
+      unsigned: false
+      nullable: false
+    hide_toc_frame:
+      type: boolean
+      nullable: false
+    seriousgame_mode:
+      type: boolean
+      nullable: false
+    use_max_score:
+      type: integer
+      unsigned: false
+      nullable: false
+    autolunch:
+      type: integer
+      unsigned: false
+      nullable: false
+    created_on:
+      type: datetime
+      nullable: false
+    modified_on:
+      type: datetime
+      nullable: false
+    publicated_on:
+      type: datetime
+      nullable: false
+    expired_on:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

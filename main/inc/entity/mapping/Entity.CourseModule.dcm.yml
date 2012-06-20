@@ -1,0 +1,43 @@
+Entity\CourseModule:
+  type: entity
+  table: course_module
+  repositoryClass: Entity\Repository\CourseModuleRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    link:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    image:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    row:
+      type: integer
+      unsigned: false
+      nullable: false
+    column:
+      type: integer
+      unsigned: false
+      nullable: false
+    position:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

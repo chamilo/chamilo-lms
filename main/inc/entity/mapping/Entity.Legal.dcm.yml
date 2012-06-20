@@ -1,0 +1,36 @@
+Entity\Legal:
+  type: entity
+  table: legal
+  repositoryClass: Entity\Repository\LegalRepository
+  fields:
+    legal_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    language_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    date:
+      type: integer
+      unsigned: false
+      nullable: false
+    content:
+      type: text
+      nullable: true
+    type:
+      type: integer
+      unsigned: false
+      nullable: false
+    changes:
+      type: text
+      nullable: false
+    version:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,34 @@
+Entity\AccessUrl:
+  type: entity
+  table: access_url
+  repositoryClass: Entity\Repository\AccessUrlRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    url:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    active:
+      type: integer
+      unsigned: false
+      nullable: false
+    created_by:
+      type: integer
+      unsigned: false
+      nullable: false
+    tms:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,65 @@
+Entity\GroupCategory:
+  type: entity
+  table: c_group_category
+  repositoryClass: Entity\Repository\GroupCategoryRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    doc_state:
+      type: boolean
+      nullable: false
+    calendar_state:
+      type: boolean
+      nullable: false
+    work_state:
+      type: boolean
+      nullable: false
+    announcements_state:
+      type: boolean
+      nullable: false
+    forum_state:
+      type: boolean
+      nullable: false
+    wiki_state:
+      type: boolean
+      nullable: false
+    chat_state:
+      type: boolean
+      nullable: false
+    max_student:
+      type: integer
+      unsigned: false
+      nullable: false
+    self_reg_allowed:
+      type: boolean
+      nullable: false
+    self_unreg_allowed:
+      type: boolean
+      nullable: false
+    groups_per_user:
+      type: integer
+      unsigned: false
+      nullable: false
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

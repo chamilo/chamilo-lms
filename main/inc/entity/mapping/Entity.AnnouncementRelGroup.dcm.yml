@@ -1,0 +1,18 @@
+Entity\AnnouncementRelGroup:
+  type: entity
+  table: announcement_rel_group
+  repositoryClass: Entity\Repository\AnnouncementRelGroupRepository
+  fields:
+    group_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    announcement_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

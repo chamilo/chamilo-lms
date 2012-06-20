@@ -1,0 +1,43 @@
+Entity\LpIvObjective:
+  type: entity
+  table: c_lp_iv_objective
+  repositoryClass: Entity\Repository\LpIvObjectiveRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: bigint
+      nullable: false
+    lp_iv_id:
+      type: bigint
+      nullable: false
+    order_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    objective_id:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    score_raw:
+      type: float
+      nullable: false
+    score_max:
+      type: float
+      nullable: false
+    score_min:
+      type: float
+      nullable: false
+    status:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,22 @@
+Entity\TrackEAttemptCoeff:
+  type: entity
+  table: track_e_attempt_coeff
+  repositoryClass: Entity\Repository\TrackEAttemptCoeffRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    attempt_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    marks_coeff:
+      type: float
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,37 @@
+Entity\AttendanceSheetLog:
+  type: entity
+  table: c_attendance_sheet_log
+  repositoryClass: Entity\Repository\AttendanceSheetLogRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    lastedit_date:
+      type: datetime
+      nullable: false
+    lastedit_type:
+      type: string
+      length: 200
+      fixed: false
+      nullable: false
+    lastedit_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    calendar_date_value:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

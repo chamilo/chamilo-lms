@@ -1,0 +1,23 @@
+Entity\DropboxPerson:
+  type: entity
+  table: c_dropbox_person
+  repositoryClass: Entity\Repository\DropboxPersonRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    file_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

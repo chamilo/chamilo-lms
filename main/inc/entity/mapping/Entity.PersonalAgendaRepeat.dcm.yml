@@ -1,0 +1,33 @@
+Entity\PersonalAgendaRepeat:
+  type: entity
+  table: personal_agenda_repeat
+  repositoryClass: Entity\Repository\PersonalAgendaRepeatRepository
+  fields:
+    cal_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    cal_type:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    cal_end:
+      type: integer
+      unsigned: false
+      nullable: true
+    cal_frequency:
+      type: integer
+      unsigned: false
+      nullable: true
+    cal_days:
+      type: string
+      length: 7
+      fixed: true
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

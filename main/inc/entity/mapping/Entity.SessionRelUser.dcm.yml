@@ -1,0 +1,23 @@
+Entity\SessionRelUser:
+  type: entity
+  table: session_rel_user
+  repositoryClass: Entity\Repository\SessionRelUserRepository
+  fields:
+    id_session:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id_user:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    relation_type:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

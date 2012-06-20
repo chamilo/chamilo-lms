@@ -1,0 +1,83 @@
+Entity\CourseRequest:
+  type: entity
+  table: course_request
+  repositoryClass: Entity\Repository\CourseRequestRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    directory:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    db_name:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    course_language:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    category_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    tutor_name:
+      type: string
+      length: 200
+      fixed: false
+      nullable: true
+    visual_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    request_date:
+      type: datetime
+      nullable: false
+    objetives:
+      type: text
+      nullable: true
+    target_audience:
+      type: text
+      nullable: true
+    status:
+      type: integer
+      unsigned: false
+      nullable: false
+    info:
+      type: integer
+      unsigned: false
+      nullable: false
+    exemplary_content:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

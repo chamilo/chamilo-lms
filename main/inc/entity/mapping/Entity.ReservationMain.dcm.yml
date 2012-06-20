@@ -1,0 +1,60 @@
+Entity\ReservationMain:
+  type: entity
+  table: reservation_main
+  repositoryClass: Entity\Repository\ReservationMainRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    subid:
+      type: integer
+      unsigned: false
+      nullable: false
+    item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    auto_accept:
+      type: boolean
+      nullable: false
+    max_users:
+      type: integer
+      unsigned: false
+      nullable: false
+    start_at:
+      type: datetime
+      nullable: false
+    end_at:
+      type: datetime
+      nullable: false
+    subscribe_from:
+      type: datetime
+      nullable: false
+    subscribe_until:
+      type: datetime
+      nullable: false
+    subscribers:
+      type: integer
+      unsigned: false
+      nullable: false
+    notes:
+      type: text
+      nullable: false
+    timepicker:
+      type: boolean
+      nullable: false
+    timepicker_min:
+      type: integer
+      unsigned: false
+      nullable: false
+    timepicker_max:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

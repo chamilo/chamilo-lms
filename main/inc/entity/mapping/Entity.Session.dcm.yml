@@ -1,0 +1,62 @@
+Entity\Session:
+  type: entity
+  table: session
+  repositoryClass: Entity\Repository\SessionRepository
+  fields:
+    id:
+      id: true
+      type: smallint
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    id_coach:
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 50
+      fixed: true
+      nullable: false
+    nbr_courses:
+      type: smallint
+      nullable: false
+    nbr_users:
+      type: integer
+      unsigned: false
+      nullable: false
+    nbr_classes:
+      type: integer
+      unsigned: false
+      nullable: false
+    date_start:
+      type: date
+      nullable: false
+    date_end:
+      type: date
+      nullable: false
+    nb_days_access_before_beginning:
+      type: boolean
+      nullable: true
+    nb_days_access_after_end:
+      type: boolean
+      nullable: true
+    session_admin_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    visibility:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_category_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    promotion_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

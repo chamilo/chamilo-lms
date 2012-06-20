@@ -1,0 +1,24 @@
+Entity\TrackCProviders:
+  type: entity
+  table: track_c_providers
+  repositoryClass: Entity\Repository\TrackCProvidersRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    provider:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    counter:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,23 @@
+Entity\UsergroupRelSession:
+  type: entity
+  table: usergroup_rel_session
+  repositoryClass: Entity\Repository\UsergroupRelSessionRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    usergroup_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

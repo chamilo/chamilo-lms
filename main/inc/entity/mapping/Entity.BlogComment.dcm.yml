@@ -1,0 +1,49 @@
+Entity\BlogComment:
+  type: entity
+  table: c_blog_comment
+  repositoryClass: Entity\Repository\BlogCommentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    comment_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: false
+    author_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    date_creation:
+      type: datetime
+      nullable: false
+    blog_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    post_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    task_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    parent_comment_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,42 @@
+Entity\Notification:
+  type: entity
+  table: notification
+  repositoryClass: Entity\Repository\NotificationRepository
+  fields:
+    id:
+      id: true
+      type: bigint
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    dest_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    dest_mail:
+      type: string
+      length: 255
+      fixed: true
+      nullable: true
+    title:
+      type: string
+      length: 255
+      fixed: true
+      nullable: true
+    content:
+      type: string
+      length: 255
+      fixed: true
+      nullable: true
+    send_freq:
+      type: smallint
+      nullable: true
+    created_at:
+      type: datetime
+      nullable: false
+    sent_at:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

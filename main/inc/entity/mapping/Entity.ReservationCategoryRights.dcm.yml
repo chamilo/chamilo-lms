@@ -1,0 +1,26 @@
+Entity\ReservationCategoryRights:
+  type: entity
+  table: reservation_category_rights
+  repositoryClass: Entity\Repository\ReservationCategoryRightsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    class_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    m_items:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

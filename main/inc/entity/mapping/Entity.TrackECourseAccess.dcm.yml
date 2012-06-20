@@ -1,0 +1,38 @@
+Entity\TrackECourseAccess:
+  type: entity
+  table: track_e_course_access
+  repositoryClass: Entity\Repository\TrackECourseAccessRepository
+  fields:
+    course_access_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    login_course_date:
+      type: datetime
+      nullable: false
+    logout_course_date:
+      type: datetime
+      nullable: true
+    counter:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

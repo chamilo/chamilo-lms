@@ -1,0 +1,33 @@
+Entity\Career:
+  type: entity
+  table: career
+  repositoryClass: Entity\Repository\CareerRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    status:
+      type: integer
+      unsigned: false
+      nullable: false
+    created_at:
+      type: datetime
+      nullable: false
+    updated_at:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

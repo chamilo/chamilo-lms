@@ -1,0 +1,35 @@
+Entity\ChatConnected:
+  type: entity
+  table: c_chat_connected
+  repositoryClass: Entity\Repository\ChatConnectedRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    last_connection:
+      id: true
+      type: datetime
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    to_group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

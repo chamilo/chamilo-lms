@@ -1,0 +1,35 @@
+Entity\DropboxCategory:
+  type: entity
+  table: c_dropbox_category
+  repositoryClass: Entity\Repository\DropboxCategoryRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cat_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cat_name:
+      type: text
+      nullable: false
+    received:
+      type: boolean
+      nullable: false
+    sent:
+      type: boolean
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

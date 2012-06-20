@@ -1,0 +1,117 @@
+Entity\Course:
+  type: entity
+  table: course
+  repositoryClass: Entity\Repository\CourseRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    directory:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    db_name:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    course_language:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    category_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    visibility:
+      type: boolean
+      nullable: true
+    show_score:
+      type: integer
+      unsigned: false
+      nullable: false
+    tutor_name:
+      type: string
+      length: 200
+      fixed: false
+      nullable: true
+    visual_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    department_name:
+      type: string
+      length: 30
+      fixed: false
+      nullable: true
+    department_url:
+      type: string
+      length: 180
+      fixed: false
+      nullable: true
+    disk_quota:
+      type: bigint
+      nullable: true
+    last_visit:
+      type: datetime
+      nullable: true
+    last_edit:
+      type: datetime
+      nullable: true
+    creation_date:
+      type: datetime
+      nullable: true
+    expiration_date:
+      type: datetime
+      nullable: true
+    target_course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    subscribe:
+      type: boolean
+      nullable: false
+    unsubscribe:
+      type: boolean
+      nullable: false
+    registration_code:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    legal:
+      type: text
+      nullable: false
+    activate_legal:
+      type: integer
+      unsigned: false
+      nullable: false
+    course_type_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,27 @@
+Entity\ToolIntro:
+  type: entity
+  table: c_tool_intro
+  repositoryClass: Entity\Repository\ToolIntroRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    session_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    intro_text:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

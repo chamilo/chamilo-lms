@@ -1,0 +1,49 @@
+Entity\Groups:
+  type: entity
+  table: groups
+  repositoryClass: Entity\Repository\GroupsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    picture_uri:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    url:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    visibility:
+      type: integer
+      unsigned: false
+      nullable: false
+    updated_on:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    created_on:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

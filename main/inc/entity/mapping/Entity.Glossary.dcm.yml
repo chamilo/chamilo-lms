@@ -1,0 +1,34 @@
+Entity\Glossary:
+  type: entity
+  table: c_glossary
+  repositoryClass: Entity\Repository\GlossaryRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    glossary_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,47 @@
+Entity\Message:
+  type: entity
+  table: message
+  repositoryClass: Entity\Repository\MessageRepository
+  fields:
+    id:
+      id: true
+      type: bigint
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_sender_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_receiver_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    msg_status:
+      type: boolean
+      nullable: false
+    send_date:
+      type: datetime
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    update_date:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

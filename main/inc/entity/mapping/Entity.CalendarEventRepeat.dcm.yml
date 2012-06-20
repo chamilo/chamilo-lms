@@ -1,0 +1,36 @@
+Entity\CalendarEventRepeat:
+  type: entity
+  table: c_calendar_event_repeat
+  repositoryClass: Entity\Repository\CalendarEventRepeatRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cal_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cal_type:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    cal_end:
+      type: integer
+      unsigned: false
+      nullable: true
+    cal_frequency:
+      type: integer
+      unsigned: false
+      nullable: true
+    cal_days:
+      type: string
+      length: 7
+      fixed: true
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

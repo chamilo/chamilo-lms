@@ -1,0 +1,39 @@
+Entity\CalendarEventAttachment:
+  type: entity
+  table: c_calendar_event_attachment
+  repositoryClass: Entity\Repository\CalendarEventAttachmentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    path:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: true
+    size:
+      type: integer
+      unsigned: false
+      nullable: false
+    agenda_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    filename:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,35 @@
+Entity\TrackELinks:
+  type: entity
+  table: track_e_links
+  repositoryClass: Entity\Repository\TrackELinksRepository
+  fields:
+    links_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    links_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    links_date:
+      type: datetime
+      nullable: false
+    links_cours_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    links_link_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    links_session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

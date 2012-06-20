@@ -1,0 +1,35 @@
+Entity\GroupRelUser:
+  type: entity
+  table: c_group_rel_user
+  repositoryClass: Entity\Repository\GroupRelUserRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    status:
+      type: integer
+      unsigned: false
+      nullable: false
+    role:
+      type: string
+      length: 50
+      fixed: true
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

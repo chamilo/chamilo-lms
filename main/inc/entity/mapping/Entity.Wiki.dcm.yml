@@ -1,0 +1,114 @@
+Entity\Wiki:
+  type: entity
+  table: c_wiki
+  repositoryClass: Entity\Repository\WikiRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    page_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    reflink:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    dtime:
+      type: datetime
+      nullable: false
+    addlock:
+      type: integer
+      unsigned: false
+      nullable: false
+    editlock:
+      type: integer
+      unsigned: false
+      nullable: false
+    visibility:
+      type: integer
+      unsigned: false
+      nullable: false
+    addlock_disc:
+      type: integer
+      unsigned: false
+      nullable: false
+    visibility_disc:
+      type: integer
+      unsigned: false
+      nullable: false
+    ratinglock_disc:
+      type: integer
+      unsigned: false
+      nullable: false
+    assignment:
+      type: integer
+      unsigned: false
+      nullable: false
+    comment:
+      type: text
+      nullable: false
+    progress:
+      type: text
+      nullable: false
+    score:
+      type: integer
+      unsigned: false
+      nullable: true
+    version:
+      type: integer
+      unsigned: false
+      nullable: true
+    is_editing:
+      type: integer
+      unsigned: false
+      nullable: false
+    time_edit:
+      type: datetime
+      nullable: false
+    hits:
+      type: integer
+      unsigned: false
+      nullable: true
+    linksto:
+      type: text
+      nullable: false
+    tag:
+      type: text
+      nullable: false
+    user_ip:
+      type: string
+      length: 39
+      fixed: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

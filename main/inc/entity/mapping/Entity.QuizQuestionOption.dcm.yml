@@ -1,0 +1,31 @@
+Entity\QuizQuestionOption:
+  type: entity
+  table: c_quiz_question_option
+  repositoryClass: Entity\Repository\QuizQuestionOptionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    position:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,63 @@
+Entity\GradebookCategory:
+  type: entity
+  table: gradebook_category
+  repositoryClass: Entity\Repository\GradebookCategoryRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: text
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    weight:
+      type: float
+      nullable: false
+    visible:
+      type: boolean
+      nullable: false
+    certif_min_score:
+      type: integer
+      unsigned: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    document_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+    default_lowest_eval_exclude:
+      type: boolean
+      nullable: true
+    grade_model_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

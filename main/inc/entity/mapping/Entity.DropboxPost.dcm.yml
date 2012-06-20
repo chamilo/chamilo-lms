@@ -1,0 +1,37 @@
+Entity\DropboxPost:
+  type: entity
+  table: c_dropbox_post
+  repositoryClass: Entity\Repository\DropboxPostRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    file_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    dest_user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    feedback_date:
+      type: datetime
+      nullable: false
+    feedback:
+      type: text
+      nullable: true
+    cat_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

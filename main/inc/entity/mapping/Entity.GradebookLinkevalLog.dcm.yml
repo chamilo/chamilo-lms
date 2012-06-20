@@ -1,0 +1,43 @@
+Entity\GradebookLinkevalLog:
+  type: entity
+  table: gradebook_linkeval_log
+  repositoryClass: Entity\Repository\GradebookLinkevalLogRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    id_linkeval_log:
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: text
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    created_at:
+      type: datetime
+      nullable: false
+    weight:
+      type: smallint
+      nullable: true
+    visible:
+      type: boolean
+      nullable: true
+    type:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+    user_id_log:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,18 @@
+Entity\ClassUser:
+  type: entity
+  table: class_user
+  repositoryClass: Entity\Repository\ClassUserRepository
+  fields:
+    class_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

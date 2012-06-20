@@ -1,0 +1,29 @@
+Entity\UserRelUser:
+  type: entity
+  table: user_rel_user
+  repositoryClass: Entity\Repository\UserRelUserRepository
+  fields:
+    id:
+      id: true
+      type: bigint
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    friend_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    relation_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    last_edit:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

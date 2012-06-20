@@ -1,0 +1,23 @@
+Entity\BlogRelUser:
+  type: entity
+  table: c_blog_rel_user
+  repositoryClass: Entity\Repository\BlogRelUserRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    blog_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

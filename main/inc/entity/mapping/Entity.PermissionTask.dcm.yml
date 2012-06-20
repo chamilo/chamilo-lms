@@ -1,0 +1,32 @@
+Entity\PermissionTask:
+  type: entity
+  table: c_permission_task
+  repositoryClass: Entity\Repository\PermissionTaskRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    task_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    tool:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    action:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

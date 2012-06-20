@@ -1,0 +1,30 @@
+Entity\SettingsOptions:
+  type: entity
+  table: settings_options
+  repositoryClass: Entity\Repository\SettingsOptionsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    variable:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    value:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    display_text:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

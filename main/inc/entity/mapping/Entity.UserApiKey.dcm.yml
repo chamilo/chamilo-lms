@@ -1,0 +1,44 @@
+Entity\UserApiKey:
+  type: entity
+  table: user_api_key
+  repositoryClass: Entity\Repository\UserApiKeyRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    api_key:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+    api_service:
+      type: string
+      length: 10
+      fixed: true
+      nullable: false
+    api_end_point:
+      type: text
+      nullable: true
+    created_date:
+      type: datetime
+      nullable: true
+    validity_start_date:
+      type: datetime
+      nullable: true
+    validity_end_date:
+      type: datetime
+      nullable: true
+    description:
+      type: text
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

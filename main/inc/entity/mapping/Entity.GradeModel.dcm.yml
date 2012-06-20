@@ -1,0 +1,34 @@
+Entity\GradeModel:
+  type: entity
+  table: grade_model
+  repositoryClass: Entity\Repository\GradeModelRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    default_lowest_eval_exclude:
+      type: boolean
+      nullable: true
+    default_external_eval:
+      type: boolean
+      nullable: true
+    default_external_eval_prefix:
+      type: string
+      length: 140
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

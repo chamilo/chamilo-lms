@@ -1,0 +1,56 @@
+Entity\GradebookEvaluation:
+  type: entity
+  table: gradebook_evaluation
+  repositoryClass: Entity\Repository\GradebookEvaluationRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: text
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    created_at:
+      type: datetime
+      nullable: false
+    weight:
+      type: float
+      nullable: false
+    max:
+      type: float
+      nullable: false
+    visible:
+      type: integer
+      unsigned: false
+      nullable: false
+    type:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

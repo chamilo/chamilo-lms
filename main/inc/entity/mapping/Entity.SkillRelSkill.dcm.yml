@@ -1,0 +1,31 @@
+Entity\SkillRelSkill:
+  type: entity
+  table: skill_rel_skill
+  repositoryClass: Entity\Repository\SkillRelSkillRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    skill_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    relation_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    level:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,37 @@
+Entity\Skill:
+  type: entity
+  table: skill
+  repositoryClass: Entity\Repository\SkillRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    short_code:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    access_url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    icon:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,40 @@
+Entity\ForumThreadQualify:
+  type: entity
+  table: c_forum_thread_qualify
+  repositoryClass: Entity\Repository\ForumThreadQualifyRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    thread_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    qualify:
+      type: float
+      nullable: false
+    qualify_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    qualify_time:
+      type: datetime
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

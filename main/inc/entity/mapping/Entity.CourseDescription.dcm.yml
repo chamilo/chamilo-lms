@@ -1,0 +1,37 @@
+Entity\CourseDescription:
+  type: entity
+  table: c_course_description
+  repositoryClass: Entity\Repository\CourseDescriptionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    content:
+      type: text
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    description_type:
+      type: boolean
+      nullable: false
+    progress:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,31 @@
+Entity\CourseType:
+  type: entity
+  table: course_type
+  repositoryClass: Entity\Repository\CourseTypeRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    translation_var:
+      type: string
+      length: 40
+      fixed: true
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    props:
+      type: text
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

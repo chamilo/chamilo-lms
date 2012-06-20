@@ -1,0 +1,76 @@
+Entity\TrackEExercices:
+  type: entity
+  table: track_e_exercices
+  repositoryClass: Entity\Repository\TrackEExercicesRepository
+  fields:
+    exe_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    exe_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    exe_date:
+      type: datetime
+      nullable: false
+    exe_cours_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    exe_exo_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    exe_result:
+      type: float
+      nullable: false
+    exe_weighting:
+      type: float
+      nullable: false
+    status:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+    data_tracking:
+      type: text
+      nullable: false
+    start_date:
+      type: datetime
+      nullable: false
+    steps_counter:
+      type: smallint
+      nullable: false
+    session_id:
+      type: smallint
+      nullable: false
+    orig_lp_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    orig_lp_item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    exe_duration:
+      type: integer
+      unsigned: false
+      nullable: false
+    expired_time_control:
+      type: datetime
+      nullable: false
+    orig_lp_item_view_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    questions_to_check:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,47 @@
+Entity\SysAnnouncement:
+  type: entity
+  table: sys_announcement
+  repositoryClass: Entity\Repository\SysAnnouncementRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    date_start:
+      type: datetime
+      nullable: false
+    date_end:
+      type: datetime
+      nullable: false
+    visible_teacher:
+      type: boolean
+      nullable: false
+    visible_student:
+      type: boolean
+      nullable: false
+    visible_guest:
+      type: boolean
+      nullable: false
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: false
+    lang:
+      type: string
+      length: 70
+      fixed: false
+      nullable: true
+    access_url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

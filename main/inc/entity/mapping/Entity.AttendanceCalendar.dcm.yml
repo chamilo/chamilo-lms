@@ -1,0 +1,28 @@
+Entity\AttendanceCalendar:
+  type: entity
+  table: c_attendance_calendar
+  repositoryClass: Entity\Repository\AttendanceCalendarRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    date_time:
+      type: datetime
+      nullable: false
+    done_attendance:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,49 @@
+Entity\Notebook:
+  type: entity
+  table: c_notebook
+  repositoryClass: Entity\Repository\NotebookRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    notebook_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    course:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+    creation_date:
+      type: datetime
+      nullable: false
+    update_date:
+      type: datetime
+      nullable: false
+    status:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,63 @@
+Entity\Tool:
+  type: entity
+  table: c_tool
+  repositoryClass: Entity\Repository\ToolRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    link:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    image:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    visibility:
+      type: boolean
+      nullable: true
+    admin:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    address:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    added_tool:
+      type: boolean
+      nullable: true
+    target:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    category:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

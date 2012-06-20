@@ -1,0 +1,24 @@
+Entity\TrackCOs:
+  type: entity
+  table: track_c_os
+  repositoryClass: Entity\Repository\TrackCOsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    os:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    counter:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

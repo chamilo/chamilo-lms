@@ -1,0 +1,23 @@
+Entity\GroupRelTag:
+  type: entity
+  table: group_rel_tag
+  repositoryClass: Entity\Repository\GroupRelTagRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    tag_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

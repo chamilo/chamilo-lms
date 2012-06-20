@@ -1,0 +1,40 @@
+Entity\TrackStoredValuesStack:
+  type: entity
+  table: track_stored_values_stack
+  repositoryClass: Entity\Repository\TrackStoredValuesStackRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    sco_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    stack_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    course_id:
+      type: string
+      length: 40
+      fixed: true
+      nullable: false
+    sv_key:
+      type: string
+      length: 64
+      fixed: true
+      nullable: false
+    sv_value:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

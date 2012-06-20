@@ -1,0 +1,35 @@
+Entity\SessionRelCourseRelUser:
+  type: entity
+  table: session_rel_course_rel_user
+  repositoryClass: Entity\Repository\SessionRelCourseRelUserRepository
+  fields:
+    id_session:
+      id: true
+      type: smallint
+      nullable: false
+    course_code:
+      id: true
+      type: string
+      length: 40
+      fixed: true
+      nullable: false
+    id_user:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    visibility:
+      type: integer
+      unsigned: false
+      nullable: false
+    status:
+      type: integer
+      unsigned: false
+      nullable: false
+    legal_agreement:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

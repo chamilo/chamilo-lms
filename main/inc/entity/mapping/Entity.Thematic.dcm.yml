@@ -1,0 +1,37 @@
+Entity\Thematic:
+  type: entity
+  table: c_thematic
+  repositoryClass: Entity\Repository\ThematicRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: true
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    active:
+      type: boolean
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

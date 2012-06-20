@@ -1,0 +1,47 @@
+Entity\Attendance:
+  type: entity
+  table: c_attendance
+  repositoryClass: Entity\Repository\AttendanceRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: text
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    active:
+      type: boolean
+      nullable: false
+    attendance_qualify_title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    attendance_qualify_max:
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_weight:
+      type: float
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

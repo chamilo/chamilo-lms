@@ -1,0 +1,61 @@
+Entity\LpItemView:
+  type: entity
+  table: c_lp_item_view
+  repositoryClass: Entity\Repository\LpItemViewRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: bigint
+      nullable: false
+    lp_item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    lp_view_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    view_count:
+      type: integer
+      unsigned: false
+      nullable: false
+    start_time:
+      type: integer
+      unsigned: false
+      nullable: false
+    total_time:
+      type: integer
+      unsigned: false
+      nullable: false
+    score:
+      type: float
+      nullable: false
+    status:
+      type: string
+      length: 32
+      fixed: true
+      nullable: false
+    suspend_data:
+      type: text
+      nullable: true
+    lesson_location:
+      type: text
+      nullable: true
+    core_exit:
+      type: string
+      length: 32
+      fixed: false
+      nullable: false
+    max_score:
+      type: string
+      length: 8
+      fixed: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

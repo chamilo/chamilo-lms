@@ -1,0 +1,42 @@
+Entity\TrackEHotspot:
+  type: entity
+  table: track_e_hotspot
+  repositoryClass: Entity\Repository\TrackEHotspotRepository
+  fields:
+    hotspot_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    hotspot_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    hotspot_course_code:
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    hotspot_exe_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    hotspot_question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    hotspot_answer_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    hotspot_correct:
+      type: boolean
+      nullable: false
+    hotspot_coordinate:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

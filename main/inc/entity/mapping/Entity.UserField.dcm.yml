@@ -1,0 +1,48 @@
+Entity\UserField:
+  type: entity
+  table: user_field
+  repositoryClass: Entity\Repository\UserFieldRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    field_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    field_variable:
+      type: string
+      length: 64
+      fixed: false
+      nullable: false
+    field_display_text:
+      type: string
+      length: 64
+      fixed: false
+      nullable: true
+    field_default_value:
+      type: text
+      nullable: true
+    field_order:
+      type: integer
+      unsigned: false
+      nullable: true
+    field_visible:
+      type: boolean
+      nullable: true
+    field_changeable:
+      type: boolean
+      nullable: true
+    field_filter:
+      type: boolean
+      nullable: true
+    tms:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

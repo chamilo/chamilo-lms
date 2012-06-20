@@ -1,0 +1,60 @@
+Entity\DropboxFile:
+  type: entity
+  table: c_dropbox_file
+  repositoryClass: Entity\Repository\DropboxFileRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    uploader_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    filename:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    filesize:
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    description:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    author:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    upload_date:
+      type: datetime
+      nullable: false
+    last_upload_date:
+      type: datetime
+      nullable: false
+    cat_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,36 @@
+Entity\Block:
+  type: entity
+  table: block
+  repositoryClass: Entity\Repository\BlockRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    path:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    controller:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    active:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

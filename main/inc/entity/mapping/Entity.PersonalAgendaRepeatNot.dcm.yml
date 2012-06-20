@@ -1,0 +1,18 @@
+Entity\PersonalAgendaRepeatNot:
+  type: entity
+  table: personal_agenda_repeat_not
+  repositoryClass: Entity\Repository\PersonalAgendaRepeatNotRepository
+  fields:
+    cal_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cal_date:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

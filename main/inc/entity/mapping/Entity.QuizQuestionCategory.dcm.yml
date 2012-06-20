@@ -1,0 +1,26 @@
+Entity\QuizQuestionCategory:
+  type: entity
+  table: c_quiz_question_category
+  repositoryClass: Entity\Repository\QuizQuestionCategoryRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

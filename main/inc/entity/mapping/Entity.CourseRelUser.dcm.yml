@@ -1,0 +1,52 @@
+Entity\CourseRelUser:
+  type: entity
+  table: course_rel_user
+  repositoryClass: Entity\Repository\CourseRelUserRepository
+  fields:
+    course_code:
+      id: true
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    relation_type:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    status:
+      type: boolean
+      nullable: false
+    role:
+      type: string
+      length: 60
+      fixed: false
+      nullable: true
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    tutor_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    sort:
+      type: integer
+      unsigned: false
+      nullable: true
+    user_course_cat:
+      type: integer
+      unsigned: false
+      nullable: true
+    legal_agreement:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

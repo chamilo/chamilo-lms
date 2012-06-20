@@ -1,0 +1,34 @@
+Entity\UserFieldOptions:
+  type: entity
+  table: user_field_options
+  repositoryClass: Entity\Repository\UserFieldOptionsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    field_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    option_value:
+      type: text
+      nullable: true
+    option_display_text:
+      type: string
+      length: 64
+      fixed: false
+      nullable: true
+    option_order:
+      type: integer
+      unsigned: false
+      nullable: true
+    tms:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

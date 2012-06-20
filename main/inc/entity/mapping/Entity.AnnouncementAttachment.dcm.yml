@@ -1,0 +1,39 @@
+Entity\AnnouncementAttachment:
+  type: entity
+  table: c_announcement_attachment
+  repositoryClass: Entity\Repository\AnnouncementAttachmentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    path:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: true
+    size:
+      type: integer
+      unsigned: false
+      nullable: false
+    announcement_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    filename:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

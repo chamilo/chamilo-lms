@@ -1,0 +1,32 @@
+Entity\DropboxFeedback:
+  type: entity
+  table: c_dropbox_feedback
+  repositoryClass: Entity\Repository\DropboxFeedbackRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    feedback_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    file_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    author_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    feedback:
+      type: text
+      nullable: false
+    feedback_date:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,76 @@
+Entity\ForumThread:
+  type: entity
+  table: c_forum_thread
+  repositoryClass: Entity\Repository\ForumThreadRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    thread_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    thread_title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    forum_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_replies:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_poster_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_poster_name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    thread_views:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_last_post:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_date:
+      type: datetime
+      nullable: true
+    thread_sticky:
+      type: boolean
+      nullable: true
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    thread_title_qualify:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    thread_qualify_max:
+      type: float
+      nullable: false
+    thread_close_date:
+      type: datetime
+      nullable: true
+    thread_weight:
+      type: float
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

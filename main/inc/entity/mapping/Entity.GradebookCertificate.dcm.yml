@@ -1,0 +1,31 @@
+Entity\GradebookCertificate:
+  type: entity
+  table: gradebook_certificate
+  repositoryClass: Entity\Repository\GradebookCertificateRepository
+  fields:
+    id:
+      id: true
+      type: bigint
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    cat_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    score_certificate:
+      type: float
+      nullable: false
+    created_at:
+      type: datetime
+      nullable: false
+    path_certificate:
+      type: text
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

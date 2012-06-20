@@ -1,0 +1,30 @@
+Entity\GradebookScoreDisplay:
+  type: entity
+  table: gradebook_score_display
+  repositoryClass: Entity\Repository\GradebookScoreDisplayRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    score:
+      type: float
+      nullable: false
+    display:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    score_color_percent:
+      type: float
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

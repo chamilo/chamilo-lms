@@ -1,0 +1,27 @@
+Entity\QuizRelQuestion:
+  type: entity
+  table: c_quiz_rel_question
+  repositoryClass: Entity\Repository\QuizRelQuestionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    exercice_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_order:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

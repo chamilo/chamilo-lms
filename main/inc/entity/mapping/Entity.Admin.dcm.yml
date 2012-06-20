@@ -1,0 +1,19 @@
+Entity\Admin:
+  type: entity
+  table: admin
+  repositoryClass: Entity\Repository\AdminRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

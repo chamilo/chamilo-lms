@@ -1,0 +1,37 @@
+Entity\SurveyQuestionOption:
+  type: entity
+  table: c_survey_question_option
+  repositoryClass: Entity\Repository\SurveyQuestionOptionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_option_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    option_text:
+      type: text
+      nullable: false
+    sort:
+      type: integer
+      unsigned: false
+      nullable: false
+    value:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,36 @@
+Entity\Metadata:
+  type: entity
+  table: c_metadata
+  repositoryClass: Entity\Repository\MetadataRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    eid:
+      id: true
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    mdxmltext:
+      type: text
+      nullable: true
+    md5:
+      type: string
+      length: 32
+      fixed: true
+      nullable: true
+    htmlcache1:
+      type: text
+      nullable: true
+    htmlcache2:
+      type: text
+      nullable: true
+    indexabletext:
+      type: text
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

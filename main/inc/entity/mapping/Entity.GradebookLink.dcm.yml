@@ -1,0 +1,50 @@
+Entity\GradebookLink:
+  type: entity
+  table: gradebook_link
+  repositoryClass: Entity\Repository\GradebookLinkRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    type:
+      type: integer
+      unsigned: false
+      nullable: false
+    ref_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    created_at:
+      type: datetime
+      nullable: false
+    weight:
+      type: float
+      nullable: false
+    visible:
+      type: integer
+      unsigned: false
+      nullable: false
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

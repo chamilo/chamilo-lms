@@ -1,0 +1,121 @@
+Entity\Survey:
+  type: entity
+  table: c_survey
+  repositoryClass: Entity\Repository\SurveyRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    code:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    title:
+      type: text
+      nullable: true
+    subtitle:
+      type: text
+      nullable: true
+    author:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    lang:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    avail_from:
+      type: date
+      nullable: true
+    avail_till:
+      type: date
+      nullable: true
+    is_shared:
+      type: string
+      length: 1
+      fixed: true
+      nullable: true
+    template:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    intro:
+      type: text
+      nullable: true
+    surveythanks:
+      type: text
+      nullable: true
+    creation_date:
+      type: datetime
+      nullable: false
+    invited:
+      type: integer
+      unsigned: false
+      nullable: false
+    answered:
+      type: integer
+      unsigned: false
+      nullable: false
+    invite_mail:
+      type: text
+      nullable: false
+    reminder_mail:
+      type: text
+      nullable: false
+    mail_subject:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    anonymous:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    access_condition:
+      type: text
+      nullable: true
+    shuffle:
+      type: boolean
+      nullable: false
+    one_question_per_page:
+      type: boolean
+      nullable: false
+    survey_version:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_type:
+      type: integer
+      unsigned: false
+      nullable: false
+    show_form_profile:
+      type: integer
+      unsigned: false
+      nullable: false
+    form_fields:
+      type: text
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

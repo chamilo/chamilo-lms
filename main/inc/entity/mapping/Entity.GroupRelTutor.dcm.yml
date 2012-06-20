@@ -1,0 +1,26 @@
+Entity\GroupRelTutor:
+  type: entity
+  table: c_group_rel_tutor
+  repositoryClass: Entity\Repository\GroupRelTutorRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

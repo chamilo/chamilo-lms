@@ -1,0 +1,35 @@
+Entity\TrackEUploads:
+  type: entity
+  table: track_e_uploads
+  repositoryClass: Entity\Repository\TrackEUploadsRepository
+  fields:
+    upload_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    upload_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    upload_date:
+      type: datetime
+      nullable: false
+    upload_cours_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    upload_work_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    upload_session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

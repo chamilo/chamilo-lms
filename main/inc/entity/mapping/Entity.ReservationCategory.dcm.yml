@@ -1,0 +1,24 @@
+Entity\ReservationCategory:
+  type: entity
+  table: reservation_category
+  repositoryClass: Entity\Repository\ReservationCategoryRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 128
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

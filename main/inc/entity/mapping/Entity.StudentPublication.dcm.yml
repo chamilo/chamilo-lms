@@ -1,0 +1,94 @@
+Entity\StudentPublication:
+  type: entity
+  table: c_student_publication
+  repositoryClass: Entity\Repository\StudentPublicationRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    url:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    description:
+      type: text
+      nullable: true
+    author:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    active:
+      type: boolean
+      nullable: true
+    accepted:
+      type: boolean
+      nullable: true
+    post_group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    sent_date:
+      type: datetime
+      nullable: false
+    filetype:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    has_properties:
+      type: integer
+      unsigned: false
+      nullable: false
+    view_properties:
+      type: boolean
+      nullable: true
+    qualification:
+      type: float
+      nullable: false
+    date_of_qualification:
+      type: datetime
+      nullable: false
+    parent_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    qualificator_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    weight:
+      type: float
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    allow_text_assignment:
+      type: integer
+      unsigned: false
+      nullable: false
+    contains_file:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

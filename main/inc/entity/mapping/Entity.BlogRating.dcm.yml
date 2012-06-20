@@ -1,0 +1,39 @@
+Entity\BlogRating:
+  type: entity
+  table: c_blog_rating
+  repositoryClass: Entity\Repository\BlogRatingRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    rating_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    blog_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    rating_type:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    item_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    rating:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

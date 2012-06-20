@@ -1,0 +1,38 @@
+Entity\ForumNotification:
+  type: entity
+  table: c_forum_notification
+  repositoryClass: Entity\Repository\ForumNotificationRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    forum_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    thread_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    post_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

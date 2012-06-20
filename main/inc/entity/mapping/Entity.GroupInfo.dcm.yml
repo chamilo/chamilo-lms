@@ -1,0 +1,70 @@
+Entity\GroupInfo:
+  type: entity
+  table: c_group_info
+  repositoryClass: Entity\Repository\GroupInfoRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    category_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    description:
+      type: text
+      nullable: true
+    max_student:
+      type: integer
+      unsigned: false
+      nullable: false
+    doc_state:
+      type: boolean
+      nullable: false
+    calendar_state:
+      type: boolean
+      nullable: false
+    work_state:
+      type: boolean
+      nullable: false
+    announcements_state:
+      type: boolean
+      nullable: false
+    forum_state:
+      type: boolean
+      nullable: false
+    wiki_state:
+      type: boolean
+      nullable: false
+    chat_state:
+      type: boolean
+      nullable: false
+    secret_directory:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    self_registration_allowed:
+      type: boolean
+      nullable: false
+    self_unregistration_allowed:
+      type: boolean
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

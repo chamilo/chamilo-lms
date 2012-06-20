@@ -1,0 +1,29 @@
+Entity\SessionFieldValues:
+  type: entity
+  table: session_field_values
+  repositoryClass: Entity\Repository\SessionFieldValuesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    field_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    field_value:
+      type: text
+      nullable: true
+    tms:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

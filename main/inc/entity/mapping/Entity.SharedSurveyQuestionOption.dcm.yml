@@ -1,0 +1,30 @@
+Entity\SharedSurveyQuestionOption:
+  type: entity
+  table: shared_survey_question_option
+  repositoryClass: Entity\Repository\SharedSurveyQuestionOptionRepository
+  fields:
+    question_option_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    question_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    option_text:
+      type: text
+      nullable: false
+    sort:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

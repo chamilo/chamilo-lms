@@ -1,0 +1,30 @@
+Entity\TrackELogin:
+  type: entity
+  table: track_e_login
+  repositoryClass: Entity\Repository\TrackELoginRepository
+  fields:
+    login_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    login_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    login_date:
+      type: datetime
+      nullable: false
+    login_ip:
+      type: string
+      length: 39
+      fixed: false
+      nullable: false
+    logout_date:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

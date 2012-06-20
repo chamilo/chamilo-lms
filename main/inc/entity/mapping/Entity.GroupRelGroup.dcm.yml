@@ -1,0 +1,27 @@
+Entity\GroupRelGroup:
+  type: entity
+  table: group_rel_group
+  repositoryClass: Entity\Repository\GroupRelGroupRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    group_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    subgroup_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    relation_type:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

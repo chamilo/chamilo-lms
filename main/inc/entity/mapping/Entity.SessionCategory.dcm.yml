@@ -1,0 +1,30 @@
+Entity\SessionCategory:
+  type: entity
+  table: session_category
+  repositoryClass: Entity\Repository\SessionCategoryRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 100
+      fixed: false
+      nullable: true
+    date_start:
+      type: date
+      nullable: true
+    date_end:
+      type: date
+      nullable: true
+    access_url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

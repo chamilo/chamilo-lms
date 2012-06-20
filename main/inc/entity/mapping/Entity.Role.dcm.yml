@@ -1,0 +1,29 @@
+Entity\Role:
+  type: entity
+  table: c_role
+  repositoryClass: Entity\Repository\RoleRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    role_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    role_name:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    role_comment:
+      type: text
+      nullable: true
+    default_role:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

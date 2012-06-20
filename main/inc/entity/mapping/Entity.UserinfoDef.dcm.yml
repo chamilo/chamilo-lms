@@ -1,0 +1,32 @@
+Entity\UserinfoDef:
+  type: entity
+  table: c_userinfo_def
+  repositoryClass: Entity\Repository\UserinfoDefRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 80
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: true
+    line_count:
+      type: boolean
+      nullable: false
+    rank:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

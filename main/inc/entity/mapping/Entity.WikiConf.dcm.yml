@@ -1,0 +1,67 @@
+Entity\WikiConf:
+  type: entity
+  table: c_wiki_conf
+  repositoryClass: Entity\Repository\WikiConfRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    page_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    task:
+      type: text
+      nullable: false
+    feedback1:
+      type: text
+      nullable: false
+    feedback2:
+      type: text
+      nullable: false
+    feedback3:
+      type: text
+      nullable: false
+    fprogress1:
+      type: string
+      length: 3
+      fixed: false
+      nullable: false
+    fprogress2:
+      type: string
+      length: 3
+      fixed: false
+      nullable: false
+    fprogress3:
+      type: string
+      length: 3
+      fixed: false
+      nullable: false
+    max_size:
+      type: integer
+      unsigned: false
+      nullable: true
+    max_text:
+      type: integer
+      unsigned: false
+      nullable: true
+    max_version:
+      type: integer
+      unsigned: false
+      nullable: true
+    startdate_assig:
+      type: datetime
+      nullable: false
+    enddate_assig:
+      type: datetime
+      nullable: false
+    delayedsubmit:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

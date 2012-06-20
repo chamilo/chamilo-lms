@@ -1,0 +1,62 @@
+Entity\SurveyQuestion:
+  type: entity
+  table: c_survey_question
+  repositoryClass: Entity\Repository\SurveyQuestionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    question_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_question:
+      type: text
+      nullable: false
+    survey_question_comment:
+      type: text
+      nullable: false
+    type:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    display:
+      type: string
+      length: 10
+      fixed: false
+      nullable: false
+    sort:
+      type: integer
+      unsigned: false
+      nullable: false
+    shared_question_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    max_value:
+      type: integer
+      unsigned: false
+      nullable: true
+    survey_group_pri:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_group_sec1:
+      type: integer
+      unsigned: false
+      nullable: false
+    survey_group_sec2:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

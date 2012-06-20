@@ -1,0 +1,24 @@
+Entity\TrackCReferers:
+  type: entity
+  table: track_c_referers
+  repositoryClass: Entity\Repository\TrackCReferersRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    referer:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    counter:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

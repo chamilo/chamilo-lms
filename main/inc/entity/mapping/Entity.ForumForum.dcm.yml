@@ -1,0 +1,101 @@
+Entity\ForumForum:
+  type: entity
+  table: c_forum_forum
+  repositoryClass: Entity\Repository\ForumForumRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    forum_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    forum_title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    forum_comment:
+      type: text
+      nullable: true
+    forum_threads:
+      type: integer
+      unsigned: false
+      nullable: true
+    forum_posts:
+      type: integer
+      unsigned: false
+      nullable: true
+    forum_last_post:
+      type: integer
+      unsigned: false
+      nullable: true
+    forum_category:
+      type: integer
+      unsigned: false
+      nullable: true
+    allow_anonymous:
+      type: integer
+      unsigned: false
+      nullable: true
+    allow_edit:
+      type: integer
+      unsigned: false
+      nullable: true
+    approval_direct_post:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    allow_attachments:
+      type: integer
+      unsigned: false
+      nullable: true
+    allow_new_threads:
+      type: integer
+      unsigned: false
+      nullable: true
+    default_view:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    forum_of_group:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    forum_group_public_private:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    forum_order:
+      type: integer
+      unsigned: false
+      nullable: true
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    forum_image:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    start_time:
+      type: datetime
+      nullable: false
+    end_time:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

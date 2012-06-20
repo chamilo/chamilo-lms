@@ -1,0 +1,32 @@
+Entity\SurveyGroup:
+  type: entity
+  table: c_survey_group
+  repositoryClass: Entity\Repository\SurveyGroupRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    name:
+      type: string
+      length: 20
+      fixed: false
+      nullable: false
+    description:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    survey_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

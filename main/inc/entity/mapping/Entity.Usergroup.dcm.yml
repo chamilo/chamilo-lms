@@ -1,0 +1,23 @@
+Entity\Usergroup:
+  type: entity
+  table: usergroup
+  repositoryClass: Entity\Repository\UsergroupRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    description:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

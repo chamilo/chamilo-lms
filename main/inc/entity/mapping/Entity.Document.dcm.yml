@@ -1,0 +1,47 @@
+Entity\Document:
+  type: entity
+  table: c_document
+  repositoryClass: Entity\Repository\DocumentRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    path:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    comment:
+      type: text
+      nullable: true
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    filetype:
+      type: string
+      length: null
+      fixed: false
+      nullable: false
+    size:
+      type: integer
+      unsigned: false
+      nullable: false
+    readonly:
+      type: boolean
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

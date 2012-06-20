@@ -1,0 +1,38 @@
+Entity\Announcement:
+  type: entity
+  table: c_announcement
+  repositoryClass: Entity\Repository\AnnouncementRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: text
+      nullable: true
+    content:
+      type: text
+      nullable: true
+    end_date:
+      type: date
+      nullable: true
+    display_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    email_sent:
+      type: boolean
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,42 @@
+Entity\LpView:
+  type: entity
+  table: c_lp_view
+  repositoryClass: Entity\Repository\LpViewRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    lp_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    view_count:
+      type: integer
+      unsigned: false
+      nullable: false
+    last_item:
+      type: integer
+      unsigned: false
+      nullable: false
+    progress:
+      type: integer
+      unsigned: false
+      nullable: true
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

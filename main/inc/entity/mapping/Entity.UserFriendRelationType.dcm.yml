@@ -1,0 +1,20 @@
+Entity\UserFriendRelationType:
+  type: entity
+  table: user_friend_relation_type
+  repositoryClass: Entity\Repository\UserFriendRelationTypeRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 20
+      fixed: true
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

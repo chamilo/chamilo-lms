@@ -1,0 +1,58 @@
+Entity\LpIvInteraction:
+  type: entity
+  table: c_lp_iv_interaction
+  repositoryClass: Entity\Repository\LpIvInteractionRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: bigint
+      nullable: false
+    order_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    lp_iv_id:
+      type: bigint
+      nullable: false
+    interaction_id:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    interaction_type:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    weighting:
+      type: float
+      nullable: false
+    completion_time:
+      type: string
+      length: 16
+      fixed: false
+      nullable: false
+    correct_responses:
+      type: text
+      nullable: false
+    student_response:
+      type: text
+      nullable: false
+    result:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    latency:
+      type: string
+      length: 16
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

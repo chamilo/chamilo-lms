@@ -1,0 +1,30 @@
+Entity\ReservationItemRights:
+  type: entity
+  table: reservation_item_rights
+  repositoryClass: Entity\Repository\ReservationItemRightsRepository
+  fields:
+    item_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    class_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    edit_right:
+      type: boolean
+      nullable: false
+    delete_right:
+      type: boolean
+      nullable: false
+    m_reservation:
+      type: boolean
+      nullable: false
+    view_right:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

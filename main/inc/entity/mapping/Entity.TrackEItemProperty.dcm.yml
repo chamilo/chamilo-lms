@@ -1,0 +1,46 @@
+Entity\TrackEItemProperty:
+  type: entity
+  table: track_e_item_property
+  repositoryClass: Entity\Repository\TrackEItemPropertyRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    course_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    item_property_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    content:
+      type: text
+      nullable: true
+    progress:
+      type: integer
+      unsigned: false
+      nullable: false
+    lastedit_date:
+      type: datetime
+      nullable: false
+    lastedit_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

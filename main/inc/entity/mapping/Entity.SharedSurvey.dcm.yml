@@ -1,0 +1,55 @@
+Entity\SharedSurvey:
+  type: entity
+  table: shared_survey
+  repositoryClass: Entity\Repository\SharedSurveyRepository
+  fields:
+    survey_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    title:
+      type: text
+      nullable: true
+    subtitle:
+      type: text
+      nullable: true
+    author:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    lang:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    template:
+      type: string
+      length: 20
+      fixed: false
+      nullable: true
+    intro:
+      type: text
+      nullable: true
+    surveythanks:
+      type: text
+      nullable: true
+    creation_date:
+      type: datetime
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

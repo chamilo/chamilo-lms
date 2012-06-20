@@ -1,0 +1,40 @@
+Entity\Language:
+  type: entity
+  table: language
+  repositoryClass: Entity\Repository\LanguageRepository
+  fields:
+    id:
+      id: true
+      type: boolean
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    original_name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    english_name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    isocode:
+      type: string
+      length: 10
+      fixed: false
+      nullable: true
+    dokeos_folder:
+      type: string
+      length: 250
+      fixed: false
+      nullable: true
+    available:
+      type: boolean
+      nullable: false
+    parent_id:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

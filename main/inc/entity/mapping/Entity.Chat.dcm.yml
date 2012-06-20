@@ -1,0 +1,33 @@
+Entity\Chat:
+  type: entity
+  table: chat
+  repositoryClass: Entity\Repository\ChatRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    from_user:
+      type: integer
+      unsigned: false
+      nullable: true
+    to_user:
+      type: integer
+      unsigned: false
+      nullable: true
+    message:
+      type: text
+      nullable: false
+    sent:
+      type: datetime
+      nullable: false
+    recd:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

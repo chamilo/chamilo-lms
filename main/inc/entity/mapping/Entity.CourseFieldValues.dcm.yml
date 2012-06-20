@@ -1,0 +1,30 @@
+Entity\CourseFieldValues:
+  type: entity
+  table: course_field_values
+  repositoryClass: Entity\Repository\CourseFieldValuesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    field_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    field_value:
+      type: text
+      nullable: true
+    tms:
+      type: datetime
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

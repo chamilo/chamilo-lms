@@ -1,0 +1,23 @@
+Entity\Class:
+  type: entity
+  table: class
+  repositoryClass: Entity\Repository\ClassRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: true
+    name:
+      type: text
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

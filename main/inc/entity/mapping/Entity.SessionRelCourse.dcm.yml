@@ -1,0 +1,21 @@
+Entity\SessionRelCourse:
+  type: entity
+  table: session_rel_course
+  repositoryClass: Entity\Repository\SessionRelCourseRepository
+  fields:
+    id_session:
+      id: true
+      type: smallint
+      nullable: false
+    course_code:
+      id: true
+      type: string
+      length: 40
+      fixed: true
+      nullable: false
+    nbr_users:
+      type: smallint
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

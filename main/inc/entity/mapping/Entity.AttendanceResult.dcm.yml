@@ -1,0 +1,30 @@
+Entity\AttendanceResult:
+  type: entity
+  table: c_attendance_result
+  repositoryClass: Entity\Repository\AttendanceResultRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    attendance_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    score:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

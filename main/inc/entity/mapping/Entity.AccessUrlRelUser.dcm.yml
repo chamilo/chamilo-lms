@@ -1,0 +1,18 @@
+Entity\AccessUrlRelUser:
+  type: entity
+  table: access_url_rel_user
+  repositoryClass: Entity\Repository\AccessUrlRelUserRepository
+  fields:
+    access_url_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    user_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

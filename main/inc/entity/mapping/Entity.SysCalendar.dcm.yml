@@ -1,0 +1,37 @@
+Entity\SysCalendar:
+  type: entity
+  table: sys_calendar
+  repositoryClass: Entity\Repository\SysCalendarRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    content:
+      type: text
+      nullable: true
+    start_date:
+      type: datetime
+      nullable: false
+    end_date:
+      type: datetime
+      nullable: false
+    access_url_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    all_day:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

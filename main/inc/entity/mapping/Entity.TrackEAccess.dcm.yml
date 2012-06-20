@@ -1,0 +1,36 @@
+Entity\TrackEAccess:
+  type: entity
+  table: track_e_access
+  repositoryClass: Entity\Repository\TrackEAccessRepository
+  fields:
+    access_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    access_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    access_date:
+      type: datetime
+      nullable: false
+    access_cours_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    access_tool:
+      type: string
+      length: 30
+      fixed: false
+      nullable: true
+    access_session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

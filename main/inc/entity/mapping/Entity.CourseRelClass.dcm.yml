@@ -1,0 +1,19 @@
+Entity\CourseRelClass:
+  type: entity
+  table: course_rel_class
+  repositoryClass: Entity\Repository\CourseRelClassRepository
+  fields:
+    course_code:
+      id: true
+      type: string
+      length: 40
+      fixed: true
+      nullable: false
+    class_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

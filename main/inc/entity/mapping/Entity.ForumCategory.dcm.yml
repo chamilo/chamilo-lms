@@ -1,0 +1,38 @@
+Entity\ForumCategory:
+  type: entity
+  table: c_forum_category
+  repositoryClass: Entity\Repository\ForumCategoryRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cat_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    cat_title:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    cat_comment:
+      type: text
+      nullable: true
+    cat_order:
+      type: integer
+      unsigned: false
+      nullable: false
+    locked:
+      type: integer
+      unsigned: false
+      nullable: false
+    session_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

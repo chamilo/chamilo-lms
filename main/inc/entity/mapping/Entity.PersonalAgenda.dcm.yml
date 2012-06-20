@@ -1,0 +1,44 @@
+Entity\PersonalAgenda:
+  type: entity
+  table: personal_agenda
+  repositoryClass: Entity\Repository\PersonalAgendaRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user:
+      type: integer
+      unsigned: false
+      nullable: true
+    title:
+      type: text
+      nullable: true
+    text:
+      type: text
+      nullable: true
+    date:
+      type: datetime
+      nullable: true
+    enddate:
+      type: datetime
+      nullable: true
+    course:
+      type: string
+      length: 255
+      fixed: false
+      nullable: true
+    parent_event_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    all_day:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

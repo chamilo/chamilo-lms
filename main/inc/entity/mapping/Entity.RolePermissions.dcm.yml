@@ -1,0 +1,38 @@
+Entity\RolePermissions:
+  type: entity
+  table: c_role_permissions
+  repositoryClass: Entity\Repository\RolePermissionsRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    role_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    tool:
+      id: true
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    action:
+      id: true
+      type: string
+      length: 50
+      fixed: false
+      nullable: false
+    default_perm:
+      type: boolean
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

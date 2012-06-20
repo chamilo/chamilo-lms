@@ -1,0 +1,43 @@
+Entity\Templates:
+  type: entity
+  table: templates
+  repositoryClass: Entity\Repository\TemplatesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    description:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+    course_code:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    ref_doc:
+      type: integer
+      unsigned: false
+      nullable: false
+    image:
+      type: string
+      length: 250
+      fixed: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

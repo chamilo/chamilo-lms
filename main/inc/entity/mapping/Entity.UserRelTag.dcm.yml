@@ -1,0 +1,23 @@
+Entity\UserRelTag:
+  type: entity
+  table: user_rel_tag
+  repositoryClass: Entity\Repository\UserRelTagRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    tag_id:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

@@ -1,0 +1,38 @@
+Entity\TrackEHotpotatoes:
+  type: entity
+  table: track_e_hotpotatoes
+  repositoryClass: Entity\Repository\TrackEHotpotatoesRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+      generator:
+        strategy: IDENTITY
+    exe_name:
+      type: string
+      length: 255
+      fixed: false
+      nullable: false
+    exe_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    exe_date:
+      type: datetime
+      nullable: false
+    exe_cours_id:
+      type: string
+      length: 40
+      fixed: false
+      nullable: false
+    exe_result:
+      type: smallint
+      nullable: false
+    exe_weighting:
+      type: smallint
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

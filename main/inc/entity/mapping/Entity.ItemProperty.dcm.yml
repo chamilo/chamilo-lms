@@ -1,0 +1,67 @@
+Entity\ItemProperty:
+  type: entity
+  table: c_item_property
+  repositoryClass: Entity\Repository\ItemPropertyRepository
+  fields:
+    c_id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    id:
+      id: true
+      type: integer
+      unsigned: false
+      nullable: false
+    tool:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    insert_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    insert_date:
+      type: datetime
+      nullable: false
+    lastedit_date:
+      type: datetime
+      nullable: false
+    ref:
+      type: integer
+      unsigned: false
+      nullable: false
+    lastedit_type:
+      type: string
+      length: 100
+      fixed: false
+      nullable: false
+    lastedit_user_id:
+      type: integer
+      unsigned: false
+      nullable: false
+    to_group_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    to_user_id:
+      type: integer
+      unsigned: false
+      nullable: true
+    visibility:
+      type: boolean
+      nullable: false
+    start_visible:
+      type: datetime
+      nullable: false
+    end_visible:
+      type: datetime
+      nullable: false
+    id_session:
+      type: integer
+      unsigned: false
+      nullable: false
+  lifecycleCallbacks:
+    prePersist:
+      - before_save

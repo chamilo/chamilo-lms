@@ -1585,4 +1585,6 @@ $AllowSkillsToolTitle = "Allow Skills tool";
 $AllowSkillsToolComment = "Users can see their skills in the social network and in a block in the homepage.";
 $AllowPublicCertificatesTitle = "Allow public certificates";
 $AllowPublicCertificatesComment = "User certificates can be view by unregistered users.";
+$EnableWebCamClipTitle = "Enable Webcam Clip";
+$EnableWebCamClipComment = "Webcam Clip allow to users capture images from his webcam and send them to server in jpeg format";
 ?>

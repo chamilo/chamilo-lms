@@ -1794,7 +1794,7 @@ function get_forum_information($forum_id) {
     $sql = "SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
             WHERE 	item_properties.tool	= '".TOOL_FORUM."' AND
             		item_properties.ref		= '".Database::escape_string($forum_id)."' AND
-                    item_properties.c_id    = '".api_get_course_int_id()." AND
+                    item_properties.c_id    = ".api_get_course_int_id()." AND
     				forums.forum_id			= '".Database::escape_string($forum_id)."' AND
     				forums.c_id = ".api_get_course_int_id()."                     
    			";

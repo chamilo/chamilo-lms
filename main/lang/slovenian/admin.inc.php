@@ -6,6 +6,10 @@ $CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom 
 Obiščite 
 <a href=\"settings.php?category=CAS\">Vtiči</a>
 za dodajanje in prilagoditev 'CAS Prijava' gumba za vaš Chamilo portal.";
+$ShowHotCoursesComment = "Seznam vročih tečajev bo dodan na indeksno (domačo) stran";
+$ShowHotCoursesTitle = "Prikaži vroče tečaje";
+$EnableIframeInclusionComment = "Dovoljenje za uporabo morebitnih iframe-ov v HTML urejevalniku izboljša zmožnosti urejanja s strani uporabnika, vendar pa lahko predstavlja tveganje, kar se tiče varnosti. Prepričajte se, da svojim uporabnikom lahko zaupate (predvsem da veste, kdo dejansko so) predenj to zmožnost omogočite.";
+$EnableIframeInclusionTitle = "Dovoli iframe v HTML urejevalniku";
 $MailTemplateRegistrationMessage = "Spoštovani((firstname)) ((lastname)),\n\nRegistrirani ste v portal ((sitename)) z naslednjimi podatki:\n\nUporabniško ime : ((username))\nGeslo : ((password))\n\nSpletni naslov portala((sitename)) je : ((url))\n\nV primeru težav se obrnite na upravitelja portala.\n\nVaš upravitelj  \n((admin_name)) ((admin_surname)).";
 $MailTemplateRegistrationTitle = "Nov uporabnik v ((sitename))";
 $AdminBy = "Upravlja";

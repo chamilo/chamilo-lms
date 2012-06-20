@@ -20,8 +20,9 @@ class Plugin {
     private $strings = null; //translation strings
 
     /**
-     * When creating a new course this settings are added to the course in the course_info/infocours.php
-     * To showing the plugin course icons you need to add these icons:
+     * When creating a new course, these settings are added to the course, in 
+     * the course_info/infocours.php
+     * To show the plugin course icons you need to add these icons:
      * main/img/icons/22/plugin_name.png
      * main/img/icons/64/plugin_name.png
      * main/img/icons/64/plugin_name_na.png

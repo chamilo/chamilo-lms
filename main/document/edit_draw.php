@@ -135,8 +135,20 @@ if (api_browser_support('svg')) {
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';	
-	echo '<iframe style=\'height: 550px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit.'\'>';	
-	echo '</iframe>';
+	?>
+	<script type="text/javascript">
+	if (window.innerHeight){
+   		height_iframe = window.innerHeight -50;
+	}else{
+		height_iframe = 550;
+ 	}
+
+	document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit; ?>" width="100%" height="' + height_iframe + '"></iframe>');
+	</script>
+    <?php
+    echo '<noscript>';
+	echo '<iframe style=\'height: 550px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit.'\'></iframe>';
+	echo '</noscript>';
 } else {	
 	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
 }

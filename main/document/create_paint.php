@@ -162,5 +162,21 @@ else {
 	$credentials="false";
 }
 
-echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials.'\'>';
-echo '</iframe>';
+?>
+
+<script type="text/javascript">
+
+if (window.innerHeight){
+	height_iframe = window.innerHeight;
+}else{   
+	height_iframe = 600;
+}
+
+document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials; ?>" width="100%" height="' + height_iframe + '"></iframe>');
+</script>
+
+<?php
+
+echo '<noscript>';
+echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials.'\'></iframe>';
+echo '</noscript>';

@@ -215,6 +215,23 @@ $image=urlencode($to_url);
 $pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
  
 //make frame an send image
-echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'">';
-echo '</iframe>';
+?>
+
+<script type="text/javascript">
+
+if (window.innerHeight){
+	height_iframe = window.innerHeight;
+}else{   
+	height_iframe = 600;
+}
+
+document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo $pixlr_url; ?>" width="100%" height="' + height_iframe + '"></iframe>');
+
+</script>
+
+<?php
+echo '<noscript>';
+echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'"></iframe>';
+echo '</noscript>';
+
 Display::display_footer();

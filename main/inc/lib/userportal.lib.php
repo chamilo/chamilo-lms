@@ -543,21 +543,23 @@ class IndexManager {
 						|| api_is_platform_admin()) {
 	                    $courses_list_string .= '</a><br />';
 				}
+                        $course_details = array();
 						if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-						$courses_list_string .= ' '.$course['visual_code'];
+						$course_details[] = $course['visual_code'];
 				}
-						if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-	                    $courses_list_string .= ' - ';
-				}
+//						if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
+//	                    $courses_list_string .= ' - ';
+//				}
 						if (api_get_setting('display_teacher_in_courselist') == 'true') {
-						$courses_list_string .= $course['tutor_name'];
+						$course_details[] = $course['tutor_name'];
 	                }
 	                if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
-						$courses_list_string .= ' - '.$course['course_language'];
+						$course_details[] = $course['course_language'];
 	                }
 						if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
-	                    $courses_list_string .= ' - '.$course['course_language'];
+	                    $course_details[] = $course['course_language'];
 	                }
+                    $courses_list_string .= implode(' - ', $course_details);
 						// We display a subscription link if:
 	                // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
 	                // 2.

@@ -1236,4 +1236,12 @@ $ResourceLockedByGradebook = "This option is not available because this activity
 $ConfirmToLockElement = "Are you sure you want to lock this item? After locking this item you can't edit the user results. To unlock it, you need to contact the platform administrator.";
 $ConfirmToUnLockElement = "Are you sure you want to unlock this element?";
 $Default = "Default";
+$ReturnToCourseHomepage = "Return to Course Homepage";
+$WebCamClip = "Webcam Clip";
+$Snapshot = "Snapshot";
+$TakeYourPhotos = "Take your photos";
+$LocalInputImage = "Local input image";
+$ClipSent = "Clip sent";
+$Auto = "Auto";
+$Stop = "Stop";
 ?>

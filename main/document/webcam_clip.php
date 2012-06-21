@@ -26,7 +26,7 @@ $this_section = SECTION_COURSES;
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-$nameTools = get_lang('Webcam');
+$nameTools = get_lang('WebCamClip');
 
 api_protect_course_script();
 api_block_anonymous_users();
@@ -137,9 +137,8 @@ echo '<div class="actions">';
 echo '</div>';
 ?>
 
-<div align="center">	
-    <h1><?php echo get_lang('Webcam'); ?></h1>
-    <h3><?php echo get_lang('TakeYourPhotos'); ?></h3>
+<div align="center">
+    <h2><?php echo get_lang('TakeYourPhotos'); ?></h2>
 </div>
 <div align="center" style="padding-left:50px;">
 <table><tr><td valign=top>
@@ -171,7 +170,7 @@ echo '</div>';
 		<input type=button value="<?php echo get_lang('Clean'); ?>" onClick="webcam.reset()">
         <input type=button value="<?php echo get_lang('Send'); ?>" onClick="do_upload()">
         &nbsp;&nbsp;||&nbsp;&nbsp;
-        <input type=button value="<?php echo get_lang('Auto'); ?>" onClick="start_video()">
+        <input type=button value="<?php echo get_lang('Auto'); ?>" onClick="start_video();">
 		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()"> 
         <br/>
         <input type=button value="<?php echo get_lang('Configure'); ?>" onClick="webcam.configure()">
@@ -184,7 +183,9 @@ echo '</div>';
 		
 		function do_upload() {
 			// upload to server
-			document.getElementById('upload_results').innerHTML = '<h3><?php echo get_lang('Uploading'); ?>...</h3>';
+			if (this.loaded){
+				document.getElementById('upload_results').innerHTML = '<h3><?php echo get_lang('Uploading'); ?></h3>';
+			}
 			webcam.upload();
 		}
 		

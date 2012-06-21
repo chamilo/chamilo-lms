@@ -129,4 +129,5 @@ $DatabaseXWillBeCreated = "La base de datos <b> %s </b> se creará";
 $ADatabaseWithTheSameNameAlreadyExists = "Una base de datos con el mismo nombre <b>ya existe</b>. El contenido de la base de datos se perderá.";
 $UserXCantHaveAccessInTheDatabaseX = "El usuario <b>%s</b> no tiene acceso a la base de datos <b>%s</b>";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "La base de datos <b>%s</b> no puede ser creada, el usuario <b>%s</b> no tiene los permisos necesarios";
+$CourseTestWasCreated = "El curso test ha sido creado";
 ?>

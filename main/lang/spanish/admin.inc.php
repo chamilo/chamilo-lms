@@ -4,7 +4,11 @@ for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS";
 $UsersRegisteredInAnyGroup = "Usuario registrado en ningun curso";
+$ShowHotCoursesComment = "La lista de los cursos con mayor prestigio será añadida a la página principal";
+$ShowHotCoursesTitle = "Mostrar cursos con mayor prestigio";
+$EnableIframeInclusionComment = "Permitir  iframes en el editor HTML aumentará las capacidades de edición de los usuarios, pero puede representar un riesgo de seguridad.  Asegúrese de que puede confiar en sus usuarios (por ejemplo, usted sabe quienes son) antes de activar esta prestación.";
 $EnableIframeInclusionTitle = "Permitir iframes en el editor HTML";
+$MailTemplateRegistrationMessage = "Estimado ((firstname)) ((lastname)),\n\nHa sido registrado en ((sitename)) con la siguiente configuración:\n\nNombre de usuario : ((username))\nContraseña : ((password))\n\nLa dirección de ((sitename)) es : ((url))\n\nSi tiene alguna dificultad, contacte con nosotros.\n\nAtentamente:\n((admin_name)) ((admin_surname)).";
 $MailTemplateRegistrationTitle = "Nuevo usuario en ((sitename))";
 $AdminBy = "Administrado por:";
 $AdministrationTools = "Administración";
@@ -1543,10 +1547,10 @@ $EnableWamiRecordTitle = "Activar Wami-recorder";
 $EnableWamiRecordComment = "Wami-recorder es una herramienta de grabación de voz sobre Flash";
 $ChangeSharedSetting = "Cambiar visibilidad de la configuración para los otros portales";
 $AllowHRSkillsManagementTitle = "Permitir al perfil RRHH administrar las competencias";
-$AllowHRSkillsManagementComment = "El usuario podrá crear, editar competencias";
+$AllowHRSkillsManagementComment = "El usuario podrá crear y editar competencias";
 $GradebookDefaultWeightTitle = "Peso total por defecto en la herramienta \"Evaluaciones\"";
 $GradebookDefaultWeightComment = "Este peso será utilizado en todos los cursos";
-$TeachersCanChangeScoreSettingsTitle = "Los profesores pueden cambiar la configuración de puntuación de las Evaluaciones";
+$TeachersCanChangeScoreSettingsTitle = "Los profesores pueden cambiar la configuración de puntuación de las evaluaciones";
 $TeachersCanChangeScoreSettingsComment = "Al editar la configuración de las Evaluaciones";
 $GradebookEnableLockingTitle = "Activar bloqueo de Evaluaciones por los profesores";
 $GradebookEnableLockingComment = "Una vez activada, esta opción permitirá a los profesores bloquear cualquier evaluación dentro de su curso. Esto prohibirá al profesor cualquier modificación posterior de los resultados de sus alumnos en los recursos usados para esta evaluación: exámenes, lecciones, tareas, etc. El único rol autorizado a desbloquear una evaluación es el administrador. El profesor estará informado de esta posibilidad al intentar desbloquear la evaluación. El bloqueo como el desbloqueo estarán guardados en el registro de actividades importantes del sistema.";
@@ -1604,8 +1608,10 @@ $GradebookEnableGradeModelTitle = "Habilitar el modelo de calificación en el cu
 $GradebookEnableGradeModelComment = "Permite utilizar un modelo de calificacíón en el cuaderno de evaluaciones";
 $AllowSessionAdminsToSeeAllSessionsTitle = "Permitir a los administradores de sesion de ver todas las sesiones";
 $AllowSessionAdminsToSeeAllSessionsComment = "Cuando esta opción no esta activada, los administradores de sesión puede ver solamente sus sesiones.";
-$AllowSkillsToolTitle = "Habilitar la herramienta de Competencias";
+$AllowSkillsToolTitle = "Habilitar la herramienta de competencias";
 $AllowSkillsToolComment = "Los usuarios pueden ver sus competencias en la red social y en un bloque en la página principal.";
 $AllowPublicCertificatesTitle = "Permitir certificados públicos";
 $AllowPublicCertificatesComment = "Los certificados pueden ser vistos por personas no registradas en el portal.";
+$EnableWebCamClipTitle = "Activar Webcam Clip";
+$EnableWebCamClipComment = "Webcam Clip permite a los usuarios capturar imágenes desde su webcam y enviarlas al servidor en formato jpeg";
 ?>

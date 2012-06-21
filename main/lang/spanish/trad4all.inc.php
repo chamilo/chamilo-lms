@@ -2,7 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visible para un estudiante pero podrá acceder a él como profesor";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
+$Unsubscribe = "Dar de baja";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $Title = "Título";
 $By = "Publicado por";
@@ -730,6 +732,7 @@ $Until = "Hasta";
 $FirstPage = "Primera página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
+$DragAndDropAnElementHere = "Arrastrar y soltar un elemento aquí";
 $ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
 $CalendarList = "Fechas de la lista de asistencia";
 $AttendanceCalendarDescription = "El calendario de asistencia le permite especificar las fechas que aparecerán en la lista de asistencia.";
@@ -1230,11 +1233,20 @@ $Configure = "Configurar";
 $Regions = "Regiones";
 $CourseList = "Lista de cursos";
 $NumberAbbreviation = "N°";
-$FirstnameAndLastname = "Nombres y Apellidos";
-$LastnameAndFirstname = "Apellidos y Nombres";
+$FirstnameAndLastname = "Nombre y apellidos";
+$LastnameAndFirstname = "Apellidos y nombre";
 $Plugins = "Plugins";
 $Detailed = "Detallado";
 $ResourceLockedByGradebook = "Esta opción no está disponible porque la actividad está incluida en una evaluación que se encuentra bloqueada. Para desbloquear esta evaluación, comuníquese con el administrador de la plataforma.";
 $ConfirmToLockElement = "¿Está seguro de querer bloquear este elemento? Después de bloquear este elemento no podrá editar los resultados de los estudiantes. Para desbloquearlo deberá contactar con el administrador de la plataforma.";
 $ConfirmToUnLockElement = "¿Está seguro de querer desbloquear este elemento?";
+$Default = "Defecto";
+$ReturnToCourseHomepage = "Volver a la página principal del curso";
+$WebCamClip = "Webcam Clip";
+$Snapshot = "Capturar";
+$TakeYourPhotos = "Tome sus fotos";
+$LocalInputImage = "Imagen local";
+$ClipSent = "Imagen enviada";
+$Auto = "Automático";
+$Stop = "Parar";
 ?>

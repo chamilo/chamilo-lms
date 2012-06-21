@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Este ejercicio ha sido incluido en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí. Si quiere colocar el mismo ejercicio disponible a través de la herramienta ejercicios, haga una copia del ejercicio en cuestión pulsando sobre el icono de copia.";
 $langExercice = "Ejercicio";
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
@@ -494,4 +495,6 @@ $CongratulationsYouPassedTheTest = "Felicitaciones ha aprobado el ejercicio.";
 $YouDidNotReachTheMinimumScore = "No ha alcanzado el puntaje mínimo.";
 $EndTest = "Terminar ejercicio";
 $PassPercentage = "Porcentaje de éxito";
+$NoCategorySelected = "No hay una categoría seleccionada";
+$ExerciseAverage = "Media del ejercicio";
 ?>

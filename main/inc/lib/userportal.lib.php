@@ -503,18 +503,17 @@ class IndexManager {
 						$courses_shown++;
 						$courses_list_string .= "<li>\n";
 						$courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
+                        $course_details = array();
 						if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-							$courses_list_string .= $course['visual_code'];
-						}
-						if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-							$courses_list_string .= ' - ';
+							$course_details[] = $course['visual_code'];
 						}
 						if (api_get_setting('display_teacher_in_courselist') == 'true') {
-							$courses_list_string .= $course['tutor_name'];
+							$course_details[] = $course['tutor_name'];
 						}
 						if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
-							$courses_list_string .= ' - '.$course['course_language'];
+							$course_details[] = $course['course_language'];
 						}
+                        $courses_list_string .= implode(' - ', $course_details);
 						$courses_list_string .= "</li>\n";
 					}
 				}

@@ -766,10 +766,16 @@ switch ($action) {
             $form->addElement('html', '<div id="options" style="display: none;">');
             
         
-            //QualificationOfAssignment
-            $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
             
-            $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
+            if(Gradebook::is_active()){
+                //QualificationOfAssignment
+                $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
+                $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
+            }else{
+                //QualificationOfAssignment
+                $form->addElement('hidden', 'qualification_value',0);
+                $form->addElement('hidden', 'make_calification', false);
+            }
             
             $form->addElement('html', '<div id="option1" style="display: none;">');
             

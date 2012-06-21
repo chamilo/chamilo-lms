@@ -2081,7 +2081,11 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
 
         // Thread qualify
         $form->applyFilter('numeric_calification', 'html_filter');
-        $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        if(Gradebook::is_active()){
+            $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        }else{
+            $form->addElement('hidden', 'thread_qualify_gradebook', false);
+        }
 
         $form -> addElement('html', '<div id="options_field" style="display:none">');
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
@@ -2508,12 +2512,20 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     if (!isset($_GET['edit'])) {
         $form->addElement('label', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
         $form->applyFilter('numeric_calification', 'html_filter');
-        $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
-
-        if (!empty($link_info)) {
-            $defaults['thread_qualify_gradebook'] = true;
-            $defaults['category_id'] = $link_info['category_id'];
+        if(Gradebook::is_active()){
+            $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+            
+            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
+            if (!empty($link_info)) {
+                $defaults['thread_qualify_gradebook'] = true;
+                $defaults['category_id'] = $link_info['category_id'];
+            }else{
+                $defaults['thread_qualify_gradebook'] = false;
+                $defaults['category_id'] = '';
+            }
+        }else{
+            $form->addElement('hidden', 'thread_qualify_gradebook', false);
+            $defaults['thread_qualify_gradebook'] = false;
         }
 
         if (!empty($defaults['thread_qualify_gradebook'])) {
@@ -2661,6 +2673,7 @@ function store_edit_post($values) {
         $link_id = $link_info['id'];
 
         $thread_qualify_gradebook = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null;
+                
         if ($thread_qualify_gradebook != 1) {
             if ($link_info !== false) {
                 remove_resource_from_course_gradebook($link_id);

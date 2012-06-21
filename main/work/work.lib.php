@@ -503,32 +503,37 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
 					list($d_hour, $d_minute) = explode(':', $parts[1]);
 						
-					$qualification_input[] = FormValidator :: createElement('text', 'qualification');
-					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
-						
-					if ((int)$row['weight'] == 0) { 
-                        
-						$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
-                        
-						$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
-                        
-                         //Loading gradebook select
-                        load_gradebook_select_in_tool($form_folder);
-                        
-						$weight_input2[] = FormValidator :: createElement('text', 'weight');
-						$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+                    if(Gradebook::is_active()){
+                        $qualification_input[] = FormValidator :: createElement('text', 'qualification');
+                        $form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
 
-						$form_folder -> addElement('html', '</div>');
-					} else {
-						$weight_input[] = FormValidator :: createElement('text', 'weight');
-                        //Loading gradebook select
-                        load_gradebook_select_in_tool($form_folder);                        
-						$form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
-					}
-                    
-                    $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
+                        if ((int)$row['weight'] == 0) {                         
+                        
+                            $form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');                                                           
+                        
+                            $form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
+
+                            //Loading gradebook select
+                            load_gradebook_select_in_tool($form_folder);
+
+                            $weight_input2[] = FormValidator :: createElement('text', 'weight');
+                            $form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+
+                            $form_folder -> addElement('html', '</div>');
+                        } else {
+                            $weight_input[] = FormValidator :: createElement('text', 'weight');
+                            //Loading gradebook select
+                            load_gradebook_select_in_tool($form_folder);                        
+                            $form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');                            
+                        }
+
+                        $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
                                                             
-                    $defaults['category_id'] = $link_info['category_id'];
+                        $defaults['category_id'] = $link_info['category_id'];
+                    }else{
+                        
+                        $defaults['category_id'] = '';
+                    }
 											
 					if ($homework['expires_on'] != '0000-00-00 00:00:00') {
 						$homework['expires_on'] = api_get_local_time($homework['expires_on']);

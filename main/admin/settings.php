@@ -222,7 +222,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
             $key = Database::escape_string($key);
             $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";            
-            $res = Database::query($sql);            
+            $res = Database::query($sql);      
         }
         
         /*foreach($settings_to_avoid as $key => $value) {

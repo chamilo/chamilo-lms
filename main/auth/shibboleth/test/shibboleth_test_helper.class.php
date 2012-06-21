@@ -45,6 +45,17 @@ class ShibbolethTestHelper
         $_SERVER['persistent-id'] = 'idp!viewer!drea34çcv3d';
     }
 
+    public function setup_staff()
+    {
+        $id = uniqid();
+        $_SERVER['Shib-SwissEP-UniqueID'] = 'usr_123456';
+        $_SERVER['Shib-EP-Affiliation'] = 'member;staff';
+        $_SERVER['Shib-InetOrgPerson-givenName'] = 'John Staff';
+        $_SERVER['Shib-Person-surname'] = 'Doe';
+        $_SERVER['Shib-InetOrgPerson-mail'] = 'john.staff.doe@localhost.org';
+        $_SERVER['persistent-id'] = 'idp!viewer!usr_123456';
+    }
+
     public function setup_new_student()
     {
         $id = uniqid();

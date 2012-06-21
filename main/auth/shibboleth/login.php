@@ -27,7 +27,7 @@ include_once(dirname(__FILE__) . '/init.php');
  */
 //Shibboleth::session()->logout();
 //ShibbolethTest::helper()->setup_new_student_no_email();
-//ShibbolethTest::helper()->setup_new_staff();
+//ShibbolethTest::helper()->setup_staff();
 //ShibbolethTest::helper()->setup_new_teacher();
 //ShibbolethTest::helper()->setup_new_student();
 //ShibbolethTest::helper()->setup_new_minimal_data();

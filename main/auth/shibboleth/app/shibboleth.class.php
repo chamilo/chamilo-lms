@@ -149,10 +149,10 @@ class Shibboleth
             if ($updatable) {
                 $user->{$key} = $shibb_user->{$key};
             }
-            $user->auth_source == self::NAME;
         }
-        $user->shibb_unique_id = $user->unique_id;
-        $user->shibb_persistent_id = $user->persistent_id;
+        $user->auth_source == self::NAME;
+        $user->shibb_unique_id = $shibb_user->shibb_unique_id;
+        $user->shibb_persistent_id = $shibb_user->shibb_persistent_id;
         $user->save();
         return $result;
     }

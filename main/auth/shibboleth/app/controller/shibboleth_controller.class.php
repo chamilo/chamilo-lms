@@ -4,6 +4,7 @@ namespace Shibboleth;
 
 use \Redirect;
 use \Display;
+use IndexManager;
 
 /**
  * Controller for the Shibboleth authentication system. 
@@ -114,7 +115,7 @@ class ShibbolethController
             //Maximum user right is reached.
             Shibboleth::redirect();
         }
-
+        
         $form = ShibbolethStatusRequestForm::instance();
 
         if ($form->cancelled())

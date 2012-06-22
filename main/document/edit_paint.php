@@ -225,13 +225,13 @@ if (window.innerHeight){
 	height_iframe = 600;
 }
 
-document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo $pixlr_url; ?>" width="100%" height="' + height_iframe + '"></iframe>');
+document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo $pixlr_url; ?>" width="100%" height="' + height_iframe + '"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 
 </script>
 
 <?php
 echo '<noscript>';
-echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'"></iframe>';
+echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 echo '</noscript>';
 
 Display::display_footer();

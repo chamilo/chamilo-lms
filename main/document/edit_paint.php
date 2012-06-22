@@ -219,13 +219,17 @@ $pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp
 
 <script type="text/javascript">
 
-if (window.innerHeight){
-	height_iframe = window.innerHeight;
-}else{   
-	height_iframe = 600;
-}
-
-document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo $pixlr_url; ?>" width="100%" height="' + height_iframe + '"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+function resizeIframe() {
+	var height = window.innerHeight;
+	//max lower size
+	if (height<600) {
+		height=600;
+	}
+	document.getElementById('frame').style.height = height +"px";
+};
+document.getElementById('frame').onload = resizeIframe;
+window.onresize = resizeIframe;
 
 </script>
 

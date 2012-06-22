@@ -151,17 +151,24 @@ if (api_browser_support('svg')){
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
 	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit ;
-	
 	?>
+    
 	<script type="text/javascript">
-	if (window.innerHeight){
-   		height_iframe = window.innerHeight -50;
-	}else{   
-		height_iframe = 550;
- 	}
-
-	document.write ('<iframe frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="' + height_iframe + '"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+	
+		document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
+	function resizeIframe() {
+    	var height = window.innerHeight -50;
+		//max lower size
+		if (height<550) {
+			height=550;
+		}
+    	document.getElementById('frame').style.height = height +"px";
+	};
+	document.getElementById('frame').onload = resizeIframe;
+	window.onresize = resizeIframe;
+	
 	</script>
+    
     <?php
     echo '<noscript>';
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0" src="'.$svg_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';

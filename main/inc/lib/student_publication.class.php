@@ -26,20 +26,25 @@ use ResultSet;
  */
 class StudentPublication
 {
-    
+
     public static function void()
     {
         static $result = null;
-        if($result)
-        {
+        if ($result) {
             return $result;
         }
-        
+
         $result = new self();
         return $result;
     }
-    
-    
+
+    /**
+     * @return Model\StudentPublicationRepository 
+     */
+    public static function repository()
+    {
+        return StudentPublicationRepository::instance();
+    }
 
     /**
      *
@@ -48,36 +53,7 @@ class StudentPublication
      */
     public static function query($where)
     {
-        $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $tool = 'work';
-
-        $sql = "SELECT pub.*,         
-                       prop.id AS property_id, 
-                       prop.tool, 
-                       prop.insert_user_id,
-                       prop.insert_date,
-                       prop.lastedit_date,
-                       prop.ref,
-                       prop.lastedit_type,
-                       prop.lastedit_user_id,
-                       prop.to_group_id, 
-                       prop.to_user_id, 
-                       prop.visibility, 
-                       prop.start_visible, 
-                       prop.end_visible, 
-                       prop.id_session
-                FROM 
-                    $table AS pub, 
-                    $table_item_property AS prop
-                WHERE 
-                    (pub.id = prop.ref AND
-                     pub.c_id = prop.c_id AND
-                     prop.tool = '$tool')";
-
-        $sql .= $where ? "AND ($where)" : '';
-        $result = new ResultSet($sql);
-        return $result->return_type(__CLASS__);
+        return self::repository()->query($where);
     }
 
     /**
@@ -88,8 +64,7 @@ class StudentPublication
      */
     public static function get_by_id($c_id, $id)
     {
-        $c_id = is_object($c_id) ? $c_id->get_id() : (int) $c_id;
-        return self::query("pub.c_id = $c_id AND pub.id = $id")->first();
+        return self::repository()->get_by_id($c_id, $id);
     }
 
     protected $c_id = 0;
@@ -156,8 +131,6 @@ class StudentPublication
             $this->item_property = null;
         }
     }
-    
-
 
     public function get_c_id()
     {
@@ -435,5 +408,80 @@ class StudentPublication
         $where = "pub.c_id = $c_id AND pub.parent_id = $id";
         return self::query($where);
     }
-    
+
+}
+
+class StudentPublicationRepository
+{
+
+    /**
+     *
+     * @staticvar null $result
+     * @return StudentPublicationRepository 
+     */
+    public static function instance()
+    {
+        static $result = null;
+        if (empty($result)) {
+            $result = new self();
+        }
+        return $resutl;
+    }
+
+    /**
+     *
+     * @param string $where
+     * @return \ResultSet 
+     */
+    public function query($where)
+    {
+        $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $tool = 'work';
+
+        $sql = "SELECT pub.*,         
+                       prop.id AS property_id, 
+                       prop.tool, 
+                       prop.insert_user_id,
+                       prop.insert_date,
+                       prop.lastedit_date,
+                       prop.ref,
+                       prop.lastedit_type,
+                       prop.lastedit_user_id,
+                       prop.to_group_id, 
+                       prop.to_user_id, 
+                       prop.visibility, 
+                       prop.start_visible, 
+                       prop.end_visible, 
+                       prop.id_session
+                FROM 
+                    $table AS pub, 
+                    $table_item_property AS prop
+                WHERE 
+                    (pub.id = prop.ref AND
+                     pub.c_id = prop.c_id AND
+                     prop.tool = '$tool')";
+
+        $sql .= $where ? "AND ($where)" : '';
+        $result = new ResultSet($sql);
+        return $result->return_type(__CLASS__);
+    }
+
+    /**
+     *
+     * @param int|Course $c_id
+     * @param int $id
+     * @return \Model\StudentPublication 
+     */
+    public function get_by_id($c_id, $id)
+    {
+        $c_id = is_object($c_id) ? $c_id->get_id() : (int) $c_id;
+        return $this->query("pub.c_id = $c_id AND pub.id = $id")->first();
+    }
+
+    public function update($pub)
+    {
+        
+    }
+
 }

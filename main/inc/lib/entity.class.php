@@ -19,7 +19,9 @@ class Entity
         if ($result === false) {
             $repo = \Entity\Course::repository();
             $course_id = api_get_course_int_id();
-            $result = $repo->find($course_id);
+            if ($course_id) {
+                $result = $repo->find($course_id);
+            }
         }
         return $result;
     }

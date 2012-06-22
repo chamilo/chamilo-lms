@@ -11,7 +11,10 @@ class CourseEntity extends Entity
 
     public function __construct()
     {
-        $this->defaults('c_id', self::current_course()->get_id());
+        $current_course = self::current_course();
+        if ($current_course) {
+            $this->defaults('c_id', self::current_course()->get_id());
+        }
         $this->defaults('session_id', api_get_session_id());
     }
 

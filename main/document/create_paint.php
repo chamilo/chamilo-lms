@@ -162,5 +162,31 @@ else {
 	$credentials="false";
 }
 
-echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials.'\'>';
-echo '</iframe>';
+$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
+
+
+?>
+
+<script type="text/javascript">
+
+document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe></div>');
+function resizeIframe() {
+	var height = window.innerHeight;
+	//max lower size
+	if (height<600) {
+		height=600;
+	}
+	document.getElementById('frame').style.height = height +"px";
+};
+document.getElementById('frame').onload = resizeIframe;
+window.onresize = resizeIframe;
+
+</script>
+
+<?php
+
+echo '<noscript>';
+echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
+echo '</noscript>';
+
+Display::display_footer();

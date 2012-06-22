@@ -241,6 +241,9 @@ function check_writable($folder, $suggestion = false) {
  * @return  array   The lines of the file returned as an array
  */
 function file_to_array($filename) {
+    if(!is_readable($filename)){
+        return array();
+    }
     $fp = fopen($filename, 'rb');
     $buffer = fread($fp, filesize($filename));
     fclose($fp);

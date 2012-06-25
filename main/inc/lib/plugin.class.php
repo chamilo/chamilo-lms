@@ -183,9 +183,7 @@ class Plugin {
                         $this->strings[$key] = $string;
                     }
                 }
-            } else {
-                $this->strings = array();
-            }
+            } 
         }
 
         if (isset($this->strings[$name])) {
@@ -251,7 +249,7 @@ class Plugin {
             }
         }
 
-        $sql_course = "DELETE FROM $t_tool WHERE  c_id = $course_id AND name = '$plugin_name'";
+        $sql_course = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
         Database::query($sql_course);
     }
 

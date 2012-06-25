@@ -23,7 +23,7 @@ class BBBPlugin extends Plugin
     protected function __construct() {
         parent::__construct('2.0', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
-
+    
     function install() {
         $table = Database::get_main_table('plugin_bbb_meeting');
         $sql = "CREATE TABLE $table (
@@ -67,7 +67,8 @@ class BBBPlugin extends Plugin
         $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
         Database::query($sql);
 
-        $sql = "DELETE FROM $t_tool WHERE name = 'videoconference'";
+        //hack to get rid of Database::query warning (please add c_id...)
+        $sql = "DELETE FROM $t_tool WHERE name = 'videoconference' AND c_id = c_id"; 
         Database::query($sql);
 
         $sql = "DROP TABLE IF EXISTS plugin_bbb_meeting";

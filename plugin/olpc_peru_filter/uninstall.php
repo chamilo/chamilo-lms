@@ -10,4 +10,4 @@
  * Queries
  */
 require_once 'config.php';
-OLPCPeruFilterPlugin::create()->uninstall();
+OLPC_Peru_FilterPlugin::create()->uninstall();

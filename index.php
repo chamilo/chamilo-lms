@@ -43,7 +43,7 @@ $htmlHeadXtra[] ='
 </script>';
 
 //set cookie for check if client browser are cookies enabled
-setcookie("TestCookie", "cookies_yes", time()+3600);
+setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 $controller = new IndexManager($header_title);
 

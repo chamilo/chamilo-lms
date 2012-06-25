@@ -221,7 +221,10 @@ if (!$is_certificate_mode) {
 	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
 
-$form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
+$params = Uri::course_params();
+$params['id'] = Request::get('id');
+$action = Uri::here($params, false);    
+$form = new FormValidator('upload', 'POST', $action, '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).'M';

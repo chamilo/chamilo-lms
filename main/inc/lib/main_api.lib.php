@@ -2785,7 +2785,9 @@ function api_not_allowed($print_headers = false, $message = null) {
         }
 
         // If the user has no user ID, then his session has expired
-        $form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']), null, array('class'=>'form-stacked'));
+        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+        $action = str_replace('&amp;', '&', $action);
+        $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
 
         //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3')); //new

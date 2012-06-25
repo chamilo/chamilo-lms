@@ -3986,9 +3986,9 @@ a.thumbnail:hover {
 .show {
   display: block;
 }
-.invisible {
+/*.invisible {
   visibility: hidden;
-}
+}*/
 .navbar .nav > li > a {
   border-right: 1px solid #C03D14;
   border-left: 1px solid #E6633A;

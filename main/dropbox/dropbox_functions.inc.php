@@ -37,12 +37,18 @@ function handle_multiple_actions() {
 	}
 
 	// STEP 2: at least one file has to be selected. If not we return an error message
-	foreach ($_POST as $key => $value) {
-		if (strstr($value, $part.'_') AND $key != 'view_received_category' AND $key != 'view_sent_category') {
-			$checked_files = true;
-			$checked_file_ids[] = intval(substr($value, strrpos($value, '_')));
-		}
-	}
+    $ids = Request::get('id', array());
+    if(count($ids)>0){        
+        $checked_file_ids = $_POST['id'];
+    }
+    else{      
+        foreach ($_POST as $key => $value) {
+            if (strstr($value, $part.'_') AND $key != 'view_received_category' AND $key != 'view_sent_category') {
+                $checked_files = true;
+                $checked_file_ids[] = intval(substr($value, strrpos($value, '_')));
+            }
+        }
+    }
 	$checked_file_ids = $_POST['id'];
 
 	if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {

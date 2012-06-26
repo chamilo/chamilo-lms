@@ -280,20 +280,35 @@ class Dropbox_SentWork extends Dropbox_Work
 			$this->recipients[] = array('id' => $rec, 'name' => getUserNameFromId($rec));
 		}
 
+        $table_post = $dropbox_cnf['tbl_post'];
+        $table_person = $dropbox_cnf['tbl_person'];
+        $session_id = intval($_SESSION['id_session']);
+        $uploader_id = $this->uploader_id;
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_post']." (c_id, file_id, dest_user_id, session_id) VALUES 
-					($course_id, '".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."', ".intval($_SESSION['id_session']).")";
+            $file_id = (int)$this->id;
+            $user_id = (int)$rec['id'];            
+			$sql = "INSERT INTO $table_post 
+                        (c_id, file_id, dest_user_id, session_id) 
+                    VALUES 
+                        ($course_id, $file_id, $user_id, $session_id)";
 	        $result = Database::query($sql);	// If work already exists no error is generated
 
-			// Insert entries into person table
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
-				    VALUES ($course_id, '".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."')";
+            /**
+             * Poster is already added when work is created - not so good to split logic 
+             */
+            if($user_id != $user_id){
+                // Insert entries into person table
+                $sql = "INSERT INTO $table_person 
+                            (c_id, file_id, user_id)
+                        VALUES 
+                            ($course_id, $file_id, $user_id)";
 
-        	// Do not add recipient in person table if mailing zip or just upload.
-			if (!$justSubmit) {
-				$result = Database::query($sql);	// If work already exists no error is generated
-			}
+                // Do not add recipient in person table if mailing zip or just upload.
+                if (!$justSubmit) {
+                    $result = Database::query($sql);	// If work already exists no error is generated
+                }
+            }
 
 			// Update item_property table for each recipient
 			global $_course, $dropbox_cnf;

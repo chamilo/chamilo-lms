@@ -27,7 +27,13 @@ $uncompress = 1;
  * size set in php.ini, all variables from POST are cleared !
  */
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+$user_file = Request::is_post() ? Request::file('user_file') : array();
+$user_file = $user_file ? $user_file : array();
+$is_error = isset($user_file['error']) ? $user_file['error'] : false;
+if( Request::is_post() && $is_error){
+    return api_failure::set_failure('upload_file_too_big');
+    unset($_FILEs['user_file']);
+}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
 
     // A file upload has been detected, now deal with the file...
 

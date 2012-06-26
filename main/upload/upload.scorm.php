@@ -18,7 +18,10 @@ chdir($cwdir);
 
 $error = api_failure::get_last_failure();
 
-if ($error=='not_a_learning_path') {
+if ($error  == 'upload_file_too_big'){
+    $msg = urlencode(get_lang('UplFileTooBig'));
+	$dialogtype = 'error';
+}else if ($error=='not_a_learning_path') {
         $msg = urlencode(get_lang('ScormUnknownPackageFormat'));
 	$dialogtype = 'error';
 } elseif ($error == 'not_enough_space') {

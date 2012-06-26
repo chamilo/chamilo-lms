@@ -33,7 +33,7 @@ class BlockDaily extends Block {
 	 */
     public function __construct ($user_id) {    	
     	$this->user_id 		= $user_id;
-    	$this->path 		= 'block_course';				
+    	$this->path 		= 'block_daily';				
 		if ($this->is_block_visible_for_user($user_id)) {
 			/*if (api_is_platform_admin()) {
 				$this->courses = CourseManager::get_real_course_list();

@@ -29,6 +29,11 @@ class Block {
      */
     public function display_large() {}
     
+    public function get_block_path(){              
+        $result = get_class($this);
+        return $result;
+    }
+    
 }
 
 ?>

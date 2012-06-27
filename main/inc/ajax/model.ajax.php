@@ -174,9 +174,9 @@ $columns = array();
 switch ($action) {    
     case 'get_work_user_list':        
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            $columns = array('type', 'firstname', 'lastname',  'username', 'qualification', 'sent_date', 'qualificator_id', 'actions');	
+            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');	
         } else {
-            $columns = array('type', 'firstname', 'lastname',  'username', 'sent_date', 'actions');	
+            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');	
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);        
         break;

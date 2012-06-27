@@ -1584,7 +1584,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         
         $extra_conditions .= " AND parent_id  = ".$work_id."  ";        
   
-        $select = 'DISTINCT work.id as id, title as file, url, sent_date, contains_file, has_properties, view_properties, 
+        $select = 'DISTINCT work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties, 
                     qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
         
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
@@ -1653,6 +1653,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
                 $work['username'] = Display::div($work['username'], array('class' => $class));
+                $work['title'] = Display::div($work['title'], array('class' => $class)) . ' <div class="invisible" style="display:none;">' . $work['description'] .'</div>';
            
                 //Type
                 $work['type'] = build_document_icon_tag('file', $work['file']);  

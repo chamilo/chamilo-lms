@@ -526,7 +526,10 @@ if ($form->validate()) {
 			// Update parent folders
 			item_property_update_on_folder($_course, $dir, $_user['user_id']);
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
+            $new_comment = Database::escape_string($new_comment);
 			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
+            $new_title = htmlspecialchars($new_title);
+            $new_title = Database::escape_string($new_title);
 			if ($new_comment || $new_title) {
 				$ct = '';
 				if ($new_comment)

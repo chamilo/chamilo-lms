@@ -826,10 +826,13 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	$path          = Database::escape_string($path);
 	$filetype      = Database::escape_string($filetype);
 	$filesize      = intval($filesize);
+    $title         = htmlspecialchars($title);
+    $title         = Database::escape_string($title);
+    $c_id          = $_course['real_id'];
 	
 	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 	$sql = "INSERT INTO $table_document (c_id, path, filetype, size, title, comment, readonly, session_id)
-	        VALUES ({$_course['real_id']}, '$path','$filetype','$filesize','".Database::escape_string($title)."', '$comment', $readonly, $session_id)";
+	        VALUES ($c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 	
 	if (Database::query($sql)) {
 		//display_message("Added to database (id ".Database::insert_id().")!");

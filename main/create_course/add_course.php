@@ -110,7 +110,7 @@ $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_C
 
 // The teacher
 //get_lang('ExplicationTrainers')
-$titular = & $form->add_textfield('tutor_name', array(get_lang('Professor'), null), null, array('size' => '60', 'disabled' => 'disabled'));
+$titular = & $form->addElement('hidden', 'tutor_name', ''); //array(get_lang('Professor'), null), null, array('size' => '60', 'disabled' => 'disabled'));
 //$form->applyFilter('tutor_name', 'html_filter');
 
 if ($course_validation_feature) {

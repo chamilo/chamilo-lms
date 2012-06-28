@@ -287,6 +287,7 @@ class GDWrapper extends ImageWrapper {
 	
 	public function send_image($file = '', $compress = -1, $convert_file_to = null) {	
 	    if (!$this->image_validated) return false;
+        $compress = (int)$compress;
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {
             $type = $convert_file_to;            

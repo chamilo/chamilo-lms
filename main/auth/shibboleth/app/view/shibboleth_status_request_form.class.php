@@ -2,6 +2,8 @@
 
 namespace Shibboleth;
 
+use Display;
+
 /**
  * Status request form. Display a form allowing the user to request additional
  * rights/ another status. 

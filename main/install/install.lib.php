@@ -241,7 +241,7 @@ function check_writable($folder, $suggestion = false) {
  * @return  array   The lines of the file returned as an array
  */
 function file_to_array($filename) {
-    if(!is_readable($filename)){
+    if(!is_readable($filename) || is_dir($filename)){
         return array();
     }
     $fp = fopen($filename, 'rb');
@@ -443,8 +443,8 @@ function get_config_param($param, $updatePath = '') {
         }
     }
 
-    if (file_exists($updatePath.$updateFromConfigFile)) {
-
+    if (file_exists($updatePath.$updateFromConfigFile) && !is_dir($updatePath.$updateFromConfigFile)) {
+     
         // The parameter was not found among the global variables, so look into the old configuration file.
 
         // Make sure the installedVersion file is read first so it is overwritten
@@ -536,6 +536,9 @@ function get_config_param($param, $updatePath = '') {
         }
     }
 
+    if($param == 'dbGlu' && empty($val)){
+        return '.';
+    }
     //Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
     if ($param == 'dokeos_version') {
         //dokeos_version from configuration.php if empty

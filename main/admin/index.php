@@ -415,6 +415,8 @@ function check_system_version() {
             'version' => $system_version,
             'numberofcourses' => $number_of_courses,
             'numberofusers' => $number_of_users,
+            //The donotlistcampus setting recovery should be improved to make
+            // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),
             'organisation' => api_get_setting('Institution'),
             'language' => api_get_setting('platformLanguage'),

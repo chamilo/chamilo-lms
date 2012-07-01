@@ -347,7 +347,7 @@ document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
 
 <?php
 
-echo '<div id="menuwiki">';
+echo '<div id="menuwiki" style="padding:3px;">';
 
 echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';
 

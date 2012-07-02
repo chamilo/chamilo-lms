@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ *	Chamilo LMS
+ *
+ *	Copyright (c) 2009-2010 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2009 Dokeos SPRL
+ *
+ *	For a full list of contributors, see "credits.txt".
+ *	The full license can be read in "license.txt".
+ *
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either version 2
+ *	of the License, or (at your option) any later version.
+ *
+ *	See the GNU General Public License for more details.
+ *
+ * This plugin uses as a template some original source code of the
+ * FCKeditor 2.6.4, see for example the flash dialog or the image
+ * properties dialog.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
+		<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+
+var FCKTools = window.parent.FCKTools ;
+var FCKConfig = window.parent.FCKConfig ;
+
+// Sets the Skin CSS
+document.write( FCKTools.GetStyleHtml( FCKConfig.SkinDialogCSS ) ) ;
+document.write( FCKTools.GetStyleHtml( GetCommonDialogCss( '../' ) ) ) ;
+
+if ( window.parent.FCKConfig.BaseHref.length > 0 )
+	document.write( '<base href="' + window.parent.FCKConfig.BaseHref + '">' ) ;
+
+window.onload = function()
+{
+	window.parent.SetPreviewElement( document.getElementById( 'youtube_preview' ) ) ;
+}
+
+//This is a patch for the "__flash__removeCallback" bug, see FS#4378.
+function ClearPreviewElement()
+{
+	if ( ( navigator.userAgent.toLowerCase().indexOf( 'msie' ) != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
+	{
+		if ( document.body.firstChild )
+		{
+			try
+			{
+				while ( document.body.firstChild )
+				{
+					document.body.removeChild( document.body.firstChild ) ;
+				}
+			}
+			catch ( ex )
+			{
+			}
+		}
+	}
+} ;
+
+		</script>
+	</head>
+	<body style="color: #000000; background-color: #ffffff;" onbeforeunload="javascript: ClearPreviewElement();"><div id="youtube_preview"></div></body>
+</html>

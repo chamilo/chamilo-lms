@@ -141,6 +141,7 @@ if (api_get_setting('youtube_for_students') == 'true') {
         $config['LoadPlugin'][] = 'youtube';
     }
 }
+$config['LoadPlugin'][] = 'media';
 
 // googlemaps : Adds a dialog for inserting Google maps.
 if ((api_get_setting('enabled_googlemaps') == 'true')) {

@@ -48,6 +48,7 @@ FCKPlugin.prototype.Load = function()
         case 'fckEmbedMovies':
         case 'flvPlayer':
         case 'youtube':
+        case 'media':
         case 'googlemaps':
         case 'mimetex':
         case 'wikilink':
@@ -98,6 +99,7 @@ FCKPlugin.prototype.Load = function()
         case 'tablecommands':
         case 'wikilink':
         case 'youtube':
+        case 'media':
             file = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 )
                 ? 'fckplugin.js'
                 : 'fckplugin.js';

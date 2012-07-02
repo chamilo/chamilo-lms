@@ -1472,6 +1472,13 @@ FCK.ContextMenu.RegisterListener( {
                         menu.AddItem( 'YouTube', FCKLang.YouTubeTip, FCKConfig.PluginsPath + 'youtube/youtube.gif' ) ;
                     }
                     break ;
+                case 'media' :
+                    if ( FCK.Plugins.IsLoaded( 'media' ) )
+                    {
+                        menu.AddSeparator() ;
+                        menu.AddItem( 'Media', FCKLang.YouTubeTip, FCKConfig.PluginsPath + 'media/media.gif' ) ;
+                    }
+                    break ;
                 case 'flv' :
                     if ( FCK.Plugins.IsLoaded( 'flvPlayer' ) )
                     {
@@ -1549,6 +1556,12 @@ FCK.RegisterDoubleClickHandler(
                     if ( FCK.Plugins.IsLoaded( 'youtube' ) )
                     {
                         FCKCommands.GetCommand( 'YouTube' ).Execute() ;
+                    }
+                    break ;
+                case 'media' :
+                    if ( FCK.Plugins.IsLoaded( 'media' ) )
+                    {
+                        FCKCommands.GetCommand( 'media' ).Execute() ;
                     }
                     break ;
                 case 'flv':

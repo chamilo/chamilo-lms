@@ -56,7 +56,7 @@ class Autoload
          */
         $result = array();
 
-        $result['CodeUtilities'] = '/main/inc/lib/code_utilities.class.php';
+        $result['CodeUtilities'] = '/main/inc/lib/system/code_utilities.class.php';
         $result['db'] = '/main/inc/lib/db.class.php';
 
         $result['AbstractLink'] = '/main/gradebook/lib/be/abstractlink.class.php';
@@ -72,24 +72,24 @@ class Autoload
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';
-        $result['AssetAggregatedRenderer'] = '/main/inc/lib/external_media/renderer/asset_aggregated_renderer.class.php';
-        $result['AssetGoogleCalendarRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_google_calendar_renderer.class.php';
-        $result['AssetGoogleDocumentRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_document_renderer.class.php';
-        $result['AssetGoogleDocumentViewerRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_document_viewer_renderer.class.php';
-        $result['AssetGoogleMapRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_map_renderer.class.php';
-        $result['AssetGoogleWidgetRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_google_widget_renderer.class.php';
-        $result['AssetImageRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_image_renderer.class.php';
-        $result['AssetMaharaGroupRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_mahara_group_renderer.class.php';
-        $result['AssetMaharaPersonRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_mahara_person_renderer.class.php';
-        $result['AssetMediaRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_media_renderer.class.php';
-        $result['AssetMediaserverRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_mediaserver_renderer.class.php';
-        $result['AssetOembedRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_oembed_renderer.class.php';
-        $result['AssetOgRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_og_renderer.class.php';
-        $result['AssetPageRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_page_renderer.class.php';
-        $result['AssetRenderer'] = '/main/inc/lib/external_media/renderer/asset_renderer.class.php';
-        $result['AssetRssRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_rss_renderer.class.php';
-        $result['AssetScratchRenderer'] = '/main/inc/lib/external_media/renderer/protocol/asset_scratch_renderer.class.php';
-        $result['AssetWikiRenderer'] = '/main/inc/lib/external_media/renderer/lab/asset_wiki_renderer.class.php';
+        $result['AssetAggregatedRenderer'] = '/main/inc/lib/system/media/renderer/asset_aggregated_renderer.class.php';
+        $result['AssetGoogleCalendarRenderer'] = '/main/inc/lib/system/media/renderer/lab/asset_google_calendar_renderer.class.php';
+        $result['AssetGoogleDocumentRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_google_document_renderer.class.php';
+        $result['AssetGoogleDocumentViewerRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_google_document_viewer_renderer.class.php';
+        $result['AssetGoogleMapRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_google_map_renderer.class.php';
+        $result['AssetGoogleWidgetRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_google_widget_renderer.class.php';
+        $result['AssetImageRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_image_renderer.class.php';
+        $result['AssetMaharaGroupRenderer'] = '/main/inc/lib/system/media/renderer/lab/asset_mahara_group_renderer.class.php';
+        $result['AssetMaharaPersonRenderer'] = '/main/inc/lib/system/media/renderer/lab/asset_mahara_person_renderer.class.php';
+        $result['AssetMediaRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_media_renderer.class.php';
+        $result['AssetMediaserverRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_mediaserver_renderer.class.php';
+        $result['AssetOembedRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_oembed_renderer.class.php';
+        $result['AssetOgRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_og_renderer.class.php';
+        $result['AssetPageRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_page_renderer.class.php';
+        $result['AssetRenderer'] = '/main/inc/lib/system/media/renderer/asset_renderer.class.php';
+        $result['AssetRssRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_rss_renderer.class.php';
+        $result['AssetScratchRenderer'] = '/main/inc/lib/system/media/renderer/protocol/asset_scratch_renderer.class.php';
+        $result['AssetWikiRenderer'] = '/main/inc/lib/system/media/renderer/lab/asset_wiki_renderer.class.php';
         $result['AttendanceLink'] = '/main/gradebook/lib/be/attendancelink.class.php';
         $result['Auth'] = '/main/inc/lib/auth.lib.php';
         $result['Block'] = '/main/dashboard/block.class.php';
@@ -103,7 +103,7 @@ class Autoload
         $result['ChamiloSession'] = '/main/inc/lib/chamilo_session.class.php';
         $result['Chat'] = '/main/inc/lib/chat.lib.php';
         $result['ClassManager'] = '/main/inc/lib/classmanager.lib.php';
-        $result['ClosureCompiler'] = '/main/inc/lib/closure_compiler.class.php';
+        $result['ClosureCompiler'] = '/main/inc/lib/system/closure_compiler.class.php';
         $result['ConditionalLogin'] = '/main/inc/lib/conditional_login.class.php';
         $result['Converter'] = '/main/inc/lib/system/text/converter.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
@@ -658,7 +658,7 @@ class Autoload
         $result['HotSpot'] = '/main/exercice/hotspot.class.php';
         $result['HotSpotDelineation'] = '/main/exercice/hotspot.class.php';
         $result['Html_Quickform_Rule_Date'] = '/main/inc/lib/pear/HTML/QuickForm/Rule/Date.php';
-        $result['HttpResource'] = '/main/inc/lib/external_media/renderer/http_resource.class.php';
+        $result['HttpResource'] = '/main/inc/lib/system/media/renderer/http_resource.class.php';
         $result['Image'] = '/main/inc/lib/image.lib.php';
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
         $result['ImagickWrapper'] = '/main/inc/lib/image.lib.php';
@@ -685,6 +685,7 @@ class Autoload
         $result['Model\ItemProperty'] = '/main/inc/lib/item_property.class.php';
         $result['Model\ItemPropertyRepository'] = '/main/inc/lib/item_property.class.php';
         $result['Model\StudentPublication'] = '/main/inc/lib/student_publication.class.php';
+        $result['Model\StudentPublicationRepository'] = '/main/inc/lib/student_publication.class.php';
         $result['Modelll\Forum'] = '/main/inc/lib/forum.class.php';
         $result['Modelll\ForumAttachment'] = '/main/inc/lib/forum_attachment.class.php';
         $result['Modelll\ForumAttachmentRepository'] = '/main/inc/lib/forum_attachment.class.php';
@@ -995,7 +996,8 @@ class AutoloadClassFinder
     {
         $result = array();
 
-        $result[] = '$result = array();';
+        $result[] = '$result = array();
+';
         foreach ($this->map as $name => $path) {
             $result[] = '$result[' . "'" . $name . "']" . ' = ' . "'" . $path . "';";
         }

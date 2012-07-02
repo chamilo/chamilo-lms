@@ -19,6 +19,7 @@ if (api_get_setting('allow_social_tool') !='true') {
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_SOCIAL;
+$_SESSION['this_section']=$this_section;
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyFiles'));

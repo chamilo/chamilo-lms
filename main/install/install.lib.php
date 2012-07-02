@@ -537,7 +537,7 @@ function get_config_param($param, $updatePath = '') {
     }
 
     if($param == 'dbGlu' && empty($val)){
-        return '.';
+        return '`.`';
     }
     //Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
     if ($param == 'dokeos_version') {

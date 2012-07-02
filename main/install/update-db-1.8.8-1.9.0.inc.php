@@ -639,7 +639,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
     }
 } else {
-    echo 'You are not allowed here !';
+    echo 'You are not allowed here !' . __FILE__;
 }
 
 function check_work($folder_id, $work_url, $work_table, $base_work_dir) {

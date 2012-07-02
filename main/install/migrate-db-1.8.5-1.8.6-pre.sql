@@ -164,7 +164,6 @@ ALTER TABLE survey ADD form_fields TEXT NOT NULL;
 ALTER TABLE quiz_answer CHANGE hotspot_type hotspot_type ENUM( 'square', 'circle', 'poly', 'delineation' ) NULL DEFAULT NULL;
 ALTER TABLE quiz ADD start_time datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE quiz ADD end_time datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE quiz ADD max_attempt int NOT NULL default 0;
 ALTER TABLE forum_forum ADD forum_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD preview_image varchar(255) NOT NULL default '';
 ALTER TABLE lp ADD author varchar(255) NOT NULL default '';

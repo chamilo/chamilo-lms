@@ -212,8 +212,6 @@ ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cid (c_id);
 ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 
-ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
-
 --User chat status
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'user_chat_status','User chat status', 0, 0);
 UPDATE settings_current SET selected_value = 'true' WHERE variable = 'more_buttons_maximized_mode';
@@ -305,6 +303,7 @@ ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
 UPDATE settings_current SET selected_value = '1.9.0.18407' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
+ALTER TABLE track_e_default  MODIFY COLUMN default_value TEXT;
 ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
 --CREATE TABLE track_filtered_terms (id int, user_id int, course_id int, session_id int, tool_id char(12), filtered_term varchar(255), created_at datetime);
 CREATE TABLE track_stored_values (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);

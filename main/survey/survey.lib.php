@@ -386,6 +386,9 @@ class survey_manager {
 	 */
 	function delete_survey($survey_id, $shared=false, $course_id = '') {
 		// Database table definitions
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        }
 		$course_info = api_get_course_info_by_id($course_id);
 		$course_id   = $course_info['real_id']; 
 		
@@ -395,7 +398,7 @@ class survey_manager {
 		if ($shared) {
 			$table_survey = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
 			 // Deleting the survey
-            $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
+            $sql = "DELETE FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
             $res = Database::query($sql);
 		} else {
 		    $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
@@ -403,7 +406,7 @@ class survey_manager {
 		}
 
 		// Deleting groups of this survey
-		$sql = "DELETE FROM $table_survey_question_group WHERE c_id = $course_id AND  survey_id='".Database::escape_string($survey_id)."'";
+		$sql = "DELETE FROM $table_survey_question_group WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
 		$res = Database::query($sql);
 
 		// Deleting the questions of the survey
@@ -942,7 +945,7 @@ class survey_manager {
 
 		// Deleting the survey questions
 		
-		$res = Database::query($sql);
+		Database::query($sql);
 
 		// Deleting all the options of the questions of the survey
 		survey_manager::delete_all_survey_questions_options($survey_id, $shared);
@@ -972,7 +975,7 @@ class survey_manager {
 		}
 
 		// Deleting the survey questions
-		$sql = "DELETE from $table_survey_question WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
+		$sql = "DELETE FROM $table_survey_question WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
 		$res = Database::query($sql);
 
 		// Deleting the options of the question of the survey
@@ -1117,10 +1120,10 @@ class survey_manager {
         $course_condition = " c_id = $course_id AND ";
 		if ($shared) {
 		    $course_condition = "";
-			$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);            
+			$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);            
 		}
         
-        $sql = "DELETE from $table_survey_question_option WHERE $course_condition survey_id='".Database::escape_string($survey_id)."'";
+        $sql = "DELETE FROM $table_survey_question_option WHERE $course_condition survey_id='".Database::escape_string($survey_id)."'";
 
 		// Deleting the options of the survey questions
 		
@@ -1147,7 +1150,7 @@ class survey_manager {
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		if ($shared) {
 		    $course_condition = "";
-			$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+			$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 		}
 
 		// Deleting the options of the survey questions

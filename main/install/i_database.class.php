@@ -40,4 +40,21 @@ class iDatabase extends Database
         return parent::query($query, $connection, $file, $line);
     }
 
+    /**
+     * Returns true if the table exists in the database, false otherwise.
+     * @param string $database
+     * @param string table
+     * @return boolean 
+     */
+    static function table_exists($database, $table)
+    {
+        $tables = mysql_list_tables($db);
+        while (list ($temp) = mysql_fetch_array($tables)) {
+            if (strtolower($temp) == strtolower($table)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

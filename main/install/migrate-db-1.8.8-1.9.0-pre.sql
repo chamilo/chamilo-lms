@@ -327,6 +327,8 @@ CREATE TABLE track_e_attempt_coeff ( id int unsigned not null auto_increment pri
 -- xxUSERxx
 
 -- xxCOURSExx
+CREATE TABLE IF NOT EXISTS metadata (c_id INT NOT NULL, eid VARCHAR(250) NOT NULL, mdxmltext TEXT default '', md5 CHAR(32) default '', htmlcache1 TEXT default '', htmlcache2 TEXT default '', indexabletext TEXT default '', PRIMARY KEY (c_id, eid))
+
 ALTER TABLE lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
 ALTER TABLE lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_item_view modify column suspend_data longtext;

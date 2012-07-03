@@ -335,7 +335,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                         iDatabase::select_db($row_course['db_name']);
                     }
                     Log::notice('Course db ' . $row_course['db_name']);
-
+                    
                     // Now use the $c_q_list
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {

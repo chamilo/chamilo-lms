@@ -119,10 +119,10 @@ echo '</div>';
 		echo ' checked';
 	}
 			?>>
-		<?php echo get_lang('_resizing').' ('.get_lang('Auto').')';?>
+		<?php echo get_lang('ResizingAuto');?>
             
 		</div>
-		<div><?php echo get_lang('_resizing_comment').' ('.get_lang('Auto').')';?>
+		<div><?php echo get_lang('ResizingAutoComment');?>
 		</div>
 	</div> 
  

@@ -284,7 +284,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }    
     
     //Adding admin user in the access_url_rel_user  table
-    $sql = "SELECT user_id FROM admin WHERE user_id = 1";
+    $sql = "SELECT user_id FROM admin WHERE user_id = 1 AND access_url_id = 1";
     $result = iDatabase::query($sql);
     
     if (Database::num_rows($result) == 0) {

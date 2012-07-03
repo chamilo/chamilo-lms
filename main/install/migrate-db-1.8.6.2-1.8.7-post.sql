@@ -34,5 +34,5 @@ ALTER TABLE student_publication CHANGE url url VARCHAR(255) default NULL;
 ALTER TABLE student_publication CHANGE title title VARCHAR(255) default NULL;
 ALTER TABLE student_publication CHANGE author author VARCHAR(255) default NULL;
 ALTER TABLE lp CHANGE name name varchar(255) NOT NULL;
-ALTER TABLE lp_item CHANGE title varchar(511) NOT NULL;
-ALTER TABLE lp_item CHANGE description varchar(511) NOT NULL default '';
+ALTER TABLE lp_item CHANGE title title  varchar(511) NOT NULL;
+ALTER TABLE lp_item CHANGE description description varchar(511) NOT NULL default '';

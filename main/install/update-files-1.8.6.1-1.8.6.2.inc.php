@@ -69,7 +69,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             $path = $currentCourseRepositorySys . "upload/announcements";
             if (!is_dir($path)) {
                 $success = mkdir($path, $perm, true);
-                if(!$sucess){
+                if(!$success){
                     $course_directory = $courses_directories['directory'];
                     Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: , perm: $perm");
                 }
@@ -79,7 +79,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             $path = $currentCourseRepositorySys . "upload/announcements/images";
             if (!is_dir($path)) {
                 $success = mkdir($path, $perm, true);
-                if(!$sucess){
+                if(!$success){
                     $course_directory = $courses_directories['directory'];
                     Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: $perm");
                 }

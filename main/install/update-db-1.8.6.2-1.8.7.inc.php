@@ -291,6 +291,9 @@ if (defined('SYSTEM_INSTALLATION')) {
                     while ($row = iDatabase::fetch_array($result)) {
                         $course_code = $row['course_code'];
                         $course_info = api_get_course_info($course_code);
+                        if (empty($course_info)) {
+                            continue;
+                        }
                         $my_course_db = $course_info['dbName'];
                         $question_id = $row['question_id'];
                         $answer = $row['answer'];

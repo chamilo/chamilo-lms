@@ -81,7 +81,9 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 
 	// Displaying the survey introduction
 	if (!isset($_GET['show'])) {
-		echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        if (!empty($survey_data['survey_introduction'])) {
+            echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        }
 		$limit = 0;
 	}
 

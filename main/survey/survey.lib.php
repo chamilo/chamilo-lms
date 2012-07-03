@@ -2047,8 +2047,7 @@ class ch_comment extends survey_question {
 	function render_question($form_content) {
 		echo '<div class="survey_question_wrapper">';
 		echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-		echo '</div>';
-		echo "\n";
+		echo '</div>';		
 	}
 }
 

@@ -151,8 +151,7 @@ class Agenda {
             //build the announcement text
             $content = $row['content'];
             //insert announcement
-            $session_id = api_get_session_id();
-            
+            $session_id = api_get_session_id();            
             
             $sql_ins = "INSERT INTO $table_ann (c_id, title,content,end_date,display_order,session_id) " .
                         "VALUES ($course_id, '".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
@@ -160,6 +159,9 @@ class Agenda {
             
             if ($res_ins) {
                 $ann_id = Database::insert_id();
+                
+                AnnouncementManager::send_email($ann_id);
+                
                 //Now also get the list of item_properties rows for this agenda_item (calendar_event)
                 //and copy them into announcement item_properties
                 $table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);

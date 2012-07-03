@@ -68,7 +68,8 @@ class Autoload
         $result['AddManySessionToCategoryFunctions'] = '/main/inc/lib/add_many_session_to_category_functions.lib.php';
         $result['AdminPage'] = '/main/admin/admin_page.class.php';
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
-        $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
+        $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';        
+        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';

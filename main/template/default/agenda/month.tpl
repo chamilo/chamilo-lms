@@ -467,7 +467,7 @@ $(document).ready(function() {
                 <label></label>
                 <div class="controls">                    
                     <label class="checkbox inline" for="add_as_annonuncement">
-                        {{ "AddAsAnnouncement"|get_lang }}
+                        {{ "AddAsAnnouncement"|get_lang }} ({{ "SendEmail" | get_lang }})
                         <input type="checkbox" name="add_as_annonuncement" id="add_as_annonuncement" />                    
                     </label>                    
                 </div>

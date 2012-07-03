@@ -3722,7 +3722,7 @@ class nusoap_server extends nusoap_base {
 			}
 			$this->send_response();
 		} elseif (preg_match('/wsdl/', $qs) ){
-			$this->debug("In service, this is a request for WSDL");
+			$this->debug("In service, this is a request for WSDL");            
 			if ($this->externalWSDLURL){
               if (strpos($this->externalWSDLURL, "http://") !== false) { // assume URL
 				$this->debug("In service, re-direct for WSDL");
@@ -4548,6 +4548,9 @@ class nusoap_server extends nusoap_base {
         }
         
 		$this->wsdl = new wsdl;
+        
+        //$this->wsdl->soap_defencoding  = $this->soap_defencoding;
+        
 		$this->wsdl->serviceName = $serviceName;
         $this->wsdl->endpoint = $endpoint;
 		$this->wsdl->namespaces['tns'] = $namespace;
@@ -5470,8 +5473,9 @@ class wsdl extends nusoap_base {
 	* @access public 
 	*/
 	function serialize($debug = 0)
-	{
-		$xml = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+	{        
+        /* $xml = '<?xml version="1.0" encoding="'.$this->soap_defencoding.'"?>';*/
+        $xml = '<?xml version="1.0" encoding="ISO-8859-1"?>';		
 		$xml .= "\n<definitions";
 		foreach($this->namespaces as $k => $v) {
 			$xml .= " xmlns:$k=\"$v\"";

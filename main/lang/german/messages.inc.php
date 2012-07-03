@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MessageEmptyMessageOrSubject = "Bitte Betreff oder Nachricht angeben";
-$Inbox = "Inbox";
+$Inbox = "Posteingang";
 $Messages = "Nachrichten";
 $SendMessage = "Nachricht senden";
 $NewMessage = "Neue Nachricht";
@@ -36,4 +33,5 @@ $WriteAMessage = "Eine Nachricht schreiben";
 $AlreadyReadMessage = "Nachricht wurde bereits gelesen";
 $UnReadMessage = "ungelesene Nachricht";
 $MessageSent = "Nachricht versendet";
+$YouShouldWriteAMessage = "Sie sollten eine Nachricht schreiben";
 ?>

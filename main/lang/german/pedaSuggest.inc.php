@@ -1,26 +1,23 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $GeneralDescription = "Allgemeine Beschreibung";
-$GeneralDescriptionQuestions = "Welche Stelle nimmt der Kurs im Programm ein? Gibt es Vorbedingungen? Hat der Kurs Verbindungen mit anderen Kursen?";
-$GeneralDescriptionInformation = "Beschreiben Sie den Kurs (Anzahl Stunden, offizieller Kurscode, Raum, wo er stattfindet, ...) und den Leiter (Name, Vorname, Büro, Tel. E-Mail ...)";
+$GeneralDescriptionQuestions = "Welche Stelle nimmt diesr Kurs im Gesamtangebot ein? Gibt es Vorbedingungen? Hat der Kurs Verbindungen mit anderen Kursen?";
+$GeneralDescriptionInformation = "Beschreiben Sie den Kurs (Anzahl Stunden, offizieller Kurscode, Raum, wo er stattfindet, ...) und den Leiter (Name, Vorname, Büro, Telefon, E-Mail ...)";
 $Objectives = "Ziele";
-$ObjectivesInformation = "Darlegung der übegreifenden und detaillierten Ziele des Kurses";
+$ObjectivesInformation = "Darlegung der übegreifenden und detaillierten Ziele des Kurses (Grob- und Feinziele)";
 $ObjectivesQuestions = "Was werden die Teilnehmer am Ende des Kurses tun können? Was können sie während des Kurses erstellen oder machen?";
 $Topics = "Themen";
 $TopicsInformation = "Liste der im Kurs enthaltenen Themen. Bedeutung jedes Themas. Schwierigkeitsgrad. Aufbau und Abhängigkeit der verschiedenen Teile";
-$TopicsQuestions = "Wie geht es im Kurs voran? Wo sollten die Teilnehmer besondere Aufmerksamkeit haben? Gibt es erkannte Schwierigkeiten beim Verständnis, falls es mehrere kapitel gibt? Wieviel Zeit sollte man den verschiedenen Teilen des Kurses widmen?";
+$TopicsQuestions = "Wie stellt sich der Kursablauf dar? Worauf sollten die Teilnehmer ihre besondere Aufmerksamkeit richten? Gibt es Erklärungsbedarf im Umgang mit den unterschiedlichen Kapiteln? Wie hoch  ist der Zeitbedarf der jeweiligen Kursteile?";
 $Methodology = "Methodik";
-$MethodologyQuestions = "Welche Methoden und welche Aktivitäten helfen, die Kursziele zu erreichzen? nach welchem Plan?";
-$MethodologyInformation = "Darlegung der Aktivitäten (Konferenz, Arbeiten, Gruppen Forschung, Labor ...)";
+$MethodologyQuestions = "Welche Methoden und welche Aktivitäten helfen, die Kursziele zu erreichen? Nach welchem zeitlichen Ablauf? In welcher Reihenfolge?";
+$MethodologyInformation = "Darlegung der Aktivitäten (Konferenz, Ausarbeitungen, Gruppen, ...)";
 $CourseMaterial = "Kursmaterial";
 $CourseMaterialQuestions = "Gibt es ein Kurshandbuch, eine Blattsammlung, eine Bibliographie, eine Liste mit Links im Internet?";
 $CourseMaterialInformation = "Kurze Beschreibung des Kursmaterials";
-$HumanAndTechnicalResources = "Helfer und technische Hilfsmittel";
+$HumanAndTechnicalResources = "Unterstützung und technische Hilfsmittel";
 $HumanAndTechnicalResourcesQuestions = "Gibt es Lehrer, Assistenten, eine technische Information, soziale Hilfestellung, Computerraum ?";
 $HumanAndTechnicalResourcesInformation = "Kurze Beschreibung der verschiedenen Kontaktpersonen und der verfügbaren technischen Mittel";
-$Assessment = "Einschätzung";
-$AssessmentQuestions = "Wie werden die Nutzer bewertet? Können Strategien entwickelt werden, um ein Thema zu bewältigen?";
-$AssessmentInformation = "Beispielfragen für Examen. Kriterien für den Erfolg, Tipps und Tricks";
+$Assessment = "Bewertungen";
+$AssessmentQuestions = "Wie werden die Nutzer bewertet? Welche Strategien sind sinvoll, um im jeweiligen Thema eine gute Bewertung zu erreichen?";
+$AssessmentInformation = "Beispielfragen für Tests Kriterien für den Erfolg, Tipps und Tricks";
 ?>

@@ -1,11 +1,8 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langOnlineConference = "Konferenz";
 $langWash = "Löschen";
 $langReset = "Zurücksetzen";
-$langSave = "Speichern";
+$langSave = "Mitteilung senden";
 $langRefresh = "Aktualisieren";
 $langIsNowInYourDocDir = "ist nun in Ihrem Dokumentenverzeichnis abgelegt. <br><B>Diese Datei ist sichtbar</B>";
 $langCopyFailed = "Druck fehlgeschlagen";
@@ -22,7 +19,7 @@ $langOnlyCheckForImportantQuestion = "Bitte nutzen Sie dieses Auswahlfeld nur, w
 $langQuestion = "Frage";
 $langClearList = "Liste leeren";
 $langWhiteBoard = "Whiteboard";
-$langTextEditorDefault = "<h2>Textverarbeitung</h2>Fügen Sie hier Text per Kopieren+Einfügen aus Ms-Word® ein und bearbeiten Sie diesen. Teilnehmer können Ihre Aktionen live verfolgen.";
+$langTextEditorDefault = "<h2>Textverarbeitung</h2>Fügen Sie hier Text per Kopieren+Einfügen aus MS-Word® ein und bearbeiten Sie diesen. Teilnehmer können Ihre Aktionen live verfolgen.";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream-URL";
 $langStreamType = "Stream-Typ";
@@ -33,31 +30,31 @@ $langNoLinkAvailable = "Kein Link verfügbar";
 $langChat_reset_by = "Chat zurücksetzen";
 $OrFile = "oder Datei";
 $langCallSent = "Chat-Anfrage wurde gesendet. Warte auf Bestätigung Ihres Partners";
-$langChatDenied = "Ihre Anfrage wurde von Ihrem Partner abgewiesen";
-$Send = "Senden";
+$langChatDenied = "Ihre Anfrage wurde vom Partner abgewiesen";
+$Send = "Mitteilung senden";
 $Connected = "verbunden";
 $Think = "grübeln";
-$BigGrin = "breitgrins";
+$BigGrin = "breites Grinsen";
 $Amazing = "begeistert";
 $Confused = "verwirrt";
 $Cool = "cool";
 $Surprised = "überrascht";
-$Hand = "hallo";
+$Hand = "Hallo";
 $Wink = "winke";
 $Neutral = "neutral";
 $Angry = "verärgert";
 $Avid = "begierig";
-$Redface = "rotwerd";
+$Redface = "schämen";
 $Sad = "traurig";
 $Silence = "ruhig";
-$Silenced = "zum schweigen gebracht";
-$Smile = "grins";
-$Exclamation = "ausrufezeichen";
-$Arrow = "pfeil";
-$Question = "fragezeichen";
-$Idea = "idee";
+$Silenced = "zum Schweigen gebracht";
+$Smile = "grinsen";
+$Exclamation = "Ausrufezeichen";
+$Arrow = "Pfeil";
+$Question = "Frage";
+$Idea = "Idee";
 $AskPermissionSpeak = "Um Erlaubnis bitten";
-$GiveTheFloorTo = "Fläche übergeben";
+$GiveTheFloorTo = "Wort erteilen an";
 $Pause = "Pause";
 $Stop = "Stop";
 ?>

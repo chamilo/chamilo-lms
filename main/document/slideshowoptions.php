@@ -86,27 +86,31 @@ window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'd
 
 <?php
 echo '<div class="actions">';
-echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
-echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('images_gallery.gif').get_lang('BackTo').' '.get_lang('SlideShow').'</a>';
+echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+
+echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
+
 echo '</div>';
 
 ?>
 
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
 	<legend><?php echo get_lang('_slideshow_options') ?></legend>
-	<div class="row">
+	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
 	if ($image_resizing == 'noresizing' || $image_resizing == '') {
 		echo ' checked';
 	}
 			?>>
+		<?php echo get_lang('_no_resizing');?>
+            
 		</div>
-		<div class="formw"><?php echo get_lang('_no_resizing');?><br /><?php echo get_lang('_no_resizing_comment');?>
+		<div><?php echo get_lang('_no_resizing_comment');?>
 		</div>
 	</div>
 
-	<div class="row">
+	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
 	
@@ -116,9 +120,10 @@ echo '</div>';
 		$height = $_SESSION['image_resizing_height'];
 	}
 			?>>
+        <?php echo get_lang('_resizing'); ?>
 		</div>
-		<div class="formw">
-			<?php echo get_lang('_resizing'); ?><br /><?php echo get_lang('_resizing_comment'); ?><br />
+		<div>
+		<?php echo get_lang('_resizing_comment'); ?><br />
         <?php echo get_lang('_width'); ?>:
 	    &nbsp;<input name="width" type="text" id="width" <?php
 		if ($image_resizing == 'resizing') {
@@ -138,12 +143,13 @@ echo '</div>';
             echo ' class="disabled_input"';
         }
 		?> >
+        <br />
 		</div>
 	</div>
-	<div class="row">
+	<div>
 		<div class="label">
 		</div>
-		<div class="formw">
+		<div>
 			<br />
 			<button type="submit" class="save" name="Submit" value="Save" ><?php echo get_lang('Save'); ?></button>
 		</div>

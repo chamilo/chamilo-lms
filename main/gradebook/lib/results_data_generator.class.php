@@ -102,7 +102,7 @@ class ResultsDataGenerator
 			usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
 		} elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-		} elseif ($sorting & self :: RDG_SORT_SCORE) {
+		} elseif ($sorting & self :: RDG_SORT_SCORE) {            
 			usort($table, array('ResultsDataGenerator', 'sort_by_score'));
 		} elseif ($sorting & self :: RDG_SORT_MASK) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
@@ -137,10 +137,10 @@ class ResultsDataGenerator
 	}
 
 	function sort_by_score($item1, $item2) {
-		if ($item1['score'] == $item2['score']) {
+		if ($item1['percentage_score'] == $item2['percentage_score']) {
 			return 0;
-		}else {
-			return ($item1['score'] < $item2['score'] ? -1 : 1);
+		} else {
+			return ($item1['percentage_score'] < $item2['percentage_score'] ? -1 : 1);
 		}
 	}
 

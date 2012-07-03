@@ -24,7 +24,6 @@ class ResultTable extends SortableTable
 	private $allresults;
 	private $iscourse;
 
-
 	/**
 	 * Constructor
 	 */
@@ -81,9 +80,10 @@ class ResultTable extends SortableTable
 		$scoredisplay = ScoreDisplay :: instance();
 
 		// determine sorting type
-		$col_adjust = ($this->iscourse == '1' ? 1 : 0);
+		$col_adjust = $this->iscourse == '1' ? 1 : 0;
+        
 		switch ($this->column) {
-			// Type
+			// first name or last name
 			case (0 + $col_adjust):
 				if ($is_western_name_order) {
 					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
@@ -91,6 +91,7 @@ class ResultTable extends SortableTable
 					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
 				}
 				break;
+            // first name or last name
 			case (1 + $col_adjust):
 				if ($is_western_name_order) {
 					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
@@ -98,19 +99,21 @@ class ResultTable extends SortableTable
 					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
 				}
 				break;
+            //Score
 			case (2 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;
+				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;                
 				break;
 			case (3 + $col_adjust):
 				$sorting = ResultsDataGenerator :: RDG_SORT_MASK;
 				break;
 		}
+        
 		if ($this->direction == 'DESC') {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_DESC;
 		} else {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_ASC;
 		}
-
+        
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
         
 		// generate the data to display

@@ -48,10 +48,12 @@ if (empty($survey_data)) {
 	exit;
 }
 
-$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
+/*$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
-}
+}*/
+
+$urlname = strip_tags($survey_data['title']);
 
 // Breadcrumbs
 $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
@@ -85,7 +87,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 
 	// Displaying the survey thanks message
 	if (isset($_POST['finish_survey'])) {
-		echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').' </strong>'.$survey_data['survey_thanks'].'</div>';
+		Display::display_confirmation_message(get_lang('SurveyFinished'));
+        echo $survey_data['survey_thanks'];
 		Display :: display_footer();
 		exit;
 	}

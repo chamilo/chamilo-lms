@@ -347,6 +347,11 @@ if ($slide_id != 'all') {
 				$resize_info = get_lang('_resizing').'<br />';
 				$resize_widht = $_SESSION["image_resizing_width"].' x ';
 				$resize_height = $_SESSION['image_resizing_height'];
+			}
+			elseif($_SESSION['image_resizing'] != 'noresizing'){
+				$resize_info = get_lang('_resizing').'<br />';
+				$resize_widht = get_lang('Auto').' x ';
+				$resize_height = get_lang('Auto');
 			} else {
 				$resize_info = get_lang('_no_resizing').'<br />';
 			}

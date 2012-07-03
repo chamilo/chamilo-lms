@@ -168,8 +168,11 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     // The little download icon
     //$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'], '', basename($path));
     $tooltip_title = explode('?', basename($path));
-    //$tooltip_title = $tooltip_title[0];
+    
     $tooltip_title = $title;
+    
+    //Cut long titles
+    //$title = cut($title, 120);
 
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {

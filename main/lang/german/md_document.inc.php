@@ -1,28 +1,28 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langMdCallingTool = "Dokumente";
-$langMdTitle = "Lernobjekt-Titel";
-$langMdDescription = "Um diese Informationen zu sichern, klicken Sie auch 'Sichern'";
-$langMdCoverage = "z.B. Bachelor in ...";
+$langMdTitle = "Element-Titel";
+$langMdDescription = "Um diese Informationen zu sichern, klicken Sie auch speichern'";
+$langMdCoverage = "z.B. Erwachsenenbildung, Sekundarstufe 2";
 $langMdCopyright = "z.B. wenn die Quelle erwähnt wird";
-$langTool = "Dokument-Metadaten";
+$langTool = "Dokumenten-Metadaten";
 $langNoScript = "Script ist in Ihrem Browser nicht aktiviert; bitte ignorieren Sie den Teil des Bildschirms unter diesem Text, es wird nicht funktionieren ...";
-$langPressAgain = "Bitte 'Sichern' nochmals klicken";
-$langLanguageTip = "die Sprache, in der dieses Lernobjekt erstellt wurde";
-$langIdentifier = "Erkennungszeichen";
-$langIdentifierTip = "Ein einzigartiges Erkennungszeichen für dieses Lernobjekt, bestehend aus Buchstaben, Ziffern,_-.()'|*";
+$langPressAgain = "Bitte nochmals 'speichern' klicken";
+$langLanguageTip = "die Sprache, in der dieses Element erstellt wurde";
+$langIdentifier = "Erkennungszeichen / ID";
+$langIdentifierTip = "Ein einzigartiges Erkennungszeichen / ID für dieses Element, bestehend aus Buchstaben, Ziffern,_-.()'|*";
 $langTitleTip = "Titel oder Name, Sprache des Titels oder Namens";
-$langDescriptionTip = "Bescheibung oder Kommentar, und Sprache für die Beschreibung dieses Lernobjekts";
-$langKeyword = "Schlüsselwort";
+$langDescriptionTip = "Bescheibung oder Kommentar und Sprache für die Beschreibung dieses Elements";
+$langKeyword = "Schlagwort";
 $langKeywordTip = "Durch Kommata trennen (Buchstaben, Ziffern,-)";
-$langCoverage = "Behandlung";
-$langCoverageTip = "z.B. Bachelor in xxx: yyy";
-$langKwNote = "Wenn Sie die Sprache für die Beschreibung ändern, bitte keine Schlüsselwörter gleichzeitig hinzufügen";
-$langClickKw = "Ein Schlüsselwort anklicken, um es aus- oder abzuwählen";
-$langKwHelp = "<br/>Zum Öffnen den '+' Knopf klicken, '-' Knopf zum Schließen, '++' Knopf um alle zu öffnen, '--' Knopf um alle zu schließen.<br/><br/>Alle ausgewählten Schlüsselwörter deselektieren durch Einklappen des Baums und anschileßendes Öffnen mit dem '+' Knopf.<br/>Alt-Klick '+' durchsucht die originalen Schlüsselwörter im Baum.<br/><br/>Alt-Klick Schlüsselwort wählt ein Schlüsselwort ohne weitere Begriffe aus oder deselektiert ein Schlüsselwort mit weiteren Begriffen.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlüsselwörter hinzu.<br/><br/>";
-$langRights = "Rechte für Gebrauch";
+$langCoverage = "Geeignet für";
+$langCoverageTip = "z.B. Erwachsenenbildung, Sekundarstufe 2";
+$langKwNote = "Wenn Sie die Sprache für die Beschreibung ändern, bitte gleichzeitig keine Schlagwörter  hinzufügen";
+$langClickKw = "Ein Schlagwort anklicken, um es aus- oder abzuwählen";
+$langKwHelp = "<br/>Zum Öffnen den '+' Button klicken, '-' Button zum Schließen, '++' Button um alle zu öffnen, '--' Button um alle zu schließen.<br/><br/>
+Schlagwort-Auswahl aufheben: Baum  einklappen und anschileßend  mit dem '+' Knopf Öffnen.<br/>
+Original Schlagwort im Baum suchen: Alt-Klick '+' <br/><br/>
+Alt-Klick Schlagwort wählt ein Schlagwort ohne weitere Begriffe aus oder hebt eine Schlagwort-Markierung  mit weiteren Begriffen auf.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlagworte hinzu.<br/><br/>";
+$langRights = "Verwendungsrechte";
 $langRightsTip = "Mit Worten beschreiben";
 $langVersion = "Version";
 $langVersionTip = "Zahl oder Beschreibung";
@@ -34,13 +34,14 @@ $langFormat = "Format";
 $langFormatTip = "aus Liste auswählen";
 $langLocation = "URL/URI";
 $langLocationTip = "Zum Öffnen des Objekts klicken";
-$langStore = "Sichern";
+$langStore = "speichern";
 $langDeleteAll = "Alle Metadaten löschen";
 $langConfirmDelete = "Wollen Sie *wirklich* alle Metadaten löschen?";
-$langCourseKwds = "Dieses Dokument enthält die Schlüsselwörter für den Kurs";
+$langCourseKwds = "Dieses Dokument enthält die Schlagworte für den Kurs";
 $langSearch = "Suchen";
 $langSearchCrit = "Ein Wort pro Zeile!";
-$langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
+$langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable
+";
 $langCosts = " :nein:frei, umsonst,, ja:nicht frei, kostenpflichtig";
 $langCopyrights = ":ja:Copyright,, nein:kein Copyright";
 $langFormats = "  \t :text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, audio/basic:audio/basic,, audio/midi:audio/midi,, audio/mpeg:audio/mpeg,, audio/x-wav:audio/x-wav,, image/gif:image/gif,, image/jpeg:image/jpeg,, image/png:image/png,, image/tiff:image/tiff,, video/mpeg:video/mpeg,, video/quicktime:video/quicktime,, video/x-msvideo:video/x-msvideo,, message/rfc822:message/rfc822,, inode/directory:inode/directory,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";

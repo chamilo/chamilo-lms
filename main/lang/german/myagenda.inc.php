@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langMyAgenda = "Meine Agenda";
+$langMyAgenda = "Mein persönlicher Kalender";
 $langToday = "Heute";
 ?>

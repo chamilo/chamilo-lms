@@ -130,6 +130,7 @@ class Agenda {
         $table_agenda  = Database::get_course_table(TABLE_AGENDA);
         $table_ann     = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $course_id     = api_get_course_int_id();
+        
         //check params
         if(empty($item_id) or $item_id != strval(intval($item_id))) {return -1;}
         //get the agenda item
@@ -150,21 +151,25 @@ class Agenda {
             //build the announcement text
             $content = $row['content'];
             //insert announcement
-            $session_id = api_get_session_id();
-            
+            $session_id = api_get_session_id();            
             
             $sql_ins = "INSERT INTO $table_ann (c_id, title,content,end_date,display_order,session_id) " .
                         "VALUES ($course_id, '".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
             $res_ins = Database::query($sql_ins);
-            if ($res > 0) {
+            
+            if ($res_ins) {
                 $ann_id = Database::insert_id();
+                
+                AnnouncementManager::send_email($ann_id);
+                
                 //Now also get the list of item_properties rows for this agenda_item (calendar_event)
                 //and copy them into announcement item_properties
                 $table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
                 $sql_props = "SELECT * FROM $table_props WHERE c_id = $course_id AND tool ='calendar_event' AND ref='$item_id'";
                 $res_props = Database::query($sql_props);
-                if(Database::num_rows($res_props)>0) {
-                    while($row_props = Database::fetch_array($res_props)) {
+                
+                if (Database::num_rows($res_props)>0) {
+                    while ($row_props = Database::fetch_array($res_props)) {
                         //insert into announcement item_property
                         $time = api_get_utc_datetime();
                         $sql_ins_props = "INSERT INTO $table_props " .
@@ -178,7 +183,7 @@ class Agenda {
                                 "'".$row_props['last_edit_user_id']."','".$row_props['to_group_id']."','".$row_props['to_user_id']."'," .
                                 "'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
                         $res_ins_props = Database::query($sql_ins_props);
-                        if($res_ins_props <= 0){
+                        if ($res_ins_props <= 0) {
                             return -1;
                         } else {
                             //copy was a success

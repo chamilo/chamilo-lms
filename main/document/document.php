@@ -1208,7 +1208,7 @@ $table->set_header($column++, get_lang('Size'), true, array('style' => 'width:50
 $table->set_header($column++, get_lang('Date'), true, array('style' => 'width:105px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
-    $table->set_header($column++, get_lang('Actions'), false, array('style' => 'width:160px;'), array('class' => 'td_actions'));
+    $table->set_header($column++, get_lang('Actions'), false, array('class' => 'td_actions'));
 }
 
 // Actions on multiple selected documents

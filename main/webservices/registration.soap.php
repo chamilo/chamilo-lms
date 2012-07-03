@@ -51,6 +51,9 @@ function WSHelperVerifyKey($params) {
 
 // Create the server instance
 $server = new soap_server();
+
+//$server->soap_defencoding = 'UTF-8';
+
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 

@@ -2,9 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langWash = "Wash";
-$langSave = "Save";
-$langRefresh = "Refresh";
-$langIsNowInYourDocDir = "is now  in  your document tool. <br /><B>This  file  is  visible</B>";
-$langCopyFailed = "Print failed";
+$langWash = "Làm sạch";
+$langSave = "Ghi lại";
+$langRefresh = "Làm tươi";
+$langIsNowInYourDocDir = "is now  in  your document tool. <br /><B>File này đã được hiển thị</B>";
+$langCopyFailed = "In lỗi";
 ?>

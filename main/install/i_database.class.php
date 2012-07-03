@@ -44,7 +44,7 @@ class iDatabase extends Database
             $caller = isset($backtrace[0]) ? $backtrace[0] : array();
             $file = $caller['file'];
             $line = $caller['line'];
-            $message = "file: $file \n line:$line";
+            $message = " sql: $sql \n file: $file \n line:$line";
             Log::error($message);
         }
         return $result;

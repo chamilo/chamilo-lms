@@ -258,8 +258,10 @@ if (!isset($_GET['show'])) {
 	unset($_SESSION['paged_questions']);
 	unset($_SESSION['page_questions_sec']);
 	$paged_questions_sec=array();
-
-	echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+    
+    if (!empty($survey_data['survey_introduction'])) {
+        echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+    }
 	$limit = 0;
 }
 

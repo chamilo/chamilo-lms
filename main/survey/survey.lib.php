@@ -4025,29 +4025,29 @@ class SurveyUtil {
 	 */
 	function display_survey_search_form() {
 
-		echo '<form method="get" action="survey_list.php?search=advanced">';
-		echo '<div class="row"><div class="form_header">'.get_lang('SearchASurvey').'</div></div>';
-		echo '	<div class="row">
+		echo '<form class="form-horizontal" method="get" action="survey_list.php?search=advanced">';
+		echo '<legend>'.get_lang('SearchASurvey').'</legend>';
+		echo '	<div class="control-group">
 					<label class="control-label">
 						'.get_lang('Title').'
 					</label>
-					<div class="formw">
+					<div class="controls">
 						<input type="text" id="search_title" name="keyword_title"/>
 					</div>
 				</div>';
-		echo '	<div class="row">
+		echo '	<div class="control-group">
 					<label class="control-label">
 						'.get_lang('Code').'
 					</label>
-					<div class="formw">
+					<div class="controls">
 						<input type="text" name="keyword_code"/>
 					</div>
 				</div>';
-		echo '	<div class="row">
+		echo '	<div class="control-group">
 					<label class="control-label">
 						'.get_lang('Language').'
 					</label>
-					<div class="formw">';
+					<div class="controls">';
 		echo '			<select name="keyword_language"><option value="%">'.get_lang('All').'</option>';
 		$languages = api_get_languages();
 		foreach ($languages['name'] as $index => & $name) {
@@ -4057,10 +4057,8 @@ class SurveyUtil {
 		echo '		</div>
 				</div>';
 		echo '<input type="hidden" name="cidReq" value="'.api_get_course_id().'"/>';
-		echo '	<div class="row">
-					<label class="control-label">
-					</label>
-					<div class="formw">
+		echo '	<div class="control-group">					
+					<div class="controls">
 						<button class="search" type="submit" name="do_search">'.get_lang('Search').'</button>
 					</div>
 				</div>';

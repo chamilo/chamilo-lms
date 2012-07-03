@@ -441,7 +441,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             if (!empty($work_dir_created[$work_key])) {
                                 $parent_id = $work_dir_created[$work_key];                                
                                 $new_url = "work/".$dir_name.'/'.basename($work['url']);
-                                $new_url = Database::escape_string($new_url);$sql = "UPDATE $work_table SET url = '$new_url', parent_id = $parent_id, contains_file = '1' WHERE id = {$work['id']} AND c_id = {$work['c_id']}";                                                               
+                                $new_url = Database::escape_string($new_url);$sql = "UPDATE $work_table SET url = '$new_url', parent_id = $parent_id, contains_file = '1' WHERE id = {$work['id']}";                                                               
                                 iDatabase::query($sql);     
                                 if (is_dir($final_dir)) {                                    
                                     rename($course_dir.'/'.$work['url'], $course_dir.'/'.$new_url);

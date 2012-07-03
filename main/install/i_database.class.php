@@ -37,7 +37,17 @@ class iDatabase extends Database
             Log::notice(__FUNCTION__ . ' ' . $query, Log::frame(1));
         }
 
-        return parent::query($query, $connection, $file, $line);
+        $result = parent::query($query, $connection, $file, $line);
+
+        if (empty($result)) {
+            $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
+            $caller = isset($backtrace[0]) ? $backtrace[0] : array();
+            $file = $caller['file'];
+            $line = $caller['line'];
+            $message = "file: $file \n line:$line";
+            Log::error($message);
+        }
+        return $result;
     }
 
     /**
@@ -46,7 +56,9 @@ class iDatabase extends Database
      * @param string table
      * @return boolean 
      */
-    static function table_exists($database, $table)
+    static
+
+    function table_exists($database, $table)
     {
         $tables = mysql_list_tables($db);
         while (list ($temp) = mysql_fetch_array($tables)) {
@@ -58,3 +70,4 @@ class iDatabase extends Database
     }
 
 }
+

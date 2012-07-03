@@ -83,5 +83,5 @@ EOP;
 
 } else {
 
-    echo 'You are not allowed here !';
+    echo 'You are not allowed here !'. __FILE__;
 }

@@ -34,5 +34,5 @@ if (defined('SYSTEM_INSTALLATION')) {
     //copy(api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php', api_get_path(CONFIGURATION_PATH).'auth.conf.php');
 	copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.dist.php', api_get_path(CONFIGURATION_PATH).'portfolio.conf.php');
 } else {
-	echo 'You are not allowed here !';
+	echo 'You are not allowed here !' . __FILE__;
 }

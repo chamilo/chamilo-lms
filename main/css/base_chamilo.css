@@ -1101,36 +1101,12 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
 }
 */
 
-
 /* Quizzes tool */
 .quiz_export_link {
     float: right;
 }
-/*Exercice timer*/
-#square{
-  padding:5px;
-  background-color:#EEEEEE;
-  border:1px solid #CCCCCC;
-  margin-right : 24px;
-  width : 155px;
-  margin-bottom:20px;
-}
-#wrapper-clock{
-  width:100%;
-  margin:0;
-}
-.count_down{
-  padding: 3px;
-  font-size:22px;
-  font-weight:bold;
-  color:#222;
-}
 
-/*
-------------------------------------------------------------------------------
-    Learning path
-------------------------------------------------------------------------------
-*/
+/*     Learning path */
 #show_audiorecorder_div {
     background:#F0F0F0;
     border:1px solid #999999;
@@ -1357,21 +1333,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     font-weight:bold;
     color:#666;
 }
-.rounded {
-    border: 3px solid #CCCCCC;
-    padding: 3px;
-    width: 200px;
-    /*margin-left:10px;*/
-}
-.rounded_inner {
-    background:#FFF;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.rounded_inner:hover {
-    color:#C802A5;
-    background:#F0F0F0;
-}
+
 .exercise_scenario_label {
 }
 .exercise_scenario_element {

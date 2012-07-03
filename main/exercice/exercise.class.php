@@ -3592,5 +3592,9 @@ class Exercise {
 		}
 		return $result;
     }
+    
+    function return_time_left_div() {
+        return '<div align="left" id="wrapper-clock"><div id="time_container" class="well"><div id="text-content" align="center" class="count_down"></div></div></div>';        
+    }
 }
 endif;

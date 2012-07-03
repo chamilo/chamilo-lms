@@ -1269,21 +1269,6 @@ ul#navigation .help a{
 	font-weight:bold;
 	color:#666;
 }
-.rounded {
-    border: 3px solid #CCCCCC;
-	padding: 3px;
-	width: 200px;
-	/*margin-left:10px;*/
-}
-.rounded_inner {
-	background:#FFF;
-	padding-top: 10px;
-	padding-bottom: 10px;
-}
-.rounded_inner:hover {
-	color:#C802A5;
-	background:#F0F0F0;
-}
 .exercise_scenario_label {
 }
 .exercise_scenario_element {
@@ -1339,25 +1324,6 @@ span.radio {
 /* Quizzes tool */
 .quiz_export_link {
 	float: right;
-}
-/*Exercice timer*/
-#square{
-  padding:5px;
-  background-color:#EEEEEE;
-  border:1px solid #CCCCCC;
-  margin-right : 24px;
-  width : 155px;
-  margin-bottom:20px;
-}
-#wrapper-clock{
-  width:100%;
-  margin:0;
-}
-.count_down{
-  padding: 3px;
-  font-size:22px;
-  font-weight:bold;
-  color:#222;
 }
 /*****************************************************
  *  BUTTONS	                                         *

@@ -210,8 +210,8 @@ if ($objExercise->selectAttempts()) {
 	//$options.= $attempt_message; //Display::div($attempt_message, array('class'=>"offset2 span2"));
 }
 
-if ($time_control) {
-	$html.=  '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+if ($time_control) {	
+    $html.= $objExercise->return_time_left_div();
 }
 
 $html .=  $message;

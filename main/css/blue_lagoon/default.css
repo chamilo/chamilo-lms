@@ -1884,30 +1884,8 @@ div.comments {
 .quiz_export_link {
 	float: right;
 }
-/*Exercice timer*/
-#square{
-  padding:5px;
-  background-color:#EEEEEE;
-  border:1px solid #CCCCCC;
-  margin-right : 24px;
-  width : 155px;
-  margin-bottom:20px;
-}
-#wrapper-clock{
-  width:100%;
-  margin:0;
-}
-.count_down{
-  padding: 3px;
-  font-size:22px;
-  font-weight:bold;
-  color:#222;
-}
-
 /*
-------------------------------------------------------------------------------
     Learning path
-------------------------------------------------------------------------------
 */
 #show_audiorecorder_div {
 	background:#F0F0F0;

@@ -109,10 +109,8 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 echo Display::div(get_lang('QuestionsToReview'), array('class'=>'question_title'));
 
 if ($time_control) {
-	echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+    echo $objExercise->return_time_left_div();	
 }
-
-
 
 echo Display::div('', array('id'=>'message'));
 

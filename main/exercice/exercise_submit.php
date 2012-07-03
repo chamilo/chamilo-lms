@@ -672,7 +672,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 
 //Timer control
 if ($time_control) {
-	echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+    echo $objExercise->return_time_left_div();	
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 

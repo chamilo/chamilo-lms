@@ -268,7 +268,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     
                     if (iDatabase::num_rows($result) > 0) {
                         while ($row = iDatabase::fetch_array($result,'ASSOC')) {                            
-                            $sql = "SELECT exe_id FROM $dbNameForm.track_e_exercices 
+                            $sql = "SELECT exe_id FROM $dbStatsForm.track_e_exercices 
                                     WHERE exe_user_id = {$row['user_id']} AND 
                                     exe_cours_id = '{$row_course['code']}' AND 
                                     exe_exo_id = {$row['exercise_id']}  AND

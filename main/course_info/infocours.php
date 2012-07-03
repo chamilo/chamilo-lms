@@ -328,19 +328,18 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 
-if (api_get_setting('allow_public_certificates')=='true') {
-    // Certificate settings
+// Certificate settings 
+
+if (api_get_setting('allow_public_certificates')=='true') {    
     $form->addElement('html', '<div><h3>'.Display::return_icon('certificate.png', Security::remove_XSS(get_lang('Certificates')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Certificates')).'</h3><div>');
     $group = array();
     $group[]=$form->createElement('radio', 'allow_public_certificates', get_lang('AllowPublicCertificates'), get_lang('Yes'), 1);
     $group[]=$form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
     $form->addGroup($group, '', array(get_lang("AllowPublicCertificates")), '');
+    
+    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('html', '</div></div>');
 }
-
-
-$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-$form->addElement('html', '</div></div>');
-
 
 
 // Plugin course settings

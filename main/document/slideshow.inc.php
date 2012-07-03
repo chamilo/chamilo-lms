@@ -40,7 +40,7 @@ function resize_image($image, $target_width, $target_height, $slideshow = 0) {
 		$new_sizes = api_resize_image($image, $target_width, $target_height);
 		$result[] = $new_sizes['height'];
 		$result[] = $new_sizes['width'];
-	} else {
+	} else {		
         $size = api_getimagesize($image);
 		$result[] = $size['height'];
 		$result[] = $size['width'];

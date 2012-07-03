@@ -109,7 +109,24 @@ echo '</div>';
 		<div><?php echo get_lang('_no_resizing_comment');?>
 		</div>
 	</div>
-
+    
+    
+    
+   <div>
+		<div class="label">
+			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
+	if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
+		echo ' checked';
+	}
+			?>>
+		<?php echo get_lang('_resizing').' ('.get_lang('Auto').')';?>
+            
+		</div>
+		<div><?php echo get_lang('_resizing_comment').' ('.get_lang('Auto').')';?>
+		</div>
+	</div> 
+ 
+    
 	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php

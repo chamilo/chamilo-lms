@@ -151,7 +151,11 @@ echo '<br />';
 // If we come from slideshowoptions.php we sessionize (new word !!! ;-) the options
 if (isset($_POST['Submit'])) {
 	// We come from slideshowoptions.php
+	
+	//$_SESSION["auto_image_resizing"]=Security::remove_XSS($_POST['auto_radio_resizing']);
+	
 	$_SESSION["image_resizing"] = Security::remove_XSS($_POST['radio_resizing']);
+	
 	if ($_POST['radio_resizing'] == "resizing" && $_POST['width'] != '' && $_POST['height'] != '') {
 		//echo "resizing";
 		$_SESSION["image_resizing_width"] = Security::remove_XSS($_POST['width']);
@@ -227,6 +231,7 @@ if ($slide_id != 'all') {
 
 		$image_height = $image_height_width[0];
 		$image_width = $image_height_width[1];
+	
 		$height_width_tags = null;
 		if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
 			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
@@ -260,7 +265,59 @@ if ($slide_id != 'all') {
         if ($path == '/') {
         	$path = '';
         }
-		echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
+
+		list($width, $height) = getimagesize($image);
+		
+		//auto resize
+		if($_SESSION["image_resizing"]!="noresizing" && $_SESSION["image_resizing"]!="resizing" ){
+		?>
+		<script type="text/javascript">
+			var initial_width='<?php echo $width; ?>';
+			var initial_height='<?php echo $height; ?>';
+			
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>" >');
+			
+			var height = window.innerHeight -320;
+			var width = window.innerWidth -360;
+
+			function resizeImage() {
+				var resize_factor_width = width / initial_width;
+                var resize_factor_height = height / initial_height;
+                var delta_width = width - initial_width * resize_factor_height;
+    			var delta_height = height - initial_height * resize_factor_width;
+    
+				if (delta_width > delta_height) {
+					width = Math.ceil(initial_width * resize_factor_height);
+					height= Math.ceil(initial_height * resize_factor_height);
+				}
+				else if(delta_width < delta_height) {
+					width = Math.ceil(initial_width * resize_factor_width);
+					height = Math.ceil(initial_height * resize_factor_width);
+				}
+				else {
+					width = Math.ceil(width);
+					height = Math.ceil(height);
+				}
+				
+				document.getElementById('image').style.height = height +"px";
+				document.getElementById('image').style.width = width +"px";
+			};
+			
+			 if (initial_height>height || initial_width>width) {
+				document.getElementById('image').onload = resizeImage;
+			    window.onresize = resizeImage;
+			}
+			
+		</script>
+    
+   
+    <?php
+		}
+		else{
+		
+			echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
+		}
+		
 		echo '</a>';
 		echo '</td>';
 		echo '</tr>';
@@ -279,8 +336,7 @@ if ($slide_id != 'all') {
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 			echo $image_files_only[$slide].' <br />';
-			list($width, $high) = getimagesize($image);
-			echo $width.' x '.$high.' <br />';
+			echo $width.' x '.$height.' <br />';
 			echo round((filesize($image)/1024), 2).' KB';
 			echo ' - '.$ext;
 			echo '</td>';

@@ -92,9 +92,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('hide_cours
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle','PDFExportWatermarkTextComment','platform',NULL, 	1);
 
-ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
-
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_insertHtml',NULL,'radio','Editor','true','EnabledInsertHtmlTitle','EnabledInsertHtmlComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'false', 'No');
@@ -198,6 +195,7 @@ UPDATE settings_current SET selected_value = '1.8.8.14911' WHERE variable = 'cha
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 
 -- xxUSERxx
+ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);

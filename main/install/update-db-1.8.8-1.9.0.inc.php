@@ -287,7 +287,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     $sql = "SELECT user_id FROM admin WHERE user_id = 1";
     $result = iDatabase::query($sql);
     
-    if (Database::num_rows($result)) {
+    if (Database::num_rows($result) == 0) {
         $sql = "INSERT INTO access_url_rel_user VALUES(1, 1)";
         iDatabase::query($sql);
     }

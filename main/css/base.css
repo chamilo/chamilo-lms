@@ -2476,10 +2476,14 @@ div.admin_section h4 {
     width:100%;
     margin:0;
 }
-#time_container {
-    padding:5px;
+
+.time_container_warning {
     background-color:#FFD700;
     border:1px solid #B8860B;
+}
+
+#time_container {
+    padding:5px;    
     margin-right : 24px;
     width: 155px;
     margin-bottom:20px;

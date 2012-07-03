@@ -444,8 +444,10 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 }
 
 // Displaying the survey thanks message
-if (isset($_POST['finish_survey'])) {
-	echo '<div id="survey_content" class="survey_content"><strong>'.get_lang('SurveyFinished').'</strong> <br />'.$survey_data['survey_thanks'].'</div>';
+if (isset($_POST['finish_survey'])) {	
+    Display::display_confirmation_message(get_lang('SurveyFinished'));
+    echo $survey_data['survey_thanks'];
+        
 	survey_manager::update_survey_answered($survey_data['survey_id'], $survey_invitation['user'], $survey_invitation['survey_code']);
 	unset($_SESSION['paged_questions']);
 	unset($_SESSION['page_questions_sec']);

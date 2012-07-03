@@ -63,11 +63,15 @@ if (isset($_GET['survey_id'])) {
 	}
 }
 
+$tool_name = strip_tags($survey_data['title']);
+
+/* 
 if (api_substr($survey_data['title'], 0, 3) != '<p>') {
-	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-} else {
+	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));    
+} else {    
 	$tool_name = strip_tags(api_substr(api_html_entity_decode(api_substr($survey_data['title'], 3, -4), ENT_QUOTES), 0, 40));
-}
+    
+}*/
 
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
@@ -100,7 +104,8 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 }
 
 // Displaying the header
-Display::display_header($tool_name,'Survey');
+
+Display::display_header($tool_name, 'Survey');
 
 // Action handling
 $my_action_survey		= Security::remove_XSS($_GET['action']);
@@ -213,7 +218,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 	} else if ($row['type'] == 'multiplechoice') {
 		$tool_name = get_lang('UniqueSelect');
 	} else {
-		$tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
+		$tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));        
 	}
 
 	echo '</td>';
@@ -241,6 +246,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     }
 	echo '</tr>';
 }
+
 echo '</table>';
 
 if ($is_survey_type_1) {

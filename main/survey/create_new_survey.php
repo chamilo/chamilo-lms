@@ -25,7 +25,6 @@ $this_section = SECTION_COURSES;
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -74,10 +73,12 @@ $course_id = api_get_course_id();
 $session_id = api_get_session_id();
 $gradebook_link_type = 8; // LINK_SURVEY
 
-$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
+/*$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
-}
+}*/
+$urlname = $survey_data['title'];
+
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
@@ -163,15 +164,8 @@ $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduc
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
 // Aditional Parameters
-$form->addElement('html', '
-<div class="row">
-	<div class="label">		
-	</div>
-	<div class="formw">
-		<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
-        <span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
-	</div>
-</div>');
+$form->addElement('advanced_settings','<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
+        <span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>');
 
 $form -> addElement('html', '<div id="options" style="display: none;">');
 

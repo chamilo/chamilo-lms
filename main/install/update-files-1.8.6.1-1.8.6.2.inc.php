@@ -66,13 +66,23 @@ if (defined('SYSTEM_INSTALLATION')) {
         while ($courses_directories = iDatabase::fetch_array($result)) {
             $currentCourseRepositorySys = $sys_course_path . $courses_directories['directory'] . '/';
             // upload > announcements
-            if (!is_dir($currentCourseRepositorySys . "upload/announcements")) {
-                mkdir($currentCourseRepositorySys . "upload/announcements", $perm);
+            $path = $currentCourseRepositorySys . "upload/announcements";
+            if (!is_dir($path)) {
+                $success = mkdir($path, $perm);
+                if(!$sucess){
+                    $course_directory = $courses_directories['directory'];
+                    Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: , perm: $perm");
+                }
             }
 
             // upload > announcements > images
-            if (!is_dir($currentCourseRepositorySys . "upload/announcements/images")) {
-                mkdir($currentCourseRepositorySys . "upload/announcements/images", $perm);
+            $path = $currentCourseRepositorySys . "upload/announcements/images";
+            if (!is_dir($path)) {
+                $success = mkdir($path, $perm);
+                if(!$sucess){
+                    $course_directory = $courses_directories['directory'];
+                    Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: $perm");
+                }
             }
         }
     }

@@ -2626,16 +2626,17 @@ class SurveyUtil {
 			}
 		}
 
-		echo $question['survey_question'];
-		
+		echo $question['survey_question'];		
 
 		if ($question['type'] == 'score') {
 			/** @todo This function should return the options as this is needed further in the code */
 			$options = SurveyUtil::display_question_report_score($survey_data, $question, $offset);
 		} elseif ($question['type'] == 'open') {
 			/** @todo Also get the user who has answered this */
-			$sql = "SELECT * FROM $table_survey_answer WHERE c_id = $course_id AND survey_id='".Database::escape_string($_GET['survey_id'])."'
-						AND question_id = '".Database::escape_string($question['question_id'])."'";
+			$sql = "SELECT * FROM $table_survey_answer 
+                        WHERE   c_id = $course_id AND 
+                                survey_id='".Database::escape_string($_GET['survey_id'])."' AND 
+                                question_id = '".Database::escape_string($question['question_id'])."'";
 			$result = Database::query($sql);
 			while ($row = Database::fetch_array($result)) {
 				echo $row['option_id'].'<hr noshade="noshade" size="1" />';
@@ -2676,11 +2677,14 @@ class SurveyUtil {
 			if (is_array($options)) {
 				foreach ($options as $key => & $value) {
 					$absolute_number = $data[$value['question_option_id']]['total'];
+                    if ($question['type'] == 'percentage' && empty($absolute_number)) {
+                        continue;
+                    }
 					if ($number_of_answers == 0) {
 						$answers_number = 0;
 					} else {
 						$answers_number = $absolute_number/$number_of_answers*100;
-					}
+					}                    
 					echo '	<tr>';
 					echo '		<td>'.$value['option_text'].'</td>';
 					echo '		<td align="right"><a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset).'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
@@ -2761,7 +2765,7 @@ class SurveyUtil {
 			$data[$row['option_id']][$row['value']] = $row;
 		}
 		// Displaying the table: headers
-		echo '<table>';
+		echo '<table class="data_table">';
 		echo '	<tr>';
 		echo '		<th>&nbsp;</th>';
 		echo '		<th>'.get_lang('Score').'</th>';

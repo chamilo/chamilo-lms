@@ -122,7 +122,7 @@ class LegalManager {
 	 * @param array with type and content i.e array('type'=>'1', 'content'=>'hola');
 	 * @return string html preview
 	 */
-	public static function show_last_condition ($term_preview) {
+	public static function show_last_condition($term_preview) {
 		$preview = '';
 		switch ($term_preview['type']) {
 			/*// scroll box
@@ -148,13 +148,15 @@ class LegalManager {
 						</label>
 				</div>
 				</fieldset>';
-			break;*/
-			// html
+                break;*/
+            // HTML
 			case 0:
-				$preview = '<div class="legal-terms">		'.$term_preview['content'].'		</div>';
-				$preview .= '<br/>'.get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
-			break;
-			// page link
+                if (!empty($term_preview['content'])) {
+                    $preview = '<div class="legal-terms">'.$term_preview['content'].'</div><br />';
+                }
+				$preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
+                break;
+			// Page link
 			case 1:
 				$preview ='<fieldset>
 							 <legend>'.get_lang('TermsAndConditions').'</legend>';
@@ -166,9 +168,9 @@ class LegalManager {
 				</label>
 				</div>
 				</fieldset>';
-			break;
+                break;
 			default:
-			break;
+                break;
 		}
 		return 	$preview;
 	}

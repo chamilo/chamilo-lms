@@ -284,10 +284,15 @@ if (defined('SYSTEM_INSTALLATION')) {
     }    
     
     //Adding admin user in the access_url_rel_user  table
-    $sql = "SELECT user_id FROM admin WHERE user_id = 1 AND access_url_id = 1";
+    $sql = "SELECT user_id FROM admin WHERE user_id = 1";
     $result = iDatabase::query($sql);
+    $has_user_id = Database::num_rows($result) > 0;
     
-    if (Database::num_rows($result) == 0) {
+    $sql = "SELECT * FROM access_url_rel_user WHERE user_id = 1 AND access_url_id = 1";
+    $result = iDatabase::query($sql);
+    $has_entry = Database::num_rows($result) > 0;
+        
+    if ($has_user_id && !$has_entry) {
         $sql = "INSERT INTO access_url_rel_user VALUES(1, 1)";
         iDatabase::query($sql);
     }

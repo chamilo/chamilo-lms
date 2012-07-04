@@ -304,7 +304,3 @@ class DummyCourseCreator
 		}
 	}
 }
-?>
-
-
-

@@ -46,4 +46,3 @@ class Glossary extends Resource
 		echo $this->name;
 	}
 }
-?>

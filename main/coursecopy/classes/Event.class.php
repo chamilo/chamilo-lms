@@ -83,4 +83,3 @@ class Event extends Resource
 		echo $this->title.' ('.$this->start_date.' -> '.$this->end_date.')';
 	}
 }
-?>

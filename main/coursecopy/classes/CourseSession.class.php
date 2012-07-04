@@ -28,4 +28,3 @@ class CourseSession extends Resource {
 		echo $this->title;	
 	}
 }
-?>

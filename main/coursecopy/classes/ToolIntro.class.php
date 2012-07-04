@@ -93,4 +93,3 @@ class ToolIntro extends Resource
 		echo $this->intro_text;
 	}
 }
-?>

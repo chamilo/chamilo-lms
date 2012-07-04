@@ -453,4 +453,3 @@ class CourseSelectForm
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 }
-?>

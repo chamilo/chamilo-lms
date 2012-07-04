@@ -62,4 +62,3 @@ class SurveyInvitation extends Resource
 		echo $this->invitation_code;
 	}
 }
-?>

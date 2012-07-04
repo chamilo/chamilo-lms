@@ -50,4 +50,3 @@ class LinkCategory extends Resource
 		echo $this->title.' '.$this->description.'<br />';
 	}
 }
-?>

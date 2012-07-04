@@ -44,4 +44,3 @@ class Wiki extends Resource
 		echo $this->reflink.' ('. (empty($this->group_id) ? get_lang('Everyone') : get_lang('Group') . ' ' .  $this->group_id) .') ' . '<i>(' . $this->dtime . ')</i>';
 	}
 }
-?>

@@ -89,8 +89,7 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
     if ($current_php_value == $recommended_value) {
         return Display::label($current_php_value.' '.$return_success, 'success');
     } else {
-        return Display::label($current_php_value.' '.$return_success, 'important');
-        //return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
+        return Display::label($current_php_value.' '.$return_success, 'important');        
     }
 }
 
@@ -225,11 +224,9 @@ function check_writable($folder, $suggestion = false) {
         return Display::label(get_lang('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotWritable'), 'info');
-            //return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
+            return Display::label(get_lang('NotWritable'), 'info');            
         } else {
-            return Display::label(get_lang('NotWritable'), 'important');
-            //return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+            return Display::label(get_lang('NotWritable'), 'important');            
         }
     }
 }
@@ -1020,11 +1017,11 @@ function display_language_selection() { ?>
     <div class="RequirementHeading">
         <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
-    <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-	<?php display_language_selection_box('language_list', api_get_interface_language()); ?>
-    <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
-    <input type="hidden" name="is_executable" id="is_executable" value="-" />
-    </form>
+        <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
+        <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
+        <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
+        <input type="hidden" name="is_executable" id="is_executable" value="-" />
+        </form>
     </div>
 <?php
 }
@@ -1057,9 +1054,9 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
     echo '<div class="RequirementContent">';
-    echo '<table class="requirements">
+    echo '<table class="table">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').'>= '.REQUIRED_PHP_VERSION.'</td>
+                <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
     if (phpversion() < REQUIRED_PHP_VERSION) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
@@ -1132,7 +1129,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementHeading"><h2>'.get_lang('RecommendedSettings').'</h2>';
     echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
     echo '<div class="RequirementContent">';
-    echo '<table class="requirements">
+    echo '<table class="table">
             <tr>
                 <th>'.get_lang('Setting').'</th>
                 <th>'.get_lang('Recommended').'</th>
@@ -1140,58 +1137,63 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('safe_mode','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('display_errors','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
-                <td class="requirements-recommended">ON</td>
+                <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('file_uploads','ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('magic_quotes_gpc','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('magic_quotes_runtime','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('register_globals','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('session.auto_start','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
-                <td class="requirements-recommended">OFF</td>
+                <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('short_open_tag','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
-                <td class="requirements-recommended">ON</td>
+                <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
                 <td class="requirements-value">'.check_php_setting('session.cookie_httponly','ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
-                <td class="requirements-recommended">10M-100M</td>
-                <td class="requirements-value">'.ini_get('upload_max_filesize').'</td>
+                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M', 'success').'</td>
+                <td class="requirements-value">'.compare_setting_values(ini_get('upload_max_filesize'), REQUIRED_MIN_UPLOAD_MAX_FILESIZE).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
-                <td class="requirements-recommended">10M-100M</td>
-                <td class="requirements-value">'.ini_get('post_max_size').'</td>
+                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success').'</td>
+                <td class="requirements-value">'.compare_setting_values(ini_get('post_max_size'), REQUIRED_MIN_POST_MAX_SIZE).'</td>
+            </tr>            
+            <tr>
+                <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
+                <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
+                <td class="requirements-value">'.compare_setting_values(ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT).'</td>
             </tr>
           </table>';
     echo '  </div>';
@@ -1247,7 +1249,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     
     $course_test_was_created  = $course_test_was_created == true ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
 
-    echo '<table class="requirements">
+    echo '<table class="table">
             <tr>
                 <td class="requirements-item">chamilo/main/inc/conf/</td>
                 <td class="requirements-value">'.check_writable('inc/conf/').'</td>
@@ -1267,23 +1269,19 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             <tr>
                 <td class="requirements-item">chamilo/courses/</td>
                 <td class="requirements-value">'.check_writable('../courses/').' </td>
-            </tr>
-            
+            </tr>            
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
-            </tr>
-            
+            </tr>            
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
                 <td class="requirements-value">'.$dir_perm.' </td>
-            </tr>
-            
+            </tr>            
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
-            </tr>
-            
+            </tr>            
             <tr>
                 <td class="requirements-item">chamilo/home/</td>
                 <td class="requirements-value">'.check_writable('../home/').'</td>
@@ -2119,6 +2117,16 @@ function update_dir_and_files_permissions() {
     
     unset($_SESSION['permissions_for_new_directories']);
     unset($_SESSION['permissions_for_new_files']);
+}
+
+function compare_setting_values($current_value, $wanted_value) {
+    $current_value_string = $current_value;
+    $current_value = (float)$current_value;    
+    $wanted_value = (float)$wanted_value;
     
-    
+    if ($current_value >= $wanted_value) {
+        return Display::label($current_value_string, 'success');
+    } else {
+        return Display::label($current_value_string, 'important');
+    }    
 }

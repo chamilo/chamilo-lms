@@ -16,6 +16,10 @@
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.3');
 
+define('REQUIRED_MIN_MEMORY_LIMIT',         '64');
+define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
+define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
+
 use \ChamiloSession as Session;
 
 

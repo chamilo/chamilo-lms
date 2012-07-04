@@ -141,16 +141,6 @@ class Diagnoser
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'display_errors', 'http://www.php.net/manual/en/ini.core.php#ini.display_errors', $setting, $req_setting, 'on_off', get_lang('DisplayErrorsInfo'));
 
-        $setting = ini_get('upload_max_filesize');
-        $req_setting = '10M - 100M - ...';
-        if ($setting < 10)
-            $status = self :: STATUS_ERROR;
-        if ($setting >= 10 && $setting < 100)
-            $status = self :: STATUS_WARNING;
-        if ($setting >= 100)
-            $status = self :: STATUS_OK;
-        $array[] = $this->build_setting($status, '[INI]', 'upload_max_filesize', 'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null, get_lang('UploadMaxFilesizeInfo'));
-
         $setting = ini_get('default_charset');
         if ($setting == '')
             $setting = null;
@@ -169,24 +159,25 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'max_input_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-input-time', $setting, $req_setting, null, get_lang('MaxInputTimeInfo'));
 
         $setting = ini_get('memory_limit');
-        $req_setting = '10M - 100M - ...';
-        if ($setting < 10)
-            $status = self :: STATUS_ERROR;
-        if ($setting >= 10 && $setting < 100)
-            $status = self :: STATUS_WARNING;
-        if ($setting >= 100)
+        $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';        
+        $status = self :: STATUS_ERROR;    
+        if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT)
             $status = self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'memory_limit', 'http://www.php.net/manual/en/ini.core.php#ini.memory-limit', $setting, $req_setting, null, get_lang('MemoryLimitInfo'));
 
         $setting = ini_get('post_max_size');
-        $req_setting = '10M - 100M - ...';
-        if ($setting < 10)
-            $status = self :: STATUS_ERROR;
-        if ($setting >= 10 && $setting < 100)
-            $status = self :: STATUS_WARNING;
-        if ($setting >= 100)
+        $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';        
+        $status = self :: STATUS_ERROR;
+        if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE)
             $status = self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'post_max_size', 'http://www.php.net/manual/en/ini.core.php#ini.post-max-size', $setting, $req_setting, null, get_lang('PostMaxSizeInfo'));
+        
+        $setting = ini_get('upload_max_filesize');
+        $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
+        $status = self :: STATUS_ERROR;
+        if ((float)$setting >= REQUIRED_UPLOAD_MAX_FILESIZE)
+            $status = self :: STATUS_OK;
+        $array[] = $this->build_setting($status, '[INI]', 'upload_max_filesize', 'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null, get_lang('UploadMaxFilesizeInfo'));
 
         $setting = ini_get('variables_order');
         $req_setting = 'GPCS';

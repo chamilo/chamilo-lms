@@ -3387,10 +3387,18 @@ class Exercise {
             }
         }
 
-		//2. If the exercise is not active
-		if ($this->active == 0) {
-			return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));
-		}
+		//2. If the exercise is not active        
+        if (empty($lp_id)) {
+            //2.1 LP is OFF
+            if ($this->active == 0) {
+    			return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));
+        	}
+        } else {
+            //2.1 LP is loaded
+            if ($this->active == 0 AND !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {                    
+                return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));
+            }            
+        }
 
 		//3. We check if the time limits are on
 		$limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;

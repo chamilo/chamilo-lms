@@ -1981,11 +1981,12 @@ class learnpath {
             $output  = '<div id="container">';
             $output .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
             $output .= '<script type="text/javascript">
-                                    var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                                    s1.addParam("allowscriptaccess","always");
-                                        s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
-                                    s1.write("container");
-						</script></div>';
+                            var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+                            s1.addParam("allowscriptaccess","always");
+                                s1.addParam("flashvars","file=' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=' . $autostart_audio.'");
+                            s1.write("container");
+						</script>
+                        </div>';
         }
         return $output;
     }

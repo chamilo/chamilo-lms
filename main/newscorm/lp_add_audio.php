@@ -2,12 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * This is a learning path creation and player tool in Chamilo - previously
- * learnpath_handler.php
- *
- * @author Patrick Cool
- * @author Denes Nagy
- * @author Roan Embrechts, refactoring and code cleaning
- * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
  * @author Julio Montoya  - Improving the list of templates
  * @package chamilo.learnpath
  */
@@ -21,10 +15,6 @@ api_protect_course_script();
 
 include 'learnpath_functions.inc.php';
 include 'resourcelinker.inc.php';
-
-$language_file = 'learnpath';
-
-/* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -102,7 +92,7 @@ echo '</div>';
 echo '<div id="doc_form" class="span8">';
 
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
-$form->addElement('header', get_lang('Upload'));
+$form->addElement('header', get_lang('UplUpload'));
 $form->addElement('file', 'file', get_lang('File'));
 $form->addElement('hidden', 'id', $lp_item_id);
 

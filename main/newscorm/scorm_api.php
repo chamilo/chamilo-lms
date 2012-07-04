@@ -1495,7 +1495,7 @@ function switch_item(current_item, next_item){
         url: "lp_nav.php",
         data: "",
         success: function(tmp_data) {
-            $("#media").html(tmp_data);
+            $("#lp_media_file").html(tmp_data);
         }
     });
     return true;

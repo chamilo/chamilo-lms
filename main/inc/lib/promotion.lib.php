@@ -83,12 +83,16 @@ class Promotion extends Model {
 				if (!empty($session_list)) {
 					$pid = $this->save($new);				
 					if (!empty($pid)) {
+                        $new_session_list = array();
+                        
 						foreach($session_list as $item) {
 							$sid = SessionManager::copy_session($item['id'], true, false, true, true);						
-							if ($sid != 0) {
-								SessionManager::suscribe_sessions_to_promotion($pid, array($sid));
-							}
+                            $new_session_list[] = $sid;
 						}
+                        
+                        if (!empty($new_session_list)) {
+                            SessionManager::suscribe_sessions_to_promotion($pid, $new_session_list);
+                        }
 					}
 				}
 			} else {

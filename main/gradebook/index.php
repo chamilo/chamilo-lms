@@ -802,7 +802,7 @@ if ($category != '0') {
 				}
 				
 				if (!empty($my_certificate)) {
-					$url  = api_get_path(WEB_PATH) .'certificates/?id='.$my_certificate['id'];	
+					$url  = api_get_path(WEB_PATH) .'certificates/index.php?id='.$my_certificate['id'];	
 					$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));					
 					echo '<div class="actions" align="right">';					
 					echo Display::url($url, $url, array('target'=>'_blank'));

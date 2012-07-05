@@ -26,6 +26,14 @@ class Promotion extends Model {
         $this->table =  Database::get_main_table(TABLE_PROMOTION);
 	}
     
+     /**
+     * Get the count of elements
+     */
+    public function get_count() {        
+        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        return $row['count'];
+    }
+    
 	
 	/**
 	* Copies the promotion to a new one

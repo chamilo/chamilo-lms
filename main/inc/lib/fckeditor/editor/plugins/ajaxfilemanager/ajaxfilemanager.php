@@ -557,9 +557,9 @@ if(!empty($_GET['view'])) {
 		  					<input type="file" class="input" name="file"  />
 		  					<input type="button" class="upload_button" value="<?php echo FILE_LBL_UPLOAD; ?>" /><!-- change style of upload button by Chamilo -->
 		  					<a href="#" class="action" title="<?php echo get_lang('Cancel')?>" style="display:none" ><!-- Chamilo lang var added -->
-		  						<span class="cancel">&nbsp;</span>
+		  						<span class="cancel">&nbsp;</span><span class="uploadProcessing" style="display:none">&nbsp;</span>
 		  					</a>
-		  					<span class="uploadProcessing" style="display:none">&nbsp;</span>
+		  					
 		  				</td>
 		  			</tr>		
 		  		</tbody>		  

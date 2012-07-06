@@ -62,10 +62,9 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 		$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.Security::remove_XSS($_GET['cidReq']).$gid_req;
 		// Redirect
 		header('Location: '.$document_explorer);
-	}
-	// Launch event
-	event_download($doc_url);
+	}	
 }
+
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;
     // Check visibility of document and paths    doc_url
@@ -85,6 +84,8 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.
     }
+    // Launch event
+	event_download($doc_url);
     DocumentManager::file_send_for_download($full_file_name);
 }
 exit;

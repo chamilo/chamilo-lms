@@ -73,37 +73,40 @@ class ScormAssessmentItem
       * End the XML flow, closing the </item> tag.
       *
       */
-     function end_page()
-     {
+     function end_page() {
      	if($this->standalone){return '</html>';}
      	return '';
      }
+     
 	/**
 	 * Start document header
 	 */
-	function start_header()
-	{
+	function start_header() {
 		if($this->standalone){return '<head>'. "\n";}
 		return '';
 	}
+    
 	/**
 	 * Print CSS inclusion
 	 */
 	function css() {
-		if($this->standalone) {
+        $css = '';
+		if ($this->standalone) {
+            
+            
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
+			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
+			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
-			$css .= '</style>'."\n";
-			return $css;
+			$css .= '</style>'."\n";			
+            
 		}
-		return '';
+		return $css;
 	}
 
 	/**
@@ -262,27 +265,26 @@ class ScormSection
     var $exercise;
 
     /**
-     * Constructor.
-     * @param $exe The Exercise instance to export
-     * @author Amand Tihon <amand@alrj.org>
-     */
+        * Constructor.
+        * @param $exe The Exercise instance to export
+        * @author Amand Tihon <amand@alrj.org>
+        */
     function ScormSection($exe) {
         $this->exercise = $exe;
     }
 
-
-     /**
-      * Start the XML flow.
-      *
-      * This opens the <item> block, with correct attributes.
-      *
-      */
-     function start_page() {
+    /**
+    * Start the XML flow.
+    *
+    * This opens the <item> block, with correct attributes.
+    *
+    */
+    function start_page() {
         global $charset;
         $head = $foot = "";
-		$head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n".'<html>'."\n";
+        $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n".'<html>'."\n";
         return $head;
-     }
+    }
 
      /**
       * End the XML flow, closing the </item> tag.
@@ -305,12 +307,12 @@ class ScormSection
 	function css() {
 		$css = '<style type="text/css" media="screen, projection">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";		
+		//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";		
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
+		//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		return $css;

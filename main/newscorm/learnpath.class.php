@@ -1991,7 +1991,6 @@ class learnpath {
         return $output;
     }
 
-
     /**
      * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
      * @param	int		Learnpath id
@@ -8225,6 +8224,7 @@ class learnpath {
                     
                     // Check type of URL.
                     //error_log(__LINE__.'Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2], 0);
+                    
                     if ($doc_info[1] == 'remote') {
                         // Remote file. Save url as is.
                         $my_dep_file->setAttribute('href', $doc_info[0]);
@@ -8286,23 +8286,24 @@ class learnpath {
                                 //error_log(__LINE__.'Abs path: '.$file_path, 0);
                                 // Prepare the current directory path (until just under 'document') with a trailing slash.
                                 $cur_path = substr($current_course_path, -1) == '/' ? $current_course_path : $current_course_path.'/';
-                                // Check if the current document is in that path.
-                                
+                                // Check if the current document is in that path.                                
                                 if (strstr($file_path, $cur_path) !== false) {
                                     // The document is in that path, now get the relative path
                                     // to the containing document.
                                     $orig_file_path = dirname($cur_path.$my_file_path).'/';
                                     $orig_file_path = str_replace('\\', '/', $orig_file_path);
-                                    $relative_path = '';
-                                    if (strstr($file_path, $cur_path) !== false) {
-                                        
-                                        if (strpos($orig_file_path, $file_path) == false) {
+                                    
+                                    $relative_path = '';                                                                        
+                                    if (strstr($file_path, $cur_path) !== false) {                                        
+                                        if (strpos($orig_file_path, $file_path) == false) {                                            
                                             //no need to do something
-                                            $file_path = $relative_path = substr($file_path, strlen($cur_path));                                            
+                                            $file_path = $relative_path = substr($file_path, strlen($cur_path));
+                                            //$file_path = substr($file_path, strlen($cur_path));
+                                            //$relative_path = str_replace('document/', '', $file_path);                                                                                        
                                         } else {                                            
                                             $relative_path = substr($file_path, strlen($orig_file_path));
                                             $file_path = substr($file_path, strlen($cur_path));
-                                        }
+                                        }                                        
                                     } else {
                                         // This case is still a problem as it's difficult to calculate a relative path easily
                                         // might still generate wrong links.
@@ -8365,13 +8366,12 @@ class learnpath {
                              case 'rel': // Path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path                                 
                                  if (substr($doc_info[0], 0, 2) == '..') {
                                      // Relative path going up.
-                                     $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-                                     
+                                     $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';                                     
                                      
                                      $current_dir = str_replace('\\', '/', $current_dir);
                                      $file_path = realpath($current_dir.$doc_info[0]);
                                      $file_path = str_replace('\\', '/', $file_path);
-                                     
+                                                                          
                                      //error_log($file_path.' <-> '.$main_path,0);
                                      if (strstr($file_path, $main_path) !== false) {
                                          // The calculated real path is really inside Chamilo's root path.
@@ -8549,7 +8549,7 @@ class learnpath {
                     // Get included docs.
                     $inc_docs = $item->get_resources_from_source(null,$tmp_file_path);
                     // Dependency to other files - not yet supported.
-                    $i = 1;
+                    $i = 1;                    
                     foreach ($inc_docs as $doc_info) {
                         if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
                         $my_dep = $xmldoc->createElement('resource');
@@ -8572,7 +8572,7 @@ class learnpath {
                                     $current_dir = dirname($abs_path);
                                     $current_dir = str_replace('\\', '/', $current_dir);
                                     $file_path = realpath($abs_path);
-                                    $file_path = str_replace('\\', '/', $file_path);
+                                    $file_path = str_replace('\\', '/', $file_path);                                    
                                     $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                     $my_dep->setAttribute('xml:base', '');
                                     if (strstr($file_path, $main_path) !== false) {
@@ -8654,21 +8654,20 @@ class learnpath {
                                            $info_file_path = explode('/', $file_path);
                                            if ($info_file_path[0] == 'courses') { // Add character "/" in file path.
                                                $file_path_dest = 'document/'.$file_path;
-                                           }
+                                           }                                           
 
                                             //error_log('Reduced path: '.$file_path, 0);
                                             $zip_files_abs[] = $file_path;
 
                                             $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path_dest);
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                             $my_dep->setAttribute('xml:base', '');
+                                            $my_dep->setAttribute('xml:base', '');
                                         }
                                     } else {
                                         $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
                                         $my_dep_file->setAttribute('href', $doc_info[0]);
                                         $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
                                     }
-
                                     break;
                                 default:
                                     $my_dep_file->setAttribute('href', $doc_info[0]); // ../../courses/
@@ -8743,11 +8742,17 @@ class learnpath {
             //echo $main_path.$file_path.'<br />';
             
             @copy($sys_course_path.$_course['path'].'/'.$file_path, $dest_file);
-
+            
             // Check if the file needs a link update
             if (in_array($file_path, array_keys($link_updates))) {
+                
+                $count_parents = explode('/', $file_path);            
+                $count_parents = count($count_parents) - 1;
+                $mult = str_repeat('../', $count_parents);
+            
                 $string = file_get_contents($dest_file);
                 unlink($dest_file);                
+                
                 foreach ($link_updates[$file_path] as $old_new) {
                     //error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path, 0);
                     // This is an ugly hack that allows .flv files to be found by the flv player that
@@ -8759,14 +8764,19 @@ class learnpath {
                     } elseif (substr($old_new['dest'], -3) == 'flv' && substr($old_new['dest'], 0, 6) == 'video/') {
                         $old_new['dest'] = str_replace('video/', '../../../../video/', $old_new['dest']);
                     }
-                    $string = str_replace($old_new['orig'], $old_new['dest'], $string);
+                    
+                    $new_dest = str_replace('document/', $mult.'document/', $old_new['dest']);                    
+                    
+                    //$string = str_replace($old_new['orig'], $old_new['dest'], $string);
+                    $string = str_replace($old_new['orig'], $new_dest, $string);
+                    
+                    //var_dump($old_new['orig'], $old_new['dest']); echo '--> ';                    
+                    //var_dump($new_path);
                     
                     //Add files inside the HTMLs
                     $new_path = str_replace('/courses/', '', $old_new['orig']);
-                    /*var_dump($sys_course_path.$new_path);
-                    var_dump($archive_path.$temp_dir_short.'/document/'.$old_new['dest']);
-                    echo '---';*/
-                    copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/document/'.$old_new['dest']);
+                    //var_dump($sys_course_path.$new_path); var_dump($archive_path.$temp_dir_short.'/'.$old_new['dest']); echo '---';
+                    copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/'.$old_new['dest']);
                     
                 }
                 file_put_contents($dest_file, $string);
@@ -8785,6 +8795,7 @@ class learnpath {
             //echo $main_path.$file_path.' - '.$dest_file.'<br />';
 
             copy($main_path.$file_path, $dest_file);
+            
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
                 $string = file_get_contents($dest_file);
@@ -8806,33 +8817,29 @@ class learnpath {
 
         if (is_array($links_to_create)) {
             foreach ($links_to_create as $file => $link) {
-               $file_content = '<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
-    <head>
-        <title>'.$link['title'].'</title>
-        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
-    </head>
-    <body dir="'.api_get_text_direction().'">
-        <div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div>
-    </body>
-</html>';
-            file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
+               $file_content = '<!DOCTYPE html>
+                   <head>
+                   <meta charset="'.api_get_language_isocode().'" />
+                   <title>'.$link['title'].'</title>
+                   </head>
+                   <body dir="'.api_get_text_direction().'">
+                        <div style="text-align:center">
+                        <a href="'.$link['url'].'">'.$link['title'].'</a></div>
+                   </body>
+                   </html>';
+                file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
             }
         }
 
         // Add non exportable message explanation.
         $lang_not_exportable = get_lang('ThisItemIsNotExportable');
-        $file_content = '<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
-    <head>
-        <title>'.$lang_not_exportable.'</title>
-        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
-    </head>
-    <body dir="'.api_get_text_direction().'">';
+        $file_content = '<!DOCTYPE html>
+        <head>
+            <meta charset="'.api_get_language_isocode().'" />
+            <title>'.$lang_not_exportable.'</title>
+            <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+        </head>
+        <body dir="'.api_get_text_direction().'">';
         $file_content .=
 <<<EOD
         <style>
@@ -8881,13 +8888,15 @@ EOD;
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
-        $zip_folder->add($archive_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $archive_path.'/'.$temp_dir_short.'/');
-
+        
+        $zip_folder->add($archive_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $archive_path.'/'.$temp_dir_short.'/');        
+        
         // Clean possible temporary files.
         foreach ($files_cleanup as $file) {
             $res = unlink($file);
             if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
         }
+        
         // Send file to client.
         //$name = 'scorm_export_'.$this->lp_id.'.zip';
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';

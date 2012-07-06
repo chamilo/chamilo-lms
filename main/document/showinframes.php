@@ -235,8 +235,8 @@ if ($jplayer_supported) {
                             '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
                         });
                     },                    
-                    errorAlerts: true,
-                    warningAlerts: true,
+                    errorAlerts: false,
+                    warningAlerts: false,
                     //swfPath: "../inc/lib/javascript/jquery-jplayer",
                      swfPath: "'.$js_path.'jquery-jplayer",
                     //supplied: "m4a, oga, mp3, ogg, wav",

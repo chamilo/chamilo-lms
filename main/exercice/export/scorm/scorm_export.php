@@ -266,8 +266,7 @@ class ScormSection
      * @param $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
      */
-    function ScormSection($exe)
-    {
+    function ScormSection($exe) {
         $this->exercise = $exe;
     }
 
@@ -278,8 +277,7 @@ class ScormSection
       * This opens the <item> block, with correct attributes.
       *
       */
-     function start_page()
-     {
+     function start_page() {
         global $charset;
         $head = $foot = "";
 		$head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n".'<html>'."\n";
@@ -290,17 +288,17 @@ class ScormSection
       * End the XML flow, closing the </item> tag.
       *
       */
-     function end_page()
-     {
+     function end_page() {
        return '</html>';
      }
+     
 	/**
 	 * Start document header
 	 */
-	function start_header()
-	{
+	function start_header() {
 		return '<head>'. "\n";
 	}
+    
 	/**
 	 * Print CSS inclusion
 	 */
@@ -321,28 +319,26 @@ class ScormSection
 	/**
 	 * End document header
 	 */
-	function end_header()
-	{
+	function end_header() {
 		return '</head>'. "\n";
 	}
+    
     /**
      * Start the itemBody
      *
      */
-    function start_js()
-    {
+    function start_js() {
        return '<script type="text/javascript" language="javascript">'. "\n";
     }
+    
 	/**
 	 * Common JS functions
 	 */
-	function common_js()
-	{
+	function common_js() {
 		$js = "\n";
 		$js .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
 		$js .= file_get_contents('../plugin/hotspot/hotspot.js');
 		$js .=	"<!--
-					// -----------------------------------------------------------------------------
 					// Globals
 					// Major version of Flash required
 					var requiredMajorVersion = 7;
@@ -352,7 +348,6 @@ class ScormSection
 					var requiredRevision = 0;
 					// the version of javascript supported
 					var jsVersion = 1.0;
-					// -----------------------------------------------------------------------------
 					// -->
 					</script>
 					<script language=\"VBScript\" type=\"text/vbscript\">
@@ -507,16 +502,15 @@ class ScormSection
      * End the itemBody part.
      *
      */
-    function end_js()
-    {
+    function end_js() {
        return '</script>'. "\n";
     }
+    
     /**
      * Start the itemBody
      *
      */
-    function start_body()
-    {
+    function start_body() {
        return '<body>'. "\n".
        		'<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>\n".
 			'<form id="dokeos_scorm_form" method="post" action="">'."\n".
@@ -527,8 +521,7 @@ class ScormSection
      * End the itemBody part.
      *
      */
-    function end_body()
-    {
+    function end_body() {
        return '</table><br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'. "\n";
     }
 
@@ -540,8 +533,7 @@ class ScormSection
      * @param $standalone: Boolean stating if it should be exported as a stand-alone question
      * @return A string, the XML flow for an Item.
      */
-    function export()
-    {
+    function export() {
         global $charset;
 
         $head = "";
@@ -576,8 +568,7 @@ class ScormSection
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_questions()
-    {
+    function export_questions() {
         $js = $html = "";
         $js_id = 0;
         foreach ($this->exercise->selectQuestionList() as $q)
@@ -591,9 +582,7 @@ class ScormSection
     }
 }
 
-/*--------------------------------------------------------
-      Functions
-  --------------------------------------------------------*/
+/*  Functions */
 
 /**
  * Send a complete exercise in SCORM format, from its ID
@@ -602,8 +591,7 @@ class ScormSection
  * @param boolean $standalone Wether it should include XML tag and DTD line.
  * @return The XML as a string, or an empty string if there's no exercise with given ID.
  */
-function export_exercise($exerciseId, $standalone=true)
-{
+function export_exercise($exerciseId, $standalone=true) {
     $exercise = new Exercise();
     if (! $exercise->read($exerciseId)) {
         return '';
@@ -620,8 +608,7 @@ function export_exercise($exerciseId, $standalone=true)
  * @param bool standalone (ie including XML tag, DTD declaration, etc)
  * @param int  The JavaScript ID for this question. Due to the nature of interactions, we must have a natural sequence for questions in the generated JavaScript.
  */
-function export_question($questionId, $standalone=true, $js_id)
-{
+function export_question($questionId, $standalone=true, $js_id) {
     $question = new ScormQuestion();
     $qst = $question->read($questionId);
     if( !$qst )
@@ -640,4 +627,3 @@ function export_question($questionId, $standalone=true, $js_id)
     //echo "<pre>".print_r($scorm,1)."</pre>";exit;
     return $assessmentItem->export();
 }
-?>

@@ -114,6 +114,7 @@ $stok = Security::get_token();
         }
 
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+         
 
         if (!empty($browse_courses_in_category)) {
 
@@ -166,10 +167,13 @@ $stok = Security::get_token();
                     }
 
                     // Go To Course button
-                    if (!api_is_anonymous()
-                            && ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)) {
+                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
+                        ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) ||
+                        in_array($course['code'], $user_coursecodes)                            
+                        ) {
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                     }
+                    
                     // Subscribe button
                     if (!api_is_anonymous()
                             && ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)

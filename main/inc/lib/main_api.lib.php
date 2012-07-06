@@ -5941,3 +5941,8 @@ function api_get_locked_settings() {
         'chamilo_database_version'
     );
 }
+
+function api_user_is_login($user_id = null) {
+    $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
+    return $user_id && !api_is_anonymous();
+}

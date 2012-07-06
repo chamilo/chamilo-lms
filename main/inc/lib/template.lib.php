@@ -274,7 +274,7 @@ class Template {
 		$user_info = array();
 		$user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-		if (api_get_user_id() && !api_is_anonymous()) {
+		if (api_user_is_login()) {
 			$user_info = api_get_user_info();			
 			$user_info['logged'] = 1;
             

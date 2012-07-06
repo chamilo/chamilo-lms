@@ -188,7 +188,8 @@ if ($slide_id == 'all') {
 	$allowed_types		  = array('jpg','jpeg','gif','png','bmp');//TODO:check bellow image_files_only
 	$max_thumbnail_width  = 100;
 	$max_thumbnail_height = 100;
-	$compression		  = 85;
+	$png_compression	  = 0;//0(none)-9
+	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More queality less compression
 	$row_items 			  = 4;
 	
 
@@ -227,40 +228,47 @@ if ($slide_id == 'all') {
 						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
 						
 						// preserve transparency
-						if($imagetype == "gif" or $imagetype == "png"){
-							imagecolortransparent($crop, imagecolorallocatealpha($crop, 0, 0, 0, 127));
-							//imagealphablending($crop, false);//TODO:check enabled
-							//imagesavealpha($crop, true);//TODO:check enabled
+						if($imagetype == "png"){
+							imagesavealpha($crop, true);
+							$color = imagecolorallocatealpha($crop,0x00,0x00,0x00,127);
+							imagefill($crop, 0, 0, $color); 
+						}
+						
+						if($imagetype == "gif"){
+							 $transindex = imagecolortransparent($image);
+							 //GIF89a for transparent and anim (first clip), either GIF87a
+							 if($transindex >= 0){
+								 $transcol = imagecolorsforindex($image, $transindex);
+								 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+								 imagefill($crop, 0, 0, $transindex);
+								 imagecolortransparent($crop, $transindex);
+							 }
 							 
-							 //other method
-							 /*
-							 //preserve transparency gif and png
-							 	$transindex = imagecolortransparent($image);
+						}
 
-								if($transindex >= 0) 
-								{
-									$transcol = imagecolorsforindex($image, $transindex);
-									$transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
-									imagefill($crop, 0, 0, $transindex);
-									imagecolortransparent($crop, $transindex);
-								}
-						
-								elseif ($imagetype == "png") 
-								{
-									imagealphablending($crop, false);
-									$color = imagecolorallocatealpha($crop, 0, 0, 0, 127);
-									imagefill($crop, 0, 0, $color);
-									imagesavealpha($crop, true);
-								}
-*/
-					    }
-						
+						//resampled image
 						imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
-						imagejpeg($crop,$image_thumbnail,$compression);
+						
+						if($imagetype == ("jpg" || "jpeg")) {
+							imagejpeg($crop,$image_thumbnail,$jpg_quality);
+						}
+            			if($imagetype == "png") {
+							
+                			imagepng($crop,$image_thumbnail,$png_compression);
+						}
+            			if($imagetype == "gif"){	
+                			imagegif($crop,$image_thumbnail);
+						}
+						else{
+							imagejpeg($crop,$image_thumbnail);//TODO:check BMP files
+						}						
 					}
-					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
+					
+					//clean memory
+					imagedestroy($crop);
 					
 					//show thumbnail and link
+					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
 					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
 				}

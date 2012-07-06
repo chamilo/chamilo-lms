@@ -10,9 +10,7 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
 
 require dirname(__FILE__) . '/scorm_classes.php';
 
-/*--------------------------------------------------------
-      Classes
-  --------------------------------------------------------*/
+/* Classes */
 // answer types
 define(UNIQUE_ANSWER,	1);
 define(MULTIPLE_ANSWER,	2);

@@ -1,4 +1,4 @@
-<?php // $Id: scorm_classes.php,v 1.2 2006/07/06 18:50:49 moosh Exp $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @author Claro Team <cvs@claroline.net>
@@ -9,17 +9,19 @@
  * Code
  */
 if ( count( get_included_files() ) == 1 ) die( '---' );
-require_once(api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/question.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer_combination.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/fill_blanks.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/freeanswer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/matching.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php');
+
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/testcategory.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/multiple_answer_combination.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/fill_blanks.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/freeanswer.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/matching.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php';
 
 // answer types
 define('UNIQUE_ANSWER',		1);
@@ -786,4 +788,3 @@ class ScormAnswerHotspot extends Answer
         return array($js,$html);
     }
 }
-?>

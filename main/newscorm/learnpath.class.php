@@ -8520,7 +8520,7 @@ class learnpath {
                     $my_file_path = 'quiz_'.$item->get_id().'.html';
                     // Write the contents of the exported exercise into a (big) html file
                     // to later pack it into the exported SCORM. The file will be removed afterwards.
-                    $contents = export_exercise($exe_id,true);
+                    $contents = export_exercise($exe_id, true);
                     $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                     $res = file_put_contents($tmp_file_path, $contents);
                     if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }

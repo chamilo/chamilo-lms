@@ -178,21 +178,100 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array ();
 if ($slide_id == 'all') {
-	$thumbnail_width = 100;
-	$thumbnail_height = 100;
-	$row_items = 4;
+	
+	// Create the template_thumbnails folder (if no exist)
+    if (!$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/') {
+		@mkdir($sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/', api_get_permissions_for_new_directories());
+    }
+	
+	// Config thumbnails
+	$allowed_types		  = array('jpg','jpeg','gif','png','bmp');//TODO:check bellow image_files_only
+	$max_thumbnail_width  = 100;
+	$max_thumbnail_height = 100;
+	$compression		  = 85;
+	$row_items 			  = 4;
+	
+
+	// check files and thumbnails
 	if (is_array($image_files_only)) {
 		foreach ($image_files_only as $one_image_file) {
 			$image = $sys_course_path.$_course['path'].'/document'.$folder.$one_image_file;
+			$image_thumbnail= $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/.'.$one_image_file;
+			
 			if (file_exists($image)) {
-				$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+				//check thumbnail
+				$imagetype = explode(".", $image);
+				$imagetype = strtolower($imagetype[count($imagetype)-1]);
+				
+				if(in_array($imagetype,$allowed_types)) {
+					
+					if (!file_exists($image_thumbnail)){
+					
+						$original_image_size = api_getimagesize($image);
+						switch($imagetype) {
+							case 'gif':
+								$source_img = imagecreatefromgif($image);
+								break;
+							case 'jpg':
+								$source_img = imagecreatefromjpeg($image);
+								break;
+							case 'png':
+								$source_img = imagecreatefrompng($image);
+								break;
+							case 'bmp':
+								$source_img = imagecreatefromwbmp($image);//TODO:check this
+								break;
+						}
+						
+						$new_thumbnail_size = api_calculate_image_size($original_image_size['width'], $original_image_size['height'], $max_thumbnail_width, $max_thumbnail_height);
+						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
+						
+						// preserve transparency
+						if($imagetype == "gif" or $imagetype == "png"){
+							imagecolortransparent($crop, imagecolorallocatealpha($crop, 0, 0, 0, 127));
+							//imagealphablending($crop, false);//TODO:check enabled
+							//imagesavealpha($crop, true);//TODO:check enabled
+							 
+							 //other method
+							 /*
+							 //preserve transparency gif and png
+							 	$transindex = imagecolortransparent($image);
 
-				$image_height = $image_height_width[0];
-				$image_width = $image_height_width[1];
-
-				$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-
-				$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
+								if($transindex >= 0) 
+								{
+									$transcol = imagecolorsforindex($image, $transindex);
+									$transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+									imagefill($crop, 0, 0, $transindex);
+									imagecolortransparent($crop, $transindex);
+								}
+						
+								elseif ($imagetype == "png") 
+								{
+									imagealphablending($crop, false);
+									$color = imagecolorallocatealpha($crop, 0, 0, 0, 127);
+									imagefill($crop, 0, 0, $color);
+									imagesavealpha($crop, true);
+								}
+*/
+					    }
+						
+						imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
+						imagejpeg($crop,$image_thumbnail,$compression);
+					}
+					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
+					
+					//show thumbnail and link
+					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
+				}
+				else{
+					//image format no support, get path original image
+					$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+					$image_height = $image_height_width[0];
+					$image_width = $image_height_width[1];
+					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
+				}
 			}
 		}
 	}

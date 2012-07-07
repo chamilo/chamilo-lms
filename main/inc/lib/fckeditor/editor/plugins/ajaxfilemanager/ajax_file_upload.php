@@ -96,6 +96,7 @@ if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
 		$error = ERR_FILE_NOT_AVAILABLE;
 	}
 }
+
 echo "error:'" . $error . "'";
 echo $info;
 echo "}";

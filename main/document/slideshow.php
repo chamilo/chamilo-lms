@@ -185,12 +185,12 @@ if ($slide_id == 'all') {
     }
 	
 	// Config thumbnails
-	$allowed_types		  = array('jpg','jpeg','gif','png','bmp');//TODO:check bellow image_files_only
+	$row_items 			  = 4;
+	$allowed_thumbnail_types = array('jpg','jpeg','gif','png');
 	$max_thumbnail_width  = 100;
 	$max_thumbnail_height = 100;
 	$png_compression	  = 0;//0(none)-9
 	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More queality less compression
-	$row_items 			  = 4;
 	
 
 	// check files and thumbnails
@@ -204,10 +204,10 @@ if ($slide_id == 'all') {
 				$imagetype = explode(".", $image);
 				$imagetype = strtolower($imagetype[count($imagetype)-1]);
 				
-				if(in_array($imagetype,$allowed_types)) {
+				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					
 					if (!file_exists($image_thumbnail)){
-					
+
 						$original_image_size = api_getimagesize($image);
 						switch($imagetype) {
 							case 'gif':
@@ -218,9 +218,6 @@ if ($slide_id == 'all') {
 								break;
 							case 'png':
 								$source_img = imagecreatefrompng($image);
-								break;
-							case 'bmp':
-								$source_img = imagecreatefromwbmp($image);//TODO:check this
 								break;
 						}
 						
@@ -259,9 +256,7 @@ if ($slide_id == 'all') {
             			if($imagetype == "gif"){	
                 			imagegif($crop,$image_thumbnail);
 						}
-						else{
-							imagejpeg($crop,$image_thumbnail);//TODO:check BMP files
-						}	
+		
 						//clean memory
 						imagedestroy($crop);					
 					}//end exist thumbnail
@@ -276,7 +271,7 @@ if ($slide_id == 'all') {
 					$image_height = $image_height_width[0];
 					$image_width = $image_height_width[1];
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';	
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$max_thumbnail_width.'" height="'.$max_thumbnail_height.'" title="'.$one_image_file.'">';	
 				}//end allowed image types
 			}//end if exist file image
 		}//end foreach
@@ -322,7 +317,6 @@ if ($slide_id != 'all') {
 			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
 		}
 
-		// Showing the comment of the image, Patrick Cool, 8 april 2005
 		// This is done really quickly and should be cleaned up a little bit using the API functions
 		$tbl_documents = Database::get_course_table(TABLE_DOCUMENT);
 		if ($path == '/') {

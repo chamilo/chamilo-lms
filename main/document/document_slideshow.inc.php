@@ -25,7 +25,7 @@
  *	too much things in one file , I decided to put the code for document.php here and to include this
  *	file into document.php
  */
-$accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png');
+$accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp','.svg');
 
 // Resetting the images of the slideshow = destroying the slideshow
 if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {

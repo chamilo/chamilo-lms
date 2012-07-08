@@ -261,16 +261,14 @@ if ($slide_id == 'all') {
 						}
 						else{
 							imagejpeg($crop,$image_thumbnail);//TODO:check BMP files
-						}						
-					}
-					
-					//clean memory
-					imagedestroy($crop);
-					
+						}	
+						//clean memory
+						imagedestroy($crop);					
+					}//end exist thumbnail
 					//show thumbnail and link
 					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';	
 				}
 				else{
 					//image format no support, get path original image
@@ -278,11 +276,11 @@ if ($slide_id == 'all') {
 					$image_height = $image_height_width[0];
 					$image_width = $image_height_width[1];
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
-				}
-			}
-		}
-	}
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';	
+				}//end allowed image types
+			}//end if exist file image
+		}//end foreach
+	}//end image files only
 }
 
 // Creating the table

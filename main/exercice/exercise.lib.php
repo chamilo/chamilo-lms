@@ -1067,7 +1067,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         $group_name_list .= $group_list_info[$id]['name'].' ';
                     }
                     $results[$i]['group_name'] = $group_name_list;
-                }
+                }                
+                
+                $results[$i]['exe_duration'] =  !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
 
                 $user_list_id[] = $results[$i]['exe_user_id'];
                 $id = $results[$i]['exe_id'];

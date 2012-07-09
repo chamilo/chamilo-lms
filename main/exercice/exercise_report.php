@@ -331,7 +331,7 @@ if ($is_allowedToEdit || $is_tutor) {
 
 	//The order is important you need to check the the $column variable in the model.ajax.php file
 	$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'),
-                        get_lang('Group'), get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
+                        get_lang('Group'), get_lang('Duration').' ('.get_lang('MinMinute').')', get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
 
 //Column config
 	$column_model   = array(

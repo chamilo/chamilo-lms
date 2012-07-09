@@ -151,10 +151,9 @@ if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
 	$time_control = true;
 }
 
-
 //Generating the time control key for the user
 $current_expired_time_key = generate_time_control_key($objExercise->id);
-$_SESSION['duration_time'][$current_expired_time_key] 	 = $current_timestamp;
+$_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
 	//Get the expired time of the current exercice in track_e_exercices

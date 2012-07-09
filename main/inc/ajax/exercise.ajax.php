@@ -316,24 +316,25 @@ switch ($action) {
                 $duration = 0;
                 $now = time();
                 
+                if ($type == 'all') {
+                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);                        
+                }
+                
                 if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
                     $duration = $now - $_SESSION['duration_time'][$key];
+                    
                     if (!empty($exercise_stat_info['exe_duration'])) {                        
-                        $duration += $exercise_stat_info['exe_duration']*60;
+                        $duration += $exercise_stat_info['exe_duration'];
                     }
-                    $duration = intval(round($duration/60));                     
-                    $_SESSION['duration_time'][$key] = 0;
-                } else {
+                    $duration = intval($duration);                    
+                } else {                    
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration = $exercise_stat_info['exe_duration'];
-                    }
-                    
-                    if ($type == 'all') {
-                        $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-                        $duration = $exercise_stat_info['exe_duration'];
-                    }
+                    }                 
                 }
-                                
+                
+                $_SESSION['duration_time'][$key] = time();
+                
                 update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, $question_list, 'incomplete', $remind_list);
                 
                  // Destruction of the Question object

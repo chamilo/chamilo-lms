@@ -311,7 +311,7 @@ function event_link($link_id) {
  * @param   int     exo_id 	exercise id
  * @param   mixed   result 	score
  * @param   int     weighting ( higher score )
- * @param   int     duration ( duration of the attempt, in seconds )
+ * @param   int     duration ( duration of the attempt in seconds )
  * @param   int     session_id
  * @param   int     learnpath_id (id of the learnpath)
  * @param   int     learnpath_item_id (id of the learnpath_item)
@@ -322,7 +322,7 @@ function event_link($link_id) {
 */
 function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {    
     //error_log('Called to update_event_exercice');
-    //error_log('duration:' . $duration);    
+    error_log('duration:' . $duration);    
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     if ($exeid != '') {
 		// Validation in case of fraud with actived control time

@@ -1058,7 +1058,7 @@ class learnpath {
         if (empty ($id) || ($id != strval(intval($id))) || empty ($title)) {
             return false;
         }
-
+        
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $sql_select = "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = ".$course_id." AND id = " . $id;
         $res_select = Database::query($sql_select);
@@ -5034,14 +5034,17 @@ class learnpath {
                     $move_icon .= '</a>';
                 }
 
-                if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module') {
-                    $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                    $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
-                    $edit_icon .= '</a>';
-                } else {
-                    $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                    $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
-                    $edit_icon .= '</a>';
+                // No edit for this item types
+                if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
+                    if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
+                        $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= '</a>';
+                    } else {
+                        $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= '</a>';
+                    }
                 }
 
                 $delete_icon .= ' <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
@@ -5053,7 +5056,7 @@ class learnpath {
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
                     $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
                     $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');                
-                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('Upload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
+                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
                 }
             }
             if ($update_audio != 'true') {
@@ -5549,7 +5552,7 @@ class learnpath {
                 case 'asset' :
                 case 'sco' :
                     if (isset ($_GET['view']) && $_GET['view'] == 'build') {
-                        $return .= $this->display_manipulate($item_id, $row['item_type']);
+                        $return .= $this->display_manipulate($item_id, $row['item_type']);                        
                         $return .= $this->display_item_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', 'edit', $item_id, $row);
                     } else {
                         $return .= $this->display_item_small_form($row['item_type'], get_lang('EditCurrentChapter') . ' :', $row);
@@ -6521,7 +6524,7 @@ class learnpath {
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title 		= $extra_info['title'];
-            $item_description 	= $extra_info['description'];
+            $item_description 	= $extra_info['description'];            
             $item_path = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
             $item_path_fck = '/scorm/' . $this->path . '/' . stripslashes($extra_info['path']);
         } else {
@@ -6574,6 +6577,7 @@ class learnpath {
         $legend .= '</legend>';
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
+        
         $url = api_get_self() . '?' .api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
         $form = new FormValidator('form', 'POST',  $url);
@@ -6675,7 +6679,7 @@ class learnpath {
         $extension = null;
         if (!empty($item_path)) {
         	$extension = pathinfo($item_path, PATHINFO_EXTENSION);
-        }
+        }        
         
         //assets can't be modified
         
@@ -6698,7 +6702,9 @@ class learnpath {
             						'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
                                     );
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
-            $defaults['content_lp'] = file_get_contents($item_path);
+            $content_path = (api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck);
+            //$defaults['content_lp'] = file_get_contents($item_path);
+            $defaults['content_lp'] = file_get_contents($content_path);
         }
 
         $form->addElement('hidden', 'type', 'dokeos_' . $item_type);

@@ -42,7 +42,7 @@ class PDF {
     } 
     
     /**
-     * Converts an html file to PDF
+     * Converts HTML files to PDF
      * @param   mixed   could be an html file path or an array with paths example: /var/www/myfile.html or array('/myfile.html','myotherfile.html') or even an indexed array with both 'title' and 'path' indexes for each element like array(0=>array('title'=>'Hello','path'=>'file.html'),1=>array('title'=>'Bye','path'=>'file2.html'));
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
@@ -68,8 +68,7 @@ class PDF {
         $course_data = array();
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
-        }
-        
+        }        
         
         //clean styles and javascript document
         $clean_search = array (
@@ -79,17 +78,20 @@ class PDF {
             
         //Formatting the pdf
         self::format_pdf($course_data);
+        
         $counter = 1;
         
         foreach ($html_file_array as $file) {            
+            
             //Add a page break per file
             $page_break = '<pagebreak>';
             if ($counter == count($html_file_array)) {
                 $page_break = '';
             }
-            $counter++;
+            $counter++;            
             
             $html_title = '';
+            
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
@@ -99,14 +101,15 @@ class PDF {
                 //we suppose we've only been sent a file path
             	$html_title = basename($file);
             }
+            
             if (empty($file) && !empty($html_title)) {
             	//this is a chapter, print title & skip the rest
                 if ($print_title) {
-                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break,2);
+                    $this->pdf->WriteHTML('<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break, 2);
                 }
                 continue;
-            } 
-          
+            }         
+            
             if (!file_exists($file)) {
                 //the file doesn't exist, skip
             	continue;
@@ -121,28 +124,28 @@ class PDF {
             $extension = $file_info['extension'];
             
             if (in_array($extension, array('html', 'htm'))) {            
-                $dirname = str_replace("\\", '/', $file_info['dirname']);
                 $filename = $file_info['basename'];
                 $filename = str_replace('_',' ',$filename);
                 
                 if ($extension == 'html') {
-                    $filename =basename($filename,'.html');
+                    $filename = basename($filename,'.html');
                 } elseif($extension == 'htm'){
-                    $filename =basename($filename,'.htm');
-                }          
+                    $filename = basename($filename,'.htm');
+                }
                 
                 $document_html = @file_get_contents($file);
                 $document_html = preg_replace($clean_search, '', $document_html);   
                 
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
-                $document_html = str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
+                $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
                 
                 //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
                 
                 if (!empty($course_data['path'])) {
                     $document_html= str_replace('../','',$document_html);            
-                    $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+                    //$document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+                    $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
                                
                     $doc = new DOMDocument();           
                     $result = @$doc->loadHTML($document_html);
@@ -150,17 +153,21 @@ class PDF {
                     //Fixing only images @todo do the same thing with other elements
                     $elements = $doc->getElementsByTagName('img');                    
                     if (!empty($elements)) {
-                        foreach($elements as $item) {                    
+                        foreach ($elements as $item) {                    
                             $old_src = $item->getAttribute('src');
-                            //$old_src= str_replace('../','',$old_src);
+                            
                             if (strpos($old_src, 'http') === false) {
-                                if (strpos($old_src, '/main/default_course_document') === false) {
-                                    $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
+                                if (strpos($old_src, '/main/default_course_document') === false) {   
+                                    $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
+                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
+                                    $new_path = $document_path.$old_src_fixed;                                    
+                                    $document_html= str_replace($old_src, $new_path, $document_html);                            
                                 }                                                       	
                             }                                    
                         }
                     }
                 }
+                
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
@@ -187,8 +194,7 @@ class PDF {
         }
         $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file              
         exit;
-    }    
-    
+    }   
     
      
     /**
@@ -229,23 +235,26 @@ class PDF {
         $document_html= str_replace('courses/'.$course_code.'/document/','',$document_html);
         
         if (!empty($course_data['path'])) {
-            $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+            $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
                        
             $doc = new DOMDocument();           
             $result = @$doc->loadHTML($document_html);
                                  
             //Fixing only images @todo do the same thing with other elements
-            $elements = $doc->getElementsByTagName('img');
-            $replace_img_elements = array();
+            $elements = $doc->getElementsByTagName('img');            
             if (!empty($elements)) {
-                foreach($elements as $item) {                    
+                foreach ($elements as $item) {                    
                     $old_src = $item->getAttribute('src');
                     //$old_src= str_replace('../','',$old_src);
                     if (strpos($old_src, 'http') === false) {
                         if (strpos($old_src, '/main/default_course_document') === false) {
-                            if (strpos($old_src, '/main/inc/lib/') === false) {                            
-                                $document_html= str_replace($old_src, $document_path.$old_src, $document_html);         
-                                //var_dump($old_src, $document_path.$old_src);     
+                            if (strpos($old_src, '/main/inc/lib/') === false) {
+                                
+                                $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
+                                $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
+                                $new_path = $document_path.$old_src_fixed;                                    
+                                $document_html= str_replace($old_src, $new_path, $document_html);  
+                               
                             }              
                         }                                                           
                     }                                    
@@ -281,8 +290,7 @@ class PDF {
             $pdf_name = replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
-        $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file
-                      
+        $result = $this->pdf->Output($output_file, 'D'); // F to save the pdf in a file                      
         exit;
     }
     

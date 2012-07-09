@@ -15,8 +15,6 @@ $use_anonymous = true;
 require_once '../inc/global.inc.php';
 Display::display_reduced_header();
 
-echo '<body dir="'.api_get_text_direction().'">';
-
 if (isset($_GET['error'])) {
     switch($_GET['error']){
         case 'document_deleted':
@@ -25,15 +23,15 @@ if (isset($_GET['error'])) {
             break;
         case 'prerequisites':
             echo '<br /><br />';
-            Display::display_normal_message(get_lang('_prereq_not_complete'));
+            Display::display_warning_message(get_lang('_prereq_not_complete'));
             break;
         case 'document_not_found':
             echo '<br /><br />';
-            Display::display_normal_message(get_lang('FileNotFound'));
+            Display::display_warning_message(get_lang('FileNotFound'));
             break;
         case 'reached_one_attempt':
             echo '<br /><br />';
-            Display::display_normal_message(get_lang('ReachedOneAttempt'));
+            Display::display_warning_message(get_lang('ReachedOneAttempt'));
             break;
         default:
             break;

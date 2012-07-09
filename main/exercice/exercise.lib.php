@@ -15,17 +15,6 @@
  */
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
-/*
-$TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_DOCUMENT               = Database::get_course_table(TABLE_DOCUMENT);
-
-$main_user_table            = Database::get_main_table(TABLE_MAIN_USER);
-$main_course_user_table     = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TBL_TRACK_EXERCICES        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);*/
 
 /**
  * Shows a question
@@ -1623,8 +1612,6 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
     return $avg_score;
 }
 
-
-
 function get_exercises_to_be_taken($course_code, $session_id) {
 	$course_info = api_get_course_info($course_code);
 	$exercises = get_all_exercises($course_info, $session_id);
@@ -1655,7 +1642,7 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 	$course_code 		= Database::escape_string($course_code);
 	$session_id 		= intval($session_id);
 
-	$sql = "SELECT count(exe_user_id) as users, MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
+	$sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
 			WHERE 	exe_exo_id 		= $exercise_id AND
 					course_code 	= '$course_code' AND
@@ -1670,14 +1657,89 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 	return $return;
 }
 
+function get_number_students_question_with_answer_count($question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+	$question_id 		= intval($question_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND            
+					question_id 	= $question_id AND
+                    answer <> 0 AND
+                    status          = ''"; 
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+	}
+	return $return;
+}
 
 
-// ---------------------------------------------------------
+function get_number_students_answer_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+	$question_id 		= intval($question_id);
+    $answer_id          = intval($answer_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND
+                    answer       	= $answer_id AND
+					question_id 	= $question_id AND status = ''";
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+	}
+	return $return;
+}
+
+
+function get_number_students_finish_exercise($exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+    $exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND                    
+					status = ''";
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+
+	}
+	return $return;
+}
+
+
+
+/**
 // return the HTML code for a menu with students group
 // @input : $in_name : is the name and the id of the <select>
 //          $in_default : default value for option
 // @return : the html code of the <select>
-// ---------------------------------------------------------
+*/
 function displayGroupMenu($in_name, $in_default, $in_onchange="") {
     // check the default value of option
     $tabSelected = array($in_default => " selected='selected' ");
@@ -1700,10 +1762,7 @@ function displayGroupMenu($in_name, $in_default, $in_onchange="") {
 }
 
 
-// ------------------------------------------------------
-// return a list of group for user with user_id=in_userid
-// separated with in_separator
-// --------------------------------------------------
+/* Return a list of group for user with user_id=in_userid separated with in_separator */
 function displayGroupsForUser($in_separator, $in_userid) {
     $res = implode($in_separator, GroupManager::get_user_group_name($in_userid));
     if ($res == "") {

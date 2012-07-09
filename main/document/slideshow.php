@@ -350,16 +350,30 @@ if ($slide_id != 'all') {
 		//auto resize
 		if($_SESSION["image_resizing"]!="noresizing" && $_SESSION["image_resizing"]!="resizing" ){
 		?>
+        
 		<script type="text/javascript">
 			var initial_width='<?php echo $width; ?>';
 			var initial_height='<?php echo $height; ?>';
 			
-			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>" >');
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
+			
 			
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
+			
+			
+			if(document.getElementById('image').complete){
+				document.getElementById('image').style.background='none';//the first load doesn't load the browser cache
+			}
+			else if(document.getElementById('image').height<initial_height){
+				document.getElementById('image').style.background='none';
+			}
+			else{
+				document.getElementById('image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
+			}
 
 			function resizeImage() {
+				
 				var resize_factor_width = width / initial_width;
                 var resize_factor_height = height / initial_height;
                 var delta_width = width - initial_width * resize_factor_height;
@@ -380,16 +394,16 @@ if ($slide_id != 'all') {
 				
 				document.getElementById('image').style.height = height +"px";
 				document.getElementById('image').style.width = width +"px";
+				document.getElementById('image').style.visibility='visible';
 			};
 			
 			 if (initial_height>height || initial_width>width) {
+				document.getElementById('image').style.visibility='hidden';
 				document.getElementById('image').onload = resizeImage;
 			    window.onresize = resizeImage;
 			}
-			
+
 		</script>
-    
-   
     <?php
 		}
 		else{

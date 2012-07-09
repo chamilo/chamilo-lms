@@ -19,7 +19,7 @@ define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback 	 - Show score only
 
 define('EXERCISE_MAX_NAME_SIZE',            80);
 
-$debug = true; //All exercise scripts should depend in this debug variable
+$debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 

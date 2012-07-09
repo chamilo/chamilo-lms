@@ -307,20 +307,24 @@ function event_link($link_id) {
 /**
  * Update the TRACK_E_EXERCICES exercises
  *
- * @param int 	exeid 	id of the attempt
- * @param int	exo_id 	exercise id
- * @param mixed	result 	score
- * @param int	weighting ( higher score )
- * @param int	duration ( duration of the attempt, in seconds )
- * @param int	session_id
- * @param int	learnpath_id (id of the learnpath)
- * @param int	learnpath_item_id (id of the learnpath_item)
+ * @param   int     exeid id of the attempt
+ * @param   int     exo_id 	exercise id
+ * @param   mixed   result 	score
+ * @param   int     weighting ( higher score )
+ * @param   int     duration ( duration of the attempt, in seconds )
+ * @param   int     session_id
+ * @param   int     learnpath_id (id of the learnpath)
+ * @param   int     learnpath_item_id (id of the learnpath_item)
  *
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration, $question_list, $status = '', $remind_list = array() , $end_date = null) {
+function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {
+    
+    error_log('Called to update_event_exercice');
+    error_log('duration:' . $duration);
+    
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     if ($exeid != '') {
 		// Validation in case of fraud with actived control time
@@ -346,7 +350,9 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 	    }
 
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$question_list = array_map('intval', $question_list);
+        if (!empty($question_list)) {
+            $question_list = array_map('intval', $question_list);
+        }
 
 		if (!empty($remind_list)) {
 			$remind_list = array_map('intval', $remind_list);

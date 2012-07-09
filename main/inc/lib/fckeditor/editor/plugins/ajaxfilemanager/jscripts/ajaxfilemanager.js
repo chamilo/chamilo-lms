@@ -85,8 +85,8 @@ function enablePreview(elem, num) {
 								case 'fileFlash':																											
 									$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].public_path + '"><div id="player">&nbsp;this is mine</div></a> ');
 									$('#playGround' + num).html('');																		
-									$('#playGround' + num).media({ width: 255, height: 210,  autoplay: true  });																										
-									showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250'  + '&width=256' + '&inlineId=winPlay&modal=true'));						
+									$('#playGround' + num).media({ width: 355, height: 310,  autoplay: true  });																										
+									showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=320'  + '&width=357' + '&inlineId=winPlay&modal=true'));	//Preview Flash, Flv, Mp3,Mpg, Change original values for Chamilo;	width: 255, height: 210 by width: 355, height: 310 and 'height=250'  + '&width=256' by height=320'  + '&width=357			
 									break;
 								default:
 									showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));

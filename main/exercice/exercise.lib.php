@@ -25,12 +25,10 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array()) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false) {
 
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
-
-	$remind_question = 1;
 
 	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
@@ -56,14 +54,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			}
 			if (!empty($questionDescription)) {
 				echo Display::div($questionDescription, array('class'=>'question_description'));
-			}
-			//@deprecated
-			if (!empty($pictureName)) {
-				//echo "<img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'>";
-			}
+			}			
 		}
-
-
 
         if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
             return '';
@@ -131,7 +123,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Width      = '100%';
 			$oFCKeditor->Height     = '200';
 			$oFCKeditor->Value      = $fck_content;
-            $s .= '<tr><td colspan="3">';
+            $s .= '<tr><td>';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
 		} elseif ($answerType == ORAL_EXPRESSION) {
@@ -141,7 +133,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
 
 				//@todo pass this as a parameter
-				global $exercise_stat_info, $exerciseId,$exe_id;
+				global $exercise_stat_info, $exerciseId, $exe_id;
 
 				if (!empty($exercise_stat_info)) {
 					$params = array(
@@ -167,7 +159,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Height = '150';
 			$oFCKeditor->ToolbarStartExpanded = false;
 			$oFCKeditor->Value	= '' ;
-			$s .= '<tr><td colspan="3">';
+			$s .= '<tr><td>';
 			$s .= $oFCKeditor->CreateHtml();
 			$s .= '</td></tr>';
 		}
@@ -198,6 +190,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
+            
+            $comment        = $objAnswerTmp->selectComment($answerId);
 
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
@@ -225,11 +219,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				//<p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">
 				//$s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 
-				$s .= '<tr><td colspan="3">';
+				$s .= '<tr><td>';
 				$s .= '<span class="question_answer">';
 				$s .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
 				$s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span>';
-				$s .= '</td></tr>';
+				$s .= '</td>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+                
+                $s .= '</tr>';
 			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
 
 				// multiple answers
@@ -256,7 +258,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                 if ($answerType == MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                    $s .= '<tr><td colspan="3">';
+                    $s .= '<tr><td>';
+                    
                     $s .= '<span class="question_answer">';
 
                     if ($debug_mark_answer) {
@@ -266,7 +269,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     }
 
                     $s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes));
-                    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';
+                    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';
+                    
+                    if ($show_comment) {                
+                        $s .= '<td>';
+                        $s .= $comment;
+                        $s .= '</td>';
+                    }
+                
+                    
+                    $s .='</tr>';
 
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                 	$my_choice = array();
@@ -276,6 +288,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $my_choice[$item[0]] = $item[1];
                         }
                     }
+                    
                     $s .='<tr>';
                     $s .= Display::tag('td', $answer);
                     if (!empty($quiz_question_options)) {
@@ -289,9 +302,14 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes));
                     	}
                     }
-                    $s.='<tr>';
+                    
+                    if ($show_comment) {                
+                        $s .= '<td>';
+                        $s .= $comment;
+                        $s .= '</td>';
+                    }
+                    $s.='</tr>';
                 }
-
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
@@ -313,10 +331,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
-				    '<tr><td colspan="3">';
+				    '<tr><td>';
 				$s .= '<span class="question_answer">';
 				$s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes));
-			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';
+			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+
+                $s.= '</tr>';
 
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 // multiple answers
@@ -345,27 +371,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             		}
             		$s .= Display::tag('td', Display::input('radio','choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
             	}
-            	$s.='<tr>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+                
+            	$s.='</tr>';
+                
 			} elseif ($answerType == FILL_IN_BLANKS) {
-
-				/*
-				// splits text and weightings that are joined with the character '::'
-				list($answer) = explode('::',$answer);
-
-				//getting the matches
-				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
-
-
-
-				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-
-				api_preg_match_all('/\[[^]]+\]/', $answer, $fill_list);
-
-
-				if (isset($user_choice[0]['answer'])) {
-				    api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $user_fill_list);
-				    $user_fill_list = $user_fill_list[0];
-				}*/
 
 				list($answer) = explode('::',$answer);
 
@@ -399,9 +414,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
 				}
 
-				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
+				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
-				//  matching type, showing suggestions and answers
+				// matching type, showing suggestions and answers
 				// TODO: replace $answerId by $numAnswer
 
 				if ($answerCorrect != 0) {

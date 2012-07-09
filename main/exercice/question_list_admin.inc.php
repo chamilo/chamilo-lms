@@ -211,7 +211,6 @@ if (!$inATest) {
 				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 55).'</a>', array('style'=>$styleCat));
 
 				// Question level
-
 				$txtQuestionLevel = $objQuestionTmp->level;
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
@@ -219,7 +218,6 @@ if (!$inATest) {
                 $questionLevel = Display::tag('div', $txtQuestionLevel, array('style'=>$styleLevel));
 
                 // Question score
-
                 $questionScore = Display::tag('div', $objQuestionTmp->selectWeighting(), array('style'=>$styleScore));
 
                 echo '<div id="question_id_list_'.$id.'" >';
@@ -238,7 +236,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, '', '',false, true);
+                        showQuestion($id, false, null, null, false, true, false, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

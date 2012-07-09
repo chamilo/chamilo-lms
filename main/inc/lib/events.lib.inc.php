@@ -322,7 +322,7 @@ function event_link($link_id) {
 */
 function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {    
     //error_log('Called to update_event_exercice');
-    error_log('duration:' . $duration);    
+    //error_log('duration:' . $duration);    
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     if ($exeid != '') {
 		// Validation in case of fraud with actived control time
@@ -397,6 +397,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
  * @return $id the last id registered, or false on error
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
+ * @deprecated this class seems to be deprecated
 */
 function create_event_exercice($exo_id) {
     if (empty($exo_id) or (intval($exo_id)!=$exo_id)) { return false; }

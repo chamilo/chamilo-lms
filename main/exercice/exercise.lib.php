@@ -63,9 +63,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         echo '<div class="question_options">';
 
-		//$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		$s = '';
-		$s .= '<table class="exercise_options">';
+        if ($show_comment) {
+            $s .= '<table class="table table-bordered">';
+        } else {
+            //$s .= '<table class="table">';
+            $s .= '<table class="exercise_options">';
+        }
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
 
@@ -174,7 +178,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             foreach ($objQuestionTmp->options as $key=>$item) {
                 $header .= Display::tag('th', $item);
             }
+            if ($show_comment) {
+                $header .= Display::tag('th', get_lang('Feedback'));
+            }
             $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+        }
+        
+        if ($show_comment) {
+            if (in_array($answerType, array(MULTIPLE_ANSWER,MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) {
+                $header = '';
+                $header .= Display::tag('th', get_lang('Options'));
+                $header .= Display::tag('th', get_lang('Feedback'));            
+                $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+            }
         }
 
         $matching_correct_answer = 0;

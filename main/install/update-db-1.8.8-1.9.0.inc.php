@@ -220,9 +220,8 @@ if (defined('SYSTEM_INSTALLATION')) {
 			"track_e_online",
 			"track_e_open",
 			"track_e_uploads",
-			"report_keys", //@todo add the "track_" prefix see #3967
-        	"report_values",
-        	"report_keys",
+			//"report_keys", //@todo add the "track_" prefix see #3967            
+        	//"report_values",
         	"track_stored_values",
         	"track_stored_values_stack",
         );

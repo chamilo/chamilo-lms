@@ -18,7 +18,9 @@ require_once $libpath.'mail.lib.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // User permissions
-api_protect_admin_script();
+api_protect_admin_script(true);
+
+$is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -37,21 +39,24 @@ function password_switch_radio_button() {
 	}
 }
 
+var is_platform_id = "'.$is_platform_admin.'";
+
 function display_drh_list(){
-	if(document.getElementById("status_select").value=='.STUDENT.')
-	{
+	if(document.getElementById("status_select").value=='.STUDENT.') {
 		document.getElementById("drh_list").style.display="block";
-		document.getElementById("id_platform_admin").style.display="none";
-	}
-	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
-	{
+        if (is_platform_id == 1)
+            document.getElementById("id_platform_admin").style.display="none";
+            
+	} else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
 		document.getElementById("drh_list").style.display="none";
-		document.getElementById("id_platform_admin").style.display="block";
-	}
-	else
-	{
+        
+        if (is_platform_id == 1) 
+            document.getElementById("id_platform_admin").style.display="block";
+	} else {
 		document.getElementById("drh_list").style.display="none";
-		document.getElementById("id_platform_admin").style.display="none";
+        
+        if (is_platform_id == 1) 
+            document.getElementById("id_platform_admin").style.display="none";
 	}
 }
 
@@ -164,13 +169,6 @@ $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' :
 
 
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-/*$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
-$drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
-if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
-} else {
-	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
-}*/
 
 if (is_array($drh_list)) {
 	foreach ($drh_list as $drh) {
@@ -180,15 +178,17 @@ if (is_array($drh_list)) {
 $form->addElement('html', '</div>');
 
 
+if (api_is_platform_admin()) {
+    // Platform admin
+    $group = array();
+    $group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
+    $group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
+    $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
+    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
+    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
+    $form->addElement('html', '</div>');
+}
 
-// Platform admin
-$group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
-$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
-$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
-$form->addElement('html', '</div>');
 // Send email
 $group = array();
 $group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('Yes'), 1);

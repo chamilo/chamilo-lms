@@ -135,6 +135,7 @@ function load_calendar(user_id, month, year) {
 </script>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script(true);
 
 /**
@@ -329,6 +330,7 @@ function get_number_of_users() {
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
+
 /**
  * Get the users to display on the current page (fill the sortable-table)
  * @param   int     offset of first user to recover
@@ -460,6 +462,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	}
 	return $users;
 }
+
 /**
 * Returns a mailto-link
 * @param string $email An email-address
@@ -527,19 +530,23 @@ function modify_filter($user_id, $url_params, $row) {
     } else {
     	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
+    
 	if ($row['7'] != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
 	}
 
-	if (api_is_platform_admin()) {
-		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {            
-            $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';        
+	if (api_is_platform_admin(true)) {        
+        
+		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
+            $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		} else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
 	}
+    
+    
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));
 	} else {
@@ -623,9 +630,6 @@ function status_filter($status) {
 	$statusname = api_get_status_langvars();
 	return $statusname[$status];
 }
-
-
-/**	INIT SECTION  */
 
 $action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
 
@@ -713,7 +717,7 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple','get', '', '',array('class' => 'form-search'),false);
+$form = new FormValidator('search_simple','get', '', '', array('class' => 'form-search'),false);
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
@@ -839,6 +843,7 @@ $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);
 $table->set_header(2, get_lang('OfficialCode'));
+
 if (api_is_western_name_order()) {
 	$table->set_header(3, get_lang('FirstName'));
 	$table->set_header(4, get_lang('LastName'));
@@ -849,7 +854,7 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'),true, 'width="15px"');
+$table->set_header(8, get_lang('Active'), true, 'width="15px"');
 $table->set_header(9, get_lang('Action'), false,'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
@@ -862,11 +867,11 @@ $table->set_column_filter(9, 'modify_filter');
 
 if (api_is_platform_admin())
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+
 $table_result = $table->return_table();
 
-/* */
-
 $extra_search_options = '';
+
 //Try to search the user everywhere
 if ($table->get_total_number_of_items() ==0) {
     

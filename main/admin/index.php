@@ -85,7 +85,7 @@ if (api_is_platform_admin()) {
 } else {
  	$items = array(
  		array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
- 		array('url'=>'../mySpace/user_add.php', 	'label' => get_lang('AddUsers')), 	
+ 		array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')), 	
  		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
  	);
 }

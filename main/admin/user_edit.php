@@ -13,14 +13,18 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 
-api_protect_super_admin($user_id);
+api_protect_super_admin($user_id, null, true);
+$is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $htmlHeadXtra[] = '
 <script>
+
+var is_platform_id = "'.$is_platform_admin.'";
+    
 <!--
 function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
@@ -38,13 +42,16 @@ function password_switch_radio_button(){
 
 function display_drh_list(){
     var $radios = $("input:radio[name=platform_admin]");
-	if(document.getElementById("status_select").value=='.COURSEMANAGER.') {
-		document.getElementById("id_platform_admin").style.display="block";
+	if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
+        if (is_platform_id == 1)
+            document.getElementById("id_platform_admin").style.display="block";
 	} else if (document.getElementById("status_select").value=='.STUDENT.') {
-		document.getElementById("id_platform_admin").style.display="none";
+        if (is_platform_id == 1)
+            document.getElementById("id_platform_admin").style.display="none";
         $radios.filter("[value=0]").attr("checked", true);
 	} else {
-		document.getElementById("id_platform_admin").style.display="none";
+        if (is_platform_id == 1)
+            document.getElementById("id_platform_admin").style.display="none";        
         $radios.filter("[value=0]").attr("checked", true);
 	}
 }
@@ -220,8 +227,7 @@ $form->addElement('html', '</div>');
 */
 
 // Platform admin
-// Only when changing another user!
-//if ($user_id != $_user['user_id']) {
+if (api_is_platform_admin()) {
 	$group = array();
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
@@ -231,7 +237,7 @@ $form->addElement('html', '</div>');
 	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
 	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
 	$form->addElement('html', '</div>');
-//}
+}
 
 // Send email
 $group = array();

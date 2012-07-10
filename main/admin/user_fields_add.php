@@ -1,4 +1,4 @@
-<?php // $Id: user_fields_add.php 20845 2009-05-19 17:27:22Z cfasanando $
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
 *	@package chamilo.admin
@@ -10,13 +10,13 @@ $cidReset = true;
 // including necessary libraries
 require_once '../inc/global.inc.php';
 
-
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
 
 // user permissions
 api_protect_admin_script();
-$htmlHeadXtra[] = '<script type="text/javascript">
+
+$htmlHeadXtra[] = '<script>
 function change_image_user_field (image_value) {
 	
 	if (image_value==1) {
@@ -102,12 +102,9 @@ $table_uf_val 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'user_fields.php', 'name' => get_lang('UserFields'));
-if ($_GET['action']<>'edit')
-{
+if ($_GET['action']<>'edit') {
 	$tool_name = get_lang('AddUserFields');
-}
-else
-{
+} else {
 	$tool_name = get_lang('EditUserFields');
 }
 // Create the form
@@ -123,16 +120,11 @@ $form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
 // Field type
 $types = UserManager::get_user_field_types();
 
-$form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
+$form->addElement('select','fieldtype',get_lang('FieldType'), $types, array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
 
 //Advanced parameters
-$form -> addElement('html','<div class="row">
-			<div class="label">&nbsp;</div>
-			<div class="formw">
-				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
-			</div>
-			</div>');
+$form -> addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>');
 //When edit, the combobox displey the field type displeyed else none 	
 if ( (isset($_GET['action']) && $_GET['action'] == 'edit') && in_array($_GET['field_type'],array(3,4,5,8))) {
 	$form -> addElement('html','<div id="options" style="display:block">');
@@ -208,13 +200,10 @@ if( $form->validate()) {
 		$fielddefault = $field['fielddefaultvalue'];
 		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
 
-		if (is_numeric($field['fieldid']) AND !empty($field['fieldid']))
-		{
+		if (is_numeric($field['fieldid']) AND !empty($field['fieldid'])) {
 			UserManager:: save_extra_field_changes($field['fieldid'],$fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldEdited');
-		}
-		else
-		{
+		} else {
 			$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldAdded');
 		}

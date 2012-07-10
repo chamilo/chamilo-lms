@@ -188,7 +188,7 @@ function get_extra_fields($f,$n,$o,$d)
  * @since Dokeos 1.8.6
  */
 function type_filter($type) {
-    $types = UserManager::get_user_field_types($field_type);
+    $types = UserManager::get_user_field_types();
 	return $types[$type];
 }
 

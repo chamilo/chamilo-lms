@@ -365,9 +365,10 @@ if ($slide_id != 'all') {
 			if(document.getElementById('image').complete){
 				document.getElementById('image').style.background='none';//the first load doesn't load the browser cache
 			}
-			else if(document.getElementById('image').height<initial_height){
-				document.getElementById('image').style.background='none';
-			}
+			//TODO:we need load this before the real image has been loaded in canvas
+			//else if(document.getElementById('image').height<initial_height){
+			//	document.getElementById('image').style.background='none';
+			//}
 			else{
 				document.getElementById('image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
 			}

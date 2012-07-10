@@ -121,7 +121,7 @@ echo Display::page_header(Display::return_icon('session.png', get_lang('Session'
 <!-- General properties -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="2">
+  <th align="center" colspan="2">
       <?php echo get_lang('GeneralProperties'); ?>
       <a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>">
           <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
@@ -208,9 +208,11 @@ if ($multiple_url_is_on) {
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th align="center" colspan="4"><?php echo get_lang('CourseList'); ?>
-  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
-        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>  
+  <th align="center" colspan="4">
+      <?php echo get_lang('CourseList'); ?>
+        <a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
+            <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
+        </a>  
   </th>
 </tr>
 <tr>
@@ -233,7 +235,7 @@ if ($session['nbr_courses'] == 0){
 			ORDER BY title";
 	$result=Database::query($sql);
 	$courses=Database::store_result($result);
-	foreach($courses as $course) {
+	foreach ($courses as $course) {
 		//select the number of users
 
 		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
@@ -257,7 +259,6 @@ if ($session['nbr_courses'] == 0){
 		} else {
 			$coach = get_lang('None');
 		}
-
 
 		if (count($coachs) > 0) {
 			$coach = implode('<br />',$coachs);
@@ -288,12 +289,12 @@ if ($session['nbr_courses'] == 0){
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>
-  <th colspan="4"><?php echo get_lang('UserList'); ?>
-  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
-        <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
-    </a></th>
+  <th align="center" colspan="4">
+      <?php echo get_lang('UserList'); ?>
+        <a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
+            <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
+        </a>
   </th>
-</tr>
 </tr>
 <?php
 

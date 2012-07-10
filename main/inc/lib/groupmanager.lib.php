@@ -919,7 +919,7 @@ class GroupManager {
 			arsort($group_available_place);
 			reset($userToken);
 			arsort($userToken);
-            var_dump($userToken);
+            
 			foreach ($group_available_place as $group_id => $place) {
 				foreach ($userToken as $user_id => $places) {					
 					if (self :: can_user_subscribe($user_id, $group_id)) {

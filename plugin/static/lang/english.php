@@ -8,8 +8,6 @@
 
 $strings['plugin_title'] = "Static";
 $strings['plugin_comment'] = "Display static html content.";
-
-$strings['content'] = "Content";
 $strings['block_title'] = "Block title";
 
 //$strings['title'] = "Title";

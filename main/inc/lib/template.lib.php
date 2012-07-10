@@ -119,13 +119,13 @@ class Template {
                 $this->plugin = new AppPlugin();
 
                 //1. Showing installed plugins in regions
-                $plugin_regions = $this->plugin->get_plugin_regions();                  
+                $plugin_regions = $this->plugin->get_plugin_regions();
                 foreach ($plugin_regions as $region) {
                     $this->set_plugin_region($region);
-                }  
-
+                }
+                
                 //2. Loading the course plugin info
-                global $course_plugin;           
+                global $course_plugin;
                 if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {                
                     //Load plugin get_langs
                     $this->plugin->load_plugin_lang_variables($course_plugin);                
@@ -656,11 +656,11 @@ class Template {
     }
     
     /* Sets the plugin content in a template variable */
-    function set_plugin_region($plugin_region) {
+    function set_plugin_region($plugin_region) {        
         if (!empty($plugin_region)) {
-            $content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);    
-            if (!empty($content)) {
-                $this->assign('plugin_'.$plugin_region, $content);                
+            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);            
+            if (!empty($region_content)) {
+                $this->assign('plugin_'.$plugin_region, $region_content);                
             } else {
                 $this->assign('plugin_'.$plugin_region, null);
             }

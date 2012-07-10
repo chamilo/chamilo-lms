@@ -8,7 +8,8 @@
 */
 class BBBPlugin extends Plugin
 {
-
+    public $is_course_plugin = true;
+    
     //When creating a new course this settings are added to the course
     public $course_settings = array(
 //                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
@@ -26,7 +27,7 @@ class BBBPlugin extends Plugin
     
     function install() {
         $table = Database::get_main_table('plugin_bbb_meeting');
-        $sql = "CREATE TABLE $table (
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
                 meeting_name VARCHAR(255) NOT NULL DEFAULT '',

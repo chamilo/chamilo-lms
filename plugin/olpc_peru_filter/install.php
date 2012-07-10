@@ -10,5 +10,4 @@
  */
 
 require_once 'config.php';
-OLPCPeruFilterPlugin::create()->install();
-
+OLPC_Peru_FilterPlugin::create()->install();

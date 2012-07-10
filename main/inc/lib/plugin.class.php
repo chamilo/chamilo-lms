@@ -18,6 +18,7 @@ class Plugin {
 
     private $settings = null;
     private $strings = null; //translation strings
+    public  $is_course_plugin = false;
 
     /**
      * When creating a new course, these settings are added to the course, in 
@@ -46,11 +47,12 @@ class Plugin {
     function get_info() {
         $result = array();
 
-        $result['title']        = $this->get_title();
-        $result['comment']      = $this->get_comment();
-        $result['version']      = $this->get_version();
-        $result['author']       = $this->get_author();
-        $result['plugin_class'] = get_class($this);
+        $result['title']            = $this->get_title();
+        $result['comment']          = $this->get_comment();
+        $result['version']          = $this->get_version();
+        $result['author']           = $this->get_author();
+        $result['plugin_class']     = get_class($this);
+        $result['is_course_plugin'] = $this->is_course_plugin;        
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;

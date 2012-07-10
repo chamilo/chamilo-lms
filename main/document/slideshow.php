@@ -335,7 +335,7 @@ if ($slide_id != 'all') {
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td align="center">';
+		echo '<td id="td_image" align="center">';
 		if ($slide < $total_slides - 1 && $slide_id != 'all') {
 			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
 		} else {
@@ -354,24 +354,10 @@ if ($slide_id != 'all') {
 		<script type="text/javascript">
 			var initial_width='<?php echo $width; ?>';
 			var initial_height='<?php echo $height; ?>';
-			
-			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
-			
-			
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
 			
-			
-			if(document.getElementById('image').complete){
-				document.getElementById('image').style.background='none';//the first load doesn't load the browser cache
-			}
-			//TODO:we need load this before the real image has been loaded in canvas
-			//else if(document.getElementById('image').height<initial_height){
-			//	document.getElementById('image').style.background='none';
-			//}
-			else{
-				document.getElementById('image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
-			}
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+width+'" height="'+height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
 
 			function resizeImage() {
 				
@@ -395,11 +381,13 @@ if ($slide_id != 'all') {
 				
 				document.getElementById('image').style.height = height +"px";
 				document.getElementById('image').style.width = width +"px";
+				document.getElementById('td_image').style.background='none';
 				document.getElementById('image').style.visibility='visible';
 			};
 			
 			 if (initial_height>height || initial_width>width) {
 				document.getElementById('image').style.visibility='hidden';
+				document.getElementById('td_image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
 				document.getElementById('image').onload = resizeImage;
 			    window.onresize = resizeImage;
 			}

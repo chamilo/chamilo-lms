@@ -41,7 +41,7 @@ $inserted_in_course = array();
 global $_configuration;                            
 
 if ($_POST['formSent']) {
-    if (isset($_FILES['import_file']['tmp_name'])) {
+    if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
         $form_sent = $_POST['formSent'];
         $file_type = $_POST['file_type'];
         $send_mail = $_POST['sendMail'] ? 1 : 0;

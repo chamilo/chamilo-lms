@@ -242,7 +242,7 @@ if ($_POST['formSent']) {
 			fputs($fp,"</Sessions>\n");
 		fclose($fp);
 
-		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
 	}
 }
 
@@ -262,54 +262,34 @@ if ($_configuration['multiple_access_urls']) {
 		ORDER BY name";
 	}
 }
-
-
-$result=Database::query($sql);
-
-$Sessions=Database::store_result($result);
+$result = Database::query($sql);
+$Sessions = Database::store_result($result);
 
 echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-if(!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg, false); //main API
 }
-?>
-<form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-<input type="hidden" name="formSent" value="1">
-<table border="0" cellpadding="5" cellspacing="0">
-<tr>
-  <td nowrap="nowrap" valign="top"><?php echo get_lang('OutputFileType'); ?> :</td>
-  <td>
-	<input class="checkbox" type="radio" name="file_type" id="file_type_xml" value="xml" <?php if($formSent && $file_type == 'xml') echo 'checked="checked"'; ?>> <label for="file_type_xml">XML</label><br>
-	<input class="checkbox" type="radio" name="file_type" id="file_type_csv"  value="csv" <?php if(!$formSent || $file_type == 'csv') echo 'checked="checked"'; ?>> <label for="file_type_csv">CSV</label><br>
-  </td>
-</tr>
-<tr>
-  <td><?php echo get_lang('WhichSessionToExport'); ?> :</td>
-  <td><select name="session_id">
-	<option value=""><?php echo get_lang('AllSessions') ?></option>
 
-<?php
-foreach($Sessions as $enreg) {
-?>
-    <option value="<?php echo $enreg['id']; ?>" <?php if($session_id == $enreg['id']) echo 'selected="selected"'; ?>>
-        <?php echo $enreg['name']; ?></option>
-<?php
+$form = new FormValidator('session_export', 'post', api_get_self());
+$form->addElement('hidden', 'formSent', 1);
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null, array('id' => 'file_type_csv'));
+$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
+
+$options = array();
+$options['0'] = get_lang('AllSessions');
+foreach ($Sessions as $enreg) {
+    $options[$enreg['id']] = $enreg['name'];
 }
-unset($Courses);
-?>
 
-  </select></td>
-</tr>
-<tr>
-  <td>&nbsp;</td>
-  <td>
-  <button class="save" type="submit" name="name" value="<?php echo get_lang('ExportSession') ?>"><?php echo get_lang('ExportSession') ?></button>
-  </td>
-</tr>
-</table>
-</form>
-<?php
+$form->addElement('select', 'session_id', get_lang('WhichSessionToExport'),  $options);
+$form->addElement('button', 'submit', get_lang('ExportSession'));
+
+$defaults = array();
+$defaults['file_type'] = 'csv';
+$form->setDefaults($defaults);
+$form->display();
+unset($Courses);
 Display::display_footer();

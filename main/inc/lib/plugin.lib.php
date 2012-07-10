@@ -128,11 +128,14 @@ class AppPlugin {
         return $this->plugin_regions;
     }
 
-    function load_region($region, $main_template, $forced = false) {
+    function load_region($region, $main_template, $forced = false) {        
+        if ($region == 'course_tool_plugin') {                        
+            return null;       
+        }
         ob_start();
         $this->get_all_plugin_contents_by_region($region, $main_template, $forced);
         $content = ob_get_contents();
-        ob_end_clean();
+        ob_end_clean();        
         return $content;
     }
 
@@ -147,13 +150,12 @@ class AppPlugin {
         $root = api_get_path(SYS_PLUGIN_PATH);
 
         //1. Loading english if exists
-        $english_path = $root.$plugin_name."/lang/english.php";
+        $english_path = $root.$plugin_name."/lang/english.php";     
 
         if (is_readable($english_path)) {
             include $english_path;
-
-            foreach ($strings as $key => $string) {
-                //$$key = $string;
+   
+            foreach ($strings as $key => $string) {                
                 $GLOBALS[$key] = $string;
             }
         }
@@ -165,8 +167,7 @@ class AppPlugin {
             if (is_readable($path)) {
                 include $path;
                 if (!empty($strings)) {
-                    foreach ($strings as $key => $string) {
-                        //$$key = $string;
+                    foreach ($strings as $key => $string) {                        
                         $GLOBALS[$key] = $string;
                     }
                 }
@@ -182,14 +183,14 @@ class AppPlugin {
      * @todo improve this function
      */
     function get_all_plugin_contents_by_region($region, $template, $forced = false) {
-        global $_plugins;
+        global $_plugins;                
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
-        //if (1) {
+        //if (1) {        
             //Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
 
                 //The plugin_info variable is available inside the plugin index
-                $plugin_info = $this->get_plugin_info($plugin_name, $forced);
+                $plugin_info = $this->get_plugin_info($plugin_name, $forced);                
 
                 //We also know where the plugin is
                 $plugin_info['current_region'] = $region;

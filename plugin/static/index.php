@@ -10,8 +10,7 @@ $title = $title ? "<h4>$title</h4>" : '';
 $css = $plugin->get_css();
 $css = $css ? "<style type=\"text/css\" scoped=\"scoped\">$css</style>" : '';
 
-if (empty($content))
-{
+if (empty($content)) {
     echo '';
 }
 

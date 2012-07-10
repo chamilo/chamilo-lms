@@ -8,7 +8,8 @@
 */
 class BBBPlugin extends Plugin
 {
-
+    public $is_course_plugin = true;
+    
     //When creating a new course this settings are added to the course
     public $course_settings = array(
 //                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),

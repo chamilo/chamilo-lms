@@ -952,18 +952,20 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 } else {
                                     $is_courseAdmin = false;
                                 }
-                                Session::write('_courseUser',$_courseUser);
+                                Session::write('_courseUser', $_courseUser);
                                 break;
                             case '0': //student
+                                $_courseUser['role'] = '';
                                 $is_courseMember     = true;
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
                                 $is_courseCoach      = false;
                                 $is_sessionAdmin     = false;
-                                Session::write('_courseUser',$_courseUser);
+                                Session::write('_courseUser', $_courseUser);
                                 break;
                             default:
                                 //unregister user
+                                $_courseUser['role'] = '';                                
                                 $is_courseMember     = false;
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;

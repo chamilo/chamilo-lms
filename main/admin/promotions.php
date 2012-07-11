@@ -10,8 +10,6 @@ $language_file = array('admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'promotion.lib.php';
-require_once api_get_path(LIBRARY_PATH).'career.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -56,7 +54,7 @@ $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
 //The order is important you need to check the model.ajax.php the $column variable
 $columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
+                        array('name'=>'name',           'index'=>'name',        'width'=>'180',   'align'=>'left'),
                         array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false'),

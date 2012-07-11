@@ -1,9 +1,118 @@
 
-
-
 $(document).ready(function () {
     $("#emailTitle").focus();
 });
+
+$(function() {
+    $('.resizable').resizable();
+    $('.resizable-vertical').resizable({
+        handles: "n, s"
+    });
+});
+
+var Announcement = {};
+
+Announcement.sort = function(c_id, ids, f){
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, ids: ids, action: 'sort'};
+    $.post(url, data, f);
+};
+
+Announcement.hide = function(c_id, id, token, f)
+{
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, id: id, action: 'hide', sec_token: token};
+    $.post(url, data, f, 'json');
+};
+
+Announcement.show = function(c_id, id, token, f)
+{
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, id: id, action: 'show', sec_token: token};
+    $.post(url, data, f, 'json');
+};
+
+Announcement.del = function(c_id, id, token, f)
+{
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, id: id, action: 'delete', sec_token: token};
+    $.post(url, data, f, 'json');
+};
+
+Announcement.delete_by_course = function(c_id, token, f)
+{
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, action: 'delete_by_course', sec_token: token};
+    $.post(url, data, f, 'json');
+};
+
+Announcement.delete_all = function(c_id, ids, token, f)
+{
+    var url = www + '/main/inc/ajax/announcement.ajax.php';
+    var data = {c_id: c_id, ids: ids, action: 'delete_all', sec_token: token};
+    $.post(url, data, f, 'json');
+};
+
+
+
+function move_selected_option(from, to){
+    var selected = $("option:selected", from)
+    selected.each(function(index, option)
+    {
+        option = $(option);
+        option.detach();
+        $(to).append(option);
+    });
+}
+
+function update_hidden_field(name){
+    
+    var select = $('#' + name + '_selected');
+    var options = $("option", select)
+    //update hidden field
+    var keys = [];
+    options.each(function(index, option)
+    {
+        option = $(option);
+        keys.push(option.val());
+    });
+    keys = keys.join(',');
+    
+    var hidden = $('#' + name);
+    hidden.val(keys);
+}
+
+
+function toggle_list_selector(name)
+{
+    var list = $('#' + name + '_list');
+    var overview = $('#' + name + '_overview');
+    if(list.css('display') == 'none'){
+        list.show();
+        overview.hide();
+    }
+    else
+    {
+        list.hide();
+        overview.show();
+    }
+    
+    var select = $('#' + name + '_selected');
+    
+    //update overview
+    var content = [];
+    var options = $("option", select)
+    options.each(function(index, option)
+    {
+        option = $(option);
+        content.push(option.text());
+    });
+    
+    content = content.join(', ');
+    content = (content == '') ? lang.Everybody : content;
+    overview.text(content);
+}
+
 
 function toggle_sendto()
 {

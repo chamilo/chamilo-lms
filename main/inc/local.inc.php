@@ -56,23 +56,7 @@
  * boolean $is_allowedCreateCourse
  *
  * COURSE VARIABLES
- *
- * string  $_cid (the course id)
- *
- * int     $_course['id'          ] - auto-assigned integer
- * string  $_course['name'        ] - the title of the course
- * string  $_course['official_code']    - the visual / fake / official code
- * string  $_course['sysCode'     ]
- * string  $_course['path'        ]
- * string  $_course['dbName'      ]
- * string  $_course['dbNameGlu'   ]
- * string  $_course['titular'     ]
- * string  $_course['language'    ]
- * string  $_course['extLink'     ]['url' ]
- * string  $_course['extLink'     ]['name']
- * string  $_course['categoryCode']
-* string  $_course['categoryName']
-
+ * see the function get_course_info_with_category
 * boolean $is_courseMember
 * boolean $is_courseTutor
 * boolean $is_courseAdmin
@@ -157,7 +141,6 @@ $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : ''
 $cidReq = isset($cidReq) ? Database::escape_string($cidReq) : '';
 // $cidReq can be set in URL-parameter
 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReq;
-
 $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 
 // $cidReset can be set in URL-parameter
@@ -580,7 +563,7 @@ if (!empty($cDir)) {
 
 // if the requested course is different from the course in session
 
-if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))) {
+if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))) {    
 	$cidReset = true;
 	$gidReset = true;    // As groups depend from courses, group id is reset
 }
@@ -672,52 +655,18 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
 if (isset($cidReset) && $cidReset) {
     // Course session data refresh requested or empty data
-	if ($cidReq) {
-		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-		$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
-			FROM $course_table
-			LEFT JOIN $course_cat_table
-			ON course.category_code = course_category.code
-			WHERE course.code = '$cidReq'";
-		$result = Database::query($sql);
-
-		if (Database::num_rows($result) > 0) {
-			$course_data = Database::fetch_array($result);
-			//@TODO real_cid should be cid, for working with numeric course id
-			$_real_cid                      = $course_data['id'];
-
-			$_cid                           = $course_data['code'];
-			$_course = array();
-			$_course['real_id']             = $course_data['id'];
-			$_course['id']                  = $course_data['code']; //auto-assigned integer
-			$_course['code']                = $course_data['code'];
-			$_course['name']                = $course_data['title'];
-            $_course['title']               = $course_data['title'];
-			$_course['official_code']       = $course_data['visual_code']; // use in echo
-			$_course['sysCode']             = $course_data['code']; // use as key in db
-			$_course['path']                = $course_data['directory']; // use as key in path
-			$_course['dbName']              = $course_data['db_name']; // use as key in db list
-			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.9
-			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
-			$_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
-			$_course['language']            = $course_data['course_language'];
-			$_course['extLink']['url' ]     = $course_data['department_url'];
-			$_course['extLink']['name']     = $course_data['department_name'];
-			$_course['categoryCode']        = $course_data['faCode'];
-			$_course['categoryName']        = $course_data['faName'];
-			$_course['visibility']          = $course_data['visibility'];
-			$_course['subscribe_allowed']   = $course_data['subscribe'];
-			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
-            $_course['activate_legal']      = $course_data['activate_legal'];
-            $_course['show_score']          = $course_data['show_score']; //used in the work tool
-
-            //error_log('Course set: '.$_cid);
-			Session::write('_cid', $_cid);
-			Session::write('_course',$_course);
-
-			//@TODO real_cid should be cid, for working with numeric course id
-			Session::write('_real_cid',$_real_cid);
+	if ($cidReq) {    
+        $_course = CourseManager::get_course_info_with_category($cidReq);
+        
+		if (!empty($_course)) {		         			
+            
+            //@TODO real_cid should be cid, for working with numeric course id
+            $_real_cid                      = $_course['real_id'];
+			$_cid                           = $_course['code'];
+            
+            Session::write('_real_cid', $_real_cid);
+			Session::write('_cid',      $_cid);
+			Session::write('_course',   $_course);
 
 			// if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode') == 'true') {
@@ -740,7 +689,7 @@ if (isset($cidReset) && $cidReset) {
             if (!isset($_SESSION['login_as'])) {
 				//Course login
                 if (isset($_user['user_id'])) {
-                    event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                    event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
                 }
             }
         } else {
@@ -753,11 +702,11 @@ if (isset($cidReset) && $cidReset) {
         Session::erase('_course');
 
         if (!empty($_SESSION)) {
-                foreach($_SESSION as $key=>$session_item) {
+                foreach($_SESSION as $key => $session_item) {
                 if (strpos($key,'lp_autolunch_') === false) {
                     continue;
                 } else {
-                    if(isset($_SESSION[$key])) {
+                    if (isset($_SESSION[$key])) {
                         Session::erase($key);
                     }
                 }
@@ -770,7 +719,22 @@ if (isset($cidReset) && $cidReset) {
         }
     }
 } else {
+    
     // Continue with the previous values
+    
+    if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
+        //Just in case $_course is empty we try to load if the c_id still exists
+        $_course = CourseManager::get_course_info_with_category($_SESSION['_cid']);
+        if (!empty($_course)) {
+            $_real_cid                      = $_course['real_id'];
+            $_cid                           = $_course['code'];
+
+            Session::write('_real_cid', $_real_cid);
+            Session::write('_cid',      $_cid);
+            Session::write('_course',   $_course);
+        }
+    }
+    
     if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
         $_cid         = -1;        //set default values that will be caracteristic of being unset
         $_course      = -1;
@@ -1003,7 +967,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
 	//Checking the course access
     $is_allowed_in_course = false;
-
+    
 	if (isset($_course)) {
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
@@ -1026,7 +990,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 break;
         }
 	}
-
+    
     // check the session visibility
 	if ($is_allowed_in_course == true) {
 
@@ -1053,7 +1017,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	Session::write('is_courseTutor', $is_courseTutor);
     Session::write('is_courseCoach', $is_courseCoach);
 	Session::write('is_allowed_in_course', $is_allowed_in_course);
-
 	Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else { // continue with the previous values
 

@@ -104,14 +104,15 @@ function event_login() {
  * @desc Record information for access event for courses
  */
 function event_access_course() {
-	global $_user, $TABLETRACK_ACCESS,  $TABLETRACK_LASTACCESS;
+	global $TABLETRACK_ACCESS,  $TABLETRACK_LASTACCESS;
 
 	$id_session = api_get_session_id();
 	$now        = api_get_utc_datetime();
     $_cid       = api_get_course_id();
+    $user_id    = api_get_user_id();
 
-	if ($_user['user_id']) {
-		$user_id = "'".$_user['user_id']."'";
+	if ($user_id) {
+		$user_id = "'".$user_id."'";
 	} else {
 		$user_id = "0"; // no one
 	}

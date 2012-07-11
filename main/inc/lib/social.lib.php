@@ -417,30 +417,7 @@ class SocialManager extends UserManager {
 				return; //do not display this course entry
 			}
 		}
-		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_code, api_get_user_id());
-		if ($has_virtual_courses) {
-			$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
-			$course_display_title = $return_result['title'];
-			$course_display_code = $return_result['code'];
-		} else {
-			$course_display_title = $course_title;
-			$course_display_code = $course_visual_code;
-		}
         
-        /*
-		$s_course_status=$my_course['s'];
-		$s_htlm_status_icon="";
-
-		if ($s_course_status==1) {
-			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px'));
-		}
-		if ($s_course_status==2) {
-			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('coachs.gif', get_lang('Status').': '.get_lang('GeneralCoach'),array('style'=>'width:11px; height:11px'));
-		}
-		if ($s_course_status==5) {
-			$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
-		}*/
-		
 		$s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
 
 		//display course entry
@@ -452,7 +429,7 @@ class SocialManager extends UserManager {
 		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
 			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_id.'\');>&nbsp;'.$course_title.'</a>';
 		} else {
-			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
+			$result .= $course_title." "." ".get_lang('CourseClosed')."";
 		}
 		$result .= '</h3>';
 		//$current_course_settings = CourseManager :: get_access_settings($my_course['k']);

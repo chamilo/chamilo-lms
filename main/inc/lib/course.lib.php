@@ -41,8 +41,7 @@
     CourseManager::has_virtual_courses_from_code($real_course_code, $user_id)
     CourseManager::get_target_of_linked_course($virtual_course_code)
 
-    TITLE AND CODE FUNCTIONS
-    CourseManager::determine_course_title_from_course_info($user_id, $course_info)
+    TITLE AND CODE FUNCTIONS    
     CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
     CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
 
@@ -804,6 +803,7 @@ class CourseManager {
      * @return an array with indices
      *    $return_result['title'] - the course title of the combined courses
      *    $return_result['code']  - the course code of the combined courses
+     * @deprecated use api_get_course_info()
      */
     public static function determine_course_title_from_course_info($user_id, $course_info) {
 
@@ -3774,8 +3774,52 @@ class CourseManager {
             $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
         }
         $res = Database::query($sql);
-	$row = Database::fetch_row($res);
+        $row = Database::fetch_row($res);
         return $row[0];
     }
-
+    
+    /* 
+     * This code was originaly in local.inc.php
+     */
+    static function get_course_info_with_category($course_code) {
+        global $_configuration;
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $course_code = Database::escape_string($course_code);
+        
+		$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName FROM $course_table
+                LEFT JOIN $course_cat_table
+                ON course.category_code = course_category.code
+                WHERE course.code = '$course_code'";
+		$result = Database::query($sql);
+        
+        $_course = array();        
+		if (Database::num_rows($result) > 0) {
+			$course_data = Database::fetch_array($result);
+			//@TODO real_cid should be cid, for working with numeric course id			
+			$_course['real_id']             = $course_data['id'];
+			$_course['id']                  = $course_data['code']; //auto-assigned integer
+			$_course['code']                = $course_data['code'];
+			$_course['name']                = $course_data['title'];
+            $_course['title']               = $course_data['title'];
+			$_course['official_code']       = $course_data['visual_code']; // use in echo
+			$_course['sysCode']             = $course_data['code']; // use as key in db
+			$_course['path']                = $course_data['directory']; // use as key in path
+			$_course['dbName']              = $course_data['db_name']; // use as key in db list
+			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.9
+			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
+			$_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
+			$_course['language']            = $course_data['course_language'];
+			$_course['extLink']['url' ]     = $course_data['department_url'];
+			$_course['extLink']['name']     = $course_data['department_name'];
+			$_course['categoryCode']        = $course_data['faCode'];
+			$_course['categoryName']        = $course_data['faName'];
+			$_course['visibility']          = $course_data['visibility'];
+			$_course['subscribe_allowed']   = $course_data['subscribe'];
+			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
+            $_course['activate_legal']      = $course_data['activate_legal'];
+            $_course['show_score']          = $course_data['show_score']; //used in the work tool
+        }
+        return $_course;
+    }
 } //end class CourseManager

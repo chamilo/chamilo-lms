@@ -73,9 +73,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
             </table>
         </div>';
 	}
-
-    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
-	$items = CourseHome::show_tools_category($my_list);
+    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);    
+	$items = CourseHome::show_tools_category($my_list);    
     $content .= return_block(get_lang('Authoring'),  $items);
 
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);

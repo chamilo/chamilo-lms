@@ -1,20 +1,16 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 * This is the session library for Chamilo.
 * All main sessions functions should be placed here.
+* This class provides methods for sessions management.
+* Include/require it in your code to use its features.
 * @package chamilo.library
 */
 /**
  * Code
  */
 
-/**
-*	This class provides methods for sessions management.
-*	Include/require it in your code to use its features.
-*
-*	@package chamilo.library
-*/
 class SessionManager {    
 	private function __construct() {
 	}
@@ -469,8 +465,7 @@ class SessionManager {
 		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_user = 						Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);		
 		$tbl_url_session                  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		
 		global $_user;
@@ -705,36 +700,36 @@ class SessionManager {
 	}
     
     function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
-           	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            
-            if (empty($user_list) || empty($session_id) || empty($course_code)) {
-                return false;                
-            }
-            
-            $session_id = intval($session_id);
-            $course_code = Database::escape_string($course_code);
-            $session_visibility = intval($session_visibility);                      
-    
-            $nbr_users = 0;
-			foreach ($user_list as $enreg_user) {
-				//if (!in_array($enreg_user, $existingUsers)) {
-	                $enreg_user = intval($enreg_user);
-					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility) 
-                                   VALUES ('$session_id','$course_code','$enreg_user','$session_visibility')";
-					Database::query($insert_sql);
-					if (Database::affected_rows()) {
-						$nbr_users++;
-					}
-				//}
-			}
-			// count users in this session-course relation
-			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
-			$rs = Database::query($sql);
-			list($nbr_users) = Database::fetch_array($rs);
-			// update the session-course relation to add the users total
-			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			Database::query($update_sql);
+        $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        if (empty($user_list) || empty($session_id) || empty($course_code)) {
+            return false;                
+        }
+
+        $session_id = intval($session_id);
+        $course_code = Database::escape_string($course_code);
+        $session_visibility = intval($session_visibility);                      
+
+        $nbr_users = 0;
+        foreach ($user_list as $enreg_user) {
+            //if (!in_array($enreg_user, $existingUsers)) {
+                $enreg_user = intval($enreg_user);
+                $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility) 
+                               VALUES ('$session_id','$course_code','$enreg_user','$session_visibility')";
+                Database::query($insert_sql);
+                if (Database::affected_rows()) {
+                    $nbr_users++;
+                }
+            //}
+        }
+        // count users in this session-course relation
+        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
+        $rs = Database::query($sql);
+        list($nbr_users) = Database::fetch_array($rs);
+        // update the session-course relation to add the users total
+        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+        Database::query($update_sql);
     }
 
 	/**
@@ -1184,7 +1179,7 @@ class SessionManager {
 		
 		//Setting session_category_id to 0
 		$sql = "UPDATE $tbl_session SET session_category_id = 0 WHERE session_category_id IN (".$id_checked.")";
-        $result = Database::query($sql);
+        Database::query($sql);
         
 		$sql = "SELECT id FROM $tbl_session WHERE session_category_id IN (".$id_checked.")";
 		$result = @Database::query($sql);
@@ -1529,27 +1524,28 @@ class SessionManager {
     
     /**
      * Get users by session
-     * @param   int sesssion id
+     * @param  int sesssion id
      * @param	int	filter by status 
      * @return  array a list with an user list
      */
-    public static function get_users_by_session($id, $with_status = false) {
+    public static function get_users_by_session($id, $with_status = null) {
         if (empty($id)) {
             return array();
         }
         $id = intval($id);
-        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_user   = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
-                FROM '.$tbl_user.'
-                INNER JOIN '.$tbl_session_rel_user.'
-                    ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
-                    AND '.$tbl_session_rel_user.'.id_session = '.$id;
+        $sql = "SELECT $tbl_user.user_id, lastname, firstname, username
+                FROM $tbl_user INNER JOIN $tbl_session_rel_user
+                    ON $tbl_user.user_id = $tbl_session_rel_user.id_user 
+                    AND $tbl_session_rel_user.id_session = $id";
+        
         if ($with_status !== false) {
         	$with_status = intval($with_status);
         	$sql .= " WHERE relation_type = $with_status ";
-        }        
+        }
+                
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result,'ASSOC')) {
             $return_array[] = $row;
@@ -1604,11 +1600,6 @@ class SessionManager {
             $status = $status['0'];
         }
         return $status;
-    }
-        
-    
-    public static function get_session_by_user($coach_id, $user_id) {
-    	
     }
     
     function get_all_sessions_by_promotion($id) {
@@ -1800,7 +1791,7 @@ class SessionManager {
         if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
             if ($session_info['session_admin_id'] != api_get_user_id()) {
                 api_not_allowed(true);
-}
+            }
         }
     }
 }

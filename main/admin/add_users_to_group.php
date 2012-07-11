@@ -180,7 +180,7 @@ $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_user (code, content) {
 
 	// document.getElementById("user_to_add").value = "";
@@ -387,7 +387,7 @@ if ($add_type == 'multiple') {
 </div>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-<?php echo '<legend>'.$tool_name.' ('.$session_info['name'].')</legend>'; ?>    
+<?php echo '<legend>'.$tool_name.' ('.$group_info['name'].')</legend>'; ?>    
 <?php if ($add_type=='multiple') { ?>
 <select name="relation" id="relation" onchange="xajax_search_users(document.getElementById('firstLetterUser').value,'multiple',this.value)">
 <?php } else { ?>
@@ -537,7 +537,7 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 <!--
 function moveItem(origin , destination){
 
@@ -636,10 +636,5 @@ function makepost(select){
 
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*  FOOTER */
 Display::display_footer();
-?>

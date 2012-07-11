@@ -1,12 +1,12 @@
-    .cas_plugin_image {
-        float:left; 
-        height:50px;
-        margin: 0px 5px 5px 0px;        
-    }
-    .cas_plugin_comm {
-        font-style:italic;
-    }
-    .cas_plugin_clear {
-        clear:both;
-        height:1px;
-    }
+.cas_plugin_image {
+    float:left; 
+    height:50px;
+    margin: 0px 5px 5px 0px;        
+}
+.cas_plugin_comm {
+    font-style:italic;
+}
+.cas_plugin_clear {
+    clear:both;
+    height:1px;
+}

@@ -10,14 +10,14 @@
     
     You can use i18n variables just use this syntax:
     
-    {{"HelloWorld"|get_lang}}
+    {{ "HelloWorld"|get_lang }}
     
     Now you can add your variables in the main/lang/english/ or main/lang/spanish/ for example in spanish:
     $HelloWorld = "Hola Mundo";
     
     3. Portal settings    
         You can access the portal settings using:
-        {{"siteName"|get_setting}}
+        {{ "siteName"|get_setting }}
         For more settings check the settings_current database table
     4. Read more
         You can also see more examples in main/template/default/layout

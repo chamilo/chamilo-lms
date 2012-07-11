@@ -81,7 +81,7 @@ function save_scores($file, $score) {
 		//table to get tracking in there as well
 	    global $jscript2run;
 		//record the results in the learning path, using the SCORM interface (API)
-	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
+	    $jscript2run .= '<script>window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
 	}
 }
 
@@ -92,7 +92,7 @@ save_scores($test, $score);
 if ($origin != 'learnpath') {
 	// $url = "Hpdownload.php?doc_url=".$test."&cid=".$cid; // back to the test
 	$url = "exercice.php"; // back to exercices
-	$jscript2run .= '<script language="javascript" type="text/javascript">'."window.open('$url', '_top', '')".'</script>';
+	$jscript2run .= '<script>'."window.open('$url', '_top', '')".'</script>';
 	echo $jscript2run;
 } else {
 ?>

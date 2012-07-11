@@ -691,11 +691,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						// -->
 						</script>';
 		$s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
-					<script language="JavaScript" type="text/javascript">
+					<script>
 						<!--
 						// Version check based upon the values entered above in "Globals"
 						var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we\'ve detected an acceptable version

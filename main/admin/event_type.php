@@ -1,6 +1,6 @@
 <?php
 // name of the language file that needs to be included
-$language_file = array('admin', 'events');
+$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -15,7 +15,7 @@ if (api_get_setting('activate_email_template') != 'true') {
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'event_controller.php', 'name' => get_lang('Events'));
-$tool_name = get_lang('events_title');
+$tool_name = get_lang('EventMessageManagement');
 
 $action = isset($_POST['action']) ? $_POST['action'] : null;
 $eventName = isset($_POST['eventList']) ? $_POST['eventList'] : null;
@@ -50,7 +50,7 @@ Display::display_header($tool_name);
 $action_array = array(array('url' =>'event_controller.php?action=listing' , 'content' => Display::return_icon('view_text.png', get_lang('List'), array(), ICON_SIZE_MEDIUM)));
 
 echo Display::actions($action_array);
-$key_lang = get_lang('unsaved_changes');
+$key_lang = get_lang('YouHaveSomeUnsavedChanges');
 $users = UserManager::get_user_list(array(), array('firstname'));
 $new_user_list = array();
 foreach($users as $user) {
@@ -59,17 +59,15 @@ foreach($users as $user) {
     }
     $new_user_list[] = $user;
 }
-
-
 ?>
 
 <script>
-    var usersList = <?php print json_encode($new_user_list) ?>;
-    var eventTypes = <?php print json_encode($ets) ?>;
-    var eventsConfig = <?php print json_encode($event_config) ?>;
-    var currentLanguage = <?php print json_encode(api_get_interface_language()) ?>;
+    var usersList = <?php echo json_encode($new_user_list) ?>;
+    var eventTypes = <?php echo json_encode($ets) ?>;
+    var eventsConfig = <?php echo json_encode($event_config) ?>;
+    var currentLanguage = <?php echo json_encode(api_get_interface_language()) ?>;
     var flagContentHasChanged = false;
-    var key_lang = "<?php print $key_lang ?>";    
+    var key_lang = "<?php echo $key_lang ?>";    
     var event_type_name = "<?php echo $event_name ?>";
     
     $(document).ready(function() {        
@@ -283,25 +281,25 @@ foreach($users as $user) {
 </script>
 
 <div class="page-header">
-<h2><?php print get_lang('events_title') ?></h2>
+<h2><?php echo get_lang('EventMessageManagement') ?></h2>
 </div>
 
 <form method="POST" onSubmit="return submitForm(); ">
     <div class="row">
         
     <div class="span12" id="event_list_group">
-        <h4><?php print get_lang('events_listTitle'); ?></h4>       
+        <h4><?php echo get_lang('Events'); ?></h4>       
         <select class="span6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
         <?php
         foreach ($event_config as $key => $config) {
-            print '<option value="' . $key . '">' . get_lang($config['name_lang_var']) . '</option>';
+            echo '<option value="' . $key . '">' . get_lang($config['name_lang_var']) . '</option>';
         }
         ?>
         </select>        
     </div>
         
     <div class="span4">
-        <h4><?php print get_lang('events_userListTile'); ?></h4>
+        <h4><?php echo get_lang('Users'); ?></h4>
         <select multiple="1" id="usersList" class="span3 registration_case"></select>
     </div>
     <div class="span4">          
@@ -313,7 +311,7 @@ foreach($users as $user) {
         </div>
     </div>
     <div class="span4">
-        <h4><?php print get_lang('events_userSubListTile'); ?></h4>
+        <h4><?php echo get_lang('ToBeWarnedUserList'); ?></h4>
         <select class="span3" multiple="1" id="usersSubList" class="registration_case"></select>
     </div>
     </div>    
@@ -321,9 +319,9 @@ foreach($users as $user) {
     <br />
     <h2 id="eventNameTitle"></h2>
         <span id="activated_checkbox">
-        <label for="activated" style="display:inline;"><?php print get_lang('checkbox_activated'); ?></label>
-        <input type="checkbox" name="activated" value="1" />
-    </span>    
+            <input type="checkbox" name="activated" value="1" />
+            <label for="activated" style="display:inline;"><?php echo get_lang('ActivateEvent'); ?></label>        
+        </span>
     <br />
     <select id="languages" name="languages" style="margin-top:20px;" onclick='confirmMessage(this.name); return false;'>
 <?php foreach ($languages["name"] as $key => $value) {
@@ -343,17 +341,17 @@ foreach($users as $user) {
     <br />
 
     <label for="eventSubject">
-        <h4><?php print get_lang('events_labelSubject'); ?></h4>
+        <h4><?php echo get_lang('Subject'); ?></h4>
     </label>
     <input class="span6" type="text" id="eventSubject" name="eventSubject" onchange="contentChanged(); return false;" />
     <br /><br />
     <table>
         <tr>
             <td>
-                <label for="eventMessage"><h4><?php print get_lang('events_labelMessage'); ?></h4></label>
+                <label for="eventMessage"><h4><?php echo get_lang('Message'); ?></h4></label>
             </td>
             <td class="available_keys" style="padding-left: 30px;">
-                <h4><?php print get_lang('availables_keys'); ?></h4>
+                <h4><?php echo get_lang('AvailableEventKeys'); ?></h4>
             </td>
         </tr>
         <tr>
@@ -366,10 +364,8 @@ foreach($users as $user) {
             </td>
         </tr>
     </table>
-
     <br /><br />
-
-    <input type="submit" value="<?php print get_lang('events_btnMod'); ?>" />
+    <input type="submit" value="<?php echo get_lang('Edit'); ?>" />
 
 </form>
 <?php

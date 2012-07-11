@@ -900,6 +900,7 @@ class CourseManager {
      *	Note this is different from getting information about a real course!
      *
      *	@param $real_course_code, the id of the real course which the virtual course is linked to
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function get_virtual_course_info($real_course_code) {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -914,6 +915,7 @@ class CourseManager {
     /**
      *	@param string $system_code, the system code of the course
      *	@return true if the course is a virtual course, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function is_virtual_course_from_system_code($system_code) {
         $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -925,6 +927,7 @@ class CourseManager {
      *	Returns whether the course code given is a visual code
      *  @param  string  Visual course code
      *	@return true if the course is a virtual course, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function is_virtual_course_from_visual_code($visual_code) {
         $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -934,6 +937,7 @@ class CourseManager {
 
     /**
      * @return true if the real course has virtual courses that the user is subscribed to, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function has_virtual_courses_from_code($real_course_code, $user_id) {
         return count(self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)) > 0;
@@ -945,6 +949,7 @@ class CourseManager {
      *
      *	@param string The id of the real course which the virtual courses are linked to
      *  @return array List of courses details
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function get_virtual_courses_linked_to_real_course($real_course_code) {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -1112,9 +1117,10 @@ class CourseManager {
      * @param integer $session_id the id of the session
      * @param string $limit the LIMIT statement of the sql statement
      * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     *  @return array
+     * @param int   0 or 2 (student, coach) if using the session id, STUDENT or COURSEMANAGER if using session_id = 0
+     * @return array
      */
-    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '') {
+    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '', $filter_by_status = null) {
         // variable initialisation
         $session_id 	= intval($session_id);
         $course_code 	= Database::escape_string($course_code);
@@ -1122,37 +1128,52 @@ class CourseManager {
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
-            if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))){
-                    $order_by = 'ORDER BY user.'.$order_by;
-                } else {
-                    $order_by = '';
-                }
+            if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
+                $order_by = 'ORDER BY user.'.$order_by;
+            } else {
+                $order_by = '';
+            }
         }
-
-        $sql = $session_id == 0
-            ? 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  '
-            : 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
-        $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        
+        $filter_by_status_condition = null;
 
         if (!empty($session_id)) {
+            $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code="'.$course_code.'"
                       AND session_course_user.id_session = '.$session_id;
             $where[] = ' session_course_user.course_code IS NOT NULL ';
-        } else {
+            
+            // 2 = coach
+            // 0 = student            
+            if (isset($filter_by_status)) {                
+                $filter_by_status = intval($filter_by_status);
+                $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";                
+            }
+        } else {            
+            $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+            
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
+            
+            if (isset($filter_by_status) && $filter_by_status != '') {
+                $filter_by_status = intval($filter_by_status);
+                $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
+            }
         }
+        
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
-        $sql .= ' WHERE '.implode(' OR ', $where);
-
+        $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
+                
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
@@ -1163,8 +1184,7 @@ class CourseManager {
         $users = array();
 
         if (Database::num_rows($rs)) {
-            while ($user = Database::fetch_array($rs)) {
-                //$user_info = Database::get_user_info_from_id($user['user_id']);
+            while ($user = Database::fetch_array($rs)) {                
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
@@ -3643,7 +3663,7 @@ class CourseManager {
      * @param   int number of days
      * @param   int number of hottest courses
      */
-    function return_hot_courses($days = 30, $limit = 5) {
+    public function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
         
         //Getting my courses
@@ -3704,7 +3724,7 @@ class CourseManager {
 		return $courses;
     }
 
-	function return_most_accessed_courses($limit = 5) {
+	public function return_most_accessed_courses($limit = 5) {
 		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
         $params['url_id']		= api_get_current_access_url_id();
 
@@ -3717,8 +3737,7 @@ class CourseManager {
      *
      * @return ResultSet
      */
-    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED)
-    {
+    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
         $visibility_level = $visibility_level ? $visibility_level : '0';

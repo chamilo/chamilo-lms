@@ -2593,11 +2593,11 @@ class Tracking {
 				                </tr>';
                 
                 if (empty($session_id)) {
-                    $user_list  = UserManager::get_user_list();
-                } else {        
-                    $user_list  = SessionManager::get_users_by_session($session_id);        
+                    $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, STUDENT);
+                } else {                    
+                    $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, 0);
                 }
-                
+                                
                 //$exercise_list = get_all_exercises($course_info, $session_id, true);                
                 // Show exercise results of invisible exercises? see BT#4091
                 $exercise_list = get_all_exercises($course_info, $session_id, false);

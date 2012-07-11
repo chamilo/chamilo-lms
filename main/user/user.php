@@ -37,12 +37,6 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 global $_configuration;
 
-//CHECK KEYS
-if (!isset ($_cid)) {
-	header('location: '.api_get_path(WEB_PATH));
-	exit;
-}
-
 if (!api_is_platform_admin(true)) {
 	if (!api_is_course_admin() && !api_is_coach()) {
 		if (api_get_course_setting('allow_user_view_user_list') == 0) {
@@ -54,7 +48,8 @@ if (!api_is_platform_admin(true)) {
 /*
 	Constants and variables
 */
-$currentCourseID 		= Database::escape_string($_course['sysCode']);
+$course_code            = Database::escape_string(api_get_course_code());
+$session_id             = api_get_session_id();
 $is_western_name_order 	= api_is_western_name_order();
 $sort_by_first_name 	= api_sort_by_first_name();
 $course_info            = api_get_course_info();
@@ -65,7 +60,6 @@ if (api_is_allowed_to_edit(null, true)) {
 		switch ($_POST['action']) {
 			case 'unsubscribe' :
 				// Make sure we don't unsubscribe current user from the course
-
 				if (is_array($_POST['user'])) {
 					$user_ids = array_diff($_POST['user'], array($_user['user_id']));
 					if (count($user_ids) > 0) {
@@ -78,7 +72,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 if (api_is_allowed_to_edit(null, true)) {
-	if ( isset ($_GET['action'])) {
+	if (isset($_GET['action'])) {
 		switch ($_GET['action']) {
 			case 'export' :
 				$table_course_user      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -91,9 +85,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				if ($_configuration['multiple_access_urls']) {				
 					$current_access_url_id = api_get_current_access_url_id();
 				}
-					
-				$session_id = api_get_session_id();	
-				
+								
 				$extra_fields = UserManager::get_extra_user_data(api_get_user_id(), false, false, false, true);
 				$extra_fields = array_keys($extra_fields);
                 
@@ -129,7 +121,7 @@ if (api_is_allowed_to_edit(null, true)) {
 						if ($_configuration['multiple_access_urls']) {
 							$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 						}
-						$sql_query .=" WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
+						$sql_query .=" WHERE course_code = '$course_code' AND session_course_user.id_user = user.user_id ";
 						$sql_query .= ' AND id_session = '.$session_id;							
 						
 						if ($_configuration['multiple_access_urls']) {				
@@ -174,7 +166,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					}
 				}
 
-				if ($session_id == 0) {      
+				if ($session_id == 0) {
 				    
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -183,7 +175,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 					}
-					$sql_query .= " WHERE course_code = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
+					$sql_query .= " WHERE course_code = '$course_code' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
 					
 					if ($_configuration['multiple_access_urls']) {							
 						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
@@ -276,7 +268,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
 					ON rel_course.id_session = reluser.id_session
 					WHERE user.user_id = "'.$user_id.'"
-					AND rel_course.course_code = "'.$currentCourseID.'"';
+					AND rel_course.course_code = "'.$course_code.'"';
 
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result, 'ASSOC');
@@ -327,6 +319,7 @@ if (isset($message)) {
 
 //statistics
 event_access_tool(TOOL_USER);
+
 /*	Setting the permissions for this page */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 
@@ -365,14 +358,6 @@ if ( api_is_allowed_to_edit(null, true)) {
 	$form->display();
 	echo '</div>';
 }
-/*
-if (1) // platform setting api_get_setting('subscribe_user_by_coach') {
-	if (!api_is_allowed_to_edit() && $is_courseTutor) {
-		echo "<div align=\"right\">";
-		echo '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a>';
-		echo "</div>";
-	}
-}*/
 
 /* 		DISPLAY LIST OF USERS */
 /**
@@ -410,6 +395,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	global $origin;
 	global $is_western_name_order;
 	global $sort_by_first_name;
+    global $session_id;
+    
 	$a_users = array();
 
 	// limit
@@ -454,12 +441,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			}
 			break;
 	}
-
-	if (!empty($_SESSION["id_session"])) {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session'], $limit, $order_by);
-	} else {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0, $limit, $order_by);
-	}
+    
+    $session_id = api_get_session_id();
+    $course_code = api_get_course_id();
+    
+    $a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $session_id, $limit, $order_by);
 
 	foreach ($a_course_users as $user_id => $o_course_user) {
 		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {

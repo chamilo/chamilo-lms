@@ -1475,9 +1475,7 @@ class SessionManager {
 			}
 		}
 		return $assigned_sessions_to_hrm;
-	}
-
-	
+	}	
 
 	/**
 	 * Gets the list of courses by session filtered by access_url
@@ -1541,7 +1539,7 @@ class SessionManager {
                     ON $tbl_user.user_id = $tbl_session_rel_user.id_user 
                     AND $tbl_session_rel_user.id_session = $id";
         
-        if ($with_status !== false) {
+        if (!empty($with_status)) {
         	$with_status = intval($with_status);
         	$sql .= " WHERE relation_type = $with_status ";
         }
@@ -1549,8 +1547,7 @@ class SessionManager {
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result,'ASSOC')) {
             $return_array[] = $row;
-        }
-        
+        }        
         return $return_array;
     }
     

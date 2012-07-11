@@ -357,7 +357,16 @@ if ($slide_id != 'all') {
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
 			
-			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
+			if (initial_height>height || initial_width>width) {
+				start_width=width;
+				start_height=height;
+			}
+			else{
+				start_width=initial_width;
+				start_height=initial_height;
+			}
+			
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+start_width+'" height="'+start_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
 
 			function resizeImage() {
 				

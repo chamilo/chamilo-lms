@@ -1,24 +1,22 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/*
- * @author Julio Montoya <gugli100@gmail.com>
+/**
+ *  @author Julio Montoya <gugli100@gmail.com>
  *  @todo better organization of the class, methods and variables 
  * 
  * */
+
 require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
-class Template
-{
+class Template {
 
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
         return Display:: return_icon($image, '', array(), $size, $show_text = false, $return_only_path = true);
     }
-    
-    public static function format_date($timestamp, $format = null)
-    {
+
+    public static function format_date($timestamp, $format = null) {
         return api_format_date($timestamp, $format);
     }
 
@@ -40,8 +38,7 @@ class Template
     var $load_plugins = false;
     var $params = array();
 
-    function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true)
-    {
+    function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
 
         //Page title
         $this->title = $title;
@@ -138,7 +135,7 @@ class Template
                 foreach ($plugin_regions as $region) {
                     $this->set_plugin_region($region);
                 }
-                
+
                 //2. Loading the course plugin info
                 global $course_plugin;
                 if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {
@@ -149,8 +146,7 @@ class Template
         }
     }
 
-    function set_help($help_input = null)
-    {
+    function set_help($help_input = null) {
         if (!empty($help_input)) {
             $help = $help_input;
         } else {
@@ -175,8 +171,7 @@ class Template
      * @todo finish it!
      * */
 
-    function set_actions($actions)
-    {
+    function set_actions($actions) {
         $action_string = '';
         if (!empty($actions)) {
             foreach ($actions as $action) {
@@ -189,8 +184,7 @@ class Template
     /**
      * Shortcut to display a 1 col layout (index.php)
      * */
-    function display_one_col_template()
-    {
+    function display_one_col_template() {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
     }
@@ -198,8 +192,7 @@ class Template
     /**
      * Shortcut to display a 2 col layout (userportal.php)
      * */
-    function display_two_col_template()
-    {
+    function display_two_col_template() {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
     }
@@ -207,8 +200,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_blank_template()
-    {
+    function display_blank_template() {
         $tpl = $this->get_template('layout/blank.tpl');
         $this->display($tpl);
     }
@@ -216,8 +208,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_no_layout_template()
-    {
+    function display_no_layout_template() {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
     }
@@ -226,8 +217,7 @@ class Template
      * Sets the footer visibility 
      * @param bool true if we show the footer
      */
-    function set_footer($status)
-    {
+    function set_footer($status) {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
     }
@@ -236,8 +226,7 @@ class Template
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function set_header($status)
-    {
+    function set_header($status) {
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
@@ -282,26 +271,23 @@ class Template
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
-    function get_template($name)
-    {
+    function get_template($name) {
         return $this->style . '/' . $name;
     }
 
     /** Set course parameters */
-    private function set_course_parameters()
-    {
+    private function set_course_parameters() {
         //Setting course id
         $course_id = api_get_course_int_id();
         $this->course_id = $course_id;
     }
 
     /** Set user parameters */
-    private function set_user_parameters()
-    {
+    private function set_user_parameters() {
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-		if (api_user_is_login()) {
+        if (api_user_is_login()) {
             $user_info = api_get_user_info();
             $user_info['logged'] = 1;
 
@@ -318,8 +304,7 @@ class Template
     }
 
     /** Set system parameters */
-    private function set_system_parameters()
-    {
+    private function set_system_parameters() {
         global $_configuration;
 
         //Setting app paths		
@@ -346,8 +331,7 @@ class Template
 
     /**
      * Set theme, include CSS files  */
-    function set_theme()
-    {
+    function set_theme() {
         //$platform_theme = api_get_setting('stylesheets');
         $this->theme = api_get_visual_theme();
 
@@ -384,8 +368,7 @@ class Template
     /**
      * Set header parameters
      */
-    private function set_header_parameters()
-    {
+    private function set_header_parameters() {
         $help = $this->help;
         $nameTools = $this->title;
 
@@ -601,8 +584,7 @@ class Template
     /**
      * Set footer parameteres
      */
-    private function set_footer_parameters()
-    {
+    private function set_footer_parameters() {
         global $_configuration;
 
         //Show admin data
@@ -676,26 +658,23 @@ class Template
           $this->assign('execution_stats', $stats); */
     }
 
-    function show_header_template()
-    {
+    function show_header_template() {
         $tpl = $this->get_template('layout/show_header.tpl');
         $this->display($tpl);
     }
 
-    function show_footer_template()
-    {
+    function show_footer_template() {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
 
     /* Sets the plugin content in a template variable */
 
-    function set_plugin_region($plugin_region)
-    {
+    function set_plugin_region($plugin_region) {
         if (!empty($plugin_region)) {
-            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);            
+            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
             if (!empty($region_content)) {
-                $this->assign('plugin_'.$plugin_region, $region_content);                
+                $this->assign('plugin_' . $plugin_region, $region_content);
             } else {
                 $this->assign('plugin_' . $plugin_region, null);
             }
@@ -703,20 +682,16 @@ class Template
         return null;
     }
 
-    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
-    {
+    public function fetch($template = null) {
         $template = $this->twig->loadTemplate($template);
         return $template->render($this->params);
     }
 
-    public function assign($tpl_var, $value = null, $nocache = false)
-    {
+    public function assign($tpl_var, $value = null) {
         $this->params[$tpl_var] = $value;
     }
 
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null)
-    {
+    public function display($template) {
         echo $this->twig->render($template, $this->params);
     }
-
 }

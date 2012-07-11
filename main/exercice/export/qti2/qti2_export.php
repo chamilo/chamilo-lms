@@ -13,15 +13,7 @@ require dirname(__FILE__) . '/qti2_classes.php';
 /**
  * Classes
 */
-// answer types
-define(UNIQUE_ANSWER,	1);
-define(MULTIPLE_ANSWER,	2);
-define(FILL_IN_BLANKS,	3);
-define(MATCHING,		4);
-define(FREE_ANSWER,     5);
-define(HOT_SPOT, 		6);
-define(HOT_SPOT_ORDER, 	7);
-define('ORAL_EXPRESSION', 		13);
+
 /**
  * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI2.0 XML format of a single question.

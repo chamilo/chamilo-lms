@@ -1614,4 +1614,16 @@ $AllowPublicCertificatesTitle = "Permitir certificados públicos";
 $AllowPublicCertificatesComment = "Los certificados pueden ser vistos por personas no registradas en el portal.";
 $EnableWebCamClipTitle = "Activar Webcam Clip";
 $EnableWebCamClipComment = "Webcam Clip permite a los usuarios capturar imágenes desde su webcam y enviarlas al servidor en formato jpeg";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Debe crear los Términos y Condiciones para todos los idiomas disponibles en la plataforma";
+$ActivateEmailTemplateTitle = "Activar alertas email por plantilla";
+$ActivateEmailTemplateComment = "Es posible de enviar emails para ciertas acciones a ciertos usuarios.";
+$SystemManagement = "Administración del sistema";
+$RemoveOldDatabaseMessage = "Eliminar base de datos antigua";
+$RemoveOldTables = "Eliminar tablas antiguas";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Espacio total usado por el portal %s limite es de %s MB";
+$EventMessageManagement = "Administración de los eventos";
+$Events = "Eventos";
+$ToBeWarnedUserList = "Lista de usuarios por ser alertados por email";
+$HideCampusFromPublicPlatformsList = "Esconder el campus de la lista pública de plataformas";
+$ChamiloOfficialServicesProviders = "Proveedores oficiales de Chamilo";
 ?>

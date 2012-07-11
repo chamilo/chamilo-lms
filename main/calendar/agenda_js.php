@@ -13,6 +13,13 @@ $language_file = array('agenda', 'group', 'announcements');
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
+//Calendar type
+$type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
+
+if ($type == 'personal') {
+    $cidReset = true; // fixes #5162
+}
+
 require_once '../inc/global.inc.php';
 require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
@@ -28,15 +35,17 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
-$type  	= isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
-
 if (api_is_platform_admin() && $type == 'admin') {	
 	$type = 'admin';
 }
+
 //if (api_get_course_id() != -1 && $type == 'course') {
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {	
 	$type = 'course';
 }
+
+
+
 $is_group_tutor = false;
 
 $group_id = api_get_group_id();

@@ -1587,4 +1587,16 @@ $AllowPublicCertificatesTitle = "Allow public certificates";
 $AllowPublicCertificatesComment = "User certificates can be view by unregistered users.";
 $EnableWebCamClipTitle = "Enable Webcam Clip";
 $EnableWebCamClipComment = "Webcam Clip allow to users capture images from his webcam and send them to server in jpeg format";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "You should create the \"Term and Conditions\" for all the available languages.";
+$ActivateEmailTemplateTitle = "Activate Email Templates";
+$ActivateEmailTemplateComment = "You can sends emails alerts for certain actions to certain users.";
+$SystemManagement = "System Management";
+$RemoveOldDatabaseMessage = "Remove old database";
+$RemoveOldTables = "Remove old tables";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Total space used by portal %s limit is %s MB";
+$EventMessageManagement = "Event message management";
+$Events = "Events";
+$ToBeWarnedUserList = "To be warned user list";
+$HideCampusFromPublicPlatformsList = "Hide campus from public platforms list";
+$ChamiloOfficialServicesProviders = "Chamilo official services providers";
 ?>

@@ -46,6 +46,11 @@ class Header
         header('Content-type: text/xml');
     }
 
+    public static function content_type_json()
+    {
+        header('Content-type: application/json');
+    }
+
     public static function content_type_javascript()
     {
         header('Content-type: application/javascript');

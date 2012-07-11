@@ -16,15 +16,13 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Invitations'));
 
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 		
 function denied_friend (element_input) {
 	name_button=$(element_input).attr("id");
@@ -68,38 +66,35 @@ function register_friend(element_input) {
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
-	foreach($_GET as $key => $value) { 
+	foreach ($_GET as $key => $value) { 
 		switch ($key) {
 			case 'accept':				
 				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);							
 				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {				
 					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
-					$show_message = get_lang('UserIsSubscribedToThisGroup');
+					$show_message = Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success');
 				} elseif (in_array($user_role , array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-					$show_message = get_lang('UserIsAlreadySubscribedToThisGroup');
+					$show_message = Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning');
 				} else {
-					$show_message = get_lang('UserIsNotSubscribedToThisGroup');
+					$show_message = Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning');
 				}			
-			break 2;			
+                break 2;			
 			case 'deny':
 				// delete invitation
 				GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value); 
-				$show_message = get_lang('GroupInvitationWasDeny');
+				$show_message = Display::return_message(get_lang('GroupInvitationWasDeny'));
 			break 2;
 		}		
 	}
 }
 $social_left_content = SocialManager::show_social_menu('invitations');
-
 $social_right_content =  '<div id="id_response" align="center"></div>';
 
-$list_get_invitation = array();
 $user_id = api_get_user_id();
-
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
 $pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
-$number_loop = count($list_get_invitation);
+$number_loop                = count($list_get_invitation);
 
 $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 
@@ -177,7 +172,7 @@ if (count($list_get_invitation_sent) > 0 ) {
 }
 
 if (count($pending_invitations) > 0) {					
-    $social_right_content .= '<h2>'.get_lang('GroupsWaitingApproval').'</h2>';
+    $social_right_content .= Display::page_subheader(get_lang('GroupsWaitingApproval'));
     $new_invitation = array();				
     foreach ($pending_invitations as $invitation) {					
         $picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);							
@@ -190,7 +185,7 @@ if (count($pending_invitations) > 0) {
         $invitation['description'] = cut($invitation['description'],220,true);
         $new_invitation[]=$invitation;
     }
-    $social_right_content .= Display::display_return_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
+    $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 }		
 	
 $tpl = new Template($tool_name);

@@ -3,6 +3,7 @@
 /**
 *	@package chamilo.admin
 *	@author Carlos Vargas
+*   @todo check if this lib is still in used
 *	This file is the calendar/agenda.inc.php
 *
 *  	@todo This file should not exist since it redeclares many of the functions in calendar/agenda.inc.php thanks cvargas!!! : jmontoya
@@ -1284,45 +1285,43 @@ function show_add_form($id = '') {
 							<?php
 							// small loop for filling all the dates
 							// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-							foreach (range(1, 31) as $i)
-											{
-											// values have to have double digits
-											$value = ($i <= 9 ? '0'.$i : $i );
-											// the current day is indicated with [] around the date
-											if ($value==$day)
-											{
-												echo " <option value=\"".$value."\" selected> ".$i." </option>";
-											}
-											else
-											{
-												echo "<option value=\"$value\">$i</option>";
-											}
-										}
-										 ?>
+							foreach (range(1, 31) as $i) {
+                            // values have to have double digits
+                            $value = ($i <= 9 ? '0'.$i : $i );
+                            // the current day is indicated with [] around the date
+                            if ($value==$day)
+                            {
+                                echo " <option value=\"".$value."\" selected> ".$i." </option>";
+                            }
+                            else
+                            {
+                                echo "<option value=\"$value\">$i</option>";
+                            }
+                        }
+                         ?>
 					</select>
 					<!-- month: january -> december -->
 					<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
 					<?php
-											for ($i=1; $i<=12; $i++)
-											{
-												// values have to have double digits
-												if ($i<=9)
-												{
-													$value="0".$i;
-												}
-												else
-												{
-													$value=$i;
-												}
-												if ($value==$month)
-												{
-													echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
-												}
-												else
-												{
-													echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
-												}
-											} ?>
+                        for ($i=1; $i<=12; $i++) {
+                            // values have to have double digits
+                            if ($i<=9)
+                            {
+                                $value="0".$i;
+                            }
+                            else
+                            {
+                                $value=$i;
+                            }
+                            if ($value==$month)
+                            {
+                                echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
+                            }
+                            else
+                            {
+                                echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
+                            }
+                        } ?>
 					</select>
 					<select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
 										<option value="<?php echo ($year-1); ?>"><?php echo ($year-1); ?></option>
@@ -1407,28 +1406,28 @@ function show_add_form($id = '') {
 						</select>
 							<!-- month: january -> december -->
 						<select name="end_fmonth">
-								<?php
-								echo "\n";
-								foreach (range(1, 12) as $i)
-								{
-									// values have to have double digits
-									$value = ($i <= 9 ? '0'.$i : $i );
-									if ($value==$end_month)
-										{ echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
-									else
-										{ echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
-									}?>
+                            <?php
+                            echo "\n";
+                            foreach (range(1, 12) as $i)
+                            {
+                                // values have to have double digits
+                                $value = ($i <= 9 ? '0'.$i : $i );
+                                if ($value==$end_month)
+                                    { echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
+                                else
+                                    { echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
+                                }?>
 						</select>
 						<select name="end_fyear">
-								<option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
-								<option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-								<?php
-								echo "\n";
-								for ($i=1; $i<=5; $i++)
-								{
-									$value=$end_year+$i;
-									echo "<option value=\"$value\">$value</option>\n";
-								} ?>
+                            <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
+                            <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
+                            <?php
+                            echo "\n";
+                            for ($i=1; $i<=5; $i++)
+                            {
+                                $value=$end_year+$i;
+                                echo "<option value=\"$value\">$value</option>\n";
+                            } ?>
 						</select>
 						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif',get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
 					</td>

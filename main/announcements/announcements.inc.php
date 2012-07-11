@@ -843,7 +843,9 @@ class AnnouncementManager  {
             }
             $result = Javascript::tag($src);
 
-            $code = Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment', 'Everybody');
+            $root = Chamilo::url();
+            $code = "var www = '$root';\n";
+            $code .= Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment', 'Everybody');
             $result .= Javascript::tag_code($code);
             return $result;
 	}

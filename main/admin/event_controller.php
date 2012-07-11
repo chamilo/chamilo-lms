@@ -1,6 +1,6 @@
 <?php
 // name of the language file that needs to be included
-$language_file = array('admin', 'events');
+$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -10,23 +10,19 @@ if (api_get_setting('activate_email_template') != 'true') {
 }
 
 class eventController { // extends Controller {
-    public function showAction()
-    {
+    public function showAction() {
                
     }
     
-    public function newAction()
-    {
+    public function newAction() {
         
     }
     
-    public function addAction()
-    {
+    public function addAction() {
         
     }
     
-    public function listingAction()
-    {
+    public function listingAction() {
         $event_email_template = new EventEmailTemplate();
         return $event_email_template->display(); 
     }

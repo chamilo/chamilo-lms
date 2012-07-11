@@ -178,5 +178,5 @@ EOT;
 
 }
 
-$page = new SystemManagementPage();
+$page = new SystemManagementPage(get_lang('SystemManagement'));
 $page->display();

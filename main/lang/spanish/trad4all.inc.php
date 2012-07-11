@@ -1244,9 +1244,14 @@ $Default = "Defecto";
 $ReturnToCourseHomepage = "Volver a la página principal del curso";
 $WebCamClip = "Webcam Clip";
 $Snapshot = "Capturar";
-$TakeYourPhotos = "Tome sus fotos";
+$TakeYourPhotos = "Saque aquí sus fotos";
 $LocalInputImage = "Imagen local";
 $ClipSent = "Imagen enviada";
 $Auto = "Automático";
 $Stop = "Parar";
+$YouHaveSomeUnsavedChanges = "Tiene algunos cambios no guardados. ¿Desea abandonarlos?";
+$ActivateEvent = "Activar evento";
+$AvailableEventKeys = "Palabras claves de los eventos.  Utilizarlos entre (( )).";
+$Events = "Eventos";
+$EventTypeName = "Nombre del tipo de evento";
 ?>

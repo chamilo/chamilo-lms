@@ -44,7 +44,7 @@ require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 
 /*	Constants and variables */
-$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit           = api_is_allowed_to_edit(null, true);
 $is_tutor                   = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);
@@ -55,11 +55,15 @@ $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id      = api_get_course_int_id();
 $exercise_id    = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
-
+$filter_user    = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($exercise_id)) {
+    api_not_allowed();
+}
+
+if (!$is_allowedToEdit) {
     api_not_allowed();
 }
 
@@ -310,7 +314,7 @@ $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 */
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user;
 
 //$activeurl = '?sidx=session_active';
 $action_links = '';
@@ -373,23 +377,8 @@ if ($is_allowedToEdit || $is_tutor) {
         // may be empty string but is defined
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
-} else {
-
-	api_not_allowed(); //view not available for students
-    //
-	//The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('Duration'), get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
-
-	//Column config
-	$column_model   = array(
-                        array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'20',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'start_date',		'index'=>'start_date',		'width'=>'50',   'align'=>'left', 'search' => 'false'),
-						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'50',   'align'=>'left', 'search' => 'false'),
-						array('name'=>'score',			'index'=>'exe_result',		'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'actions',        'index'=>'actions',			'width'=>'40',   'align'=>'left', 'search' => 'false')
-                       );
 }
+
 //Autowidth
 $extra_params['autowidth'] = 'true';
 

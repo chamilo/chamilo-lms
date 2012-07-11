@@ -203,7 +203,7 @@ $course_info = api_get_course_info();
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true))) {
 	switch($action) {
 		case 'add':
-			if (isset($_POST['submit_event']) && $_POST['submit_event']) {			
+			if (isset($_POST['submit_event']) && $_POST['submit_event']) {	
 				$event_start 		= (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
 				$event_stop   		= (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
 				$safe_title 		= Security::remove_XSS($_POST['title']);

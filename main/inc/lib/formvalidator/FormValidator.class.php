@@ -250,6 +250,11 @@ EOT;
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
     }
+    
+    function add_header($text)
+    {
+        $this->addElement('header', $text);
+    }
 
     /**
      * Adds a HTML-editor to the form to fill in a title.

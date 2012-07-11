@@ -47,7 +47,7 @@ require dirname(__FILE__).'/../inc/global.inc.php';
 //unset($_SESSION['oLP']);
 //unset($_SESSION['lpobject']);
 
-$htmlHeadXtra[] ='<script type="text/javascript">
+$htmlHeadXtra[] ='<script>
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
@@ -111,19 +111,6 @@ $(function() {
 
 </script>';
 
-if (!isset($cidReq)) {
-	$cidReq = api_get_course_id(); // To provide compatibility with previous systems.
-	global $error_msg,$error_no;
-	$classError = 'init';
-	$error_no[$classError][] = '2';
-	$error_level[$classError][] = 'info';
-	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was missing $cidReq take $dbname;";
-}
-
-if (isset($_SESSION['_gid'])) {
-	unset($_SESSION['_gid']);
-}
-
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
@@ -139,26 +126,15 @@ define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that 
 define('TOOL_ADMIN',                    'tooladmin');
 define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
 
-//define('TOOL_ADMIN_PLATFORM_VISIBLE', 'tooladminplatformvisible');
-//define('TOOL_ADMIN_PLATFORM_INVISIBLE', 'tooladminplatforminvisible');
-//define('TOOL_ADMIN_COURS_INVISIBLE', 'tooladmincoursinvisible');
 define('TOOL_STUDENT_VIEW',              'toolstudentview');
 define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
-
-/*	Virtual course support code	*/
-
 $user_id 		= api_get_user_id();
-$course_code 	= $_course['sysCode'];
-$course_info 	= Database::get_course_info($course_code);
-$return_result	= CourseManager::determine_course_title_from_course_info($_user['user_id'], $course_info);
-$course_title	= $return_result['title'];
-$course_code	= $return_result['code'];
+$course_code 	= api_get_course_id();
 
-$_course['name'] = $course_title;
-$_course['official_code'] = $course_code;
-
+//Deleting group session
 Session::erase('toolgroup');
+Session::erase('_gid');
 
 $is_speacialcourse = CourseManager::is_special_course($course_code);
 
@@ -168,33 +144,28 @@ if ($is_speacialcourse) {
         CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
     }
 }
-
 /*	Is the user allowed here? */
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-/*	Header */
-
 /*  STATISTICS */
 
-if (!isset($coursesAlreadyVisited[$_cid])) {
+if (!isset($coursesAlreadyVisited[$course_code])) {
     event_access_course();
-    $coursesAlreadyVisited[$_cid] = 1;
+    $coursesAlreadyVisited[$course_code] = 1;
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
-/*Auto lunch code */
+/*Auto launch code */
 $show_autolunch_lp_warning = false;
-$auto_lunch = api_get_course_setting('enable_lp_auto_launch');
-if (!empty($auto_lunch)) {
-    $session_id = api_get_session_id();
-    
-    if ($auto_lunch == 2) { //LP list
+$auto_launch = api_get_course_setting('enable_lp_auto_launch');
+if (!empty($auto_launch)) {
+    $session_id = api_get_session_id();    
+    if ($auto_launch == 2) { //LP list
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $show_autolunch_lp_warning = true;
-        } else {
-        
+        } else {        
             $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();                
             if (!isset($_SESSION[$session_key])) {
                 //redirecting to the LP 
@@ -244,14 +215,10 @@ if (!empty($auto_lunch)) {
 }
 
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-
 $temps = time();
 $reqdate = "&reqdate=$temps";
 
 /*	MAIN CODE */
-
-//display course title for course home page (similar to toolname for tool pages)
-//echo '<h3>'.api_display_tool_title($nameTools) . '</h3>';
 
 /*	Introduction section (editable by course admins) */
 

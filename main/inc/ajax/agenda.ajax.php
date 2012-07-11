@@ -4,6 +4,12 @@
  * Responses to AJAX calls
  */
 
+$type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
+
+if ($type == 'personal') {
+    $cidReset = true; // fixes #5162
+}
+
 require_once '../global.inc.php';
 
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
@@ -11,7 +17,6 @@ require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$type   = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
 
 if ($type =='course') {
     api_protect_course_script(true);

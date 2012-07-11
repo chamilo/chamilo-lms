@@ -19,18 +19,9 @@ $language_file='exercice';
 include('../inc/global.inc.php');
 
 // including additional libraries
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER', 5);
-define('MULTIPLE_ANSWER_COMBINATION', 9);
-define('ORAL_EXPRESSION', 		13);
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 //debug param. 0: no display - 1: debug display
 $debug=0;

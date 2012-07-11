@@ -9,18 +9,6 @@
  * Code
  */
 if ( count( get_included_files() ) == 1 ) die( '---' );
-// answer types
-define('UNIQUE_ANSWER',		1);
-define('MCUA',				1);
-define('TF',				1);
-define('MULTIPLE_ANSWER',	2);
-define('MCMA',				2);
-define('FILL_IN_BLANKS',	3);
-define('FIB',				3);
-define('MATCHING',			4);
-define('FREE_ANSWER', 		5);
-define('HOTSPOT',			6);
-define('ORAL_EXPRESSION', 		13);
 
 if (!function_exists('mime_content_type')) {
 	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -31,6 +19,7 @@ if (!function_exists('mime_content_type')) {
 
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/question.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');

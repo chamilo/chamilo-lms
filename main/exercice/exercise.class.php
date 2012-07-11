@@ -1447,10 +1447,6 @@ class Exercise {
 		$exercise_obj= new Exercise();
 		$exercise_obj = $this;
 
-		$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
-		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
 		// force the creation of a new exercise
 		$exercise_obj->updateTitle($exercise_obj->selectTitle().' - '.get_lang('Copy'));
 		//Hides the new exercise

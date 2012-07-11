@@ -41,8 +41,7 @@
     CourseManager::has_virtual_courses_from_code($real_course_code, $user_id)
     CourseManager::get_target_of_linked_course($virtual_course_code)
 
-    TITLE AND CODE FUNCTIONS
-    CourseManager::determine_course_title_from_course_info($user_id, $course_info)
+    TITLE AND CODE FUNCTIONS    
     CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
     CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
 
@@ -804,6 +803,7 @@ class CourseManager {
      * @return an array with indices
      *    $return_result['title'] - the course title of the combined courses
      *    $return_result['code']  - the course code of the combined courses
+     * @deprecated use api_get_course_info()
      */
     public static function determine_course_title_from_course_info($user_id, $course_info) {
 
@@ -900,6 +900,7 @@ class CourseManager {
      *	Note this is different from getting information about a real course!
      *
      *	@param $real_course_code, the id of the real course which the virtual course is linked to
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function get_virtual_course_info($real_course_code) {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -914,6 +915,7 @@ class CourseManager {
     /**
      *	@param string $system_code, the system code of the course
      *	@return true if the course is a virtual course, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function is_virtual_course_from_system_code($system_code) {
         $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -925,6 +927,7 @@ class CourseManager {
      *	Returns whether the course code given is a visual code
      *  @param  string  Visual course code
      *	@return true if the course is a virtual course, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function is_virtual_course_from_visual_code($visual_code) {
         $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -934,6 +937,7 @@ class CourseManager {
 
     /**
      * @return true if the real course has virtual courses that the user is subscribed to, false otherwise
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function has_virtual_courses_from_code($real_course_code, $user_id) {
         return count(self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)) > 0;
@@ -945,6 +949,7 @@ class CourseManager {
      *
      *	@param string The id of the real course which the virtual courses are linked to
      *  @return array List of courses details
+     *  @deprecated virtual courses doesn't exist anymore
      */
     public static function get_virtual_courses_linked_to_real_course($real_course_code) {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -1112,9 +1117,10 @@ class CourseManager {
      * @param integer $session_id the id of the session
      * @param string $limit the LIMIT statement of the sql statement
      * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     *  @return array
+     * @param int   0 or 2 (student, coach) if using the session id, STUDENT or COURSEMANAGER if using session_id = 0
+     * @return array
      */
-    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '') {
+    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '', $filter_by_status = null) {
         // variable initialisation
         $session_id 	= intval($session_id);
         $course_code 	= Database::escape_string($course_code);
@@ -1122,37 +1128,52 @@ class CourseManager {
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
-            if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))){
-                    $order_by = 'ORDER BY user.'.$order_by;
-                } else {
-                    $order_by = '';
-                }
+            if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
+                $order_by = 'ORDER BY user.'.$order_by;
+            } else {
+                $order_by = '';
+            }
         }
-
-        $sql = $session_id == 0
-            ? 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  '
-            : 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
-        $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        
+        $filter_by_status_condition = null;
 
         if (!empty($session_id)) {
+            $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code="'.$course_code.'"
                       AND session_course_user.id_session = '.$session_id;
             $where[] = ' session_course_user.course_code IS NOT NULL ';
-        } else {
+            
+            // 2 = coach
+            // 0 = student            
+            if (isset($filter_by_status)) {                
+                $filter_by_status = intval($filter_by_status);
+                $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";                
+            }
+        } else {            
+            $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+            
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
+            
+            if (isset($filter_by_status) && $filter_by_status != '') {
+                $filter_by_status = intval($filter_by_status);
+                $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
+            }
         }
+        
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
-        $sql .= ' WHERE '.implode(' OR ', $where);
-
+        $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
+                
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
@@ -1163,8 +1184,7 @@ class CourseManager {
         $users = array();
 
         if (Database::num_rows($rs)) {
-            while ($user = Database::fetch_array($rs)) {
-                //$user_info = Database::get_user_info_from_id($user['user_id']);
+            while ($user = Database::fetch_array($rs)) {                
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
@@ -3643,7 +3663,7 @@ class CourseManager {
      * @param   int number of days
      * @param   int number of hottest courses
      */
-    function return_hot_courses($days = 30, $limit = 5) {
+    public function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
         
         //Getting my courses
@@ -3704,7 +3724,7 @@ class CourseManager {
 		return $courses;
     }
 
-	function return_most_accessed_courses($limit = 5) {
+	public function return_most_accessed_courses($limit = 5) {
 		$table_course_ranking	= Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
         $params['url_id']		= api_get_current_access_url_id();
 
@@ -3717,8 +3737,7 @@ class CourseManager {
      *
      * @return ResultSet
      */
-    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED)
-    {
+    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
         $visibility_level = $visibility_level ? $visibility_level : '0';
@@ -3755,8 +3774,52 @@ class CourseManager {
             $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
         }
         $res = Database::query($sql);
-	$row = Database::fetch_row($res);
+        $row = Database::fetch_row($res);
         return $row[0];
     }
-
+    
+    /* 
+     * This code was originaly in local.inc.php
+     */
+    static function get_course_info_with_category($course_code) {
+        global $_configuration;
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $course_code = Database::escape_string($course_code);
+        
+		$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName FROM $course_table
+                LEFT JOIN $course_cat_table
+                ON course.category_code = course_category.code
+                WHERE course.code = '$course_code'";
+		$result = Database::query($sql);
+        
+        $_course = array();        
+		if (Database::num_rows($result) > 0) {
+			$course_data = Database::fetch_array($result);
+			//@TODO real_cid should be cid, for working with numeric course id			
+			$_course['real_id']             = $course_data['id'];
+			$_course['id']                  = $course_data['code']; //auto-assigned integer
+			$_course['code']                = $course_data['code'];
+			$_course['name']                = $course_data['title'];
+            $_course['title']               = $course_data['title'];
+			$_course['official_code']       = $course_data['visual_code']; // use in echo
+			$_course['sysCode']             = $course_data['code']; // use as key in db
+			$_course['path']                = $course_data['directory']; // use as key in path
+			$_course['dbName']              = $course_data['db_name']; // use as key in db list
+			$_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.9
+			$_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
+			$_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
+			$_course['language']            = $course_data['course_language'];
+			$_course['extLink']['url' ]     = $course_data['department_url'];
+			$_course['extLink']['name']     = $course_data['department_name'];
+			$_course['categoryCode']        = $course_data['faCode'];
+			$_course['categoryName']        = $course_data['faName'];
+			$_course['visibility']          = $course_data['visibility'];
+			$_course['subscribe_allowed']   = $course_data['subscribe'];
+			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
+            $_course['activate_legal']      = $course_data['activate_legal'];
+            $_course['show_score']          = $course_data['show_score']; //used in the work tool
+        }
+        return $_course;
+    }
 } //end class CourseManager

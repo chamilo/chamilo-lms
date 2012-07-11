@@ -238,7 +238,7 @@ The users folder contains a folder for each user who has accessed it through the
 <br /><br />
 The users folder and each of the included folders will be hidden by default in for all students, but each student can see the contents of his/her directory through the online editor. However, if a student knows the address of a file or folder of another student, he may be able to access it.
 <br /><br />
-If the folder of a student is visible, other students can see what it contains. In this case, the student that owns the folder can also (from the documents tool and only in his/her folder): create and edit web documents, convert a document into a template for personal use, create and edit drawings in SVG and PNG formats, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
+If the folder of a student is visible, other students can see what it contains. In this case, the student that owns the folder can also (from the documents tool and only in his/her folder): create and edit web documents, convert a document into a template for personal use, create and edit drawings in SVG and PNG formats, record audio files in WAV format, make audio files in MP3 from a text, make snapshops from a webcam, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
 <br /><br />
 Moreover, the documents tool is synchronized with the file manager of the online editor, so changes in the documents triggered in any one of these will affect both.
 <br /><br />
@@ -279,4 +279,5 @@ $DocMv = "Document moved";
 $NoSVGImagesInImagesGalleryPath = "There are no SVG images in your images gallery directory";
 $NoSVGImages = "No SVG image";
 $WamiNeedFilename = "Before you activate recording it is necessary a file name.";
+$SelectAnAudioFileFromDocuments = "Select an audio file from documents";
 ?>

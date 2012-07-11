@@ -1234,4 +1234,15 @@ $ConfirmToLockElement = "Etes-vous sur de vouloir fermer cet élément? Une foix
 $ConfirmToUnLockElement = "Etes-vous sur de vouloir réouvrir cet élément?";
 $Default = "Option par défaut";
 $ReturnToCourseHomepage = "Retour à la page d'accueil";
+$WebCamClip = "Webcam Clip";
+$Snapshot = "Capturer";
+$TakeYourPhotos = "Prenez vos photos";
+$ClipSent = "Image envoyé";
+$Auto = "Automatique";
+$Stop = "Stop";
+$YouHaveSomeUnsavedChanges = "Vous avez des modifications non enregistrées. Voulez-vous les abandonner?";
+$ActivateEvent = "Activer événement";
+$AvailableEventKeys = "Clés d'événements disponibles. Utilisez-les entre (()).";
+$Events = "Événements";
+$EventTypeName = "Nom du type d'événement";
 ?>

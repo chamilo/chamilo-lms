@@ -14,29 +14,18 @@
  * Code
  */
 if ( count( get_included_files() ) == 1 ) die( '---' );
-require_once('../../exercise.class.php');
-require_once('../../question.class.php');
-require_once('../../answer.class.php');
-require_once('../../unique_answer.class.php');
-require_once('../../multiple_answer.class.php');
-require_once('../../fill_blanks.class.php');
-require_once('../../freeanswer.class.php');
-require_once('../../hotspot.class.php');
-require_once('../../matching.class.php');
-require_once('../../hotspot.class.php');
+require_once '../../exercise.class.php';
+require_once '../../question.class.php';
+require_once '../../answer.class.php';
+require_once '../../unique_answer.class.php';
+require_once '../../multiple_answer.class.php';
+require_once '../../fill_blanks.class.php';
+require_once '../../freeanswer.class.php';
+require_once '../../hotspot.class.php';
+require_once '../../matching.class.php';
+require_once '../../hotspot.class.php';
 
-// answer types
-define('UNIQUE_ANSWER',		1);
-define('MCUA',				1);
-define('TF',				1);
-define('MULTIPLE_ANSWER',	2);
-define('MCMA',				2);
-define('FILL_IN_BLANKS',	3);
-define('FIB',				3);
-define('MATCHING',			4);
-define('FREE_ANSWER', 		5);
-define('HOTSPOT',			6);
-define('ORAL_EXPRESSION', 		13);
+
 /**
  *
  * @package chamilo.exercise

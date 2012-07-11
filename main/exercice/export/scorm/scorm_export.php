@@ -10,16 +10,6 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
 
 require dirname(__FILE__) . '/scorm_classes.php';
 
-/* Classes */
-// answer types
-define(UNIQUE_ANSWER,	1);
-define(MULTIPLE_ANSWER,	2);
-define(FILL_IN_BLANKS,	3);
-define(MATCHING,		4);
-define(FREE_ANSWER,     5);
-define(HOT_SPOT, 		6);
-define(HOT_SPOT_ORDER, 	7);
-define('ORAL_EXPRESSION', 		13);
 /**
  * A SCORM item. It corresponds to a single question.
  * This class allows export from Dokeos SCORM 1.2 format of a single question.

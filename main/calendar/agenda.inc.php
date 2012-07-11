@@ -2647,7 +2647,7 @@ function show_add_form($id = '') {
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</label>
 				<div class="controls">';
-			/*require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
+			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
@@ -2658,8 +2658,8 @@ function show_add_form($id = '') {
 			}
 			$oFCKeditor->Value		= $content;
 			$return =	$oFCKeditor->CreateHtml();
-			echo $return;*/
-            echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
+			echo $return;
+            //echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
 	echo '</div>
 			</div>';
 

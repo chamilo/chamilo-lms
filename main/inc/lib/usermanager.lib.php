@@ -3680,6 +3680,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
         $types[self::USER_FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        return $types;
     }
 
     function add_user_as_admin($user_id) {

@@ -137,8 +137,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
     
     if (isset($_GET['id'])) {        
         if (api_get_setting('allow_social_tool') == 'true') {	
-            header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=?".$_GET['id']);
-            exit;            
+            header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_GET['id']));
+            exit;
         } else {
             SocialManager::display_individual_user($_GET['id']);    
         }

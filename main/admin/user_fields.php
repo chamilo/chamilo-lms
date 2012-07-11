@@ -188,7 +188,7 @@ function get_extra_fields($f,$n,$o,$d)
  * @since Dokeos 1.8.6
  */
 function type_filter($type) {
-    $types = UserManager::get_user_field_types($field_type);
+    $types = UserManager::get_user_field_types();
 	return $types[$type];
 }
 
@@ -250,13 +250,14 @@ function modify_field_filter ($changeability,$url_params,$row)
 						   '<a href="'.api_get_self().'?action=filter_on&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('FilterOn')).'</a>');
 }
 
-function edit_filter($id,$url_params,$row)
-{
+function edit_filter($id, $url_params, $row) {
 	global $charset;
-	$return = '<a href="user_fields_add.php?action=edit&field_id='.$row[0].'&field_type='.$row[2].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
-	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+	$return = '<a href="user_fields_add.php?action=edit&field_id='.$row[0].'&field_type='.$row[2].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('edit.png',get_lang('Edit')).'</a>';
+	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.
+            Display::return_icon('delete.png',get_lang('Delete')).'</a>';
 	return $return;
 }
+
 /**
  * Move a user defined field up or down
  *
@@ -267,8 +268,7 @@ function edit_filter($id,$url_params,$row)
  * @version July 2008
  * @since Dokeos 1.8.6
  */
-function move_user_field($direction,$field_id)
-{
+function move_user_field($direction,$field_id) {
 	// Databse table definitions
 	$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 
@@ -379,11 +379,8 @@ function delete_user_fields($field_id)
 
 		// field was deleted so we return true
 		return true;
-	}
-	else
-	{
+	} else {
 		// the field was not deleted so we return false
 		return false;
 	}
 }
-?>

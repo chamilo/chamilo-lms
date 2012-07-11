@@ -210,24 +210,8 @@ if ($origin != 'learnpath') {
 
 // Tracking of results
 
-//	Updates the empty exercise
-
-$quiz_duration = 0;
-$end_date = api_get_utc_datetime();
-if (isset($_SESSION['quizStartTime']) && !empty($_SESSION['quizStartTime'])) {
-    if (isset($_SESSION['quizStartTime'][$objExercise->selectId()])) {
-        $start_date = $_SESSION['quizStartTime'][$objExercise->selectId()];
-        $end_date_datetime = new DateTime($end_date);
-        $start_date_date_time = new DateTime($start_date);
-        $interval = $end_date_datetime->diff($start_date_date_time);
-        $hours   = $interval->format('%h');
-        $minutes = $interval->format('%i');
-        $quiz_duration = $hours * 60 + $minutes;
-    }
-}
-
 if (api_is_allowed_to_session_edit()) {
-	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $quiz_duration, $question_list, '', array(), $end_date);
+	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
 }
 
 //If is not valid

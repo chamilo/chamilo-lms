@@ -278,7 +278,8 @@ class Security {
             //$config->set('Cache.DefinitionImpl', null); // Enable this line for testing purposes, for turning off caching. Don't forget to disable this line later!
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
-            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');            
+            $config->set('HTML.MaxImgLength', '2560');                    
             $config->set('HTML.TidyLevel', 'light');
             $config->set('Core.ConvertDocumentToFragment', false);
             $config->set('Core.RemoveProcessingInstructions', true);

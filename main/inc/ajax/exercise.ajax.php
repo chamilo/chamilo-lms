@@ -180,7 +180,9 @@ switch ($action) {
             }
             
             //Getting information of the current exercise    
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);           
+            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+            
+            $exercise_id = $exercise_stat_info['exe_exo_id'];
             
             $attempt_list = array();
             
@@ -250,7 +252,7 @@ switch ($action) {
                 }
             }          
                         
-            unset($objQuestionTmp);
+            unset($objQuestionTmp);           
             
             //Looping the question list
             
@@ -309,7 +311,31 @@ switch ($action) {
                 if ($debug) error_log("total_score: $total_score ");
                 if ($debug) error_log("total_weight: $total_weight ");
                 
-                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $exercise_stat_info['exe_duration'], $question_list, 'incomplete', $remind_list);
+                $key = get_time_control_key($exercise_id);
+                
+                $duration = 0;
+                $now = time();
+                
+                if ($type == 'all') {
+                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);                        
+                }
+                
+                if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
+                    $duration = $now - $_SESSION['duration_time'][$key];
+                    
+                    if (!empty($exercise_stat_info['exe_duration'])) {                        
+                        $duration += $exercise_stat_info['exe_duration'];
+                    }
+                    $duration = intval($duration);                    
+                } else {                    
+                    if (!empty($exercise_stat_info['exe_duration'])) {
+                        $duration = $exercise_stat_info['exe_duration'];
+                    }                 
+                }
+                
+                $_SESSION['duration_time'][$key] = time();
+                
+                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, $question_list, 'incomplete', $remind_list);
                 
                  // Destruction of the Question object
             	unset($objQuestionTmp); 

@@ -22,6 +22,7 @@ if (isset($_GET['action'])) {
 }
 $language_file[] = 'course_home';
 $language_file[] = 'scormdocument';
+$language_file[] = 'document';
 $language_file[] = 'scorm';
 $language_file[] = 'learnpath';
 $language_file[] = 'resourcelinker';
@@ -406,7 +407,9 @@ switch ($action) {
                 //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
                 $audio = array();
+                
                 if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
+                
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
 
                 if (isset($_POST['content_lp'])) {

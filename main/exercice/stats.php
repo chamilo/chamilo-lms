@@ -19,6 +19,7 @@ if (!$result) {
 }
 
 $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
+$count_students = count($students);
 
 $question_list = $objExercise->get_validated_question_list();
 
@@ -27,7 +28,8 @@ $data = array();
 $headers = array(
 	get_lang('Question'),
     get_lang('QuestionType'),
-	get_lang('NumberOfStudentsWhoTryTheExercise'),
+	//get_lang('NumberOfStudentsWhoTryTheExercise'),
+    get_lang('NumberStudentWhoSelectedIt'),
 	get_lang('LowestScore'),
 	get_lang('AverageScore'),
 	get_lang('HighestScore'),
@@ -38,10 +40,15 @@ if (!empty($question_list)) {
 	foreach($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
 		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+        $count_users = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
 
 		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
         $data[$question_id]['type'] 						= $question_obj->get_question_type_name();
-		$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
+		//$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
+        $percentange = $count_users/$count_students*100;
+        
+        $data[$question_id]['students_who_try_exercise'] 	= Display::bar_progress($percentange, false, $count_users .' / '.$count_students);
+                
 		$data[$question_id]['lowest_score'] 				= round($exercise_stats['min'], 2);
 		$data[$question_id]['average_score'] 				= round($exercise_stats['average'], 2);
 		$data[$question_id]['highest_score'] 				= round($exercise_stats['max'], 2);
@@ -76,10 +83,68 @@ $headers = array(
 	get_lang('Question'),
 	get_lang('Answer'),
 	get_lang('Correct'),
-	get_lang('NumberStudentWhoSelectedIt'),
-	get_lang('HighestScore'),
-	get_lang('MaximumScore')
+	get_lang('NumberStudentWhoSelectedIt')	
 );
+
+$data = array();
+
+if (!empty($question_list)) {
+    $id = 0;
+	foreach ($question_list as $question_id) {
+		$question_obj = Question::read($question_id);
+		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+
+        $answer = new Answer($question_id);
+		$answer_count = $answer->selectNbrAnswers();
+        
+        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {            
+            $answer_info = $answer->selectAnswer($answer_id);            
+            if ($answer_id == 1) {
+                $data[$id]['name']      = cut($question_obj->question, 100);
+            } else {
+                $data[$id]['name']      = '-';
+            }
+            $data[$id]['answer'] 	= $answer_info;
+            $is_correct = $answer->isCorrect($answer_id);
+                        
+            $data[$id]['correct'] 	= $is_correct == 1 ? get_lang('Yes') : get_lang('No');
+            
+            $real_answer_id          = $answer->selectAutoId($answer_id);
+            
+            $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+            //$data[$id]['attempts'] 	= $count.'/'.$count_students;
+            $percentange = $count/$count_students*100;
+            $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
+            
+            
+            $id++;
+        }
+        
+	}
+}
+
+//Format A table
+$table = new HTML_Table(array('class' => 'data_table'));
+$row = 0;
+$column = 0;
+foreach ($headers as $header) {
+	$table->setHeaderContents($row, $column, $header);
+	$column++;
+}
+$row++;
+foreach ($data as $row_table) {
+	$column = 0;
+	foreach ($row_table as $cell) {
+		$table->setCellContents($row, $column, $cell);
+		$table->updateCellAttributes($row, $column, 'align="center"');
+		$column++;
+	}
+	$table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+	$row++;
+}
+$content .= $table->toHtml();
+
+
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 

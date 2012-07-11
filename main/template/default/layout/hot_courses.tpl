@@ -42,22 +42,12 @@ $(document).ready( function() {
                             <div class="categories-course-description">
                                 <h3>{{ hot_course.extra_info.name }}</h3>
                                 <h5>{{ hot_course.extra_info.teachers }}</h5>
+                                
                                 {{ hot_course.extra_info.rating_html }}
                             </div>
-                            <p>
-                            {#  World  #}
-                            {% if hot_course.extra_info.visibility == 3 or (hot_course.extra_info.visibility == 2 and _u.logged == 1 ) %}
-                                <a class="btn btn-primary" title="" href="{{_p.web_course}}{{hot_course.extra_info.path}}/index.php">
-                                    {{ "GoToCourse"|get_lang }}
-                                </a>
-                            {% endif %}
-
-                            {#  Description  #}
-                            {% if hot_course.extra_info.visibility == 3 %}
-                                <a class="ajax btn" title="" href="{{ _p.web_ajax}}course_home.ajax.php?a=show_course_information&code={{hot_course.course_code}}">
-                                    {{"Description"|get_lang}}
-                                </a>
-                            {% endif %}
+                            <p>                                
+                                {{ hot_course.extra_info.go_to_course_button }}
+                                {{ hot_course.extra_info.description_button }}
                             </p>
                         </div>
                     </div>

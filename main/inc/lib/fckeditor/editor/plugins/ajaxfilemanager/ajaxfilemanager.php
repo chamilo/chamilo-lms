@@ -84,7 +84,7 @@ if(!empty($_GET['view'])) {
 		//end hack
 	}	
 	var globalSettings = {'upload_init':false};		
-	var queryString = '<?php echo makeQueryString(array('path')); ?>';	
+	var queryString = '<?php echo makeQueryString(array('path')); ?>';
 	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};	
 	
 	<!-- Chamilo hack for breadcrumb into shared folders -->
@@ -524,7 +524,8 @@ if(!empty($_GET['view'])) {
   <div id="winUpload" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="tb_remove();">
+        	<!-- Adding return windowRefresch() for Chamilo -->
+  			<a href="#" onclick="tb_remove();return windowRefresh();">
   				<img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>">
   				<?php echo LBL_ACTION_CLOSE; ?>
   			</a>
@@ -557,9 +558,9 @@ if(!empty($_GET['view'])) {
 		  					<input type="file" class="input" name="file"  />
 		  					<input type="button" class="upload_button" value="<?php echo FILE_LBL_UPLOAD; ?>" /><!-- change style of upload button by Chamilo -->
 		  					<a href="#" class="action" title="<?php echo get_lang('Cancel')?>" style="display:none" ><!-- Chamilo lang var added -->
-		  						<span class="cancel">&nbsp;</span>
+		  						<span class="cancel">&nbsp;</span><span class="uploadProcessing" style="display:none">&nbsp;</span>
 		  					</a>
-		  					<span class="uploadProcessing" style="display:none">&nbsp;</span>
+		  					
 		  				</td>
 		  			</tr>		
 		  		</tbody>		  
@@ -571,7 +572,7 @@ if(!empty($_GET['view'])) {
   <div id="winNewFolder" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->  
+  			<a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo --> 
   		</div>
   		<div class="jqmBody">
 	    	<form id="formNewFolder" name="formNewFolder" method="post" action="">

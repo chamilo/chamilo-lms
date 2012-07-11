@@ -109,7 +109,7 @@ class TestAddCourse extends UnitTestCase {
         $courseRepository = 'testcourse';
         $language = 'english';
         $default_document_array ='testdocument';
-        $res = fill_db_course($courseDbName, $courseRepository, $language,array());
+        $res = fill_db_course($courseDbName, $courseRepository, $language);
         $this->assertTrue($res === 0);
     }
 

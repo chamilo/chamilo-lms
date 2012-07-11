@@ -139,6 +139,7 @@ $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
 $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = $course_id AND id = '". $path_item."' ";
+
 $res_doc = Database::query($sql_doc);
 $path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
@@ -170,5 +171,4 @@ echo '</div>';
 echo '</div>';
 
 /* FOOTER */
-
 Display::display_footer();

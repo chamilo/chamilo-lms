@@ -201,7 +201,6 @@ class Answer {
 		return $this->autoId[$id];
 	}
 
-
 	/**
 	 * returns the number of answers in this question
 	 *

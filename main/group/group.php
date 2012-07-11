@@ -73,7 +73,7 @@ Display::display_introduction_section(TOOL_GROUP);
  */
  $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
  $my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
- $my_group    = isset($_GET['group']) ? Security::remove_XSS($_POST['group']) : null;
+ $my_group    = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
  $my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
  $my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
  $my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
@@ -101,6 +101,7 @@ if (isset($_GET['action'])) {
 /*
  * Group-admin functions
  */
+
 if (api_is_allowed_to_edit(false, true)) {
 
 	// Post-actions
@@ -119,7 +120,7 @@ if (api_is_allowed_to_edit(false, true)) {
 				}
 				break;
 			case 'fill_selected' :
-				if (is_array($_POST['group'])) {
+				if (is_array($_POST['group'])) {                    
                     GroupManager :: fill_groups($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsFilled'));
 				}
@@ -346,9 +347,9 @@ foreach ($group_cats as $index => $category) {
 		if (api_is_allowed_to_edit(false, true)) { // Only for course administrator
 			$table->set_header($column++, get_lang('Modify'), false);
 			$form_actions = array();
-			$form_actions['delete_selected'] = get_lang('Delete');
-			$form_actions['fill_selected'] = get_lang('FillGroup');
+            $form_actions['fill_selected'] = get_lang('FillGroup');
 			$form_actions['empty_selected'] = get_lang('EmptyGroup');
+            $form_actions['delete_selected'] = get_lang('Delete');
 			if (count($group_list) > 1) {
 				$table->set_form_actions($form_actions, 'group');
 			}

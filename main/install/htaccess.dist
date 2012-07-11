@@ -1,22 +1,26 @@
-###########################################################################################
-#change this file to fit your configuration and save it as .htaccess in the courses folder#
-###########################################################################################
-#chamilo mod rewrite
-#comment lines start with # and are not processed
+# Change this file to fit your configuration and save it as .htaccess in the courses folder #
+# Chamilo mod rewrite
+# Comment lines start with # and are not processed
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-#rewrite base is the dir chamilo is installed in with trailing slash
+# Rewrite base is the dir chamilo is installed in with trailing slash
 RewriteBase {CHAMILO_URL_APPEND_PATH}/courses/
 
-#do not rewrite on the main dir
-#change this path to the path of your main folder
+# Do not rewrite on the main dir
+# Change this path to the path of your main folder
 RewriteCond %{REQUEST_URI} !^{CHAMILO_URL_APPEND_PATH}/main/
 
 #replace nasty ampersands by 3 slashes, we change these back in download.php
 RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
-#rewrite everything in the document folder of a course to the download script
+
+# Rewrite everything in the scorm folder of a course to the download script
+RewriteRule ([^/]+)/scorm/(.*)$ {CHAMILO_URL_APPEND_PATH}/main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
+
+# Rewrite everything in the document folder of a course to the download script
 RewriteRule ([^/]+)/document/(.*)$ {CHAMILO_URL_APPEND_PATH}/main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+
+# Rewrite everything in the work folder
 RewriteRule ([^/]+)/work/(.*)$ {CHAMILO_URL_APPEND_PATH}/main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>

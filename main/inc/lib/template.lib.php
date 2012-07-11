@@ -138,7 +138,7 @@ class Template
                 foreach ($plugin_regions as $region) {
                     $this->set_plugin_region($region);
                 }
-
+                
                 //2. Loading the course plugin info
                 global $course_plugin;
                 if (isset($course_plugin) && !empty($course_plugin) && !empty($this->course_id)) {
@@ -301,7 +301,7 @@ class Template
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-        if (api_get_user_id() && !api_is_anonymous()) {
+		if (api_user_is_login()) {
             $user_info = api_get_user_info();
             $user_info['logged'] = 1;
 
@@ -693,9 +693,9 @@ class Template
     function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
-            $content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
-            if (!empty($content)) {
-                $this->assign('plugin_' . $plugin_region, $content);
+            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);            
+            if (!empty($region_content)) {
+                $this->assign('plugin_'.$plugin_region, $region_content);                
             } else {
                 $this->assign('plugin_' . $plugin_region, null);
             }

@@ -15,17 +15,6 @@
  */
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
-/*
-$TBL_EXERCICE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES              = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_DOCUMENT               = Database::get_course_table(TABLE_DOCUMENT);
-
-$main_user_table            = Database::get_main_table(TABLE_MAIN_USER);
-$main_course_user_table     = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TBL_TRACK_EXERCICES        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);*/
 
 /**
  * Shows a question
@@ -36,12 +25,10 @@ $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRAC
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array()) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false) {
 
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
-
-	$remind_question = 1;
 
 	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
@@ -67,14 +54,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			}
 			if (!empty($questionDescription)) {
 				echo Display::div($questionDescription, array('class'=>'question_description'));
-			}
-			//@deprecated
-			if (!empty($pictureName)) {
-				//echo "<img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'>";
-			}
+			}			
 		}
-
-
 
         if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
             return '';
@@ -82,9 +63,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         echo '<div class="question_options">';
 
-		//$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		$s = '';
-		$s .= '<table class="exercise_options">';
+        if ($show_comment) {
+            $s .= '<table class="table table-bordered">';
+        } else {
+            //$s .= '<table class="table">';
+            $s .= '<table class="exercise_options">';
+        }
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
 
@@ -142,7 +127,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Width      = '100%';
 			$oFCKeditor->Height     = '200';
 			$oFCKeditor->Value      = $fck_content;
-            $s .= '<tr><td colspan="3">';
+            $s .= '<tr><td>';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
 		} elseif ($answerType == ORAL_EXPRESSION) {
@@ -152,7 +137,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
 
 				//@todo pass this as a parameter
-				global $exercise_stat_info, $exerciseId,$exe_id;
+				global $exercise_stat_info, $exerciseId, $exe_id;
 
 				if (!empty($exercise_stat_info)) {
 					$params = array(
@@ -178,7 +163,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Height = '150';
 			$oFCKeditor->ToolbarStartExpanded = false;
 			$oFCKeditor->Value	= '' ;
-			$s .= '<tr><td colspan="3">';
+			$s .= '<tr><td>';
 			$s .= $oFCKeditor->CreateHtml();
 			$s .= '</td></tr>';
 		}
@@ -193,7 +178,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             foreach ($objQuestionTmp->options as $key=>$item) {
                 $header .= Display::tag('th', $item);
             }
+            if ($show_comment) {
+                $header .= Display::tag('th', get_lang('Feedback'));
+            }
             $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+        }
+        
+        if ($show_comment) {
+            if (in_array($answerType, array(MULTIPLE_ANSWER,MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) {
+                $header = '';
+                $header .= Display::tag('th', get_lang('Options'));
+                $header .= Display::tag('th', get_lang('Feedback'));            
+                $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+            }
         }
 
         $matching_correct_answer = 0;
@@ -209,6 +206,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
+            
+            $comment        = $objAnswerTmp->selectComment($answerId);
 
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
@@ -236,11 +235,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				//<p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">
 				//$s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 
-				$s .= '<tr><td colspan="3">';
+				$s .= '<tr><td>';
 				$s .= '<span class="question_answer">';
 				$s .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
 				$s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span>';
-				$s .= '</td></tr>';
+				$s .= '</td>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+                
+                $s .= '</tr>';
 			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
 
 				// multiple answers
@@ -267,7 +274,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                 if ($answerType == MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                    $s .= '<tr><td colspan="3">';
+                    $s .= '<tr><td>';
+                    
                     $s .= '<span class="question_answer">';
 
                     if ($debug_mark_answer) {
@@ -277,7 +285,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     }
 
                     $s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes));
-                    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';
+                    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';
+                    
+                    if ($show_comment) {                
+                        $s .= '<td>';
+                        $s .= $comment;
+                        $s .= '</td>';
+                    }
+                
+                    
+                    $s .='</tr>';
 
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                 	$my_choice = array();
@@ -287,6 +304,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $my_choice[$item[0]] = $item[1];
                         }
                     }
+                    
                     $s .='<tr>';
                     $s .= Display::tag('td', $answer);
                     if (!empty($quiz_question_options)) {
@@ -300,9 +318,14 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes));
                     	}
                     }
-                    $s.='<tr>';
+                    
+                    if ($show_comment) {                
+                        $s .= '<td>';
+                        $s .= $comment;
+                        $s .= '</td>';
+                    }
+                    $s.='</tr>';
                 }
-
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
@@ -324,10 +347,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
-				    '<tr><td colspan="3">';
+				    '<tr><td>';
 				$s .= '<span class="question_answer">';
 				$s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes));
-			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td></tr>';
+			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+
+                $s.= '</tr>';
 
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 // multiple answers
@@ -356,27 +387,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             		}
             		$s .= Display::tag('td', Display::input('radio','choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
             	}
-            	$s.='<tr>';
+                
+                if ($show_comment) {                
+                    $s .= '<td>';
+                    $s .= $comment;
+                    $s .= '</td>';
+                }
+                
+            	$s.='</tr>';
+                
 			} elseif ($answerType == FILL_IN_BLANKS) {
-
-				/*
-				// splits text and weightings that are joined with the character '::'
-				list($answer) = explode('::',$answer);
-
-				//getting the matches
-				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
-
-
-
-				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-
-				api_preg_match_all('/\[[^]]+\]/', $answer, $fill_list);
-
-
-				if (isset($user_choice[0]['answer'])) {
-				    api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $user_fill_list);
-				    $user_fill_list = $user_fill_list[0];
-				}*/
 
 				list($answer) = explode('::',$answer);
 
@@ -410,9 +430,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
 				}
 
-				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
+				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
-				//  matching type, showing suggestions and answers
+				// matching type, showing suggestions and answers
 				// TODO: replace $answerId by $numAnswer
 
 				if ($answerCorrect != 0) {
@@ -1067,7 +1087,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         $group_name_list .= $group_list_info[$id]['name'].' ';
                     }
                     $results[$i]['group_name'] = $group_name_list;
-                }
+                }                
+                
+                $results[$i]['exe_duration'] =  !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
 
                 $user_list_id[] = $results[$i]['exe_user_id'];
                 $id = $results[$i]['exe_id'];
@@ -1621,8 +1643,6 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
     return $avg_score;
 }
 
-
-
 function get_exercises_to_be_taken($course_code, $session_id) {
 	$course_info = api_get_course_info($course_code);
 	$exercises = get_all_exercises($course_info, $session_id);
@@ -1653,7 +1673,7 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 	$course_code 		= Database::escape_string($course_code);
 	$session_id 		= intval($session_id);
 
-	$sql = "SELECT count(exe_user_id) as users, MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
+	$sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
 			WHERE 	exe_exo_id 		= $exercise_id AND
 					course_code 	= '$course_code' AND
@@ -1668,14 +1688,89 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 	return $return;
 }
 
+function get_number_students_question_with_answer_count($question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+	$question_id 		= intval($question_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND            
+					question_id 	= $question_id AND
+                    answer <> 0 AND
+                    status          = ''"; 
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+	}
+	return $return;
+}
 
 
-// ---------------------------------------------------------
+function get_number_students_answer_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+	$question_id 		= intval($question_id);
+    $answer_id          = intval($answer_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND
+                    answer       	= $answer_id AND
+					question_id 	= $question_id AND status = ''";
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+	}
+	return $return;
+}
+
+
+function get_number_students_finish_exercise($exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+    $exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			WHERE 	exe_exo_id 		= $exercise_id AND
+					course_code 	= '$course_code' AND
+					e.session_id 	= $session_id AND                    
+					status = ''";
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+
+	}
+	return $return;
+}
+
+
+
+/**
 // return the HTML code for a menu with students group
 // @input : $in_name : is the name and the id of the <select>
 //          $in_default : default value for option
 // @return : the html code of the <select>
-// ---------------------------------------------------------
+*/
 function displayGroupMenu($in_name, $in_default, $in_onchange="") {
     // check the default value of option
     $tabSelected = array($in_default => " selected='selected' ");
@@ -1698,10 +1793,7 @@ function displayGroupMenu($in_name, $in_default, $in_onchange="") {
 }
 
 
-// ------------------------------------------------------
-// return a list of group for user with user_id=in_userid
-// separated with in_separator
-// --------------------------------------------------
+/* Return a list of group for user with user_id=in_userid separated with in_separator */
 function displayGroupsForUser($in_separator, $in_userid) {
     $res = implode($in_separator, GroupManager::get_user_group_name($in_userid));
     if ($res == "") {

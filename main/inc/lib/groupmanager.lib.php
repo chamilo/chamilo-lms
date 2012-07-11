@@ -840,22 +840,23 @@ class GroupManager {
 	public static function fill_groups ($group_ids) {
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
 		$group_ids = array_map('intval',$group_ids);
-
+        
 		if (api_is_course_coach()) {
-			for($i=0 ; $i<count($group_ids) ; $i++) {
-				if (!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i])){
+			for ($i=0 ; $i< count($group_ids) ; $i++) {
+				if (!api_is_element_in_the_session(TOOL_GROUP, $group_ids[$i])){
 					array_splice($group_ids,$i,1);
 					$i--;
 				}
 			}
 			if (count($group_ids)==0) {
-				return false;}
+				return false;                
+            }
 		}
 
 		global $_course;
 		$category 			= self::get_category_from_group($group_ids[0]);
-		$groups_per_user 	= $category['groups_per_user'];
-		$course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        
+		$groups_per_user 	= $category['groups_per_user'];		
 		$group_table 		= Database :: get_course_table(TABLE_GROUP);
 		$group_user_table 	= Database :: get_course_table(TABLE_GROUP_USER);
 		$session_id 		= api_get_session_id();
@@ -892,14 +893,13 @@ class GroupManager {
 		 */
 		for ($i = 0; $i < count($complete_user_list); $i ++) {
 			//find # of groups the user is enrolled in
-			$number_of_groups = self :: user_in_number_of_groups($complete_user_list[$i]["user_id"],$category['id']);
+			$number_of_groups = self :: user_in_number_of_groups($complete_user_list[$i]["user_id"], $category['id']);            
 			//add # of groups to user list
 			$complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
 		}
 		
 		//first sort by user_id to filter out duplicates
-		$complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
-		
+		$complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');		
 		$complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');		
 		$complete_user_list = self :: filter_only_students($complete_user_list);
 				
@@ -907,21 +907,11 @@ class GroupManager {
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
 		$userToken = array ();
 		foreach ($complete_user_list as $this_user) {
-
 			if ($this_user['number_groups_left'] > 0) {
 				$userToken[$this_user['user_id']] = $this_user['number_groups_left'];
 			}
 		}
-		
-		/*
-		 * Retrieve the present state of the users repartion in groups
-		 */
-		$sql = "SELECT user_id uid, group_id gid FROM ".$group_user_table." WHERE c_id = $course_id ";
-		$result = Database::query($sql);
-		while ($member = Database::fetch_array($result, 'ASSOC')) {
-			$groupUser[$member['gid']][] = $member['uid'];
-		}
-		
+        
 		$changed = true;
 		while ($changed) {
 			$changed = false;
@@ -929,13 +919,15 @@ class GroupManager {
 			arsort($group_available_place);
 			reset($userToken);
 			arsort($userToken);
+            
 			foreach ($group_available_place as $group_id => $place) {
 				foreach ($userToken as $user_id => $places) {					
 					if (self :: can_user_subscribe($user_id, $group_id)) {
 
 						self :: subscribe_users($user_id, $group_id);
 						$group_available_place[$group_id]--;
-						$userToken[$user_id]--;
+						//$userToken[$user_id]--;
+                        unset($userToken[$user_id]);
 						$changed = true;
 						break;
 					}
@@ -983,20 +975,23 @@ class GroupManager {
 	 * @param int $user_id
 	 * @return int The number of groups the user is subscribed in.
 	 */
-	public static function user_in_number_of_groups ($user_id, $cat_id) {
+	public static function user_in_number_of_groups ($user_id, $cat_id = null) {
 		$table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
 		$table_group 		= Database :: get_course_table(TABLE_GROUP);
 		$user_id 			= Database::escape_string($user_id);
 		$cat_id 			= Database::escape_string($cat_id);
 		
 		$course_id = api_get_course_int_id();
-		
+		$cat_condition = '';
+        if (!empty($cat_id)) {
+            $cat_condition = " AND g.category_id =  $cat_id ";
+        }
+            
 		$sql = "SELECT  COUNT(*) AS number_of_groups FROM $table_group_user gu, $table_group g 
 				WHERE 	gu.c_id 	= $course_id AND
 						g.c_id 		= $course_id AND
 						gu.user_id 	= $user_id AND 
-						g.id 		= gu.group_id AND 
-						g.category_id =  $cat_id";
+						g.id 		= gu.group_id  $cat_condition";
 		$db_result = Database::query($sql);
 		$db_object = Database::fetch_object($db_result);
 		return $db_object->number_of_groups;

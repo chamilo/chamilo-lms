@@ -34,8 +34,6 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 
-$debug = 1; //debug value is set in the exercise.class.php file
-
 // name of the language file that needs to be included
 $language_file = 'exercice';
 
@@ -145,7 +143,6 @@ if ($objExercise->review_answers) {
 	}
 }
 
-
 $current_timestamp 	= time();
 $my_remind_list 	= array();
 
@@ -154,12 +151,13 @@ if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
 	$time_control = true;
 }
 
+//Generating the time control key for the user
+$current_expired_time_key = generate_time_control_key($objExercise->id);
+$_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
+
 if ($time_control) {
 	//Get the expired time of the current exercice in track_e_exercices
 	$total_seconds 			  = $objExercise->expired_time*60;
-
-	//Generating the time control key for the user
-	$current_expired_time_key = generate_time_control_key($objExercise->id);
 }
 
 $show_clock = true;
@@ -219,8 +217,6 @@ if ($objExercise->selectAttempts() > 0) {
 		exit;
 	}
 }
-
-
 
 if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
@@ -369,9 +365,6 @@ if (!isset($_SESSION['questionList'])) {
 
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
-$quizStartTime = array( $exerciseId => api_get_utc_datetime());
-Session::write('quizStartTime', $quizStartTime);
-
 //Real question count
 $question_count = 0;
 if (!empty($questionList)) {
@@ -436,7 +429,7 @@ if ($formSent && isset($_POST)) {
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     Session::write('exerciseResult',$exerciseResult);
-    Session::write('remind_list',$remind_list);
+    Session::write('remind_list', $remind_list);
     Session::write('exerciseResultCoordinates',$exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)

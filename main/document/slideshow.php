@@ -178,24 +178,104 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array ();
 if ($slide_id == 'all') {
-	$thumbnail_width = 100;
-	$thumbnail_height = 100;
-	$row_items = 4;
+	
+	// Create the template_thumbnails folder (if no exist)
+    if (!$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/') {
+		@mkdir($sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/', api_get_permissions_for_new_directories());
+    }
+	
+	// Config thumbnails
+	$row_items 			  = 4;
+	$allowed_thumbnail_types = array('jpg','jpeg','gif','png');
+	$max_thumbnail_width  = 100;
+	$max_thumbnail_height = 100;
+	$png_compression	  = 0;//0(none)-9
+	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More queality less compression
+	
+
+	// check files and thumbnails
 	if (is_array($image_files_only)) {
 		foreach ($image_files_only as $one_image_file) {
 			$image = $sys_course_path.$_course['path'].'/document'.$folder.$one_image_file;
+			$image_thumbnail= $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/.'.$one_image_file;
+			
 			if (file_exists($image)) {
-				$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+				//check thumbnail
+				$imagetype = explode(".", $image);
+				$imagetype = strtolower($imagetype[count($imagetype)-1]);
+				
+				if(in_array($imagetype,$allowed_thumbnail_types)) {
+					
+					if (!file_exists($image_thumbnail)){
 
-				$image_height = $image_height_width[0];
-				$image_width = $image_height_width[1];
+						$original_image_size = api_getimagesize($image);
+						switch($imagetype) {
+							case 'gif':
+								$source_img = imagecreatefromgif($image);
+								break;
+							case 'jpg':
+								$source_img = imagecreatefromjpeg($image);
+								break;
+							case 'png':
+								$source_img = imagecreatefrompng($image);
+								break;
+						}
+						
+						$new_thumbnail_size = api_calculate_image_size($original_image_size['width'], $original_image_size['height'], $max_thumbnail_width, $max_thumbnail_height);
+						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
+						
+						// preserve transparency
+						if($imagetype == "png"){
+							imagesavealpha($crop, true);
+							$color = imagecolorallocatealpha($crop,0x00,0x00,0x00,127);
+							imagefill($crop, 0, 0, $color); 
+						}
+						
+						if($imagetype == "gif"){
+							 $transindex = imagecolortransparent($image);
+							 //GIF89a for transparent and anim (first clip), either GIF87a
+							 if($transindex >= 0){
+								 $transcol = imagecolorsforindex($image, $transindex);
+								 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+								 imagefill($crop, 0, 0, $transindex);
+								 imagecolortransparent($crop, $transindex);
+							 }
+							 
+						}
 
-				$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-
-				$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
-			}
-		}
-	}
+						//resampled image
+						imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
+						
+						if($imagetype == ("jpg" || "jpeg")) {
+							imagejpeg($crop,$image_thumbnail,$jpg_quality);
+						}
+            			if($imagetype == "png") {
+							
+                			imagepng($crop,$image_thumbnail,$png_compression);
+						}
+            			if($imagetype == "gif"){	
+                			imagegif($crop,$image_thumbnail);
+						}
+		
+						//clean memory
+						imagedestroy($crop);					
+					}//end exist thumbnail
+					//show thumbnail and link
+					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
+					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';	
+				}
+				else{
+					//image format no support, get path original image
+					$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
+					$image_height = $image_height_width[0];
+					$image_width = $image_height_width[1];
+					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$max_thumbnail_width.'" height="'.$max_thumbnail_height.'" title="'.$one_image_file.'">';	
+				}//end allowed image types
+			}//end if exist file image
+		}//end foreach
+	}//end image files only
 }
 
 // Creating the table
@@ -237,7 +317,6 @@ if ($slide_id != 'all') {
 			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
 		}
 
-		// Showing the comment of the image, Patrick Cool, 8 april 2005
 		// This is done really quickly and should be cleaned up a little bit using the API functions
 		$tbl_documents = Database::get_course_table(TABLE_DOCUMENT);
 		if ($path == '/') {
@@ -256,7 +335,7 @@ if ($slide_id != 'all') {
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td align="center">';
+		echo '<td id="td_image" align="center">';
 		if ($slide < $total_slides - 1 && $slide_id != 'all') {
 			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
 		} else {
@@ -271,16 +350,17 @@ if ($slide_id != 'all') {
 		//auto resize
 		if($_SESSION["image_resizing"]!="noresizing" && $_SESSION["image_resizing"]!="resizing" ){
 		?>
+        
 		<script type="text/javascript">
 			var initial_width='<?php echo $width; ?>';
 			var initial_height='<?php echo $height; ?>';
-			
-			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>" >');
-			
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
+			
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+width+'" height="'+height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
 
 			function resizeImage() {
+				
 				var resize_factor_width = width / initial_width;
                 var resize_factor_height = height / initial_height;
                 var delta_width = width - initial_width * resize_factor_height;
@@ -301,16 +381,18 @@ if ($slide_id != 'all') {
 				
 				document.getElementById('image').style.height = height +"px";
 				document.getElementById('image').style.width = width +"px";
+				document.getElementById('td_image').style.background='none';
+				document.getElementById('image').style.visibility='visible';
 			};
 			
 			 if (initial_height>height || initial_width>width) {
+				document.getElementById('image').style.visibility='hidden';
+				document.getElementById('td_image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
 				document.getElementById('image').onload = resizeImage;
 			    window.onresize = resizeImage;
 			}
-			
+
 		</script>
-    
-   
     <?php
 		}
 		else{

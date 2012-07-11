@@ -65,7 +65,16 @@ foreach ($fileList as $file) {
 			switch($file['cssClass']) {			
 				case 'filePicture':
 					echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['public_path'] . '">';
-					echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
+					
+					//improve for Chamilo load thumbnails from disk
+					$thumbnail_disk= dirname($file['path']).'/.thumbs/.'.basename($file['path']);
+					
+					if (file_exists($thumbnail_disk)) {
+						echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($thumbnail_disk)) . '" id="thumbImg' . $count . '"></a>' . "\n";
+					}
+					else {
+						echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
+					}
 					break;
 				case 'fileFlash':
 				case 'fileVideo':

@@ -16,6 +16,10 @@
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.3');
 
+define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
+define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
+define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
+
 use \ChamiloSession as Session;
 
 
@@ -2098,6 +2102,22 @@ function api_is_platform_admin_by_id($user_id = null) {
     return Database::num_rows($res) === 1;
 }
 
+function api_get_user_status($user_id = null) {
+    $user_id = intval($user_id);
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
+    $table = Database::get_main_table(TABLE_MAIN_USER);
+    $sql = "SELECT status FROM $table WHERE user_id = $user_id ";
+    $result = Database::query($sql);
+    $status = null;
+    if (Database::num_rows($result)) {
+        $row = Database::fetch_array($result);
+        $status = $row['status'];
+    }        
+    return $status;
+}
+
 /**
  * Checks whether current user is allowed to create courses
  * @return boolean True if the user has course creation rights,
@@ -2148,8 +2168,7 @@ function api_get_user_platform_status($user_id = false) {
 
 	//Group (in course)
     if ($group_id && $course_id) {
-        $group_status = array();
-        require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+        $group_status = array();        
         $is_subscribed = GroupManager::is_subscribed($user_id, $group_id);
         if ($is_subscribed) {
             $group_status = array('id'=> $group_id , 'status' => 'student');
@@ -5400,11 +5419,12 @@ function api_is_global_platform_admin($user_id = null) {
     return false;
 }
 
-function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null) {
+function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
     if (empty($my_user_id)) {
         $my_user_id = api_get_user_id();
     }
-    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);
+    
+    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);    
     $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
 
     if ($iam_a_global_admin) {
@@ -5412,7 +5432,13 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null)
         return true;
     } else {
         //If i'm a simple admin
-        if (api_is_platform_admin_by_id($my_user_id)) {
+        $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
+        
+        if ($allow_session_admin) {
+            $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (api_get_user_status($my_user_id) == SESSIONADMIN);    
+        }
+        
+        if ($is_platform_admin) {
             if ($user_is_global_admin) {
                 return false;
             } else {
@@ -5424,8 +5450,8 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null)
     }
 }
 
-function api_protect_super_admin($admin_id_to_check, $my_user_id = null) {
-    if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id)) {
+function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
+    if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id, $allow_session_admin)) {
         return true;
     } else {
         api_not_allowed();
@@ -5493,66 +5519,52 @@ function api_browser_support($format="") {
 	if ($format=='svg'){
 		if (($current_browser == 'Internet Explorer' && $current_majorver >= 9) || ($current_browser == 'Firefox' && $current_majorver > 1) || ($current_browser == 'Safari' && $current_majorver >= 4) || ($current_browser == 'Chrome' && $current_majorver >= 1) || ($current_browser == 'Opera' && $current_majorver >= 9)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='pdf'){
+	} elseif($format=='pdf') {
 		//native pdf support
 		if($current_browser == 'Chrome' && $current_majorver >= 6){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='tif' || $format=='tiff'){
+	} elseif($format=='tif' || $format=='tiff'){
 		//native tif support
 		if($current_browser == 'Safari' && $current_majorver >= 5){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='ogg' || $format=='ogx'|| $format=='ogv' || $format=='oga'){
+	} elseif($format=='ogg' || $format=='ogx'|| $format=='ogv' || $format=='oga'){
 	//native ogg, ogv,oga support
 		if (($current_browser == 'Firefox' && $current_majorver >= 3)  || ($current_browser == 'Chrome' && $current_majorver >= 3) || ($current_browser == 'Opera' && $current_majorver >= 9)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='mpg' || $format=='mpeg'){
+	} elseif($format=='mpg' || $format=='mpeg'){
 		//native mpg support
 		if(($current_browser == 'Safari' && $current_majorver >= 5)){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='mp4'){
+	} elseif($format=='mp4') {
 		//native mp4 support (TODO: Android, iPhone)
 		if($current_browser == 'Android' || $current_browser == 'iPhone') {
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='mov'){
+	} elseif($format=='mov') {
 		//native mov support( TODO:check iPhone)
 		if($current_browser == 'Safari' && $current_majorver >= 5 || $current_browser == 'iPhone'){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='avi'){
+	} elseif($format=='avi') {
 		//native avi support
 		if($current_browser == 'Safari' && $current_majorver >= 5){
 			return true;
@@ -5560,17 +5572,14 @@ function api_browser_support($format="") {
 		else{
 			return false;
 		}
-	}
-	elseif($format=='wmv'){
+	} elseif($format=='wmv') {
 		//native wmv support
-		if($current_browser == 'Firefox' && $current_majorver >= 4){
+		if ($current_browser == 'Firefox' && $current_majorver >= 4){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='webm'){
+	} elseif($format=='webm') {
 		//native webm support (TODO:check IE9, Chrome9, Android)
 		if(($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Opera' && $current_majorver >= 9) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver >=9)|| $current_browser == 'Android'){
 			return true;
@@ -5578,26 +5587,22 @@ function api_browser_support($format="") {
 		else{
 			return false;
 		}
-	}
-	elseif($format=='wav'){
+	} elseif($format=='wav') {
 		//native wav support (only some codecs !)
-		if(($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Opera' && $current_majorver >= 9) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver > 9)|| $current_browser == 'Android' || $current_browser == 'iPhone'){
+		if (($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Opera' && $current_majorver >= 9) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver > 9)|| $current_browser == 'Android' || $current_browser == 'iPhone'){
 			return true;
 		}
 		else{
 			return false;
 		}
-	}
-	elseif($format=='mid' || $format=='kar'){
+	} elseif($format=='mid' || $format=='kar') {
 		//native midi support (TODO:check Android)
 		if($current_browser == 'Opera'&& $current_majorver >= 9 || $current_browser == 'Android'){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=='wma'){
+	} elseif($format=='wma') {
 		//native wma support
 		if($current_browser == 'Firefox' && $current_majorver >= 4){
 			return true;
@@ -5605,8 +5610,7 @@ function api_browser_support($format="") {
 		else{
 			return false;
 		}
-	}
-	elseif($format=='au'){
+	} elseif($format=='au') {
 		//native au support
 		if($current_browser == 'Safari' && $current_majorver >= 5){
 			return true;
@@ -5614,21 +5618,17 @@ function api_browser_support($format="") {
 		else{
 			return false;
 		}
-	}
-	elseif($format=='mp3'){
+	} elseif($format=='mp3') {
 		//native mp3 support (TODO:check Android, iPhone)
 		if(($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Chrome' && $current_majorver >=6)|| ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| $current_browser == 'Android' || $current_browser == 'iPhone'){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
-	}
-	elseif($format=="check_browser"){
+	} elseif($format=="check_browser") {
 		$array_check_browser=array($current_browser, $current_majorver);
 		return $array_check_browser;
-	}
-	else{
+	} else {
 		return false;
 	}
 }
@@ -5936,4 +5936,9 @@ function api_get_locked_settings() {
         'login_is_email',
         'chamilo_database_version'
     );
+}
+
+function api_user_is_login($user_id = null) {
+    $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
+    return $user_id && !api_is_anonymous();
 }

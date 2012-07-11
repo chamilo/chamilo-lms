@@ -1,4 +1,4 @@
-<?php //$id:$
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	File containing the HotSpot class.
@@ -26,18 +26,16 @@ class HotSpot extends Question {
 	static $typePicture = 'hotspot.gif';
 	static $explanationLangVar = 'HotSpot';
 
-
 	function HotSpot() {
 		parent::question();
 		$this -> type = HOT_SPOT;
 	}
 
 	function display() {
-
 	}
 	
-	function createForm ($form) {
-		parent::createForm ($form);
+	function createForm (&$form, $fck_config=0) {
+		parent::createForm ($form, $fck_config);
 		global $text, $class;
 		if(!isset($_GET['editQuestion'])) {
 			$renderer = $form->defaultRenderer();			
@@ -86,6 +84,7 @@ class HotSpot extends Question {
 		// nothing
 	}
 }
+
 /**
  * @package chamilo.exercise
  */
@@ -100,9 +99,8 @@ class HotSpotDelineation extends HotSpot {
 
 	}
 	
-	function createForm ($form) {
-		parent::createForm ($form);
-	
+	function createForm (&$form, $fck_config=0) {
+		parent::createForm ($form, $fck_config);	
 	}
 
 	function processCreation ($form, $objExercise) {
@@ -112,16 +110,10 @@ class HotSpotDelineation extends HotSpot {
 	
 	function createAnswersForm ($form) {
 		parent::createAnswersForm ($form);
-    	// nothing
-
 	}
 
 	function processAnswersCreation ($form) {
 		parent::processAnswersCreation ($form);
-		// nothing
-
 	}
-
 }
-
 endif;

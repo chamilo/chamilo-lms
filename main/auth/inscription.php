@@ -236,14 +236,16 @@ if (!CustomPages::enabled()) {
     }
 
     // Forbidden to self-register
+    /*
     if (api_get_setting('allow_registration') == 'false') {
         api_not_allowed();
-    }
+    }*/
 
     //api_display_tool_title($tool_name);
     if (api_get_setting('allow_registration') == 'approval') {
         Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
     }
+    
     //if openid was not found
     if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
         Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
@@ -254,15 +256,16 @@ if (!CustomPages::enabled()) {
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
-    $term_preview = LegalManager::get_last_condition($language);
+    $term_preview = LegalManager::get_last_condition($language);    
 
     if (!$term_preview) {
         //we load from the platform
         $language = api_get_setting('platformLanguage');
         $language = api_get_language_id($language);
         $term_preview = LegalManager::get_last_condition($language);
+        
         //if is false we load from english
-        if (!$term_preview){
+        if (!$term_preview) {
             $language = api_get_language_id('english'); //this must work
             $term_preview = LegalManager::get_last_condition($language);
         }
@@ -275,17 +278,16 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
-    } else {
-        if (!empty($term_preview['content'])) {
-            $preview = LegalManager::show_last_condition($term_preview);
-            $form->addElement('label', get_lang('TermsAndConditions'), $preview);
-        }
+    } else {        
+        $preview = LegalManager::show_last_condition($term_preview);
+        $form->addElement('label', null, $preview);        
     }
 }
 
 $form->addElement('button', 'submit', get_lang('RegisterUser'));
 
 if ($form->validate()) {
+    
     $values = $form->exportValues();
     $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
 
@@ -300,7 +302,7 @@ if ($form->validate()) {
     if (api_get_setting('login_is_email') == 'true') {
         $values['username'] = $values['email'];
     }
-
+    
     if ($user_already_registered_show_terms && api_get_setting('allow_terms_conditions') == 'true') {
         $user_id = $_SESSION['term_and_condition']['user_id'];
         $is_admin = UserManager::is_admin($user_id);
@@ -415,6 +417,7 @@ if ($form->validate()) {
     // Terms & Conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
         // update the terms & conditions
+        
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {

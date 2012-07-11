@@ -128,11 +128,9 @@ class CourseManager {
                 $course_info    = api_get_course_info_by_id($course_id);
 
                 if (!empty($course_info)) {
-                    prepare_course_repository($course_info['directory'], $course_info['code']);
-                    $pictures_array = fill_course_repository($course_info['directory'], $params['exemplary_content']);
-                    fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $pictures_array, $params['exemplary_content']);
-                    //self::update_course_ranking($course_info['real_id'], 0, null);
-
+                    prepare_course_repository($course_info['directory'], $course_info['code']);                    
+                    fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
+                    
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
@@ -3647,6 +3645,14 @@ class CourseManager {
      */
     function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
+        
+        //Getting my courses
+        $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
+        $my_course_code_list = array();
+        foreach ($my_course_list as $course) {
+            $my_course_code_list[$course['real_id']] = $course['real_id'];
+        }
+        
         $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 		//@todo all dates in the tracking_course_access, last_access are in the DB time (NOW) not UTC
@@ -3670,12 +3676,27 @@ class CourseManager {
 		$courses = array();
 		if (Database::num_rows($result)) {
 			$courses = Database::store_result($result, 'ASSOC');
+            $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+            
 			foreach ($courses as &$my_course) {
 				$course_info = api_get_course_info($my_course['course_code']);
-				$my_course['extra_info'] = $course_info;
+                $my_course['extra_info'] = $course_info;
+                $my_course['extra_info']['go_to_course_button'] = '';
+                
+                //World
+                if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
+                   ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || 
+                   in_array($course_info['real_id'], $my_course_code_list)) {
+                   $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$my_course['extra_info']['path'].'/index.php', array('class' => 'btn btn-primary'));                        
+                }
+                
+                //Description
+                $my_course['extra_info']['description_button'] = '';
+                if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
+                    $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$my_course['course_code'], array('class' => 'ajax btn'));                        
+                }
+				
                 $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($my_course['course_code']);
-				$ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-
 				$point_info = self::get_course_ranking($course_info['real_id'], 0);
 				$my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&amp;course_id='.$course_info['real_id'], $point_info);
 			}

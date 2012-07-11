@@ -26,6 +26,14 @@ class Career extends Model {
         $this->table =  Database::get_main_table(TABLE_CAREER);
 	}    
     
+    /**
+     * Get the count of elements
+     */
+    public function get_count() {        
+        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        return $row['count'];
+    }
+    
     public function get_all($where_conditions = array()) {
         return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
     }

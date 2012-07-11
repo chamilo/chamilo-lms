@@ -396,10 +396,11 @@ if (Database::num_rows($res_media) > 0) {
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
+        $height = '100%';
         if ($_SESSION['oLP']->mode == 'fullscreen') {
-            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
+            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" ></iframe>';
         } else {
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:600px"></iframe>';
+            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'"></iframe>';
         }
     ?>
     </div>
@@ -414,7 +415,7 @@ if (Database::num_rows($res_media) > 0) {
         var hauteurHeader = document.getElementById('header').offsetHeight;
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
-        var hauteurMedia = document.getElementById('media').offsetHeight;
+        var hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
         var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
         var hauteurAction = 0;
         if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;

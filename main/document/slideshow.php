@@ -357,7 +357,7 @@ if ($slide_id != 'all') {
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
 			
-			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+width+'" height="'+height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
+			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+initial_width+'" height="'+initial_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
 
 			function resizeImage() {
 				

@@ -441,7 +441,7 @@ abstract class Question
     		$o_img->send_image($picturePath.'/'.$this->picture, -1, 'jpg');
             $document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
     	    if ($document_id) {
-                return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id);
+                return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
             }
 		}
 
@@ -544,20 +544,30 @@ abstract class Question
 	 * @return - boolean - true if copied, otherwise false
 	 */
 	function exportPicture($questionId, $course_info) {
-		$course_id = $course_info['real_id'];
-        $TBL_QUESTIONS  = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $destination_path    = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
-        $source_path         = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';
+		$course_id          = $course_info['real_id'];
+        $TBL_QUESTIONS      = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $destination_path   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
+        $source_path        = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';        
 
 		// if the question has got an ID and if the picture exists
-		if($this->id && !empty($this->picture)) {
+		if ($this->id && !empty($this->picture)) {
 			$picture=explode('.',$this->picture);
-			$Extension=$picture[sizeof($picture)-1];
-			$picture='quiz-'.$questionId.'.'.$Extension;
-			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE c_id = $course_id AND id='".intval($questionId)."'";
-			Database::query($sql);
-			return @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture)?true:false;
-		}
+			$extension = $picture[sizeof($picture)-1];
+			$picture = 'quiz-'.$questionId.'.'.$extension;			          
+			$result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture) ? true : false;
+            //If copy was correct then add to the database
+            if ($result) {
+                $sql = "UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE c_id = $course_id AND id='".intval($questionId)."'";
+                Database::query($sql);
+            
+                $document_id = add_document($course_info, '/images/'.$picture, 'file', filesize($destination_path.'/'.$picture), $picture);
+                if ($document_id) {
+                    return api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
+                }
+            }
+            
+            return $result;
+		}        
 		return false;
 	}
 
@@ -572,9 +582,8 @@ abstract class Question
 	 */
 	function setTmpPicture($Picture,$PictureName) {
 		global $picturePath;
-
-		$PictureName=explode('.',$PictureName);
-		$Extension=$PictureName[sizeof($PictureName)-1];
+		$PictureName = explode('.',$PictureName);
+		$Extension = $PictureName[sizeof($PictureName)-1];
 
 		// saves the picture into a temporary file
 		@move_uploaded_file($Picture,$picturePath.'/tmp.'.$Extension);
@@ -606,24 +615,17 @@ abstract class Question
 		global $picturePath;
 
 		// if the question has got an ID and if the picture exists
-		if($this->id) {
-			if(file_exists($picturePath.'/tmp.jpg')) {
+		if ($this->id) {
+			if (file_exists($picturePath.'/tmp.jpg')) {
 				$Extension='jpg';
-			}
-			elseif(file_exists($picturePath.'/tmp.gif'))
-			{
+			} elseif(file_exists($picturePath.'/tmp.gif')) {
 				$Extension='gif';
-			}
-			elseif(file_exists($picturePath.'/tmp.png'))
-			{
+			} elseif(file_exists($picturePath.'/tmp.png')) {
 				$Extension='png';
 			}
-
 			$this->picture='quiz-'.$this->id.'.'.$Extension;
-
 			return @rename($picturePath.'/tmp.'.$Extension,$picturePath.'/'.$this->picture)?true:false;
 		}
-
 		return false;
 	}
 
@@ -666,7 +668,7 @@ abstract class Question
 			Database::query($sql);
 			$this->saveCategory($category);
 			if (!empty($exerciseId)) {
-				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id);
+				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id());
 			}
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
@@ -721,7 +723,6 @@ abstract class Question
 				Database::query($sql);
 			}
 
-
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
                     $this -> search_engine_edit($exerciseId, TRUE);
@@ -735,7 +736,7 @@ abstract class Question
 		}
 
 		// if the question is created in an exercise
-		if($exerciseId) {
+		if ($exerciseId) {
 			/*
 			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).'
 					SET max_score = '.intval($weighting).'
@@ -1037,7 +1038,7 @@ abstract class Question
             }
         }
 
-		// Duplicates the picture
+		// Duplicates the picture of the hotspot
 		$this->exportPicture($new_question_id, $course_info);
 		return $new_question_id;
 	}

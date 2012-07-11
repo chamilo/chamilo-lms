@@ -10,7 +10,7 @@ require_once '../global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 // 1. Setting variables needed by jqgrid
-
+    
 $action = $_GET['a'];
 $page   = intval($_REQUEST['page']); //page
 $limit  = intval($_REQUEST['rows']); //quantity of rows
@@ -105,7 +105,7 @@ switch ($action) {
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
         $exercise_id = $_REQUEST['exerciseId'];
-		$count = get_count_exam_results($exercise_id);
+		$count = get_count_exam_results($exercise_id);        
 		break;
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
@@ -187,10 +187,18 @@ switch ($action) {
 		if ($is_allowedToEdit || $is_tutor) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
-			$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
-		}        
-		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
-		
+			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
+		} 
+        
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
+            $filter_user = intval($_GET['filter_by_user']);
+            if ($where_condition == "") {
+                $where_condition .= " te.exe_user_id  = '$filter_user'" ;
+            } else {
+                $where_condition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        } 
+		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
@@ -370,6 +378,6 @@ if (in_array($action, $allowed_actions)) {
             $i++; 
         }
     }    
-    echo json_encode($response);       
+    echo json_encode($response);
 }
 exit;

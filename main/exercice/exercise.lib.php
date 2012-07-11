@@ -976,10 +976,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
     } else {
+        
         //any view is proposed to the student, they should see the results in the overview.php page
         exit;
+        
         // Student view
-
+        /*
         $sql = "SELECT DISTINCT
                     te.exe_duration,
 					te.start_date,
@@ -1013,6 +1015,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                   FROM $TBL_TRACK_HOTPOTATOES
                   WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $hotpotatoe_where
                   ORDER BY exe_cours_id ASC, exe_date DESC";
+        */
     }
 
     $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());

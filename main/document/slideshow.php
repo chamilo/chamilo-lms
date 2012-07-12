@@ -316,7 +316,7 @@ $html_table = '';
 echo '<table align="center" width="760px" border="0" cellspacing="10">';
 $i = 0;
 $count_image = count($image_tag);
-$number_image = 6;
+$number_image = 6;//num icons cols to show
 $number_iteration = ceil($count_image/$number_image);
 $p = 0;
 for ($k = 0; $k < $number_iteration; $k++) {

@@ -80,6 +80,12 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
         // Correct choice for usability
     	$is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
     //}
+	
+	//Documents' slideshow thumbnails
+	//correct $is_visible used in below and ??. Now the students can view the thumbnails too
+	$doc_url_thumbs = str_replace('.thumbs/.', '', $doc_url);
+	$is_visible = DocumentManager::is_visible($doc_url_thumbs, $_course, api_get_session_id());
+	
     if (!api_is_allowed_to_edit() && !$is_visible) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.

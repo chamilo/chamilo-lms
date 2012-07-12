@@ -15,6 +15,8 @@ define('SCORE_DIV_PERCENT',              3);    // X / Y (XX %)
 define('SCORE_AVERAGE',                  4);    // XX %
 define('SCORE_DECIMAL',                  5);    // 0.50  (X/Y)
 
+define('SCORE_BAR',                      6);    // Uses the Display::bar_progress function
+
 //@todo where is number 6?
 
 define('SCORE_IGNORE_SPLIT',             8);    //  ??
@@ -254,7 +256,12 @@ class ScoreDisplay
 	 * 				(only taken into account if custom score display is enabled and for course/platform admin)
 	 */
 	public function display_score($score, $type = SCORE_DIV_PERCENT, $what = SCORE_BOTH, $no_color = false) {	  
-		$my_score = ($score==0) ? 1 : $score;		        
+		$my_score = ($score==0) ? 1 : $score;	
+        
+        if ($type == SCORE_BAR) {
+            $percentage = $my_score[0]/$my_score[1]*100;            
+            return Display::bar_progress($percentage);
+        }
 		if ($this->custom_enabled && isset($this->custom_display_conv)) {		    
 	        $display = $this->display_default($my_score, $type);	        
 		} else {

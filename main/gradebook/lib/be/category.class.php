@@ -1348,5 +1348,5 @@ class Category implements GradebookItem
             }
             event_system($event_type, LOG_GRADEBOOK_ID, $this->id);   
         }
-    }
+    }     
 }

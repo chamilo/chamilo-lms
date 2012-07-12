@@ -2015,7 +2015,7 @@ class Exercise {
                         
                     if ($debug) error_log("studentChoice: $studentChoice");
 					break;
-				case GLOBAL_MULTIPLE_ANSWER : //2                    
+				case GLOBAL_MULTIPLE_ANSWER :
 					if ($from_database) {
 						$choice = array();
 						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
@@ -2029,20 +2029,14 @@ class Exercise {
 						if ($studentChoice) {
 							$questionScore  +=$answerWeighting;							                            
 						}
-					} else {
-                        //echo '+---';
-                        //var_dump($numAnswer);
-                        //var_dump($choice);
-						$studentChoice = $choice[$numAnswer];
-                        //var_dump($studentChoice .' - '.$answerCorrect);
+					} else {                        
+						$studentChoice = $choice[$numAnswer];                        
 						if (isset($studentChoice)) {
-							$questionScore  += $answerWeighting;
-                            //var_dump($questionScore.' '.$answerWeighting);
+							$questionScore  += $answerWeighting;                            
 						}                        
                         $real_answers[$answerId] = (bool)$studentChoice;
 					}
-                    $totalScore     += $answerWeighting;
-                    
+                    $totalScore     += $answerWeighting;                    
                     if ($debug) error_log("studentChoice: $studentChoice");
 					break;
 				case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:

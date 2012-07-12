@@ -978,7 +978,7 @@ if (!empty($error)) {
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
 	        // shows the question and its answers
-	        showQuestion($questionId, false, $origin, $i, true, false, $user_choice);
+	        showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
 
             //BUtton save and continue
             switch ($objExercise->type) {

@@ -45,7 +45,8 @@ if (!class_exists('GlobalMultipleAnswer')):
                 $html .='<th>' . get_lang('Comment') . '</th>';
             }
             $html .='</tr>';
-            /* Excution de l'affichage */
+            
+            
             $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
 
             /* Initialiation variable */
@@ -97,12 +98,15 @@ if (!class_exists('GlobalMultipleAnswer')):
                     $defaults['pts'] = 1;
                 else
                     $defaults['pts'] = 0;
-                //------------- Fin
 
-                $renderer = & $form->defaultRenderer();
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+                $renderer = & $form->defaultRenderer();			
+            
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+                //$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
 
-                //$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
                 $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
                 $answer_number->freeze();
 
@@ -123,25 +127,20 @@ if (!class_exists('GlobalMultipleAnswer')):
             $defaults['weighting[1]'] = (round($scoreG));
 
             $form->addElement('html', '</div></div></table>');
+            
             //$form -> addElement ('html', '<br />');
             $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
 
-            //--------- Affichage score suivant la langue	
-            $form->addElement('html', '<table><div class="row">
-										<tr>' . get_lang('Score') . '</tr><tr><td>');
-
             //only 1 answer the all deal ...
-            $form->addElement('text', 'weighting[1]');
-
-            $form->addElement('html', '</td><td width=18%></td><td width="1" align="right">');
+            $form->addElement('text', 'weighting[1]', get_lang('Score'));
 
             global $pts;
             //--------- Creation coche pour ne pas prendre en compte les n�gatifs
-            $form->addElement('checkbox', 'pts', '', get_lang('SansNeg'));
-            $form->addElement('html', '</td></tr></div></table><br>');
-            //------------------------------------------------------------------------------
+            $form->addElement('checkbox', 'pts', '', get_lang('NoNegative'));
+            $form->addElement('html', '<br />');
+            
             // Affiche un message si le score n'est pas renseign�
-            $form->addRule('weighting[1]', get_lang('ScoreVide'), 'required');
+            $form->addRule('weighting[1]', get_lang('EmptyScore'), 'required');
 
             $navigator_info = api_get_navigator();
             global $text, $class, $show_quiz_edition;
@@ -149,22 +148,20 @@ if (!class_exists('GlobalMultipleAnswer')):
             //ie6 fix
             if ($show_quiz_edition) {
                 if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-
                     $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                     $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
                     $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
                 } else {
-
                     $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                     $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
                     $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
-
                     // setting the save button here and not in the question class.php
                 }
             }
             $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
             $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
             $renderer->setElementTemplate('{element}', 'moreAnswers');
+            
             $form->addElement('html', '</div></div>');
 
             $defaults['correct'] = $correct;

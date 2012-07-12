@@ -25,7 +25,7 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null) {
 	
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -38,6 +38,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		// Question not found        
 		return false;
 	}
+    
+    if ($exercise_feedback != EXERCISE_FEEDBACK_TYPE_END) {
+        $show_comment = false;
+    }
     
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
@@ -53,9 +57,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
 			}
 			if (!empty($questionDescription)) {
-				echo Display::div($questionDescription, array('class'=>'question_description'));
-			}
-			}
+                echo Display::div($questionDescription, array('class'=>'question_description'));
+            }
+        }
 		
         if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) && $freeze) {
             return '';
@@ -178,17 +182,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             foreach ($objQuestionTmp->options as $key=>$item) {                
                 $header .= Display::tag('th', $item);                           
             }                
-            if ($show_comment) {
-                $header .= Display::tag('th', get_lang('Feedback'));
+            if ($show_comment) {                
+                $header .= Display::tag('th', get_lang('Feedback'));                
             }
             $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));  
         }
         
         if ($show_comment) {
-            if (in_array($answerType, array(MULTIPLE_ANSWER,MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) {
+            if (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, GLOBAL_MULTIPLE_ANSWER))) {
                 $header = '';
                 $header .= Display::tag('th', get_lang('Options'));
-                $header .= Display::tag('th', get_lang('Feedback'));            
+                if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
+                    $header .= Display::tag('th', get_lang('Feedback'));
+                }
                 $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
             }
         }
@@ -200,14 +206,12 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         		$user_choice_array[] = $item['answer'];
         	}
         }
-        
-        
+                
 		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-			$answer          = $objAnswerTmp->selectAnswer($answerId);            
-			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);            
-			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);		
-            
-            $comment        = $objAnswerTmp->selectComment($answerId);
+			$answer          = $objAnswerTmp->selectAnswer($answerId);
+			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);         
+			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);            
+            $comment         = $objAnswerTmp->selectComment($answerId);
 
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
@@ -292,8 +296,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                         $s .= $comment;
                         $s .= '</td>';
                     }
-                
-                    
                     $s .='</tr>';
 
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {

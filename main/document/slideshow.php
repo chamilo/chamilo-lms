@@ -14,6 +14,9 @@ $language_file = array('slideshow', 'document');
 
 require_once '../inc/global.inc.php';
 
+
+api_protect_course_script();
+
 $noPHP_SELF = true;
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);

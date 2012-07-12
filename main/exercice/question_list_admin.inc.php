@@ -173,7 +173,7 @@ if (!$inATest) {
         $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
 
         if (is_array($questionList)) {
-			foreach($questionList as $id) {
+			foreach ($questionList as $id) {
 				//To avoid warning messages
 				if (!is_numeric($id)) {
 					continue;
@@ -236,7 +236,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, null, null, false, true, false, true);
+                        showQuestion($id, false, null, null, false, true, false, true, $my_exercise->feedback_type);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

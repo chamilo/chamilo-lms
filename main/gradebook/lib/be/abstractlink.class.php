@@ -240,11 +240,14 @@ abstract class AbstractLink implements GradebookItem {
 				$sql .= ','.'"'.$date_current=api_get_local_time().'"';
 				$sql .= ")";				
 				Database::query($sql);
-				$this->set_id(Database::insert_id());
+                $inserted_id = Database::insert_id();
+				$this->set_id($inserted_id);
+                return $inserted_id;
 		 	}
 		} else {
 			die('Error in AbstractLink add: required field empty');
 		}
+        return false;
 	}
 
 	/**
@@ -434,6 +437,5 @@ abstract class AbstractLink implements GradebookItem {
   		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
   		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
   		Database::query($sql);
-  	}
-    
+  	}    
 }

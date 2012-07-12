@@ -64,9 +64,7 @@ if($modifyIn)
 
         $objAnswer=new Answer($questionId);
     }
-
-    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION)
-    {
+    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == GLOBAL_MULTIPLE_ANSWER) {
         $correct=unserialize($correct);
         $reponse=unserialize($reponse);
         $comment=unserialize($comment);
@@ -122,8 +120,8 @@ if($modifyIn)
 // the answer form has been submitted
 if($submitAnswers || $buttonBack)
 {
-    if($debug>0){echo '$submitAnswers or $buttonBack was set'."<br />\n";}
-    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
+    if ($debug>0){echo '$submitAnswers or $buttonBack was set'."<br />\n";}	
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == GLOBAL_MULTIPLE_ANSWER) {
       if($debug>0){echo '&nbsp;&nbsp;$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
         $questionWeighting=$nbrGoodAnswers=0;
 
@@ -154,8 +152,8 @@ if($submitAnswers || $buttonBack)
                 {
                     $questionWeighting+=$weighting[$i];
                 }
-            } elseif($answerType == MULTIPLE_ANSWER) {
-            if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is MULTIPLE_ANSWER'."<br />\n";}
+            } elseif($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+            if ($debug>0){echo str_repeat('&nbsp;',4).'$answerType is MULTIPLE_ANSWER'."<br />\n";}
                 // a bad answer can't have a positive weighting
                 $weighting[$i]=0-abs($weighting[$i]);
             }
@@ -599,20 +597,18 @@ if($modifyAnswers)
 
 
     Session::write('objAnswer', $objAnswer);
-
-    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-    {
-       if($debug>0){echo str_repeat('&nbsp;',2).'$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
-        if(!$nbrAnswers)
-        {
+    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+    if ($debug>0){echo str_repeat('&nbsp;',2).'$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
+        if(!$nbrAnswers) {
             $nbrAnswers=$objAnswer->selectNbrAnswers();
 
             $reponse=Array();
             $comment=Array();
             $weighting=Array();
 
-            // initializing
-            if($answerType == MULTIPLE_ANSWER)
+
+            // initializing + Modification de la ligne suivante 
+            if($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER)
             {
                 $correct=Array();
             }
@@ -626,9 +622,7 @@ if($modifyAnswers)
                 $reponse[$i]=$objAnswer->selectAnswer($i);
                 $comment[$i]=$objAnswer->selectComment($i);
                 $weighting[$i]=$objAnswer->selectWeighting($i);
-
-                if($answerType == MULTIPLE_ANSWER)
-                {
+                if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                     $correct[$i]=$objAnswer->isCorrect($i);
                 }
                 elseif($objAnswer->isCorrect($i))
@@ -862,13 +856,12 @@ if($modifyAnswers)
 
     }
 
-    if(!$usedInSeveralExercises)
+    if (!$usedInSeveralExercises)
     {
-        if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
+        if ($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
 
-        if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION)
-        {
-            if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+            if ($debug>0){echo str_repeat('&nbsp;',4).'$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
 
 ?>
 <h3>

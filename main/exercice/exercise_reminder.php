@@ -102,11 +102,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
 	echo '</div>';
 }
-
-
-//$user_info   = api_get_user_info(api_get_user_id());     
-//echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), null, 'review');
-echo Display::div(get_lang('QuestionsToReview'), array('class'=>'question_title'));
+echo Display::page_header(get_lang('QuestionsToReview'));
 
 if ($time_control) {
     echo $objExercise->return_time_left_div();	
@@ -182,8 +178,8 @@ foreach ($attempt_list as $question_id => $options) {
 		}
 	}    
 }
-$rows = array(Display::div('', array('class'=>'question_no_answer', 'style'=>'width:20px;height:10px;')), get_lang('QuestionWithNoAnswer'));
-echo Display::table(array() , $rows, array('class'=>'t'));
+echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+echo '<div class="clear"></div><br />';
 
 $table = '';
 $counter = 0;
@@ -206,12 +202,9 @@ foreach ($question_list as $questionId) {
 	}
 	$label_attributes = array();
 	$label_attributes['class'] = 'checkbox';
-	$label_attributes['for'] = $check_id;
+	$label_attributes['for'] = $check_id;	
+    $label_attributes['class'] = "checkbox";
 	
-	//Check if the question doesn't have an answer
-	if (!in_array($questionId, $exercise_result)) {
-	    $label_attributes['class'] = "checkbox question_no_answer";
-	}
 	
 	$checkbox          = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
 	$url               = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
@@ -223,10 +216,13 @@ foreach ($question_list as $questionId) {
 	} else {
 	    $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
 	}
+    //Check if the question doesn't have an answer
+    if (!in_array($questionId, $exercise_result)) {
+        $question_title = Display::label($question_title, 'warning');
+    }
 	$question_title    = Display::tag('label', $checkbox.$question_title, $label_attributes);	
 	$table            .= Display::div($question_title, array('class'=>'exercise_reminder_item'));		
 } // end foreach() block that loops over all questions
-
 
 echo Display::div($table, array('class'=>'span10'));
 

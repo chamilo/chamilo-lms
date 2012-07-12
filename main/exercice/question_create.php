@@ -126,6 +126,8 @@ $pictures_question_types[10] = 'mcuao.gif';
 $pictures_question_types[11] = 'mcmao.gif';
 $pictures_question_types[12] = 'mcmaco.gif';
 $pictures_question_types[13] = 'audio_question.png';
+$pictures_question_types[14] = 'mcmagl.gif';
+
 $question_list = Question::get_question_type_list();
 
 foreach ($question_list as $key=>$value) {

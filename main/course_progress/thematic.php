@@ -16,19 +16,19 @@ $url_token = "&sec_token=".$token;
 
 if (api_is_allowed_to_edit(null, true)) {
 	
-	echo '<div class="actions" style="margin-bottom:30px">';	
+	echo '<div class="actions">';	
 	switch ($action) {		
 		case 'thematic_add' :	
-				echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ThematicDetails'),'',ICON_SIZE_MEDIUM).'</a>';
-				break;		
+            echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ThematicDetails'),'',ICON_SIZE_MEDIUM).'</a>';
+            break;		
 		case 'thematic_list' :	
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
-				break;
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
+            break;
 		case 'thematic_details' :		
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
-				break;
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
+            break;
 		default :
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';		
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';		
 	}			
 	echo '</div>';
 }
@@ -228,13 +228,11 @@ if ($action == 'thematic_list') {
 		
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 	$form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
-	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
     $show_form = true;
     
-	if (!empty($thematic_data)) {
-        
+	if (!empty($thematic_data)) {        
         if (api_get_session_id()) {
         	if ($thematic_data['session_id'] != api_get_session_id()) {
         		$show_form  = false;

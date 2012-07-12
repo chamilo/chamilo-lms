@@ -361,16 +361,16 @@ class DisplayGradebook
 		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat = new Category();
 		$course_id = Database::get_course_by_category($selectcat);
-		$message_resource=$objcat->show_message_resource_delete($course_id);
+		$message_resource = $objcat->show_message_resource_delete($course_id);
         
         $grade_model_id = $catobj->get_grade_model_id();
         
-        //@todo move these in a function            
-        $sum_categories_weight_array = array();     
+        //@todo move these in a function
+        $sum_categories_weight_array = array();
         if (isset($catobj) && !empty($catobj)) {            
             $categories = Category::load(null, null, null, $catobj->get_id());
             if (!empty($categories)) {
-                foreach($categories as $category) {                  
+                foreach ($categories as $category) {                  
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
             } else {
@@ -380,38 +380,38 @@ class DisplayGradebook
 
 		if (!$is_course_admin && $status<>1 && $selectcat<>0) {
 			$user_id = api_get_user_id();
-			$catcourse	  = Category::load($catobj->get_id());            
+			$catcourse	  = Category::load($catobj->get_id());
+            $main_weight = $catcourse[0]->get_weight();
 			$scoredisplay = ScoreDisplay :: instance();			
 
 			// generating the total score for a course
 			$allevals= $catcourse[0]->get_evaluations($user_id,true);
 			$alllinks= $catcourse[0]->get_links($user_id,true);
 			$evals_links = array_merge($allevals, $alllinks);
-			$item_value=0;
-			$item_total=0;
-            $item_total_value = 0;            
+            
+			$item_value =0;
+			$item_total = 0;
+            $item_total_value = 0;     
+            //var_dump($sum_categories_weight_array);
             
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item           = $evals_links[$count];
 				$score          = $item->calc_score($user_id);
-                $my_score_denom =($score[1]==0) ? 1 : $score[1];
+                $divide			= ( ($score[1])==0 ) ? 1 : $score[1];
                 
-				$item_value     = $score[0]/$my_score_denom * $item->get_weight(); 
-                $sub_item_total      = $item->get_weight();                
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
                 
-                /*$item_value         = $item_value*$catcourse[0]->get_weight();                 
-                $sub_item_total      = $item->get_weight()*$catcourse[0]->get_weight();                
-                */
-                //var_dump($item_value.' - '.$sub_item_total);
-                $item_total         += $sub_item_total;                
-                $item_total_value   += $item_value;                
+                $item_value     = round($score[0]/$divide, 2);
+                //$item_value     = $item_value*$item->get_weight();
+                $item_value     =round($score[0]/$divide*$item->get_weight(),2)*$sub_cat_percentage/$main_weight;      
+                //var_dump($score[0].' '.$divide.' '.$item->get_weight().' - '.$item_value.' '.$sub_cat_percentage);
+                $item_value_total +=$item_value;
 			}
             
+            $item_total = $main_weight;
+            
             $item_total = round($item_total);
-			//$item_value = number_format($item_total_value, api_get_setting('gradebook_number_decimals'));
-            $item_value = number_format($item_total_value, 2);
-			$total_score = array($item_value, $item_total);
-		
+			$total_score = array($item_value_total, $item_total);       
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
 			if ((!$catobj->get_id() == '0') && (!isset ($_GET['studentoverview'])) && (!isset ($_GET['search']))) {

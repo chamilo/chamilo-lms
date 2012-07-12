@@ -15,7 +15,7 @@
 define('LINK_EXERCISE',				1);
 define('LINK_DROPBOX',				2);
 define('LINK_STUDENTPUBLICATION',	3);
-define('LINK_LEARNPATH',			4);
+define('LINK_LEARNPATH',            4);
 define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);

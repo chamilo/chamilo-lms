@@ -148,13 +148,13 @@ switch ($action) {
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
         	            
-            //"all" or "simple" strings means that there's one or all questions           
+            //"all" or "simple" strings means that there's one or all questions exercise type          
             $type                   = $_REQUEST['type'];         
             
-            //Normal questions choices
+            //Questions choices
             $choice                 = $_REQUEST['choice'];
             
-            //All Hotspot coordinates from all questions 
+            //Hotspot coordinates from all questions 
             $hot_spot_coordinates   = $_REQUEST['hotspot'];            
             
             //There is a reminder?
@@ -170,12 +170,15 @@ switch ($action) {
             if ($debug) error_log("remind_list = $remind_list ");            
             
             //Exercise information            
-            $question_id             = intval($_REQUEST['question_id']);            
-            $question_list           = $_SESSION['questionList'];
             $objExercise             = $_SESSION['objExercise'];
             
+            //Question info
+            $question_id             = intval($_REQUEST['question_id']);            
+            $question_list           = $_SESSION['questionList'];
+            
+            //If exercise or question is not set then exit
             if (empty($question_list) || empty($objExercise)) {
-                echo 0;
+                echo 'error';
                 exit;
             }
             
@@ -233,7 +236,7 @@ switch ($action) {
             }
             
             
-            //No exe id? Can't save answer
+            //No exe id? Can't save answer.
             if (empty($exe_id)) {
                 //Fires an error 
                 echo 'error';
@@ -288,7 +291,6 @@ switch ($action) {
                     
                     //Removing old score
                     $total_score = $total_score - $old_result['score'];                                        
-                } else {                    
                 }
                 
                 // Deleting old attempt
@@ -326,7 +328,7 @@ switch ($action) {
                     if (!empty($exercise_stat_info['exe_duration'])) {                        
                         $duration += $exercise_stat_info['exe_duration'];
                     }
-                    $duration = intval($duration);                    
+                    $duration = intval($duration);             
                 } else {                    
                     if (!empty($exercise_stat_info['exe_duration'])) {
                         $duration = $exercise_stat_info['exe_duration'];

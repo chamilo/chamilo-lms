@@ -606,4 +606,8 @@ class Evaluation implements GradebookItem
             }
         }
     }
+    
+    function delete_linked_data() {
+        
+    }
 }

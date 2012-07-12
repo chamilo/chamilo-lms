@@ -13,14 +13,15 @@ if (defined('SYSTEM_INSTALLATION')) {
     Log::notice("Starting " . basename(__FILE__));
 
     // Edit the configuration file
-    $file = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
-    $fh = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
-    $found_version_old = false;
-    $found_stable_old = false;
-    $found_version = false;
-    $found_stable = false;
-    $found_software_name = false;
-    $found_software_url = false;
+    $file   = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
+    $fh     = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
+    
+    $found_version_old      = false;
+    $found_stable_old       = false;
+    $found_version          = false;
+    $found_stable           = false;
+    $found_software_name    = false;
+    $found_software_url     = false;
 
     foreach ($file as $line) {
         $ignore = false;
@@ -45,7 +46,8 @@ if (defined('SYSTEM_INSTALLATION')) {
             $found_software_url = true;
             $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
         } elseif (stripos($line, '$userPasswordCrypted') !== false) {
-            $line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
+            //$line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
+            $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";            
         } elseif (stripos($line, '?>') !== false) {
             $ignore = true;
         }
@@ -53,6 +55,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             fwrite($fh, $line);
         }
     }
+    
     if (!$found_version) {
         fwrite($fh, '$_configuration[\'system_version\'] = \'' . $new_version . '\';' . "\r\n");
     }
@@ -64,7 +67,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
     if (!$found_software_url) {
         fwrite($fh, '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n");
-    }
+    }    
     fwrite($fh, '?>');
     fclose($fh);
 } else {

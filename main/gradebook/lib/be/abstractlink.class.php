@@ -437,6 +437,5 @@ abstract class AbstractLink implements GradebookItem {
   		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
   		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
   		Database::query($sql);
-  	}
-    
+  	}    
 }

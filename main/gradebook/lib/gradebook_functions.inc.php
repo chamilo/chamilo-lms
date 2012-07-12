@@ -192,8 +192,6 @@ function build_edit_icons_cat($cat, $selectcat) {
         
         if (api_is_allowed_to_edit(null, true)) {
             
-            
-            
             //Locking button
             if (api_get_setting('gradebook_locking_enabled') == 'true') {            
                 

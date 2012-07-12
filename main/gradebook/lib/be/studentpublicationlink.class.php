@@ -275,6 +275,18 @@ class StudentPublicationLink extends AbstractLink
 		return 'studentpublication';
 	}
     
+    function save_linked_data() {
+        $weight = (float)$this->get_weight();        
+        $ref_id = $this->get_ref_id();
+        
+        if (!empty($ref_id)) {
+            //Cleans works            
+            $sql = 'UPDATE '.$this->get_studpub_table().' SET weight= '.$weight.'
+                    WHERE c_id = '.$this->course_id.' AND id ='.$ref_id;
+            Database::query($sql);
+        }
+    }
+    
     function delete_linked_data() {
         $ref_id = $this->get_ref_id();
         if (!empty($ref_id)) {

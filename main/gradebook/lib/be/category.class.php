@@ -387,12 +387,14 @@ class Category implements GradebookItem
 			return $id;
 		}
 	}
+    
 	/**
 	 * Update the properties of this category in the database
      * @todo fix me
 	 */
 	public function save() {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        
 		$sql = 'UPDATE '.$tbl_grade_categories." SET name = '".Database::escape_string($this->get_name())."'".', description = ';
 		if (isset($this->description)) {
 			$sql .= "'".Database::escape_string($this->get_description())."'";
@@ -407,7 +409,7 @@ class Category implements GradebookItem
 			$sql .= 'null';
 		}
 		$sql .=	', parent_id = ';
-		if (isset ($this->parent)) {
+		if (isset($this->parent)) {
 			$sql .= intval($this->get_parent_id());
 		} else {
 			$sql .= 'null';
@@ -427,11 +429,11 @@ class Category implements GradebookItem
         
 		Database::query($sql);
                 
-        if (!empty($this->id)) {        
+        if (!empty($this->id)) {   
             $parent_id = $this->get_parent_id();
             $grade_model_id = $this->get_grade_model_id();
             if ($parent_id == 0) {        
-                //do something           
+                
                 if (isset($grade_model_id) && !empty($grade_model_id) && $grade_model_id != '-1') {
                     $obj = new GradeModel();                             
                     $components = $obj->get_components($grade_model_id);
@@ -461,12 +463,36 @@ class Category implements GradebookItem
                 }
             }
         }
+        
+  
 
         
         $gradebook= new Gradebook();
         $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
 
 	}
+    
+    /**
+     * Update link weights see #5168
+     * @param type $new_weight
+     */
+    function update_children_weight($new_weight) {        
+        
+        //$evals = $this->get_evaluations();
+        $links = $this->get_links();
+        $old_weight = $this->get_weight();
+        
+        if (!empty($links)) {
+            foreach ($links as $link_item) {
+                if (isset($link_item)) {
+                    $new_item_weight =  $new_weight * $link_item->get_weight() / $old_weight;                    
+                    $link_item->set_weight($new_item_weight);
+                    $link_item->save();
+                }
+            }
+        }
+    }
+    
 
 	/**
 	 * Delete this evaluation from the database

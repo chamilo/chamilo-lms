@@ -239,6 +239,7 @@ class GradebookTable extends SortableTable {
 				$course_code	= api_get_course_id();
 				$session_id		= api_get_session_id();
 				$parent_id      = $item->get_id();
+                
 				$cats = Category :: load ($parent_id, null, null, null, null, null);
 			
 				$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);				
@@ -273,12 +274,18 @@ class GradebookTable extends SortableTable {
 					//Description
 					$row[] = $invisibility_span_open.$data[2].$invisibility_span_close;			
 					
-					//Weight
-					//$row[] = $invisibility_span_open . $data[3] .' / '.$category_weight.$invisibility_span_close;
-                    $weight = $data[3]/$category_weight*$main_cat[0]->get_weight();
+					//Weight					
+                    //$weight = $data[3]/$category_weight*$main_cat[0]->get_weight();                    
+                    /*$weight = $category_weight * $data[3] / $main_cat[0]->get_weight();        
+                    $weight = $main_cat[0]->get_weight()*$weight/$category_weight;*/
+                    
+                    $weight = $data[3];
+                    
+                    //$extra = " - $data[3]  $category_weight -".$main_cat[0]->get_weight();
+                                                
                     $total_weight += $weight;
                     
-                    $row[] = $invisibility_span_open.$weight.$invisibility_span_close;
+                    $row[] = $invisibility_span_open.$weight.$extra.$invisibility_span_close;
 					
 					if (api_is_allowed_to_edit(null, true)) {						
 						//$weight_total_links += intval($data[3]);

@@ -228,7 +228,7 @@ class ExerciseLink extends AbstractLink
     /**
      * Lazy load function to get the database table of the exercise
      */
-    private function get_exercise_table () {
+    private function get_exercise_table() {
     	$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST);
     	return $this->exercise_table;   		
     }

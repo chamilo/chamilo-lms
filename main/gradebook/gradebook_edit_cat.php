@@ -87,13 +87,19 @@ $form     = new CatForm(CatForm :: TYPE_EDIT, $catedit[0], 'edit_cat_form');
 
 if ($form->validate()) {
 	$values = $form->getSubmitValues();
-    if (isset($values['skills'])) {
-        //$res    = $gradebook->update_skills_to_gradebook($values['hid_id'], $values['skills']);
+    
+    $cat = new Category();
+	
+    if (!empty($values['hid_id'])) {
+        $cat = $cat->load($values['hid_id']);
+        if (isset($cat[0])) {
+            $cat = $cat[0];
+        }
     }
     
-	$cat = new Category();
 	$cat->set_id($values['hid_id']);
 	$cat->set_name($values['name']);
+    
 	if (empty ($values['course_code'])) {
 		$cat->set_course_code(null);
 	}else {
@@ -105,6 +111,9 @@ if ($form->validate()) {
 	$cat->set_skills($values['skills']);    
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
+    
+    //$cat->update_children_weight($values['weight']);
+    
 	$cat->set_weight($values['weight']);
     
 	if ($values['hid_parent_id'] == 0 ) {

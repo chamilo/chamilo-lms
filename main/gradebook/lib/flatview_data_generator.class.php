@@ -97,13 +97,13 @@ class FlatViewDataGenerator
 		//@todo move these in a function
 		$sum_categories_weight_array = array();
 		if (isset($this->category) && !empty($this->category)) {
-			$categories = Category::load(null, null, null, $this->category->get_id());
+			$categories = Category::load(null, null, null, $this->category->get_id());            
 			if (!empty($categories)) {
 			    foreach ($categories as $category) {			         
 				    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
 			} else {
-			    $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();
+			    $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();                
 			}
 		}
         
@@ -125,7 +125,8 @@ class FlatViewDataGenerator
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item = $this->evals_links[$count + $items_start];                    
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                    $weight = round($item->get_weight()/($sub_cat_percentage)*$sub_cat_percentage/$this->category->get_weight() *100, 2);
+                    //$weight = round($item->get_weight()/($sub_cat_percentage)*$sub_cat_percentage/$this->category->get_weight() *100, 2);
+                    $weight = 100*$item->get_weight()/$main_weight;                    
                     $headers[] = $item->get_name().' '.$weight.' % ';                
                 }
             }            
@@ -317,7 +318,8 @@ class FlatViewDataGenerator
                     $item_total		+= $sub_cat->get_weight();
                     
                     if ($convert_using_the_global_weight) {
-                        $score[0] = $main_weight*$score[0]/$sub_cat->get_weight();
+                        //$score[0] = $main_weight*$score[0]/$sub_cat->get_weight();                        
+                        $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();                        
                         $score[1] = $main_weight ;
                     }
                     
@@ -340,29 +342,32 @@ class FlatViewDataGenerator
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item  			= $this->evals_links[$count + $items_start];                    
                     $score 			= $item->calc_score($user_id);
-                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];  
+                    $divide			= ( ($score[1])==0 ) ? 1 : $score[1];
                     
                     //sub cat weight
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 
-                    $item_value     = round($score[0]/$divide,2);
-
+                    $item_value     = round($score[0]/$divide, 2);
+                    
                     //Fixing total when using one or multiple gradebooks 
-                    if ($this->category->get_parent_id() == 0 ) {
-                        $item_value     = $item_value;
+                    if ($this->category->get_parent_id() == 0 ) {                        
                         $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
-                    } else {                       
-                        $item_value     = $item_value*$item->get_weight();                        
-                        $item_value     = $main_weight*$item_value/$item->get_weight();                        
-                    }                    
+                    } else {
+                        $item_value     = $item_value*$item->get_weight(); 
+                        //var_dump($item_value.' - '.$item->get_weight());
+                        //$item_value     = $main_weight*$item_value/$item->get_weight();
+                        //$item_value     = $item_value*100/$item->get_weight();
+                    }
+                    
                     $item_total		+= $item->get_weight();                    
-                    $temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
-                    //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
+                    //$temp_score     = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                    //$temp_score     = $item_value.' - '.$scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                    $temp_score     = $item_value;                    
                     
                     if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {                            
                             if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
-                                                                LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+                                                                   LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
                                 if (!empty($score[0])) {
                                    $row[] = $temp_score.' ';                                        
                                 } else {
@@ -374,14 +379,14 @@ class FlatViewDataGenerator
                         } else {                         
                            $row[] = $temp_score;                           
                         }          
-                    }
-                    $item_value_total +=$item_value;              
+                    }                    
+                    $item_value_total +=$item_value;
                 }
                 $item_total = $main_weight;
             }
             
             $item_total = round($item_total);
-			$total_score = array($item_value_total, $item_total);	
+			$total_score = array($item_value_total, $item_total);            
             
 			if (!$show_all) {
                 if ($export_to_pdf) {

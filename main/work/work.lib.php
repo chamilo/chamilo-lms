@@ -528,8 +528,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
                                                 
                         $defaults['weight[weight]'] = $link_info['weight'];
                         
-                        if (!empty($link_info)) {      
-                            var_dump($link_info);
+                        if (!empty($link_info)) {                            
                             $defaults['category_id'] = $link_info['category_id'];
                             $defaults['make_calification'] = 1;
                         }

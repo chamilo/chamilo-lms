@@ -527,8 +527,7 @@ switch ($action) {
         }        
 		break;        
     case 'upload': 
-        $check = Security::check_token('post');        
-        //var_dump($check);
+        $check = Security::check_token('post');                
 		if ($student_can_edit_in_session && $check) {
 			
 			//check the token inserted into the form

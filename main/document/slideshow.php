@@ -193,7 +193,9 @@ if ($slide_id == 'all') {
 	$directory_thumbnails=$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
 	
 	// Create the template_thumbnails folder (if no exist)
-	if (!$directory_thumbnails) {
+	
+	
+	if (!file_exists($directory_thumbnails)) {
 		@mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
     }
 	

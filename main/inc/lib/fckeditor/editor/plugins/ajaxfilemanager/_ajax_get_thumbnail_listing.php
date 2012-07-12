@@ -76,7 +76,7 @@ foreach ($fileList as $file) {
 					
 					$directory_thumbnails=dirname($file['path']).'/.thumbs/';
 					
-					if (!$directory_thumbnails) {
+					if (!file_exists($directory_thumbnails)) {
 						@mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
    				 	}
 					

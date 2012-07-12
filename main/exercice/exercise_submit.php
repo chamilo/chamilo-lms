@@ -789,8 +789,15 @@ if (!empty($error)) {
 				url = "exercise_submit.php?'.$params.'&num="+question_num;
 				window.location = url;
 			}
+            
+            function previous_question_and_save(previous_question_id, question_id_to_save) {            
+                url = "exercise_submit.php?'.$params.'&num="+previous_question_id;                    
+                //Save the current question
+                save_now(question_id_to_save, url);
+            }
+            
 
-           function save_now(question_id) {
+           function save_now(question_id, url_extra) {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -839,6 +846,10 @@ if (!empty($error)) {
 								} else {
 									url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
 								}
+                                
+                                if (url_extra) {
+                                    url = url_extra;
+                                }
 								window.location = url;
                         	}
                         },

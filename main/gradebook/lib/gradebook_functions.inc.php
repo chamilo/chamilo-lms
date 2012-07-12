@@ -28,7 +28,7 @@ require_once 'gradebook_functions_users.inc.php';
  * @param   int     Session ID (optional or 0 if not defined)
  * @return  boolean True on success, false on failure
  */
-function add_resource_to_course_gradebook($category_id, $course_code, $resource_type, $resource_id, $resource_name='', $weight=0, $max=0, $resource_description='',  $visible=0, $session_id = 0) {
+function add_resource_to_course_gradebook($category_id, $course_code, $resource_type, $resource_id, $resource_name='', $weight=0, $max=0, $resource_description='',  $visible =  0, $session_id = 0, $link_id = null) {
     $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
@@ -57,6 +57,38 @@ function add_resource_to_course_gradebook($category_id, $course_code, $resource_
     	$link->set_session_id($session_id);
     }
     $link->add();
+    return true;
+}
+
+/**
+ * Update a resource weight
+ * @param    int     Link/Resource ID
+ * @return   bool    false on error, true on success
+ */
+function update_resource_from_course_gradebook($link_id, $course_code, $weight) {
+    $course_code = Database::escape_string($course_code);
+    if (!empty($link_id)) {
+        $link_id = intval($link_id);
+        $sql = 'UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' 
+                SET weight = '."'".Database::escape_string((float)$weight)."'".'
+                WHERE course_code = "'.$course_code.'" AND id = '.$link_id;
+        Database::query($sql);
+    }   
+    return true;
+}
+
+
+/**
+ * Remove a resource from the unique gradebook of a given course
+ * @param    int     Link/Resource ID
+ * @return   bool    false on error, true on success
+ */
+function remove_resource_from_course_gradebook($link_id) {
+    if ( empty($link_id) ) { return false; }    
+    // TODO find the corresponding category (the first one for this course, ordered by ID)
+    $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+    $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
+    $res = Database::query($sql);
     return true;
 }
 
@@ -280,19 +312,12 @@ function build_edit_icons_link($link, $selectcat) {
 		$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';
 		
 		//If a work is added in a gradebook you can only delete the link in the work tool 
-		$show_delete = true;
-		if ($link->get_type() == 3) {
-			$show_delete = false;
-		}
-		if ($show_delete) {
-            if ($is_locked && !api_is_platform_admin()) {
-                $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);                
-            } else {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-            }
-		} else {
-			$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
-		}
+	
+        if ($is_locked && !api_is_platform_admin()) {
+            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);                
+        } else {
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+        }	
 		return $modify_icons;
 	}
 }
@@ -351,19 +376,6 @@ function get_resource_from_course_gradebook($link_id) {
     return $row;
 }
 
-/**
- * Remove a resource from the unique gradebook of a given course
- * @param    int     Link/Resource ID
- * @return   bool    false on error, true on success
- */
-function remove_resource_from_course_gradebook($link_id) {
-    if ( empty($link_id) ) { return false; }    
-    // TODO find the corresponding category (the first one for this course, ordered by ID)
-    $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
-    $res = Database::query($sql);
-    return true;
-}
 /**
  * Return the database name
  * @param    int

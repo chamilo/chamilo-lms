@@ -257,4 +257,14 @@ class ForumThreadLink extends AbstractLink
     public function get_icon_name() {
 		return 'forum';
 	}
+    
+    function delete_linked_data() {
+        $ref_id = $this->get_ref_id();
+        if (!empty($ref_id)) {            
+            //Cleans forum
+            $sql = 'UPDATE '.$this->get_forum_thread_table().' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" 
+                    WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
+            Database::query($sql);
+        }
+    }
 }

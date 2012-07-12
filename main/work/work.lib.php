@@ -503,35 +503,37 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
 					list($d_hour, $d_minute) = explode(':', $parts[1]);
 						
-                    if(Gradebook::is_active()){
+                    if (Gradebook::is_active()) {
+                        
+                        $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
+                        
                         $qualification_input[] = FormValidator :: createElement('text', 'qualification');
                         $form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
-
-                        if ((int)$row['weight'] == 0) {                         
                         
-                            $form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');                                                           
-                        
-                            $form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
-
-                            //Loading gradebook select
-                            load_gradebook_select_in_tool($form_folder);
-
-                            $weight_input2[] = FormValidator :: createElement('text', 'weight');
-                            $form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
-
-                            $form_folder -> addElement('html', '</div>');
+                        $form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');                                                                                   
+                            
+                        if (!empty($link_info)) {
+                            $form_folder -> addElement('html', '<div id=\'option3\' style="display:block">');
                         } else {
-                            $weight_input[] = FormValidator :: createElement('text', 'weight');
-                            //Loading gradebook select
-                            load_gradebook_select_in_tool($form_folder);                        
-                            $form_folder -> addGroup($weight_input, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');                            
+                            $form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
                         }
 
-                        $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
-                                                            
-                        $defaults['category_id'] = $link_info['category_id'];
-                    }else{
+                        //Loading gradebook select
+                        load_gradebook_select_in_tool($form_folder);
+
+                        $weight_input2[] = FormValidator :: createElement('text', 'weight');
+                        $form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
+
+                        $form_folder -> addElement('html', '</div>');
+                                                
+                        $defaults['weight[weight]'] = $link_info['weight'];
                         
+                        if (!empty($link_info)) {      
+                            var_dump($link_info);
+                            $defaults['category_id'] = $link_info['category_id'];
+                            $defaults['make_calification'] = 1;
+                        }
+                    } else {                        
                         $defaults['category_id'] = '';
                     }
 											
@@ -606,10 +608,8 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 					
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
-					}
-					if (!empty($row['weight'])) {
-						$defaults = array_merge($defaults, array('weight[weight]' => $row['weight']));
-					}
+					}            
+                    
 					$defaults['allow_text_assignment'] = $row['allow_text_assignment'];
 					$form_folder -> setDefaults($defaults);
 					$display_edit_form = true;
@@ -671,23 +671,25 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 							Database::query($sql);
 								
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            
-                            if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1 && !empty($_POST['category_id'])) {
-                                $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+                                                        
+                            $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $row['id'], api_get_session_id());
+                            $link_id = null;
+                            if (!empty($link_info)) {
                                 $link_id = $link_info['id'];
-                                if ($link_info !== false) {
-                                    $course_code = api_get_course_id();
-                                    Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' 
-                                                    WHERE course_code = "'.$course_code.'" AND id = '.$link_id);
+                            }
+                                
+                            if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1 && !empty($_POST['category_id'])) {
+                                if (empty($link_id)) {
+                                    add_resource_to_course_gradebook($_POST['category_id'], api_get_course_id(), LINK_STUDENTPUBLICATION, $row['id'], $_POST['dir_name'], (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], $_POST['description'], 1, api_get_session_id(), $link_id);
+                                } else {
+                                    update_resource_from_course_gradebook($link_id, api_get_course_id(), $_POST['weight']['weight']);
                                 }
-
-                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-                                require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
-                                $resource_name = $_POST['dir_name'];
-                                add_resource_to_course_gradebook($_POST['category_id'], api_get_course_id(), 3, $row['id'], $resource_name, (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], $_POST['description'], 1, api_get_session_id());                                
+                            } else {
+                                //Delete everything of the gradebook                                
+                                remove_resource_from_course_gradebook($link_id);                                
                             }
 
 							update_dir_name($work_data, $dir_name, $values['dir_name']);

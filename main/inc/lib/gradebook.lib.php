@@ -25,16 +25,17 @@ class Gradebook extends Model {
         $setting = ResultSet::create($sql)->first();
         $setting = $setting ? $setting : array();        
         $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
+        
         if ($inactive) {
             return false;
         }
         $c_id = $c_id ? intval($c_id) : api_get_course_int_id();        
         $table  = Database::get_course_table(TABLE_TOOL_LIST);
         $sql = "SELECT * from $table WHERE c_id = $c_id and name='$name'";
-        $item = ResultSet::create($sql)->first();
+        $item = ResultSet::create($sql)->first();        
         if (empty($item)) {
             return true;
-        }
+        }        
         return $item['visibility'] == '1';
     }
     

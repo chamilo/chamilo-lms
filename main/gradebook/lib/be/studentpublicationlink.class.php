@@ -264,10 +264,7 @@ class StudentPublicationLink extends AbstractLink
 	}
 
     public function is_valid_link() {    	    	
-/*        $sql = 'SELECT count(id) from '.$this->get_studpub_table().' 
-    			WHERE c_id = "'.$this->course_id.'" AND id = '.intval($this->get_ref_id()).' AND session_id='.api_get_session_id();
-        */
-    	$sql = 'SELECT count(id) from '.$this->get_studpub_table().' 
+    	$sql = 'SELECT count(id) FROM '.$this->get_studpub_table().' 
     			WHERE c_id = "'.$this->course_id.'" AND id = '.intval($this->get_ref_id()).'';
 		$result = Database::query($sql);
 		$number = Database::fetch_row($result);
@@ -277,4 +274,14 @@ class StudentPublicationLink extends AbstractLink
     public function get_icon_name() {
 		return 'studentpublication';
 	}
+    
+    function delete_linked_data() {
+        $ref_id = $this->get_ref_id();
+        if (!empty($ref_id)) {
+            //Cleans works            
+            $sql = 'UPDATE '.$this->get_studpub_table().' SET weight=0
+                    WHERE c_id = '.$this->course_id.' AND id ='.$ref_id;
+            Database::query($sql);
+        }
+    }
 }

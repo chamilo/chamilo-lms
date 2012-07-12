@@ -780,14 +780,12 @@ switch ($action) {
             $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
             
             $form->addElement('html', '<div id="options" style="display: none;">');
-            
-        
-            
-            if(Gradebook::is_active()){
+                        
+            if (Gradebook::is_active()) {              
                 //QualificationOfAssignment
                 $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));
                 $form->addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), array('id' =>'make_calification_id', 'onclick' => "javascript: if(this.checked){document.getElementById('option1').style.display='block';}else{document.getElementById('option1').style.display='none';}"));
-            }else{
+            } else {                
                 //QualificationOfAssignment
                 $form->addElement('hidden', 'qualification_value',0);
                 $form->addElement('hidden', 'make_calification', false);

@@ -322,25 +322,17 @@ function event_link($link_id) {
  * @desc Record result of user when an exercice was done
 */
 function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {    
-    //error_log('Called to update_event_exercice');
-    //error_log('duration:' . $duration);    
 	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+    global $debug;
+    if ($debug) error_log('Called to update_event_exercice');
+    if ($debug) error_log('duration:' . $duration);    
+    
     if ($exeid != '') {
 		// Validation in case of fraud with actived control time
 		if (!exercise_time_control_is_valid($exo_id)) {
 			$score = 0;
 	    }
 
-        /*  start_date wouldn't be updated
-        $start_date_condition = '';
-	    //Validation in case of wrong start_date
-	    if (isset($_SESSION['exercice_start_date'])) {
-	    	$start_date = $_SESSION['exercice_start_date'];
-	    	$diff  = abs($start_date - $now);
-	    	if ($diff > 14400) { // 14400 = 4h*60*60 more than 4h of diff
-	    		$start_date = $now - 1800; //	Now - 30min
-	    	}
-	    }*/
 
 	    if (!isset($status) || empty($status)) {
 	    	$status = '';

@@ -1809,7 +1809,7 @@ class Exercise {
 	 * @return  string  html code
 	 */
 	public function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0, $hotspot_delineation_result = array()) {
-		global $_configuration, $feedback_type, $debug;		
+		global $feedback_type, $debug;		
 		require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
         
         if ($debug) error_log("<------ manage_answer ------> ");
@@ -1987,7 +1987,7 @@ class Exercise {
 					}					
 					$totalScore = $questionScore;
 					break;
-				case MULTIPLE_ANSWER : //2                    
+				case MULTIPLE_ANSWER : //2
 					if ($from_database) {
 						$choice = array();
 						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
@@ -2018,7 +2018,7 @@ class Exercise {
 				case GLOBAL_MULTIPLE_ANSWER :
 					if ($from_database) {
 						$choice = array();
-						$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
+						$queryans = "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";                        
 						$resultans = Database::query($queryans);
 						while ($row = Database::fetch_array($resultans)) {
 							$ind = $row['answer'];
@@ -3098,7 +3098,7 @@ class Exercise {
 				} else {					
 					exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
 				}
-			} elseif ($answerType == MULTIPLE_ANSWER) {
+			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
 				if ($choice != 0) {
 					$reply = array_keys($choice);
                     

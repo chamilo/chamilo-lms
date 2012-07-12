@@ -136,11 +136,11 @@ if (!class_exists('GlobalMultipleAnswer')):
 
             global $pts;
             //--------- Creation coche pour ne pas prendre en compte les n�gatifs
-            $form->addElement('checkbox', 'pts', '', get_lang('NoNegative'));
+            $form->addElement('checkbox', 'pts', '', get_lang('NoNegativeScore'));
             $form->addElement('html', '<br />');
             
             // Affiche un message si le score n'est pas renseign�
-            $form->addRule('weighting[1]', get_lang('EmptyScore'), 'required');
+            $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
             $navigator_info = api_get_navigator();
             global $text, $class, $show_quiz_edition;

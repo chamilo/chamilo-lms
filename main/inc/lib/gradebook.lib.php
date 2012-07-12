@@ -18,24 +18,21 @@ class Gradebook extends Model {
      * @param int $c_id Course integer id, defaults to the current course
      * @return boolean 
      */
-    public static function is_active($c_id = null)
-    {
-        $name = 'gradebook';
-        
+    public static function is_active($c_id = null) {
+        $name = 'gradebook';        
         $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $sql = "SELECT * from $table WHERE variable='course_hide_tools' AND subkey='$name'";
         $setting = ResultSet::create($sql)->first();
-        $setting = $setting ? $setting : array();
+        $setting = $setting ? $setting : array();        
         $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
-        if($inactive){
+        if ($inactive) {
             return false;
         }
-        $c_id = $c_id ? $c_id : api_get_course_int_id();        
-        
+        $c_id = $c_id ? intval($c_id) : api_get_course_int_id();        
         $table  = Database::get_course_table(TABLE_TOOL_LIST);
         $sql = "SELECT * from $table WHERE c_id = $c_id and name='$name'";
         $item = ResultSet::create($sql)->first();
-        if(empty($item)){
+        if (empty($item)) {
             return true;
         }
         return $item['visibility'] == '1';

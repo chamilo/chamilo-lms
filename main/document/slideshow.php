@@ -182,30 +182,51 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 $image_tag = array ();
 if ($slide_id == 'all') {
 	
-	// Create the template_thumbnails folder (if no exist)
-    if (!$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/') {
-		@mkdir($sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/', api_get_permissions_for_new_directories());
-    }
-	
 	// Config thumbnails
-	$row_items 			  = 4;
+	$row_items 			  = 4;//only in slideshow.php
 	$allowed_thumbnail_types = array('jpg','jpeg','gif','png');
 	$max_thumbnail_width  = 100;
 	$max_thumbnail_height = 100;
 	$png_compression	  = 0;//0(none)-9
-	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More queality less compression
+	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More quality less compression
 	
-
+	$directory_thumbnails=$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
+	
+	// Create the template_thumbnails folder (if no exist)
+	if (!$directory_thumbnails) {
+		@mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
+    }
+	
+	/*
+	//
+	//disabled by now, because automatic mode is heavy for server (scandir), only manual
+	//
+	
+	// Delete orphaned thumbnails
+	$directory_images=$sys_course_path.$_course['path'].'/document'.$folder;
+	$all_thumbnails  = scandir($directory_thumbnails);
+	$all_files  = scandir($directory_images);
+	foreach ($all_thumbnails as $check_thumb) {
+		$temp_filename=substr($check_thumb,1);//erase the first dot in file, and translate .. to .
+		if ($temp_filename=='.') {
+			 continue; //need because scandir also return . and .. simbols
+		}
+		if(in_array($filename, $all_files)==false) {
+			unlink($directory_thumbnails.'.'.$temp_filename);
+		}
+	}
+	*/
+	
 	// check files and thumbnails
 	if (is_array($image_files_only)) {
 		foreach ($image_files_only as $one_image_file) {
 			$image = $sys_course_path.$_course['path'].'/document'.$folder.$one_image_file;
-			$image_thumbnail= $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/.'.$one_image_file;
-			
+			$image_thumbnail= $directory_thumbnails.'.'.$one_image_file;
+
 			if (file_exists($image)) {
 				//check thumbnail
 				$imagetype = explode(".", $image);
-				$imagetype = strtolower($imagetype[count($imagetype)-1]);
+				$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
 				
 				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					
@@ -217,6 +238,9 @@ if ($slide_id == 'all') {
 								$source_img = imagecreatefromgif($image);
 								break;
 							case 'jpg':
+								$source_img = imagecreatefromjpeg($image);
+								break;
+							case 'jpeg':
 								$source_img = imagecreatefromjpeg($image);
 								break;
 							case 'png':
@@ -249,15 +273,19 @@ if ($slide_id == 'all') {
 						//resampled image
 						imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
 						
-						if($imagetype == ("jpg" || "jpeg")) {
-							imagejpeg($crop,$image_thumbnail,$jpg_quality);
-						}
-            			if($imagetype == "png") {
-							
-                			imagepng($crop,$image_thumbnail,$png_compression);
-						}
-            			if($imagetype == "gif"){	
-                			imagegif($crop,$image_thumbnail);
+						switch($imagetype) {
+							case 'gif':
+								imagegif($crop,$image_thumbnail);
+								break;
+							case 'jpg':
+								imagejpeg($crop,$image_thumbnail,$jpg_quality);
+								break;
+							case 'jpeg':
+								imagejpeg($crop,$image_thumbnail,$jpg_quality);
+								break;
+							case 'png':
+								imagepng($crop,$image_thumbnail,$png_compression);
+								break;
 						}
 		
 						//clean memory

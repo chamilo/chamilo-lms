@@ -234,6 +234,7 @@ class EvalForm extends FormValidator
 		}
 		$this->addElement('style_submit_button' , 'submit', get_lang('Ok'),'class="save"');
 	}
+    
 	/**
 	 * Builds a result form containing inputs for all students with a given course_code
 	 */
@@ -377,6 +378,7 @@ class EvalForm extends FormValidator
 		}
 		$this->addElement('style_submit_button', 'submit', get_lang('AddAssessment'),'class="add"');
 	}
+    
 	/**
 	 * Builds a form to edit an evaluation
 	 */
@@ -389,6 +391,7 @@ class EvalForm extends FormValidator
             $global_weight = $cat[0]->get_weight();                
             $weight_mask = $global_weight*$this->evaluation_object->get_weight()/$parent_cat[0]->get_weight() ;
         }
+        $weight_mask = $this->evaluation_object->get_weight();
             
 		$this->setDefaults(array (	'hid_id'            => $this->evaluation_object->get_id(), 
 									'name'              => $this->evaluation_object->get_name(), 
@@ -419,13 +422,13 @@ class EvalForm extends FormValidator
 
 		$this->addElement('header', $form_title);
 		$this->addElement('hidden', 'zero', 0);
-		$this->addElement('hidden', 'hid_user_id');
-		
+		$this->addElement('hidden', 'hid_user_id');		
 		$this->addElement('hidden', 'hid_course_code');
+        
 		$this->add_textfield('name', get_lang('EvaluationName'), true, array (
-			'class' => 'span3',
-			'maxlength' => '50',
-			'id' => 'evaluation_title'
+			'class'         => 'span3',
+			'maxlength'     => '50',
+			'id'            => 'evaluation_title'
 		));
         
         $cat_id = $this->evaluation_object->get_category_id();
@@ -521,7 +524,6 @@ class EvalForm extends FormValidator
 	function setDefaults($defaults= array ()) {
 		parent :: setDefaults($defaults);
 	}
-
 
 	private function build_stud_label ($id, $username,$lastname, $firstname) {
 		$opendocurl_start = '';

@@ -49,7 +49,9 @@ if ($form->validate()) {
     
     $parent_cat = Category :: load($values['hid_category_id']);            
     $global_weight = $cat[0]->get_weight();
-    $values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    $values['weight'] = $values['weight_mask'];
+    
     
 	$eval->set_weight($values['weight']);	
 	$eval->set_max($values['max']);

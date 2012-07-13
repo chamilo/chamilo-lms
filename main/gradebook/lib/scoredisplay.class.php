@@ -14,8 +14,8 @@ define('SCORE_PERCENT',                  2);    // XX %
 define('SCORE_DIV_PERCENT',              3);    // X / Y (XX %)
 define('SCORE_AVERAGE',                  4);    // XX %
 define('SCORE_DECIMAL',                  5);    // 0.50  (X/Y)
-
 define('SCORE_BAR',                      6);    // Uses the Display::bar_progress function
+define('SCORE_SIMPLE',                   7);    // X
 
 //@todo where is number 6?
 
@@ -25,7 +25,7 @@ define('SCORE_DIV_PERCENT_WITH_CUSTOM',  9);    // X / Y (XX %) - Good!
 define('SCORE_CUSTOM',                  10);    // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM',  11);    // X - Good!
 
-define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS',  12);    // X (ex) - Good!
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS',  12);    // X - Good!
 
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
@@ -246,6 +246,24 @@ class ScoreDisplay
 		}
 		Database::query($sql);
 	}
+    
+    public function get_number_decimals() {
+        $number_decimals = api_get_setting('gradebook_number_decimals');        
+        if (!isset($number_decimals)) {
+            $number_decimals = 0;
+        }        
+        return $number_decimals;
+    }
+    
+    /**
+     * Formats a number depending of the number of decimals
+     * 
+     * @param float a score
+     * @return float the score formatted
+     */
+    public function format_score($score) {        
+        return floatval(number_format($score, $this->get_number_decimals()));
+    }
 
 	/**
 	 * Display a score according to the current settings
@@ -256,12 +274,18 @@ class ScoreDisplay
 	 * 				(only taken into account if custom score display is enabled and for course/platform admin)
 	 */
 	public function display_score($score, $type = SCORE_DIV_PERCENT, $what = SCORE_BOTH, $no_color = false) {	  
-		$my_score = ($score==0) ? 1 : $score;	
+		$my_score = $score == 0 ? 1 : $score;	
         
         if ($type == SCORE_BAR) {
             $percentage = $my_score[0]/$my_score[1]*100;            
             return Display::bar_progress($percentage);
         }
+        
+        if ($type == SCORE_SIMPLE) {   
+            $simple_score = $this->format_score($my_score[0]);
+            return $simple_score;
+        }
+        
 		if ($this->custom_enabled && isset($this->custom_display_conv)) {		    
 	        $display = $this->display_default($my_score, $type);	        
 		} else {
@@ -325,7 +349,7 @@ class ScoreDisplay
 	
 	private function display_simple_score($score) {
 	    if (isset($score[0])) {
-	        return $score[0];
+	        return $this->format_score($score[0]);
 	    }
 	    return '';
 	}
@@ -335,15 +359,15 @@ class ScoreDisplay
      */
 	private function display_as_decimal($score) {
 		$score_denom = ($score[1]==0) ? 1 : $score[1];
-		return round(($score[0]/ $score_denom),2);
+		return $this->format_score($score[0]/$score_denom);
 	}
 	
 	/**
 	 * Returns "100 %" for array("100", "100");
 	 */
 	private function display_as_percent($score) {        
-		$score_denom=($score[1]==0) ? 1 : $score[1];        
-		return round(($score[0] / $score_denom) * 100,2) . ' %';
+		$score_denom = ($score[1]==0) ? 1 : $score[1];        
+		return $this->format_score($score[0]/$score_denom*100) . ' %';
 	}
 	
     /**
@@ -355,16 +379,19 @@ class ScoreDisplay
 		if ($score == 1) {
 			return '0/0';
 		} else {
+            $score[0] =$this->format_score($score[0]);
+            $score[1] =$this->format_score($score[1]);
 			return  $score[0] . ' / ' . $score[1];
 		}
 	}
+    
     /**
      * 
      * Depends in the user selections [0 50] Bad  [50:100] Good 
      * @param array $score
      */	
 	private function display_custom ($score) {
-		$my_score_denom= ($score[1]==0)?1:$score[1];
+		$my_score_denom= ($score[1]==0) ? 1 : $score[1];
 		$scaledscore = $score[0] / $my_score_denom;
 		if ($this->upperlimit_included) {
 			foreach ($this->custom_display_conv as $displayitem) {

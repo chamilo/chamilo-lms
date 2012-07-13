@@ -3970,7 +3970,6 @@ footer {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .btn.show{
     border:none;
     border-radius: 0;
@@ -4026,66 +4025,6 @@ footer {
     padding:0;
     display:inline-block;
     background-image:  url('../img/icons/22/delete.png');
-    background-repeat: no-repeat;
-    background-position:center center; 
-    box-shadow:none;
-}
-
-.btn.new_folder{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:32px;
-    height:32px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../img/icons/32/new_folder.png');
-    background-repeat: no-repeat;
-    background-position:center center; 
-    box-shadow:none;
-}
-
-.btn.new_link{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:32px;
-    height:32px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../img/icons/32/new_link.png');
-    background-repeat: no-repeat;
-    background-position:center center; 
-    box-shadow:none;
-}
-
-.btn.expand{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:32px;
-    height:32px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../img/div_hide.gif');
-    background-repeat: no-repeat;
-    background-position:center center; 
-    box-shadow:none;
-}
-
-.btn.collapse{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:32px;
-    height:32px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../img/div_show.gif');
     background-repeat: no-repeat;
     background-position:center center; 
     box-shadow:none;
@@ -4184,6 +4123,10 @@ li.annoucement{
 .control-text{
     padding-top: 5px;
     display:inline-block;
+}
+
+.boot-tooltip {
+    cursor: pointer;
 }
 
 .link_category{

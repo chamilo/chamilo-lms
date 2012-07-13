@@ -401,16 +401,13 @@ class DisplayGradebook
                 
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
                 
-                $item_value     = round($score[0]/$divide, 2);
+                $item_value     = $score[0]/$divide;
                 //$item_value     = $item_value*$item->get_weight();
-                $item_value     =round($score[0]/$divide*$item->get_weight(),2)*$sub_cat_percentage/$main_weight;      
+                $item_value     = $score[0]/$divide*$item->get_weight()*$sub_cat_percentage/$main_weight;
                 //var_dump($score[0].' '.$divide.' '.$item->get_weight().' - '.$item_value.' '.$sub_cat_percentage);
                 $item_value_total +=$item_value;
-			}
-            
+			}            
             $item_total = $main_weight;
-            
-            $item_total = round($item_total);
 			$total_score = array($item_value_total, $item_total);       
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 

@@ -118,20 +118,13 @@ class LinkAddEditForm extends FormValidator
                 $values['weight'] = $link->get_weight();                
             } else {
                 $cat = Category :: load($parent_cat[0]->get_parent_id());
-                $global_weight = $cat[0]->get_weight();
-                $values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
-                /* 
-                 * 33 -> 100 
-                 * x -> 25
-                 */
-                //100 33 25
+                //$global_weight = $cat[0]->get_weight();
+                //$values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
                 //var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
-                $weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
+                //$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
                 //$values['weight'] = $weight;
-                $values['weight'] = $link->get_weight() ;
-                
-            }
-			
+                $values['weight'] = $link->get_weight() ;                
+            }			
             $defaults['weight_mask'] = $values['weight'] ;   
             $defaults['select_gradebook'] = $link->get_category_id();
             

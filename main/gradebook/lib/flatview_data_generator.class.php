@@ -124,8 +124,7 @@ class FlatViewDataGenerator
             if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item = $this->evals_links[$count + $items_start];                    
-                    $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                    //$weight = round($item->get_weight()/($sub_cat_percentage)*$sub_cat_percentage/$this->category->get_weight() *100, 2);
+                    $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];                    
                     $weight = 100*$item->get_weight()/$main_weight;                    
                     $headers[] = $item->get_name().' '.$weight.' % ';                
                 }
@@ -307,13 +306,14 @@ class FlatViewDataGenerator
                                 
                 foreach ($allcat as $sub_cat) {
                     $score 			= $sub_cat->calc_score($user_id);
+                    $real_score     = $score;
                     $divide			= ( ($score[1])==0 ) ? 1 : $score[1];      
                     
                     $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
-                    $item_value     = round($score[0]/$divide,2) * $main_weight;
+                    $item_value     = $score[0]/$divide*$main_weight;
 
                     //Fixing total when using one or multiple gradebooks                    
-                    $percentage     = round($sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight(), 2);
+                    $percentage     = $sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight();
                     $item_value     = $percentage*$item_value;                    
                     $item_total		+= $sub_cat->get_weight();
                     
@@ -323,8 +323,9 @@ class FlatViewDataGenerator
                         $score[1] = $main_weight ;
                     }
                     
-                    //$temp_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);                    
+                    $real_score = $scoredisplay->display_score($real_score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);                    
                     $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
+                    $temp_score = Display::tip($temp_score, $real_score);
                     
                     if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {
@@ -347,11 +348,11 @@ class FlatViewDataGenerator
                     //sub cat weight
                     $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 
-                    $item_value     = round($score[0]/$divide, 2);
+                    $item_value     = $score[0]/$divide;
                     
                     //Fixing total when using one or multiple gradebooks 
                     if ($this->category->get_parent_id() == 0 ) {                        
-                        $item_value     =round($score[0]/$divide*$item->get_weight(),2);                    
+                        $item_value     = $score[0]/$divide*$item->get_weight();
                     } else {
                         $item_value     = $item_value*$item->get_weight(); 
                         //var_dump($item_value.' - '.$item->get_weight());
@@ -360,9 +361,13 @@ class FlatViewDataGenerator
                     }
                     
                     $item_total		+= $item->get_weight();                    
-                    //$temp_score     = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
+                    $complete_score     = $scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
                     //$temp_score     = $item_value.' - '.$scoredisplay->display_score($score, SCORE_DIV_PERCENT, SCORE_ONLY_SCORE);
-                    $temp_score     = $item_value;                    
+                    //$temp_score     = $item_value;
+                    $temp_score     = $scoredisplay->display_score(array($item_value, null), SCORE_DIV_SIMPLE_WITH_CUSTOM);
+                    
+                    $temp_score = Display::tip($temp_score, $complete_score);
+                    
                     
                     if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {                            
@@ -383,9 +388,7 @@ class FlatViewDataGenerator
                     $item_value_total +=$item_value;
                 }
                 $item_total = $main_weight;
-            }
-            
-            $item_total = round($item_total);
+            }            
 			$total_score = array($item_value_total, $item_total);            
             
 			if (!$show_all) {
@@ -425,7 +428,7 @@ class FlatViewDataGenerator
 			for ($count=0;$count < count($this->evals_links); $count++) {
 				$item = $this->evals_links [$count];
 				$score = $item->calc_score($user[0]);				
-				$porcent_score = isset($score[1]) &&  $score[1] > 0 ? round(($score[0]*100)/$score[1]):0;
+				$porcent_score = isset($score[1]) &&  $score[1] > 0 ? ($score[0]*100)/$score[1] :0;
 				$row[$item->get_name()] = $porcent_score;
 			}
 			$data[$user[0]] = $row;
@@ -481,16 +484,16 @@ class FlatViewDataGenerator
 				$score = $item->calc_score($user[0]);
 			
 				$divide =( ($score[1])==0 ) ? 1 : $score[1];
-                $item_value += round($score[0]/$divide*$item->get_weight(),2);
+                $item_value += $score[0]/$divide*$item->get_weight();
 				$item_total += $item->get_weight();
 				
 				
 				$score_denom = ($score[1]==0) ? 1 : $score[1];
-				$score_final = round(($score[0] / $score_denom) * 100,2);
+				$score_final = ($score[0] / $score_denom) * 100;
 				$row[] = $score_final;
 			}
 			$total_score = array($item_value, $item_total);
-			$score_final = round(($item_value / $item_total) * 100,2);
+			$score_final = ($item_value / $item_total) * 100;
 			
 			$row[] = $score_final;
 			$data[] = $row;
@@ -522,15 +525,15 @@ class FlatViewDataGenerator
 				$item = $this->evals_links [$count];
 				$score = $item->calc_score($user[0]);
 				$divide=( ($score[1])==0 ) ? 1 : $score[1];
-				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
+				$item_value+= $score[0]/$divide*$item->get_weight();
 				$item_total+=$item->get_weight();
 				$score_denom=($score[1]==0) ? 1 : $score[1];
-				$score_final = round(($score[0] / $score_denom) * 100,2);
+				$score_final = ($score[0] / $score_denom) * 100;
 				$row[] = array ($score_final, trim($scoredisplay->display_score($score, SCORE_CUSTOM,null, true)));
 
 			}
 			$total_score=array($item_value,$item_total);
-			$score_final = round(($item_value / $item_total) * 100,2);
+			$score_final = ($item_value / $item_total) * 100;
 			$row[] =array ($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
 
 			$data[] = $row;

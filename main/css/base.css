@@ -52,6 +52,14 @@ legend {
     font-weight: bold;
 }
 
+header {
+    margin-bottom: 11px;
+}
+
+.breadcrumb {
+    margin-bottom: 0px;
+}
+
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
@@ -84,7 +92,6 @@ label, input, button, select, textarea, p {
 .badge-group  > :nth-child(5) {
     z-index: 600;
 }
-
 
 .badge-group .badge:not(:first-child) {
     margin-left: -13px;

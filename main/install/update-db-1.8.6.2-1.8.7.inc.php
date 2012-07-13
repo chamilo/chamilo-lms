@@ -311,10 +311,12 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $sql_question = "SELECT id_auto FROM $my_course_db.quiz_answer where question_id = $question_id and id = $answer";
                             $res_question = iDatabase::query($sql_question);
                             $row = iDatabase::fetch_array($res_question);
-                            $id_auto = $row['id_auto'];
-                            if (!empty($id_auto)) {
-                                $sql = "UPDATE $dbStatsForm.track_e_attempt SET answer = '$id_auto' WHERE exe_id = $exe_id AND question_id = $question_id AND course_code = '$course_code' and answer = $answer ";
-                                iDatabase::query($sql);
+                            if($row){
+                                $id_auto = $row['id_auto'];
+                                if (!empty($id_auto)) {
+                                    $sql = "UPDATE $dbStatsForm.track_e_attempt SET answer = '$id_auto' WHERE exe_id = $exe_id AND question_id = $question_id AND course_code = '$course_code' and answer = $answer ";
+                                    iDatabase::query($sql);
+                                }
                             }
                         }
                     }

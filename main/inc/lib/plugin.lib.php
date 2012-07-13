@@ -330,7 +330,7 @@ class AppPlugin {
                 if (!empty($obj->course_settings)) {
                     $icon = Display::return_icon($plugin_name.'.png', Security::remove_XSS($plugin_info['title']),'', ICON_SIZE_SMALL);
                     //$icon = null;
-                    $form->addElement('html', '<div><h3>'.$icon.Security::remove_XSS($plugin_info['title']).'</h3><div>');
+                    $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($plugin_info['title']).'</h3><div>');
 
                     foreach ($obj->course_settings as $setting) {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));

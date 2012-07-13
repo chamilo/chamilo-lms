@@ -295,7 +295,6 @@ class SessionManager {
 					$session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
 				}
 
-
 				if ($session['date_start'] == '0000-00-00') {
 					$session['date_start'] = '';
 				}
@@ -313,8 +312,8 @@ class SessionManager {
 					case SESSION_INVISIBLE:         //3
 						$session['visibility'] =  api_ucfirst(get_lang('Invisible'));
 					break;
-			  }
-			  $formatted_sessions[] = $session;
+                }
+                $formatted_sessions[] = $session;
 			}
 		}
 		
@@ -603,8 +602,7 @@ class SessionManager {
 		while($row = Database::fetch_array($result)) {
 			$course_list[]=$row['course_code'];
 		}
-
-
+        
 		if ($send_email) {
 		    //global $_configuration;
 			//sending emails only

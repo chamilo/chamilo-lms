@@ -205,8 +205,7 @@ if (empty($session_id)) {
 	$count_sessions = count($sessions);
 		
 	//Students	
-	$nb_students = count($students);
-	
+	$nb_students = count($students);	
 	
 	$total_time_spent 			= 0;
 	$total_courses 				= 0;
@@ -287,9 +286,8 @@ if (empty($session_id)) {
 			$csv_content[] = array();
 		} else {
 			// html part
-			echo '
-				 <div class="report_section">			
-					<table class="data_table">
+			echo '<div class="report_section">
+					<table class="table table-bordered">
 						<tr>
 							<td>'.get_lang('InactivesStudents').'</td>
 							<td align="right">'.$nb_inactive_students.'</td>
@@ -307,7 +305,7 @@ if (empty($session_id)) {
 							<td align="right">'.(is_null($avg_total_progress) ? '' : round($avg_total_progress, 2).'%').'</td>
 						</tr>
 						<tr>
-							<td>'.get_lang('AverageResultsToTheExercices').'</td>
+							<td>'.get_lang('AvgCourseScore').'</td>
 							<td align="right">'.(is_null($avg_results_to_exercises) ? '' : round($avg_results_to_exercises, 2).'%').'</td>
 						</tr>
 						<tr>
@@ -438,22 +436,14 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		
 		$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;
 		$courses = array();
-		foreach ($sessions as $session) {
-			if ($session['date_start'] == '0000-00-00') {
-				$nb_sessions_current ++;
-			} else {
-				$date_start = explode('-', $session['date_start']);
-				$time_start = mktime(0, 0, 0, $date_start[1], $date_start[2], $date_start[0]);
-				$date_end = explode('-', $session['date_end']);
-				$time_end = mktime(0, 0, 0, $date_end[1], $date_end[2], $date_end[0]);
-				if ($time_start < time() && time() < $time_end) {
-					$nb_sessions_current++;
-				} elseif (time() < $time_start) {
-					$nb_sessions_future++;
-				} elseif (time() > $time_end) {
-					$nb_sessions_past++;
-				}
-			}
+        
+		foreach ($sessions as $session) {            
+            $visibility = api_get_session_visibility($session['id']);            
+            if ($visibility == SESSION_AVAILABLE) {
+                $nb_sessions_current ++;
+            } else {
+                $nb_sessions_past++;
+            } 
 			$courses = array_merge($courses, Tracking::get_courses_list_from_session($session['id']));
 		}
 		
@@ -469,28 +459,29 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			//csv part
 			$csv_content[] = array(get_lang('Sessions', ''));
 			$csv_content[] = array(get_lang('NbActiveSessions', '').';'.$nb_sessions_current);
-			$csv_content[] = array(get_lang('NbPastSessions', '').';'.$nb_sessions_past);
-			$csv_content[] = array(get_lang('NbFutureSessions', '').';'.$nb_sessions_future);
+			$csv_content[] = array(get_lang('NbInactiveSessions', '').';'.$nb_sessions_past);
+			//$csv_content[] = array(get_lang('NbFutureSessions', '').';'.$nb_sessions_future);
 			$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);
 			$csv_content[] = array(get_lang('NbCoursesPerSession', '').';'.$nb_courses_per_session);
 			$csv_content[] = array();
 		} else {
 			// html part
+            
+            			/*<tr>
+						<td>'.get_lang('NbFutureSessions').'</td>
+						<td align="right">'.$nb_sessions_future.'</td>
+					</tr>*/
 			echo '
 			<div class="report_section">				
-				<table class="data_table">
+				<table class="table table-bordered">
 					<tr>
 						<td>'.get_lang('NbActiveSessions').'</td>
 						<td align="right">'.$nb_sessions_current.'</td>
 					</tr>
 					<tr>
-						<td>'.get_lang('NbPastSessions').'</td>
+						<td>'.get_lang('NbInactiveSessions').'</td>
 						<td align="right">'.$nb_sessions_past.'</td>
-					</tr>
-					<tr>
-						<td>'.get_lang('NbFutureSessions').'</td>
-						<td align="right">'.$nb_sessions_future.'</td>
-					</tr>
+					</tr>		
 					<tr>
 						<td>'.get_lang('NbStudentPerSession').'</td>
 						<td align="right">'.(is_null($nb_students_per_session) ? '' : $nb_students_per_session).'</td>

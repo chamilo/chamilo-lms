@@ -38,6 +38,11 @@ class Plugin {
         );
      */
     public  $course_settings = array();
+    /**
+     * This indicates whether changing the setting should execute the callback
+     * function.
+     */
+    public  $course_settings_callback = false;
 
     /**
      * Default constructor for the plugin class. By default, it only sets
@@ -282,11 +287,29 @@ class Plugin {
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
-                $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
-                $result = Database::query($sql);
-                if (!Database::num_rows($result)) {
-                    $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey) VALUES ($course_id, '$variable','', 'plugins', '$plugin_name')";
-                    $r = Database::query($sql_course);
+                $value ='';
+                if (isset($setting['init_value'])) {
+                    $value = Database::escape_string($setting['init_value']);
+                }
+                $type = 'textfield';
+                if (isset($setting['type'])) {
+                    $type = Database::escape_string($setting['type']);
+                }
+                if (isset($setting['group'])) {
+                    $group = Database::escape_string($setting['group']);
+                    $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$group' AND subkey = '$variable' ";
+                    $result = Database::query($sql);
+                    if (!Database::num_rows($result)) {
+                        $sql_course = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES ($course_id, '$group', '$variable', '$value', 'plugins', '$type')";
+                        $r = Database::query($sql_course);
+                    }
+                } else {
+                    $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
+                    $result = Database::query($sql);
+                    if (!Database::num_rows($result)) {
+                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
+                        $r = Database::query($sql_course);
+                    }
                 }
             }
         }
@@ -323,6 +346,9 @@ class Plugin {
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
+                if (!empty($setting['group'])) {
+                    $variable = Database::escape_string($setting['group']);
+                }
                 $sql_course = "DELETE FROM $t_course WHERE c_id = $course_id AND variable = '$variable'";
                 Database::query($sql_course);
             }
@@ -359,5 +385,13 @@ class Plugin {
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
         }
+    }
+    /**
+     * Method to be extended when changing the setting in the course
+     * configuration should trigger the use of a callback method
+     * @param array Values sent back from the course configuration script
+     * @return void
+     */
+    private function course_settings_updated($values = array()) {
     }
 }

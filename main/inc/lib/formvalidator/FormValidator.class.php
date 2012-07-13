@@ -251,6 +251,36 @@ EOT;
         }
     }
     
+    function add_hidden($name, $value)
+    {
+        $this->addElement('hidden', $name, $value);
+    }
+    
+    function add_textarea($name, $label, $attributes = array())
+    {
+        $this->addElement('textarea', $name, $label, $attributes);
+    }
+    
+    function add_button($name, $label, $attributes = array())
+    {
+        $this->addElement('button', $name, $label, $attributes);
+    }
+    
+    function add_checkbox($name, $label, $trailer = '', $attributes = array())
+    {
+        $this->addElement('checkbox', $name, $label, $trailer, $attributes);
+    }
+    
+    function add_select($name, $label, $options = '', $attributes = array())
+    {
+        $this->addElement('select', $name, $label, $options, $attributes);
+    }
+    
+    function add_label($name, $text)
+    {
+        $this->addElement('label', $name, $text);
+    }
+    
     function add_header($text)
     {
         $this->addElement('header', $text);

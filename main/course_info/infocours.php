@@ -83,24 +83,24 @@ if (Database::num_rows($q_result_titulars) == 0) {
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
 while ($a_titulars = Database::fetch_array($q_result_titulars)) {
-	$s_username = $a_titulars['username'];
-	$s_lastname = $a_titulars['lastname'];
-	$s_firstname = $a_titulars['firstname'];
+    $s_username = $a_titulars['username'];
+    $s_lastname = $a_titulars['lastname'];
+    $s_firstname = $a_titulars['firstname'];
 
-	if (api_get_person_name($s_firstname, $s_lastname) == $s_tutor) {
-		$s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
-	}
-	$s_disabled_select_titular = '';
-	if (!$is_courseAdmin) {
-		$s_disabled_select_titular = 'disabled=disabled';
-	}
-	$a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
+    if (api_get_person_name($s_firstname, $s_lastname) == $s_tutor) {
+        $s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
+    }
+    $s_disabled_select_titular = '';
+    if (!$is_courseAdmin) {
+        $s_disabled_select_titular = 'disabled=disabled';
+    }
+    $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
 $categories[''] = '-';
 while ($cat = Database::fetch_array($res)) {
-	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-	ksort($categories);
+    $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
+    ksort($categories);
 }
 
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
@@ -292,24 +292,25 @@ $group[]=$form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('
 $form->addGroup($group, '', array(get_lang("LPAutoLaunch")), '');
 
 if (api_get_setting('allow_course_theme') == 'true') {
-	// Allow theme into Learning path
-	$group = array();
-	$group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
-	$group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
+    // Allow theme into Learning path
+    $group = array();
+    $group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
+    $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
 
-	$group = array();
-	$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
+    $group = array();
+    $group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
     $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 }
 
 if (is_settings_editable()) {
-	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 } else {
-	// Is it allowed to edit the course settings?
-	if (!is_settings_editable())
-		$disabled_output = "disabled";
-	$form->freeze();
+    // Is it allowed to edit the course settings?
+    if (!is_settings_editable()) {
+        $disabled_output = "disabled";
+    }
+    $form->freeze();
 }
 $form->addElement('html', '</div></div>');
 
@@ -418,40 +419,40 @@ if ($form->validate() && is_settings_editable()) {
     $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',
     								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
 
-	foreach ($update_values as $index =>$value) {
-		$update_values[$index] = Database::escape_string($value);
-	}
-	unset($value);
-	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql = "UPDATE $table_course SET
-				title 				    = '".$update_values['title']."',
-				course_language 	    = '".$update_values['course_language']."',
-				category_code 		    = '".$update_values['category_code']."',
-				department_name  	    = '".$update_values['department_name']."',
-				department_url  	    = '".$update_values['department_url']."',
-				visibility  		    = '".$update_values['visibility']."',
-				subscribe  			    = '".$update_values['subscribe']."',
-				unsubscribe  		    = '".$update_values['unsubscribe']."',
-				legal                   = '".$update_values['legal']."',
-				activate_legal          = '".$update_values['activate_legal']."',
-				registration_code 	    = '".$update_values['course_registration_password']."'
-			WHERE code = '".$course_code."'";
-	Database::query($sql);
+    foreach ($update_values as $index =>$value) {
+        $update_values[$index] = Database::escape_string($value);
+    }
+    unset($value);
+    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $sql = "UPDATE $table_course SET
+        title 				    = '".$update_values['title']."',
+        course_language 	    = '".$update_values['course_language']."',
+        category_code 		    = '".$update_values['category_code']."',
+        department_name  	    = '".$update_values['department_name']."',
+        department_url  	    = '".$update_values['department_url']."',
+        visibility  		    = '".$update_values['visibility']."',
+        subscribe  			    = '".$update_values['subscribe']."',
+        unsubscribe  		    = '".$update_values['unsubscribe']."',
+        legal                   = '".$update_values['legal']."',
+        activate_legal          = '".$update_values['activate_legal']."',
+        registration_code 	    = '".$update_values['course_registration_password']."'
+        WHERE code = '".$course_code."'";
+    Database::query($sql);
 
-	// Update course_settings table - this assumes those records exist, otherwise triggers an error
-	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
-
+    // Update course_settings table - this assumes those records exist, otherwise triggers an error
+    $table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
     foreach ($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {
             Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
         }
     }
-	$cidReset = true;
-	$cidReq = $course_code;
-	require '../inc/local.inc.php';
-	header('Location: infocours.php?action=show_message&cidReq='.$course_code);
-	exit;
+    $app_plugin->save_course_settings($update_values);
+    $cidReset = true;
+    $cidReq = $course_code;
+    require '../inc/local.inc.php';
+    header('Location: infocours.php?action=show_message&cidReq='.$course_code);
+    exit;
 }
 
 /*	Header */
@@ -462,7 +463,7 @@ if ($show_delete_watermark_text_message) {
 }
 //api_display_tool_title($nameTools);
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-	Display :: display_normal_message(get_lang('ModifDone'));
+    Display :: display_normal_message(get_lang('ModifDone'));
 }
 
 echo '<script>

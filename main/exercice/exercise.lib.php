@@ -810,7 +810,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 	if (empty($extra_where_conditions)) {
 		$extra_where_conditions = "1 = 1 ";
 	}
-        
+    
+    $course_id = api_get_course_int_id();
+    $course_code = api_get_course_id();
+    
+            
    	$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 	$is_tutor                   = api_is_allowed_to_edit(true);
     
@@ -823,7 +827,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);    
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);    
     
-    $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
+    $session_id_and = ' AND te.session_id = '.api_get_session_id().' ';
     
     $exercise_id = intval($exercise_id);
     
@@ -839,8 +843,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     }  
          
     // sql for chamilo-type tests for teacher / tutor view		
-    $sql_inner_join_tbl_track_exercices = "(SELECT ttte.*, if(tr.exe_id,1, 0) as revised FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr ON (ttte.exe_id = tr.exe_id) )";
-    	
+    $sql_inner_join_tbl_track_exercices = " (
+                                            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised 
+                                            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr 
+                                            ON (ttte.exe_id = tr.exe_id) 
+                                            WHERE exe_cours_id = '$course_code' AND
+                                                  exe_exo_id = $exercise_id AND
+                                                  session_id = ".api_get_session_id()."
+                                            )";    	
     if ($is_allowedToEdit || $is_tutor) {
         //Teacher view		
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -860,19 +870,22 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             (
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
                 FROM $TBL_USER u 
-                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id().")
+                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id.")
                 INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
             )";
 
         }
            
-        if (strpos($extra_where_conditions, 'group_all')) {        
+        if (strpos($extra_where_conditions, 'group_all')) {   
+            
             $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);
             $extra_where_conditions = str_replace("AND group_id = 'group_all'", '', $extra_where_conditions);
+            $extra_where_conditions = str_replace("group_id = 'group_all' AND", '', $extra_where_conditions);
+                        
             $sql_inner_join_tbl_user = " 
             (
                 SELECT u.user_id, firstname, lastname, email, username, '' as group_name, '' as group_id
-                FROM $TBL_USER u                 
+                FROM $TBL_USER u
             )";
             $sql_inner_join_tbl_user = null;
         }
@@ -884,8 +897,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             (
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
                 FROM $TBL_USER u
-                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id()." ) 
-                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = ".api_get_course_int_id().")
+                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id." ) 
+                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = ".$course_id.")
             )";
         }
         
@@ -994,8 +1007,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (!empty($column)) {
             $sql .= " ORDER BY $column $direction ";
         }
-        $sq .= " LIMIT $from, $number_of_items";			
-
+        $sql .= " LIMIT $from, $number_of_items";			
+        
         $results = array();        
         $resx = Database::query($sql);
         while ($rowx = Database::fetch_array($resx,'ASSOC')) {
@@ -1003,7 +1016,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         }
     
         $list_info = array();
-    
+        
+        $group_list = GroupManager::get_group_list();
+        $clean_group_list = array();
+        
+        if (!empty($group_list)) {
+            foreach ($group_list as $group) {
+                $clean_group_list[$group['id']] = $group['name'];
+            }
+        }
+            
         if (is_array($results)) {
 			
             $users_array_id = array();
@@ -1015,8 +1037,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $user_list_id = array ();                        
                         
             $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
-            			
-            $group_list_info = array();
             
             //Looping results
             for ($i = 0; $i < $sizeof; $i++) {                
@@ -1035,12 +1055,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 if ($is_empty_sql_inner_join_tbl_user) {
                     $group_list = GroupManager::get_group_ids(api_get_course_int_id(), $results[$i]['user_id']);
 
-                    foreach ($group_list as $id) {
-                        if (!isset($group_list_info[$id])) {
-                            $result = GroupManager::get_group_properties($id);
-                            $group_list_info[$id] = $result;
-                        }
-                        $group_name_list .= $group_list_info[$id]['name'].' ';
+                    foreach ($group_list as $id) {               
+                        $group_name_list .= $clean_group_list[$id].' ';
                     }
                     $results[$i]['group_name'] = $group_name_list;
                 }                

@@ -26,7 +26,6 @@
         {% include "default/layout/topbar.tpl" %}
 
         <div id="main" class="container">
-
             <header>
                 <div class="row">
                     <div id="header_left" class="span4">
@@ -85,9 +84,7 @@
                 {{ breadcrumb }}
             </header>
 
-
-
-            <div class="row">
+            <div id="main_content" class="row">
             {# course navigation links/shortcuts need to be activated by the admin #}
             {% include "default/layout/course_navigation.tpl" %}
 {% endif %}

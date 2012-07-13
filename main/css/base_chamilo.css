@@ -1251,28 +1251,6 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
     float:left;
 }
 
-.actions {	
-	background:#efefef;
-    border:1px solid #ccc; 
-    margin-bottom: 5px;
-    height:32px;
-    padding:2px;     
-    vertical-align:middle;
-}
-
-.actions a {
-    display:inline-block;
-    margin-right: 10px;
-    vertical-align:middle;
-}
-.actions span {
-    margin-right: 10px;
-    vertical-align:middle;
-}
-
-.actions fieldset {
-    margin-top:0px;
-}
 /* big actions */
 .actionsbig {
     background:#F8F8F8;

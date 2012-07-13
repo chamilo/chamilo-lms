@@ -52,6 +52,14 @@ legend {
     font-weight: bold;
 }
 
+header {
+    margin-bottom: 11px;
+}
+
+.breadcrumb {
+    margin-bottom: 0px;
+}
+
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
@@ -84,7 +92,6 @@ label, input, button, select, textarea, p {
 .badge-group  > :nth-child(5) {
     z-index: 600;
 }
-
 
 .badge-group .badge:not(:first-child) {
     margin-left: -13px;
@@ -237,13 +244,14 @@ footer .container .row {
 #topbar_push {
     height: 55px;
 }
+
 .actions {
     background:#efefef;
     border:1px solid #ccc;
-    margin-bottom: 5px;
+    margin-bottom: 11px;
     height:32px;
-    padding:2px;
-    vertical-align:middle;
+    padding: 2px 2px 2px 14px;
+    vertical-align:middle;    
 }
 
 .actions form {
@@ -255,6 +263,11 @@ footer .container .row {
     margin:0px;
     float:left;
 }
+
+.actions fieldset {
+    margin-top:0px;
+}
+
 
 .muted {
     color: #999999 !important;

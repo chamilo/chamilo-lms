@@ -25,14 +25,14 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false) {
 	
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
 	
-	// Change false to true in the following line to enable answer hinting.
-	$debug_mark_answer = api_is_allowed_to_edit() && false;
-
+	// Change false to true in the following line to enable answer hinting
+	$debug_mark_answer = $show_answers; //api_is_allowed_to_edit() && false;
+    
 	// Reads question information
 	if (!$objQuestionTmp = Question::read($questionId)) {
 		// Question not found        
@@ -77,8 +77,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
         
-		$nbrAnswers   = $objAnswerTmp->selectNbrAnswers();
-        $course_id = api_get_course_int_id();
+		$nbrAnswers     = $objAnswerTmp->selectNbrAnswers();
+        $course_id      = api_get_course_int_id();
         $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
         
 		// For "matching" type here, we need something a little bit special
@@ -214,22 +214,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             $comment         = $objAnswerTmp->selectComment($answerId);
 
 			// Unique answer
-			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
-				// set $debug_mark_answer to true at function start to
-				// show the correct answer with a suffix '-x'
-                
-				$help = $selected = '';
-				if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$help = 'x-';
-						$selected = 'checked';
-					}
-				}
+			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {								
 				$input_id = 'choice-'.$questionId.'-'.$answerId;
 				if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer ) {
 					$attributes = array('id' =>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
 				} else {
 					$attributes = array('id' =>$input_id, 'class'=>'checkbox');
+				}
+                
+                if ($debug_mark_answer) {
+					if ($answerCorrect) {
+						$attributes['checked'] = 1;
+                        $attributes['selected'] = 1;
+					}
 				}
 				
 				$answer = Security::remove_XSS($answer, STUDENT);
@@ -253,41 +250,27 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 
                 $s .= '</tr>';
 			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-
-				// multiple answers
-				// set $debug_mark_answer to true at function start to
-				// show the correct answer with a suffix '-x'
-				$help = $selected = '';                
-				if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$help = 'x-';
-						$selected = 'checked="checked"';
-					}
-				}
-				$input_id = 'choice-'.$questionId.'-'.$answerId;
-				 
+				$input_id = 'choice-'.$questionId.'-'.$answerId;				 
 				$answer = Security::remove_XSS($answer, STUDENT);
 				
 				if (in_array($numAnswer, $user_choice_array)) {
 					$attributes = array('id' =>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
 				} else {
 					$attributes = array('id' =>$input_id, 'class'=>'checkbox');
-				}				
-
-				$answer = Security::remove_XSS($answer, STUDENT);
+				}
+                
+                if ($debug_mark_answer) {
+					if ($answerCorrect) {
+						$attributes['checked'] = 1;
+                        $attributes['selected'] = 1;
+					}
+				}
                 
                 if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';                
                     $s .= '<tr><td>';
                     
-                    $s .= '<span class="question_answer">';
-                                        
-                    if ($debug_mark_answer) {
-                        if ($answerCorrect) {
-                            //$options['checked'] = 'checked';
-                        }
-                    }
-    				
+                    $s .= '<span class="question_answer">';                				
                     $s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes));                                        
                     $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';                	
 
@@ -297,8 +280,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                         $s .= '</td>';
                     }
                     $s .='</tr>';
-
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+                    
                 	$my_choice = array();
                     if (!empty($user_choice_array)) {
                         foreach ($user_choice_array as $item) {
@@ -309,14 +292,22 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     
                     $s .='<tr>';
                     $s .= Display::tag('td', $answer);
+                    
                     if (!empty($quiz_question_options)) {
-                    	foreach ($quiz_question_options as $id=>$item) {
+                    	foreach ($quiz_question_options as $id => $item) {
+                            
                     		if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
                     			$attributes = array('class'=>'checkbox','checked'=>1, 'selected'=>1);
                     		} else {
                     			$attributes = array('class'=>'checkbox');
-                    		}
-                    
+                    		}                            
+                            
+                            if ($debug_mark_answer) {
+                                if ($id == $answerCorrect) {
+                                    $attributes['checked'] = 1;
+                                    $attributes['selected'] = 1;
+                                }
+                            }                    
                     		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes));
                     	}
                     }
@@ -329,27 +320,25 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s.='</tr>';
                 }
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
-				// multiple answers
-				// set $debug_mark_answer to true at function start to
-				// show the correct answer with a suffix '-x'
-				$help = $selected = '';
-				if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$help = 'x-';
-						$selected = 'checked="checked"';
-					}
-				}
+				// multiple answers	
 				$input_id = 'choice-'.$questionId.'-'.$answerId;
 				
 				if (in_array($numAnswer, $user_choice_array)) {				    
 				    $attributes = array('id'=>$input_id, 'class'=>'checkbox','checked'=>1, 'selected'=>1);
 				} else {
 				    $attributes = array('id'=>$input_id, 'class'=>'checkbox');
-				}		
+				}
+                
+                if ($debug_mark_answer) {
+					if ($answerCorrect) {
+						$attributes['checked'] = 1;
+                        $attributes['selected'] = 1;
+					}
+				}
 								
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
-				    '<tr><td>';
+                        '<tr><td>';
 				$s .= '<span class="question_answer">';				
 				$s .= Display::tag('span', Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes));				
 			    $s .= Display::tag('label', $answer, array('for'=>$input_id)).'</span></td>';
@@ -363,10 +352,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $s.= '</tr>';
 
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-                // multiple answers
-                // set $debug_mark_answer to true at function start to
-                // show the correct answer with a suffix '-x'
-                
             	$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
             	
             	$my_choice = array();
@@ -380,13 +365,20 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             	$s .='<tr>';
             	$s .= Display::tag('td', $answer);
             	
-            	foreach ($objQuestionTmp->options as $key => $item) {
-            		//$options['value'] = $key;
+            	foreach ($objQuestionTmp->options as $key => $item) {            		
             		if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
             			$attributes = array('class'=>'checkbox','checked'=>1, 'selected'=>1);
             		} else {
             			$attributes = array('class'=>'checkbox');
             		}
+                    
+                    if ($debug_mark_answer) {
+                        if ($key == $answerCorrect) {
+                            $attributes['checked'] = 1;
+                            $attributes['selected'] = 1;
+                        }
+                    } 
+                    
             		$s .= Display::tag('td', Display::input('radio','choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
             	}
 				
@@ -394,13 +386,11 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s .= '<td>';
                     $s .= $comment;
                     $s .= '</td>';
-                }
-			
+                }			
             	$s.='</tr>';
 				
-			} elseif ($answerType == FILL_IN_BLANKS) {
-			
-				list($answer) = explode('::',$answer);
+			} elseif ($answerType == FILL_IN_BLANKS) {                
+				list($answer) = explode('::', $answer);
 				
 				api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);				
 				
@@ -408,12 +398,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
 					$student_answer_list = $student_answer_list[0];
 				}
-								
+                
+                if ($debug_mark_answer) {                    
+					$student_answer_list = $teacher_answer_list[0];                    
+                }
+                
 				if (!empty($teacher_answer_list) && !empty($student_answer_list)) {
-				    $teacher_answer_list = $teacher_answer_list[0];
-				    
+				    $teacher_answer_list = $teacher_answer_list[0];				    
 				    $i = 0;				    
-				    foreach($teacher_answer_list as $teacher_item) {				    	
+				    foreach ($teacher_answer_list as $teacher_item) {				    	
 				        $value = null;
 				        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
 				        	//Cleaning student answer list
@@ -430,8 +423,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				    }
 				} else {
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-				}
-				
+				}				
 				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
 				// matching type, showing suggestions and answers
@@ -454,11 +446,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					foreach ($select_items as $key=>$val) {
 						// set $debug_mark_answer to true at function start to
 						// show the correct answer with a suffix '-x'
-						$help = $selected = '';
+						$selected = '';
 						if ($debug_mark_answer) {
-							if ($val['id'] == $answerCorrect) {
-								$help = '-x';
-								//$selected = 'selected="selected"';
+							if ($val['id'] == $answerCorrect) {								
+								$selected = 'selected="selected"';
 							}
 						}						
 						if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {

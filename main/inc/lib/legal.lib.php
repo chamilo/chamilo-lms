@@ -193,7 +193,7 @@ class LegalManager {
  		$sql  = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
 				FROM $legal_conditions_table inner join $lang_table l on(language_id = l.id) ";
 		$sql .= "ORDER BY language, version ASC ";
-		$sql .= "LIMIT $from,$number_of_items ";
+		$sql .= "LIMIT $from, $number_of_items ";
 
 		$result = Database::query($sql);
 		$legals = array ();

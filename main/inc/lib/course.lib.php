@@ -3388,7 +3388,7 @@ class CourseManager {
      * @param int session id
      * @return boolean
      */
-    function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
+    public static function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
         $user_id    = intval($user_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
@@ -3815,6 +3815,7 @@ class CourseManager {
 			$_course['subscribe_allowed']   = $course_data['subscribe'];
 			$_course['unubscribe_allowed']  = $course_data['unsubscribe'];
             $_course['activate_legal']      = $course_data['activate_legal'];
+            $_course['legal']               = $course_data['legal' ];
             $_course['show_score']          = $course_data['show_score']; //used in the work tool
         }
         return $_course;

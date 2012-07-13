@@ -77,9 +77,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
 		}
 	}
 
-
 	// Generate table
-
 	$stattable= '<table class="data_table" cellspacing="0" cellpadding="3">';
 	$stattable .= '<tr><th>' . get_lang('ScoringSystem') . '</th>';
     $stattable .= '<th>' . get_lang('Percentage') . '</th>';
@@ -92,8 +90,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
 		$stattable .= '<td width="150">' . $key . '</td>';
         
 		$stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
-		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		//$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';
+		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';		
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

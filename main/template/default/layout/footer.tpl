@@ -72,6 +72,12 @@ $(document).ready( function() {
             $(this).parentsUntil("tr").parent().removeClass("row_selected");
         }    
     });
+
+    var tip_options = {
+            placement : 'right',
+    }
+
+    $('.boot-tooltip').tooltip(tip_options);
 });
 </script>
 {% endraw %}

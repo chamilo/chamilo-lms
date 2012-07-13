@@ -53,6 +53,7 @@ class GradebookTable extends SortableTable {
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Result'), false);
+            $this->set_header($column++, get_lang('Actions'), false);
 		}
 		
 		/*if (api_is_allowed_to_edit(null, true)) {
@@ -150,7 +151,10 @@ class GradebookTable extends SortableTable {
         
         $total_categories_weight = 0;
         
-        //Looping categories
+        $scoredisplay = ScoreDisplay :: instance();
+        
+        //Categories
+        
 		foreach ($data_array as $data) {
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
@@ -188,8 +192,7 @@ class GradebookTable extends SortableTable {
 			//Weight
 			//$row[] = $invisibility_span_open .Display::tag('h4', $data['3'] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
             //$average = $data['3']/$this->currentcat->get_weight()*100;
-            
-            $scoredisplay = ScoreDisplay :: instance();            
+                    
             $average = $scoredisplay->display_score(array($data['3'], $this->currentcat->get_weight()), SCORE_PERCENT, SCORE_BOTH, true);
             
             if (api_is_allowed_to_edit(null, true)) {
@@ -204,9 +207,8 @@ class GradebookTable extends SortableTable {
 				$weight_total_links += $data[3];
 			} else {
 				$cattotal   = Category :: load($_GET['selectcat']);
-                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
-                $item_value = $scoretotal[0];
-                $item_value = number_format($item_value, api_get_setting('gradebook_number_decimals'), '.', ' ');                
+                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                
+                $item_value = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
 			}
 						
 			//Date
@@ -229,13 +231,14 @@ class GradebookTable extends SortableTable {
                         $row[] = $this->build_edit_column($item);     
                     }
 				} else {     
-                    $score = $item->calc_score(api_get_user_id());                    
-                    //$bar = $scoredisplay->display_score($score, SCORE_BAR);
-                    //$score = $scoredisplay->display_score($score);
+                    $score = $item->calc_score(api_get_user_id());
                     
-                    $score = $score[0]/$score[1]*$item->get_weight();
+                    $complete_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
+                    $score = $score[0]/$score[1]*$item->get_weight();                    
+                    $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
                     
-                    $row[] = $score.' '.$this->build_edit_column($item);
+                    $row[] = Display::tip($score, $complete_score);
+                    $row[] = $this->build_edit_column($item);
                 }
 			}
             
@@ -261,6 +264,8 @@ class GradebookTable extends SortableTable {
 				$data_array  =  $sub_cat_info->get_data($sorting, $from, $this->per_page);				
                 
 				$total_weight = 0;
+                
+                //Links
                 
 				foreach ($data_array as $data) {
 					$row  = array();
@@ -303,8 +308,7 @@ class GradebookTable extends SortableTable {
 					} else {
 						$cattotal   = Category :: load($_GET['selectcat']);
 		                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());                    
-		                $item_value = $scoretotal[0];
-		                $item_value = number_format($item_value, 2, '.', ' ');                        					   				  			   	
+		                $item_value = $scoretotal[0];		                
 					}
 					
 					//Date
@@ -314,7 +318,7 @@ class GradebookTable extends SortableTable {
 					if (api_is_allowed_to_edit(null, true)) {
 						$cat = new Category();
 						$show_message = $cat->show_message_resource_delete($item->get_course_code());
-						if ($show_message===false) {
+						if ($show_message === false) {
 							$row[] = $this->build_edit_column($item); 
 						}
 					} else {
@@ -323,11 +327,12 @@ class GradebookTable extends SortableTable {
 						
 						if (count($eval_n_links)> 0 && $status_user!=1 ) {
 							$value_data = isset($data[4]) ? $data[4] : null;							
-							if (!is_null($value_data)) {     
-                                $score = $item->calc_score(api_get_user_id());                                
-								$row[] = $value_data;
+							if (!is_null($value_data)) {                                     
+                                //$row[] = Display::tip($data[4], $data[4]);                                
+                            $row[] = $data[4];
 							}
 						}
+                        $row[] = null;
 					}
                     $row['child_of'] = $parent_id;
                     

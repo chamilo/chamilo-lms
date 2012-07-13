@@ -731,6 +731,7 @@ if ($category != '0') {
 	$category_id   = intval($_GET['selectcat']);
 	$course_id     = Database::get_course_by_category($category_id);
 	$show_message  = $cat->show_message_resource_delete($course_id);
+    
 	if ($show_message=='') {
 
 		//student
@@ -743,8 +744,8 @@ if ($category != '0') {
 			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
 			
 			$evals_links = array_merge($alleval_course, $alllink_course);
-			$item_value=0;
-			$item_total=0;
+			$item_value = 0;
+			$item_total = 0;
             
             //@todo move these in a function            
             $sum_categories_weight_array = array();     
@@ -768,34 +769,30 @@ if ($category != '0') {
 				
 				$score_denom    = ($score[1]==0) ? 1 : $score[1];
 				$item_value     = $score[0]/$score_denom*$item->get_weight();
-                        
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                $percentage     = round($item->get_weight()/($sub_cat_percentage) *  $sub_cat_percentage/$cats_course[0]->get_weight(), 2);
                 
                 $item_total         += $item->get_weight();                
                 $item_total_value   += $item_value;                                
 			}			
                         
-		    $item_total_value = (float)$item_total_value;
-            
+		    $item_total_value = (float)$item_total_value;            
 			
 			$cattotal = Category :: load($category_id);
-            //echo 'start';            
+            
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());            
 					
-			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
-			$my_score_in_gradebook =  round($scoretotal[0],2);
+			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global
+            $scoredisplay = ScoreDisplay :: instance();
+            
+			//$my_score_in_gradebook =  round($scoretotal[0],2);
+            $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
 			
 			//Show certificate
-			$certificate_min_score = $cats[0]->get_certificate_min_score();	
-            		
-			$scoredisplay = ScoreDisplay :: instance();
-			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
+			$certificate_min_score = $cats[0]->get_certificate_min_score();	            		
+			
+			$scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
 			//var_dump($certificate_min_score, $item_total_value);
 			if (isset($certificate_min_score) && $item_total_value >= $certificate_min_score) {
-			    
-				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());
-								
+				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());								
 				if (empty($my_certificate)) {
 					register_user_info_about_certificate($category_id, api_get_user_id(), $my_score_in_gradebook, api_get_utc_datetime());
 					$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());

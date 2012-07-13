@@ -1505,7 +1505,16 @@ class Display {
             }        
             $html .= '</ul></div>';
         }
-        return $html;
-        
+        return $html;        
+    }
+    
+    /**
+     * Prints a tooltip
+     */
+    function tip($text, $tip)  {
+        if (empty($tip)) {
+            return $text;
+        }
+        return self::span($text, array('class' => 'boot-tooltip', 'title' => $tip));
     }
 } //end class Display

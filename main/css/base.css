@@ -4101,3 +4101,7 @@ li.annoucement{
     padding-top: 5px;
     display:inline-block;
 }
+
+.boot-tooltip {
+    cursor: pointer;
+}

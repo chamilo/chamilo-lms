@@ -298,6 +298,10 @@ if (defined('SYSTEM_INSTALLATION')) {
                         $question_id = $row['question_id'];
                         $answer = $row['answer'];
                         $exe_id = $row['exe_id'];
+                        
+                        if(empty($answer)){
+                            continue;
+                        }
 
                         //getting the type question id
                         $sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";

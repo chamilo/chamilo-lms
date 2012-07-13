@@ -236,7 +236,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, null, null, false, true, false, true, $my_exercise->feedback_type);
+                        showQuestion($id, false, null, null, false, true, false, true, $my_exercise->feedback_type, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';
@@ -244,7 +244,8 @@ if (!$inATest) {
 			}
 		}
 	}
-	if(!$nbrQuestions) {
+    
+	if (!$nbrQuestions) {
 	  	echo Display::display_warning_message(get_lang('NoQuestion'));
 	}
 	echo '</div>'; //question list div

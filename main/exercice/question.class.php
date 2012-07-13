@@ -1350,8 +1350,7 @@ abstract class Question
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?'=>array($course_id, $id)));             
         return $result;        
-    }
-    
+    }    
     
     static function readQuestionOption($question_id, $course_id) {
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);               
@@ -1367,6 +1366,7 @@ abstract class Question
 	    echo Display::div(get_lang("Question").' '.($counter_label).' : '.$this->question, array('id'=>'question_title', 'class'=>'sectiontitle'));
 	    echo Display::div($this->description, array('id'=>'question_description'));	    
 	}
+    
     /**
      * Create a question from a set of parameters
      * @param   int     Quiz ID

@@ -511,7 +511,6 @@ class Answer {
      * @param  array course info (result of the function api_get_course_info() ) 
 	 */
 	function duplicate($newQuestionId, $course_info = null) {
-        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
         
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -521,7 +520,7 @@ class Answer {
         
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         
-        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {                
+        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
                            
             //Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $course_info['real_id']);
@@ -530,7 +529,7 @@ class Answer {
                 foreach($origin_options as $item) {
             	   $new_option_list[]=$item['id'];
                 }
-            }            
+            }
             
             $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
             $i=0;
@@ -546,7 +545,7 @@ class Answer {
 		// if at least one answer
 		if ($this->nbrAnswers) {
 			// inserts new answers into data base
-			$sql="INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
+			$sql = "INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 			$c_id = $course_info['real_id'];
 			
 			for($i=1;$i <= $this->nbrAnswers;$i++) {
@@ -572,7 +571,7 @@ class Answer {
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
 
-			$sql=api_substr($sql,0,-1);
+			$sql = api_substr($sql,0,-1);
 			Database::query($sql);
 		}
 	}

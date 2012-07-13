@@ -15,3 +15,5 @@ sudo chmod -R 0777 /var/squidGuard/blacklists
 After that, enable the plugin, then go to some course's config screen and
 check/uncheck the "Games" option. Now check that it updated the 
 /var/sqg/blacklists file... That's all folks!
+
+The blacklists in /var/squidGuard/blacklists/ can be downloaded from http://dsi.ut-capitole.fr/blacklists/index_en.php

@@ -249,11 +249,12 @@ class AppPlugin {
      */
     function get_plugin_info($plugin_name, $forced = false) {
         static $plugin_data = array();
+        
         if (isset($plugin_data[$plugin_name]) && $forced == false) {
             return $plugin_data[$plugin_name];
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
-
+            
             $plugin_info = array();
             if (file_exists($plugin_file)) {
                 require $plugin_file;
@@ -267,7 +268,7 @@ class AppPlugin {
                 $settings_filtered[$item['variable']] = $item['selected_value'];
             }
             $plugin_info['settings'] = $settings_filtered;
-            $plugin_data[$plugin_name] = $plugin_info;
+            $plugin_data[$plugin_name] = $plugin_info;            
             return $plugin_info;
         }
     }
@@ -395,11 +396,15 @@ class AppPlugin {
             }
             if ($i>0) {
                 $plugin_info = $this->get_plugin_info($plugin_name);
-                $obj = $plugin_info['plugin_class']::create();
-                $obj->course_settings_updated($subvalues);
+                
+                if (isset($plugin_info['plugin_class'])) {
+                    $obj = $plugin_info['plugin_class']::create();
+                    $obj->course_settings_updated($subvalues);
+                }
             }
         }
     }
+    
     /**
      * Gets a nice array of keys for just the plugin's course settings
      * @param string The plugin ID
@@ -409,19 +414,22 @@ class AppPlugin {
         $settings = array();
         if (empty($plugin_name)) { return $settings; }
         $plugin_info = $this->get_plugin_info($plugin_name);
-        $obj = $plugin_info['plugin_class']::create();
-        if (is_array($obj->course_settings)) {
-            foreach ($obj->course_settings as $item) {
-                if (isset($item['group'])) {
-                    if (!in_array($item['group'],$settings)) {
-                        $settings[] = $item['group'];
+        
+        if (isset($plugin_info['plugin_class'])) {
+            $obj = $plugin_info['plugin_class']::create();
+            if (is_array($obj->course_settings)) {
+                foreach ($obj->course_settings as $item) {
+                    if (isset($item['group'])) {
+                        if (!in_array($item['group'],$settings)) {
+                            $settings[] = $item['group'];
+                        }
+                    } else {
+                        $settings[] = $item['name'];
                     }
-                } else {
-                    $settings[] = $item['name'];
                 }
             }
+            unset($obj); unset($plugin_info);
         }
-        unset($obj); unset($plugin_info);
         return $settings;
     }
 }

@@ -22,6 +22,21 @@
  */
 class Temp
 {
+    
+    protected static $files = array();
+    
+    /**
+     * Returns the list of temporary files opened by the script.
+     * This is mostly due to pin temporary files and prevent garbage collection.
+     * This ensure files are not unlinked while still using it to send data in 
+     * an upload.
+     * 
+     * @return array
+     */
+    public static function files()
+    {
+        return self::$files;
+    }
 
     /**
      * Recursively delete files and/or folders.
@@ -35,16 +50,19 @@ class Temp
             return false;
         }
 
-        if (is_file($path)) {
+        if (is_readable($path)) {
             unlink($path);
             return true;
         }
-        $files = scandir($path);
-        $files = array_diff($files, array('.', '..'));
-        foreach ($files as $file) {
-            self::delete($file);
+
+        if (is_dir($path)) {
+            $files = scandir($path);
+            $files = array_diff($files, array('.', '..'));
+            foreach ($files as $file) {
+                self::delete($file);
+            }
+            rmdir($path);
         }
-        rmdir($path);
     }
 
     private static $temp_root = '';
@@ -123,6 +141,7 @@ class Temp
 
     function __construct($path = '')
     {
+        self::$files[] = $this;
         $this->path = $path;
     }
 

@@ -422,13 +422,13 @@ class EvalForm extends FormValidator
 
 		$this->addElement('header', $form_title);
 		$this->addElement('hidden', 'zero', 0);
-		$this->addElement('hidden', 'hid_user_id');
-		
+		$this->addElement('hidden', 'hid_user_id');		
 		$this->addElement('hidden', 'hid_course_code');
+        
 		$this->add_textfield('name', get_lang('EvaluationName'), true, array (
-			'class' => 'span3',
-			'maxlength' => '50',
-			'id' => 'evaluation_title'
+			'class'         => 'span3',
+			'maxlength'     => '50',
+			'id'            => 'evaluation_title'
 		));
         
         $cat_id = $this->evaluation_object->get_category_id();

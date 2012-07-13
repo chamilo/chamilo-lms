@@ -53,7 +53,10 @@ class GradebookTable extends SortableTable {
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Result'), false);
-            $this->set_header($column++, get_lang('Actions'), false);
+                        
+            if (!empty($cats)) {
+                $this->set_header($column++, get_lang('Actions'), false);
+            }            
 		}
 		
 		/*if (api_is_allowed_to_edit(null, true)) {
@@ -238,7 +241,9 @@ class GradebookTable extends SortableTable {
                     $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
                     
                     $row[] = Display::tip($score, $complete_score);
-                    $row[] = $this->build_edit_column($item);
+                    if (!empty($cats)) {
+                        $row[] = $this->build_edit_column($item);
+                    }
                 }
 			}
             
@@ -329,10 +334,12 @@ class GradebookTable extends SortableTable {
 							$value_data = isset($data[4]) ? $data[4] : null;							
 							if (!is_null($value_data)) {                                     
                                 //$row[] = Display::tip($data[4], $data[4]);                                
-                            $row[] = $data[4];
+                                $row[] = $data[4];
 							}
 						}
-                        $row[] = null;
+                        if (!empty($cats)) {
+                            $row[] = null;
+                        }
 					}
                     $row['child_of'] = $parent_id;
                     

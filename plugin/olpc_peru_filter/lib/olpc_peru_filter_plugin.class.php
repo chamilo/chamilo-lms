@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /* To show the plugin course icons you need to add these icons in the main/img Chamilo platform
-     * main/img/icons/22/plugin_name.png
-     * main/img/icons/64/plugin_name.png
-     * main/img/icons/64/plugin_name_na.png
+ * main/img/icons/22/plugin_name.png
+ * main/img/icons/64/plugin_name.png
+ * main/img/icons/64/plugin_name_na.png
 */
 class OLPC_Peru_FilterPlugin extends Plugin
 {
@@ -13,6 +13,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
     //When creating a new course, these settings are added to the course
     public $course_settings = array(
 //                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+      array('name' => 'olpc_peru_filter_filter',  'type' => 'textarea'),
 //                    array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
     );
 
@@ -27,7 +28,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
 
     function install() {
         //Installing course settings
-        $this->install_course_fields_in_all_courses();
+        $this->install_course_fields_in_all_courses(false);
     }
 
     function uninstall() {        

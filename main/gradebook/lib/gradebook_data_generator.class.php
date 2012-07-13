@@ -89,6 +89,7 @@ class GradebookDataGenerator
 	    $user_id      = api_get_user_id();
 		$course_code  = api_get_course_id();
 		$status_user  = api_get_status_of_user_in_course($user_id, $course_code);
+        
 		// generate the data to display
 		$data = array();
         

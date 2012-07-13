@@ -22,6 +22,7 @@ class GradebookTable extends SortableTable {
 	private $currentcat;
 	private $datagen;
 	private $evals_links;
+    public  $cats;
 
 	/**
 	 * Constructor
@@ -31,7 +32,7 @@ class GradebookTable extends SortableTable {
     	parent :: __construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
 		$this->evals_links = array_merge($evals, $links);
 		$this->currentcat = $currentcat;
-		
+        $this->cats = $cats;		
 		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);								
         
 		if (isset($addparams)) {
@@ -142,18 +143,16 @@ class GradebookTable extends SortableTable {
         $session_id     = api_get_session_id();
 		$status_user    = api_get_status_of_user_in_course($user_id, $course_code);
         
-		$data_array  = $this->datagen->get_data($sorting, $from, $this->per_page);		
+		$data_array     = $this->datagen->get_data($sorting, $from, $this->per_page);		
 
 		// generate the data to display
 		$sortable_data = array();
 		$weight_total_links = 0;
         
-        $main_categories = array();
+        $main_categories = array();        
+        $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);
         
-        $main_cat =  Category :: load(null, null, $course_code, null, null, $session_id, false);        		
-        
-        $total_categories_weight = 0;
-        
+        $total_categories_weight = 0;        
         $scoredisplay = ScoreDisplay :: instance();
         
         //Categories
@@ -162,7 +161,7 @@ class GradebookTable extends SortableTable {
 			
             // list of items inside the gradebook (exercises, lps, forums, etc)
 			$row  = array();
-			$item = $data[0];
+			$item = $item_category = $data[0];
 			
 			$id   = $item->get_id();							
 						
@@ -234,14 +233,17 @@ class GradebookTable extends SortableTable {
                         $row[] = $this->build_edit_column($item);     
                     }
 				} else {     
-                    $score = $item->calc_score(api_get_user_id());
+                    $score = $item->calc_score(api_get_user_id());                    
+                    if (!empty($score[1])) {
+                        $complete_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
+                        $score = $score[0]/$score[1]*$item->get_weight();                    
+                        $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
+                        $row[] = Display::tip($score, $complete_score);
+                    } else {
+                        $row[] = '-';
+                    }
                     
-                    $complete_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
-                    $score = $score[0]/$score[1]*$item->get_weight();                    
-                    $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
-                    
-                    $row[] = Display::tip($score, $complete_score);
-                    if (!empty($cats)) {
+                    if (!empty($this->cats)) {
                         $row[] = $this->build_edit_column($item);
                     }
                 }
@@ -287,6 +289,7 @@ class GradebookTable extends SortableTable {
 					if (api_is_allowed_to_edit(null, true)) {
 						$row[] = $this->build_id_column($item);
 					}
+                    
 					$row[] = $this->build_type_column($item);
 					
 					//Name
@@ -332,9 +335,10 @@ class GradebookTable extends SortableTable {
 						
 						if (count($eval_n_links)> 0 && $status_user!=1 ) {
 							$value_data = isset($data[4]) ? $data[4] : null;							
-							if (!is_null($value_data)) {                                     
-                                //$row[] = Display::tip($data[4], $data[4]);                                
-                                $row[] = $data[4];
+							if (!is_null($value_data)) {                                
+                                $score = $item->calc_score(api_get_user_id());                                
+                                $new_score = $data[3]* $score[0] / $score[1];                                                                
+                                $row[] = Display::tip($new_score, $data[4]);
 							}
 						}
                         if (!empty($cats)) {

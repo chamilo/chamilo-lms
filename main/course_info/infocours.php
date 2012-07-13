@@ -447,6 +447,7 @@ if ($form->validate() && is_settings_editable()) {
             Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
         }
     }
+    $app_plugin->save_course_settings($update_values);
 	$cidReset = true;
 	$cidReq = $course_code;
 	require '../inc/local.inc.php';

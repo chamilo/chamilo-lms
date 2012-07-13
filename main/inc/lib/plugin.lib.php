@@ -361,4 +361,47 @@ class AppPlugin {
             }
         }
     }
+    /**
+     * When saving the plugin values in the course settings, check whether 
+     * a callback method should be called and send it the updated settings
+     * @param array The new settings the user just saved
+     * @return void
+     */
+    function save_course_settings($values) {
+        $plugin_list = $this->get_installed_plugins();
+        foreach ($plugin_list as $plugin_name) {
+            $settings = $this->get_plugin_course_settings($plugin_name);
+            $subvalues = array();
+            $i = 0;
+            foreach ($settings as $v) {
+                if (isset($values[$v])) {
+                    $subvalues[$v] = $values[$v];
+                    $i++;
+                }
+            }
+            if ($i>0) {
+                $plugin_info = $this->get_plugin_info($plugin_name);
+                $obj = $plugin_info['plugin_class']::create();
+                $obj->course_settings_updated($subvalues);
+            }
+        }
+    }
+    /**
+     * Gets a nice array of keys for just the plugin's course settings
+     * @param string The plugin ID
+     * @return array Nice array of keys for course settings
+     */ 
+    public function get_plugin_course_settings($plugin_name) {
+        $settings = array();
+        if (empty($plugin_name)) { return $settings; }
+        $plugin_info = $this->get_plugin_info($plugin_name);
+        $obj = $plugin_info['plugin_class']::create();
+        if (is_array($obj->course_settings)) {
+            foreach ($obj->course_settings as $item) {
+                $settings[] = $item['name'];
+            }
+        }
+        unset($obj); unset($plugin_info);
+        return $settings;
+    }
 }

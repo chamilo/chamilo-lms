@@ -38,6 +38,11 @@ class Plugin {
         );
      */
     public  $course_settings = array();
+    /**
+     * This indicates whether changing the setting should execute the callback
+     * function.
+     */
+    public  $course_settings_callback = false;
 
     /**
      * Default constructor for the plugin class. By default, it only sets
@@ -359,5 +364,13 @@ class Plugin {
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
         }
+    }
+    /**
+     * Method to be extended when changing the setting in the course
+     * configuration should trigger the use of a callback method
+     * @param array Values sent back from the course configuration script
+     * @return void
+     */
+    private function course_settings_updated($values = array()) {
     }
 }

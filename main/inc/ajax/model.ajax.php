@@ -105,7 +105,16 @@ switch ($action) {
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
         $exercise_id = $_REQUEST['exerciseId'];
-		$count = get_count_exam_results($exercise_id);        
+        
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
+            $filter_user = intval($_GET['filter_by_user']);
+            if ($where_condition == "") {
+                $where_condition .= " te.exe_user_id  = '$filter_user'" ;
+            } else {
+                $where_condition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        } 
+		$count = get_count_exam_results($exercise_id, $where_condition);        
 		break;
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
@@ -188,16 +197,7 @@ switch ($action) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
 		} else {
 			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
-		} 
-        
-        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
-            $filter_user = intval($_GET['filter_by_user']);
-            if ($where_condition == "") {
-                $where_condition .= " te.exe_user_id  = '$filter_user'" ;
-            } else {
-                $where_condition .= " AND te.exe_user_id  = '$filter_user'";
-            }
-        } 
+		}       
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':

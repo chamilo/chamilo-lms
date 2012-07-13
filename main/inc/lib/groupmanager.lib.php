@@ -1588,18 +1588,18 @@ class GroupManager {
 	 * Get all groups where a specific user is subscribed
 	 */
 	public static function get_user_group_name ($user_id) {
-
-		$table_group_user=Database::get_course_table(TABLE_GROUP_USER);
-		$table_group=Database::get_course_table(TABLE_GROUP);
-		$user_id = Database::escape_string($user_id);
-		$course_id = api_get_course_int_id();
-		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu 
-		               WHERE gu.c_id= '.$course_id.' AND g.c_id='.$course_id.' AND  gu.user_id="'.$user_id.'" AND gu.group_id=g.id';
-		               
+		$table_group_user   = Database::get_course_table(TABLE_GROUP_USER);
+		$table_group        = Database::get_course_table(TABLE_GROUP);
+		$user_id            = intval($user_id);
+		$course_id          = api_get_course_int_id();
+		$sql_groups = "SELECT name FROM $table_group g  INNER JOIN $table_group_user gu 
+                       ON (gu.group_id=g.id)
+		               WHERE    gu.c_id= $course_id AND 
+                                g.c_id= $course_id AND 
+                                gu.user_id = $user_id";		               
 		$res = Database::query($sql_groups);
-
 		$groups=array();
-	    while($group = Database::fetch_array($res)) {
+	    while ($group = Database::fetch_array($res)) {
 	    	$groups[] .= $group['name'];
 	    }
 	    return $groups;

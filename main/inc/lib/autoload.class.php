@@ -594,6 +594,7 @@ class Autoload
         $result['ForumTopic'] = '/main/coursecopy/classes/ForumTopic.class.php';
         $result['FreeAnswer'] = '/main/exercice/freeanswer.class.php';
         $result['GDWrapper'] = '/main/inc/lib/image.lib.php';
+        $result['GlobalMultipleAnswer'] = '/main/exercice/global_multiple_answer.class.php';
         $result['Glossary'] = '/main/coursecopy/classes/Glossary.class.php';
         $result['GlossaryManager'] = '/main/inc/lib/glossary.lib.php';
         $result['GradeBookResult'] = '/main/gradebook/gradebook_result.class.php';
@@ -691,9 +692,9 @@ class Autoload
         $result['Link\Controller'] = '/main/link/controller.class.php';
         $result['Link\Link'] = '/main/link/link.class.php';
         $result['Link\LinkCategory'] = '/main/link/link_category.class.php';
-        $result['Link\LinkCategoryRepository'] = '/main/link/repo.class.php';
+        $result['Link\LinkCategoryRepository'] = '/main/link/link_category_repository.class.php';
         $result['Link\LinkForm'] = '/main/link/link_form.class.php';
-        $result['Link\LinkRepository'] = '/main/link/repo.class.php';
+        $result['Link\LinkRepository'] = '/main/link/link_repository.class.php';
         $result['Link\Request'] = '/main/link/request.class.php';
         $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
@@ -727,7 +728,6 @@ class Autoload
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
         $result['MultipleAnswerCombinationTrueFalse'] = '/main/exercice/multiple_answer_combination_true_false.class.php';
         $result['MultipleAnswerTrueFalse'] = '/main/exercice/multiple_answer_true_false.class.php';
-        $result['GlobalMultipleAnswer'] = '/main/exercice/global_multiple_answer.class.php';
         $result['MyHorBar'] = '/main/inc/lib/pchart/MyHorBar.class.php';
         $result['MySpace'] = '/main/mySpace/myspace.lib.php';
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
@@ -943,6 +943,7 @@ class Autoload
         $result['vtimezone'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
+
         return $result;
     }
 

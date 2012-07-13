@@ -68,9 +68,18 @@ class Autoload
         $result['AddManySessionToCategoryFunctions'] = '/main/inc/lib/add_many_session_to_category_functions.lib.php';
         $result['AdminPage'] = '/main/admin/admin_page.class.php';
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
-        $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';        
-        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';
+        $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
+        $result['Announcement\AjaxController'] = '/main/announcements/ajax_controller.class.php';
+        $result['Announcement\Announcement'] = '/main/announcements/announcement.class.php';
+        $result['Announcement\AnnouncementAttachementRepo'] = '/main/announcements/repo.class.php';
+        $result['Announcement\AnnouncementAttachment'] = '/main/announcements/announcement_attachment.class.php';
+        $result['Announcement\Controller'] = '/main/announcements/controller.class.php';
+        $result['Announcement\EditForm'] = '/main/announcements/edit_form.class.php';
+        $result['Announcement\Email'] = '/main/announcements/email.class.php';
+        $result['Announcement\MessageProcessor'] = '/main/announcements/message_processor.class.php';
+        $result['Announcement\Param'] = '/main/announcements/controller.class.php';
+        $result['Announcement\Repo'] = '/main/announcements/repo.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';
         $result['AssetAggregatedRenderer'] = '/main/inc/lib/system/media/renderer/asset_aggregated_renderer.class.php';
@@ -106,6 +115,7 @@ class Autoload
         $result['ClassManager'] = '/main/inc/lib/classmanager.lib.php';
         $result['ClosureCompiler'] = '/main/inc/lib/system/closure_compiler.class.php';
         $result['ConditionalLogin'] = '/main/inc/lib/conditional_login.class.php';
+        $result['Controller'] = '/main/inc/lib/controller.class.php';
         $result['Converter'] = '/main/inc/lib/system/text/converter.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
         $result['CourseArchiver'] = '/main/coursecopy/classes/CourseArchiver.class.php';
@@ -571,6 +581,7 @@ class Autoload
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
         $result['FileManager'] = '/main/inc/lib/fileManage.lib.php';
         $result['FileReader'] = '/main/inc/lib/system/io/file_reader.class.php';
+        $result['FileStore'] = '/main/inc/lib/file_store.class.php';
         $result['FileWriter'] = '/main/inc/lib/system/io/file_writer.class.php';
         $result['FillBlanks'] = '/main/exercice/fill_blanks.class.php';
         $result['FlatViewDataGenerator'] = '/main/gradebook/lib/flatview_data_generator.class.php';
@@ -675,6 +686,15 @@ class Autoload
         $result['LinkCategory'] = '/main/coursecopy/classes/LinkCategory.class.php';
         $result['LinkFactory'] = '/main/gradebook/lib/be/linkfactory.class.php';
         $result['LinkForm'] = '/main/gradebook/lib/fe/linkform.class.php';
+        $result['Link\AjaxController'] = '/main/link/ajax_controller.class.php';
+        $result['Link\CategoryForm'] = '/main/link/category_form.class.php';
+        $result['Link\Controller'] = '/main/link/controller.class.php';
+        $result['Link\Link'] = '/main/link/link.class.php';
+        $result['Link\LinkCategory'] = '/main/link/link_category.class.php';
+        $result['Link\LinkCategoryRepository'] = '/main/link/repo.class.php';
+        $result['Link\LinkForm'] = '/main/link/link_form.class.php';
+        $result['Link\LinkRepository'] = '/main/link/repo.class.php';
+        $result['Link\Request'] = '/main/link/request.class.php';
         $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
@@ -923,8 +943,6 @@ class Autoload
         $result['vtimezone'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
-
-
         return $result;
     }
 

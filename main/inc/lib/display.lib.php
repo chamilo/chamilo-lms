@@ -333,7 +333,7 @@ class Display {
      * @param   bool    Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public function return_message($message, $type='normal', $filter = true) {
+    public static function return_message($message, $type='normal', $filter = true) {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());        	
             //$message = Security::remove_XSS($message);

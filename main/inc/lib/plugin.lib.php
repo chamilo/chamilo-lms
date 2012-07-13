@@ -332,8 +332,22 @@ class AppPlugin {
                     //$icon = null;
                     $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($plugin_info['title']).'</h3><div>');
 
+                    $groups = array();
                     foreach ($obj->course_settings as $setting) {
-                        $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
+                        if ($setting['type'] != 'checkbox') {
+                            $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
+                        } else {
+                            //if (isset($groups[$setting['group']])) {
+                                $element = & $form->createElement($setting['type'], $setting['name'], '', $obj->get_lang($setting['name']));
+                                if ($setting['init_value'] == 1) {
+                                    $element->setChecked(true);
+                                }
+                                $groups[$setting['group']][] = $element;
+                            //}
+                        }
+                    }
+                    foreach ($groups as $k => $v) {
+                        $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
                     }
                     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
                     $form->addElement('html', '</div></div>');
@@ -398,7 +412,13 @@ class AppPlugin {
         $obj = $plugin_info['plugin_class']::create();
         if (is_array($obj->course_settings)) {
             foreach ($obj->course_settings as $item) {
-                $settings[] = $item['name'];
+                if (isset($item['group'])) {
+                    if (!in_array($item['group'],$settings)) {
+                        $settings[] = $item['group'];
+                    }
+                } else {
+                    $settings[] = $item['name'];
+                }
             }
         }
         unset($obj); unset($plugin_info);

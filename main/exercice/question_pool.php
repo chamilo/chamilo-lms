@@ -62,8 +62,8 @@ if(!empty($_GET['copy_question'])){
 	$copy_question = intval($_GET['copy_question']);
 }
 
-$session_id      			= intval($_GET['session_id']);
-$selected_course 			= intval($_GET['selected_course']);
+$session_id      		= intval($_GET['session_id']);
+$selected_course        = intval($_GET['selected_course']);
 $course_id_changed		= intval($_GET['course_id_changed']);	// save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
 $exercice_id_changed 	= intval($_GET['exercice_id_changed']); // save the id of the previous exercice selected by user to reset menu if we detect that user change course hub 13-10-2011
 
@@ -94,19 +94,20 @@ if ($is_allowedToEdit) {
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course     = api_get_course_info();
         $old_question_id    = $copy_question;       
-        //Reading the source question
+        //Reading the source question        
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
+        
 		if ($old_question_obj) {
 			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));     
-        //Duplicating the source question, in the current course
+            //Duplicating the source question, in the current course
 			$new_id = $old_question_obj->duplicate($current_course);
-        //Reading new question
+            //Reading new question
 			$new_question_obj = Question::read($new_id);
 			$new_question_obj->addToList($fromExercise);
-        //Reading Answers obj of the current course 
+            //Reading Answers obj of the current course 
 			$new_answer_obj = new Answer($old_question_id, $origin_course_id);
 			$new_answer_obj->read();
-        //Duplicating the Answers in the current course
+            //Duplicating the Answers in the current course
 			$new_answer_obj->duplicate($new_id, $current_course);		
 			// destruction of the Question object
 			unset($new_question_obj);
@@ -115,17 +116,15 @@ if ($is_allowedToEdit) {
                 $objExercise = new Exercise();
                 $objExercise->read($fromExercise);
             }
-			Session::write('objExercise',$objExercise);
+			Session::write('objExercise', $objExercise);            
 		}
 		$displayMessage = get_lang('ItemAdded');
-//		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
-//		exit();	
 	}
 	// deletes a question from the database and all exercises
 	if ($delete) {
 		// construction of the Question object
 		// if the question exists
-		if($objQuestionTmp = Question::read($delete)) {
+		if ($objQuestionTmp = Question::read($delete)) {
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
 		}

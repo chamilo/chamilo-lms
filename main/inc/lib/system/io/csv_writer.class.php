@@ -19,7 +19,7 @@ class CsvWriter
     /**
      *
      * @param string|object $stream
-     * @return FileWriter
+     * @return CsvWriter
      */
     static function create($stream, $delimiter = ';', $enclosure = '"')
     {
@@ -61,16 +61,19 @@ class CsvWriter
 
     function write($items)
     {
+        $items = is_array($items) ? $items : func_get_args();
         $this->put($items);
     }
 
     function writeln($items)
     {
+        $items = is_array($items) ? $items : func_get_args();
         $this->put($items);
     }
 
     function put($items)
     {
+        $items = is_array($items) ? $items : func_get_args();
         $enclosure = $this->enclosure;
         $fields = array();
         foreach ($items as $item) {

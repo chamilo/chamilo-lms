@@ -823,10 +823,6 @@ while ($row=Database::fetch_array($allpages)) {
 thead {background:#E2E2E2}
 tbody tr:hover {
   background: #F9F9F9;
-  border-top-width:thin;
-  border-bottom-width:thin;
-  border-top-style:dotted;
-  border-bottom-style:dotted;
   cursor:default;
   }
 

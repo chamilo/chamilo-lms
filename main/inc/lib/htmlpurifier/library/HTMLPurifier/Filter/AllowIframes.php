@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Class definition for HTMLPurifier that allows (but controls) iframes
+ * @package chamilo.lib
+ */
 /**
  * Based on: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
  * Iframe filter that does some primitive whitelisting in a somewhat recognizable and tweakable way

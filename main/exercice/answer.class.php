@@ -508,10 +508,9 @@ class Answer {
 	 *
 	 * @author Olivier Brouckaert
 	 * @param  int question id
-     * @param  array course info (result of the function api_get_course_info() ) 
+     * @param  array destination course info (result of the function api_get_course_info() ) 
 	 */
-	function duplicate($newQuestionId, $course_info = null) {
-        
+	function duplicate($newQuestionId, $course_info = null) {        
         if (empty($course_info)) {
             $course_info = $this->course;
         } else {
@@ -520,10 +519,11 @@ class Answer {
         
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         
-        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
-                           
+        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
+            
             //Selecting origin options
-            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $course_info['real_id']);
+            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
+            
             
             if (!empty($origin_options)) {
                 foreach($origin_options as $item) {
@@ -548,8 +548,8 @@ class Answer {
 			$sql = "INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 			$c_id = $course_info['real_id'];
 			
-			for($i=1;$i <= $this->nbrAnswers;$i++) {
-                if ($course_info['db_name'] != $this->course['db_name']) {                    
+			for ($i=1;$i <= $this->nbrAnswers;$i++) {
+                if ($this->course['id'] != $course_info['id']) {                    
                 	$this->answer[$i]  = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->answer[$i],$this->course['id'], $course_info['id']) ;
                     $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->comment[$i],$this->course['id'], $course_info['id']) ;                    
                 }
@@ -557,7 +557,7 @@ class Answer {
 				$answer					= Database::escape_string($this->answer[$i]);
 				$correct				= Database::escape_string($this->correct[$i]);
                 
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {                    
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ) {                    
                     $correct = $fixed_list[intval($correct)];
                 }
                 
@@ -570,7 +570,6 @@ class Answer {
 				$sql.="($c_id, '$i','$newQuestionId','$answer','$correct','$comment'," .
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
-
 			$sql = api_substr($sql,0,-1);
 			Database::query($sql);
 		}

@@ -229,12 +229,11 @@ if ($slide_id == 'all') {
 				//check thumbnail
 				$imagetype = explode(".", $image);
 				$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
+				$original_image_size = api_getimagesize($image);
 				
-				if(in_array($imagetype,$allowed_thumbnail_types)) {
+				if(in_array($imagetype,$allowed_thumbnail_types) && $original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height) {
 					
-					if (!file_exists($image_thumbnail)){
-
-						$original_image_size = api_getimagesize($image);
+					if (!file_exists($image_thumbnail)){						
 						switch($imagetype) {
 							case 'gif':
 								$source_img = imagecreatefromgif($image);
@@ -300,11 +299,19 @@ if ($slide_id == 'all') {
 				}
 				else{
 					//image format no support, get path original image
-					$image_height_width = resize_image($image, $thumbnail_width, $thumbnail_height, 1);
-					$image_height = $image_height_width[0];
-					$image_width = $image_height_width[1];
+					
+					if($original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height){
+						$image_height_width = resize_image($image, $max_thumbnail_width, $max_thumbnail_height, 1);
+						$image_height = $image_height_width[0];
+						$image_width = $image_height_width[1];
+					}
+					else{
+						$image_height=$original_image_size['height'];
+						$image_width=$original_image_size['width'];
+					}
+					
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$max_thumbnail_width.'" height="'.$max_thumbnail_height.'" title="'.$one_image_file.'">';	
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';	
 				}//end allowed image types
 			}//end if exist file image
 		}//end foreach

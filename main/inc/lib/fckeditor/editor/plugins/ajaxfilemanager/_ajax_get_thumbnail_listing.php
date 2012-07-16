@@ -109,12 +109,13 @@ foreach ($fileList as $file) {
 						//check thumbnail
 						$imagetype = explode(".", $image);
 						$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
+						$original_image_size = api_getimagesize($image);
 						
-						if(in_array($imagetype,$allowed_thumbnail_types)) {
+						if(in_array($imagetype,$allowed_thumbnail_types) && $original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height) {
 							
 							if (!file_exists($image_thumbnail)){
 		
-								$original_image_size = api_getimagesize($image);
+								
 								switch($imagetype) {
 									case 'gif':
 										$source_img = imagecreatefromgif($image);
@@ -178,7 +179,7 @@ foreach ($fileList as $file) {
 							echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($image_thumbnail)) . '" id="thumbImg' . $count . '"></a>' . "\n";
 						}
 						else{
-
+							
 							echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
 						}//end allowed image types
 					}//end if exist file image

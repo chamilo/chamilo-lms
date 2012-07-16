@@ -60,7 +60,7 @@ class Event extends Resource
 	 * @param string $hour
 	 * @param int $duration
 	 */
-	function Event($id,$title,$content,$start_date,$end_date, $attachment_path, $attachment_filename, $attachment_size, $attachment_comment) {
+	function Event($id,$title,$content,$start_date,$end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null) {
 		parent::Resource($id,RESOURCE_EVENT);
 		
 		$this->title 				= $title;

@@ -107,9 +107,9 @@ class ScoreDisplay
         }
         
         //Setting custom enabled
-        $value = api_get_setting('gradebook_score_display_custom');
+        $value = api_get_setting('gradebook_score_display_custom');        
         $value = $value['my_display_custom'];   
-        $this->custom_enabled  = $value;
+        $this->custom_enabled  = $value == 'true' ? true : false;
         
         if ($this->custom_enabled) {             
             
@@ -143,6 +143,7 @@ class ScoreDisplay
                     $this->custom_display_conv = $this->convert_displays($this->custom_display);                
                 }            
             }
+            
             if ($this->coloring_enabled) {
                 $this->color_split_value = $this->get_score_color_percent();
             }
@@ -155,17 +156,18 @@ class ScoreDisplay
 	public function is_coloring_enabled () {
 		return $this->coloring_enabled;
 	}
+    
 	/**
 	 * Is custom score display enabled ?
 	 */
 	public function is_custom() {
 		return $this->custom_enabled;
 	}
+    
 	/**
 	 * Is upperlimit included ?
 	 */
-	public function is_upperlimit_included ()
-	{
+	public function is_upperlimit_included () {
 		return $this->upperlimit_included;
 	}
 
@@ -193,8 +195,8 @@ class ScoreDisplay
     private function get_current_gradebook_category_id() {
 
         $tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $curr_course_code = api_get_course_id();
-        $curr_session_id = api_get_session_id();
+        $curr_course_code       = api_get_course_id();
+        $curr_session_id        = api_get_session_id();
 
         $session_condition = '';
         if (empty($curr_session_id)) {
@@ -244,6 +246,7 @@ class ScoreDisplay
 			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."', ".$category_id.", ".intval($scorecolpercent).")";
 			$count++;
 		}
+        
 		Database::query($sql);
 	}
     
@@ -291,11 +294,13 @@ class ScoreDisplay
 		} else {
 			// if no custom display set, use default display
 			$display = $this->display_default($my_score, $type);
-		}		
+		}        
+        
 		if ($this->coloring_enabled && $no_color == false) {
 		    $my_score_denom = ($score[1]==0)?1:$score[1];		
 		    if (($score[0] / $my_score_denom) < ($this->color_split_value / 100)) {
-		        $display = Display::tag('font', $display, array('color'=>'red'));
+		        $display = Display::tag('font', $display, array('color'=>'red'));                
+                //$display = Display::label($display, 'important');
 		    }		    
 		}
 		return $display;
@@ -328,19 +333,22 @@ class ScoreDisplay
 		        return $this->display_simple_score($score).$custom;		
                 break;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS:
-                $custom = $this->display_custom($score);                
+                $custom = $this->display_custom($score);
 		        if (!empty($custom)) {
 		            $custom = ' - '.$custom;
-		        }                
+		        }
+                $score = $this->display_simple_score($score);
+                
                 //needs sudo apt-get install php5-intl
                 if (class_exists(NumberFormatter)) {
-                    $iso = api_get_language_isocode();                    
+                    $iso = api_get_language_isocode();
                     $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
-                    $letters = $f->format($score[0]);  
+                    $letters = $f->format($score);
                     $letters = api_strtoupper($letters);
                     $letters = " ($letters) ";
                 }
-		        return $this->display_simple_score($score).$letters.$custom;		 
+                
+		        return $score.$letters.$custom;		 
                 break;
 		    case SCORE_CUSTOM:                          // Good!
 		        return $this->display_custom($score);

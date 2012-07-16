@@ -695,7 +695,8 @@ function load_gradebook_select_in_tool($form) {
 /**
  * PDF report creation
  */
-function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {    
+function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
+    global $flatviewtable;
     //Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
 

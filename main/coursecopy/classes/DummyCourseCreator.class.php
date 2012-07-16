@@ -227,7 +227,7 @@ class DummyCourseCreator
 		// create forums
 		for ($forum_id = 1; $forum_id <= $number_of_forums; $forum_id ++)
 		{
-			$forum = new Forum($forum_id, $this->get_dummy_content('title'),$this->get_dummy_content('description') , rand(1, $number_of_categories), $last_forum_post[$forum_id]);
+			$forum = new Forum($forum_id, $this->get_dummy_content('title'),$this->get_dummy_content('description'), rand(1, $number_of_categories), $last_forum_post[$forum_id]);
 			$this->course->add_resource($forum);
 		}
 	}

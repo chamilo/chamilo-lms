@@ -1124,9 +1124,8 @@ class Tracking {
 
 			$a_students = array ();
 
-			//////////////////////////////////////////////////////////////
 			// At first, courses where $coach_id is coach of the course //
-			//////////////////////////////////////////////////////////////
+
 			$sql = 'SELECT course_code FROM ' . $tbl_session_course_user . ' WHERE id_session="' . $id_session . '" AND id_user=' . $coach_id.' AND status=2';
 
 			$result = Database::query($sql);
@@ -1145,9 +1144,7 @@ class Tracking {
 				}
 			}
 
-			//////////////////////////////////////////////////////////////
 			// Then, courses where $coach_id is coach of the session    //
-			//////////////////////////////////////////////////////////////
 
 			$dsl_session_coach = 'SELECT id_coach FROM ' . $tbl_session . ' WHERE id="' . $id_session . '" AND id_coach="' . $coach_id . '"';
 			$result = Database::query($dsl_session_coach);
@@ -1176,9 +1173,8 @@ class Tracking {
 			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
-			//////////////////////////////////////////////////////////////
 			// At first, courses where $coach_id is coach of the course //
-			//////////////////////////////////////////////////////////////
+
 			/*$sql = 'SELECT 1
 			FROM ' . $tbl_session_course_user . ' AS session_course_user
 			INNER JOIN ' . $tbl_session_course . ' AS session_course
@@ -1193,9 +1189,7 @@ class Tracking {
 				return true;
 			}
 
-			//////////////////////////////////////////////////////////////
 			// Then, courses where $coach_id is coach of the session    //
-			//////////////////////////////////////////////////////////////
 
 			$sql = 'SELECT session_course_user.id_user
                         FROM ' . $tbl_session_course_user . ' as session_course_user
@@ -1232,9 +1226,8 @@ class Tracking {
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 			$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
-			//////////////////////////////////////////////////////////////
-			// At first, courses where $coach_id is coach of the course //
-			//////////////////////////////////////////////////////////////
+			// At first, courses where $coach_id is coach of the course
+			
 			$sql = 'SELECT DISTINCT course_code FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id.' AND status=2';
 
 			global $_configuration;
@@ -1254,10 +1247,9 @@ class Tracking {
 			while ($row = Database::fetch_array($result)) {
 				$a_courses[$row['course_code']] = $row['course_code'];
 			}
-
-			//////////////////////////////////////////////////////////////
-			// Then, courses where $coach_id is coach of the session    //
-			//////////////////////////////////////////////////////////////
+			
+			// Then, courses where $coach_id is coach of the session
+			
 			$sql = 'SELECT DISTINCT session_course.course_code
                         FROM ' . $tbl_session_course . ' as session_course
                         INNER JOIN ' . $tbl_session . ' as session

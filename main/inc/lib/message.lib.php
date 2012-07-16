@@ -17,14 +17,15 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 /*
  * @todo use constants!
  */
-define('MESSAGE_STATUS_NEW',				'0');
-define('MESSAGE_STATUS_UNREAD',				'1');
+define('MESSAGE_STATUS_NEW',                    '0');
+define('MESSAGE_STATUS_UNREAD',                 '1');
 //2 ??
-define('MESSAGE_STATUS_DELETED',			'3');
-define('MESSAGE_STATUS_OUTBOX',				'4');
-define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
-define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
+define('MESSAGE_STATUS_DELETED',                '3');
+define('MESSAGE_STATUS_OUTBOX',                 '4');
+define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
+define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
+
 /**
  * Class
  * @package chamilo.library

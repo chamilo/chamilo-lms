@@ -9,8 +9,7 @@
  */
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
+
 /**
  * Form for the score display dialog
  * @author Stijn Konings
@@ -22,11 +21,15 @@ class ScoreDisplayForm extends FormValidator
 	function ScoreDisplayForm($form_name, $action= null) {
 		parent :: __construct($form_name, 'post', $action);
 		$displayscore= ScoreDisplay :: instance();
-		$customdisplays= $displayscore->get_custom_score_display_settings();
+		$customdisplays = $displayscore->get_custom_score_display_settings();
+        
 		$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
 		$this->setDefaults(array (            
             'scorecolpercent' => $displayscore->get_color_split_value()                
 		));
+        
+        //var_dump($displayscore->get_color_split_value() );
+        
 		$this->addElement('hidden', 'maxvalue', '100');
 		$this->addElement('hidden', 'minvalue', '0');
 		$counter= 1;
@@ -42,27 +45,37 @@ class ScoreDisplayForm extends FormValidator
 				$counter++;
 			}
 		}
-		$scorecol= array ();
+		$scorecol = array ();
 
 		//settings for the colored score
-		$this->addElement('header', '', get_lang('ScoreEdit'));
-		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');		
-		$this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
-			'size' => 5,
-			'maxlength' => 5,
-            'class'=>'span1',
+		$this->addElement('header', get_lang('ScoreEdit'));		
+        
+        if ($displayscore->is_coloring_enabled()) {
             
-		));		
-		$this->addRule('scorecolpercent', get_lang('OnlyNumbers'), 'numeric');
-		$this->addRule(array('scorecolpercent','maxvalue'), get_lang('Over100'), 'compare', '<=');
-		$this->addRule(array('scorecolpercent','minvalue'), get_lang('UnderMin'), 'compare', '>');
+            $this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
+            
+            $this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
+                'size' => 5,
+                'maxlength' => 5,
+                'class'=>'span1',
+            ));
+            
+            if (api_get_setting('teachers_can_change_score_settings') != 'true') {            
+                $this->freeze('scorecolpercent');
+            }
+            
+            $this->addRule('scorecolpercent', get_lang('OnlyNumbers'), 'numeric');
+            $this->addRule(array('scorecolpercent','maxvalue'), get_lang('Over100'), 'compare', '<=');
+            $this->addRule(array('scorecolpercent','minvalue'), get_lang('UnderMin'), 'compare', '>');
+        }
 
-		//settings for the scoring system
+		//Settings for the scoring system
 
-		$this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
-		//$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
-
-		if ($displayscore->is_custom()) {
+		if ($displayscore->is_custom()) {          
+            
+            $this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
+            //$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
+        
 			//$this->addElement('checkbox', 'includeupperlimit', null, get_lang('IncludeUpperLimit'), null);
 			$this->addElement('static', null, null, get_lang('ScoreInfo'));
 			$scorenull[]= & $this->CreateElement('static', null, null, get_lang('Between'));
@@ -110,9 +123,12 @@ class ScoreDisplayForm extends FormValidator
 				$this->addRule(array ('endscore[' . $counter . ']', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
 				$this->addRule(array ('endscore[' . $counter . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>');
 			}
-		}		
-		$this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
+		}
+        
+        if ($displayscore->is_custom())
+            $this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
 	}
+    
 	function validate() {
 		return parent :: validate();
 	}

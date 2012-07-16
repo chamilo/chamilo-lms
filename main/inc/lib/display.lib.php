@@ -1515,6 +1515,6 @@ class Display {
         if (empty($tip)) {
             return $text;
         }
-        return self::span($text, array('class' => 'boot-tooltip', 'title' => $tip));
+        return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 } //end class Display

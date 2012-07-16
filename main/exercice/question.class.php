@@ -13,7 +13,7 @@
 
 if(!class_exists('Question')):
 
-// answer types
+// Answer types
 define('UNIQUE_ANSWER',                             1);
 define('MULTIPLE_ANSWER',                           2);
 define('FILL_IN_BLANKS',                            3);
@@ -65,18 +65,19 @@ abstract class Question
     
 	static $questionTypes = array(
                                 UNIQUE_ANSWER => 				array('unique_answer.class.php' , 	'UniqueAnswer'),
-                                MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),										
-								GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),			
+                                MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),								
 								FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
                                 MATCHING => 					array('matching.class.php' , 		'Matching'),
                                 FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
                                 ORAL_EXPRESSION => 				array('oral_expression.class.php' , 'OralExpression'),
                                 HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
                                 HOT_SPOT_DELINEATION =>         array('hotspot.class.php' , 'HotspotDelineation'),
-                                MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
-                                UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php' ,   'UniqueAnswerNoOption'),
-                                MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php' , 'MultipleAnswerTrueFalse'),
-                                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php' , 'MultipleAnswerCombinationTrueFalse')                            
+                                MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php', 'MultipleAnswerCombination'),
+                                UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php',   'UniqueAnswerNoOption'),
+                                MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
+                                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
+                                GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
+    
 							);
 
 	/**
@@ -123,6 +124,10 @@ abstract class Question
         }        
         
         $course_id = $course_info['real_id'];
+        
+        if (empty($course_id) || $course_id == -1 ) {
+            return false;
+        }
 
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

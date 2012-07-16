@@ -5710,7 +5710,7 @@ function api_get_jquery_libraries_js($libraries) {
         //Jquery ui
         $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
 
-        $jquery_ui_version = '1.8.17';
+        $jquery_ui_version = '1.8.21';
 
         //$js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
         $js .= api_get_css($js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css');

@@ -91,10 +91,11 @@ if ($scoreform->validate()) {
 	}
 
 	$scorecolpercent = 0;
-    if ($displayscore->is_coloring_enabled()) {		
+    
+    if ($displayscore->is_coloring_enabled()) {
         $scorecolpercent = $values['scorecolpercent'];
 	}
-	    
+    	    
 	if ($displayscore->is_custom() && !empty($scoringdisplay)) {
 		$displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
 	}

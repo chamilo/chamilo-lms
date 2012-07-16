@@ -1,5 +1,5 @@
 {% if add_cas_login_button.show_message %}
-    <link href="{{ _p.web_plugin }}add_cas_login_button/css.css" rel="stylesheet" type="text/css"> julio
+    <link href="{{ _p.web_plugin }}add_cas_login_button/css.css" rel="stylesheet" type="text/css">
     <div class="well">
         {% if add_cas_login_button.url_label %}
             <img src="{{ add_cas_login_button.url_label }}" class='cas_plugin_image'/>

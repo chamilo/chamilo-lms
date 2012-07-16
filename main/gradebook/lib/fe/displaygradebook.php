@@ -528,7 +528,7 @@ class DisplayGradebook
             		
                     if (empty($categories)) {
                         $modify_icons .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_MEDIUM).'</a>';
-                    }
+                    }                    
             		if (api_get_setting('teachers_can_change_score_settings') == 'true') {
                         $modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'',ICON_SIZE_MEDIUM).'</a>';
                     }

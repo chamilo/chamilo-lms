@@ -78,7 +78,7 @@ class ForumTopic extends Resource
 	 /**
 	 * Create a new ForumTopic
 	 */
-	function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views, $sticky, $locked, $time_closed, $weight, $title_qualify, $qualify_max)
+	function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views = 0, $sticky = 0, $locked = 0, $time_closed = null, $weight = 0, $title_qualify = null, $qualify_max = 0)
 	{
 		parent::Resource($id, RESOURCE_FORUMTOPIC);
 		$this->title = $title;
@@ -96,6 +96,7 @@ class ForumTopic extends Resource
 		$this->title_qualify = $title_qualify;
 		$this->qualify_max = $qualify_max;
 	}
+    
 	/**
 	 * Show this resource
 	 */

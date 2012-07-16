@@ -17,6 +17,9 @@ define('SOCIAL_RIGHT_PLUGIN',       3);
 
 define('CUT_GROUP_NAME', 50);
 
+//This require is necessary becas we use constants that need to be loaded before the SocialManager class
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+
 /**
  *
 *	@package chamilo.social

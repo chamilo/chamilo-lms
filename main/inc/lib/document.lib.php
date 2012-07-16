@@ -1898,7 +1898,7 @@ class DocumentManager {
      * @return string	new content html with replaced urls or return false if content is not a string
      */
     function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
-
+        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         if (!is_string($content_html)) {
             return false;
         }

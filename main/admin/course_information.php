@@ -13,8 +13,7 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 /**
@@ -64,22 +63,14 @@ $res = Database::query($sql);
 $course = Database::fetch_object($res);
 $tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
-
+/* <a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a> */
 ?>
 <div class="actions">
-<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif', get_lang('CourseHomepage')); ?> <?php echo get_lang('CourseHomepage'); ?></a>
+<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM); ?></a>
 </div>
-<?php
-if(api_get_setting('server_type') == 'test') {
-	?>
-	<a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a>
-	<?php
-}
-?>
-</p>
-<?php
+<?php 
 
-echo '<h4>'.get_lang('CourseUsage').'</h4>';
+echo Display::page_header(get_lang('CourseUsage'));
 
 $id_session = intval($_GET['id_session']);
 $table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
@@ -88,28 +79,25 @@ $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);
 $table->set_header(1,get_lang('NumberOfItems'), true);
 $table->display();
+
 /**
  * Show all users subscribed in this course
  */
-echo '<h4>'.get_lang('Users').'</h4>';
+echo Display::page_header(get_lang('Users'));
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
-if (Database::num_rows($res) > 0)
-{
+if (Database::num_rows($res) > 0) {
 	$users = array ();
 	while ($obj = Database::fetch_object($res)) {
 		$user = array ();
 		$user[] = $obj->official_code;
-		if ($is_western_name_order)
-		{
+		if ($is_western_name_order) {
 			$user[] = $obj->firstname;
 			$user[] = $obj->lastname;
-		}
-		else
-		{
+		} else {
 			$user[] = $obj->lastname;
 			$user[] = $obj->firstname;
 		}
@@ -122,13 +110,10 @@ if (Database::num_rows($res) > 0)
 	$table->set_additional_parameters(array ('code' => $code));
 	$table->set_other_tables(array('usage_table','class_table'));
 	$table->set_header(0,get_lang('OfficialCode'), true);
-	if ($is_western_name_order)
-	{
+	if ($is_western_name_order) {
 		$table->set_header(1,get_lang('FirstName'), true);
 		$table->set_header(2,get_lang('LastName'), true);
-	}
-	else
-	{
+	} else {
 		$table->set_header(1,get_lang('LastName'), true);
 		$table->set_header(2,get_lang('FirstName'), true);
 	}
@@ -140,19 +125,31 @@ if (Database::num_rows($res) > 0)
 	echo get_lang('NoUsersInCourse');
 }
 
+$session_list = SessionManager::get_session_by_course($course->code);
+$url = api_get_path(WEB_CODE_PATH);
+foreach($session_list as &$session)  {    
+    $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
+    unset($session[1]);
+}
+
+if (!empty($session_list)) {
+    echo Display::page_header(get_lang('Sessions')); 
+    $table = new SortableTableFromArray($session_list, 0, 20,'user_table');
+    $table->display();
+}
+
+
 /*@todo This should be dissapear classes are a deprecated feature*/ 
-/**
- * Show all classes subscribed in this course
- */
+/*
+//Show all classes subscribed in this course
+ 
 $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 $table_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
 $res = Database::query($sql);
-if (Database::num_rows($res) > 0)
-{
+if (Database::num_rows($res) > 0) {
 	$data = array ();
-	while ($class = Database::fetch_object($res))
-	{
+	while ($class = Database::fetch_object($res)) {
 		$row = array ();
 		$row[] = $class->name;
 		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif', get_lang('Edit')).'</a>';
@@ -169,6 +166,6 @@ if (Database::num_rows($res) > 0)
 	echo '</blockquote>';
 } else {
 	echo '<p>'.get_lang('NoClassesForThisCourse').'</p>';
-}
+}*/
 /*	FOOTER	*/
 Display::display_footer();

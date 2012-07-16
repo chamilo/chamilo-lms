@@ -1789,4 +1789,14 @@ class SessionManager {
             }
         }
     }
+    
+    function get_session_by_course($course_code) {
+        $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $course_code = Database::escape_string($course_code);
+        $sql = "SELECT name, s.id FROM $table_session_course sc INNER JOIN $table_session s ON (sc.id_session = s.id)
+                WHERE sc.course_code = '$course_code' ";
+        $result = Database::query($sql);
+        return Database::store_result($result);
+    }
 }

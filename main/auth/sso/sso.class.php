@@ -27,7 +27,10 @@ class sso {
      */
     public function __construct() {
         $this->protocol   = api_get_setting('sso_authentication_protocol');
-        $this->domain     = api_get_setting('sso_authentication_domain');
+        // There can be multiple domains, so make sure to take only the first
+        // This might be later extended with a decision process
+        $domains          = split(',',api_get_setting('sso_authentication_domain'));
+        $this->domain     = trim($domains[0]);
         $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure

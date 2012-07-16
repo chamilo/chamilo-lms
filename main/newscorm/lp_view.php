@@ -11,7 +11,6 @@
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
-* @license	GNU/GPL - See Chamilo license directory for details
 */
 /**
  * Code

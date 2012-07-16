@@ -4289,3 +4289,22 @@ li.annoucement{
 .link.invisible .description{
     color: #999999;
 }
+
+#learning_path_main #control {
+    text-align: center;    
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#ececec),to(#fff));
+    background-image:-webkit-linear-gradient(top,#ececec,#fff);
+    background-image:-moz-linear-gradient(top,#ececec,#fff);
+    background-image:-ms-linear-gradient(top,#ececec,#fff);
+    background-image:-o-linear-gradient(top,#ececec,#fff);
+    background-image:linear-gradient(top,#ececec,#fff);
+    
+    height:32px;
+    padding:8px 0px 8px 0px;
+    opacity:0.9;
+    bottom: 0px;
+    margin: auto;
+    width: 100%;
+    height: 34px;
+    position: absolute
+}

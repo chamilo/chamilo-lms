@@ -1521,7 +1521,7 @@ class SessionManager {
     /**
      * Get users by session
      * @param  int sesssion id
-     * @param	int	filter by status 
+     * @param	int	filter by status  
      * @return  array a list with an user list
      */
     public static function get_users_by_session($id, $with_status = null) {
@@ -1537,7 +1537,7 @@ class SessionManager {
                     ON $tbl_user.user_id = $tbl_session_rel_user.id_user 
                     AND $tbl_session_rel_user.id_session = $id";
         
-        if (!empty($with_status)) {
+        if (isset($with_status) && $with_status != '') {
         	$with_status = intval($with_status);
         	$sql .= " WHERE relation_type = $with_status ";
         }

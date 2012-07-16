@@ -849,7 +849,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                                             ON (ttte.exe_id = tr.exe_id) 
                                             WHERE exe_cours_id = '$course_code' AND
                                                   exe_exo_id = $exercise_id AND
-                                                  session_id = ".api_get_session_id()."
+                                                  ttte.session_id = ".api_get_session_id()."
                                             )";    	
     if ($is_allowedToEdit || $is_tutor) {
         //Teacher view		

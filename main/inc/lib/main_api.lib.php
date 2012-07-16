@@ -5970,12 +5970,13 @@ function api_user_is_login($user_id = null) {
  */
 function api_get_real_ip(){
     // Guess the IP if behind a reverse proxy
+    global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
-    if ($debug) error_log('Real IP: '.$ip);
+    if (!empty($debug)) error_log('Real IP: '.$ip);
     return $ip;
 }
 

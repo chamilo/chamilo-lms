@@ -13,8 +13,7 @@
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 /**
@@ -64,20 +63,12 @@ $res = Database::query($sql);
 $course = Database::fetch_object($res);
 $tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
-
+/* <a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a> */
 ?>
 <div class="actions">
 <a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif', get_lang('CourseHomepage')); ?> <?php echo get_lang('CourseHomepage'); ?></a>
 </div>
-<?php
-if(api_get_setting('server_type') == 'test') {
-	?>
-	<a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a>
-	<?php
-}
-?>
-</p>
-<?php
+<?php 
 
 echo '<h4>'.get_lang('CourseUsage').'</h4>';
 

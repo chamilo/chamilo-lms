@@ -136,7 +136,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $settings = get_settings($my_category);
     
     $form = generate_settings_form($settings, $settings_by_access_list);
-    
+        
     $message = array();
     
     if ($form->validate()) {    
@@ -213,11 +213,21 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         // will be set to false.
         
         //$r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
+                
+        //This is a more accurate way of updating to false the checkboxes and radios the settings
+        //var_dump($settings);exit;
         
-        
-        //This is amore accurate way of updating to false the checboxes and radios the settings
-        
+        /*
         foreach ($values as $key => $value) {          
+            if (in_array($key, $settings_to_avoid)) { continue; }            
+            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
+            $key = Database::escape_string($key);
+            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";            
+            $res = Database::query($sql);      
+        }*/
+        
+        foreach ($settings as $item) {     
+            $key = $item['variable'];
             if (in_array($key, $settings_to_avoid)) { continue; }            
             if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
             $key = Database::escape_string($key);
@@ -236,7 +246,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             if (in_array($key, $settings_to_avoid)) { continue; }
             // Avoid form elements which have nothing to do with settings
             if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
-            //
+            
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
@@ -277,7 +287,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             }
                             break;
                     }
-                    if ($old_value != $value) $keys[] = $key;
+                    if ($old_value != $value) $keys[] = $key;                    
                     $result = api_set_setting($key, $value, null, null, $url_id);
                 } else {                
                     $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
@@ -290,7 +300,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             break;
                         }
                     }
-                    foreach ($value as $subkey => $subvalue) {	             
+                    foreach ($value as $subkey => $subvalue) {                        
                         $result = api_set_setting($key, 'true', $subkey, null, $url_id);	
                     }
                 	

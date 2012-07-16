@@ -444,15 +444,36 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 				// Redirect to master server
 				$osso->ask_master();
 			} elseif (isset($_GET['sso_cookie'])) {
-				$protocol = api_get_setting('sso_authentication_protocol');
-				$master_url = api_get_setting('sso_authentication_domain').api_get_setting('sso_authentication_auth_uri');
-                //error_log($_GET['sso_referer']);error_log($protocol.$master_url);
-				if (isset($_GET['sso_referer']) ? $_GET['sso_referer'] === $protocol.$master_url  : FALSE) {
-					//make all the process of checking
-					//if the user exists (delegated to the sso class)
-					$osso->check_user();
+				// Here we are going to check the origin of
+				// what the call says should be used for
+				// authentication, and ensure  we know it
+				$matches_domain = false;
+				if (isset($_GET['sso_referer'])) {
+					$protocol = api_get_setting('sso_authentication_protocol');
+					// sso_authentication_domain can list
+					// several, comma-separated, domains
+					$master_urls = split(',',api_get_setting('sso_authentication_domain'));
+					if (!empty($master_urls)) {
+					    $master_auth_uri = api_get_setting('sso_authentication_auth_uri');
+					    foreach ($master_urls as $mu) {
+						if (empty($mu)) { continue; }
+						// for each URL, check until we find *one* that matches the $_GET['sso_referer'], then skip the rest
+						if ($protocol.trim($mu).$master_auth_uri === $_GET['sso_referer']) {
+					            $matches_domain = true;
+					            break;
+					        }
+					    }
+                                	} else {
+					    error_log('Your sso_authentication_master param is empty. Check the platform configuration, security section. It can be a list of comma-separated domains');
+					}
+				}
+				if ($matches_domain) { 
+                                        //make all the process of checking
+                                        //if the user exists (delegated to the sso class)
+                                        $osso->check_user();
+
 				} else {
-                    error_log('Check the sso_referer URL in your script');
+					error_log('Check the sso_referer URL in your script, it doesn\'t match any of the possibilities');
 					//Request comes from unknown source
 					$loginFailed = true;
 					Session::erase('_uid');
@@ -460,7 +481,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 					exit;
 				}
 			}
-		}//end logout
+		}//end logout ... else ... login
 	} elseif (api_get_setting('openid_authentication')=='true') {
 		if (!empty($_POST['openid_url'])) {
 			include 'main/auth/openid/login.php';

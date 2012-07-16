@@ -47,8 +47,9 @@ function event_open() {
 	//if(!eregi($_configuration['root_web'],$referer))
 	$pos = strpos($referer, $_configuration['root_web']);
 	if ($pos === false && $referer != '') {
-		$remhost = @ getHostByAddr($_SERVER['REMOTE_ADDR']);
-		if ($remhost == $_SERVER['REMOTE_ADDR'])
+		$ip = api_get_real_ip();
+		$remhost = @ getHostByAddr($ip);
+		if ($remhost == $ip)
 			$remhost = "Unknown"; // don't change this
 		$reallyNow = api_get_utc_datetime();
 		$sql = "INSERT INTO ".$TABLETRACK_OPEN."
@@ -77,7 +78,7 @@ function event_login() {
 	$reallyNow = api_get_utc_datetime();
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES	
                 ('".$_user['user_id']."',
-				'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
+				'".Database::escape_string(api_get_real_ip())."',
 				'".$reallyNow."',
 				'".$reallyNow."'
 				)";
@@ -1446,3 +1447,4 @@ function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
 
 
 /*  End of filters   */
+

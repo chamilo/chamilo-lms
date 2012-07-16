@@ -5882,7 +5882,11 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
         api_not_allowed(true, $message);
     }
 }
-
+/**
+ * Checks the PHP version installed is enough to run Chamilo
+ * @param string Include path (used to load the error page)
+ * @return void
+ */
 function api_check_php_version($my_inc_path = null) {
     if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
         $global_error_code = 1;
@@ -5894,14 +5898,21 @@ function api_check_php_version($my_inc_path = null) {
         exit;
     }
 }
-
+/**
+ * Checks whether the Archive directory is present and writeable. If not,
+ * prints a warning message.
+ */
 function api_check_archive_dir() {
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
         $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');
         api_not_allowed(true, $message);
     }
 }
-
+/**
+ * Returns an array of global configuration settings which should be ignored
+ * when printing the configuration settings screens
+ * @return array Array of strings, each identifying one of the excluded settings
+ */
 function api_get_locked_settings() {
     return array(
         'server_type',
@@ -5938,7 +5949,33 @@ function api_get_locked_settings() {
     );
 }
 
+/**
+ * Checks if the user is corrently logged in. Returns the user ID if he is, or
+ * false if he isn't. If the user ID is given and is an integer, then the same
+ * ID is simply returned
+ * @param  integer User ID
+ * @return mixed Integer User ID is logged in, or false otherwise
+ */
 function api_user_is_login($user_id = null) {
     $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
     return $user_id && !api_is_anonymous();
 }
+/**
+ * Guess the real ip for register in the database, even in reverse proxy cases.
+ * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
+ * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
+ * @return string the real ip of teh user.
+ * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
+ * @version CEV CHANGE 24APR2012
+ */
+function api_get_real_ip(){
+    // Guess the IP if behind a reverse proxy
+    $ip = trim($_SERVER['REMOTE_ADDR']);
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ip = trim($ip1);
+    }
+    if ($debug) error_log('Real IP: '.$ip);
+    return $ip;
+}
+

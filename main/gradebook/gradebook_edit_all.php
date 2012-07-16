@@ -104,11 +104,13 @@ $result = Database::query($sql);
 
 while ($row = Database ::fetch_array($result)) {
     $item_weight = $row['weight'];
-    $item_weight = $masked_total*$item_weight/$original_total;
+    //$item_weight = $masked_total*$item_weight/$original_total;
     
     //update only if value changed
     if (isset($_POST['link'][$row['id']])) {        
-        $new_weight = trim($_POST['link'][$row['id']]*$original_total/$masked_total);
+        //$new_weight = trim($_POST['link'][$row['id']]*$original_total/$masked_total);
+        $new_weight = trim($_POST['link'][$row['id']]);
+        
         AbstractLink::add_link_log($row['id']);
         Database::query('UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($new_weight)."'".' WHERE id = '.$row['id']);
         $item_weight = trim($_POST['link'][$row['id']]);        
@@ -148,12 +150,13 @@ while ($row = Database ::fetch_array($result)) {
 $sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$my_selectcat);
 while ($row = Database ::fetch_array($sql)) {
     $item_weight = $row['weight'];
-    $item_weight = $masked_total*$item_weight/$original_total;
+    //$item_weight = $masked_total*$item_weight/$original_total;
     
     //update only if value changed
     if (isset($_POST['evaluation'][$row['id']])) {
         Evaluation::add_evaluation_log($row['id']);
-        $new_weight = trim($_POST['evaluation'][$row['id']]*$original_total/$masked_total);        
+        //$new_weight = trim($_POST['evaluation'][$row['id']]*$original_total/$masked_total);
+        $new_weight = trim($_POST['evaluation'][$row['id']]);
         $update_sql = 'UPDATE '.$table_evaluation.' SET weight = '."'".Database::escape_string($new_weight)."'".' WHERE id = '.$row['id'];        
         Database::query($update_sql);
         $item_weight = trim($_POST['evaluation'][$row['id']]);

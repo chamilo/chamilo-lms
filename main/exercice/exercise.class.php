@@ -976,7 +976,7 @@ class Exercise {
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
 			$option[0] = get_lang('No');
-			$option[-1] = get_lang('Everybody');    // #3942
+			$option[-1] = get_lang('AllQuestionsShort');
 			$form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));			
 
 			//random answers

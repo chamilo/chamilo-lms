@@ -349,12 +349,9 @@ class Tracking {
 	 * @return   string 	value (number %) Which represents a round integer about the score average.
 	 */
 	public static function get_avg_student_exercise_score($student_id, $course_code, $exercise_id = 0, $session_id = null) {
-
-		// protect datas
-		$course_code = Database::escape_string($course_code);
-		// get the informations of the course
-		$a_course = CourseManager :: get_course_information($course_code);
-		if (!empty($a_course)) {
+		$course_info = api_get_course_info($course_code);
+		
+		if (!empty($course_info)) {
 			// table definition
 			$tbl_course_quiz     = Database::get_course_table(TABLE_QUIZ_TEST);
 			$tbl_stats_exercise  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -373,30 +370,31 @@ class Tracking {
 				$condition_session = " AND session_id = $session_id ";
 			}
 			$sql = "SELECT count(id) FROM $tbl_course_quiz 
-					WHERE c_id = {$a_course['real_id']} AND active <> -1 $condition_quiz ";			
+					WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz ";                    
 			$count_quiz = Database::fetch_row(Database::query($sql));
 
-			$quiz_avg_total_score = 0;
 			if (!empty($count_quiz[0]) && !empty($student_id)) {
-				$condition_user = "";
+				$condition_user = "";                
 				if (is_array($student_id)) {
 					$condition_user = " AND exe_user_id IN (".implode(',',$student_id).") ";
 				} else {
 					$condition_user = " AND exe_user_id = '$student_id' ";
 				}
 
-				if (empty($exercise_id)) {
+				if (empty($exercise_id)) {                    
 					$sql = "SELECT id FROM $tbl_course_quiz 
-							WHERE c_id = {$a_course['real_id']} AND active <> -1 $condition_quiz";
-					$exercises = Database::fetch_row(Database::query($sql));
-					$exercise_list = array();
-					$exercise_id = 0;
-					if (!empty($exercises)) {
-						foreach($exercises as $row) {
-							$exercise_list[] = $row['id'];
-						}
-						$exercise_id = implode("','",$exercise_list);
-					}
+							WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz";
+                    $result = Database::query($sql);
+                    $exercise_list = array();
+					$exercise_id = null;
+                    if (Database::num_rows($result)) {
+                        while ($row = Database::fetch_array($result)) {    
+                            $exercise_list[] = $row['id'];
+                        }
+                    }
+                    if (!empty($exercise_list)) {
+                        $exercise_id = implode("','",$exercise_list);
+                    }                    
 				}
 
 				$count_quiz = Database::fetch_row(Database::query($sql));
@@ -410,7 +408,7 @@ class Tracking {
                         exe_cours_id = '$course_code' AND
                         orig_lp_item_id = 0 $condition_session
                         ORDER BY exe_date DESC";
-
+                
 				$res = Database::query($sql);
 				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
@@ -634,7 +632,7 @@ class Tracking {
 			$tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-			$course = CourseManager :: get_course_information($course_code);
+			$course = api_get_course_info($course_code);
 
 			if (!empty($course)) {
 
@@ -658,6 +656,7 @@ class Tracking {
 				$condition_session = "";
 
 				$session_id = intval($session_id);
+                
 				if (count($lp_ids) > 0) {
 					$condition_session = " AND session_id = $session_id ";
 				} else {

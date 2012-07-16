@@ -1220,8 +1220,6 @@ class MySpace {
 	 * @return array
 	 */
 	function get_course_data($from, $number_of_items, $column, $direction) {
-		
-
 		global $courses, $csv_content, $charset, $session_id;
 
 		// definition database tables
@@ -1252,7 +1250,7 @@ class MySpace {
 
 		$res = Database::query($sql);
 		while ($row_course = Database::fetch_row($res)) {
-
+            
 			$course_code = $row_course[0];
 			$course_info = api_get_course_info($course_code);
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
@@ -1271,7 +1269,7 @@ class MySpace {
 				$nb_students_in_course = count($users);
 				$avg_assignments_in_course  = Tracking::count_student_assignments($users, $course_code, $session_id);
 				$avg_messages_in_course     = Tracking::count_student_messages($users, $course_code, $session_id);
-				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
+				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);                
 				$avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
 				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
 				                

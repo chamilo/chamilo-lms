@@ -1588,18 +1588,18 @@ class GroupManager {
 	 * Get all groups where a specific user is subscribed
 	 */
 	public static function get_user_group_name ($user_id) {
-
-		$table_group_user=Database::get_course_table(TABLE_GROUP_USER);
-		$table_group=Database::get_course_table(TABLE_GROUP);
-		$user_id = Database::escape_string($user_id);
-		$course_id = api_get_course_int_id();
-		$sql_groups = 'SELECT name FROM '.$table_group.' g,'.$table_group_user.' gu 
-		               WHERE gu.c_id= '.$course_id.' AND g.c_id='.$course_id.' AND  gu.user_id="'.$user_id.'" AND gu.group_id=g.id';
-		               
+		$table_group_user   = Database::get_course_table(TABLE_GROUP_USER);
+		$table_group        = Database::get_course_table(TABLE_GROUP);
+		$user_id            = intval($user_id);
+		$course_id          = api_get_course_int_id();
+		$sql_groups = "SELECT name FROM $table_group g  INNER JOIN $table_group_user gu 
+                       ON (gu.group_id=g.id)
+		               WHERE    gu.c_id= $course_id AND 
+                                g.c_id= $course_id AND 
+                                gu.user_id = $user_id";		               
 		$res = Database::query($sql_groups);
-
 		$groups=array();
-	    while($group = Database::fetch_array($res)) {
+	    while ($group = Database::fetch_array($res)) {
 	    	$groups[] .= $group['name'];
 	    }
 	    return $groups;
@@ -1643,11 +1643,13 @@ class GroupManager {
          * Retrieve all the groups where enrollment is still allowed
          * (reverse) ordered by the number of place available
          */
-        $sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
+        $sql = "SELECT g.id gid, g.max_student - count(ug.user_id) nbPlaces, g.max_student
                 FROM ".$group_table." g
                 LEFT JOIN  ".$group_user_table." ug
                 ON    g.id = ug.group_id
-                WHERE g.c_id = $course_id AND g.id IN (".implode(',', $group_ids).")
+                WHERE   g.c_id = $course_id AND 
+                        ug.c_id = $course_id AND 
+                        g.id IN (".implode(',', $group_ids).")
                 GROUP BY (g.id)
                 HAVING (nbPlaces > 0 OR g.max_student = ".MEMBER_PER_GROUP_NO_LIMIT.")
                 ORDER BY nbPlaces DESC";
@@ -1656,6 +1658,7 @@ class GroupManager {
         while ($group = Database::fetch_array($sql_result, 'ASSOC')) {
             $group_available_place[$group['gid']] = $group['nbPlaces'];
         }
+        
         /*
          * Retrieve course users (reverse) ordered by the number
          * of group they are already enrolled

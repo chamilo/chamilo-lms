@@ -793,31 +793,28 @@ function get_session_time_control_key($exercise_id) {
 /**
  * Gets count of exam results
  * @todo this function should be moved in a library  + no global calls 
- * Modified by hubert borderiou 08-11-2011
  */
-function get_count_exam_results($exercise_id) {
-    // I know it's bad to add a static integer here... but
-    // it factorise function get_exam_results_data
-    // and I think it worths it.
-    //This is not bad for the hardcoded value, this is bad because you call 2 times get_exam_results_data()! jm
-    //@todo use a real count select I know the sql constructions are 
-    $tabres = get_exam_results_data(0, 9999999, 0, "ASC", $exercise_id);
-    return count($tabres);
+function get_count_exam_results($exercise_id, $extra_where_conditions) {
+    $count = get_exam_results_data(null, null, null, null, $exercise_id, $extra_where_conditions, true);
+    return $count;
 }
-
 
 /**
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls 
  */
-function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null) {
+function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
     //@todo replace all this globals
     global $documentPath, $filter;
 	
 	if (empty($extra_where_conditions)) {
 		$extra_where_conditions = "1 = 1 ";
 	}
-        
+    
+    $course_id = api_get_course_int_id();
+    $course_code = api_get_course_id();
+    
+            
    	$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
 	$is_tutor                   = api_is_allowed_to_edit(true);
     
@@ -830,7 +827,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);    
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);    
     
-    $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
+    $session_id_and = ' AND te.session_id = '.api_get_session_id().' ';
     
     $exercise_id = intval($exercise_id);
     
@@ -846,8 +843,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     }  
          
     // sql for chamilo-type tests for teacher / tutor view		
-    $sql_inner_join_tbl_track_exercices = "(SELECT ttte.*, if(tr.exe_id,1, 0) as revised FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr ON (ttte.exe_id = tr.exe_id) )";
-    	
+    $sql_inner_join_tbl_track_exercices = " (
+                                            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised 
+                                            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr 
+                                            ON (ttte.exe_id = tr.exe_id) 
+                                            WHERE exe_cours_id = '$course_code' AND
+                                                  exe_exo_id = $exercise_id AND
+                                                  session_id = ".api_get_session_id()."
+                                            )";    	
     if ($is_allowedToEdit || $is_tutor) {
         //Teacher view		
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -867,19 +870,22 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             (
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
                 FROM $TBL_USER u 
-                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id().")
+                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id.")
                 INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
             )";
 
         }
            
-        if (strpos($extra_where_conditions, 'group_all')) {        
+        if (strpos($extra_where_conditions, 'group_all')) {   
+            
             $extra_where_conditions = str_replace("AND (  group_id = 'group_all'  )", '', $extra_where_conditions);
             $extra_where_conditions = str_replace("AND group_id = 'group_all'", '', $extra_where_conditions);
+            $extra_where_conditions = str_replace("group_id = 'group_all' AND", '', $extra_where_conditions);
+                        
             $sql_inner_join_tbl_user = " 
             (
                 SELECT u.user_id, firstname, lastname, email, username, '' as group_name, '' as group_id
-                FROM $TBL_USER u                 
+                FROM $TBL_USER u
             )";
             $sql_inner_join_tbl_user = null;
         }
@@ -891,8 +897,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             (
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
                 FROM $TBL_USER u
-                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".api_get_course_int_id()." ) 
-                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = ".api_get_course_int_id().")
+                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id." ) 
+                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = ".$course_id.")
             )";
         }
         
@@ -913,8 +919,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         $sqlWhereOption = "  AND gru.c_id = ".api_get_course_int_id()." AND gru.user_id = user.user_id ";
 		
         $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
-                
-        $sql = "SELECT DISTINCT
+        
+        if ($get_count) {
+            $sql_select = "SELECT count(te.exe_id) ";
+        } else {
+            $sql_select = "SELECT DISTINCT
                     user_id, 
                     $first_and_last_name, 
                     ce.title, 
@@ -929,31 +938,39 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     exe_user_id,
                     te.exe_duration, 
                     propagate_neg,
-					revised,
+                    revised,
                     group_name,
-                    group_id
-                FROM
-                    $TBL_EXERCICES  AS ce 
+                    group_id";
+        }
+        
+        $sql = " $sql_select            
+                FROM $TBL_EXERCICES AS ce 
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete' 
-                    AND te.exe_cours_id='" . api_get_course_id() . "'  $session_id_and 
+                    AND te.exe_cours_id='" . api_get_course_id() . "' $session_id_and 
                     AND ce.active <>-1 
                     AND orig_lp_id = 0 
                     AND orig_lp_item_id = 0
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
-        //var_dump($sql);
          
-         // sql for hotpotatoes tests for teacher / tutor view
-        $hpsql = "SELECT 
+        // sql for hotpotatoes tests for teacher / tutor view
+        
+        if ($get_count) {
+            $hpsql_select = "SELECT count(username)";
+        } else {
+            $hpsql_select = "SELECT 
                     $first_and_last_name , 
                     username,
                     tth.exe_name, 
                     tth.exe_result , 
                     tth.exe_weighting, 
-                    tth.exe_date
+                    tth.exe_date";
+        }
+        
+        $hpsql = " $hpsql_select
                 FROM 
                     $TBL_TRACK_HOTPOTATOES tth, 
                     $TBL_USER user
@@ -967,47 +984,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 ORDER BY 
                     tth.exe_cours_id ASC, 
                     tth.exe_date DESC";
-    } else {
-        
-        //any view is proposed to the student, they should see the results in the overview.php page
-        exit;
-        
-        // Student view
-        /*
-        $sql = "SELECT DISTINCT                           
-                    te.exe_duration, 
-					te.start_date, 
-                    firstname, 
-                    lastname, 
-                    te.exe_result, 
-                    te.exe_weighting, 
-                    te.exe_date, 
-                    te.exe_id, 
-                    email as exemail,                    
-                    steps_counter, 
-                    exe_user_id,  
-                    ce.results_disabled, 
-                    propagate_neg,
-                    revised
-                FROM 
-                    $TBL_EXERCICES  AS ce                     
-                    INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id) 
-                    INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE $extra_where_conditions AND
-                    te.status != 'incomplete' 
-                    AND te.exe_cours_id = '".api_get_course_id()."'  
-                    AND te.exe_user_id  = ".api_get_user_id()." $session_id_and 
-                    AND ce.active       <>-1 
-                    AND orig_lp_id      = 0 
-                    AND orig_lp_item_id = 0  
-                    AND ce.c_id         = ".api_get_course_int_id()."
-                    $exercise_where";
-
-        $hpsql = "SELECT '', '', '', exe_name, exe_result , exe_weighting, exe_date
-                  FROM $TBL_TRACK_HOTPOTATOES
-                  WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $hotpotatoe_where
-                  ORDER BY exe_cours_id ASC, exe_date DESC";
-        */
+    }
+    
+    if ($get_count) {
+        $resx = Database::query($sql);
+        $rowx = Database::fetch_row($resx,'ASSOC');
+        return $rowx[0];
     }
     
     $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
@@ -1016,26 +998,34 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     	$teacher_id_list[] = $teacher['user_id'];
     }    
     
-    if (empty($hotpotatoe_where)) {        
+    //Simple exercises
+    if (empty($hotpotatoe_where)) {
         $column             = !empty($column) ? Database::escape_string($column) : null;
         $from               = intval($from);
         $number_of_items    = intval($number_of_items);
         
         if (!empty($column)) {
-            $sql               .= " ORDER BY $column $direction ";
+            $sql .= " ORDER BY $column $direction ";
         }
-        $sql               .= " LIMIT $from, $number_of_items";
-			
-
-        $results = array();
+        $sql .= " LIMIT $from, $number_of_items";			
         
+        $results = array();        
         $resx = Database::query($sql);
         while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $results[] = $rowx;
         }
     
         $list_info = array();
-    
+        
+        $group_list = GroupManager::get_group_list();
+        $clean_group_list = array();
+        
+        if (!empty($group_list)) {
+            foreach ($group_list as $group) {
+                $clean_group_list[$group['id']] = $group['name'];
+            }
+        }
+            
         if (is_array($results)) {
 			
             $users_array_id = array();
@@ -1045,12 +1035,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $sizeof = count($results);
     
             $user_list_id = array ();                        
-            $duration_list = '';
-            
+                        
             $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
-            			
-            $group_list_info = array();
-
+            
+            //Looping results
             for ($i = 0; $i < $sizeof; $i++) {                
                 $revised = $results[$i]['revised'];	
                 
@@ -1060,26 +1048,15 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
                     $users_array_id[] = $results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'];
                 }
-                if ($is_allowedToEdit || $is_tutor) {                    
-                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];                    
-                    $user_groups = displayGroupsForUser('<br/>', $results[$i]['user_id']);
-                } else {                    
-                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                }
-                              
+                                 
                 //Add all groups by user
-
                 $group_name_list = null;
 
                 if ($is_empty_sql_inner_join_tbl_user) {
                     $group_list = GroupManager::get_group_ids(api_get_course_int_id(), $results[$i]['user_id']);
 
-                    foreach ($group_list as $id) {
-                        if (!isset($group_list_info[$id])) {
-                            $result = GroupManager::get_group_properties($id);
-                            $group_list_info[$id] = $result;
-                }
-                        $group_name_list .= $group_list_info[$id]['name'].' ';
+                    foreach ($group_list as $id) {               
+                        $group_name_list .= $clean_group_list[$id].' ';
                     }
                     $results[$i]['group_name'] = $group_name_list;
                 }                
@@ -1092,46 +1069,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 $dt = api_convert_and_format_date($results[$i]['exe_weighting']);                
                 
                 // we filter the results if we have the permission to
-                if (isset ($results[$i]['results_disabled']))
+                if (isset($results[$i]['results_disabled'])) {
                     $result_disabled = intval($results[$i]['results_disabled']);
-                else
+                }  else {
                     $result_disabled = 0;
+                }
     
-                if ($result_disabled == 0) {         
-    
-                    if ($is_allowedToEdit || $is_tutor) {                        
-                        $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                        $start_date = $results[$i]['start_date'];
-                    } else {
-                        $start_date = $results[$i]['start_date'];
-                    }
+                if ($result_disabled == 0) {      
                     
-                    if ($start_date != "0000-00-00 00:00:00") {
-                        $start_date_timestamp   = api_strtotime($start_date, 'UTC');
-                        $exe_date_timestamp     = api_strtotime($results[$i]['exe_date'], 'UTC');                                                
-    
-                        $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
-                        //var_dump($start_date .' - '.$results[$i]['exdate'].' - '.$my_duration);
-                        if ($my_duration == 1 ) {
-                            $duration_list = $my_duration . ' ' . get_lang('MinMinute');
-                        } else {
-                            $duration_list =  $my_duration. ' ' . get_lang('MinMinutes');
-                        }
-                        if ($results[$i]['exstep'] > 1) {                            
-                            $duration_list = ' ( ' . $results[$i]['steps_counter'] . ' ' . get_lang('Steps') . ' )';
-                        }
-                    } else {
-                        $duration_list = get_lang('NoLogOfDuration');                        
-                    }
-                    // Date conversion
-					
-					
-                    
-                    // there are already a duration test period calculated??
-                    //echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
-    
-                    // if the float look like 10.00 we show only 10
-    
                     $my_res     = $results[$i]['exe_result'];
                     $my_total   = $results[$i]['exe_weighting'];
                     
@@ -1788,7 +1733,10 @@ function displayGroupMenu($in_name, $in_default, $in_onchange="") {
 }
 
 
-/* Return a list of group for user with user_id=in_userid separated with in_separator */
+/** 
+ * Return a list of group for user with user_id=in_userid separated with in_separator 
+ * @deprecated ?
+ */
 function displayGroupsForUser($in_separator, $in_userid) {
     $res = implode($in_separator, GroupManager::get_user_group_name($in_userid));
     if ($res == "") {

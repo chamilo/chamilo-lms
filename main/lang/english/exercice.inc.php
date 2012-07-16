@@ -497,4 +497,6 @@ $EndTest = "End test";
 $PassPercentage = "Pass percentage";
 $NoCategorySelected = "No category selected";
 $ExerciseAverage = "Exercise average";
+$NoNegativeScore = "No negative score";
+$GlobalMultipleAnswer = "Global multiple answer";
 ?>

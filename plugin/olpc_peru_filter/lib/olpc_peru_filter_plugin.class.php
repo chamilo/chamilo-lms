@@ -53,6 +53,17 @@ class OLPC_Peru_FilterPlugin extends Plugin
         //Deleting course settings
         $this->uninstall_course_fields_in_all_courses();
     }
+    /**
+     * Caller for the install_course_fields() function
+     * @param int The course's integer ID
+     * @param boolean Whether to add a tool link on the course homepage
+     * @return void
+     */
+    function course_install($course_id, $add_tool_link = true) {
+        //force ignoring the tools table insertion for this plugin
+        $this->install_course_fields($course_id, false);
+    }
+
     function course_settings_updated($values = array()) {
         if (!is_array($values) or count($values)==0) {
             return false;

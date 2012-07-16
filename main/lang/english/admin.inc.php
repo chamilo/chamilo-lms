@@ -1599,4 +1599,9 @@ $Events = "Events";
 $ToBeWarnedUserList = "To be warned user list";
 $HideCampusFromPublicPlatformsList = "Hide campus from public platforms list";
 $ChamiloOfficialServicesProviders = "Chamilo official services providers";
+$Reader = "Reader";
+$Zombies = "Zombies";
+$ActiveOnly = "Active only";
+$AuthenticationSource = "Authentication source";
+$RegisteredDate = "Registered date";
 ?>

@@ -8032,7 +8032,7 @@ class learnpath {
      * @return	string	Returns the zip package string, or null if error
      */
     public  function scorm_export() {
-        global $_course;
+        global $_course, $debug;
 
         $course_id = api_get_course_int_id();
 
@@ -8055,7 +8055,9 @@ class learnpath {
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $temp_dir_short = uniqid();
         $temp_zip_dir = $archive_path.'/'.$temp_dir_short;
+        
         $temp_zip_file = $temp_zip_dir.'/'.md5(time()).'.zip';
+        
         $zip_folder = new PclZip($temp_zip_file);
         $current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
         $root_path = $main_path = api_get_path(SYS_PATH);
@@ -8081,7 +8083,8 @@ class learnpath {
         //Removes ./ at the end of the path
         $this->path = str_replace('/.', '', $this->path);
         
-        if (is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')) {
+        //If scorm comes from a Chamilo scorm package
+        if (is_dir($current_course_path.'/scorm/'.$this->path) && is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')) {            
             // Remove the possible . at the end of the path
             $dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
             //$dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
@@ -8149,6 +8152,7 @@ class learnpath {
         $link_updates = array();
         
         foreach ($this->items as $index => $item) {
+            if ($debug)  { echo '<h3>'.$item->name.'</h3>';var_dump($item->type); }
             
             if (!in_array($item->type, array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION))) {
                 // Get included documents from this item                
@@ -8157,8 +8161,11 @@ class learnpath {
                 else
                     $inc_docs = $item->get_resources_from_source();
                 
+                if ($debug) { echo 'Files inside file';var_dump($inc_docs); }
+                                
                 // Give a child element <item> to the <organization> element.
                 $my_item_id = $item->get_id();
+                
                 $my_item = $xmldoc->createElement('item');
                 $my_item->setAttribute('identifier', 'ITEM_'.$my_item_id);
                 $my_item->setAttribute('identifierref', 'RESOURCE_'.$my_item_id);
@@ -8195,12 +8202,12 @@ class learnpath {
                 }
 
                 // Get the path of the file(s) from the course directory root.
-                $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');                               
+                $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');                
                                 
                 if (!empty($path_to_remove)) {
                     //From docs                    
-                    $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);            
-                    
+                    $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
+                                        
                     //From quiz                    
                     if ($this->ref == 'chamilo_scorm_export') {
                         $path_to_remove = 'scorm/'.$this->path.'/';
@@ -8208,10 +8215,9 @@ class learnpath {
                     }                    
                 }
 
-                $my_sub_dir = dirname($my_file_path);
-                
+                $my_sub_dir = dirname($my_file_path);                
                 $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                
+                                
                 //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
                 $my_xml_sub_dir = $my_sub_dir;
 
@@ -8236,10 +8242,10 @@ class learnpath {
 
                 // Dependency to other files - not yet supported.
                 $i = 1;
-                
+                if ($debug) echo 'Looping docs';
                 foreach ($inc_docs as $doc_info) {
-                    
                     if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
+                    if ($debug) var_dump($doc_info);
                     
                     $my_dep = $xmldoc->createElement('resource');
                     $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
@@ -8255,9 +8261,8 @@ class learnpath {
                         // Remote file. Save url as is.
                         $my_dep_file->setAttribute('href', $doc_info[0]);
                         $my_dep->setAttribute('xml:base', '');
-                    } elseif ($doc_info[1] == 'local') {                        
+                    } elseif ($doc_info[1] == 'local') {
                         switch ($doc_info[2]) {
-                            
                             case 'url': // Local URL - save path as url for now, don't zip file.
                                 $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
                                 $current_dir = dirname($abs_path);
@@ -8309,27 +8314,31 @@ class learnpath {
                                 $file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
                                 $file_path = str_replace('\\', '/', $file_path);
                                 $file_path = str_replace('//', '/', $file_path);
-                                //error_log(__LINE__.'Abs path: '.$file_path, 0);
+                                
                                 // Prepare the current directory path (until just under 'document') with a trailing slash.
                                 $cur_path = substr($current_course_path, -1) == '/' ? $current_course_path : $current_course_path.'/';
+                                
+                                if ($debug) { echo 'file path '; var_dump($file_path); }
+                                if ($debug) { echo '$cur_path '; var_dump($cur_path); }
+                                
                                 // Check if the current document is in that path.                                
                                 if (strstr($file_path, $cur_path) !== false) {
                                     // The document is in that path, now get the relative path
                                     // to the containing document.
                                     $orig_file_path = dirname($cur_path.$my_file_path).'/';
                                     $orig_file_path = str_replace('\\', '/', $orig_file_path);
-                                    
+                                                                        
                                     $relative_path = '';                                                                        
                                     if (strstr($file_path, $cur_path) !== false) {                                        
                                         if (strpos($orig_file_path, $file_path) == false) {                                            
                                             //no need to do something
                                             $file_path = $relative_path = substr($file_path, strlen($cur_path));
                                             //$file_path = substr($file_path, strlen($cur_path));
-                                            //$relative_path = str_replace('document/', '', $file_path);                                                                                        
+                                            //$relative_path = str_replace('document/', '', $file_path);
                                         } else {                                            
-                                            $relative_path = substr($file_path, strlen($orig_file_path));
+                                            $relative_path = substr($file_path, strlen($orig_file_path));                                            
                                             $file_path = substr($file_path, strlen($cur_path));
-                                        }                                        
+                                        }                               
                                     } else {
                                         // This case is still a problem as it's difficult to calculate a relative path easily
                                         // might still generate wrong links.
@@ -8355,11 +8364,17 @@ class learnpath {
                                         $relative_path = $dotdot.$subdir.$my_relative_file;
                                     }
                                     
+                                    if ($debug) { echo '$relative_path'; var_dump($relative_path); }
+                                    if ($debug) { echo '$file_path'; var_dump($file_path); }
+                                    
                                     // Put the current document in the zip (this array is the array
                                     // that will manage documents already in the course folder - relative).
                                     $zip_files[] = $file_path;
                                     // Update the links to the current document in the containing document (make them relative).
                                     $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $relative_path);
+                                    
+                                    if ($debug) { echo 'orig '; var_dump($doc_info[0]); }
+                                    if ($debug) { echo 'dest '; var_dump($relative_path); }
                                     
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
@@ -8393,7 +8408,6 @@ class learnpath {
                                  if (substr($doc_info[0], 0, 2) == '..') {
                                      // Relative path going up.
                                      $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';                                     
-                                     
                                      $current_dir = str_replace('\\', '/', $current_dir);
                                      $file_path = realpath($current_dir.$doc_info[0]);
                                      $file_path = str_replace('\\', '/', $file_path);
@@ -8410,7 +8424,7 @@ class learnpath {
                                          $my_dep->setAttribute('xml:base', '');
                                      }
                                  } else {                                     
-                                     $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+                                     $zip_files[] = $my_sub_dir.'/'.$doc_info[0];                                     
                                      $my_dep_file->setAttribute('href', $doc_info[0]);
                                      $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
                                  }
@@ -8433,7 +8447,6 @@ class learnpath {
                 $resources->appendChild($my_resource);
                 
                 $zip_files[] = $my_file_path;
-
                 //error_log('File '.$my_file_path. ' added to $zip_files', 0);
             } else {
                 
@@ -8759,12 +8772,14 @@ class learnpath {
         
         $root = api_get_path(SYS_PATH);
         
+        if ($debug) { echo '<h3> zip_files</h3>'; var_dump($zip_files); }
+        
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) { continue; }    
-            if (!file_exists($file_path)) continue;            
+            //if (!file_exists($file_path)) continue;            
             
             //Fixes chamilo scorm exports
-            if ($this->ref == 'chamilo_scorm_export') {                
+            if ($this->ref == 'chamilo_scorm_export') {        
                 $pos = strpos($file_path, 'document');
                 $replace = null;
                 if ($pos) {

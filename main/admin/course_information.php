@@ -126,18 +126,20 @@ if (Database::num_rows($res) > 0) {
 }
 
 $session_list = SessionManager::get_session_by_course($course->code);
-$url = api_get_path(WEB_CODE_PATH);
-foreach($session_list as &$session)  {    
-    $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
-    unset($session[1]);
-}
 
+$url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {
+    foreach($session_list as &$session)  {    
+        $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
+        unset($session[1]);
+    }
     echo Display::page_header(get_lang('Sessions')); 
     $table = new SortableTableFromArray($session_list, 0, 20,'user_table');
     $table->display();
 }
 
+/*$group = new UserGroup();
+$usegroups = $group->get_usergroup_by_course($course->id);*/
 
 /*@todo This should be dissapear classes are a deprecated feature*/ 
 /*

@@ -34,7 +34,6 @@ class UserGroup extends Model {
         return $row['id'];
     }
 
-
     /**
      * Displays the title + grid
      */
@@ -63,6 +62,17 @@ class UserGroup extends Model {
         if (!empty($results)) {
             foreach($results as $row) {
                 $array[]= $row['course_id'];
+            }
+        }
+        return $array;
+    }
+    
+    public function get_usergroup_by_course($course_id) {
+        $results = Database::select('usergroup_id', $this->usergroup_rel_course_table, array('where'=>array('course_id = ?'=> $course_id)));
+        $array = array();
+        if (!empty($results)) {
+            foreach($results as $row) {
+                $array[]= $row['usergroup_id'];
             }
         }
         return $array;

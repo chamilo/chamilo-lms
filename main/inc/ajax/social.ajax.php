@@ -29,19 +29,13 @@ switch ($action) {
 			$relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
 		}
 		
-		if (isset($_POST['friend_id'])) {
-			
+		if (isset($_POST['friend_id'])) {			
 			UserManager::relate_users($current_user_id,$my_current_friend,$relation_type);
 			UserManager::relate_users($my_current_friend,$current_user_id,$relation_type);			
-			SocialManager::invitation_accepted($my_current_friend,$current_user_id);
-			
-			if (isset($_POST['is_my_friend'])) {
-				echo api_xml_http_response_encode(get_lang('AddedContactToList'));
-			} else {
-				Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
-			}
+			SocialManager::invitation_accepted($my_current_friend,$current_user_id);			
+            Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));            
 		}
-		break;		
+		break;
 	case 'deny_friend':	
 		if (api_is_anonymous()){
 			echo '';

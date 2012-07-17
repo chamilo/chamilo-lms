@@ -12,6 +12,7 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
+
 if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
@@ -23,43 +24,44 @@ $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Invitations'));
 
 $htmlHeadXtra[] = '
 <script>
-		
 function denied_friend (element_input) {
-	name_button=$(element_input).attr("id");
-	name_div_id="id_"+name_button.substring(13);
-	user_id=name_div_id.split("_");
-	friend_user_id=user_id[1];	
-	 $.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-		type: "POST",
-		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
-		data: "denied_friend_id="+friend_user_id,
-		success: function(datos) {
-		 $("div#"+name_div_id).hide("slow");
-		 $("#id_response").html(datos);
-		}
-	});
+    name_button=$(element_input).attr("id");
+    name_div_id="id_"+name_button.substring(13);
+    user_id=name_div_id.split("_");
+    friend_user_id=user_id[1];	
+    $.ajax({
+        contentType: "application/x-www-form-urlencoded",
+        beforeSend: function(objeto) {
+            $("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); 
+        },
+        type: "POST",
+        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
+        data: "denied_friend_id="+friend_user_id,
+        success: function(datos) {
+            $("div#"+name_div_id).hide("slow");
+            $("#id_response").html(datos);
+        }
+   });
 }
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToFriends').'")) {
+    if(confirm("'.get_lang('AddToFriends').'")) {
 		name_button=$(element_input).attr("id");
 		name_div_id="id_"+name_button.substring(13);
 		user_id=name_div_id.split("_");
 		user_friend_id=user_id[1];
-		 $.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-			type: "POST",
-			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-			success: function(datos) {  $("div#"+name_div_id).hide("slow");
-				$("form").submit()
-			}
+        $.ajax({
+           contentType: "application/x-www-form-urlencoded",
+           beforeSend: function(objeto) {
+               $("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+               type: "POST",
+               url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
+               data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
+               success: function(data) {
+                   $("div#"+name_div_id).hide("slow");
+                   $("#id_response").html(data);                   
+               }
 		});
- }
+    }
 }
 
 </script>';
@@ -109,32 +111,30 @@ if ($number_loop != 0) {
         $sender_user_id = $invitation['user_sender_id'];				
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
-                $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
-                $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
-                $user_info	= api_get_user_info($sender_user_id);
-                $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);	        
-                $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);				        
-                $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+        $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
+        $user_info	= api_get_user_info($sender_user_id);
+        $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);	        
+        $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);				        
+        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);  				                        
 
-            $social_right_content .= '<div class="span2">                        
-                            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
-                            <img src="'.$friends_profile['file'].'" /></a>          
+        $social_right_content .= '<div class="span2">                        
+                        <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
+                        <img src="'.$friends_profile['file'].'" /></a>          
+                </div>
+                <div class="span3">
+                    <a href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a> :                         
+                    '.$content.'                        
+                    <div>
+                    '.get_lang('DateSend').' : '.$date.'
                     </div>
-                    <div class="span3">
-                            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>
-                            <div>
-                            '.$title.' : '.$content.'
-                            </div>
-                            <div>
-                            '.get_lang('DateSend').' : '.$date.'
-                            </div> 
-                            <div class="buttons">
-                                <button class="save" name="btn_accepted" type="submit" id="btn_accepted_'.$sender_user_id.'" value="'.get_lang('Accept').' "onclick="javascript:register_friend(this)">
-                                '.get_lang('Accept').'</button>
-                                <button class="cancel" name="btn_denied" type="submit" id="btn_deniedst_'.$sender_user_id.' " value="'.get_lang('Deny').' " onclick="javascript:denied_friend(this)" >
-                                '.get_lang('Deny').'</button>
-                            </div>					
-                    </div>                   
+                    <div class="buttons">
+                        <button class="save" name="btn_accepted" type="submit" id="btn_accepted_'.$sender_user_id.'" value="'.get_lang('Accept').' "onclick="javascript:register_friend(this)">
+                        '.get_lang('Accept').'</button>
+                        <button class="cancel" name="btn_denied" type="submit" id="btn_deniedst_'.$sender_user_id.' " value="'.get_lang('Deny').' " onclick="javascript:denied_friend(this)" >
+                        '.get_lang('Deny').'</button>
+                    </div>					
+                </div>                   
         </div>';				
     }
 }		

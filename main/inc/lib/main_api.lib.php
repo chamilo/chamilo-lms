@@ -5979,4 +5979,25 @@ function api_get_real_ip(){
     if (!empty($debug)) error_log('Real IP: '.$ip);
     return $ip;
 }
+/**
+ * Checks whether an IP is included inside an IP range
+ * @author claudiu at cnixs dot com  on http://www.php.net/manual/fr/ref.network.php#55230
+ * @param string IP address
+ * @param string IP range
+ * @return bool True if IP is in the range, false otherwise
+ */ 
+function api_check_ip_in_range($ip,$range) {
+    if (empty($ip) or empty($range)) {
+        return false;
+    }
+    list ($net, $mask) = split ("/", $range);
+   
+    $ip_net = ip2long ($net);
+    $ip_mask = ~((1 << (32 - $mask)) - 1);
 
+    $ip_ip = ip2long ($ip);
+
+    $ip_ip_net = $ip_ip & $ip_mask;
+
+    return ($ip_ip_net == $ip_net);
+}

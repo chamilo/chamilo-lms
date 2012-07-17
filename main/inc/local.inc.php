@@ -170,10 +170,10 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		unset($_user['user_id']);
 	}
 
-	if (api_get_setting('allow_terms_conditions')=='true') {
+	if (api_get_setting('allow_terms_conditions') == 'true') {
 		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['term_and_condition']['user_id'])) {
 			$user_id = $_SESSION['term_and_condition']['user_id'];    // user id
-			// update the terms & conditions
+			// Update the terms & conditions
             $legal_type = null;
 			//verify type of terms and conditions
             if (isset($_POST['legal_info'])) {
@@ -184,10 +184,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			//is necessary verify check
 			if ($legal_type == 1) {
 				if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
-					$legal_option=true;
+					$legal_option = true;
 				} else {
-					$legal_option=false;
-
+					$legal_option = false;
 				}
 			}
 
@@ -850,7 +849,26 @@ $is_sessionAdmin    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
-    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
+    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {        
+        
+        $variable = 'accept_legal_'.$user_id.'_'.$_course['real_id'].'_'.$session_id;
+        
+        $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
+        
+        $user_pass_open_course = false;
+        if (in_array($_course['visibility'], $course_visibility_list) && Session::read($variable)) {
+            $user_pass_open_course = true;
+        }
+        
+        //Checking if the user filled the course legal agreement
+        if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
+            $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
+            if (!$user_is_subscribed) {
+                $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;                
+                header('Location: '.$url);
+                exit;
+            }
+        }
 
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -866,15 +884,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
             $is_courseMember     = true;
 
-            //Checking if the user filled the course legal agreement
-            if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
-                $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id);
-                if (!$user_is_subscribed) {
-                    $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
-                    header('Location: '.$url);
-                    exit;
-                }
-            }
+          
             $_courseUser['role'] = $cuData['role'];
             Session::write('_courseUser',$_courseUser);
         }

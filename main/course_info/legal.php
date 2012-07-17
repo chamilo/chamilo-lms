@@ -1,5 +1,7 @@
 <?php
 
+use \ChamiloSession as Session;
+
 // Language files that need to be included
 $language_file = array('create_course', 'course_info', 'admin');
 
@@ -28,36 +30,49 @@ $form->addElement('hidden', 'session_id', $session_id);
 $form->addElement('checkbox', 'accept_legal', null, get_lang('AcceptLegal'));
 $form->addElement('style_submit_button', null, get_lang('Accept'), 'class="save"');
 
+$variable = 'accept_legal_'.$user_id.'_'.$course_info['real_id'].'_'.$session_id;
+
+$course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
+
 if ($form->validate()) {
     $accept_legal = $form->exportValue('accept_legal');
         
-    if ($accept_legal == 1 ) {
-        $result = CourseManager::save_user_legal($user_id, $course_code, $session_id);        
+    if ($accept_legal == 1) {
+        CourseManager::save_user_legal($user_id, $course_code, $session_id);        
+        if (in_array($course_info['visibility'], $course_visibility_list)) {
+            Session::write($variable, true);
+        }
     }
+}
+
+$user_pass_open_course = false;
+if (in_array($course_info['visibility'], $course_visibility_list) && Session::read($variable)) {
+    $user_pass_open_course = true;
 }
 
 $url = api_get_course_url($course_code, $session_id);
 
 if (empty($session_id)) {
-    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code) || in_array($course_info['visibility'], $course_visibility_list)) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code);
-        if ($user_accepted_legal) {
+        if ($user_accepted_legal || $user_pass_open_course) {
             //Redirect to course home
             header('Location: '.$url);
             exit;
         }           
-    } else {
-        api_not_allowed();
+    } else {   
+        api_not_allowed();        
     }    
 } else {
     if (api_is_platform_admin()) {
         header('Location: '.$url);
     }
+    
     $user_session_status = SessionManager::get_user_status_in_session($user_id, $course_code, $session_id);
     
-    if (isset($user_session_status)) {        
+    if (isset($user_session_status) || in_array($course_info['visibility'], $course_visibility_list)) {        
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code, $session_id);        
-        if ($user_accepted_legal) {
+        if ($user_accepted_legal || $user_pass_open_course) {
             //Redirect to course session home
             header('Location: '.$url);
             exit;

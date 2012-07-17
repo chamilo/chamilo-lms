@@ -170,9 +170,11 @@ $stok = Security::get_token();
                     }
 
                     // Go To Course button
-                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
-                        ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) ||
-                        in_array($course['code'], $user_coursecodes)                            
+                    if (api_is_platform_admin() || (
+                            $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
+                            ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) ||
+                            in_array($course['code'], $user_coursecodes && $course['visibility'] != COURSE_VISIBILITY_CLOSED   )
+                            )
                         ) {
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                     }

@@ -2691,10 +2691,10 @@ class CourseManager {
         $assigned_courses_to_hrm = array();
 
         if (api_get_multiple_access_url()) {
-           $sql = "SELECT * FROM $tbl_course c
+           $sql = "SELECT *, id as real_id FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code) LEFT JOIN $tbl_course_rel_access_url a  ON (a.course_code = c.code) WHERE cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
         } else {
-            $sql = "SELECT * FROM $tbl_course c
+            $sql = "SELECT *, id as real_id FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
         }
         $rs_assigned_courses = Database::query($sql);
@@ -3665,9 +3665,17 @@ class CourseManager {
         
         //Getting my courses
         $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
+        
         $my_course_code_list = array();
         foreach ($my_course_list as $course) {
             $my_course_code_list[$course['real_id']] = $course['real_id'];
+        }
+                
+        if (api_is_drh()) {
+            $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+            foreach ($courses as $course) {
+                $my_course_code_list[$course['real_id']] = $course['real_id'];
+            }            
         }
         
         $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -3700,11 +3708,12 @@ class CourseManager {
                 $my_course['extra_info'] = $course_info;
                 $my_course['extra_info']['go_to_course_button'] = '';
                 
-                //World
-                if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
-                   ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || 
-                   in_array($course_info['real_id'], $my_course_code_list)) {
-                   $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$my_course['extra_info']['path'].'/index.php', array('class' => 'btn btn-primary'));                        
+                //Course visibility 
+                if (api_is_platform_admin() || (
+                        $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
+                        ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || in_array($course_info['real_id'], $my_course_code_list) && $course_info['visibility'] != COURSE_VISIBILITY_CLOSED  )
+                    ) {
+                    $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$my_course['extra_info']['path'].'/index.php', array('class' => 'btn btn-primary'));                        
                 }
                 
                 //Description

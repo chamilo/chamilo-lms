@@ -107,6 +107,13 @@ class CoursesController { // extends Controller {
             }
         }
         
+        if (api_is_drh()) {
+            $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+            foreach ($courses as $course) {
+                $user_coursecodes[] = $course['code'];
+            }            
+        }
+        
         $data['user_coursecodes'] = $user_coursecodes;
         $data['action']           = $action;
         $data['message']          = $message;

@@ -299,6 +299,67 @@ function who_is_online_count($valid = null, $friends = false) {
 
 
 /**
+* Returns a list (array) of users who are online and in this course.
+* @param    int User ID
+* @param    int Number of minutes
+* @param    string  Course code (could be empty, but then the function returns false)
+* @return   array   Each line gives a user id and a login time
+*/
+function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code) {    
+	if (empty($course_code)) return false;
+    
+    if (empty($time_limit)) {
+        $time_limit = api_get_setting('time_limit_whosonline');
+    } else {
+        $time_limit = intval($time_limit);
+    }
+    
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$course_code         = Database::escape_string($course_code);
+	    
+    $from            = intval($from);
+    $number_of_items = intval($number_of_items);
+
+	$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." 
+              WHERE course='".$course_code."' AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= NOW() 
+              LIMIT $from, $number_of_items ";
+              
+	$result = Database::query($query);
+	if ($result) {
+        $valid_date_time = new DateTime();          
+        $diff = "PT".$time_limit.'M';
+        $valid_date_time->sub(new DateInterval($diff));
+		$users_online = array();
+
+		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
+            $user_login_date = new DateTime($login_date);            
+			if ($user_login_date > $valid_date_time) {
+				$users_online[] = $login_user_id;
+			}            
+		}
+		return $users_online;
+	} else {
+		return false;
+	}
+}
+
+function who_is_online_in_this_course_count($uid, $valid, $coursecode=null) {
+	if(empty($coursecode)) return false;
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$coursecode = Database::escape_string($coursecode);
+	$valid 		= Database::escape_string($valid);
+
+	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
+	$result = Database::query($query);
+	if (Database::num_rows($result) > 0) {
+		$row = Database::fetch_array($result);
+		return $row['count'];
+	} else {
+		return false;
+	}
+}
+
+/**
  * Gets the full user name for a given user ID
  * @param   int User ID
  * @return  string  The full username, elements separated by an HTML space
@@ -367,65 +428,4 @@ function chatcall() {
 		return false;
 	}
 
-}
-
-/**
-* Returns a list (array) of users who are online and in this course.
-* @param    int User ID
-* @param    int Number of minutes
-* @param    string  Course code (could be empty, but then the function returns false)
-* @return   array   Each line gives a user id and a login time
-*/
-function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code) {    
-	if (empty($course_code)) return false;
-    
-    if (empty($time_limit)) {
-        $time_limit = api_get_setting('time_limit_whosonline');
-    } else {
-        $time_limit = intval($time_limit);
-    }
-    
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$course_code         = Database::escape_string($course_code);
-	    
-    $from            = intval($from);
-    $number_of_items = intval($number_of_items);
-
-	$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." 
-              WHERE course='".$course_code."' AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= NOW() 
-              LIMIT $from, $number_of_items ";
-              
-	$result = Database::query($query);
-	if ($result) {
-        $valid_date_time = new DateTime();          
-        $diff = "PT".$time_limit.'M';
-        $valid_date_time->sub(new DateInterval($diff));
-		$users_online = array();
-
-		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
-            $user_login_date = new DateTime($login_date);            
-			if ($user_login_date > $valid_date_time) {
-				$users_online[] = $login_user_id;
-			}            
-		}
-		return $users_online;
-	} else {
-		return false;
-	}
-}
-
-function who_is_online_in_this_course_count($uid, $valid, $coursecode=null) {
-	if(empty($coursecode)) return false;
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$coursecode = Database::escape_string($coursecode);
-	$valid 		= Database::escape_string($valid);
-
-	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
-	$result = Database::query($query);
-	if (Database::num_rows($result) > 0) {
-		$row = Database::fetch_array($result);
-		return $row['count'];
-	} else {
-		return false;
-	}
 }

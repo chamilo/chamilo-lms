@@ -30,7 +30,7 @@ class Auth
     public function get_courses_of_user($user_id) {
         $TABLECOURS                 = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $TABLE_COURSE_FIELD         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register

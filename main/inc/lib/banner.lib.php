@@ -257,8 +257,8 @@ function return_navigation_array() {
         }
 
         // Reporting
-        if (api_get_setting('show_tabs', 'reporting') == 'true') {
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+        if (api_get_setting('show_tabs', 'reporting') == 'true') {            
+            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {                
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -325,7 +325,7 @@ function return_navigation_array() {
 function return_menu() {
     $navigation         = return_navigation_array();
     $navigation         = $navigation['navigation'];
-
+    
     // Displaying the tabs
 
     $lang = ''; //el for "Edit Language"

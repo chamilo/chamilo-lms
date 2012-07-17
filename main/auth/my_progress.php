@@ -50,7 +50,6 @@ require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $user_id = api_get_user_id();
 
-// Code to 
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 

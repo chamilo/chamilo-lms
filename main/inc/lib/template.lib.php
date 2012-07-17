@@ -587,11 +587,12 @@ class Template {
         $this->assign('bug_notification_link', $bug_notification_link);
 
         $notification = return_notification_menu();
-        $menu = return_menu();
-        $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
-
         $this->assign('notification_menu', $notification);
+        
+        $menu = return_menu();
         $this->assign('menu', $menu);
+        
+        $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
         $extra_header = null;

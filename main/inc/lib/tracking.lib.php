@@ -2113,10 +2113,10 @@ class Tracking {
 			$tbl_course		            = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$tbl_session		        = Database :: get_main_table(TABLE_MAIN_SESSION);
 			$tbl_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$tbl_access_rel_course      = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$tbl_access_rel_course      = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);            
 			$tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 			$tbl_access_rel_session     = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-			$tbl_access_rel_course      = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			
 			$user_id                    = intval($user_id);
 
 			// get course list
@@ -2130,19 +2130,11 @@ class Tracking {
 			}
 
 			$rs = Database::query($sql);
-			$courses = $course_in_session = $temp_course_in_session = array();
-			
-			$courses = array();
+			$courses = $course_in_session = $temp_course_in_session = array();			
 			while($row = Database :: fetch_array($rs, 'ASSOC')) {
 				$courses[$row['code']] = $row['title'];
 			}
-				
-			/*
-			if (!empty($courses)) {
-				//sort need to be improved
-				sort($courses);
-			}*/
-			
+						
 			// Get the list of sessions where the user is subscribed as student
 			if ($_configuration['multiple_access_urls']) {
 				$sql = 'SELECT DISTINCT cu.course_code, id_session as session_id, name FROM '.$tbl_session_course_user.' cu INNER JOIN '.$tbl_access_rel_session.' a  ON(a.session_id = cu.id_session) INNER JOIN '.$tbl_session.' s  ON(s.id = a.session_id) 
@@ -2162,9 +2154,8 @@ class Tracking {
 			}			
 			foreach($simple_session_array as $my_session_id => $session_name) {
 				$course_list = $temp_course_in_session[$my_session_id]['course_list'];
-				$my_course_data = array();
-				
-				foreach($course_list as $course_data) {
+				$my_course_data = array();				
+				foreach ($course_list as $course_data) {
 					$my_course_data[$course_data['id']] = $course_data['title'];
 				}
 				$my_course_data = utf8_sort($my_course_data);											

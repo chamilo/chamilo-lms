@@ -4,6 +4,10 @@
  * IPs or ranges of IPs
  */
 /**
+ * Check no direct access to file using a constant defined in the calling script
+ */
+if (!defined('WS_ERROR_SECRET_KEY')) { die(); }
+/**
  * Define here the IPs or ranges that will be authorized to access the
  * webservice. When this is in place, the security key check will be made on
  * the string given here in $ws_auth_ip, and not anymore on 

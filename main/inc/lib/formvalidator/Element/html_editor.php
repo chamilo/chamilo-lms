@@ -78,7 +78,6 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
     function toHtml() {
         $value = $this->getValue();
         if ($this->fullPage) {
-
             if (strlen(trim($value)) == 0) {
                 // TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
                 $value = '<html><head><title></title><style type="text/css" media="screen, projection">/*<![CDATA[*/body{font-family: arial, verdana, helvetica, sans-serif;font-size: 12px;}/*]]>*/</style></head><body></body></html>';
@@ -107,13 +106,10 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
         if (!FCKeditor :: IsCompatible()) {
             return parent::toHTML();
         }
-
-        $this->fck_editor->Value = $this->getValue();
-        $result .= $this->fck_editor->CreateHtml();
-
+        $this->fck_editor->Value = $this->getValue();        
+        $result = $this->fck_editor->CreateHtml();
         //Add a link to open the allowed html tags window
         //$result .= '<small><a href="#" onclick="MyWindow=window.open('."'".api_get_path(WEB_CODE_PATH)."help/allowed_html_tags.php?fullpage=". ($this->fullPage ? '1' : '0')."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=500,height=600,left=200,top=20'".'); return false;">'.get_lang('AllowedHTMLTags').'</a></small>';
         return $result;
     }
-
 }

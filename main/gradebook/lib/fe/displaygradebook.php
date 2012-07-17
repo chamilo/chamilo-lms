@@ -478,7 +478,7 @@ class DisplayGradebook
 		if (api_is_allowed_to_edit(null, true)) {
             
             if (empty($grade_model_id) || $grade_model_id == -1) {
-                $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'"><img src="../img/icons/32/new_folder.png" alt="' . get_lang('AddGradebook') . '" /></a></td>';			
+                $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.Display::return_icon('new_folder.png', get_lang('AddGradebook'), array(), ICON_SIZE_MEDIUM).'</a></td>';			
             }
 			
 			if ($selectcat == '0') {

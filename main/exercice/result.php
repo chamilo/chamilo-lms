@@ -15,7 +15,7 @@ $language_file = array('exercice');
 
 // including additional libraries
 require_once 'exercise.class.php';
-require_once 'question.class.php'; //also defines answer type constants
+require_once 'question.class.php';
 require_once 'answer.class.php';
 
 require_once '../inc/global.inc.php';
@@ -86,9 +86,7 @@ $show_only_total_score  = false;
 $display_category_name  = 1;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
-if (!empty($track_exercise_info)) {
-	$exerciseTitle			= $track_exercise_info['title'];
-	$exerciseDescription	= $track_exercise_info['description'];
+if (!empty($track_exercise_info)) {		
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	$display_category_name = $track_exercise_info['display_category_name'];
@@ -119,13 +117,15 @@ $question_list = $result[$id]['question_list'];
 // for each question
 $total_weighting = 0;
 $counter = 1;
+
 if (!empty($question_list)) {
 
 	foreach ($question_list as $question_item) {
     	$objQuestionTmp     = Question::read($question_item['question_id'], api_get_course_int_id());
     	$total_weighting   += $objQuestionTmp->selectWeighting();        
 	}
-
+    //Needed in the manage_answer function
+    $feedback_type = $objExercise->feedback_type;
 
 	foreach ($question_list as $question_item) {	
 		$choice = $question_item['answer'];
@@ -133,12 +133,8 @@ if (!empty($question_list)) {
 		// creates a temporary Question object
 		$questionId 		= $question_item['question_id'];
 		$objQuestionTmp 	= Question::read($questionId, api_get_course_int_id());		
-		
-		$questionName		= $objQuestionTmp->selectTitle();
-		$questionDescription= $objQuestionTmp->selectDescription();
 		$questionWeighting	= $objQuestionTmp->selectWeighting();
-		$answerType			= $objQuestionTmp->selectType();
-		$quesId 			= $objQuestionTmp->selectId();	
+		$answerType			= $objQuestionTmp->selectType();		
 		        	
 	 	if ($show_results) { 	    
             // display question category, if any
@@ -167,8 +163,7 @@ if (!empty($question_list)) {
 	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
 	        $questionScore   = $question_result['score'];
 	        $totalScore     += $question_result['score'];              
-		} elseif ($answerType == FREE_ANSWER) {
-	        $answer = $str;     
+		} elseif ($answerType == FREE_ANSWER) {	         
 	        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
 	        $questionScore   = $question_result['score'];
 	        $totalScore     += $question_result['score'];
@@ -236,8 +231,7 @@ if (!empty($question_list)) {
 	        			$excess_color='green';
 	        	    } else {
 	        			$excess_color='red';
-	        	    }
-	        	    
+	        	    }	        	    
 	        	    
 	        	    if (!is_numeric($final_overlap)) {
 	            	    $final_overlap = 0;
@@ -385,4 +379,4 @@ if ($show_results || $show_only_total_score) {
 
 if ($show_headers) {
 	Display::display_footer();
-} 
+}

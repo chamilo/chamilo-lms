@@ -2671,7 +2671,7 @@ class Exercise {
 							if ($answerId==1) {
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
 							} else {
-								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
+								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId, "");
 							}
 							break;
 						case FILL_IN_BLANKS:

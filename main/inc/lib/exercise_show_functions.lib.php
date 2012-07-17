@@ -299,27 +299,13 @@ class ExerciseShowFunctions {
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%" style="border-bottom: 1px solid #4171B5;">
-            <?php
-            //@todo replace this harcoded value
-
-            if ($studentChoice) {
-                $color = "black";
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+            <?php            
+            $color = "black";
+            if (isset($new_options[$studentChoice])) {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
-//                    echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
                 }
-
-            }
-
-            if ($studentChoice == 3 || $studentChoice == '') {
-            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
-            } else {
-	            if ($studentChoice == $answerCorrect) {
-	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-	            } else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-	            }
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
             }
             ?>
         </td>

@@ -4043,6 +4043,21 @@ footer {
     box-shadow:none;
 }
 
+.btn.loading{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/loading1.gif') !important;
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
 .announce.btn.delete-all{
     border:none;
     border-radius: 0;
@@ -4098,6 +4113,36 @@ footer {
     padding:0;
     display:inline-block;
     background-image:  url('../img/icons/32/export_csv.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.btn.import_csv{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/import_csv.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.btn.delete_all{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/delete.png');
     background-repeat: no-repeat;
     background-position:center center; 
     box-shadow:none;
@@ -4288,6 +4333,43 @@ li.annoucement{
 
 .link.invisible .description{
     color: #999999;
+}
+
+.link .status{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.link.invalid .status{
+    background-image:  url('../img/icons/22/error.png');
+}
+
+.link.valid .status{
+    background-image:  url('../img/icons/22/accept.png');
+}
+
+.btn.validate_link{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/22/preview_view.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
 }
 
 #learning_path_main #control {

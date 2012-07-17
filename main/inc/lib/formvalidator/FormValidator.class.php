@@ -276,14 +276,24 @@ EOT;
         $this->addElement('select', $name, $label, $options, $attributes);
     }
     
-    function add_label($name, $text)
+    function add_label($label, $text)
     {
-        $this->addElement('label', $name, $text);
+        $this->addElement('label', $label, $text);
     }
     
     function add_header($text)
     {
         $this->addElement('header', $text);
+    }
+    
+    function add_file($name, $label, $attributes = array())
+    {
+        $this->addElement('file', $name, $label, $attributes);
+    }
+    
+    function add_html($snippet)
+    {
+        $this->addElement('html', $snippet);
     }
 
     /**

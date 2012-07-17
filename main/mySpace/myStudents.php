@@ -27,8 +27,7 @@ if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh
 	api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-
+$htmlHeadXtra[] = '<script>
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;
@@ -41,7 +40,7 @@ $export_csv = isset ($_GET['export']) && $_GET['export'] == 'csv' ? true : false
 if ($export_csv) {
 	ob_start();
 }
-$csv_content = array ();
+$csv_content = array();
 
 $from_myspace = false;
 if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
@@ -158,9 +157,6 @@ if (isset($_GET['details'])) {
 	}
 }
 
-/*
- *	MAIN CODE
-*/
 // Database Table Definitions
 $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -205,7 +201,16 @@ if ($check) {
 $user_info = api_get_user_info($student_id);
 
 $courses_in_session = array();
+
+//See #4676
+$drh_can_access_all_courses = false;
+
+if (api_is_drh()) {
+    $drh_can_access_all_courses = true;
+}
+
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+
 $courses_in_session_by_coach = array();
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
@@ -235,9 +240,13 @@ $sql = "SELECT course_code FROM $tbl_course_user WHERE relation_type <> ".COURSE
 $rs = Database::query($sql);
 
 while ($row = Database :: fetch_array($rs)) {    
-	if (isset($courses[$row['course_code']])) {
-		$courses_in_session[0][] = $row['course_code'];
-	}    
+    if ($drh_can_access_all_courses) {
+        $courses_in_session[0][] = $row['course_code'];
+    } else {
+        if (isset($courses[$row['course_code']])) {
+            $courses_in_session[0][] = $row['course_code'];
+        }    
+    }
 }
 
 // Get the list of sessions where the user is subscribed as student
@@ -246,14 +255,20 @@ $rs = Database::query($sql);
 $tmp_sessions = array();
 while ($row = Database :: fetch_array($rs)) {
 	$tmp_sessions[] = $row['id_session'];
-	if (isset($courses_in_session_by_coach[$row['id_session']])) {
-		if (in_array($row['id_session'], $tmp_sessions)) {
-			$courses_in_session[$row['id_session']][] = $row['course_code'];
-		}
-	}
+    if ($drh_can_access_all_courses) {
+        if (in_array($row['id_session'], $tmp_sessions)) {
+            $courses_in_session[$row['id_session']][] = $row['course_code'];
+        }
+    } else {
+        if (isset($courses_in_session_by_coach[$row['id_session']])) {
+            if (in_array($row['id_session'], $tmp_sessions)) {
+                $courses_in_session[$row['id_session']][] = $row['course_code'];
+            }
+        }
+    }
 }
 
-if (empty($courses_in_session)) {
+/*if (empty($courses_in_session)) {
     Display :: display_header($nameTools);
 	echo '<div class="actions">';
 	echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -261,16 +276,15 @@ if (empty($courses_in_session)) {
 	Display::display_warning_message(get_lang('NoDataAvailable'));
 	Display::display_footer();
 	exit;
-}
+}*/
 
 Display :: display_header($nameTools);
 
-if (isset($message )) {
+if (isset($message)) {
     echo $message;
 }
 
-if (!empty($student_id)) {
-	
+if (!empty($student_id)) {	
 	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {        
 		api_not_allowed(false);
 	}
@@ -530,6 +544,7 @@ if (!empty($session_id)) {
 if (!empty($info_course['title'])) {
 	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
 }
+
 
 echo Display::page_subheader($table_title);
 

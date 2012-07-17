@@ -25,7 +25,8 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Access control
-api_protect_course_script(true);
+api_protect_course_script(true, false, true);
+
 
 // including additional libraries
 require_once 'exercise.class.php';
@@ -44,7 +45,7 @@ require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 
 /*	Constants and variables */
-$is_allowedToEdit           = api_is_allowed_to_edit(null, true);
+$is_allowedToEdit           = api_is_allowed_to_edit(null, true) || api_is_drh();
 $is_tutor                   = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);

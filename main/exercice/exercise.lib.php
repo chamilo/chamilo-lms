@@ -813,11 +813,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
-    
-            
-   	$is_allowedToEdit           = api_is_allowed_to_edit(null,true);
-	$is_tutor                   = api_is_allowed_to_edit(true);
-    
+                
+   	$is_allowedToEdit           = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+	    
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);    
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);    
 	$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
@@ -851,7 +849,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                                                   exe_exo_id = $exercise_id AND
                                                   ttte.session_id = ".api_get_session_id()."
                                             )";    	
-    if ($is_allowedToEdit || $is_tutor) {
+    if ($is_allowedToEdit) {
         //Teacher view		
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
             //$exercise_where_query = ' te.exe_exo_id = ce.id AND ';
@@ -1039,10 +1037,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
             
             //Looping results
-            for ($i = 0; $i < $sizeof; $i++) {                
+            for ($i = 0; $i < $sizeof; $i++) {               
                 $revised = $results[$i]['revised'];	
                 
-                if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
+                if ($from_gradebook && ($is_allowedToEdit)) {
                     if (in_array($results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'], $users_array_id)) {
                         continue;
                     }
@@ -1089,10 +1087,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $score = show_score($my_res, $my_total);
                     
                     $actions = '';
-                    if ($is_allowedToEdit || $is_tutor) {
-                    	if (in_array($results[$i]['exe_user_id'], $teacher_id_list)) {
-                    		$actions .= Display::return_icon('teachers.gif', get_lang('Teacher'));
-                    	}
+                    if ($is_allowedToEdit) {
+                        if (isset($teacher_id_list)) {
+                            if (in_array($results[$i]['exe_user_id'], $teacher_id_list)) {
+                                $actions .= Display::return_icon('teachers.gif', get_lang('Teacher'));
+                            }
+                        }
                         if ($revised) {
                             $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
                             $actions .= '&nbsp;';
@@ -1106,7 +1106,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                                 $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                             }
                         }
-                        if (api_is_platform_admin() || $is_tutor) {     
+                        if (api_is_platform_admin()) {     
                             if ($locked == false) {
                                 $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
                                 $actions .='&nbsp;';
@@ -1124,7 +1124,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         $revised = Display::label(get_lang('NotValidated'), 'info');
                     }
                     
-                    if ($is_allowedToEdit || $is_tutor) {                        					
+                    if ($is_allowedToEdit) {                        					
 						$results[$i]['status']  =  $revised;
 						$results[$i]['score']   =  $score;
 						$results[$i]['actions'] =  $actions;
@@ -1154,7 +1154,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 
                 $hp_date = api_get_local_time($hpresults[$i][6], null, date_default_timezone_get());
                 $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
-                if ($is_allowedToEdit || $is_tutor) {                   
+                if ($is_allowedToEdit) {                   
                     $list_info[] = array($hpresults[$i][0], $hpresults[$i][1], $hpresults[$i][2], '',  $hp_title, '-',  $hp_date , $hp_result , '-');
                 } else {
                     $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
@@ -1162,7 +1162,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
     }	
-	//var_dump($list_info);
     return $list_info;
 }
 

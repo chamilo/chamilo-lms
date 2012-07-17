@@ -637,7 +637,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 			$_user ['status']           = $uData ['status'];
 
 			$is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
-			$is_allowedCreateCourse     = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+			$is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
 			ConditionalLogin::check_conditions($uData);
 
 			Session::write('_user',$_user);
@@ -851,15 +851,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
     if (isset($user_id) && $user_id && isset($_cid) && $_cid) {        
         
-        $variable = 'accept_legal_'.$user_id.'_'.$_course['real_id'].'_'.$session_id;
-        
-        $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
-        
+        $variable = 'accept_legal_'.$user_id.'_'.$_course['real_id'].'_'.$session_id;                
         $user_pass_open_course = false;
-        if (in_array($_course['visibility'], $course_visibility_list) && Session::read($variable)) {
+        if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
             $user_pass_open_course = true;
-        }
-        
+        }        
+                
         //Checking if the user filled the course legal agreement
         if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
             $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
@@ -890,7 +887,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
 
         //We are in a session course? Check session permissions
-        if (!empty($session_id))  {
+        if (!empty($session_id)) {
             //I'm not the teacher of the course
             if ($is_courseAdmin == false) {
                 // this user has no status related to this course
@@ -1021,7 +1018,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 break;
         }
 	}
-    
+        
     // check the session visibility
 	if ($is_allowed_in_course == true) {
 
@@ -1029,7 +1026,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 		if ($session_id != 0) {
 			if (!$is_platformAdmin) {
 				// admin is not affected to the invisible session mode
-
 				$session_visibility = api_get_session_visibility($session_id);
 
                 switch ($session_visibility) {
@@ -1041,7 +1037,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 			}
         }
 	}
-
+    
 	// save the states
     Session::write('is_courseAdmin', $is_courseAdmin);
 	Session::write('is_courseMember', $is_courseMember);
@@ -1051,7 +1047,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 	Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else { // continue with the previous values
 
-	if (isset($_SESSION ['_courseUser'])) {
+	if (isset($_SESSION['_courseUser'])) {
 		$_courseUser       = $_SESSION ['_courseUser'];
 	}
 

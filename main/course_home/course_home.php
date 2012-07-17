@@ -144,6 +144,7 @@ if ($is_speacialcourse) {
         CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
     }
 }
+
 /*	Is the user allowed here? */
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);

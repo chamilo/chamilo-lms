@@ -32,10 +32,12 @@ if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
 
+
 if ($origin == 'learnpath')
-	api_protect_course_script();
+    api_protect_course_script(false, false, true);
 else
-	api_protect_course_script(true);
+    api_protect_course_script(true, false, true);
+
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -63,7 +65,7 @@ if (empty($id)) {
 	api_not_allowed();
 }
 
-$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin();
+$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -493,7 +495,7 @@ foreach ($questionList as $questionId) {
 	if ($show_results) {		            
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
-		if ($is_allowedToEdit && $locked == false) {            
+		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {         
         
 			echo '<tr><td>';
 			$name = "fckdiv".$questionId;
@@ -615,7 +617,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 	$marksid = implode(",",$arrmarks);
 }
 
-if ($is_allowedToEdit && $locked == false) {
+if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
 		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		//echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';

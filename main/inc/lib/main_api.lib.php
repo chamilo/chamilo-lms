@@ -803,9 +803,13 @@ function api_valid_email($address) {
  * @todo replace global variable
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false) {
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
     global $is_allowed_in_course;
     $is_visible = false;
+    
+    if (api_is_drh()) {
+        return true;
+    }
     if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
@@ -5960,6 +5964,7 @@ function api_user_is_login($user_id = null) {
     $user_id = empty($user_id) ? api_get_user_id() : intval($user_id);
     return $user_id && !api_is_anonymous();
 }
+
 /**
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
@@ -5979,6 +5984,7 @@ function api_get_real_ip(){
     if (!empty($debug)) error_log('Real IP: '.$ip);
     return $ip;
 }
+
 /**
  * Checks whether an IP is included inside an IP range
  * @author claudiu at cnixs dot com  on http://www.php.net/manual/fr/ref.network.php#55230
@@ -6000,4 +6006,10 @@ function api_check_ip_in_range($ip,$range) {
     $ip_ip_net = $ip_ip & $ip_mask;
 
     return ($ip_ip_net == $ip_net);
+}
+
+
+function api_check_user_access_to_legal($course_visibility) {
+    $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);    
+    return in_array($course_visibility, $course_visibility_list) || api_is_drh();
 }

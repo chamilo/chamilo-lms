@@ -4308,3 +4308,8 @@ li.annoucement{
     height: 34px;
     position: absolute
 }
+
+
+#course_category_well {
+    padding: 9px 0;
+}

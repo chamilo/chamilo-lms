@@ -47,10 +47,13 @@ $stok = Security::get_token();
 ?>
 <div class="row">
     <div class="span3">
-        <div class="well">
+        <div id="course_category_well" class="well">
+            <ul class="nav nav-list">
             <?php
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
+                
+                echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {
@@ -62,12 +65,12 @@ $stok = Security::get_token();
                         $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                     } else {
                         if (!empty($count_courses_lv1)) {
-                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.' ('.$count_courses_lv1.') </a>';
                         } else {
                             $category_link = ''.$category_name.' ('.$count_courses_lv1.')';
                         }
                     }
-                    echo '<div>'.$category_link.'</div>';
+                    echo '<li>'.$category_link.'</li>';
 
                     // level 2
                     if (!empty($browse_course_categories[$category_code])) {
@@ -78,9 +81,9 @@ $stok = Security::get_token();
                             if ($code == $subcategory1_code) {
                                 $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
                             } else {
-                                $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
+                                $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.' ('.$count_courses_lv2.') </a> ';
                             }
-                            echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
+                            echo '<li style="margin-left:20px;">'.$subcategory1_link.'</li>';
                         }
 
                         // level 3
@@ -94,7 +97,7 @@ $stok = Security::get_token();
                                 } else {
                                     $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                 }
-                                echo '<div style="margin-left:40px;">'.$subcategory2_link.'</div>';
+                                echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
                             }
                         }
                     }

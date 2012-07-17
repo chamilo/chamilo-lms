@@ -237,13 +237,10 @@ class Nanogong {
 	 */
 	function get_public_url($force_download = 0) {
 		$params = $this->get_params(true);
-		$url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
-		
+		$url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;	
 		$params = $this->get_params();
-		
-		$filename = basename($this->load_filename_if_exists());
-		
-		$url = api_get_path(WEB_COURSE_PATH).$this->course_info['code'].'/exercises/'.
+		$filename = basename($this->load_filename_if_exists());		
+		$url = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/exercises/'.
 		$params['session_id'].'/'.$params['exercise_id'].'/'.$params['question_id'].'/'.$params['user_id'].'/'.$filename;		
 		return $url;
 	}

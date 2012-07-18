@@ -2548,7 +2548,8 @@ div.admin_section h4 {
 }
 
 .topics_grid_item {
-    /*    margin-left:20px; */
+    border-bottom: 1px solid #CCCCCC;
+    margin-bottom: 20px;
 }
 
 #div_content_table {

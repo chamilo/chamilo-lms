@@ -195,7 +195,7 @@ echo '</div>';
 				var image_url = RegExp.$1;
 				
 				image_url=image_url.replace(/\\/g,'/').replace( /.*\//, '' );// extract basename
-				image_url='<?php echo api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';?>'+image_url+'<?php echo '?'.api_get_cidreq(); ?>';
+				image_url='<?php echo api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'.$dir;?>'+image_url+'<?php echo '?'.api_get_cidreq(); ?>';
 			
 				// show JPEG image in page
 				document.getElementById('upload_results').innerHTML = 

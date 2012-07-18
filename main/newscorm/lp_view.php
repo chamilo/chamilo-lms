@@ -414,7 +414,12 @@ if (Database::num_rows($res_media) > 0) {
         var hauteurHeader = document.getElementById('header').offsetHeight;
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
-        var hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
+        
+        var hauteurMedia = 0;
+        if ($("#lp_media_file").length != 0) {
+            hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
+        }
+        
         var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
         var hauteurAction = 0;
         if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;

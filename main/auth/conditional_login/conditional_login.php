@@ -12,8 +12,8 @@
 $dc_conditions = array();
 
 array_push($dc_conditions, array(
-  'conditional_function'    => 'check_platform_legal_conditions',
-  'url'                     => api_get_path(WEB_CODE_PATH).'auth/inscription.php'
+//  'conditional_function'    => 'check_platform_legal_conditions',
+//  'url'                     => api_get_path(WEB_CODE_PATH).'auth/inscription.php'
 ));
 
 

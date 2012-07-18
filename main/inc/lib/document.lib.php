@@ -797,11 +797,11 @@ class DocumentManager {
         }
 
         if (!empty($document_id)) {
-            $sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b
+            $sql= "SELECT a.insert_user_id, b.readonly FROM $TABLE_PROPERTY a, $TABLE_DOCUMENT b
                    WHERE
             			a.c_id = $course_id AND
                         b.c_id = $course_id AND
-            			a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
+            			a.ref = b.id and a.ref= $document_id LIMIT 1";
             $resultans   =  Database::query($sql);
             $doc_details =  Database ::fetch_array($resultans, 'ASSOC');
 
@@ -1306,7 +1306,7 @@ class DocumentManager {
         }
         $sql='UPDATE '.$tbl_category.' SET document_id="'.Database::escape_string($document_id).'"
                WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
-        $rs=Database::query($sql);
+        Database::query($sql);
     }
 
     /**
@@ -1461,7 +1461,7 @@ class DocumentManager {
         $default_certificate=self::get_default_certificate_id($course_id);
         if ((int)$default_certificate==(int)$default_certificate_id) {
             $tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $session_id=api_get_session_id();
+            $session_id = api_get_session_id();
             if ($session_id==0 || is_null($session_id)) {
                 $sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
             } elseif ($session_id>0) {
@@ -1471,8 +1471,8 @@ class DocumentManager {
             }
 
             $sql='UPDATE '.$tbl_category.' SET document_id=null
-                       WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
-            $rs=Database::query($sql);
+                  WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
+            Database::query($sql);
         }
     }
 

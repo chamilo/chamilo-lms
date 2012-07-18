@@ -227,8 +227,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			$login      = $_POST['login'];
 			$password   = $_POST['password'];
 		}
-
-		//lookup the user in the main database
+        
+		//Lookup the user in the main database
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status FROM $user_table
 			    WHERE username = '".Database::escape_string($login)."'";
@@ -238,38 +238,19 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			$uData = Database::fetch_array($result);
 
 			if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
-				//the authentification of this user is managed by Chamilo itself
+				//The authentification of this user is managed by Chamilo itself
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
-
-				if (api_get_setting('allow_terms_conditions')=='true') {
-					if ($password == $uData['password'] AND (trim($login) == $uData['username']) OR $cas_login ) {
-						$temp_user_id = $uData['user_id'];
-
-						$term_and_condition_status = api_check_term_condition($temp_user_id);//false or true
-
-						if ($term_and_condition_status === false) {
-                            $_SESSION['term_and_condition'] = array('user_id'   => $temp_user_id,
-                                                                    'login'     => $login,
-                                                                    'password'  => $password,
-                                                                    'update_term_status' => true,
-                            );
-							header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
-							exit;
-						} else {
-							unset($_SESSION['term_and_condition']);
-						}
-					}
-				}
-
+       			
 				// Check the user's password
-				if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {                    
+				if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {    
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
                         include_once $extAuthSource[$update_type]['updateUser'];
                     }
+                                        
 					// Check if the account is active (not locked)
-					if ($uData['active']=='1') {
+					if ($uData['active'] == '1') {
 
 						// Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date'] == '0000-00-00 00:00:00') {

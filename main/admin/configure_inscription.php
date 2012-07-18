@@ -301,10 +301,6 @@ if (get_setting('allow_terms_conditions') == 'true') {
     $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
 
-    /*if (isset($_SESSION['term_and_condition']['user_id']) && isset($_SESSION['term_and_condition']['password'])) {
-        $form->addElement('hidden', 'login', $_SESSION['term_and_condition']['user_id']);
-        $form->addElement('hidden', 'password', $_SESSION['term_and_condition']['password']);
-    }*/
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
         $form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');

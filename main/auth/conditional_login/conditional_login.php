@@ -12,7 +12,7 @@
 $dc_conditions = array();
 
 array_push($dc_conditions, array(
-  'conditional_function'    => 'check_platform_legal',
+  'conditional_function'    => 'check_platform_legal_conditions',
   'url'                     => api_get_path(WEB_CODE_PATH).'auth/inscription.php'
 ));
 
@@ -42,8 +42,8 @@ function dc_check_first_login($user){
     return $uInfo['extra']['already_logged_in'] === 'false';
 }
 
-function check_platform_legal($user) {             
-    if (api_get_setting('allow_terms_conditions') == 'true') {        
+function check_platform_legal_conditions($user) {             
+    if (api_get_setting('allow_terms_conditions') == 'true') {
         $term_and_condition_status = api_check_term_condition($user['user_id']);
         // @todo not sure why we need the login password and update_term_status
         if ($term_and_condition_status === false) {
@@ -57,7 +57,10 @@ function check_platform_legal($user) {
             exit;*/
         } else {
             unset($_SESSION['term_and_condition']);
+            return false;
         }        
-    }	
-    return false;
+    } else {
+        //No validation
+        return true;
+    }
 }

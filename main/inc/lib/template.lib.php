@@ -12,39 +12,6 @@ require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
 class Template {
 
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
-        return Display:: return_icon($image, '', array(), $size, $show_text = false, $return_only_path = true);
-    }
-
-    public static function format_date($timestamp, $format = null) {
-        return api_format_date($timestamp, $format);
-    }
-        
-    /**
-     * Return the item's url key:
-     * 
-     *      c_id=xx&id=xx
-     * 
-     * @param object $item
-     * @return string
-     */
-    public static function key($item){
-        $id = isset($item->id) ? $item->id : null;
-        $c_id = isset($item->c_id) ? $item->c_id : null;
-        $result = '';
-        if($c_id){
-            $result = "c_id=$c_id";
-        }
-        if($id){
-            if($result){
-                $result .= "&amp;id=$id";
-            }else{
-                $result .= "&amp;id=$id";
-            }
-        }
-        return $result;
-    }
-
     var $style = 'default'; //see the template folder 
     var $preview_theme = null;
     var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
@@ -169,6 +136,39 @@ class Template {
                 }
             }
         }
+    }    
+    
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
+        return Display:: return_icon($image, '', array(), $size, $show_text = false, $return_only_path = true);
+    }
+
+    public static function format_date($timestamp, $format = null) {
+        return api_format_date($timestamp, $format);
+    }
+        
+    /**
+     * Return the item's url key:
+     * 
+     *      c_id=xx&id=xx
+     * 
+     * @param object $item
+     * @return string
+     */
+    public static function key($item){
+        $id = isset($item->id) ? $item->id : null;
+        $c_id = isset($item->c_id) ? $item->c_id : null;
+        $result = '';
+        if($c_id){
+            $result = "c_id=$c_id";
+        }
+        if($id){
+            if($result){
+                $result .= "&amp;id=$id";
+            }else{
+                $result .= "&amp;id=$id";
+            }
+        }
+        return $result;
     }
 
     function set_help($help_input = null) {

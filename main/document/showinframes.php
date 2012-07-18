@@ -173,34 +173,6 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                 //   });';
 }
 
-if (!$jplayer_supported) {
-    $htmlHeadXtra[] = '<script type="text/javascript">
-    <!--
-        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
-    -->
-    </script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
-
-    $htmlHeadXtra[] = '<script>
-    <!--
-        var updateContentHeight = function() {
-            //HeaderHeight = document.getElementById("header").offsetHeight;
-            //FooterHeight = document.getElementById("footer").offsetHeight;
-            //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
-            my_iframe = document.getElementById("mainFrame");
-            //this doesnt seem to work in IE 7,8,9
-            new_height = my_iframe.contentWindow.document.body.scrollHeight;
-            my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
-        };
-
-        // Fixes the content height of the frame
-        window.onload = function() {
-            updateContentHeight();
-            '.$js_glossary_in_documents.'
-        }
-    -->
-    </script>';
-}
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
@@ -219,6 +191,8 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
         });        
   </script>';
 }
+
+$execute_iframe = true;
 
 if ($jplayer_supported) {
     
@@ -251,11 +225,46 @@ if ($jplayer_supported) {
             '.$jquery.'            
         });
     </script>';
+    $execute_iframe = false;
 }
+if ($show_web_odf) {      
+    $execute_iframe = false;
+}
+
+$is_nanogong_available = $pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true';
+if ($is_nanogong_available){
+    $execute_iframe = false;
+}
+
+if (!$jplayer_supported && $execute_iframe) {
+    
+    $htmlHeadXtra[] = '<script type="text/javascript">
+    <!--
+        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+    -->
+    </script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+    $htmlHeadXtra[] = '<script>
+    <!--
+        var updateContentHeight = function() {            
+            my_iframe = document.getElementById("mainFrame");
+            //this doesnt seem to work in IE 7,8,9
+            new_height = my_iframe.contentWindow.document.body.scrollHeight;
+            my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+        };
+
+        // Fixes the content height of the frame
+        window.onload = function() {
+            updateContentHeight();
+            '.$js_glossary_in_documents.'
+        }
+    -->
+    </script>';
+}
+
 
 Display::display_header('');
 
-$execute_iframe = true;
 
 echo '<div align="center">';
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
@@ -268,19 +277,17 @@ if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
 
 if ($show_web_odf) {        
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
-    echo '<div id="odf"></div>';
-    $execute_iframe = false;
+    echo '<div id="odf"></div>';    
 }
 echo '</div>';
     
-if ($jplayer_supported) {        
+if ($jplayer_supported) { 
     echo '<br /><div class="span12" style="margin:0 auto; width:100%; text-align:center;">';
     echo DocumentManager::generate_video_preview($document_data);
-    echo '</div>'; 
-    $execute_iframe = false;
+    echo '</div>';     
 }
 
-if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){
+if ($is_nanogong_available){
     echo '<div align="center">';
         echo '<br/>';
         echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
@@ -289,8 +296,7 @@ if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web
             echo '<param name="ShowTime" value="true" />';
             echo '<param name="ShowRecordButton" value="false" />';
         echo '</applet>';
-    echo '</div>';
-    $execute_iframe = false;
+    echo '</div>';    
 }
 
 if ($execute_iframe) {

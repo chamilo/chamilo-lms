@@ -402,8 +402,10 @@ elseif ($displayMode == "viewContentEdit") {
 
 
 		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
-
-		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
+        
+        if (api_get_setting('show_email_addresses') == 'true') {
+            echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
+        }        
 
 		if (api_get_setting('extended_profile') == 'true') {			
 			if (!empty($mainUserInfo['competences']))
@@ -522,10 +524,6 @@ elseif ($displayMode == "viewContentEdit") {
 
 				if (api_get_setting("show_email_addresses") == "true") {
 					echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
-				} else {
-					if (api_is_allowed_to_edit()) {
-						echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
-					}
 				}
 
 				if (api_get_setting('extended_profile') == 'true') {

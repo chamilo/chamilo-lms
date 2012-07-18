@@ -70,7 +70,7 @@ class Statistics {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             }
         } else {
-            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table $status_filter $active_filter";
+            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE 1=1 $status_filter $active_filter";
             if (isset ($category_code)) {
                 $status_filter = isset($status)?' AND status = '.intval($status):'';
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter $active_filter";

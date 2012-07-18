@@ -21,7 +21,7 @@ class Login
     /**
      * Get user account list
      *
-     * @param unknown_type $user
+     * @param array $user array with keys: email, password, uid, loginName
      * @param boolean $reset
      * @param boolean $by_username
      * @return unknown
@@ -80,7 +80,7 @@ class Login
     /**
      * This function sends the actual password to the user
      *
-     * @param unknown_type $user
+     * @param int $user
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function send_password_to_user($user, $by_username = false)
@@ -125,8 +125,7 @@ class Login
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function handle_encrypted_password($user, $by_username = false)
-    {
+    public static function handle_encrypted_password($user, $by_username = false) {
         global $_configuration;
         $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
 
@@ -785,5 +784,39 @@ class Login
             }
         }
     }
+    
+    /**
+     * Returns true if user exists in the platform when asking the password
+     * 
+     * @param string $username (email or username)
+     * @return boolean
+     */
+    function get_user_accounts_by_username($username) {        
+        if (strpos($username,'@')){
+            $username = api_strtolower($username);
+            $email = true;
+        } else {
+            $username = api_strtolower($username);
+            $email = false;
+        }
 
+		$condition = '';
+		if ($email) {
+			$condition = "LOWER(email) = '".Database::escape_string($username)."' ";
+		} else {
+            $condition = "LOWER(username) = '".Database::escape_string($username)."'";
+        }
+
+		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email, 
+                         status AS status, official_code, phone, picture_uri, creator_id 
+				 FROM  $tbl_user
+				 WHERE ( $condition AND active = 1) ";
+		$result 	= Database::query($query);
+		$num_rows 	= Database::num_rows($result);
+        if ($result && $num_rows > 0) {
+            return Database::store_result($result);
+        }
+        return false;
+    }
 }

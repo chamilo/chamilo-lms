@@ -407,6 +407,7 @@ function check_system_version() {
 
         // The number of users
         $number_of_users = statistics::count_users();
+        $number_of_active_users = statistics::count_users(null,null,null,true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -415,6 +416,7 @@ function check_system_version() {
             'version' => $system_version,
             'numberofcourses' => $number_of_courses,
             'numberofusers' => $number_of_users,
+            'numberofactiveusers' => $number_of_active_users,
             //The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),

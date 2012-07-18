@@ -219,7 +219,7 @@ $(function() {
                                             modal       : true,
                                             width       : width_value,
                                             height      : height_value,
-                                            resizable   : resizable_value,
+                                            resizable   : resizable_value
                                     });
             });
             //prevent the browser to follow the link

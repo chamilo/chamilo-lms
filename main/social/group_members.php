@@ -57,7 +57,7 @@ if (isset($_GET['action']) && $_GET['action']=='delete') {
 	//if i'm a moderator		
 	if (GroupPortalManager::is_group_moderator($group_id)) {
 		GroupPortalManager::delete_user_rel_group($user_join, $group_id); 
-		$show_message = get_lang('UserDeleted');
+		$show_message = Display::return_message(get_lang('UserDeleted'));
 	}
 }
 
@@ -67,7 +67,7 @@ if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
 	//if i'm the admin		
 	if (GroupPortalManager::is_group_admin($group_id)) {
 		GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_MODERATOR); 
-		$show_message = get_lang('UserChangeToModerator');
+		$show_message = Display::return_message(get_lang('UserChangeToModerator'));
 	}
 }
 
@@ -77,11 +77,9 @@ if (isset($_GET['action']) && $_GET['action']=='delete_moderator') {
 	//only group admins can do that	
 	if (GroupPortalManager::is_group_admin($group_id)) {	
 		GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_READER); 
-		$show_message = get_lang('UserChangeToReader');
+		$show_message = Display::return_message(get_lang('UserChangeToReader'));
 	}
 }
-
-
 
 $users	= GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
 $new_member_list = array();
@@ -91,10 +89,6 @@ $social_left_content = SocialManager::show_social_menu('member_list',$group_id);
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 	 
 $social_right_content .= '<div style="width:90%">';
-
-if (! empty($show_message)){
-    $social_right_content .= Display :: return_message($show_message,'confirmation', false);
-}
 
 foreach($users as $user) {		
     switch ($user['relation_type']) {

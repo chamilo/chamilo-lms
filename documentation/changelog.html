@@ -200,11 +200,10 @@ This version of Chamilo only includes new features:
 </ul>
 <h3>Known issues</h3>
 <ul>
-    <li>
-    <b>Document title:</b> The option to NOT use a document title different than the filename in the documents tool has been removed. This means that if this setting was not set to the default option in your Chamilo option or if you have a very old installation that you have been upgrading over the years, you might experience problems accessing the documents. In this case, we recommend contacting an official provider of Chamilo to take this migration in charge.
-    </li>
+    <li><b>Document title:</b> The option to NOT use a document title different than the filename in the documents tool has been removed. This means that if this setting was not set to the default option in your Chamilo option or if you have a very old installation that you have been upgrading over the years, you might experience problems accessing the documents. In this case, we recommend contacting an official provider of Chamilo to take this migration in charge.</li>
     <li>During upgrade, if your database ends with "c_", the installation process will report errors in the PHP error log. This is due to a check on the new c_id field for database normalization, but is not important. The corresponding logging code can be disabled in database.lib.php</li>
 	<li>Agenda regression: because we implemented a much more usable and familiar agenda for most of you, and because we lacked some time to go into the details, we have temporarily removed the possibility to make an event visible to specific users (they are always visible to all the course users right now) - see task #5201 for details</li>
+    <li>Exercises: When reviewing an exercise, hotspot questions results are not remembered see #3980</li>
 </ul>
 
 <h3>Third-Party Libraries additions/updates</h3>
@@ -684,7 +683,7 @@ This version of Chamilo only includes a few minor new features:
   <li>If you used split users directories before v1.8.8 in combination with the "My files" feature (if it existed at all at that point), you will probably have a problem now, as the code in the previous version was wrong and was saving the personal portfolio file in another directory than the user's. Sorry about that. If you need professional assistance, see the http://www.chamilo.org/ website under support -> professional support for official providers who could help you. And don't forget to keep a backup. If you don't understand a thing about what I'm talking about, you are probable not concerned by this bug, so don't worry too much.</li>
   <li>For some reason, we have been reported unsuccessful migrations from 1.8.7 to 1.8.7.1 whereby the course_rel_user table was not integrally copied. We recommend keeping your database backup until you're sure every student/course relationship was copied (comparing the lines in the table before and after migration might help you)</li>     
   <li>Document tool: when moving an HTML file using the "move" funcionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
-<li>Hotpotatoes: When taking a Hotpotato exam added to Chamilo there is a javascript error, this bug can be only reproduced using Google Chrome see #3332</li>
+  <li>Hotpotatoes: When taking a Hotpotato exam added to Chamilo there is a javascript error, this bug can be only reproduced using Google Chrome see #3332</li>
 
 </ul>
 <h3>Deprecated features</h3>

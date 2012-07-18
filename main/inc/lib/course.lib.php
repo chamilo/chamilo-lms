@@ -3705,13 +3705,18 @@ class CourseManager {
             
 			foreach ($courses as &$my_course) {
 				$course_info = api_get_course_info($my_course['course_code']);
+                
+                if ($course_info['visibility'] = COURSE_VISIBILITY_CLOSED) {
+                    continue;
+                }
+                
                 $my_course['extra_info'] = $course_info;
                 $my_course['extra_info']['go_to_course_button'] = '';
                 
                 //Course visibility 
                 if (api_is_platform_admin() || (
                         $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
-                        ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || in_array($course_info['real_id'], $my_course_code_list) && $course_info['visibility'] != COURSE_VISIBILITY_CLOSED  )
+                        ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || in_array($course_info['real_id'], $my_course_code_list))
                     ) {
                     $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$my_course['extra_info']['path'].'/index.php', array('class' => 'btn btn-primary'));                        
                 }

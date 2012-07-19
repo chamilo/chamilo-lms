@@ -380,7 +380,7 @@ if (Database::num_rows($res_media) > 0) {
                 <!-- log message layout -->
                 <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
                     <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="color: white;">.</div>
+                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
                 </div>
                 <!-- end log message layout -->
                 <?php } ?>

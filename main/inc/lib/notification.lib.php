@@ -13,23 +13,23 @@
 
 //default values
 //mail_notify_message ("At once", "Daily", "No")
-define('NOTIFY_MESSAGE_AT_ONCE',	'1');
-define('NOTIFY_MESSAGE_DAILY',		'8');
-define('NOTIFY_MESSAGE_WEEKLY',    '12');
-define('NOTIFY_MESSAGE_NO',			'0');
+define('NOTIFY_MESSAGE_AT_ONCE',        '1');
+define('NOTIFY_MESSAGE_DAILY',          '8');
+define('NOTIFY_MESSAGE_WEEKLY',         '12');
+define('NOTIFY_MESSAGE_NO',             '0');
 
 //mail_notify_invitation ("At once", "Daily", "No")
 
-define('NOTIFY_INVITATION_AT_ONCE',	'1');
-define('NOTIFY_INVITATION_DAILY',	'8');
-define('NOTIFY_INVITATION_WEEKLY', '12');
-define('NOTIFY_INVITATION_NO',		'0');
+define('NOTIFY_INVITATION_AT_ONCE',     '1');
+define('NOTIFY_INVITATION_DAILY',       '8');
+define('NOTIFY_INVITATION_WEEKLY',      '12');
+define('NOTIFY_INVITATION_NO',          '0');
 
 // mail_notify_group_message ("At once", "Daily", "No")
-define('NOTIFY_GROUP_AT_ONCE',		'1');
-define('NOTIFY_GROUP_DAILY',		'8');
-define('NOTIFY_GROUP_WEEKLY',      '12');
-define('NOTIFY_GROUP_NO',			'0');
+define('NOTIFY_GROUP_AT_ONCE',          '1');
+define('NOTIFY_GROUP_DAILY',            '8');
+define('NOTIFY_GROUP_WEEKLY',           '12');
+define('NOTIFY_GROUP_NO',               '0');
 
 define('NOTIFICATION_TYPE_MESSAGE',       1);
 define('NOTIFICATION_TYPE_INVITATION',    2);
@@ -63,7 +63,7 @@ class Notification extends Model {
     public function send($frec = NOTIFY_MESSAGE_DAILY) {
         $notifications = $this->find('all',array('where'=>array('sent_at IS NULL AND send_freq = ?'=>$frec)));
         if (!empty($notifications)) {
-            foreach($notifications as $item_to_send) {
+            foreach ($notifications as $item_to_send) {
                 
                 //Sending email
                 api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], Security::filter_terms($item_to_send['title']), Security::filter_terms($item_to_send['content']), $this->admin_name, $this->admin_email);                    
@@ -80,7 +80,7 @@ class Notification extends Model {
     /**
      * Save message notification
      * @param	array	message type NOTIFICATION_TYPE_MESSAGE, NOTIFICATION_TYPE_INVITATION, NOTIFICATION_TYPE_GROUP
-     * @param	array	user list of ids
+     * @param	array	recipients: user list of ids
      * @param	string	title
      * @param	string	content of the message
      * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
@@ -106,16 +106,18 @@ class Notification extends Model {
         }
         
         if (!empty($user_list)) {
-            foreach($user_list  as $user_id) {
+            foreach ($user_list  as $user_id) {
                 $extra_data = UserManager::get_extra_user_data($user_id);              
-                $params = array();                
+                $params = array();       
                 if ($avoid_my_self) {
                     if ($user_id == api_get_user_id()) {
                         continue;
                     }  
                 }
-                $user_setting = $extra_data[$setting_to_check];                
+                
                 $user_info = api_get_user_info($user_id);
+                $user_setting = $extra_data[$setting_to_check];
+                                
                 switch ($user_setting) {
                     //No notifications                   
                     case NOTIFY_MESSAGE_NO:
@@ -140,7 +142,7 @@ class Notification extends Model {
                 	    $params['send_freq']     = $user_setting;    			 
                 	    $this->save($params);
                 	    break;
-                }                   
+                }          
             }
         }
     }    

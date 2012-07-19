@@ -850,14 +850,14 @@ if (empty($_GET['details'])) {
 			get_lang('Score'),
 			get_lang('Attempts')
 		);
-
+        
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
 						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
 						  		active='1' AND 
-								quiz.session_id = $session_id 
+								(quiz.session_id = $session_id OR quiz.session_id = 0)
 							ORDER BY quiz.title ASC ";
-
+        
 		$result_exercices = Database::query($sql_exercices);
 		$i = 0;
 		if (Database :: num_rows($result_exercices) > 0) {
@@ -892,18 +892,19 @@ if (empty($_GET['details'])) {
 				echo '<td align="center">';
 
 				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' 
-				                     WHERE  exe_exo_id="'.$exercise_id.'" AND 
-				                            exe_user_id="'.$student_id.'" AND 
-				                            exe_cours_id="'.$course_code.'" AND
-				                            status = "" AND 
-				                            orig_lp_id = 0 AND 
+				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND 
+				                            exe_user_id     ="'.$student_id.'" AND 
+				                            exe_cours_id    ="'.$course_code.'" AND
+                                            session_id      ="'.$session_id.'" AND
+				                            status          = "" AND 
+				                            orig_lp_id      = 0 AND 
 				                            orig_lp_item_id = 0				                             
 				                            ORDER BY exe_date DESC LIMIT 1';
 				$result_last_attempt = Database::query($sql_last_attempt);
 				if (Database :: num_rows($result_last_attempt) > 0) {
 					$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
 					if ($count_attempts > 0)
-						echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+						echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
 				}
 				echo '</td>';
 				
@@ -977,8 +978,7 @@ if (empty($_GET['details'])) {
 		$links 					= Tracking::count_student_visited_links($student_id, $course_code, $session_id);
 		$chat_last_connection 	= Tracking::chat_last_connection($student_id, $course_code, $session_id);			
 		$documents				= Tracking::count_student_downloaded_documents($student_id, $course_code, $session_id);
-		$uploaded_documents		= Tracking::count_student_uploaded_documents($student_id, $course_code, $session_id);
-		
+		$uploaded_documents		= Tracking::count_student_uploaded_documents($student_id, $course_code, $session_id);		
 		
 		$csv_content[] = array (
 			get_lang('Student_publication'),
@@ -1038,8 +1038,7 @@ if (empty($_GET['details'])) {
 </table>
 
 <?php
-	} //end details
-		
+	} //end details		
 }
 if ($export_csv) {
 	ob_end_clean();

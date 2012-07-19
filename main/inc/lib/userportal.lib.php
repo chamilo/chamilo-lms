@@ -189,7 +189,7 @@ class IndexManager {
 			
 			if ($show_course_link) {
 				if (!api_is_drh() && !api_is_session_admin()) {
-					$html .=  '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseManagement').'</a></li>';					
+					$html .=  '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';					
 				} else {
 					$html .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 				}
@@ -824,8 +824,7 @@ class IndexManager {
         //Course management                
 		if ($show_course_link) {
 			if (!api_is_drh()) {
-				$my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseManagement').'</a></li>';
-	
+				$my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';	
 				
                 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
                     $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';

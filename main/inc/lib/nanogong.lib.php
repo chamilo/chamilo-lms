@@ -507,22 +507,17 @@ class Nanogong {
 				$("#status_ok").hide();
 				$("#messages").hide();
 				
-				var check_js = check_gong();
-			
-				//check
-				
-				if (!check_js) {
-					$("#status_warning").html(lang_no_applet);
-					$("#status_warning").show();
-					return false;
-				}
-				
+				var check_js = check_gong();				
 				var recorder = document.getElementById("nanogong");
 				
 				if (!recorder || !check_js) {
 					//alert(lang_no_applet)
 					$("#status_warning").html(lang_no_applet);
 					$("#status_warning").show();
+                    
+                    //Show form
+                    $("#no_nanogong_div").show();                    
+                    $("#nanogong_div").hide();           
 					return false;
 				}
 				

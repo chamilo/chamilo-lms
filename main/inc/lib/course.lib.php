@@ -3693,7 +3693,7 @@ class CourseManager {
 			foreach ($courses as &$my_course) {
 				$course_info = api_get_course_info($my_course['course_code']);
                 
-                if ($course_info['visibility'] = COURSE_VISIBILITY_CLOSED) {
+                if ($course_info['visibility'] == COURSE_VISIBILITY_CLOSED) {
                     continue;
                 }
                 

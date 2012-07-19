@@ -386,7 +386,7 @@ class SocialManager extends UserManager {
 	 */
 	public static function get_logged_user_course_html($my_course, $count) {
 		global $nosession, $nbDigestEntries, $orderKey, $digest, $thisCourseSysCode;
-		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+		if (!$nosession) {
 			global $now, $date_start, $date_end;
 		}
 		//initialise
@@ -477,7 +477,7 @@ class SocialManager extends UserManager {
 		$result .= '</li>';
 		$result .= '</div>';
 
-		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+		if (!$nosession) {
 			$session = '';
 			$active = false;
 			if (!empty($my_course['session_name'])) {

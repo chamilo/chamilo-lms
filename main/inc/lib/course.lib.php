@@ -1323,7 +1323,7 @@ class CourseManager {
 
         // students subscribed to the course through a session
 
-        if (api_get_setting('use_session_mode') == 'true' && $with_session) {
+        if ($with_session) {
             $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE course_code = '$course_code' AND status<>2";
             if ($session_id != 0) {
                 $sql_query .= ' AND id_session = '.$session_id;

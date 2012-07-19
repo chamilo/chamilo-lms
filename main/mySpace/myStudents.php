@@ -385,7 +385,7 @@ if (!empty($student_id)) {
     $session_name = '';     
     $nb_login = Tracking :: count_login_per_student($user_info['user_id'], $_GET['course']);    
     //get coach and session_name if there is one and if session_mode is activated
-    if (api_get_setting('use_session_mode') == 'true' && $session_id > 0) {
+    if ($session_id > 0) {
         
         $session_info  = api_get_session_info($session_id);         
         $course_coachs = api_get_coachs_from_course($session_id, $course_code);

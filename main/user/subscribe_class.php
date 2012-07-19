@@ -12,9 +12,9 @@ $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) api_not_allowed(true);
-if(api_get_setting('use_session_mode')=='true') {
-	api_not_allowed(true);
-}
+
+api_not_allowed(true);
+
 
 /*
 	MAIN CODE

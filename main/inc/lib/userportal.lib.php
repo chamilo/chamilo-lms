@@ -826,13 +826,13 @@ class IndexManager {
 			if (!api_is_drh()) {
 				$my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseManagement').'</a></li>';
 	
-				if (api_get_setting('use_session_mode') == 'true') {
-					if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-						$my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
-					} else {
-						$my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
-					}
-				}
+				
+                if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+                    $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+                } else {
+                    $my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
+                }
+				
 			} else {
 				$my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
 			}

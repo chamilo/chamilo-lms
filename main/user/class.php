@@ -15,9 +15,7 @@ $this_section = SECTION_COURSES;
  */
 api_protect_course_script();
 
-if (api_get_setting('use_session_mode')=='true') {
-	api_not_allowed();
-}
+api_not_allowed();
 
 $tool_name = get_lang("Classes");
 //extra entries in breadcrumb

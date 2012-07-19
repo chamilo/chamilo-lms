@@ -381,21 +381,20 @@ class Login
                     Session::write('_real_cid', $_real_cid);
 
                     // if a session id has been given in url, we store the session
-                    if (api_get_setting('use_session_mode') == 'true') {
-                        // Database Table Definitions
-                        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                    
+                    // Database Table Definitions
+                    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+                    $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                    $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-                        if (!empty($_GET['id_session'])) {
-                            $_SESSION['id_session'] = intval($_GET['id_session']);
-                            $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
-                            $rs = Database::query($sql);
-                            list($_SESSION['session_name']) = Database::fetch_array($rs);
-                        } else {
-                            Session::erase('session_name');
-                            Session::erase('id_session');
-                        }
+                    if (!empty($_GET['id_session'])) {
+                        $_SESSION['id_session'] = intval($_GET['id_session']);
+                        $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
+                        $rs = Database::query($sql);
+                        list($_SESSION['session_name']) = Database::fetch_array($rs);
+                    } else {
+                        Session::erase('session_name');
+                        Session::erase('id_session');
                     }
 
                     if (!isset($_SESSION['login_as'])) {

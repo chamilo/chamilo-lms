@@ -352,67 +352,32 @@ class Nanogong {
 					$html .= '</div>';
 				$html .= '</div>';
 						
-				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserNotSupportNanogongListen'),'warning').$download_button.'</div>';
-				
+				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserNotSupportNanogongListen'),'warning').$download_button.'</div>';				
 				
 			} elseif(in_array($path_info['extension'],array('mp3', 'ogg','wav'))) {
 				$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
 				
 				$html .= '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
+                //$html .= '<link rel="stylesheet" href="' . $js_path . 'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 				$html .= '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 				
 				$html .= '<div class="nanogong_player"></div>';
 				$html .= '<br /><div class="action_player">'.$actions.'</div><br /><br /><br />';
 				
-				$jquery .= ' $("#audio_preview").jPlayer({
-                                ready: function() {                    
-                                    $(this).jPlayer("setMedia", {                                        
-                                        '.$path_info['extension'].' : "'.$url.'"                                                                                  
-                                    });
-                                },                            
-                                swfPath: "'.$js_path.'jquery-jplayer",                                
-                                supplied: "mp3, ogg, oga, wav",
-		                        solution: "flash, html",  // Do not change this setting otherwise
-		                        width:0,
-		                        height:0,
-                            });';
+                $params = array('url' => $url,
+                                'extension' =>$path_info['extension'],
+                                'count'=> 1                                 
+                 );
+                $jquery = DocumentManager::generate_jplayer_jquery($params);
+                
 				
-				$html .= '<script type="text/javascript">
+				$html .= '<script>
 				$(document).ready( function() {        
 				    //Experimental changes to preview mp3, ogg files        
 				     '.$jquery.'                 
 				});
-				</script>';
-				
-				//@todo fix this
-				$html .= '
-						<div id="audio_preview" class="jp-jplayer"></div>
-							<div class="jp-audio audio_preview_container">
-								<div class="jp-type-single">
-									<div id="jp_interface_1" class="jp-interface">
-										<ul class="jp-controls">
-											<li><a href="#" class="jp-play" tabindex="1">play</a></li>
-											<li><a href="#" class="jp-pause" tabindex="1">pause</a></li>
-											<li><a href="#" class="jp-stop" tabindex="1">stop</a></li>
-											<li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
-											<li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>
-										</ul>
-										<div class="jp-progress">
-											<div class="jp-seek-bar">
-												<div class="jp-play-bar"></div>
-											</div>
-										</div>
-										<div class="jp-volume-bar">
-											<div class="jp-volume-bar-value"></div>
-										</div>
-										<div class="jp-current-time"></div>
-										<div class="jp-duration"></div>
-									</div>					
-									<div id="jp_playlist_1" class="jp-playlist">					
-									</div>
-								</div>
-							</div>
-							<br />';				
+				</script>';				
+				$html .= DocumentManager::generate_media_preview(1, 'advanced');
 			}
 			return $html;
 		}	
@@ -507,22 +472,17 @@ class Nanogong {
 				$("#status_ok").hide();
 				$("#messages").hide();
 				
-				var check_js = check_gong();
-			
-				//check
-				
-				if (!check_js) {
-					$("#status_warning").html(lang_no_applet);
-					$("#status_warning").show();
-					return false;
-				}
-				
+				var check_js = check_gong();				
 				var recorder = document.getElementById("nanogong");
 				
 				if (!recorder || !check_js) {
 					//alert(lang_no_applet)
 					$("#status_warning").html(lang_no_applet);
 					$("#status_warning").show();
+                    
+                    //Show form
+                    $("#no_nanogong_div").show();                    
+                    $("#nanogong_div").hide();           
 					return false;
 				}
 				

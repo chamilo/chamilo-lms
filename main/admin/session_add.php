@@ -155,7 +155,7 @@ echo '</div>';
             <?php echo get_lang('SessionName') ?>
         </label>
         <div class="controls">
-            <input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
+            <input type="text" name="name" class="span4" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
         </div>        
     </div>   
   

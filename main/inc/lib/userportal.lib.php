@@ -898,7 +898,7 @@ class IndexManager {
 					// Sessions and courses that are not in a session category.
                     
                     // If we're not in the history view...
-					if (!isset($_GET['history'])) {						                        // 
+					if (!isset($_GET['history'])) {
                         //Display special courses
 						$html .= CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
                         //Display courses

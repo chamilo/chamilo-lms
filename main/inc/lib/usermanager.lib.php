@@ -2870,9 +2870,18 @@ class UserManager {
 	 */
 	 public function get_all_administrators() {
 	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-
-	 	$sql = "SELECT user_id, username, firstname, lastname, email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
+	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);        
+        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();   
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $tbl_url_rel_user as url INNER JOIN $table_admin as admin 
+                                 ON (admin.user_id=url.user_id) INNER JOIN $table_user u ON (u.user_id=admin.user_id)
+                                 WHERE access_url_id ='".$access_url_id."'";
+        } else {
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $table_admin as admin 
+                    INNER JOIN $table_user u ON (u.user_id=admin.user_id)";
+        }             
 	 	$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {

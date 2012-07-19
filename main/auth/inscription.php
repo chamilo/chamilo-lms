@@ -366,43 +366,29 @@ if ($form->validate()) {
                 $sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
                 Database::query($sql);
 
-                $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+                // 2. Send mail to all platform admin
+                
+                $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
+                $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
+                $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
 
-                if ($_configuration['multiple_access_urls']) {
-                    $access_url_id = api_get_current_access_url_id();
-                    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                    $sql_get_id_admin = "SELECT admin.user_id FROM ".$tbl_url_rel_user." as url,  ".$table_main_admin." as admin WHERE access_url_id='".$access_url_id."' AND admin.user_id=url.user_id";
+                if (api_is_western_name_order()) {
+                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
                 } else {
-                    $sql_get_id_admin = "SELECT * FROM ".$table_main_admin;
+                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
                 }
-                $result = Database::query($sql_get_id_admin);
-                while ($row = Database::fetch_array($result)) {
+                $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
+                $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
+                $url_edit       = Display::url(api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id, api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id);
+                $emailbody		.= get_lang('ManageUser',null,$values['language']).": $url_edit";
 
-                    $sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
-                    $result_list = Database::query($sql_admin_list);
-                    $admin_list = Database::fetch_array($result_list);
-                    $emailto = $admin_list['email'];
-
-                    // 2. send mail to the platform admin
-                    $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
-                    $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
-                    $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
-
-                    if (api_is_western_name_order()) {
-                        $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                        $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                    } else {
-                        $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                        $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                    }
-                    $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
-                    $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
-                    $emailbody		.= get_lang('ManageUser',null,$values['language']).': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
-
-                    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                    $email_admin = api_get_setting('emailAdministrator');
-                    @api_mail('', $emailto, $emailsubject, $emailbody, $sender_name, $email_admin);
+                $admins = UserManager::get_all_administrators();
+                foreach ($admins as $admin_info) {
+                    MessageManager::send_message($admin_info['user_id'], $emailsubject, $emailbody, null, null, null, null, null, null, $user_id);
                 }
+                
                 // 3. exit the page
                 unset($user_id);
 

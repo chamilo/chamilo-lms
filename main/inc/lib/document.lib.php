@@ -2448,6 +2448,36 @@ class DocumentManager {
         }
         return true;
     }
+    
+    /**
+     * 
+     * @param array paremeters: count, url, extension
+     * @return string
+     */
+    
+    function generate_jplayer_jquery($params = array()) {
+        $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';        
+        
+        $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({                                
+                            ready: function() {                    
+                                $(this).jPlayer("setMedia", {                                        
+                                    ' . $params['extension'] . ' : "' . $params['url'] . '"                                                                                  
+                                });
+                            },
+                            play: function() { // To avoid both jPlayers playing together.
+                                $(this).jPlayer("pauseOthers");
+                            },                                
+                            //errorAlerts: true,
+                            //warningAlerts: true,
+                            swfPath: "' . $js_path . 'jquery-jplayer",
+                            //supplied: "m4a, oga, mp3, ogg, wav",
+                            supplied: "' . $params['extension'] . '",
+                            wmode: "window",
+                            solution: "flash, html",  // Do not change this setting 
+                            cssSelectorAncestor: "#jp_container_' . $params['count'] . '", 
+                        });  	 ' . "\n\n";
+        return $jplayer_definition;
+    }
 
     /**
      *
@@ -2455,8 +2485,21 @@ class DocumentManager {
      * @param int
      * @return string	html content
      */
-    function generate_media_preview($i) {
+    function generate_media_preview($i, $type = 'simple') {
         $i = intval($i);
+        
+        $extra_controls = $progress = '';
+        if ($type == 'advanced') {
+            $extra_controls = ' <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+                                <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
+								<li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>';
+            $progress = '<div class="jp-progress">
+                                <div class="jp-seek-bar">
+                                    <div class="jp-play-bar"></div>
+                                </div>
+                            </div>';
+        }
+        
         //Shows only the play button
         $html = '<div id="jquery_jplayer_'.$i.'" class="jp-jplayer"></div>
                 <div id="jp_container_'.$i.'" class="jp-audio">
@@ -2465,7 +2508,9 @@ class DocumentManager {
                             <ul class="jp-controls">
                                 <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
                                 <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-                            </ul>
+                                '.$extra_controls.'
+                            </ul>                            
+                            '.$progress.'                            
                         </div>
                     </div>
                 </div>';

@@ -2872,7 +2872,7 @@ class UserManager {
 	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-	 	$sql = "SELECT user_id, username, firstname, lastname, email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
+	 	$sql = "SELECT u.user_id, username, firstname, lastname, email from $table_user as u INNER JOIN $table_admin as a ON (u.user_id=a.user_id) ";
 	 	$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {

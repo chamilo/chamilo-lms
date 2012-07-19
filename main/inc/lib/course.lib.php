@@ -3665,7 +3665,8 @@ class CourseManager {
             }            
         }
         
-        $table_course_access	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		//@todo all dates in the tracking_course_access, last_access are in the DB time (NOW) not UTC
 		/*
@@ -3678,8 +3679,11 @@ class CourseManager {
 
 		//$table_course_access table uses the now() and interval ...
 
-        $sql = "SELECT COUNT(course_access_id) course_count, course_code FROM $table_course_access
-				WHERE login_course_date <= now() AND login_course_date > DATE_SUB(now(), INTERVAL $days DAY)
+       $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility FROM $table_course c INNER JOIN $table_course_access a 
+                ON (c.code = a.course_code)
+				WHERE   login_course_date <= now() AND 
+                        login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND
+                        visibility <> '".COURSE_VISIBILITY_CLOSED."'
 				GROUP BY course_code
 				ORDER BY course_count DESC
 				LIMIT $limit";
@@ -3691,12 +3695,7 @@ class CourseManager {
             $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
             
 			foreach ($courses as &$my_course) {
-				$course_info = api_get_course_info($my_course['course_code']);
-                
-                if ($course_info['visibility'] == COURSE_VISIBILITY_CLOSED) {
-                    continue;
-                }
-                
+                $course_info = api_get_course_info($my_course['course_code']);
                 $my_course['extra_info'] = $course_info;
                 $my_course['extra_info']['go_to_course_button'] = '';
                 
@@ -3705,16 +3704,16 @@ class CourseManager {
                         $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || 
                         ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && api_user_is_login()) || in_array($course_info['real_id'], $my_course_code_list))
                     ) {
-                    $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$my_course['extra_info']['path'].'/index.php', array('class' => 'btn btn-primary'));                        
+                    $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
                 }
                 
                 //Description
                 $my_course['extra_info']['description_button'] = '';
                 if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
-                    $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$my_course['course_code'], array('class' => 'ajax btn'));                        
+                    $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'], array('class' => 'ajax btn'));                        
                 }
 				
-                $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($my_course['course_code']);
+                $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
 				$point_info = self::get_course_ranking($course_info['real_id'], 0);
 				$my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&amp;course_id='.$course_info['real_id'], $point_info);
 			}

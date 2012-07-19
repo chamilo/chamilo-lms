@@ -288,10 +288,6 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');	// when sessions are used
 $labelFormRow = get_lang('Session');
-if (api_get_setting('use_session_mode') == 'false') {
-	$tabAttrParam = array('style'=>'visibility:hidden', 'onchange'=>'submit_form(this)');
-	$labelFormRow = "";
-}
 $session_select_list = array();
 foreach($session_list as $item) {
 	$session_select_list[$item['id']] = $item['name'];

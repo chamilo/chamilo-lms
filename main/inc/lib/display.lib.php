@@ -1006,37 +1006,6 @@ class Display {
     }
 
     /**
-     * Display dashboard link
-     *
-     */
-    /*function display_dashboard_link() {
-        echo '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
-    }*/
-
-    /**
-     * Display edit course list links
-     *
-     */
-    /*function display_edit_course_list_links() {
-        echo '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
-    }*/
-
-    /**
-     * Show history sessions
-     *
-     */
-    /*
-    function display_history_course_session() {
-        if (api_get_setting('use_session_mode') == 'true') {
-            if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-                echo '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
-            } else {
-                echo '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
-            }
-        }
-    }*/
-
-    /**
      * Returns the "what's new" icon notifications
      *
      * The general logic of this function is to track the last time the user
@@ -1251,12 +1220,12 @@ class Display {
     function get_session_title_box($session_id) {
         global $nosession;
 
-        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+        if (!$nosession) {
             global $now, $date_start, $date_end;
         }
 
         $output = array();
-        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+        if (!$nosession) {
             $main_user_table        = Database :: get_main_table(TABLE_MAIN_USER);
             $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
             $tbl_session_category   = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);

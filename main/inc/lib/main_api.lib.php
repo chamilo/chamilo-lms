@@ -5958,25 +5958,47 @@ function api_get_real_ip(){
 
 /**
  * Checks whether an IP is included inside an IP range
- * @author claudiu at cnixs dot com  on http://www.php.net/manual/fr/ref.network.php#55230
  * @param string IP address
  * @param string IP range
  * @return bool True if IP is in the range, false otherwise
+ * @author claudiu at cnixs dot com  on http://www.php.net/manual/fr/ref.network.php#55230
+ * @author Yannick Warnier for improvements and managment of multiple ranges
+ * @todo check for IPv6 support
  */ 
 function api_check_ip_in_range($ip,$range) {
     if (empty($ip) or empty($range)) {
         return false;
     }
-    list ($net, $mask) = split ("/", $range);
-   
-    $ip_net = ip2long ($net);
-    $ip_mask = ~((1 << (32 - $mask)) - 1);
-
     $ip_ip = ip2long ($ip);
+    $ranges = array();
+    // divide range param into array of elements
+    if (strpos($range,',')!==false) {
+        $ranges = explode(',',$range);
+    } else {
+        $ranges = array($range);
+    }
+    foreach ($ranges as $range) {
+        $range = trim($range);
+        if (empty($range)) { continue; }
+        if (strpos($range,'/')===false) {
+            if (strcmp($ip,$range)===0) {
+                return true; // there is a direct IP match, return OK
+            }
+            continue; //otherwise, get to the next range
+        }
+        // the range contains a "/", so analyse completely
+        list ($net, $mask) = explode("/", $range);
+   
+        $ip_net = ip2long ($net);
+        // mask binary magic
+        $ip_mask = ~((1 << (32 - $mask)) - 1);
 
-    $ip_ip_net = $ip_ip & $ip_mask;
-
-    return ($ip_ip_net == $ip_net);
+        $ip_ip_net = $ip_ip & $ip_mask;
+        if ($ip_ip_net == $ip_net) {
+            return true;
+        }
+    }
+    return false;
 }
 
 

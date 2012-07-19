@@ -48,19 +48,7 @@ function WSHelperVerifyKey($params) {
       include 'webservice-auth-ip.conf.php';
       if (!empty($ws_auth_ip)) {
           $check_ip = true;
-	  if (strpos($ws_auth_ip,'/')!==false) {
-              $ip_matches = api_check_ip_in_range($ip,$ws_auth_ip);
-          } elseif (strpos(',',$ws_auth_ip)!==false) {
-              $list = split(',',$ws_auth_ip);
-              foreach ($list as $ipc) {
-                  if (strcmp($ip,trim($ipc))===0) {
-                      $ip_matches = true;
-                      break;
-                  }
-              }
-          } else {
-              $ip_matches = (strcmp($ip,$ws_auth_ip)===0);
-          }
+          $ip_matches = api_check_ip_in_range($ip,$ws_auth_ip);
       }
     }
     if ($check_ip) {

@@ -372,7 +372,7 @@ if (Database::num_rows($res_media) > 0) {
         <!-- end media player layout -->
 
         <!-- TOC layout -->
-        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
+        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc(); ?>
 

@@ -48,10 +48,11 @@ class Statistics {
      * Count users
      * @param int      optional, user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users.
      * @param string optional, code of a course category. Default: count only users without filtering category
-     * @todo count invisible courses
+     * @param bool count invisible courses (todo)
+     * @param bool count only active users (false to only return currently active users)
      * @return int Number of users counted
      */
-    function count_users($status = null, $category_code = null, $count_invisible_courses = true) {
+    function count_users($status = null, $category_code = null, $count_invisible_courses = true, $only_active = false) {
 
         global $_configuration;
         // Database table definitions
@@ -60,19 +61,19 @@ class Statistics {
         $user_table         = Database :: get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
+        $active_filter = $only_active?' AND active=1':'';
+        $status_filter = isset($status)?' AND status = '.intval($status):'';
 
         if ($_configuration['multiple_access_urls']) {
-            $status_filter = isset($status)?' AND status = '.intval($status):'';
-            $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";
+            $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             if (isset ($category_code)) {
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";
+                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             }
         } else {
-            $status_filter = isset($status)?' WHERE status = '.intval($status):'';
-            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table $status_filter ";
+            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE 1=1 $status_filter $active_filter";
             if (isset ($category_code)) {
                 $status_filter = isset($status)?' AND status = '.intval($status):'';
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter ";
+                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter $active_filter";
             }
         }
 

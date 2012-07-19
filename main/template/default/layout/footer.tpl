@@ -74,7 +74,7 @@ $(document).ready( function() {
     });
 
     var tip_options = {
-            placement : 'right',
+            placement : 'right'
     }
 
     $('.boot-tooltip').tooltip(tip_options);

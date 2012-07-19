@@ -372,7 +372,7 @@ if (Database::num_rows($res_media) > 0) {
         <!-- end media player layout -->
 
         <!-- TOC layout -->
-        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
+        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
@@ -380,7 +380,7 @@ if (Database::num_rows($res_media) > 0) {
                 <!-- log message layout -->
                 <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
                     <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="color: white;">.</div>
+                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
                 </div>
                 <!-- end log message layout -->
                 <?php } ?>
@@ -414,7 +414,12 @@ if (Database::num_rows($res_media) > 0) {
         var hauteurHeader = document.getElementById('header').offsetHeight;
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
-        var hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
+        
+        var hauteurMedia = 0;
+        if ($("#lp_media_file").length != 0) {
+            hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
+        }
+        
         var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
         var hauteurAction = 0;
         if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;

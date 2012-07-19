@@ -4583,144 +4583,115 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         return true;
     }
 
-    if (api_get_setting('use_session_mode') != 'true') {
-        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql = "SELECT tutor_id, status
-                FROM $course_user_table
-                WHERE user_id  = '$userid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                AND   course_code = '$cid'
-                LIMIT 1";
+    $sql = "SELECT
+                tutor_id, status, role
+            FROM $tbl_course_user
+            WHERE
+                user_id  = '$userid'
+            AND
+                relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
+            AND
+                course_code = '$cid'
+            LIMIT 1";
 
-        $result = Database::query($sql);
+    $result = Database::query($sql);
 
-        if (Database::num_rows($result) > 0) {
-            // This user have a recorded state for this course.
-            $cuData = Database::fetch_array($result);
+    if (Database::num_rows($result) > 0) {
+        // This user has got a recorded state for this course.
+        $cuData = Database::fetch_array($result);
 
-            $is_courseMember = true;
-            $is_courseTutor = ($cuData['tutor_id' ] == 1);
-            $is_courseAdmin = ($cuData['status'] == 1);
-
-        } else {
-            // This user has no status related to this course.
-            $is_courseMember = false;
-            $is_courseAdmin = false;
-            $is_courseTutor = false;
-        }
-
-        $is_courseAdmin = ($is_courseAdmin || $is_platformAdmin);
-    } else {
-        $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $_courseUser['role'] = $cuData['role'];
+        $is_courseMember     = true;
+        $is_courseTutor      = ($cuData['tutor_id' ] == 1);
+        $is_courseAdmin      = ($cuData['status'] == 1);
+    }
+    if (!$is_courseAdmin) {
+        // This user has no status related to this course.
+        // Is it the session coach or the session admin?
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT
-                    tutor_id, status, role
-                FROM $tbl_course_user
-                WHERE
-                    user_id  = '$userid'
-                AND
-                    relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
-                AND
-                    course_code = '$cid'
+                    session.id_coach, session_admin_id, session.id
+                FROM
+                    $tbl_session as session
+                INNER JOIN $tbl_session_course
+                    ON session_rel_course.id_session = session.id
+                    AND session_rel_course.course_code = '$cid'
                 LIMIT 1";
 
         $result = Database::query($sql);
+        $row = Database::store_result($result);
 
-        if (Database::num_rows($result) > 0) {
-            // This user has got a recorded state for this course.
-            $cuData = Database::fetch_array($result);
-
-            $_courseUser['role'] = $cuData['role'];
-            $is_courseMember     = true;
-            $is_courseTutor      = ($cuData['tutor_id' ] == 1);
-            $is_courseAdmin      = ($cuData['status'] == 1);
+        if ($row[0]['id_coach'] == $userid) {
+            $_courseUser['role'] = 'Professor';
+            $is_courseMember = true;
+            $is_courseTutor = true;
+            $is_courseAdmin = false;
+            $is_courseCoach = true;
+            $is_sessionAdmin = false;
+            Session::write('_courseUser',$_courseUser);
         }
-        if (!$is_courseAdmin) {
-            // This user has no status related to this course.
-            // Is it the session coach or the session admin?
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-            $sql = "SELECT
-                        session.id_coach, session_admin_id, session.id
-                    FROM
-                        $tbl_session as session
-                    INNER JOIN $tbl_session_course
-                        ON session_rel_course.id_session = session.id
-                        AND session_rel_course.course_code = '$cid'
+        elseif ($row[0]['session_admin_id'] == $userid) {
+            $_courseUser['role'] = 'Professor';
+            $is_courseMember = false;
+            $is_courseTutor = false;
+            $is_courseAdmin = false;
+            $is_courseCoach = false;
+            $is_sessionAdmin = true;
+        } else {
+            // Check if the current user is the course coach.
+            $sql = "SELECT 1
+                    FROM $tbl_session_course
+                    WHERE session_rel_course.course_code = '$cid'
+                    AND session_rel_course.id_coach = '$userid'
                     LIMIT 1";
 
             $result = Database::query($sql);
-            $row = Database::store_result($result);
 
-            if ($row[0]['id_coach'] == $userid) {
+            //if ($row = Database::fetch_array($result)) {
+            if (Database::num_rows($result) > 0 ) {
                 $_courseUser['role'] = 'Professor';
                 $is_courseMember = true;
                 $is_courseTutor = true;
-                $is_courseAdmin = false;
                 $is_courseCoach = true;
                 $is_sessionAdmin = false;
-                Session::write('_courseUser',$_courseUser);
-            }
-            elseif ($row[0]['session_admin_id'] == $userid) {
-                $_courseUser['role'] = 'Professor';
-                $is_courseMember = false;
-                $is_courseTutor = false;
-                $is_courseAdmin = false;
-                $is_courseCoach = false;
-                $is_sessionAdmin = true;
-            } else {
-                // Check if the current user is the course coach.
-                $sql = "SELECT 1
-                        FROM $tbl_session_course
-                        WHERE session_rel_course.course_code = '$cid'
-                        AND session_rel_course.id_coach = '$userid'
-                        LIMIT 1";
+
+                $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+                $sql = "SELECT status FROM $tbl_user
+                        WHERE  user_id = $userid  LIMIT 1";
 
                 $result = Database::query($sql);
 
-                //if ($row = Database::fetch_array($result)) {
-                if (Database::num_rows($result) > 0 ) {
-                    $_courseUser['role'] = 'Professor';
-                    $is_courseMember = true;
-                    $is_courseTutor = true;
-                    $is_courseCoach = true;
-                    $is_sessionAdmin = false;
-
-                    $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-
-                    $sql = "SELECT status FROM $tbl_user
-                            WHERE  user_id = $userid  LIMIT 1";
-
-                    $result = Database::query($sql);
-
-                    if (Database::result($result, 0, 0) == 1) {
-                        $is_courseAdmin = true;
-                    } else {
-                        $is_courseAdmin = false;
-                    }
+                if (Database::result($result, 0, 0) == 1) {
+                    $is_courseAdmin = true;
                 } else {
-                    // Check if the user is a student is this session.
-                    $sql = "SELECT  id
-                            FROM    $tbl_session_course_user
-                            WHERE   id_user  = '$userid'
-                            AND     course_code = '$cid'
-                            LIMIT 1";
+                    $is_courseAdmin = false;
+                }
+            } else {
+                // Check if the user is a student is this session.
+                $sql = "SELECT  id
+                        FROM    $tbl_session_course_user
+                        WHERE   id_user  = '$userid'
+                        AND     course_code = '$cid'
+                        LIMIT 1";
 
-                    if (Database::num_rows($result) > 0) {
-                        // This user haa got a recorded state for this course.
-                        while ($row = Database::fetch_array($result)) {
-                            $is_courseMember     = true;
-                            $is_courseTutor      = false;
-                            $is_courseAdmin      = false;
-                            $is_sessionAdmin     = false;
-                        }
+                if (Database::num_rows($result) > 0) {
+                    // This user haa got a recorded state for this course.
+                    while ($row = Database::fetch_array($result)) {
+                        $is_courseMember     = true;
+                        $is_courseTutor      = false;
+                        $is_courseAdmin      = false;
+                        $is_sessionAdmin     = false;
                     }
                 }
             }
         }
-    }
+    }    
 
     switch ($visibility) {
         case COURSE_VISIBILITY_OPEN_WORLD:

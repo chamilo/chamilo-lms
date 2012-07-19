@@ -37,10 +37,12 @@ if (empty($group_id)) {
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
-    if (api_is_platform_admin()) {        
+    $group_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
+    
+    if (api_is_platform_admin() || in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {        
         GroupPortalManager::delete_topic($group_id, $topic_id);
         header("Location: groups.php?id=$group_id&action=show_message&msg=topic_deleted");
-    }    
+    }
 }
 
 // save message group

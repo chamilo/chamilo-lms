@@ -109,36 +109,12 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
+        
+        $users_related_to_username = Login::get_user_accounts_by_username($values['user']);
 		
-        if(strpos($values['user'],'@')){
-            $user = strtolower($values['user']);
-            $email = TRUE;
-        } else {
-            $user = strtolower($values['user']);
-            $email = FALSE;
-        }
-
-		$condition = '';
-		if ($email) {
-			$condition = "LOWER(email) = '".Database::escape_string($user)."' ";
-		} else {
-            $condition = "LOWER(username) = '".Database::escape_string($user)."'";
-        }
-
-		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, ".
-				 "username AS loginName, password, email, status AS status, ".
-		         "official_code, phone, picture_uri, creator_id ".
-				 "FROM ".$tbl_user." ".
-				 "WHERE ( $condition ) ";
-
-		$result 	= Database::query($query);
-		$num_rows 	= Database::num_rows($result);
-
-		if ($result && $num_rows > 0) {
-            $by_username = true;
-            $users = Database::store_result($result);
-            foreach ($users as $user ) {
+		if ($users_related_to_username) {
+            $by_username = true;            
+            foreach ($users_related_to_username as $user) {
                 if ($_configuration['password_encryption'] != 'none') {
                     Login::handle_encrypted_password($user, $by_username);
                 } else {

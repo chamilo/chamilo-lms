@@ -175,65 +175,37 @@ if (api_is_platform_admin()) {
 }
 
 /* Sessions */
+$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
+$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 
-//if (api_get_setting('use_session_mode') == 'true') {
-if (true) {
-	
-	$blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
-	$blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
-	
-	$search_form = ' <form method="GET" class="form-search" action="session_list.php">
-                        <input class="span3" type="text" name="keyword" value="">
-                        <button class="btn" type="submit">'.get_lang('Search').'</button>
-                    </form>';
-	$blocks['sessions']['search_form'] = $search_form;	
-	$items = array();
-	$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
-	$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
-	$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
-	$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
-	if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-		$items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
-	}
-	$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
-	$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
-	
-    if (api_is_platform_admin()) {
-        if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required 
-        	$items[] = array('url'=>'user_move_stats.php', 	'label' => get_lang('MoveUserStats'));
-        }            
-        $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
-    }
-    
-    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
-    
-    $blocks['sessions']['items'] = $items;
-    $blocks['sessions']['extra'] = null;
-
-} elseif (api_is_platform_admin()) {
-
-	/*$blocks['classes']['items'] = $items;	
-	$blocks['classes']['icon']  = Display::return_icon('group.gif', get_lang('AdminClasses'), array(), ICON_SIZE_SMALL, false);
-	$blocks['classes']['label'] = api_ucfirst(get_lang('AdminClasses'));
-	
-	$search_form = ' <form method="POST" class="form-search" action="class_list.php">
-                        <input class="span3" type="text" name="keyword" value="">
-                        <button class="btn" type="submit">.'.get_lang('Search').'</button>
-                    </form>';
-	$blocks['classes']['search_form'] = $search_form;
-	$items = array();
-	$items[] = array('url'=>'class_list.php', 	'label' => get_lang('ClassList'));
-	$items[] = array('url'=>'class_add.php', 	'label' => get_lang('AddClasses'));
-	$items[] = array('url'=>'class_import.php', 	'label' => get_lang('ImportClassListCSV'));
-	$items[] = array('url'=>'class_user_import.php', 	'label' => get_lang('AddUsersToAClass'));
-	$items[] = array('url'=>'subscribe_class2course.php', 	'label' => get_lang('AddClassesToACourse'));    
-    
-    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
-	
-	$blocks['classes']['items'] = $items;
-    $blocks['classes']['extra'] = null;*/
-    
+$search_form = ' <form method="GET" class="form-search" action="session_list.php">
+                    <input class="span3" type="text" name="keyword" value="">
+                    <button class="btn" type="submit">'.get_lang('Search').'</button>
+                </form>';
+$blocks['sessions']['search_form'] = $search_form;	
+$items = array();
+$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
+$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
+$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
+if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+    $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
 }
+$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
+$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
+
+if (api_is_platform_admin()) {
+    if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required 
+        $items[] = array('url'=>'user_move_stats.php', 	'label' => get_lang('MoveUserStats'));
+    }            
+    $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
+}
+
+$items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+
+$blocks['sessions']['items'] = $items;
+$blocks['sessions']['extra'] = null;
+
 
 /* Settings */
 if (api_is_platform_admin()) {	
@@ -407,6 +379,7 @@ function check_system_version() {
 
         // The number of users
         $number_of_users = statistics::count_users();
+        $number_of_active_users = statistics::count_users(null,null,null,true);
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -415,6 +388,7 @@ function check_system_version() {
             'version' => $system_version,
             'numberofcourses' => $number_of_courses,
             'numberofusers' => $number_of_users,
+            'numberofactiveusers' => $number_of_active_users,
             //The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),

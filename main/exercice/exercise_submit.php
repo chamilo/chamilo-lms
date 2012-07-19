@@ -740,8 +740,7 @@ if (!empty($error)) {
     $number_of_hotspot_questions = 0;
     $onsubmit = '';
     $i = 0;
-    //i have a doubt in this line cvargas
-    //var_dump($questionList);
+    
     if (!strcmp($questionList[0], '') === 0) {
         foreach ($questionList as $questionId) {
             $i++;
@@ -782,6 +781,8 @@ if (!empty($error)) {
                 	//$(this).find(".exercise_save_now_button").hide();
                 	$(this).removeClass("question_highlight");
                 });
+                
+                $(".no_remind_highlight").hide();               
     		});
 
 
@@ -973,6 +974,12 @@ if (!empty($error)) {
         $user_choice = $attempt_list[$questionId];
 
         $remind_highlight = '';
+        
+        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
+            $remind_highlight = 'no_remind_highlight';    
+        }
+        
         $exercise_actions  = '';
         $is_remind_on = false;
 

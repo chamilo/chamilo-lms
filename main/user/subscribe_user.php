@@ -201,8 +201,11 @@ if (api_is_western_name_order()) {
     $table->set_header($col ++, get_lang('LastName'));
     $table->set_header($col ++, get_lang('FirstName'));
 }
-$table->set_header($col ++, get_lang('Email'));
-$table->set_column_filter($col -1, 'email_filter');
+
+if (api_get_setting('show_email_addresses') == 'true') {
+    $table->set_header($col ++, get_lang('Email'));
+    $table->set_column_filter($col -1, 'email_filter');
+}
 $table->set_header($col ++, get_lang('Active'),false);
 $table->set_column_filter($col -1, 'active_filter');
 $table->set_header($col ++, get_lang('Actions'), false);
@@ -248,7 +251,7 @@ function get_number_of_users() {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT	COUNT(u.user_id) FROM $user_table u
+					$sql = "SELECT COUNT(u.user_id) FROM $user_table u
 							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
@@ -293,7 +296,7 @@ function get_number_of_users() {
 				}
 			}
 		} else {
-			$sql = "SELECT 	COUNT(u.user_id)
+			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
@@ -383,23 +386,39 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$course_user_table             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user   = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$table_user_field_values 	   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-	// adding teachers
+    
+    // adding teachers
 	$is_western_name_order = api_is_western_name_order();
+    
+    if (api_get_setting('show_email_addresses') == 'true') {
+        
+        $select_fields = "u.user_id              AS col0,
+                u.official_code        AS col1,
+                ".($is_western_name_order
+                ? "u.firstname         AS col2,
+                u.lastname             AS col3,"
+                : "u.lastname          AS col2,
+                u.firstname            AS col3,")."
+                u.email 	           AS col4,
+                u.active               AS col5,
+                u.user_id              AS col6";
+    } else {
+        $select_fields = "u.user_id              AS col0,
+                u.official_code        AS col1,
+                ".($is_western_name_order
+                ? "u.firstname         AS col2,
+                u.lastname             AS col3,"
+                : "u.lastname          AS col2,
+                u.firstname            AS col3,")."                
+                u.active               AS col4,
+                u.user_id              AS col5";
+    }
+
+	
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		// adding a teacher through a session
 		if (!empty($_SESSION["id_session"])) {
-			$sql = "SELECT
-					u.user_id              AS col0,
-					u.official_code        AS col1,
-					".($is_western_name_order
-					? "u.firstname         AS col2,
-					u.lastname             AS col3,"
-					: "u.lastname          AS col2,
-					u.firstname            AS col3,")."
-					u.email 	           AS col4,
-					u.active               AS col5,
-					u.user_id              AS col6
+			$sql = "SELECT $select_fields			
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
@@ -417,17 +436,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			}
 		} else {
 		     // adding a teacher NOT through a session
-			$sql = "SELECT
-					u.user_id AS col0,
-					u.official_code AS col1,
-					".($is_western_name_order
-					? "u.firstname AS col2,
-					u.lastname AS col3,"
-					: "u.lastname AS col2,
-					u.firstname AS col3,")."
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
+			$sql = "SELECT $select_fields
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
@@ -449,17 +458,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					$url_access_id = api_get_current_access_url_id();
 					if ($url_access_id !=-1) {
 						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-						$sql = "SELECT
-						u.user_id AS col0,
-						u.official_code AS col1,
-						".($is_western_name_order
-						? "u.firstname AS col2,
-						u.lastname AS col3,"
-						: "u.lastname AS col2,
-						u.firstname AS col3,")."
-						u.email 	AS col4,
-						u.active 	AS col5,
-						u.user_id   AS col6
+						$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
@@ -482,17 +481,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	} else {
 		// adding a student
 		if (!empty($_SESSION["id_session"])) {
-			$sql = "SELECT
-					u.user_id AS col0,
-					u.official_code AS col1,
-					".($is_western_name_order
-					? "u.firstname AS col2,
-					u.lastname AS col3,"
-					: "u.lastname AS col2,
-					u.firstname AS col3,")."
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
+			$sql = "SELECT $select_fields
 				FROM $user_table u
 				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
@@ -510,17 +499,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			}
 		} else {
 
-		$sql = "SELECT
-					u.user_id AS col0,
-					u.official_code   AS col1,
-					".($is_western_name_order
-					? "u.firstname  AS col2,
-					u.lastname AS col3,"
-					: "u.lastname  AS col2,
-					u.firstname AS col3,")."
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
+		$sql = "SELECT $select_fields
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
@@ -544,17 +523,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				if ($url_access_id !=-1) {
 
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT
-						u.user_id AS col0,
-						u.official_code AS col1,
-						".($is_western_name_order
-						? "u.firstname  AS col2,
-						u.lastname AS col3,"
-						: "u.lastname  AS col2,
-						u.firstname AS col3,")."
-						u.email 	AS col4,
-						u.active 	AS col5,
-						u.user_id   AS col6
+					$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
@@ -608,7 +577,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	$res = Database::query($sql);
 	$users = array ();
-	while ($user = Database::fetch_row($res)) {
+	while ($user = Database::fetch_row($res)) {        
 		$users[] = $user;
 		$_SESSION['session_user_id'][] = $user[0];
 		if ($is_western_name_order) {

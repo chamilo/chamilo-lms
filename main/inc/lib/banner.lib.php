@@ -25,22 +25,17 @@ function get_tabs() {
 	$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
 	// My Courses
-	if (api_get_setting('use_session_mode')=='true') {
-		if(api_is_allowed_to_create_course()) {
-			// Link to my courses for teachers
-			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
-			$navigation['mycourses']['title'] = get_lang('MyCourses');
-		} else {
-			// Link to my courses for students
-			$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
-			$navigation['mycourses']['title'] = get_lang('MyCourses');
-		}
-	} else {
-		// Link to my courses
-		$navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
-		$navigation['mycourses']['title'] = get_lang('MyCourses');
-	}
-
+	
+    if(api_is_allowed_to_create_course()) {
+        // Link to my courses for teachers
+        $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
+        $navigation['mycourses']['title'] = get_lang('MyCourses');
+    } else {
+        // Link to my courses for students
+        $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+        $navigation['mycourses']['title'] = get_lang('MyCourses');
+    }
+	
 	// My Profile
 	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
@@ -197,7 +192,7 @@ function return_notification_menu() {
         }
 
         // Display the who's online for the session
-        if (api_get_setting('use_session_mode') == 'true' && isset($user_id) && api_get_session_id() != 0) {
+        if (isset($user_id) && api_get_session_id() != 0) {
             $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
                     Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
         }
@@ -490,7 +485,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 break;
             default:
-                if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) {
+                if (api_get_session_id() != -1 ) {
                     $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 } else {
                     $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;

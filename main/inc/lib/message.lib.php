@@ -885,7 +885,8 @@ class MessageManager
 	 * @param int group id
 	 */
 	public static function display_messages_for_group($group_id) {
-		global $my_group_role;
+		global $my_group_role;     
+        
 		$rows = self::get_messages_by_group($group_id);		 
 		$topics_per_page  = 10;
 		$html_messages = '';
@@ -904,7 +905,7 @@ class MessageManager
 			
 			$new_topics = array();
 						
-			foreach($topics as $id => $value) {
+			foreach ($topics as $id => $value) {
 			    $rows = null;
                 $rows = self::get_messages_by_group_by_message($group_id, $value['id']);
                 if (!empty($rows)) {            
@@ -922,43 +923,59 @@ class MessageManager
 			foreach ($new_topics as $index => $topic) {
 				$html = '';
 				// topics
-				$indent	= 0;
+				//$indent	= 0;
 				$user_sender_info   = UserManager::get_user_info_by_id($topic['user_sender_id']);
-				$files_attachments  = self::get_links_message_attachment_files($topic['id']);
+				//$files_attachments  = self::get_links_message_attachment_files($topic['id']);
 				$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
-				$html .= '<div class="topic_div">';
+				$html .= '<div class="row">';
 				
-				    $items = $topic['count'];				    
-				    $reply_label = ($items == 1) ? get_lang('GroupReply'): get_lang('GroupReplies');
-				    $html .= '<table width="100%"><tr><td width="20px" valign="top">'; 
-				    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
-				    $html .= '</td><td width="150px"  valign="top">';
-				    
-			        $topic['title'] = trim($topic['title']);
-			        
-			        if (empty($topic['title'])) {
-			            $topic['title'] = get_lang('Untitled');
-			        } 				
-			        $title = Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
-                                            
-                    $date = '';
-                    $link = '';
-					if ($topic['send_date']!=$topic['update_date']) {
-						if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
-							$date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
-						}
-					} else {
+                    $items = $topic['count'];				    
+                    $reply_label = ($items == 1) ? get_lang('GroupReply'): get_lang('GroupReplies');
+
+                    $html .= '<div class="span1">';
+                    $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' =>'group_discussions_replies'));
+                    $html .= '</div>';
+
+                    $topic['title'] = trim($topic['title']);
+
+                    if (empty($topic['title'])) {
+                        $topic['title'] = get_lang('Untitled');
+                    }
+
+                    $html .= '<div class="span4">';
+                    $html .= Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
+                    
+                    if ($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) {
+                        $actions = '<br />'.Display::url(get_lang('Delete'), api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'], array('class' => 'btn'));
+                    }
+
+                    $date = '';                    
+                    if ($topic['send_date']!=$topic['update_date']) {
+                        if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
+                            $date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
+                        }
+                    } else {
                         $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';
-					}					
-					$image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);							
-					$image_repository = $image_path['dir'];
-					$existing_image = $image_path['file'];
-					$user_info = '<td valign="top"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
-					$user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
-					$user_info .= '<div class="message-group-author">'.$user.'</div></td>';
-					//$date.								 
-					$html .= Display::div($title.Security::remove_XSS(cut($topic['content'], 150), STUDENT, true).$user_info, array('class'=>'group_discussions_info')).'</td></table>';						
+                    }					
+                    $html .= $date.$actions;
+                    $html .= '</div>';
+
+                    $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);							
+                    $image_repository = $image_path['dir'];
+                    $existing_image = $image_path['file'];
+
+                    $user_info = '<td valign="top"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
+                    $user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+                    $user_info .= '</td>';
+
+                    $html .= '<div class="span2">';
+                    $html .= $user_info;
+                    $html .= '</div>';
+                    //group_topics.php?action=delete&id=3&topic_id=6
+                    //$date.								 
+
+                    //$html .= Display::div($title.Security::remove_XSS(cut($topic['content'], 150), STUDENT, true).$user_info, array('class'=>'group_discussions_info')).' </tr> '.$actions.'</table>';						
 		
 				$html .= '</div>'; //rounded_div
 				

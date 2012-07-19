@@ -16,8 +16,8 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $tok = Security::get_token();
 
@@ -112,7 +112,7 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 				<a href="javascript://" onclick="return add_image_form()">
 			    <?php echo get_lang('AddOneMoreFile') ?></a>
 			</div>
-			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)		   				   				   		
+			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)		   				   				   		
 	   		<br />
 	   		<br />
 	   		

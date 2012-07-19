@@ -438,7 +438,7 @@ if (!empty($flat_list)) {
 
             //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
             	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
-				  '.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
+				  '.Display::return_icon('pdf.png', get_lang('ExportToPDFOnlyHTMLAndImages'),'',ICON_SIZE_SMALL).'</a>';
             //}
 
             /* DELETE COMMAND */

@@ -302,7 +302,6 @@ class CourseRestorer
                 }
                 
 		    	if ($document->file_type == FOLDER) {
-
 		    		$visibility = $document->item_properties[0]['visibility'];
 		    		if (!empty($document->title))  {
 		    		    $title  = $document->title;
@@ -321,19 +320,29 @@ class CourseRestorer
                     echo 'file type'; var_dump($document->file_type);
                     echo 'session'; var_dump($session_id);
                     echo 'file _exists';  var_dump($path.$document->path); var_dump(file_exists($path.$document->path));
-                    */                    
-                    if (!is_dir($path.dirname($document->path))) {
-                        continue;
-                        $visibility = $document->item_properties[0]['visibility'];
-                        $new        = substr($document->path, 8);
-                        if (!empty($document->title))  {
-                            $title      = $document->title;
-                        } else {
-                            $title      = basename($new);
-                        }
+                    */                   
+                    //echo '---->';var_dump($path.dirname($document->path));
+                    
+                    
+                    //Checking if folder exists in the database otherwise we created it 
+                    $dir_to_create = dirname($document->path);                    
+                    if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
+                        if (is_dir($path.dirname($document->path))) {
+                            $sql = "SELECT id FROM ".$table." WHERE c_id = ".$this->destination_course_id." AND path = '/".self::DBUTF8escapestring(substr(dirname($document->path), 9))."'";
+                            $res = Database::query($sql);                            
+                            if (Database::num_rows($res) == 0) {                         
+                                //continue;
+                                $visibility = $document->item_properties[0]['visibility'];
+                                $new        = '/'.substr(dirname($document->path), 9);
+                                $title      = str_replace('/', '', $new);
 
-                        // This code fixes the possibility for a file without a directory entry to be
-                        $created_dir = create_unexisting_directory($destination_course, api_get_user_id(), $my_session_id, 0, 0 , $path.'document', $new, $title, $visibility, true);
+                                // This code fixes the possibility for a file without a directory entry to be
+                                $document_id = add_document($course_info, $new, 'folder', 0, $title);
+                                api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'FolderCreated', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
+                            }
+                        } else {
+                            //$created_dir = create_unexisting_directory($course_info, api_get_user_id(), $my_session_id, 0, 0 , $path.'document', $new, $title, $visibility, true);
+                        }
                     }
 
 					if (file_exists($path.$document->path)) {
@@ -1549,41 +1558,14 @@ class CourseRestorer
 				$old_prerequisite 	= array();
 				$old_refs 			= array();
 				$prerequisite_ids 	= array();
-
-				foreach ($lp->get_items() as $index => $item) {
-					/*
-					if ($item['id'] != 0)
-					{
-						 // Links in learnpath have types 'Link _self' or 'Link _blank'. We only need 'Link' here.
-						 $type_parts = explode(' ',$item['type']);
-						 $item['id'] = $this->course->resources[$type_parts[0]][$item['id']]->destination_id;
-					}
-					*/
-					/*
-					//Get the new ref ID for all items that are not sco (chamilo quizzes, documents, etc)
-					$ref = '';
-					if(!empty($item['ref']) && $lp->lp_type!='2'){
-						$ref = $this->get_new_id($item['item_type'],$item['ref']);
-					} else {
-						$ref = $item['ref'];
-					}*/
-
+                
+				foreach ($lp->get_items() as $index => $item) {		
 					// we set the ref code here and then we update in a for loop
 					$ref = $item['ref'];
 
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = self::DBUTF8escapestring($item['path']);
-
-                    //@todo Check this validation, why if is session we leave the path the same?
-					/*if (strval(intval($path)) === $path) {
-						if (!empty($session_id)) {
-							$path = intval($path);
-						} else {
-							$path = $this->get_new_id($item['item_type'], $path);
-						}
-					}*/
-
                     $path = $this->get_new_id($item['item_type'], $path);
 
 					$sql = "INSERT INTO ".$table_item." SET
@@ -1798,7 +1780,7 @@ class CourseRestorer
 	 * @param	integer	Old ID
 	 * @return	integer	New ID
 	 */
-	function get_new_id($tool,$ref) {
+	function get_new_id($tool, $ref) {
 		//transform $tool into one backup/restore constant
 
         //just in case you copy the tool in the same course

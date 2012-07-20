@@ -290,12 +290,46 @@ if ($jplayer_supported) {
 if ($is_nanogong_available){
     echo '<div align="center">';
         echo '<br/>';
-        echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
-            echo '<param name="SoundFileURL" value="'.$file_url_web.'" />';
+
+		//make temp audio
+			$temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
+			if (!file_exists($temp_folder)) {
+				@mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
+			}
+
+		//make htaccess with allow from all, and file index.html into temp/audio
+		$htaccess=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htacess';
+		if (!file_exists($htaccess)) {
+			$htaccess_content="order deny,allow\r\nallow from all";
+			$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess', 'w');
+			if ($fp) {
+				fwrite($fp, $htaccess_content);
+				fclose($fp);
+			}
+		}
+
+		//encript temp name file
+		$name_crip=sha1(uniqid());//encript 
+		$findext= explode(".", $file);
+		$extension= $findext[count($findext)-1];
+		$file_crip=$name_crip.'.'.$extension;
+		
+		//copy file to temp/audio directory
+		$from_sys=$file_url_sys;
+		$to_sys=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+		copy($from_sys, $to_sys);
+
+		//get file from tmp directory
+		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
+            echo '<param name="SoundFileURL" value="'.$to_url.'" />';
             echo '<param name="ShowSaveButton" value="false" />';
             echo '<param name="ShowTime" value="true" />';
             echo '<param name="ShowRecordButton" value="false" />';
         echo '</applet>';
+		
+		//erase temp file in tmp directory when return to documents
+		$_SESSION['temp_audio_nanogong']=$to_sys;      
     echo '</div>';    
 }
 

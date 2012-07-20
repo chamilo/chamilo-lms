@@ -46,9 +46,18 @@ require_once $lib_path . 'fileDisplay.lib.php';
 
 api_protect_course_script(true);
 
+//erase temp nanogons' audio
+if(isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
+	unlink($_SESSION['temp_audio_nanogong']);
+}
+
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
+unset($_SESSION['temp_audio_nanogong']);
+
+
+
 
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());

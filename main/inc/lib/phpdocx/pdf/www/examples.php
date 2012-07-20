@@ -1,5 +1,5 @@
 <?php
-
+exit;
 require_once("../dompdf_config.inc.php");
 if ( isset( $_POST["html"] ) ) {
 

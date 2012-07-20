@@ -286,7 +286,7 @@ if ($action != 'add') {
 			echo '<div class="actions">';
 			if ($view_dropbox_category_received != 0  && api_is_allowed_to_session_edit(false, true)) {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'),'',ICON_SIZE_MEDIUM)."</a>";
-				echo get_lang('Category').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+				echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
 				$movelist[0] = 'Root'; // move_received selectbox content
 			} else {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('new_folder.png', get_lang('AddNewCategory'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -297,7 +297,7 @@ if ($action != 'add') {
 				echo '<div class="actions">';
 				if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'),'',ICON_SIZE_MEDIUM)."</a>";
-					echo get_lang('Category').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+					echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
 					$movelist[0] = 'Root'; // move_received selectbox content
 				} else {
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('new_folder.png', get_lang('AddNewCategory'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -323,7 +323,7 @@ if ($action != 'add') {
 			echo '<div class="actions">';
 			if ($view_dropbox_category_sent != 0) {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'),'',ICON_SIZE_MEDIUM)."</a>";
-				echo get_lang('Category').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+				echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
 			} else {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('new_folder.png', get_lang('AddNewCategory'),'',ICON_SIZE_MEDIUM)."</a>\n";
 			}
@@ -335,7 +335,7 @@ if ($action != 'add') {
 			if (api_is_allowed_to_session_edit(false, true)) {
 				echo '<div class="actions">';
 				if ($view_dropbox_category_sent != 0) {
-					echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+					echo get_lang('CurrentlySeeing').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'),'',ICON_SIZE_MEDIUM)."</a>";
 				} else {
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('new_folder.png', get_lang('AddNewCategory'),'',ICON_SIZE_MEDIUM)."</a>\n";
@@ -492,7 +492,7 @@ if ($action != 'add') {
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&amp;id='.$category['cat_id'].'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>
-										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.Security::remove_XSS($category['cat_name']).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 				}
 				if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
 					$dropbox_data_recieved[] = $dropbox_category_data;
@@ -504,7 +504,7 @@ if ($action != 'add') {
 		$selectlist = array('delete_received' => get_lang('Delete'), 'download_received' => get_lang('Download'));
 		if (is_array($movelist)) {
 			foreach ($movelist as $catid => $catname){
-				$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
+				$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. Security::remove_XSS($catname);
 			}
 		}
 
@@ -629,15 +629,17 @@ if ($action != 'add') {
 				if ($category['sent'] == '1') {
 					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear.
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.Security::remove_XSS($_GET['view']).'">';
-					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', $category['cat_name']).'</a>';
-					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$category['cat_name'].'</a>';
+					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
+					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.Security::remove_XSS($category['cat_name']).'</a>';
 					//$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
 					//$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
-					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&id='.$category['cat_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&id='.$category['cat_id'].'">'.
+                                    Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.Security::remove_XSS($category['cat_name']).'\');">'.
+                                    Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 				}
 				if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
 					$dropbox_data_sent[] = $dropbox_category_data;

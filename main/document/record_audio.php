@@ -180,7 +180,6 @@ function submitVoice() {
 <?php
 
 echo '<div align="center">';
-
 Display::display_icon('microphone.png', get_lang('PressRecordButton'),'','128');
 echo '<br/>';
 echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
@@ -195,8 +194,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	echo '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
 	//echo '<param name="SamplingRate" value="32000" />';//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
 	//echo '<param name="MaxDuration" value="60" />';
-	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
-	
+	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")	
 echo '</applet>';
  
 echo '<form name="form_nanogong">';	

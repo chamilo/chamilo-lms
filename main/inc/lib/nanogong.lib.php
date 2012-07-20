@@ -1,7 +1,7 @@
 <?php  
 /* For licensing terms, see /license.txt */
 
-/*
+/**
  * 
  * Files are saved in the path:
  * 
@@ -297,7 +297,7 @@ class Nanogong {
 	 *
 	 */
 	public function show_audio_file($show_delete_button = false) {
-		$html = '&nbsp;&nbsp;';
+		$html = '';
 		$file_path = $this->load_filename_if_exists();
 		
 		if (!empty($file_path)) {
@@ -352,7 +352,7 @@ class Nanogong {
 					$html .= '</div>';
 				$html .= '</div>';
 						
-				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserNotSupportNanogongListen'),'warning').$download_button.'</div>';				
+				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserNotSupportNanogongListen'),'warning').$download_button.'</div>';			
 				
 			} elseif(in_array($path_info['extension'],array('mp3', 'ogg','wav'))) {
 				$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
@@ -379,8 +379,8 @@ class Nanogong {
 				</script>';				
 				$html .= DocumentManager::generate_media_preview(1, 'advanced');
 			}
-			return $html;
-		}	
+		}
+        return $html;
 	}
 	
 	
@@ -425,6 +425,13 @@ class Nanogong {
 				var java_enabled = navigator.javaEnabled()
 				return java_enabled;				
 			}
+            
+
+            function show_simple_upload_form() {
+                $("#no_nanogong_div").show();
+                $("#nanogong_div").hide();
+                $("#preview").hide();                
+            }
 		
 			$(document).ready( function() {	
 				$("#no_nanogong_div").hide();
@@ -531,21 +538,26 @@ class Nanogong {
 		$array_browser = api_browser_support('check_browser');
 	
 		$preview_file = $this->show_audio_file(true, true);
-		$preview_file = Display::div($preview_file, array('id' => 'preview', 'style' => 'text-align:center;'));
+        
+        
+		$preview_file = Display::div($preview_file, array('id' => 'preview', 'style' => 'text-align:center; padding-left: 25px;'));
 	
 		$html .= '<center>';
 	
 		//Use normal upload file
-		$html .= Display::return_icon('microphone.png', get_lang('PressRecordButton'),'','128');
+		$html .= Display::return_icon('microphone.png', get_lang('PressRecordButton'),'', ICON_SIZE_BIG);
 		$html .='<br />';
-	
+        
+        
 		$html .= '<div id="no_nanogong_div">';
-		$html .= Display::return_message(get_lang('BrowserNotSupportNanogongSend'), 'warning');
+		//$html .= Display::return_message(get_lang('BrowserNotSupportNanogongSend'), 'warning');
 	
-		$html .= '<form id="form_nanogong_simple" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
+		$html .= '<form id="form_nanogong_simple" class="form-search" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
 		$html .= '<input type="file" name="file">';
 		$html .= '<a href="#" class="btn"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
-		$html .= '</form></div>';	
+		$html .= '</form>';
+        
+        $html .= '</div>';	
 	
 		$html .= '<div id="nanogong_div">';
 	
@@ -566,16 +578,21 @@ class Nanogong {
 		//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
 		$html .= '</applet>';
 	
-		$html .= '<br /><br /><br /><form name="form_nanogong_advanced">';
+		$html .= '<br /><br /><br />';        
+        
+        $html .= '<form name="form_nanogong_advanced">';
 		$html .= '<input type="hidden" name="is_nano" value="1">';
 		$html .= '<a href="#" class="btn"  onclick="send_voice()" />'.get_lang('SendRecord').'</a>';
 		$html .= '</form></div>';	
+        
+        $html .= Display::url(get_lang('ProblemsRecordingUploadYourOwnAudioFile'), 'javascript:void(0)', array('onclick' => 'show_simple_upload_form();'));
 	
 		$html .= '</center>';
+        
 		
 		$html .= '<div style="display:none" id="status_ok" class="confirmation-message"></div><div style="display:none" id="status_warning" class="warning-message"></div>';
 		
-		$html .= '<div id="messages">'.$message.'</div>';		
+		$html .= '<div id="messages">'.$message.'</div>';
 		
 		$html .= $preview_file;
 			
@@ -605,7 +622,7 @@ class Nanogong {
 	 */
 	function show_button() {		
 		$params_string = $this->get_params(true);		
-		$html .= '<br />'.Display::url(get_lang('RecordAnswer'),api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=350&width=500', 
+		$html .= '<br />'.Display::url(get_lang('RecordAnswer'),api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=400&width=500', 
 						array('class'=>'btn thickbox'));
 		$html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));				
 		return $html;

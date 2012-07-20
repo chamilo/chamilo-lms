@@ -3144,12 +3144,23 @@ a:active{
 }
 
 #dates {
-
     /* height: 60px; */
     overflow: hidden;
     width: 800px;
 }
 
+#my_timeline #next {
+    background: url("../img/action_next.png") no-repeat transparent;
+    height: 32px;
+    width: 32px;
+}
+
+#my_timeline #prev {
+    background: url("../img/action_prev.png") no-repeat transparent;
+    height: 32px;
+    width: 32px;
+    float:right;
+}
 
 #dates .selected {
     font-size: 22px;
@@ -3194,7 +3205,6 @@ a:active{
     margin-right: 70px;
     text-shadow: 1px 1px 2px #000000;
 }
-
 
 #course_tools .row h3 {
     margin-top:10px;

@@ -36,7 +36,7 @@ class Import {
      * 
      * @deprecated use cvs_reader instead
 	 */
-	function csv_to_array($filename) {
+	function csv_to_array($filename, $csv_order = 'vertical') {
 		$result = array();
 
 		// Encoding detection.
@@ -63,22 +63,40 @@ class Import {
 		if ($handle === false) {
 			return $result;
 		}
-		$keys = api_fgetcsv($handle, null, ';');
-		foreach ($keys as $key => &$key_value) {
-			$key_value = api_to_system_encoding($key_value, $from_encoding);
-		}
+        
+        if ($csv_order == 'vertical') {
+            $keys = api_fgetcsv($handle, null, ';');        
+            foreach ($keys as $key => &$key_value) {
+                $key_value = api_to_system_encoding($key_value, $from_encoding);
+            }
+        }
+        
 		while (($row_tmp = api_fgetcsv($handle, null, ';')) !== false) {
 			$row = array();
-			// Avoid empty lines in csv.
+			// Avoid empty lines in csv            
 			if (is_array($row_tmp) && count($row_tmp) > 0 && $row_tmp[0] != '') {
 				if (!is_null($row_tmp[0])) {
-					foreach ($row_tmp as $index => $value) {
-						$row[$keys[$index]] = api_to_system_encoding($value, $from_encoding);
-					}
+                    if ($csv_order == 'vertical') {
+                        foreach ($row_tmp as $index => $value) {
+                            $row[$keys[$index]] = api_to_system_encoding($value, $from_encoding);
+                        }
+                    } else {
+                        $first = null;
+                        $count = 1;
+                        foreach ($row_tmp as $index => $value) {
+                            if ($count == 1) {
+                                $first = $value;                                
+                            } else {
+                                $row[$first][] = api_to_system_encoding($value, $from_encoding);
+                            }
+                            $count++;
+                        }
+                    }                    
 					$result[] = $row;
 				}
 			}
 		}
+        
 		fclose($handle);
 		return $result;
 	}

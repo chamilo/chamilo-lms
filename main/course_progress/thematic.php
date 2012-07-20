@@ -14,11 +14,12 @@ api_protect_course_script(true);
 $token = Security::get_token();
 $url_token = "&sec_token=".$token;
 
-if (api_is_allowed_to_edit(null, true)) {
-	
+if (api_is_allowed_to_edit(null, true)) {	
 	echo '<div class="actions">';	
+    
 	switch ($action) {		
 		case 'thematic_add' :	
+        case 'thematic_import_select' :
             echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ThematicDetails'),'',ICON_SIZE_MEDIUM).'</a>';
             break;		
 		case 'thematic_list' :	
@@ -26,9 +27,12 @@ if (api_is_allowed_to_edit(null, true)) {
             break;
 		case 'thematic_details' :		
             echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.Display::return_icon('import_csv.png',get_lang('ImportThematic'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.Display::return_icon('export_csv.png',get_lang('ExportThematic'),'', ICON_SIZE_MEDIUM).'</a>';
             break;
 		default :
-            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';		
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
+    
 	}			
 	echo '</div>';
 }
@@ -250,5 +254,13 @@ if ($action == 'thematic_list') {
 		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
 	}
     if ($show_form)
-	$form->display();		
+        $form->display();		
+} else if ($action == 'thematic_import_select') {
+    // Create form to upload csv file.
+    $form = new FormValidator('thematic_import','POST','index.php?action=thematic_import&'.api_get_cidreq().$url_token);
+    $form->addElement('header', get_lang('ImportThematic'));
+    $form->addElement('file', 'file');
+    $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));    
+    $form->addElement('style_submit_button', 'SubmitImport', get_lang('Import'), 'class="save"');
+    $form->display();
 }

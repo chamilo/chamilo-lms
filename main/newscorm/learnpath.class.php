@@ -3053,8 +3053,8 @@ class learnpath {
                         //prerequisites did not match
                         //$file = 'blank.php';
                         //}
-                        // We want to use parameters if they were defined in the imsmanifest.
-                        if ($file != 'blank.php') {
+                        // We want to use parameters if they were defined in the imsmanifest                        
+                        if (strpos($file, 'blank.php') === false) {
                             $file .= (strstr($file, '?') === false ? '?' : '') . $lp_item_params;
                         }
                     } else {

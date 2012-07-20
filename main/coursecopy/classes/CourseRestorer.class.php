@@ -1559,14 +1559,18 @@ class CourseRestorer
 				$old_refs 			= array();
 				$prerequisite_ids 	= array();
                 
-				foreach ($lp->get_items() as $index => $item) {		
+				foreach ($lp->get_items() as $index => $item) {                    
 					// we set the ref code here and then we update in a for loop
 					$ref = $item['ref'];
 
-					//Dealing with path the same way as ref as some data has been put into path when it's a
-					//local resource
-					$path = self::DBUTF8escapestring($item['path']);
-                    $path = $this->get_new_id($item['item_type'], $path);
+					//Dealing with path the same way as ref as some data has been put into path when it's a local resource
+					//Only fix the path for no scos
+                    if ($item['item_type'] == 'sco') {
+                        $path = self::DBUTF8escapestring($item['path']);                        
+                    } else {
+                        $path = self::DBUTF8escapestring($item['path']);
+                        $path = $this->get_new_id($item['item_type'], $path);
+                    }                
 
 					$sql = "INSERT INTO ".$table_item." SET
 							c_id = ".$this->destination_course_id." ,

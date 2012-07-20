@@ -420,17 +420,15 @@ class Nanogong {
 			
 			function check_gong() {
 				//var record = document.getElementById("nanogong");
-				var recorder;
-				
+				var recorder;				
 				var java_enabled = navigator.javaEnabled()
 				return java_enabled;				
-			}
-            
+			}            
 
             function show_simple_upload_form() {
                 $("#no_nanogong_div").show();
-                $("#nanogong_div").hide();
-                $("#preview").hide();                
+                //$("#nanogong_div").hide();
+                $("#preview").hide();
             }
 		
 			$(document).ready( function() {	
@@ -537,8 +535,7 @@ class Nanogong {
 		//check browser support and load form
 		$array_browser = api_browser_support('check_browser');
 	
-		$preview_file = $this->show_audio_file(true, true);
-        
+		$preview_file = $this->show_audio_file(true, true);        
         
 		$preview_file = Display::div($preview_file, array('id' => 'preview', 'style' => 'text-align:center; padding-left: 25px;'));
 	
@@ -547,17 +544,6 @@ class Nanogong {
 		//Use normal upload file
 		$html .= Display::return_icon('microphone.png', get_lang('PressRecordButton'),'', ICON_SIZE_BIG);
 		$html .='<br />';
-        
-        
-		$html .= '<div id="no_nanogong_div">';
-		//$html .= Display::return_message(get_lang('BrowserNotSupportNanogongSend'), 'warning');
-	
-		$html .= '<form id="form_nanogong_simple" class="form-search" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
-		$html .= '<input type="file" name="file">';
-		$html .= '<a href="#" class="btn"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
-		$html .= '</form>';
-        
-        $html .= '</div>';	
 	
 		$html .= '<div id="nanogong_div">';
 	
@@ -585,7 +571,17 @@ class Nanogong {
 		$html .= '<a href="#" class="btn"  onclick="send_voice()" />'.get_lang('SendRecord').'</a>';
 		$html .= '</form></div>';	
         
+                
         $html .= Display::url(get_lang('ProblemsRecordingUploadYourOwnAudioFile'), 'javascript:void(0)', array('onclick' => 'show_simple_upload_form();'));
+        
+		$html .= '<br /><br /><div id="no_nanogong_div">';
+		//$html .= Display::return_message(get_lang('BrowserNotSupportNanogongSend'), 'warning');	
+		$html .= '<form id="form_nanogong_simple" class="form-search" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
+		$html .= '<input type="file" name="file">';
+		$html .= '<a href="#" class="btn"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
+		$html .= '</form>';        
+        $html .= '</div>';	
+        
 	
 		$html .= '</center>';
         

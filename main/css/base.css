@@ -3978,6 +3978,21 @@ footer {
     box-shadow:none;
 }
 
+.btn.loading{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/loading1.gif') !important;
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
 .announce.btn.delete-all{
     border:none;
     border-radius: 0;
@@ -4038,6 +4053,36 @@ footer {
     box-shadow:none;
 }
 
+.btn.import_csv{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/import_csv.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.btn.delete_all{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/delete.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
 .btn.expand{
     border:none;
     border-radius: 0;
@@ -4068,21 +4113,7 @@ footer {
     box-shadow:none;
 }
 
-.announce.btn.new{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:32px;
-    height:32px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../img/icons/32/new_announce.png');
-    background-repeat: no-repeat;
-    background-position:center center; 
-    box-shadow:none;
-}
-.announce.btn.back{
+.btn.back{
     border:none;
     border-radius: 0;
     background-color: transparent;
@@ -4097,8 +4128,53 @@ footer {
     box-shadow:none;
 }
 
+.btn.view.detailed{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/view_detailed.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.btn.view.text{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/view_text.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.announce.btn.new{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/new_announce.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
 .announcement {
-/*    background: none repeat scroll 0 0 #F2F2F2;*/
+    /*    background: none repeat scroll 0 0 #F2F2F2;*/
     border: 1px solid #D3D3D3;
     color: #555555;
     font-weight: normal;
@@ -4109,8 +4185,8 @@ footer {
     width: 100%;
 }
 .announcement .title{  
-   background: none repeat scroll 0 0 #F2F2F2;
-   color:black;
+    background: none repeat scroll 0 0 #F2F2F2;
+    color:black;
 }
 
 .announcement .title a:link,
@@ -4151,6 +4227,10 @@ li.annoucement{
 .boot-tooltip {
     cursor: pointer;
 }
+
+/*
+    link
+*/
 
 .link_category{
     background-color: #FFFFFF;
@@ -4225,6 +4305,63 @@ li.annoucement{
     color: #999999;
 }
 
+.link .status{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+.link.invalid .status{
+    background-image:  url('../img/icons/22/error.png');
+}
+
+.link.valid .status{
+    background-image:  url('../img/icons/22/accept.png');
+}
+
+.btn.validate_link{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:22px;
+    height:22px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/22/preview_view.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+/*
+  Glossary
+*/
+
+.glossary.btn.new.term{
+    border:none;
+    border-radius: 0;
+    background-color: transparent;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    background-image:  url('../img/icons/32/new_glossary_term.png');
+    background-repeat: no-repeat;
+    background-position:center center; 
+    box-shadow:none;
+}
+
+
 #learning_path_main #control {
     text-align: center;    
     background-image:-webkit-gradient(linear,left top,left bottom,from(#ececec),to(#fff));
@@ -4233,7 +4370,7 @@ li.annoucement{
     background-image:-ms-linear-gradient(top,#ececec,#fff);
     background-image:-o-linear-gradient(top,#ececec,#fff);
     background-image:linear-gradient(top,#ececec,#fff);
-    
+
     height:32px;
     padding:8px 0px 8px 0px;
     opacity:0.9;
@@ -4242,6 +4379,73 @@ li.annoucement{
     width: 100%;
     height: 34px;
     position: absolute
+}
+
+
+/*
+data table
+*/
+
+.dataTables_wrapper{
+    clear: both;
+}
+
+.dataTables_length {
+    float: left;
+    width: 40%;
+}
+
+.dataTables_filter {
+    text-align: right;
+}
+
+.dataTables_info {
+    float: left;
+    width: 60%;
+}
+
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
+
+.dataTables_wrapper label input, .dataTables_wrapper label textarea, .dataTables_wrapper label select {
+    display: inline-block;
+}
+
+.dataTables.display {
+    clear: both;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_enabled_previous {
+    padding-left: 23px;
+    background: url("../img/action_prev.png") no-repeat scroll left top;
+}
+
+.dataTables_wrapper .paginate_disabled_next, .dataTables_wrapper .paginate_enabled_next {
+    margin-left: 10px;
+    padding-right: 23px;
+    background: url("../img/action_next.png") no-repeat scroll left top;
+}
+
+.dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_disabled_next{
+    opacity: 0.4;
+}
+
+.dataTables_wrapper .sorting_asc {
+    background-image: url("../img/sort_asc.png");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: right center;
+}
+
+.dataTables_wrapper .sorting_desc{
+    background-image: url("../img/sort_desc.png");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: right center;
 }
 
 

@@ -111,12 +111,10 @@ foreach ($fileList as $file) {
 						$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
 						$original_image_size = api_getimagesize($image);
 						
-						if(in_array($imagetype,$allowed_thumbnail_types) && $original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height) {
+						if (in_array($imagetype,$allowed_thumbnail_types) && $original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height) {
 							
-							if (!file_exists($image_thumbnail)){
-		
-								
-								switch($imagetype) {
+							if (!file_exists($image_thumbnail)) {
+								switch ($imagetype) {
 									case 'gif':
 										$source_img = imagecreatefromgif($image);
 										break;
@@ -135,22 +133,23 @@ foreach ($fileList as $file) {
 								$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
 								
 								// preserve transparency
-								if($imagetype == "png"){
+								if ($imagetype == "png") {
 									imagesavealpha($crop, true);
 									$color = imagecolorallocatealpha($crop,0x00,0x00,0x00,127);
 									imagefill($crop, 0, 0, $color); 
 								}
 								
-								if($imagetype == "gif"){
-									 $transindex = imagecolortransparent($image);
+								if ($imagetype == "gif") {
+									 $transindex = imagecolortransparent($source_img);
+                                     $palletsize = imagecolorstotal($source_img);
+
 									 //GIF89a for transparent and anim (first clip), either GIF87a
-									 if($transindex >= 0){
-										 $transcol = imagecolorsforindex($image, $transindex);
+									 if ($transindex >= 0 && $transindex < $palletsize){
+										 $transcol = imagecolorsforindex($source_img, $transindex);
 										 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
 										 imagefill($crop, 0, 0, $transindex);
 										 imagecolortransparent($crop, $transindex);
 									 }
-									 
 								}
 		
 								//resampled image

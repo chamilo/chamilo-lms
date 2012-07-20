@@ -259,16 +259,16 @@ if ($slide_id == 'all') {
 							imagefill($crop, 0, 0, $color); 
 						}
 						
-						if($imagetype == "gif"){
-							 $transindex = imagecolortransparent($image);
+						if ($imagetype == "gif") {
+							$transindex = imagecolortransparent($source_img);
+                            $palletsize = imagecolorstotal($source_img);
 							 //GIF89a for transparent and anim (first clip), either GIF87a
-							 if($transindex >= 0){
-								 $transcol = imagecolorsforindex($image, $transindex);
+							 if ($transindex >= 0 && $transindex < $palletsize){
+								 $transcol = imagecolorsforindex($source_img, $transindex);
 								 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
 								 imagefill($crop, 0, 0, $transindex);
 								 imagecolortransparent($crop, $transindex);
 							 }
-							 
 						}
 
 						//resampled image

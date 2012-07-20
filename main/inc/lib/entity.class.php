@@ -41,9 +41,37 @@ class Entity
         return $result;
     }
 
-    public function __construct()
+    function __construct($data = null)
     {
+        if ($data) {
+            foreach ($this as $key => $value) {
+                if (isset($data->{$key})) {
+                    $this->{$key} = $data->{$key};
+                }
+            }
+        }
         $this->defaults('session_id', api_get_session_id());
+    }
+
+    function __get($name)
+    {
+        $f = array($this, "get_$name");
+        return call_user_func($f);
+    }
+
+    function __isset($name)
+    {
+        $f = array($this, "get_$name");
+        return is_callable($f);
+    }
+
+    function __set($name, $value)
+    {
+        $f = array($this, "set_$name");
+        if (!is_callable($f)) {
+            return;
+        }
+        call_user_func($f, $value);
     }
 
     function before_save()

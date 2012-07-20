@@ -193,7 +193,7 @@ if (($action == 'movesent' OR $action == 'movereceived') AND isset($_GET['move_i
 	}
 	display_move_form(str_replace('move', '', $action), $_GET['move_id'], get_dropbox_categories(str_replace('move', '', $action)), $sort_params);
 }
-if (isset($_POST['do_move']) && $_POST['do_move']) {
+if (isset($_POST['do_move'])) {
 	Display :: display_confirmation_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']));
 }
 

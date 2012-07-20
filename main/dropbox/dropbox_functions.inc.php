@@ -196,11 +196,11 @@ function display_move_form($part, $id, $target = array(), $extra_params = array(
 * @version march 2006
 */
 function store_move($id, $target, $part) {
-	global $_user;
-	global $dropbox_cnf;
+	global $_user, $dropbox_cnf;
     $course_id = api_get_course_int_id();
 
 	if ((isset($id) AND $id != '') AND (isset($target) AND $target != '') AND (isset($part) AND $part != '')) {
+        
 		if ($part == 'received') {
 			$sql = "UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id='".Database::escape_string($target)."'
 						WHERE c_id = $course_id AND dest_user_id='".Database::escape_string($_user['user_id'])."'

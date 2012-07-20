@@ -8837,8 +8837,9 @@ class learnpath {
                     //Add files inside the HTMLs
                     $new_path = str_replace('/courses/', '', $old_new['orig']);
                     //var_dump($sys_course_path.$new_path); var_dump($archive_path.$temp_dir_short.'/'.$old_new['dest']); echo '---';
-                    copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/'.$old_new['dest']);
-                    
+                    if (file_exists($sys_course_path.$new_path)) {
+                        copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/'.$old_new['dest']);
+                    }                    
                 }
                 file_put_contents($dest_file, $string);
             }

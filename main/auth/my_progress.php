@@ -56,13 +56,25 @@ $dates = $issues = '';
 if (!empty($course_user_list)) {
     foreach ($course_user_list as $course) {    
         $items = MySpace::get_connections_to_course($user_id, $course['code']);
-        foreach($items as $result) {
+        $first = null;
+        $last = null;
+        $last_item = count($items);
+        $count = 1;
+        foreach ($items as $result) {
             $login = $result['login']; 
+            if ($count == 1) {
+                $first = '<a href="#'.$login.'">'. get_lang('First').'</a>';
+            }
+            if ($count == $last_item) {
+                $last = '<a href="#'.$login.'">'.  get_lang('Last').'</a>';
+            }
+            
             $course_info = api_get_course_info($course['code']);
             $course_image = '<img src="'.$course_info['course_image'].'">';
             $dates .= '<li><a href="#'.$login.'">'.  api_get_utc_datetime($login).'</a></li>';
             $issues .= '<li id ="'.$login.'"><div class="row"><div class="span2"><div class="thumbnail">'.$course_image.'</div></div>
                     <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY') , $course['code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div></li>';
+            $count++;
         }    
     }
 }
@@ -77,14 +89,20 @@ if (!empty($dates)) {
     $content .= '<div class="row"><div class="span12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
 
     $content .= '<div id="my_timeline">
+        <div class="actions">
+    <a href="#" id="prev"></a> <!-- optional -->
+    <a href="#" id="next"></a> <!-- optional -->
+    </div>
+    
     <ul id="dates">
         '.$dates.'  
-        </ul>
+    </ul>
     <ul id="issues">
         '.$issues.'
-    </ul>
-    <a href="#" id="next">+</a> <!-- optional -->
-    <a href="#" id="prev">-</a> <!-- optional -->
+    </ul>    
+    
+
+   
     </div></div>';
 }
 

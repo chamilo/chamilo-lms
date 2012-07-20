@@ -299,12 +299,13 @@ class CourseRecycler
                     Database::query($sql);
                 }
             }
-        }
-
-        // Purge "deleted" tests (active = -1).
-        $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
-        Database::query($sql);
+            
+            // Purge "deleted" tests (active = -1).
+            $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
+            Database::query($sql);            
+        }        
     }
+    
     /**
      * Recycle surveys - removes everything
      */

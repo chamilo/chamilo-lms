@@ -130,11 +130,11 @@ function delete_category($action, $id, $user_id = null) {
 	}
 
 	// step 1: delete the category
-	$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".Database::escape_string($id)."' AND $sentreceived='1'";
+	$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".intval($id)."' AND $sentreceived='1'";
 	$result = Database::query($sql);
 
 	// step 2: delete all the documents in this category
-	$sql = "SELECT * FROM ".$entries_table." WHERE cat_id='".Database::escape_string($id)."'";
+	$sql = "SELECT * FROM ".$entries_table." WHERE cat_id='".intval($id)."'";
 	$result = Database::query($sql);
 
 	while($row = Database::fetch_array($result)) {
@@ -313,13 +313,13 @@ function get_dropbox_categories($filter = '') {
  */
 function get_dropbox_category($id) {
     global $dropbox_cnf;
-    if (empty($id)) { return array(); }
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".$_user['user_id']."'";
+    if (empty($id) or $id != intval($id)) { return array(); }
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
         return array();
     }
-    $row = Database::fetch_array($res);
+    $row = Database::fetch_assoc($res);
     return $row;
 }
 

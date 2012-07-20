@@ -106,7 +106,65 @@ class ThematicController
                         $thematic_id = null;
         				$action = 'thematic_details';
                     }
-                    break;   
+                    break;
+                case 'thematic_import_select':
+                    break;
+                case 'thematic_import':
+                    $csv_import_array = Import::csv_to_array($_FILES['file']['tmp_name'], 'horizontal');
+                    
+                    if (isset($_POST['replace']) && $_POST['replace']) {
+                        // Remove current thematic.
+                        $list = $thematic->get_thematic_list();
+                        foreach ($list as $i) {
+                            $thematic->thematic_destroy($i);
+                        }                        
+                    }
+                    
+                    // Import the progress.
+                    $current_thematic = null;
+                    
+                    foreach ($csv_import_array as $data) {
+                        foreach ($data as $key => $item) {                            
+                            if ($key == 'title') {
+                                $thematic->set_thematic_attributes(null, $item[0], $item[1], api_get_session_id ());
+                                $current_thematic = $thematic->thematic_save ();
+                                $description_type = 0;
+                            }
+                            if ($key == 'plan') {
+                                $thematic->set_thematic_plan_attributes($current_thematic, $item[0], $item[1], $description_type);
+                                $thematic->thematic_plan_save();
+                                $description_type++;
+                            }
+                            if ($key == 'progress') {
+                                $thematic->set_thematic_advance_attributes (null, $current_thematic, 0, $item[2], $item[0], $item[1]);
+                                $thematic->thematic_advance_save ();
+                            }                      
+                        }
+                    }
+                    $action = 'thematic_details';
+                    break;
+                case 'thematic_export':
+                    $list = $thematic->get_thematic_list();
+                    $csv = array();
+                    foreach ($list as $theme) {
+                        $csv[] = array ('title', $theme['title'], $theme['content']);
+                        $data = $thematic->get_thematic_plan_data ($theme['id']);
+                        if (!empty($data)) {
+                            foreach ($data as $plan) {
+                                $csv[] = array ('plan', $plan['title'], $plan['description']);
+                            }
+                        }
+                        $data = $thematic->get_thematic_advance_by_thematic_id ($theme['id']);
+                        if (!empty($data)) {
+                            foreach ($data as $advance) {
+                                $csv[] = array('progress', $advance['start_date'], $advance['duration'], $advance['content']);
+                            }
+                        }
+                    }
+                    Export::export_table_csv($csv);
+                    exit;
+                    // Don't continue building a normal page.
+                    return;
                 case 'moveup':
                     $thematic->move_thematic('up', $thematic_id);
     				$action = 'thematic_details';
@@ -181,7 +239,7 @@ class ThematicController
 	
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {   
     		if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {            
-                if (trim($_POST['title']) !== '') {             
+                if (isset($_POST['title'])) {
                     if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {
                         if (api_is_allowed_to_edit(null, true)) {  
                             
@@ -347,9 +405,9 @@ class ThematicController
                         }
                     }
                     break;
-			default:
-				$thematic_advance_data = $thematic->get_thematic_advance_list($thematic_advance_id);	
-			break;	
+                default:
+                    $thematic_advance_data = $thematic->get_thematic_advance_list($thematic_advance_id);	
+                    break;	
             }
 		
 		

@@ -18,7 +18,9 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
-//require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // current section
 $this_section = SECTION_COURSES;
@@ -33,6 +35,7 @@ define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
 $actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_copy', 'thematic_delete', 'moveup', 'movedown',
+                'thematic_import_select', 'thematic_import', 'thematic_export',    
 				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete',
 				 'thematic_advance_list', 'thematic_advance_add', 'thematic_advance_edit', 'thematic_advance_delete');
 
@@ -298,13 +301,16 @@ switch ($action) {
 	case 'thematic_edit'			:
 	case 'thematic_delete'			:
 	case 'thematic_delete_select'	:
-    case 'thematic_copy'            :	
+    case 'thematic_copy'            :
+    case 'thematic_import_select'   :
+    case 'thematic_import'          :
 	case 'moveup'					:
 	case 'movedown'					:    
         if (!api_is_allowed_to_edit(null,true)) {
         	api_not_allowed();
         }
 	case 'thematic_list'			:
+    case 'thematic_export'          :
     case 'thematic_details'         :	
         $thematic_controller->thematic($action);
 		break;	
@@ -316,8 +322,7 @@ switch ($action) {
         }	
     case 'thematic_plan_list'       :
         $thematic_controller->thematic_plan($action);
-        break;
-	
+        break;	
 	case 'thematic_advance_add'		:
 	case 'thematic_advance_edit'	:
 	case 'thematic_advance_delete'	:

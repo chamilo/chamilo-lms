@@ -102,9 +102,17 @@ function handle_multiple_actions() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function delete_category($action, $id) {
+function delete_category($action, $id, $user_id = null) {
 	global $dropbox_cnf;
-	global $_user, $is_courseAdmin, $is_courseTutor;
+	global $is_courseAdmin, $is_courseTutor;
+    if (empty($user_id)) {
+        $user_id = api_get_user_id();
+    }
+    $cat = get_dropbox_category($id);
+    if (count($cat)==0) { return false; }
+    if ($cat['user_id'] != $user_id && !api_is_platform_admin($user_id)) {
+        return false;
+    }
 
 	// an additional check that might not be necessary
 	if ($action == 'deletereceivedcategory') {
@@ -268,7 +276,7 @@ function display_file_checkbox($id, $part) {
 }
 
 /**
-* This function retrieves all the dropbox categories and returns them as an array
+* This function retrieves all dropbox categories and returns them as an array
 *
 * @param $filter default '', when we need only the categories of the sent or the received part.
 *
@@ -296,6 +304,23 @@ function get_dropbox_categories($filter = '') {
 	}
 
 	return $return_array;
+}
+
+/**
+ * Get a dropbox category details
+ * @param int The category ID
+ * @return array The details of this category
+ */
+function get_dropbox_category($id) {
+    global $dropbox_cnf;
+    if (empty($id)) { return array(); }
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".$_user['user_id']."'";
+    $res = Database::query($sql);
+    if ($res === false) {
+        return array();
+    }
+    $row = Database::fetch_array($res);
+    return $row;
 }
 
 /**

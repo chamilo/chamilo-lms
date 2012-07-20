@@ -1547,76 +1547,10 @@ div.image-social-content center.friend {
     height:auto;
 }
 
-.social-menu-title {
-    background-color: #888;
-}
 
-.social-menu ul {
-    list-style-image:none;
-    list-style-position:outside;
-    list-style-type:none;
-    margin:0;
-    padding:0px;
-}
-.social-menu li {
-    margin-bottom:4px;
-    padding-bottom:12px;
-    border-bottom : 1px solid #ddd;
-    background-position:bottom;
-    background-repeat:repeat-x;
-}
-.social-menu li img {
-    float:left;
-}
-.social-menu-sub-level a img {
-    float:left;
-}
-.social-menu ul li a {
-    padding:2px 0px;
-}
+
 .social-menu-sub-level {
     margin-left:20px;
-}
-.social-menu-title{
-    width:100%;
-    float:left;
-    height:auto;
-    margin-bottom:10px;
-    padding-top:4px;
-    padding-bottom:4px;
-}
-.social-menu-text1 {
-    color:#fff;
-    font-size:12px;
-    font-weight:bold;
-}
-.social-menu-text2 {
-    color:#000;
-    font-weight:normal;
-    font-size:12px;
-}
-.social-menu-text3 {
-    color:#94cdf9;
-    font-weight:normal;
-    font-size:12px;
-    font-weight:bold;
-}
-.social-menu-text4 {
-    color:#000;
-    font-weight:normal;
-    vertical-align:bottom;
-}
-.social-menu-text-active {
-    color:#000;
-    font-weight:bold;
-    vertical-align:bottom;
-}
-.social-menu-title-right {
-    width:84%;
-    float:right;
-    height:20px;
-    background-color:#32578b;
-    margin-bottom:10px;
 }
 
 
@@ -4313,4 +4247,9 @@ li.annoucement{
 
 #course_category_well {
     padding: 9px 0;
+}
+
+
+.nav-list img {
+    margin-right: 6px;
 }

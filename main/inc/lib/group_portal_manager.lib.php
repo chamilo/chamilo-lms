@@ -1088,12 +1088,12 @@ class GroupPortalManager {
 		}
 
 		if (!empty($links)) {
-			$html .= '<ul class="social-menu-groups">';
+			$html .= '<div class="well social_menu_items"><ul class="nav nav-list">';
 			if (!empty($group_info['description'])) {
 				$html .= Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
 			}
 			$html .= $links;
-			$html .= '</ul>';
+			$html .= '</ul></div>';
 		}
         return $html;
 	}

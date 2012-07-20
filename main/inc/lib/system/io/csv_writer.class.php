@@ -46,7 +46,11 @@ class CsvWriter
     {
         return $this->enclosure;
     }
-
+    
+    function get_stream(){
+        return $this->stream;
+    }
+    
     /**
      *
      * @return FileWriter

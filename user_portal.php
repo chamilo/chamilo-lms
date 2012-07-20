@@ -177,6 +177,7 @@ if(!empty($some_activex) || !empty($some_plugins)){
 }
 
 $controller->tpl->assign('profile_block', 				$controller->return_profile_block());
+$controller->tpl->assign('user_image_block',            $controller->return_user_image_block());
 $controller->tpl->assign('course_block',				$controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
 $controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());

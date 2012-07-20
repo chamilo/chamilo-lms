@@ -67,6 +67,9 @@
 		{% endif %}
 
 		{#  User picture  #}
+        {{ user_image_block }}
+        
+        {#  User Profile links #}
 		{{ profile_block }}
         
         {#  Course block - admin #}

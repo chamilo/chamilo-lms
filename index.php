@@ -140,6 +140,7 @@ $controller->set_login_form();
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
 	$controller->tpl->assign('profile_block', $controller->return_profile_block());
+    $controller->tpl->assign('user_image_block', $controller->return_user_image_block());    
 
 	if (api_is_platform_admin()) {
 		$controller->tpl->assign('course_block',			$controller->return_course_block());

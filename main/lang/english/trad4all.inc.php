@@ -77,7 +77,7 @@ $Info = "Information";
 $Search = "Search";
 $AdvancedSearch = "Advanced search";
 $Open = "Open";
-$Import = "Validate";
+$Import = "Import";
 $AddAnother = "Add another";
 $Author = "Author";
 $TrueFalse = "True / False";
@@ -1249,4 +1249,7 @@ $ActivateEvent = "Activate event";
 $AvailableEventKeys = "Available event keys. Use them between (( )).";
 $Events = "Events";
 $EventTypeName = "Event type name";
+$ExportToPDFOnlyHTMLAndImages = "Export to PDF web pages and images";
+$CourseCatalog = "Course catalog";
+$Go = "Go";
 ?>

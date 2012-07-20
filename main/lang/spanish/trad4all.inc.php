@@ -1254,4 +1254,7 @@ $ActivateEvent = "Activar evento";
 $AvailableEventKeys = "Palabras claves de los eventos.  Utilizarlos entre (( )).";
 $Events = "Eventos";
 $EventTypeName = "Nombre del tipo de evento";
+$ExportToPDFOnlyHTMLAndImages = "Exportar páginas web e imágenes a PDF";
+$CourseCatalog = "Catálogo de cursos";
+$Go = "Ir";
 ?>

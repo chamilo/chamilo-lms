@@ -270,7 +270,7 @@ $SeeTheory = "Revisar la teoría";
 $EndActivity = "Fin de la actividad";
 $NoFeedback = "Examen (sin retroalimentación)";
 $DirectFeedback = "Autoevaluación (retroalimentación inmediata)";
-$FeedbackType = "Evaluación";
+$FeedbackType = "Retro-alimentación";
 $Scenario = "Escenario";
 $VisitUrl = "Visitar esta dirección";
 $ExitTest = "Salir del examen";
@@ -497,4 +497,7 @@ $EndTest = "Terminar ejercicio";
 $PassPercentage = "Porcentaje de éxito";
 $NoCategorySelected = "No hay una categoría seleccionada";
 $ExerciseAverage = "Media del ejercicio";
+$NoNegativeScore = "Sin puntos negativos";
+$GlobalMultipleAnswer = "Respuesta múltiple global";
+$AllQuestionsShort = "Todas";
 ?>

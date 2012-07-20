@@ -21,6 +21,20 @@
 <div id="main">
 
 
+<h1>Chamilo 1.8.8.6 - Merida, 20th of July 2012</h1>
+
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.8.8.6 is a minor security fix, stable version for version 1.8.8.4. If you are using Chamilo 1.8.8.4, we highly recommend you upgrade to this version, either by following the usual upgrade procedure, or by applying a very small patch, as explained on <a href="http://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues listing page</a>. The security fixes are all considered "moderate". This means you could loose data (specifically dropbox tool data in this case) and your users might get tricked into providing credentials to potential hackers, but the integrity of your server will not be in direct danger.</p>
+
+<h3>Fixes</h3>
+<ul>
+  <li>Fixed long-standing e-mail sending bug (fixed in upstream and documented on the forum and all over the internet)</li>
+  <li>Fixed a reflected XSS PHP_SELF security flax in the phpdocx 3rd-party library - #5202</li>
+  <li>Fixed an unauthorized file deletion in dropbox by logged in users - #5202</li>
+  <li>Fixed XSS unfiltered input in dropbox - #5202</li>
+</ul>
+
+
 <h1>Chamilo 1.8.8.4 - La Molina, August 2011</h1>
 
 <h3>Release notes - summary</h3>

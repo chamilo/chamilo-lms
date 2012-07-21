@@ -86,7 +86,7 @@ $(document).ready(function (){
 	});
 });
 
-var dokeos_xajax_handler = window.oxajax;
+var chamilo_xajax_handler = window.oxajax;
 
 </script>';
 

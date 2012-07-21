@@ -23,7 +23,7 @@ require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-      var dokeos_xajax_handler = window.parent.oxajax;
+      var chamilo_xajax_handler = window.parent.oxajax;
     </script>';
 
 $progress_bar = '';

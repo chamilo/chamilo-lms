@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Trainers";
-$langExplanation = "Once you click on \"Create a training\", a training is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as trainer provides you with editing privileges for this training.";
+$langExplanation = "Once you click on \"Create a course\", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.";
 $langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program";
 $langCodeTaken = "This training code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
@@ -105,7 +105,7 @@ $CreateCourse = "Create a course";
 $Create = "Create";
 $MessageOfNewCourseToAdmin = "This message is to inform you that has created a new course on platform";
 $NewCourseCreatedIn = "New course created in";
-$ExplicationTrainers = "The trainer is set as you for now. You can change this setting later in the training configuration settings";
+$ExplicationTrainers = "The teacher is set as you for now. You can change this setting later in the course configuration settings";
 $Objectives = "Objectives";
 $TargetAudience = "Target audience";
 $YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions in order to request a new training.";
@@ -137,7 +137,7 @@ $CourseRequestPageForApproval = "This course request can be approved on the foll
 $PleaseActivateCourseValidationFeature = "The \"Course validation\" feature is not enabled at the moment. In order to use this feature, please, enable it by using the  %s setting.";
 $CourseRequestLegalNote = "The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.";
 $CourseRequestAskInfoEmailSubject = "%s A request for additional information about the course request %s";
-$CourseRequestAskInfoEmailText = "We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information.\n\nPlease, provide brief information about the course content (description), the objectives, the students or the users that are to be involved in the proposed course. If it is applicable, mention the name of the institution or the unit on which behalf you made the course request.";
+$CourseRequestAskInfoEmailText = "We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information.\n\nPlease, provide brief information about the course content (description), the objectives, the learners or the users that are to be involved in the proposed course. If it is applicable, mention the name of the institution or the unit on which behalf you made the course request.";
 $CourseRequestAcceptedEmailSubject = "%s The course request %s has been approved";
 $CourseRequestAcceptedEmailText = "Your course request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s";
 $CourseRequestRejectedEmailSubject = "%s The course request %s has been rejected";

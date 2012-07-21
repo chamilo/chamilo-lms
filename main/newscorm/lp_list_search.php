@@ -67,14 +67,14 @@ foreach ($specific_fields as $specific_field) {
             $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
             foreach ($sf_terms_for_code as $term) {
                 if (!empty($term)) {
-                    $term_array[] = dokeos_get_boolean_query($term['name']); // Here name includes prefix.
+                    $term_array[] = chamilo_get_boolean_query($term['name']); // Here name includes prefix.
                 }
             }
         } else {
             foreach ($values as $term) {
                 if (!empty($term)) {
                     $prefix = $specific_field['code'];
-                    $term_array[] = dokeos_get_boolean_query($prefix . $term);
+                    $term_array[] = chamilo_get_boolean_query($prefix . $term);
                 }
             }
         }
@@ -82,7 +82,7 @@ foreach ($specific_fields as $specific_field) {
         $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);        
         foreach ($sf_terms_for_code as $term) {
             if (!empty($term)) {
-                $term_array[] = dokeos_get_boolean_query($term['name']); // Here name includes prefix.
+                $term_array[] = chamilo_get_boolean_query($term['name']); // Here name includes prefix.
             }
         }
     }
@@ -93,14 +93,14 @@ $fixed_queries = array();
 $course_filter = NULL;
 if ( ($cid=api_get_course_id()) != -1 ) {    
     // Results only from actual course.
-    $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+    $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
 }
 
 if (count($term_array)) {    
-    $fixed_queries = dokeos_join_queries($term_array, null, $op);
+    $fixed_queries = chamilo_join_queries($term_array, null, $op);
     
     if ($course_filter != NULL) {
-        $fixed_queries = dokeos_join_queries($fixed_queries, $course_filter, 'and');
+        $fixed_queries = chamilo_join_queries($fixed_queries, $course_filter, 'and');
     }
 } else {
     if (!empty($query)) {        
@@ -110,7 +110,7 @@ if (count($term_array)) {
 
 //var_dump($fixed_queries);
 
-list($count, $results) = dokeos_query_query(api_convert_encoding($query, 'UTF-8', $charset), 0, 1000, $fixed_queries);
+list($count, $results) = chamilo_query_query(api_convert_encoding($query, 'UTF-8', $charset), 0, 1000, $fixed_queries);
 
 // Prepare blocks to show.
 $blocks = array();

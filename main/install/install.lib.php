@@ -1211,12 +1211,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     @unlink($course_dir.'/test.txt');
     @rmdir($course_dir);
     
-    $perms_dir = array('0777', '0755', '0775', '0770', '0750', '0700');
-    $perms_fil = array('0666', '0644', '0664', '0660', '0640', '0600');
+    $perms_dir = array(0777, 0755, 0775, 0770, 0750, 0700);
+    $perms_fil = array(0666, 0644, 0664, 0660, 0640, 0600);
     
     $course_test_was_created = false;
     
-    $dir_perm_verified = '0777';
+    $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
         $r = mkdir($course_dir, $perm);        
         if ($r === true) { 
@@ -1226,7 +1226,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         }
     }
     
-    $fil_perm_verified = '0666';
+    $fil_perm_verified = 0666;
     
     if (is_dir($course_dir)) {    
         foreach ($perms_fil as $perm) {
@@ -1244,8 +1244,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
     $_SESSION['permissions_for_new_files']       = $_setting['permissions_for_new_files'] = $fil_perm_verified;
     
-    $dir_perm = Display::label($dir_perm_verified, 'info');
-    $file_perm = Display::label($fil_perm_verified, 'info');
+    $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
+    $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
     
     $course_test_was_created  = $course_test_was_created == true ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
 
@@ -2108,11 +2108,11 @@ function update_dir_and_files_permissions() {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
-    
-    $sql = "UPDATE $table SET selected_value = '".$permissions_for_new_directories."' WHERE variable  = 'permissions_for_new_directories'";
+    // use decoct() to store as string
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."' WHERE variable  = 'permissions_for_new_directories'";
     Database::query($sql);
      
-    $sql = "UPDATE $table SET selected_value = '".$permissions_for_new_files."' WHERE variable  = 'permissions_for_new_files'";
+    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
     Database::query($sql);
     
     unset($_SESSION['permissions_for_new_directories']);

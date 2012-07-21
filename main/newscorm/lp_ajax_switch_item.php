@@ -150,7 +150,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * so this code is technically deprecated (but the change of item_id should
      * remain). However, due to numerous technical issues with SCORM, we prefer
      * leaving it as a double-lock security. If removing, please test carefully
-     * with both SCORM and dokeos learning path tracking.
+     * with both SCORM and proper learning path tracking.
      */
     $return .=
             "olms.score=".$myscore.";" .

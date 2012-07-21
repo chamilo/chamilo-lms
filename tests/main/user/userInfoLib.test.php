@@ -126,6 +126,7 @@ class TestUserInfoLib extends UnitTestCase {
 		//var_dump($res);
 	}
 
+/*
 	function testmove_cat_rank_by_rank()  {
 		$rank=5;
 		$direction='up';
@@ -133,7 +134,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-
+*/
 	/**
  	* remove a category from the category list
  	* @param  - int $id - id of the category

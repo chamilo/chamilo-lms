@@ -49,6 +49,7 @@ require_once $maindir.'exercice/exercise.class.php';
 require_once $maindir.'exercice/fill_blanks.class.php';
 require_once $maindir.'exercice/freeanswer.class.php';
 require_once $maindir.'forum/forumfunction.inc.php';
+/*
 require_once $maindir.'gradebook/lib/be/gradebookitem.class.php';
 require_once $maindir.'gradebook/lib/be/abstractlink.class.php';
 require_once $maindir.'gradebook/lib/be/evallink.class.php';
@@ -61,6 +62,7 @@ require_once $maindir.'gradebook/lib/be/exerciselink.class.php';
 require_once $maindir.'gradebook/lib/be/dropboxlink.class.php';
 require_once $maindir.'gradebook/lib/be/result.class.php';
 require_once $maindir.'gradebook/lib/be/forumthreadlink.class.php';
+*/
 require_once $maindir.'course_info/download.lib.php';
 
 
@@ -69,7 +71,6 @@ require_once $maindir.'course_info/download.lib.php';
 require_once $libdir.'urlmanager.lib.php';
 require_once $libdir.'fileDisplay.lib.php';
 require_once $libdir.'groupmanager.lib.php';
-require_once $libdir.'course.lib.php';
 require_once $libdir.'usermanager.lib.php';
 require_once $libdir.'social.lib.php';
 require_once $libdir.'xht.lib.php';
@@ -83,9 +84,7 @@ require_once $libdir.'notebook.lib.php';
 ob_start();
 require_once $libdir.'main_api.lib.php';
 require_once $libdir.'course_document.lib.php';
-require_once $libdir.'banner.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
-require_once $incdir.'banner.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();
 
@@ -133,7 +132,7 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	            'db_prefix'=> $_configuration['db_prefix'],
 	            'firstExpirationDelay'=>'999'
 	            );
-	    $res = create_course($course_data['wanted_code'], $course_data['title'],
+	    $res = CourseManager::create_course($course_data['wanted_code'], $course_data['title'],
 	                         $course_data['tutor_name'], $course_data['category_code'],
 	                         $course_data['course_language'],$course_data['course_admin_id'],
 	                         $course_data['db_prefix'], $course_data['firstExpirationDelay']);

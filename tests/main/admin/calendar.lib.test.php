@@ -221,7 +221,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_array($res));
  	}
 
- 	public function testGetRepeatedEventsDayView(){
+/* 	public function testGetRepeatedEventsDayView(){
  			global $_course;
  			$start = 0;
  			$end = 0;
@@ -231,13 +231,13 @@ class TestCalendar extends UnitTestCase {
 			$resul = get_repeated_events_day_view($course_info,$start,$end,$params);
 	 		$this->assertTrue(is_array($resul));
  	}
-
+*/
  	public function testGetRepeatedEventsWeekView(){
  		$course_info = 'COURSETEST';
  		$resul = get_repeated_events_week_view($course_info, 0, 0, '');
  		$this->assertTrue(is_array($resul));
  	}
-
+/*
  	public function testGetRepeatedEventsMonthView(){
  		$course_code='COURSETEST';
  		$course_info = api_get_course_info($course_code);
@@ -245,7 +245,6 @@ class TestCalendar extends UnitTestCase {
 		$this->assertTrue(is_array($resul));
 		//var_dump($resul);
 	}
-
 	public function testGetRepeatedEventsListView(){
 		$course_code='COURSETEST';
  		$course_info = api_get_course_info($course_code);
@@ -253,6 +252,7 @@ class TestCalendar extends UnitTestCase {
 		$this->assertTrue(is_array($resul));
 		//var_dump($resul);
 	}
+*/
 
 	public function testDeleteAgendaItem(){
 		$id=1;
@@ -291,23 +291,6 @@ class TestCalendar extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		//var_dump($res);
- 	}
-
- 	public function testDisplayCourseadminLinks(){
- 		ob_start();
- 		$res = display_courseadmin_links();
- 		ob_end_clean();
- 		$this->assertTrue(is_null($res));
- 		//var_dump($res);
- 	}
-
- 	public function testDisplayStudentLinks(){
- 		ob_start();
- 		global $show;
- 		$res = display_student_links();
- 		ob_end_clean();
- 		$this->assertTrue(is_null($res));
- 		//var_dump($res);
  	}
 
  	public function testGetAgendaItem(){

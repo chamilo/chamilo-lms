@@ -440,13 +440,13 @@ class TestMainApi extends UnitTestCase {
 		$this->assertEqual($res,'');
 		ob_end_clean();
 	}
-
+/*
 	function testConvertMysqlDate(){
 	 	$last_post_datetime = array();
 	 	$res=convert_mysql_date($last_post_datetime);
 	 	$this->assertTrue($res);
 	}
-
+*/
 	function testApiGetDatetime(){
 	 	$res=api_get_datetime($time=null);
 	 	$this->assertTrue($res);
@@ -688,13 +688,14 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
+/*
 	function testApiDeleteCategorySettings(){
 		$c= false;
 		$res = api_delete_category_settings($c,$a=1);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-
+*/
 	function testApiAddSetting(){
 		$sk=null;
 		$type='textfield';

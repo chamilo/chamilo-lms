@@ -25,44 +25,6 @@ class TestDisplay extends UnitTestCase {
 		//var_dump($full_file_name);
 	}
 
-		/**
-	*	Display html header of table with several options.
-	*
-	*	@param $properties, array with elements
-	*	@param column_header, array with the header elements.
-	*	@author Arthur Portugal
-	*	@return return type string, bgcolor
-	*/
-	public function testdisplay_complex_table_header() {
-		$properties='HTML_WHITE';
-		$column_header=array();
-		ob_start();
-		$res= Display::display_complex_table_header($properties, $column_header);
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	/**
-	*	Displays a table row.
-	*
-	*	@param $bgcolor the background colour for the table
-	*	@param $table_row an array with the row elements
-	*	@param $is_alternating true: the row colours alternate, false otherwise
-	*	@return string color
-	*/
-	/*
-	public function testdisplay_table_row() {
-		$bgcolor = 'red';
-		$table_row = array();
-		$is_alternating = true;
-		ob_start();
-		$res=Display::display_table_row($bgcolor, $table_row,$is_alternating);
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}*/
-
 	public function testdisplay_sortable_table() {
 		$header='';
 		$content='';
@@ -171,7 +133,7 @@ class TestDisplay extends UnitTestCase {
 	 * @author Arthur Portugal
 	 * @return string Code HTML about the footer
 	 */
-	public function testdisplay_footer() {
+/*	public function testdisplay_footer() {
 		global $_plugins;
 		ob_start();
 		$res=Display::display_footer();
@@ -179,7 +141,7 @@ class TestDisplay extends UnitTestCase {
 		$this->assertNull($res);
 		//var_dump($res);
 	}
-
+*/
 	/**
 	 * Display the page header
 	 * @param string The name of the page (will be showed in the page title)

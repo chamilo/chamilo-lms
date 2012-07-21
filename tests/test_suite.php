@@ -61,6 +61,8 @@ require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
 require_once 'simpletest/mock_objects.php';
 require_once 'simpletest/autorun.php';
+require_once 'simpletest/reporter.php';
+require_once 'simpletest/xml.php';
 
 /*  TEST SUITE
  * Start to load the tests files
@@ -76,8 +78,6 @@ class TestsSuite extends TestSuite {
         // Loading test cases
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/database.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/add_course.lib.inc.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/course.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/banner.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/admin/calendar.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/surveymanager.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/session_handler.class.test.php');
@@ -126,7 +126,7 @@ class TestsSuite extends TestSuite {
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/work/work.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/glossary.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/notebook.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/permissions/permissions_functions.inc.test.php');
+//        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/permissions/permissions_functions.inc.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/dropbox/dropbox_class.inc.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/dropbox/dropbox_functions.inc.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/search/search_suggestions.test.php');
@@ -166,13 +166,14 @@ class TestsSuite extends TestSuite {
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');
 
         // GRADEBOOK
-        $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/attendancelink.class.test.php');
+/*        $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/attendancelink.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/category.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/dropboxlink.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/evaluation.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/exerciselink.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/forumthreadlink.class.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'main/course_info/download.lib.test.php');
+*/
         // NEW SCORM
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpath.class.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpathItem.class.test.php');
@@ -190,3 +191,4 @@ class TestsSuite extends TestSuite {
     }
 }
 $test = &new TestsSuite();
+$test->run(new XMLReporter());

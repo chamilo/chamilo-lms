@@ -204,26 +204,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetScormDatabase() {
-		global $_configuration;
-		$res=$this->dbase->get_scorm_database();
-		$this->assertTrue(is_string($res));
-	}
-    
-	function testGetStatisticDatabase() {
-		global $_configuration;
-		$res=$this->dbase->get_statistic_database($_configuration);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
-	}
-
-	function testGetStatisticTable() {
-		$short_table_name='';
-		$res=$this->dbase->get_statistic_table($short_table_name);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
-	}
-
 	function testGetUserInfoFromIdOneIsArray() {
 		$res=$this->dbase->get_user_info_from_id(1);
 		$this->assertTrue(is_array($res));

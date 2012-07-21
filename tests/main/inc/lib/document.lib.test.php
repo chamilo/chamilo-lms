@@ -99,7 +99,7 @@ class TestDocumentManager extends UnitTestCase {
 	*   @return true if the user is allowed to see the document, false otherwise
 	* 	(bool)
 	*/
-	function testfile_visible_to_user() {
+/*	function testfile_visible_to_user() {
 		global $_course,$tbl_document;
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 		$this_course= $_course['dbName'].'.';
@@ -108,7 +108,7 @@ class TestDocumentManager extends UnitTestCase {
 		$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
 		$this->assertTrue(is_bool($res));
 	}
-
+*/
 	/**
 	* Fetches all document data for the given user/group
 	*

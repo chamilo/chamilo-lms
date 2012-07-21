@@ -89,6 +89,7 @@ class learnpath_processor extends search_processor {
     private function get_information($course_id, $lp_id, $has_document_id=TRUE) {        
         $course_information     = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
+        $course_path = $course_information['path'];
         
         if (!empty($course_information)) {
             $lpi_table  = Database::get_course_table(TABLE_LP_ITEM);
@@ -125,7 +126,7 @@ class learnpath_processor extends search_processor {
             $name = '';
             if ($row = Database::fetch_array ($dk_result)) {
                 // Get the image path
-                $img_location = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_id)."/document/";
+                $img_location = api_get_path(WEB_COURSE_PATH).$course_path."/document/";
                 $thumbnail_path = str_replace ('.png.html', '_thumb.png', $row['path']);
                 $big_img_path = str_replace ('.png.html', '.png', $row['path']);
                 $thumbnail = '';

@@ -389,7 +389,7 @@ function addListeners(){
         // when something is loaded in there.
         var myelem = document.getElementById('content_id');
         if(!myelem){logit_lms("Impossible to find content_id element in document",2);}
-        addEvent(myelem,'unload',dokeos_save_asset,false);
+        addEvent(myelem,'unload',chamilo_save_asset,false);
         logit_lms('Added event listener on content_id for unload',2);
     }
     logit_lms('Quitting addListeners()',2);
@@ -410,7 +410,7 @@ function load_item(item_id,url){
             var lms_new_item_id = item_id;
             //load new content page into content frame
             if(lms_lp_type==1 || lms_item_type=='asset'){
-                dokeos_save_asset();
+                chamilo_save_asset();
             }
             cont_f.src = url;
             update_toc('unhighlight',lms_old_item_id);
@@ -432,10 +432,10 @@ function load_item(item_id,url){
  * Save a Chamilo learnpath item's time and mark as completed upon
  * leaving it
  */
-function dokeos_save_asset(){
+function chamilo_save_asset(){
     //var linkparams = 'id='+lms_item_id+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
     //var url = "<?php echo api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php'; ?>?action=save&" + linkparams + "";
-    logit_lms('dokeos_save_asset: '+url,0);
+    logit_lms('chamilo_save_asset: '+url,0);
     //frames["message_name"].src = url;
     xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
 }

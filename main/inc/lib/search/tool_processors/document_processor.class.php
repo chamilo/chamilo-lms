@@ -68,6 +68,7 @@ class document_processor extends search_processor {
     private function get_information($course_id, $doc_id) {
         $course_information     = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
+        $course_path = $course_information['path'];
         if (!empty($course_information)) {
             $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY);
             $doc_table              = Database::get_course_table(TABLE_DOCUMENT);               
@@ -85,7 +86,7 @@ class document_processor extends search_processor {
             if ($row = Database::fetch_array ($dk_result)) {
                 $name = $row['title'];
                 $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
-                $url = sprintf($url, api_get_course_path($course_id), $row['path']);
+                $url = sprintf($url, $course_path, $row['path']);
                 // Get the image path
                 include_once api_get_path(LIBRARY_PATH). 'fileDisplay.lib.php';
                 $icon = choose_image(basename($row['path']));

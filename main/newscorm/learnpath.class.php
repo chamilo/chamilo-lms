@@ -1027,8 +1027,8 @@ class learnpath {
             $res = Database::query($sql);
             if (Database :: num_rows($res) > 0) {
                 $row2 = Database :: fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
-                $di = new DokeosIndexer();
+                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
+                $di = new ChamiloIndexer();
                 $di->remove_document((int) $row2['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
@@ -3967,7 +3967,7 @@ class learnpath {
             return false;
 
         require_once 'xapian.php'; // TODO: Try catch every xapian use or make wrappers on API.
-        require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+        require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
         require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
         require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
@@ -3976,7 +3976,7 @@ class learnpath {
         $lp_id = intval($_POST['lp_id']);
         $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND lp_id = $lp_id";
         $result = Database::query($sql);
-        $di = new DokeosIndexer();
+        $di = new ChamiloIndexer();
 
         while ($lp_item = Database :: fetch_array($result)) {
             // Get search_did.

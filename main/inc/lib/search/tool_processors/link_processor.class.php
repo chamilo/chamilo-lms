@@ -40,7 +40,7 @@ class link_processor extends search_processor {
         $results = array();
 
         foreach ($this->links as $courseid => $one_course_links) {
-	        $course_info = api_get_course_info($courseid);
+	    $course_info = api_get_course_info($courseid);
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
             $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseid);
 	        // can view course?
@@ -97,6 +97,7 @@ class link_processor extends search_processor {
     private function get_information($course_id, $link_id) {
         $course_information     = api_get_course_info($course_id);
         $course_id = $course_information['real_id'];
+        $course_id_alpha = $course_information['id'];
         if (!empty($course_information)) {            
             $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY);            
         
@@ -107,7 +108,7 @@ class link_processor extends search_processor {
     
             $name = get_lang('Links');
             $url = api_get_path(WEB_PATH) . 'main/link/link.php?cidReq=%s';
-            $url = sprintf($url, $course_id);
+            $url = sprintf($url, $course_id_alpha);
             // Get the image path
             $thumbnail = api_get_path(WEB_CODE_PATH) .'img/link.gif';
             $image = $thumbnail; //FIXME: use big images

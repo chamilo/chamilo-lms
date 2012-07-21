@@ -440,7 +440,7 @@ class scorm extends learnpath {
 
     /**
      * Intermediate to import_package only to allow import from local zip files
-     * @param	string	Path to the zip file, from the dokeos sys root
+     * @param	string	Path to the zip file, from the sys root
      * @param	string	Current path (optional)
      * @return string	Absolute path to the imsmanifest.xml file or empty string on error
      */
@@ -784,7 +784,7 @@ class scorm extends learnpath {
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
-        //$zipfilename = '/var/www/dokeos-comp/courses/TEST2/scorm/example_document.html';
+        //$zipfilename = '/var/www/chamilo/courses/TEST2/scorm/example_document.html';
         //This file sending implies removing the default mime-type from php.ini
         //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
         DocumentManager :: file_send_for_download($zipfilename, true);

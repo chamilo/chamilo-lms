@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Script defining generic functions against a search engine api. Just only if one day the search engine changes
  * @package chamilo.include.search
@@ -18,12 +18,12 @@ require 'xapian/XapianQuery.php';
  * @param   array     extra           Extra queries to join with. Optional
  * @return  array
  */
-function dokeos_query_query($query_string, $offset=0, $length=10, $extra=NULL) {
+function chamilo_query_query($query_string, $offset=0, $length=10, $extra=NULL) {
     list($count, $results) = xapian_query($query_string, NULL, $offset, $length, $extra);
-    return dokeos_preprocess_results($results);
+    return chamilo_preprocess_results($results);
 }
 
-function dokeos_query_simple_query($query_string, $offset=0, $length=10, $extra=NULL) {
+function chamilo_query_simple_query($query_string, $offset=0, $length=10, $extra=NULL) {
     return xapian_query($query_string, NULL, $offset, $length, $extra);
 }
 
@@ -32,14 +32,14 @@ function dokeos_query_simple_query($query_string, $offset=0, $length=10, $extra=
  *
  * @param   string    $query_string   The term string
  */
-function dokeos_get_boolean_query($term) {
+function chamilo_get_boolean_query($term) {
   return xapian_get_boolean_query($term);
 }
 
 /**
  * Preprocess all results depending on the toolid
  */
-function dokeos_preprocess_results($results) {
+function chamilo_preprocess_results($results) {
     // group by toolid
     $results_by_tool = array();
     if (count($results)>0) {
@@ -71,6 +71,6 @@ function dokeos_preprocess_results($results) {
  * @param string $op
  * @return XapianQuery query joined
  */
-function dokeos_join_queries($query1, $query2=NULL, $op='or') {
+function chamilo_join_queries($query1, $query2=NULL, $op='or') {
 	return xapian_join_queries($query1, $query2, $op);
 }

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * @package chamilo.include.search
  */
@@ -236,7 +236,7 @@ function xapian_join_queries($query1, $query2=NULL, $op='or') {
 /**
  * @author Isaac flores paz <florespaz@bidsoftperu.com>
  * @param String The xapian error message
- * @return String The dokeos error message
+ * @return String The chamilo error message
  */
  function display_xapian_error($xapian_error_message) {
  	$message=explode(':',$xapian_error_message);

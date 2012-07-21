@@ -13,7 +13,7 @@ include_once 'xapian/XapianIndexer.class.php';
  * Class wrapper
  * @package chamilo.include.search
  */
-class DokeosIndexer extends XapianIndexer {
+class ChamiloIndexer extends XapianIndexer {
 
 	/**
 	 * Set terms on search_did given

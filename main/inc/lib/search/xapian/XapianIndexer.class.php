@@ -27,7 +27,7 @@ abstract class XapianIndexer {
    * Generates a list of languages Xapian manages
    *
    * This method enables the definition of more matches between
-   * Dokeos languages and Xapian languages (through hardcoding)
+   * Chamilo languages and Xapian languages (through hardcoding)
    * @return  array  Array of languages codes -> Xapian languages
    */
     public final function xapian_languages() {

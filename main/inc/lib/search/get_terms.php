@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * This script retrieves a list of terms that have xapian documents
  * related with the term passed
@@ -17,7 +17,7 @@ if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'
 }
 
 require_once dirname(__FILE__) . '../../../global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
+require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 
 /**
  * search with filter and build base array avoding repeated terms
@@ -27,7 +27,7 @@ require_once api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
  */
 function get_usual_sf_terms($filter, $specific_fields) {
     $sf_terms = array();
-    $dkterms = dokeos_query_simple_query('', 0, 1000, $filter);
+    $dkterms = chamilo_query_simple_query('', 0, 1000, $filter);
 
     if (is_array($dkterms) && is_array($dkterms[1])) {
         foreach ($specific_fields as $specific_field) {
@@ -53,19 +53,19 @@ $sf_terms = array();
 
 if ( ($cid=api_get_course_id()) != -1) { // with cid
     // course filter
-    $filter[] = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+    $filter[] = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
     // term filter
     if ($term != '__all__') {
-        $filter[] = dokeos_get_boolean_query($prefix . $term);
+        $filter[] = chamilo_get_boolean_query($prefix . $term);
         // always and between term and courseid
-        $filter = dokeos_join_queries($filter, null, 'and');
+        $filter = chamilo_join_queries($filter, null, 'and');
     }
 
     $sf_terms = get_usual_sf_terms($filter, $specific_fields);
 
 } else { // without cid
     if ($term != '__all__') {
-        $filter[] = dokeos_get_boolean_query($prefix . $term);
+        $filter[] = chamilo_get_boolean_query($prefix . $term);
 
         $sf_terms = get_usual_sf_terms($filter, $specific_fields);
 

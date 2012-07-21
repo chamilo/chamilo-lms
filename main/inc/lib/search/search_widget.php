@@ -135,7 +135,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
         $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';
 	}
 
-    $form = '<form id="dokeos_search" action="'. $action .'" method="GET">
+    $form = '<form id="chamilo_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" value="'.stripslashes(Security::remove_XSS($_REQUEST['query'])).'" />
             <input type="hidden" name="mode" value="'. $mode .'"/>
             <input type="hidden" name="type" value="'. $type .'"/>
@@ -203,7 +203,7 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
 	}
 	
     $form = '
-        <form id="dokeos_search" action="'. $action .'" method="GET">
+        <form id="chamilo_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" />
             <input type="hidden" name="mode" value="'. $mode .'"/>
             <input type="hidden" name="type" value="'. $type .'"/>
@@ -305,7 +305,7 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
  */
 function search_widget_show($action='index.php') {
     global $charset;
-    require_once api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
+    require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
     // TODO: load images dinamically when they're avalaible from specific field ui to add
     $icons_for_search_terms = array();
 
@@ -316,8 +316,8 @@ function search_widget_show($action='index.php') {
     if ( ($cid=api_get_course_id()) != -1 ) { // with cid
 
         // get search engine terms
-        $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
-        $dkterms = dokeos_query_simple_query('', 0, 1000, array($course_filter));
+        $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
+        $dkterms = chamilo_query_simple_query('', 0, 1000, array($course_filter));
 
         //prepare specific fields names (and also get possible URL param names)
         foreach ($specific_fields as $specific_field) {

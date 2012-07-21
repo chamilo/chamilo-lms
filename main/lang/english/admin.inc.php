@@ -1630,6 +1630,6 @@ $ToolVisibleByDefaultAtCreationTitle = "Tool visible at course creation";
 $ToolVisibleByDefaultAtCreationComment = "Select the tools that will be visible when creating the courses - not yet available";
 $casAddUserActivatePlatform = "CAS internal setting";
 $casAddUserActivateLDAP = "CAS internal setting";
-$ UpdateUserInfoCasWithLdapTitle = "CAS internal setting";
+$UpdateUserInfoCasWithLdapTitle = "CAS internal setting";
 $UpdateUserInfoCasWithLdapComment = "CAS internal setting";
 ?>

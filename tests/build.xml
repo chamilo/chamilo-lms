@@ -124,4 +124,9 @@
    <arg path="${basedir}/tests/code-browser" />
   </exec>
  </target>
+ <target name="phpdoc" description="Generate API documentation">
+   <exec executable="phpdoc">
+     <arg line="-d ${basedir} -t ${basedir}/logs/docs" />
+   </exec>
+ </target>
 </project>

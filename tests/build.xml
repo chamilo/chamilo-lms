@@ -2,10 +2,10 @@
 
 <project name="Chamilo LMS" default="build">
  <target name="build"
-   depends="prepare,lint,pdepend,phpmd-ci,phpcs-ci,phpdoc,phpcb"/>
+   depends="prepare,lint,pdepend,phpmd-ci,phpcs-ci,simpletest,phpdoc"/>
 
  <target name="build-parallel"
-   depends="prepare,lint,tools-parallel,phpcb"/>
+   depends="prepare,lint,tools-parallel,simpletest"/>
 
  <target name="tools-parallel" description="Run tools in parallel">
   <parallel threadCount="2">
@@ -14,6 +14,7 @@
     <antcall target="phpmd-ci"/>
    </sequential>
    <antcall target="phpcs-ci"/>
+   <antcall target="simpletest"/>
    <antcall target="phpdoc"/>
   </parallel>
  </target>

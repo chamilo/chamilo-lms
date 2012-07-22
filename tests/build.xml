@@ -54,7 +54,7 @@
    <arg value="--jdepend-xml=${basedir}/tests/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/tests/pdepend/dependencies.svg" />
    <arg value="--overview-pyramid=${basedir}/tests/pdepend/overview-pyramid.svg" />
-   <arg path="${basedir}/src" />
+   <arg path="${basedir}" />
   </exec>
  </target>
 

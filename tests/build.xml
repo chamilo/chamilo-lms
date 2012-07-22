@@ -42,7 +42,6 @@
 
    <fileset dir="${basedir}">
     <include name="**/*.php" />
-    <exclude name="**/class.class.php" />
     <modified />
    </fileset>
 

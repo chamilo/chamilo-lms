@@ -1778,7 +1778,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         $database_exists_text = '';
         
         if (database_exists($dbNameForm)) {
-            $database_exists_text = '<div class="normal-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+            $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         } else {            
             if ($dbConnect == -1) {
                  $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';                 

@@ -55,24 +55,24 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (!$found_software_url) {
         fwrite($fh, '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n");
     }
-    $string = <<<EOP
-//============================================================================
-// Hosting settings - Allows you to set limits to the Chamilo portal when
-// hosting it for a third party. These settings can be overwritten by an
-// optionally-loaded extension file with only the settings (no comments).
-//============================================================================
-// Set a maximum number of users. Default (0) = no limit
-$_configuration['hosting_limit_users'] = 0;
-// Set a maximum number of teachers. Default (0) = no limit
-$_configuration['hosting_limit_teachers'] = 0;
-// Set a maximum number of courses. Default (0) = no limit
-$_configuration['hosting_limit_courses'] = 0;
-// Set a maximum number of sessions. Default (0) = no limit
-$_configuration['hosting_limit_sessions'] = 0;
-// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
-// Default (0) = no limit
-$_configuration['hosting_limit_disk_space'] = 0;
-EOP;
+    $string = "
+//===========================================================================\n
+// Hosting settings - Allows you to set limits to the Chamilo portal when\n
+// hosting it for a third party. These settings can be overwritten by an\n
+// optionally-loaded extension file with only the settings (no comments).\n
+//===========================================================================\n
+// Set a maximum number of users. Default (0) = no limit\n
+".'$'."_configuration['hosting_limit_users'] = 0;\n
+// Set a maximum number of teachers. Default (0) = no limit\n
+".'$'."_configuration['hosting_limit_teachers'] = 0;\n
+// Set a maximum number of courses. Default (0) = no limit\n
+".'$'."_configuration['hosting_limit_courses'] = 0;\n
+// Set a maximum number of sessions. Default (0) = no limit\n
+".'$'."_configuration['hosting_limit_sessions'] = 0;\n
+// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).\n
+// Default (0) = no limit\n
+".'$'."_configuration['hosting_limit_disk_space'] = 0;\n
+";
     fwrite($fh, $string);
     fwrite($fh, '?>');
     fclose($fh);

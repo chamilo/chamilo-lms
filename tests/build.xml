@@ -92,6 +92,14 @@
   </exec>
  </target>
 
+ <target name="simpletest" description="Run simpletests">
+   <exec dir="${basedir}/tests"
+    executable="php"
+    failonerror="true">
+    <arg line="tests/run.sh"/>
+   </exec>
+  </target>
+
  <target name="phpdoc" description="Generate API documentation">
    <exec executable="phpdoc">
      <arg line="-d ${basedir} -t ${basedir}/logs/docs" />

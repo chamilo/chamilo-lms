@@ -97,7 +97,7 @@
    <exec dir="${basedir}/tests"
     executable="php"
     failonerror="true">
-    <arg line="tests/run.sh"/>
+    <arg line="${basedir}/tests/run.sh"/>
    </exec>
   </target>
 

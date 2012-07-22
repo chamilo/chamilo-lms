@@ -169,12 +169,14 @@ $form->addElement('advanced_settings','<a href="javascript: void(0);" onclick="j
 
 $form -> addElement('html', '<div id="options" style="display: none;">');
 
-// An option: Qualify the fact that survey has been answered in the gradebook
-$form->addElement('checkbox', 'survey_qualify_gradebook', null, get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
-$form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
-$form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
-$form->applyFilter('survey_weight', 'html_filter');
-$form->addElement('html', '</div>');
+if (Gradebook::is_active()) {
+    // An option: Qualify the fact that survey has been answered in the gradebook
+    $form->addElement('checkbox', 'survey_qualify_gradebook', null, get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
+    $form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
+    $form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
+    $form->applyFilter('survey_weight', 'html_filter');
+    $form->addElement('html', '</div>');
+}
 
 // Personality/Conditional Test Options
 $surveytypes[0] = get_lang('Normal');

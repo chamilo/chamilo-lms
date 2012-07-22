@@ -500,7 +500,7 @@ if ($encryptPassForm == '1') {
         $update_from_version = isset($update_from_version) ? $update_from_version : null;
         $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
     }
-    if (!empty($instalation_type_label)) {
+    if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     	echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
     }
     ?>
@@ -720,6 +720,19 @@ if (@$_POST['step2']) {
 
 	//STEP 6 : INSTALLATION PROCESS
 
+    $current_step = 7;
+    $msg = get_lang('InstallExecution');
+    if ($installType == 'update') {
+        $msg = get_lang('UpdateExecution');
+    }
+    echo '<div class="RequirementHeading">'.
+         '	<h2>'.display_step_sequence() . $msg.'</h2>'.
+         '<div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>';
+         '</div>';
+    // Push the web server to send these strings before we start the real
+    // installation process
+    flush(); ob_flush();
+    
 	if ($installType == 'update') {
 
 		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -829,8 +842,9 @@ if (@$_POST['step2']) {
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
 	}
-    $current_step = 7;
     display_after_install_message($installType);
+    //Hide the "please wait" message sent previously
+    echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
 
 } elseif (@$_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS

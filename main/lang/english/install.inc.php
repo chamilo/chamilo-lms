@@ -129,5 +129,8 @@ $DatabaseXWillBeCreated = "Database <b>%s</b> will be created";
 $ADatabaseWithTheSameNameAlreadyExists = "A database with the same name <b>already exists</b>.";
 $UserXCantHaveAccessInTheDatabaseX = "User <b>%s</b> doesn't have access in the database <b>%s</b>";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Database <b>%s</b> can't be created, user <b>%s</b> doesn't have enough permissions";
-$CourseTestWasCreated = "Course test was created";
+$CourseTestWasCreated = "A test course has been created successfully";
+$InstallExecution = "Installation process execution";
+$UpdateExecution = "Update process execution";
+$PleaseWaitThisCouldTakeAWhile = "Please wait. This could take a while...";
 ?>

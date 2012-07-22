@@ -2024,16 +2024,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
  * After installation is completed (step 6), this message is displayed.
  */
 function display_after_install_message($installType) {
-    ?>
-    <div class="RequirementHeading">
-    	<h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
-    </div>
-    
-    <div class="RequirementContent">
-    <?php echo get_lang('FirstUseTip'); ?>
-    </div>
-
-    <?php
+    echo '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
     echo '<div class="warning-message">';
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
     echo ': ';
@@ -2041,7 +2032,7 @@ function display_after_install_message($installType) {
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    <a class="btn btn-success btn-large btn-install" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
     <?php
 }
 

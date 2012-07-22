@@ -4492,4 +4492,6 @@ data table
     select#question_type_hidden option[value="14"] {background-image: url(../img/icons/32/mcmagl.gif);}
 }
 
-
+.btn-success.btn-install{
+    float: right;
+}

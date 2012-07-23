@@ -267,18 +267,22 @@ Display::display_header('');
 
 
 echo '<div align="center">';
+
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 
-if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';    
-} else {
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';    
+if (!$is_nanogong_available) {
+    if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';    
+    } else {    
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';     
+    }
 }
 
 if ($show_web_odf) {        
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
     echo '<div id="odf"></div>';    
 }
+
 echo '</div>';
     
 if ($jplayer_supported) { 
@@ -287,20 +291,18 @@ if ($jplayer_supported) {
     echo '</div>';     
 }
 
-if ($is_nanogong_available){
-    echo '<div align="center">';
-        echo '<br/>';
+if ($is_nanogong_available) {
 
 		//make temp audio
-			$temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
-			if (!file_exists($temp_folder)) {
-				@mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
-			}
+        $temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
+        if (!file_exists($temp_folder)) {
+            @mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
+        }
 
 		//make htaccess with allow from all, and file index.html into temp/audio
-		$htaccess=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htacess';
+		$htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess';
 		if (!file_exists($htaccess)) {
-			$htaccess_content="order deny,allow\r\nallow from all";
+			$htaccess_content="order deny,allow\r\nallow from all\r\nOptions -Indexes";
 			$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess', 'w');
 			if ($fp) {
 				fwrite($fp, $htaccess_content);
@@ -309,7 +311,7 @@ if ($is_nanogong_available){
 		}
 
 		//encript temp name file
-		$name_crip=sha1(uniqid());//encript 
+		$name_crip = sha1(uniqid());//encript 
 		$findext= explode(".", $file);
 		$extension= $findext[count($findext)-1];
 		$file_crip=$name_crip.'.'.$extension;
@@ -317,10 +319,19 @@ if ($is_nanogong_available){
 		//copy file to temp/audio directory
 		$from_sys=$file_url_sys;
 		$to_sys=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-		copy($from_sys, $to_sys);
+        
+        if (file_exists($from_sys)) {
+            copy($from_sys, $to_sys);
+        }
 
 		//get file from tmp directory
 		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+        
+        echo '<div align="center">';
+        echo '<a class="btn" href="'.$to_url.'" target="_blank">'.get_lang('Download').'</a>';
+        echo '<br/>';
+        echo '<br/>';
+        
 		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
             echo '<param name="SoundFileURL" value="'.$to_url.'" />';
             echo '<param name="ShowSaveButton" value="false" />';

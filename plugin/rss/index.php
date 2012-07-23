@@ -12,7 +12,7 @@ $css = $css ? "<style type=\"text/css\" scoped=\"scoped\">$css</style>" : '';
 $bullet = api_get_path(WEB_PLUGIN_PATH).'rss/resources/arrow-bullet.png';
 
 if (empty($rss)) {
-    Display::display_warning_message(get_lang('no_rss'));
+    Display::display_warning_message(get_lang('NoRSSItem'));
     return;
 }
 

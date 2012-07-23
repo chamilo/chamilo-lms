@@ -49,14 +49,20 @@
     *    @author Roan Embrechts
     *    @version 3.0
     *    @package chamilo.auth.ldap
-*/
-
+ * Note:
+ * If you are using a firewall, you might need to check port 389 is open in 
+ * order for Chamilo to communicate with the LDAP server.
+ * See http://support.chamilo.org/issues/4675 for details.
+ */
+/**
+ * Inclusions
+ */
 use \ChamiloSession as Session;
 
 /**
  * Code
  */
-require('ldap_var.inc.php');
+require 'ldap_var.inc.php';
 /**
  *    Check login and password with LDAP
  *    @return true when login & password both OK, false otherwise
@@ -225,26 +231,20 @@ function ldap_put_user_info_locally($login, $info_array) {
     Session::write('_uid', $_uid);
 }
 
-/*
-*    The code of UGent uses these functions to authenticate.
-*    function AuthVerifEnseignant ($uname, $passwd)
-*    function AuthVerifEtudiant ($uname, $passwd)
-*    function Authentif ($uname, $passwd)
-*    @todo translate the comments and code to english
-*    @todo let these functions use the variables in config.inc instead of ldap_var.inc
-*/
-
-//*** variables en entree
-// $uname : username entre au clavier
-// $passwd : password fournit par l'utilisateur
-
-//*** en sortie : 3 valeurs possibles
-// 0 -> authentif reussie
-// 1 -> password incorrect
-// -1 -> ne fait partie du LDAP
-
-//---------------------------------------------------
-// verification de l'existence du membre dans le LDAP
+/**
+ * The code of UGent uses these functions to authenticate.
+ * function AuthVerifEnseignant ($uname, $passwd)
+ * function AuthVerifEtudiant ($uname, $passwd)
+ * function Authentif ($uname, $passwd)
+ * @todo translate the comments and code to english
+ * @todo let these functions use the variables in config.inc instead of ldap_var.inc
+ */
+/**
+ * Checks the existence of a member in LDAP
+ * @param string username input on keyboard
+ * @param string password given by user
+ * @return int 0 if authentication succeeded, 1 if password was incorrect, -1 if it didn't belong to LDAP
+ */
 function ldap_authentication_check ($uname, $passwd) {
     //error_log('Entering ldap_authentication_check('.$uname.','.$passwd.')',0);
     global $ldap_host, $ldap_port, $ldap_basedn, $ldap_host2, $ldap_port2,$ldap_rdn,$ldap_pass;
@@ -256,7 +256,7 @@ function ldap_authentication_check ($uname, $passwd) {
 
     $test_bind = false;
     $test_bind_res = ldap_handle_bind($ds,$test_bind);
-    //en cas de probleme on utlise le replica
+    //if problem, use the replica
     if ($test_bind_res===false) {
         $ds=ldap_connect($ldap_host2,$ldap_port2);
         ldap_set_version($ds);
@@ -264,42 +264,41 @@ function ldap_authentication_check ($uname, $passwd) {
         //error_log('Connected to server '.$ldap_host);
     }
     if ($ds!==false) {
-        // Creation du filtre contenant les valeurs saisies par l'utilisateur
+        //Creation of filter containing values input by the user
+        // Here it might be necessary to use $filter="(samaccountName=$uname)"; - see http://support.chamilo.org/issues/4675
         $filter="(uid=$uname)";
         // Open anonymous LDAP connection
-        // Ouverture de la connection anonyme ldap
         $result=false;
         $ldap_bind_res = ldap_handle_bind($ds,$result);
-        // Execution de la recherche avec $filtre en parametre
+	// Executing the search with the $filter parametr
         //error_log('Searching for '.$filter.' on LDAP server',0);
         $sr=ldap_search($ds,$ldap_basedn,$filter);
-        // La variable $info recoit le resultat de la requete
         $info = ldap_get_entries($ds, $sr);
         $dn=($info[0]["dn"]);
-        //affichage debug !!    echo"<br> dn = $dn<br> pass = $passwd<br>";
-        // fermeture de la 1ere connexion
+        // debug !!    echo"<br> dn = $dn<br> pass = $passwd<br>";
+        // closing 1st connection
         ldap_close($ds);
     }
 
-    // teste le Distinguish Name de la 1ere connection
+    // test the Distinguish Name from the 1st connection
     if ($dn=="") {
-        return (-1);        // ne fait pas partie de l'annuaire
+        return (-1);        // doesn't belong to the addressbook
     }
-    //bug ldap.. si password vide.. retourne vrai !!
+    //bug ldap.. if password empty, return 1!
     if ($passwd=="") {
         return(1);
     }
-    // Ouverture de la 2em connection Ldap : connexion user pour verif mot de passe
+    // Opening 2nd LDAP connection : Connection user for password check 
     $ds=ldap_connect($ldap_host,$ldap_port);
     ldap_set_version($ds);
     if (!$test_bind) {
         $ds=ldap_connect($ldap_host2,$ldap_port2);
         ldap_set_version($ds);
     }
-    // retour en cas d'erreur de connexion password incorrecte
+    // return in case of wrong password connection error
     if (@ldap_bind( $ds, $dn , $passwd) === false) {
-        return (1); // mot passe invalide
-    } else {// connection correcte
+        return (1); // invalid password
+    } else {// connection successfull
         return (0);
     }
 } // end of check
@@ -484,7 +483,7 @@ function ldap_add_user($login) {
         $r = false;
         $res = ldap_handle_bind($ds, $r);
         $sr = ldap_search($ds, $ldap_basedn, $str_query);
-        //echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
+        //echo "Number of results is : ".ldap_count_entries($ds,$sr)."<p>";
         $info = ldap_get_entries($ds, $sr);
 
         for ($key = 0; $key < $info['count']; $key ++) {
@@ -494,7 +493,7 @@ function ldap_add_user($login) {
             // Get uid from dn
             $dn_array=ldap_explode_dn($info[$key]['dn'],1);
             $username = $dn_array[0]; // uid is first key
-            $outab[] = $info[$key]['edupersonprimaryaffiliation'][0]; // Ici "student"
+            $outab[] = $info[$key]['edupersonprimaryaffiliation'][0]; // Here, "student"
             //$val = ldap_get_values_len($ds, $entry, "userPassword");
             //$val = ldap_get_values_len($ds, $info[$key], "userPassword");
             //$password = $val[0];
@@ -506,16 +505,16 @@ function ldap_add_user($login) {
             $etape=$array_val[1];
             $array_val=explode("=", $array_structure[1]);
             $annee=$array_val[1];
-            // Pour faciliter la gestion on ajoute le code "etape-annee"
+            // To ease management, we add the step-year (etape-annee) code
             $official_code=$etape."-".$annee;
             $auth_source='ldap';
-            // Pas de date d'expiration d'etudiant (a recuperer par rapport au shadow expire LDAP)
+            // No expiration date for students (recover from LDAP's shadow expiry)
             $expiration_date='0000-00-00 00:00:00';
             $active=1;
             if(empty($status)){$status = 5;}
             if(empty($phone)){$phone = '';}
             if(empty($picture_uri)){$picture_uri = '';}
-            // Ajout de l'utilisateur
+            // Adding user
             if (UserManager::is_username_available($username)) {
                 $user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
             } else {
@@ -551,7 +550,7 @@ function ldap_add_user_to_session($UserList, $id_session) {
     $tbl_class_user                        = Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
     $id_session = (int) $id_session;
-    // Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
+    // Once users are imported in the users base, we can assign them to the session
     $result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
             "WHERE id_session='$id_session'");
     $CourseList=array();
@@ -583,7 +582,7 @@ function ldap_add_user_to_session($UserList, $id_session) {
                " (id_session, id_user) " .
                " VALUES('$id_session','$enreg_user')");
     }
-    // On mets a jour le nombre d'utilisateurs dans la session
+    // We update the number of users in the session
     $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_user ".
            " WHERE id_session='$id_session' ".
            " AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ";

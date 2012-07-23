@@ -120,13 +120,13 @@ class Timeline extends Model {
         $form->addElement('text', 'headline', get_lang('Name'), array('class' => 'span4'));
         
         //@todo fix this
-        $form->addElement('text', 'start_date', get_lang('start_date'), array('size' => '70'));
-        $form->addElement('text', 'end_date', get_lang('end_date'), array('size' => '70'));
-        $form->addElement('textarea', 'text', get_lang('text'), array('class' => 'span3'));
-        $form->addElement('text', 'media', get_lang('media'), array('size' => '70'));
-        $form->addElement('text', 'media_caption', get_lang('media_caption'), array('size' => '70'));
-        $form->addElement('text', 'media_credit', get_lang('media_credit'), array('size' => '70'));
-        $form->addElement('text', 'title_slide', get_lang('title_slide'), array('size' => '70'));
+        $form->addElement('text', 'start_date', get_lang('StartDate'), array('size' => '70'));
+        $form->addElement('text', 'end_date', get_lang('EndDate'), array('size' => '70'));
+        $form->addElement('textarea', 'text', get_lang('TimelineItemText'), array('class' => 'span3'));
+        $form->addElement('text', 'media', get_lang('TimelineItemMedia'), array('size' => '70'));
+        $form->addElement('text', 'media_caption', get_lang('TimelineItemMediaCaption'), array('size' => '70'));
+        $form->addElement('text', 'media_credit', get_lang('TimelineItemMediaCredit'), array('size' => '70'));
+        $form->addElement('text', 'title_slide', get_lang('TimelineItemTitleSlide'), array('size' => '70'));
         
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');

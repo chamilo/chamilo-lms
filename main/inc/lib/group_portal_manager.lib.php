@@ -1088,7 +1088,7 @@ class GroupPortalManager {
 		}
 
 		if (!empty($links)) {
-			$html .= '<div class="well social_menu_items"><ul class="nav nav-list">';
+			$html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
 			if (!empty($group_info['description'])) {
 				$html .= Display::tag('li', Security::remove_XSS($group_info['description'], STUDENT, true), array('class'=>'group_description'));
 			}

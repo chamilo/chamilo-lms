@@ -165,6 +165,8 @@ $controller->tpl->assign('hot_courses',             $hot_courses);
 $controller->tpl->assign('announcements_block', 	$announcements_block);
 $controller->tpl->assign('home_page_block', 		$controller->return_home_page());
 
+$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
+
 $controller->tpl->assign('notice_block',			$controller->return_notice());
 $controller->tpl->assign('main_navigation_block',	$controller->return_navigation_links());
 $controller->tpl->assign('help_block',              $controller->return_help());

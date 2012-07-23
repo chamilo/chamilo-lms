@@ -9,7 +9,7 @@ class IndexManager {
 	var $name 	= '';
 	
 	var $home			= '';
-	var $default_home 	= 'home/';
+	var $default_home 	= 'home/';    
 	
 	function __construct($title) {					
 		$this->tpl = new Template($title);		
@@ -38,7 +38,7 @@ class IndexManager {
 			}
 	
 			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-				$login_form .= '<ul class="menulist">';
+				$login_form .= '<ul class="nav nav-list">';
 				if (api_get_setting('allow_registration') != 'false') {
 					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';					
 				}
@@ -182,7 +182,7 @@ class IndexManager {
 		// My Account section
 		
 		if ($show_menu) {
-			$html .= '<ul class="menulist">';
+			$html .= '<ul class="nav nav-list">';
 			if ($show_create_link) {			
 				$html .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
 			}
@@ -277,7 +277,7 @@ class IndexManager {
         $html = null;		
 		$home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
 		if (!empty($home_menu)) {
-			$home_menu_content .= '<ul class="menulist">';
+			$home_menu_content .= '<ul class="nav nav-list">';
 			$home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 			$home_menu_content .= '</ul>';
 			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
@@ -288,7 +288,7 @@ class IndexManager {
     function return_skills_links() {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="menulist">';      
+            $content = '<ul class="nav nav-list">';      
             $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
             $content .= '</ul>';        
             $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
@@ -689,7 +689,7 @@ class IndexManager {
 				$classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
 			}
 			if (!empty($classes)) {
-				$classes = Display::tag('ul', $classes, array('class'=>'menulist'));
+				$classes = Display::tag('ul', $classes, array('class'=>'nav nav-list'));
 				$html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
 			}		
 		}
@@ -699,7 +699,7 @@ class IndexManager {
 	function return_reservation_block() {
 		$html = '';
 		if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
-			$booking_content .='<ul class="menulist">';
+			$booking_content .='<ul class="nav nav-list">';
 			$booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
 			$booking_content .='</ul>';
 			$html .= self::show_right_block(get_lang('Booking'), $booking_content, 'reservation_block');
@@ -736,7 +736,7 @@ class IndexManager {
 			return; 
 		}
 	
-		$profile_content .= '<ul class="menulist">'; 
+		$profile_content .= '<ul class="nav nav-list">'; 
 		
 		//  @todo Add a platform setting to add the user image.
 		if (api_get_setting('allow_message_tool') == 'true') {
@@ -783,7 +783,7 @@ class IndexManager {
 		// Main navigation section.
 		// Tabs that are deactivated are added here.
 		if (!empty($this->tpl->menu_navigation)) {            
-			$content = '<ul class="menulist">';
+			$content = '<ul class="nav nav-list">';
 			foreach ($this->tpl->menu_navigation as $section => $navigation_info) {                
 				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
 				$content .= '<li'.$current.'>';
@@ -816,7 +816,7 @@ class IndexManager {
 		}
 		
 		// My account section		
-		$my_account_content = '<ul class="menulist">';
+		$my_account_content = '<ul class="nav nav-list">';
         
 		if ($show_create_link) {
 			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';

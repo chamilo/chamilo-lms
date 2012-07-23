@@ -146,9 +146,26 @@ form .formw input {
 
 /* New changes Chamilo 1.9 */
 
-.sidebar-nav {
-    padding: 20px 20px 10px 20px
+.well h4 {
+    padding: 3px 15px;
 }
+
+#login_block #formLogin,
+#login_block #lang_form,
+#notice_block .homepage_notice {
+    padding: 3px 15px;
+}
+
+.nav-list > .active > a, 
+.nav-list > .active > a:hover {
+    background-color: #999999;
+}
+
+.sidebar-nav {
+    padding:  8px 0px;
+}
+
+
 
 .well_border {
     /* border: 1px solid rgba(0, 0, 0, 0.05);*/
@@ -765,25 +782,18 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 /* input values to crop the image: top, right, bottom, left */
 
-.online_grid_element_0 img{
-    /* width: 200px; */
-    /* height: 150px; */
-}
-
 .social-home-users-online {
     width: 200px;
-    margin: -28px 0 0 -50px;
-    /* height: 150px; */
+    margin: -28px 0 0 -50px;    
 }
 .social-home-anonymous-online {
-    width: 200px;
-    /* height: 150px; */
+    width: 200px;    
 }
 
 .menulist {
     margin: 0px;
     list-style: none;
-    padding: 0;
+    padding: 3px 15px;
     list-style-image:none;
     list-style-position:outside;
     list-style-type:none;

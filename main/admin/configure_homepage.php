@@ -910,7 +910,7 @@ switch ($action) {
 		  <td width="10%" valign="top"></td>
 		  <td width="20%" rowspan="3" valign="top">
               
-		    <div class="well sidebar-nav">                
+		    <div id="login_block" class="well sidebar-nav">                
                 <?php echo api_display_language_form(); ?>
                 <form id="formLogin">
                     <div><label><?php echo get_lang('LoginName'); ?></label></div>
@@ -919,18 +919,17 @@ switch ($action) {
                     <div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
                     <div><button class="btn" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
                 </form>
-			</div>
+			</div>			
 			
-			
-			<div class="well sidebar-nav">
+			<div id="profile_block" class="well sidebar-nav">
 				<h4><?php echo get_lang('MenuUser'); ?></h4>
-				<ul class="menulist">
+				<ul class="nav nav-list">
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
 						
-			<div class="well sidebar-nav">
+			<div id="notice_block" class="well sidebar-nav">
                 <h4><?php echo get_lang('Notice'); ?> 
                     <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>                    
                 </h4>

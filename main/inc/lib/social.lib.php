@@ -582,31 +582,31 @@ class SocialManager extends UserManager {
 
 		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {			
 
-	        $html .= '<div class="well social_menu_items"><ul class="nav nav-list">';	  
+	        $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';	  
             $active = $show=='home' ? 'active' : null;
-            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array()).' '.get_lang('Home').'</a></li>';
+            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array()).get_lang('Home').'</a></li>';
             $active = $show=='messages' ? 'active' : null;
-            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array()).' '.get_lang('Messages').$count_unread_message.'</a></li>';
+            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array()).get_lang('Messages').$count_unread_message.'</a></li>';
 
 	        //Invitations
             $active = $show=='invitations' ? 'active' : null;
-	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array()).' '.get_lang('Invitations').$total_invitations.'</a></li>';
+	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array()).get_lang('Invitations').$total_invitations.'</a></li>';
 			
 			//Shared profile and groups
             $active = $show=='shared_profile' ? 'active' : null;
-	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile'),array()).' '.get_lang('ViewMySharedProfile').'</a></li>';
+	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile'),array()).get_lang('ViewMySharedProfile').'</a></li>';
             $active = $show=='friends' ? 'active' : null;
-            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array()).' '.get_lang('Friends').'</a></li>';
+            $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array()).get_lang('Friends').'</a></li>';
             $active = $show=='browse_groups' ? 'active' : null;
-	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png',get_lang('SocialGroups'),array()).' '.get_lang('SocialGroups').'</a></li>';
+	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png',get_lang('SocialGroups'),array()).get_lang('SocialGroups').'</a></li>';
 
 			//Search users
             $active = $show=='search' ? 'active' : null;
-	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'), array()).' '.get_lang('Search').'</a></li>';
+	        $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'), array()).get_lang('Search').'</a></li>';
             		
 			//My files
             $active = $show=='myfiles' ? 'active' : null;
-			$html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array(), 16).' '.get_lang('MyFiles').'</span></a></li>';	
+			$html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array(), 16).get_lang('MyFiles').'</span></a></li>';	
 	        $html .='</ul>
 				  </div>';	     
 		}
@@ -617,7 +617,7 @@ class SocialManager extends UserManager {
 
         if ($show == 'shared_profile') {
 				//echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-	        	$html .= '<div class="well social_menu_items">
+	        	$html .= '<div class="well sidebar-nav">
 	                	<ul class="nav nav-list">';
 
     	  	// My own profile
@@ -712,7 +712,7 @@ class SocialManager extends UserManager {
         }
         
         if ($show_delete_account_button) {        
-            $html .= '<div class="social_menu_items"><ul><li>';	   
+            $html .= '<div class="sidebar-nav"><ul><li>';	   
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
             $html .= Display::url(Display::return_icon('delete.png',get_lang('Unsubscribe'), array(), ICON_SIZE_TINY).get_lang('Unsubscribe'), $url);
             $html .= '</li></ul></div>';            

@@ -46,9 +46,13 @@ require_once $lib_path . 'fileDisplay.lib.php';
 
 api_protect_course_script(true);
 
-//erase temp nanogons' audio
+//erase temp nanogons' audio, image edit
 if(isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
 	unlink($_SESSION['temp_audio_nanogong']);
+}
+
+if(isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image'])) {
+	unlink($_SESSION['temp_realpath_image']);
 }
 
 //Removing sessions

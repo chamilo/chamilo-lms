@@ -45,7 +45,7 @@ class EventEmailTemplate extends Model {
 	}
     
     public function get_status_list() {
-        return array(EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enable'), EVENT_EMAIL_TEMPLATE_INACTIVE=> get_lang('Disable'));
+        return array(EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'), EVENT_EMAIL_TEMPLATE_INACTIVE=> get_lang('Disabled'));
     }
     
     /**

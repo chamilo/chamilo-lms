@@ -328,7 +328,7 @@ if ($is_nanogong_available) {
 		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
         
         echo '<div align="center">';
-        echo '<a class="btn" href="'.$to_url.'" target="_blank">'.get_lang('Download').'</a>';
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
         echo '<br/>';
         echo '<br/>';
         

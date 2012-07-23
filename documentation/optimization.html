@@ -26,6 +26,7 @@
   <li><a href="#4.Sessions-directories">Sessions directories</a></li>
   <li><a href="#5.Users-upload-directories">Users upload directories</a></li>
   <li><a href="#6.Zlib-compression">Zlib compressed output</a></li>
+  <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache</h2>
@@ -136,6 +137,11 @@ Don't have time or resources to optimize your Chamilo installation yourself? Hir
 	<a href="http://jigsaw.w3.org/css-validator/">
 		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
+<hr />
+<h2><a name="7.High-numbers-memory"></a>Memory considerations for high numbers of users</h2>
+Some administration scripts *have to* handle lists of all users, and this might have a considerable impact on portals with very high numbers of users. For example, the main/admin/add_users_to_session.php script that handles the registration of users into a specific session, if used with the (non-default) full list of users, will devour about 3KB per user, which, for 100,000 users, translates into the need for around 300MB of RAM just to show this page, and to around 3GB for 1,000,000 users.<br />
+This mode is not loaded by default, but could still be selected, leading to a "Fatal error: Allowed memory size ... exhausted" message.<br />
+The only non-scripted solution here is to allow for the corresponding amount of RAM for your PHP configuration (<em>memory_limit = 300M</em>) or your specific VirtualHost if you use mod-php5 (<em>php_value memory_limit 300M</em>).<br/>
 <hr />
 <h2>Authors</h2>
 <ul>

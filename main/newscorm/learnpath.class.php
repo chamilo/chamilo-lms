@@ -5202,6 +5202,7 @@ class learnpath {
     /**
      * This functions builds the LP tree based on data from the database.
      * @return string
+     * @deprecated use the return_new_tree() function
      * @uses dtree.js :: necessary javascript for building this tree
      */
     public function build_tree() {

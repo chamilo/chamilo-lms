@@ -455,7 +455,7 @@ class Template {
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
-            'dtree/dtree.js',
+            //'dtree/dtree.js',
             'email_links.lib.js.php',
             'bootstrap/bootstrap.js',
         );

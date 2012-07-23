@@ -352,7 +352,7 @@ class Nanogong {
 					$html .= '</div>';
 				$html .= '</div>';
 						
-				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserNotSupportNanogongListen'),'warning').$download_button.'</div>';			
+				$html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserDoesNotSupportNanogongPlayer'),'warning').$download_button.'</div>';			
 				
 			} elseif(in_array($path_info['extension'],array('mp3', 'ogg','wav'))) {
 				$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';

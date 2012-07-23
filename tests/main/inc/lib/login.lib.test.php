@@ -1,8 +1,8 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'login.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once api_get_path(LIBRARY_PATH).'login.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-class TestLostPassword extends UnitTestCase {
+class TestLogin extends UnitTestCase {
 
     public function __construct(){
         $this->UnitTestCase('Lost password library - main/auth/lost_password.lib.test.php');
@@ -81,4 +81,3 @@ class TestLostPassword extends UnitTestCase {
  		//var_dump($res);
 	}
 }
-?>

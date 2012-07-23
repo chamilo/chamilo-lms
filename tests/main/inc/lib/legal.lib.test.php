@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'legal.lib.php');
+require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 
 class TestLegal extends UnitTestCase{
 

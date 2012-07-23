@@ -23,7 +23,6 @@ $language_file = array('registration', 'index');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'login.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-//require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';moved to autoload
 
 // Custom pages
 // Had to move the form handling in here, because otherwise there would 

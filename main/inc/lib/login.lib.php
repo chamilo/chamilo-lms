@@ -83,8 +83,7 @@ class Login
      * @param int $user
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function send_password_to_user($user, $by_username = false)
-    {
+    public static function send_password_to_user($user, $by_username = false) {
         global $_configuration;
         $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
 
@@ -96,7 +95,7 @@ class Login
             $email_to = $user[0]['email'];
         }
 
-        $portal_url = $_configuration['root_web'];
+        $portal_url = api_get_path(WEB_PATH);
         if ($_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {

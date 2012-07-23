@@ -119,13 +119,6 @@ class TestAddCourse extends UnitTestCase {
         $this->assertTrue($res);
     }
 
-    function TestCheckArchive(){
-        $dirarchive = api_get_path(SYS_PATH);
-        $pathToArchive = $dirarchive.'archive';
-        $res = checkArchive($pathToArchive);
-        $this->assertTrue($res === TRUE);
-    }
-
     public function TestDeleteCourse(){
         $code = 'testcourse';
         $res = CourseManager::delete_course($code);
@@ -141,5 +134,4 @@ class TestAddCourse extends UnitTestCase {
             closedir($handle);
         }
     }
-
 }

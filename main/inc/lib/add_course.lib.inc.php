@@ -2749,7 +2749,7 @@ function register_course($params) {
                 $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
                 $message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
                 $message .= get_lang('CourseName').' '.$title."\n";
-                $message .= get_lang('Category').' '.$category."\n";
+                $message .= get_lang('Category').' '.$category_code."\n";
                 $message .= get_lang('Tutor').' '.$tutor_name."\n";
                 $message .= get_lang('Language').' '.$course_language;
 
@@ -2759,13 +2759,6 @@ function register_course($params) {
     }
 
     return $course_id;
-}
-
-/**
- * WARNING: This function always returns true.
- */
-function checkArchive($path_to_archive) {
-    return true;
 }
 
 /**

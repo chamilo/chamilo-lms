@@ -107,24 +107,28 @@ class FlatViewDataGenerator
 			}
 		}
         
-        if ($parent_id == 0) {
-            $course_code 	= api_get_course_id();            
-            $session_id		= api_get_session_id();
-            $allcat  = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');   
+        //No category was added
+        
+        $course_code 	= api_get_course_id();            
+        $session_id		= api_get_session_id();
+
+        $allcat  = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+                    
+        if ($parent_id == 0 && !empty($allcat)) {             
             
+            //Means there are any subcategory
             foreach ($allcat as $sub_cat) {
-                 $sub_cat_weight = 100*$sub_cat->get_weight()/$main_weight;
-                 $add_weight = " $sub_cat_weight %";
-                 if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
-                    $add_weight = null;
-                 }
-                 $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).$add_weight;                    
-            }               
+                $sub_cat_weight = 100*$sub_cat->get_weight()/$main_weight;
+                $add_weight = " $sub_cat_weight %";
+                if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
+                   $add_weight = null;
+                }
+                $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).$add_weight;                    
+            }
         } else {
             if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     $item = $this->evals_links[$count + $items_start];                    
-                    $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];                    
                     $weight = 100*$item->get_weight()/$main_weight;                    
                     $headers[] = $item->get_name().' '.$weight.' % ';                
                 }
@@ -299,11 +303,12 @@ class FlatViewDataGenerator
             
             $convert_using_the_global_weight = true;
             
-            if ($parent_id == 0) {
-                $course_code 	= api_get_course_id();            
-                $session_id		= api_get_session_id();
-                $allcat         = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
-                                
+            $course_code 	= api_get_course_id();            
+            $session_id		= api_get_session_id();
+            $allcat         = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+
+            if ($parent_id == 0 && !empty($allcat)) {
+                                                
                 foreach ($allcat as $sub_cat) {
                     $score 			= $sub_cat->calc_score($user_id);
                     $real_score     = $score;

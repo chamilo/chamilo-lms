@@ -3212,12 +3212,13 @@ a:active{
 }
 
 .td_actions {
-    /* background:#efefef;*/
+    /*
     background:#F9F9F9;
     border:1px solid #eee;
     margin-bottom: 5px;
     padding:2px;
     vertical-align:middle;
+    */
     width: 250px;
 }
 

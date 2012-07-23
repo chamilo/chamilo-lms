@@ -594,7 +594,7 @@ class SortableTable extends HTML_Table {
         
 		$table_data = $this->get_table_data($from);
         
-        $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
+        
 		if (is_array($table_data)) {
             $count = 1;
 			foreach ($table_data as $index => & $row) {
@@ -606,6 +606,8 @@ class SortableTable extends HTML_Table {
                 $count++;
 			}
 		}
+        
+        $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
 		
 		foreach ($this->th_attributes as $column => $attributes) {
 			$this->setCellAttributes(0, $column, $attributes);

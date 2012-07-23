@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -24,158 +25,158 @@ $new_file_version = '1.8.6';
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
 
-	// Check if the current Dokeos install is eligible for update
-	if (!file_exists('../inc/conf/configuration.php')) {
-		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
-								'.get_lang('PleasGoBackToStep1').'.
-							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
+    // Check if the current Dokeos install is eligible for update
+    if (!file_exists('../inc/conf/configuration.php')) {
+        echo '<strong>' . get_lang('Error') . ' !</strong> Dokeos ' . implode('|', $updateFromVersion) . ' ' . get_lang('HasNotBeenFound') . '.<br /><br />
+								' . get_lang('PleasGoBackToStep1') . '.
+							    <p><button type="submit" class="back" name="step1" value="&lt; ' . get_lang('Back') . '">' . get_lang('Back') . '</button></p>
 							    </td></tr></table></form></body></html>';
-		exit ();
-	}
+        exit();
+    }
 
-	$_configuration['db_glue'] = get_config_param('dbGlu');
+    $_configuration['db_glue'] = get_config_param('dbGlu');
 
-	if ($singleDbForm) {
-		$_configuration['table_prefix'] = get_config_param('courseTablePrefix');
-		$_configuration['main_database'] = get_config_param('mainDbName');
-		$_configuration['db_prefix'] = get_config_param('dbNamePrefix');
-	}
+    if ($singleDbForm) {
+        $_configuration['table_prefix'] = get_config_param('courseTablePrefix');
+        $_configuration['main_database'] = get_config_param('mainDbName');
+        $_configuration['db_prefix'] = get_config_param('dbNamePrefix');
+    }
 
-	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
+    $dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
-		$dbScormForm = $dbPrefixForm.$dbScormForm;
-	}
+    if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+        $dbScormForm = $dbPrefixForm . $dbScormForm;
+    }
 
-	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
-		$dbScormForm = $dbPrefixForm.'scorm';
-	}
+    if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
+        $dbScormForm = $dbPrefixForm . 'scorm';
+    }
 
-	/*	Normal upgrade procedure: start by updating main, statistic, user databases */
+    /* 	Normal upgrade procedure: start by updating main, statistic, user databases */
 
-	// If this script has been included by index.php, not update_courses.php, so
-	// that we want to change the main databases as well...
-	$only_test = false;
-	$log = 0;
-	if (defined('SYSTEM_INSTALLATION')) {
+    // If this script has been included by index.php, not update_courses.php, so
+    // that we want to change the main databases as well...
+    $only_test = false;
+    $log = 0;
+    if (defined('SYSTEM_INSTALLATION')) {
 
-		if ($singleDbForm) {
-			$dbStatsForm = $dbNameForm;
-			$dbScormForm = $dbNameForm;
-			$dbUserForm = $dbNameForm;
-		}
-		/**
-		 * Update the databases "pre" migration
-		 */
-		include '../lang/english/create_course.inc.php';
+        if ($singleDbForm) {
+            $dbStatsForm = $dbNameForm;
+            $dbScormForm = $dbNameForm;
+            $dbUserForm = $dbNameForm;
+        }
+        /**
+         * Update the databases "pre" migration
+         */
+        include '../lang/english/create_course.inc.php';
 
-		if ($languageForm != 'english') {
-			// languageForm has been escaped in index.php
-			include '../lang/'.$languageForm.'/create_course.inc.php';
-		}
+        if ($languageForm != 'english') {
+            // languageForm has been escaped in index.php
+            include '../lang/' . $languageForm . '/create_course.inc.php';
+        }
 
-		// Get the main queries list (m_q_list)
-		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
-		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
-			/**
-			 * We connect to the right DB first to make sure we can use the queries
-			 * without a database name
-			 */
-			if (strlen($dbNameForm) > 40) {
-				 Log::error('Database name '.$dbNameForm.' is too long, skipping');
-			} elseif (!in_array($dbNameForm, $dblist)) {
-				 Log::error('Database '.$dbNameForm.' was not found, skipping');
-			} else {
-				iDatabase::select_db($dbNameForm);
-				foreach ($m_q_list as $query) {
-					if ($only_test) {
-						 Log::notice("iDatabase::query($dbNameForm,$query)");
-					} else {
-						$res = iDatabase::query($query);
-						if ($log) {
-							 Log::notice("In $dbNameForm, executed: $query");
-						}
-					}
-				}
-			}
-		}
+        // Get the main queries list (m_q_list)
+        $m_q_list = get_sql_file_contents('migrate-db-' . $old_file_version . '-' . $new_file_version . '-pre.sql', 'main');
+        if (count($m_q_list) > 0) {
+            //now use the $m_q_list
+            /**
+             * We connect to the right DB first to make sure we can use the queries
+             * without a database name
+             */
+            if (strlen($dbNameForm) > 40) {
+                Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+            } elseif (!in_array($dbNameForm, $dblist)) {
+                Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+            } else {
+                iDatabase::select_db($dbNameForm);
+                foreach ($m_q_list as $query) {
+                    if ($only_test) {
+                        Log::notice("iDatabase::query($dbNameForm,$query)");
+                    } else {
+                        $res = iDatabase::query($query);
+                        if ($log) {
+                            Log::notice("In $dbNameForm, executed: $query");
+                        }
+                    }
+                }
+            }
+        }
 
         require_once '../inc/lib/image.lib.php'; //this library has been created
         // in 1.8.8, which makes this inclusion retroactively necessary in 
         // updates from 1.8.5
-		// Filling the access_url_rel_user table with access_url_id by default = 1
-		$query = "SELECT user_id FROM $dbNameForm.user";
+        // Filling the access_url_rel_user table with access_url_id by default = 1
+        $query = "SELECT user_id FROM $dbNameForm.user";
 
-		$result_users = iDatabase::query($query);
-		while ($row = iDatabase::fetch_array($result_users, 'NUM')) {
-			$user_id = $row[0];
-			$sql = "INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";
-			$res = iDatabase::query($sql);
-			//Updating user image
-			$query = "SELECT picture_uri FROM $dbNameForm.user WHERE user_id=$user_id";
-			$res = iDatabase::query($query);
-			$picture_uri = iDatabase::fetch_array($res, 'NUM');
-			$file =  $picture_uri[0];
-			$dir = api_get_path(SYS_CODE_PATH).'upload/users/';
-			$image_repository = file_exists($dir.$file) ? $dir.$file : $dir.$user_id.'/'.$file;
+        $result_users = iDatabase::query($query);
+        while ($row = iDatabase::fetch_array($result_users, 'NUM')) {
+            $user_id = $row[0];
+            $sql = "INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";
+            $res = iDatabase::query($sql);
+            //Updating user image
+            $query = "SELECT picture_uri FROM $dbNameForm.user WHERE user_id=$user_id";
+            $res = iDatabase::query($query);
+            $picture_uri = iDatabase::fetch_array($res, 'NUM');
+            $file = $picture_uri[0];
+            $dir = api_get_path(SYS_CODE_PATH) . 'upload/users/';
+            $image_repository = file_exists($dir . $file) ? $dir . $file : $dir . $user_id . '/' . $file;
 
-			if (!is_dir($dir.$user_id)) {
-				@mkdir($dir.$user_id, $perm);
-			}
+            if (!is_dir($dir . $user_id)) {
+                @mkdir($dir . $user_id, $perm);
+            }
 
-			if (file_exists($image_repository) && is_file($image_repository)) {
-				chmod($dir.$user_id, 0777);
-				if (is_dir($dir.$user_id)) {
-					$picture_location = $dir.$user_id.'/'.$file;
-					$big_picture_location = $dir.$user_id.'/big_'.$file;
+            if (file_exists($image_repository) && is_file($image_repository)) {
+                chmod($dir . $user_id, 0777);
+                if (is_dir($dir . $user_id)) {
+                    $picture_location = $dir . $user_id . '/' . $file;
+                    $big_picture_location = $dir . $user_id . '/big_' . $file;
 
-					$temp = new Image($image_repository);
+                    $temp = new Image($image_repository);
 
-					$picture_infos = getimagesize($image_repository);
+                    $picture_infos = getimagesize($image_repository);
 
-					$thumbwidth = 150;
-					if (empty($thumbwidth) or $thumbwidth == 0) {
-						$thumbwidth = 150;
-					}
+                    $thumbwidth = 150;
+                    if (empty($thumbwidth) or $thumbwidth == 0) {
+                        $thumbwidth = 150;
+                    }
 
-					$new_height = ($picture_infos[0] > 0) ? round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]) : 0;
+                    $new_height = ($picture_infos[0] > 0) ? round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]) : 0;
 
-					$temp->resize($thumbwidth, $new_height, 0);
+                    $temp->resize($thumbwidth, $new_height, 0);
 
-					$type = $picture_infos[2];
+                    $type = $picture_infos[2];
 
-					// Original picture
-					$big_temp = new Image($image_repository);
+                    // Original picture
+                    $big_temp = new Image($image_repository);
 
-					    switch (!empty($type)) {
-						    case 2 : $temp->send_image('JPG', $picture_location);
-						    		 $big_temp->send_image('JPG', $big_picture_location);
-						    		 break;
-						    case 3 : $temp->send_image('PNG', $picture_location);
-						    		 $big_temp->send_image('JPG', $big_picture_location);
-						    		 break;
-						    case 1 : $temp->send_image('GIF',$picture_location);
-						    		 $big_temp->send_image('JPG', $big_picture_location);
-						    		 break;
-					    }
-					if ($image_repository == $dir.$file) {
-					   @unlink($image_repository);
-					}
-				}
-			}
-		}
-		// Filling the access_url_rel_session table with access_url_id by default = 1
-		$query = "SELECT id FROM $dbNameForm.session";
-		$result = iDatabase::query($query);
-		while ($row = iDatabase::fetch_array($result, 'NUM')) {
-			$sql = "INSERT INTO $dbNameForm.access_url_rel_session SET session_id=".$row[0].", access_url_id=1";
-			$res = iDatabase::query($sql);
-		}
+                    switch (!empty($type)) {
+                        case 2 : $temp->send_image('JPG', $picture_location);
+                            $big_temp->send_image('JPG', $big_picture_location);
+                            break;
+                        case 3 : $temp->send_image('PNG', $picture_location);
+                            $big_temp->send_image('JPG', $big_picture_location);
+                            break;
+                        case 1 : $temp->send_image('GIF', $picture_location);
+                            $big_temp->send_image('JPG', $big_picture_location);
+                            break;
+                    }
+                    if ($image_repository == $dir . $file) {
+                        @unlink($image_repository);
+                    }
+                }
+            }
+        }
+        // Filling the access_url_rel_session table with access_url_id by default = 1
+        $query = "SELECT id FROM $dbNameForm.session";
+        $result = iDatabase::query($query);
+        while ($row = iDatabase::fetch_array($result, 'NUM')) {
+            $sql = "INSERT INTO $dbNameForm.access_url_rel_session SET session_id=" . $row[0] . ", access_url_id=1";
+            $res = iDatabase::query($sql);
+        }
 
-		// Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
+        // Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCourseTitle\', \'TemplateTitleCourseTitleDescription\', \'coursetitle.gif\', \'
 		<head>
 		            	{CSS}
@@ -209,60 +210,60 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		/*
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
-		(\'TemplateTitleCheckList\', \'TemplateTitleCheckListDescription\', \'checklist.gif\', \'
-		      <head>
-			               {CSS}
-			            </head>
-			            <body>
-						<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-						<tbody>
-						<tr>
-						<td style="vertical-align: top; width: 66%;">
-						<h3>Lorem ipsum dolor sit amet</h3>
-						<ul>
-							<li>consectetur adipisicing elit</li>
-							<li>sed do eiusmod tempor incididunt</li>
-							<li>ut labore et dolore magna aliqua</li>
-						</ul>
+        /*
+          $sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+          (\'TemplateTitleCheckList\', \'TemplateTitleCheckListDescription\', \'checklist.gif\', \'
+          <head>
+          {CSS}
+          </head>
+          <body>
+          <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+          <tbody>
+          <tr>
+          <td style="vertical-align: top; width: 66%;">
+          <h3>Lorem ipsum dolor sit amet</h3>
+          <ul>
+          <li>consectetur adipisicing elit</li>
+          <li>sed do eiusmod tempor incididunt</li>
+          <li>ut labore et dolore magna aliqua</li>
+          </ul>
 
-						<h3>Ut enim ad minim veniam</h3>
-						<ul>
-							<li>quis nostrud exercitation ullamco</li>
-							<li>laboris nisi ut aliquip ex ea commodo consequat</li>
-							<li>Excepteur sint occaecat cupidatat non proident</li>
-						</ul>
+          <h3>Ut enim ad minim veniam</h3>
+          <ul>
+          <li>quis nostrud exercitation ullamco</li>
+          <li>laboris nisi ut aliquip ex ea commodo consequat</li>
+          <li>Excepteur sint occaecat cupidatat non proident</li>
+          </ul>
 
-						<h3>Sed ut perspiciatis unde omnis</h3>
-						<ul>
-							<li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
-							<li>eaque ipsa quae ab illo inventore veritatis</li>
-							<li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
-						</ul>
+          <h3>Sed ut perspiciatis unde omnis</h3>
+          <ul>
+          <li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
+          <li>eaque ipsa quae ab illo inventore veritatis</li>
+          <li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
+          </ul>
 
-						</td>
-						<td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
-						<h3>Ut enim ad minima</h3>
-						Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br />
-						<h3>
-						<img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br /></h3>
-						</td>
-						</tr>
-						</tbody>
-						</table>
-						<p><br />
-						<br />
-						</p>
-						</body>
-		\');';
+          </td>
+          <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
+          <h3>Ut enim ad minima</h3>
+          Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br />
+          <h3>
+          <img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br /></h3>
+          </td>
+          </tr>
+          </tbody>
+          </table>
+          <p><br />
+          <br />
+          </p>
+          </body>
+          \');';
 
-		$res = iDatabase::query($sql);
-		*/
+          $res = iDatabase::query($sql);
+         */
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTeacher\', \'TemplateTitleTeacherDescription\', \'yourinstructor.gif\', \'
 		<head>
 		                   {CSS}
@@ -299,9 +300,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</body>
 		\');
 		';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftList\', \'TemplateTitleListLeftListDescription\', \'leftlist.gif\', \'
 		<head>
 			           {CSS}
@@ -337,9 +338,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftRightList\', \'TemplateTitleLeftRightListDescription\', \'leftrightlist.gif\', \'
 
 		<head>
@@ -389,9 +390,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</body>
 
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleRightList\', \'TemplateTitleRightListDescription\', \'rightlist.gif\', \'
 			<head>
 			           {CSS}
@@ -428,37 +429,37 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</p>
 					</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		/*
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
-		(\'TemplateTitleComparison\', \'TemplateTitleComparisonDescription\', \'compare.gif\', \'
-		<head>
-		            {CSS}
-		            </head>
+        /*
+          $sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+          (\'TemplateTitleComparison\', \'TemplateTitleComparisonDescription\', \'compare.gif\', \'
+          <head>
+          {CSS}
+          </head>
 
-		            <body>
-		            	<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-						<tr>
-							<td style="height: 10%; width: 33%;"></td>
-							<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br />
-							</td>
-							<td style="height: 10%; width: 33%;"></td>
-						</tr>
-					<tr>
-					<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
-					Lorem ipsum dolor sit amet.
-					</td>
-					<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 33%;">
-					Convallis
-					ut.&nbsp;Cras dui magna.</td>
-					</tr>
-					</body>
-		\');';
-		$res = iDatabase::query($sql);
-		*/
+          <body>
+          <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+          <tr>
+          <td style="height: 10%; width: 33%;"></td>
+          <td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br />
+          </td>
+          <td style="height: 10%; width: 33%;"></td>
+          </tr>
+          <tr>
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
+          Lorem ipsum dolor sit amet.
+          </td>
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 33%;">
+          Convallis
+          ut.&nbsp;Cras dui magna.</td>
+          </tr>
+          </body>
+          \');';
+          $res = iDatabase::query($sql);
+         */
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDiagram\', \'TemplateTitleDiagramDescription\', \'diagram.gif\', \'
 			<head>
 			                   {CSS}
@@ -491,9 +492,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</body>
 		\');
 		';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDesc\', \'TemplateTitleCheckListDescription\', \'description.gif\', \'
 		<head>
 			                   {CSS}
@@ -520,51 +521,51 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</body>
 		\');
 		';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		/*
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
-		(\'TemplateTitleObjectives\', \'TemplateTitleObjectivesDescription\', \'courseobjectives.gif\', \'
-		<head>
-			               {CSS}
-					    </head>
+        /*
+          $sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+          (\'TemplateTitleObjectives\', \'TemplateTitleObjectivesDescription\', \'courseobjectives.gif\', \'
+          <head>
+          {CSS}
+          </head>
 
-					    <body>
-							<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-							<tbody>
-							<tr>
-							<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-							<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br />
-							</td>
-							<td style="height: 10%; width: 66%;"></td>
-							</tr>
-							<tr>
-							<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 66%;">
-							<h3>Lorem ipsum dolor sit amet</h3>
-							<ul>
-							<li>consectetur adipisicing elit</li>
-							<li>sed do eiusmod tempor incididunt</li>
-							<li>ut labore et dolore magna aliqua</li>
-							</ul>
-							<h3>Ut enim ad minim veniam</h3>
-							<ul>
-							<li>quis nostrud exercitation ullamco</li>
-							<li>laboris nisi ut aliquip ex ea commodo consequat</li>
-							<li>Excepteur sint occaecat cupidatat non proident</li>
-							</ul>
-							</td>
-							</tr>
-							</tbody>
-							</table>
-						<p><br />
-						<br />
-						</p>
-						</body>
-		\');';
-		$res = iDatabase::query($sql);
-		*/
+          <body>
+          <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+          <tbody>
+          <tr>
+          <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
+          <img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br />
+          </td>
+          <td style="height: 10%; width: 66%;"></td>
+          </tr>
+          <tr>
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 66%;">
+          <h3>Lorem ipsum dolor sit amet</h3>
+          <ul>
+          <li>consectetur adipisicing elit</li>
+          <li>sed do eiusmod tempor incididunt</li>
+          <li>ut labore et dolore magna aliqua</li>
+          </ul>
+          <h3>Ut enim ad minim veniam</h3>
+          <ul>
+          <li>quis nostrud exercitation ullamco</li>
+          <li>laboris nisi ut aliquip ex ea commodo consequat</li>
+          <li>Excepteur sint occaecat cupidatat non proident</li>
+          </ul>
+          </td>
+          </tr>
+          </tbody>
+          </table>
+          <p><br />
+          <br />
+          </p>
+          </body>
+          \');';
+          $res = iDatabase::query($sql);
+         */
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCycle\', \'TemplateTitleCycleDescription\', \'cyclechart.gif\', \'
 		<head>
 			               {CSS}
@@ -627,53 +628,53 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</p>
 						</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		/*
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
-		(\'TemplateTitleLearnerWonder\', \'TemplateTitleLearnerWonderDescription\', \'learnerwonder.gif\', \'
-		<head>
-		               {CSS}
-				    </head>
+        /*
+          $sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+          (\'TemplateTitleLearnerWonder\', \'TemplateTitleLearnerWonderDescription\', \'learnerwonder.gif\', \'
+          <head>
+          {CSS}
+          </head>
 
-				    <body>
-						<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-						<tbody>
-						<tr>
-						<td style="width: 33%;" colspan="1" rowspan="4">
-							<img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br />
-						</td>
-						<td style="width: 66%;"></td>
-						</tr>
-						<tr align="center">
-						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-						Convallis
-						ut.&nbsp;Cras dui magna.</td>
-						</tr>
-						<tr align="center">
-						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-						Etiam
-						lacinia stibulum ante.<br />
-						</td>
-						</tr>
-						<tr align="center">
-						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-						Consectetuer
-						adipiscing elit. <br />
-						</td>
-						</tr>
-						</tbody>
-						</table>
-					<p><br />
-					<br />
-					</p>
-					</body>
-		\');
-		';
-		$res = iDatabase::query($sql);
-		*/
+          <body>
+          <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+          <tbody>
+          <tr>
+          <td style="width: 33%;" colspan="1" rowspan="4">
+          <img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br />
+          </td>
+          <td style="width: 66%;"></td>
+          </tr>
+          <tr align="center">
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+          Convallis
+          ut.&nbsp;Cras dui magna.</td>
+          </tr>
+          <tr align="center">
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+          Etiam
+          lacinia stibulum ante.<br />
+          </td>
+          </tr>
+          <tr align="center">
+          <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+          Consectetuer
+          adipiscing elit. <br />
+          </td>
+          </tr>
+          </tbody>
+          </table>
+          <p><br />
+          <br />
+          </p>
+          </body>
+          \');
+          ';
+          $res = iDatabase::query($sql);
+         */
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTimeline\', \'TemplateTitleTimelineDescription\', \'phasetimeline.gif\', \'
 		<head>
 		               {CSS}
@@ -737,44 +738,44 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</body>
 		\');
 		';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		/*
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
-		(\'TemplateTitleStopAndThink\', \'TemplateTitleStopAndThinkDescription\', \'stopthink.gif\', \'
-		<head>
-		               {CSS}
-				    </head>
-				    <body>
-						<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-						<tbody>
-						<tr>
-						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-							<img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
-						<br />
-						</td>
-						<td style="height: 10%; width: 66%;"></td>
-						</tr>
-						<tr>
-						<td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 66%; vertical-align: middle; text-align: center;">
-							<h3>Attentio sectetur adipisicing elit</h3>
-							<ul>
-								<li>sed do eiusmod tempor incididunt</li>
-								<li>ut labore et dolore magna aliqua</li>
-								<li>quis nostrud exercitation ullamco</li>
-							</ul><br /></td>
-						</tr>
-						</tbody>
-						</table>
-					<p><br />
-					<br />
-					</p>
-					</body>
-		\');';
-		$res = iDatabase::query($sql);
-		*/
+        /*
+          $sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+          (\'TemplateTitleStopAndThink\', \'TemplateTitleStopAndThinkDescription\', \'stopthink.gif\', \'
+          <head>
+          {CSS}
+          </head>
+          <body>
+          <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+          <tbody>
+          <tr>
+          <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
+          <img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
+          <br />
+          </td>
+          <td style="height: 10%; width: 66%;"></td>
+          </tr>
+          <tr>
+          <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 66%; vertical-align: middle; text-align: center;">
+          <h3>Attentio sectetur adipisicing elit</h3>
+          <ul>
+          <li>sed do eiusmod tempor incididunt</li>
+          <li>ut labore et dolore magna aliqua</li>
+          <li>quis nostrud exercitation ullamco</li>
+          </ul><br /></td>
+          </tr>
+          </tbody>
+          </table>
+          <p><br />
+          <br />
+          </p>
+          </body>
+          \');';
+          $res = iDatabase::query($sql);
+         */
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleTable\', \'TemplateTitleCheckListDescription\', \'table.gif\', \'
 		<head>
 		                   {CSS}
@@ -838,9 +839,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 						<br />
 						</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleAudio\', \'TemplateTitleAudioDescription\', \'audiocomment.gif\', \'
 		<head>
 		               {CSS}
@@ -873,9 +874,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 							</p>
 							</body>
 		\');';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleVideo\', \'TemplateTitleVideoDescription\', \'video.gif\', \'
 		<head>
 		            	{CSS}
@@ -935,9 +936,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 					 <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 					</body>
 		\'); ';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
-		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
+        $sql = 'INSERT INTO ' . $dbNameForm . '.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleFlash\', \'TemplateTitleFlashDescription\', \'flash.gif\', \'
 		<head>
 		               {CSS}
@@ -959,13 +960,13 @@ if (defined('SYSTEM_INSTALLATION')) {
 					</center>
 					</body>
 		\'); ';
-		$res = iDatabase::query($sql);
+        $res = iDatabase::query($sql);
 
         // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and $sql = 'INSERT it if necessary
         $query = "SELECT * FROM $dbNameForm.course_module";
         $result = iDatabase::query($query);
         if ($result === false) {
-        	//the course_module table doesn't exist, create it
+            //the course_module table doesn't exist, create it
             $sql = "CREATE TABLE $dbNameForm.course_module (
                       id int unsigned NOT NULL auto_increment,
                       name varchar(100) NOT NULL,
@@ -979,7 +980,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     ";
             $result = iDatabase::query($sql);
             if ($result !== false) {
-            	$sql = "INSERT INTO $dbNameForm.course_module (name, link, image, `row`,`column`, position) VALUES
+                $sql = "INSERT INTO $dbNameForm.course_module (name, link, image, `row`,`column`, position) VALUES
                     ('calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
                     ('link','link/link.php','links.gif',4,1,'basic'),
                     ('document','document/document.php','documents.gif',3,1,'basic'),
@@ -1012,135 +1013,135 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
 
-		// Get the stats queries list (s_q_list)
-		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
+        // Get the stats queries list (s_q_list)
+        $s_q_list = get_sql_file_contents('migrate-db-' . $old_file_version . '-' . $new_file_version . '-pre.sql', 'stats');
 
-		if (count($s_q_list) > 0) {
-			// Now use the $s_q_list
-			/**
-			 * We connect to the right DB first to make sure we can use the queries
-			 * without a database name
-			 */
-			if (strlen($dbStatsForm) > 40) {
-				 Log::error('Database name '.$dbStatsForm.' is too long, skipping');
-			} elseif (!in_array($dbStatsForm,$dblist)) {
-				 Log::error('Database '.$dbStatsForm.' was not found, skipping');
-			} else {
-				iDatabase::select_db($dbStatsForm);
-				foreach ($s_q_list as $query) {
-					if ($only_test) {
-						 Log::notice("iDatabase::query($dbStatsForm,$query)");
-					} else {
-						$res = iDatabase::query($query);
-						if ($log) {
-							 Log::notice("In $dbStatsForm, executed: $query");
-						}
-					}
-				}
-			}
-		}
-		// Get the user queries list (u_q_list)
-		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
-		if (count($u_q_list) > 0) {
-			// Now use the $u_q_list
-			/**
-			 * We connect to the right DB first to make sure we can use the queries
-			 * without a database name
-			 */
-			if (strlen($dbUserForm) > 40) {
-				 Log::error('Database name '.$dbUserForm.' is too long, skipping');
-			} elseif (!in_array($dbUserForm,$dblist)) {
-				 Log::error('Database '.$dbUserForm.' was not found, skipping');
-			} else {
-				iDatabase::select_db($dbUserForm);
-				foreach ($u_q_list as $query) {
-					if ($only_test) {
-						error_log("iDatabase::query($dbUserForm,$query)");
-						error_log("In $dbUserForm, executed: $query");
-					} else {
-						$res = iDatabase::query($query);
-					}
-				}
-			}
-		}
-		// The SCORM database doesn't need a change in the pre-migrate part - ignore
-	}
+        if (count($s_q_list) > 0) {
+            // Now use the $s_q_list
+            /**
+             * We connect to the right DB first to make sure we can use the queries
+             * without a database name
+             */
+            if (strlen($dbStatsForm) > 40) {
+                Log::error('Database name ' . $dbStatsForm . ' is too long, skipping');
+            } elseif (!in_array($dbStatsForm, $dblist)) {
+                Log::error('Database ' . $dbStatsForm . ' was not found, skipping');
+            } else {
+                iDatabase::select_db($dbStatsForm);
+                foreach ($s_q_list as $query) {
+                    if ($only_test) {
+                        Log::notice("iDatabase::query($dbStatsForm,$query)");
+                    } else {
+                        $res = iDatabase::query($query);
+                        if ($log) {
+                            Log::notice("In $dbStatsForm, executed: $query");
+                        }
+                    }
+                }
+            }
+        }
+        // Get the user queries list (u_q_list)
+        $u_q_list = get_sql_file_contents('migrate-db-' . $old_file_version . '-' . $new_file_version . '-pre.sql', 'user');
+        if (count($u_q_list) > 0) {
+            // Now use the $u_q_list
+            /**
+             * We connect to the right DB first to make sure we can use the queries
+             * without a database name
+             */
+            if (strlen($dbUserForm) > 40) {
+                Log::error('Database name ' . $dbUserForm . ' is too long, skipping');
+            } elseif (!in_array($dbUserForm, $dblist)) {
+                Log::error('Database ' . $dbUserForm . ' was not found, skipping');
+            } else {
+                iDatabase::select_db($dbUserForm);
+                foreach ($u_q_list as $query) {
+                    if ($only_test) {
+                        error_log("iDatabase::query($dbUserForm,$query)");
+                        error_log("In $dbUserForm, executed: $query");
+                    } else {
+                        $res = iDatabase::query($query);
+                    }
+                }
+            }
+        }
+        // The SCORM database doesn't need a change in the pre-migrate part - ignore
+    }
 
-	$prefix = '';
-	if ($singleDbForm) {
-		$prefix = get_config_param ('table_prefix');
-	}
+    $prefix = '';
+    if ($singleDbForm) {
+        $prefix = get_config_param('table_prefix');
+    }
 
-	// Get the courses databases queries list (c_q_list)
-	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
+    // Get the courses databases queries list (c_q_list)
+    $c_q_list = get_sql_file_contents('migrate-db-' . $old_file_version . '-' . $new_file_version . '-pre.sql', 'course');
 
-	if (count($c_q_list) > 0) {
-		// Get the courses list
-		if (strlen($dbNameForm) > 40) {
-			error_log('Database name '.$dbNameForm.' is too long, skipping');
-		} elseif (!in_array($dbNameForm, $dblist)) {
-			error_log('Database '.$dbNameForm.' was not found, skipping');
-		} else {
-			iDatabase::select_db($dbNameForm);
-			$res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+    if (count($c_q_list) > 0) {
+        // Get the courses list
+        if (strlen($dbNameForm) > 40) {
+            error_log('Database name ' . $dbNameForm . ' is too long, skipping');
+        } elseif (!in_array($dbNameForm, $dblist)) {
+            error_log('Database ' . $dbNameForm . ' was not found, skipping');
+        } else {
+            iDatabase::select_db($dbNameForm);
+            $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-			if ($res === false) { die('Error while querying the courses list in update_db-1.8.5-1.8.6.inc.php'); }
+            if ($res === false) {
+                die('Error while querying the courses list in update_db-1.8.5-1.8.6.inc.php');
+            }
 
-			if (iDatabase::num_rows($res) > 0) {
-				$i = 0;
+            if (iDatabase::num_rows($res) > 0) {
+                $i = 0;
                 $list = array();
-				while ($row = iDatabase::fetch_array($res)) {
-					$list[] = $row;
-					$i++;
-				}
-				foreach ($list as $row_course) {
-					// Now use the $c_q_list
-					/**
-					 * We connect to the right DB first to make sure we can use the queries
-					 * without a database name
-					 */
-					if (!$singleDbForm) { //otherwise just use the main one
-						iDatabase::select_db($row_course['db_name']);
-					}
+                while ($row = iDatabase::fetch_array($res)) {
+                    $list[] = $row;
+                    $i++;
+                }
+                foreach ($list as $row_course) {
+                    // Now use the $c_q_list
+                    /**
+                     * We connect to the right DB first to make sure we can use the queries
+                     * without a database name
+                     */
+                    if (!$singleDbForm) { //otherwise just use the main one
+                        iDatabase::select_db($row_course['db_name']);
+                    }
                     Log::notice('Course db ' . $row_course['db_name']);
 
-					foreach ($c_q_list as $query) {
-						if ($singleDbForm) { //otherwise just use the main one
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
-						}
+                    foreach ($c_q_list as $query) {
+                        if ($singleDbForm) { //otherwise just use the main one
+                            $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
+                        }
 
-						if ($only_test) {
-							 Log::notice("iDatabase::query(".$row_course['db_name'].",$query)");
-						} else {
-							$res = iDatabase::query($query);
-							if ($log) {
-								 Log::notice("In ".$row_course['db_name'].", executed: $query");
-							}
-						}
-					}
+                        if ($only_test) {
+                            Log::notice("iDatabase::query(" . $row_course['db_name'] . ",$query)");
+                        } else {
+                            $res = iDatabase::query($query);
+                            if ($log) {
+                                Log::notice("In " . $row_course['db_name'] . ", executed: $query");
+                            }
+                        }
+                    }
 
-                    $t_d = $row_course['db_name'].".document";
-                    $t_ip = $row_course['db_name'].".item_property";
+                    $t_d = $row_course['db_name'] . ".document";
+                    $t_ip = $row_course['db_name'] . ".item_property";
 
                     if ($singleDbForm) {
                         $t_d = "$prefix{$row_course['db_name']}_document";
                         $t_ip = "$prefix{$row_course['db_name']}_item_property";
                     }
                     // Shared documents folder
-                    $query = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')";
+                    $query = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','" . get_lang('SharedDocumentsDirectory') . "','folder','0')";
                     $myres = iDatabase::query($query);
                     if ($myres !== false) {
-                    	$doc_id = iDatabase::insert_id();
+                        $doc_id = iDatabase::insert_id();
                         $query = "INSERT INTO $t_ip (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderAdded',1,0,NULL,1)";
                         $myres = iDatabase::query($query);
                     }
-				}
-			}
-		}
-	}
-
+                }
+            }
+        }
+    }
 } else {
 
-	echo 'You are not allowed here !' . __FILE__;
-
+    echo 'You are not allowed here !' . __FILE__;
 }

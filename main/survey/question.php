@@ -133,11 +133,11 @@ if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) 
 	}
 
 	if ($_GET['type'] == 'personality') {
-		$form_content['answers'][0] = get_lang('1');
-		$form_content['answers'][1] = get_lang('2');
-		$form_content['answers'][2] = get_lang('3');
-		$form_content['answers'][3] = get_lang('4');
-		$form_content['answers'][4] = get_lang('5');
+		$form_content['answers'][0] = 1; //get_lang('1');
+		$form_content['answers'][1] = 2; //get_lang('2');
+		$form_content['answers'][2] = 3; //get_lang('3');
+		$form_content['answers'][3] = 4; //get_lang('4');
+		$form_content['answers'][4] = 5; //get_lang('5');
 
 		$form_content['values'][0] = 0;
 		$form_content['values'][1] = 0;

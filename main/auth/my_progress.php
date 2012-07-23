@@ -90,9 +90,9 @@ if (!empty($dates)) {
 
     $content .= '<div id="my_timeline">
         <div class="actions">
-    <a href="#" id="prev"></a> <!-- optional -->
-    <a href="#" id="next"></a> <!-- optional -->
-    </div>
+            <a href="#" id="prev"></a> <!-- optional -->
+            <a href="#" id="next"></a> <!-- optional -->                
+        </div>
     
     <ul id="dates">
         '.$dates.'  

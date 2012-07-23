@@ -3153,13 +3153,14 @@ a:active{
     background: url("../img/action_next.png") no-repeat transparent;
     height: 32px;
     width: 32px;
+    float:right;
 }
 
 #my_timeline #prev {
     background: url("../img/action_prev.png") no-repeat transparent;
     height: 32px;
     width: 32px;
-    float:right;
+    float:left;
 }
 
 #dates .selected {

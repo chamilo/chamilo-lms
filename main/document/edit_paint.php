@@ -179,7 +179,9 @@ if (!file_exists($temp_folder)) {
 //make htaccess with allow from all, and file index.html into temp/images
 $htaccess=api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htacess';
 if (!file_exists($htaccess)) {
-	$htaccess_content="order deny,allow\r\nallow from all";
+
+	$htaccess_content="order deny,allow\r\nallow from all\r\nOptions -Indexes";
+	
 	$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
 	if ($fp) {
 		fwrite($fp, $htaccess_content);

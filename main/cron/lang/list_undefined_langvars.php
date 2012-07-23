@@ -61,7 +61,11 @@ foreach ($files as $file) {
 //$undefined_terms = array_flip($undefined_terms);
 if (count($undefined_terms)<1) { die("No missing terms<br />\n"); } else { echo "The following terms were nowhere to be found: <br />\n<table>"; }
 foreach ($undefined_terms as $term => $file) {
-	echo "<tr><td>$term</td><td>in $file</td></tr>\n";
+    echo "<tr><td>$term</td><td>in $file";
+    if (substr($file,0,7)=='plugin/') {
+        echo " <span style=\"color: #00ff00;\">(this one should be taken care of by the plugin's language files)</span>";
+    }
+    echo "</td></tr>\n";
 }
 echo "</table>\n";
 

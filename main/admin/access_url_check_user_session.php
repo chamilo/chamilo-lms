@@ -115,7 +115,6 @@ foreach($session_list  as $session_item) {
         }
         $html .= '</table>';
     } else {
-        //$html .= get_lang('');
     }
 }
 echo $html;

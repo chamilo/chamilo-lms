@@ -17,7 +17,7 @@ class AjaxController extends \Controller
 
     function forbidden()
     {
-        $this->response(false, get_lang('YourAreNotAuthorized'));
+        $this->response(false, get_lang('YouAreNotAuthorized'));
     }
 
     public function unknown()

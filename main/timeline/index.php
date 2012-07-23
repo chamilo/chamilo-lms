@@ -36,7 +36,7 @@ switch ($action) {
         break;
     case 'add_item':
         $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));    
-        $interbreadcrumb[]=array('url' => '#','name' => get_lang('item'));
+        $interbreadcrumb[]=array('url' => '#','name' => get_lang('TimelineItem'));
         break;
     default:
         $interbreadcrumb[]=array('url' => '#','name' => get_lang('Timeline'));

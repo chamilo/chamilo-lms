@@ -201,7 +201,7 @@ if ($action_forums != 'add') {
     // Step 3: The interim headers (for the forum).
     echo '<tr class="forum_header">';
     echo '<td colspan="2">'.get_lang('Forum').'</td>';
-    echo '<td>'.get_lang('Threads').'</td>';
+    echo '<td>'.get_lang('ForumThreads').'</td>';
     echo '<td>'.get_lang('Posts').'</td>';
     echo '<td>'.get_lang('LastPosts').'</td>';
     echo '<td>'.get_lang('Actions').'</td>';

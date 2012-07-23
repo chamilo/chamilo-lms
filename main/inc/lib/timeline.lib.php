@@ -1,20 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
-
-/**
+ * This class provides methods for the timeline management.
  * @package chamilo.library
+ * @package chamilo.timeline
+ */
+/**
+ * Init
  */
 define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
-
+/**
+ * Timeline model class definition
+ */
 class Timeline extends Model {    
     var $table;
     var $columns = array('headline', 'type', 'start_date', 'end_date', 'text', 'media', 'media_credit', 'media_caption', 'title_slide', 'parent_id', 'status','c_id');
@@ -63,7 +61,7 @@ class Timeline extends Model {
      */
     public function return_form($url, $action) {
         $form = new FormValidator('timeline', 'post', $url);
-        // Settting the form elements
+        // Setting the form elements
         $header = get_lang('Add');        
         if ($action == 'edit') {
             $header = get_lang('Modify');

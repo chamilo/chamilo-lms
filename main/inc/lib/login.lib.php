@@ -112,7 +112,8 @@ class Login
         if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
             return get_lang('your_password_has_been_reset');
         } else {
-            return get_lang('SystemUnableToSendEmailContact') . ' ' . Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')) . ".</p>";
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));            
+            return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);            
         }
     }
 
@@ -154,7 +155,9 @@ class Login
                 Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
             }
         } else {
-            $message = get_lang('SystemUnableToSendEmailContact') . ' ' . Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')) . ".</p>";
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));            
+            $message = sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
+            
             if (CustomPages::enabled()) {
                 return $message;
             } else {

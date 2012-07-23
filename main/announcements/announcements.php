@@ -20,7 +20,7 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('announcements', 'group', 'survey');
+$language_file = array('announcements', 'group', 'survey', 'document');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;

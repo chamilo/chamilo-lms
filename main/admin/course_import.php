@@ -124,11 +124,9 @@ function save_data($courses) {
         $params['title']            = $course['Title'];
         $params['wanted_code']      = $course['Code'];         
         $params['tutor_name']       = $titular;
-        $params['course_category']  = $course['CourseCategory'];
-        $params['course_category']  = $course['CourseCategory'];
+        $params['course_category']  = $course['CourseCategory'];        
         $params['course_language']  = $course_language;
-        $params['user_id']          = $uidCreator;
-         
+        $params['user_id']          = $uidCreator;         
          
         $course_info = CourseManager::create_course($params);
         if (!empty($course_info)) {

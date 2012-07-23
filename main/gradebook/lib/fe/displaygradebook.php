@@ -638,7 +638,11 @@ class DisplayGradebook
         $info .= '</div>';        
         $info .= '<div class="span6">';
 		$info .= get_lang('Name') . ' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $userid . '"> ' . api_get_person_name($user['firstname'], $user['lastname']) . '</a><br />';
-		$info .= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';
+        
+		if (api_get_setting('show_email_addresses') == 'true') {
+            $info .= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';
+        }
+        
 		$info .= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b>';
 		$info .= '</div>';
         $info .= '</div>';

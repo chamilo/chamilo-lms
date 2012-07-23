@@ -1,6 +1,17 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Quick form to ask for password reminder.
+ * @package chamilo.custompages
+ */ 
+/**
+ * Initialization
+ */
 require_once('../../main/inc/global.inc.php'); 
 require_once('language.php');
+/**
+ * HTML
+ */
 ?>
 <html>
 <head>
@@ -12,7 +23,7 @@ require_once('language.php');
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="../../custompages/style-ie6.css" />
 	<![endif]-->
-	<script type="text/javascript" src="../../custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="../../main/inc/lib/javascript/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// Handler pour la touche retour
@@ -36,7 +47,7 @@ require_once('language.php');
         <?php if(isset($content['error']) && !empty($content['error'])){
           echo $content['info'];
         } else {
-          echo cblue_get_lang('lang_enter_email_and_well_send_you_password');
+          echo custompages_get_lang('lang_enter_email_and_well_send_you_password');
         }?>
       </div>
 		<div id="lostpassword-form-box" class="form-box">
@@ -45,14 +56,14 @@ require_once('language.php');
 		}?>
 			<form id="lostpassword-form" class="form" action="lostPassword.php" method="post">
 				<div>
-        <label for="user">*<?php echo cblue_get_lang('UserName');?></label>
+        <label for="user">*<?php echo custompages_get_lang('UserName');?></label>
 					<input name="user" type="text" /><br />
-          <label for="email">*<?php echo cblue_get_lang('Email');?></label>
+          <label for="email">*<?php echo custompages_get_lang('Email');?></label>
 					<input name="email" type="text" /><br />
 				</div>
 			</form>
 			<div id="lostpassword-form-submit" class="form-submit" onclick="document.forms['lostpassword-form'].submit();">
-      <span><?php echo cblue_get_lang('langSend'); ?> </span>
+      <span><?php echo custompages_get_lang('langSend'); ?> </span>
 			</div> <!-- #form-submit -->
 		</div> <!-- #form -->
 		<div id="footer">

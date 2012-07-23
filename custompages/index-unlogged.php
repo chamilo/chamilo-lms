@@ -1,23 +1,34 @@
 <?php 
+/* For licensing terms, see /license.txt */
+/**
+ * Redirect script
+ * @package chamilo.custompages
+ */
+/**
+ * Initialization
+ */
 //require_once('main/inc/global.inc.php'); 
 require_once('language.php');
+/**
+ * Homemade micro-controller
+ */
 if (isset($_GET['loginFailed'])){
   if (isset($_GET['error'])) {
     switch ($_GET['error']) {
     case 'account_expired':
-      $error_message = cblue_get_lang('AccountExpired');
+      $error_message = custompages_get_lang('AccountExpired');
       break;
     case 'account_inactive':
-      $error_message = cblue_get_lang('AccountInactive');
+      $error_message = custompages_get_lang('AccountInactive');
       break;
     case 'user_password_incorrect':
-      $error_message = cblue_get_lang('InvalidId');
+      $error_message = custompages_get_lang('InvalidId');
       break;
     case 'access_url_inactive':
-      $error_message = cblue_get_lang('AccountURLInactive');
+      $error_message = custompages_get_lang('AccountURLInactive');
       break;
     default : 
-      $error_message = cblue_get_lang('InvalidId');
+      $error_message = custompages_get_lang('InvalidId');
     }
   } else { 
     $error_message = get_lang('InvalidId');
@@ -25,6 +36,9 @@ if (isset($_GET['loginFailed'])){
 }
 
     $rootWeb = api_get_path('WEB_PATH');
+/**
+ * HTML output
+ */
 ?>
 <html>
 <head>
@@ -37,7 +51,7 @@ if (isset($_GET['loginFailed'])){
 	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
 	<![endif]-->
 
-	<script type="text/javascript" src="<?php echo $rootWeb ?>custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo $rootWeb ?>main/inc/lib/javascript/jquery.min.js"></script>
         
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -72,18 +86,18 @@ if (isset($_GET['loginFailed'])){
 		}?> 
 			<form id="login-form" class="form" action="<?php echo api_get_path(WEB_PATH)?>index.php" method="post">
 				<div>
-        <label for="login">*<?php echo cblue_get_lang('User');?></label>
+        <label for="login">*<?php echo custompages_get_lang('User');?></label>
 					<input name="login" type="text" /><br />
-          <label for="password">*<?php echo cblue_get_lang('langPass');?></label>
+          <label for="password">*<?php echo custompages_get_lang('langPass');?></label>
 					<input name="password" type="password" /><br />
 				</div>
 			</form>
 			<div id="login-form-submit" class="form-submit" onclick="document.forms['login-form'].submit();">
-      <span><?php echo cblue_get_lang('LoginEnter');?></span>
+      <span><?php echo custompages_get_lang('LoginEnter');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php"><?php echo cblue_get_lang('langReg')?></a><br />
-      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php"><?php echo cblue_get_lang('langLostPassword')?></a>
+      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php"><?php echo custompages_get_lang('langReg')?></a><br />
+      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php"><?php echo custompages_get_lang('langLostPassword')?></a>
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">

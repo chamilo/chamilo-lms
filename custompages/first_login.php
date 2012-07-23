@@ -1,8 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Quick page to react to first login cases
+ * @package chamilo.custompages
+ */
+/**
+ * Initialization
+ */
 require_once('language.php');
 require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-
+/**
+ * Security checks
+ */
 if (! isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
@@ -30,6 +40,9 @@ if ($_GET['invalid'] == 1) {
 if ($_GET['invalid'] == 2) {
   $error_message = get_lang('PassTwo');
 }
+/**
+ * HTML output
+ */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -43,7 +56,7 @@ if ($_GET['invalid'] == 2) {
 	<link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
 	<![endif]-->
 
-	<script type="text/javascript" src="/custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (top.location != location) 
@@ -66,23 +79,23 @@ if ($_GET['invalid'] == 2) {
 		<div id="header">
 			<img src="/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
-    <h2> <?php echo cblue_get_lang('FirstLogin');?> </h2>
+    <h2> <?php echo custompages_get_lang('FirstLogin');?> </h2>
         
 		<div id="changepassword-form-box" class="form-box">
-      <div class="info"> <?php echo cblue_get_lang('FirstLoginChangePassword');?> </div>
+      <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword');?> </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
 		}?> 
 			<form id="changepassword-form" class="form" method="post">
 				<div>
-          <label for="password">*<?php echo cblue_get_lang('langPass');?></label>
+          <label for="password">*<?php echo custompages_get_lang('langPass');?></label>
 					<input name="password" type="password" /><br />
-          <label for="password2">*<?php echo cblue_get_lang('langPass');?></label>
+          <label for="password2">*<?php echo custompages_get_lang('langPass');?></label>
 					<input name="password2" type="password" /><br />
 				</div>
 			</form>
 			<div id="changepassword-form-submit" class="form-submit" onclick="document.forms['changepassword-form'].submit();">
-      <span><?php echo cblue_get_lang('LoginEnter');?></span>
+      <span><?php echo custompages_get_lang('LoginEnter');?></span>
 			</div> <!-- #form-submit -->
 		</div> <!-- #form -->
 		<div id="footer">

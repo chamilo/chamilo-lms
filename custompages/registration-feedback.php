@@ -1,3 +1,13 @@
+<?php
+/* For licensing terms, see /license.txt */
+/**
+ * Quick display for user registration
+ * @package chamilo.custompages
+ */ 
+/**
+ * HTML output
+ */
+?>
 <html>
 <head>
 	<title>Registration</title>
@@ -8,7 +18,7 @@
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="../../custompages/style-ie6.css" />
 	<![endif]-->
-	<script type="text/javascript" src="../../custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="../../main/inc/lib/javascript/jquery.min.js"></script>
 </head>
 <body>
 	<div id="backgroundimage">

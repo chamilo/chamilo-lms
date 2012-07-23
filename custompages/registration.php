@@ -1,17 +1,24 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
- * Licence: GPL
+ * This script allows for specific registration rules (see CustomPages feature of Chamilo)
  * Please contact CBlue regarding any licences issues.
  * Author: noel@cblue.be
- *  Copyright: CBlue SPRL, 20XX
+ * Copyright: CBlue SPRL, 20XX (GNU/GPLv3)
+ * @package chamilo.custompages
  **/
+/**
+ * Initialization
+ */
 require_once('language.php');
 require_once('../inc/global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-//Removes some unwanted elementend of the form object
+/**
+ * Removes some unwanted elementend of the form object
+ */
 $content['form']->removeElement('extra_mail_notify_invitation');
 $content['form']->removeElement('extra_mail_notify_message');
 $content['form']->removeElement('extra_mail_notify_group_message');
@@ -22,7 +29,7 @@ $content['form']->removeElement('status');
 $content['form']->removeElement('status');
 /**
  * Code to change the way QuickForm render html
- **/
+ */
 /*
 $renderer = & $content['form']->defaultRenderer();
 $form_template = <<<EOT
@@ -83,7 +90,7 @@ EOT;
 	<!--[if IE 6]>
 	<link rel="stylesheet" type="text/css" href="../../custompages/style-ie6.css" />
 	<![endif]-->
-	<script type="text/javascript" src="../../custompages/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="../../main/inc/lib/javascript/jquery.min.js"></script>
 </head>
 <body>
 	<div id="backgroundimage">
@@ -101,10 +108,10 @@ EOT;
       $content['form']->display();
       ?>
 			<div id="registration-form-submit" class="form-submit" onclick="document.forms['registration'].submit();">
-				<span><?php echo cblue_get_lang('Subscribe');?></span>
+				<span><?php echo custompages_get_lang('Subscribe');?></span>
 			</div> <!-- #form-submit -->
 			<div id="links">
-      <!--<a href="mailto: support@cblue.be"><?php echo cblue_get_lang('NeedContactAdmin')?></a><br />-->
+      <!--<a href="mailto: support@cblue.be"><?php echo custompages_get_lang('NeedContactAdmin')?></a><br />-->
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">

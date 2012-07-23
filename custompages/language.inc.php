@@ -1,14 +1,17 @@
 <?php
-// CustomPages : Browser language detection
-// Include this file in your custom page if you want to set the language variable of the Chamilo session to the best pick according to the visitor's browser's options.
-// 2011, Jean-Karim Bockstael, CBlue <jeankarim@cblue.be>
-
-// This requires the Chamilo system to be initialized
-// (note that it's easier to do the following include in the parent page)
-// require_once('path/to/main/inc/global.inc.php');
-
-// Returns the best match between available languages and visitor preferences
-// return the best match as 2-chars code, null when none match
+/* For licensing terms, see /license.txt */
+/**
+ * CustomPages : Browser language detection
+ * Include this file in your custom page if you want to set the language variable of the Chamilo session to the best pick according to the visitor's browser's options.
+ * 2011, Jean-Karim Bockstael, CBlue <jeankarim@cblue.be>
+ * This requires the Chamilo system to be initialized
+ * (note that it's easier to do the following include in the parent page)
+ * @package chamilo.custompages
+ */
+/**
+ * Returns the best match between available languages and visitor preferences
+ * @return string the best match as 2-chars code, null when none match
+*/
 function get_preferred_language($available_langs) {
     // Parsing the Accept-languages HTTP header
     $langs = array();
@@ -36,12 +39,16 @@ function get_preferred_language($available_langs) {
     return null;
 }
 
-// Wrapper function for the get_lang function
-// use this if you want to avoid translation caching issues
+/**
+ * Wrapper function for the get_lang function
+ * use this if you want to avoid translation caching issues
+ */
 function cp_get_lang($variable) {
 	return get_lang($variable, null, $_SESSION['user_language_choice']);
 }
-
+/**
+ * Code
+ */
 // Note that Chamilo languages are expressed as full english names, not 2-characters codes
 // e.g. 'english' instead of 'en', 'french' instead of 'fr', ...
 // We need a matching array. Note the value for the null key, which is the default language.

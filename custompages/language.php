@@ -1,4 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Definition of language-related functions for cases where th user isn't 
+ * logged in yet
+ * @package chamilo.custompages
+ */
+/**
+ * Get the preferred language base on the browser headers
+ */
 function get_preferred_language($available_langs) {
 	$langs = array();
 	foreach (explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) as $httplang) {
@@ -19,8 +28,10 @@ function get_preferred_language($available_langs) {
 	}
 	return null;
 }
-
-function cblue_get_lang($variable) {
+/**
+ * Get a language variable in a specific language
+ */
+function custompages_get_lang($variable) {
 	return get_lang($variable, null, $_SESSION['user_language_choice']);
 }
 

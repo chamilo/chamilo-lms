@@ -1,8 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Displayed after the user has been logged out.
+ * @package chamilo.custompages
  */
-
+/**
+ * Init
+ */
 $called_direcly = !function_exists('api_get_path');
 if ($called_direcly)
 {
@@ -12,6 +16,9 @@ if ($called_direcly)
 require_once('language.php');
 $www = api_get_path('WEB_PATH');
 
+/**
+ * HTML output
+ */
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,7 +32,7 @@ $www = api_get_path('WEB_PATH');
         <link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
         <![endif]-->
 
-        <script type="text/javascript" src="<?php echo $www ?>custompages/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo $www ?>main/inc/lib/javascript/jquery.min.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {

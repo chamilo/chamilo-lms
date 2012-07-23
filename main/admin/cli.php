@@ -22,7 +22,7 @@ api_protect_admin_script();
  * Main code 
  */
 // setting the name of the tool
-$tool_name = get_lang('CLI');
+$tool_name = get_lang('CommandLineInterpreter');
 // setting breadcrumbs
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 // including the header file (which includes the banner itself)

@@ -53,7 +53,7 @@ class SystemManagementPage extends AdminPage
         
         if ($access_url_id === 1) {
             if (api_is_windows_os()) {
-                $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuresOnWindows');
+                $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
             } else {
                 $dir = api_get_path(SYS_PATH);
                 $du = exec('du -sh ' . $dir, $err);

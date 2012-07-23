@@ -272,9 +272,9 @@ global $_configuration;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
     $sql="SELECT user_id, lastname, firstname, username, id_session
-            FROM $tbl_user
+            FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
                 WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 

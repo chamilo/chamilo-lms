@@ -1255,4 +1255,5 @@ $Go = "Go";
 $ImportThematic = "Import course progress";
 $ExportThematic = "Export course progress";
 $DeleteAllThematic = "Delete all course progress";
+$ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation = "This platform was unable to send the email. Please contact %s for more information.";
 ?>

@@ -357,7 +357,7 @@ class PortfolioController
             $name = $this->get_portfolio();
             $result = Portfolio::get($name)->send($user, $artefact);
             if ($result) {
-                $this->message = Display::return_message(get_lang('SentSuccessful'), 'normal');
+                $this->message = Display::return_message(get_lang('SentSuccessfully'), 'normal');
             } else {
                 $this->message = Display::return_message(get_lang('SentFailed'), 'error');
             }

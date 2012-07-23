@@ -21,8 +21,8 @@ $event_config = array(
             'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => false, // this key states that we can't add user to this event through the admin panel
-        'name_lang_var' => get_lang('portal_homepage_edited'),
-        'desc_lang_var' => get_lang('portal_homepage_edited'),
+        'name_lang_var' => get_lang('PortalHomepageEdited'),
+        'desc_lang_var' => get_lang('PortalHomepageEdited'),
         'available_keyvars' => array (// keys used for the mail template
             'url'           => 'portal',
             'sitename'      => 'sitename',
@@ -43,8 +43,8 @@ $event_config = array(
             'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => true, // this key states that we can't add user to this event through the admin panel
-        'name_lang_var' => get_lang('userRegistrationTitle'),
-        'desc_lang_var' => get_lang('userRegistrationComment'),
+        'name_lang_var' => get_lang('UserRegistrationTitle'),
+        'desc_lang_var' => get_lang('UserRegistrationComment'),
         'available_keyvars' => array (// keys used for the mail template
             'url'           => 'portal',
             'sitename'      => 'sitename',

@@ -364,7 +364,7 @@ function build_document_icon_tag($type, $path) {
 		
 		if(preg_match('/_chnano_.wav$/i',  $basename)) {
 			$icon="jplayer_play.png";
-        	$basename = get_lang('wav').' '.get_lang('(Nanogong)');
+        	$basename = 'wav'.' '.'(Nanogong)';
 		}else{
 			$basename=substr(strrchr($basename, '.'), 1);
 		}

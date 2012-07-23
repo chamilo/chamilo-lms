@@ -150,7 +150,6 @@ class Controller extends \Controller
 
         $www = Chamilo::url();
         $code = "var www = '$www';\n";
-        //$code .= Javascript::get_lang('');
         $result .= Javascript::tag_code($code);
         return $result;
     }

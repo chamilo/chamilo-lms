@@ -398,16 +398,14 @@ class Dropbox_Person
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
 		// Find all entries where this person is the recipient
-		 $sql = "SELECT r.file_id, r.cat_id FROM $post_tbl r, $person_tbl p
-				WHERE 
-				    r.c_id = $course_id AND
-				    p.c_id = $course_id AND  
-					r.dest_user_id 	= '".Database::escape_string($this->userId)."' AND 
-					r.dest_user_id 	= p.user_id AND 
-		 			r.file_id 		= p.file_id $condition_session AND
-		 			r.c_id = $course_id AND
-		 			p.c_id = $course_id
-		 			";
+		 $sql = "SELECT r.file_id, r.cat_id FROM $post_tbl r, $person_tbl p ".
+			" WHERE ".
+			" r.c_id = $course_id AND ".
+			" p.c_id = $course_id AND ". 
+			" r.dest_user_id = ".intval($this->userId)." AND ".
+		 	" r.file_id      = p.file_id $condition_session AND ".
+		 	" r.c_id = $course_id AND ".
+		 	" p.c_id = $course_id ";
 
 		//if (intval($_SESSION['id_session']>0)) { $sql .= " AND r.session_id = ".intval($_SESSION['id_session']); }
 

@@ -68,16 +68,18 @@ class UserManager {
 		if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();
         }
+        
 		if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
-            return api_set_failure('portal users limit reached');
+                return api_set_failure('portal users limit reached');
             }
         }
+        
 		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
-            return api_set_failure('portal teachers limit reached');
+                return api_set_failure('portal teachers limit reached');
             }
         }
 
@@ -100,13 +102,16 @@ class UserManager {
 		} else {
 			$creator_id = '';
 		}
+        
 		// First check wether the login already exists
 		if (!self::is_username_available($loginName)) {
 			return api_set_failure('login-pass already taken');
 		}
+        
 		//$password = "PLACEHOLDER";
-		if ($encrypt_method == '') {
-			$password = api_get_encrypted_password($password);
+        
+		if (empty($encrypt_method)) {
+			$password = api_get_encrypted_password($password);            
 		} else {
 			if ($_configuration['password_encryption'] === $encrypt_method ) {
 				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
@@ -118,6 +123,8 @@ class UserManager {
 				return api_set_failure('encrypt_method invalid');
 			}
 		}
+        
+        
 		//@todo replace this date with the api_get_utc_date function big problem with users that are already registered
 		$current_date = date('Y-m-d H:i:s', time());
 		$sql = "INSERT INTO $table_user
@@ -138,6 +145,7 @@ class UserManager {
 				hr_dept_id = 		'".Database::escape_string($hr_dept_id)."',
 				active = 			'".Database::escape_string($active)."'";
 		$result = Database::query($sql);
+        
 		if ($result) {
 			//echo "id returned";
 			$return = Database::insert_id();			
@@ -188,6 +196,8 @@ class UserManager {
 		} else {
 			//echo "false - failed" ;
 			$return = false;
+            echo $sql;
+            return api_set_failure('error inserting in Database');
 		}
 
 		if (is_array($extra) && count($extra) > 0) {
@@ -197,6 +207,7 @@ class UserManager {
 			}
 		}
 		self::update_extra_field_value($return, 'already_logged_in', 'false');
+        
 		return $return;
 	}
 

@@ -18,6 +18,10 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $form_sent = 0;
 $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
+if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
+    $error_message = Security::remove_XSS($_GET['message']);
+}
+
 
 $tbl_user                   = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -72,63 +76,45 @@ if ($_POST['formSent']) {
                 if (count($root->Users->User) > 0) {
 
                     // Creating/updating users from <Sessions> <Users> base node.
-                    foreach ($root->Users->User as $node_user) {
+                    foreach ($root->Users->User as $node_user) {       
                         $username = $username_old = trim(api_utf8_decode($node_user->Username));
-                            $username = UserManager::purify_username($username, $purification_option_for_usernames);
-                        if (UserManager::is_username_available($username)) {
-                            if (UserManager::is_username_too_long($username_old)) {
-                                $error_message .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$username_old.' '.get_lang('To').' '.$username.' <br />';
-                            }
-                            $lastname = trim(api_utf8_decode($node_user->Lastname));
-                            $firstname = trim(api_utf8_decode($node_user->Firstname));
+                        if (UserManager::is_username_available($username)) {                            
                             $password = api_utf8_decode($node_user->Password);
                             if (empty($password)) {
                                 $password = api_generate_password();
                             }
-                            $email = trim(api_utf8_decode($node_user->Email));
-                            $official_code = trim(api_utf8_decode($node_user->OfficialCode));
-                            $phone = trim(api_utf8_decode($node_user->Phone));
-                            $status = trim(api_utf8_decode($node_user->Status));
-                            switch ($status) {
-                                case 'student' : $status = 5; break;
-                                case 'teacher' : $status = 1; break;
-                                default : $status = 5; $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
-                            }
 
-                            // Adding the current user to the platform.
-                            $sql = "INSERT INTO $tbl_user SET
-                                    username = '".Database::escape_string($username)."',
-                                    lastname = '".Database::escape_string($lastname)."',
-                                    firstname = '".Database::escape_string($firstname)."',
-                                    password = '".(api_get_encrypted_password($password))."',
-                                    email = '".Database::escape_string($email)."',
-                                    official_code = '".Database::escape_string($official_code)."',
-                                    phone = '".Database::escape_string($phone)."',
-                                    status = '".Database::escape_string($status)."'";
-
-                            // When it is applicable, adding the access_url rel user relationship too.
-                            Database::query($sql);
-                            $return = Database::insert_id();
-                            
-                            if ($_configuration['multiple_access_urls']) {
-                                if (api_get_current_access_url_id() != -1) {
-                                    UrlManager::add_user_to_url($return, api_get_current_access_url_id());
-                                } else {
-                                    UrlManager::add_user_to_url($return, 1);
-                                }
-                            } else {
-                                // We add by default in the access_url_user table with access_url_id = 1.
-                                UrlManager::add_user_to_url($return, 1);
+                            switch ($node_user->Status) {
+                                case 'student' : 
+                                    $status = 5; 
+                                    break;
+                                case 'teacher' : 
+                                    $status = 1; 
+                                    break;
+                                default : 
+                                    $status = 5; 
+                                    $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
                             }
-                            // Sending email to the current user.
-                            if ($send_mail) {
-                                $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-                                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                                $emailbody = "[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear').' '.api_get_person_name($firstname, $lastname).",\n\n".get_lang('langYouAreReg').' '.api_get_setting('siteName') .' '.get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') .' '. get_lang('langIs') .' '. $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');
-                                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                                $email_admin = api_get_setting('emailAdministrator');
-                                @api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-                            }
+                                                        
+                            $result = UserManager::create_user(
+                                    api_utf8_decode($node_user->Firstname), 
+                                    api_utf8_decode($node_user->Lastname),
+                                    $status,
+                                    api_utf8_decode($node_user->Email),
+                                    $username,
+                                    $password,
+                                    api_utf8_decode($node_user->OfficialCode),
+                                    null,
+                                    api_utf8_decode($node_user->Phone),
+                                    null,
+                                    PLATFORM_AUTH_SOURCE,
+                                    null,
+                                    1,
+                                    0,
+                                    null,
+                                    null,
+                                    $send_mail
+                                    );                            
                         } else {
                             $lastname = trim(api_utf8_decode($node_user->Lastname));
                             $firstname = trim(api_utf8_decode($node_user->Firstname));
@@ -159,34 +145,36 @@ if ($_POST['formSent']) {
                 }
 
                 // Creating  courses from <Sessions> <Courses> base node.
-                /*
+                
                 if (count($root->Courses->Course) > 0) {
                     foreach ($root->Courses->Course as $courseNode) {
-                        $course_code    = trim(api_utf8_decode($courseNode->CourseCode));
-                        $title          = trim(api_utf8_decode($courseNode->CourseTitle));
-                        $description    = trim(api_utf8_decode($courseNode->CourseDescription));
-                        $language       = api_get_valid_language(api_utf8_decode($courseNode->CourseLanguage));
-                        $username       = trim(api_utf8_decode($courseNode->CourseTeacher));
-
+                        
+                        $params = array();
+                        if (empty($courseNode->CourseTitle)) {
+                            $params['title']            = api_utf8_decode($courseNode->CourseCode);
+                        } else {
+                            $params['title']            = api_utf8_decode($courseNode->CourseTitle);
+                        }
+                        $params['wanted_code']      = api_utf8_decode($courseNode->CourseCode);         
+                        $params['tutor_name']       = null;
+                        $params['course_category']  = null;                    
+                        $params['course_language']  = api_get_valid_language(api_utf8_decode($courseNode->CourseLanguage));
+                        $params['user_id']          = api_get_user_id();
+                        
                         // Looking up for the teacher.
+                        $username       = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
                         list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
-                        
-                        if (empty($title)) {
-                            $title = $course_code;
-                        }
-                        
-                        $course_info = CourseManager::create_course($title, $course_code, lang2db($description), false, 
-                                                                    api_get_person_name($firstname, $lastname, null, null, $language), '', $language, $user_id);
+                                               
+                        $params['teachers']  = $user_id;
+                        CourseManager::create_course($params);
                     }
-                }*/
+                }
 
                 // Creating sessions from <Sessions> base node.
                 if (count($root->Session) > 0) {
-
                     foreach ($root->Session as $node_session) {
-
                         $course_counter = 0;
                         $user_counter = 0;
 
@@ -208,7 +196,7 @@ if ($_POST['formSent']) {
                         $date_start = trim(api_utf8_decode($node_session->DateStart)); // Just in case - encoding conversion.
 
                         if (!empty($date_start)) {
-                            list($year_start, $month_start, $day_start) = explode('-', $date_start);
+                            list($year_start, $month_start, $day_start) = explode('/', $date_start);
                             if(empty($year_start) || empty($month_start) || empty($day_start)) {
                                 $error_message .= get_lang('WrongDate').' : '.$date_start.'<br />';
                                 break;
@@ -218,9 +206,9 @@ if ($_POST['formSent']) {
 
                             $date_end = trim(api_utf8_decode($node_session->DateEnd));
                             if (!empty($date_start)) {
-                                list($year_end, $month_end, $day_end) = explode('-', $date_end);
+                                list($year_end, $month_end, $day_end) = explode('/', $date_end);
                                 if (empty($year_end) || empty($month_end) || empty($day_end)) {
-                                    $error_message .= get_lang('WrongDate').' : '.$date_end.'<br />';
+                                    $error_message .= get_lang('Error').' : '.$date_end.'<br />';
                                     break;
                                 } else {
                                     $time_end = mktime(0, 0, 0, $month_end, $day_end, $year_end);
@@ -300,10 +288,8 @@ if ($_POST['formSent']) {
                         }
 
                         // Associate the session with access_url.
-                        global $_configuration;
-                        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-                        if ($_configuration['multiple_access_urls']) {
-                            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                        global $_configuration;                        
+                        if ($_configuration['multiple_access_urls']) {                            
                             $access_url_id = api_get_current_access_url_id();
                             UrlManager::add_session_to_url($session_id, $access_url_id);
                         } else {
@@ -774,9 +760,6 @@ if ($_POST['formSent']) {
 // Display the header.
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
 if (count($inserted_in_course) > 1) {
     $msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
     foreach ($inserted_in_course as $code => $title) {
@@ -786,72 +769,29 @@ if (count($inserted_in_course) > 1) {
     Display::display_warning_message($msg);
 }
 
-/*
-
- update session by default is true
- <tr>
-  <td nowrap="nowrap" valign="top"><?php echo get_lang('UpdateSession'); ?> :</td>
-  <td>
-    <input class="checkbox" type="checkbox" name="updatesession" id="updatesession" value="true" />
-  </td>
-</tr>
-
-
-  */
-?>
-
-<form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
-<input type="hidden" name="formSent" value="1">
-<?php
 echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-?>
-<table border="0" cellpadding="5" cellspacing="0">
 
-<?php
 if (!empty($error_message)) {
-?>
-<tr>
-  <td colspan="2">
-<?php
     Display::display_normal_message($error_message, false);
-?>
-  </td>
-</tr>
-<?php
 }
+
+$form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
+$form->addElement('hidden', 'formSent', 1);
+$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
+
+$form->addElement('radio', 'file_type', array(get_lang('FileType'), '<a href="example_session.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>'), 'CSV', 'csv');
+$form->addElement('radio', 'file_type', array(null, '<a href="example_session.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>'), 'XML', 'xml');
+
+$form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
+$form->addElement('button', 'submit', get_lang('ImportSession'));
+
+$defaults = array('sendMail' => 'true','file_type' => 'csv');
+$form->setDefaults($defaults);
+$form->display();
+
 ?>
-<tr>
-  <td nowrap="nowrap"><?php echo get_lang('ImportFileLocation'); ?> :</td>
-  <td><input type="file" name="import_file" size="30"></td>
-</tr>
-<tr>
-  <td nowrap="nowrap" valign="top"><?php echo get_lang('FileType'); ?> :</td>
-  <td>
-    <input class="checkbox" type="radio" name="file_type" id="file_type_xml" value="xml" checked="checked" /> <label for="file_type_xml">XML</label> (<a href="example_session.xml" target="_blank"><?php echo get_lang('ExampleXMLFile'); ?></a>)<br>
-    <input class="checkbox" type="radio" name="file_type" id="file_type_csv"  value="csv" <?php if ($form_sent && $file_type == 'csv') echo 'checked="checked"'; ?>> <label for="file_type_csv">CSV</label> (<a href="example_session.csv" target="_blank"><?php echo get_lang('ExampleCSVFile'); ?></a>)<br>
-  </td>
-</tr>
-<tr>
-  <td nowrap="nowrap" valign="top"><?php echo get_lang('SendMailToUsers'); ?> :</td>
-  <td>
-    <input class="checkbox" type="checkbox" name="sendMail" id="sendMail" value="true" />
-  </td>
-</tr>
-
-
-
-
-<tr>
-  <td>&nbsp;</td>
-  <td>
-  <button class="save" type="submit" name="name" value="<?php echo get_lang('ImportSession'); ?>"><?php echo get_lang('ImportSession'); ?></button>
-  </td>
-</tr>
-</table>
-</form>
-
 <font color="gray">
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
@@ -884,7 +824,7 @@ if (!empty($error_message)) {
     &lt;Courses&gt;
         &lt;Course&gt;
             &lt;CourseCode&gt;<strong>xxx</strong>&lt;/CourseCode&gt;
-            &lt;CourseTeacher&gt;xxx&lt;/CourseTeacher&gt;
+            &lt;CourseTeacher&gt;<strong>teacher_username</strong>&lt;/CourseTeacher&gt;
             &lt;CourseLanguage&gt;xxx&lt;/CourseLanguage&gt;
             &lt;CourseTitle&gt;xxx&lt;/CourseTitle&gt;
             &lt;CourseDescription&gt;xxx&lt;/CourseDescription&gt;
@@ -926,5 +866,4 @@ if (!empty($error_message)) {
 <?php
 
 /* FOOTER */
-
 Display::display_footer();

@@ -30,6 +30,15 @@ $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
+$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
+if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
+    $error_message = Security::remove_XSS($_GET['message']);
+}
+
+if (!empty($error_message)) {
+    Display::display_normal_message($error_message, false);
+}
+
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
 if (isset($_REQUEST['keyword'])) {

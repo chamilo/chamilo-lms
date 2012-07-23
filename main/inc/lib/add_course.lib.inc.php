@@ -2699,6 +2699,9 @@ function register_course($params) {
                 Database::query($sql);
             }
             if (!empty($teachers)) {
+                if (!is_array($teachers)) {
+                    $teachers = array($teachers);
+                }
                 foreach ($teachers as $key) {
                     //just in case
                     if ($key == $user_id) {

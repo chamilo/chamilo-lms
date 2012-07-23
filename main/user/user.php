@@ -109,7 +109,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     
                 if (isset($course_info['activate_legal']) AND $course_info['activate_legal'] == 1) {
                     $legal = ', legal_agreement';    
-                    $a_users[0][] = get_lang('Legal');
+                    $a_users[0][] = get_lang('LegalAgreementAccepted');
                 }
                 
                 if ($_GET['type'] == 'pdf') {

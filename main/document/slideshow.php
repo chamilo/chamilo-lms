@@ -238,7 +238,8 @@ if ($slide_id == 'all') {
 				
 				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					if (!file_exists($image_thumbnail)){
-						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail		
+						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail
+												
 						switch($imagetype) {
 							case 'gif':
 								$source_img = imagecreatefromgif($image);
@@ -307,19 +308,19 @@ if ($slide_id == 'all') {
 					//if images aren't support by gd (not gif, jpg, jpeg, png)
 					
 					if ($imagetype=="bmp"){
-						$original_image_size = api_getimagesize($image);//it isn't heavey here because thumbnails are already created. Here only for no gif, jpg, or png image files. But if there are many image files no supported can be heavy here too.
-						if($original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height){
-							$image_height_width = resize_image($image, $max_thumbnail_width, $max_thumbnail_height, 1);
-							$image_height = $image_height_width[0];
-							$image_width = $image_height_width[1];
+						$original_image_size = getimagesize($image);// use getimagesize instead api_getimagesize($image); becasuse api_getimagesize doesn't support bmp files. Put here for each show, only for a few bmp files isn't heavy
+						if($original_image_size[0]>$max_thumbnail_width || $original_image_size[1]>$max_thumbnail_height){
+							$thumbnail_size=api_calculate_image_size($original_image_size[0], $original_image_size[1], $max_thumbnail_width, $max_thumbnail_height);//don't use resize_image because doesn't run with bmp files
+							$image_height = $thumbnail_size['height'];
+							$image_width  = $thumbnail_size['width'];
 						}
 						else{
-							$image_height=$original_image_size['height'];
-							$image_width=$original_image_size['width'];
+							$image_height=$original_image_size[0];
+							$image_width=$original_image_size[1];
 						}
 					}
 					else{
-						//example for svg files
+						//example for svg files,...
 						$image_width=$max_thumbnail_width;
 						$image_height=$max_thumbnail_height;
 					}

@@ -34,7 +34,7 @@ if ($path != '/') {
 	$folder = '/';
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-
+	
 // Including the functions for the slideshow
 require_once 'slideshow.inc.php';
 
@@ -182,15 +182,20 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 $image_tag = array ();
 if ($slide_id == 'all') {
 	
-	// Config thumbnails
-	$row_items 			  = 4;//only in slideshow.php
+	// Config for make thumbnails	
 	$allowed_thumbnail_types = array('jpg','jpeg','gif','png');
-	$max_thumbnail_width  = 100;
-	$max_thumbnail_height = 100;
-	$png_compression	  = 0;//0(none)-9
-	$jpg_quality  	      = 75;//from 0 to 100 (default is 75). More quality less compression
+	$max_thumbnail_width     = 100;
+	$max_thumbnail_height    = 100;
+	$png_compression	     = 0;//0(none)-9
+	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
 	
 	$directory_thumbnails=$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
+	
+	//Other parameters only for show tumbnails
+	$row_items 			     = 4;//only in slideshow.php
+	$number_image 			 = 7;//num icons cols to show
+	$thumbnail_width_frame=$max_thumbnail_width;//optional $max_thumbnail_width+x
+	$thumbnail_height_frame=$max_thumbnail_height;
 	
 	// Create the template_thumbnails folder (if no exist)
 	
@@ -218,9 +223,10 @@ if ($slide_id == 'all') {
 		}
 	}
 	*/
-	
+
 	// check files and thumbnails
 	if (is_array($image_files_only)) {
+
 		foreach ($image_files_only as $one_image_file) {
 			$image = $sys_course_path.$_course['path'].'/document'.$folder.$one_image_file;
 			$image_thumbnail= $directory_thumbnails.'.'.$one_image_file;
@@ -323,7 +329,6 @@ $html_table = '';
 echo '<table align="center" width="760px" border="0" cellspacing="10">';
 $i = 0;
 $count_image = count($image_tag);
-$number_image = 6;//num icons cols to show
 $number_iteration = ceil($count_image/$number_image);
 $p = 0;
 for ($k = 0; $k < $number_iteration; $k++) {
@@ -331,14 +336,35 @@ for ($k = 0; $k < $number_iteration; $k++) {
 	for ($i = 0; $i < $number_image; $i++) {
 		if (!is_null($image_tag[$p])) {
 			echo '<td>';
-			echo '<div align="center"><a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
-			echo '</div></td>';
+			//TODO:move styles to css files and center image vertical
+			?>
+            
+			<style>
+			div.thumbnail:hover {
+			  border-color: #0088cc;
+			  background-color:#FBFFFF;
+			  -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+			  -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+			  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+			}
+			</style>
+
+			<?php			
+			echo '<div class="thumbnail" style="text-align: center; margin:5px; padding:9px; height:'.$thumbnail_height_frame.'px; width:'.$thumbnail_width_frame.'px">';
+			echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
+			echo '</div>';
+			echo '</td>';
 		}
 		$p++;
 	}
 	echo '</tr>';
 }
 echo '</table>';
+
+
+
+
+
 
 /*	ONE AT A TIME VIEW */
 $course_id = api_get_course_int_id();
@@ -370,8 +396,8 @@ if ($slide_id != 'all') {
 
 		echo '<table align="center" border="0" cellspacing="10">';
 		echo '<tr>';
-		echo '<td align="center">';
-		echo Display::tag('h1',$row['title']);
+		echo '<td style="padding:10px;" align="center">';
+		echo Display::tag('h2',$row['title']);
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';

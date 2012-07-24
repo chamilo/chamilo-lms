@@ -223,7 +223,7 @@ if ($slide_id == 'all') {
 		}
 	}
 	*/
-
+			  
 	// check files and thumbnails
 	if (is_array($image_files_only)) {
 
@@ -235,11 +235,10 @@ if ($slide_id == 'all') {
 				//check thumbnail
 				$imagetype = explode(".", $image);
 				$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
-				$original_image_size = api_getimagesize($image);
 				
-				if(in_array($imagetype,$allowed_thumbnail_types) && $original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height) {
-					
-					if (!file_exists($image_thumbnail)){						
+				if(in_array($imagetype,$allowed_thumbnail_types)) {
+					if (!file_exists($image_thumbnail)){
+						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail		
 						switch($imagetype) {
 							case 'gif':
 								$source_img = imagecreatefromgif($image);
@@ -297,27 +296,37 @@ if ($slide_id == 'all') {
 		
 						//clean memory
 						imagedestroy($crop);					
-					}//end exist thumbnail
+					}//end !exist thumbnail
+					
 					//show thumbnail and link
 					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
 					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';	
 				}
 				else{
-					//image format no support, get path original image
+					//if images aren't support by gd (not gif, jpg, jpeg, png)
 					
-					if($original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height){
-						$image_height_width = resize_image($image, $max_thumbnail_width, $max_thumbnail_height, 1);
-						$image_height = $image_height_width[0];
-						$image_width = $image_height_width[1];
+					if ($imagetype=="bmp"){
+						$original_image_size = api_getimagesize($image);//it isn't heavey here because thumbnails are already created. Here only for no gif, jpg, or png image files. But if there are many image files no supported can be heavy here too.
+						if($original_image_size['width']>$max_thumbnail_width || $original_image_size['height']>$max_thumbnail_height){
+							$image_height_width = resize_image($image, $max_thumbnail_width, $max_thumbnail_height, 1);
+							$image_height = $image_height_width[0];
+							$image_width = $image_height_width[1];
+						}
+						else{
+							$image_height=$original_image_size['height'];
+							$image_width=$original_image_size['width'];
+						}
 					}
 					else{
-						$image_height=$original_image_size['height'];
-						$image_width=$original_image_size['width'];
+						//example for svg files
+						$image_width=$max_thumbnail_width;
+						$image_height=$max_thumbnail_height;
 					}
-					
+
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
 					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';	
+					
 				}//end allowed image types
 			}//end if exist file image
 		}//end foreach

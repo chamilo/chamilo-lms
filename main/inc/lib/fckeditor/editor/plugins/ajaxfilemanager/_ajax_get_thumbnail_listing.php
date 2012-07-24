@@ -113,7 +113,13 @@ foreach ($fileList as $file) {
 						if (in_array($imagetype,$allowed_thumbnail_types)) {
 							
 							if (!file_exists($image_thumbnail)) {
-								$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail					
+								$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail		
+								if($max_thumbnail_width>$original_image_size['width'] || $max_thumbnail_height>$original_image_size['height']){
+							echo '<img src="' . appendQueryString($thumbnailBaseUrl, ' path=' . base64_encode($file['path'])) . '" id="thumbImg' . $count . '"></a>' . "\n";
+							continue;
+								}
+								
+											
 								switch ($imagetype) {
 									case 'gif':
 										$source_img = imagecreatefromgif($image);

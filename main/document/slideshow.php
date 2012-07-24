@@ -239,7 +239,13 @@ if ($slide_id == 'all') {
 				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					if (!file_exists($image_thumbnail)){
 						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail
-												
+			
+						if($max_thumbnail_width>$original_image_size['width'] || $max_thumbnail_height>$original_image_size['height']){
+							$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
+							$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
+							continue;
+						}
+						
 						switch($imagetype) {
 							case 'gif':
 								$source_img = imagecreatefromgif($image);
@@ -300,9 +306,10 @@ if ($slide_id == 'all') {
 					}//end !exist thumbnail
 					
 					//show thumbnail and link
+					
 					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';	
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
 				}
 				else{
 					//if images aren't support by gd (not gif, jpg, jpeg, png)

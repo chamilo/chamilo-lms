@@ -217,7 +217,7 @@ echo '</div>';
 if ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     echo '<div class="actions">';    
     // Create a search-box.
-    $form_search = new FormValidator('search_simple', 'get', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', 'width=200px', false);
+    $form_search = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', array('class' => 'form-search'), false);
     $renderer =& $form_search->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span>');
     $form_search->addElement('hidden', 'studentlist', 'true');
@@ -558,20 +558,20 @@ if ($_GET['studentlist'] == 'false') {
 
         $table->set_additional_parameters($parameters);
         $tab_table_header = array();    // tab of header texts
-        $table->set_header(0, get_lang('OfficialCode'), true, 'align="center"');
+        $table->set_header(0, get_lang('OfficialCode'), true);
         $tab_table_header[] = get_lang('OfficialCode');
         if ($is_western_name_order) {
-            $table->set_header(1, get_lang('FirstName'), true, 'align="center"');
+            $table->set_header(1, get_lang('FirstName'), true);
             $tab_table_header[] = get_lang('FirstName');
-            $table->set_header(2, get_lang('LastName'),  true, 'align="center"');
+            $table->set_header(2, get_lang('LastName'),  true);
             $tab_table_header[] = get_lang('LastName');
         } else {
-            $table->set_header(1, get_lang('LastName'),  true, 'align="center"');
+            $table->set_header(1, get_lang('LastName'),  true);
             $tab_table_header[] = get_lang('LastName');
-            $table->set_header(2, get_lang('FirstName'), true, 'align="center"');
+            $table->set_header(2, get_lang('FirstName'), true);
             $tab_table_header[] = get_lang('FirstName');
         }
-        $table->set_header(3, get_lang('Login'), false, 'align="center"');  // 
+        $table->set_header(3, get_lang('Login'), false);
         $tab_table_header[] = get_lang('Login');
         
         $table->set_header(4, get_lang('TrainingTime'), false);
@@ -593,9 +593,9 @@ if ($_GET['studentlist'] == 'false') {
         if (empty($session_id)) {
             $table->set_header(11, get_lang('Survey'), false);
             $tab_table_header[] = get_lang('Survey');
-            $table->set_header(12, get_lang('FirstLogin'), false, 'align="center"');
+            $table->set_header(12, get_lang('FirstLogin'), false);
             $tab_table_header[] = get_lang('FirstLogin');
-            $table->set_header(13, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(13, get_lang('LatestLogin'), false);
             $tab_table_header[] = get_lang('LatestLogin');
             if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
                 $table->set_header(14, $extra_info['field_display_text'], false);
@@ -608,9 +608,9 @@ if ($_GET['studentlist'] == 'false') {
             }
             
         } else {
-            $table->set_header(11, get_lang('FirstLogin'), false, 'align="center"');
+            $table->set_header(11, get_lang('FirstLogin'), false);
             $tab_table_header[] = get_lang('FirstLogin');
-            $table->set_header(12, get_lang('LatestLogin'), false, 'align="center"');
+            $table->set_header(12, get_lang('LatestLogin'), false);
             $tab_table_header[] = get_lang('LatestLogin');
             
             if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                

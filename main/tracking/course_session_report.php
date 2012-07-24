@@ -180,7 +180,7 @@ if (!empty($users) && is_array($users)) {
 		foreach($course_list  as $current_course ) {
 			$total_course = 0;			
 			$user_info_stat = $main_result[$current_course['code']][$user['user_id']];
-			$html_result .= "<td align=\"center\" >";
+			$html_result .= "<td>";
 			if (!empty($user_info_stat['result']) && !empty($user_info_stat['attempts'])) {
 				$result =round($user_info_stat['result']/$user_info_stat['attempts'] * 100, 2);
 				$total_course +=$result;
@@ -203,7 +203,7 @@ if (!empty($users) && is_array($users)) {
 			$total_average_score_count++;
 		}		
 		$string_date=Tracking :: get_last_connection_date($user['user_id'],true);
-		$html_result .="<td  align=\"center\">$total_student</td><td>$string_date</td></tr>";		
+		$html_result .="<td>$total_student</td><td>$string_date</td></tr>";		
 	}
 	
 	$html_result .="<tr><th>".get_lang('AverageScore')."</th>";
@@ -219,7 +219,7 @@ if (!empty($users) && is_array($users)) {
 			$counter++;		
 		}
 		$total_average = $total_average + $average_per_course;
-		$html_result .="<td align=\"center\">$average_per_course</td>";
+		$html_result .="<td>$average_per_course</td>";
 	}	
 	if (!empty($total_average_score_count)) {
 		$total_average = round($total_average_score/($total_average_score_count*100)*100,2);
@@ -227,7 +227,7 @@ if (!empty($users) && is_array($users)) {
 		$total_average = '-';
 	}
 			
-	$html_result .='<td align="center">'.$total_average.'</td>';
+	$html_result .='<td>'.$total_average.'</td>';
 	$html_result .="<td>-</td>";
 	$html_result .="</tr>";
 	$html_result .= '</table>';

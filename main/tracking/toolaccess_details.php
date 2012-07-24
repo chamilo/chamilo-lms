@@ -1,4 +1,4 @@
-<?php // $Id: toolaccess_details.php 20472 2009-05-11 10:02:06Z ivantcholakov $
+<?php
 /* For licensing terms, see /license.txt */
 // TODO: Is this file deprecated?
 
@@ -14,11 +14,7 @@
  * Code
  */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/* INIT SECTION */
 
 $tool = $_REQUEST['tool'];
 $period = $_REQUEST['period'];

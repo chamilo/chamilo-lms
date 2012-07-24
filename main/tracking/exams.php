@@ -296,44 +296,44 @@ foreach ($course_list as $current_course) {
 						$user_info = api_get_user_info($current_student_id);						
 						
 						//User
-						$user_row = '<td align="center">';					  
+						$user_row = '<td >';					  
 						$user_row .= 		$user_info['firstName'].' '.$user_info['lastName'];
 						$user_row .= '</td>';
 						$user_info = $user_info['firstName'].' '.$user_info['lastName'];						
 						
 						//Best result																								
 						if (!empty($a_essais['essais'])) {
-							$user_row .= '<td align="center" >';
+							$user_row .= '<td  >';
 							$user_row .= 		$pourcentageScore;	
 							$temp_array [] = 		$pourcentageScore;				
 							$user_row .= '</td>';
 							
 							if ($pourcentageScore >= $filter_score ) {
-								$user_row .= '<td align="center" style="background-color:#DFFFA8">';
+								$user_row .= '<td  style="background-color:#DFFFA8">';
 								$user_row .= get_lang('PassExam').'</td>';
 								$temp_array [] = 		get_lang('PassExam');
 							} else {
-								$user_row .= '<td align="center" style="background-color:#FC9A9E"  >';
+								$user_row .= '<td  style="background-color:#FC9A9E"  >';
 								$user_row .= get_lang('ExamFail').'</td>';
 								$temp_array [] = 		get_lang('ExamFail');
 							}
 							
-							$user_row .= '<td align="center">';					  
+							$user_row .= '<td >';					  
 							$user_row .= $a_essais['essais'];
 							$temp_array [] = 		$a_essais['essais'];
 							$user_row .= '</td>';	
 						} else {
 							$score = '-';
-							$user_row .= '<td align="center" >';
+							$user_row .= '<td  >';
 							$user_row .=  '-';
 							$temp_array [] = 		'-';
 							$user_row .= '</td>';
 							
-							$user_row .= '<td align="center"  style="background-color:#FCE89A">';					  
+							$user_row .= '<td   style="background-color:#FCE89A">';					  
 							$user_row .= get_lang('NoAttempt');
 							$temp_array [] = 	get_lang('NoAttempt');
 							$user_row .= '</td>';
-							$user_row .= '<td align="center">';					  
+							$user_row .= '<td >';					  
 							$user_row .= 0;
 							$temp_array [] = 0;
 							$user_row .= '</td>';
@@ -369,23 +369,23 @@ foreach ($course_list as $current_course) {
 				}
 				if ($global) {
 					//Exam taken
-					$html_result .= '<td align="center">';					  
+					$html_result .= '<td >';					  
 					$html_result .= 		$taken;
 					$global_row[]= $taken;
 					//echo 		$total.' /  '.$total_students;
 					$html_result .= '</td>';
 					
 					//Exam NOT taken 
-					$html_result .= '<td align="center">';					  
+					$html_result .= '<td >';					  
 					$html_result .= 		$not_taken = $total_students - $taken;
 					$global_row[]= $not_taken;
 					$html_result .= '</td>';
 					
 					//Examn pass
 					if (!empty($total_with_parameter_score)) {
-						$html_result .= '<td align="center"  style="background-color:#DFFFA8" >';
+						$html_result .= '<td   style="background-color:#DFFFA8" >';
 					} else {
-						$html_result .= '<td align="center"  style="background-color:#FCE89A"  >';
+						$html_result .= '<td   style="background-color:#FCE89A"  >';
 					}
 					
 					$html_result .= $total_with_parameter_score;
@@ -393,13 +393,13 @@ foreach ($course_list as $current_course) {
 					$html_result .= '</td>';
 					
 					//Exam fail 
-					$html_result .= '<td align="center">';
+					$html_result .= '<td >';
 
 					$html_result .= 		$fail = $taken - $total_with_parameter_score;
 					$global_row[]= $fail;
 					$html_result .= '</td>';
 					
-					$html_result .= '<td align="center">';
+					$html_result .= '<td >';
 					$html_result .= 		$total_students;
 					$global_row[]= $total_students;
 				

@@ -218,11 +218,11 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
 		
 		$html_result .= "</td>";
 		
-		$html_result .= "<td align=\"center\" >";						
+		$html_result .= "<td>";						
 		$html_result .= round($question->results, 2).' / '.$question->weighting;
 		$html_result .= "</td>";
         
-        $html_result .= "<td align=\"center\" >";                       
+        $html_result .= "<td>";                       
         $html_result .= $question->quantity;
         $html_result .= "</td>";
         

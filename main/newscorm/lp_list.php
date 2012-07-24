@@ -46,8 +46,8 @@ api_protect_course_script();
  */
 /* Require the search widget and prepare the header with its stuff. */
 if (api_get_setting('search_enabled') == 'true') {
-  require api_get_path(LIBRARY_PATH).'search/search_widget.php';
-  search_widget_prepare(&$htmlHeadXtra);
+    require api_get_path(LIBRARY_PATH).'search/search_widget.php';
+    search_widget_prepare($htmlHeadXtra);
 }
 Display::display_header($nameTools, 'Path');
 $current_session = api_get_session_id();

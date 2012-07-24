@@ -1292,7 +1292,7 @@ class Display {
 	 * @param	bool	add a div wrapper
 	 * @todo	use     templates
      **/
-    public function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
+    public static function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
 		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
         		
 		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
@@ -1336,11 +1336,11 @@ class Display {
         return $html;        
     }
     
-    function return_default_table_class() {
+    public static function return_default_table_class() {
         return 'data_table';
     }
     
-    public function page_header($title, $second_title = null) {
+    public static function page_header($title, $second_title = null) {
         $title = Security::remove_XSS($title);
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
@@ -1349,17 +1349,17 @@ class Display {
         return '<div class="page-header"><h1>'.$title.'</h1></div>';
     }
     
-    public function page_header_and_translate($title, $second_title = null) {
+    public static function page_header_and_translate($title, $second_title = null) {
         $title = get_lang($title);
         return self::page_header($title, $second_title);
     }
     
-     public function page_subheader_and_translate($title, $second_title = null) {
+     public static function page_subheader_and_translate($title, $second_title = null) {
         $title = get_lang($title);
         return self::page_subheader($title, $second_title);
     }
     
-    public function page_subheader($title, $second_title = null) {
+    public static function page_subheader($title, $second_title = null) {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
@@ -1380,7 +1380,7 @@ class Display {
         return $html;
     }
     
-    function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
         $percentage = intval($percentage);
         $div = '<div class="progress progress-striped">                                    
                     <div class="bar" style="width: '.$percentage.'%;"></div>                                            
@@ -1395,7 +1395,7 @@ class Display {
         return $div;
     }
     
-    function badge($count, $type ="warning") {  
+    public static function badge($count, $type ="warning") {  
         $class = '';
         
         switch ($type) {
@@ -1422,7 +1422,7 @@ class Display {
         return null;
     }
     
-    function badge_group($badge_list) {
+    public static function badge_group($badge_list) {
         $html = '<div class="badge-group">';
         foreach ($badge_list as $badge) {
             $html .= $badge;
@@ -1431,7 +1431,7 @@ class Display {
         return $html;
     }
     
-    function label($content, $type = null) {  
+    public static function label($content, $type = null) {  
         $class = '';
         switch ($type) {
             case 'success':
@@ -1460,7 +1460,7 @@ class Display {
         return $html;        
     }    
     
-    function actions($items) {
+    public static function actions($items) {
         if (!empty($items)) {
             $html = '<div class="new_actions"><ul class="nav nav-pills">';        
             foreach ($items as $value) {
@@ -1480,7 +1480,7 @@ class Display {
     /**
      * Prints a tooltip
      */
-    function tip($text, $tip)  {
+    public static function tip($text, $tip)  {
         if (empty($tip)) {
             return $text;
         }

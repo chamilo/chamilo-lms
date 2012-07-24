@@ -201,7 +201,6 @@ $langNameOfLang['turkce'] = "Turks";
 $langNameOfLang['vietnamese'] = "Vietnamees";
 $UserInfo = "gebruikersinformatie";
 $langModifyQuestion = "Wijzig vraag";
-$langNameOfLang = "Caam van de taal";
 $langCheckAll = "Controleer alles";
 $langNbAnnoucement = "Mededeling";
 $lang_no_access_here = "Geen toegang tot deze gegevens";

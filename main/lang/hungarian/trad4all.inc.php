@@ -201,7 +201,6 @@ $langNameOfLang['turkce'] = "török";
 $langNameOfLang['vietnamese'] = "vietnámi";
 $UserInfo = "Felhasználói információ";
 $langModifyQuestion = "Kérdés módosítása";
-$langNameOfLang = "Nyelv";
 $langCheckAll = "Összes ellenőrzése";
 $langNbAnnoucement = "Bejelentés";
 $lang_no_access_here = "Itt nincs belépés";

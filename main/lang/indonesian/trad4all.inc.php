@@ -157,7 +157,6 @@ $langNameOfLang['turkce'] = "turki";
 $langNameOfLang['vietnamese'] = "vietnam";
 $UserInfo = "informasi user";
 $langModifyQuestion = "Ubah pertanyaan";
-$langNameOfLang = "Nama bahasa";
 $langCheckAll = "Conteng semua";
 $langNbAnnoucement = "Pengumuman";
 $lang_no_access_here = "Tidak ada akses disini";

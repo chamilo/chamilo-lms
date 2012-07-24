@@ -1055,21 +1055,6 @@ span.form_error {
 	margin: 0;
 	padding: 4px 0 0 10px;
 }
-/*
-==============================================================================
-    divs for category list / platform news on home page
-==============================================================================
-*/
-
-.home_cats {
-	background: #fff;
-	float: left;
-	margin: 0;
-	padding: 0px;
-	padding-top: 8px;
-	position: relative;
-	width: 45%;
-}
 .home_news {
 	background: #fff;
 	float: right;

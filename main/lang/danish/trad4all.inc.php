@@ -194,7 +194,6 @@ $langNameOfLang['turkce'] = "tyrkisk";
 $langNameOfLang['vietnamese'] = "vietnamesisk";
 $UserInfo = "brugerinformation";
 $langModifyQuestion = "Rediger spørgsmålet";
-$langNameOfLang = "Sprogets navn";
 $langCheckAll = "Afkryds alle";
 $langNbAnnoucement = "Meddelelser";
 $lang_no_access_here = "Ingen adgang";

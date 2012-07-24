@@ -160,7 +160,6 @@ $langUsers = "Vartotojai";
 $langPlatformAdmin = "Sistemos administravimas";
 $UserInfo = "vartotojo informacija";
 $langModifyQuestion = "Redaguoti klausimą";
-$langNameOfLang = "Kalbos pavadinimas";
 $langCheckAll = "Tikrinti viską";
 $langNbAnnoucement = "Skelbimas";
 $lang_no_access_here = "Nėra priėjimo";

@@ -195,7 +195,6 @@ $langNameOfLang['turkce'] = "turski";
 $langNameOfLang['vietnamese'] = "vijetnamski";
 $UserInfo = "podatci o korisniku";
 $langModifyQuestion = "Izmijeni pitanje";
-$langNameOfLang = "Ime jezika";
 $langCheckAll = "Označi sve";
 $langNbAnnoucement = "Obavijest";
 $lang_no_access_here = "Zabranjen pristup";

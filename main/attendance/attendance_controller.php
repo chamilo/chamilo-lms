@@ -522,8 +522,6 @@
                 $head_table[] = $array_p2;
 */
 //echo "<pre>"; print_r($head_table); echo "</pre>"; exit();
-
-        export_pdf_attendance(&$head_table, &$data_table, &$header_pdf, $footer_pdf, $title_pdf);
-
+                export_pdf_attendance($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
     } 	
 }

@@ -190,7 +190,6 @@ $langNameOfLang['thai'] = "tajski";
 $langNameOfLang['turkce'] = "turecki";
 $langNameOfLang['vietnamese'] = "wietnamski";
 $UserInfo = "dane użytkownika";
-$langNameOfLang = "Nazwa języka";
 $langCheckAll = "Zaznacz wszystkie";
 $langNbAnnoucement = "Ogłoszenie";
 $lang_no_access_here = "Nie ma dostępu";

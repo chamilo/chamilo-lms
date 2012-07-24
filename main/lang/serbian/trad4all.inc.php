@@ -164,7 +164,6 @@ $langNameOfLang['turkce'] = "turski";
 $langNameOfLang['vietnamese'] = "vijetnamski";
 $UserInfo = "informacija o korisniku";
 $langModifyQuestion = "Izmena putanja";
-$langNameOfLang = "ume jezika";
 $langCheckAll = "Proveri sve";
 $langNbAnnoucement = "Obaveštenje";
 $lang_no_access_here = "Nije dozvoljen pristup";

@@ -4,9 +4,6 @@
  * @package chamilo.plugin.bigbluebutton
  */
 
-require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
-require_once 'bbb_plugin.class.php';
-
 class bbb {
 
     var $url;

@@ -152,7 +152,6 @@ $langNameOfLang['thai'] = "thailandsk";
 $langNameOfLang['turkce'] = "tyrkisk";
 $langNameOfLang['vietnamese'] = "vietnamesisk";
 $UserInfo = "Brukerinformasjon";
-$langNameOfLang = "Navn på språk";
 $langCheckAll = "Velg alle";
 $langNbAnnoucement = "Annonsering";
 $lang_no_access_here = "Ingen adgang her";

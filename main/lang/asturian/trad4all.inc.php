@@ -201,7 +201,6 @@ $langNameOfLang['turkce'] = "turcu";
 $langNameOfLang['vietnamese'] = "vietnamita";
 $UserInfo = "información del usuariu";
 $langModifyQuestion = "Modificar la entruga";
-$langNameOfLang = "yome de la llingua";
 $langCheckAll = "comprobar";
 $langNbAnnoucement = "Anuncies";
 $lang_no_access_here = "Nun tien permisu pa entrar equí";

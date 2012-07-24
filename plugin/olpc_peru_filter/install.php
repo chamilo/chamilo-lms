@@ -9,5 +9,5 @@
  * Initialization
  */
 
-require_once 'config.php';
+require_once dirname(__FILE__).'/config.php';
 OLPC_Peru_FilterPlugin::create()->install();

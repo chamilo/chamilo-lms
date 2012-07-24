@@ -178,7 +178,6 @@ $langNameOfLang['turkce'] = "Türkçe";
 $langNameOfLang['vietnamese'] = "vietnamese";
 $UserInfo = "kullanıcı bilgisi";
 $langModifyQuestion = "Soruyu düzenle";
-$langNameOfLang = "Lisan ismi";
 $langCheckAll = "Hepsini seç";
 $langNbAnnoucement = "Duyuru";
 $lang_no_access_here = "Erişim yetkiniz yok";

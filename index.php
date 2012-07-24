@@ -127,7 +127,7 @@ if (!empty($_POST['submitAuth'])) {
 }
 
 if (api_get_setting('display_categories_on_homepage') == 'true') {
-	$controller->tpl->assign('content', $controller->return_anonymous_course_list());
+	$controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 
 // Facebook connexion, if activated

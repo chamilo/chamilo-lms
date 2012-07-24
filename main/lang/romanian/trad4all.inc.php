@@ -200,7 +200,6 @@ $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['vietnamese'] = "vietnamese";
 $UserInfo = "informatii despre utilizator";
 $langModifyQuestion = "Modifica intrebarea";
-$langNameOfLang = "Numele limbii";
 $langCheckAll = "Bifeaza toate";
 $langNbAnnoucement = "Anunt";
 $lang_no_access_here = "Nu aveti acces aici";

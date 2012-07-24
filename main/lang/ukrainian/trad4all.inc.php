@@ -184,7 +184,6 @@ $langNameOfLang['turkce'] = "&#1090;&#1091;&#1088;&#1077;&#1094;&#1100;&#1082;&#
 $langNameOfLang['vietnamese'] = "&#1074;\'&#1108;&#1090;&#1085;&#1072;&#1084;&#1089;&#1100;&#1082;&#1072;";
 $UserInfo = "інформація користувача";
 $langModifyQuestion = "Змінити питання";
-$langNameOfLang = "Назва мови";
 $langCheckAll = "Позначити всі";
 $langNbAnnoucement = "Оголошення";
 $lang_no_access_here = "Немає доступу";

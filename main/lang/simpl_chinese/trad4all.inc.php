@@ -202,7 +202,6 @@ $langNameOfLang['turkce'] = "土耳其语";
 $langNameOfLang['vietnamese'] = "越南语";
 $UserInfo = "用户信息";
 $langModifyQuestion = "修改题目";
-$langNameOfLang = "语言名称";
 $langCheckAll = "全部选定";
 $langNbAnnoucement = "通知";
 $lang_no_access_here = "不开放";

@@ -1109,16 +1109,7 @@ span.form_error {
 	margin: 0;
 	padding: 4px 0 0 10px;
 }
-/* divs for category list / platform news on home page */
-.home_cats {
-	width: 45%;
-	float: left;
-	position: relative;
-	margin: 0;
-	padding: 0px;
-	padding-top: 8px;
-	background: #fff;
-}
+
 .home_news {
 	width: 45%;
 	float: right;

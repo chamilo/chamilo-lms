@@ -239,12 +239,6 @@ if ($slide_id == 'all') {
 				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					if (!file_exists($image_thumbnail)){
 						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail
-			
-						if($max_thumbnail_width>$original_image_size['width'] || $max_thumbnail_height>$original_image_size['height']){
-							$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-							$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
-							continue;
-						}
 						
 						switch($imagetype) {
 							case 'gif':
@@ -262,6 +256,11 @@ if ($slide_id == 'all') {
 						}
 						
 						$new_thumbnail_size = api_calculate_image_size($original_image_size['width'], $original_image_size['height'], $max_thumbnail_width, $max_thumbnail_height);
+						if($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
+							$new_thumbnail_size['width']=$original_image_size['width'];
+							$new_thumbnail_size['height']=$original_image_size['height'];
+						}
+						
 						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
 						
 						// preserve transparency
@@ -284,8 +283,8 @@ if ($slide_id == 'all') {
 						}
 
 						//resampled image
-						imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
-						
+							imagecopyresampled($crop,$source_img,0,0,0,0,$new_thumbnail_size['width'],$new_thumbnail_size['height'],$original_image_size['width'],$original_image_size['height']);
+
 						switch($imagetype) {
 							case 'gif':
 								imagegif($crop,$image_thumbnail);
@@ -316,7 +315,7 @@ if ($slide_id == 'all') {
 					
 					if ($imagetype=="bmp"){
 						$original_image_size = getimagesize($image);// use getimagesize instead api_getimagesize($image); becasuse api_getimagesize doesn't support bmp files. Put here for each show, only for a few bmp files isn't heavy
-						if($original_image_size[0]>$max_thumbnail_width || $original_image_size[1]>$max_thumbnail_height){
+						if($max_thumbnail_width<$original_image_size[0] || $max_thumbnail_height<$original_image_size[1]){
 							$thumbnail_size=api_calculate_image_size($original_image_size[0], $original_image_size[1], $max_thumbnail_width, $max_thumbnail_height);//don't use resize_image because doesn't run with bmp files
 							$image_height = $thumbnail_size['height'];
 							$image_width  = $thumbnail_size['width'];

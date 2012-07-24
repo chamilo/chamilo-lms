@@ -194,7 +194,6 @@ $langNameOfLang['turkce'] = "турецкий";
 $langNameOfLang['vietnamese'] = "вьетнамский";
 $UserInfo = "информация пользователя";
 $langModifyQuestion = "Изменить вопрос";
-$langNameOfLang = "Название языка";
 $langCheckAll = "Проверить все";
 $langNbAnnoucement = "Объявление";
 $lang_no_access_here = "Здесь доступа нет";

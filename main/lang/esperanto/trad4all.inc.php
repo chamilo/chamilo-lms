@@ -157,7 +157,6 @@ $langNameOfLang['turkce'] = "turka";
 $langNameOfLang['vietnamese'] = "vjetnama";
 $UserInfo = "uzulaj informoj";
 $langModifyQuestion = "Ŝanĝi la demandon";
-$langNameOfLang = "nomo de la lingvo";
 $langCheckAll = "Kontroli ĉion";
 $langNbAnnoucement = "Komuniko";
 $lang_no_access_here = "Ne aliro ĉi-tien";

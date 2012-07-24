@@ -142,7 +142,6 @@ $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['vietnamese'] = "vietnamese";
 $UserInfo = "유저 정보";
 $langModifyQuestion = "문제 수정";
-$langNameOfLang = "언어";
 $langNbAnnoucement = "공지사항";
 $lang_no_access_here = "액세스한 사람이 없습니다";
 $langOtherCourses = "다른 과정들";

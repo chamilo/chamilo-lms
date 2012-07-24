@@ -201,7 +201,6 @@ $langNameOfLang['turkce'] = "turkiska";
 $langNameOfLang['vietnamese'] = "vietnamesiska";
 $UserInfo = "användarinformation";
 $langModifyQuestion = "Ändra fråga";
-$langNameOfLang = "Språkets namn";
 $langCheckAll = "Markera allt";
 $langNbAnnoucement = "Tillkännagivande";
 $lang_no_access_here = "Ingen access här";

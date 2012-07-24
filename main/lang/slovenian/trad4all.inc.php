@@ -2,7 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Ta posnetek je neviden za tečajnike. Do njih lahko dostopite kot učitelj.";
 $DeleteAllAttendances = "Odstrani vso obstoječo prisotnost";
+$Unsubscribe = "Izpiši se";
 $SearchXapianModuleNotInstalled = "Xapian iskalni modul ni nameščen";
 $Title = "Naslov";
 $By = "Objavil";
@@ -203,7 +205,6 @@ $langNameOfLang['turkce'] = "turkish";
 $langNameOfLang['vietnamese'] = "vietnamese";
 $UserInfo = "informacije o uporabniku";
 $langModifyQuestion = "Shrani vprašanje";
-$langNameOfLang = "ime jezika";
 $langCheckAll = "Izberi vse";
 $langNbAnnoucement = "Obvestilo";
 $lang_no_access_here = "Tu ni dostopa";
@@ -730,6 +731,7 @@ $Until = "Do";
 $FirstPage = "Prva stran";
 $LastPage = "Zadnja stran";
 $Coachs = "Coach-i";
+$DragAndDropAnElementHere = "Povleci in izpusti element tule";
 $ThereAreNoRegisteredDatetimeYet = "Trenutni ni nobenega registriranega datuma/časa";
 $CalendarList = "Koledarski seznam prisotnosti";
 $AttendanceCalendarDescription = "Koledar prisotnosti omogoča registracijo spiska prisotnosti (po eno na obstoječo sejo/uro, ki ji mora tečajnik prisostvovati). Dodaj nov spisek prisotnosti tule.";
@@ -1231,4 +1233,12 @@ $Detailed = "Podrobno";
 $ResourceLockedByGradebook = "Ta možnost ni dostopna, ker je ta aktivnost vsebovana v nalogi/objavi, ki je trenutno zaklenjena. Za odklepanje naloge se obrnite na upravitelja platforme.";
 $ConfirmToLockElement = "Ste prepričani, da želite zakleniti ta element? Po zaklepanju tega elementa ne bo več mogoče urejati tečajnikovih rezultatov. Za odklepanje boste naknadno morali zaprositi upravitelja platforme.";
 $ConfirmToUnLockElement = "Ste prepričani, da želite odkleniti ta element?";
+$Default = "Privzeto";
+$ReturnToCourseHomepage = "Na domačo stran tečaja";
+$WebCamClip = "Posnetek s spletne kamere";
+$Snapshot = "Posnetek";
+$LocalInputImage = "Lokalna slika";
+$ClipSent = "Posnetek je bil poslan";
+$Auto = "Avtomatično";
+$Stop = "Zaustavi";
 ?>

@@ -157,7 +157,6 @@ $langNameOfLang['turkce'] = "µØÃ¡Õ";
 $langNameOfLang['vietnamese'] = "àÇÕÂŽ¹ÒÁ";
 $UserInfo = "ข้อมูลของผู้ใช้";
 $langModifyQuestion = "ปรับ/แก้ไขคำถาม";
-$langNameOfLang = "ชื่อภาษา";
 $langCheckAll = "เลือกทั้งหมด";
 $langNbAnnoucement = "ประกาศ";
 $lang_no_access_here = "ห้ามเข้า";

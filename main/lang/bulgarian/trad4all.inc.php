@@ -202,7 +202,6 @@ $langNameOfLang['turkce'] = "турски";
 $langNameOfLang['vietnamese'] = "виетнамски";
 $UserInfo = "потребителска информация";
 $langModifyQuestion = "Промяна на въпроса";
-$langNameOfLang = "Наименование на езика";
 $langCheckAll = "Провери всички";
 $langNbAnnoucement = "Обяви";
 $lang_no_access_here = "Нямате достъп тук.";

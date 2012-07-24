@@ -156,7 +156,6 @@ $langNameOfLang['turkce'] = "&#1578;&#1585;&#1705;&#1740;";
 $langNameOfLang['vietnamese'] = "&#1608;&#1740;&#1578;&#1606;&#1575;&#1605;&#1740;";
 $UserInfo = "فهرست اعضا";
 $langModifyQuestion = "تغییر سؤال";
-$langNameOfLang = "زبان";
 $langCheckAll = "انتخاب همه";
 $langNbAnnoucement = "اطلاعیه ها";
 $lang_no_access_here = "دسترسی\nغیرممکن است";

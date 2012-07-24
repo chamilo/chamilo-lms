@@ -144,7 +144,6 @@ $langNameOfLang['thai'] = "ôáúëáíäÝæéêá";
 $langNameOfLang['turkce'] = "ôïõñêéêÜ";
 $UserInfo = "πληροφορίες χρήστη";
 $langModifyQuestion = "Μετατροπή μιας ερώτησης";
-$langNameOfLang = "Όνομα γλώσσας";
 $langNbAnnoucement = "Ανακοίνωση";
 $lang_no_access_here = "Δεν επιτρέπεται η πρόσβαση εδώ";
 $langOtherCourses = "άλλα μαθήματα";

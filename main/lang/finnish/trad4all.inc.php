@@ -175,7 +175,6 @@ $langUsers = "Käyttäjät";
 $langPlatformAdmin = "Alustan ylläpito";
 $UserInfo = "tietoja käyttäjästä";
 $langModifyQuestion = "Muokkaa kysymystä";
-$langNameOfLang = "Kielen nimi";
 $langCheckAll = "Valitse kaikki";
 $langNbAnnoucement = "Ilmoitus";
 $lang_no_access_here = "Sinulla ei ole pääsyä tänne";

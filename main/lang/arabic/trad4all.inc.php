@@ -195,7 +195,6 @@ $langNameOfLang['turkce'] = "التركية";
 $langNameOfLang['vietnamese'] = "الفتنامية";
 $UserInfo = "معلومات المستخدم";
 $langModifyQuestion = "تعديل السؤال";
-$langNameOfLang = "اسم اللغة";
 $langCheckAll = "اختر الجميع";
 $langNbAnnoucement = "إعلان";
 $lang_no_access_here = " لا يسمح بالوصول إلى هنا";

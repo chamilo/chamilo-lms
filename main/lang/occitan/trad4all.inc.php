@@ -111,7 +111,6 @@ $langOnLine = "En linha";
 $langUsers = "Usanciers";
 $UserInfo = "Informacions de l'usancier";
 $langModifyQuestion = "Modificar la demanda";
-$langNameOfLang = "Nom de la lenga";
 $langCheckAll = "Tot verificar";
 $langNbAnnoucement = "Anóncia";
 $lang_no_access_here = "Ges d'accès";

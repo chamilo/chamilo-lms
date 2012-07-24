@@ -158,7 +158,6 @@ $langUsers = "用戶";
 $langPlatformAdmin = "系統管理";
 $UserInfo = "用戶訊息";
 $langModifyQuestion = "修改題目";
-$langNameOfLang = "語言名稱";
 $langCheckAll = "全部選定";
 $langNbAnnoucement = "通知";
 $lang_no_access_here = "不開放";

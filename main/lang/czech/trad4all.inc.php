@@ -121,7 +121,6 @@ $langOnLine = "Online";
 $langUsers = "Uživatelé";
 $langPlatformAdmin = "Administrace platformy";
 $UserInfo = "informace o uživateli";
-$langNameOfLang = "Název jazyka";
 $langCheckAll = "Označ vše";
 $langNbAnnoucement = "Oznámení";
 $lang_no_access_here = "Žádný přístup";

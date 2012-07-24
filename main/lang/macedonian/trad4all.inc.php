@@ -193,7 +193,6 @@ $langNameOfLang['turkce'] = "&#1090;&#1091;&#1088;&#1089;&#1082;&#1080;";
 $langNameOfLang['vietnamese'] = "&#1074;&#1080;&#1077;&#1090;&#1085;&#1072;&#1084;&#1089;&#1082;&#1080;";
 $UserInfo = "информација за корисникот";
 $langModifyQuestion = "Измени го прашањето";
-$langNameOfLang = "Име на јазикот";
 $langCheckAll = "Маркирај се'";
 $langNbAnnoucement = "Соопштение";
 $lang_no_access_here = "Немате пристап тука";

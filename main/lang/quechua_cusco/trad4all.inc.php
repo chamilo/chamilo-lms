@@ -168,7 +168,6 @@ $langUsers = "Haykuqmasikuna";
 $langPlatformAdmin = "Hanp'araq kamachina";
 $UserInfo = "haykuqmasimanta willay";
 $langModifyQuestion = "T'ijrapay taputa";
-$langNameOfLang = "himimanta sutin";
 $langCheckAll = "cheqaqchay";
 $langNbAnnoucement = "Willaykuna";
 $lang_no_access_here = "Manan kayman haykuwaqchu";

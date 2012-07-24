@@ -60,9 +60,6 @@ unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 unset($_SESSION['temp_audio_nanogong']);
 
-
-
-
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 

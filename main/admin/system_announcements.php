@@ -126,7 +126,7 @@ if ($action_todo) {
     }
     $form = new FormValidator('system_announcement');
     $form->addElement('header', '', $form_title);
-    $form->add_textfield('title', get_lang('Title'), true, array('size'=>'60px'));
+    $form->add_textfield('title', get_lang('Title'), true, array('class'=>'span4'));
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');

@@ -12,17 +12,17 @@
             </div>
         {% endif %}
         
-		{#  ??  #}
+		{#  Portal homepage  #}
         {% if home_page_block %}
-            <section id="home_page">
+            <section id="homepage">
                 <div class="row">
                     <div class="span9">
-                    {{ home_page_block}}
+                    {{ home_page_block }}
                     </div>
                 </div>
             </section>
         {% endif %}
-		
+        
 		{#  ??  #}
 		{{ sniff_notification }}
 		
@@ -33,16 +33,27 @@
                 {{ content }}
             </section>
         {% endif %}
-		
+        		
 		{#  Announcements  #}
         {% if announcements_block %}      
-            <section id="announcements_page">
+            <section id="announcements">
             {{ announcements_block }}
             </section>
         {% endif %}
-		
+        
+        {# Course categories (must be turned on in the admin settings) #}
+        {% if course_category_block %}
+            <section id="course_category">
+                <div class="row">
+                    <div class="span9">
+                    {{ course_category_block }}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+                	
 		{#  Hot courses template  #}		
-		{% include "default/layout/hot_courses.tpl" %}
+		{% include "default/layout/hot_courses.tpl" %}        
         
         {#  Content bottom  #}
         {% if plugin_content_bottom %}       

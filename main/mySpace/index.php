@@ -448,12 +448,22 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			$row = array();
 			$row[] = $session['name'];
 
-			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {				
-				$row[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT).' '.get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
-			} else {
-				$row[] = ' - ';
-			}
+            $session_date = array();
+			if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
+                $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
+            }
             
+            if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
+                $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
+            }
+            
+            if (empty($session_date)) {
+                $session_date_string = '-';
+            } else {
+                $session_date_string = implode(' ', $session_date);
+            }
+            
+            $row[] = $session_date_string;            
             $row[] = $count_courses_in_session;
             $row[] = $count_users_in_session;
 			

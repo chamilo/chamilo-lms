@@ -435,18 +435,18 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 					$master_urls = split(',',api_get_setting('sso_authentication_domain'));
 					if (!empty($master_urls)) {
 					    $master_auth_uri = api_get_setting('sso_authentication_auth_uri');
-					    foreach ($master_urls as $mu) {
-						if (empty($mu)) { continue; }
-						// for each URL, check until we find *one* that matches the $_GET['sso_referer'], then skip the rest
-						if ($protocol.trim($mu).$master_auth_uri === $_GET['sso_referer']) {
-					            $matches_domain = true;
-					            break;
-					        }
-					    }
-                                	} else {
-					    error_log('Your sso_authentication_master param is empty. Check the platform configuration, security section. It can be a list of comma-separated domains');
-					}
-				}
+                        foreach ($master_urls as $mu) {
+                            if (empty($mu)) { continue; }
+                            // for each URL, check until we find *one* that matches the $_GET['sso_referer'], then skip the rest
+                            if ($protocol.trim($mu).$master_auth_uri === $_GET['sso_referer']) {
+                                $matches_domain = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        error_log('Your sso_authentication_master param is empty. Check the platform configuration, security section. It can be a list of comma-separated domains');
+                    }
+                }
 				if ($matches_domain) { 
                                         //make all the process of checking
                                         //if the user exists (delegated to the sso class)
@@ -829,15 +829,16 @@ $is_courseCoach     = false; //course coach
 $is_sessionAdmin    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
-
-    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {        
+    
+    if (isset($_cid) && $_cid) {
+        $my_user_id = isset($my_user_id) ? intval($my_user_id) : 0;
+        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;                
         
-        $variable = 'accept_legal_'.$user_id.'_'.$_course['real_id'].'_'.$session_id;                
         $user_pass_open_course = false;
         if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
             $user_pass_open_course = true;
-        }        
-                
+        } 
+
         //Checking if the user filled the course legal agreement
         if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
             $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
@@ -847,7 +848,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 exit;
             }
         }
+    }
 
+
+    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
+    
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table

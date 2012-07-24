@@ -567,7 +567,7 @@ class Database {
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
      * @return string/boolean					Returns string data on success or FALSE on failure.
      */
-    public function get_host_info($connection = null) {
+    public static function get_host_info($connection = null) {
         return self::use_default_connection($connection) ? mysql_get_host_info() : mysql_get_host_info($connection);
     }
 
@@ -576,7 +576,7 @@ class Database {
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
      * @return int/boolean						Returns the protocol version on success or FALSE on failure.
      */
-    public function get_proto_info($connection = null) {
+    public static function get_proto_info($connection = null) {
         return self::use_default_connection($connection) ? mysql_get_proto_info() : mysql_get_proto_info($connection);
     }
 
@@ -585,7 +585,7 @@ class Database {
      * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
      * @return string/boolean					Returns the MySQL server version on success or FALSE on failure.
      */
-    public function get_server_info($connection = null) {
+    public static function get_server_info($connection = null) {
         return self::use_default_connection($connection) ? mysql_get_server_info() : mysql_get_server_info($connection);
     }
 

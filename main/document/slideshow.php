@@ -338,47 +338,45 @@ if ($slide_id == 'all') {
 			}//end if exist file image
 		}//end foreach
 	}//end image files only
-}
-
-// Creating the table
-$html_table = '';
-echo '<table align="center" width="760px" border="0" cellspacing="10">';
-$i = 0;
-$count_image = count($image_tag);
-$number_iteration = ceil($count_image/$number_image);
-$p = 0;
-for ($k = 0; $k < $number_iteration; $k++) {
-	echo '<tr height="'.$thumbnail_height.'">';
-	for ($i = 0; $i < $number_image; $i++) {
-		if (!is_null($image_tag[$p])) {
-			echo '<td>';
-			//TODO:move styles to css files and center image vertical
-			?>
-            
-			<style>
-			div.thumbnail:hover {
-			  border-color: #0088cc;
-			  background-color:#FBFFFF;
-			  -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-			  -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-			  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+	
+	// Creating the table
+	$html_table = '';
+	echo '<table align="center" width="760px" border="0" cellspacing="10">';
+	$i = 0;
+	$count_image = count($image_tag);
+	$number_iteration = ceil($count_image/$number_image);
+	$p = 0;
+	for ($k = 0; $k < $number_iteration; $k++) {
+		echo '<tr height="'.$thumbnail_height.'">';
+		for ($i = 0; $i < $number_image; $i++) {
+			if (!is_null($image_tag[$p])) {
+				echo '<td>';
+				//TODO:move styles to css files and center image vertical
+				?>
+				
+				<style>
+				div.thumbnail:hover {
+				  border-color: #0088cc;
+				  background-color:#FBFFFF;
+				  -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+				  -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+				  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+				}
+				</style>
+	
+				<?php			
+				echo '<div class="thumbnail" style="text-align: center; margin:5px; padding:9px; height:'.$thumbnail_height_frame.'px; width:'.$thumbnail_width_frame.'px">';
+				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
+				echo '</div>';
+				echo '</td>';
 			}
-			</style>
-
-			<?php			
-			echo '<div class="thumbnail" style="text-align: center; margin:5px; padding:9px; height:'.$thumbnail_height_frame.'px; width:'.$thumbnail_width_frame.'px">';
-			echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
-			echo '</div>';
-			echo '</td>';
+			$p++;
 		}
-		$p++;
+		echo '</tr>';
 	}
-	echo '</tr>';
-}
-echo '</table>';
+	echo '</table>';	
 
-
-
+}//end slide==all
 
 
 

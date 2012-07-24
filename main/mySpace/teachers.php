@@ -171,7 +171,7 @@ if (count($formateurs) > 0) {
 	}
 } else {
 	// No results
-	echo '<tr><td colspan="6" "align=center">'.get_lang("NoResults").'</td></tr>';
+	echo '<tr><td colspan="6">'.get_lang("NoResults").'</td></tr>';
 }
 echo '</table>';
 

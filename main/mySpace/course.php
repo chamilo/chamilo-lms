@@ -128,7 +128,7 @@ if (!api_is_drh() && !api_is_session_admin() && !api_is_platform_admin()) {
 $nb_courses = count($a_courses);
 
 $table = new SortableTable('tracking_list_course', 'count_courses');
-$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
+$table -> set_header(0, get_lang('CourseTitle'), false);
 $table -> set_header(1, get_lang('NbStudents'), false);
 $table -> set_header(2, get_lang('TimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 $table -> set_header(3, get_lang('ThematicAdvance'), false);
@@ -230,8 +230,8 @@ if (is_array($a_courses)) {
 
 	// $csv_content = array_merge($csv_header, $csv_content); // Before this statement you are allowed to sort (in different way) the array $csv_content.
 }
-$table -> setColAttributes(0, array('align' => 'left'));
-$table -> setColAttributes(7, array('align' => 'center'));
+//$table -> setColAttributes(0);
+//$table -> setColAttributes(7);
 $table -> display();
 
 Display :: display_footer();

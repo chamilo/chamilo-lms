@@ -168,11 +168,11 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 	if (count($students) > 0) {
 		$table = new SortableTable('tracking_student', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		if ($is_western_name_order) {
-			$table -> set_header(0, get_lang('FirstName'), false, 'align="center');
-			$table -> set_header(1, get_lang('LastName'), false, 'align="center');
+			$table -> set_header(0, get_lang('FirstName'), false);
+			$table -> set_header(1, get_lang('LastName'), false);
 		} else {
-			$table -> set_header(0, get_lang('LastName'), false, 'align="center');
-			$table -> set_header(1, get_lang('FirstName'), false, 'align="center');
+			$table -> set_header(0, get_lang('LastName'), false);
+			$table -> set_header(1, get_lang('FirstName'), false);
 		}
 	/*	$table -> set_header(2, get_lang('Time'), false);
 		$table -> set_header(3, get_lang('Progress'), false);
@@ -267,8 +267,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			$row[] = $first_date;
 			$row[] = $string_date;
 
-			if ($export_csv) {
-			    
+			if ($export_csv) {			    
 			    $row[count($row) - 1] = strip_tags($row[count($row) - 1]);
                 $row[count($row) - 2] = strip_tags($row[count($row) - 2]);
 				$csv_content[] = $row;
@@ -297,11 +296,6 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 		foreach ($all_datas as $row) {
 			$table -> addRow($row, 'align="right"');
 		}
-		$table -> updateColAttributes(0, array('align' => 'left'));
-		$table -> updateColAttributes(1, array('align' => 'left'));
-	/*	$table -> updateColAttributes(7, array('align' => 'left'));
-		$table -> updateColAttributes(8, array('align' => 'left'));
-		$table -> setColAttributes(9, array('align' => 'center'));*/
 		$table -> display();
 	} else {
 		echo Display::display_warning_message(get_lang('NoStudent'));

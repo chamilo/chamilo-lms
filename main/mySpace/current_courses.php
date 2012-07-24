@@ -269,7 +269,7 @@ foreach ($array as $row_table) {
 	$column = 0;	
 	foreach ($row_table as $cell) {
 		$table->setCellContents($row, $column, $cell);
-		$table->updateCellAttributes($row, $column, 'align="center"');
+		//$table->updateCellAttributes($row, $column, 'align="center"');
 		$column++;
 	}
 	$table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);

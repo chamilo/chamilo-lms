@@ -383,7 +383,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
 		$table->set_additional_parameters($parameters);
-		$table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
+		$table -> set_header(0, get_lang('CourseTitle'), false);
 		$table -> set_header(1, get_lang('NbStudents'), false);
 		$table -> set_header(2, get_lang('AvgTimeSpentInTheCourse').' '.Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 		$table -> set_header(3, get_lang('AvgStudentsProgress').' '.Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
@@ -455,10 +455,6 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			$table -> addRow($row);
 		}
 
-		$table -> setColAttributes(1, array('align' => 'center'));
-		$table -> setColAttributes(2, array('align' => 'center'));
-		$table -> setColAttributes(3, array('align' => 'center'));
-		
 		/*  Start session over view stats */
 		
 		$nb_sessions_past = $nb_sessions_current = 0;
@@ -557,18 +553,18 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 		$parameters['view'] = 'admin';
 		$table->set_additional_parameters($parameters);
 		if ($is_western_name_order) {
-			$table -> set_header(0, get_lang('FirstName'), true, 'align="center"');
-			$table -> set_header(1, get_lang('LastName'), true, 'align="center"');
+			$table -> set_header(0, get_lang('FirstName'), true);
+			$table -> set_header(1, get_lang('LastName'), true);
 		} else {
-			$table -> set_header(0, get_lang('LastName'), true, 'align="center"');
-			$table -> set_header(1, get_lang('FirstName'), true, 'align="center"');
+			$table -> set_header(0, get_lang('LastName'), true);
+			$table -> set_header(1, get_lang('FirstName'), true);
 		}
 		$table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
-		$table -> set_header(3, get_lang('LastConnexion'), false, 'align="center"');
+		$table -> set_header(3, get_lang('LastConnexion'), false);
 		$table -> set_header(4, get_lang('NbStudents'), false);
 		$table -> set_header(5, get_lang('CountCours'), false);
 		$table -> set_header(6, get_lang('NumberOfSessions'), false);
-		$table -> set_header(7, get_lang('Sessions'), false, 'align="center"');
+		$table -> set_header(7, get_lang('Sessions'), false);
 
 		if ($is_western_name_order) {
 			$csv_header[] = array (
@@ -667,7 +663,7 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 			$table_row[] = $nb_students;
 			$table_row[] = $nb_courses;
 			$table_row[] = $nb_sessions;
-			$table_row[] = '<center><a href="session.php?id_coach='.$coaches['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			$table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			$all_datas[] = $table_row;
 
 			if ($is_western_name_order) {
@@ -711,11 +707,11 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 		foreach ($all_datas as $row) {
 			$table -> addRow($row, 'align="right"');
 		}
-
+/*
 		$table -> updateColAttributes(0, array('align' => 'left'));
 		$table -> updateColAttributes(1, array('align' => 'left'));
 		$table -> updateColAttributes(3, array('align' => 'left'));
-		$table -> updateColAttributes(7, array('align' => 'center'));
+		$table -> updateColAttributes(7, array('align' => 'center'));*/
 		$table -> display();
 	}
 }

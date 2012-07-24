@@ -656,17 +656,17 @@ if (empty($_GET['details'])) {
     				);
     
     				echo '<tr>
-    				<td align="right">'.$course_info['title'].'</td>
-    				<td align="right">'.$time_spent_on_course .'</td>
-    				<td align="right">'.$progress.'</td>
-    				<td align="right">'.$score.'</td>
-    				<td align="right">'.$attendances_faults_avg.'</td>
-                    <td align="right">'.$scoretotal_display.'</td>';
+    				<td >'.$course_info['title'].'</td>
+    				<td >'.$time_spent_on_course .'</td>
+    				<td >'.$progress.'</td>
+    				<td >'.$score.'</td>
+    				<td >'.$attendances_faults_avg.'</td>
+                    <td >'.$scoretotal_display.'</td>';
     			
     				if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-    					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+    					echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
     				} else {
-    					echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+    					echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
     				}
 				echo '</tr>';
 				}
@@ -777,21 +777,21 @@ if (empty($_GET['details'])) {
     	    echo '<tr class="'.$css_class.'">';					
     			
     		echo Display::tag('td', stripslashes($lp_name));
-    		echo Display::tag('td', api_time_to_hms($total_time), array('align'=>'center'));
+    		echo Display::tag('td', api_time_to_hms($total_time));
     		
     		if (!is_null($score)) {
     			if (is_numeric($score)) { 
                     $score = $score.'%';
                 }
     		}
-    		echo Display::tag('td', $score, array('align'=>'center'));
+    		echo Display::tag('td', $score);
     		
     	    if (!is_null($score_latest)) {
                 if (is_numeric($score_latest)) { 
                     $score_latest = $score_latest.'%';
                 }
             }				
-    		echo Display::tag('td', $score_latest, array('align'=>'center'));							
+    		echo Display::tag('td', $score_latest);							
     		 
     		if (is_numeric($progress)) {						
     			$progress = $progress.'%';
@@ -799,11 +799,10 @@ if (empty($_GET['details'])) {
     			$progress = '-';
     		}
     		
-    		echo Display::tag('td', $progress, array('align'=>'center'));
+    		echo Display::tag('td', $progress);
     	    //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
             //which implies several other changes not a priority right now  
-    		echo Display::tag('td', $start_time, array('align'=>'center'));            
-    		
+    		echo Display::tag('td', $start_time);    		
     
     		if ($any_result === true) {
     			$from = '';
@@ -811,11 +810,11 @@ if (empty($_GET['details'])) {
     				$from ='&from=myspace';
     			}
     			$link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$session_id);
-                echo Display::tag('td', $link, array('align'=>'center'));
+                echo Display::tag('td', $link);
     		}
     
     		if (api_is_allowed_to_edit()) {					
-    			echo '<td align="center">';							
+    			echo '<td>';							
     				if ($any_result === true) {											
     					echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
     					echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
@@ -878,7 +877,7 @@ if (empty($_GET['details'])) {
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
 				
-				echo '<td align="center">';
+				echo '<td>';
 											
 				if ($count_attempts > 0) {
 					echo $score_percentage . '%';
@@ -888,8 +887,8 @@ if (empty($_GET['details'])) {
 				}
 
 				echo '</td>';
-				echo '<td align="center">'.$count_attempts.'</td>';
-				echo '<td align="center">';
+				echo '<td>'.$count_attempts.'</td>';
+				echo '<td>';
 
 				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' 
 				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND 
@@ -908,7 +907,7 @@ if (empty($_GET['details'])) {
 				}
 				echo '</td>';
 				
-				echo '<td align="center">';
+				echo '<td>';
 				$all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
 				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
 				

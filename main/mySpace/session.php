@@ -156,7 +156,7 @@ if ($nb_sessions > 0) {
 		$table -> addRow($row);
 	}
 
-	$table -> setColAttributes(2, array('align' => 'center'));
+	//$table -> setColAttributes(2, array('align' => 'center'));
 	$table -> display();
 
 	if ($export_csv) {

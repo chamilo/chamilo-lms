@@ -69,7 +69,7 @@ if (!empty($_GET['session'])) {
 				$moyenne_test = null;
 			}
 
-			echo '<tr><td>'.$session['name'].'</td><td align="center">'.(is_null($moyenne_test) ? '' : $moyenne_test.'%').'</td><td> </td></tr>';
+			echo '<tr><td>'.$session['name'].'</td><td>'.(is_null($moyenne_test) ? '' : $moyenne_test.'%').'</td><td> </td></tr>';
 		}
 		echo '</table>';
 	} else {
@@ -102,17 +102,11 @@ if (!empty($_GET['session'])) {
 			} else {
 				$moyenne_test = null;
 			}
-			echo '<tr><td>'.$course['title'].'</td><td align="center">'.(is_null($moyenne_test) ? '' : $moyenne_test.'%').'</td><td> </td></tr>';
+			echo '<tr><td>'.$course['title'].'</td><td>'.(is_null($moyenne_test) ? '' : $moyenne_test.'%').'</td><td> </td></tr>';
 		}
 		echo '</table>';
 	} else {
 		echo get_lang('NoCourse');
 	}
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
-
 Display :: display_footer();

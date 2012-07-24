@@ -164,7 +164,7 @@ if (Database::num_rows($result_coachs) > 0) {
 	}
 } else {
 	// No results
-	echo '<tr><td colspan="5" "align=center">'.get_lang("NoResult").'</td></tr>';
+	echo '<tr><td colspan="5">'.get_lang("NoResult").'</td></tr>';
 }
 echo '</table>';
 
@@ -174,11 +174,4 @@ if (isset($_POST['export'])){
 
 echo "<br /><br />";
 echo "<form method='post' action='coaches.php'><button type='submit' class='save' name='export' value='".get_lang('exportExcel')."'>".get_lang('exportExcel')."</button><form>";
-
-/*
-==============================================================================
-	FOOTER
-==============================================================================
-*/
-
 Display::display_footer();

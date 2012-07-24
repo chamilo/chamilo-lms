@@ -278,17 +278,22 @@ while ($row = Database :: fetch_array($rs)) {
 	exit;
 }*/
 
+if (!empty($student_id)) {
+	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {        
+		api_not_allowed();
+	}
+}
+	
+    
 Display :: display_header($nameTools);
 
 if (isset($message)) {
     echo $message;
 }
 
-if (!empty($student_id)) {	
-	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {        
-		api_not_allowed(false);
-	}
-	
+    
+if (!empty($student_id)) {
+	    
 	// Actions bar
 	echo '<div class="actions">';
     echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -325,6 +330,7 @@ if (!empty($student_id)) {
 		$avg_student_score 	  = Tracking::get_avg_student_score($user_info['user_id'], $course_code, array(), $session_id);
 		//var_dump($avg_student_score);	
 	}	
+    
 	$avg_student_progress = round($avg_student_progress, 2);
 	
 	// time spent on the course

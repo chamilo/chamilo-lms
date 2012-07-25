@@ -831,7 +831,8 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
     
 	if (!empty($cats)) {
         
-        if ( (api_get_setting('gradebook_enable_grade_model') == 'true') && (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true'))) {
+        if ( (api_get_setting('gradebook_enable_grade_model') == 'true') && 
+             (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true'))) {
             
             //Getting grade models
             $obj = new GradeModel();
@@ -841,13 +842,13 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             //No children
             if (count($cats) == 1 && empty($grade_model_id)) {
                 if (!empty($grade_models)) {
-                
-                    $form = new FormValidator('grade_model_settings');                    
-                    $obj->fill_grade_model_select_in_form();                    
-                    $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');                
-
-                    if ($form->validate()) {
-                        $value = $form->exportValue('grade_model_id');                    
+                //if (0) {                
+                    $form_grade = new FormValidator('grade_model_settings');                    
+                    $obj->fill_grade_model_select_in_form($form_grade);
+                    $form_grade->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');
+                    
+                    if ($form_grade->validate()) {
+                        $value = $form_grade->exportValue('grade_model_id');                    
                         $gradebook = new Gradebook();
                         $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 
 
@@ -873,8 +874,8 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                         //Reloading cats
                         $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
                     } else {
-                        $form->display();   
-                    }      
+                        $form_grade->display();   
+                    }
                 }
             }
         }

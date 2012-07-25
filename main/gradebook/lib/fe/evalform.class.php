@@ -521,8 +521,8 @@ class EvalForm extends FormValidator
 		parent :: display();
 	}
     
-	function setDefaults($defaults= array ()) {
-		parent :: setDefaults($defaults);
+	function setDefaults($defaults= array(), $filter = null) {
+		parent :: setDefaults($defaults, $filter);
 	}
 
 	private function build_stud_label ($id, $username,$lastname, $firstname) {

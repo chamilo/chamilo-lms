@@ -104,7 +104,8 @@ class GradebookTable extends SortableTable {
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data($from = 1) {
+	function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
+        	
         //variables load in index.php
         global $my_score_in_gradebook, $certificate_min_score;
         $scoretotal = 0;

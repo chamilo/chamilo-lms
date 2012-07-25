@@ -982,6 +982,17 @@ button.next.disabled {
     color: red;
 }
 
+.confirmation-message .right_link,
+.error-message .right_link, 
+.normal-message .right_link, 
+.warning-message .right_link {
+    position: relative;
+    right: 0;
+    top: -6px;
+    float:right;
+}
+
+
 .confirmation-message, .error-message, .normal-message, .warning-message {
     min-height: 15px;
     position: relative;

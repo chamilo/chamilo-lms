@@ -532,8 +532,7 @@ class DisplayGradebook
             		if (api_get_setting('teachers_can_change_score_settings') == 'true') {
                         $modify_icons .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('ranking.png', get_lang('ScoreEdit'),'',ICON_SIZE_MEDIUM).'</a>';
                     }
-            		$header .= Display::div($modify_icons, array('class'=>'right'));
-					
+            		$header .= Display::div($modify_icons, array('class'=>'right'));					
                 }
 			}
 		} elseif (isset ($_GET['search'])) {
@@ -544,14 +543,14 @@ class DisplayGradebook
 		echo $header;		
 		
 		if (api_is_allowed_to_edit(null, true)) {
-    	        $weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);                        			
+    	    $weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);                        			
     		$weight            = get_lang('TotalWeight').' : '.$weight;
     		
     		$min_certification = (intval($catobj->get_certificate_min_score()>0) ? $catobj->get_certificate_min_score() : 0);
     		$min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
-            	$edit_icon  = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),array('class'=>'right'),ICON_SIZE_SMALL).'</a>';
-		//$msg = Display::tag('h3', $weight.' - '.$min_certification);
-		$msg = Display::tag('h3', $weight.' - '.$min_certification.$edit_icon);
+            $edit_icon  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+            //$msg = Display::tag('h3', $weight.' - '.$min_certification);
+            $msg = Display::tag('h4', $weight.' - '.$min_certification.$edit_icon);
     		//@todo show description
     		$description       = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());    				
     		Display::display_normal_message($msg, false);

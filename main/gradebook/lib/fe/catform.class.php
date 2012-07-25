@@ -266,7 +266,7 @@ class CatForm extends FormValidator {
    		parent :: display();
    	}
 
-   	function setDefaults($defaults = array ()) {
-   		parent :: setDefaults($defaults);
+   	function setDefaults($defaults = array(), $filter = null) {
+   		parent :: setDefaults($defaults, $filter);
    	}
 }

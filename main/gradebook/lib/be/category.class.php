@@ -172,7 +172,7 @@ class Category implements GradebookItem
 	 */
     	
           
-	public function load($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $order_by = null) {        
+	public static function load($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $order_by = null) {        
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
 		if ( isset($id) && (int)$id === 0 ) {
@@ -277,7 +277,7 @@ class Category implements GradebookItem
 		return $cat;
 	}
 
-	private function create_category_objects_from_sql_result($result) {
+	private static function create_category_objects_from_sql_result($result) {
 		$allcat=array();
 		while ($data=Database::fetch_array($result)) {
 			$cat= new Category();

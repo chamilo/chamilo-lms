@@ -129,7 +129,7 @@ abstract class AbstractLink implements GradebookItem {
 	 * Retrieve links and return them as an array of extensions of AbstractLink.
 	 * To keep consistency, do not call this method but LinkFactory::load instead.
 	 */
-	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
+	public static function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);        
 		$sql='SELECT * FROM '.$tbl_grade_links;
 		$paramcount = 0;
@@ -191,7 +191,7 @@ abstract class AbstractLink implements GradebookItem {
 		return $links;
 	}
 
-    private function create_objects_from_sql_result($result) {
+    private static function create_objects_from_sql_result($result) {
     	$links=array();
 		while ($data=Database::fetch_array($result)) {
 			$link = LinkFactory::create(intval($data['type']));

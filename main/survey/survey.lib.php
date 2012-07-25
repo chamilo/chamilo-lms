@@ -27,7 +27,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
  */
 class survey_manager {
     
-    function get_surveys($course_code, $session_id = 0) {
+    public static function get_surveys($course_code, $session_id = 0) {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id, true, true);

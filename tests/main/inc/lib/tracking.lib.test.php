@@ -113,8 +113,8 @@ class TestTracking extends UnitTestCase {
 	 	$student_id=$_user;
 	 	$course_code=$_course;
 	 	$a_course = CourseManager :: get_course_information($course_code);
-		$this->tracking = new Tracking();
-		$res=$this->tracking->count_student_messages($student_id, $course_code);
+		
+		$res=Tracking::count_student_messages($student_id, $course_code);
 		$this->assertTrue(is_object($this->tracking));
 		if(!is_numeric($res))$this->assertTrue(is_null($res));
 		//var_dump($res);

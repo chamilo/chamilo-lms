@@ -41,7 +41,7 @@ if ($_SESSION['oLP']) {
     $lp_item_info = new learnpathItem($lp_item_id);
     if (!empty($lp_item_info)) {
     //if (basename($lp_item_info->path) == basename($doc_url)) {
-        $visible = $_SESSION['oLP']->is_lp_visible_for_student($lp_id, $user_id);
+        $visible = learnpath::is_lp_visible_for_student($lp_id, $user_id);
         
         if ($visible) {
             event_download($doc_url);  

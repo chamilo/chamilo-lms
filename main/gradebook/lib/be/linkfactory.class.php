@@ -50,7 +50,7 @@ class LinkFactory
 	 * @param $category_id parent category
 	 * @param $visible visible
 	 */
-	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
+	public static function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
 		return AbstractLink::load($id, $type, $ref_id, $user_id, $course_code, $category_id, $visible);
 	}
 

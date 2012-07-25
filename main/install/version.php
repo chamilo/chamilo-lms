@@ -11,10 +11,10 @@
 /**
  * Variables used from the main/install/index.php
  */
-$new_version 		= '1.9.0';
-$new_version_status	= 'beta';
+$new_version            = '1.9.0';
+$new_version_status     = 'RC';
 $new_version_last_id	= 1;
 $new_version_stable 	= false;
-$new_version_major 	= true;
-$software_name 		= 'Chamilo';
-$software_url 		= 'http://www.chamilo.org/';
+$new_version_major      = true;
+$software_name          = 'Chamilo';
+$software_url           = 'http://www.chamilo.org/';

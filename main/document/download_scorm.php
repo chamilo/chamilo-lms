@@ -29,7 +29,7 @@ if (isset($_SESSION['oLP'])) {
 }
 
 //If is visible for the current user
-if (!$obj->is_lp_visible_for_student($obj->get_id(), api_get_user_id())) {
+if (!learnpath::is_lp_visible_for_student($obj->get_id(), api_get_user_id())) {
     api_not_allowed();
 }
 

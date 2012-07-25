@@ -846,6 +846,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $lp_view_table         = Database::get_course_table(TABLE_LP_VIEW);
     $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $course_id 			   = $course['real_id'];
+    
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
@@ -858,22 +859,22 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $lp_id                 = intval($lp_id);
     $session_id            = intval($session_id);
 
-    //make sure we have the exact lp_view_id
-    $sqlview       = "SELECT id FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";
+    //Make sure we have the exact lp_view_id
+    $sqlview       = "SELECT id FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";    
     $resultview    = Database::query($sqlview);
 
     if (Database::num_rows($sqlview)) {
         $view          = Database::fetch_array($resultview, 'ASSOC');
         $lp_view_id    = $view['id'];
 
-        $sql_delete = "DELETE FROM $lp_item_view_table WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";
-        $result = Database::query($sql_delete);
+        $sql_delete = "DELETE FROM $lp_item_view_table WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";        
+        Database::query($sql_delete);
     }
 
-    $sql_delete = "DELETE FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id= $session_id ";
-    $result = Database::query($sql_delete);
+    $sql_delete = "DELETE FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id = $session_id ";
+    Database::query($sql_delete);
 
-    $select_all_attempts = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id= $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";
+    $select_all_attempts = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id = $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";
     $result    = Database::query($select_all_attempts);
     $exe_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -881,14 +882,14 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     }
 
     if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
-        $sql_delete = "DELETE FROM $track_e_exercises  WHERE exe_id IN (".implode(',',$exe_list).")";
-        $result = Database::query($sql_delete);
+        $sql_delete = "DELETE FROM $track_e_exercises   WHERE exe_id IN (".implode(',',$exe_list).")";
+        Database::query($sql_delete);
 
-        $sql_delete = "DELETE FROM $track_attempts  WHERE exe_id IN (".implode(',',$exe_list).")";
-        $result = Database::query($sql_delete);
+        $sql_delete = "DELETE FROM $track_attempts      WHERE exe_id IN (".implode(',',$exe_list).")";
+        Database::query($sql_delete);
 
-        $sql_delete = "DELETE FROM $recording_table  WHERE exe_id IN (".implode(',',$exe_list).")";
-        $result = Database::query($sql_delete);
+        $sql_delete = "DELETE FROM $recording_table     WHERE exe_id IN (".implode(',',$exe_list).")";
+        Database::query($sql_delete);
     }
 }
 

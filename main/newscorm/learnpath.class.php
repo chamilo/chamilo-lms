@@ -1874,7 +1874,7 @@ class learnpath {
      * @param	boolean	Whether to return null if no record was found (true), or 0 (false) (optional, defaults to false)
      * @return	integer	Current progress value as found in the database
      */
-    public function get_db_progress($lp_id, $user_id, $mode = '%', $course_code = '', $sincere = false,$session_id = 0) {
+    public static function get_db_progress($lp_id, $user_id, $mode = '%', $course_code = '', $sincere = false,$session_id = 0) {
 
         //if ($this->debug > 0) { error_log('New LP - In learnpath::get_db_progress()', 0); }
         $session_id = intval($session_id);
@@ -2000,7 +2000,7 @@ class learnpath {
      * @param   string  Course code (optional)
      * @return	bool	True if
      */
-    public function is_lp_visible_for_student($lp_id, $student_id, $course = null) {
+    public static function is_lp_visible_for_student($lp_id, $student_id, $course = null) {
         $lp_id = (int)$lp_id;
         $course = api_get_course_info($course);
         $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
@@ -2049,7 +2049,6 @@ class learnpath {
 	            	}
 	            }
             }
-
             return $is_visible;
         }
         return false;
@@ -2620,7 +2619,7 @@ class learnpath {
      * @param	boolean		Return the name? If false, return the ID. Default is false.
      * @return	mixed		Type ID or name, depending on the parameter
      */
-    public function get_type_static($lp_id = 0) {
+    public static function get_type_static($lp_id = 0) {
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT lp_type FROM $tbl_lp WHERE c_id = $course_id AND id = '" . $lp_id . "'";

@@ -2302,11 +2302,14 @@ class learnpathItem {
 		$rs_verified = Database::query($sql_verified);
 		$row_verified = Database::fetch_array($rs_verified);
    		$my_case_completed = array('completed', 'passed', 'browsed', 'failed'); // Added by Isaac Flores.
-   		if (in_array($sql_verified['status'], $my_case_completed)) {
-   			$save = false;
-   		} else {
-   			$save = true;
-   		}
+        
+        $save = true;
+        
+        if (isset($sql_verified['status'])) {
+            if (in_array($sql_verified['status'], $my_case_completed)) {
+                $save = false;
+            }
+        }
 
    		if ((($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) && ($this->seriousgame_mode!=1 && $this->type == 'sco'))
    		{

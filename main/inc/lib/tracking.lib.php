@@ -439,7 +439,7 @@ class Tracking {
 	 * @param    int        Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
 	 * @return  int     count of attempts
 	 */
-	public function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
+	public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
 		$course_code = Database::escape_string($course_code);
 		$student_id  = intval($student_id);
 		$exercise_id = intval($exercise_id);
@@ -1511,7 +1511,7 @@ class Tracking {
 		 * @param    int        Session id (optional), if param $session_id is null(default) return count of messages including sessions, 0 = session is not filtered
 		 * @return    int        Count of messages
 		 */
-		function count_student_messages($student_id, $course_code, $session_id = null) {
+		public static function count_student_messages($student_id, $course_code, $session_id = null) {
 			
 			// protect datas
 			$student_id = intval($student_id);

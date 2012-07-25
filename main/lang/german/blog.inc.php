@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Meine Aufgaben";
 $FavoriteBlogs = "Meine Projekte";
 $Navigation = "Navigation";

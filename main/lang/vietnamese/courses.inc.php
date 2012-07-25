@@ -28,7 +28,7 @@ $langKeeped = "Giữ lại";
 $langHideAndSubscribeClosed = "Ẩn / Đóng";
 $langHideAndSubscribeOpen = "Ẩn / Mở";
 $langShowAndSubscribeOpen = "Hiện / Mở";
-$langShowAndSubscribeClosed = "Hiện / Đóng ";
+$langShowAndSubscribeClosed = "Hiện / Đóng";
 $langAdminThisUser = "Trở về trang người dùng";
 $langManage = "Quản lý chuyên môn";
 ?>

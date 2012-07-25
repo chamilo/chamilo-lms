@@ -1,11 +1,13 @@
 <?php
-$langClarContent = "<p> <b> Kurs-Leiter </ b> </ p> Chamilo ist ein Managementsystem zur Verbesserungt von Ausbildungs-und Kenntnisständen. Es ermöglicht Lehrern, Ausbildern, Ausbildungsleitern Online-Kurse in Lernarragemnts zu organisieren, Interaktionen mit den Lernenden zu verwalten und online Inhalte mit dem Browser zu erstellen. Seit Chamilo 1,8, ist es auch möglich, PowerPoint-Präsentationen zu Lernpfaden zu konvertieren und  Videokonferenzen (virtuelles Treffen und virtuelles Klassenzimmer) zu organisieren</ p> Um Chamilo als Kurs-Leiterr nutzen zu können, müssen Sie einen Benutzernamen und ein Passwort haben. Diese können entweder durch die Selbstregistrierung erhlaten  (wenn Ihr Portal dies ermöglicht, der Link \"Registrierung\" erscheint auf der Homepage) oder durch den Administrator, wenn die Anmeldung zentral verwaltet wird. Sobald Sie Ihren Benutzernamen und Ihr Passwort haben, melden Sie sich am System an, erstellen Sie einen Kurs (oder nutzen Sie den, der für Sie vom Adminitrator angelegt wurde  und machen Sie sich mit den Werkzeugen vertraut.</ p> ";
-$test = "Test";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ClearContent = "Hier können Trainer/innen Kurswebseiten erstellen, ändern und löschen. Teilnehmer/innen können lesen (Dokumente, Themen, Agenden, diverse Informationen) und teilweise Übungen durchführen, Unterlagen veröffentlichen, an Diskussionsforen teilnehmen...</p><b>Registrierung</b><p>Sollten Sie ein/e Teilnehmer/in sein, können Sie dem Kurs beitreten, indem Sie das Register 'zu den Seminaren (Teilnehmer/in)' auswählen, anschließend wählen Sie die Kurse aus, die Sie belegen möchten.</p><p>Sind Sie ein/e Trainer/in, können Sie sich auch registrieren lassen. Sie wählen jedoch 'Kurse anlegen (Trainer/in)'. Daraufhin müssen Sie ein Formular ausfüllen, in dem Sie den Kurse Code, den Bereich und den  Kurstitel definieren. Wenn diese Eingaben bestätigt sind, werden Sie zu der Seminarseite weitergeleitet und es wird Ihnen ermöglicht, den Inhalt entsprechend Ihren Wünschen zu verändern. </p><p>Wenn dieses Portal nicht Ihren Ansprüchen gerecht wird, lassen Sie es uns bitte über die 'To do' Liste wissen. Sie ist auf der Homepage der Plattform (sobald sie eingelogged sind).</p><p>Der Link zur Registrierung ist auf der Homepage der Plattform (oben rechts).</p><b>Login</b><p>Bei Ihren nächsten Besuchen loggen Sie sich ein, mit Login/Passwort und bestätigen Sie den Zugriff auf Ihr/e Seminar/e. Die URL der Seite ist";
 $WCAGImage = "Bild";
 $WCAGLabel = "Bildbezeichnung";
 $WCAGLink = "Link";
 $WCAGLinkLabel = "Linkbeschreibung";
-$errorNoLabel = "";
+$ErrorNoLabel = "Das Bild hat keine Beschreibung";
 $AllLanguages = "alle Sprachen";
 $WCAGEditor = "WCAG Editor";
 $WCAGGoMenu = "Gehe zu Menü";

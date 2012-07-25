@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Šis vingrinājums ir iekļauts mācību kursa saturā, kā tā sastāvdaļa, tāpēc studenti tai nevar piekļūt tieši no šejienes. Ja Jūs vēlaties, lai šis pats uzdevums ir pieejams caur vingrinājumu rīku, lūdzu, veiciet pašreizējā uzdevuma kopiju, izmantojot kopēšanas ikonu.";
 $langExercice = "Tests / Kontroldarbs";
 $langActivate = "Rādīt";
 $langDeactivate = "Slēpt";
@@ -482,4 +483,22 @@ $SelectAQuestionToReview = "Atzīmējiet jautājumu, lai to izskatītu";
 $ReviewQuestionLater = "Jautājuma izskatīšana vēlāk";
 $NumberStudentWhoSelectedIt = "Kursantu skaits , kuri to ir izvēlējušies";
 $QuestionsAlreadyAnswered = "Jau atbildētie jautājumi";
+$StudentsWhoAreTakingTheExerciseRightNow = "Audzēkņi, kas uzņēmās uzdevumu īstenot tieši tagad";
+$ReportByQuestion = "Atskaite par jautājumiem";
+$LiveResults = "Tiešsaistes (dzīvie) rezultāti";
+$RecordAnswer = "Ierakstīt atbildes";
+$UseTheMessageBelowToAddSomeComments = "Izmantojiet zemāk redzamos ziņojumus, lai pievienotu komentāru";
+$SendRecord = "Sūtīt ierakstu";
+$DownloadLatestRecord = "Lejupielādēt atbildes ierakstu";
+$OralExpression = "Mutiska atbilde (izteikums)";
+$CongratulationsYouPassedTheTest = "Apsveicam! Jūs esat testu izturējis!";
+$YouDidNotReachTheMinimumScore = "Jūs nesasniedzāt ieskaitei nepieciešamo minimālo punktu skaitu";
+$EndTest = "Testa beigas";
+$PassPercentage = "Ieskaite procentuāli";
+$NoCategorySelected = "Nav izvēlēta kategorija";
+$ExerciseAverage = "Uzdevuma vidējais vērtējums";
+$NoNegativeScore = "Nav negatīvu vērtējumu";
+$GlobalMultipleAnswer = "Vairākas vispārīgās atbildes";
+$AllQuestionsShort = "Visi";
+$ProblemsRecordingUploadYourOwnAudioFile = "Ja Jums ir problēmas ar ieraksta funkciju, augšupielādējiet savu audio failu.";
 ?>

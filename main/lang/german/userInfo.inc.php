@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Zeilenzahl";
 $langLine = "Zeile";
 $langLines = "Zeilen";
@@ -107,7 +110,7 @@ $AddGroup = "Gruppe hinzufügen";
 $Privacy = "Privatsphäre";
 $ThisIsAnOpenGroup = "Dies ist eine offene Gruppe";
 $YouShouldCreateATopic = "Sie sollten ein Thema anlegen";
-$IamAnAdmin = "Ich bin ein Administrator";
+$IAmAnAdmin = "Ich bin ein Administrator";
 $NewTopic = "Thema anlegen";
 $MessageList = "Nachrichtenliste";
 $EditGroup = "Gruppe bearbeiten";
@@ -132,9 +135,9 @@ $Popular = "Beliebt";
 $Moderator = "Moderator";
 $DeleteModerator = "Moderator entfernen";
 $UserChangeToModerator = "Benutzer zum Moderator gemacht";
-$IamAModerator = "Ich bin ein Moderator";
+$IAmAModerator = "Ich bin ein Moderator";
 $ThisIsACloseGroup = "Dies ist eine geschlossene Gruppe";
-$IamAReader = "Ich bin ein Teilnehmer";
+$IAmAReader = "Ich bin ein Teilnehmer";
 $UserChangeToReader = "Benutzer zum Leser gemacht";
 $AddModerator = "Als Moderator hinzufügen";
 $UserDeleted = "Der Benutzer ist gelöscht";

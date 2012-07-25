@@ -214,6 +214,8 @@ $CreateFolder = "Izveidot mapi";
 $HelpDefaultDirDocuments = "<b>TIKAI LEKTORAM REDZAMA INFORMĀCIJA</b><br>Šajā direktorijā ir noklusētie arhīvi. Jūs varat izdzēst šos failus vai pievienot jaunus, bet, ja fails,kad tas tiek ievietots web dokumentā, ir paslēpts, tad kursanti nevarēs to redzēt. Pirms ievietojiet failu web dokumentā, pārliecinieties, ka tas ir redzams. Direktorijas var būt paslēptas.";
 $HelpSharedFolder = "Šajā direktorijā ir faili, kurus jūs vai citi kursanti saglabā kursā no redaktora (vai no kursantu grupas). Pēc noklusējuma šie faili ir redzami visiem lektoriem, bet nav redzami citiem kursantiem (izņemot, ja viņi piekļūst tiem pa taisno pēc adreses). Ja padarīsiet direktoriju redzamu, citi lietotāji redzēs visu tās saturu.";
 $TemplateImage = "Sagataves / šablona ikona";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Lai atskaņotu multivides failus, Jums ir nepieciešams, vai nu atjaunināt savu pārlūkprogrammu uz jaunāku versiju, vai atjaunināt Flash spraudni. Pārbaudiet arī, vai failam ir pareizs paplašinājums.";
+$UpdateRequire = "Nepieciešams atjaunināt programmu";
 $MoveElement = "Pārvietot elementu";
 $CertificateName = "Nosaukums";
 $CopyToMyFiles = "Kopēt manā privātajā failu vietnē";
@@ -261,4 +263,6 @@ $DirExists = "Darbība nav iespējama, jo direktorija ar šādu nosaukumu jau ek
 $DocMv = "Dokuments ir pārvietots";
 $NoSVGImagesInImagesGalleryPath = "Šeit nav SVG attēlu, Jūsu attēlu galerijas katalogā";
 $NoSVGImages = "Nav SVG attēlu";
+$WamiNeedFilename = "Pirms Jūs aktivizējat ierakstu, tam ir nepieciešams izveidot faila nosaukumu.";
+$SelectAnAudioFileFromDocuments = "Izvēlieties audio failu no mapes Dokumenti";
 ?>

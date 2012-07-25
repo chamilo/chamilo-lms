@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Bewertung speichern";
 $CreateLink = "Diese Aktivität zur Bewertung hinzufügen";
 $AddResultNoStudents = "Es gibt keine Kursteilnehmer um Ergebnisse hinzuzufügen";
@@ -135,7 +138,7 @@ $ToViewGraphScoreRuleMustBeEnabled = "Um die grafische Auswertung anzuzeigen, mu
 $GradebookPreviousWeight = "Vorherige Gewichtung der Bewertung";
 $AddAssessment = "Diese Klassen-Aktivität zur Bewertung hinzufügen";
 $FolderView = "Bewertungen Home";
-$GradebookSkillsRanking = "Bewertungsreihenfolge ";
+$GradebookSkillsRanking = "Bewertungsreihenfolge";
 $SaveScoringRules = "Gewichtung in Auswertung speichern";
 $AttachCertificate = "Zertifikat hinzufügen";
 $GradebookSeeListOfStudentsCertificates = "Liste der Zertifikate der Kursteilnehmer zeigen";
@@ -144,7 +147,7 @@ $UploadCertificate = "Zertifikat hochladen";
 $CertificateName = "Bezeichnung des Zertifikats";
 $CertificateOverview = "Übersicht Zertifikat";
 $CreateCertificateWithTags = "Zertifikat mit diesen Platzhaltern speichern";
-$ViewPresenceSheets = "Anwesenheitlisten anzeigen ";
+$ViewPresenceSheets = "Anwesenheitlisten anzeigen";
 $ViewEvaluations = "Bewertungen sehen";
 $NewPresenceSheet = "Neue Anwesenheitliste";
 $NewPresenceStep1 = "Neue Anwesenheitliste: Schritt 1 von 2 - Details der Anwesenheitsliste ausfüllen";

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Neuen Begriff zum Lexikon hinzufügen";
 $TermName = "Begriff";
 $TermDefinition = "Begriffserläuterung";

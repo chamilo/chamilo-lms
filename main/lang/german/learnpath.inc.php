@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Das neue Forum wurde erstellt";
 $NewThreadCreated = "Das neue Forum Thema wurde erstellt";
 $AddHotpotatoes = "Hot Potatoes hinzufügen";
@@ -34,7 +37,7 @@ $langLearnpathPrevious = "Zurück";
 $langLearnpathNext = "Weiter";
 $langLearnpathRestart = "Neu starten";
 $langLearnpathThisStatus = "Dieser Schritt ist nun";
-$langLearnpathToEnter = "Um weiterzukommen ";
+$langLearnpathToEnter = "Um weiterzukommen";
 $langLearnpathFirstNeedTo = "müssen Sie zunächst erfüllen";
 $langLearnpathLessonTitle = "Schritt-Titel";
 $langLearnpathStatus = "Status";
@@ -74,9 +77,7 @@ $lang_none = "KEIN";
 $lang_forum_opened = "Das ausgewählte Forum wurde in einem neuen Fenster geöffnet.";
 $lang_link_opened = "Der gewählte Link wurde in einem neuen Fenster geöffnet.";
 $lang_short_help = "Nutzen Sie die entsprechenden Symbole, um Schritte, Titel/Beschreibung oder Voraussetzungen hinzuzufügen.";
-$lang_prereq_not_complete = "Nicht alle Vorrausetzungen sind erfüllt. 
-Entweder haben Sie die schrittweise Reihenfolge nicht befolgt oder 
-es wurde die Mindestpunktzahl eines Tests nicht erreicht, die notwendig ist, diesen Schrift aufzurufen.";
+$lang_prereq_not_complete = "Nicht alle Vorrausetzungen sind erfüllt. \nEntweder haben Sie die schrittweise Reihenfolge nicht befolgt oder \nes wurde die Mindestpunktzahl eines Tests nicht erreicht, die notwendig ist, diesen Schrift aufzurufen.";
 $lang_author = "Autor";
 $lang_date = "Datum";
 $langBasicOverview = "Aufbau";
@@ -163,7 +164,6 @@ $AddLpIntro = "<strong>Willkommen</strong> zum Chamilo Lernpfad Erstellungstool.
 $AddLpToStart = "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben";
 $CreateTheLink = "Link importieren";
 $MoveCurrentLink = "Link verschieben";
-
 $EditCurrentLink = "Link bearbeiten";
 $Url = "URL";
 $MoveCurrentStudentPublication = "Ausarbeitung verschieben";
@@ -201,11 +201,7 @@ $OogieBadExtension = "Die Datei hat eine falsche Endung.";
 $WoogieBadExtension = "Bitte nur Text-Dokumente hochladen. Dateinamen sollten enden mit .doc, .docx oder .odt";
 $ShowAudioRecorder = "Audio Rekorder anzeigen";
 $SearchFeatureNotEnabledComment = "Die Volltext-Suche-Funktion ist nicht aktiviert. Nehmen Sie Kontakt mit dem Portal-Administrator auf.";
-$SearchFeatureSearchExplanation = "Um die die Kurs-Datenbank zu durchsuchen, verwenden Sie bitte folgende Syntax:<br />
-<i>Begriff tag:Schlagwort -exclude + include \"genaue Phrase\"</i><br />
-Beispiel:<br />
-<i>Auto tag:Laster -Ferrari +Ford \"'hoher Verbrauch\".</i><br/> 
-Das Ergebnis wird alles zeigen, was das Wort <i>Auto</i> enthält, als <i>Laster</i> verschlagwortet wurde und nicht den Begriff <i>Ferrar</i>i aber den Begriff <i>Ford</i> behinhaltet und genau die Phrase <i>hoher Verbrauch</i> enthält.";
+$SearchFeatureSearchExplanation = "Um die die Kurs-Datenbank zu durchsuchen, verwenden Sie bitte folgende Syntax:<br />\n<i>Begriff tag:Schlagwort -exclude + include \"genaue Phrase\"</i><br />\nBeispiel:<br />\n<i>Auto tag:Laster -Ferrari +Ford \"'hoher Verbrauch\".</i><br/> \nDas Ergebnis wird alles zeigen, was das Wort <i>Auto</i> enthält, als <i>Laster</i> verschlagwortet wurde und nicht den Begriff <i>Ferrar</i>i aber den Begriff <i>Ford</i> behinhaltet und genau die Phrase <i>hoher Verbrauch</i> enthält.";
 $ViewLearningPath = "Lernpfad anschauen";
 $SearchFeatureDocumentTagsIfIndexing = "Zum Dokument beim Indizieren hinzuzufügende Schlagworte";
 $ReturnToLearningPaths = "Zurück zum Lernpfad";

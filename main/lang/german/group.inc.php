@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Neue Gruppe(n) erstellen";
 $langGroupCreation = "Neue Gruppen erstellen";
 $langCreate = "erstellen";

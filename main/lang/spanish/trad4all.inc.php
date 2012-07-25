@@ -1256,4 +1256,7 @@ $EventTypeName = "Nombre del tipo de evento";
 $ExportToPDFOnlyHTMLAndImages = "Exportar páginas web e imágenes a PDF";
 $CourseCatalog = "Catálogo de cursos";
 $Go = "Ir";
+$ImportThematic = "Importar avance temático";
+$ExportThematic = "Exportar avance temático";
+$DeleteAllThematic = "Eliminar todo el avance temático";
 ?>

@@ -214,6 +214,8 @@ $CreateFolder = "Ustvari mapo";
 $HelpDefaultDirDocuments = "INFORMACIJA VIDNA ZGOLJ UČITELJEM: Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstranite ali pa dodate novo. V primeru, da so datoteke označene kot skrite in kot take vstavljene v spletni dokument, jih tečajniki ne bodo videli v svojem področju dokumentov. Ko vstavljate datoteko v spletni dokument, se najprej prepričajte, da je viden. Mape v splošnem lahko ostanejo skrite.";
 $HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih tečajniki (ali vi sami) prenesete v področje tečaja preko urejevalnika (če jih niso/niste prenesli preko orodij skupine). Privzeto bodo vidne vsem učiteljem in skrite tečajnikom (razen v primeru direktnega dostopa do datoteke). V primeru, da naredite eno od map tečajnikom vidno, bo celotna njena vsebina vidna vsem tečajnikom.";
 $TemplateImage = "Ikona predloge";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Za predvajanje medijske vsebine boste morali nadgraditi vaš brskalnik na zadnjo različico ali pa nadgraditi <a href=\"http://get.adobe.com/flashplayer/\">Flash vtičnik</a>. Preverite, če ima datoteka ustrezno končnico.";
+$UpdateRequire = "Nadgraditev zahtevana";
 $MoveElement = "Premakni dokument";
 $CertificateName = "Ime";
 $CopyToMyFiles = "Prepiši v moje osebno področje datotek";
@@ -268,4 +270,5 @@ $DocMv = "Dokument je bil premaknjen";
 $NoSVGImagesInImagesGalleryPath = "V vaši galeriji slik ni SVG slik";
 $NoSVGImages = "Ni SVG slik";
 $WamiNeedFilename = "Pred aktivacijo snemanja je potrebno določiti ime datoteke.";
+$SelectAnAudioFileFromDocuments = "Izberi avdio datoteko iz dokumentov";
 ?>

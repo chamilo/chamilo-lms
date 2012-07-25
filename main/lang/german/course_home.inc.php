@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Anzeigen";
 $langDeactivate = "Verstecken";
 $langInLnk = "Versteckte Werkzeuge und Links";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Jau ir reģistrēti kursā";
 $lang_already_enrolled = "Šajā kursā Jūs jau esat piereģistrējies.";
 $lang_my_personnal_course_list = "Manu kursu saraksts";
 $lang_course_enrollment = "Lietotāju kursu saraksts";

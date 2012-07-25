@@ -17,4 +17,7 @@ $CourseDescriptionUpdated = "Kursa apraksts papildināts";
 $CourseDescriptionDeleted = "Kursa apraksts izdzēsts";
 $CourseDescriptionIntro = "Lai veidotu kursa aprakstu, klikojiet uz nosaukuma  un aizpildiet lauciņu.<br><br> Spiediet OK, lai turpinātu";
 $langSaveDescription = "Saglabāt aprakstu";
+$AddCourseDescription = "Pievienot kursa aprakstu";
+$DescriptionUpdated = "Kursu apraksti atjaunināti";
+$CourseDescriptions = "Kursu apraksti";
 ?>

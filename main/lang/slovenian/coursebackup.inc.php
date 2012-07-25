@@ -49,4 +49,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da želite izvoziti 
 $ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoča pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
 $DestinationCourse = "Ciljni tečaj";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "V primeru, da vaša učna pot vsebuje zvočne datoteke, jih morate izbrati iz področja dokumentov";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Ne pozabite izbrati tudi vseh pripadajočih medijskih datotek, če jih vaš vir potrebuje.";
 ?>

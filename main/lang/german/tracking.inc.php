@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AssignSessionsTo = "Kurs-Session zurordnen zu";
 $langToolName = "Blackboard-Kurse importieren";
 $TrackingDisabled = "Auswertung wurde deaktiviert";
@@ -247,7 +250,7 @@ $DashboardBlocks = "Elemente der Kontroll-Anzeige";
 $DashboardList = "Liste Kontroll-Anzeige";
 $YouHaveNotEnabledBlocks = "Sie haben kein Element aktiviert";
 $BlocksHaveBeenUpdatedSuccessfully = "Die Elemente wurde aktualisiert";
-$AttendanceSheetDescription = "Anwesenheits-Bögen erlauben es Ihnen die Anwesenheiten in den Kursen zu gruppieren. Z.B.: Sie möchten die Anwesenheiten von Theorie- und Praxiskursen unterscheiden. Die Listen werde alle Teilnehmer als anwesend darstellen. Evtl. fehlende Teilnehmer können Sie durch einen Kikck manuell hinzufügen. ";
+$AttendanceSheetDescription = "Anwesenheits-Bögen erlauben es Ihnen die Anwesenheiten in den Kursen zu gruppieren. Z.B.: Sie möchten die Anwesenheiten von Theorie- und Praxiskursen unterscheiden. Die Listen werde alle Teilnehmer als anwesend darstellen. Evtl. fehlende Teilnehmer können Sie durch einen Kikck manuell hinzufügen.";
 $AttendanceSheetReport = "Auswertung der Anwesenheitslisten";
 $YouDoNotHaveDoneAttendances = "Sie haben keine Anwesenheiten";
 $GoToAttendanceCalendarList = "Zur Kalenderansicht der Anwesenheiten";

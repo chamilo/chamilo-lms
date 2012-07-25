@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $nameTools = "obsolete Sprachvariable";
 $langMdCallingTool = "Dokumente";
 $langTool = "Dokument-Metadaten";

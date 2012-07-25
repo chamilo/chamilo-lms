@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Allgemeine Beschreibung";
 $GeneralDescriptionQuestions = "Welche Stelle nimmt diesr Kurs im Gesamtangebot ein? Gibt es Vorbedingungen? Hat der Kurs Verbindungen mit anderen Kursen?";
 $GeneralDescriptionInformation = "Beschreiben Sie den Kurs (Anzahl Stunden, offizieller Kurscode, Raum, wo er stattfindet, ...) und den Leiter (Name, Vorname, Büro, Telefon, E-Mail ...)";

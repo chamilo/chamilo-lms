@@ -20,7 +20,7 @@ $langCopyCourse = "Kopēt kursa saturu";
 $langSelectItemsToCopy = "Iezīmēt kopējamās lietas";
 $langCopyFinished = "Kopēšana pabeigta!";
 $langFullRecycle = "Dzēst visu!";
-$langRecycleCourse = "Pārstrādāt kursu.";
+$langRecycleCourse = "Pārstrādāt kursu";
 $langRecycleFinished = "Pārstrāde ir pabeigta";
 $langRecycleWarning = "Brīdinājums!<br>Lietojot šo rīku, Jūs izdzēsīsiet dažas kursa sastāvdaļas. Šis solis nav atkārtojams. Stingrs ieteikums: izveidojiet <a href=\"create_backup.php\">rezerves kopiju</a> pirms lietot pārstrādes rīku!";
 $langSameFilename = "Ko darīt ar importētajiem failiem, kam ir tādi paši nosaukumi, kā jau esošajiem?";
@@ -49,4 +49,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Ja vēlaties eksportēt kursu, 
 $ArchivesDirectoryNotWriteableContactAdmin = "Lietojot šo instrumentu arhīvu direktorija nav lasāma. Lūdzu sazinieties ar platformas administratoru.";
 $DestinationCourse = "Mērķa Kurss";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Ja jūsu mācību kursa saturā ir ietverti audio faili, Jums tie ir jāizvēlas no dokumentiem";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Neaizmirstiet izvēlēties multivides mediju failus, ja Jūsu resursiem tie ir nepieciešami";
 ?>

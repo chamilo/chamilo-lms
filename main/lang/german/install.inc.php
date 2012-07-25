@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langStatDB = "Tracking DB.  Nur sinnvoll in der Multidatenbankinstallation";
 $langEnableTracking = "Tracking aktivieren";
 $langInstituteShortName = "Organisation Name (kurz)";

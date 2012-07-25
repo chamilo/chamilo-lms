@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Login ist ungültig;  Benutzername / Passwort sind inkorrekt.";
 $langWelcome = "Willkommen !";
 $langPass = "Passwort";
@@ -69,7 +72,6 @@ $Inbox = "Nachrichten-Eingang";
 $Comppose = "Nachricht erstellen";
 $PendingInvitations = "Offene Einladungen";
 $YouDoNotHaveAnySessionInItsHistory = "Sie haben keine Session in Ihrer Session-Liste";
-$PortalHomepageDefaultIntroduction = "";
 $Username = "Benutzername";
 $Profile = "Profil";
 ?>

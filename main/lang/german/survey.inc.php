@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Umfrage veröffentlichen";
 $CompareQuestions = "Fragen vergleichen";
 $InformationUpdated = "Information aktualisiert";
@@ -89,7 +92,7 @@ $AddAnswer = "Anwort hinzufügen";
 $DisplayAnswersHorVert = "Anzeige";
 $AnswerOptions = "Mögliche Antworten";
 $YesNo = "Ja / Nein";
-$MultipleResponse = "Mehrfach-Antworten";
+$MultipleResponse = "Mehrfach-Antwort";
 $Open = "offen";
 $Dropdown = "Dropdown";
 $Pagebreak = "Seitenende (Trennt Fragen)";
@@ -200,7 +203,7 @@ $UpdateInformation = "Update Informationen";
 $PleaseFillSurvey = "Umfrage beantworten";
 $ReportingOverview = "Übersicht Auswertung";
 $ThereAreNotQuestionsForthisSurvey = "Es gibt keine Fragen für diese Umfrage";
-$Multipleresponse = "Mehrfach-Antwort";
+$Multipleresponse = "Mehrere Antworten";
 $ErrorSurveyTypeUnknown = "Umfrage-Typ unbekannt";
 $SurveyUndetermined = "Umfrage undefiniert";
 $QuestionComment = "Fragen Kommentar";

@@ -58,4 +58,5 @@ $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Estimado usuario, a súa conta foi activada na plataforma. Por favor, entre e disfrute dos seus cursos.";
 $AddAsAnnouncement = "Engadir coma un anuncio";
+$AnnouncementForGroup = "Anuncio para un grupo";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Die reservierte Zeitspanne ist zu kurz";
 $BookingSystem = "Buchungssystem";
 $BookingPeriodList = "Liste gebuchter Zeitspannen";
@@ -37,7 +40,7 @@ $RepeatUntil = "Wiederhole bis";
 $BookingPeriodPast = "Reservierungen für die Vergangenheit sind nicht möglich";
 $ReservationMaxUsersOverrun = "Die Anzahl der Anmeldungen übersteigt Ihre ausgewählte Höchstanzahl von Benutzern";
 $AddNewBookingPeriod = "neuen Buchungszeitraum hinzufügen";
-$BookingPeriodTimePickerLimitation = "Reservierungen mit Zeitwähler sind nicht möglich, wenn sich Start- und Enddatum unterscheiden";
+$BookingPeriodTimePickerLimitation = "Begrenzung des Buchungszeitraum-Zeitwählers";
 $ResourceTypeName = "Ressourcentyp";
 $AddNewResourceType = "neuen Ressourcentyp hinzufügen";
 $ResourceTypeAdded = "Der Ressourcentyp wurde hinzugefügt.";
@@ -166,7 +169,6 @@ $ItemEdited = "Inhalt aktualisiert";
 $CategoryFilter = "Kategorie Filter";
 $ItemCreator = "Inhalt Ersteller";
 $DeleteSelectedItems = "Ausgewählte Inhalte löschen";
-$BookingPeriodTimepickerLimitation = "Begrenzung des Buchungszeitraum-Zeitwählers";
 $Blackout = "Ausfall";
 $EveryDay = "Jeden Tag";
 $EveryWeek = "Jede Woche";

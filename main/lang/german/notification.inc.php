@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "neuer Eintrag hinzugefügt";
 $lang_title_notification = "seit Ihrem letzten Besuch";
 $lang_update_agenda = "Kalender aktualisiert";

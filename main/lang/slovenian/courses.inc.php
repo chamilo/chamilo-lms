@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Že vpisan v ta tečaj";
 $lang_already_enrolled = "že vpisan";
 $lang_my_personnal_course_list = "Osebni seznam tečajev";
 $lang_course_enrollment = "Uporabnik tečaja";

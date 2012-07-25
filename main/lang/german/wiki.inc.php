@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Wiki Suchergebnis";
 $Wiki = "Gruppen-Wiki";
 $StartPage = "Hauptseite";
@@ -115,7 +118,7 @@ $HideDiscussExtra = "Nun sind Kommentare nur für Kursleiter sichtbar";
 $ShowDiscussExtra = "Nun sind Kommentare für alle Benutzer  sichtbar";
 $LockDiscussExtra = "Nun können nur noch Kursleiter Kommentare eingeben";
 $UnlockDiscussExtra = "Nun können alle Benutzer Kommentare eingeben";
-$AssignmentDescExtra = "Diese Seite ist eine vom Kursleiter vorgeschlagene Aufgabe ";
+$AssignmentDescExtra = "Diese Seite ist eine vom Kursleiter vorgeschlagene Aufgabe";
 $AssignmentWorkExtra = "Diese Seite eine Teilnehmer Aufgabe";
 $NoAreSeeingTheLastVersion = "WARNUNG: Sie sehen nicht die letzte Version dieser Seite";
 $AssignmentFirstComToStudent = "Diese Seite zu einer Lösung zur vorgeschlagenen Aufgabe machen";
@@ -142,9 +145,7 @@ $Changes = "Änderungen";
 $MostActiveUsers = "Aktivster Benutzer";
 $Contributions = "Beteiligung";
 $UserContributions = "Beteiligte Benutzer";
-$WarningDeleteMainPage = "Das Löschen der Haupt-Seite  (Homepage) des Wiki ist nicht ratsam! Sie ist der Hautzugang zum Wiki.<br />
-Wenn Sie, warum auch immer, die Seite löschen müssen, vergessen Sie nicht diese Homepage wieder herzustellen.<br />
-Bis dahin werden andere Benutzer nicht in der Lage sein, neue Seiten hinzuzufügen.";
+$WarningDeleteMainPage = "Das Löschen der Haupt-Seite  (Homepage) des Wiki ist nicht ratsam! Sie ist der Hautzugang zum Wiki.<br />\nWenn Sie, warum auch immer, die Seite löschen müssen, vergessen Sie nicht diese Homepage wieder herzustellen.<br />\nBis dahin werden andere Benutzer nicht in der Lage sein, neue Seiten hinzuzufügen.";
 $ConvertToLastVersion = "Um diese Version zur Aktuellsten zu machen, hier klicken:";
 $Restore = "Wiederherstellen";
 $CurrentVersion = "Aktuelle Version";
@@ -154,12 +155,10 @@ $RestoredFromVersion = "Wiederhergestellt aus Version";
 $HWiki = "Hilfe: wiki";
 $FirstSelectOnepage = "Bitte wählen Sie eine erste Seite";
 $DefineTask = "Wenn Sie eine Beschreibung eingeben, so wird diese Seite zu einer speziellen Seite umgewandelt, die es Ihnen ermöglicht eine Aufgabe zu erstellen.";
-$ThisPageisBeginEditedBy = "Zur Zeit wird die Seite bearbeitet von ";
-$ThisPageisBeginEditedTryLater = "Versuchen Sie es später. Wenn der Benutzer, der diese Seite derzeit berabeitet, seine Änderungen nicht speichert, wird Ihnen diese Seite zur Verfügung stehen in ";
+$ThisPageisBeginEditedBy = "Zur Zeit wird die Seite bearbeitet von";
+$ThisPageisBeginEditedTryLater = "Versuchen Sie es später. Wenn der Benutzer, der diese Seite derzeit berabeitet, seine Änderungen nicht speichert, wird Ihnen diese Seite zur Verfügung stehen in";
 $EditedByAnotherUser = "Ihr Änderungen werden nicht gespeichert weil ein anderer Benutzer diese Seite geändert und gespeichert hat während Sie selbst Änderungen vorgenommen haben";
-$WarningMaxEditingTime = "Sie haben 20 Minuten Zeit diese Seite zu bearbeiten. 
-Wenn Sie Ihre Änderungen nicht speichern, steht diese Seite nach dieser Zeit anderen Benutzern zur Verfügung. 
-In diesem Fall  kann es sein, dass Ihre Änderungen verloren gehen!";
+$WarningMaxEditingTime = "Sie haben 20 Minuten Zeit diese Seite zu bearbeiten. \nWenn Sie Ihre Änderungen nicht speichern, steht diese Seite nach dieser Zeit anderen Benutzern zur Verfügung. \nIn diesem Fall  kann es sein, dass Ihre Änderungen verloren gehen!";
 $TheTaskDoesNotBeginUntil = "Es gibt noch kein Start-Datum";
 $TheDeadlineHasBeenCompleted = "Sie haben die Abgabefrist versäumt";
 $HasReachedMaxNumWords = "Sie haben die Zahl der erlaubten Wörter überschritten";
@@ -195,7 +194,7 @@ $RandomPage = "Zufallseite";
 $ProtectedPages = "Geschützte Seiten";
 $IncludeAllVersions = "Auch in älteren Versionen jeder Seite suchen";
 $TotalHiddenPages = "Gesamt versteckte Seiten";
-$TotalPagesEditedAtThisTime = "Anzahl der Seiten die zur Zeit bearbeitet werden ";
+$TotalPagesEditedAtThisTime = "Anzahl der Seiten die zur Zeit bearbeitet werden";
 $TotalWikiUsers = "Alle User die an diesem Wiki beteiligt sind";
 $StudentAddNewPages = "Teilnehmer können dem Wiki neue Seiten hinzufügen";
 $DateCreateOldestWikiPage = "Erstellungsdatum der ältesten Wiki-Seite";

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langHFor = "Hilfe für die Foren";
 $langForContent = "Ein Forum ist ein schriftliches asynchrones Diskussionswerkzeug. Wo Email nur einen Eins-zu Eins Dialog ermöglicht, bieten Foren die Gelegenheit öffentliche bzw. halböffentliche Diskussionen zu führen.</p><p>Die Kurtsteilnehmer benötigen nur ihren Browser, um die Foren zu benutzen.</p><p>Um Foren einzurichten, klicken Sie auf 'admin'. Diskussionen sind wie folgt aufgeteilt:</p><p><b>Kategorie > Forum >Thema > Antworten</b></p>Um die Diskussionen zu strukturieren, müssen zuvor die Kategorien und Foren eingerichtet werden. Dabei können die Überschriften und Antworten frei gelassen werden.Per Voreinstellung enthält das Forum nun die Kategorie 'Public' und ein Beispielforum mit einem exemplarischen Thema.</p><p>Zuerst sollten Sie die Beispielüberschrift entfernen und den Forennamen ändern. Anschließend können Sie in der Kategorie 'public' weitere Foren anlegen, nach Gruppen oder Themen, entsprechend den Anforderungen Ihrer Einsatzsituation.</p><p>Mischen Sie keine Kategorien und Foren und vergessen Sie nicht, daß eine leere Kategorie (ohne Foren) nicht in der Teilnehmeransicht sichtbar ist.</p><p>Die Beschreibung eines Forums kann eine Liste der Mitglieder, eine Zieldefinition, ein Vorhaben, ein Thema... sein.";
 $langHDropbox = "Dateikiste";

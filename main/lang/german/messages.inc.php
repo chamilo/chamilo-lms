@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MessageEmptyMessageOrSubject = "Bitte Betreff oder Nachricht angeben";
 $Inbox = "Posteingang";
 $Messages = "Nachrichten";

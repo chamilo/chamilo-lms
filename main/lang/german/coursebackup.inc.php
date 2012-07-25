@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Bitte wählen Sie eine Backup-Option.";
 $langLetMeSelectItems = "Kurs Komponenten auswählen";
 $langCreateFullBackup = "Vollständiges Backup erstellen";

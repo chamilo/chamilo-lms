@@ -1631,4 +1631,5 @@ $Zombies = "Zombies";
 $ActiveOnly = "Solo activo";
 $AuthenticationSource = "Fuente de autentificación";
 $RegisteredDate = "Fecha de registro";
+$FilterTermsTitle = "Filtrar términos";
 ?>

@@ -261,4 +261,5 @@ $DirExists = "Operación imposible, xa existe un directorio co mesmo nome.";
 $DocMv = "Documento movido";
 $NoSVGImagesInImagesGalleryPath = "Non hai imaxes SVG na túa galeria de imaxes";
 $NoSVGImages = "Non é unha imaxe SVG";
+$WamiNeedFilename = "Antes de activar a gravación é necesario un nome de arquivo";
 ?>

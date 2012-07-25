@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Neuen Eintrag hinzufügen";
 $ShowAllEvents = "Alle Einträge anzeigen";
 $ShowCurrent = "Einträge in diesem Monat anzeigen";

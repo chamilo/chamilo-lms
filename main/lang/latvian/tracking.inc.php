@@ -315,4 +315,12 @@ $NumberOfForumsInLearnpath = "Kopējais forumu skaits Kursa mācību tēmās";
 $NumberOfAssignmentsInLearnpath = "Kopējais mājas darbu skaits Kursa mācību tēmās";
 $NumberOfAnnouncementsInCourse = "Kopējais paziņojumu skaits Kursa mācību tēmās";
 $CurrentCoursesReport = "Konkrētā kursa atskaite";
+$NumberOfPublishedExercises = "Publicēto vingrinājumu #";
+$NumberOfPublishedLps = "Mācību kursu #";
+$EventType = "Notikuma tips";
+$NbInactiveSessions = "Neaktīvo sesiju skaits";
+$FollowedSessions = "Aktīvas sesijas";
+$FollowedCourses = "Aktīvie kursi";
+$FollowedUsers = "Izsekojamie Lietotāji";
+$Timeline = "Laika skala";
 ?>

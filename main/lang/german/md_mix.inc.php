@@ -1,10 +1,10 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langTool = "Dokument-Metadaten";
 $langClickKw = "Ein Schlagwort anklicken, um es aus- oder abzuwählen";
-$langKwHelp = "<br/>Zum Öffnen den '+' Button klicken, '-' Button zum Schließen, '++' Button um alle zu öffnen, '--' Button um alle zu schließen.<br/><br/>
-Schlagwort-Auswahl aufheben: Baum  einklappen und anschileßend  mit dem '+' Knopf Öffnen.<br/>
-Original Schlagwort im Baum suchen: Alt-Klick '+' <br/><br/>
-Alt-Klick Schlagwort wählt ein Schlagwort ohne weitere Begriffe aus oder hebt eine Schlagwort-Markierung  mit weiteren Begriffen auf.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlagworte hinzu.<br/><br/>";
+$langKwHelp = "<br/>Zum Öffnen den '+' Button klicken, '-' Button zum Schließen, '++' Button um alle zu öffnen, '--' Button um alle zu schließen.<br/><br/>\nSchlagwort-Auswahl aufheben: Baum  einklappen und anschileßend  mit dem '+' Knopf Öffnen.<br/>\nOriginal Schlagwort im Baum suchen: Alt-Klick '+' <br/><br/>\nAlt-Klick Schlagwort wählt ein Schlagwort ohne weitere Begriffe aus oder hebt eine Schlagwort-Markierung  mit weiteren Begriffen auf.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlagworte hinzu.<br/><br/>";
 $langAdvanced = "Authoring";
 $langSearch = "Suchen";
 $langSearchCrit = "Ein Wort pro Zeile!";

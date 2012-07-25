@@ -91,7 +91,11 @@ class SortableTable extends HTML_Table {
 	 * Array with names of the other tables defined on the same page of this
 	 * table
 	 */
-	public $other_tables;
+	public $other_tables;    
+    /** 
+     * Activates the odd even rows  
+     * **/
+    public $odd_even_rows_enabled = true;
 
 
 	/**
@@ -601,13 +605,15 @@ class SortableTable extends HTML_Table {
 				$row = $this->filter_data($row);                                
 				$this->addRow($row);
                 if (isset($row['child_of'])) {
-                    $this->setRowAttributes ($count, array('class' => 'hidden hidden_'.$row['child_of']), true);
+                    $this->setRowAttributes($count, array('class' => 'hidden hidden_'.$row['child_of']), true);
                 }
                 $count++;
 			}
 		}
         
-        $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
+        if ($this->odd_even_rows_enabled == true) {
+            $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
+        }
 		
 		foreach ($this->th_attributes as $column => $attributes) {
 			$this->setCellAttributes(0, $column, $attributes);

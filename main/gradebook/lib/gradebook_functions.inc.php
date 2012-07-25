@@ -115,10 +115,9 @@ function get_course_name_from_code($code) {
  * Builds an img tag for a gradebook item
  * @param string $type value returned by a gradebookitem's get_icon_name()
  */
-function build_type_icon_tag($kind) {
-	return '<img src="' . get_icon_file_name ($kind) . '" border="0" hspace="5" align="middle" alt="" />';
+function build_type_icon_tag($kind, $attributes = array()) {
+	return Display::return_icon(get_icon_file_name($kind), ' ', $attributes, ICON_SIZE_SMALL);
 }
-
 
 /**
  * Returns the icon filename for a gradebook item
@@ -127,13 +126,13 @@ function build_type_icon_tag($kind) {
 function get_icon_file_name ($type) {
 	switch ($type) {
 		case 'cat':
-			$icon = 'icons/22/gradebook.png';
+			$icon = 'gradebook.png';
 			break;
 		case 'evalempty':
-			$icon = 'icons/22/empty_evaluation.png';
+			$icon = 'empty_evaluation.png';
 			break;
 		case 'evalnotempty':
-			$icon = 'icons/22/no_empty_evaluation.png';
+			$icon = 'no_empty_evaluation.png';
 			break;
 		case 'exercise':
 		case LINK_EXERCISE:
@@ -141,7 +140,7 @@ function get_icon_file_name ($type) {
 			break;
 		case 'learnpath':
 		case LINK_LEARNPATH:
-			$icon = 'icons/22/learnpath.png';
+			$icon = 'learnpath.png';
 			break;
 		case 'studentpublication':
 		case LINK_STUDENTPUBLICATION:
@@ -170,7 +169,7 @@ function get_icon_file_name ($type) {
 			$icon = 'link.gif';
 			break;
 	}
-	return api_get_path(WEB_IMG_PATH).$icon;
+	return $icon;
 }
 
 /**

@@ -50,7 +50,7 @@ class GradebookTable extends SortableTable {
         $this->set_header($column++, get_lang('Description'), false);
 
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Weight'),'','width="20px"');
+			$this->set_header($column++, get_lang('Weight'),'','width="100px"');
 		} else {
 			$this->set_header($column++, get_lang('Weight'), false);
 			$this->set_header($column++, get_lang('Result'), false);
@@ -59,6 +59,9 @@ class GradebookTable extends SortableTable {
                 $this->set_header($column++, get_lang('Actions'), false);
             }            
 		}
+        //Desactivates the odd/even alt rows in order that the +/- buttons work see #4047
+        
+        $this->odd_even_rows_enabled = false;
 		
 		/*if (api_is_allowed_to_edit(null, true)) {
 			//$this->set_header($column++, get_lang('CreationDate'),true, 'width="100px"');
@@ -290,7 +293,7 @@ class GradebookTable extends SortableTable {
 						$row[] = $this->build_id_column($item);
 					}
                     
-					$row[] = $this->build_type_column($item);
+					$row[] = $this->build_type_column($item, array('style' => 'padding-left:5px'));
 					
 					//Name
 					$row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item) . $invisibility_span_close;
@@ -483,8 +486,8 @@ class GradebookTable extends SortableTable {
 		}
 	}
 
-	private function build_type_column ($item) {
-		return build_type_icon_tag($item->get_icon_name());
+	private function build_type_column ($item, $attributes = array()) {
+		return build_type_icon_tag($item->get_icon_name(), $attributes);
 	}
 	
 	/**

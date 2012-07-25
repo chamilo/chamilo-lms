@@ -270,4 +270,5 @@ $DocMv = "Document déplacé.";
 $NoSVGImagesInImagesGalleryPath = "Il n'y a aucune image SVG dans le répertoire de galerie d'images";
 $NoSVGImages = "Aucune image SVG";
 $WamiNeedFilename = "Avant d'activer l'enregistrement il faut donner un nom de fichier.";
+$SelectAnAudioFileFromDocuments = "Sélectionner un fichier audio à partir des documents";
 ?>

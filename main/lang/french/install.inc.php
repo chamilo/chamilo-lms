@@ -130,4 +130,7 @@ $ADatabaseWithTheSameNameAlreadyExists = "Une base de donnée avec le meme nom e
 $UserXCantHaveAccessInTheDatabaseX = "L'utilisateur %s n'a pas accès à la base de donnée %s";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "La base de donnée %s ne peut pas être crée, l'utilisateur %s n'a pas suffisamment de permissions.";
 $CourseTestWasCreated = "Le cours de test a été créé";
+$InstallExecution = "Exécution du processus d'installation";
+$UpdateExecution = "Exécution du processus de mise à jour";
+$PleaseWaitThisCouldTakeAWhile = "Veuillez patienter, cette opération peut prendre un certain temps...";
 ?>

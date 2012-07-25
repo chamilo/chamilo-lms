@@ -21,4 +21,6 @@ $lang_of = "de";
 $lang_view_slideshow = "Voir la galerie";
 $FirstSlide = "Première diapositive";
 $LastSlide = "Dernière diapositive";
+$ResizingAuto = "Redimensionnement automatique (par défaut)";
+$ResizingAutoComment = "La présentation se redimensionnera automatiquement à la taille de votre écran. Ceci est l'option par défaut.";
 ?>

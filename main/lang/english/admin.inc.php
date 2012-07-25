@@ -1632,4 +1632,14 @@ $casAddUserActivatePlatform = "CAS internal setting";
 $casAddUserActivateLDAP = "CAS internal setting";
 $UpdateUserInfoCasWithLdapTitle = "CAS internal setting";
 $UpdateUserInfoCasWithLdapComment = "CAS internal setting";
+$ShowAllUsers = "Show all users";
+$ShowUsersNotAddedInTheURL = "Show users not added to the URL";
+$UserNotAddedInURL = "Users not added to the URL";
+$UsersRegisteredInNoSession = "Users not registered in any session";
+$CommandLineInterpreter = "Command line interpreter (CLI)";
+$PleaseVisitOurWebsite = "Please visit our website: http://www.chamilo.org";
+$SpaceUsedOnSystemCannotBeMeasuredOnWindows = "The space used on disk cannot be measured properly on Windows-based systems.";
+$XOldTablesDeleted = "%d old tables deleted";
+$XOldDatabasesDeleted = "%d old databases deleted";
+$ExtensionShouldBeLoaded = "This extension should be loaded.";
 ?>

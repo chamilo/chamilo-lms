@@ -235,4 +235,5 @@ $OnlyActiveWhenThereAreAnyComponents = "This option is enabled if you have any e
 $GradebookLockedAlert = "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).";
 $NoStudentCertificatesAvailableYet = "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives.";
 $CertificateExistsButNotPublic = "The requested certificate exists on this portal, but it has not been made public. Please login to view it.";
+$ConfirmToUnlockElement = "Confirm to unlock element";
 ?>

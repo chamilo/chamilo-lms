@@ -497,4 +497,8 @@ $EndTest = "Fin du test";
 $PassPercentage = "Moyenne (%)";
 $NoCategorySelected = "Aucune catégorie n'est sélectionnée";
 $ExerciseAverage = "Moyenne de l'exercice";
+$NoNegativeScore = "Pas de points négatifs";
+$GlobalMultipleAnswer = "Réponses multiples à pondération globale";
+$AllQuestionsShort = "Toutes";
+$ProblemsRecordingUploadYourOwnAudioFile = "Problème pour enregistrer? Envoyez un fichier audio!";
 ?>

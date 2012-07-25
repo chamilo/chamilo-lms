@@ -6,24 +6,26 @@
 * @package chamilo.statistics
 */
 class Statistics {
+    
     /**
      * Converts a number of bytes in a formatted string
      * @param int $size
      * @return string Formatted file size
      */
-    function make_size_string($size) {
+    static function make_size_string($size) {
         if ($size < pow(2,10)) return $size." bytes";
         if ($size >= pow(2,10) && $size < pow(2,20)) return round($size / pow(2,10), 0)." KB";
         if ($size >= pow(2,20) && $size < pow(2,30)) return round($size / pow(2,20), 1)." MB";
         if ($size > pow(2,30)) return round($size / pow(2,30), 2)." GB";
     }
+    
     /**
      * Count courses
      * @param string $category_code  Code of a course category. Default: count
      * all courses.
      * @return int Number of courses counted
      */
-    function count_courses($category_code = NULL) {
+    static function count_courses($category_code = NULL) {
         global $_configuration;
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -52,7 +54,7 @@ class Statistics {
      * @param bool count only active users (false to only return currently active users)
      * @return int Number of users counted
      */
-    function count_users($status = null, $category_code = null, $count_invisible_courses = true, $only_active = false) {
+    static function count_users($status = null, $category_code = null, $count_invisible_courses = true, $only_active = false) {
 
         global $_configuration;
         // Database table definitions
@@ -86,7 +88,7 @@ class Statistics {
      * Count activities from track_e_default_table
      * @return int Number of activities counted
      */
-    function get_number_of_activities() {
+    static function get_number_of_activities() {
         // Database table definitions
         global $_configuration;
         $track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
@@ -108,10 +110,11 @@ class Statistics {
         $obj = Database::fetch_object($res);
         return $obj->total_number_of_items;
     }
+    
     /**
      * Get activities data to display
      */
-    function get_activities_data($from, $number_of_items, $column, $direction) {
+    static function get_activities_data($from, $number_of_items, $column, $direction) {
         global $dateTimeFormatLong, $_configuration;
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);        
@@ -184,7 +187,7 @@ class Statistics {
      * Get all course categories
      * @return array All course categories (code => name)
      */
-    function get_course_categories() {
+    static function get_course_categories() {
         $category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT code, name FROM $category_table ORDER BY tree_pos";
         $res = Database::query($sql);
@@ -194,13 +197,14 @@ class Statistics {
         }
         return $categories;
     }
+    
     /**
      * Rescale data
      * @param array $data The data that should be rescaled
      * @param int $max The maximum value in the rescaled data (default = 500);
      * @return array The rescaled data, same key as $data
      */
-    function rescale($data, $max = 500) {
+    static function rescale($data, $max = 500) {
         $data_max = 1;
         foreach ($data as $index => $value) {
             $data_max = ($data_max < $value ? $value : $data_max);
@@ -213,6 +217,7 @@ class Statistics {
         }
         return $result;
     }
+    
     /**
      * Show statistics
      * @param string $title The title
@@ -220,7 +225,7 @@ class Statistics {
      * @param bool $show_total
      * @param bool $is_file_size
      */
-    function print_stats($title, $stats, $show_total = true, $is_file_size = false) {
+    static function print_stats($title, $stats, $show_total = true, $is_file_size = false) {
         $total = 0;
         $data = Statistics::rescale($stats);
 
@@ -259,11 +264,12 @@ class Statistics {
         }
         echo '</table>';
     }
+    
     /**
      * Show some stats about the number of logins
      * @param string $type month, hour or day
      */
-    function print_login_stats($type) {
+    static function print_login_stats($type) {
         global $_configuration;
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -333,10 +339,11 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('AllLogins').' ('.$period.')', $result, true);
     }
+    
     /**
      * Print the number of recent logins
      */
-    function print_recent_login_stats() {
+    static function print_recent_login_stats() {
         global $_configuration;
         $total_logins = array();
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -363,7 +370,7 @@ class Statistics {
     /**
      * Show some stats about the accesses to the different course tools
      */
-    function print_tool_stats() {
+    static function print_tool_stats() {
         global $_configuration;
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -395,10 +402,11 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
     }
+    
     /**
      * Show some stats about the number of courses per language
      */
-    function print_course_by_language_stats() {
+    static function print_course_by_language_stats() {
         global $_configuration;
         $table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -419,10 +427,11 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('CountCourseByLanguage'),$result,true);
     }
+    
     /**
      * Shows the number of users having their picture uploaded in Dokeos.
      */
-    function print_user_pictures_stats() {
+    static function print_user_pictures_stats() {
         global $_configuration;
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -445,7 +454,7 @@ class Statistics {
         Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
     }
 
-    function print_activities_stats() {
+    static function print_activities_stats() {
 
         echo '<h4>'.get_lang('ImportantActivities').'</h4>';
 
@@ -482,7 +491,7 @@ class Statistics {
     /**
      * Shows statistics about the time of last visit to each course.
      */
-    function print_course_last_visit() {
+    static function print_course_last_visit() {
         global $_configuration;
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
@@ -558,7 +567,7 @@ class Statistics {
      * @param string    Type of message: 'sent' or 'received'
      * @return array    Message list
      */
-    function get_messages($message_type) {
+    static function get_messages($message_type) {
         global $_configuration;
         $message_table 				= Database::get_main_table(TABLE_MAIN_MESSAGE);
         $user_table 				= Database::get_main_table(TABLE_MAIN_USER);
@@ -602,7 +611,7 @@ class Statistics {
     /**
      * Count the number of friends for social network users
      */
-    function get_friends() {
+    static function get_friends() {
         global $_configuration;
         $user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -630,10 +639,11 @@ class Statistics {
         }
         return $list_friends;
     }
+    
     /**
      * Print the number of users that didn't login for a certain period of time
      */
-    function print_users_not_logged_in_stats() {
+    static function print_users_not_logged_in_stats() {
         global $_configuration;
         $total_logins = array();
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);

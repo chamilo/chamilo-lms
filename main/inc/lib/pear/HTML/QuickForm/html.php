@@ -65,8 +65,8 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
     * @access public
     * @return void
-    */
-    function accept(&$renderer)
+    */    
+    function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderHtml($this);
     } // end func accept

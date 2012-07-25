@@ -51,9 +51,15 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylesubmitbutton($elementName = null, $value = null, $attributes = array(), $img=null) {
+    function HTML_QuickForm_stylesubmitbutton($elementName = null, $value = null, $attributes = null, $img = null) {
+        if (empty($attributes)) {
+            $attributes = array();
+        }
+        
         if (!isset($attributes['class'])) {
-            $attributes['class'] = 'btn';
+            if (is_array($attributes)) {
+                $attributes['class'] = 'btn';
+            }            
         }
         HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value, $img);
         $this->setValue($value);

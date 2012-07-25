@@ -527,7 +527,8 @@ switch ($action) {
         }        
 		break;        
     case 'upload': 
-        $check = Security::check_token('post');                
+        $check = Security::check_token('post');  
+        
 		if ($student_can_edit_in_session && $check) {
 			
 			//check the token inserted into the form
@@ -593,7 +594,7 @@ switch ($action) {
 										   parent_id 	=  '".$work_id."' ,
                                            session_id	= '".intval($id_session)."' ,                                               
                                            user_id 		= '".$user_id."'";
-				//var_dump($sql_add_publication);
+				//var_dump($sql_add_publication);exit;
 				Database::query($sql_add_publication);
 				$id = Database::insert_id();				
 				if ($id) {				
@@ -632,7 +633,7 @@ switch ($action) {
 				$insertId = Database::insert_id();
 				api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id, $group_id);
 				$succeed = true;*/
-			} elseif (isset($_POST['editWork'])) {			
+			} elseif (isset($_POST['editWork'])) {	
 				/*
 				 * SPECIAL CASE ! For a work edited
 				*/					
@@ -669,9 +670,14 @@ switch ($action) {
 				} else {
 					$error_message = get_lang('IsNotPosibleSaveTheDocument');
 				}
-			}    
+			} else {
+                $error_message = get_lang('IsNotPosibleSaveTheDocument');
+            }   
             Security::clear_token();
-		}
+		} else {
+            //Bad token or can't add works
+            $error_message = get_lang('IsNotPosibleSaveTheDocument');
+        }
 						
 		if (!empty($succeed) && !empty($id)) {
 			//last value is to check this is not "just" an edit
@@ -691,7 +697,7 @@ switch ($action) {
                             $emailto[$row_email['myemail']] = $row_email['myemail'];
 						}
 					}
-				} else {					
+				} else {				
 					// coachs of the session
 					$sql_resp = 'SELECT user.email as myemail
 										FROM ' . $table_session . ' session INNER JOIN ' . $table_user . ' user
@@ -718,7 +724,7 @@ switch ($action) {
 					}
 				}
 			
-				if (count($emailto) > 0) {			
+				if (count($emailto) > 0) {		
 					$emailto = implode(',', $emailto);				
 					$emailsubject = "[" . api_get_setting('siteName') . "] ";
 					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
@@ -755,7 +761,11 @@ switch ($action) {
 			}
 			event_upload($Id);			
 			Display :: display_confirmation_message(get_lang('DocAdd'), false);
-		}
+		} else {
+            if (!empty($error_message)) {
+                Display :: display_warning_message($error_message, false);    
+            }
+        }
     case 'create_dir':	
 	case 'add':
         //$check = Security::check_token('post');                
@@ -950,7 +960,7 @@ switch ($action) {
 	case 'move_to':
 	case 'list':		
 		/*	Move file command */
-		if ($is_allowed_to_edit && $action == 'move_to') {  
+		if ($is_allowed_to_edit && $action == 'move_to') {
 			$move_to_path = get_work_path($_REQUEST['move_to_id']);
 		
 			if ($move_to_path==-1) {
@@ -1139,7 +1149,7 @@ switch ($action) {
 		}
         
         //User works
-        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {           
+        if (isset($work_id) && !empty($work_id) && !$display_list_users_without_publication) {
             $work_data = get_work_assignment_by_id($work_id);                    
             $check_qualification = intval($my_folder_data['qualification']);
             

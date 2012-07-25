@@ -328,7 +328,7 @@ class DisplayGradebook
 					//Right icons
 					$modify_icons  = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_MEDIUM).'</a>';
 					//$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
-					Display::return_icon('certificate.png', get_lang('AttachCertificate'),'',ICON_SIZE_MEDIUM).'</a>';	
+					//Display::return_icon('certificate.png', get_lang('AttachCertificate'),'',ICON_SIZE_MEDIUM).'</a>';	
 	
 					//hide or delete are not options available
 					//$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $catobj->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -544,14 +544,17 @@ class DisplayGradebook
 		echo $header;		
 		
 		if (api_is_allowed_to_edit(null, true)) {
-            $weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);                        			
-    		$weight            = Display::tag('h3', get_lang('TotalWeight').' : '.$weight);    		
+    	        $weight = ((intval($catobj->get_weight())>0) ? $catobj->get_weight() : 0);                        			
+    		$weight            = get_lang('TotalWeight').' : '.$weight;
     		
     		$min_certification = (intval($catobj->get_certificate_min_score()>0) ? $catobj->get_certificate_min_score() : 0);
-    		$min_certification = Display::tag('h3', get_lang('CertificateMinScore').' : '.$min_certification);
+    		$min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
+            	$edit_icon  = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Edit'),array('class'=>'right'),ICON_SIZE_SMALL).'</a>';
+		//$msg = Display::tag('h3', $weight.' - '.$min_certification);
+		$msg = Display::tag('h3', $weight.' - '.$min_certification.$edit_icon);
     		//@todo show description
     		$description       = (($catobj->get_description() == "" || is_null($catobj->get_description())) ? '' : '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.$catobj->get_description());    				
-    		Display::display_normal_message($weight.$min_certification, false);
+    		Display::display_normal_message($msg, false);
     		if (!empty($description)) {
     		    echo Display::div($description, array());
     		}

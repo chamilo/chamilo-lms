@@ -193,8 +193,8 @@ function CreateEmbeddedMovie( url )
 			classid = '' ;
 		}
 
-		var html ;
-		if ( EmbedInObject )
+		var html ;//hack: change logical EmbedInObjectt to !EmbedInObjectt, to force insert video with a object
+		if ( !EmbedInObject )
 		{
 			html  = '<object ' + classid + '>' ;
 			html += '<param name="url" value="' + url + '" />' ;

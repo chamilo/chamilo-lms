@@ -83,7 +83,6 @@ if ($_POST['formSent']) {
                             if (empty($password)) {
                                 $password = api_generate_password();
                             }
-
                             switch ($node_user->Status) {
                                 case 'student' : 
                                     $status = 5; 
@@ -781,8 +780,8 @@ $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 
-$form->addElement('radio', 'file_type', array(get_lang('FileType'), '<a href="example_session.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>'), 'CSV', 'csv');
-$form->addElement('radio', 'file_type', array(null, '<a href="example_session.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>'), 'XML', 'xml');
+$form->addElement('radio', 'file_type', array(get_lang('FileType'), '<a href="example_session.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>'), 'CSV', 'csv');
+$form->addElement('radio', 'file_type', array(null, '<a href="example_session.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>'), 'XML', 'xml');
 
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addElement('button', 'submit', get_lang('ImportSession'));

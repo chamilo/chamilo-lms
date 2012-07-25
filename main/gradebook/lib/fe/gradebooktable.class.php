@@ -71,7 +71,7 @@ class GradebookTable extends SortableTable {
 		
 		//admins get an edit column
 		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Modify'), false, 'width="180px"');
+			$this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
 			//actions on multiple selected documents
 			$this->set_form_actions(array (				
 				'setvisible' => get_lang('SetVisible'),

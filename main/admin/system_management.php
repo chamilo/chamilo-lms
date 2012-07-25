@@ -137,7 +137,7 @@ EOT;
             }
         }
         
-        Display::display_confirmation_message(get_lang('OldTablesDeleted') . ' ' . $number_tables_deleted);
+        Display::display_confirmation_message(sprintf(get_lang('XOldTablesDeleted'),$number_tables_deleted));
         Display::display_confirmation_message($tables_deleted, false);
     }
     
@@ -170,7 +170,7 @@ EOT;
             }
         }
         
-        Display::display_confirmation_message(get_lang('OldDatabasesDeleted') . ' ' . count($result));
+        Display::display_confirmation_message(sprintf(get_lang('XOldDatabasesDeleted'),count($result)));
         
         
         return $result;

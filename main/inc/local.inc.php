@@ -169,7 +169,8 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	if (isset($_user['user_id'])) {
 		unset($_user['user_id']);
 	}
-
+    
+    //Platform legal terms and conditions
 	if (api_get_setting('allow_terms_conditions') == 'true') {
 		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['term_and_condition']['user_id'])) {
 			$user_id = $_SESSION['term_and_condition']['user_id'];    // user id
@@ -831,8 +832,8 @@ $is_sessionAdmin    = false;
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     
     if (isset($_cid) && $_cid) {
-        $my_user_id = isset($my_user_id) ? intval($my_user_id) : 0;
-        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;                
+        $my_user_id = isset($user_id) ? intval($user_id) : 0;
+        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
         
         $user_pass_open_course = false;
         if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {

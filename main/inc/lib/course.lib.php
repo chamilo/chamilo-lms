@@ -1386,7 +1386,7 @@ class CourseManager {
      * @return array    - array containing user_id, lastname, firstname, username
      *
      */
-    function get_coachs_from_course($session_id=0, $course_code='') {
+    public static function get_coachs_from_course($session_id=0, $course_code='') {
 
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -1418,7 +1418,7 @@ class CourseManager {
         }
     }
 
-    function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
+    public static function get_coachs_from_course_to_string($session_id = 0, $course_code = null, $separator = self::USER_SEPARATOR, $add_link_to_profile = false) {
         $coachs_course = self::get_coachs_from_course($session_id, $course_code);
         $course_coachs = array();
 
@@ -1439,7 +1439,7 @@ class CourseManager {
         return $coaches_to_string;
     }
 
-    function get_coach_list_from_course_code_to_string($course_code, $session_id) {
+    public static function get_coach_list_from_course_code_to_string($course_code, $session_id) {
         $tutor_data = '';
         if ($session_id != 0) {
             $coaches = self::get_email_of_tutor_to_session($session_id, $course_code);
@@ -2772,7 +2772,7 @@ class CourseManager {
      * Builds the course block in user_portal.php
      * @todo use Twig
      */
-    public function course_item_html($params, $is_sub_content = false) {
+    public static function course_item_html($params, $is_sub_content = false) {
         $html = '';
         $class = "well";
         if ($is_sub_content) {
@@ -2816,7 +2816,7 @@ class CourseManager {
     }
 
 
-    public function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
+    public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
         return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
     }
 
@@ -2829,7 +2829,7 @@ class CourseManager {
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    function display_special_courses($user_id, $load_dirs = false) {
+    public static function display_special_courses($user_id, $load_dirs = false) {
         $user_id = intval($user_id);
         $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2931,7 +2931,7 @@ class CourseManager {
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    function display_courses($user_id, $load_dirs = false) {
+    public static function display_courses($user_id, $load_dirs = false) {
         $user_id = intval($user_id);
         if (empty($user_id)) {
             $user_id = api_get_user_id();
@@ -2961,7 +2961,7 @@ class CourseManager {
      * @param bool      Whether to show the document quick-loader or not
      *  @return void
      */
-    function display_courses_in_category($user_category_id, $load_dirs = false) {
+    public static function display_courses_in_category($user_category_id, $load_dirs = false) {
         $user_id = api_get_user_id();
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3134,7 +3134,7 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
+    public static function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
         global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
         $user_id  = api_get_user_id();
         $course_info = api_get_course_info($course['code']);
@@ -3288,7 +3288,7 @@ class CourseManager {
      * @param 	int		destination session id
      * @return  bool
      */
-    function copy_course($source_course_code, $source_session_id, $destination_course_code, $destination_session_id, $params = array()) {
+    public static function copy_course($source_course_code, $source_session_id, $destination_course_code, $destination_session_id, $params = array()) {
         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
@@ -3318,7 +3318,7 @@ class CourseManager {
      *
      * @return 	array
      */
-    function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0, $params = array()) {
+    public static function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0, $params = array()) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
             $new_course_code = self::generate_nice_next_course_code($source_course_code);
@@ -3343,7 +3343,7 @@ class CourseManager {
      * if the course code doest not exist in the DB the same course code will be returned
      * @return string	wanted unused code
      */
-	function generate_nice_next_course_code($wanted_code) {
+	public static function generate_nice_next_course_code($wanted_code) {
         require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
         $course_code_ok = !self::course_code_exists($wanted_code);
         if (!$course_code_ok) {
@@ -3431,7 +3431,7 @@ class CourseManager {
         }
     }
 
-	public function get_user_course_vote($user_id, $course_id, $session_id = null, $url_id = null) {
+	public static function get_user_course_vote($user_id, $course_id, $session_id = null, $url_id = null) {
 		$table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
 
 		$session_id = !isset($session_id)   ? api_get_session_id()				: intval($session_id);
@@ -3457,7 +3457,7 @@ class CourseManager {
 		return false;
 	}
 
-    public function get_course_ranking($course_id, $session_id = null, $url_id = null) {
+    public static function get_course_ranking($course_id, $session_id = null, $url_id = null) {
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
 
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
@@ -3647,7 +3647,7 @@ class CourseManager {
      * @param   int number of days
      * @param   int number of hottest courses
      */
-    public function return_hot_courses($days = 30, $limit = 5) {
+    public static function return_hot_courses($days = 30, $limit = 5) {
 		$limit  = intval($limit);
         
         //Getting my courses
@@ -3763,7 +3763,7 @@ class CourseManager {
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
-    public function count_courses($access_url_id=null) {
+    public static function count_courses($access_url_id=null) {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";
@@ -3778,7 +3778,7 @@ class CourseManager {
     /* 
      * This code was originaly in local.inc.php
      */
-    static function get_course_info_with_category($course_code) {
+    public static function get_course_info_with_category($course_code) {
         global $_configuration;
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);

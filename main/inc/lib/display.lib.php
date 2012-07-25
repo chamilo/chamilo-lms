@@ -1017,7 +1017,7 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    function show_notification($course_info) {        
+    public static function show_notification($course_info) {        
         $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);        
         $user_id = api_get_user_id();
         
@@ -1144,7 +1144,7 @@ class Display {
      *
      * @version 1.0
      */
-    function display_digest($toolsList, $digest, $orderKey, $courses) {
+    public static function display_digest($toolsList, $digest, $orderKey, $courses) {
         $html = '';
         if (is_array($digest) && (CONFVAL_showExtractInfo == SCRIPTVAL_UnderCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both)) {
             // // // LEVEL 1 // // //
@@ -1217,7 +1217,7 @@ class Display {
      * @param int       Session ID
      * @return array    Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
      */
-    function get_session_title_box($session_id) {
+    public static function get_session_title_box($session_id) {
         global $nosession;
 
         if (!$nosession) {

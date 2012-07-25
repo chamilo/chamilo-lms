@@ -235,4 +235,5 @@ $OnlyActiveWhenThereAreAnyComponents = "Esta opción está habilitada si tiene e
 $GradebookLockedAlert = "Esta evaluación ha sido bloqueada y no puede ser desbloqueada. Si necesita realmente desbloquearla, por favor contacte el administrador de la plataforma, explicando su razón (sino podría ser considerado como un intento de fraude).";
 $NoStudentCertificatesAvailableYet = "Aún no están disponibles los certificados de los estudiantes. Tenga en cuenta que para generar su certificado un estudiante tiene que ir a la herramienta evaluaciones y pulsar sobre el icono certificado, el cual sólo aparecerá cuando ha él haya conseguido los objetivos del curso.";
 $CertificateExistsButNotPublic = "El certificado solicitado existe pero no es público, por lo que para poderlo ver tendrá que identificarse.";
+$ConfirmToUnlockElement = "Confirme el desbloqueo del elemento";
 ?>

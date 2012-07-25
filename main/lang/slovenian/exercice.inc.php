@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Ta test/vaja je vključena v učno pot in ni dostopna tečajnikom direktno iz tega orodja. V primeru, da želite test/vajo narediti dostopno iz tega orodja, naredite kopijo tega testa/vaje z uporabo ikone za kopiranje.";
 $langExercice = "Test";
 $langActivate = "Prikaži";
 $langDeactivate = "Skrij";
@@ -494,4 +495,6 @@ $CongratulationsYouPassedTheTest = "Čestitam. Tvoj test je bil uspešno zaklju�
 $YouDidNotReachTheMinimumScore = "Nisi dosegel minimalnega zahtevanega rezultata.";
 $EndTest = "Končaj test";
 $PassPercentage = "Prag uspešnosti[%]";
+$NoCategorySelected = "Nobena kategorija ni izbrana";
+$ExerciseAverage = "Povprečje testov";
 ?>

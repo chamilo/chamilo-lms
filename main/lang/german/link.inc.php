@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Der Link wurde verschoben";
 $langLinkName = "Link-Name";
 $langLinkAdd = "Link hinzufügen";

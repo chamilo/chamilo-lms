@@ -125,4 +125,12 @@ $PHPVersionError = "Jūsu PHP versija nesakrīt prasību attiecībā uz šo prog
 $ExtensionSessionsNotAvailable = "Sesijas paplašinājums nav pieejams";
 $ExtensionZlibNotAvailable = "Zlib paplašinājums nav pieejams";
 $ExtensionPCRENotAvailable = "PCRE paplašinājums nav pieejams";
+$DatabaseXWillBeCreated = "Datubāze %s tiks izveidota";
+$ADatabaseWithTheSameNameAlreadyExists = "Datubāze ar šādu nosaukumu, jau eksistē";
+$UserXCantHaveAccessInTheDatabaseX = "Lietotājam %s nav pieeja datubāzei %s";
+$DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Datubāze %s nevar tikt izveidota, jo lietotājam %s nav pietiekams piešķirto tiesību līmenis";
+$CourseTestWasCreated = "Testa kurss ir sekmīgi izveidots";
+$InstallExecution = "Izpildīt instalācijas procesu";
+$UpdateExecution = "Izpildīt atjaunināšanas procesu";
+$PleaseWaitThisCouldTakeAWhile = "Lūdzu uzgaidiet. Tas var aizņemt kādu laiku ...";
 ?>

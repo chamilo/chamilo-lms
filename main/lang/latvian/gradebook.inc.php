@@ -228,4 +228,12 @@ $SelectGradebook = "Izvēlēties ieskaites grāmatiņu";
 $CheckYourGradingModelValues = "Lūdzu, pārbaudiet jūsu kvalifikācijas modeļu vērtības";
 $SkillsAchievedWhenAchievingThisGradebook = "Prasmes, kas iegūtas, kad sasniegta šī pakāpe";
 $AddGradebook = "Pievienot ieskaiti";
+$SelectGradeModel = "Izvēlieties klasifikācijas modeli";
+$AllMustWeight100 = "Visu vērtību kopējai summai ir jābūt 100";
+$Components = "Sastāvdaļas, jeb komponenti";
+$OnlyActiveWhenThereAreAnyComponents = "Šī opcija tiek iespējota, ja Jums ir jebkādas piederības vai kategorijas";
+$GradebookLockedAlert = "Šis novērtējums ir bloķēts. Jūs nevarat to atbloķēt. Ja jums tiešām ir nepieciešams, lai to atbloķētu, lūdzu, sazinieties ar platformu administratoru, paskaidrojot iemeslu, kāpēc jums tas ir jādara.(Citādi tas var tikt uzskatīts par krāpšanu mēģinājumu).";
+$NoStudentCertificatesAvailableYet = "Nevienam skolēnam sertifikāts vēl nav pieejams. Lūdzu, ņemiet vērā, ka, lai radītu savu sertifikātu, skolēnam ir jāiet uz novērtējumu rīku un jānoklikšķina uz sertifikāta ikonas, kas parādīsies tikai tad, kad viņš būs sasniedzis - izpildījis Kursa mērķus.";
+$CertificateExistsButNotPublic = "Pieprasītie sertifikāti ir izveidoti un pastāv šajā portālā, bet tie nav publiskoti. Lai sertifikātu aplūkotu, lūdzu ielogojieties atkārtoti";
+$ConfirmToUnlockElement = "Apstipriniet, lai atbloķētu elementu";
 ?>

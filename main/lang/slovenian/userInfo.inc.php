@@ -91,6 +91,7 @@ $ClearSearchResults = "Počisti rezultate iskanja";
 $SendInvitation = "Pošlji vabilo";
 $SocialInvitationToFriends = "Vabilo za pridružitev k moji skupini prijateljev";
 $MyCertificates = "Moji certifikati";
+$UnsubscribeFromPlatformSuccess = "Vaš račun %s je bil popolnoma odstranjen s tega portala. Hvala, ker ste bili nekaj časa z nami. Upamo, da se bomo srečali še kdaj kasneje.";
 $ToChangeYourEmailMustTypeYourPassword = "Za spremembo poštnega naslova morate vnesti vaše geslo";
 $Invitations = "Povabila";
 $MyGroups = "Moje skupine";
@@ -199,4 +200,6 @@ $SocialGroups = "Socialne skupine";
 $CreateASocialGroup = "Ustvari socialno skupino";
 $EditMembersList = "Uredi seznam članov";
 $IAmAHRM = "Sem upravitelj človeških virov";
+$UnsubscribeFromPlatform = "Če se želite izpisati iz tega kampusa in s stem odstraniti vse vaše informacije iz naših podatkovnih baz, kliknite gumb spodaj in potrdite zahtevo.";
+$UnsubscribeFromPlatformConfirm = "Da, želim odstraniti ta račun. Vsi podatki, povezani z računom se bodo odstranili s strežnika in vstop v portal s tem računom ne bo več mogoč. Ponovna prijava je možna zgolj z novim uporabniškim računom.";
 ?>

@@ -57,4 +57,6 @@ $SendAnnouncement = "Sūtīt paziņojumu";
 $ModifyAnnouncement = "Rediģēt paziņojumu";
 $ButtonPublishAnnouncement = "Sūtīt paziņojumu";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Cienījamais Lietotāj, Jūsu konts platformā ir aktivizēts. Lūdzu, piesakieties ar savu Paroli un Lietotājvārdu un apgūstiet pieejamos kursus";
+$AddAsAnnouncement = "Pievienot kā paziņojumu";
+$AnnouncementForGroup = "Paziņojums Grupai";
 ?>

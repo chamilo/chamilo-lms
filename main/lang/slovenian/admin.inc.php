@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom avtentifikacijo z njihovimi obstoječimi CAS avtentifikacijskimi podatki.<br>
 Obiščite 
-<a href=\"settings.php?category=CAS\">Vtiči</a>
+<a href=\"settings.php?category=CAS\">Vtičniki</a>
 za dodajanje in prilagoditev 'CAS Prijava' gumba za vaš Chamilo portal.";
 $ShowHotCoursesComment = "Seznam vročih tečajev bo dodan na indeksno (domačo) stran";
 $ShowHotCoursesTitle = "Prikaži vroče tečaje";
@@ -1068,6 +1068,8 @@ $EditTopRegister = "Uredi beležko";
 $InsertTabs = "Dodaj zavihke";
 $EditTabs = "Uredi zavihke";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Certifikar redovalnice je potreben, če želite redovalnico povezati s spretnostmi";
+$PlatformUnsubscribeTitle = "Dovoli izpis iz platforme";
+$PlatformUnsubscribeComment = "S to možnostjo dovolite poljubnemu uporabniku da odstrani svoj račun in vse podatke povezane z računom, ki jih platforma hrani. Tako dejanje je zelo radikalno, vendar potrebno pri portalih, odprtih javnosti, ki omogočajo samoregistracijo v portal. V profilu uporabnika se s to možnostjo doda opcija za izpis iz portala s potrditvijo izpisa.";
 $BabyOrange = "Otroško oranžna";
 $BlueLagoon = "Modra laguna";
 $CoolBlue = "Odlično modra";
@@ -1542,10 +1544,25 @@ $EnableWamiRecordComment = "Wami-recorder je snemalnik zvoka, ki bazira na Flash
 $ChangeSharedSetting = "Spremeni nastavitev vidnosti drugih portalov";
 $GradebookDefaultWeightTitle = "Privzeta utež v redovalnici";
 $GradebookDefaultWeightComment = "Ta utež bo uporabljena privzeto v vseh tečajih";
+$TeachersCanChangeScoreSettingsTitle = "Učitelji lahko spremenijo dosežen rezultat evalvacije v redovalnici";
+$TeachersCanChangeScoreSettingsComment = "Pri urejanju nastavitev redovalnice";
+$GradebookEnableLockingTitle = "Dovoli zaklepanje ocenjevanja s strani učitelja";
+$GradebookEnableLockingComment = "Ko je omogočena, ta možnost omogoči zaklepanje poljubnega ocenjevanja s strani učitelja tečaja. Zaklepanje onemogoči vse nadaljne spremembe rezultatov s strani učitelja v tečaju in vseh virih, ki so uporabljeni pri ocenjevanju: testov, učnih poti, nalog, ... Edina vloga v okviru portala, ki ima možnost odklepanja je vloga administratorja. Učitelj bo pri zaklepanju informiran o tej možnosti. Odklepanje in zaklepanje redovalnic bo vedno registrirano v poročilih pomembnih aktivnosti sistema.";
 $ShibbolethMainActivateTitle = "Shibboleth avtentifikacija";
 $LdapDescriptionTitle = "LDAP avtentifikacija";
 $FacebookMainActivateTitle = "Facebook avtentifikacija";
+$LanguagePriority1Title = "Jezik-prioriteta 1";
+$LanguagePriority2Title = "Jezik-prioriteta 2";
+$LanguagePriority3Title = "Jezik-prioriteta 3";
+$LanguagePriority4Title = "Jezik-prioriteta 4";
+$LanguagePriority5Title = "Jezik-prioriteta 5";
+$LanguagePriority1Comment = "Jezik z najvišjo prioriteto";
+$LanguagePriority2Comment = "Jezik z drugo najvišjo prioriteto";
+$LanguagePriority3Comment = "Jezik s prioriteto 3";
+$LanguagePriority4Comment = "Jezik s prioriteto 4";
+$LanguagePriority5Comment = "Jezik z najnižjo prioriteto";
 $UserLanguage = "Jezik uporabnika";
+$UserSelectedLanguage = "S strani uporabnika izbran jezik";
 $TeachersCanChangeGradeModelSettingsTitle = "Učitelj lahko spremeni nastavitve modela ocenjevanja";
 $TeachersCanChangeGradeModelSettingsComment = "Ko ureja redovalnico";
 $GradebookDefaultGradeModelTitle = "Privzeti model ocenjevanja";
@@ -1554,4 +1571,9 @@ $GradebookEnableGradeModelTitle = "Omogoči model ocenjevanja";
 $GradebookEnableGradeModelComment = "Omogoči avtomatično kreiranje kategorij redovalnice v tečaju v odvisnosti od modelov ocenjevanj.";
 $AllowSessionAdminsToSeeAllSessionsTitle = "Dovoli administratorjem sej vpogled v vse seje";
 $AllowSessionAdminsToSeeAllSessionsComment = "Ko ta možnost ni omogočena (privzeto), administratorji sej vidijo zgolj seje, ki so jih sami ustvarili. To včasih ni zaželeno, še posebej v primerih, ko morajo administratorji sej deliti čas podprore med večimi sejami, po možnosti takimi, ki jih vse niso sami ustvarili.";
+$AllowPublicCertificatesTitle = "Dovoli javne certifikate";
+$AllowPublicCertificatesComment = "Uporabniški certifikati so vidni tudi neregistriranim uporabnikom.";
+$EnableWebCamClipTitle = "Omogoči posnetke s spletne kamere";
+$EnableWebCamClipComment = "S pomočjo \"Posnetki s spletne kamere\" uporabniki lahko zajamejo slike s spletne kamere in pošljejo na strežnik v jpeg obliki.";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Priporočljivo je, da za vsakega izmed jezikov kreirate dokuemnt za \"Pogoji rabe\".";
 ?>

@@ -91,6 +91,7 @@ $ClearSearchResults = "Nodzēst meklēšanas rezultātus.";
 $SendInvitation = "Sūtīt ielūgumu.";
 $SocialInvitationToFriends = "Uzaicināt pievienoties manu draugu grupai";
 $MyCertificates = "Mani sertifikāti.";
+$UnsubscribeFromPlatformSuccess = "Jūsu konts %s ir pilnībā izdzēsts no šī portāla. Paldies Jums par laiku, ko uzturējāties ar mums kopā. Mēs ceram Jūs redzēt mūsu portālā atkal.";
 $ToChangeYourEmailMustTypeYourPassword = "Lai mainītu savu e-pasta adresi, jums ir nepieciešams to apstiprināt ar savu paroli.";
 $Invitations = "Ielūgumi";
 $MyGroups = "Manas grupas";
@@ -199,4 +200,6 @@ $SocialGroups = "Sociālās grupas";
 $CreateASocialGroup = "Izveidot sociālo grupu";
 $EditMembersList = "Rediģēt biedru sarakstu";
 $IAmAHRM = "Es esmu AHRM";
+$UnsubscribeFromPlatform = "Ja Jūs vēlaties pilnībā atrakstīties pilnīgi no šīs platformas un izdzēst visu savu informāciju no mūsu datu bāzes, lūdzu, noklikšķiniet uz pogas zemāk un apstipriniet šo izvēli.";
+$UnsubscribeFromPlatformConfirm = "Jā, es vēlos izdzēst šo kontu pavisam. Apzinos, ka nekādi mani dati uz servera netiks saglabāti un es nevarēšu pieteikties atkal, lai izveidotu pilnīgi jaunu kontu.";
 ?>

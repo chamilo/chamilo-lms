@@ -479,4 +479,5 @@ $Validated = "Validado";
 $NotValidated = "Non validado";
 $Revised = "Revisado";
 $SelectAQuestionToReview = "Seleccionar unha pregunta para revisar";
+$ReviewQuestionLater = "Revisar a pregunta máis tarde";
 ?>

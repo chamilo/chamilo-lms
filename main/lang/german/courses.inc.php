@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "Sie haben diesen Kurs bereits belegt";
 $lang_my_personnal_course_list = "Meine persönliche Kursliste";
 $lang_course_enrollment = "Kurse des Benutzers";

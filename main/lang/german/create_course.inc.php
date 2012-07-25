@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langProfessors = "Kursleiter";
 $langExplanation = "Wenn Sie OK geklickt haben, wird ein kompletter Kurs mit Forum, Agenda, Dokument-Manager usw. erstellt. Ihr Login, als Autor des Kurses, erlaubt Ihnen, die Seite für den Kurs entsprechend Ihrer Wünsche und Erfordernisse   zu bearbeiten";
 $langEmpty = "Einige Felder wurden leer gelassen.<br>Benutzen Sie den <b>'Zurück'</b>-Button und versuchen Sie es erneut.<br>Wenn Sie den Kurscode ignorieren, schauen Sie sich bitte das Kursprogramm an";
@@ -136,7 +139,7 @@ $CourseRequestLegalNote = "Die Informationen über diese Kurserstellungsanfrage 
 $CourseRequestAskInfoEmailSubject = "%s Eine Anfrage für weitere Informationen zur Kurserstellungsanfrage %s";
 $CourseRequestAskInfoEmailText = "Wir haben Ihre Kurserstellungsanfrage mit dem Kurscode %s erhalten. Bevor wir über eine Freigabe entscheiden, benötigen wir noch einihe zusätzliche Informationen.\n\nErstellen sie bitte eine aussagefähige Kursbeschreibung und geben Sie uns zusätzliche Informationen zu den grundlegenden Kursregeln, den Kursteilnehmer oder den Benutzern die in gewünschten Kurs involviert sind. Falls erforderlich und sinnvoll, teilen Sie uns bitte die Organisation oder Abteilung mit, in deren Auftrag Sie diese Anfrage erstellt haben.";
 $CourseRequestAcceptedEmailSubject = "%s Die Kurserstellungsanfrage %s wurde genehmigt";
-$CourseRequestAcceptedEmailText = "Ihre Kurserstellungsanfrage %s wurde genehmigt. Ein neuer Kurs %s wurde erstellt und Sie wurden als Kursleiter eingetragen./n/nSie können hier auf Ihren neuen Kurs zugreifen./n %s ";
+$CourseRequestAcceptedEmailText = "Ihre Kurserstellungsanfrage %s wurde genehmigt. Ein neuer Kurs %s wurde erstellt und Sie wurden als Kursleiter eingetragen./n/nSie können hier auf Ihren neuen Kurs zugreifen./n %s";
 $CourseRequestRejectedEmailSubject = "%s Die Kurserstellungsanfrage %s wurde abgelehnt";
 $CourseRequestRejectedEmailText = "Es tut uns leid, Ihnen mitteilen zu müssen, das Ihre Kurserstellungsanfrage %s abgelehntb wurde, da Sie nicht unseren Nutzungsbedigungen genügt.";
 $CourseCreationFailed = "Der Kurs konnte wegen eines internen Fehlers nicht erstellt werden.";

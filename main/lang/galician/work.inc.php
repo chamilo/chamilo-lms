@@ -95,4 +95,7 @@ $DateExpiredNotBeLessDeadLine = "A data de caducidade non pode ser menor que a d
 $NotRevised = "Non se revisou";
 $MaxWeightNeedToBeProvided = "Necesita indicar o peso máximo";
 $ContainsAfile = "Contén un arquivo";
+$AllowTextAssignments = "Permitir tarefas a través do editor en liña";
+$YouAlreadySentAPaperYouCantUpload = "Xa enviou unha tarefa, non pode subir unha nova";
+$CantUploadDeleteYourPaperFirst = "Non pode subir esta tarefa. Por favor elimine a tarefa anterior antes";
 ?>

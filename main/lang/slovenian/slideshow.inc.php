@@ -21,4 +21,6 @@ $lang_of = "od";
 $lang_view_slideshow = "Poglej diaprojekcijo";
 $FirstSlide = "Prvi diapozitiv";
 $LastSlide = "Zadnj diapozitiv";
+$ResizingAuto = "Prilagoditev velikosti (privzeto)";
+$ResizingAutoComment = "Velikost predstavitve se bo avtomatično prilagodila velikosti zaslona. To dejanje je privzeto.";
 ?>

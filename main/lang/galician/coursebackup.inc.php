@@ -49,4 +49,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se quere exportar un itinerario
 $ArchivesDirectoryNotWriteableContactAdmin = "O directorio \"archive\" utilizado por esta ferramenta non ten habilitado os permisos de escritura. Contacte co administrador da plataforma.";
 $DestinationCourse = "Curso de destino";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se a súa lección ten arquivos de audio incluídos, debería seleccionalos desde os documentos";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Non olvidar seleccionar arquivos multimedia se o necesitan os teus recursos";
 ?>

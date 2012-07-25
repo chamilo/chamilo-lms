@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Verschieben nach";
 $langDownloadFile = "Dateien zum Server hochladen";
 $langNameDir = "Name des neuen Verzeichnisses";
@@ -225,31 +228,9 @@ $FileExistsChangeToSave = "Dateiname existiert bereits! Wählen Sie einen andere
 $FileSavedAs = "Datei gespeichert unter";
 $FileExportAs = "Datei exportiert als";
 $UserFolder = "Benutzer-Verzeichnis";
-$HelpUsersFolder = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:
-<ul>
-<li>
-Das Benutzer-Verzeichnis beinhaltet ein Verzeichnis für jeden Benutzer, welcher über das Werkzeug Dokumente zugegriffen hat oder wenn mit dem HTML-Editor eigene Dikuemnet erzeugt wurden. So kann es unter Umständen sein, das (noch) kein solches Verzeichnis existiert. Im Fall von Gruppen werden Dateien in ein Verzeichnis der jeweiligen Gruppen abgelegt, welches nur für die Gruppenmitglieder sichtbar ist.
-</li>
-<li>
-Das Benutzer-Verzeichnis und alle darunter liegenden Verzeichnisse sind standardmäßig für alle Kursteilnehmer nicht sichtbar geschaltet. Jeder Kursteilnehmer kann aber die Inhalte über den HTML-Editor sehen. HINWEIS: Ein Kursteilnehmer kann auf die Verzeichnisse anderer zugreifen, soweit er die entsprechende URL kennt.
-</li>
-<li>
-Wenn das Verzeichnis eines Kursteilnehmers sichtbar geschaltet ist, können andere Kursteilnehmer desn Inhalt sehen. In diesem Fall, stehen dem Verzeichnis-Eigentümer (Kursteilnehmer) über das Werkzeug Dokumente und nur in seinem eigenen Verzeichnis folgende Möglichkeiten zur Verfügung: Erstellen und Bearbeiten eigener Webdokumente (HTML) mittes des HTML-Editors, Erstelletn eigener Vorlagen zur eigenen Verwendung, Erstellen und Bearebiten von Zeichnungen / Bildern in den Formaten SVG und PNG, Versenden von Dokumenten, Erstellen von Verzeichnissen, Verschieben und Löschen von Verzeichnissen und Dateien und Erstellen eines ZIP-Backups der eigenen Verzeichnisse.
-</li>
-<li>
-Ausserdem synchronisiert sich das Werkzeug Dokumente mit dem Datei-Manager des HTML-Editors. Änderungen dieser Verzeichnisse und Dateien wirken sich auf beide Bereiche aus.
-</li>
-<li>
-Demnach ist das Benutzer-Verzeichnis nicht nur eine Ablageplatz für Dateien, sondern dient als Dokumenten-Manager des Kursteilnehmers während des Kurses. Beachten Sie, dass jeder Kursteilnehmer jedes sichtbare Dokument, unabhängig davon ob er der Eigentümer ist oder nicht,in seine Arbeitsmappe oder in seinen persönlichen Dateibereich  im Sozialen Netzwerk kopieren kann. Dadurch sind dieses Dokumente auch in anderen Kursen für ihn verwendbar.
-</li>
-</ul>
-";
-$HelpFolderChat = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:
-
-Dieses Verzeichnis beinhaltet einen Mitschnitt aller Chat-Sitzungen. Auch wenn Chat-Sitzungen häufig recht trival sein können, können manche durchaus interessant sein. Dann möchte man sie den Kursteilnehmern zur Verfügung stellen und als Teil der Kursarbeit verwenden. Um das zu Erreichen, ohne den gesamten Ordner sichtbar zu machen, machen Sie die Datei sichtbar und verlinken Sie die Datei, von wo aus es Ihnen sinnvoll erscheint. Es ist nicht notwendig den gesamten Ordner sichtbar zu machen.";
-$HelpFolderCertificates = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:
-<br /><br />
-Dieser Ordner beinhaltet die verschiedenen Zertifikats-Vorlagen, die im Bewertunsgwerkzeug erstellt wurden. Es wird nicht empfohlen, diesen Ordner für alle sichtbar zu machen.";
+$HelpUsersFolder = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:\n<ul>\n<li>\nDas Benutzer-Verzeichnis beinhaltet ein Verzeichnis für jeden Benutzer, welcher über das Werkzeug Dokumente zugegriffen hat oder wenn mit dem HTML-Editor eigene Dikuemnet erzeugt wurden. So kann es unter Umständen sein, das (noch) kein solches Verzeichnis existiert. Im Fall von Gruppen werden Dateien in ein Verzeichnis der jeweiligen Gruppen abgelegt, welches nur für die Gruppenmitglieder sichtbar ist.\n</li>\n<li>\nDas Benutzer-Verzeichnis und alle darunter liegenden Verzeichnisse sind standardmäßig für alle Kursteilnehmer nicht sichtbar geschaltet. Jeder Kursteilnehmer kann aber die Inhalte über den HTML-Editor sehen. HINWEIS: Ein Kursteilnehmer kann auf die Verzeichnisse anderer zugreifen, soweit er die entsprechende URL kennt.\n</li>\n<li>\nWenn das Verzeichnis eines Kursteilnehmers sichtbar geschaltet ist, können andere Kursteilnehmer desn Inhalt sehen. In diesem Fall, stehen dem Verzeichnis-Eigentümer (Kursteilnehmer) über das Werkzeug Dokumente und nur in seinem eigenen Verzeichnis folgende Möglichkeiten zur Verfügung: Erstellen und Bearbeiten eigener Webdokumente (HTML) mittes des HTML-Editors, Erstelletn eigener Vorlagen zur eigenen Verwendung, Erstellen und Bearebiten von Zeichnungen / Bildern in den Formaten SVG und PNG, Versenden von Dokumenten, Erstellen von Verzeichnissen, Verschieben und Löschen von Verzeichnissen und Dateien und Erstellen eines ZIP-Backups der eigenen Verzeichnisse.\n</li>\n<li>\nAusserdem synchronisiert sich das Werkzeug Dokumente mit dem Datei-Manager des HTML-Editors. Änderungen dieser Verzeichnisse und Dateien wirken sich auf beide Bereiche aus.\n</li>\n<li>\nDemnach ist das Benutzer-Verzeichnis nicht nur eine Ablageplatz für Dateien, sondern dient als Dokumenten-Manager des Kursteilnehmers während des Kurses. Beachten Sie, dass jeder Kursteilnehmer jedes sichtbare Dokument, unabhängig davon ob er der Eigentümer ist oder nicht,in seine Arbeitsmappe oder in seinen persönlichen Dateibereich  im Sozialen Netzwerk kopieren kann. Dadurch sind dieses Dokumente auch in anderen Kursen für ihn verwendbar.\n</li>\n</ul>\n";
+$HelpFolderChat = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:\n\nDieses Verzeichnis beinhaltet einen Mitschnitt aller Chat-Sitzungen. Auch wenn Chat-Sitzungen häufig recht trival sein können, können manche durchaus interessant sein. Dann möchte man sie den Kursteilnehmern zur Verfügung stellen und als Teil der Kursarbeit verwenden. Um das zu Erreichen, ohne den gesamten Ordner sichtbar zu machen, machen Sie die Datei sichtbar und verlinken Sie die Datei, von wo aus es Ihnen sinnvoll erscheint. Es ist nicht notwendig den gesamten Ordner sichtbar zu machen.";
+$HelpFolderCertificates = "DIESE INFORMATION IST NUR FÜR KURSLEITER SICHTBAR:\n<br /><br />\nDieser Ordner beinhaltet die verschiedenen Zertifikats-Vorlagen, die im Bewertunsgwerkzeug erstellt wurden. Es wird nicht empfohlen, diesen Ordner für alle sichtbar zu machen.";
 $DestinationDirectory = "Zielverzeichnis";
 $CreateAudio = "Audio erstellen";
 $InsertText2Audio = "Geben Sie den Text ein, der zu einer Audio-Datei umgewandelt werden soll.";
@@ -259,7 +240,7 @@ $Voice = "Stimme";
 $Female = "weiblich";
 $Male = "männlich";
 $GoogleAudio = "Verwende den Google Audio-Service";
-$vozMe = "Verwende den vozMe Audio Service ";
+$vozMe = "Verwende den vozMe Audio Service";
 $HelpGoogleAudio = "Unterstützt  bis zu 100 Zeichen in vielen Sprachen. Die Dateien werden erstellt und automatisch in dem Verzeichnis des Portals gespeichert, in dem Sie sich gerade befinden.";
 $HelpvozMe = "Untersützt Text mit einigen tausend Zeichen. Sie können zwischen den Stimmen weiblich oder männlich wählen. Es arbeitet mit wenig Sprachen und die Qualität der Audio-Dateien ist mäßig. Ausserdem müssen Sie die Dateien manuell aus einem neuen Fenster herunterladen.";
 $SaveMP3 = "mp3 speichern";

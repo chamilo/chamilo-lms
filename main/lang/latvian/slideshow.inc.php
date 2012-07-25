@@ -21,4 +21,6 @@ $lang_of = "no";
 $lang_view_slideshow = "Skatīt attēlu prezentāciju";
 $FirstSlide = "Pirmais slaids";
 $LastSlide = "Pēdējais slaids";
+$ResizingAuto = "Auto Resize (pēc noklusējuma)";
+$ResizingAutoComment = "Šīs slīdrādes ekrāns automātiski tiks pielāgots Jūsu ekrāna izmēram. Šī ir noklusējuma opcija.";
 ?>

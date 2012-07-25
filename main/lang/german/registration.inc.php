@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langShouldBeCSVFormat = "Die Datei sollte im CSV-Fomrat sein. Fügen Sie keine Leerzeichen ein. Die Struktur sollte wie folgt aussehen:";
 $langTracking = "Berichterstattung";
 $langEnter2passToChange = "Wenn Sie Ihr Passwort ändern möchten, geben Sie das neue Passwort bitte zweimal ein. Andernfalls lassen Sie diese Felder einfach frei.";
@@ -35,9 +38,7 @@ $langGiveAdmin = "Erstelle Kursleiter";
 $langUserNumber = "Nummer";
 $langDownloadUserList = "Upload der Liste";
 $langSend = "Senden";
-$langUserAddExplanation = "Jede Zeile der Datei darf nur genau fünf Felder enthalten:<br /> 
-<b>Nachname |  Vorname |  Login |  Passwort | Email</b> getrennt durch Tabulatoren und in dieser Reihenfolge.<br />
-Die Teilnehmer erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort.";
+$langUserAddExplanation = "Jede Zeile der Datei darf nur genau fünf Felder enthalten:<br /> \n<b>Nachname |  Vorname |  Login |  Passwort | Email</b> getrennt durch Tabulatoren und in dieser Reihenfolge.<br />\nDie Teilnehmer erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort.";
 $langUserMany = "Teilnehmerliste durch Textdatei einfügen";
 $langOneByOne = "Teilnehmer manuell eintragen";
 $langNow = "jetzt";

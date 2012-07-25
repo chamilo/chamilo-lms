@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Werkzeuge";
 $SendWork = "Dokument hochladen";
 $langTooBig = "Sie haben keine Datei ausgewählt oder die Datei ist zu groß";

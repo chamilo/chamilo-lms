@@ -14,7 +14,7 @@ $Minutes = "Phút";
 $Detail = "Chi tiết";
 $EditSuccess = "Thay đổi thành công";
 $AddSuccess = "Thêm mới thành công";
-$AgendaDeleteSuccess ="Đã xóa";
+$AgendaDeleteSuccess = "Đã xóa";
 $NoAgendaItems = "Không có mục nào được đánh dấu";
 $lang_september = "Tháng 9";
 ?>

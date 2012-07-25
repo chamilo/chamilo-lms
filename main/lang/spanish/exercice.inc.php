@@ -500,4 +500,5 @@ $ExerciseAverage = "Media del ejercicio";
 $NoNegativeScore = "Sin puntos negativos";
 $GlobalMultipleAnswer = "Respuesta múltiple global";
 $AllQuestionsShort = "Todas";
+$ProblemsRecordingUploadYourOwnAudioFile = "Tiene problemas para grabar? Mande su propio fichero audio.";
 ?>

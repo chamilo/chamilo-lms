@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Ankündigungen";
 $langAnnEmpty = "Die Liste der Ankündigungen wurde gelöscht";
 $AnnouncementModified = "Ankündigung wurde verändert";
@@ -35,7 +38,7 @@ $langMessageToSelectedUsers = "Mitteilung an ausgewählte Benutzer";
 $langIntroText = "Um eine Mitteilung zu verschicken, wählen Sie Benutzergruppen (mit einem <i>G</i> gekennzeichnet) oder einzelne Benutzer aus der Liste auf der linken Seite aus.";
 $langDown = "Nach unten";
 $langMsgSent = "Die Mitteilung wurde an die ausgewählten Kursteilnehmer gesandt.";
-$langSelUser = "ausgewählte Benutzer diese Portals ";
+$langSelUser = "ausgewählte Benutzer diese Portals";
 $langMessageToSelectedGroups = "Mitteilung an ausgewählte Gruppen";
 $langSelectedGroups = "ausgewählte Gruppen";
 $langMsg = "Mitteilungen";

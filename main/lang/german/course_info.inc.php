@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Kursinformation ändern";
 $langModifDone = "Information wurde geändert";
 $langDelCourse = "Kurs vollständig löschen";
@@ -12,7 +15,7 @@ $langPrivate = "Zugang nur für Portal-Benutzer, Selbst-Registrierung NICHT mög
 $langForbidden = "Nicht erlaubt";
 $CourseAccessConfigTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich. Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Selbst-Registrierung während einer Registrierungsfrist (z.B. eine Woche) und bitten Sie die Benutzer sich einzuschreiben. Im Anschluss sperren Sie die  Selbst-Registrierung und überprüfen die Kursteilnehmerliste auf 'Trittbrettfahrer'.";
 $langOpenToTheWorld = "Offen - Zugang erlaubt für alle";
-$OpenToThePlatform = "Offen - Zugang für alle Portal-Benutzer ";
+$OpenToThePlatform = "Offen - Zugang für alle Portal-Benutzer";
 $langOpenToThePlatform = "Offen - Zugang möglich nur für die im Kurs registrierten Teilnehmer";
 $langTipLang = "Diese Sprache wird für alle Besucher Ihrer Webseite gültig sein.";
 $langVid = "Video";
@@ -119,8 +122,7 @@ $NewHomeworkEmailAlertEnable = "Email-Benachrichtung AN";
 $NewHomeworkEmailAlertDisable = "Email-Benachrichtung AUS";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Anzeigen des zuletzt ausgeführten Schritts und des nächsten unbeendeten Schritts";
 $AddPicture = "Bild hinzufügen";
-$LPAutoLaunch = "Lernpfad-Umleitung aktivieren
-";
+$LPAutoLaunch = "Lernpfad-Umleitung aktivieren\n";
 $ConfigLearnpath = "Lernpfad-Einstellungen";
 $PDFWaterMarkHeader = "Wasserzeichen beim Erstellen von PDF-Dokumenten";
 $RedirectToALearningPath = "Umleitung zu einem ausgwählten Lernpfad";

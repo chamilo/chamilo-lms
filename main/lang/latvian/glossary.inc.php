@@ -25,4 +25,13 @@ $GlossaryManagement = "Terminu skaidrojumu vārdnīcas vadība";
 $TermMoved = "Termins ir pārvietots";
 $ShowGlossaryInExtraToolsTitle = "Parādīt skaidrojumu vārdnīcas terminus papildus instrumentos";
 $ShowGlossaryInExtraToolsComment = "No šejienes jūs varat konfigurēt, kā pievienot skaidrojumu vārdnīcas terminus, kā papildus instrumentu, mācību tēmas un uzdevumu instrumentos";
+$ImportGlossary = "Importēt vārdnīcu";
+$ReplaceGlossary = "Aizstāt, pārrakstīt vārdnīcu";
+$CannotDeleteGlossary = "Vārdnīcu nevar izdzēst";
+$TermsImported = "Jauni termini ir importēti";
+$TermsNotImported = "Termini nav importēti";
+$ExportGlossaryAsCSV = "Eksportēt vārdnīcu, kā CSV failu";
+$List = "Saraksts";
+$GlossaryTermUpdated = "Termins atjaunināts";
+$DeleteAllGlossaryTerms = "Izdzēst visus terminus";
 ?>

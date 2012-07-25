@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "Version";
 $langScormRestarted = "Alle Lerneinheiten sind nun unvollständig.";
 $langScormNoNext = "Dies ist die letzte Lerneinheit.";
@@ -54,5 +57,5 @@ $AdditionalProfileField = "Feld Benutzer-Profil hinzufügen";
 $ScormUnknownPackageFormat = "Das Paket, das Sie versucht haben, hochzuladen, hat ein unbekanntes Format. Bitte verwenen Sie nur unterstütze Formate.";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "Es ist nicht genug Speicherplatz in diesem Kurs verfügbar, um das Paket zu entpacken.";
 $ScormPackageFormatNotScorm = "Das Paket, das Sie versucht haben, hochzuladen, scheint kein SCORM-Format zu haben. Überprüfen Sie ob sich eine Datei namens imsmanifest.xml in dem ZIP-Paket befindet.";
-$HideTocFrame = "Inhaltsverzeichnis-Rahmen verstecken ";
+$HideTocFrame = "Inhaltsverzeichnis-Rahmen verstecken";
 ?>

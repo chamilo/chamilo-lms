@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Element hinzugefügt. Sie können jetzt zum Pfad zurück kehren oder weitere Elemente hinzufügen.";
 $LearningPath = "Lernpfad";
 $LevelUp = "Stufe nach oben";

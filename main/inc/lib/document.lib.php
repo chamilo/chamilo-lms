@@ -1481,7 +1481,7 @@ class DocumentManager {
      * @param string The course id
      * @return void()
      */
-    function create_directory_certificate_in_course ($course_id) {
+    static function create_directory_certificate_in_course ($course_id) {
         $course_info = api_get_course_info($course_id);
         if (!empty($course_info)) {
             $to_group_id=0;
@@ -1521,7 +1521,7 @@ class DocumentManager {
      * @param string path of directory
      * @return bool  true if is a certificate or false otherwise
      */
-    function is_certificate_mode($dir) {
+    static function is_certificate_mode($dir) {
         //I'm in the certification module?
         $is_certificate_mode = false;
         $is_certificate_array = explode('/',$dir);

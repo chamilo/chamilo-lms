@@ -397,14 +397,10 @@ class GradebookTable extends SortableTable {
 				$course_code = $this->build_course_code($category[0]);
                 $weight_total_links  = round($weight_total_links);
                 
-				if ($weight_total_links > $weight_category) {
-				    
-					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
-					Display::display_warning_message($warning_message,false);
-				}
-				
-				if ($weight_total_links < $weight_category ||$weight_total_links > $weight_category) {
+				if ($weight_total_links > $weight_category || $weight_total_links < $weight_category || $weight_total_links > $weight_category) {
 					$warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
+					$modify_icons  = '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'">'.Display::return_icon('edit.png', $warning_message,array('class'=>'right'),ICON_SIZE_TINY).'</a>';
+					$warning_message .= $modify_icons;
 					Display::display_warning_message($warning_message,false);
 				}
 
@@ -415,7 +411,9 @@ class GradebookTable extends SortableTable {
 
 				if (empty($new_content[0])) {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
-					Display::display_warning_message($warning_message);
+					$cert_icon = '<a href="../document/document.php?curdirpath=/certificates&'.$course_code.'&origin=gradebook&selectcat=' . $id_cat . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'),array('class'=>'right'),ICON_SIZE_TINY).'</a>';
+
+					Display::display_warning_message($warning_message.$cert_icon,false);
 				}
 			}
 

@@ -174,16 +174,10 @@ class learnpath {
         if (empty($user_id)) {
             $this->error = 'User ID is empty';
             return false;
-        } else {
-            //$main_table = Database::get_main_user_table();
-            $main_table = Database::get_main_table(TABLE_MAIN_USER);
-            //$user_id = Database::escape_integer($user_id);
-            $user_id = $this->escape_string($user_id);
-            $sql = "SELECT * FROM $main_table WHERE user_id = '$user_id'";
-            if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying user: '.$sql, 0); }
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $this->user_id = $user_id;
+        } else {            
+            $user_info  = api_get_user_info($user_id);
+            if (!empty($user_info)) {
+                $this->user_id = $user_info['user_id'];
             } else {
                 $this->error = 'User ID does not exist in database ('.$sql.')';
                 return false;
@@ -197,7 +191,8 @@ class learnpath {
         // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
         $lp_table = Database::get_course_table(TABLE_LP_VIEW);
         // Selecting by view_count descending allows to get the highest view_count first.
-        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session ORDER BY view_count DESC";
+        
         if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
         $res = Database::query($sql);
         $view_id = 0; // Used later to query lp_item_view.
@@ -206,17 +201,17 @@ class learnpath {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
             }
             $row = Database :: fetch_array($res);
-            $this->attempt = $row['view_count'];
-            $this->lp_view_id = $row['id'];
-            $this->last_item_seen = $row['last_item'];
-            $this->progress_db = $row['progress'];
-            $this->lp_view_session_id = $row['session_id'];
+            $this->attempt              = $row['view_count'];
+            $this->lp_view_id           = $row['id'];
+            $this->last_item_seen       = $row['last_item'];
+            $this->progress_db          = $row['progress'];
+            $this->lp_view_session_id   = $row['session_id'];
         } else {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
             $this->attempt = 1;
-            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id,user_id,view_count, session_id) VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
+            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id) VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";            
             $res_ins = Database::query($sql_ins);
             $this->lp_view_id = Database :: insert_id();
             if ($this->debug > 2) {
@@ -226,7 +221,7 @@ class learnpath {
 
         // Initialise items.
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
+        $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";        
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $oItem = '';
@@ -264,7 +259,6 @@ class learnpath {
                     }
                     break;
                 case 1:
-
                 default:
                     require_once 'learnpathItem.class.php';
                     $oItem = new learnpathItem($row['id'], $user_id, $course_id);
@@ -299,6 +293,7 @@ class learnpath {
                     }
                 }
             }
+            
             // Get last viewing vars.
             $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
             // This query should only return one or zero result.
@@ -2715,6 +2710,7 @@ class learnpath {
         $mycurrentitemid = $this->get_current_item_id();
         $color_counter = 0;
         $i = 0;
+        
         foreach ($list as $item) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::get_html_toc(): using item ' . $item['id'], 0);

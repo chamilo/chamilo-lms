@@ -847,7 +847,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                     $form_grade->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');
                     
                     if ($form_grade->validate()) {
-                        $value = $form_grade->exportValues('grade_model_id');
+                        $value = $form_grade->exportValue('grade_model_id');
                         
                         $gradebook = new Gradebook();
                         $gradebook->update(array('id'=> $cats[0]->get_id(), 'grade_model_id' => $value), true);                 

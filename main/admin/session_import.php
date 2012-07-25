@@ -788,7 +788,10 @@ $form->addElement('button', 'submit', get_lang('ImportSession'));
 
 $defaults = array('sendMail' => 'true','file_type' => 'csv');
 $form->setDefaults($defaults);
+
+Display::display_normal_message('TheXMLImportLetYouAddMoreInfoAndCreateResources');
 $form->display();
+
 
 ?>
 <font color="gray">

@@ -1990,13 +1990,12 @@ function store_thread($values) {
         }
         
         send_notification_mails($last_thread_id, $reply_info);
-
-        session_unregister('formelements');
-        session_unregister('origin');
-        session_unregister('breadcrumbs');
-        session_unregister('addedresource');
-        session_unregister('addedresourceid');
-
+        Session::erase('formelements');
+        Session::erase('origin');
+        Session::erase('breadcrumbs');
+        Session::erase('addedresource');
+        Session::erase('addedresourceid');
+ 
         Display :: display_confirmation_message($message, false);
     } else {
         Display::display_error_message(get_lang('UplNoFileUploaded'));
@@ -2451,11 +2450,11 @@ function store_reply($values) {
         
         send_notification_mails($values['thread_id'], $values);
         
-        session_unregister('formelements');
-        session_unregister('origin');
-        session_unregister('breadcrumbs');
-        session_unregister('addedresource');
-        session_unregister('addedresourceid');
+        Session::erase('formelements');
+        Session::erase('origin');
+        Session::erase('breadcrumbs');
+        Session::erase('addedresource');
+        Session::erase('addedresourceid');
         $return['msg'] = $message;
         $return['type'] = 'confirmation';
 
@@ -2692,11 +2691,11 @@ function store_edit_post($values) {
     $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
     $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$values['thread_id'].'&amp;post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
-    session_unregister('formelements');
-    session_unregister('origin');
-    session_unregister('breadcrumbs');
-    session_unregister('addedresource');
-    session_unregister('addedresourceid');
+    Session::erase('formelements');
+    Session::erase('origin');
+    Session::erase('breadcrumbs');
+    Session::erase('addedresource');
+    Session::erase('addedresourceid');
 
     Display :: display_confirmation_message($message,false);
 }
@@ -2809,8 +2808,8 @@ function get_whats_new() {
     //$tool = TOOL_FORUM;
     $tool = TOOL_FORUM; //
     // to do: Remove this. For testing purposes only.
-    //session_unregister('last_forum_access');
-    //session_unregister('whatsnew_post_info');
+    //Session::erase('last_forum_access');
+    //Session::erase('whatsnew_post_info');
 
     $course_id = api_get_course_int_id();
 

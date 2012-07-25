@@ -198,7 +198,7 @@ class GradebookTable extends SortableTable {
 			//$row[] = $invisibility_span_open .Display::tag('h4', $data['3'] .' / '.$this->currentcat->get_weight()).$invisibility_span_close;		
             //$average = $data['3']/$this->currentcat->get_weight()*100;
                     
-            $average = $scoredisplay->display_score(array($data['3'], $this->currentcat->get_weight()), SCORE_PERCENT, SCORE_BOTH, true);
+            $average = $scoredisplay->display_score(array($data['3'], $this->currentcat->get_weight()), SCORE_SIMPLE, SCORE_BOTH, true);
             
             if (api_is_allowed_to_edit(null, true)) {
                 $row[] = $invisibility_span_open .Display::tag('h4', $average).$invisibility_span_close;		
@@ -359,7 +359,7 @@ class GradebookTable extends SortableTable {
                         $main_weight = intval($main_cat[0]->get_weight());                
                         if (intval($total_weight) == $main_weight) { 
                             $label = null;
-                            $total = score_badges(array($total_weight.' / '.$main_weight, '100%'));
+                            $total = score_badges(array($total_weight.' / '.$main_weight, '100'));
                         } else {                                                       
                             $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $main_weight) );    
                             $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                  
@@ -375,7 +375,7 @@ class GradebookTable extends SortableTable {
             if (count($main_cat) > 1) {
                 $main_weight = intval($main_cat[0]->get_weight());    
                 if (intval($total_categories_weight) == $main_weight) {                               
-                    $total = score_badges(array($total_categories_weight.' / '.$main_weight, '100%'));
+                    $total = score_badges(array($total_categories_weight.' / '.$main_weight, '100'));
                 } else {                                                                       
                     $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');                    
                 }

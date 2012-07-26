@@ -21,8 +21,8 @@ class CourseRecycler
      */
     function CourseRecycler($course) {
         $this->course = $course;        
-        $this->course_info = api_get_course_info($this->course->code); 
-        $this->course_id = $course->info['real_id'];
+        $this->course_info = api_get_course_info($this->course->code);        
+        $this->course_id = $this->course_info['real_id'];
     }
     /**
      * Delete all items from the course.

@@ -34,7 +34,7 @@
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = 'course_home';
+$language_file = array('course_home','courses');
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.
@@ -131,6 +131,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 $user_id 		= api_get_user_id();
 $course_code 	= api_get_course_id();
+$show_message = '';
 
 //Deleting group session
 Session::erase('toolgroup');
@@ -142,6 +143,20 @@ if ($is_speacialcourse) {
     $autoreg = Security::remove_XSS($_GET['autoreg']);
     if ($autoreg == 1) {
         CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
+    }
+}
+if ($_GET['action'] == 'subscribe') {
+    if (Security::check_token('get')) {
+        Security::clear_token();
+        $auth = new Auth();
+        $msg = $auth->subscribe_user($course_code);
+        if (!empty($msg)) {
+            $show_message .= Display::return_message(get_lang($msg));
+        }
+//    } else {
+        // @todo The message should be improved here to make it clear that
+        // the subscription was not effective
+        //api_not_allowed(true);
     }
 }
 
@@ -237,7 +252,7 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 if ($show_autolunch_lp_warning) {    
-    $show_message = Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
+    $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
 }
 if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
 	require 'activity.php';

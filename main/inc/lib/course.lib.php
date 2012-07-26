@@ -1314,8 +1314,9 @@ class CourseManager {
 
         if ($session_id == 0) {
             // students directly subscribed to the course
-            $rs = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE course_code = '$course_code' AND status = 5");
+            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." 
+                   WHERE course_code = '$course_code' AND status = ".STUDENT."";
+            $rs = Database::query();
             while ($student = Database::fetch_array($rs)) {
                 $students[$student['user_id']] = $student;
             }
@@ -1324,7 +1325,8 @@ class CourseManager {
         // students subscribed to the course through a session
 
         if ($with_session) {
-            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE course_code = '$course_code' AND status<>2";
+            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." 
+                          WHERE course_code = '$course_code' AND status<>2";
             if ($session_id != 0) {
                 $sql_query .= ' AND id_session = '.$session_id;
             }

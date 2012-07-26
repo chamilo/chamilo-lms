@@ -1621,23 +1621,28 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 	return $return; 	
 }
 
-function get_number_students_question_with_answer_count($question_id,  $exercise_id, $course_code, $session_id) {
+function get_number_students_question_with_answer_count($question_id, $exercise_id, $course_code, $session_id) {
 	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$question_id 		= intval($question_id);
 	$exercise_id 		= intval($exercise_id);
 	$course_code 		= Database::escape_string($course_code);
 	$session_id 		= intval($session_id);
+   
 
 	$sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
+                ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
+					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND            
 					question_id 	= $question_id AND
-                    answer <> 0 AND
-                    status          = ''"; 
+                    answer          <> 0 AND   
+                    cu.status          = ".STUDENT." AND 
+                    relation_type <> 2 AND
+                    e.status          = ''"; 
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {
@@ -1650,6 +1655,7 @@ function get_number_students_question_with_answer_count($question_id,  $exercise
 function get_number_students_answer_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
 	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$question_id 		= intval($question_id);
     $answer_id          = intval($answer_id);
@@ -1658,12 +1664,16 @@ function get_number_students_answer_count($answer_id, $question_id,  $exercise_i
 	$session_id 		= intval($session_id);
 
 	$sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
+                ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
+					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND
-                    answer       	= $answer_id AND
-					question_id 	= $question_id AND status = ''";
+                    answer       	= $answer_id AND                    
+					question_id 	= $question_id AND 
+                    cu.status        = ".STUDENT." AND 
+                    relation_type <> 2 AND
+                    e.status = ''";
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {

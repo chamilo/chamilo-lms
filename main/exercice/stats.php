@@ -18,7 +18,13 @@ if (!$result) {
 	api_not_allowed(true);
 }
 
-$students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
+$session_id = api_get_session_id();
+
+if (empty($session_id)) {
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
+} else {
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, $session_id);
+}
 $count_students = count($students);
 
 $question_list = $objExercise->get_validated_question_list();
@@ -37,7 +43,7 @@ $headers = array(
 );
 
 if (!empty($question_list)) {
-	foreach($question_list as $question_id) {
+	foreach ($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
 		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
         $count_users = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_id(), api_get_session_id());

@@ -82,7 +82,18 @@ if (api_is_allowed_to_edit(null, true)) {
             var scrollTop = $(window).scrollTop();
             if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
                 floatingHeaderRow.css("visibility", "hidden");
-                floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
+                var topbar = 0;
+                if ($("#topbar").length != 0) {
+                    topbar = $("#topbar").height();
+                }
+                
+                if ($(".subnav").length != 0) {
+                    topbar = topbar + $(".subnav").height();
+                }
+                
+                var top_value = Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + topbar;
+                
+                floatingHeaderRow.css("top",  top_value + "px");
 
                 // Copy cell widths from original header
                 $("th", floatingHeaderRow).each(function(index) {

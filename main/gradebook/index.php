@@ -837,13 +837,13 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             //Getting grade models
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
-            $grade_model_id = $cats[0]->get_grade_model_id();        
-                        
+            $grade_model_id = $cats[0]->get_grade_model_id();
+                                    
             //No children
-            if (count($cats) == 1 && empty($grade_model_id)) {
+            if ( (count($cats) == 1 && empty($grade_model_id)) || (count($cats) == 1 && $grade_model_id != -1) ) {
                 if (!empty($grade_models)) {                   
                     $form_grade = new FormValidator('grade_model_settings');                    
-                    $obj->fill_grade_model_select_in_form($form_grade, 'grade_model_id');
+                    $obj->fill_grade_model_select_in_form($form_grade, 'grade_model_id', $grade_model_id);
                     $form_grade->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');
                     
                     if ($form_grade->validate()) {

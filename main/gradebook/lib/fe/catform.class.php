@@ -200,7 +200,8 @@ class CatForm extends FormValidator {
             
             //Getting grade models
             $obj = new GradeModel();
-            $obj->fill_grade_model_select_in_form($this, 'grade_model_id');
+            $obj->fill_grade_model_select_in_form($this, 'grade_model_id', $this->category_object->get_grade_model_id());
+            
             /*
             $grade_models = $obj->get_all();                
             $options = array(-1 => get_lang('None'));

@@ -416,7 +416,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field
-		//$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
+		$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
         $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';        
 		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);

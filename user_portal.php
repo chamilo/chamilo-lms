@@ -168,6 +168,7 @@ if (api_get_setting('allow_browser_sniffer') == 'true') {
 $sniff_notification = '';
 $some_activex=$_SESSION['sniff_check_some_activex'];
 $some_plugins=$_SESSION['sniff_check_some_plugins'];
+
 if(!empty($some_activex) || !empty($some_plugins)){
 	if (! preg_match("/flash_yes/", $some_activex) && ! preg_match("/flash_yes/", $some_plugins)) {
 		$sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);

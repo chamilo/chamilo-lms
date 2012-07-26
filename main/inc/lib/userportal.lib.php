@@ -858,23 +858,26 @@ class IndexManager {
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		
 		if ($load_history) {
-            //Load courses history 
+            //Load sessions in category in *history*
 			$courses_tree = UserManager::get_sessions_by_category($user_id, true, true, true);            
 			if (empty($courses_tree[0]) && count($courses_tree) == 1) {
 				$courses_tree = null;
 			}
 		} else {
-            //Load current courses
+            //Load sessions in category
 			$courses_tree = UserManager::get_sessions_by_category($user_id, true, false, true);            
 		}
         
 		if (!empty($courses_tree)) {
-			foreach ($courses_tree as $cat => $sessions) {                
+			foreach ($courses_tree as $cat => $sessions) {
+                //Get session category 
 				$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
+                
                 //Get courses
 				if ($cat == 0) {                    
-					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($user_id, false);                            
+					$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($user_id, false);
 				}
+                
 				$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
                 //Get courses in sessions
 				if (count($courses_tree[$cat]['sessions']) > 0) {
@@ -886,7 +889,9 @@ class IndexManager {
 			}
 		}
                 
-        $html = '';		
+        $html = '';
+        
+        //Showing history title
 		
 		if ($load_history) {
 			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));			
@@ -897,9 +902,8 @@ class IndexManager {
 		
 		if (is_array($courses_tree)) {
             foreach ($courses_tree as $key => $category) {
+                // Sessions and courses that are not in a session category
                 if ($key == 0) {
-					// Sessions and courses that are not in a session category.
-                    
                     // If we're not in the history view...
 					if (!isset($_GET['history'])) {
                         //Display special courses

@@ -928,7 +928,6 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
         $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
 
-
         // Size (or total size of a directory)
         $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
 
@@ -1015,6 +1014,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = $last_edit_date;
         $row[] = $size;
         $row[] = $document_name;
+        
         $total_size = $total_size + $size;
 
         if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {

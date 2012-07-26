@@ -11,6 +11,11 @@
  */
 class Import {
     
+    /**
+     *
+     * @param string $path
+     * @return \CsvReader 
+     */
     static function csv_reader($path)
     {
         return new CsvReader($path);

@@ -50,15 +50,25 @@
 {% endfor %}
 
 {% if is_allowed_to_edit %}
-    <div class="actions" >
-        {% for type in types %}        
-            <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}"> 
-                <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} ">
-            </a>    
-        {% endfor %}
-        <a href="{{root}}&amp;action=import_csv" class="btn import_csv" title="{{'ImportCSV'|get_lang}}"></a>
-        <a href="{{root}}&amp;action=export_csv" class="btn export_csv" title="{{'ExportAsCSV'|get_lang}}"></a>
-        <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn delete_all" title="{{'DeleteAll'|get_lang}}"></a>
+    <div class="btn-toolbar actions-bar" >
+        <div class="btn-group edit new">
+            {% for type in types %}        
+                <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}" class="btn "> 
+                    <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} ">
+                </a>    
+            {% endfor %}
+        </div>
+        <div class="btn-group edit">
+            <a href="{{root}}&amp;action=import_csv" class="btn import_csv" title="{{'ImportCSV'|get_lang}}">
+                <i class="size-32 icon-import-csv"></i>
+            </a>
+            <a href="{{root}}&amp;action=export_csv" class="btn export_csv" title="{{'ExportAsCSV'|get_lang}}">
+                <i class="size-32 icon-export-csv"></i>
+            </a>
+            <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn delete_all" title="{{'DeleteAll'|get_lang}}">
+                <i class="size-32 icon-delete-all"></i>
+            </a>
+        </div>
     </div>
 {% endif %}
 
@@ -67,17 +77,17 @@
     <li id="description_{{description.id}}" class="course_description" data-id="{{description.id}}" data-c_id="{{description.c_id}}" data-type="course_description">
         <div class="title sectiontitle">
             {% if is_allowed_to_edit %}
-                <div style="float:right;">
+                <div class="pull-right element-actions">
                 {% if session_id == description.session_id %}                    
                     <a href="{{root}}&amp;action=delete&amp;id={{description.id}}" 
                        onclick="delete_entry('description_{{description.id}}', this); return false;"
-                       class="btn delete"
                        title="{{'Delete'|get_lang}}">
+                        <i class="size-22 icon-delete"></i>
                     </a>
 
                     <a href="{{root}}&amp;action=edit&amp;id={{description.id}}" 
-                       class="btn edit"
                        title="{{'Edit'|get_lang}}">
+                        <i class="size-22 icon-edit"></i>
                     </a>
                 {% else %}
                     <img title="{{'EditionNotAvailableFromSession'|get_lang}}" 

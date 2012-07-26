@@ -85,10 +85,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 var topbar = 0;
                 if ($("#topbar").length != 0) {
                     topbar = $("#topbar").height();
-                }
-                
-                if ($(".subnav").length != 0) {
-                    topbar = topbar + $(".subnav").height();
+                } else {                
+                    if ($(".subnav").length != 0) {
+                        topbar = $(".subnav").height();
+                    }
                 }
                 
                 var top_value = Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + topbar;

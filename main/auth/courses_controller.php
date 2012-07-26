@@ -277,11 +277,15 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param string    Course code
      */
-    public function unsubscribe_user_from_course($course_code) {
+    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null) {
         $result = $this->model->remove_user_from_course($course_code);
         $message = '';
         if ($result) { $message = get_lang('YouAreNowUnsubscribed'); }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        if (!empty($search_term)) {
+            $this->search_courses($search_term, $message, $error);
+        } else {
+            $this->courses_categories('subcribe', $category_code, $message, $error);
+        }
     }
 }

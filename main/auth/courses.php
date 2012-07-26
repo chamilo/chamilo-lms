@@ -73,7 +73,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses','display_random_courses');
+$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses','display_random_courses');
 $action = 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
@@ -149,14 +149,6 @@ if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
 	}
 }
 
-// We are unsubscribing from a course (=Unsubscribe from course).
-if (isset($_POST['unsubscribe'])) {
-	if ($ctok == $_POST['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
-            //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
-	}
-}
-
 // We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
 	if ($ctok == $_POST['sec_token']) {
@@ -174,9 +166,23 @@ if (isset($_REQUEST['search_course'])) {
 
 // subscribe user to course
 if (isset($_GET['subscribe_course'])) {
-    //if ($ctok == $_GET['sec_token'] || $_POST['token'] == $_GET['sec_token']) {
+    if ($ctok == $_GET['sec_token']) {
             $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
-    //}
+    }
+}
+// We are unsubscribing from a course (=Unsubscribe from course).
+if (isset($_GET['unsubscribe'])) {
+	if ($ctok == $_GET['sec_token']) {
+        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $_GET['search_term'], $_GET['category_code']);
+            //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
+	}
+}
+// We are unsubscribing from a course (=Unsubscribe from course).
+if (isset($_POST['unsubscribe'])) {
+	if ($ctok == $_POST['sec_token']) {
+        $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
+            //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
+	}
 }
 
 switch ($action) {

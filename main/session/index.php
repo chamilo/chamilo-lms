@@ -55,29 +55,25 @@ $my_session_list = array();
 $final_array     = array();
 
 if (!empty($new_session_list)) {
-    foreach($new_session_list as $item) {
+    foreach ($new_session_list as $item) {
         $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;    
         if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
         	$final_array[$my_session_id]['name'] = $item['session_name'];
             
             //Get all courses by session where I'm subscribed
-            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
-                   
+            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
+                               
             foreach ($my_course_list as $my_course) {
                 $course = array();
             
                 $course_info   = api_get_course_info($my_course['code']);
+                
                 //Getting all exercises from the current course            
                 $exercise_list = get_all_exercises($course_info, $my_session_id, true);
-                           
-                //Exercises we skip
-                /*if (empty($exercise_list)) {
-                    continue;
-                } */   
-                //$exercise_course_list = array();
+                
                 $course['name'] = $course_info['name'];
                 $course['id']   = $course_info['real_id'];
-                if (!empty($exercise_list)) {        
+                if (!empty($exercise_list)) {     
                     foreach($exercise_list as $exercise_item) {
                         //Loading the exercise                
                         $exercise = new Exercise($course_info['real_id']);
@@ -100,7 +96,7 @@ if (!empty($new_session_list)) {
 }
 
 if (!empty($course_list)) {
-    foreach($course_list as $course_data) {
+    foreach ($course_list as $course_data) {
         if (in_array($course_data['code'], $user_course_list)) {
             $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));            
         } else {
@@ -159,7 +155,7 @@ if (!api_is_platform_admin()) {
 
 //If session is not active we stop de script
 if (!api_is_allowed_to_session_edit()) {
-	api_not_allowed();
+	//api_not_allowed();
 }
 		
 Display::display_header(get_lang('Session'));

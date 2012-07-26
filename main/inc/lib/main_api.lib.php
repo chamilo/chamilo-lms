@@ -1884,7 +1884,7 @@ function api_get_session_visibility($session_id) {
             }
 
             //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
-            $is_coach = api_is_coach();
+            $is_coach = api_is_coach($session_id);
 
             if ($is_coach) {
 
@@ -2264,7 +2264,9 @@ function api_is_coach($session_id = 0, $course_code = '') {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session_rc_ru.id_user = '".api_get_user_id()."'
-	            WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'";
+	            WHERE   session_rc_ru.course_code = '$course_code' AND 
+                        session_rc_ru.status = 2 AND 
+                        session_rc_ru.id_session = '$session_id'";
 	    $result = Database::query($sql);
 	    $sessionIsCoach = Database::store_result($result);
 	}
@@ -2595,9 +2597,10 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
         } else {
             // I'm in a session and I'm a student
             $session_id = api_get_session_id();
+            
             // Get the session visibility
-            $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available.
-
+            $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
+            
             //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
             //echo api_get_user_id();
             //echo api_get_course_id();
@@ -2611,7 +2614,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
                     return false;
                 case SESSION_AVAILABLE:         //5
                     return true;
-
             }
 
         }

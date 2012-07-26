@@ -1,0 +1,408 @@
+<map version="0.8">
+<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
+<node BACKGROUND_COLOR="#ccccff" COLOR="#cc0066" CREATED="1116895787449" ID="Freemind_Link_1757763095" MODIFIED="1133829961500" TEXT=" FreeMind&#xa; FlashBrowser">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">Flash implementation of&#13; &#13;&#13;&#13;
+a browser of FreeMind mindmaps</p></body></html></richcontent>
+<edge STYLE="bezier" WIDTH="8"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#006600" CREATED="1120438784977" FOLDED="true" HGAP="57" ID="_" MODIFIED="1174530309319" POSITION="right" TEXT="suport" VSHIFT="-2">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<cloud COLOR="#fbee98"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#006600" CREATED="1116895810342" ID="Freemind_Link_1494831195" MODIFIED="1137712966337" TEXT="&#xa1;&#xa1;notes added!!">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">NOTES</p></body></html></richcontent>
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1116895870088" ID="Freemind_Link_1521667232" MODIFIED="1116895880934" TEXT=" ">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#006600" CREATED="1116895787459" ID="Freemind_Link_365336361" MODIFIED="1137712957744" TEXT="icons">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#006600" CREATED="1116895787459" ID="Freemind_Link_1391434695" MODIFIED="1137712963292" STYLE="fork" TEXT="">
+<edge COLOR="#00cc66" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="stop"/>
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="back"/>
+<icon BUILTIN="forward"/>
+<icon BUILTIN="attach"/>
+<icon BUILTIN="smily_bad"/>
+<icon BUILTIN="ksmiletris"/>
+<icon BUILTIN="clanbomber"/>
+<icon BUILTIN="desktop_new"/>
+<icon BUILTIN="flag"/>
+<icon BUILTIN="gohome"/>
+<icon BUILTIN="kaddressbook"/>
+<icon BUILTIN="knotify"/>
+<icon BUILTIN="korn"/>
+<icon BUILTIN="Mail"/>
+<icon BUILTIN="password"/>
+<icon BUILTIN="pencil"/>
+<icon BUILTIN="stop"/>
+<icon BUILTIN="wizard"/>
+<icon BUILTIN="xmag"/>
+<icon BUILTIN="bell"/>
+<icon BUILTIN="bookmark"/>
+<icon BUILTIN="penguin"/>
+<icon BUILTIN="licq"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#006600" CREATED="1119315773323" ID="Freemind_Link_504690116" MODIFIED="1137712968800" STYLE="fork" TEXT="priorities">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="full-1"/>
+<icon BUILTIN="full-2"/>
+<icon BUILTIN="full-3"/>
+<icon BUILTIN="full-4"/>
+<icon BUILTIN="full-5"/>
+<icon BUILTIN="full-6"/>
+<icon BUILTIN="full-7"/>
+</node>
+<node COLOR="#006600" CREATED="1120439033635" HGAP="73" ID="Freemind_Link_936118463" MODIFIED="1137713075053" STYLE="fork" TEXT="clouds" VSHIFT="7">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<cloud COLOR="#f0f0f0"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1120439151725" ID="Freemind_Link_18172533" MODIFIED="1120439187396" TEXT="nested">
+<cloud COLOR="#ccffff"/>
+</node>
+</node>
+<node COLOR="#006600" CREATED="1120438925079" HGAP="75" ID="Freemind_Link_1500474034" MODIFIED="1174530472494" STYLE="bubble" TEXT="efects" VSHIFT="4">
+<edge COLOR="#38a36e" STYLE="bezier" WIDTH="2"/>
+<cloud COLOR="#ed8080"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120438930597" ID="Freemind_Link_39955002" MODIFIED="1120439118176" STYLE="bubble" TEXT="shadow"/>
+<node CREATED="1120438942023" ID="Freemind_Link_1495921914" MODIFIED="1120439142772" TEXT="general background color"/>
+</node>
+<node COLOR="#006600" CREATED="1118489003359" HGAP="96" ID="Freemind_Link_784776356" MODIFIED="1137713065169" STYLE="fork" TEXT="htag and swift_y" VSHIFT="3">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1118489021105" HGAP="72" ID="Freemind_Link_1839860304" MODIFIED="1137715359979" TEXT="htag" VSHIFT="11"/>
+<node CREATED="1118489032531" HGAP="25" ID="Freemind_Link_825223268" MODIFIED="1120438827769" TEXT="swift_y" VSHIFT="20"/>
+</node>
+<node COLOR="#006600" CREATED="1120438727725" HGAP="86" ID="Freemind_Link_1942582674" MODIFIED="1137713068934" STYLE="fork" TEXT="images" VSHIFT="24">
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1133925410625" ID="Freemind_Link_1719473460" MODIFIED="1133925416464" TEXT="jpg">
+<node COLOR="#006600" CREATED="1116895787469" HGAP="23" ID="Freemind_Link_783936156" MODIFIED="1137715355612" STYLE="fork" VSHIFT="-9">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <img src="bola.jpg" />
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#00cc66" STYLE="bezier" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1132970912243" ID="Freemind_Link_381387829" MODIFIED="1132970918862" TEXT="for flash8">
+<node COLOR="#006600" CREATED="1132970922307" ID="Freemind_Link_553253281" MODIFIED="1137712993155" STYLE="fork" TEXT="png">
+<edge COLOR="#00cc66" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1132970948284" ID="Freemind_Link_12019451" MODIFIED="1137715351356" STYLE="fork" VSHIFT="-43">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <img src="estrella.png" />
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#006600" CREATED="1132970928136" ID="Freemind_Link_876325418" MODIFIED="1137712994477" STYLE="fork" TEXT="gif">
+<edge COLOR="#00cc66" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#006600" CREATED="1132970951369" ID="Freemind_Link_1113897524" MODIFIED="1137715345588" STYLE="fork" VSHIFT="-9">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <img src="bola4.gif" />
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#00cc66" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f2e76b" CREATED="1120439269995" ID="Freemind_Link_1526379647" MODIFIED="1174530264715" TEXT="fonts&#xa;efects">
+<edge COLOR="#a6cc00" STYLE="bezier" WIDTH="1"/>
+<cloud COLOR="#ffffff"/>
+<node CREATED="1120439275693" ID="Freemind_Link_1422075277" MODIFIED="1120439418108" TEXT="size">
+<font NAME="SansSerif" SIZE="18"/>
+</node>
+<node CREATED="1120439383117" ID="Freemind_Link_1656813669" MODIFIED="1174530254090" TEXT="types">
+<edge COLOR="#a6cc00" STYLE="linear" WIDTH="4"/>
+<cloud COLOR="#66ffcc"/>
+<node CREATED="1120439280009" ID="Freemind_Link_460533788" MODIFIED="1120439380023" TEXT="Comic Sans MS">
+<font NAME="Comic Sans MS" SIZE="12"/>
+</node>
+<node CREATED="1120439390288" ID="Freemind_Link_1865767706" MODIFIED="1120439408714" TEXT="Arial">
+<font NAME="Arial" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1120439428322" ID="Freemind_Link_74163200" MODIFIED="1120439449953" TEXT="italic">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1120439436775" ID="Freemind_Link_1873140703" MODIFIED="1120439452958" TEXT="bold">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#993300" CREATED="1120439467909" ID="Freemind_Link_1502578646" MODIFIED="1120439486306" TEXT="color"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d9f26b" CREATED="1120438957676" ID="Freemind_Link_904931287" MODIFIED="1133829942406" POSITION="left" STYLE="bubble" TEXT="configuration&#xa; HTML">
+<edge COLOR="#9999ff" STYLE="sharp_bezier" WIDTH="8"/>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120439553572" ID="Freemind_Link_956009379" MODIFIED="1120757253715" STYLE="bubble" TEXT="atributes">
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120439671903" ID="Freemind_Link_1627742472" MODIFIED="1120757283658" STYLE="bubble" TEXT="initLoadFile">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">Initial mindmap to load&#13;&#13;&#13;&#13;&#13;
+default="index.mm"</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120439625306" ID="Freemind_Link_459354659" MODIFIED="1120757286452" STYLE="bubble" TEXT="openUrl">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">Where to open a link&#13;&#13;&#13;&#13;&#13;
+default="_self"</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120439647578" ID="Freemind_Link_395235013" MODIFIED="1120757288565" STYLE="bubble" TEXT="startCollapsedToLevel">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">If you want to initiate the browser with&#13;&#13;&#13;&#13;&#13;
+all nodes collapsed from this level&#13;&#13;&#13;&#13;&#13;
+default="-1" that means, do nothing</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1120755771634" ID="Freemind_Link_589333705" MODIFIED="1133925513513" STYLE="bubble" TEXT="mainNodeShape">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">To create de main node with a diferent shape.&#13;&#13;
+Just one posibility by now&#13;&#13;
+mainNodeShape="rectangle"&#13;
+by default is draw with the "elipse" shape</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1133553996431" ID="Freemind_Link_1862546020" MODIFIED="1133925370457" STYLE="bubble" TEXT="noElipseMode">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">for use the old way with&#13;
+the edges raising from an&#13;
+elipse.</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1133553996431" ID="Freemind_Link_1028428322" MODIFIED="1133829924234" STYLE="bubble" TEXT="defaultWordWrap">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">set max width of a text node&#13;
+default=600</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712151615" ID="Freemind_Link_1182560932" MODIFIED="1137712338784" STYLE="bubble" TEXT="ShotsWidth">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">width of  snapshots</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712355719" ID="Freemind_Link_986347649" MODIFIED="1137712457425" STYLE="bubble" TEXT="genAllShots">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">generate snapshots for all the mindmaps reachable from throught the main mindmap</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_1976188075" MODIFIED="1137712531211" STYLE="bubble" TEXT="unfoldAll">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">for every mindmap loaded start the visualization with all the nodes unfolded</p></body></html></richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_1281638518" MODIFIED="1174527876771" STYLE="bubble" TEXT="justMap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    <title>>    </title>
+    
+  </head>
+  <body>
+    <p align="left">
+      true o false
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_1730370515" MODIFIED="1174527466051" STYLE="bubble" TEXT="defaultToolTipWordWrap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    <title>>    </title>
+    
+  </head>
+  <body>
+    <p align="left">
+      Number that acts as an automatic wordwrap limit
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_1953067860" MODIFIED="1176039826719" STYLE="bubble" TEXT="offsetX">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p align="left">
+      for the initial centering of the map.Admits also the values &quot;left&quot; and &quot;right&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_582701624" MODIFIED="1176039554247" STYLE="bubble" TEXT="offsetY">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    <title>>    </title>
+    
+  </head>
+  <body>
+    <p>
+      for the initial centering of the map. Admits also the values &quot;top&quot; and &quot;bottom&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1137712485555" ID="Freemind_Link_390963532" MODIFIED="1176039898432" STYLE="bubble" TEXT="buttonsPos">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    <title>>    </title>
+    
+  </head>
+  <body>
+    <p align="left">
+      values &quot;top&quot; (default) and &quot;bottom&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176044286873" ID="Freemind_Link_1470437317" MODIFIED="1176044426153" STYLE="bubble" TEXT="max_alpha_buttons">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      max value of alpha for the dynamic view of buttons (0-100)
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176044289957" ID="Freemind_Link_690872243" MODIFIED="1176044419613" STYLE="bubble" TEXT="min_alpha_buttons">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      min value of alpha for the dynamic view of buttons (0-100)
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176039567536" ID="Freemind_Link_409377548" MODIFIED="1176039664526" STYLE="bubble" TEXT="scaleTooltips">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      optionally can be used to restrict the scale of the tooltips ( by default it does scale) &quot;true&quot; or &quot;false&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176043762018" ID="Freemind_Link_861631583" MODIFIED="1176043911733" STYLE="bubble" TEXT="toolTipsBgColor">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      tooltip bgcolor ej: &quot;0xaaeeaa&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176043762019" ID="Freemind_Link_861631584" MODIFIED="1176043911733" STYLE="bubble" TEXT="baseImagePath">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      for some web sites like wikis, add a prefix to the image direction ej(/images/): /images/image1.gif
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176043762022" ID="Freemind_Link_861631585" MODIFIED="1176043911733" STYLE="bubble" TEXT="CSSFile">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      for some web sites like wikis, full dir or the css ej: /css/special.css
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#9999ff" WIDTH="2"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176040278699" ID="Freemind_Link_1952876411" MODIFIED="1176040287362" STYLE="bubble" TEXT="css">
+<edge COLOR="#9999ff" WIDTH="8"/>
+<node BACKGROUND_COLOR="#ccccff" CREATED="1176040291898" ID="Freemind_Link_1297602813" MODIFIED="1176040311486" STYLE="bubble" TEXT="tooltip css file &quot;flashfreemind.css&quot;">
+<edge COLOR="#9999ff" WIDTH="8"/>
+</node>
+</node>
+<node CREATED="1120439964654" ID="Freemind_Link_405660259" MODIFIED="1120755968136" STYLE="bubble" TEXT="example">
+<richcontent TYPE="NOTE"><html><head/><body><p align="left">Take this html file "mindmaps.html"&#13;&#13;
+as an example</p></body></html></richcontent>
+<node BACKGROUND_COLOR="#ffffcc" CREATED="1120439971523" ID="Freemind_Link_1158231081" MODIFIED="1176043944190" STYLE="bubble" TEXT="fo.addVariable(&quot;openUrl&quot;, &quot;_blank&quot;);&#xa;fo.addVariable(&quot;initLoadFile&quot;, &quot;index.mm&quot;);&#xa;fo.addVariable(&quot;startCollapsedToLevel&quot;,&quot;1&quot;);&#xa;fo.addVariable(&quot;mainNodeShape&quot;,&quot;rectangle&quot;);&#xa;fo.addVariable(&quot;defaultWordWrap&quot;,&quot;300&quot;);&#xa;fo.addVariable(&quot;ShotsWidth&quot;,&quot;200&quot;);&#xa;fo.addVariable(&quot;genAllShots&quot;,&quot;true&quot;);&#xa;fo.addVariable(&quot;unfoldAll&quot;,&quot;true&quot;);&#xa;fo.addVariable(&quot;justMap&quot;,&quot;false&quot;);&#xa;fo.addVariable(&quot;defaultToolTipWordWrap&quot;,100);&#xa;fo.addVariable(&quot;offsetX&quot;,100); // admit also &quot;left&quot; and &quot;right&quot;&#xa;fo.addVariable(&quot;offsetY&quot;,100); // admit also &quot;top&quot; and &quot;bottom&quot;&#xa;fo.addVariable(&quot;scaleTooltips&quot;,&quot;false&quot;);&#xa;fo.addVariable(&quot;toolTipsBgColor&quot;,&quot;0xaaeeaa&quot;);">
+<edge STYLE="bezier" WIDTH="2"/>
+</node>
+</node>
+</node>
+<node COLOR="#006600" CREATED="1116895787459" FOLDED="true" ID="Freemind_Link_981115726" MODIFIED="1137712915283" POSITION="right" TEXT="links" VSHIFT="-49">
+<edge COLOR="#cc9900" STYLE="linear" WIDTH="2"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1116895787459" ID="Freemind_Link_590917382" LINK="http://www.efectokiwano.net/mm/freeMindFlashBrowser.zip" MODIFIED="1137712624265" TEXT="last version">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#f9f5d1" COLOR="#996600" CREATED="1116895787459" ID="Freemind_Link_892314811" LINK="http://freemind.sourceforge.net/wiki/index.php/Main_Page" MODIFIED="1116895787459" STYLE="bubble" TEXT="freeMind HomePage">
+<font BOLD="true" ITALIC="true" NAME="Dialog" SIZE="19"/>
+</node>
+</node>
+<node CREATED="1134591658270" ID="Freemind_Link_1361145967" MODIFIED="1138746250668" POSITION="right" TEXT="atributes">
+<edge WIDTH="2"/>
+<attribute NAME="color" VALUE="Red"/>
+<attribute NAME="date" VALUE="10/01/2006"/>
+<attribute NAME="city" VALUE="Madrid"/>
+</node>
+<node COLOR="#993300" CREATED="1137715660320" ID="Freemind_Link_1264418329" LINK="#Freemind_Link_936118463" MODIFIED="1138746299498" POSITION="right" TEXT="inner jump to clouds">
+<edge COLOR="#a6cc00" WIDTH="1"/>
+</node>
+</node>
+</map>

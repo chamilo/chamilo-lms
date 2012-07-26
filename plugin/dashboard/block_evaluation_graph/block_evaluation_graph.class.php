@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This file is part of evaluation graph block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform
@@ -19,7 +21,6 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/flatview_data_generator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-
 
 /**
  * This class is used like controller for this evaluations graph block plugin,
@@ -43,6 +44,7 @@ class BlockEvaluationGraph extends Block {
     	$this->bg_width = 450;
     	$this->bg_height = 350;
     	if ($this->is_block_visible_for_user($user_id)) {    		
+            //$this->courses  = CourseManager::get_real_course_list();            
     		/*if (api_is_platform_admin()) {
 	    		$this->courses  = CourseManager::get_real_course_list();
 	    		$this->sessions = SessionManager::get_sessions_list();
@@ -52,7 +54,9 @@ class BlockEvaluationGraph extends Block {
 	    		} 
 	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
 	    	//}	
-    	} 	
+    	}
+        
+        
     }
 
 	/**
@@ -82,11 +86,11 @@ class BlockEvaluationGraph extends Block {
     	$column = 1;
     	$data   = array();
 		
-		$evaluations_base_courses_graph = $this->get_evaluations_base_courses_graph();
-		$evaluations_courses_in_sessions_graph = $this->get_evaluations_courses_in_sessions_graph();
+		$evaluations_base_courses_graph         = $this->get_evaluations_base_courses_graph();
+        
+		$evaluations_courses_in_sessions_graph  = $this->get_evaluations_courses_in_sessions_graph();
 
-		$html = '        		
-			            <li class="widget color-orange" id="intro">
+		$html = '<li class="widget color-orange" id="intro">
 			                <div class="widget-head">
 			                    <h3>'.get_lang('EvaluationsGraph').'</h3>
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
@@ -115,14 +119,11 @@ class BlockEvaluationGraph extends Block {
 				                	}			                		
 			                	}
 		$html .=        	'</div>
-			            </li>			                        			    
-				'; 
+			            </li>'; 
     	
     	$data['column'] = $column;
     	$data['content_html'] = $html;
-    	
-    	return $data;
-		
+    	return $data;		
 	}
 
     /**
@@ -130,11 +131,12 @@ class BlockEvaluationGraph extends Block {
  	 * @return string  img html
  	 */
     public function get_evaluations_base_courses_graph() {				
-		$graphs = array();		
+		$graphs = array();        
 		if (!empty($this->courses)) {
-			$courses_code = array_keys($this->courses);		
+			$courses_code = array_keys($this->courses);            
 			foreach ($courses_code as $course_code) {										
 				$cats = Category::load(null, null, $course_code, null, null, null, false);					
+                
 				if (isset($cats) && isset($cats[0])) {
 					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 					$alllinks = $cats[0]->get_links(null, true);
@@ -300,8 +302,6 @@ class BlockEvaluationGraph extends Block {
 				}												
 			} 
 		}					
-    	return $graphs;		
+    	return $graphs;
  	}
-
 }
-?>

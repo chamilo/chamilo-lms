@@ -48,13 +48,13 @@ $(document).ready(function() {
                     <td class="td_actions">
                         {% if session_id == item.session_id %}
                             <a  href="{{root}}&amp;action=edit&amp;id={{item.id}}" 
-                                class="btn edit"
                                 title="{{'Edit'|get_lang}}">
+                                <i class="size-22 icon-edit"></i>
                             </a>                    
                             <a  href="{{root}}&amp;action=delete&amp;id={{item.id}}" 
                                 onclick="ui.remove('glossary_{{item.id}}', this); return false;"
-                                class="btn delete"
                                 title="{{'Delete'|get_lang}}">
+                                <i class="size-22 icon-delete"></i>
                             </a>
                         {% else %}
                             <img    title="{{'EditionNotAvailableFromSession'|get_lang}}" 

@@ -253,6 +253,7 @@ class UserManager {
 			return false;
 		}
 		$table_user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $usergroup_rel_user           = Database :: get_main_table(TABLE_USERGROUP_REL_USER);
 		$table_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_class_user             = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -273,11 +274,15 @@ class UserManager {
 		// Unsubscribe user from all classes
 		$sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
 		Database::query($sql);
-
+        
+        // Unsubscribe user from usergroup_rel_user
+        $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '".$user_id."'";
+		Database::query($sql);
+        
 		// Unsubscribe user from all courses
 		$sql = "DELETE FROM $table_course_user WHERE user_id = '".$user_id."'";
 		Database::query($sql);
-
+    
 		// Unsubscribe user from all courses in sessions
 		$sql = "DELETE FROM $table_session_course_user WHERE id_user = '".$user_id."'";
 		Database::query($sql);

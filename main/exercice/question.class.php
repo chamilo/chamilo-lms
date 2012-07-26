@@ -1062,14 +1062,14 @@ abstract class Question
         return get_lang($key[1]);
     }
     
-    function get_question_type($type) {
+    static function get_question_type($type) {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
             return null;
         }        
         return self::$questionTypes[$type];
     }
     
-    function get_question_type_list() {
+    static function get_question_type_list() {
         if (api_get_setting('enable_nanogong') != 'true') {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);

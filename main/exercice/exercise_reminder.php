@@ -59,7 +59,7 @@ if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
 	$time_control = true;
 }
 
-$clock_expired_time = get_session_time_control_key($objExercise->id);
+$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id);
 
 // Get time left for exipiring time
 $time_left = api_strtotime($clock_expired_time,'UTC') - time();

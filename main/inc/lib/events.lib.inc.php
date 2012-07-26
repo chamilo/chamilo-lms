@@ -329,11 +329,10 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
     if ($debug) error_log('duration:' . $duration);    
     
     if ($exeid != '') {
-        // Validation in case of fraud with actived control time
-        if (!exercise_time_control_is_valid($exo_id)) {
+        // Validation in case of fraud with actived control time        
+        if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {            
         	$score = 0;
         }
-
 
         if (!isset($status) || empty($status)) {
         	$status = '';
@@ -391,7 +390,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
  * @return $id the last id registered, or false on error
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
- * @deprecated this class seems to be deprecated
+ * @deprecated this function seems to be deprecated
 */
 function create_event_exercice($exo_id) {
     if (empty($exo_id) or (intval($exo_id)!=$exo_id)) { return false; }
@@ -448,7 +447,7 @@ function create_event_exercice($exo_id) {
  */
 function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-    global $debug;
+    global $debug, $learnpath_id, $learnpath_item_id;
     $score          = Database::escape_string($score);
     $answer         = Database::escape_string($answer);
     $question_id    = Database::escape_string($question_id);
@@ -467,12 +466,11 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
     if ($debug) error_log("position: $position");
 
     //Validation in case of fraud with actived control time
-    if (!exercise_time_control_is_valid($exercise_id)) {
+    if (!exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
         if ($debug) error_log("exercise_time_control_is_valid is false");
         $score = 0;
         $answer = 0;
     }
-
 
     if (!empty($user_id)) {
         $user_id = "'".$user_id."'";
@@ -530,8 +528,9 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+    global $safe_lp_id, $safe_lp_item_id;
     //Validation in case of fraud  with actived control time
-    if (!exercise_time_control_is_valid($exerciseId)) {
+    if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
         $correct = 0;
     }
 

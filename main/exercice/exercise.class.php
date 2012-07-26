@@ -1810,6 +1810,7 @@ class Exercise {
 	 */
 	public function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0, $hotspot_delineation_result = array()) {
 		global $feedback_type, $debug;		
+        global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
 		require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
         
         if ($debug) error_log("<------ manage_answer ------> ");
@@ -1820,6 +1821,11 @@ class Exercise {
 		if ($debug) error_log('manage_answer $show_result: '.$show_result);
 		if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
 		if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
+        if ($debug) error_log('manage_answer $safe_lp_id: '.$learnpath_id);        
+        if ($debug) error_log('manage_answer $safe_lp_item_id: '.$learnpath_id);
+        
+        error_log('manage_answer $safe_lp_id: '.$learnpath_id);        
+        error_log('manage_answer $safe_lp_item_id: '.$learnpath_item_id);
 			
 		$extra_data = array();
 				 

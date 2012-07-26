@@ -731,7 +731,7 @@ function get_exercise_track_exercise_info($exe_id) {
 /**
  * Validates the time control key
  */
-function exercise_time_control_is_valid($exercise_id) {
+function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0) {
     $course_id = api_get_course_int_id();	
 	$exercise_id = intval($exercise_id);
 	$TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
@@ -739,7 +739,7 @@ function exercise_time_control_is_valid($exercise_id) {
 	$result = Database::query($sql);
 	$row	= Database::fetch_array($result, 'ASSOC');
 	if (!empty($row['expired_time']) ) {
-		$current_expired_time_key = get_time_control_key($exercise_id);        
+		$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);        
 		if (isset($_SESSION['expired_time'][$current_expired_time_key])) {                	
 	        $current_time = time();
 			$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
@@ -761,31 +761,26 @@ function exercise_time_control_is_valid($exercise_id) {
 /**
 	Deletes the time control token 
 */
-function exercise_time_control_delete($exercise_id) {	
-	$current_expired_time_key = get_time_control_key($exercise_id);
+function exercise_time_control_delete($exercise_id,  $lp_id = 0 , $lp_item_id = 0) {	
+	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
 	unset($_SESSION['expired_time'][$current_expired_time_key]);	
 }
 
 /**
 	Generates the time control key
 */
-function generate_time_control_key($exercise_id) {
+function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0) {
 	$exercise_id = intval($exercise_id);
-	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id();
+    $lp_id = intval($lp_id);
+    $lp_item_id = intval($lp_item_id);
+	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id().'_'.$lp_id.'_'.$lp_item_id;
 }
+
 /**
-	Returns the time controller key
-    @todo this function is the same as generate_time_control_key
-*/
-function get_time_control_key($exercise_id) {
-	$exercise_id = intval($exercise_id);
-	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id();
-}
-/**
- * @todo use this function instead of get_time_control_key
+ * Get session time control
  */
-function get_session_time_control_key($exercise_id) {
-    $time_control_key = get_time_control_key($exercise_id);
+function get_session_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0) {
+    $time_control_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
     $return_value = $_SESSION['expired_time'][$time_control_key];
     return $return_value;
 }

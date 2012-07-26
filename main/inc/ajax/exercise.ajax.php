@@ -155,10 +155,15 @@ switch ($action) {
             $choice                 = $_REQUEST['choice'];
             
             //Hotspot coordinates from all questions 
-            $hot_spot_coordinates   = $_REQUEST['hotspot'];            
+            $hot_spot_coordinates   = $_REQUEST['hotspot'];
             
             //There is a reminder?
             $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
+            
+            //Needed in manage_answer
+            $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
+            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+            
             
             //Attempt id
             $exe_id                 = $_REQUEST['exe_id'];
@@ -190,7 +195,7 @@ switch ($action) {
             $attempt_list = array();
             
             //First time here we create an attempt (getting the exe_id)
-            if (empty($exercise_stat_info)) {           
+            if (empty($exercise_stat_info)) {     
             	/* 
                 //$exe_id = create_event_exercice($objExercise->selectId());                
                 $current_expired_time_key = get_time_control_key($objExercise->id);
@@ -312,9 +317,7 @@ switch ($action) {
                                 
                 if ($debug) error_log("total_score: $total_score ");
                 if ($debug) error_log("total_weight: $total_weight ");
-                
-                $key = get_time_control_key($exercise_id);
-                
+                                
                 $duration = 0;
                 $now = time();
                 
@@ -322,6 +325,8 @@ switch ($action) {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);                        
                 }
                 
+                $key = get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
+                                
                 if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
                     $duration = $now - $_SESSION['duration_time'][$key];
                     

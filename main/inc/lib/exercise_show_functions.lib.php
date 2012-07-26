@@ -25,7 +25,7 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 
-	function display_fill_in_blanks_answer($answer,$id,$questionId) {
+	static function display_fill_in_blanks_answer($answer,$id,$questionId) {
         global $feedback_type;
         if (empty($id)) {
             echo '<tr><td>'. nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)).'</td></tr>';
@@ -57,7 +57,7 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	function display_free_answer($answer,$id,$questionId) {
+	static function display_free_answer($answer,$id,$questionId) {
         global $feedback_type;
         if (empty($id)) {
         	if (!empty($answer)) {
@@ -88,7 +88,7 @@ class ExerciseShowFunctions {
         }
 	}
 
-	function display_oral_expression_answer($answer,$id,$questionId, $nano = null) {
+	static function display_oral_expression_answer($answer,$id,$questionId, $nano = null) {
 		global $feedback_type;
 
 		if (isset($nano)) {
@@ -132,7 +132,7 @@ class ExerciseShowFunctions {
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
+	static function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
 		global $feedback_type;
 		$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
 	            						"#4271B5",
@@ -198,7 +198,7 @@ class ExerciseShowFunctions {
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+	static function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
 		global $feedback_type;
 		?>
 		<tr>
@@ -264,7 +264,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+    static function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         global $feedback_type;
         ?>
         <tr>
@@ -334,7 +334,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    function display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+    static function display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         global $feedback_type;
         ?>
         <tr>

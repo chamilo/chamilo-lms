@@ -548,22 +548,7 @@ if ($links!='') {
 	echo '<h3>'.$links.'</h3>';
 	//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
 	echo '</div>';
-	$_SESSION['hot_spot_result']=$message;			
-			
-	//saving the hotspot delineation results	
-	/*
-	if ($hot_spot_load) { // apparently the popup load 2 times @todo check this
-		$exeId = create_event_exercice($exerciseId);		
-		// only insert the user delineation
-		//for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-			$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);			
-			// 	Save into db
-			$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate ) 
-					VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionid)."', '".Database::escape_string($answerId)."', '".Database::escape_string($exerciseResult[$questionid])."', '".Database::escape_string($user_array)."')";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
-		//}
-	}*/
-					
+	$_SESSION['hot_spot_result']=$message;								
 	$_SESSION['hotspot_delineation_result'][$exerciseId][$questionid] = array($message, $exerciseResult[$questionid]);
 	//reseting the exerciseResult variable
 	Session::write('exerciseResult',$exerciseResult);

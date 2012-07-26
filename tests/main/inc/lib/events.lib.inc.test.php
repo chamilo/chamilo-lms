@@ -8,10 +8,10 @@ class TestEvents extends UnitTestCase {
     }
 
 	function testCreateEventExerciceEmptyExoId() {
-		global $_user, $_cid, $_configuration;
+		/*global $_user, $_cid, $_configuration;
 		$exo_id='';
 		$res=create_event_exercice($exo_id);
-		$this->assertFalse($res);
+		$this->assertFalse($res);*/
 		//var_dump($res);
 	}
 

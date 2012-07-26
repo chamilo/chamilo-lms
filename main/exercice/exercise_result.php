@@ -114,17 +114,17 @@ if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list		= explode(',', $exercise_stat_info['data_tracking']);
 }
 
-$safe_lp_id              = $exercise_stat_info['orig_lp_id'];
-$safe_lp_item_id         = $exercise_stat_info['orig_lp_item_id'];
-$safe_lp_item_view_id    = $exercise_stat_info['orig_lp_item_view_id'];
+$learnpath_id           = $exercise_stat_info['orig_lp_id'];
+$learnpath_item_id      = $exercise_stat_info['orig_lp_item_id'];
+$learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
 if ($origin == 'learnpath') {
 ?>
-	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
+	<form method="GET" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
-    <input type="hidden" name="learnpath_id" 			value="<?php echo $safe_lp_id; ?>" />
-    <input type="hidden" name="learnpath_item_id" 		value="<?php echo $safe_lp_item_id; ?>" />
-    <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $safe_lp_item_view_id; ?>" />
+    <input type="hidden" name="learnpath_id" 			value="<?php echo $learnpath_id; ?>" />
+    <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />
+    <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
 <?php
 }
 
@@ -132,7 +132,7 @@ $i = $total_score = $total_weight = 0;
 
 //We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
-    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
+    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()), false);
         if ($origin != 'learnpath') {
@@ -142,7 +142,6 @@ if ($objExercise->selectAttempts() > 0) {
         exit;
     }
 }
-
 
 $user_info   = api_get_user_info(api_get_user_id());
 if ($show_results || $show_only_score) {
@@ -189,6 +188,7 @@ if (!empty($question_list)) {
 		}
 
 	    // We're inside *one* question. Go through each possible answer for this question
+        error_log('exerc_ise______result ----> ');
 	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
 
 	    $total_score     += $result['score'];
@@ -210,20 +210,20 @@ if ($origin != 'learnpath') {
 
 // Tracking of results
 
-if (api_is_allowed_to_session_edit()) {
-	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
+if (api_is_allowed_to_session_edit()) {    
+	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
 }
 
 //If is not valid
-$session_control_key = get_session_time_control_key($objExercise->id);
-if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise->id)) {
+$session_control_key = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise->id, $learnpath_id, $learnpath_item_id)) {
 	$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $exe_id ";
+	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks = 0, position = 0 WHERE exe_id = $exe_id ";
 	Database::query($sql_fraud);
 }
 
 //Unset session for clock time
-exercise_time_control_delete($objExercise->id);
+exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';
@@ -231,7 +231,7 @@ if ($origin != 'learnpath') {
 	Display::display_footer();
 } else {
 	$lp_mode =  $_SESSION['lp_mode'];
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$safe_lp_id.'&lp_item_id='.$safe_lp_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
 	//echo $total_score.','.$total_weight;	exit;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 	echo '<script type="text/javascript">'.$href.'</script>'."\n";

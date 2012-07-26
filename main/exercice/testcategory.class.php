@@ -198,7 +198,7 @@ class Testcategory {
 	 In this version, a question has only 1 category.
 	 Return the category id, "" if none
 	 */
-	function getCategoryNameForQuestion($in_questionid, $in_courseid="") {
+	public static function getCategoryNameForQuestion($in_questionid, $in_courseid="") {
 		if (empty($in_courseid) || $in_courseid=="") {
 			$in_courseid = api_get_course_int_id();
 		}		
@@ -214,8 +214,6 @@ class Testcategory {
 		}
 		return $result;
 	}
-	
-
 	
 	/**
 	 * return the list of differents categories ID for a test

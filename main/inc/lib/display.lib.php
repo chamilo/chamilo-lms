@@ -1367,7 +1367,7 @@ class Display {
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
     }
     
-    public function description($list) {
+    public static function description($list) {
         $html = null;
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';

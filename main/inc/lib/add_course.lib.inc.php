@@ -2624,8 +2624,6 @@ function register_course($params) {
     $department_name    = $params['department_name'];
     $department_url     = $params['department_url'];
     $disk_quota         = $params['disk_quota'];
-    $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : 0;
-    $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
 
     if (!isset($params['visibility'])) {
         $default_course_visibility = api_get_setting('courses_default_creation_visibility');
@@ -2637,6 +2635,8 @@ function register_course($params) {
     } else {
         $visibility         = $params['visibility'];
     }
+    $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
+    $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
 
     $expiration_date    = $params['expiration_date'];
     $teachers           = $params['teachers'];

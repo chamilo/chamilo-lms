@@ -676,16 +676,16 @@ class Display {
      *
      */
     public static function input($type, $name, $value, $extra_attributes = array()) {
-         if (!empty($type)) {
+         if (isset($type)) {
             $extra_attributes['type']= $type;
          }
-         if (!empty($name)) {
+         if (isset($name)) {
             $extra_attributes['name']= $name;
          }
-         if (!empty($value)) {
+         if (isset($value)) {
             $extra_attributes['value']= $value;
         }
-        return self::tag('input', '',$extra_attributes);
+        return self::tag('input', '', $extra_attributes);
     }
     
     public static function button($name, $value, $extra_attributes = array()) {

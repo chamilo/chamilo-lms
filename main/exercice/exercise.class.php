@@ -1821,13 +1821,10 @@ class Exercise {
 		if ($debug) error_log('manage_answer $show_result: '.$show_result);
 		if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
 		if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
-        if ($debug) error_log('manage_answer $safe_lp_id: '.$learnpath_id);        
-        if ($debug) error_log('manage_answer $safe_lp_item_id: '.$learnpath_id);
-        
-        error_log('manage_answer $safe_lp_id: '.$learnpath_id);        
-        error_log('manage_answer $safe_lp_item_id: '.$learnpath_item_id);
-			
-		$extra_data = array();
+        if ($debug) error_log('manage_answer $learnpath_id: '.$learnpath_id);        
+        if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
+        			
+		$extra_data = array();        
 				 
 		$questionId   = intval($questionId);
 		$exeId        = intval($exeId);
@@ -2067,8 +2064,7 @@ class Exercise {
 							$real_answers[$answerId] = false;
 						}
 					} else {
-						$studentChoice = $choice[$numAnswer];
-
+						$studentChoice = $choice[$numAnswer];                        
 						if ($answerCorrect == $studentChoice) {
 							//$answerCorrect = 1;
 							$real_answers[$answerId] = true;
@@ -2870,14 +2866,15 @@ class Exercise {
 			$resfree        = Database::query($queryfree);
 			$questionScore  = Database::result($resfree,0,"marks");
 		}
-
+        
 		$final_answer = true;
 		foreach ($real_answers as $my_answer) {
 			if (!$my_answer) {
 				$final_answer = false;
 			}
 		}
-
+        
+        
 		//we add the total score after dealing with the answers
 		if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
 			if ($final_answer) {				

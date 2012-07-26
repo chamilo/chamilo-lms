@@ -187,8 +187,7 @@ if (!empty($question_list)) {
 	    	$counter++;
 		}
 
-	    // We're inside *one* question. Go through each possible answer for this question
-        error_log('exerc_ise______result ----> ');
+	    // We're inside *one* question. Go through each possible answer for this question        
 	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
 
 	    $total_score     += $result['score'];

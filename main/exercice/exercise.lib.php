@@ -185,7 +185,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             if ($show_comment) {                
                 $header .= Display::tag('th', get_lang('Feedback'));                
             }
-            $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));  
+            $s.= Display::tag('tr', $header, array('style'=>'text-align:left;'));  
         }
         
         if ($show_comment) {
@@ -367,19 +367,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             	
             	foreach ($objQuestionTmp->options as $key => $item) {            		
             		if (isset($my_choice[$numAnswer]) && $key == $my_choice[$numAnswer]) {
-            			$attributes = array('class'=>'checkbox','checked'=>1, 'selected'=>1);
+            			$attributes = array('class'=>'checkbox','checked' => 1, 'selected' => 1);
             		} else {
             			$attributes = array('class'=>'checkbox');
             		}
                     
                     if ($debug_mark_answer) {
                         if ($key == $answerCorrect) {
-                            $attributes['checked'] = 1;
+                            $attributes['checked']  = 1;
                             $attributes['selected'] = 1;
                         }
-                    } 
-                    
-            		$s .= Display::tag('td', Display::input('radio','choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
+                    }                    
+            		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $key, $attributes));
             	}
 				
                 if ($show_comment) {                

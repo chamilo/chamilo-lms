@@ -472,8 +472,9 @@ function add_ext_on_mime($file_name, $file_type) {
 		$mime_type[] = 'video/ogg';                  	 $extension[] = '.ogv';
 		$mime_type[] = 'audio/ogg';                  	 $extension[] = '.oga';		
 		$mime_type[] = 'application/ogg';                $extension[] = '.ogg';
-		$mime_type[] = 'application/ogg';                $extension[] = '.ogx';	
-
+		$mime_type[] = 'application/ogg';                $extension[] = '.ogx';
+		$mime_type[] = 'application/x-freemind';         $extension[] = '.mm';
+		
 		$mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12';							$extension[] = '.docm';
 		$mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';	$extension[] = '.docx';
 		$mime_type[] = 'application/vnd.ms-word.template.macroEnabled.12';							$extension[] = '.dotm';

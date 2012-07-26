@@ -269,7 +269,8 @@ span.fileRTF, span.fileXml, span.fileCode,
 span.fileZip, span.addMore, span.deleteFile,
 span.cancel,span.uploadProcessing,
 span.folderShared, span.unknownUser, span.fileSVG,
-span.fileODT,span.fileODS,span.fileODP,span.fileODG,span.fileOGG{
+span.fileODT,span.fileODS,span.fileODP,span.fileODG,span.fileOGG,
+span.fileFreemind{
 padding:2px 0 2px 16px;
 background-repeat:no-repeat;
 background-position:0 50%;
@@ -305,6 +306,7 @@ span.fileODS{background-image:url(../images/small_icon/fileODS.png);}
 span.fileODP{background-image:url(../images/small_icon/fileODP.png);}
 span.fileODG{background-image:url(../images/small_icon/fileODG.png);}
 span.fileOGG{background-image:url(../images/small_icon/fileOGG.png);}
+span.fileFreemind{background-image:url(../images/small_icon/fileFreemind.png);}
 
 /* big icon */
 dt.folderEmpty, dt.folder, dt.folderParent,
@@ -315,7 +317,8 @@ dt.fileMusic, dt.fileExe, dt.fileAcrobat,
 dt.fileRTF, dt.fileXml, dt.fileCode,
 dt.fileZip,
 dt.folderShared, dt.unknownUser, dt.fileSVG,
-dt.fileODT,dt.fileODS,dt.fileODP,dt.fileODG,dt.fileOGG{
+dt.fileODT,dt.fileODS,dt.fileODP,dt.fileODG,dt.fileOGG,
+dt.fileFreemind{
 margin: 0px;
 padding:0px;
 border:solid #ccc 1px;
@@ -356,6 +359,7 @@ dt.fileODS{background-image:url(../images/big_icon/fileODS.png);}
 dt.fileODP{background-image:url(../images/big_icon/fileODP.png);}
 dt.fileODG{background-image:url(../images/big_icon/fileODG.png);}
 dt.fileOGG{background-image:url(../images/big_icon/fileOGG.png);}
+dt.fileFreemind{background-image:url(../images/big_icon/fileFreemind.png);}
 
 table.tableSummary{
 border-collapse:collapse;

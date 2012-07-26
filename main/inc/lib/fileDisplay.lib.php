@@ -235,18 +235,22 @@ function get_total_folder_size($path, $can_see_invisible = false) {
     
     $course_id 			= api_get_course_int_id();
     $session_id         = api_get_session_id();
-    $session_condition         = api_get_session_condition($session_id, true, false, 'id_session');
+    $session_condition  = api_get_session_condition($session_id, true, true, 'id_session');
 
     $visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
     
-    $sql = "SELECT SUM(size) FROM $table_itemproperty AS props, $table_document AS docs
-    		WHERE 	docs.c_id 	= $course_id AND
-    				props.c_id 	= $course_id AND    		
-    				docs.id 	= props.ref AND 
-    				props.tool 	= '$tool_document' AND 
-    				path LIKE '$path/%' AND                     
-    				$visibility_rule 
-                    $session_condition ";
+    $sql = "SELECT SUM(table1.size) FROM (
+                SELECT size FROM $table_itemproperty AS props, $table_document AS docs
+                WHERE 	docs.c_id 	= $course_id AND
+                        props.c_id 	= $course_id AND    		
+                        docs.id 	= props.ref AND 
+                        props.tool 	= '$tool_document' AND 
+                        path LIKE '$path/%' AND                     
+                        $visibility_rule 
+                        $session_condition 
+                GROUP BY ref
+               ) as table1";
+    
     $result = Database::query($sql);    
     if ($result && Database::num_rows($result) != 0) {
         $row = Database::fetch_row($result);

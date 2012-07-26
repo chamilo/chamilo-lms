@@ -1433,6 +1433,6 @@ abstract class Question
 			eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
 			eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
 			return array($img, $explanation);
-    }
+    } 
 }
 endif;

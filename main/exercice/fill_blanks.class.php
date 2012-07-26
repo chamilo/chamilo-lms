@@ -200,6 +200,4 @@ class FillBlanks extends Question
         return $header;	  
 	}
 }
-
 endif;
-?>

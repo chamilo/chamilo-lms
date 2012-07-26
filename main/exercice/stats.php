@@ -99,10 +99,13 @@ if (!empty($question_list)) {
         
         for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {            
             $answer_info = $answer->selectAnswer($answer_id);            
-            if ($answer_id == 1) {
+            if ($answer_id == 1) {                
                 $data[$id]['name']      = cut($question_obj->question, 100);
             } else {
                 $data[$id]['name']      = '-';
+            }       
+            if ($question_obj->type == FILL_IN_BLANKS) {
+                $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
             }
             $data[$id]['answer'] 	= $answer_info;
             $is_correct = $answer->isCorrect($answer_id);

@@ -19,6 +19,7 @@ define('TEACHER_HTML_FULLPAGE', 5);
  */
 class FormValidator extends HTML_QuickForm
 {
+
     /**
      * Create a form validator based on an array of form data:
      * 
@@ -50,7 +51,8 @@ class FormValidator extends HTML_QuickForm
      * @param array form_data 
      * @return FormValidator
      */
-    static function create($form_data) {
+    static function create($form_data)
+    {
         if (empty($form_data)) {
             return null;
         }
@@ -112,7 +114,8 @@ class FormValidator extends HTML_QuickForm
      * @param bool $track_submit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
-    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true) {
+    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
+    {
         //Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
@@ -127,11 +130,11 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
-        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');        
+        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');        
+        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        
+
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
         $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
         $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
@@ -139,9 +142,9 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('username', null, 'HTML_QuickForm_Rule_Username', $dir . 'Rule/Username.php');
         $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/Filetype.php');
         $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
-        $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');        
+        $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
-        
+
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
@@ -156,7 +159,7 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($form_template);
 
         //Element template
-        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {         
+        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
@@ -186,40 +189,38 @@ class FormValidator extends HTML_QuickForm
                 </div>
             </div>';
             $renderer->setElementTemplate($element_template);
-            
+
             //Display a gray div in the buttons
             $button_element_template_simple = '<div class="form-actions">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');       
-            
+            $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');
+
             //Display a gray div in the buttons + makes the button available when scrolling
             $button_element_template_in_bottom = '<div class="form-actions bottom_actions">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');            
-            
+            $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');
+
             //When you want to group buttons use something like this
             /* $group = array();    
-               $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-               $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));    
-                $form->addGroup($group, 'buttons_in_action');
+              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
+              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
+              $form->addGroup($group, 'buttons_in_action');
              */
             $renderer->setElementTemplate($button_element_template_simple, 'buttons_in_action');
-            
+
             $button_element_template_simple_right = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
             $renderer->setElementTemplate($button_element_template_simple_right, 'buttons_in_action_right');
-            
+
             /*
-            $renderer->setElementTemplate($button_element_template, 'submit_button');            
-            $renderer->setElementTemplate($button_element_template, 'submit');
-            $renderer->setElementTemplate($button_element_template, 'button');   
+              $renderer->setElementTemplate($button_element_template, 'submit_button');
+              $renderer->setElementTemplate($button_element_template, 'submit');
+              $renderer->setElementTemplate($button_element_template, 'button');
              *
              */
-            
-            
-        }        
-        
-            
-        
+        }
 
-        
+
+
+
+
 
         //Set Header template        
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
@@ -250,47 +251,56 @@ EOT;
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-    
+
     function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
     }
-    
+
     function add_textarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }
-    
+
     function add_button($name, $label, $attributes = array())
     {
         $this->addElement('button', $name, $label, $attributes);
     }
-    
+
     function add_checkbox($name, $label, $trailer = '', $attributes = array())
     {
         $this->addElement('checkbox', $name, $label, $trailer, $attributes);
     }
-    
+
+    function add_radio($name, $label, $options = '')
+    {
+        $group = array();
+        foreach ($options as $key => $value) {
+            $group[] = $this->createElement('radio', null, null, $value, $key);
+        }
+        $this->addGroup($group, $name, $label);
+    }
+
     function add_select($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }
-    
+
     function add_label($label, $text)
     {
         $this->addElement('label', $label, $text);
     }
-    
+
     function add_header($text)
     {
         $this->addElement('header', $text);
     }
-    
+
     function add_file($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }
-    
+
     function add_html($snippet)
     {
         $this->addElement('html', $snippet);
@@ -387,7 +397,8 @@ EOT;
     /**
      * Adds a button to the form to add resources.
      */
-    function add_resource_button() {
+    function add_resource_button()
+    {
         $group = array();
         $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
         $group[] = $this->createElement('submit', 'add_resource', get_lang('Attachment'), 'class="link_alike"');
@@ -405,7 +416,8 @@ EOT;
      * @param string $label (optional)			Custom label to be shown
      * submits the form and the start of the progress bar.
      */
-    function add_progress_bar($delay = 2, $label = '') {
+    function add_progress_bar($delay = 2, $label = '')
+    {
         if (empty($label)) {
             $label = get_lang('PleaseStandBy');
         }

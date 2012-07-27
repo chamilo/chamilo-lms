@@ -45,16 +45,16 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name"
 $interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id);
+$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
-$time_left = null;
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
-	$time_control = true;        
-    // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time,'UTC') - time();    
+	$time_control = true;    
 }
 
-if ($time_control) {    
+if ($time_control) {
+    // Get time left for expiring time
+    $time_left = api_strtotime($clock_expired_time,'UTC') - time();
+    
 	$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');

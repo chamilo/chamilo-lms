@@ -103,29 +103,45 @@ if (!empty($question_list)) {
         $answer = new Answer($question_id);
 		$answer_count = $answer->selectNbrAnswers();
         
-        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {            
-            $answer_info = $answer->selectAnswer($answer_id);            
-            if ($answer_id == 1) {                
-                $data[$id]['name']      = cut($question_obj->question, 100);
-            } else {
-                $data[$id]['name']      = '-';
-            }       
-            if ($question_obj->type == FILL_IN_BLANKS) {
-                $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
-            }
-            $data[$id]['answer'] 	= $answer_info;
-            $is_correct = $answer->isCorrect($answer_id);
-                        
-            $data[$id]['correct'] 	= $is_correct == 1 ? get_lang('Yes') : get_lang('No');
+        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
+            $answer_info = $answer->selectAnswer($answer_id);
+            $is_correct  = $answer->isCorrect($answer_id);
+            $correct_answer = $is_correct == 1 ? get_lang('Yes') : get_lang('No');
             
-            $real_answer_id          = $answer->selectAutoId($answer_id);
-            
-            $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-            //$data[$id]['attempts'] 	= $count.'/'.$count_students;
-            $percentange = $count/$count_students*100;
-            $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
-            
-            
+            //$data[$id]['name'] .=$answer_count;
+            //Overwriting values depending of the question
+            switch($question_obj->type) {
+                case FILL_IN_BLANKS :
+                    $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
+                    $correct_answer = $is_correct;                
+                    $answers = $objExercise->fill_in_blank_answer_to_array($answer_info);
+                    $counter = 0;
+                    foreach ($answers as $answer_item) {
+                        if ($counter == 0) {
+                            $data[$id]['name']      = cut($question_obj->question, 100);
+                        } else {
+                            $data[$id]['name']      = '-';    
+                        }
+                        $data[$id]['answer'] 	= $answer_item;
+                        $data[$id]['correct'] 	= get_lang('Yes');
+                        $data[$id]['attempts'] 	= '-';
+                        $id++;
+                        $counter++;
+                    }
+                    break;
+                default:
+                    if ($answer_id == 1) {                
+                        $data[$id]['name']      = cut($question_obj->question, 100);
+                    } else {
+                        $data[$id]['name']      = '-';
+                    }
+                    $data[$id]['answer'] 	= $answer_info;
+                    $data[$id]['correct'] 	= $correct_answer;
+                    $real_answer_id         = $answer->selectAutoId($answer_id);            
+                    $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+                    $percentange = $count/$count_students*100;
+                    $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
+            }            
             $id++;
         }
         

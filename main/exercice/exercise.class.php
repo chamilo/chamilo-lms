@@ -3611,24 +3611,29 @@ class Exercise {
 			}
 		}
 	}
+    
+    public function fill_in_blank_answer_to_array($answer) {
+        api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
+        $teacher_answer_list = $teacher_answer_list[0];
+        return $teacher_answer_list;
+    }
 	
 	public function fill_in_blank_answer_to_string($answer) {				
-		api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);			
+        $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
 		$result = '';		
-		if (!empty($teacher_answer_list)) {
-			$teacher_answer_list = $teacher_answer_list[0];
+		if (!empty($teacher_answer_list)) {			
 			$i = 0;
-			foreach($teacher_answer_list as $teacher_item) {
-				$value = null;				
-					//Cleaning student answer list
-					$value = strip_tags($teacher_item);					
-					$value = api_substr($value,1, api_strlen($value)-2);					
-					$value = explode('/', $value);
-					if (!empty($value[0])) {
-						$value = trim($value[0]);
-						$value = str_replace('&nbsp;', '',  $value);
-						$result .= $value;
-					}
+			foreach ($teacher_answer_list as $teacher_item) {
+				$value = null;
+                //Cleaning student answer list
+                $value = strip_tags($teacher_item);					
+                $value = api_substr($value,1, api_strlen($value)-2);					
+                $value = explode('/', $value);
+                if (!empty($value[0])) {
+                    $value = trim($value[0]);
+                    $value = str_replace('&nbsp;', '',  $value);
+                    $result .= $value;
+                }
 			}
 		}		
 		return $result;

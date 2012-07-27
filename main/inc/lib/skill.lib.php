@@ -317,22 +317,21 @@ class Skill extends Model {
         $id_condition = '';
         if (isset($id)) {
             $id = intval($id);
-            $id_condition = " WHERE id = $id";
+            $id_condition = " WHERE s.id = $id";
         }
 
         if (isset($parent_id)) {
             $parent_id = intval($parent_id);
             if (empty($id_condition)) {
-                $id_condition = "WHERE parent_id = $parent_id";
+                $id_condition = "WHERE ss.parent_id = $parent_id";
             } else {
-                $id_condition = " AND parent_id = $parent_id";
+                $id_condition = " AND ss.parent_id = $parent_id";
             }
 
         }
 
-        $sql = "SELECT id, name, description, parent_id, relation_type
-                FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id)
-                $id_condition";
+        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type".
+               " FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition";
 
         $result = Database::query($sql);
         $skills = array();

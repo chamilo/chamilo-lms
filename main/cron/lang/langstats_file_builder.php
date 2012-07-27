@@ -48,7 +48,6 @@ $language_file = array(
 'myagenda',
 'notebook',
 'notification',
-'pedaSuggest',
 'registration',
 'reportlib',
 'reservation',

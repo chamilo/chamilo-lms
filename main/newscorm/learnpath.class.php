@@ -66,8 +66,8 @@ class learnpath {
 
     public $debug = 0; // Logging level.
 
-    public $lp_session_id =0;
-    public $lp_view_session_id =0; // The specific view might be bound to a session.
+    public $lp_session_id = 0;
+    public $lp_view_session_id = 0; // The specific view might be bound to a session.
 
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
@@ -1511,17 +1511,35 @@ class learnpath {
      * Gets the first element URL.
      * @return	string	URL to load into the viewer
      */
-    public function first() {
+    public function first() {        
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::first()', 0);
+            error_log('$this->last_item_seen '.$this->last_item_seen);
+            //error_log('$this->items '.print_r($this->items, 1));
+            //error_log('$this->ordered_items '.print_r($this->ordered_items, 1));            
         }
+        
         // Test if the last_item_seen exists and is not a dir.
         if (count($this->ordered_items) == 0) {
             $this->index = 0;
         }
-        if (!empty($this->last_item_seen) && !empty($this->items[$this->last_item_seen]) && $this->items[$this->last_item_seen]->get_type() != 'dir' && $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter' && !$this->items[$this->last_item_seen]->is_done()) {
+        
+        if ($this->debug > 0) {
+            if (isset($this->items[$this->last_item_seen])) {
+                $status = $this->items[$this->last_item_seen]->get_status();
+            }
+            error_log('status '.$status);
+        }
+        
+         if (!empty($this->last_item_seen) && 
+             !empty($this->items[$this->last_item_seen]) && 
+             $this->items[$this->last_item_seen]->get_type() != 'dir' &&
+             $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter' && 
+             !$this->items[$this->last_item_seen]->is_done()
+             ) {
+                
             if ($this->debug > 2) {
-                error_log('New LP - In learnpath::first() - Last item seen is ' . $this->last_item_seen . ' of type ' . $this->items[$this->last_item_seen]->get_type(), 0);
+                error_log('New LP - In learnpath::first() - Last item seen is ' . $this->last_item_seen.' of type '.$this->items[$this->last_item_seen]->get_type(), 0);
             }
             $index = -1;
             foreach ($this->ordered_items as $myindex => $item_id) {
@@ -1537,9 +1555,9 @@ class learnpath {
                 }
                 return false;
             } else {
-                $this->last = $this->last_item_seen;
-                $this->current = $this->last_item_seen;
-                $this->index = $index;
+                $this->last     = $this->last_item_seen;
+                $this->current  = $this->last_item_seen;
+                $this->index    = $index;
             }
         } else {
             if ($this->debug > 2) {
@@ -1548,20 +1566,29 @@ class learnpath {
             $index = 0;
             // Loop through all ordered items and stop at the first item that is
             // not a directory *and* that has not been completed yet.
-            while (!empty($this->ordered_items[$index]) AND is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' OR $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter' OR $this->items[$this->ordered_items[$index]]->is_done() === true) AND $index < $this->max_ordered_items) {
+            while ( !empty($this->ordered_items[$index]) AND 
+                    is_a($this->items[$this->ordered_items[$index]], 'learnpathItem') AND 
+                    (
+                            $this->items[$this->ordered_items[$index]]->get_type() == 'dir' OR 
+                            $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter' OR 
+                            $this->items[$this->ordered_items[$index]]->is_done() === true
+                    ) AND $index < $this->max_ordered_items) {
                 $index++;
             }
-            $this->last = $this->current;
+            $this->last     = $this->current;
             // current is
-            $this->current = $this->ordered_items[$index];
-            $this->index = $index;
+            $this->current  = $this->ordered_items[$index];
+            $this->index    = $index;
+            if ($this->debug > 2) {
+                error_log('$index ' . $index);
+            }
             if ($this->debug > 2) {
                 error_log('New LP - In learnpath::first() - No last item seen. New last = ' . $this->last . '(' . $this->ordered_items[$index] . ')', 0);
             }
         }
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::first() - First item is ' . $this->get_current_item_id());
-        }
+        }        
     }
 
     /**

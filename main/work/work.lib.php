@@ -1654,7 +1654,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
                 $work['username'] = Display::div($work['username'], array('class' => $class));
-                $work['title'] = Display::div($work['title'], array('class' => $class)) . ' <div class="invisible" style="display:none;">' . $work['description'] .'</div>';
+                $work['title'] = Display::div($work['title'], array('class' => $class));
            
                 //Type
                 $work['type'] = build_document_icon_tag('file', $work['file']);  

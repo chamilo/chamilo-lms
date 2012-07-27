@@ -3844,6 +3844,9 @@ class CourseManager {
         if (!is_array($user_courses)) {
             // get the array of courses to which the user is subscribed
             $user_courses = CourseManager::get_courses_list_by_user_id($uid);
+            foreach ($user_courses as $k => $v) {
+                $user_courses[$k] = $v['real_id'];
+            }
         }
         $is_admin = api_is_platform_admin_by_id($uid);
         // Register button

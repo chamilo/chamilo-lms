@@ -14,8 +14,6 @@
 /** 
  * Code
  */
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
@@ -77,13 +75,8 @@ function activate_end_date() {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
 
 /* MAIN CODE */
 
@@ -97,11 +90,6 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
-
-$course_id = api_get_course_int_id();
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql_query);
-$therow = Database::fetch_array($result);
 
 /*
     Course admin section

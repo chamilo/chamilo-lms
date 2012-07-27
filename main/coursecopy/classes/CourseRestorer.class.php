@@ -273,7 +273,7 @@ class CourseRestorer
 
 	    $params['category_code']   = $course_info['categoryCode'];
 	    $params['subscribe']       = $course_info['subscribe_allowed'];
-	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];
+	    $params['unsubscribe']     = $course_info['unsubscribe'];
 	    CourseManager::update_attributes($origin_course_info['real_id'], $params);
 	}
 

@@ -1266,7 +1266,7 @@ function api_get_course_info($course_code = null) {
             $_course['categoryName' ]         = $course_data['faName'         ];
             $_course['visibility'   ]         = $course_data['visibility'     ];
             $_course['subscribe_allowed']     = $course_data['subscribe'      ];
-            $_course['unubscribe_allowed']    = $course_data['unsubscribe'    ];
+            $_course['unsubscribe']    = $course_data['unsubscribe'    ];
 
             $_course['department_name']       = $course_data['department_name'];
             $_course['department_url']        = $course_data['department_url' ];
@@ -1340,7 +1340,7 @@ function api_get_course_info_by_id($id = null) {
 
             $_course['visibility'   ]         = $course_data['visibility'      ];
             $_course['subscribe_allowed']     = $course_data['subscribe'       ];
-            $_course['unubscribe_allowed']    = $course_data['unsubscribe'     ];
+            $_course['unsubscribe']           = $course_data['unsubscribe'     ];
 
             $_course['real_id'      ]         = $course_data['id'              ];
             $_course['title'        ]         = $course_data['title'           ];

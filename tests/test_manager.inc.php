@@ -168,7 +168,7 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	    $_course['categoryName']         = $cData['faName'           ];
 	    $_course['visibility'  ]         = $cData['visibility'		 ];
 	    $_course['subscribe_allowed']    = $cData['subscribe'		 ];
-	    $_course['unubscribe_allowed']   = $cData['unsubscribe'		 ];
+	    $_course['unsubscribe']          = $cData['unsubscribe'		 ];
 	
 	    Session::write('_cid',$_cid);
 	    Session::write('_course',$_course);

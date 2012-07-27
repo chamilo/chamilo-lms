@@ -372,7 +372,7 @@ class Login
                     $_course['categoryName'] = $course_data['faName'];
                     $_course['visibility'] = $course_data['visibility'];
                     $_course['subscribe_allowed'] = $course_data['subscribe'];
-                    $_course['unubscribe_allowed'] = $course_data['unsubscribe'];
+                    $_course['unsubscribe'] = $course_data['unsubscribe'];
                     $_course['activate_legal'] = $course_data['activate_legal'];
                     $_course['show_score'] = $course_data['show_score']; //used in the work tool
 

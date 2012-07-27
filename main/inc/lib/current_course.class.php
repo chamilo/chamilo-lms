@@ -125,9 +125,9 @@ class CurrentCourse
         return $this->get('subscribe_allowed');
     }
 
-    public function unubscribe_allowed()
+    public function unsubscribe_allowed()
     {
-        return $this->get('unubscribe_allowed');
+        return $this->get('unsubscribe');
     }
 
     public function activate_legal()

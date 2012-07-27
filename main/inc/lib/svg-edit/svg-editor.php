@@ -24,12 +24,7 @@ if(!isset($_SESSION['draw_dir'])){
 <link rel="stylesheet" href="jgraduate/css/jgraduate.css" type="text/css"/>
 <link rel="stylesheet" href="svg-editor.css" type="text/css"/>
 <link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
-
-<!--{if jquery_release}>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js"></script>
-<!{else}-->
-  <script type="text/javascript" src="jquery.js"></script>
-<!--{endif}-->
+<?php echo api_get_js('jquery.min.js'); ?>
 <!--Chamilo TODO: compress sgv-editor.js and change all calls by release version -->
 <script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
 <script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>

@@ -488,7 +488,7 @@ class Template {
         $css_files = array(
             api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css',
             api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css',
-            api_get_path(WEB_LIBRARY_PATH) . 'javascript/dtree/dtree.css',
+            //api_get_path(WEB_LIBRARY_PATH) . 'javascript/dtree/dtree.css', not used anymore
         );
 
         if ($this->show_learnpath) {

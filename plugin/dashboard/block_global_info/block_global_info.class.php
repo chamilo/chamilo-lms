@@ -126,16 +126,17 @@ class BlockGlobalInfo extends Block {
     function get_global_information_data() {
         // Two-dimensional array with data about the system
         $global_info = array();
+        $path = api_get_path(WEB_CODE_PATH);
         // Check total number of users
-        $global_info[] = array(get_lang('CountUsers'), statistics::count_users());
+        $global_info[] = array(get_lang('CountUsers'), '<a href="'.$path.'admin/user_list.php">'.statistics::count_users().'</a>');
         // Check only active users
-        $global_info[] = array(get_lang('NumberOfUsersActive'), statistics::count_users(null,null,null,true));
+        $global_info[] = array(get_lang('NumberOfUsersActive'), '<a href="'.$path.'admin/user_list.php?keyword_firstname=&amp;keyword_lastname=&amp;keyword_username=&amp;keyword_email=&amp;keyword_officialcode=&amp;keyword_status=%25&amp;keyword_active=1&amp;submit=&amp;_qf__advanced_search=">'.statistics::count_users(null,null,null,true).'</a>');
         // Check number of courses
-        $global_info[] = array(get_lang('NumberOfCoursesTotal'), statistics::count_courses());
-        $global_info[] = array(get_lang('NumberOfCoursesClosed'), statistics::count_courses_by_visibility(COURSE_VISIBILITY_CLOSED));
-        $global_info[] = array(get_lang('NumberOfCoursesPrivate'), statistics::count_courses_by_visibility(COURSE_VISIBILITY_REGISTERED));
-        $global_info[] = array(get_lang('NumberOfCoursesOpen'), statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_PLATFORM));
-        $global_info[] = array(get_lang('NumberOfCoursesPublic'), statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_WORLD));
+        $global_info[] = array(get_lang('NumberOfCoursesTotal'), '<a href="'.$path.'admin/course_list.php">'.statistics::count_courses().'</a>');
+        $global_info[] = array(get_lang('NumberOfCoursesPublic'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_WORLD.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_WORLD).'</a>');
+        $global_info[] = array(get_lang('NumberOfCoursesOpen'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_PLATFORM.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_PLATFORM).'</a>');
+        $global_info[] = array(get_lang('NumberOfCoursesPrivate'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_REGISTERED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.statistics::count_courses_by_visibility(COURSE_VISIBILITY_REGISTERED).'</a>');
+        $global_info[] = array(get_lang('NumberOfCoursesClosed'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.statistics::count_courses_by_visibility(COURSE_VISIBILITY_CLOSED).'</a>');
         return $global_info;
     }
 

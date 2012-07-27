@@ -7,7 +7,7 @@
 * @copyrights CBLUE SPRL 2011
 * @package chamilo.reports
 */
-
+exit;
 // name of the language file that needs to be included
 $language_file = array('reportlib');
 $cidReset = true;
@@ -47,7 +47,7 @@ if ($_REQUEST['format'] == 'link') {
 }
 
 if ($_REQUEST['format'] == 'directlink') {
-	foreach (array('jquery.js', 'jquery.dataTables.min.js') as $js)
+	foreach (array('jquery.dataTables.min.js') as $js)
 		$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
 
 	$htmlCSSXtra[] = 'dataTable.css';

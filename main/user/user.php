@@ -53,6 +53,12 @@ $session_id             = api_get_session_id();
 $is_western_name_order 	= api_is_western_name_order();
 $sort_by_first_name 	= api_sort_by_first_name();
 $course_info            = api_get_course_info();
+$user_id                = api_get_user_id();
+
+//Can't auto unregister from a session
+if (!empty($session_id)) {
+    $course_info['unsubscribe']  = 0;
+}
 
 /* Unregistering a user section	*/
 if (api_is_allowed_to_edit(null, true)) {
@@ -290,7 +296,17 @@ if (api_is_allowed_to_edit(null, true)) {
 			}
 		}
 	}
-} // end if allowed to edit
+} else {    
+    //if student can unsubsribe
+    if (isset($_REQUEST['unregister']) && $_REQUEST['unregister'] == 'yes') {
+        if ($course_info['unsubscribe'] == 1) {
+            $user_id = api_get_user_id();        
+            CourseManager::unsubscribe_user($user_id, $course_info['code']);        
+            header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
+            exit;
+        }
+    }
+}
 
 
 /*		FUNCTIONS	*/
@@ -399,6 +415,7 @@ function search_keyword($firstname, $lastname, $username, $official_code, $keywo
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
 	global $origin;
+    global $course_info;
 	global $is_western_name_order;
 	global $sort_by_first_name;
     global $session_id;
@@ -496,7 +513,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                 //Active
 				$temp[] = $o_course_user['active'];
                 
-                //User id
+                //User id for actions
 				$temp[] = $user_id;
 			} else {
 				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
@@ -521,6 +538,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['username'];
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ', $groups_name);//Group
+                
+                if ($course_info['unsubscribe'] == 1) {
+                    //User id for actions
+                    $temp[] = $user_id;
+                }
 				//$temp[] = $o_course_user['official_code'];				
 			}
 			$a_users[$user_id] = $temp;
@@ -563,33 +585,41 @@ function active_filter($active, $url_params, $row) {
  * @return string Some HTML-code
  */
 function modify_filter($user_id) {
-	global $origin, $_user, $_course, $is_allowed_to_track, $charset;
+	global $origin, $_course, $is_allowed_to_track, $charset, $course_info;
+    
+    $current_user_id = api_get_user_id();
 
-	$result="<div style='text-align: center'>";
+	$result = "";
 
 	if ($is_allowed_to_track) {
 		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
 	}
 
 	if (api_is_allowed_to_edit(null, true)) {
-            // edit
+        // edit
         $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
-            if ($user_id != $_user['user_id']) {
+            if ($user_id != $current_user_id) {
                 $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             } else {
                 $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             }
         }
-	}
+	} else {
+        //Show buttons for unsubscribe
+        if ($course_info['unsubscribe'] == 1) {
+            if ($user_id == $current_user_id) {
+                $result .= '<a class="btn" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
+            }
+        }        
+    }
     
     //if platform admin, show the login_as icon (this drastically shortens
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
         $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
-    }
-	$result .= "</div>";
+    }	
 	return $result;
 }
 
@@ -636,6 +666,11 @@ if (api_is_allowed_to_edit(null, true)) {
 
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
         $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
+    }
+} else {    
+    if ($course_info['unsubscribe'] == 1) {
+        $table->set_header($header_nr++, get_lang('Action'), false);
+        $table->set_column_filter($header_nr-1, 'modify_filter');
     }
 }
 

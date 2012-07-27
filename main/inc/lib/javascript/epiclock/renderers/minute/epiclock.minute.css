@@ -7,10 +7,11 @@
  *  GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
  */
 
-.under_minute { 
-    background-color: #FFD700; 
+ /* Near to 0 seconds should be red */
+.time_warning_one { 
+    background-color: #FB3A35; 
 }
 
-.under_thirty_seconds {
-    background-color: #DB4A45; 
+.time_warning_two {
+    background-color: #FFD700; 
 }

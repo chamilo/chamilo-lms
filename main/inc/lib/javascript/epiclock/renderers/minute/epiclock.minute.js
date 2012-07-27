@@ -7,30 +7,18 @@
  *      MIT: http://www.opensource.org/licenses/mit-license.php
  *      GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
  */
-
 "use strict";
 
 /*global window, jQuery */
-
 /*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, maxerr: 50, indent: 4 */
 
 (function ($) {
-
-   
     //constants
-
     var epClock;   // clock object
 
-    
-    //------------------------------
-    //
     //  Setup
-    //
-    //------------------------------
-
     $.epiclock.addRenderer('minute', function (element, value)
     {
-
         var currentTime = new Date().valueOf();
         var dist = epClock.time+epClock.__offset - currentTime;
        
@@ -38,24 +26,24 @@
         element.text(value);
         
         var div_clock = $('#text-content');
-
-        if (dist <= 60000) {  // 60000 = 60 seconds
-            if (!(div_clock.hasClass('under_minute'))) {
-                div_clock.addClass('under_minute');
+        
+        // 60000 = 60 seconds
+        if (dist <= 180000) {  //3min
+            if (!(div_clock.hasClass('time_warning_two'))) {
+                div_clock.addClass('time_warning_two');
             }
         }
         
-        if (dist <= 30000) {  // 60000 = 60 seconds
-            if (!(div_clock.hasClass('under_thirty_seconds'))) {
-                div_clock.removeClass('under_minute');
-                div_clock.addClass('under_thirty_seconds');
-            }        
+        if (dist <= 60000) { //1min
+            div_clock.removeClass('time_warning_two');
+            if (!(div_clock.hasClass('time_warning_one'))) {                
+                div_clock.addClass('time_warning_one');
+            }
+            
         }
-    },     
+    },
     function ()
     {
        epClock = this;
-
-    });
-	
+    });	
 }(jQuery));

@@ -1534,8 +1534,8 @@ class learnpath {
          if (!empty($this->last_item_seen) && 
              !empty($this->items[$this->last_item_seen]) && 
              $this->items[$this->last_item_seen]->get_type() != 'dir' &&
-             $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter' && 
-             !$this->items[$this->last_item_seen]->is_done()
+             $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter'
+             //&& !$this->items[$this->last_item_seen]->is_done()
              ) {
                 
             if ($this->debug > 2) {

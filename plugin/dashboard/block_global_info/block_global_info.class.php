@@ -92,7 +92,7 @@ class BlockGlobalInfo extends Block {
 
          $global_data = $this->get_global_information_data();
          $content = '<div style="margin:10px;">';
-         $content .= '<h3><font color="#000">'.get_lang('PortalInformation').'</font></h3>';
+         $content .= '<h3><font color="#000">'.get_lang('GlobalPlatformInformation').'</font></h3>';
          if (!empty($global_data)) {
              $data_table = '<table class="data_table" width:"95%">';
              $i = 1;

@@ -125,6 +125,7 @@ class DocumentManager {
             'mesh' => 'model/mesh',
             'mid' => 'audio/midi',
             'midi' => 'audio/midi',
+			'mm' => 'x-freemind',
             'mov' => 'video/quicktime',
             'movie' => 'video/x-sgi-movie',
             'mp2' => 'audio/mpeg',

@@ -55,9 +55,10 @@ class manager {
 			array(array("odt", "ott", "sxw", "stw"), "fileODT", SEARCH_TYPE_ODT, 1),			
 			array(array("odp", "otp", "sxi", "sti"), "fileODP", SEARCH_TYPE_ODP, 1),
 			array(array("ods", "ots", "sxc", "stc"), "fileODS", SEARCH_TYPE_ODS, 1),
-			array(array("odg", "otg", "sxd", "std"), "fileODG", SEARCH_TYPE_ODG, 1)
+			array(array("odg", "otg", "sxd", "std"), "fileODG", SEARCH_TYPE_ODG, 1),
+			array(array("mm"), "freemind", SEARCH_TYPE_PDF, 0)
 
-	);// Added svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,(odt,ods,odp,odg and extra) types to Chamilo, and change flv from flash to video
+	);// Added mm, svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,(odt,ods,odp,odg and extra) types to Chamilo, and change flv from flash to video
 	
 	/**
 		 * constructor

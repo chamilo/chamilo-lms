@@ -1058,6 +1058,7 @@ $DeleteSelectedFullSessionCategory = "Eliminar as categorías seleccionadas coas
 $EditTopRegister = "Editar aviso";
 $InsertTabs = "Insertar tabuladores";
 $EditTabs = "Editar tabuladores";
+$YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "A avaliación precisa ter un certificado para poder relacionalo a unha competencia";
 $BabyOrange = "Nenos laranxa";
 $BlueLagoon = "Lagoa azul";
 $CoolBlue = " \tAzul fresco";
@@ -1473,4 +1474,122 @@ $AllowTeacherChangeGradebookGradingModelTitle = "Los docentes pueden escoger el 
 $AllowTeacherChangeGradebookGradingModelComment = "Activar esta opción,permitirá que cada profesor poda escoller o modelo de cualificación que utilizará no seu curso. Este cambio terá que facelo o profesor dentro da ferramenta de cualificacións do curso.";
 $NumberOfSubEvaluations = "Número de subavaliacións";
 $AddNewModel = "Engadir novo modelo";
+$GroupParentship = "Parentesco do grupo";
+$NoParentship = "Non hai parentesco";
+$NoCertificate = "Sen certificado";
+$ShowDocumentPreviewTitle = "Amosar vista previa de documento";
+$ShowDocumentPreviewComment = "Amosar vista previa de documentos na ferramenta documentos. Este modo permite evitar a carga dunha nova páxina para amosar un documento, pero pode resultar inestable en navegadores vellos ou pouco práctico en pantallas pequenas.";
+$CasMainActivateTitle = "Activar a autentificación CAS";
+$CasMainServerTitle = "Servidor CAS principal";
+$CasMainServerComment = "Este é servidor CAS principal que se empregará para a autentificación (dirección IP ou nome)";
+$CasMainServerURITitle = "URI do servidor CAS principal";
+$CasMainServerURIComment = "A ruta para o servicio CAS";
+$CasMainPortTitle = "Porto principal do servidor CAS";
+$CasMainPortComment = "Porto ao que conectar o servidor principal CAS";
+$CasMainProtocolTitle = "Protocolo do servidor principal CAS";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "Protocolo co que conectamos ao servidor CAS";
+$CasUserAddActivateTitle = "Permitir engadir usuarios mediante CAS";
+$CasUserAddActivateComment = "Permitir engadir usuarios mediante CAS";
+$CasUserAddLoginAttributeTitle = "Rexistrar o nome de usuario";
+$CasUserAddLoginAttributeComment = "Rexistrar o nome do usuario CAS cando se rexistra un novo usuario por esta vía";
+$CasUserAddEmailAttributeTitle = "Rexistrar o correo-e CAS";
+$CasUserAddEmailAttributeComment = "Rexistrar o correo-e CAS cando se rexistra un novo usuario por esta vía";
+$CasUserAddFirstnameAttributeTitle = "Rexistrar o nome CAS";
+$CasUserAddFirstnameAttributeComment = "Rexistrar o nome CAS cando se rexistra un novo usuario por esta vía";
+$CasUserAddLastnameAttributeTitle = "Rexistrar o apelido CAS";
+$CasUserAddLastnameAttributeComment = "Rexistrar o apelido CAS cando se rexistra un novo usuario por esta vía";
+$ShowAdminToolbarTitle = "Amosar a barra de administración";
+$ShowAdminToolbarComment = "Amosa aos usuarios, segundo o seu perfil, unha barra global na parte superior da páxina. Esta barra, moi similar ás de Wordpress e Google, pode aumentar considerablemente a súa eficiencia ao realizar actividades complexas e aumenta o espazo dispoñible para o contido da aprendizaxe.";
+$AddInMenu = "Engadir no menú";
+$AllowUsersToChangeEmailWithNoPasswordTitle = "Permitir que os usuarios poidan cambiar o seu correo electrónico sen necesidade de solicitar o contrasinal";
+$AllowUsersToChangeEmailWithNoPasswordComment = "Cando se modifica a conta do usuario";
+$EnableHelpLinkTitle = "Habilitar a ligazón de axuda";
+$EnableHelpLinkComment = "A ligazón de axuda atópase na parte superior dereita da pantalla";
+$BackToAdmin = "Regresar á administración";
+$AllowGlobalChatTitle = "Habilitar o chat global";
+$HeaderExtraContentTitle = "Contido extra na cabeceira";
+$HeaderExtraContentComment = "Pode engadir código HTML como os meta tags";
+$FooterExtraContentTitle = "Contido extra no pé";
+$AllowGlobalChatComment = "Os usuarios poden falar entre si mediante un chat global";
+$FooterExtraContentComment = "Podese engadir contido HTML como meta tags";
+$CopyOnlySessionItems = "Copiar só os elementos dunha sesión";
+$FirstLetterCourseTitle = "Primeira letra do título do curso";
+$UsersFoundInOtherPortals = "Usuarios atopados noutros portais";
+$AddUserToMyURL = "Engadir o usuario ao meu portal";
+$UsersDeleted = "Usuarios eliminados";
+$UsersAdded = "Usuarios engadidos";
+$PluginArea = "Área de plugins";
+$NoConfigurationSettingsForThisPlugin = "Non hai opcións de configuración para este plugin";
+$Regions = "Rexións";
+$CoursesDefaultCreationVisibilityTitle = "Visibilidade do curso por defecto";
+$CoursesDefaultCreationVisibilityComment = "Visibilidade por defecto do curso cuando se está a crear un curso";
+$YouHaveEnteredTheCourseXInY = "Vostede entrou no curso %s o %s";
+$LoginIsEmailTitle = "Usar o correo-e como nome de usuario";
+$LoginIsEmailComment = "Utilizarase o correo electrónico para entrar no sistema";
+$AllowBrowserSnifferTitle = "Activiar o investigador de navegadores";
+$AllowBrowserSnifferComment = "Isto activará un investigador das capacidades que soportan os navegadores que se conectan a Chamilo. Polo tanto, mellorará a experiencia do usuario, adaptando as respuestas da plataforma ao tipo de navegador que se conecta, pero reducirá a velocidad de carga da páxina inicial dos usuarios cada vez que entren á plataforma.";
+$EnableWamiRecordTitle = "Activar Wami-recorder";
+$EnableWamiRecordComment = "Wami-recorder é unha ferramenta de grabación de voz sobre Flash";
+$ChangeSharedSetting = "Cambiar visibilidade da configuración para os outros portais";
+$AllowHRSkillsManagementTitle = "Permitir ao perfil RRHH administrar as competencias";
+$AllowHRSkillsManagementComment = "O usuario poderá crear e editar competencias";
+$GradebookDefaultWeightTitle = "Peso total por defecto na ferramenta \"Avaliacións\"";
+$GradebookDefaultWeightComment = "Este peso utilizarase en todos os cursos";
+$TeachersCanChangeScoreSettingsTitle = "Os profesores poden cambiar o modelo de cualificación dentro do caderno de avaliacións";
+$TeachersCanChangeScoreSettingsComment = "Cando se edita unha avaliación";
+$GradebookEnableLockingTitle = "Activar bloqueo de Avaliacións para os profesores";
+$GradebookEnableLockingComment = "Unha vez activada, esta opción permitirá aos profesores bloquear calquera avaliación dentro do seu curso. Isto prohibirá ao profesor calquera modificación posterior dos resultados dos seus alumnos nos recursos usados para esta avaliación: exames, leccións, tarefas, etc. O único rol autorizado a desbloquear unha avaliación é o administrador. O profesor estará informado desta posibilidade ao intentar desbloquear a avaliación. Tanto o bloqueo como o desbloqueo estarán gardados no rexistro de actividades importantes do sistema.";
+$LdapDescriptionComment = "LDAP authentication : 
+See I. below to configure LDAP 
+See II. below to activate LDAP authentication
+
+
+Update user attributes, with LDAP data, after CAS authentication(see CAS configuration ) : 
+See I. below to configure LDAP 
+CAS manage user authentication, LDAP activation isn't required.
+
+
+I. LDAP configuration
+
+Edit file main/auth/external_login/ldap.conf.php
+
+-> Edit values of array $extldap_config 
+
+Parameters are 
+base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
+admin distinguished name (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
+admin password (ex : 'admin_password' => '123456')
+ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
+filter (ex : 'filter' => '')
+port (ex : 'port' => 389)
+protocol version (2 or 3) (ex : 'protocol_version' => 3)
+user_search (ex : 'user_search' => 'sAMAccountName=%username%')
+encoding (ex : 'encoding' => 'UTF-8')
+update_userinfo (ex : 'update_userinfo' => true)
+-> To update correspondences between user and LDAP attributes, edit array $extldap_user_correspondance 
+Array values are <chamilo_field> => >ldap_field> 
+Array structure is explained in file main/auth/external_login/ldap.conf.php
+
+
+II. Activate LDAP authentication
+
+Edit file main/inc/conf/configuration.php
+
+-> Uncomment lines 
+$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+
+N.B. : LDAP users use same fields than platform users to login. 
+N.B. : LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.";
+$ShibbolethMainActivateTitle = "Autenticación Shibboleth";
+$ShibbolethMainActivateComment = "En primeiro lugar, ten que configurar Shibboleth para o seu servidor web. Para configuralo en Chamilo: editar o arquivo main/auth/shibboleth/config/aai.class.php Modificar valores de \$result co nome dos atributos de Shibboleth \$result->unique_id = 'mail'; \$result->firstname = 'cn'; \$result->lastname = 'uid'; \$result->email = 'mail'; \$result->language = '-'; \$result->gender = '-'; \$result->address = '-'; \$result->staff_category = '-'; \$result->home_organization_type = '-'; \$result->home_organization = '-'; \$result->affiliation = '-'; \$result->persistent_id = '-'; ... Ir a Plug-in para engadir o botón 'Shibboleth Login' no seu campus de Chamilo.";
+$LdapDescriptionTitle = "Autenticación LDAP";
+$FacebookMainActivateTitle = "Autenticación Facebook";
+$FacebookMainActivateComment = "En primeiro lugar, tense que crear unha aplicación de Facebook (ver https://developers.facebook.com/apps) cunha conta de Facebook. Nos parámetros de aplicacións de Facebook, o valor de dirección URL do sitio debe tener \"unha acción = fbconnect\" un parámetro GET (http://mychamilo.com/?action=fbconnect, por ejemplo). Entón, editar o arquivo main/auth/external_login/facebook.conf.php e ingresar en \"appId\" e \"secret\" os valores de \$facebook_config. Ir a Plug-in para engadir un botón configurable \"Facebook Login\" para o campus de Chamilo.";
+$LanguagePriority1Title = "Prioridade do idioma 1";
+$LanguagePriority2Title = "Prioridade do idioma 2";
+$LanguagePriority3Title = "Prioridade do idioma 3";
 ?>

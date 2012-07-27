@@ -57,4 +57,5 @@ $AdditionalProfileField = "Engadir campo do perfil do usuario";
 $ScormUnknownPackageFormat = "O paquete que está tentando de subir ten un formato descoñecido. Por favor comprobe si utiliza un dos formatos soportados.";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "Non hai espazo suficiente neste curso para descomprimir o paquete actual.";
 $ScormPackageFormatNotScorm = "O paquete que está tentando subir non parece estar en fomrato SCORM. Por favor comprobe que o imsmanifest.xml esté dentro do arquivo ZIP que está tentando subir.";
+$HideTocFrame = "Ocultar zona de táboa de contidos";
 ?>

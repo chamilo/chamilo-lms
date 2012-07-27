@@ -1,0 +1,6 @@
+name = "Global info Block"
+controller = "BlockGlobalInfo"
+description = "Display global platform information"
+package = Dashboard
+version = 1.0 
+author = Yannick Warnier <ywarnier@beeznest.org>

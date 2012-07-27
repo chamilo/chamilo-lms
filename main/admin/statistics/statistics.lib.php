@@ -47,6 +47,33 @@ class Statistics {
     }
 
     /**
+     * Count courses by visibility
+     * @param int Visibility (0 = closed, 1 = private, 2 = open, 3 = public)
+     * all courses.
+     * @return int Number of courses counted
+     */
+    static function count_courses_by_visibility($vis = null) {
+        if (!isset($vis)) { return 0; }
+        $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $current_url_id = api_get_current_access_url_id();
+        if ($_configuration['multiple_access_urls']) {
+            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
+            if (isset ($vis)) {
+                $sql .= " AND visibility = ".intval($vis);
+            }
+        } else {
+            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
+            if (isset ($vis)) {
+                $sql .= " WHERE visibility = ".intval($vis);
+            }
+        }
+        $res = Database::query($sql);
+        $obj = Database::fetch_object($res);
+        return $obj->number;
+    }
+
+    /**
      * Count users
      * @param int      optional, user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users.
      * @param string optional, code of a course category. Default: count only users without filtering category

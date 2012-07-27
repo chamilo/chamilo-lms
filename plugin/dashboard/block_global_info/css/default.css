@@ -29,14 +29,15 @@
     overflow: hidden;
     width: 100%;
     height: 30px;
-    line-height: 30px;
+    line-height: 10px;
 }
 .widget .widget-head h3 {
     padding: 0 5px;
     float: left;
+    margin: 0px;
 }
 .widget .widget-content {
-    background: #FFF;/* url(img/widget-content-bg.png) repeat-x;*/
+    background: #FFF url(img/widget-content-bg.png) repeat-x;
     padding: 0 5px;
     color: #000;
     -moz-border-radius-bottomleft: 2px;

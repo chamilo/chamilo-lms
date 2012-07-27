@@ -6,7 +6,7 @@
 * @copyrights CBLUE SPRL 2011
 * @package chamilo.reports
 */
-
+exit;
 // name of the language file that needs to be included
 $language_file = array('reportlib');
 $cidReset = true;

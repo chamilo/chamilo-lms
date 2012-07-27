@@ -93,7 +93,7 @@ if (empty($objExercise)) {
 $feedback_type = $objExercise->feedback_type;
 
 //If is not valid
-$session_control_key = get_session_time_control_key($exercise_id);
+$session_control_key = get_session_time_control_key($exercise_id, $learnpath_id, $learnpath_item_id);
 if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id) && !in_array($action, array('qualify','edit'))) {
     $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
     Database::query($sql_fraud);

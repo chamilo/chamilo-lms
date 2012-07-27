@@ -2439,28 +2439,19 @@ div.admin_section h4 {
     /* padding:5px; */
 }
 
-/*Exercice timer */
-#wrapper-clock {
-    width:100%;
-    margin:0;
-}
-
 .time_container_warning {
     background-color:#FFD700;
     border:1px solid #B8860B;
 }
 
-#time_container {
-    padding:5px;    
-    margin-right : 24px;
-    width: 155px;
-    margin-bottom:20px;
-}
 .count_down {
     padding: 3px;
     font-size:22px;
     font-weight:bold;
     color:#222;
+    padding: 12px;
+    text-align: center;
+    width:200px;
 }
 
 .red_alert {

@@ -1630,10 +1630,9 @@ class Exercise {
 	 */
 	public function show_time_control_js($time_left) {
 		$time_left = intval($time_left);
-		return "<script type=\"text/javascript\">
-	
+		return "<script>	
 			$(document).ready(function() {
-	
+                
 				function get_expired_date_string(expired_time) {
 			        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 			        var day, month, year, hours, minutes, seconds, date_string;
@@ -1659,18 +1658,28 @@ class Exercise {
         			$('#exercise_form').submit();	     		
 	      		}
 	
-				var current_time = new Date().getTime();
-				var time_left    = parseInt(".$time_left.");
+				var current_time = new Date().getTime();				
+                var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
-					
+                
+                /*
 	       		$('#text-content').epiclock({
 	         		mode: EC_COUNTDOWN,
 	         		format: 'x{ : } i{ : } s{}',
 	         		target: expired_date,
 	         		onTimer: function(){ onExpiredTimeExercise(); }
 	       		}).clocks(EC_RUN);
-	       
+                */
+                
+                $('#text-content').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: time_left}, 
+                    format: 'x:i:s', 
+                    renderer: 'minute'
+                }).bind('timer', function () {
+                    onExpiredTimeExercise();
+                });
 	       		$('#submit_save').click(function () {});
 	    });
 	    </script>";
@@ -3625,8 +3634,8 @@ class Exercise {
 		return $result;
     }
     
-    function return_time_left_div() {
-        return '<div align="left" id="wrapper-clock"><div id="time_container" class="well"><div id="text-content" align="center" class="count_down"></div></div></div>';        
+    function return_time_left_div() {       
+        return '<div id="text-content" class="well count_down"></div>';
     }
 }
 endif;

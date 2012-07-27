@@ -1,0 +1,16 @@
+/*!
+ * Minute Style Countdown
+ * Copyright (c) 2009 Eric Garside (http://eric.garside.name)
+ *  Copyright (c) 2012 Chamilo
+ * Dual licensed under:
+ *  MIT: http://www.opensource.org/licenses/mit-license.php
+ *  GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
+ */
+
+.under_minute { 
+    background-color: #FFD700; 
+}
+
+.under_thirty_seconds {
+    background-color: #DB4A45; 
+}

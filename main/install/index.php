@@ -819,6 +819,7 @@ if (@$_POST['step2']) {
                 //Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
 			case '1.8.8.4':
+			case '1.8.8.6':
 				include 'update-db-1.8.8-1.9.0.inc.php';
 				//include 'update-files-1.8.8-1.9.0.inc.php';
 				//Only updates the configuration.inc.php with the new version

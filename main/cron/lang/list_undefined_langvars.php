@@ -6,7 +6,7 @@
 /**
  * Includes and declarations
  */
-//if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
+die();
 require_once '../../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
 $path = api_get_path(SYS_LANG_PATH).'english';

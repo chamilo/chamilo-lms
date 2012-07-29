@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Definition of new system event types
+ * @package chamilo.admin.events
+ */
+/**
+ * Init and access validation
+ */
 // name of the language file that needs to be included
 $language_file = array('admin');
 $cidReset = true;
@@ -12,10 +20,6 @@ api_protect_admin_script();
 if (api_get_setting('activate_email_template') != 'true') {
     api_not_allowed();
 }
-
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'event_controller.php', 'name' => get_lang('Events'));
-$tool_name = get_lang('EventMessageManagement');
 
 $action = isset($_POST['action']) ? $_POST['action'] : null;
 $eventName = isset($_POST['eventList']) ? $_POST['eventList'] : null;
@@ -45,22 +49,35 @@ $ets = get_all_event_types();
 $languages = api_get_languages();
 
 $ajaxPath = api_get_path(WEB_CODE_PATH) . 'inc/ajax/events.ajax.php';
-Display::display_header($tool_name);
 
-$action_array = array(array('url' =>'event_controller.php?action=listing' , 'content' => Display::return_icon('view_text.png', get_lang('List'), array(), ICON_SIZE_MEDIUM)));
+$action_array = array(array('url' =>'event_controller.php?action=listing' , 'content' => Display::return_icon('view_text.png', get_lang('ListView'), array(), ICON_SIZE_MEDIUM)));
 
-echo Display::actions($action_array);
 $key_lang = get_lang('YouHaveSomeUnsavedChanges');
 $users = UserManager::get_user_list(array(), array('firstname'));
 $new_user_list = array();
-foreach($users as $user) {
+foreach ($users as $user) {
     if ($user['status'] == ANONYMOUS) {
         continue;
     }
     $new_user_list[] = $user;
 }
-?>
 
+/**
+ * Header definition
+ */ 
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'event_controller.php', 'name' => get_lang('Events'));
+$tool_name = get_lang('EventMessageManagement');
+
+Display::display_header($tool_name);
+
+echo Display::actions($action_array);
+
+/**
+ * JavaScript code
+ * @todo move into HTML header
+ */
+?>
 <script>
     var usersList = <?php echo json_encode($new_user_list) ?>;
     var eventTypes = <?php echo json_encode($ets) ?>;
@@ -279,7 +296,12 @@ foreach($users as $user) {
         $('#eventSubject').val("");
     }
 </script>
-
+<?php
+/**
+ * HTML body
+ * @todo move as template layout
+ */
+?>
 <div class="page-header">
 <h2><?php echo get_lang('EventMessageManagement') ?></h2>
 </div>
@@ -292,7 +314,7 @@ foreach($users as $user) {
         <select class="span6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
         <?php
         foreach ($event_config as $key => $config) {
-            echo '<option value="' . $key . '">' . get_lang($config['name_lang_var']) . '</option>';
+            echo '<option value="' . $key . '">' . $config['name_lang_var'] . '</option>';
         }
         ?>
         </select>        
@@ -370,3 +392,4 @@ foreach($users as $user) {
 </form>
 <?php
 Display :: display_footer();
+

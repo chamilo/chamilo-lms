@@ -12,7 +12,11 @@ class Chat extends Model {
     var $table;
     var $columns = array('id', 'from_user','to_user','message','sent','recd');    
     var $window_list = array();
-        
+
+    /**
+     * The contructor sets the chat table name and the window_list attribute
+     * @return object Object reference
+     */
     public function __construct() {
         $this->table =  Database::get_main_table(TABLE_MAIN_CHAT);
         $this->window_list = $_SESSION['window_list'] = isset($_SESSION['window_list']) ? $_SESSION['window_list'] : array();
@@ -20,7 +24,7 @@ class Chat extends Model {
     
     /**
      * Get user chat status
-     * @return type 
+     * @return int 0 if disconnected, 1 if connected
      */
     function get_user_status() {
         $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'user_chat_status', false, true);
@@ -29,13 +33,16 @@ class Chat extends Model {
     
     /*
      * Set user chat status
+     * @param int 0 if disconnected, 1 if connected
+     * @return void
      */
     function set_user_status($status) {
         UserManager::update_extra_field_value(api_get_user_id(), 'user_chat_status', $status);
     }
     
     /* 
-     * Starts a chat session
+     * Starts a chat session and returns JSON array of status and chat history
+     * @return void (prints output in JSON format)
      */
     public function start_session() {                
         $items = array();        
@@ -48,7 +55,11 @@ class Chat extends Model {
         exit;
     }
     
-    public function heartbeat() {        
+    /**
+     * Refreshes the chat windows (usually called every x seconds through AJAX)
+     * @return void (prints JSON array of chat windows)
+     */
+    public function heartbeat() {
         $to_user_id    = api_get_user_id();                
         $minutes    = 60;
         $now        = time() - $minutes*60;
@@ -77,11 +88,11 @@ class Chat extends Model {
             foreach ($rows as $chat) {
                 $chat['message'] = Security::remove_XSS($chat['message']);
                 
-                $item = array(    's'            => '0', 
-                                'f'            => $from_user_id, 
-                                'm'            => $chat['message'],                                 
-                                'username'    => $user_info['complete_name'],                            
-                                'id'        => $chat['id']                                
+                $item = array(  's'        => '0', 
+                                'f'        => $from_user_id, 
+                                'm'        => $chat['message'],                                 
+                                'username' => $user_info['complete_name'],                            
+                                'id'       => $chat['id']                                
                             );
                 $items[$from_user_id]['items'][] = $item;                
                 $items[$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
@@ -129,9 +140,11 @@ class Chat extends Model {
         }        
         echo json_encode(array('items' => $items));
     }
-    
+
     /* 
-     * chatBoxSession
+     * Returns an array of messages inside a chat session with a specific user
+     * @param int The ID of the user with whom the current user is chatting
+     * @return array Messages list
      */
     function box_session($user_id) {
         $items = array();
@@ -140,12 +153,23 @@ class Chat extends Model {
         }
         return $items;
     }
-    
+
+    /**
+     * Saves into session the fact that a chat window exists with the given user
+     * @param int The ID of the user with whom the current user is chatting
+     * @return void
+     */
     function save_window($user_id){
         $this->window_list[$user_id] = true; 
         $_SESSION['window_list']  = $this->window_list;
     }
-    
+    /**
+     * Sends a message from one user to another user
+     * @param int The ID of the user sending the message
+     * @param int The ID of the user receiving the message
+     * @param string Message
+     * @return void Prints "1"
+     */
     function send($from_user_id, $to_user_id, $message) {
         $user_info = api_get_user_info($to_user_id, true);
         $this->save_window($to_user_id);
@@ -156,10 +180,10 @@ class Chat extends Model {
         if (!isset($_SESSION['chatHistory'][$to_user_id])) {
             $_SESSION['chatHistory'][$to_user_id] = array();
         }
-        $item = array (    "s"            => "1", 
+        $item = array ( "s"            => "1", 
                         "f"            => $from_user_id,
                         "m"            => $messagesan,
-                        "username"    => get_lang('Me')
+                        "username"     => get_lang('Me')
                     );
         $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;    
         $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];    
@@ -180,14 +204,21 @@ class Chat extends Model {
         echo "1";
         exit;
     }
-
+    /**
+     * Close a specific chat box (user ID taken from $_POST['chatbox'])
+     * @return void Prints "1"
+     */
     function close() {
         unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
         unset($_SESSION['chatHistory'][$_POST['chatbox']]);        
         echo "1";
         exit;
     }
-
+    /**
+     * Filter chat messages to avoid XSS or other JS
+     * @param string Unfiltered message
+     * @return string Filterd mssage
+     */
     function sanitize($text) {
         $text = htmlspecialchars($text, ENT_QUOTES);
         $text = str_replace("\n\r","\n",$text);

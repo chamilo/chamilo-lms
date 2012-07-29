@@ -433,11 +433,8 @@ if ($show_full_profile) {
     }
     $friend_html.= '</div>';    
     $social_right_content .=  SocialManager::social_wrapper_div($friend_html, 5);    
-}
 
-// Extra information
-if ($show_full_profile) {
-    //-- Extra Data
+    // Extra information
     $t_uf    = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
     $t_ufo    = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id);
@@ -506,11 +503,9 @@ if ($show_full_profile) {
         $extra_information .= '</div>'; //social-profile-info
     }
     //     if there are information to show
-    if (!empty($extra_information_value))
+    if (!empty($extra_information_value)) {
         $social_right_content .=  SocialManager::social_wrapper_div($extra_information, 9);
-}
-
-if ($show_full_profile) {
+    }
 
     // MY GROUPS
     $results = GroupPortalManager::get_groups_by_user($my_user_id, 0);

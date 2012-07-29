@@ -2095,7 +2095,13 @@ function api_is_platform_admin($allow_sessions_admins = false) {
     return $allow_sessions_admins && $_user['status'] == SESSIONADMIN;
 }
 
-function api_is_platform_admin_by_id($user_id = null) {
+/**
+ * Checks whether the user given as user id is in the admin table.
+ * @param int User ID. If none provided, will use current user
+ * @param int URL ID. If provided, also check if the user is active on given URL
+ * @result bool True if the user is admin, false otherwise
+ */
+function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $user_id = intval($user_id);
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -2103,9 +2109,23 @@ function api_is_platform_admin_by_id($user_id = null) {
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
     $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
     $res = Database::query($sql);
-    return Database::num_rows($res) === 1;
+    $is_admin = Database::num_rows($res) === 1;
+    if (!$is_admin or !isset($url)) {
+        return $is_admin;
+    }
+    // We get here only if $url is set
+    $url = intval($url);
+    $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $sql = "SELCT * FROM $url_user_table WHERE access_url_id = $url AND user_id = $user_id";
+    $res = Database::query($sql);
+    $is_on_url = Database::num_rows($res) === 1;
+    return $is_on_url;
 }
-
+/**
+ * Returns the user's numeric status ID from the users table
+ * @param int User ID. If none provided, will use current user
+ * @result int User's status (1 for teacher, 5 for student, etc)
+ */
 function api_get_user_status($user_id = null) {
     $user_id = intval($user_id);
     if (empty($user_id)) {

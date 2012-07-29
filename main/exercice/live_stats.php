@@ -4,7 +4,7 @@
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-$language_file = 'exercice';
+$language_file = array('exercice','tracking');
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
@@ -39,15 +39,15 @@ $minutes = 60;
 $url     = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Date'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
+$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
 
 //Column config
 $column_model   = array(
                         array('name'=>'firstname',  'index'=>'firstname',       'width'=>'100', 'align'=>'left'),
                         array('name'=>'lastname',   'index'=>'lastname',        'width'=>'100', 'align'=>'left'),
                         array('name'=>'start_date', 'index'=>'start_date',      'width'=>'100', 'align'=>'left'),
-                        array('name'=>'question',   'index'=>'count_questions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false'),
-                        array('name'=>'score',      'index'=>'score',           'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'question',   'index'=>'count_questions', 'width'=>'60', 'align'=>'left', 'sortable'=>'false'),
+                        array('name'=>'score',      'index'=>'score',           'width'=>'50', 'align'=>'left','sortable'=>'false'),
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';

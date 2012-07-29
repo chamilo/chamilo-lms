@@ -25,10 +25,13 @@ class EventsDispatcher
                 $execute = false;
             }
             
-            if (function_exists($event_name."_".$func."_filter_func")) // check if the event's got a filter
+            // check if the event's got a filter
+            if (function_exists($event_name."_".$func."_filter_func")) 
             {
                 $filter = $event_name."_".$func."_filter_func";
-                $event_data = $filter($event_data); // if it does, we execute the filter
+                // if it does, we execute the filter (which changes the data 
+                // in-place and returns true on success or false on error)
+                $execute = $filter($event_data);
             }
             else // if there's no filter
             {
@@ -39,7 +42,9 @@ class EventsDispatcher
             {
                 return false;
             }
-            // finally, if the filter says yes, we execute the in-between function that will call the needed function
+            // finally, if the filter says yes (or the filter doesn't exist), 
+            // we execute the in-between function that will call the needed 
+            // function
             $func($event_name, $event_data);
         }
     }

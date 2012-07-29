@@ -654,9 +654,9 @@ class SocialManager extends UserManager {
                   }
               }
             
-            //@todo check if user is online to show the chat link
-            if (api_get_setting('allow_global_chat') == 'true') {
-                if ($user_id != api_get_user_id()) {                    
+            //@todo check if user is online and if it's a friend to show the chat link
+            if (api_get_setting('allow_global_chat') == 'true' && $show_full_profile) {
+                if ($user_id != api_get_user_id()) {
                     $user_name  = $user_info['complete_name'];        
                     
                     $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");

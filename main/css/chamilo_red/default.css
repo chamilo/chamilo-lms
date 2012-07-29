@@ -39,7 +39,7 @@ a:active {
             border-radius: 0;
 }
 
-.subnav {  
+.subnav .navbar-inner {  
   background-color: #79AA0B; /* Old browsers */
   background-repeat: repeat-x; /* Repeat the gradient */
   background-image: -moz-linear-gradient(top, #D60B19 0%, #E8222F 100%); /* FF3.6+ */
@@ -49,8 +49,7 @@ a:active {
   background-image: -ms-linear-gradient(top, #D60B19 0%,#E8222F 100%); /* IE10+ */
   background-image: -o-linear-gradient(top, #D60B19 0%,#E8222F 100%); /* Opera 11.10+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D60B19', endColorstr='#E8222F',GradientType=0 ); /* IE6-9 */
-  background-image: linear-gradient(top, #D60B19 0%,#E8222F 100%); /* W3C */
-  border: 1px solid #D60B19;
+  background-image: linear-gradient(top, #D60B19 0%,#E8222F 100%); /* W3C */  
 }
 
 .subnav .nav > li > a {
@@ -65,12 +64,12 @@ a:active {
   border-right-color: #D60B19;  
 }
 
-.subnav li a {
+.subnav .nav li a {
     color:#fff;
 }
 
 /* Green hover */
-.subnav li a:hover {
+.subnav .navbar-inner li a:hover {
     background: none repeat scroll 0 0 #E8222F;
     color: #fff;
 }

@@ -403,7 +403,7 @@ input[text] {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-.subnav {
+.subnav .navbar-inner {
 	font-size: 1.0em;
 	padding: 0.8em 0.5em 0em 0.5em;
 	background: #E5EDF9;
@@ -465,24 +465,6 @@ input[text] {
 	BACKGROUND-IMAGE:  url(../../img/tab_right_active.gif);
 	COLOR: #333;
 	background-color: transparent;
-}
-.subnav .banner_links {
-	margin: 0;
-}
-.subnav input.logout {
-	/* makes an input appear like a link in this header */
-	margin: 0 0 0 0;
-	padding: 0;
-	background-color: transparent;
-	border: none;
-	COLOR: rgb(39,84,175);
-	font-size: 1.0em;
-	font-weight:bold;
-	font-family: verdana, arial, helvetica, sans-serif;
-	display: inline;
-	BACKGROUND:  url(../../img/tab_right.gif) no-repeat right top;
-	PADDING-RIGHT: 10px;
-	PADDING-TOP: 3px;
 }
 .subnav input:hover {
 	COLOR: #333;

@@ -353,7 +353,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-.subnav {
+.subnav .navbar-inner  {
     background-color: #4C4C4C; /* Old browsers */
     background-repeat: repeat-x; /* Repeat the gradient */
     background-image: -moz-linear-gradient(top, #4C4C4C 0%, #747474 100%); /* FF3.6+ */  
@@ -365,7 +365,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #4C4C4C;
 }
-.subnav a {
+.subnav .nav li a {
     color:white;
 }
 .subnav #current a {

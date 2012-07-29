@@ -378,11 +378,11 @@ a:active {
 /*****************************************************
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
-.subnav {    
+.subnav .navbar-inner {    
     background-image: url(images/fondoHeader3.jpg);	    
 }
 
-.subnav a {
+.subnav .nav li a {
     COLOR: #fff;    
 }
 .subnav a:hover {

@@ -45,7 +45,7 @@ input[type=button], input[type=submit] {
     width: 100%;
 }
 
-.subnav {
+.subnav .navbar-inner  {
     background-color: #F2F2F2; /* Old browsers */
     background-repeat: repeat-x; /* Repeat the gradient */
     background-image: -moz-linear-gradient(top, #CCCCCC 0%, #F2F2F2 100%); /* FF3.6+ */  
@@ -57,14 +57,11 @@ input[type=button], input[type=submit] {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #CCCCCC;
 }
-.subnav a {
-    color:#fff;
+.subnav .nav li a {
+    color:#888;
 }
 .subnav a :hover {
     color:#000;
-}
-
-.subnav #current a {    
 }
 
 .subnav .nav > #current > a, .subnav .nav > #current > a:hover {

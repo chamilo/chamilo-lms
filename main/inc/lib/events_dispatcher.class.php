@@ -18,15 +18,17 @@ class EventsDispatcher
         // and execute every actions with the values
         
         foreach ($event_config[$event_name]["actions"] as $func) {
+            $execute = true;
             if (!function_exists($func)) // if the function doesn't exist, we log
             {
                 error_log("EventsDispatcher warning : ".$func." does not exist.");
+                $execute = false;
             }
             
             if (function_exists($event_name."_".$func."_filter_func")) // check if the event's got a filter
             {
                 $filter = $event_name."_".$func."_filter_func";
-                $execute = $filter($event_data); // if it does, we execute the filter
+                $event_data = $filter($event_data); // if it does, we execute the filter
             }
             else // if there's no filter
             {

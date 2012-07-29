@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*    This is the array library for Chamilo.
+*    This is the Chat library for Chamilo.
 *    Include/require it in your code to use its functionality.
 *
-*    @package chamilo.library
+*    @package chamilo.library.chat
 */
-
+/**
+ * Chat class
+ */
 class Chat extends Model {
     
     var $table;

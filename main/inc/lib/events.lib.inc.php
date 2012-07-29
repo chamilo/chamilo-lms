@@ -639,8 +639,8 @@ function get_all_event_types() {
     
     $to_return = array();
     foreach ($events_types as $et) {
-        $et['nameLangVar'] = get_lang($event_config[$et["event_type_name"]]["name_lang_var"]);
-        $et['descLangVar'] = get_lang($event_config[$et["event_type_name"]]["desc_lang_var"]);
+        $et['nameLangVar'] = $event_config[$et["event_type_name"]]["name_lang_var"];
+        $et['descLangVar'] = $event_config[$et["event_type_name"]]["desc_lang_var"];
         $to_return[] = $et;
     }
     return $to_return;

@@ -5309,7 +5309,7 @@ class learnpath {
     	$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
     	$folder = null;
     	if (!is_dir($filepath.'/'.$dir)) {
-    		$folder = create_unexisting_directory($course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , get_lang('LearningPaths'));
+    		$folder = create_unexisting_directory($course, api_get_user_id(), api_get_session_id(), 0, 0, $filepath, $dir , get_lang('LearningPaths'),0);
     	} else {
     		$folder = true;
     	}

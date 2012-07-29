@@ -154,6 +154,8 @@ $gidReset = isset($gidReset) ? $gidReset : '';
 
 // parameters passed via POST
 $login = isset($_POST["login"]) ? $_POST["login"] : '';
+// register if the user is just logging in, in order to redirect him
+$logging_in = false;
 
 /*  MAIN CODE  */
 
@@ -243,7 +245,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
                    
                 // Check the user's password
-                if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {    
+                if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
@@ -279,6 +281,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user',$_user);
                                             event_login();
+                                            $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
@@ -322,6 +325,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
                                 Session::write('_user',$_user);
                                 event_login();
+                                $logging_in = true;
                             }
                         } else {
                             $loginFailed = true;
@@ -1100,5 +1104,5 @@ if (isset($_cid)) {
     Database::query($sql);
 }
 
-Redirect::session_request_uri();
+Redirect::session_request_uri($logging_in);
 

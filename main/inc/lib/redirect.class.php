@@ -35,8 +35,9 @@ class Redirect
 
     /**
      * Redirect to the session "request uri" if it exists. 
+     * @param bool Whether the user ha just logged in (in this case, use page_after_login rules)
      */
-    static function session_request_uri()
+    static function session_request_uri($logging_in = false)
     {
 //        if (api_is_anonymous())
 //        {
@@ -53,9 +54,13 @@ class Redirect
         unset($_SESSION['request_uri']);
         
         
-        if ($url)
-        {
+        if (!empty($url)) {
             self::navigate($url);
+        } elseif ($logging_in) {
+            $pal = api_get_setting('page_after_login');
+            if (!empty($pal)) {
+                self::navigate(api_get_path(WEB_PATH).api_get_setting('page_after_login'));
+            }
         }
     }
 

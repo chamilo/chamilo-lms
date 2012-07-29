@@ -589,18 +589,42 @@ class Template {
         $notification = return_notification_menu();
         $this->assign('notification_menu', $notification);
         
+        
+        //Preparing values for the menu
+        
+        //Logout link
+        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());        
+        
+        //Profile link
+        if (api_get_setting('allow_social_tool')=='true') {
+            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
+        } else {
+            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+        }
+        $this->assign('profile_link', $profile_link);
+        
+        //Message link
+        $message_link = null;
+        if (api_get_setting('allow_message_tool') == 'true') {
+            $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
+        }
+        $this->assign('message_link', $message_link);
+        
+        //Menu
         $menu = return_menu();
         $this->assign('menu', $menu);
         
+        //Breadcrumb        
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
+        //Extra content
         $extra_header = null;
         if (!api_is_platform_admin()) {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
-
+        
         if ($this->show_header == 1) {
             header('Content-Type: text/html; charset=' . api_get_system_encoding());
             header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));

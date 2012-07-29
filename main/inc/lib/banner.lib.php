@@ -386,12 +386,12 @@ function return_menu() {
         $pre_lis = '';
         foreach ($navigation as $section => $navigation_info) {
             if (isset($GLOBALS['this_section'])) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $current = $section == $GLOBALS['this_section'] ? ' id="current" class="active" ' : '';
             } else {
                 $current = '';
             }
             if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
+                $pre_lis .= '<li'.$current.' ><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
             }
         }
         $lis = $pre_lis.$lis;        

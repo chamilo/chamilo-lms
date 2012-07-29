@@ -68,10 +68,25 @@ function get_url_params(q, attribute) {
     }
 }
 
+function check_brand() {
+    if ($('.subnav').length) {     
+        if ($(window).width() > 959) {
+            $('.subnav .brand').hide();
+        } else {
+            $('.subnav .brand').show();
+        }
+    }
+}
+
+
+$(window).resize(function() {
+    check_brand();
+});
+
 $(document).scroll(function() {
 
     // Top bar scroll effect
-    if ($('body').width() > 959) {
+    if ($('body').width() > 959) {     
         if ($('.subnav').length) {
             if (!$('.subnav').attr('data-top')) {
                 // If already fixed, then do nothing
@@ -86,7 +101,10 @@ $(document).scroll(function() {
             } else {
                 $('.subnav').removeClass('subnav-fixed');
             }
+            //$('.subnav .brand').show();
         }
+    } else {
+        //$('.subnav .brand').hide();
     }
 
     //Admin -> Settings toolbar
@@ -102,7 +120,6 @@ $(document).scroll(function() {
             if ($('.subnav').hasClass('new_actions-fixed')) {
                 more_top = 50;
             }
-
             $('.new_actions').attr('data-top', offset.top + more_top);
         }
 
@@ -115,7 +132,6 @@ $(document).scroll(function() {
 
     //Bottom actions
     if ($('.bottom_actions').length) {
-
         if (!$('.bottom_actions').attr('data-top')) {
             // If already fixed, then do nothing
             if ($('.bottom_actions').hasClass('bottom_actions_fixed')) return;
@@ -157,6 +173,8 @@ function isScrolledIntoView(elem) {
 
 
 $(function() {
+    
+    check_brand();
 
     //Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
@@ -230,6 +248,7 @@ $(function() {
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);
+    
     $('#navigation > li').hover(
         function () {
             $('a',$(this)).stop().animate({

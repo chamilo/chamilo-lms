@@ -401,7 +401,7 @@ ul#navigation .student-connect a {
 ------------------------------------------------------------------------------
 */
 
-.subnav {
+.subnav .navbar-inner  {
 	background: #E5EDF9; 
     height:auto;
 	border-bottom: 1px solid #4171b5;
@@ -451,9 +451,7 @@ ul#navigation .student-connect a {
 .subnav #current a:hover {
 	color: #333;
 }
-.subnav .banner_links {
-	margin: 0;
-}
+
 .subnav input {
 	display: block;
 	padding-left: 2px;
@@ -462,18 +460,7 @@ ul#navigation .student-connect a {
 .subnav input:hover {
 	color: #333;
 }
-.subnav input.logout {	/* makes an input appear like a link in this header */
-	background-color: transparent;
-	border: none;
-	color: #2754AF;
-	display: inline;
-	font-size: 1.0em;
-	font-weight:bold;
-	margin: 0;
-	padding: 0;
-	padding-right: 2px;
-	padding-top: 3px;
-}
+
 .subnav #logout {
 	margin-top: 0px;
 }

@@ -1,0 +1,17 @@
+/*!
+ * Minute Style Countdown
+ * Copyright (c) 2009 Eric Garside (http://eric.garside.name)
+ *  Copyright (c) 2012 Chamilo
+ * Dual licensed under:
+ *  MIT: http://www.opensource.org/licenses/mit-license.php
+ *  GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
+ */
+
+ /* Near to 0 seconds should be red */
+.time_warning_one { 
+    background-color: #FB3A35; 
+}
+
+.time_warning_two {
+    background-color: #FFD700; 
+}

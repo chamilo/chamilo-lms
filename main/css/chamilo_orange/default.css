@@ -39,7 +39,7 @@ a:active {
             border-radius: 0;
 }
 
-.subnav {  
+.subnav .navbar-inner {  
   background-color: #F88017; /* Old browsers */
   background-repeat: repeat-x; /* Repeat the gradient */
   background-image: -moz-linear-gradient(top, #F88017 0%, #FC9337 100%); /* FF3.6+ */
@@ -65,12 +65,12 @@ a:active {
   border-right-color: #F88017;  
 }
 
-.subnav li a {
+.subnav .nav li a {
     color:#fff;
 }
 
 /* Green hover */
-.subnav li a:hover {
+.subnav .navbar-inner li a:hover {
     background: none repeat scroll 0 0 #FFAE67;
     color: #fff;
 }

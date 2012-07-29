@@ -54,7 +54,7 @@ $style .='</style>';
 
 ?>
 <!doctype html>
-<script src="../../jquery.js"></script><!--Chamilo TODO: compress this file and changing loads -->
+<?php echo api_get_js('jquery.min.js'); ?>
 <?php echo $style ?>
 <body>
 <?php

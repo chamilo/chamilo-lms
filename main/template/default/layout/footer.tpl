@@ -4,20 +4,20 @@
             <div id="footer_left" class="span4">                
                 {% if session_teachers is not null %}
                     <div id="session_teachers">
-                        {{session_teachers}}           
+                        {{ session_teachers }}           
                     </div>
                 {% endif %}
 
                 {% if teachers is not null %}
                     <div id="teachers">
-                        {{teachers}}            
+                        {{ teachers }}            
                     </div>
                 {% endif %}
                 
                 {#  Plugins for footer section #}                                             
                 {% if plugin_footer_left is not null %}
                     <div id="plugin_footer_left">
-                        {{plugin_footer_left}}               
+                        {{ plugin_footer_left }}               
                     </div>                
                 {% endif %}
                  &nbsp;
@@ -27,28 +27,27 @@
                 {#   Plugins for footer section  #}		
                 {% if plugin_footer_center is not null %}
                     <div id="plugin_footer_center">
-                        {{plugin_footer_center}}                
+                        {{ plugin_footer_center }}                
                     </div>
                 {% endif %}
                  &nbsp;
             </div>
             
-            <div id="footer_right" class="span4">        
-                
+            <div id="footer_right" class="span4">                
                 {% if administrator_name is not null %}
                     <div id="admin_name">
-                        {{administrator_name}}          
+                        {{ administrator_name }}          
                     </div>
                 {% endif %}
                 
                 <div id="software_name">	    	
-                    {{"Platform"|get_lang}} <a href="{{_p.web}}" target="_blank">{{_s.software_name}} {{_s.system_version}}</a>
+                    {{ "Platform" | get_lang }} <a href="{{_p.web}}" target="_blank">{{_s.software_name}} {{_s.system_version}}</a>
                     &copy; {{ "now"|date("Y") }}   	
                 </div>
                 {#   Plugins for footer section  #}		
                 {% if plugin_footer_right is not null %}                                
                     <div id="plugin_footer_right">
-                        {{plugin_footer_right}}                
+                        {{ plugin_footer_right }}                
                     </div>                
                 {% endif %}
                 &nbsp;
@@ -57,7 +56,7 @@
     </div><!-- end of #container -->
 </footer>
 
-{{footer_extra_content}}
+{{ footer_extra_content }}
 
 {% raw %}
 <script>
@@ -74,11 +73,10 @@ $(document).ready( function() {
     });
 
     var tip_options = {
-            placement : 'right'
+        placement : 'right'
     }
-
     $('.boot-tooltip').tooltip(tip_options);
 });
 </script>
 {% endraw %}
-{{execution_stats}}
+{{ execution_stats }}

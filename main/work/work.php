@@ -237,7 +237,7 @@ if (!empty($group_id)) {
 
 	} else {
 		//we are in the learnpath tool
-		require Display::display_reduced_header();
+		Display::display_reduced_header();
 	}
 }
 

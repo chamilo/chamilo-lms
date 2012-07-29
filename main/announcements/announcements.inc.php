@@ -311,7 +311,7 @@ class AnnouncementManager  {
 	/*
 		   STORE ANNOUNCEMENT  GROUP ITEM
 	*/
-	public static function add_group_announcement($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='') {
+	public static function add_group_announcement($emailTitle, $newContent, $order, $to, $to_users, $file = array(), $file_comment='') {
 		global $_course;
 
 		// database definitions
@@ -340,23 +340,22 @@ class AnnouncementManager  {
 
 		//store the attach file
 		$last_id = Database::insert_id();
-		if (empty($file)) {
+		if (!empty($file)) {
 			$save_attachment = self::add_announcement_attachment_file($last_id, $file_comment, $file);
 		}
 
 		// store in item_property (first the groups, then the users
-		if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
-		{
-			$send_to=self::separate_users_groups($to);
+        
+		if (!isset($to_users)) { // !isset($to): when no user is selected we send it to everyone
+			$send_to = self::separate_users_groups($to);
 			// storing the selected groups
 			if (is_array($send_to['groups'])) {
 				foreach ($send_to['groups'] as $group) {
 					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
 				}
 			}
-		}
-		else // the message is sent to everyone, so we set the group to 0
-		{
+		} else {
+            // the message is sent to everyone, so we set the group to 0
 			// storing the selected users
 			if (is_array($to_users)) {
 				foreach ($to_users as $user) {
@@ -1102,7 +1101,7 @@ class AnnouncementManager  {
 				$safe_new_file_name = Database::escape_string($new_file_name);
 				$id_attach = intval($id_attach);
 				$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', size ='".intval($file['size'])."'
-					 	WHERE c_id $course_id AND id = '$id_attach'";
+					 	WHERE c_id = $course_id AND id = '$id_attach'";
 				$result = Database::query($sql);
 				if ($result === false) {
 					$return = -1;

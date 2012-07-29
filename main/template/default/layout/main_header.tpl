@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html lang="{{ document_language  }}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if lt IE 7]> <html lang="{{ document_language }}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>    <html lang="{{ document_language }}" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>    <html lang="{{ document_language }}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
@@ -7,13 +7,13 @@
 {% include "default/layout/head.tpl" %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }}">
-<noscript>{{"NoJavascript"|get_lang}}</noscript>
+<noscript>{{ "NoJavascript" | get_lang }}</noscript>
 
 {% if show_header == true %}
     <div class="skip">
         <ul>
-            <li><a href="#menu">{{"WCAGGoMenu"|get_lang}}</a></li>
-            <li><a href="#content" accesskey="2">{{"WCAGGoContent"|get_lang}}</a></li>
+            <li><a href="#menu">{{ "WCAGGoMenu" | get_lang }}</a></li>
+            <li><a href="#content" accesskey="2">{{ "WCAGGoContent" | get_lang }}</a></li>
         </ul>
     </div>
     <div id="wrapper">
@@ -22,6 +22,7 @@
             {{ help_content }}
             {{ bug_notification_link }}
         </ul>
+            
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
 
@@ -74,11 +75,7 @@
                 {% endif %}
 
                 {# menu #}
-                {% if menu is not null %}
-                    <div class="subnav">
-                        {{ menu }}
-                    </div>
-                {% endif %}
+                {% include "default/layout/menu.tpl" %}                
 
                 {# breadcrumb #}
                 {{ breadcrumb }}

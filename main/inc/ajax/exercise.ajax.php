@@ -88,7 +88,10 @@ switch ($action) {
         while ($row = Database::fetch_array($result,'ASSOC')){
             $results[] = $row;
         }        
-        
+
+        $oExe = new exercise();
+        $oExe->read($exercise_id);
+
         $response = new stdClass();           
         $response->page     = $page; 
         $response->total    = $total_pages; 
@@ -110,10 +113,14 @@ switch ($action) {
                 
                 $row['count_questions'] = $count_questions;
                 
-                $response->rows[$i]['id'] = $row['exe_id'];                 
+                $response->rows[$i]['id'] = $row['exe_id'];
+                $remaining = strtotime($row['start_date'])+($oExe->expired_time*60) - strtotime(api_get_utc_datetime(time()));
+                $h = floor($remaining/3600);
+                $m = floor(($remaining - ($h*3600))/60);
+                $s = ($remaining - ($h*3600) - ($m*60));
                 $array = array( $row['firstname'], 
                                 $row['lastname'], 
-                                api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG),
+                                api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
                                 $row['count_questions'],                                
                                 round($row['score']*100).'%'
                                );

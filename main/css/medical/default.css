@@ -379,7 +379,7 @@ a:active {
 /*****************************************************
  *  TABS OF THE HEADER			     	 *
  *****************************************************/
-.subnav {
+.subnav .navbar-inner  {
     background-color: #B49FA6; /* Old browsers */
     background-repeat: repeat-x; /* Repeat the gradient */
     background-image: -moz-linear-gradient(top, #B49FA6 0%, #AF8B97 100%); /* FF3.6+ */  
@@ -391,13 +391,10 @@ a:active {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #B49FA6;
 }
-.subnav a {
+.subnav .nav li a {
     color:white;
 }
 
-.subnav #current a {
-    
-}
 .subnav .nav > #current > a, .subnav .nav > #current > a:hover {
     color: #333;
 }

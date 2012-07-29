@@ -96,4 +96,5 @@ $BackToGroupList = "Volver á lista de grupos";
 $EditGroupCategory = "Modificar categoría de grupo";
 $NoStudents = "Non é estudante";
 $NoData = "A información non está dispoñible";
+$AllGroups = "Todos os grupos";
 ?>

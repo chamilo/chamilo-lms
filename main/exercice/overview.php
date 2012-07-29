@@ -45,17 +45,21 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name"
 $interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
 $time_control = false;
-if ($objExercise->expired_time != 0 && $origin != 'learnpath') {
-	$time_control = true;
+$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+
+if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
+	$time_control = true;    
 }
 
-$clock_expired_time = get_session_time_control_key($objExercise->id);
-
-// Get time left for exipiring time
-$time_left = api_strtotime($clock_expired_time,'UTC') - time();
-
 if ($time_control) {
-	$htmlHeadXtra[] = api_get_js('jquery.epiclock.min.js');
+    // Get time left for expiring time
+    $time_left = api_strtotime($clock_expired_time,'UTC') - time();
+    
+	$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 

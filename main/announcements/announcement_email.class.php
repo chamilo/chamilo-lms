@@ -76,39 +76,24 @@ class AnnouncementEmail
      * @return array
      */
     public function all_users()
-    {
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    {        
         $course_code = $this->course('code');
-        $course_code = Database::escape_string($course_code);
-
         if (empty($this->session_id)) {
-            $rel_rh = COURSE_RELATION_TYPE_RRHH;
-            $sql = "SELECT user.user_id, user.email, user.lastname, user.firstname
-                    FROM $tbl_course_user, $tbl_user
-                    WHERE active = 1 AND
-                          course_code = '$course_code' AND
-                          course_rel_user.user_id = user.user_id AND
-                          relation_type <> $rel_rh";
+            $group_id = api_get_group_id();
+            if (empty($group_id)) {
+                $user_list = CourseManager::get_user_list_from_course_code($course_code);
+            } else {
+                $user_list = GroupManager::get_users($group_id);
+                $new_user_list = array();
+                foreach ($user_list as $user) {
+                    $new_user_list[] = array('user_id' => $user);
+                }
+                $user_list = $new_user_list;
+            }
         } else {
-            $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $session_id = $this->session_id;
-            $sql = "SELECT user.user_id, user.email, user.lastname, user.firstname
-                    FROM $tbl_user
-                    INNER JOIN $tbl_session_course_user
-                          ON $tbl_user.user_id = $tbl_session_course_user.id_user AND
-                             $tbl_session_course_user.course_code = '$course_code' AND
-                             $tbl_session_course_user.id_session = $session_id
-                    WHERE
-                        active = 1";
+            $user_list = CourseManager::get_user_list_from_course_code($course_code, $this->session_id);            
         }
-
-        $rs = Database::query($sql);
-        $result = array();
-        while ($data = Database::fetch_array($rs)) {
-            $result[] = $data;
-        }
-        return $result;
+        return $user_list;
     }
 
     /**
@@ -160,20 +145,27 @@ class AnnouncementEmail
         $users = $sent_to['users'];
         $users = $users ? $users : array();
         $groups = $sent_to['groups'];
-
+        
         if ($users) {
             $users = UserManager::get_user_list_by_ids($users, true);
         } else {
             $users = self::all_users();
-        }
+        }        
 
         if (!empty($groups)) {
             $group_users = GroupManager::get_groups_users($groups);
             $group_users = UserManager::get_user_list_by_ids($group_users, true);
-            $users = array_merge($users, $group_users);
+            $users = array_merge($users, $group_users);            
         }
-
-        return $users;
+        
+        //Clean users just in case
+        $new_list_users = array();
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                $new_list_users[$user['user_id']] = array('user_id' => $user['user_id']);
+            }
+        }        
+        return $new_list_users;
     }
 
     /**
@@ -214,19 +206,23 @@ class AnnouncementEmail
         $content = stripslashes($content);
         $content = AnnouncementManager::parse_content($content, $this->course('code'));
 
-        $user_firstname = $this->sender('firstName');
-        $user_lastname = $this->sender('lastName');
-        $user_email = $this->sender('mail');
-
-        $www = api_get_path(WEB_CODE_PATH);
+        $user_email   = $this->sender('mail');
         $course_param = api_get_cidreq();
-        $course_name = $this->course('title');
-
-        $result = '';
-        $result .= "<div>$content</div>";
-        $result .= '--<br/>';
-        $result .= "<a href=\"mailto:$user_email\">$user_firstname $user_lastname</a><br/>";
-        $result .= "<a href=\"$www/announcements/announcements.php?$course_param\">$course_name</a><br/>";
+        $course_name  = $this->course('title');
+        
+        $result = "<div>$content</div>";
+        
+        //Adding attachment
+        $attachment = $this->attachement();        
+        if (!empty($attachment)) {
+            $result .= '<br />';            
+            $result .= Display::url($attachment['filename'], api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param).'<br />';            
+        }
+        
+        $result .= '<hr />';
+        $sender_name = api_get_person_name($this->sender('firstName'), $this->sender('lastName'), PERSON_NAME_EMAIL_ADDRESS);
+        $result .= '<a href="mailto:'.$user_email.'">'.$sender_name.'</a><br/>';
+        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
         return $result;
     }
 
@@ -265,14 +261,14 @@ class AnnouncementEmail
 
         $subject = $this->subject();
         $message = $this->message();
-        $attachement = $this->attachement();
-
+    
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
         foreach ($users as $user) {
-            $recipient_name = api_get_person_name($user['firstname'], $user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-            $recipient_email = $user['email'];
-            @api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, $sender_email, null, $attachement, true);
+            MessageManager::send_message($user['user_id'], $subject, $message, null, null, null, null, null, null, $sender['user_id']);
+            //$recipient_name = api_get_person_name($user['firstname'], $user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+            //$recipient_email = $user['email'];
+            //@api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, $sender_email, null, $attachement, true);
         }
         $this->log_mail_sent();
     }

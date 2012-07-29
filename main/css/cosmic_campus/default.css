@@ -72,13 +72,13 @@ input[type=button], input[type=submit] {
 }
 
 /* header 3 styles */
-.subnav {
+.subnav .navbar-inner {
 	background: #fff;
 	color: #006;
 	border-bottom: 1px solid #aeaeae;	
 	background-image: url(images/fondoHeader3.jpg);
 }
-.subnav a {	
+.subnav .nav li a {	
     color: #fff;
 }
 .subnav a:hover {

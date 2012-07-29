@@ -371,8 +371,7 @@ function return_menu() {
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
     $lis = '';
-    $show_bar = false;
-
+    
     if (!empty($open)) {
         if (strpos($open, 'show_menu') === false) {
             if (api_is_anonymous()) {
@@ -380,72 +379,28 @@ function return_menu() {
             }
         } else {
             $lis .= Display::tag('li', $open);
-        }
-        $show_bar = true;
+        }        
     }
 
     if (count($navigation) > 0 || !empty($lis)) {
         $pre_lis = '';
         foreach ($navigation as $section => $navigation_info) {
             if (isset($GLOBALS['this_section'])) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $current = $section == $GLOBALS['this_section'] ? ' id="current" class="active" ' : '';
             } else {
                 $current = '';
             }
             if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
+                $pre_lis .= '<li'.$current.' ><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
             }
         }
-        $lis = $pre_lis.$lis;
-        $show_bar = true;
+        $lis = $pre_lis.$lis;        
     }
 
-    $menu = null;
-
-    // Logout
-    if ($show_bar) {
-        if (api_get_user_id() && !api_is_anonymous()) {
-            $login = '';
-            if (api_is_anonymous()) {
-                $login = get_lang('Anonymous');
-            } else {
-                $user_info = api_get_user_info(api_get_user_id());
-            }
-            $logout_link = api_get_path(WEB_PATH).'index.php?logout=logout&amp;uid='.api_get_user_id();
-
-            $message_link  = null;
-
-            if (api_get_setting('allow_message_tool') == 'true') {
-                $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
-            }
-
-            if (api_get_setting('allow_social_tool')=='true') {
-                $profile_url = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
-            } else {
-                $profile_url = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
-            }
-            //start user section line with name, my course, my profile, scorm info, etc
-            $menu .= '<ul class="nav nav-pills pull-right">';
-                //echo '<li><span>'.get_lang('LoggedInAsX').' '.$login.'</span></li>';
-                $menu .= '<li class="dropdown">';
-                $menu .= '<a class="dropdown-toggle" data-toggle="dropdown" href="#"><img src="'.$user_info['avatar_small'].'"/> '.$user_info['complete_name'].'<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        '.$profile_url.'
-                                        '.$message_link.'
-                                    </li>
-                                </ul>';
-                $menu .= '</li>';
-                $menu .= '<li><a class="logout" title="'.get_lang('Logout').'" href="'.$logout_link.'">'.Display::return_icon('exit.png', get_lang('Logout'), array(), ICON_SIZE_SMALL).'</a></li>';
-            $menu .= '</ul>';
-        }
-
-        if (!empty($lis)) {
-            $menu .= '<ul class="nav nav-pills">';
-            $menu .= $lis;
-            $menu .= '</ul>';
-        }
-    }
+    $menu = null;        
+    if (!empty($lis)) {            
+         $menu .= $lis;            
+    }    
     return $menu;
 }
 

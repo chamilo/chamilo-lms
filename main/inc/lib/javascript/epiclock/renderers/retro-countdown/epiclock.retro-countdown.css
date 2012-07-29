@@ -1,0 +1,68 @@
+/*!
+ * Retro Style Countdown
+ * Copyright (c) 2009 Eric Garside (http://eric.garside.name)
+ * Dual licensed under:
+ *  MIT: http://www.opensource.org/licenses/mit-license.php
+ *  GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
+ */
+
+/* Master Style
+----------------------------------*/
+
+.epiclock-retro .epiclock, .epiclock-retro .epiclock-img
+    { display: block; float: left; }
+
+.epiclock-retro-countdown .epiclock-img .epiclock-animation,
+.epiclock-retro-countdown .epiclock-separator { display: block; float: left; background-image: url(epiclock.retro-countdown.png); background-repeat: no-repeat; height: 40px; }
+
+/* Individual Styles
+----------------------------------*/
+.epiclock-retro-countdown .epiclock-spacer { display: block; float: left; width: 10px; height: 1px; margin: 0; }
+.epiclock-retro-countdown .epiclock-animation { width: 40px; }
+.epiclock-retro-countdown .epiclock-separator { width: 26px; text-indent: -999999px; background-position: -120px -360px; }
+
+/* Container Clearfix
+----------------------------------*/
+.epiclock-retro-countdown:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.epiclock-retro-countdown { display: inline-block; }
+* html .epiclock-retro-countdown { height:1%; }
+.epiclock-retro-countdown { display:block; }
+
+/* Static Positions
+----------------------------------*/
+.epiclock-retro-countdown .d0 .s { background-position: 0 -360px; }
+.epiclock-retro-countdown .d1 .s { background-position: 0 -320px; }
+.epiclock-retro-countdown .d2 .s { background-position: 0 -280px; }
+.epiclock-retro-countdown .d3 .s { background-position: 0 -240px; }
+.epiclock-retro-countdown .d4 .s { background-position: 0 -200px; }
+.epiclock-retro-countdown .d5 .s { background-position: 0 -160px; }
+.epiclock-retro-countdown .d6 .s { background-position: 0 -120px; }
+.epiclock-retro-countdown .d7 .s { background-position: 0 -80px; }
+.epiclock-retro-countdown .d8 .s { background-position: 0 -40px; }
+.epiclock-retro-countdown .d9 .s { background-position: 0 0; }
+
+/* Animation Phase 1
+----------------------------------*/
+.epiclock-retro-countdown .d9 .a1 { background-position: -40px -360px; }
+.epiclock-retro-countdown .d0 .a1 { background-position: -40px -320px; }
+.epiclock-retro-countdown .d1 .a1 { background-position: -40px -280px; }
+.epiclock-retro-countdown .d2 .a1 { background-position: -40px -240px; }
+.epiclock-retro-countdown .d3 .a1 { background-position: -40px -200px; }
+.epiclock-retro-countdown .d4 .a1 { background-position: -40px -160px; }
+.epiclock-retro-countdown .d5 .a1 { background-position: -40px -120px; }
+.epiclock-retro-countdown .d6 .a1 { background-position: -40px -80px; }
+.epiclock-retro-countdown .d7 .a1 { background-position: -40px -40px; }
+.epiclock-retro-countdown .d8 .a1 { background-position: -40px 0; }
+
+/* Animation Phase 2
+----------------------------------*/
+.epiclock-retro-countdown .d9 .a2 { background-position: -80px -360px; }
+.epiclock-retro-countdown .d0 .a2 { background-position: -80px -320px; }
+.epiclock-retro-countdown .d1 .a2 { background-position: -80px -280px; }
+.epiclock-retro-countdown .d2 .a2 { background-position: -80px -240px; }
+.epiclock-retro-countdown .d3 .a2 { background-position: -80px -200px; }
+.epiclock-retro-countdown .d4 .a2 { background-position: -80px -160px; }
+.epiclock-retro-countdown .d5 .a2 { background-position: -80px -120px; }
+.epiclock-retro-countdown .d6 .a2 { background-position: -80px -80px; }
+.epiclock-retro-countdown .d7 .a2 { background-position: -80px -40px; }
+.epiclock-retro-countdown .d8 .a2 { background-position: -80px 0; }

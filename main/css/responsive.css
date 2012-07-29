@@ -13,6 +13,10 @@
         display:none;
     }
     
+    .subnav .nav > li > a, .navbar .dropdown-menu a {        
+        color: white;        
+    }
+    
     header #header_center, header #header_right {
         display:none;
     }    
@@ -72,6 +76,10 @@
      #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
     }    
+    
+    .subnav .nav > li > a, .navbar .dropdown-menu a {        
+        color: white;        
+    }
     
     footer .container .row {
         padding-top: 15px;        
@@ -171,6 +179,14 @@
     .subnav .dropdown-toggle {
         display:none;
     }    
+    
+    .subnav .nav > li > a, .navbar .dropdown-menu a {      
+        color: #ccc;        
+    }
+    
+   .subnav .nav > li > a:hover,
+   .subnav .dropdown-menu a:hover {
+    }
 }
 
 @media (max-width: 979px) {

@@ -6,7 +6,7 @@
 /**
  * Includes and declarations
  */
-//if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
+if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
 require_once '../../inc/global.inc.php';
 $path = api_get_path(SYS_CODE_PATH).'img/';
 ini_set('memory_limit','128M');

@@ -129,4 +129,8 @@ $DatabaseXWillBeCreated = "Crearase a base de datos %s";
 $ADatabaseWithTheSameNameAlreadyExists = "Xa existe unha base de datos co mesmo nome";
 $UserXCantHaveAccessInTheDatabaseX = "O usuario %s non ten acceso á base de datos %s";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Non se pode crear a base de datos %s, o usuario %s non ten persimos suficientes";
+$CourseTestWasCreated = "O test do curso foi creado satisfactoriamente";
+$InstallExecution = "Instalación en proceso de execución";
+$UpdateExecution = "Actualizar o proceso de execución";
+$PleaseWaitThisCouldTakeAWhile = "Por favor espere. Isto podería levar un tempo...";
 ?>

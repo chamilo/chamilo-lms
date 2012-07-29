@@ -29,8 +29,8 @@ class ConditionalLogin {
         }
     }
 
-	public static function login() {
-	    $_SESSION['conditional_login']['can_login'] = true;
-		LoginRedirection::redirect();
-	}
+    public static function login() {
+        $_SESSION['conditional_login']['can_login'] = true;
+        LoginRedirection::redirect();
+    }
 }

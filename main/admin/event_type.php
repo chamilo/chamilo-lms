@@ -387,7 +387,7 @@ echo Display::actions($action_array);
         </tr>
     </table>
     <br /><br />
-    <input type="submit" value="<?php echo get_lang('Edit'); ?>" />
+    <input type="submit" value="<?php echo get_lang('Save'); ?>" />
 
 </form>
 <?php

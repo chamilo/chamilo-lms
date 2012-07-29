@@ -1104,5 +1104,5 @@ if (isset($_cid)) {
     Database::query($sql);
 }
 
-Redirect::session_request_uri($logging_in);
+Redirect::session_request_uri($logging_in, $user_id);
 

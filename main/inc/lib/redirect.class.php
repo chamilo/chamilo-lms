@@ -37,7 +37,7 @@ class Redirect
      * Redirect to the session "request uri" if it exists. 
      * @param bool Whether the user ha just logged in (in this case, use page_after_login rules)
      */
-    static function session_request_uri($logging_in = false)
+    static function session_request_uri($logging_in = false, $user_id = null)
     {
 //        if (api_is_anonymous())
 //        {
@@ -57,9 +57,42 @@ class Redirect
         if (!empty($url)) {
             self::navigate($url);
         } elseif ($logging_in) {
+            if (isset($user_id)) {
+                // Make sure we use the appropriate role redirection in case one has been defined
+                global $_configuration;
+                $user_status = api_get_user_status($user_id);
+                switch ($user_status) {
+                    case COURSEMANAGER:
+                        $redir = api_get_setting('teacher_page_after_login');
+                        if (!empty($redir)) {
+                            self::navigate(api_get_path(WEB_PATH).$redir);
+                        }
+                        break;
+                    case STUDENT:
+                        $redir = api_get_setting('student_page_after_login');
+                        if (!empty($redir)) {
+                            self::navigate(api_get_path(WEB_PATH).$redir);
+                        }
+                        break;
+                    case DRH:
+                        $redir = api_get_setting('drh_page_after_login');
+                        if (!empty($redir)) {
+                            self::navigate(api_get_path(WEB_PATH).$redir);
+                        }
+                        break;
+                    case SESSIONADMIN:
+                        $redir = api_get_setting('sessionadmin_page_after_login');
+                        if (!empty($redir)) {
+                            self::navigate(api_get_path(WEB_PATH).$redir);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
             $pal = api_get_setting('page_after_login');
             if (!empty($pal)) {
-                self::navigate(api_get_path(WEB_PATH).api_get_setting('page_after_login'));
+                self::navigate(api_get_path(WEB_PATH).$pal);
             }
         }
     }

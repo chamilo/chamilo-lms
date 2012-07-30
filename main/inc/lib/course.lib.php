@@ -3844,7 +3844,7 @@ class CourseManager {
      * @param array  List of courses to which the user is subscribed (if not provided, will be generated)
      * @return mixed 'enter' for a link to go to the course or 'register' for a link to subscribe, or false if no access
      */
-    static function get_access_link_by_user($uid, $course, $user_courses = null) {
+    static function get_access_link_by_user($uid, $course, $user_courses = array()) {
         if (empty($uid) or empty($course)) { return false; }
         if (!is_array($user_courses)) {
             // get the array of courses to which the user is subscribed
@@ -3866,7 +3866,7 @@ class CourseManager {
         if ($is_admin
           || $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
           || (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-          || in_array($course['real_id'], $user_courses && $course['visibility'] != COURSE_VISIBILITY_CLOSED   )
+          || (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
         ) {
             return 'enter';
         }

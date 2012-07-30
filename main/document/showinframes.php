@@ -231,6 +231,14 @@ if ($show_web_odf) {
     $execute_iframe = false;
 }
 
+
+
+
+$is_freemind_available = $pathinfo['extension']=='mm' && api_get_setting('enable_freemind') == 'true';
+if ($is_freemind_available){
+    $execute_iframe = false;
+}
+
 $is_nanogong_available = $pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true';
 if ($is_nanogong_available){
     $execute_iframe = false;
@@ -290,6 +298,81 @@ if ($jplayer_supported) {
     echo DocumentManager::generate_video_preview($document_data);
     echo '</div>';     
 }
+
+
+if ($is_freemind_available) { 
+
+	?>
+	
+	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
+	<style type="text/css">
+		#flashcontent {
+			height: 500px;
+			padding-top:10px;
+		}
+	</style>
+	<script type="text/javascript">
+	function giveFocus() 
+		{ 
+		  document.visorFreeMind.focus();  
+		}
+	</script>
+	
+	<div id="flashcontent" onmouseover="giveFocus();">
+		 Flash plugin or Javascript are turned off.
+		 Activate both  and reload to view the mindmap
+	</div>
+		
+	<script type="text/javascript">
+		document.onload=giveFocus;
+		// <![CDATA[
+		// for allowing using http://.....?mindmap.mm mode
+		function getMap(map){
+		  var result=map;
+		  var loc=document.location+'';
+		  if(loc.indexOf(".mm")>0 && loc.indexOf("?")>0){
+			result=loc.substring(loc.indexOf("?")+1);
+		  }
+		  return result;
+		}
+		var fo = new FlashObject("<?php echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/visorFreemind.swf", "visorFreeMind", "100%", "100%", 6, "#ffffff");
+		fo.addParam("quality", "high");
+		//fo.addParam("bgcolor", "#a0a0f0");
+		fo.addVariable("openUrl", "_blank");//Default value "_self"
+		fo.addVariable("startCollapsedToLevel","3");//Default value = "-1", meaning do nothing, the mindmap will open as it was saved. The root node, or central node, of your mindmap is level zero. You could force the browser to open (unfold) your mind map to an expanded level using this variable.
+		fo.addVariable("maxNodeWidth","200");
+		//
+		fo.addVariable("mainNodeShape","elipse");//"rectangle", "elipse", "none". None hide the main node. Default is "elipse"
+		fo.addVariable("justMap","false");
+		fo.addVariable("initLoadFile",getMap("<?php echo $file_url_web; ?>"));
+		fo.addVariable("defaultToolTipWordWrap",200);//max width for tooltips. Default "600" pixels
+		fo.addVariable("offsetX","left");//for the center of the mindmap. Admit also "left" and "right"
+		fo.addVariable("offsetY","top");//for the center of the mindmap. Admit also "top" and "bottom"
+		fo.addVariable("buttonsPos","top");//"top" or "bottom"
+		fo.addVariable("min_alpha_buttons",20);//for dynamic view of buttons
+		fo.addVariable("max_alpha_buttons",100);//for dynamic view of buttons
+		fo.addVariable("scaleTooltips","false");
+		//
+		//extra
+		//fo.addVariable("CSSFile","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/flashfreemind.css");//
+		//fo.addVariable("baseImagePath","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/");//		
+		//fo.addVariable("justMap","false");//Hides all the upper control options. Default value "false"
+		//fo.addVariable("noElipseMode","anyvalue");//for changing to old elipseNode edges. Default = not set
+		//fo.addVariable("ShotsWidth","200");//The width of snapshots, in pixels.
+		//fo.addVariable("genAllShots","true");//Preview shots (like the samples on the Shots Width page) will be generated for all linked maps when your main map loads. If you have a lot of linked maps, this could take some time to complete
+		//fo.addVariable("unfoldAll","true"); //For each mindmap loaded start the display with all nodes unfolded. Another variable to be wary of!
+		//fo.addVariable("toolTipsBgColor","0xaaeeaa");: bgcolor for tooltips ej;"0xaaeeaa"
+		//fo.addVariable("defaultWordWrap","300"); //default 600
+		//
+		
+		fo.write("flashcontent");
+		// ]]>
+	</script>
+	
+	<?php
+
+}
+
 
 if ($is_nanogong_available) {
 

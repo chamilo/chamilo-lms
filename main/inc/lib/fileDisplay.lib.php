@@ -69,6 +69,7 @@ function choose_image($file_name)
         $type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
         $type['epub'      ] = array('epub');
 		$type['java'      ] = array('class','jar');
+		$type['freemind'  ] = array('mm');
 
         $image['word'      ] = 'word.gif';
         $image['web'       ] = 'file_html.gif';
@@ -89,6 +90,7 @@ function choose_image($file_name)
         $image['oo_draw'   ] = 'file_oo_draw.gif';
         $image['epub'      ] = 'file_epub.gif';
 		$image['java'      ] = 'file_java.png';
+		$image['freemind'  ] = 'file_freemind.png';
     }
 
     /* FUNCTION CORE */

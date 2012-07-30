@@ -532,7 +532,12 @@ class SocialManager extends UserManager {
         $user_info = api_get_user_info($user_id, true);
         
         $current_user_id = api_get_user_id();
-        $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
+        
+        if ($current_user_id == $user_id) {
+            $user_friend_relation = null;
+        } else {
+            $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
+        }
         
         $show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
         //$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');

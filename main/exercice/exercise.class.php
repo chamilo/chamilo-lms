@@ -1663,16 +1663,7 @@ class Exercise {
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
                 
-                /*
-	       		$('#text-content').epiclock({
-	         		mode: EC_COUNTDOWN,
-	         		format: 'x{ : } i{ : } s{}',
-	         		target: expired_date,
-	         		onTimer: function(){ onExpiredTimeExercise(); }
-	       		}).clocks(EC_RUN);
-                */
-                
-                $('#text-content').epiclock({
+                $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left}, 
                     format: 'x:i:s', 
@@ -3640,7 +3631,7 @@ class Exercise {
     }
     
     function return_time_left_div() {       
-        return '<div id="text-content" class="well count_down"></div>';
+        return '<div id="exercise_clock_warning" class="well count_down"></div>';
     }
 }
 endif;

@@ -16,11 +16,11 @@ class AnnouncementManager  {
 	public function __construct() {
 	}
 
-	public function get_tags() {
+	public static function get_tags() {
 	    return array('((user_name))','((teacher_name))','((teacher_email))','((course_title))', '((course_link))');
 	}
 
-	public function parse_content($content, $course_code) {
+	public static function parse_content($content, $course_code) {
     	$reader_info  = api_get_user_info(api_get_user_id());
 		$course_info  = api_get_course_info($course_code);
 	    $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);

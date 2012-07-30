@@ -382,16 +382,16 @@ a:active {
     background-image: url(images/fondoHeader3.jpg);	    
 }
 
-.subnav .nav li a {
-    COLOR: #fff;    
+.subnav .nav > li > a {
+    color: #fff;    
 }
 .subnav a:hover {
-    COLOR: #9ba408;
+    color: #9ba408;
     background: none;
 }
 
 .subnav #current A {
-    COLOR: #999
+    color: #999;
 }
 
 .subnav .nav > li > a {

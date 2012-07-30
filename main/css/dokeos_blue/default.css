@@ -365,9 +365,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #4C4C4C;
 }
-.subnav .nav li a {
+
+.subnav .nav > li > a {
     color:white;
 }
+
 .subnav #current a {
     background-color: #406FB2; /* Old browsers */
     background-repeat: repeat-x; /* Repeat the gradient */

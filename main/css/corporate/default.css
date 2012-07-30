@@ -57,7 +57,7 @@ input[type=button], input[type=submit] {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #CCCCCC;
 }
-.subnav .nav li a {
+.subnav .nav > li > a {
     color:#888;
 }
 .subnav a :hover {

@@ -64,7 +64,7 @@ a:active {
   border-right-color: #D60B19;  
 }
 
-.subnav .nav li a {
+.subnav .nav > li > a {
     color:#fff;
 }
 

@@ -338,7 +338,7 @@ a:active {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4C4C4C', endColorstr='#747474',GradientType=0 ); /* IE6-9 */
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */    
 }
-.subnav .nav li a {
+.subnav .nav > li > a {
     color:white;
 }
 

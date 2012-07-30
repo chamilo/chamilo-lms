@@ -391,7 +391,7 @@ a:active {
     background-image: linear-gradient(top, #4C4C4C 0%, #747474 100%); /* W3C */
     border: 1px solid #B49FA6;
 }
-.subnav .nav li a {
+.subnav .nav > li > a {
     color:white;
 }
 

@@ -935,6 +935,7 @@ $Literal20 = "twenty";
 $DateTime = "Date & time";
 $Item = "Item";
 $Never = "Never";
+$YouWillBeRedirectedInXSeconds = "Just a moment, please. You will be redirected in %s seconds...";
 $NumberOfCoursesPublic = "Number of public courses";
 $NumberOfCoursesOpen = "Number of open courses";
 $NumberOfCoursesPrivate = "Number of private courses";

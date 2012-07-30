@@ -214,4 +214,8 @@ $CreateFolder = "Crear directori";
 $HelpDefaultDirDocuments = "Aquest directori conté els arxius subministrats per defecte. Pot eliminar o afegir altres arxius, però si un arxiu està ocult quan és inserit en un document web els estudiants tampoc podran veure'l aquí. Quan insereixi un arxiu en un document web faci'l visible prèviament. Els directoris poden seguir ocults.";
 $HelpSharedFolder = "Aquest directori conté els arxius que els estudiants (i Vè.) envien a un curs a través de l'editor si no ho fan des de l'eina grups. Per defecte seran visibles per qualsevol professor, però estaran ocults per a altres estudiants tret que accedeixin a ells mitjançant un accés directe. Si fa visible el directori d'un estudiant altres estudiants podran veure tot el que contingui.";
 $TemplateImage = "Imatge de la plantilla";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Per reproduir el contingut multimèdia o bé haureu d'actualitzar el vostre navegador a una versió actual o bé actualitzar el vostre connector de Flash. Comproveu si l'arxiu té una extensió correcta.";
+$UpdateRequire = "Actualització obligatòria";
+$MoveElement = "Mou element";
+$CertificateName = "Nom del certificat";
 ?>

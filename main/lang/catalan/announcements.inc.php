@@ -56,4 +56,7 @@ $AnnounceSentToUserSelection = "Anunci enviat a una selecció d'usuaris";
 $SendAnnouncement = "Enviar anunci";
 $ModifyAnnouncement = "Modificar anunci";
 $ButtonPublishAnnouncement = "Publicar anunci";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Benvolgut usuari, s'ha activitat el seu compte a la plataforma. Autentiqueu-vos i gaudiu dels vostres cursos.";
+$AddAsAnnouncement = "Afegeix-ho com un anunci";
+$AnnouncementForGroup = "Anuncis per a un grup";
 ?>

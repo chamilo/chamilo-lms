@@ -62,7 +62,10 @@
 <script>
 /* Makes row highlighting possible */
 $(document).ready( function() {
+    //Chosen select
     $(".chzn-select").chosen();     
+    
+    //Table highlight
     $("form .data_table input:checkbox").click(function() {
         if ($(this).is(":checked")) {
             $(this).parentsUntil("tr").parent().addClass("row_selected");
@@ -71,11 +74,13 @@ $(document).ready( function() {
             $(this).parentsUntil("tr").parent().removeClass("row_selected");
         }    
     });
-
+    
+    //Tool tip (in exercises)
     var tip_options = {
         placement : 'right'
     }
     $('.boot-tooltip').tooltip(tip_options);
+   
 });
 </script>
 {% endraw %}

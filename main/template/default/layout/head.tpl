@@ -86,7 +86,7 @@ $(window).resize(function() {
 $(document).scroll(function() {
 
     // Top bar scroll effect
-    if ($('body').width() > 959) {     
+    if ($('body').width() > 959) {   
         if ($('.subnav').length) {
             if (!$('.subnav').attr('data-top')) {
                 // If already fixed, then do nothing
@@ -105,6 +105,28 @@ $(document).scroll(function() {
         }
     } else {
         //$('.subnav .brand').hide();
+    }
+    
+    
+    //Exercise warning fixed at the top
+    var fixed =  $("#exercise_clock_warning");
+    if (fixed.length) {        
+        if (!fixed.attr('data-top')) {
+            // If already fixed, then do nothing
+            if (fixed.hasClass('subnav-fixed')) return;
+            // Remember top position
+            var offset = fixed.offset();
+            fixed.attr('data-top', offset.top);
+            fixed.css('width', '100%');
+        }
+
+        if (fixed.attr('data-top') - fixed.outerHeight() <= $(this).scrollTop()) {
+            fixed.addClass('subnav-fixed');
+            fixed.css('width', '100%');
+        } else {
+            fixed.removeClass('subnav-fixed');
+            fixed.css('width', '200px');
+        }
     }
 
     //Admin -> Settings toolbar
@@ -159,8 +181,10 @@ $(document).scroll(function() {
             }
         }
     }
-});
-
+}); 
+    
+    
+/*
 function isScrolledIntoView(elem) {
     var docViewTop = $(window).scrollTop();
     var docViewBottom = docViewTop + $(window).height();
@@ -169,7 +193,7 @@ function isScrolledIntoView(elem) {
     var elemBottom = elemTop + $(elem).height();
 
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-}
+}*/
 
 
 $(function() {

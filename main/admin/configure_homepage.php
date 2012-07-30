@@ -175,7 +175,7 @@ if (!empty($action)) {
 				}
                 
                 if (EventsMail::check_if_using_class('portal_homepage_edited')) {              
-                    EventsDispatcher::events('portal_homepage_edited');
+                    EventsDispatcher::events('portal_homepage_edited',array('about_user' => api_get_user_id()));
                 }
 
 				break;

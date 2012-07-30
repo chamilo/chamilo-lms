@@ -85,7 +85,7 @@ class TableSort {
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
-	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR, $doc_filter = false) {
+	public static function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR, $doc_filter = false) {
 
 		if (!is_array($data) || empty($data)) {
 			return array();
@@ -208,7 +208,7 @@ class TableSort {
 	 * @todo Take locale into account (eg decimal point or comma ?)
 	 * @author bart.mollet@hogent.be
 	 */
-	private function is_numeric_column(& $data, $column) {
+	private static function is_numeric_column(& $data, $column) {
 		$is_numeric = true;
 		foreach ($data as $index => & $row) {
 			$is_numeric &= is_numeric(strip_tags($row[$column]));
@@ -226,7 +226,7 @@ class TableSort {
 	 * @return bool				TRUE if column contains only dates, FALSE otherwise
 	 * @author bart.mollet@hogent.be
 	 */
-	private function is_date_column(& $data, $column) {
+	private static function is_date_column(& $data, $column) {
 		$is_date = true;
 		foreach ($data as $index => & $row) {
 			if (strlen(strip_tags($row[$column])) != 0) {
@@ -251,7 +251,7 @@ class TableSort {
 	 * @return bool				TRUE if column contains only images, FALSE otherwise
 	 * @author bart.mollet@hogent.be
 	 */
-	private function is_image_column(& $data, $column) {
+	private static function is_image_column(& $data, $column) {
 		$is_image = true;
 		foreach ($data as $index => & $row) {
 			$is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag

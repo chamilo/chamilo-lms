@@ -331,7 +331,7 @@ class Security {
      * @param	string content to be filter
      * @return 	string
      */
-    function filter_terms($text) {
+    static function filter_terms($text) {
     	static $bad_terms = array();
 
     	if (empty($bad_terms)) {

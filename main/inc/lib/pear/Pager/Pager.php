@@ -166,7 +166,7 @@ class Pager
      * @static
      * @access public
      */
-    function &factory($options = array())
+    static function &factory($options = array())
     {
         $mode = (isset($options['mode']) ? ucfirst($options['mode']) : 'Jumping');
         $classname = 'Pager_' . $mode;

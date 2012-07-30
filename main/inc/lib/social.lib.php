@@ -920,7 +920,7 @@ class SocialManager extends UserManager {
         }
     }
     
-    public function social_wrapper_div($content, $span_count) {
+    public static function social_wrapper_div($content, $span_count) {
         $span_count = intval($span_count);
         $html = '<div class="span'.$span_count.'">';
         $html .= '<div class="well_border">';

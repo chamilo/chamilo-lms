@@ -1,4 +1,4 @@
-<?php
+'<?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
@@ -322,7 +322,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     * @access    private
     * @return    mixed
     */
-    function _findValue()
+    function _findValue(&$values = null)
     {
         if (empty($_FILES)) {
             return null;

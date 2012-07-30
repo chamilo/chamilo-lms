@@ -76,7 +76,7 @@ class Result
 	 * @param $user_id user id (student)
 	 * @param $evaluation_id evaluation where this is a result for
 	 */
-	public function load ($id = null, $user_id = null, $evaluation_id = null) {
+	public static function load ($id = null, $user_id = null, $evaluation_id = null) {
 		$tbl_grade_results 				= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$tbl_course_rel_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_rel_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);

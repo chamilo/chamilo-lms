@@ -180,7 +180,7 @@ if ((isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) && (isset($
 
 $language_name=get_lang('CreateSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
 
-if (ckeck_if_is_parent_of_sub_language ($parent_id)===true && isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
+if (ckeck_if_is_parent_of_sub_language($parent_id)===true && isset($_GET['action']) && $_GET['action']=='deletesublanguage') {
 	$language_name=get_lang('DeleteSubLanguage');
 }
 
@@ -253,7 +253,7 @@ Display :: display_header($language_name);
 echo $msg;
 
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
-	$rs = SubLanguageManager::remove_sub_language($english_name);
+	$rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
 	if ($rs===true) {
 		Display::display_confirmation_message(get_lang('TheSubLanguageHasBeenRemoved'));
 	} else {

@@ -1630,7 +1630,7 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 	$exercise_id 		= intval($exercise_id);
 	$course_code 		= Database::escape_string($course_code);
 	$session_id 		= intval($session_id);
-   
+  
 
 	$sql = "SELECT DISTINCT exe_user_id
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
@@ -1639,10 +1639,43 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND            
 					question_id 	= $question_id AND
-                    answer          <> 0 AND   
-                    cu.status          = ".STUDENT." AND 
-                    relation_type <> 2 AND
-                    e.status          = ''"; 
+                    answer          <> 0 AND 
+                    cu.status       = ".STUDENT." AND 
+                    relation_type  <> 2 AND
+                    e.status        = ''";
+    
+	$result = Database::query($sql);
+	$return = 0;
+	if ($result) {
+		$return = Database::num_rows($result);
+	}
+	return $return;
+}
+
+function get_number_students_answer_hotspot_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
+	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$track_hotspot		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+	$question_id 		= intval($question_id);
+    $answer_id          = intval($answer_id);
+	$exercise_id 		= intval($exercise_id);
+	$course_code 		= Database::escape_string($course_code);
+	$session_id 		= intval($session_id);    
+
+	$sql = "SELECT DISTINCT exe_user_id
+			FROM $track_exercises e INNER JOIN $track_hotspot a ON (a.hotspot_exe_id = e.exe_id) INNER JOIN $course_user cu
+                ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id
+			WHERE 	exe_exo_id              = $exercise_id AND
+					a.hotspot_course_code 	= '$course_code' AND
+					e.session_id            = $session_id AND
+                    hotspot_answer_id       = $answer_id AND                    
+					hotspot_question_id     = $question_id AND 
+                    cu.status               = ".STUDENT." AND
+                    hotspot_correct         =  1 AND
+                    relation_type           <> 2 AND
+                    e.status                = ''";
+    
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {
@@ -1652,7 +1685,7 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 }
 
 
-function get_number_students_answer_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
+function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $answer = null, $fill_in_blank_answer = null) {
 	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1661,25 +1694,160 @@ function get_number_students_answer_count($answer_id, $question_id,  $exercise_i
     $answer_id          = intval($answer_id);
 	$exercise_id 		= intval($exercise_id);
 	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
-
-	$sql = "SELECT DISTINCT exe_user_id
+	$session_id 		= intval($session_id);    
+    
+    if ($question_type == FILL_IN_BLANKS) {
+        $answer_condition = "";
+        $select_condition = " e.exe_id, answer ";
+    } else {
+        $answer_condition = "answer       	= $answer_id AND ";
+        $select_condition = "DISTINCT exe_user_id";
+    }
+    
+	$sql = "SELECT $select_condition
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
                 ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
 					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND
-                    answer       	= $answer_id AND                    
+                              
 					question_id 	= $question_id AND 
-                    cu.status        = ".STUDENT." AND 
+                    cu.status        = ".STUDENT." AND                     
                     relation_type <> 2 AND
                     e.status = ''";
+    
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {
-		$return = Database::num_rows($result);
+        if ($question_type == FILL_IN_BLANKS) {
+            $good_answers = 0;            
+            while ($row = Database::fetch_array($result, 'ASSOC')) {   
+                $fill_blank = check_fill_in_blanks($answer, $row['answer']);                
+                if (isset($fill_blank[$fill_in_blank_answer]) && $fill_blank[$fill_in_blank_answer] == 1 ) {                    
+                    $good_answers++;
+                }
+            }
+            return $good_answers;
+        } else {
+            $return = Database::num_rows($result);
+        }
 	}
 	return $return;
+}
+
+
+function check_fill_in_blanks($answer, $user_answer) {    
+    // the question is encoded like this
+    // [A] B [C] D [E] F::10,10,10@1
+    // number 1 before the "@" means that is a switchable fill in blank question
+    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+    // means that is a normal fill blank question
+    // first we explode the "::"
+    $pre_array = explode('::', $answer);
+    // is switchable fill blank or not
+    $last = count($pre_array) - 1;
+    $is_set_switchable = explode('@', $pre_array[$last]);
+    $switchable_answer_set = false;
+    if (isset ($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
+        $switchable_answer_set = true;
+    }
+    $answer = '';
+    for ($k = 0; $k < $last; $k++) {
+        $answer .= $pre_array[$k];
+    }
+    // splits weightings that are joined with a comma
+    $answerWeighting = explode(',', $is_set_switchable[0]);
+
+    // we save the answer because it will be modified
+    //$temp = $answer;
+    $temp = $answer;
+
+    $answer = '';
+    $j = 0;
+    //initialise answer tags
+    $user_tags = $correct_tags = $real_text = array ();
+    // the loop will stop at the end of the text
+    while (1) {
+        // quits the loop if there are no more blanks (detect '[')
+        if (($pos = api_strpos($temp, '[')) === false) {
+            // adds the end of the text
+            $answer = $temp;
+            /* // Deprecated code
+             // TeX parsing - replacement of texcode tags
+            $texstring = api_parse_tex($texstring);
+            $answer = str_replace("{texcode}", $texstring, $answer);
+            */
+            $real_text[] = $answer;
+            break; //no more "blanks", quit the loop
+        }
+        // adds the piece of text that is before the blank
+        //and ends with '[' into a general storage array
+        $real_text[] = api_substr($temp, 0, $pos +1);
+        $answer .= api_substr($temp, 0, $pos +1);
+        //take the string remaining (after the last "[" we found)
+        $temp = api_substr($temp, $pos +1);
+        // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+        if (($pos = api_strpos($temp, ']')) === false) {
+            // adds the end of the text
+            $answer .= $temp;
+            break;
+        }
+        
+        $str = $user_answer;
+
+        preg_match_all('#\[([^[]*)\]#', $str, $arr);
+        $str = str_replace('\r\n', '', $str);
+        $choice = $arr[1];
+
+        $tmp = api_strrpos($choice[$j],' / ');
+        $choice[$j] = api_substr($choice[$j],0,$tmp);
+        $choice[$j] = trim($choice[$j]);
+
+        //Needed to let characters ' and " to work as part of an answer
+        $choice[$j] = stripslashes($choice[$j]);
+
+        $user_tags[] = api_strtolower($choice[$j]);
+        //put the contents of the [] answer tag into correct_tags[]
+        $correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
+        $j++;
+        $temp = api_substr($temp, $pos +1);        
+    }
+    
+    $answer = '';
+    $real_correct_tags = $correct_tags;
+    $chosen_list = array();
+    
+    $good_answer = array();
+    
+    for ($i = 0; $i < count($real_correct_tags); $i++) {        
+        if (!$switchable_answer_set) {
+            //needed to parse ' and " characters
+            $user_tags[$i] = stripslashes($user_tags[$i]);
+            if ($correct_tags[$i] == $user_tags[$i]) {                    
+                $good_answer[$correct_tags[$i]] = 1;
+            } elseif (!empty ($user_tags[$i])) {                
+                $good_answer[$correct_tags[$i]] = 0;
+            } else {
+                $good_answer[$correct_tags[$i]] = 0;
+            }
+        } else {
+            // switchable fill in the blanks
+            if (in_array($user_tags[$i], $correct_tags)) {                
+                $correct_tags = array_diff($correct_tags, $chosen_list);
+                $good_answer[$correct_tags[$i]] = 1;
+            } elseif (!empty ($user_tags[$i])) {                
+                $good_answer[$correct_tags[$i]] = 0;
+            } else {                
+                $good_answer[$correct_tags[$i]] = 0;
+            }
+        }
+        // adds the correct word, followed by ] to close the blank
+        $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
+        if (isset ($real_text[$i +1])) {
+            $answer .= $real_text[$i +1];
+        }
+    }    
+    return $good_answer;    
 }
 
 

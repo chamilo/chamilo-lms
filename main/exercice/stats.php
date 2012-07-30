@@ -104,14 +104,16 @@ if (!empty($question_list)) {
 		$answer_count = $answer->selectNbrAnswers();
         
         for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
-            $answer_info = $answer->selectAnswer($answer_id);
-            $is_correct  = $answer->isCorrect($answer_id);
+            $answer_info    = $answer->selectAnswer($answer_id);
+            $is_correct     = $answer->isCorrect($answer_id);
             $correct_answer = $is_correct == 1 ? get_lang('Yes') : get_lang('No');
+            $real_answer_id = $answer->selectAutoId($answer_id);
             
             //$data[$id]['name'] .=$answer_count;
             //Overwriting values depending of the question
             switch($question_obj->type) {
                 case FILL_IN_BLANKS :
+                    $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
                     $correct_answer = $is_correct;                
                     $answers = $objExercise->fill_in_blank_answer_to_array($answer_info);
@@ -121,13 +123,61 @@ if (!empty($question_list)) {
                             $data[$id]['name']      = cut($question_obj->question, 100);
                         } else {
                             $data[$id]['name']      = '-';    
+                        
+                            
                         }
-                        $data[$id]['answer'] 	= $answer_item;
-                        $data[$id]['correct'] 	= get_lang('Yes');
-                        $data[$id]['attempts'] 	= '-';
+                        $data[$id]['answer'] 	= $answer_item; 
+                        
+                        $answer_item = api_substr($answer_item, 1);
+                        $answer_item = api_substr($answer_item, 0, api_strlen($answer_item) -1);
+                                                                      
+                        $data[$id]['correct'] 	= '-';
+                        
+                        $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), $question_obj->type, $answer_info_db, $answer_item);
+                        
+                        $percentange = $count/$count_students*100;
+                        $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
+                    
                         $id++;
-                        $counter++;
+                        $counter++;                        
                     }
+                    break;
+                case MATCHING:
+                    if ($is_correct == 0) {                   
+                        if ($answer_id == 1) {                
+                            $data[$id]['name']      = cut($question_obj->question, 100);
+                        } else {
+                            $data[$id]['name']      = '-';
+                        }
+                        
+                        $correct = '';
+                        for ($i = 1; $i <= $answer_count; $i++) {
+                             $is_correct_i     = $answer->isCorrect($i);
+                             if ($is_correct_i != 0 && $is_correct_i == $answer_id) {
+                                 $correct = $answer->selectAnswer($i);
+                             }
+                             
+                        }
+                        $data[$id]['answer'] 	= $answer_info;
+                        $data[$id]['correct'] 	= $correct;
+
+                        $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), $real_answer_id);                        
+                        $percentange = $count/$count_students*100;
+                        $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
+                    }                    
+                    break;
+                case HOT_SPOT:
+                    if ($answer_id == 1) {                
+                        $data[$id]['name']      = cut($question_obj->question, 100);
+                    } else {
+                        $data[$id]['name']      = '-';
+                    }
+                    $data[$id]['answer'] 	= $answer_info;
+                    $data[$id]['correct'] 	= '-';
+                    
+                    $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());                    
+                    $percentange = $count/$count_students*100;
+                    $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);                    
                     break;
                 default:
                     if ($answer_id == 1) {                
@@ -137,7 +187,7 @@ if (!empty($question_list)) {
                     }
                     $data[$id]['answer'] 	= $answer_info;
                     $data[$id]['correct'] 	= $correct_answer;
-                    $real_answer_id         = $answer->selectAutoId($answer_id);            
+                    
                     $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
                     $percentange = $count/$count_students*100;
                     $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);

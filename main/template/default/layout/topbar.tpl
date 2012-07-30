@@ -2,12 +2,7 @@
 {% if show_toolbar == 1 %}
     <div id="topbar" class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <div class="container-fluid">
-                <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+            <div class="container-fluid">              
                 <a class="brand" href="{{ _p.web }}">
                     {{ "siteName" | get_setting }}
                 </a>

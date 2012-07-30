@@ -109,14 +109,14 @@ $currentUserFirstName 	= $_user['firstName'];
 $currentUserLastName 	= $_user['lastName'];
 $currentUserEmail 		= $_user['mail'];
 
-$description 	        = isset($_REQUEST['description']) ? Database::escape_string($_REQUEST['description']) : '';
-
 $item_id 		        = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 $parent_id 		        = isset($_REQUEST['parent_id']) ? Database::escape_string($_REQUEST['parent_id']) : '';
 $origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
 $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
-$title 			        = isset($_REQUEST['title']) ? Database::escape_string($_REQUEST['title']) : '';
+$title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
+$description 	        = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
+
 $uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
 
 // get data for publication assignment

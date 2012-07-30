@@ -1464,6 +1464,7 @@ class Display {
     }    
     
     public static function actions($items) {
+        $html = null;
         if (!empty($items)) {
             $html = '<div class="new_actions"><ul class="nav nav-pills">';        
             foreach ($items as $value) {

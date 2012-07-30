@@ -1056,9 +1056,9 @@ function update_gradebook_score_display_custom_values($values) {
     $scoredisplay->update_custom_score_display_settings($final);
 }
 
-function generate_settings_form($settings, $settings_by_access_list) {
-    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+function generate_settings_form($settings, $settings_by_access_list) {    
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
+    $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     
@@ -1076,7 +1076,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
     $default_values = array();    
     
     $i = 0;
-    foreach ($settings as $row) {       
+    foreach ($settings as $row) {      
     	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; } 
         
         if ( $_configuration['multiple_access_urls']) {
@@ -1265,15 +1265,18 @@ function generate_settings_form($settings, $settings_by_access_list) {
         }
                                 
         switch ($row['variable']) {
-            case 'pdf_export_watermark_enable':
-                $url =  PDF::get_watermark($course_code);
+            case 'pdf_export_watermark_enable':                
+                $url =  PDF::get_watermark(null);                
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+                
                 if ($url != false) {                
                     $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
                     $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
                 }   
+                
                 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-                $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+                $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+                
                 break;
             case 'timezone_value':
                 $timezone = $row['selected_value'];

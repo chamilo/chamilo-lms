@@ -299,7 +299,7 @@ class PDF {
      * @param   string  course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
      */
-    public function get_watermark($course_code = null) {
+    public static function get_watermark($course_code = null) {
         $web_path = false;
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);

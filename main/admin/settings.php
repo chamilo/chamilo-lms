@@ -58,7 +58,6 @@ if (isset($_POST['style'])) {
     Display::$preview_style = $_POST['style'];
 }
 
-
 // Database table definitions.
 $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
@@ -130,6 +129,7 @@ function get_settings($category = null) {
     }
     return $settings;
 }
+
 
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {

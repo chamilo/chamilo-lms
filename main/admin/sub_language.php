@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*		INIT SECTION	*/
+/**
+ * Script for sub-language administration
+ * @package chamilo.admin.sub_language
+ */
+/**
+ * Init section
+ */
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -47,7 +53,9 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 	});
  		});
 </script>';
-/* 		MAIN CODE	*/
+/**
+ * Main code
+ */
 // setting the name of the tool
 $tool_name = get_lang('CreateSubLanguage');
 // setting breadcrumbs
@@ -265,7 +273,9 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 	$list_info = array_unique_dimensional($list_info);
 	return $list_info;
 }
-
+/**
+ * Output
+ */
 //allow see data in sortetable
 if (isset($_REQUEST['txt_search_word'])) {
 	//@todo fix to accept a char with 1 char

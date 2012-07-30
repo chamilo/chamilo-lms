@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 $language_file = 'admin';
+$this_script = 'sub_language';
 require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 

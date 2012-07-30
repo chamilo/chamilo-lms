@@ -176,7 +176,7 @@ class FCKeditor
 
         $HtmlValue = htmlspecialchars( $this->Value ) ;
         $Html = '' ;
-        if ( $this->IsCompatible() ) {
+        if ( FCKeditor::IsCompatible() ) {
             if ( api_get_setting('server_type') == 'test' )
                 $File = 'fckeditor.original.html' ;
             else
@@ -216,7 +216,7 @@ class FCKeditor
      *
      * @return boolean
      */
-    public function IsCompatible()
+    public static function IsCompatible()
     {
         return FCKeditor_IsCompatibleBrowser() ;
     }

@@ -72,7 +72,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 	 * Export the date value in MySQL format
 	 * @return string YYYY-MM-DD HH:II:SS
 	 */
-	function exportValue()
+	function exportValue(&$submitValues, $assoc = false)
 	{
 		$values = parent::getValue();
 		$y = $values['Y'][0];

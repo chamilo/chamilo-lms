@@ -1356,7 +1356,7 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    boolean
      */
-    function isTypeRegistered($type)
+    static function isTypeRegistered($type)
     {
         return isset($GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][strtolower($type)]);
     } // end func isTypeRegistered

@@ -1642,8 +1642,7 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
                     answer          <> '0' AND 
                     cu.status       = ".STUDENT." AND 
                     relation_type  <> 2 AND
-                    e.status        = ''";
-    var_dump($sql);
+                    e.status        = ''";    
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {

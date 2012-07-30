@@ -9,7 +9,7 @@
 * @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-use \ChamiloSession as Session;
+//use \ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
@@ -510,6 +510,6 @@ $course_info = api_get_course_info();
 $result = learnpath::generate_learning_path_folder($course_info);
 
 //Deleting the objects
-Session::erase('oLP');
-Session::erase('lpobject');
+//Session::erase('oLP');
+//Session::erase('lpobject');
 Display::display_footer();

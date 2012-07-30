@@ -84,7 +84,7 @@ switch($type) {
 		break;
 	case 'personal':
         if (api_is_anonymous()) {
-            api_not_allowed();
+            api_not_allowed(true);
         }
         $extra_field_data = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'google_calendar_url');
         if (!empty($extra_field_data) && isset($extra_field_data['google_calendar_url']) && !empty($extra_field_data['google_calendar_url'])) {            

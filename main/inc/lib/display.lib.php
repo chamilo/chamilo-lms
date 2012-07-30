@@ -914,6 +914,7 @@ class Display {
         }
 
         $json_encode = json_encode($obj);
+        
         if (!empty($data)) {
             //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
@@ -921,6 +922,8 @@ class Display {
 
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
+        //wrap_cell is not a valid jqgrid attributes is a hack to wrap a text
+        $json_encode = str_replace('"wrap_cell":true','cellattr:function(rowId, tv, rawObject, cm, rdata) { return \'style ="white-space: normal;"\'}',$json_encode);
         $json_encode = str_replace(':"false"',':false',$json_encode);
         $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
 

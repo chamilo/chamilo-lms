@@ -1655,7 +1655,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
                 $work['username'] = Display::div($work['username'], array('class' => $class));
                 
-                $work['title'] = Display::div(cut($work['title'], 20), array('class' => $class));
+                $work['title'] = Display::div($work['title'], array('class' => $class));
            
                 //Type
                 $work['type'] = build_document_icon_tag('file', $work['file']);  

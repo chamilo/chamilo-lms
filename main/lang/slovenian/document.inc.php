@@ -211,15 +211,14 @@ $CreateTheDocument = "Shrani dokument";
 $CreateTemplate = "Ustvari predlogo";
 $SharedFolder = "Mapa v skupni rabi";
 $CreateFolder = "Ustvari mapo";
-$HelpDefaultDirDocuments = "INFORMACIJA VIDNA ZGOLJ UČITELJEM: Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstranite ali pa dodate novo. V primeru, da so datoteke označene kot skrite in kot take vstavljene v spletni dokument, jih tečajniki ne bodo videli v svojem področju dokumentov. Ko vstavljate datoteko v spletni dokument, se najprej prepričajte, da je viden. Mape v splošnem lahko ostanejo skrite.";
+$HelpDefaultDirDocuments = "INFORMACIJA VIDNA ZGOLJ UČITELJEM:\nTa mapa vsebuje privzeti arhiv. Vsebino lahko odstranite ali pa dodate novo. V primeru, da so datoteke označene kot skrite in kot take vstavljene v spletni dokument, jih tečajniki ne bodo videli v svojem področju dokumentov. Ko vstavljate datoteko v spletni dokument, se najprej prepričajte, da je viden. Mape v splošnem lahko ostanejo skrite.";
 $HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih tečajniki (ali vi sami) prenesete v področje tečaja preko urejevalnika (če jih niso/niste prenesli preko orodij skupine). Privzeto bodo vidne vsem učiteljem in skrite tečajnikom (razen v primeru direktnega dostopa do datoteke). V primeru, da naredite eno od map tečajnikom vidno, bo celotna njena vsebina vidna vsem tečajnikom.";
 $TemplateImage = "Ikona predloge";
 $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Za predvajanje medijske vsebine boste morali nadgraditi vaš brskalnik na zadnjo različico ali pa nadgraditi <a href=\"http://get.adobe.com/flashplayer/\">Flash vtičnik</a>. Preverite, če ima datoteka ustrezno končnico.";
 $UpdateRequire = "Nadgraditev zahtevana";
 $MoveElement = "Premakni dokument";
 $CertificateName = "Ime";
-$HelpFolderLearningPaths = "INFORMACIJA VIDNA ZGOLJ UČITELJEM<br /><br />
-Ta mapa vsebuje dokumente, ki so biti ustvarjeni z orodjem Učne poti. V mapi lahko urejate HTML dokumente, ki so bili ustvarjeni z uvozom vsebine iz učnih poti, kot tudi tiste, ki so bili uvoženi preko orodja Chamilo Rapid. Priporočljivo je, da to mapo skrijete pred tečajniki.";
+$HelpFolderLearningPaths = "INFORMACIJA VIDNA ZGOLJ UČITELJEM\nTa mapa vsebuje dokumente, ki so biti ustvarjeni z orodjem Učne poti. V mapi lahko urejate HTML dokumente, ki so bili ustvarjeni z uvozom vsebine iz učnih poti, kot tudi tiste, ki so bili uvoženi preko orodja Chamilo Rapid. Priporočljivo je, da to mapo skrijete pred tečajniki.";
 $CopyToMyFiles = "Prepiši v moje osebno področje datotek";
 $Export2PDF = "Izvozi v PDF";
 $ResourceShared = "Resurs v skupni rabi";
@@ -232,15 +231,13 @@ $FileExistsChangeToSave = "Datoteka s tem imenom že obstaja. Izberite drugo ime
 $FileSavedAs = "Datoteka je bila shranjena kot";
 $FileExportAs = "Datoeka je bila izvožena kot";
 $UserFolder = "Uporabnikova mapa";
-$HelpUsersFolder = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM:<br /><br />
-Mapa uporabnikov vsebuje mapo za vsakega uporabnika, ki je dostopil do nje preko orodja dokumentov ali pa je vanjo poslal dokument preko urejevalnika na platformi. V primeru, da noben od naštetih dogodkov ni nastopil, uporabnikova mapa ni bila kreirana. V primeru skupin, se datoteke poslane preko urejevalnika platforme dodajo mapi skupine, ki je dosegljiva zgolj tečajnikom te skupine.<br /><br />
+$HelpUsersFolder = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM:\nMapa uporabnikov vsebuje mapo za vsakega uporabnika, ki je dostopil do nje preko orodja dokumentov ali pa je vanjo poslal dokument preko urejevalnika na platformi. V primeru, da noben od naštetih dogodkov ni nastopil, uporabnikova mapa ni bila kreirana. V primeru skupin, se datoteke poslane preko urejevalnika platforme dodajo mapi skupine, ki je dosegljiva zgolj tečajnikom te skupine.<br /><br />
 Uporabnikova mapa in vsa njena vsebina je privzeto skrita vsem ostalim tečajnikov, vendar vsak tečajnik lahko vidi vsebino svoje mape preko urejevalnika platforme. V primeru, da nek tečajnik pozna naslov datoteke ali mape drugega tečajnika, bo lahko do te vsebine tudi dostopil.<br /><br />
 Če je mapa nekega tečajnika vidna, ostali tečajniki lahko vidijo, kaj ta mapa vsebuje. V tem primeru lahko tečajnik-lastnik mape (iz orodja dokumenti in zgolj za svoje mape/datoteke) ustvari in ureja spletne dokumente, pretvarja dokumente v predloge za osebno rabo, ustvarja in ureja slike v SVG in PNG formatu, pošilja dokumente, kreira mape, premika mape in datoteke, odstranjuje mape in datoteke, prenaša (gor/dol) arhive svojih map.<br /><br />
 Še več, orodje dokumentov je sinhronizirano z upravljalcem datotek urejevalnika besedila platforme, tako da se spremembe v enem izmed njih manifestirajo tudi v drugem.<br /><br />
 Kot taka, uporabniška mapa ni zgolj mesto za odlaganje datotek, temveč postaja upravljalec dokumentov tečajnikov med trajanjem tečaja. In, ne pozabite, da vsak  uporabnik lahko kopira vse datoteke, iz poljubne mape orodja dokumentov (če je, ali pa če ni, lastnik) v lasten portfolij ali osebne dokumente socialnega omrežja, ki mu je omogočen/dostopen.";
-$HelpFolderChat = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM: Ta mapa vsebuje vse seje, ki so bile odprte v klepetu. Čeprav je seje klepeta lahko trivialna, pa je občasno njena vsebina lahko takšna, da lahko služi kot del izobraževalnega procesa, npr. kot dodaten vir, dokument, ... Da bi sejo vključili v vire tečaja brez spremembe vidljivosti te mape, naredite vidno zgolj datoteko in naredite nanjo povezavo iz elementa platforme, kjer boste ta vir uporabili.";
-$HelpFolderCertificates = "INFORMACIJA VIDNA ZGOLJ UČITELJEM:<br /><br />
-Ta mapa vsebuje različne predloge certifikatov, ki se izdajajo kot rezultat uspešnosti izvedbe (dela) učnega procesa.Ni priporočljivo, da to mapo naredite vidno vsem uporabnikom.";
+$HelpFolderChat = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM:\nTa mapa vsebuje vse seje, ki so bile odprte v klepetu. Čeprav je seje klepeta lahko trivialna, pa je občasno njena vsebina lahko takšna, da lahko služi kot del izobraževalnega procesa, npr. kot dodaten vir, dokument, ... Da bi sejo vključili v vire tečaja brez spremembe vidljivosti te mape, naredite vidno zgolj datoteko in naredite nanjo povezavo iz elementa platforme, kjer boste ta vir uporabili.";
+$HelpFolderCertificates = "INFORMACIJA VIDNA ZGOLJ UČITELJEM:\nTa mapa vsebuje različne predloge certifikatov, ki se izdajajo kot rezultat uspešnosti izvedbe (dela) učnega procesa.Ni priporočljivo, da to mapo naredite vidno vsem uporabnikom.";
 $DestinationDirectory = "Ciljna mapa";
 $CreateAudio = "Ustvari avdio";
 $InsertText2Audio = "Vnesi besedilo, ki ga želiš pretvoriti v zvok";

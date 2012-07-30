@@ -49,23 +49,23 @@ class SocialManager extends UserManager {
         } else {
             return $friend_relation_list;
         }
-
     }
+    
     /**
      * Get relation type contact by name
      * @param string names of the kind of relation
      * @return int
      * @author isaac flores paz 
      */
-    public static function get_relation_type_by_name ($relation_type_name) {
-        $list_type_friend=array();
-        $list_type_friend=self::show_list_type_friends();
+    public static function get_relation_type_by_name ($relation_type_name) {        
+        $list_type_friend = self::show_list_type_friends();
         foreach ($list_type_friend as $value_type_friend) {
             if (strtolower($value_type_friend['title'])==$relation_type_name) {
                 return $value_type_friend['id'];
             }
         }
     }
+    
     /**
      * Get the kind of relation between contacts
      * @param int user id
@@ -80,7 +80,7 @@ class SocialManager extends UserManager {
               'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int)$user_id).' AND friend_user_id='.((int)$user_friend).' AND uf.relation_type <> '.USER_RELATION_TYPE_RRHH.' )';
         $res=Database::query($sql);
         if (Database::num_rows($res)>0) {
-            $row=Database::fetch_array($res,'ASSOC');
+            $row = Database::fetch_array($res,'ASSOC');
             return $row['id'];
         } else {
             return USER_UNKNOW;
@@ -529,7 +529,10 @@ class SocialManager extends UserManager {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }       
-        $user_info = api_get_user_info($user_id, true);  
+        $user_info = api_get_user_info($user_id, true);
+        
+        $current_user_id = api_get_user_id();
+        $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
         
         $show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
         //$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
@@ -560,7 +563,7 @@ class SocialManager extends UserManager {
               $html .= '</div>';
               
           } else {
-              $img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);              
+            $img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);              
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
@@ -616,17 +619,17 @@ class SocialManager extends UserManager {
         }
 
         if ($show == 'shared_profile') {
-                //echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-                $html .= '<div class="well sidebar-nav">
-                        <ul class="nav nav-list">';
+            //echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+            $html .= '<div class="well sidebar-nav">
+                    <ul class="nav nav-list">';
 
               // My own profile
-              if ($show_full_profile && $user_id == intval(api_get_user_id())) {
+            if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png',get_lang('Home'),array()).get_lang('Home').'</a></li>
                           <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png', get_lang('Messages'),array()).get_lang('Messages').$count_unread_message.'</a></li>';
                 $active = $show=='invitations' ? 'active' : null;
                 $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('Invitations'),array()).get_lang('Invitations').$total_invitations.'</a></li>';
-                
+
                 $html .= '<li class="active"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png', get_lang('ViewMySharedProfile'), array('style'=>'float:left')).''.get_lang('ViewMySharedProfile').'</a></li>
                           <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array()).get_lang('Friends').'</a></li>
                           <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group_s.png', get_lang('SocialGroups'),array()).get_lang('SocialGroups').'</a></li>';
@@ -634,28 +637,28 @@ class SocialManager extends UserManager {
                 $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array()).get_lang('Search').'</a></li>';
                 $active = $show=='myfiles' ? 'active' : null;
                 $html .= '<li class="'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase.png',get_lang('MyFiles'),array(),16).get_lang('MyFiles').'</a></li>';
-              }
+            }
             
-              // My friend profile
-              
-              if ($user_id != api_get_user_id()) {
-                  $html .=  '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
-                  $html .=  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';                        
-              }
+            // My friend profile
 
-              //check if I already sent an invitation message
-              $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+            if ($user_id != api_get_user_id()) {
+                $html .=  '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
+                $html .=  Display::return_icon('compose_message.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';                        
+            }
 
-              if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0 ) {
-                  $html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
-              } else {
-                  if (!$show_full_profile) {
-                      $html .=  '<li><a  href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user_id.'\');" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
-                  }
-              }
-            
+            //check if I already sent an invitation message
+            $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+
+            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0 ) {
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+            } else {
+                if (!$show_full_profile) {
+                    $html .=  '<li><a  href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user_id.'\');" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+                }
+            }
+
             //@todo check if user is online and if it's a friend to show the chat link
-            if (api_get_setting('allow_global_chat') == 'true' && $show_full_profile) {
+            if (api_get_setting('allow_global_chat') == 'true' && $user_friend_relation == USER_RELATION_TYPE_FRIEND) {
                 if ($user_id != api_get_user_id()) {
                     $user_name  = $user_info['complete_name'];        
                     
@@ -664,7 +667,7 @@ class SocialManager extends UserManager {
                     $html .=   Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
                 }
             }
-              $html .= '</ul></div>';
+            $html .= '</ul></div>';
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);

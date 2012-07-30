@@ -173,38 +173,46 @@ class Chat extends Model {
      * @return void Prints "1"
      */
     function send($from_user_id, $to_user_id, $message) {
-        $user_info = api_get_user_info($to_user_id, true);
-        $this->save_window($to_user_id);
-    
-        $_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
-        $messagesan = self::sanitize($message);
+        
+        $user_friend_relation = SocialManager::get_relation_between_contacts($from_user_id, $to_user_id);
+        if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
+        
+            $user_info = api_get_user_info($to_user_id, true);
+            $this->save_window($to_user_id);
 
-        if (!isset($_SESSION['chatHistory'][$to_user_id])) {
-            $_SESSION['chatHistory'][$to_user_id] = array();
+            $_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
+            $messagesan = self::sanitize($message);
+
+            if (!isset($_SESSION['chatHistory'][$to_user_id])) {
+                $_SESSION['chatHistory'][$to_user_id] = array();
+            }
+            $item = array ( "s"            => "1", 
+                            "f"            => $from_user_id,
+                            "m"            => $messagesan,
+                            "username"     => get_lang('Me')
+                        );
+            $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;    
+            $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];    
+            $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];    
+
+            unset($_SESSION['tsChatBoxes'][$to_user_id]);
+
+            $params = array();
+            $params['from_user']    = intval($from_user_id);
+            $params['to_user']        = intval($to_user_id);
+            $params['message']        = $message;
+            $params['sent']            = api_get_utc_datetime();
+
+            if (!empty($from_user_id) && !empty($to_user_id)) {        
+                $this->save($params);
+            }
+            //print_r($_SESSION['chatHistory']);
+            echo "1";
+            exit;
+        } else {
+            echo "0";
+            exit;
         }
-        $item = array ( "s"            => "1", 
-                        "f"            => $from_user_id,
-                        "m"            => $messagesan,
-                        "username"     => get_lang('Me')
-                    );
-        $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;    
-        $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];    
-        $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];    
-                
-        unset($_SESSION['tsChatBoxes'][$to_user_id]);
-        
-        $params = array();
-        $params['from_user']    = intval($from_user_id);
-        $params['to_user']        = intval($to_user_id);
-        $params['message']        = $message;
-        $params['sent']            = api_get_utc_datetime();
-        
-        if (!empty($from_user_id) && !empty($to_user_id)) {        
-            $this->save($params);
-        }
-        //print_r($_SESSION['chatHistory']);
-        echo "1";
-        exit;
     }
     /**
      * Close a specific chat box (user ID taken from $_POST['chatbox'])

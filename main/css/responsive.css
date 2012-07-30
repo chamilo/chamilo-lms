@@ -60,7 +60,7 @@
     
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
         color : #999;
-    }       
+    }
 }
 
 @media (max-width: 767px) {
@@ -70,6 +70,10 @@
     }
     
     .subnav .dropdown-toggle {
+        display:none;
+    }
+    
+    header #header_center, header #header_right {
         display:none;
     }
     

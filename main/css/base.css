@@ -123,14 +123,7 @@ legend {
 .subnav .nav > #current > a:hover .caret {
     border-top-color: #777;
 }
-.subnav .nav > li:first-child > a,
-.subnav .nav > li:first-child > a:hover {
-    border-left: 0;
-    padding-left: 12px;
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
-}
+
 .subnav .nav > li:last-child > a {
     border-right: 0;
 }
@@ -3668,7 +3661,7 @@ a.forum_group_link {
 }
 
 .subnav .nav > li > .logout {
-    padding:7px;
+    padding-top:8px; 
 }
 
 footer {

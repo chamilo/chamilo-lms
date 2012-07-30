@@ -2797,14 +2797,19 @@ class CourseManager {
                     $html .= '</div>';
 
                     $html .= '<div class="span6">';
-                        $html .='<h3>'.$params['title'].$params['notifications'].'</h3>';
-
+                        $html .='<h3>'.$params['title'].$params['notifications'].'</h3> ';
+                        
+                        if (!empty($params['subtitle'])) {
+                            $html .= '<small>'.$params['subtitle'].'</small>';
+                        }
                         if (!empty($params['teachers'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
                         }
                         if (!empty($params['coaches'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
                         }
+                        
+                        
                     $html .= '</div>';
                 $html .= '</div>';
 

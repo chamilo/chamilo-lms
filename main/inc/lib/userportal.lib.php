@@ -1023,9 +1023,8 @@ class IndexManager {
                                 }
                                 
 								$params['title'] .=  $session_link;
-								$params['title'] .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
-								$params['title'] .=  (!empty($s['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
-								$params['title'] .=  '</span>';
+								
+								$params['subtitle'] =  (!empty($s['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];								
                                 
 								if (api_is_platform_admin()) {
 									$params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
@@ -1040,15 +1039,16 @@ class IndexManager {
                             
 							if (api_is_platform_admin()) {
 								$params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a>';
-							}                            
-							$params['title'] .=  $category['details']['name'];
+							}
+                            
+							$params['title'] .= $category['details']['name'];
                             
                             if (api_is_platform_admin()) {
                                 $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'];
                             }
 							
 							if ($category['details']['date_end'] != '0000-00-00') {
-								$params['title'] .= sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);
+								$params['subtitle'] = sprintf(get_lang('FromDateXToDateY'),$category['details']['date_start'], $category['details']['date_end']);
 							}
                             $html .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
 						}

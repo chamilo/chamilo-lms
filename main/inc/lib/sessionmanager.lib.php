@@ -175,7 +175,7 @@ class SessionManager {
         return $result['count'] > 0;
 	}
     
-    function get_count_admin() {
+    static function get_count_admin() {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
         $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
@@ -218,7 +218,7 @@ class SessionManager {
      * Gets the admin session list callback of the admin/session_list.php page
      * @param array order and limit keys
      */
-	public function get_sessions_admin($options) {
+	public static function get_sessions_admin($options) {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
 		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);        
@@ -1780,7 +1780,7 @@ class SessionManager {
         return $row[0];
     }
 
-    function protect_session_edit($id) {
+    static function protect_session_edit($id) {
         api_protect_admin_script(true);
         $session_info = self::fetch($id);
         if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {

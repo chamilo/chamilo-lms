@@ -1334,5 +1334,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$YouWillBeRedirectedInXSeconds = "You will be redirected in %s seconds";
 ?>

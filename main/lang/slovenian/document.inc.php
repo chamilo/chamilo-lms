@@ -218,6 +218,8 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Nadgraditev zahtevana";
 $MoveElement = "Premakni dokument";
 $CertificateName = "Ime";
+$HelpFolderLearningPaths = "INFORMACIJA VIDNA ZGOLJ UČITELJEM<br /><br />
+Ta mapa vsebuje dokumente, ki so biti ustvarjeni z orodjem Učne poti. V mapi lahko urejate HTML dokumente, ki so bili ustvarjeni z uvozom vsebine iz učnih poti, kot tudi tiste, ki so bili uvoženi preko orodja Chamilo Rapid. Priporočljivo je, da to mapo skrijete pred tečajniki.";
 $CopyToMyFiles = "Prepiši v moje osebno področje datotek";
 $Export2PDF = "Izvozi v PDF";
 $ResourceShared = "Resurs v skupni rabi";

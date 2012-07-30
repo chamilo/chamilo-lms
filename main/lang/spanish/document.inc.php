@@ -211,8 +211,8 @@ $CreateTheDocument = "Guardar documento";
 $CreateTemplate = "Crear plantilla";
 $SharedFolder = "Carpeta compartida";
 $CreateFolder = "Crear la carpeta";
-$HelpDefaultDirDocuments = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br /> 
-<br />
+$HelpDefaultDirDocuments = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
+\n
 
 Esta carpeta contiene los archivos suministrados por defecto. Puede eliminar o añadir otros archivos. Al hacerlo tenga en cuenta que si un archivo está oculto cuando es insertado en un documento web, los estudiantes tampoco podrán verlo en el documento. Cuando inserte un archivo en un documento web hágalo visible previamente. Las carpetas pueden seguir ocultas.";
 $HelpSharedFolder = "Esta carpeta contiene los archivos que los estudiantes (y Ud.) envían a un curso a través del editor, salvo los que se envían desde la herramienta grupos. Por defecto serán visibles por cualquier profesor, pero estarán ocultos para otros estudiantes salvo que accedan a ellos mediante un acceso directo. Si hace visible la carpeta de un estudiante otros estudiantes podrán ver todo lo que contenga.";
@@ -221,8 +221,8 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Actualización necesaria";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nombre del certificado";
-$HelpFolderLearnigPaths = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO<br /> 
-<br />
+$HelpFolderLearningPaths = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
+\n
 
 Esta carpeta contiene los documentos que se crean desde la herramienta Lecciones. Aquí puede editar los HTML que se hayan creado al realizar una importación desde la herramienta Lecciones, por ejemplo desde Chamilo Rapid. Se recomienda mantener invisible esta carpeta a los alumnos.";
 $CopyToMyFiles = "Copiar en mi área personal de archivos";
@@ -237,8 +237,8 @@ $FileExistsChangeToSave = "Este nombre de archivo ya existe, escoja otro para gu
 $FileSavedAs = "Archivo guardado como";
 $FileExportAs = "Archivo exportado como";
 $UserFolder = "Carpeta del usuario";
-$HelpUsersFolder = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br /> 
-<br /> 
+$HelpUsersFolder = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
+\n
 
 La carpeta de los usuarios contiene una carpeta de cada usuario que haya accedido a ella a través de la herramienta documentos, o bien que haya enviado algún fichero al curso a través del editor, salvo desde la herramienta grupos. Si ninguna de las dos circuntancias se ha producido la carpeta del usuario no estará creada. En el caso de los grupos, los archivos que se envíen a través del editor se depositarán en la carpeta de cada grupo, la cual sólo será accesible por los alumnos desde la herramienta grupos.
 
@@ -249,12 +249,12 @@ Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos
 Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas. 
 
 Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos.";
-$HelpFolderChat = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br /> 
-<br />
+$HelpFolderChat = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
+\n
  
 Esta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser dignas de ser tratadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta.";
-$HelpFolderCertificates = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:<br /> 
-<br /> 
+$HelpFolderCertificates = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:
+\n
 
 Esta carpeta contiene los distintos modelos de certificados que se han creado para la herramienta Evaluaciones. No se recomienda hacer visible esta carpeta.";
 $DestinationDirectory = "Carpeta de destino";

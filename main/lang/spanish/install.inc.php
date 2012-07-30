@@ -119,7 +119,7 @@ $UpgradeFromDokeos18x = "Actualizar desde Chamilo 1.8.x";
 $Step7 = "Paso 7";
 $SuggestionOnlyToEnableCSSUploadFeature = "Solamente necesario si desea habilitar la funcionalidad de cargar archivos CSS";
 $SuggestionOnlyToEnableSubLanguageFeature = "Solamente necesario si desea habilitar la funcionalidad de sub-idiomas";
-$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en lectura sola (chmod -r 0555 bajo Linux) y borre completamente la carpeta %s.";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Para proteger su instalación, ponga la carpeta %s en solo lectura (chmod -r 0555 bajo Linux) y borre completamente la carpeta %s.";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Si intenta actualizar desde una versión anterior de Chamilo, quizás desee <a href=\"http://translate.chamilo.org/documentation/changelog.html\" target=\"_blank\">tomar una mirada al registro de cambios</a> para conocer las novedades y lo que se ha cambiado.";
 $WelcomeToTheDokeosInstaller = "Bienvenido al instalador de Chamilo";
 $PHPVersionError = "Su versión de PHP no coincide con los requisitos para este software. Por favor, compruebe que tiene la versión más reciente y vuelva a intentarlo.";

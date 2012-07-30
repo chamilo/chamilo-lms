@@ -218,6 +218,9 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Mise à jour nécessaire";
 $MoveElement = "Déplacer élément";
 $CertificateName = "Nom du certificat";
+$HelpFolderLearningPaths = "INFORMATION VISIBLE UNIQUEMENT PAR L'ENSEIGNANT<br />
+<br />
+Ce répertoire contient des documents créés par l'outil de parcours. Vous pouvez y éditer les documents HTML qui ont été générés par l'import de contenu, comme par exemple ceux importés via Chamilo Rapid. Nous recommendons de rendre ce répertoire invisible aux étudiants.";
 $CopyToMyFiles = "Copier dans mon dossier personnel de fichiers";
 $Export2PDF = "Exporter au format PDF";
 $ResourceShared = "Ressource partagée";

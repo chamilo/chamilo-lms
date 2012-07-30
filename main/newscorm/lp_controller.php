@@ -207,8 +207,10 @@ if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 /**
  * Actions switching
  */
-$_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
-$_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
+if (isset($_SESSION['oLP'])) {
+    $_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
+    $_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
+}
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
     if ($_REQUEST['action'] != 'list' AND $_REQUEST['action'] != 'view') {

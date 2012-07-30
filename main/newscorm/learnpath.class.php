@@ -868,7 +868,7 @@ class learnpath {
         $sql_del_view = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
         //if ($this->debug > 2) { error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view, 0); }
         $res_del_view = Database::query($sql_del_view);
-        $this->toggle_publish($this->lp_id, 'i');
+        self::toggle_publish($this->lp_id, 'i');
         //if ($this->debug > 2) { error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type, 0); }
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
@@ -3612,7 +3612,7 @@ class learnpath {
      * @param	integer	Learnpath id
      * @param	string	New visibility (v/s - visible/invisible)
      */
-    public function toggle_publish($lp_id, $set_visibility = 'v') {
+    public static function toggle_publish($lp_id, $set_visibility = 'v') {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_publish()', 0); }
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -5301,7 +5301,7 @@ class learnpath {
     /**
      * Creates the default learning path folder
      */
-    public function generate_learning_path_folder($course) {
+    public static function generate_learning_path_folder($course) {
         //Creating learning_path folder
     	$dir = '/learning_path';
     	$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';

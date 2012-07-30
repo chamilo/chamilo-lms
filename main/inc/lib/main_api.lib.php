@@ -1740,7 +1740,7 @@ class api_failure {
      * @global array  $api_failureList
      * @return bolean false to stay consistent with the main script
      */
-    function set_failure($failure_type) {
+    static function set_failure($failure_type) {
         global $api_failureList;
         $api_failureList[] = $failure_type;
         return false;
@@ -1753,7 +1753,7 @@ class api_failure {
      * @param void
      * @return string - the last failure stored
      */
-    function get_last_failure() {
+    static function get_last_failure() {
         global $api_failureList;
         if (count($api_failureList) == 0) { return ''; }
         return $api_failureList[count($api_failureList) - 1];

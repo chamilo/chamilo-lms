@@ -1,9 +1,11 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
- * 
  * Manages the email sending action when a event requires it.
- *
+ * @package chamilo.libraries.events
+ */
+/**
+ * EventsMail class: manages the e-mail sending action when a event requires it
  */
 class EventsMail 
 {
@@ -56,7 +58,7 @@ class EventsMail
             $event_data["user_id"] = $about_user["user_id"];
         }
 
-        // First, we send the mail to people we put in the $event_data["send_to"] ========================================================
+        // First, we send the mail to people we put in the $event_data["send_to"]
         if ($event_data["send_to"] != null) // the users we precised need to receive the mail 
         {
             foreach ($event_data["send_to"] as $id) // for every member put in the array 

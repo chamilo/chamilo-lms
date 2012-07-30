@@ -1399,21 +1399,6 @@ function event_course_login($course_code, $user_id, $session_id) {
     CourseManager::update_course_ranking(null, null, null, null, true, false);
 }
 
-/* 
- * 
- * Filter EventEmailTemplate Filters see the main/inc/conf/events.conf.dist.php
- * 
- */
-
-/**
- * user_registration - send_mail filter
- * @param array $values (passing by reference)
- * @return boolean 
- */
-function user_registration_event_send_mail_filter_func(&$values) {
-    return true;
-}
-
 /**
  * For the sake of genericity, this function is a switch.
  * It's called by EventsDispatcher and fires the good function
@@ -1445,6 +1430,44 @@ function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
     return $result[0]["total"];
 }
 
+/* 
+ * 
+ * Filter EventEmailTemplate Filters see the main/inc/conf/events.conf.dist.php
+ * 
+ */
+
+/**
+ * Basic template event message filter (to be used by other filters as default)
+ * @param array $values (passing by reference)
+ * @return boolean True if everything is OK, false otherwise
+ */
+function _event_send_mail_filter_func(&$values) {
+    return true;
+}
+/**
+ * user_registration - send_mail filter
+ * @param array $values (passing by reference)
+ * @return boolean True if everything is OK, false otherwise
+ */
+function user_registration_event_send_mail_filter_func(&$values) {
+    $res = _event_send_mail_filter_func($values);
+    // proper logic for this filter
+    return $res;
+}
+/**
+ * portal_homepage_edited - send_mail filter
+ * @param array $values (passing by reference)
+ * @return boolean True if everything is OK, false otherwise
+ */
+function portal_homepage_edited_event_send_mail_filter_func(&$values) {
+    $res = _event_send_mail_filter_func($values);
+    // proper logic for this filter
+    return $res;
+}
+
+/**
+ * 
+ */
 
 /*  End of filters   */
 

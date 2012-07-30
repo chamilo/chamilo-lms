@@ -66,4 +66,25 @@ $FolderCreated = "S'ha creat un nou directori";
 $LinkAdded = "Enllaç afegit";
 $AnnouncementAdded = "L'anunci ha estat afegit";
 $AgendaAdded = "S'ha afegit un esdeveniment de l'agenda";
+$LoginEnter = "Accedeix";
+$Messages = "Missatges";
+$Inbox = "Safata d'entrada";
+$Comppose = "Redacta";
+$PendingInvitations = "Invitacions pendents";
+$YouDoNotHaveAnySessionInItsHistory = "En el seu historial no hi ha cap sessió de formació";
+$PortalHomepageDefaultIntroduction = "<h2>Enhorabona, heu instal·lat satisfactòriament el seu portal de formació en línia!</h2>
+
+Ara podeu completar la instal·lació seguint tres passos ben senzills:
+
+<ol>
+<li>Configureu el portal: aneu a la secció d'Administració de la plataforma i seleccioneu Plataforma -> <a href=\"main/admin/settings.php\">Paràmetres de configuració de Chamilo</a></li>
+<li>Doneu vida al seu portal amb la creació d'usuaris i cursos. Podeu fer-ho convidant a d'altres usuaris a crear el seu compte, o creant-los vostè mateix mitjançant les seccions d'usuaris i cursos de la <a href=\"main/admin/\">pàgina d'administració</a></li>
+<li>Editeu aquesta pàgina a través de l'entrada <a href=\"main/admin/configure_homepage.php\">Configuració de la pàgina principal</a></li>
+</ol>
+
+Sempre podreu trobar més informació en quant aquest programari al nostre lloc web: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.
+
+Divertiu-vos, no dubteu en unir-vos a la comunitat i doneu-vos la vostra opinió a través del nostre <a href=\"http://www.chamilo.org/forum\">fòrum</a>.";
+$Username = "Nom d'usuari";
+$Profile = "Perfil";
 ?>

@@ -184,6 +184,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
         $tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
     } elseif($path == '/chat_files') {
         $tooltip_title_alt = get_lang('ChatFiles');
+	} elseif($path == '/learning_path') {
+        $tooltip_title_alt = get_lang('LearningPaths');
     } elseif($path == '/video') {
         $tooltip_title_alt = get_lang('Video');
     } elseif($path == '/audio') {
@@ -451,6 +453,15 @@ function build_document_icon_tag($type, $path) {
                 }
                 else{
                     $basename=get_lang('ChatFiles');
+                }
+			}
+			elseif($path == '/learning_path') {
+				$icon = 'folder_learningpath.gif';
+				if(api_is_allowed_to_edit()){
+                    $basename= get_lang('HelpFolderLearningPaths');
+                }
+                else{
+                    $basename= get_lang('LearningPaths');
                 }
             }
         }

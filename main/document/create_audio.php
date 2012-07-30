@@ -199,11 +199,6 @@ $(document).ready(function(){
 
     $options = $options_pedia = array();
     $selected_language = null;
-    //$selected_language = api_get_language_isocode();//lang default is the course language
-	//lang default is a default message
-	$selected_language = "defaultmessage";
-	$options_pedia['defaultmessage'] =get_lang('FirstSelectALanguage');
-	$options['defaultmessage'] =get_lang('FirstSelectALanguage'); 
 	
     while ($row = Database::fetch_array($result_select)) {       
         if (api_get_setting('platformLanguage')==$row['english_name']) {        
@@ -222,6 +217,7 @@ $(document).ready(function(){
 	
   
     if(Security::remove_XSS($_GET['dt2a'])=='google'){
+		$selected_language = api_get_language_isocode();//lang default is the course language
 		echo '<div>';
 		$form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
 		$form->addElement('hidden', 'text2voice_mode', 'google');
@@ -232,7 +228,7 @@ $(document).ready(function(){
 		//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
 		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
 		$defaults = array();
-		$defaults['lang'] = $selected_language;    
+		$defaults['lang'] = $selected_language;   
 		$form->setDefaults($defaults);        
 		$form->display();
 
@@ -240,6 +236,10 @@ $(document).ready(function(){
 	}
 	
 	if(Security::remove_XSS($_GET['dt2a'])=='pediaphon'){
+		//lang default is a default message
+		$selected_language = "defaultmessage";
+		$options_pedia['defaultmessage'] =get_lang('FirstSelectALanguage');
+		$options['defaultmessage'] =get_lang('FirstSelectALanguage'); 
 		echo '<div>';
 		
 		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
@@ -358,7 +358,7 @@ Display :: display_footer();
  *
  * @param $filepath
  * @param $dir
-  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
+ * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_google($filepath, $dir) {
@@ -370,7 +370,6 @@ function downloadMP3_google($filepath, $dir) {
 		return;	
 	}
     global $_course, $_user;
-	
 	$clean_title=trim($_POST['title']);
 	$clean_text=trim($_POST['text']);
 	if(empty($clean_title) || empty($clean_text)){ 

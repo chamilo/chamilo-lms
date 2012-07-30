@@ -25,6 +25,11 @@ $(document).ready( function() {
     <section id="hot_courses">
         <div class="row">
             <div class="span9">
+                {% if _u.is_admin %}
+                <span class="pull-right">
+                    <a href="{{_p.web_main}}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"><img src="{{_p.web_img}}icons/32/visible.png" alt="{{ "Hide" | get_lang}}" title="{{ "Hide" | get_lang}}" /></a>
+                </span>
+                {% endif %}
                 {{"HottestCourses"|display_page_header}}
             </div>
             {% for hot_course in hot_courses %}

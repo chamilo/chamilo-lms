@@ -2774,7 +2774,7 @@ function api_not_found($print_headers = false) {
 function api_not_allowed($print_headers = false, $message = null) {
     Header::response_code(403);
     $home_url   = api_get_path(WEB_PATH);
-    $user_id    = api_get_user_id(); //0 if not defined
+    $user_id    = api_get_user_id();
     $course     = api_get_course_id();
 
     global $this_section;
@@ -2787,12 +2787,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     if (CustomPages::enabled() && !isset($user_id)) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
-    /* Default behaviour
-    if (CustomPages::enabled() && !isset($_SESSION['_user']['user_id'])) {
-        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-        CustomPages::display(CustomPages::INDEX_UNLOGGED);
-    }*/
-
+    
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
 
     $msg = null;
@@ -2805,7 +2800,8 @@ function api_not_allowed($print_headers = false, $message = null) {
     $msg = Display::div($msg, array('align'=>'center'));
 
     $show_headers = 0;
-    if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
+    
+    if ($print_headers && $origin != 'learnpath') {
         $show_headers = 1;
     }
 

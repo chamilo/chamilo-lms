@@ -286,7 +286,6 @@ class Exercise {
 		$this->text_when_finished = $in_txt;
 	}
 
-
 	/**
 	 * return 1 or 2 if randomByCat 
 	 * @author - hubert borderiou
@@ -363,7 +362,6 @@ class Exercise {
 		return $this->random_answers;
 	}
 
-
 	/**
 	 * Same as isRandom() but has a name applied to values different than 0 or 1
 	 */
@@ -407,7 +405,6 @@ class Exercise {
 		}
 		return $this->questionList;
 	}
-
 
 	/**
 	 * returns the number of questions in this exercise
@@ -1631,33 +1628,70 @@ class Exercise {
 	public function show_time_control_js($time_left) {
 		$time_left = intval($time_left);
 		return "<script>	
-			$(document).ready(function() {
+            
+            function get_expired_date_string(expired_time) {
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                var day, month, year, hours, minutes, seconds, date_string;
+                var obj_date = new Date(expired_time);
+                day     = obj_date.getDate();
+                if (day < 10) day = '0' + day;
+                    month   = obj_date.getMonth();
+                    year    = obj_date.getFullYear();
+                    hours   = obj_date.getHours();
+                if (hours < 10) hours = '0' + hours;
+                minutes = obj_date.getMinutes();
+                if (minutes < 10) minutes = '0' + minutes;
+                seconds = obj_date.getSeconds();
+                if (seconds < 10) seconds = '0' + seconds;
+                date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+                return date_string;
+            }
+            
+            function open_clock_warning() {
+                $('#clock_warning').dialog({
+                    modal:true,
+                    height:250,
+                    closeOnEscape: false,
+                    resizable: false,
+                    buttons: {
+                        '".addslashes(get_lang("EndTest"))."': function() {
+                            $('#clock_warning').dialog('close');
+                        },
+                    },     
+                    close: function() {
+                        send_form();
+                    }
+                });                
+                $('#clock_warning').dialog('open');
                 
-				function get_expired_date_string(expired_time) {
-			        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			        var day, month, year, hours, minutes, seconds, date_string;
-			        var obj_date = new Date(expired_time);
-			        day     = obj_date.getDate();
-			        if (day < 10) day = '0' + day;
-				        month   = obj_date.getMonth();
-				        year    = obj_date.getFullYear();
-				        hours   = obj_date.getHours();
-			        if (hours < 10) hours = '0' + hours;
-			        minutes = obj_date.getMinutes();
-			        if (minutes < 10) minutes = '0' + minutes;
-			        seconds = obj_date.getSeconds();
-			        if (seconds < 10) seconds = '0' + seconds;
-			        date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
-			        return date_string;
-				}
-	
-				function onExpiredTimeExercise() { 
-        			$('#wrapper-clock').hide(); 
-        			$('#exercise_form').hide();
-        			$('#expired-message-id').show();
-        			$('#exercise_form').submit();	     		
-	      		}
-	
+
+                $('#counter_to_redirect').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: 5}, 
+                    format: 's'                    
+                }).bind('timer', function () {
+                    send_form();
+                });
+                
+            }
+            
+            function send_form() {
+                //console.log('send_form');
+                $('#exercise_form').submit();
+            }
+           
+            function onExpiredTimeExercise() { 
+                $('#wrapper-clock').hide(); 
+                $('#exercise_form').hide();
+                $('#expired-message-id').show();
+
+                //Fixes bug #5263
+                $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');                
+                open_clock_warning();
+            }
+                
+			$(document).ready(function() {
+            
 				var current_time = new Date().getTime();				
                 var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
 				var expired_time = current_time + (time_left*1000);

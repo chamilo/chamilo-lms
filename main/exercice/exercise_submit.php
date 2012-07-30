@@ -93,7 +93,6 @@ $current_question			= isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $error = '';
 
 //Table calls
-$stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
@@ -160,7 +159,7 @@ if ($time_control) {
 	//Get the expired time of the current exercice in track_e_exercices
 	$total_seconds 			  = $objExercise->expired_time*60;
 }
-
+$objExercise->questionList;
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
@@ -275,7 +274,7 @@ if ($reminder == 2 && empty($my_remind_list)) {
 
 /*
  * 7. Loading Time control parameters
- * If the expired time is major that zero(0) then the expired time is compute on this time. Disable for learning path
+ * If the expired time is major that zero(0) then the expired time is compute on this time.
  */
 
 if ($time_control) {
@@ -470,6 +469,7 @@ if ($formSent && isset($_POST)) {
                     }
                     /*
                     //Clean incomplete - @todo why setting to blank the status?
+                    $stat_table   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
                     $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$learnpath_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
 
                     if ($debug) { error_log('Updating track_e_exercises '.$update_query); }
@@ -918,11 +918,13 @@ if (!empty($error)) {
                 return false;
             }
 		</script>';
-
+    
+    echo '<div id="clock_warning" style="display:none">'.Display::return_message(get_lang('ReachedTimeLimit'), 'warning').' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'), '<span id="counter_to_redirect" class="red_alert"></span>').'</div>';    
+    
     echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=" . $exerciseId .'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent"				value="1" />
          <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
-         <input type="hidden" name="num" 					value="'.$current_question . '" />
+         <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
          <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
          <input type="hidden" name="origin" 				value="'.$origin . '" />
          <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />

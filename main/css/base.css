@@ -2454,10 +2454,6 @@ div.admin_section h4 {
     background-color: #FFF7C0;
 }
 
-.main_question {
-
-}
-
 .exercise_header {
     border-bottom: 1px dotted #ccc;
     margin-bottom:20px;
@@ -2540,6 +2536,7 @@ div.admin_section h4 {
     border:1px solid #B8860B;
 }
 
+/* Exercise clock*/
 .count_down {
     padding: 3px;
     font-size:22px;
@@ -2552,8 +2549,7 @@ div.admin_section h4 {
 
 .red_alert {
     color:red;
-    font-weight: bold;
-    color:red;
+    font-weight: bold;    
 }
 
 #question_feedback {

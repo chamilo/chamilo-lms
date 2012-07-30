@@ -78,7 +78,7 @@ api_check_php_version($includePath.'/');
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 
 $default_username_length = 40;
-if (api_get_setting('login_is_email') == true) {
+if (api_get_setting('login_is_email') == 'true') {
     $default_username_length = 100;
 }
 define('USERNAME_MAX_LENGTH', $default_username_length);

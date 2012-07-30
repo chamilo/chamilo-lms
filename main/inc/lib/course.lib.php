@@ -3658,6 +3658,7 @@ class CourseManager {
      * @param   int number of hottest courses
      */
     public static function return_hot_courses($days = 30, $limit = 5) {
+        global $_configuration;
         $limit  = intval($limit);
         
         //Getting my courses
@@ -3677,6 +3678,7 @@ class CourseManager {
         
         $table_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         //@todo all dates in the tracking_course_access, last_access are in the DB time (NOW) not UTC
         /*
@@ -3689,14 +3691,16 @@ class CourseManager {
 
         //$table_course_access table uses the now() and interval ...
 
-       $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility FROM $table_course c INNER JOIN $table_course_access a 
-                ON (c.code = a.course_code)
-                WHERE   login_course_date <= now() AND 
-                        login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND
-                        visibility <> '".COURSE_VISIBILITY_CLOSED."'
-                GROUP BY course_code
-                ORDER BY course_count DESC
-                LIMIT $limit";
+       $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
+              "FROM $table_course c INNER JOIN $table_course_access a ".
+              "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ". 
+              "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
+              "          login_course_date <= now() AND ".
+              "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
+              "          visibility <> '".COURSE_VISIBILITY_CLOSED."'".
+              "  GROUP BY course_code".
+              "  ORDER BY course_count DESC".
+              "  LIMIT $limit";
 
         $result = Database::query($sql);
         $courses = array();

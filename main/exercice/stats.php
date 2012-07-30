@@ -44,9 +44,9 @@ $headers = array(
 
 if (!empty($question_list)) {
 	foreach ($question_list as $question_id) {
-		$question_obj = Question::read($question_id);
-		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-        $count_users = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+		$question_obj   = Question::read($question_id);
+		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());        
+        $count_users    = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
 
 		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
         $data[$question_id]['type'] 						= $question_obj->get_question_type_name();
@@ -111,7 +111,7 @@ if (!empty($question_list)) {
             
             //$data[$id]['name'] .=$answer_count;
             //Overwriting values depending of the question
-            switch($question_obj->type) {
+            switch ($question_obj->type) {
                 case FILL_IN_BLANKS :
                     $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
@@ -122,9 +122,7 @@ if (!empty($question_list)) {
                         if ($counter == 0) {
                             $data[$id]['name']      = cut($question_obj->question, 100);
                         } else {
-                            $data[$id]['name']      = '-';    
-                        
-                            
+                            $data[$id]['name']      = '-';
                         }
                         $data[$id]['answer'] 	= $answer_item; 
                         
@@ -148,8 +146,7 @@ if (!empty($question_list)) {
                             $data[$id]['name']      = cut($question_obj->question, 100);
                         } else {
                             $data[$id]['name']      = '-';
-                        }
-                        
+                        }                        
                         $correct = '';
                         for ($i = 1; $i <= $answer_count; $i++) {
                              $is_correct_i     = $answer->isCorrect($i);

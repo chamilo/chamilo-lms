@@ -1639,11 +1639,11 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND            
 					question_id 	= $question_id AND
-                    answer          <> 0 AND 
+                    answer          <> '0' AND 
                     cu.status       = ".STUDENT." AND 
                     relation_type  <> 2 AND
                     e.status        = ''";
-    
+    var_dump($sql);
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {

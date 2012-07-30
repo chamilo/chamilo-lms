@@ -2028,7 +2028,7 @@ function display_after_install_message($installType) {
     echo '<div class="warning-message">';
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
     echo ': ';
-    printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'), 'main/inc/conf/configuration.php', 'main/install/index.php');
+    printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'main/inc/conf/', 'main/install/');
     echo '</div>';
     ?></form>
     <br />

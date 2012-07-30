@@ -213,7 +213,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
                             LIMIT $from, $number_of_items";                        
 			} else {
 				// all users online
-				$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." track  INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
+				$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u 
+                          ON (u.user_id=track.login_user_id)
 						  WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND 
                                 DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."' 
                           ORDER BY $column $direction  
@@ -256,16 +257,18 @@ function who_is_online_count($valid = null, $friends = false) {
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);	
 	$query = '';
+    
 	if ($friends) {
 		// 	who friends from social network is online
 		$query = "SELECT DISTINCT count(login_user_id) as count
 				  FROM $track_online_table INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
 	} else {
-		// all users online
-		$query = "SELECT count(login_id) as count  FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
+		// All users online
+		$query = "SELECT count(login_id) as count  FROM ".$track_online_table ." 
+                  WHERE login_user_id <> 2 AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
 	}
-	
+    	
 	if (api_get_multiple_access_url()) {		
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
@@ -278,7 +281,7 @@ function who_is_online_count($valid = null, $friends = false) {
 			} else {
 				// all users online
 				$query = "SELECT count(login_id) as count FROM ".$track_online_table ." track
-						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+						  WHERE login_user_id <> 2 AND track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
 			}
 		}
 	}
@@ -321,7 +324,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $number_of_items = intval($number_of_items);
 
 	$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." 
-              WHERE course='".$course_code."' AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= NOW() 
+              WHERE login_user_id <> 2 AND course='".$course_code."' AND DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= NOW() 
               LIMIT $from, $number_of_items ";
               
 	$result = Database::query($query);
@@ -349,7 +352,8 @@ function who_is_online_in_this_course_count($uid, $valid, $coursecode=null) {
 	$coursecode = Database::escape_string($coursecode);
 	$valid 		= Database::escape_string($valid);
 
-	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
+	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." 
+              WHERE login_user_id <> 2 AND course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
 		$row = Database::fetch_array($result);

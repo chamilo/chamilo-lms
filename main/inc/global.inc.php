@@ -254,7 +254,8 @@ foreach ($result as & $row) {
         }
 
         if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
-            if ($settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
+            if (isset($settings_by_access_list[$var]) &&
+                $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
                 if ($row['subkey'] == null) {
                     $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
                 } else {

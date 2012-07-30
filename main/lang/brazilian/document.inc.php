@@ -214,6 +214,8 @@ $CreateFolder = "Criar uma pasta";
 $HelpDefaultDirDocuments = "Este diretório contém arquivos predefinidos. Pode eliminar ou adicionar novos arquivos, mas se um arquivo está oculto quando é inserido num documento, os usuários não serão capazes de o visualizar nesse documento. Ao inserir um arquivo num documento, certifique-se primeiro que se encontra visível. Os diretórios podem permanecer ocultos.";
 $HelpSharedFolder = "Este diretório contém os arquivos que os usuários enviaram para um curso através do editor (não realizarado a partir da ferramenta de grupos). Por predefinição, serão visíveis para qualquer instrutor, mas estará oculto para outros usuários (desde que não visiveis aos arquivos diretamente). Se tornar o directório de um usuário visível, todos os outros usuários poderão visualizar o seu conteúdo.";
 $TemplateImage = "Imagem do modelo";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Para reproduzir as mídias vai precisar atualizar seu navegador a uma versão recente ou atualizar a sua extensão Flash. Confira se o arquivo tem uma extensão correta.";
+$UpdateRequire = "Precisa de atualização";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nome";
 $CopyToMyFiles = "Copiar para minha área de arquivos privados";
@@ -271,4 +273,8 @@ $UplUploadFailedSizeIsZero = "Houve um problema ao carregar o documento: o arqui
 $NewImage = "Nova imagem";
 $DirExists = "Esta operação não é permitida, uma pasta já existe com este nome.";
 $DocMv = "Documento movido.";
+$NoSVGImagesInImagesGalleryPath = "Não há imagens SVG na sua pasta de galeria de imagens";
+$NoSVGImages = "Sem imagem SVG";
+$WamiNeedFilename = "Antes de ativar a gravação é preciso um nome de arquivo.";
+$SelectAnAudioFileFromDocuments = "Selecione um arquivo de audio dos documentos";
 ?>

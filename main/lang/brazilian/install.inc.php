@@ -125,4 +125,12 @@ $PHPVersionError = "Sua versão do PHP não coincide com os requisitos deste sof
 $ExtensionSessionsNotAvailable = "A extensão de sessões não estão disponíveis";
 $ExtensionZlibNotAvailable = "A extensão Zlib não está disponível";
 $ExtensionPCRENotAvailable = "A extensão PCRE não está disponível";
+$DatabaseXWillBeCreated = "O banco de dados %s será criado";
+$ADatabaseWithTheSameNameAlreadyExists = "Um banco de dados com o mesmo nome já existe.";
+$UserXCantHaveAccessInTheDatabaseX = "O usuário %s não tem acesso ao banco de dados %s";
+$DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "O banco de dados %s não pode ser criado posto que o usuário %s não tem permissões suficientes";
+$CourseTestWasCreated = "Um curso de prova foi criado com sucesso";
+$InstallExecution = "Execução do processo de instalação";
+$UpdateExecution = "Execução do processo de atualização";
+$PleaseWaitThisCouldTakeAWhile = "Espere, por favor. Isto vai levar um tempinho...";
 ?>

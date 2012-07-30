@@ -48,4 +48,6 @@ $DocumentsWillBeAddedToo = "Els documents també seran afegits";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si voleu exportar un itinerari formatiu que contingui exercicis, haureu d'assegurar-vos que aquests exercicis hagin estat inclosos a l'exportació; per això haureu hagut de seleccionar-los a la llista d'exercicis.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El directori \"archive\" utilitzat per aquesta eina no té habilitat el permís d'escriptura. Contacteu amb l'administrador de la plataforma.";
 $DestinationCourse = "Curs de destinació";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Si la seva lliçó té arxius d'àudio inclosos, hauria de seleccionar-los des dels documents.";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "No oblideu seleccionar els arxius multimèdia si els seu recurs els necessita";
 ?>

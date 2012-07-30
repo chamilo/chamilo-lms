@@ -53,4 +53,5 @@ $LinkOpenSelf = "Abrir na mesma página";
 $LinkOpenBlank = "Abrir em outra página";
 $LinkOpenParent = "Open parent";
 $LinkOpenTop = "Open top";
+$LinkTarget = "Destino do link";
 ?>

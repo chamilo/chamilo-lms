@@ -24,4 +24,72 @@ $langHAnnouncements = "Ajuda: Tauler d'anuncis";
 $langHChat = "Ajuda: Xat";
 $langHWork = "Ajuda: Treballs dels estudiants";
 $langHTracking = "Ajuda: Estadístiques";
+$langUserContent = "<b>Afegeix usuaris</b>
+
+L'opció 'Inscriu usuaris al curs' li permet afegir al seu curs usuaris ja registrats a la plataforma. Per a això comproveu primer si ja està registrat a la plataforma, en aquest cas, marqui la casella que apareix al costat del seu nom i validi, això ho inscriure en el curs. Si encara no està registrat a la plataforma, aquest registre haurà de realitzar l'administrador de la plataforma o el propi usuari en el cas del que aquesta opció estigui habilitada.
+
+Una segona possibilitat és que els estudiants s'inscriguin per si mateixos, per a això l'administrador del curs haurà d'haver activat a l'eina 'Configuració del curs'.
+
+Tant en les operacions de registre com en les d'inscripció els usuaris rebran un correu electrònic recordant-lis el seu nom d'usuari i contrasenya.
+
+
+<b>Descripció</b>
+
+La descripció no atorga ninguns privilegis en el sistema informàtic. Només indica als usuaris, qui és qui. Podeu modificar aquesta descripció, fent clic a la icona en forma de llapis i escrivint la funció que voleu descriure de cada usuari: professor, ajudant, estudiant, visitant, expert, documentalista, moderador, tutor ...
+
+<b>Drets d'administració</b>
+
+Per contra, els permisos o drets d'administració atorguen privilegis al sistema informàtic, podent modificar el contingut i l'organització del lloc del curs. Aquests privilegis presenten dos perfils. El perfil de 'Administrador del curs', en què la persona en qüestió tindrà els mateixos permisos que qui els hi està donant. El perfil de 'Tutor' que l'identificarà per fer-se càrrec dels grups que puguin establir en el curs. Per atorgar o no aquests permisos a un usuari del curs, n'hi haurà prou amb marcar o no la casella corresponent, després d'haver premut en l'opció modifica.
+
+<b>Cotitulars</b>
+
+Per fer que figuri el nom d'un cotitular del curs a la capçalera del mateix, aneu a la pàgina principal del curs i feu ús de l'eina 'Configuració del curs '. En aquesta eina modifiqueu el camp 'Professor'; aquest camp és completament independent de la llista d'usuaris del curs, de manera que pot no estar inscrit en el mateix.
+
+<b>Seguiment i àrees personals dels usuaris</b>
+
+A més d'oferir un llistat d'usuaris i modificar els seus permisos, l'eina 'Usuaris' dóna un seguiment individual i permet al professor definir capçaleres addicionals a la fitxa de cada estudiant, perquè aquests les emplenin. Aquestes dades addicionals només estaran vinculats al curs en qüestió.";
+$langGroupContent = "<b>Introducció</b>
+
+Aquesta eina permet crear i gestionar grups dins del seu curs. Quan es crea el curs (Crear grups), els grups estan buits. Hi ha moltes formes d'emplenar:
+
+<ul>
+<li> Automàticament ('Emplenar grups'),</li>
+<li> Manualment ('Editar'),</li>
+<li> Adscripció a un grup per part dels propis estudiants (Modificar característiques: 'Es permet als estudiants ...').</li>
+</ul>
+
+Es poden combinar aquestes tres formes. Pot, per exemple, demanar als estudiants que s'inscriguin en un grupo.Más tarda pot descobrir que algun no ho va fer i decideixi finalment omplir de forma automáticalos grups per completar-los. També podeu editar cada grup per decidir qui forma part de quin grup.
+Omplir grups, tant de forma manual o automàtica només és efectiu si hi ha estudiants inscritosen el curs (no confongui la inscripció en el curs amb la inscripció en els grups). La llista d'estudiants és visible en el mòdul Usuaris.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Crear Grups</b>
+
+Per crear grups nous, cliqueu a 'Crear nous grups' i determinar el nombre de grups que vol crear.El nombre màxim de membres és il·limitat, però és recomanable que indiqui un. Si deixa el camp nombre màxim sense emplenar, la mida serà infinit.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Característiques dels grups</b>
+
+Podeu determinar les característiques dels grups de forma global (per a tots els grups). Es permet als estudiants inscriure's en el grup que vulguin:
+
+Podeu crear grups buits, perquè els estudiants s'inscriguin. Si vostè ha definit un nombre màxim, els grups complets no acceptaran nous membres. Aquest mètode és bo per a professors que encara no coneixen la llista d'estudiants quan creen els grups.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Eines</b>
+
+Cada grup pot disposar d'un 'Fòrum' (privat o públic) i/o d'una àrea de 'Documents' (privada o pública)
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Edició manual</b>
+
+Quan es creen els grups (Crear grups), veurà a la part inferior de la pàgina una llista dels grups amb un seguit d'informació i funcions:
+
+<ul>
+<li><b>Edita</b> manualment el nom del grup, descripció, tutor, llista de membres</li>
+<li><b>Esborra</b> elimina un grup</li>
+
+<hr noshade=\"\" size=\"1\">";
 ?>

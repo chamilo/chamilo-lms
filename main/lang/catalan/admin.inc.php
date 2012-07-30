@@ -1553,6 +1553,48 @@ $TeachersCanChangeScoreSettingsTitle = "Els professors poden canviar la configur
 $TeachersCanChangeScoreSettingsComment = "A l'editar la configuració de les Avaluacions";
 $GradebookEnableLockingTitle = "Activa el bloqueig d'Avaluacions pels professors";
 $GradebookEnableLockingComment = "Un cop activada, aquesta opció permetrà als professors bloquejar qualsevol avaluació dins del seu curs. Això prohibirà al professor qualsevol modificació posterior dels resultats dels seus alumnes en els recursos usats per a aquesta avaluació: exàmens, lliçons, tasques, etc. L'únic rol autoritzat a desbloquejar una avaluació és l'administrador. El professor estarà informat d'aquesta possibilitat en intentar desbloquejar l'avaluació. El bloqueig com el desbloqueig estaran desats en el registre d'activitats importants del sistema.";
+$LdapDescriptionComment = "Autenticació LDAP : 
+Veure I. Tot seguit per configurar LDAP 
+Veure II. Tot seguit per activar l'autenticació LDAP
+
+Actualitzar les atributs de l'usuari, amb dades LDAP, després de l'autenticació CAS (veure la configuració CAS):
+Veure I. Tot seguit per configurar LDAP
+Administració de l'autenticació d'usuari CAS, l'activació LDAP no és necessària.
+
+I. Configuració LDAP
+
+Edita l'arxiu main/auth/external_login/ldap.conf.php
+
+-> Edita els valorsde l'array $extldap_config 
+
+Els paràmetres són:
+
+cadena base del domini (ex : 'base_dn' => 'DC=cblue,DC=be')
+nom complet d'administració (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
+contrasenya admin (ex : 'admin_password' => '123456')
+ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
+filtre (ex : 'filter' => '')
+port (ex : 'port' => 389)
+versió del protocol (2 or 3) (ex : 'protocol_version' => 3)
+user_search (ex : 'user_search' => 'sAMAccountName=%username%')
+encoding (ex : 'encoding' => 'UTF-8')
+update_userinfo (ex : 'update_userinfo' => true)
+-> Per actualitzar correspondències entre usuari i els atributs LDAP, edita la matriu $extldap_user_correspondance 
+Els valors de la matriu són <chamilo_field> => >ldap_field> 
+L'estructura de la matriu és explicada a l'arxiu main/auth/external_login/ldap.conf.php
+
+
+II. Activar l'autenticació LDAP
+
+Edita l'arxiu main/inc/conf/configuration.php
+
+-> Treure les línies
+$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+
+A tenir en compte: els usuaris LDAP utilitzen els mateixos camps que els usuaris de la plataforma per autenticar-se.
+ 
+A tenir en compte: l'activació LDAP afegeix un menú extern d'autenticació [LDAP] a les pàgines d'usuari \"afegeix o modifca\".";
 $ShibbolethMainActivateTitle = "Autenticació Shibboleth";
 $ShibbolethMainActivateComment = "En primer lloc, heu de configurar Shibboleth per al seu servidor.
 
@@ -1585,10 +1627,84 @@ Llavors,
 
 editeu el fitxer main/auth/external_login/facebook.conf.php i accediu a \"appId\" i \"secret\" els valors de $facebook_config. Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
 $LanguagePriority1Title = "Prioritat d'idioma 1";
+$LanguagePriority2Title = "Prioritat de l'idioma 2";
 $LanguagePriority3Title = "Prioritat d'idioma 3";
 $LanguagePriority4Title = "Prioritat d'idioma 4";
 $LanguagePriority5Title = "Prioritat d'idioma 5";
 $LanguagePriority1Comment = "L'idioma amb la prioritat més alta";
 $LanguagePriority2Comment = "Prioritat de l'idioma 2";
 $LanguagePriority3Comment = "Prioritat de l'idioma 3";
+$LanguagePriority4Comment = "Prioritat de l'idioma 4";
+$LanguagePriority5Comment = "La prioritat més baixa entre els idiomes";
+$UserLanguage = "Idioma de l'usuari";
+$UserSelectedLanguage = "Idioma de l'usuari seleccionat";
+$TeachersCanChangeGradeModelSettingsTitle = "Els professors poden canviar el model de qualificació dins del quadern d'avaluacions";
+$TeachersCanChangeGradeModelSettingsComment = "Quan s'edita una avaluació";
+$GradebookDefaultGradeModelTitle = "Model de qualificació per defecte";
+$GradebookDefaultGradeModelComment = "Aquest valor es seleccionarà per defecte quan es creï un curs";
+$GradebookEnableGradeModelTitle = "Habilita el model de qualificació al quadern d'avaluacions";
+$GradebookEnableGradeModelComment = "Permet utilitzar un model de qualificació al quadern d'avaluacions";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Permet als administradors de sessions veure totes les sessions";
+$AllowSessionAdminsToSeeAllSessionsComment = "Quan aquesta opció està desactivada els administradors de sessions només podran veure les seves sessions.";
+$AllowSkillsToolTitle = "Habilita l'eina de competències";
+$AllowSkillsToolComment = "Els usuaris poden veure les seves competències a la xarxa social i en un bloc de la pàgina principal.";
+$AllowPublicCertificatesTitle = "Permet certificats públics";
+$AllowPublicCertificatesComment = "Els certificats poden ser visualitzats per persones no registrades al portal.";
+$EnableWebCamClipTitle = "Activar Webcam Clip";
+$EnableWebCamClipComment = "Webcam Clip permet als usuaris capturar imatges des de la seva càmera web i enviar-les al servidor en format JPEG";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Heu de crear els Termes i Condicions per tots els idiomes disponibles a la plataforma";
+$ActivateEmailTemplateTitle = "Activa plantilles de correu electrònic";
+$ActivateEmailTemplateComment = "És possible enviar correus electrònics per certes accions a certs usuaris.";
+$SystemManagement = "Administració del sistema";
+$RemoveOldDatabaseMessage = "Elimina la base de dades antiga";
+$RemoveOldTables = "Elimina les taules antigues";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Espai tot utilitzat pel portal %s el límit és de %s MB";
+$EventMessageManagement = "Administració d'esdeveniments";
+$Events = "Esdeveniments";
+$ToBeWarnedUserList = "Llista d'usuaris per ser alertats";
+$HideCampusFromPublicPlatformsList = "Amaga el campus de llista pública de plataformes";
+$ChamiloOfficialServicesProviders = "Proveïdors oficials de Chamilo";
+$Reader = "Lector";
+$Zombies = "Zombis";
+$ActiveOnly = "Només actiu";
+$AuthenticationSource = "Font d'autenticació";
+$RegisteredDate = "Data de registre";
+$FilterTermsTitle = "Filtre termes";
+$FilterTermsComment = "Proporcioneu una llista de termes, un per línia, que seran filtrats per tal que no apareguin a les seves pàgines web i correus electrònics. Aquests termes seran substituïts per ***";
+$UseCustomPagesTitle = "Utilitza pàgines personalitzades";
+$UseCustomPagesComment = "Activeu aquesta funcionalitat per configurar pàgines específiques d'autenticació segons el perfil de l'usuari";
+$StudentPageAfterLoginTitle = "Pàgina de l'alumne després d'autenticar-se";
+$StudentPageAfterLoginComment = "Aquesta pàgina serà la que veuran tots els alumnes després d'autenticar-se.";
+$TeacherPageAfterLoginTitle = "Pàgina del professor després d'autenticar-se";
+$TeacherPageAfterLoginComment = "Aquesta pàgina serà la que es carregui després que un professor s'hagi autenticat";
+$DRHPageAfterLoginTitle = "Pàgina del Director de Recursos Humans després d'haver-se autenticat";
+$DRHPageAfterLoginComment = "Aquesta pàgina serà la que es carregui després que un Director de Recursos Humans s'hagi autenticat.";
+$StudentAutosubscribeTitle = "Inscripció pel propi alumne";
+$StudentAutosubscribeComment = "Inscripció pel propi alumne - encara no disponible";
+$TeacherAutosubscribeTitle = "Inscripció pel propi professor";
+$TeacherAutosubscribeComment = "Inscripció pel propi professor - encara no disponible";
+$DRHAutosubscribeTitle = "Inscripció pel propi Director de Recursos Humans";
+$DRHAutosubscribeComment = "Inscripció pel propi Director de Recursos Humans - encara no disponible";
+$ScormCumulativeSessionTimeTitle = "Temps acumulat de sessió per SCORM";
+$ScormCumulativeSessionTimeComment = "Quan s'activa el temps d'una sessió per una seqüència d'aprenentatge SCORM serà acumulatiu, en cas contrari, només comptarà des del moment de l'última actualització.";
+$SessionAdminPageAfterLoginTitle = "Pàgina de l'administrador de sessions després d'autenticar-se";
+$SessionAdminPageAfterLoginComment = "Pàgina que es carregarà després que un administrador de sessions s'hagi autenticat";
+$SessionadminAutosubscribeTitle = "Inscripció pel propi administrador de sessions";
+$SessionadminAutosubscribeComment = "Inscripció pel propi administrador de sessions - encara no disponible";
+$ToolVisibleByDefaultAtCreationTitle = "Eina visible al crear un curs";
+$ToolVisibleByDefaultAtCreationComment = "Seleccioneu les eines que seran visibles quan es creïn els cursos";
+$casAddUserActivatePlatform = "Configuració interna CAS";
+$casAddUserActivateLDAP = "Configuració interna CAS";
+$UpdateUserInfoCasWithLdapTitle = "Configuració interna CAS";
+$UpdateUserInfoCasWithLdapComment = "Configuració interna CAS";
+$ShowAllUsers = "Mostra tots els usuaris";
+$ShowUsersNotAddedInTheURL = "Mostra usuaris no afegits a la URL";
+$UserNotAddedInURL = "Usuaris no afegits a la URL";
+$UsersRegisteredInNoSession = "Usuaris no registrats a cap sessió";
+$CommandLineInterpreter = "Intèrpret d'ordres en línia (CLI)";
+$PleaseVisitOurWebsite = "Visiteu el nostre lloc web http://www.chamilo.org";
+$SpaceUsedOnSystemCannotBeMeasuredOnWindows = "L'espai utilitzat en aquest disc no pot ser mesurat en sistemes basats en Windows.";
+$XOldTablesDeleted = "%d taules antigues eliminades";
+$XOldDatabasesDeleted = "%d bases de dades antigues eliminades";
+$ExtensionShouldBeLoaded = "Aquesta extensió s'hauria de carregar";
 ?>

@@ -226,4 +226,14 @@ $TotalWeightMustBeX = "A suma de todos os pesos das actividades debe ser %s";
 $ExportAsDOC = "Exportar como .doc";
 $SelectGradebook = "Selecciona valoración";
 $CheckYourGradingModelValues = "Por favor, revisa os valores do teu modelo de calificación";
+$SkillsAchievedWhenAchievingThisGradebook = "Competencias obtidas cando superes esta avaliación";
+$AddGradebook = "Engadir avaliación";
+$SelectGradeModel = "Seleccionar un modelo de cualificación";
+$AllMustWeight100 = "A suma de todos os valores debe ser 100";
+$Components = "Compoñentes";
+$OnlyActiveWhenThereAreAnyComponents = "Esta opción está habilitada se ten algunha avaliación ou categoría";
+$GradebookLockedAlert = "Esta avaliación foi bloqueada e non pode ser desbloqueada. Se precisa realmente desbloqueala, por favor, póñase en contacto co administrador da plataforma, explicando a súa razón (senon podería ser considerado coma un intento de fraude).";
+$NoStudentCertificatesAvailableYet = "Aínda non están dispoñibles os certificados dos estudantes. Teña en conta que para xenerar o seu certificado un estudante ten que ir á ferramenta avaliacións e premer sobre a icona certificado, o cal só aparecerá cando se teñan logrado os obxectivos do curso.";
+$CertificateExistsButNotPublic = "O certificado solicitado existe pero non é público, polo que para podelo ver terá que identificarse.";
+$ConfirmToUnlockElement = "Confirme o desbloqueo do elemento";
 ?>

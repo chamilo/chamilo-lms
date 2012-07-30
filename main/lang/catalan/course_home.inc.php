@@ -28,4 +28,7 @@ $IntroductionTextDeleted = "El text d'introducció ha estat eliminat";
 $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nom de la sessió";
 $SessionCategory = "Categoria de la sessió";
+$SessionData = "Dades de la sessió";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuració per al desplegament automàtic de lliçons està activada. Quan els estudiants entrin al curs, seran redirigits a la lliçó seleccionada perquè es desplegui automàticament.";
+$ToolSearch = "Cerca";
 ?>

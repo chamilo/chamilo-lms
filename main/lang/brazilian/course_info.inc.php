@@ -127,4 +127,8 @@ $ConfigLearnpath = "Configurações da rota de aprendizagem";
 $PDFWaterMarkHeader = "Cabeçalho em Marca d'água nas exportações em PDF";
 $RedirectToALearningPath = "Redirecionar para uma rota de aprendizagem selecionada";
 $RedirectToTheLearningPathList = "Lista de rotas de aprendizagem para redirecionar";
+$ActivateLegal = "Ativar termos legais";
+$ShowALegalNoticeWhenEnteringTheCourse = "Mostrar uma nota legal ao acessar o curso";
+$CourseLegalAgreement = "Acordo legal para este curso";
+$AcceptLegal = "Aceitar termos legais";
 ?>

@@ -25,4 +25,13 @@ $GlossaryManagement = "Gerenciamento do glossário";
 $TermMoved = "O termo foi movido";
 $ShowGlossaryInExtraToolsTitle = "Exibir os termos do glossário em outras ferramentas";
 $ShowGlossaryInExtraToolsComment = "A partir daqui você pode configurar como adicionar os termos do glossário em ferramentas extras como Rotas de Aprendizagem e Exercícios";
+$ImportGlossary = "Importar glossário";
+$ReplaceGlossary = "Substituir glossário";
+$CannotDeleteGlossary = "Não pode apagar o glossário";
+$TermsImported = "Termos importados";
+$TermsNotImported = "Termos não importados";
+$ExportGlossaryAsCSV = "Exportar glossário como arquivo CSV";
+$List = "Lista";
+$GlossaryTermUpdated = "Termo atualizado";
+$DeleteAllGlossaryTerms = "Apagar todos os termos";
 ?>

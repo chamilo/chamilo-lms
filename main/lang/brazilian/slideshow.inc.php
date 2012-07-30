@@ -21,4 +21,6 @@ $lang_of = "de";
 $lang_view_slideshow = "Ver Galeria de Imagens";
 $FirstSlide = "Primeiro slide";
 $LastSlide = "Último slide";
+$ResizingAuto = "AUTO REDIMENSIONAR (padrão)";
+$ResizingAutoComment = "A apresentação de slides vai se redimensionar automaticamente ao seu tamanho de tela. Esta é a opção padrão.";
 ?>

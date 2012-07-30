@@ -497,4 +497,8 @@ $EndTest = "Končaj test";
 $PassPercentage = "Prag uspešnosti[%]";
 $NoCategorySelected = "Nobena kategorija ni izbrana";
 $ExerciseAverage = "Povprečje testov";
+$NoNegativeScore = "Brez negativnih rezultatov";
+$GlobalMultipleAnswer = "Globalen večkraten odgovor";
+$AllQuestionsShort = "Vsi";
+$ProblemsRecordingUploadYourOwnAudioFile = "Problem s snemanjem? Naložite svojo avdio datoteko.";
 ?>

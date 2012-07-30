@@ -31,4 +31,7 @@ $CannotDeleteGlossary = "No pode borrar o glosario";
 $TermsImported = "Importar termos";
 $TermsNotImported = "Termos non importados";
 $ExportGlossaryAsCSV = "Exportar o glosario como un arquivo CSV";
+$List = "Lista";
+$GlossaryTermUpdated = "Termo actualizado";
+$DeleteAllGlossaryTerms = "Eliminar todos os termos";
 ?>

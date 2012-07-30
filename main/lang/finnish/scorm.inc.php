@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$langScormVersion = "versio";
 $langScormTime = "Aika";
 $langScormScore = "Tulos";
 $langScormClose = "Sulje";

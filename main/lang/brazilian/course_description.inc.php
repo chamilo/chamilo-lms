@@ -17,4 +17,7 @@ $CourseDescriptionUpdated = "A descrição do curso foi atualizada";
 $CourseDescriptionDeleted = "A descrição do curso foi excluida";
 $CourseDescriptionIntro = " Para criar uma descrição do curso, clique em um título e preencha o campo associado.<br><br> Clique em OK para continuar.";
 $langSaveDescription = "Salvar descrição";
+$AddCourseDescription = "Adicionar descrição do curso";
+$DescriptionUpdated = "Descrição atualizada";
+$CourseDescriptions = "Descrições do curso";
 ?>

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Ja s'ha registrat en el curs";
 $lang_already_enrolled = "Ja està matriculat";
 $lang_my_personnal_course_list = "La meva llista personal de cursos";
 $lang_course_enrollment = "Cursos de l'usuari";
@@ -81,4 +82,7 @@ $SessionCategory = "Categoria de la sessió";
 $Expand = "Expandir";
 $Collapse = "Contreure";
 $CourseDetails = "Detalls del curs";
+$GroupPendingInvitations = "Invitacions pendents de grup";
+$Compose = "Redacta";
+$ThereAreNoCoursesInThisCategory = "No existeixen cursos en la categoria actual";
 ?>

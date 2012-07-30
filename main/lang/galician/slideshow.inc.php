@@ -21,4 +21,6 @@ $lang_of = "de";
 $lang_view_slideshow = "Ver presentación";
 $FirstSlide = "Primeira dispostiva";
 $LastSlide = "Última diapositiva";
+$ResizingAuto = "Presentación redimensionada automáticamente";
+$ResizingAutoComment = "A presentación redimensionarase automáticamente ao tamaño da súa pantalla. Esta é a opción que sempre se cargará por defecto cada vez que entre na plataforma.";
 ?>

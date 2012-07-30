@@ -18,4 +18,6 @@ $CourseDescriptionDeleted = "Opis tečaja je bil odstranjen";
 $CourseDescriptionIntro = "Da bi opisali tečaj, kliknite na ustrezen naslov in vnesite želene podatke v vnosna polja.<br /><br />Zaključite s klikom na OK, nato ponovite za naslednji želen naslov.";
 $langSaveDescription = "Shrani opis";
 $AddCourseDescription = "Dodaj opis tečaja";
+$DescriptionUpdated = "Opis tečaja je bil ažuriran";
+$CourseDescriptions = "Opis tečaja";
 ?>

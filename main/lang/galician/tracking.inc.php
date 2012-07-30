@@ -317,4 +317,10 @@ $NumberOfAnnouncementsInCourse = "Número de anuncios no curso";
 $CurrentCoursesReport = "Informe do curso actual";
 $NumberOfPublishedExercises = "# de exercicios publicados";
 $NumberOfPublishedLps = "# de Leccións publicadas";
+$EventType = "Tipo de evento";
+$NbInactiveSessions = "Número de sesións inactivas";
+$FollowedSessions = "Sesións seguidas";
+$FollowedCourses = "Cursos seguidos";
+$FollowedUsers = "Usuarios seguidos";
+$Timeline = "Liña de tempo";
 ?>

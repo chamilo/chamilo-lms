@@ -93,4 +93,9 @@ $PleaseCheckHomeworkPage = "Por favor, verifique a página de tarefas/trabalhos"
 $IncludedInEvaluation = "Incluídos na avaliação";
 $DateExpiredNotBeLessDeadLine = "A data de expiração não pode ser inferior que a data de devolução";
 $NotRevised = "Não revisado";
+$MaxWeightNeedToBeProvided = "Precisa fornecer o peso máximo";
+$ContainsAfile = "Contém um arquivo";
+$AllowTextAssignments = "Permitir a entrega de tarefas através do editor on-line";
+$YouAlreadySentAPaperYouCantUpload = "Você já enviou uma tarefa, não pode enviar outra";
+$CantUploadDeleteYourPaperFirst = "Não pode subir esta tarefa. Por favor, apague antes a anterior.";
 ?>

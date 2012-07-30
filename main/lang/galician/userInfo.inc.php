@@ -91,6 +91,7 @@ $ClearSearchResults = "Limpar resultados da procura";
 $SendInvitation = "Enviar invitación";
 $SocialInvitationToFriends = "Invitar ou unirme a grupo de amigos";
 $MyCertificates = "Os meus certificados";
+$UnsubscribeFromPlatformSuccess = "A súa conta %s foi eliminada por completo deste portal. Gracias polo tempo que permaneceu con nós. No futuro esperamos volver velo/a de novo con nós.";
 $ToChangeYourEmailMustTypeYourPassword = "Para cambiar a súa dirección de correo, é preciso que confirme a súa contrasinal.";
 $Invitations = "Invitacións";
 $MyGroups = "Os meus grupos";
@@ -199,4 +200,6 @@ $SocialGroups = "Grupos";
 $CreateASocialGroup = "Crear un grupo social";
 $EditMembersList = "Editar lista de membros";
 $IAmAHRM = "Eu son un administrador de recursos humáns";
+$UnsubscribeFromPlatform = "Se desexa darse de baixa completamente no Campus e que toda a súa información sexa eliminada da nosa base de datos prema o botón inferior.";
+$UnsubscribeFromPlatformConfirm = "Si, quero suprimir completamente esta conta. Ningún dato quedará no servidor e non poderei acceder de novo, salvo que cree unha conta completamente nova.";
 ?>

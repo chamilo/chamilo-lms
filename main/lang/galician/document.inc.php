@@ -214,6 +214,8 @@ $CreateFolder = "Crear o directorio";
 $HelpDefaultDirDocuments = "Este directorio contén os arquivos fornecidos por defecto. Pode eliminar ou engadir outros arquivos, pero se un arquivo está oculto cando é inserido nun documento web os estudantes tampouco poderán velo aquí. Cando insira un arquivo nun documento web fágao visible previamente. Os directorios poden seguir ocultos.";
 $HelpSharedFolder = "Este directorio contén os arquivos que os estudantes (e Vd.) envían a un curso a través do editor se non o fan desde a ferramenta grupos. Por defecto serán visibles por calquera profesor, pero estarán ocultos para outros estudantes salvo que accedan a eles mediante un acceso directo. Se fai visible o directorio dun estudante outros estudantes poderán ver todo o que conteña.";
 $TemplateImage = "Imaxe da plantilla";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Para reproducir o contido multimedia tená que ou ben actualizar o seu navegador a unha versión recente ou actualizar o seu plugin de Flash. Comprobe se o arquivo ten unha extensión correcta.";
+$UpdateRequire = "Actualización necesaria";
 $MoveElement = "Mover";
 $CertificateName = "Nome do certificado";
 $CopyToMyFiles = "Copiar na miña área persoal de arquivos";
@@ -262,4 +264,5 @@ $DocMv = "Documento movido";
 $NoSVGImagesInImagesGalleryPath = "Non hai imaxes SVG na túa galeria de imaxes";
 $NoSVGImages = "Non é unha imaxe SVG";
 $WamiNeedFilename = "Antes de activar a gravación é necesario un nome de arquivo";
+$SelectAnAudioFileFromDocuments = "Seleccionar un arquivo de audio desde a sección de documentos";
 ?>

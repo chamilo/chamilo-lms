@@ -232,4 +232,5 @@ $NumOtherAudioVideo = "Quantidade de arquivos de áudio e vídeo inseridos (exce
 $NumTables = "Quantidade de tabelas inseridas";
 $Anchors = "Âncoras";
 $NumProtectedPages = "Quantidade de páginas protegidas";
+$WhoAndWhere = "Quem e onde";
 ?>

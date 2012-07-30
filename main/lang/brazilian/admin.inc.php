@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Ativando a autenticação CAS permitirá aos usuários se autenticarem com as credenciais CAS deles. Pode ir à seção Plugin para adicionar um botão de \"Login CAS\" configurável no seu campus Chamilo.";
+$UsersRegisteredInAnyGroup = "Usuários cadastrados em qualquer grupo";
+$ShowHotCoursesComment = "A lista de cursos populares será adicionada na página índice";
+$ShowHotCoursesTitle = "Mostrar cursos populares";
+$EnableIframeInclusionComment = "Permitir iframes arbitrários no editor HTML melhorará as possibilidades de edição dos usuários, mas pode representar um risco de segurança. Por favor, assegure-se de que pode confiar nos seus usuários (isto é, sabe quem são eles) antes de activar esta característica.";
+$EnableIframeInclusionTitle = "Permitir iframes no editor HTML";
+$MailTemplateRegistrationMessage = "Prezado/a ((firstname)) ((lastname)),\n\n Você assinou em ((sitename) com as configurações seguintes:\n\nNome de usuário : ((username))\nSenha : ((password))\n\nO endereço de ((sitename)) é : ((url))\n\nEm caso de ter problemas, contate conosco.\n\nAtenciosamente\n((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationTitle = "Novo usuário em ((sitename))";
 $AdminBy = "Administrado por";
 $AdministrationTools = "Administração";
 $State = "Status do sistema";
@@ -1057,6 +1065,9 @@ $DeleteSelectedFullSessionCategory = "Excluir todas as categorias de sessões se
 $EditTopRegister = "Editar a nota";
 $InsertTabs = "Adicionar abas (Tabs)";
 $EditTabs = "Editar abas (Tabs)";
+$YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Sua caderneta de notas precisa primeiro de um certificado para ser ligada com uma habilidade";
+$PlatformUnsubscribeTitle = "Permitir a eliminação de conta da plataforma";
+$PlatformUnsubscribeComment = "Activando esta opção, permitirá que cualquer usuário possa apagar a conta dele definitivamente, assim como apagar toda informação relacionada da plataforma. Esta é uma ação certamente radical, mas é necessária para portais abertos ao público onde os usuários podem se assinar automaticamente. Uma entrada adicional vai aparecer no perfil de usuário para apagar a conta após confirmação.";
 $BabyOrange = "Baby Orange";
 $BlueLagoon = "Lago azul";
 $CoolBlue = "Azul legal";
@@ -1228,6 +1239,7 @@ $AllowUserCourseSubscriptionByCourseAdminTitle = "Permite a inscrição de usuá
 $AllowUserCourseSubscriptionByCourseAdminComment = "Ativar esta opção permitirá que o administrador do curso possa inscrever usuários no curso";
 $ConfigureDashboardPlugin = "Configurar Plugin do Painel";
 $EditBlocks = "Editar blocos";
+$TheXMLImportLetYouAddMoreInfoAndCreateResources = "A importação XML lhe permite adicionar mais informações e criar recursos (cursos, usuários...). A importação CSV somente criará sessões e lhe permitirá designar recursos existentes a elas.";
 $ShowLinkBugNotificationTitle = "Exibir link para reportar bugs";
 $ShowLinkBugNotificationComment = "Exibir um link no cabeçalho para relatar um erro dentro de nossa plataforma de suporte (http://support.chamilo.org). Quando clicar no link, o usuário é encaminhado a uma página wiki que descreve todo o processo para relatar um erro.";
 $DataFiller = "Preenchimento de dados";
@@ -1461,9 +1473,231 @@ $ContributorsList = "Lista de Colaboradores";
 $SecurityGuide = "Guia de Segurança";
 $OptimizationGuide = "Guia de Otimização";
 $FreeBusyCalendar = "Agenda";
+$ExtensionCouldBeLoaded = "A extensão foi carregada";
 $ArchiveDirCleanup = "Limpar diretório de arquivo";
 $ArchiveDirCleanupDescr = "O Chamilo mantém uma cópia da maioria dos arquivos temporários gerados (para backups, exportações, cópias, etc) neste arquivo/diretório. Depois de um tempo, todos esses arquivos podem ocupar uma grande parte do espaço do disco, sem necessidade. Clique no botão abaixo para limpar o arquivo diretório. Esta operação deve ser automatizada por processos cron, mas se não for possível, você pode vir a esta página regularmente para remover todos os arquivos temporários do diretório.";
 $ArchiveDirCleanupProceedButton = "Proceder com a limpeza";
 $ArchiveDirCleanupSucceeded = "A limpeza do arquivo/diretório foi executada com sucesso.";
 $ArchiveDirCleanupFailed = "Por alguma razão, o arquivo/diretório não pode ser limpo.  Tente limpá-lo manualmente conectando ao servidor e excluindo os conteúdos do diretório chamilo/arquive, exceto o arquivo .htaccess.";
+$LocalTimeUsingPortalTimezoneXIsY = "A hora local no fuso horário do site (%s) é %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Permitir que os professores mudem o sistema de avaliação das tarefas";
+$AllowTeacherChangeGradebookGradingModelComment = "Ativando esta opção, permitirá que os professores escolhan o sistema de avaliação usado nos cursos deles. Esta mudança deverá ser feita pelo professor na ferramenta de avaliações do curso.";
+$NumberOfSubEvaluations = "Número de sub-avaliações";
+$AddNewModel = "Adicionar novo modelo";
+$GroupParentship = "Matriz de grupo";
+$NoParentship = "Sem matriz";
+$NoCertificate = "Sem certificado";
+$ShowDocumentPreviewTitle = "Mostrar pré-visualização do documento";
+$ShowDocumentPreviewComment = "Mostrar pré-visualizações dos documentos na ferramenta de documentos evita cargar uma nova página só para mostrar um documento, mas pode ser inestável em navegadores velhos ou telas de pouca largura.";
+$CasMainActivateTitle = "Ativar autenticação CAS";
+$CasMainServerTitle = "Servidor CAS principal";
+$CasMainServerComment = "Este é o servidor CAS principal que será usado para a autenticação (endereço IP ou nome do host)";
+$CasMainServerURITitle = "URI do servidor CAS principal";
+$CasMainServerURIComment = "A rota ao serviço CAS";
+$CasMainPortTitle = "Porto do servidor CAS principal";
+$CasMainPortComment = "O porto onde conectar o servidor CAS principal";
+$CasMainProtocolTitle = "Protocolo do servidor CAS principal";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "O protocolo com que conectar ao servidor CAS";
+$CasUserAddActivateTitle = "Ativar a adição de usuário CAS";
+$CasUserAddActivateComment = "Ativar a adição de usuário CAS";
+$CasUserAddLoginAttributeTitle = "Adicionar login de usuário CAS";
+$CasUserAddLoginAttributeComment = "Adicionar detalhes de login de usuário CAS ao cadastrar um novo usuário";
+$CasUserAddEmailAttributeTitle = "Adicionar e-mail de usuário CAS";
+$CasUserAddEmailAttributeComment = "Adicionar detalles do e-mail do usuário CAS ao cadastrar um novo usuário";
+$CasUserAddFirstnameAttributeTitle = "Adicionar nome do usuário CAS";
+$CasUserAddFirstnameAttributeComment = "Adicionar nome do usuário CAS ao cadastrar um novo usuário";
+$CasUserAddLastnameAttributeTitle = "Adicionar sobrenome do usuário CAS";
+$CasUserAddLastnameAttributeComment = "Adicionar detalhes do sobrenome do usuário CAS ao cadastrar um novo usuário";
+$ShowAdminToolbarTitle = "Mostrar barra de ferramentas do administrador";
+$ShowAdminToolbarComment = "Mostra uma barra de ferramentas global no alto da página para os roles de usuário designados. Esta barra de ferramentas, muito similar às barras de ferramentas pretas de WordPress e Google, podem acelerar muito ações dificeis e melhorar o espaço que você tem disponível para o conteúdo de aprendizagem, mas pode ser confusa para alguns usuários";
+$AddInMenu = "Adicionar no menu";
+$AllowUsersToChangeEmailWithNoPasswordTitle = "Permitir aos usuários mudar o endereço de e-mail sem senha";
+$AllowUsersToChangeEmailWithNoPasswordComment = "Ao mudar a informação da conta";
+$EnableHelpLinkTitle = "Ativar link de ajuda";
+$EnableHelpLinkComment = "O link de Ajuda está localizado no alto à direita da tela";
+$BackToAdmin = "De volta para administração";
+$AllowGlobalChatTitle = "Permitir chat global";
+$HeaderExtraContentTitle = "Conteúdo extra na cabeceira";
+$HeaderExtraContentComment = "Você pode adicionar código HTML como por exemplo as meta tags";
+$FooterExtraContentTitle = "Conteúdo extra no pé de página";
+$AllowGlobalChatComment = "Os usuários podem conversar entre si no chat";
+$FooterExtraContentComment = "Você pode adicionar código HTML como por exemplo as meta tags";
+$CopyOnlySessionItems = "Copiar somente os itens de sessão";
+$FirstLetterCourseTitle = "Primeira letra do título do curso";
+$UsersFoundInOtherPortals = "Usuários achados noutros portais";
+$AddUserToMyURL = "Adicionar usuário ao meu portal";
+$UsersDeleted = "Usuários eliminados";
+$UsersAdded = "Usuários adicionados";
+$PluginArea = "Área de extensões";
+$NoConfigurationSettingsForThisPlugin = "Não se acharam opções de configuração para esta extensão";
+$Regions = "Regiões";
+$CoursesDefaultCreationVisibilityTitle = "Visibilidade padrão do curso";
+$CoursesDefaultCreationVisibilityComment = "Visibilidade padrão do curso ao criar um novo curso";
+$YouHaveEnteredTheCourseXInY = "Você acessou o curso %s em %s";
+$LoginIsEmailTitle = "Usar e-mail como nome de usuário";
+$LoginIsEmailComment = "Usar e-mail para fazer login no sistema";
+$AllowBrowserSnifferTitle = "Ativar o sniffer do navegador";
+$AllowBrowserSnifferComment = "Isto permite uma pesquisa das capacidades que tem os navegadores que se conectam a Chamilo. Assim a experiência de usuário vai melhorar adaptando respostas ao tipo de plataforma de navegação que se conecta, mas também vai alentecer a carrega da página inicial dos usuários cada vez que eles acessem a plataforma.";
+$EnableWamiRecordTitle = "Ativar gravador WAMI";
+$EnableWamiRecordComment = "O gravador WAMI é uma ferramenta Flash de gravação de voz";
+$ChangeSharedSetting = "Mudar visibilidade da opção nos outros portais";
+$AllowHRSkillsManagementTitle = "Permitir aos RH gerenciar habilidades";
+$AllowHRSkillsManagementComment = "Permite gerenciar habilidades aos RH";
+$GradebookDefaultWeightTitle = "Peso padrão na caderneta de notas";
+$GradebookDefaultWeightComment = "Este peso será o padrão em todos os cursos";
+$TeachersCanChangeScoreSettingsTitle = "Os professores podem mudar as configurações de pontuação da caderneta de notas";
+$TeachersCanChangeScoreSettingsComment = "Ao editar as configurações da caderneta de notas";
+$GradebookEnableLockingTitle = "Ativar bloqueio de avaliações pelos professores";
+$GradebookEnableLockingComment = "Uma vez activado, esta opção permitirá o bloqueio de qualquer avaliação pelos professores do curso correspondente. Em troca, isto evitará qualquer modificação dos resultados pelo professor dentro nos recursos usados na avaliação: provas, roteiros de aprendizagem, tarefas, etc. O único rol autorizado para desbloquear uma avaliação bloqueada é o administrador. O professor será informado desta possibilidade. O bloqueio e desbloqueio das cadernetas de notas será cadastrado no relatório de atividades importantes do sistema";
+$LdapDescriptionComment = "Autenticação LDAP: 
+Ver I. de baixo para configurar LDAP 
+Ver II. de baixo para activar a autenticação LDAP
+
+
+Atualize os atributos de usuário com dados LDAP após da autenticação CAS (ver configuração CAS):
+Ver I. de baixo para configurar LDAP 
+CAS gerencia a autenticação de usuário, a activação de LDAP é desnecessária.
+
+I. Configuração LDAP
+
+Editar arquivo main/auth/external_login/ldap.conf.php
+
+-> Editar valores do array $extldap_config 
+
+Os parâmetros são
+base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
+admin distinguished name (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
+admin password (ex : 'admin_password' => '123456')
+ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
+filter (ex : 'filter' => '')
+port (ex : 'port' => 389)
+protocol version (2 or 3) (ex : 'protocol_version' => 3)
+user_search (ex : 'user_search' => 'sAMAccountName=%username%')
+encoding (ex : 'encoding' => 'UTF-8')
+update_userinfo (ex : 'update_userinfo' => true)
+-> Para atualizar correspondências entre usuário e atributos LDAP, edite o array $extldap_user_correspondance 
+Os valores do array são <chamilo_field> => <ldap_field> 
+A estrutura do array é explicada no arquivo main/auth/external_login/ldap.conf.php
+
+
+II. Activar autenticação LDAP
+
+Editar arquivo main/inc/conf/configuration.php
+
+-> Descomente as linhas 
+$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+
+N.B. : Os usuários LDAP usam os mesmos campos para fazer login que os usuários da plataforma. 
+N.B. : A activação de LDAP adiciona um menu Autenticação externa [LDAP] em \"adicionar o modificar\" páginas de usuário.";
+$ShibbolethMainActivateTitle = "Autenticação Shibboleth";
+$ShibbolethMainActivateComment = "Primeiro, precisa configurar Shibboleth no seu servidor web.
+
+Para configurá-lo para Chamilo edite o arquivo main/auth/shibboleth/config/aai.class.php
+
+Modifique os valores do objeto $result com o nome dos seus atributos Shibboleth
+$result->unique_id = 'mail';
+$result->firstname = 'cn';
+$result->lastname = 'uid';
+$result->email = 'mail';
+$result->language = '-';
+$result->gender = '-';
+$result->address = '-';
+$result->staff_category = '-';
+$result->home_organization_type = '-';
+$result->home_organization = '-';
+$result->affiliation = '-';
+$result->persistent_id = '-';
+...
+
+Vá para Extensões para adicionar um botão de \"Login Shibboleth\" configurável no seu campus Chamilo.";
+$LdapDescriptionTitle = "Autenticação LDAP";
+$FacebookMainActivateTitle = "Autenticação Facebook";
+$FacebookMainActivateComment = "Primeiro, deve criar uma aplicação Facebook (ver https://developers.facebook.com/apps) com sua conta de Facebook. Nos parâmetros das aplicações de Facebook, o valor da URL do site deveria ter um parâmetro GET \"action=fbconnect\" (por exemplo, http://mychamilo.com/?action=fbconnect).
+
+Depois, edite o arquivo main/auth/external_login/facebook.conf.php e insira os valores \"appId\" e \"secret\" para $facebook_config. Vá para Extensões para adicionar um botão \"Login Facebook\" configurável no seu campus Chamilo.";
+$LanguagePriority1Title = "Prioridade de idioma 1";
+$LanguagePriority2Title = "Prioridade de idioma 2";
+$LanguagePriority3Title = "Prioridade de idioma 3";
+$LanguagePriority4Title = "Prioridade de idioma 4";
+$LanguagePriority5Title = "Prioridade de idioma 5";
+$LanguagePriority1Comment = "O idioma com a prioridade mais alta";
+$LanguagePriority2Comment = "A segunda prioridade de idioma";
+$LanguagePriority3Comment = "A terceira prioridade de idioma";
+$LanguagePriority4Comment = "A quarta prioridade de idioma";
+$LanguagePriority5Comment = "A prioridade de idioma mais baixa";
+$UserLanguage = "Idioma do usuário";
+$UserSelectedLanguage = "Idioma selecionado pelo usuário";
+$TeachersCanChangeGradeModelSettingsTitle = "Os professores podem mudar as opções do modelo de caderneta de notas";
+$TeachersCanChangeGradeModelSettingsComment = "Ao editar uma caderneta de notas";
+$GradebookDefaultGradeModelTitle = "Sistema de notas padrão";
+$GradebookDefaultGradeModelComment = "Este valor será o padrão ao criar um curso";
+$GradebookEnableGradeModelTitle = "Activar modelo de caderneta de notas";
+$GradebookEnableGradeModelComment = "Activa a autocriação de categorias de caderneta de notas dentro de um curso dependendo dos modelos de caderneta.";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Permitir aos administradores de sessão ver todas as sessões";
+$AllowSessionAdminsToSeeAllSessionsComment = "Se esta opção não estiver activada (padrão), os administradores de sessão podem ver somente as sessões que eles criaram. Isto é confuso num ambiente aberto onde os administradores de sessão talvez precisem compartilhar tempo de soporte entre duas sessões.";
+$AllowSkillsToolTitle = "Permitir ferramenta Habilidades";
+$AllowSkillsToolComment = "Os usuários podem ver as habilidades deles na rede social e num bloque na página de inicio.";
+$AllowPublicCertificatesTitle = "Permitir certificados públicos";
+$AllowPublicCertificatesComment = "Os certificados de usuário podem ser vistos por usuários não cadastrados.";
+$EnableWebCamClipTitle = "Activar Clip de webcam";
+$EnableWebCamClipComment = "O Clip de webcame permite aos usuários capturar imagens da webcam deles e mandá-la para o servidor em formato jpeg";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Deveria criar os \"Termos e condições\" para todos os idiomas disponíveis.";
+$ActivateEmailTemplateTitle = "Activar modelos de e-mail";
+$ActivateEmailTemplateComment = "Você pode mandar alertas por e-mail para certas ações a certos usuários.";
+$SystemManagement = "Gerenciamento do sistema";
+$RemoveOldDatabaseMessage = "Eliminar o banco de dados antigo";
+$RemoveOldTables = "Eliminar as tabelas velhas";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Espaço total usado pelo limite %s do portal é %s MB";
+$EventMessageManagement = "Gerenciamento das mensagens de evento";
+$Events = "Eventos";
+$ToBeWarnedUserList = "Lista de usuários a serem avisados";
+$HideCampusFromPublicPlatformsList = "Ocultar campus da lista de plataformas públicas";
+$ChamiloOfficialServicesProviders = "Fornecedores oficiais de serviços sobre Chamilo";
+$Reader = "Leitor";
+$Zombies = "Zumbis";
+$ActiveOnly = "Somente ativos";
+$AuthenticationSource = "Origem da autenticação";
+$RegisteredDate = "Data cadastrada";
+$FilterTermsTitle = "Filtrar termos";
+$FilterTermsComment = "Dê uma lista de termos, um por linha, a serem filtrados dos sites web e e-mails. Estes termos serão substituidos por ***.";
+$UseCustomPagesTitle = "Usar páginas personalizadas";
+$UseCustomPagesComment = "Ativar esta característica para configurar páginas de login específicas segundo o rol";
+$StudentPageAfterLoginTitle = "Página do aluno depois de fazer login";
+$StudentPageAfterLoginComment = "Esta página vai aparecer a todos os alunos depois de eles fazerem login";
+$TeacherPageAfterLoginTitle = "Página do professor depois de fazer login";
+$TeacherPageAfterLoginComment = "Esta página será carregada depois de fazer login para todos os professores";
+$DRHPageAfterLoginTitle = "Página do gerenciador de recursos humanos depois de fazer login";
+$DRHPageAfterLoginComment = "Esta página será carregada depois de fazer login para todos os gerenciadores de recursos humanos";
+$StudentAutosubscribeTitle = "Autoassinatura de aluno";
+$StudentAutosubscribeComment = "Autoassinatura de aluno - ainda não disponível";
+$TeacherAutosubscribeTitle = "Autoassinatura de professor";
+$TeacherAutosubscribeComment = "Autoassinatura de professor - ainda não disponível";
+$DRHAutosubscribeTitle = "Autoassinação do diretor de recursos humanos";
+$DRHAutosubscribeComment = "Autoassinação do diretor de recursos humanos - ainda não disponível";
+$ScormCumulativeSessionTimeTitle = "Tempo de sessão acumulativo para SCORM";
+$ScormCumulativeSessionTimeComment = "Se for ativado, o tempo de sessão para os roteiros de aprendizagem SCORM serão acumulativos. Caso contrário, somente se contará apartir do último tempo de atualização.";
+$SessionAdminPageAfterLoginTitle = "Página do administrador de sessão depois de fazer login";
+$SessionAdminPageAfterLoginComment = "Página a carregar depois de fazer login para os administradores de sessão";
+$SessionadminAutosubscribeTitle = "Autoassinatura de administradores de sessão";
+$SessionadminAutosubscribeComment = "Autoassinatura de administradores de sessão - ainda não disponível";
+$ToolVisibleByDefaultAtCreationTitle = "Ferramenta visível na criação do curso";
+$ToolVisibleByDefaultAtCreationComment = "Selecione as ferramentas que serão visíveis ao criar os cursos - ainda não disponível";
+$casAddUserActivatePlatform = "Configuração interna de CAS";
+$casAddUserActivateLDAP = "Configuração interna de CAS";
+$UpdateUserInfoCasWithLdapTitle = "Configuração interna de CAS";
+$UpdateUserInfoCasWithLdapComment = "Configuração interna de CAS";
+$ShowAllUsers = "Mostrar todos os usuários";
+$ShowUsersNotAddedInTheURL = "Mostrar usuários não adicionados à URL";
+$UserNotAddedInURL = "Usuários não adicionados à URL";
+$UsersRegisteredInNoSession = "Usuários não cadastrados em nenhuma sessão";
+$CommandLineInterpreter = "Intérprete de comandos (CLI)";
+$PleaseVisitOurWebsite = "Por favor, visite o nosso site web: http://www.chamilo.org";
+$SpaceUsedOnSystemCannotBeMeasuredOnWindows = "O espaço usado em disco não pode ser medido adequadamente em sistemas baseados em Windows.";
+$XOldTablesDeleted = "Eliminadas %d tabelas antigas";
+$XOldDatabasesDeleted = "Eliminados %d bancos de dados antigos";
+$ExtensionShouldBeLoaded = "Esta extensão deveria ser carregada.";
 ?>

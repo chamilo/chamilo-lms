@@ -235,4 +235,5 @@ $OnlyActiveWhenThereAreAnyComponents = "Ta možnost je omogočena v primeru, da 
 $GradebookLockedAlert = "Ta naloga je zaklenjena. Ne morete je odkleniti. Če želite odklenjeno, se obrnite na upravitelja platforme in objasnite razloge, zakaj želite odklenjeno (brez obrazložitve se lahko smatra, da gre za poskus zlorabe orodja).";
 $NoStudentCertificatesAvailableYet = "Trenutno ni na voljo noben certifikat tečajnikov. Pomnite, da mora tečajnik za generiranje certifikata dostopiti do orodja naloge/zadolžitve in klikniti na ikono certifikata. Ikona je dostopna zgolj v primeru, da je tečajnik izpolnil kriterije za doseg certifikata.";
 $CertificateExistsButNotPublic = "Zahtevan certifikat obstaja, vendar ni javen. Prijavite se, če si ga želite ogledati.";
+$ConfirmToUnlockElement = "Potrdi odklepanje elementa";
 ?>

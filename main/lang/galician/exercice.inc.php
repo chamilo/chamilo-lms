@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Este exercicio foi incluido nunha secuencia de aprendizaxe, polo cal non poderá ser accesible directamente polos estudantes desde aquí. Se quere colocar o mesmo exercicio dispoñible a través da ferramenta exercicios, faga unha copia do exercicio en cuestión pulsando sobre a icona de copia.";
 $langExercice = "Exercicio";
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
@@ -480,4 +481,24 @@ $NotValidated = "Non validado";
 $Revised = "Revisado";
 $SelectAQuestionToReview = "Seleccionar unha pregunta para revisar";
 $ReviewQuestionLater = "Revisar a pregunta máis tarde";
+$NumberStudentWhoSelectedIt = "Número de alumnos que a seleccionaron";
+$QuestionsAlreadyAnswered = "Preguntas xa respostadas";
+$StudentsWhoAreTakingTheExerciseRightNow = "Estudantes que realizan o exercicio neste momento";
+$ReportByQuestion = "Informe por pregunta";
+$LiveResults = "Resultados en vivo";
+$RecordAnswer = "Grabar resposta";
+$UseTheMessageBelowToAddSomeComments = "Utilizar o seguinte campo de texto para escribir un comentario ao profesor";
+$SendRecord = "Enviar grabación";
+$DownloadLatestRecord = "Descargar grabación";
+$OralExpression = "Expresión oral";
+$CongratulationsYouPassedTheTest = "Parabéns aprobaches o exame";
+$YouDidNotReachTheMinimumScore = "Non alcanzaches a puntuación mínima";
+$EndTest = "Fin do exame";
+$PassPercentage = "Porcentaxe de éxito";
+$NoCategorySelected = "Non hai una categoría seleccionada";
+$ExerciseAverage = "Media do exercicio";
+$NoNegativeScore = "Sen puntos negativos";
+$GlobalMultipleAnswer = "Resposta múltiple global";
+$AllQuestionsShort = "Todas";
+$ProblemsRecordingUploadYourOwnAudioFile = "Ten problemas para grabar? Mande o seu propio arquivo de audio";
 ?>

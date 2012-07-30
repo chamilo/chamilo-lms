@@ -49,4 +49,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar um curso ju
 $ArchivesDirectoryNotWriteableContactAdmin = "O directório do arquivo utilizado por esta aplicação, não se encontra editável. Por favor, contacte o administrador da plataforma.";
 $DestinationCourse = "Curso destino";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se as Rotas de Aprendizagem têm arquivos de áudio incluídos, você deve selecioná-las a partir dos documentos";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Não esqueça marcar os arquivos de mídias se seus recursos precisarem";
 ?>

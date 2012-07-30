@@ -130,4 +130,7 @@ $ADatabaseWithTheSameNameAlreadyExists = "Podatkovna baza z istim imenom <b>že 
 $UserXCantHaveAccessInTheDatabaseX = "Uporabnik <b>%s</b> nima dostopa do podatkovne baze <b>%s</b>";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Podatkovna baza <b>%s</b> ne bo ustvarjena. Uporabnik <b>%s</b> nima zadostnih pravic.";
 $CourseTestWasCreated = "Testni tečaj je bil ustvarjen";
+$InstallExecution = "Izvajanje procesa namestitve";
+$UpdateExecution = "Izvajanje procesa nadgradnje";
+$PleaseWaitThisCouldTakeAWhile = "Prosim, počajate. Ta proces lahko traja nekaj časa ...";
 ?>

@@ -75,4 +75,10 @@ $AgendaSortChronologicallyDown = "Ordenar events (recents/antics)";
 $ItemForUserSelection = "Esdeveniment dirigit a una selecció d'usuaris";
 $IsNotiCalFormatFile = "No és un arxiu de format iCal";
 $RepeatEvent = "Repetir esdeveniment";
+$RepeatDate = "Repeteix data";
+$EndDateMustBeMoreThanStartDate = "La data de finalització ha de ser posterior a la data d'inici";
+$SelectACourse = "Selecciona un curs";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Seleccioneu un curs o una sessió a la barra lateral.";
+$DisableEndDate = "Deshabilita la data final";
+$AllEvents = "Tots els esdeveniments";
 ?>

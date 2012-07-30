@@ -318,4 +318,9 @@ $CurrentCoursesReport = "Poročilo o trenutnih tečajih";
 $NumberOfPublishedExercises = "št. objavljenih vaj/testov";
 $NumberOfPublishedLps = "št. objavljenih učnih poti";
 $EventType = "Vrsta dogodka";
+$NbInactiveSessions = "Št. neaktivnih sej";
+$FollowedSessions = "Sledene seje";
+$FollowedCourses = "Sledeni tečaji";
+$FollowedUsers = "Sledeni uporabniki";
+$Timeline = "Časovnica";
 ?>

@@ -31,4 +31,7 @@ $CannotDeleteGlossary = "Ne morem odstraniti slovarja";
 $TermsImported = "Termini so bili uvoženi";
 $TermsNotImported = "Termini niso bili uvoženi";
 $ExportGlossaryAsCSV = "Izvozi slovar v CSV datoteko";
+$List = "Seznam";
+$GlossaryTermUpdated = "Izraz je bil ažuriran";
+$DeleteAllGlossaryTerms = "Odstrani vse izraze";
 ?>

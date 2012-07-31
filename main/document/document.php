@@ -66,7 +66,7 @@ DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 $course_info = api_get_course_info();
 
 if (empty($course_info)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $course_dir = $course_info['path'] . '/document';

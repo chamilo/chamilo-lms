@@ -9,7 +9,7 @@ body {
     /* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
     font-family: bold arial, verdana, helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     color: #000;
     margin: 0;
     padding: 0;

@@ -13,24 +13,20 @@ body {
 	margin: 0;
 	padding: 0;	
 }
+
 img {
 	border: none;
 }
+
 a {
 	font-family:Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	text-decoration: none;
+    color : #4171b5;
 }
-a {
-	color : #4171b5;
-}
-a:visited {
-	
-}
+
 a:hover {
 	color: #000915;
-}
-a:active {
 }
 
 #my_courses {
@@ -38,11 +34,7 @@ a:active {
 	font-weight: bold;
 }
 
-.subnav li a:hover {
-	float:left;
-	text-decoration:none;
-	cursor: pointer;
-}
+
 
 /* The tool shortcuts */
 #toolshortcuts {

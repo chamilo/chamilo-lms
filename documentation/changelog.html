@@ -45,164 +45,483 @@
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.0 is a major stable version with loads of added features.</p>
+<p><i>Note: all #xyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bugtracking system</a></i></p>
 
 <h3>New Features</h3>
-This version of Chamilo only includes new features:
+This version of Chamilo includes a few new features.
 <ul>
-  <li>One single database #3910</li>
-  <li>Extra reports generation feature (by CBlue)</li>
-  <li>Feature for admin to recover deleted attendances (BT#3002)</li>
-  <li>Plugin system has been reworked, new plugins were added Static, Facebook/Twitter share buttons, Videoconference (with BBB), etc</li>
-  <li>New options in Exercises</li>
-  <li>New CSS framework added</li>
-  <li>User Interface is very easy to modify. Now we use Twig Template System</li>
-  <li>Record your voice (flash mode)</li>
-  <li>Webcam Clip</li>
-  <li>Global platform chat</li>
-  <li>New improved course agenda</li>  
+  <li>Most Chamilo pages are now HTML5-compliant (#4400)</li>
+  <li>Chamilo now implements an adaptative design which greatly improves its use on mobile devices (#4400)</li>
+  <li>Plugins: The plugin system has been reworked a lot and new plugins were added Static, Facebook/Twitter share buttons, Videoconference (with BBB), etc (#4450, #4557). Now you can select where the plugins will be show, we call these Regions. New Hello World, Social tools and Show regions plugins added</li>
+  <li>Admin: Feature for admin to recover deleted attendances (BT#3002)</li>
+  <li>Documents: Record your voice (flash mode)</li>
+  <li>Global: Platform-wide, FB-type chat with social network friends (#3565, #5264)</li>
+  <li>Exercises: Added questions categories management in exercises (#294 & #3974)</li>
+  <li>Admin: E-mail alerts can be configured and sent to specific users (#984, #4358, #4658)</li>
+  <li>System: Migration to one single, simple normal form database (#1245, #3910, #4728, #4791)  (heavy migration process but should result in lighter database processing, migration heavily tried by many testers)</li>
+  <li>Global: New CSS framework added</li>
+  <li>Global: Implementation of Twig Template System</li>
+  <li>Global: A feature sniffer now can check if the user's browser has enough resources to use all features of Chamilo (#1337)</li>
+  <li>Tracking: Teachers can now see their own results if they are subscribed to a course (#1409)</li>
+  <li>Social: you can now choose when to receive e-mails from the social network notifications (this requires a working Cron setup)(#2189)</li>
+  <li>Exercises: It is now possible to answer a question and "Mark it" for later review, then review all marked questions (#2486, #3958 & #4031)</li> 
+  <li>Agenda: You can now connect your calendar to your Google Calendar (#3040)</li>
+  <li>Agenda: You can now see a specific event's details from inside the calendar view (#3143)</li>
+  <li>Languages: Added structure for Turkish and Basque languages (#3350)</li>
+  <li>Exercises: Audio recording question: students can now record their answers as audio directly from the browser or uploading an MP3 (#3478)</li>
+  <li>Exercises: any question can now be "cloned" (#3551)</li>
+  <li>Admin: It is now possible to *search* for platform settings, through a neat search box (#3655)</li>
+  <li>Exercises: A button now allows you to save each question when going through the test, even in all questions on one page mode (#3683)</li>
+  <li>Admin: Added default visibility settings for new courses (#3684)</li>
+  <li>Admin: Added possibility to disable the documents quick list on courses list page (#3766 & #3904)</li>
+  <li>Wiki: A search feature now lets you search in all wiki pages (#3849)</li>
+  <li>Glossary: It is now possible to import glossary terms through CSV files (#3857)</li>
+  <li>Course progress: It is now possible to import course progress (#3858)</li>
+  <li>Exercises: There is now a report by question for exercises, in order to know which questions are too difficult or too simple for most students (#3864 & #3954)</li>
+  <li>Wiki: The wiki now includes contributions statistics (#3870)</li>
+  <li>Admin: A new administration top bar has been added, Wordpress-style, which should allow administrators to manage Chamilo much faster (#3899, #4162, #4843)</li>
+  <li>Exercises: Added "all questions" selector for random number of questions to avoid having to re-edit each time (#3942)</li>
+  <li>Learning paths: Students can now add new forum threads if forum included in learning path (#3944)</li>
+  <li>Assignments: It is now possible to fulfill an assignment directly as an HTML document from the assignment tool (#3978)</li>
+  <li>Plugins: The BigBlueButton plugin has been adjusted to work with BigBlueButton 0.80 and manage webconference recordings from inside the course (#3988)</li>
+  <li>Exercises: You can now add a congratulations text at the end of an exercise (#4074)</li>
+  <li>Exercises: You can now watch the progress of your students, live, while they are taking an exam (#4100)</li>
+  <li>Global: Added the possibility to vote for courses, and a "Popular courses" block on the homepage (#4191, #4200)</li>
+  <li>Plugins: Added Shibboleth authentication plugin (#4554)</li>
+  <li>Plugins: Added RSS feed plugin for course events (#4574)</li>
+  <li>Plugins: Added statis HTML block plugin (#4575)</li>
+  <li>Documents: Added WAMI Audio recorder in Flash to the documents tool (requires admin settings to be configured) (#4596)</li>
+  <li>Plugins: Added a course search plugin to find a specific course by title (#4597)</li>
+  <li>Plugins: "Share this" plugin (#4598)</li>
+  <li>Admin: Added custom logged-out pages mechanism (#4610)</li>
+  <li>Admin: Zombies! Now possible to disable old users (#4652)</li>
+  <li>System: Added CDN static files controller for high-availability servers (#4653)</li>
+  <li>Assignments: The teacher can now download all files from a specific assignment in one Zip (#4687)</li>
+  <li>Documents: Added Flash(TM) webcam photoboot, whereby teachers (or students through groups) can take pictures from their webcam, wich get uploaded to the documents tool directly (#4856) (enable through admin settings)</li>
+  <li>Plugins: Added plugin for School Server of OLPC Perú project (Squid proxy filtering from course) (#4925)</li>
+  <li>Exerciss: Added new type of questions that automate the repartition of score between available answers (#5012)</li>
+  <li>Exercises: Time counter now changes color at 3, then 1 minute to increase awareness of student, and appears nicely in all-questions-on-one-page exercises (#5043, #5267)</li>
+  <li>System: The stats collection of Chamilo.org is now automatic. If you want to disable this feature, edit admin/index.php and look for fsockopen() (#5104)</li>
+  <li>Global: Improvements for iPad(TM) and iPhone(TM) by disabling auto-capitalization (#5116)</li>
+  <li>Documents: Added thumbnails to the advanced files manager in the documents tool (#5142)</li>
+  <li>Tracking: Added a personal timeline for students in their <i>My reporting</i> tab (#5163)</li>
+  <li>Admin: Added notification to admins when a new user is requesting approval for account activation (#5178)</li>
+  <li>Documents: Added Flash(TM) reader for Freemind's mindmap format</li>
 </ul>
+<h3>Improvements</h3>
+<ul>
+  <li>Global: Most tables' pagination now work with jQuery for more interactive navigation (#340)</li>
+  <li>Installation: Install process now tests memory limit and suggests value (#607)</li>
+  <li>Global: Most buttons were improved, both in visual style and in labels (#1145)</li>
+  <li>Exercises: Creation of questions was improved (better presentation) (#1151)</li>
+  <li>Agenda: Invalid dates were removed in time selector (#1197)</li>
+  <li>Installation: Messages during installation have been improved (#1485)</li>
+  <li>Links: Improved coherency of links (#1845)</li>
+  <li>Exercises: Improved Universal Time usage in exercises (#2075)</li>
+  <li>Documents: Advanced file manager now lets you see PDF previews (#2245)</li>
+  <li>Global: the FCKEditor has been updated and improved in many ways (#2479)</li>
+  <li>Learning paths: Improved tracking of multiple exercises in learning paths (#3188)</li>
+  <li>Global: The header size has been reduced to give more space to content, in particular for wide screens layouts (#3191)</li>
+  <li>Global: Modal windows usability has been improved (#3253)</li>
+  <li>Documents: The Nanogong plugin integration has been improved to reduce the number of warnings and work on more platforms (#3257)</li>
+  <li>Global: Reduced the amount of session-kicking and improved messaging (#3266)</li>
+  <li>Global: Implemented fixed width layout by default (#3315)</li>
+  <li>Global: Menus and breadcrumb were sanitized (#3329)</li>
+  <li>Learning paths: The navigation was improved in the learning paths (#3365)</li>
+  <li>Learning paths: Documents uploaded from the learning path tool are now located in the learning_path folder in documents (#3542)</li>
+  <li>Global: The configuration.php file has been cleaned up to make it easier to edit (#3604)</li>
+  <li>Admin: Removed the "use_document_title" option. Now always considered enabled (#3781)</li>
+  <li>Admin: Session admins are now allowed to see sessions of other session admins (#3823)</li>
+  <li>Agenda: The personal agenda is now enabled by default (#3828)</li>
+  <li>Exercises: Now showing the start screen for exercises only on first screen (#3844)</li>
+  <li>Exercises: Exams show correct answers for teachers in questions list and preview mode (#3846, #4072)</li>
+  <li>Social: Social groups interface has been improved to make writing and answering to others easier (#3871)</li>
+  <li>Exercises: In exercises, show the results to the student even if the teacher didn't review it yet (varies depending on options) (#3949)</li>
+  <li>Exercises: A new results listing allows you to sort by finish date (#3984)</li>
+  <li>Exercises: When a teacher finishes giving feedback to a test, he is sent back to the list of tests still missing feedback (#4015)</li>
+  <li>Admin: Max course space is shown in MB instead of bytes (#4016)</li>
+  <li>Documents: Text to speech feature has been improved in many ways (#4022)</li>
+  <li>Exercises: Added a group filter in tests results (#4027)</li>
+  <li>System: Increased the disk_quota database field in the course table, previously limiting max space to 4GB (#4028)</li>
+  <li>Global: Added username as tooltip to most users lists (#4030, #4226)</li>
+  <li>System: Using a unique function for course creation now (#4068)</li>
+  <li>Installation: Improved buttons behaviour (#4206)</li>
+  <li>Documents: Updated SVG-edit tool to latest version and included external SVG galleries (#4399, #4408)</li>
+  <li>System: Behaviour has been verified and improved with SSL (#4465)</li>
+  <li>Global: username has been replaced by full name in logout button (#4505)</li>
+  <li>Admin: Sessions now show the number of users subscribed (#4522)</li>
+  <li>Announcements: Announcements can now be re-sent by e-mail when edited (#4527)</li>
+  <li>Learning path: Export of learning paths to PDF is now done as one item per page (#4532)</li>
+  <li>Global: FCKEditor now show all tools by default when maximized (#4534)</li>
+  <li>Global announcements: Global announcements now show as a slideshow on homepage (#4537)</li>
+  <li>Exercises: Improving buttons (#4543)</li>
+  <li>Admin: Improved user-related admin settings (#4576)</li>
+  <li>Global: In the courses list, teacher names now link to their info sheet (#4586)</li>
+  <li>System: New courses automatically come with index.html in their directory to avoid browsing if web server not properly configured (#4592)</li>
+  <li>Social groups: It is now possible to unsubscribe from a social group (#4593)</li>
+  <li>Admin: Now highlighting current category in admin settings (#4615)</li>
+  <li>Admin: Improved Chamilo external authentication mchanism to enable better Single Sign On (#4618)</li>
+  <li>System: Improved api_session_register() (#4784)</li>
+  <li>System: Added optional limits for hosting services (#4792)</li>
+  <li>Exercises: Added a return button at the end of the exercises results page (#4842)</li>
+  <li>System: Old "Class" tables have been migrated to the usergroups tables (#4882)</li>
+  <li>System: Session mode is now the only mode available. Previous "class" mode should now be implemented through user groups</li>
+  <li>Documents: Improved photo retouching application (PixlR) integration to make it possible to run from a simple IP address (no domain name needed) (#4899))</li>
+  <li>Admin: When disabling the gradebook tool, no more reference appear to the gradebook in other tools (#5034)</li>
+  <li>Documents: Added images thumbnail slideshow automatic resize (#5131)</li>
+  <li>Admin: The new "System" block was added in administration</li>
+  <li>Admin: A new option was added to delete files in /archive (only for the super administrator can access it)</li>
+  <li>Global: Courses/Session blocks layout have been improved</li>
+  <li>Users: Users lists can now be exported to a PDF document</li>
+  <li>Global: Right menus where improved and cleaned up</li>
+  <li>Admin: The hide tool options now blocks the access to the tool. See BT#4138</li>            
+  <li>Admin: Removed $_configuration['tracking_enabled'] (#2808)</li>
+</ul>
+<ul>
 <h3>Debugging</h3>
 <ul>
-    <li>
-        Agenda
-        <ul>            
-            <li>A complete rework was made for 3 types of calendars: Personal, Course and Admin. Now we use the Fullcalendar js library</li>
-        </ul>
-    </li>
-    <li>
-        Announcements
-        <ul>          
-            <li>Fixed applied when sending an announcement to a group</li>  
-        </ul>
-    </li>
-    <li>
-      Assignments
-      <ul>
-          <li>New assignment list, now we use jqgrid and we see the user name instead of the work title see BT#4131</li>
-      </ul>
-    </li>
-    <li>
-        Attendances
-        <ul>
-        </ul>
-    </li>
-    <li>Documents
-	    <ul>
-            <li>Jplayer lib updated</li>
-        </ul>
-    </li>    
-	<li>Exercises
-        <ul>
-            <li>Group questions by category added by Hubert Borderiou</li>
-            <li>Save questions to review at the end of the exercise</li>
-            <li>Live exercise statistics</li>
-            <li>The exercise result list now uses jqgrid to filter results</li>
-            <li>UI improved</li>
-        </ul>
-    </li>
-    <li>Gradebook
-        <ul>
-            <li>Multiple gradebooks by course</li>            
-        </ul>
-    </li>    
-    <li>Glossary
-        <ul>
-        </ul>
-    </li>
-        
-    <li>Learning path
-        <ul>
-            <li></li>
-        </ul>
-    </li>          
-    <li>Links
-        <ul>
-        </ul>
-    </li>  
-    
-    <li>Migration
-      <ul>
-      </ul>
-    </li>
-    
-    <li>Portal administration
-        <ul>
-            <li>Plugin system was fixed in order to be more easy to add plugins to Chamilo now we use Regions (à la Drupal)</li>
-            <li>Regions: Thanks to Twig we can add plugins everywhere in Chamilo using the plugins</li>            
-            <li>New we can find a Chamilo setting very fast, thanks to a search form</li>            
-            <li>2 new blocks were added "System" and "Skills"</li>
-            <li>The extensions block was moved to the Plugin area</li>            
-            <li>New option to delete files in /archive (only for the super administrator)</li>
-            <li>Data filler: several fixes added</li>
-            <li>The hide tool options now blocks the access to the tool. See BT#4138</li>            
-            <li>The setting "Hide course tools" was changed: Check the tools you want to hide from teachers. This will prohibit access to the tool instead of just hidden the tools.                 
-            </li>            
-        </ul>
-    </li>
-    
-    <li>Plugins
-        <ul>
-            <li>The plugin system was improved in this version now you can select where the plugins will be show, we call these Regions.</li>
-            <li>New Hello World plugin added</li>
-            <li>New Social tools plugin added</li>
-            <li>New Shared tools plugin added</li>
-            <li>New Show regions plugin added</li>
-            <li>New Static plugin added by Laurent Opprecht</li>
-        </ul>
-   </li>
-    
-    <li>Users
-        <ul>
-            <li>Export users to a PDF document</li>
-        </ul>
-    </li>
-    <li>User portal/ My courses
-        <ul>            
-            <li>Courses/Session blocks layout have been improved</li>
-            <li>Right menus where improved and cleaned up</li>
-        </ul>
-    </li>
-    <li>Sessions
-        <ul>
-            <li>Session list uses now jqgrid in order to filter fields better and faster.</li>
-        </ul>
-    </li>    
-    <li>Social Network / Groups
-        <ul>            
-        </ul>
-    </li>
-    <li>Survey
-        <ul>
-        </ul>
-    </li>    
-    <li>System
-        <ul>
-        </ul>
-    </li>
-    
-    <li>Videoconference
-        <ul>
-            <li>A fix was applied to avoid a bug in BigBlueButton by which all videoconference rooms are marked as "not running" (BT#3102). Financed by NoSoloRed</li>
-        </ul>
-    </li>
-        
-    <li>Style changes
-        <ul>
-            <li>Styles changed for all forms</li>
-            <li>New top bar added (only for admins)</li>
-            <li>Responsive layout for Mobile Devices</li>
-        </ul>
-    </li>
+  <li>Search: Fixed queries of fulltext search feature (#3166)</li>
+  <li>Admin: Fixed bug by which a session could be added in two distinct URLs at the same time (#3733)</li>
+  <li>Agenda: A complete rework was made for 3 types of calendars: Personal, Course and Admin. Now we use the Fullcalendar js library</li>
+  <li>Announcements: Fixed applied when sending an announcement to a group</li>
+  <li>Assignments: New assignment list, now we use jqgrid and we see the user name instead of the work title see BT#4131</li>
+  <li>Documents: Jplayer lib updated</li>
+  <li>Exercises: Fixed various issues with score calculation (#4406)</li>
+  <li>Gradebook: Multiple gradebooks by course</li>
+  <li>Admin: Data filler: several fixes added (developers only)</li>
+  <li>Admin: The setting "Hide course tools" was changed: Check the tools you want to hide from teachers. This will prohibit access to the tool instead of just hiding the tools.</li>            
+  <li>Sessions: Session list uses now jqgrid in order to filter fields better and faster.</li>
+  <li>Videoconference: A fix was applied to avoid a bug in BigBlueButton by which all videoconference rooms were marked as "not running" (BT#3102). Kindly financed by NoSoloRed and delivered by BeezNest</li>
+  <li>Document &gt; don't display image if document moved (#1278)</li>
+  <li>Crash when importing QTI2 exercices from Dok€os (#1363)</li>
+  <li>Check files in main/external_module (#1397)</li>
+  <li>Multi-url requires database insertion to work (#1850)</li>
+  <li>Admin: if the forums tool is hidden  on the course, should not be displayed in the social network, also in a blog (#1959)</li>
+  <li>Course progress: Anyone can delete thematic items (registered users) (#2121)</li>
+  <li>Agenda: failing adding all users after editing an event (#2158)</li>
+  <li>Forum: Problem when inserting a google map in the forum (#2159)</li>
+  <li>Documents: Hot potatoes folder bug (#2165)</li>
+  <li>Documents: show in frames doesn't run well on iexplorer 7 and 8 (#2719)</li>
+  <li>Documents: Resizing flv video embed doesn't work (#2927)</li>
+  <li>Plugins: When saving the BigBlueButton plugin multiple times the icon is generated many times (#2967)</li>
+  <li>Documents: Path problem when uploading media (except images) with fckeditor (both advenced nor basic) (#3197)</li>
+  <li>Exercises: Can't access orphaned questions from question pool (#3324)</li>
+  <li>Exercises: Hotpotatoes and google chrome (#3332)</li>
+  <li>Exercises: Weird popup option for feedback (#3472)</li>
+  <li>Documents: Watermark portal image file should be in default_course_documents/images/ (#3596)</li>
+  <li>Global: Trainings suddenly blank (#3607)</li>
+  <li>Translations: chinese name in wrong order 1.8.8.2 (#3614)</li>
+  <li>Plugins: BBB plugin only works with root dir install (#3625)</li>
+  <li>Gradebook: Public certificates list (#3630)</li>
+  <li>Gradebook: Certificates barcodes (#3631)</li>
+  <li>Admin: Settings: Registration Page (#3681)</li>
+  <li>Agenda: Show multi-day agenda events as spanning multiple days (#3717)</li>
+  <li>Admin: Warn about failure to create backup (#3729)</li>
+  <li>Announcements: in session create ordering problem (#3743)</li>
+  <li>Exercises: Questions database does not work (#3764)</li>
+  <li>Groups: "Number proposed exceeds max." message if group as no number of users limitation (#3773)</li>
+  <li>Exercises: Error if I answer a HotSpot question if not the last question of the 1 question per page test (#3782)</li>
+  <li>Install: step4 unclear description (#3804)</li>
+  <li>Tracking: Admin can't view the tab "My reporting" because the status was changed to Session Admin (#3816)</li>
+  <li>Assignments: Error downloading assignment X (#3834)</li>
+  <li>Admin: Backup and Import of course data into clean system will clutter course (#3837)</li>
+  <li>Exercises: Image zone on a copy of a test (#3838)</li>
+  <li>Global: course catalog go out (#3847)</li>
+  <li>Wiki: wiki all pages - each page is not the last version (#3848)</li>
+  <li>Wiki: tuning count wiki words (#3850)</li>
+  <li>Admin: Don't send e-mail to inactive accounts (#3855)</li>
+  <li>Help: FAQ window from help cannot be closed (#3861)</li>
+  <li>Documents: Can't add new templates in 1.8.8.2 (#3862)</li>
+  <li>Documents: World-access on course does not work for Documents (#3865)</li>
+  <li>Global: codification problem around index user_portal ... files (#3874)</li>
+  <li>Admin: Portal unable to send email contact Administration (#3883)</li>
+  <li>Translations: Avoid empty translations (#3884)</li>
+  <li>Exercises: lines too close together in exercices (#3893)</li>
+  <li>Calendar: windows (select date) too small (#3894)</li>
+  <li>Documents: Documents without title (which is auto-created folders) not shown (#3896)</li>
+  <li>Wiki: I can not change the alignment of the tables in the wiki (#3900)</li>
+  <li>Global: maximize the editor size has stopped working on several tools (#3901)</li>
+  <li>Exercises: When creating a new test question, there is an overflow on the right of the screen (#3905)</li>
+  <li>Exercises: Exercice generated with Chamilo doesn't work in LP (#3912)</li>
+  <li>Documents: INSERT IMAGE (#3914)</li>
+  <li>Install: Three error messages after installation (#3915)</li>
+  <li>Groups: fix pixlr in groups (#3921)</li>
+  <li>Documents: Folders in Documents Tool not Visible for Anonymous User When Couse Access Set to Open (#3922)</li>
+  <li>Documents: editing a pixlr image fail (#3923)</li>
+  <li>Documents: create and save a svg image fail (#3924)</li>
+  <li>Documents: export a svg image to png fail (#3925)</li>
+  <li>Documents: Folders in Documents Tool With Comments Do Not Show Folder Name (#3926)</li>
+  <li>Documents: can't  edit  and save a svg image (#3927)</li>
+  <li>Documents: Path problem when uploading media with fckeditor (both advanced and basic) (#3933)</li>
+  <li>Documents: Medias copied when duplicate a part of a course doesn't appear in the Chamilo document interface (#3934)</li>
+  <li>Install: Chamilo 1.8.8.4 - Connection error chamilo_test_chamilo_connection (#3937)</li>
+  <li>Exercises: Question title too long overlap other question info in test admin (#3941)</li>
+  <li>Exercises: number of random question displayed for a test is wrong if you delete some questions (#3945)</li>
+  <li>Admin: Add/Edit course category bug when using non alpha char in code (#3947)</li>
+  <li>Social network: group strange behaviour (#3950)</li>
+  <li>Assignments: assignments download (#3964)</li>
+  <li>Install: New single DB method: showing "Several" in confirmation screen (#3966)</li>
+  <li>Install: New tables added in the stat DB should be added with the track_ prefix (#3967)</li>
+  <li>Exercises: Score in test reported wrongly as zero (#3968)</li>
+  <li>Admin: Course has no category if you delete the category it belongs to (#3970)</li>
+  <li>System: ajaxfilemanager_c.js and  ajaxfilemanager.js  should be the same (#3971)</li>
+  <li>Exercises: When you continue a random question test, you don't have the same list of question (#3972)</li>
+  <li>Exercises: If you remove a question from a test, you cannot reuse the question (#3973)</li>
+  <li>Announcements: announcements for groups (#3992)</li>
+  <li>Social network: Bug and/or localization problem in social network's group (#3994)</li>
+  <li>Course description: Links in new window open in the same (#3997)</li>
+  <li>Exercises: "New exercice" icon should not show up when exercise is inactive/hidden (#3998)</li>
+  <li>Translation: (gallerie > galerie) (#3999)</li>
+  <li>Classes: Pb if name of classe contains char ' (#4014)</li>
+  <li>Exercises: Results on quiz missing ... (#4020)</li>
+  <li>Documents: By creating a document with fckeditor and IE *, there is no title in the BD only path (#4023)</li>
+  <li>Exercises: Exercise creation: dropboxes do not show anything (#4025)</li>
+  <li>Exercises: Learner score &gt; Number of test is wrong (#4026)</li>
+  <li>Install: screen shifts because of smaller header1 (#4040)</li>
+  <li>Install: Database check is incorrect (#4041)</li>
+  <li>Tracking: When exporting users in CSV or Excel, the first names are reversed with the last names. (#4043)</li>
+  <li>Gradebook: Assessment modification (#4047)</li>
+  <li>System: course.css should be deleted or merge into other file (#4050)</li>
+  <li>Tracking: SQL error in Course Reporting "Documents most downloaded" (#4051)</li>
+  <li>Assignment: submission causes SQL error on c_id (#4054)</li>
+  <li>Assignment See echap character \ when having ' character in the Submit paper assignment description. (#4055)</li>
+  <li>Data filler: insert users and courses (#4056)</li>
+  <li>Exercises: SQL error on test result page for teacher, when sorting by date. (#4061)</li>
+  <li>Course progress: Small icons appear when submitted a new Thematic section in Thematic control tool (#4065)</li>
+  <li>Sessions: Import of sessions via XML doesn't work (#4069)</li>
+  <li>Classes: CSV import problem with classes (#4071)</li>
+  <li>System: http://campus.chamilo.org/main/user/subscribe_user.php too slow (#4079)</li>
+  <li>Dashboard: hiding blocks from dashboard interface can fail (#4083)</li>
+  <li>Tracking: Time spent in course 1500 hours and more  (#4084)</li>
+  <li>Sessions: campus.chamilo.org/main/admin/add_users_to_session.php Fails (#4127)</li>
+  <li>Learning paths: SQL error when uploading SCORM package (#4143)</li>
+  <li>Social network: It's not possible preview an image in social network portfolio (#4202)</li>
+  <li>Documents: no preview files in ajaxfilemager when create a html file (#4203)</li>
+  <li>Documents: no play flv files in documents tool (#4204)</li>
+  <li>Course settings: In French, course settings show escaped apostrophes (#4207)</li>
+  <li>Learning paths: Students' answers disappear when test is in learnpath (#4211)</li>
+  <li>Install: Problem in a Local instalation (#4214)</li>
+  <li>Documents: fckeditor bug when adding a wmv video (#4217)</li>
+  <li>Backup: Problem viewing images after course copy (#4225)</li>
+  <li>Backup: Bugs when copying questions from one course to another (#4228)</li>
+  <li>Tracking: Visibility of results for students (#4229)</li>
+  <li>Tracking: Inconsistency of terms in test result table (#4236)</li>
+  <li>Documents: Error when you put HTML tags with attributes and " in a file/folder name (#4240)</li>
+  <li>Links: Links added in a learning path doesn't work (#4250)</li>
+  <li>Links: check online link does not run (#4251)</li>
+  <li>Exercises: overflow tables 1024x768 (#4252)</li>
+  <li>Social network: view copy files from a course to my portfolio show course files, no portoflio files (#4254)</li>
+  <li>Global: css break in IE9 (#4265)</li>
+  <li>Documents: cannot save pictures from photographic retouching (#4266)</li>
+  <li>Portal announcements: lost features (#4268)</li>
+  <li>Global: Hiding tabs should show them in right-side panel (#4269)</li>
+  <li>Agenda: Error when adding user in calendar event if hamonym exists (#4278)</li>
+  <li>Users: Columns badly located in users list (learner view) (#4356)</li>
+  <li>Users: Users cannot update their user name (#4364)</li>
+  <li>Backup: Impossible to copy content from one course to another (#4375)</li>
+  <li>Documents: Document tool upload current folder not changing (#4380)</li>
+  <li>Plugins: BigBlueButton (#4381)</li>
+  <li>Global: DATABASE ERROR #1064: on file main/inc/local.inc.php (#4402)</li>
+  <li>Assignments: Failure in the assignments section (#4403)</li>
+  <li>Announcements: Problems in 1.8.8.4 with announcements generated since agenda events (#4404)</li>
+  <li>Global: Strange error with the login (Chamilo 1.8.8.4) (#4405)</li>
+  <li>Exercises: Report form quiz (#4407)</li>
+  <li>Exercises: Test preview appear align on the right in test questions view (#4440)</li>
+  <li>Exercises: Filtering test result table doesn't work (#4441)</li>
+  <li>Admin: If you are admin and put the wysiwyg editor full screen, buttons are hidden (#4442)</li>
+  <li>Backup: Copy big courses with igbinary (#4443)</li>
+  <li>Global: The wysiwyg editor is vertically squeezing my image to an of 1200px (#4448)</li>
+  <li>Global: New style broke the quick toolbar (#4451)</li>
+  <li>Assignments: Visibility of documents in assigments (#4455)</li>
+  <li>Announcements: Impossible to hide announcements (#4463)</li>
+  <li>Documents: Imposible eliminar imagen en curso copiado de otro (#4469)</li>
+  <li>Admin: SQL error when creating a new course (#4477)</li>
+  <li>Exercises: Test review window doesn't close when click on [X] icon (#4489)</li>
+  <li>Documents: In documents tool, audio files do not play (#4491)</li>
+  <li>Exercises: Some bugs in exercices - Chrome + audio (#4493)</li>
+  <li>Learning paths: Error when adding mp3 to learning path item if lots of items, +adding drag&drop audio (#4503)</li>
+  <li>Global: HRM can't access to courses (#4504)</li>
+  <li>Global: User info box align left when user has no courses and right if he has courses (#4506)</li>
+  <li>Global: Platform users cannot view a course "Open - access allowed for users registered on the platform" (#4508)</li>
+  <li>Translation: get_lang() doesn't manage well empty translations (#4511)</li>
+  <li>Admin: Session title doesn't show in session box (#4514)</li>
+  <li>Global: Logout link should remain logout link (#4515)</li>
+  <li>Global: username update doesn't work (#4516)</li>
+  <li>Tracking: Check if global stats distinguish between multiple URLs (#4521)</li>
+  <li>Global: Font resizing feature only resizes part of the interface fonts (#4524)</li>
+  <li>Admin: E-mail template for registration (#4525)</li>
+  <li>Assignments: Deadline and end date not clear in Dutch (#4526)</li>
+  <li>Assignments: visible to all users doesn't work (#4528)</li>
+  <li>Translation: Confusing language terms: homework/assignment/student publication (#4529)</li>
+  <li>Course copy: surveys do not show (#4530)</li>
+  <li>Course users: adding a teacher lacks title in users list (#4531)</li>
+  <li>Course users: Lists of users sort on previous field (#4538)</li>
+  <li>Exercises: "Remove answer option" in exercises changes questions numbering (#4539)</li>
+  <li>Exercises: "Review" option not aligned in test preview (#4540)</li>
+  <li>Exercises: review only marked questions in all-on-one-page mode (#4542)</li>
+  <li>Translation: Dutch translation for hotspot filetype is wrong (#4544)</li>
+  <li>Exercises: Exercises results export: wrong data (#4545)</li>
+  <li>Learning paths: detailed stats allow for other attempts (#4546)</li>
+  <li>Admin: Long course codes  "already exists" (#4548)</li>
+  <li>Translation: Mark learners should be Grade learners (#4549)</li>
+  <li>Forum: threads names do not show in gradebook (#4550)</li>
+  <li>Global: Incorrect protocol (http/https) in link created by javascript code (#4552)</li>
+  <li>Plugins: Error on table pluggin_bbb after reinstall (#4555)</li>
+  <li>Plugins: Forms variables are not viewed in all regions when activate a plugin in several regions (#4559)</li>
+  <li>Sessions: Sort user list in "Training sessions list &gt; Session overview &gt; List of user"  doesn't work (#4569)</li>
+  <li>Social network: I cannot upload a user image for my profile (#4577)</li>
+  <li>Agenda: EventType not translated in courseLog.php (#4585)</li>
+  <li>Global: Rename the "quitter" button for "disconnect" (#4591)</li>
+  <li>Global: Course list not displayed properly on home page (#4599)</li>
+  <li>Global: Check Rapid still works (#4601)</li>
+  <li>Exercises: Bad score calculation on 1.9 Beta Platform (#4604)</li>
+  <li>Translation: User list in french (#4605)</li>
+  <li>Exercises: Issue with quiz correction (#4606)</li>
+  <li>Documents: bad update time label (#4609)</li>
+  <li>Documents: When edit and after save an html document does not return to document list (#4611)</li>
+  <li>Announcements: attachments and notes in announcements (#4612)</li>
+  <li>Exercises: Mouse over highlighting doesn't work for action column in test list (#4613)</li>
+  <li>Exercises: Total number of question and test score doesn't update for copied questions (#4614)</li>
+  <li>Announcements: body not sent in email (#4617)</li>
+  <li>Global: Course legal notice isn't visible when not registered in a course (#4619)</li>
+  <li>Notebook: edit notebook does not run well (#4624)</li>
+  <li>Plugins: ldap plugins missing (#4625)</li>
+  <li>Surveys: Fillsurvey bug (#4629)</li>
+  <li>Install: Try several permissions during installation (#4630)</li>
+  <li>Documents: Second html edit from document tool does not run (#4637)</li>
+  <li>Admin: settings_current does not get populated from db_main.sql (new install) (#4638)</li>
+  <li>Global: 'Tricky' logout (#4640)</li>
+  <li>Global: Self register to the course logic error when (self) enrolment isn't allowed (#4642)</li>
+  <li>System: SQL error in get_personal_session_course_list (#4649)</li>
+  <li>Admin: Chamilo 19.Alpha4 - Admin => Système =Statut du système (#4650)</li>
+  <li>Exercises: Multiple choice question score calculation for the question (#4661)</li>
+  <li>Global: Duplicate ID tab_active (#4668)</li>
+  <li>Global: Duplicate ID clickable_email_link (#4669)</li>
+  <li>Global: SortableTable html validation errors (#4673)</li>
+  <li>Admin: ldap_bind function (#4675)</li>
+  <li>Admin: HRM : accessibility of the data (#4676)</li>
+  <li>Global: Course voting score starts at 0 (#4683)</li>
+  <li>Gradebook: Error modifying weight of activity in assessment (#4685)</li>
+  <li>Tracking: improper use of echo statement in access_datails.php (#4689)</li>
+  <li>Exercises: The group column of the Test &gt; Learner score page table is empty (#4698)</li>
+  <li>Admin: Export 1.8.8.4 vs Import 1.9.0 Alpha4 (#4706)</li>
+  <li>Admin: update_version variable not used (#4711)</li>
+  <li>System: Undefined variable: nbr_courses (#4712)</li>
+  <li>Announcements: announcements sent to all (#4715)</li>
+  <li>Systems: Delete get_scorm_database() functions and other "scorm database calls" (#4716)</li>
+  <li>Global: Allow user to unsubscribe from platform (#4720)</li>
+  <li>System: Missing tables after upgrade (#4725)</li>
+  <li>System: Missing indexes after upgrade (#4726)</li>
+  <li>Global: Security issue bug in FCKEditor 2.6.6 (#4743)</li>
+  <li>Glossary: csv export with international chars do not work (#4758)</li>
+  <li>this.GetSelection() is null js error when fckeditor wiris plugin is enabled (#4760)</li>
+  <li>Document creation layout is broken (#4777)</li>
+  <li>Link to document title fails when editing SVG (#4780)</li>
+  <li>Exercises: Wrong display of questions when reordoring a question above the saved div (#4783)</li>
+  <li>Documents: bad fit when edit a document 1024x768 (#4786)</li>
+  <li>Social network: my files doesn't work (chamilodev) (#4787)</li>
+  <li>Global: USERNAME_MAX_LENGTH = 40 but if we use the "Use the email as username" setting? (#4793)</li>
+  <li>Assignments: Sorting by hand out time (#4794)</li>
+  <li>Global: time_limit_whosonline in seconds or in minutes?? (#4795)</li>
+  <li>Exercises: Multiple answers score computing (#4801)</li>
+  <li>Global: Style broken on homepage - anonymous (#4807)</li>
+  <li>Global announcements: visibility broken again (#4808)</li>
+  <li>Tracking: error in mySpace/user_add.php (#4812)</li>
+  <li>Course access: closed courses are realy closed (#4814)</li>
+  <li>Wiki : menu is overlapped by status message (#4832)</li>
+  <li>Documents: PDF export - 2 issues (#4841)</li>
+  <li>Global: 1.9 nightly 04 Termes et conditions (#4851)</li>
+  <li>Reporting: learner score test details : not filtered by learner (#4858)</li>
+  <li>Reporting-sessions: division by zero on closed course (#4860)</li>
+  <li>Exercises: Ranking (student Progress) calculation is wrong (#4861)</li>
+  <li>Global: Empty random course pick in catalog (#4862)</li>
+  <li>Agenda: Incorrect date in agenda (#4863)</li>
+  <li>Agenda: No description in agenda AND long description (#4864)</li>
+  <li>Agenda: Personal agenda does not show anything outside the course (#4865)</li>
+  <li>Announcements: sent to all message is not updated (#4874)</li>
+  <li>Exercises: live stats show more answered questions (#4876)</li>
+  <li>Announcement: not sending to one person (#4879)</li>
+  <li>Assignments: we don't see filename nor description (#4880)</li>
+  <li>Admin: problem creating new field for user (user field) (#5025)</li>
+  <li>System: forum join with item properties missing some filter (#5026)</li>
+  <li>Assignments: course settings are not updated in the current session (#5056)</li>
+  <li>Dropbox: unable to download files (#5057)</li>
+  <li>Dropbox: duplicate warning when uploading a doc (#5058)</li>
+  <li>Surveys: happiness/compliance survey (#5100)</li>
+  <li>Admin: view copied files from a course to his user folder by an administrator (#5102)</li>
+  <li>Admin: fill and clean group for all groups don't work (#5106)</li>
+  <li>System: Duplicate column name 'max_attempt' (#5108)</li>
+  <li>Migration: Duplicate column name 'theme' (#5109)</li>
+  <li>Migration: Duplicate column name 'type' (#5110)</li>
+  <li>Migration: undefined index:update-db-1.8.6.2-1.8.7 on line 303 (#5117)</li>
+  <li>Install: Seems that the table xxx.metadata doesn't exists (#5118)</li>
+  <li>Migrate: sql error for alter table (#5119)</li>
+  <li>Learning paths: export a learning path with an exercice fail (#5130)</li>
+  <li>Learning paths: Students don't see tests in a learning path (#5133)</li>
+  <li>Learning paths: they play the same audio file, even if you change activity. (#5134)</li>
+  <li>Documents: when create a course the flv directory sample is duplicated (#5136)</li>
+  <li>Documents: bad work when view a flv file  (#5137)</li>
+  <li>Global: Go to course button is missing on private courses (#5140)</li>
+  <li>Admin: Session admin cannot add users (#5146)</li>
+  <li>Sessions: Category session/session - learner has an error messare (#5153)</li>
+  <li>Classes: Potentially bug on classes (#5154)</li>
+  <li>Invitation pending => blank page blanche (#5156)</li>
+  <li>Agenda: course switching automatically on popup (#5162)</li>
+  <li>Copying: Error copying a type 11 question from a course to one another (#5164)</li>
+  <li>Migrate: Encryption problem upgrading from 1.8.8.4 to 1.9 nightly 2012-07-10  (#5165)</li>
+  <li>Assessments : weight recalculation error when category weight is changed (#5168)</li>
+  <li>Exercises: single page mode : transition previous-next question does not store (#5169)</li>
+  <li>Admin: Session course is not session cùourse  (#5173)</li>
+  <li>Tracking: overall statistics errors (#5175)</li>
+  <li>Session-reporting-learner details in course: tests stats empty (#5176)</li>
+  <li>Exercises: Process time for function get_exam_results_data is slow (#5179)</li>
+  <li>Exercises: sort by Validated/Not validated doesn't work. (#5180)</li>
+  <li>Learning paths: minipanel learning path doesn't work (#5181)</li>
+  <li>Migrate: Undefined index: activate_legal  (#5188)</li>
+  <li>Migrate: Undefined index: legal_agreement (#5189)</li>
+  <li>Migrate: Undefined index: id_auto (#5190)</li>
+  <li>Migrate: empty answer in update db 1.8.6.2-1.8.7 (#5191)</li>
+  <li>Social network: friend invitations are not delivered (#5195)</li>
+  <li>Global: Course catalog allows people access to unassign courses (#5212)</li>
+  <li>Global: Hide e-mails in users subscriptions list (#5216)</li>
+  <li>Global: User can access to the platform even if the account is inactive (#5217)</li>
+  <li>Global: On Chamilodev, white space in anonymous header (#5223)</li>
+  <li>Admin: When you remove a user , member of a class (usergroup)  from platform, number of registered members in the class(usergourp) doesn't change (#5227)</li>
+  <li>Documents: No directory created in documents on course creation (#5238)</li>
+  <li>Global: Open course, "Go to course" button and the empty assignment (#5240)</li>
+  <li>Installation: strange button for previous step (#5243)</li>
+  <li>Plugins: unable to set/configure plugins  (#5244)</li>
+  <li>Announcements: appear on top of courses (#5249)</li>
+  <li>Learning paths: When I create a learning path a new visible folder is created in the document tool (#5251)</li>
+  <li>Learning paths: Integration quiz of a LP - timer KO + pas de score (#5255)</li>
+  <li>Learning paths: adding an assignment when assignments are empty (#5256)</li>
+  <li>Exercises: Report by question (#5257)</li>
+  <li>Global: "When ""unsubscribe allowed"" is set in a course, the student has no way to unsubscribe" (#5258)</li>
+  <li>Migration: After upgrade only a few courses are available (#5262)</li>
+  <li>Exercises: reaching time limit provokes refresh for each non-answered question (#5263)</li>
+  <li>Global: Popular courses block does not filter by url (#5271)</li>
+  <li>Google(TM)) text to audio bad file if language not defined (#5277)</li>
 </ul>
+
+<h3>Style changes</h3>
+Due to the move to HTML5, it is very likely that any older stylesheet will have to be updated when upgrading to Chamilo 1.9.
+<ul>
+  <li>Styles changed for all forms</li>
+  <li>New top bar added (only for admins)</li>
+  <li>Responsive layout for Mobile Devices</li>
+</ul>
+
 <h3>Security</h3>
 <ul>
+  <li>If you haven't updated to 1.8.8.6 previously, then you will benefit from 1.8.8.6's security patches by installing 1.9.</li>
 </ul>
+
 <h3>Known issues</h3>
 <ul>
-    <li><b>Document title:</b> The option to NOT use a document title different than the filename in the documents tool has been removed. This means that if this setting was not set to the default option in your Chamilo option or if you have a very old installation that you have been upgrading over the years, you might experience problems accessing the documents. In this case, we recommend contacting an official provider of Chamilo to take this migration in charge.</li>
-    <li>During upgrade, if your database ends with "c_", the installation process will report errors in the PHP error log. This is due to a check on the new c_id field for database normalization, but is not important. The corresponding logging code can be disabled in database.lib.php</li>
-	<li>Agenda regression: because we implemented a much more usable and familiar agenda for most of you, and because we lacked some time to go into the details, we have temporarily removed the possibility to make an event visible to specific users (they are always visible to all the course users right now) - see task #5201 for details</li>
-    <li>Exercises: When reviewing an exercise, hotspot questions results are not remembered see #3980</li>
+  <li><b>Document title:</b> The option to NOT use a document title different than the filename in the documents tool has been removed. This means that if this setting was not set to the default option in your Chamilo option or if you have a very old installation that you have been upgrading over the years, you might experience problems accessing the documents. In this case, we recommend contacting an official provider of Chamilo to take this migration in charge.</li>
+  <li>During upgrade, if your database ends with "c_", the installation process will report errors in the PHP error log. This is due to a check on the new c_id field for database normalization, but is not important. The corresponding logging code can be disabled in database.lib.php</li>
+  <li>Agenda regression: because we implemented a much more usable and familiar agenda for most of you, and because we lacked some time to go into the details, we have temporarily removed the possibility to make an event visible to specific users (they are always visible to all the course users right now) - see task #5201 for details</li>
+  <li>Exercises: When reviewing an exercise, hotspot questions results are not remembered see #3980</li>
 </ul>
 
 <h3>Third-Party Libraries additions/updates</h3>

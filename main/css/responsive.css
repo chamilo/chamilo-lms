@@ -19,9 +19,19 @@
     .navbar .brand {
          font-size: 14px;
     }
+    
+    /* In order to avoid clicking in the main title instead of the expand button */
+    .subnav .navbar-inner .in{
+        margin-top: 45px 
+    }
 }
 
 @media (max-width: 480px) {
+    
+    .subnav .navbar-inner .in{
+        margin-top: 45px 
+    }
+    
     /* No chat in mobiles */
     #chatmain {
         display:none;

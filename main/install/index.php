@@ -495,7 +495,9 @@ if ($encryptPassForm == '1') {
                 </a>
 			</div>
         </div>
+        
         <div class="span9">
+            
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php   
 
@@ -686,7 +688,8 @@ if (@$_POST['step2']) {
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
-	?><br /><br />
+	?>
+    <br /><br />
 
 	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
@@ -698,27 +701,28 @@ if (@$_POST['step2']) {
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 		<div class="warning-message">
-		<center>
-			<h3><?php echo get_lang('Warning'); ?> !</h3>
-			<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
-		</center>
+            <center>
+                <h3><?php echo get_lang('Warning'); ?> !</h3>
+                <?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
+            </center>
 		</div>
 	</div>
 	<?php endif; ?>
 
 	<table width="100%">
-	<tr>
-		<td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  	<td align="right">
-			<input type="hidden" name="is_executable" id="is_executable" value="-" />
-			<input type="hidden" name="step6" value="1" />
-	  		<button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
-                <?php echo get_lang('InstallChamilo'); ?>
-            </button>
-
-            <button class="save" id="button_please_wait"></button>
-		</td>
-	</tr>
+        <tr>
+            <td>
+                <button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button>
+            </td>
+            <td align="right">
+                <input type="hidden" name="is_executable" id="is_executable" value="-" />
+                <input type="hidden" name="step6" value="1" />
+                <button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
+                    <?php echo get_lang('InstallChamilo'); ?>
+                </button>
+                <button class="save" id="button_please_wait"></button>
+            </td>
+        </tr>
 	</table>
 
 <?php
@@ -735,9 +739,11 @@ if (@$_POST['step2']) {
          '	<h2>'.display_step_sequence() . $msg.'</h2>'.
          '<div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>';
          '</div>';
+         
     // Push the web server to send these strings before we start the real
     // installation process
-    flush(); ob_flush();
+    flush(); 
+    ob_flush();
     
 	if ($installType == 'update') {
 
@@ -864,9 +870,8 @@ if (@$_POST['step2']) {
 }
 ?>
 </form>
-</div>                  <!-- span-->
+</div>                  <!-- span9-->
 </div>  <!-- row -->
-
 </div> <!-- main end-->
 <div class="push"></div>
 </div><!-- wrapper end-->

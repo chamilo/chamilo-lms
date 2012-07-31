@@ -1921,3 +1921,15 @@ function displayGroupsForUser($in_separator, $in_userid) {
     return $res;
 }
 
+function create_chat_exercise_session($exe_id) {
+    if (!isset($_SESSION['current_exercises'])) {
+        $_SESSION['current_exercises'] = array();
+    }
+    $_SESSION['current_exercises'][$exe_id] = true;
+}
+
+function delete_chat_exercise_session($exe_id) {    
+    if (isset($_SESSION['current_exercises'])) {
+        $_SESSION['current_exercises'][$exe_id] = false;
+    }    
+}

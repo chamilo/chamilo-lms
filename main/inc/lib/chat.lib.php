@@ -224,6 +224,7 @@ class Chat extends Model {
         echo "1";
         exit;
     }
+    
     /**
      * Filter chat messages to avoid XSS or other JS
      * @param string Unfiltered message
@@ -235,5 +236,16 @@ class Chat extends Model {
         $text = str_replace("\r\n","\n",$text);
         $text = str_replace("\n","<br>",$text);
         return $text;
+    }
+    
+    function is_chat_blocked_by_exercises() {
+        if (isset($_SESSION['current_exercises'])) {
+            foreach ($_SESSION['current_exercises'] as $attempt_status) {
+                if ($attempt_status == true) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

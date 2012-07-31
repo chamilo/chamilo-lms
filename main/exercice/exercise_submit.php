@@ -55,6 +55,7 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight
 }
 
+
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
@@ -159,7 +160,7 @@ if ($time_control) {
 	//Get the expired time of the current exercice in track_e_exercices
 	$total_seconds 			  = $objExercise->expired_time*60;
 }
-$objExercise->questionList;
+
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
@@ -254,6 +255,9 @@ if (empty($exercise_stat_info)) {
 	$exe_id = $exercise_stat_info['exe_id'];
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
+
+//Array to check in order to block the chat
+create_chat_exercise_session($exe_id);
 
 if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 

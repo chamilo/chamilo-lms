@@ -224,6 +224,8 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 //Unset session for clock time
 exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
 
+delete_chat_exercise_session($exe_id);
+
 if ($origin != 'learnpath') {
     echo '<hr>';
     echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));

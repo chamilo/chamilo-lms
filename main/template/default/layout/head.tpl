@@ -70,7 +70,8 @@ function get_url_params(q, attribute) {
 
 function check_brand() {
     if ($('.subnav').length) {     
-        if ($(window).width() > 959) {
+        console.log($(window).width());
+        if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
         } else {
             $('.subnav .brand').show();
@@ -228,45 +229,45 @@ $(function() {
 
     //Global popup
     $('.ajax').on('click', function() {
-            var url     = this.href;
-            var dialog  = $("#dialog");
-            if ($("#dialog").length == 0) {
-                dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
-            }
+        var url     = this.href;
+        var dialog  = $("#dialog");
+        if ($("#dialog").length == 0) {
+            dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
+        }
 
-            width_value = 580;
-            height_value = 450;
-            resizable_value = true;
+        width_value = 580;
+        height_value = 450;
+        resizable_value = true;
 
-            new_param = get_url_params(url, 'width');
-            if (new_param) {
-                width_value = new_param;
-            }
+        new_param = get_url_params(url, 'width');
+        if (new_param) {
+            width_value = new_param;
+        }
 
-            new_param = get_url_params(url, 'height')
-            if (new_param) {
-                height_value = new_param;
-            }
+        new_param = get_url_params(url, 'height')
+        if (new_param) {
+            height_value = new_param;
+        }
 
-            new_param = get_url_params(url, 'resizable');
-            if (new_param) {
-                resizable_value = new_param;
-            }
+        new_param = get_url_params(url, 'resizable');
+        if (new_param) {
+            resizable_value = new_param;
+        }
 
-            // load remote content
-            dialog.load(
-                            url,
-                            {},
-                            function(responseText, textStatus, XMLHttpRequest) {
-                                    dialog.dialog({
-                                            modal       : true,
-                                            width       : width_value,
-                                            height      : height_value,
-                                            resizable   : resizable_value
-                                    });
-            });
-            //prevent the browser to follow the link
-            return false;
+        // load remote content
+        dialog.load(
+                        url,
+                        {},
+                        function(responseText, textStatus, XMLHttpRequest) {
+                                dialog.dialog({
+                                        modal       : true,
+                                        width       : width_value,
+                                        height      : height_value,
+                                        resizable   : resizable_value
+                                });
+        });
+        //prevent the browser to follow the link
+        return false;
     });
 
     //old jquery.menu.js

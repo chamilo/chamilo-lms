@@ -824,18 +824,18 @@ if (@$_POST['step2']) {
             case '1.8.8.2':
                 //Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
-			case '1.8.8.4':
-			case '1.8.8.6':
-				include 'update-db-1.8.8-1.9.0.inc.php';
-				//include 'update-files-1.8.8-1.9.0.inc.php';
-				//Only updates the configuration.inc.php with the new version
-				include 'update-configuration.inc.php';
+            case '1.8.8.4':
+            case '1.8.8.6':
+                include 'update-db-1.8.8-1.9.0.inc.php';
+                //include 'update-files-1.8.8-1.9.0.inc.php';
+                //Only updates the configuration.inc.php with the new version
+                include 'update-configuration.inc.php';
 
                 break;
             default:
-				break;
-		}
-	} else {
+                break;
+        }
+    } else {
 		set_file_folder_permissions();
 		database_server_connect();
 

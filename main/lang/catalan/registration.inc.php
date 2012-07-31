@@ -175,4 +175,15 @@ $User = "Usuari";
 $LostPass = "Ha oblidat la seva contrasenya?";
 $EnterEmailUserAndWellSendYouPassword = "Introdueixi l'usuari i l'adreça de correu electrònic amb la qual està registrat i li remetrem la seva contrasenya.";
 $NoUserAccountWithThisEmailAddress = "No existeix un compte amb aquest usuari i/o adreça de correu electrònic";
+$CouldNotResetPassword = "No podeu restablir la contrasenya";
+$WithTheFollowingSettings = "amb els paràmetres següents:";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "El seu compte a %s ha estat aprovat per un dels nostres administradors.";
+$HaveFun = "Divertiu-vos,";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ara podeu autenticar-se a % utilitzant el nom d'usuari i contrasenya que li han estat facilitats";
+$AreYouSureToEditTheUserStatus = "Esteu segur de voler editar l'estat d'usuari?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "L'assistent només pot realitzar el seguiment dels estudiants registrats al curs.";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "El professor pot qualificar, avaluar i realitzar el seguiment de totes els estudiants registrats al curs.";
+$LoginOrEmailAddress = "Nom d'usuari o adreça de correu electrònic";
+$AtOnce = "A la recepció";
+$Daily = "A diari";
 ?>

@@ -93,4 +93,8 @@ $GroupsFromClassesInfo = "Utilitzant aquesta opció, podreu crear grups basats e
 $Group = "Grup";
 $ForumOfGroup = "Fòrum del grup:";
 $BackToGroupList = "Tornar a la llista de grups";
+$EditGroupCategory = "Edita categoria de grup";
+$NoStudents = "No hi ha estudiants";
+$NoData = "No hi ha dades disponibles";
+$AllGroups = "Tots els grups";
 ?>

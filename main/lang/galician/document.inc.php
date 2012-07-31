@@ -218,6 +218,7 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Actualización necesaria";
 $MoveElement = "Mover";
 $CertificateName = "Nome do certificado";
+$HelpFolderLearningPaths = "INFORMACIÓN SÓ VISIBLE POLO PROFESORADO:\nEsta carpeta contén os documentos que se crean desde a ferramenta Leccións. Aquí pode editar os HTML que se teñan creado ao realizar unha importación desde a ferramenta Leccións, por exemplo desde Chamilo Rapid. Recomendase manter invisible esta carpeta para os alumnos.";
 $CopyToMyFiles = "Copiar na miña área persoal de arquivos";
 $Export2PDF = "Exportar en formato PDF";
 $ResourceShared = "Recurso compartido";

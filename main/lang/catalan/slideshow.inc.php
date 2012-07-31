@@ -19,4 +19,8 @@ $lang_next_slide = "Diapositiva següent";
 $lang_image = "Imatge";
 $lang_of = "de";
 $lang_view_slideshow = "Veure presentació";
+$FirstSlide = "Primera diapositiva";
+$LastSlide = "Última diapositiva";
+$ResizingAuto = "AUTODIMENSIONAR (per defecte)";
+$ResizingAutoComment = "Aquesta presentació de diapositives es dimensionarà automàticament a la teva grandària de pantalla. Aquesta és l'opció per defecte.";
 ?>

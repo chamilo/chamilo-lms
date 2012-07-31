@@ -218,6 +218,7 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Precisa de atualização";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nome";
+$HelpFolderLearningPaths = "INFORMAÇÕES VISÍVEIS SOMENTE PARA OS PROFESSORES:\nEsta pasta contém documentos criados pela ferramenta de roteiro de aprendizagem. Dentro da pasta pode editar o arquivo HTML que é gerado ao importar conteúdo do roteiro de aprendizagem, como são os importados por Chamilo Rapid, por exemplo. Recomendamos-lhe ocultar esta pasta aos seus alunos.";
 $CopyToMyFiles = "Copiar para minha área de arquivos privados";
 $Export2PDF = "Exportar para o formato PDF";
 $ResourceShared = "Recurso compartilhado";

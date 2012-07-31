@@ -48,4 +48,10 @@ $langSaveLink = "Guardar enllaç";
 $langSaveCategory = "Guardar la categoria";
 $BackToLinksOverview = "Regressar a la llista d'enllaços";
 $AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrarà l'enllaç en la pàgina principal del curs";
+$Url = "URL";
+$LinkOpenSelf = "La mateixa finestra";
+$LinkOpenBlank = "Una altra finestra";
+$LinkOpenParent = "Finestra pare";
+$LinkOpenTop = "Part superior";
+$LinkTarget = "Enllaç de destí";
 ?>

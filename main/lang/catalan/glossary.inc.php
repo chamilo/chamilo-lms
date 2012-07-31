@@ -23,4 +23,15 @@ $TableView = "Veure com taula";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Aquest terme del glossari ja existeix, per favor canvie'l per altre nom";
 $GlossaryManagement = "Administració del glossari";
 $TermMoved = "El terme s'ha mogut";
+$ShowGlossaryInExtraToolsTitle = "Mostrar els termes del glossari en eines extra";
+$ShowGlossaryInExtraToolsComment = "Des d'ací pots configurar com afegir els termes del glossari de les eines extra com a eina d'exercicis i rutes d'aprenentatge";
+$ImportGlossary = "Importar glossari";
+$ReplaceGlossary = "Reemplaçar glossari";
+$CannotDeleteGlossary = "No es pot eliminar el glossari";
+$TermsImported = "Els termes s'han importat";
+$TermsNotImported = "Els termes no s'han importat";
+$ExportGlossaryAsCSV = "Exportar glossari com a arxiu CSV";
+$List = "Listar";
+$GlossaryTermUpdated = "Els termes s'han actualitzat";
+$DeleteAllGlossaryTerms = "Eliminar tots els termes";
 ?>

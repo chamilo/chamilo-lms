@@ -140,4 +140,13 @@ $BackToForum = "Tornar al fórum";
 $BackToForumOverview = "Tornar a la vista general del fòrum";
 $BackToThread = "Tornar a tema";
 $ForumcategoryLocked = "Categoria de fòrum bloquejada";
+$PreviewImage = "Previsualitzar imatge";
+$UpdateImage = "Actualitzar imatge";
+$EnableTimeLimits = "Activar límits de temps";
+$RemoveSearchResults = "Netejar els resultats de cerca";
+$InsertQualificationCorrespondingToMaxScore = "Inserir la qualificació corresponent a la màxima puntuació";
+$ThreadMoved = "El tema ha sigut traslladat";
+$MigrateForum = "Migrar fòrum";
+$YouWillBeNotified = "Seràs notificat";
+$ForumCategories = "Categories del fòrum";
 ?>

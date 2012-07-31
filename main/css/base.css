@@ -3203,7 +3203,7 @@ a:active{
     margin-right: 4px;
 }
 
-.hide_menu{
+.subnav .nav .hide_menu {
     display:none;
 }
 

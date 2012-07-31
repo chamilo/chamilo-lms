@@ -131,7 +131,7 @@ if (!empty($question_list)) {
                                                                       
                         $data[$id]['correct'] 	= '-';
                         
-                        $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), $question_obj->type, $answer_info_db, $answer_item);
+                        $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), FILL_IN_BLANKS, $answer_info_db, $answer_item);
                         
                         $percentange = $count/$count_students*100;
                         $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
@@ -141,24 +141,26 @@ if (!empty($question_list)) {
                     }
                     break;
                 case MATCHING:
-                    if ($is_correct == 0) {                   
+                    if ($is_correct == 0) {                
                         if ($answer_id == 1) {                
                             $data[$id]['name']      = cut($question_obj->question, 100);
                         } else {
                             $data[$id]['name']      = '-';
                         }                        
                         $correct = '';
+                        
                         for ($i = 1; $i <= $answer_count; $i++) {
-                             $is_correct_i     = $answer->isCorrect($i);
+                             $is_correct_i = $answer->isCorrect($i);                             
                              if ($is_correct_i != 0 && $is_correct_i == $answer_id) {
                                  $correct = $answer->selectAnswer($i);
+                                 break;
                              }
-                             
                         }
-                        $data[$id]['answer'] 	= $answer_info;
-                        $data[$id]['correct'] 	= $correct;
-
-                        $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), $real_answer_id);                        
+                        $data[$id]['answer'] 	= $correct;
+                        $data[$id]['correct'] 	= $answer_info;
+                        
+                        $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), MATCHING);
+                        
                         $percentange = $count/$count_students*100;
                         $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
                     }                    

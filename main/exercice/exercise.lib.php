@@ -1684,7 +1684,7 @@ function get_number_students_answer_hotspot_count($answer_id, $question_id,  $ex
 }
 
 
-function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $answer = null, $fill_in_blank_answer = null) {
+function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $correct_answer = null, $current_answer = null) {
 	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1695,12 +1695,15 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
 	$course_code 		= Database::escape_string($course_code);
 	$session_id 		= intval($session_id);    
     
-    if ($question_type == FILL_IN_BLANKS) {
-        $answer_condition = "";
-        $select_condition = " e.exe_id, answer ";
-    } else {
-        $answer_condition = "answer       	= $answer_id AND ";
-        $select_condition = "DISTINCT exe_user_id";
+    switch ($question_type) {
+        case FILL_IN_BLANKS:        
+            $answer_condition = "";
+            $select_condition = " e.exe_id, answer ";
+            break;
+        case MATCHING:    
+        default:
+            $answer_condition = " answer = $answer_id AND ";
+            $select_condition = " DISTINCT exe_user_id ";
     }
     
 	$sql = "SELECT $select_condition
@@ -1709,26 +1712,29 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
 					a.course_code 	= '$course_code' AND
 					e.session_id 	= $session_id AND
-                              
+                    $answer_condition                              
 					question_id 	= $question_id AND 
                     cu.status        = ".STUDENT." AND                     
                     relation_type <> 2 AND
                     e.status = ''";
-    
+    //var_dump($sql);
 	$result = Database::query($sql);
 	$return = 0;
 	if ($result) {
-        if ($question_type == FILL_IN_BLANKS) {
-            $good_answers = 0;            
-            while ($row = Database::fetch_array($result, 'ASSOC')) {   
-                $fill_blank = check_fill_in_blanks($answer, $row['answer']);                
-                if (isset($fill_blank[$fill_in_blank_answer]) && $fill_blank[$fill_in_blank_answer] == 1 ) {                    
-                    $good_answers++;
+        $good_answers = 0;
+        switch ($question_type) {
+            case FILL_IN_BLANKS:                
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $fill_blank = check_fill_in_blanks($correct_answer, $row['answer']);
+                    if (isset($fill_blank[$current_answer]) && $fill_blank[$current_answer] == 1 ) {                    
+                        $good_answers++;
+                    }
                 }
-            }
-            return $good_answers;
-        } else {
-            $return = Database::num_rows($result);
+                return $good_answers;
+                break;
+            case MATCHING:  
+            default:
+                $return = Database::num_rows($result);                
         }
 	}
 	return $return;

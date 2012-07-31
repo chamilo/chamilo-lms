@@ -63,6 +63,19 @@
         display:none;
     }    
     
+    /* Footer fixes */
+    
+    footer {
+        border-top: 1px solid #CCCCCC;
+        background-color: #fff;
+        background-image: none;
+        color: #666;
+    }
+    
+    footer #footer_left a, footer #footer_center a, footer #footer_right a {
+        color : #999;
+    }
+    
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
     }    
@@ -88,7 +101,7 @@
         display:none;
     }
     
-    /* Show 2 icons instead of one */
+    /* Course- home - Show 2 icons instead of one */
     #course_tools .row .span4 {
         float: left;        
         height: 150px;
@@ -99,16 +112,7 @@
         font-size: 14px;
     }
     
-    footer {
-        border-top: 1px solid #CCCCCC;
-        background-color: #fff;
-        background-image: none;
-        color: #666;
-    }
-    
-    footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
-    }
+   
     
     .subbav .nav > li > a:hover,
     .subbav .dropdown-menu a:hover {
@@ -222,12 +226,25 @@
     }
 
 
-    /* Unfloat the back to top link in footer */
-    .footer .pull-right {
-        float: none;
+    /* Footer fixes */
+    
+    footer {
+        border-top: 1px solid #CCCCCC;
+        background-color: #fff;
+        background-image: none;
+        color: #666;
     }
-    .footer p {
-        margin-bottom: 9px;
+    
+    footer #footer_left a, footer #footer_center a, footer #footer_right a {
+        color : #999;
+    }
+    
+    #footer_left , #footer_right #admin_name, #footer_right #software_name {
+        text-align: center !important;
+    }    
+    
+    footer .container .row {
+        padding-top: 15px;        
     }
 }
 

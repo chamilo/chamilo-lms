@@ -192,7 +192,7 @@ class AttendanceLink extends AbstractLink
     }
 
     public function get_name() {
-    	$this->get_attendance_data();
+    	self::get_attendance_data();
     	$attendance_title = isset($this->attendance_data['name']) ? $this->attendance_data['name'] : '';
     	$attendance_qualify_title = isset($this->attendance_data['attendance_qualify_title']) ? $this->attendance_data['attendance_qualify_title'] : '';
     	if ( isset($attendance_qualify_title) && $attendance_qualify_title != '') {
@@ -233,7 +233,7 @@ class AttendanceLink extends AbstractLink
 		return $url;   		
 	}
 
-	private function get_attendance_data() {
+	private static function get_attendance_data() {
 		$tbl_name = $this->get_attendance_table();
 		$session_id = api_get_session_id();
 		if ($tbl_name == '') {

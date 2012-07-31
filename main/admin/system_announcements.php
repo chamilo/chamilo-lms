@@ -9,7 +9,7 @@
 /* INIT SECTION */
 
 // Language files that need to be included.
-$language_file = array('admin', 'agenda');
+$language_file = array('admin', 'agenda', 'announcements');
 
 // Resetting the course id.
 $cidReset = true;
@@ -152,7 +152,7 @@ if ($action_todo) {
     $form->addElement('hidden', 'id');
 
     $group_list = GroupPortalManager::get_groups_list();
-    $group_list[0]  = get_lang('AllGroups');
+    $group_list[0]  = get_lang('All');
 	$form->addElement('select', 'group',get_lang('AnnouncementForGroup'),$group_list);
     $values['group'] = isset($values['group']) ? $values['group'] : '0';
 

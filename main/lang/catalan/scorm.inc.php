@@ -53,4 +53,9 @@ $UnknownPackageFormat = "El format d'aquest paquet no ha estat reconegut. Per fa
 $Attempt = "Intent";
 $MoveTheCurrentForum = "Moure el foro actual";
 $WarningWhenEditingScorm = "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte.";
+$AdditionalProfileField = "Afegir camp al perfil d'usuari";
+$ScormUnknownPackageFormat = "El paquet que estàs intentant pujar té un format desconegut. Per favor, assegura't que utilitza un dels formats aceptats.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "No hi ha suficient espai en aquest curs per descomprimir el paquet actual.";
+$ScormPackageFormatNotScorm = "El paquet que esteu carregant no sembla estar en format SCORM. Comproveu que el imsmanifest.xml es troba dins de l'arxiu ZIP que esteu intentant carregar.";
+$HideTocFrame = "Amaga taula del marc de continguts";
 ?>

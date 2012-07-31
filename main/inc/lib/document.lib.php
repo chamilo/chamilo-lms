@@ -2338,7 +2338,7 @@ class DocumentManager {
      * @param  int $to_group_id (to calculate group document space)
      * @return int total size
      */
-    function documents_total_space($to_group_id = '0') {
+    static function documents_total_space($to_group_id = '0') {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT 	= Database::get_course_table(TABLE_DOCUMENT);
 		$course_id 			= api_get_course_int_id();
@@ -2365,7 +2365,7 @@ class DocumentManager {
     /**
      *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
      */
-    function display_quota($course_quota, $already_consumed_space) {
+    static function display_quota($course_quota, $already_consumed_space) {
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000);
 
@@ -2416,7 +2416,7 @@ class DocumentManager {
      *
      *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
      */
-    function display_simple_quota($course_quota, $already_consumed_space) {
+    static function display_simple_quota($course_quota, $already_consumed_space) {
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000, 2);
         $percentage = $already_consumed_space / $course_quota * 100;
@@ -2440,7 +2440,7 @@ class DocumentManager {
      *
      * @see enough_space() uses  documents_total_space() function
      */
-    function enough_space($file_size, $max_dir_space) {
+    static function enough_space($file_size, $max_dir_space) {
         if ($max_dir_space) {
             $already_filled_space = self::documents_total_space();
             if (($file_size + $already_filled_space) > $max_dir_space) {
@@ -2456,7 +2456,7 @@ class DocumentManager {
      * @return string
      */
     
-    function generate_jplayer_jquery($params = array()) {
+    static function generate_jplayer_jquery($params = array()) {
         $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';        
         
         $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({                                
@@ -2486,7 +2486,7 @@ class DocumentManager {
      * @param int
      * @return string	html content
      */
-    function generate_media_preview($i, $type = 'simple') {
+    static function generate_media_preview($i, $type = 'simple') {
         $i = intval($i);
         
         $extra_controls = $progress = '';
@@ -2519,7 +2519,7 @@ class DocumentManager {
         return $html;
     }
 
-    function generate_video_preview($document_data = array()) {
+    static function generate_video_preview($document_data = array()) {
         $html = '
         <div id="jp_container_1" class="jp-video">
 			<div class="jp-type-single">
@@ -2570,7 +2570,7 @@ class DocumentManager {
         return $html;
     }
 
-    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
+    static function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
     	if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
     		return '';
     	}
@@ -3105,7 +3105,7 @@ class DocumentManager {
         return true;
     }
 
-    public function get_web_odf_extension_list(){
+    public static function get_web_odf_extension_list(){
         return array('ods', 'odt');
     }
 }

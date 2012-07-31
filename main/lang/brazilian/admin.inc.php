@@ -292,11 +292,11 @@ $ProfileChangesComment = "Quais partes do perfil podem ser alteradas?";
 $RegistrationRequiredFormsTitle = "Registro: campos obrigatórios";
 $RegistrationRequiredFormsComment = "Selecione quais campos que considere obrigatórios na inscrição (além do nome, sobrenome, login e senha)";
 $DefaultGroupQuotumTitle = "Quota de espaço predefinida no servidor para o grupo";
-$DefaultGroupQuotumComment = "Quota de epaço predefeinida no servidor para a ferramenta documento dos grupos?";
+$DefaultGroupQuotumComment = "Quota de epaço predefinida no servidor para a ferramenta documento dos grupos?";
 $AllowLostPasswordTitle = "Senha perdida";
 $AllowLostPasswordComment = "É permitido ao usuário solicitar ao sistema o envio da senha automaticamente?";
 $AllowRegistrationTitle = "Registro";
-$AllowRegistrationComment = "A inscrição como um novo usuário é permitido? Os usuários criados pode criar novas contas?";
+$AllowRegistrationComment = "A inscrição como um novo usuário é permitida? Os usuários criados podem criar novas contas?";
 $AllowRegistrationAsTeacherTitle = "Registro como professor";
 $AllowRegistrationAsTeacherComment = "Alguém pode se registrar como professor (poder criar cursos)?";
 $PlatformLanguage = "Idioma da Plataforma";
@@ -1552,73 +1552,38 @@ $TeachersCanChangeScoreSettingsTitle = "Os professores podem mudar as configura�
 $TeachersCanChangeScoreSettingsComment = "Ao editar as configurações da caderneta de notas";
 $GradebookEnableLockingTitle = "Ativar bloqueio de avaliações pelos professores";
 $GradebookEnableLockingComment = "Uma vez activado, esta opção permitirá o bloqueio de qualquer avaliação pelos professores do curso correspondente. Em troca, isto evitará qualquer modificação dos resultados pelo professor dentro nos recursos usados na avaliação: provas, roteiros de aprendizagem, tarefas, etc. O único rol autorizado para desbloquear uma avaliação bloqueada é o administrador. O professor será informado desta possibilidade. O bloqueio e desbloqueio das cadernetas de notas será cadastrado no relatório de atividades importantes do sistema";
-$LdapDescriptionComment = "Autenticação LDAP: 
-Ver I. de baixo para configurar LDAP 
-Ver II. de baixo para activar a autenticação LDAP
-
-
-Atualize os atributos de usuário com dados LDAP após da autenticação CAS (ver configuração CAS):
-Ver I. de baixo para configurar LDAP 
-CAS gerencia a autenticação de usuário, a activação de LDAP é desnecessária.
-
-I. Configuração LDAP
-
-Editar arquivo main/auth/external_login/ldap.conf.php
-
--> Editar valores do array $extldap_config 
-
-Os parâmetros são
-base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
-admin distinguished name (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
-admin password (ex : 'admin_password' => '123456')
-ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
-filter (ex : 'filter' => '')
-port (ex : 'port' => 389)
-protocol version (2 or 3) (ex : 'protocol_version' => 3)
-user_search (ex : 'user_search' => 'sAMAccountName=%username%')
-encoding (ex : 'encoding' => 'UTF-8')
-update_userinfo (ex : 'update_userinfo' => true)
--> Para atualizar correspondências entre usuário e atributos LDAP, edite o array $extldap_user_correspondance 
-Os valores do array são <chamilo_field> => <ldap_field> 
-A estrutura do array é explicada no arquivo main/auth/external_login/ldap.conf.php
-
-
-II. Activar autenticação LDAP
-
-Editar arquivo main/inc/conf/configuration.php
-
--> Descomente as linhas 
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
-
-N.B. : Os usuários LDAP usam os mesmos campos para fazer login que os usuários da plataforma. 
-N.B. : A activação de LDAP adiciona um menu Autenticação externa [LDAP] em \"adicionar o modificar\" páginas de usuário.";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Autenticação LDAP:<br />Ver I. de baixo para configurar LDAP <br />Ver II. de baixo para activar a autenticação LDAP</li><br /><br /><li> Atualize os atributos de usuário com dados LDAP após da autenticação CAS (ver <a href='settings.php?category=CAS'>configuração CAS</a>) : <br />Ver I. de baixo para configurar LDAP <br />CAS gerencia a autenticação de usuário, a activação de LDAP é desnecessária.</li><br /></ul></div><br /><h4>I. Configuração LDAP</h4><h5>Editar arquivo main/auth/external_login/ldap.conf.php </h5>-&gt; Editar valores do array <code>&#36;extldap_config</code> <br /><br />Os parâmetros são <br /><ul><li>base domain string (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>admin password (ex : 'admin_password' =&gt; '123456') </li><li>ldap host (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filter (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>encoding (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Para atualizar as correspondências entre usuário e atributos LDAP, edite o array <code>&#36;extldap_user_correspondance</code> <br />Os valores do array são &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />A estrutura do array é explicada no arquivo file main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Ativar autenticação LDAP </h4><h5>Edite o arquivo main/inc/conf/configuration.php </h5>-&gt; Descomente as linhas <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : Os usuários LDAP usam os mesmos campos para fazer login que os usuários da plataforma. <br />N.B. : A activação de LDAP adiciona um menu Autenticação externa [LDAP] em \"adicionar o modificar\" páginas de usuário.</div>";
 $ShibbolethMainActivateTitle = "Autenticação Shibboleth";
-$ShibbolethMainActivateComment = "Primeiro, precisa configurar Shibboleth no seu servidor web.
+$ShibbolethMainActivateComment = "Primeiro, precisa configurar Shibboleth no seu servidor web.</br>
 
-Para configurá-lo para Chamilo edite o arquivo main/auth/shibboleth/config/aai.class.php
+Para configurá-lo para Chamilo<br />
+<h5>edit file main/auth/shibboleth/config/aai.class.php</h5>
 
-Modifique os valores do objeto $result com o nome dos seus atributos Shibboleth
-$result->unique_id = 'mail';
-$result->firstname = 'cn';
-$result->lastname = 'uid';
-$result->email = 'mail';
-$result->language = '-';
-$result->gender = '-';
-$result->address = '-';
-$result->staff_category = '-';
-$result->home_organization_type = '-';
-$result->home_organization = '-';
-$result->affiliation = '-';
-$result->persistent_id = '-';
-...
+Modifique os valores do objeto $result com o nome dos seus atributos Shibboleth<br />
+<ul>
+<li>$result->unique_id = 'mail';
+<li>$result->firstname = 'cn';
+<li>$result->lastname = 'uid';
+<li>$result->email = 'mail';
+<li>$result->language = '-';
+<li>$result->gender = '-';
+<li>$result->address = '-';
+<li>$result->staff_category = '-';
+<li>$result->home_organization_type = '-';
+<li>$result->home_organization = '-';
+<li>$result->affiliation = '-';
+<li>$result->persistent_id = '-';
+<li>...
+</ul>
 
 Vá para Extensões para adicionar um botão de \"Login Shibboleth\" configurável no seu campus Chamilo.";
 $LdapDescriptionTitle = "Autenticação LDAP";
 $FacebookMainActivateTitle = "Autenticação Facebook";
-$FacebookMainActivateComment = "Primeiro, deve criar uma aplicação Facebook (ver https://developers.facebook.com/apps) com sua conta de Facebook. Nos parâmetros das aplicações de Facebook, o valor da URL do site deveria ter um parâmetro GET \"action=fbconnect\" (por exemplo, http://mychamilo.com/?action=fbconnect).
+$FacebookMainActivateComment = "Primeiro, deve criar uma aplicação Facebook (ver <a href=\"https://developers.facebook.com/apps\">https://developers.facebook.com/apps</a>) com sua conta de Facebook. Nos parâmetros das aplicações de Facebook, o valor da URL do site deveria ter um parâmetro GET \"action=fbconnect\" (por exemplo, http://mychamilo.com/?action=fbconnect).
 
-Depois, edite o arquivo main/auth/external_login/facebook.conf.php e insira os valores \"appId\" e \"secret\" para $facebook_config. Vá para Extensões para adicionar um botão \"Login Facebook\" configurável no seu campus Chamilo.";
+Depois, 
+<h5>edite o arquivo main/auth/external_login/facebook.conf.php</h5>
+e insira os valores \"appId\" e \"secret\" para $facebook_config.<br /> Vá para Extensões para adicionar um botão \"Login Facebook\" configurável no seu campus Chamilo.";
 $LanguagePriority1Title = "Prioridade de idioma 1";
 $LanguagePriority2Title = "Prioridade de idioma 2";
 $LanguagePriority3Title = "Prioridade de idioma 3";

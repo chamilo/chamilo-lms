@@ -127,10 +127,11 @@ class CourseArchiver
 		rmdirr($backup_dir);
 		return ''.$zip_file;
 	}
+    
 	/**
 	 *
 	 */
-	function get_available_backups($user_id = null)
+	static function get_available_backups($user_id = null)
 	{
 		global $dateTimeFormatLong;
 		$backup_files = array();

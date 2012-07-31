@@ -121,13 +121,7 @@
     /* No topbar */
     #topbar {
         display:none;
-    }
-    
-    /* Course- home - Show 2 icons instead of one */
-    #course_tools .row .span4 {
-        float: left;        
-        width: 220px;
-    }
+    }    
     
     #course_tools .row .span4 h4 {
         font-size: 14px;

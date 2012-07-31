@@ -457,12 +457,18 @@ if ($encryptPassForm == '1') {
                 </div>
             </div>
         </div>
-        <div class="subnav">
-            <ul class="nav nav-pills">
-                <li id="current">
-                    <a target="_top" href="index.php"><?php echo get_lang('Homepage'); ?></a>
-                </li>
-            </ul>
+        <div class="navbar subnav">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="nav-collapse">
+                        <ul class="nav nav-pills">
+                            <li id="current" class="active">
+                                <a target="_top" href="index.php"><?php echo get_lang('Homepage'); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 	</header>
     <br />

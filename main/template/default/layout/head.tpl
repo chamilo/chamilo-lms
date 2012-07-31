@@ -45,8 +45,8 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
 var online_button   = '{{ online_button }}';
 var offline_button  = '{{ offline_button }}';
-var connect_lang    = '{{"ChatConnected"|get_lang}}';
-var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
+var connect_lang    = '{{ "ChatConnected"|get_lang }}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 </script>
 
 {{ js_file_to_string}}
@@ -69,8 +69,8 @@ function get_url_params(q, attribute) {
 }
 
 function check_brand() {
-    if ($('.subnav').length) {     
-        if ($(window).width() > 959) {
+    if ($('.subnav').length) {        
+        if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
         } else {
             $('.subnav .brand').show();
@@ -130,25 +130,26 @@ $(document).scroll(function() {
     }
 
     //Admin -> Settings toolbar
+    if ($('body').width() > 959) {
+        if ($('.new_actions').length) {
+            if (!$('.new_actions').attr('data-top')) {
+                // If already fixed, then do nothing
+                if ($('.new_actions').hasClass('new_actions-fixed')) return;
+                // Remember top position
+                var offset = $('.new_actions').offset();
 
-    if ($('.new_actions').length) {
-        if (!$('.new_actions').attr('data-top')) {
-            // If already fixed, then do nothing
-            if ($('.new_actions').hasClass('new_actions-fixed')) return;
-            // Remember top position
-            var offset = $('.new_actions').offset();
-
-            var more_top = 0;
-            if ($('.subnav').hasClass('new_actions-fixed')) {
-                more_top = 50;
+                var more_top = 0;
+                if ($('.subnav').hasClass('new_actions-fixed')) {
+                    more_top = 50;
+                }
+                $('.new_actions').attr('data-top', offset.top + more_top);
             }
-            $('.new_actions').attr('data-top', offset.top + more_top);
-        }
 
-        if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
-            $('.new_actions').addClass('new_actions-fixed');
-        } else {
-            $('.new_actions').removeClass('new_actions-fixed');
+            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+                $('.new_actions').addClass('new_actions-fixed');
+            } else {
+                $('.new_actions').removeClass('new_actions-fixed');
+            }
         }
     }
 
@@ -205,8 +206,7 @@ $(function() {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
-                var name = $(this).attr('name');
-                console.log(name);
+                var name = $(this).attr('name');                
                 $(this).after(this.outerHTML).remove();
                 $('input[name=' + name + ']').val(text);
             });
@@ -227,45 +227,45 @@ $(function() {
 
     //Global popup
     $('.ajax').on('click', function() {
-            var url     = this.href;
-            var dialog  = $("#dialog");
-            if ($("#dialog").length == 0) {
-                dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
-            }
+        var url     = this.href;
+        var dialog  = $("#dialog");
+        if ($("#dialog").length == 0) {
+            dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
+        }
 
-            width_value = 580;
-            height_value = 450;
-            resizable_value = true;
+        width_value = 580;
+        height_value = 450;
+        resizable_value = true;
 
-            new_param = get_url_params(url, 'width');
-            if (new_param) {
-                width_value = new_param;
-            }
+        new_param = get_url_params(url, 'width');
+        if (new_param) {
+            width_value = new_param;
+        }
 
-            new_param = get_url_params(url, 'height')
-            if (new_param) {
-                height_value = new_param;
-            }
+        new_param = get_url_params(url, 'height')
+        if (new_param) {
+            height_value = new_param;
+        }
 
-            new_param = get_url_params(url, 'resizable');
-            if (new_param) {
-                resizable_value = new_param;
-            }
+        new_param = get_url_params(url, 'resizable');
+        if (new_param) {
+            resizable_value = new_param;
+        }
 
-            // load remote content
-            dialog.load(
-                            url,
-                            {},
-                            function(responseText, textStatus, XMLHttpRequest) {
-                                    dialog.dialog({
-                                            modal       : true,
-                                            width       : width_value,
-                                            height      : height_value,
-                                            resizable   : resizable_value
-                                    });
-            });
-            //prevent the browser to follow the link
-            return false;
+        // load remote content
+        dialog.load(
+                        url,
+                        {},
+                        function(responseText, textStatus, XMLHttpRequest) {
+                                dialog.dialog({
+                                        modal       : true,
+                                        width       : width_value,
+                                        height      : height_value,
+                                        resizable   : resizable_value
+                                });
+        });
+        //prevent the browser to follow the link
+        return false;
     });
 
     //old jquery.menu.js

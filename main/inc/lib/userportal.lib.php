@@ -281,7 +281,7 @@ class IndexManager {
 			$home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 			$home_menu_content .= '</ul>';
 			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
-		}		
+		}        
 		return $html;
 	}
 	    

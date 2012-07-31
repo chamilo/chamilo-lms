@@ -100,4 +100,7 @@ $ErrorNoFilesInFolder = "Aquest directori està vuit";
 $AddComment = "Afegir comentari";
 $SentCatgoryDeleted = "Aquesta carpeta ha estat eliminada";
 $ReceivedCatgoryDeleted = "La carpeta ha estat eliminada";
+$InvalideUserDetected = "S'ha detectat un usuari invàlid.";
+$InvalideGroupDetected = "S'ha detectat un grup invàlid.";
+$OverviewOfFilesInThisZip = "Panoràmica dels arxius d'aquest Zip";
 ?>

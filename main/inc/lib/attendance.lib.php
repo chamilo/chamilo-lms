@@ -35,7 +35,7 @@ class Attendance
 	 * Get the total number of attendance inside current course and current session
 	 * @see SortableTable#get_total_number_of_items()
 	 */
-	function get_number_of_attendances() {
+	static function get_number_of_attendances() {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
         
 		$session_id = api_get_session_id();
@@ -90,7 +90,7 @@ class Attendance
 	 * @param   string  Order (ASC,DESC)
 	 * @see SortableTable#get_table_data($from)
 	 */
-	function get_attendance_data($from, $number_of_items, $column, $direction) {
+	static function get_attendance_data($from, $number_of_items, $column, $direction) {
         $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
@@ -602,7 +602,7 @@ class Attendance
 			}
 		}
 		// update attendance qualify max
-		$count_done_calendar = $this->get_done_attendance_calendar($attendance_id);
+		$count_done_calendar = self::get_done_attendance_calendar($attendance_id);
 		$sql = "UPDATE $tbl_attendance SET attendance_qualify_max='$count_done_calendar' WHERE c_id = $course_id AND id = '$attendance_id'";
 		Database::query($sql);
 	}
@@ -649,7 +649,7 @@ class Attendance
 	 * @param	int	   attendance id
 	 * @return 	int	   number of done attendances
 	 */
-	public function get_done_attendance_calendar($attendance_id) {
+	public static function get_done_attendance_calendar($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
@@ -677,7 +677,7 @@ class Attendance
 		$results = array();
 		$attendance_data 	= $this->get_attendance_by_id($attendance_id);
 		
-		$calendar_count 	= $this->get_number_of_attendance_calendar($attendance_id);
+		$calendar_count 	= self::get_number_of_attendance_calendar($attendance_id);
 		
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
 		
@@ -993,7 +993,7 @@ class Attendance
 	 * @param	int	attendance id
 	 * @return	int     number of dates in attendance calendar
 	 */
-	public function get_number_of_attendance_calendar($attendance_id) {
+	public static function get_number_of_attendance_calendar($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
         $course_id = api_get_course_int_id();
@@ -1010,7 +1010,7 @@ class Attendance
 	 * @param	int	attendance id
 	 * @return	int     count of dates
 	 */
-	public function get_count_dates_inside_attendance_calendar($attendance_id) {
+	public static function get_count_dates_inside_attendance_calendar($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
          $course_id = api_get_course_int_id();
@@ -1026,50 +1026,49 @@ class Attendance
 	}
 
 
-        /**
-         * check if all calendar of an attendance is done
-         * @param   int     attendance id
-         * @return  bool    True if all calendar is done, otherwise false
-         */
+    /**
+     * check if all calendar of an attendance is done
+     * @param   int     attendance id
+     * @return  bool    True if all calendar is done, otherwise false
+     */
+    public static function is_all_attendance_calendar_done($attendance_id) {
+        $attendance_id = intval($attendance_id);
+        $done_calendar = self::get_done_attendance_calendar($attendance_id);
+        $count_dates_in_calendar = self::get_count_dates_inside_attendance_calendar($attendance_id);
+        $number_of_dates = self::get_number_of_attendance_calendar($attendance_id);
 
-        public function is_all_attendance_calendar_done($attendance_id) {
-            $attendance_id = intval($attendance_id);
-            $done_calendar = self::get_done_attendance_calendar($attendance_id);
-            $count_dates_in_calendar = self::get_count_dates_inside_attendance_calendar($attendance_id);
-            $number_of_dates = self::get_number_of_attendance_calendar($attendance_id);
-
-            $result = false;
-            if ($number_of_dates && (intval($count_dates_in_calendar) == intval($done_calendar))) {
-                $result = true;
-            }
-            return $result;
+        $result = false;
+        if ($number_of_dates && (intval($count_dates_in_calendar) == intval($done_calendar))) {
+            $result = true;
         }
+        return $result;
+    }
 
 
-        /**
-         * check if an attendance is locked
-         * @param   int   attendance id
-         * @param   bool
-         */
-        public function is_locked_attendance($attendance_id) {
-            //use gradebook lock
-            $result = api_resource_is_locked_by_gradebook($attendance_id, LINK_ATTENDANCE);            
-            return $result;
-            
-            /*
-            $attendance_id = intval($attendance_id);
-            $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-            $course_id = api_get_course_int_id();
+    /**
+     * check if an attendance is locked
+     * @param   int   attendance id
+     * @param   bool
+     */
+    public function is_locked_attendance($attendance_id) {
+        //use gradebook lock
+        $result = api_resource_is_locked_by_gradebook($attendance_id, LINK_ATTENDANCE);            
+        return $result;
 
-            $sql = "SELECT id FROM $tbl_attendance WHERE c_id = $course_id  AND id = $attendance_id AND locked = 1";
-            $rs  = Database::query($sql);
-            $result = false;
+        /*
+        $attendance_id = intval($attendance_id);
+        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+        $course_id = api_get_course_int_id();
 
-            if (Database::num_rows($rs) > 0) {
-                $result = true;
-            }
-            return $result;*/
-        }       
+        $sql = "SELECT id FROM $tbl_attendance WHERE c_id = $course_id  AND id = $attendance_id AND locked = 1";
+        $rs  = Database::query($sql);
+        $result = false;
+
+        if (Database::num_rows($rs) > 0) {
+            $result = true;
+        }
+        return $result;*/
+    }       
 
 	/**
 	 * Add new datetime inside attendance calendar table
@@ -1104,84 +1103,84 @@ class Attendance
 		return $affected_rows;
 	}
 
-        /**
-         * save repeated date inside attendance calendar table
-         * @param   int attendance id
-         * @param   int start date in tms
-         * @param   int end date in tms
-         * @param   string  repeat type  daily, weekly, monthlyByDate
-         
-         */
-        public function attendance_repeat_calendar_add($attendance_id, $start_date, $end_date, $repeat_type) {
-            $attendance_id = intval($attendance_id);
-            // save start date
-            $datetimezone = api_get_utc_datetime($start_date);
-            $this->set_date_time($datetimezone);
-            $res = $this->attendance_calendar_add($attendance_id);
-            
-            //86400 = 24 hours in seconds
-            //604800 = 1 week in seconds
-            // Saves repeated dates
-            switch($repeat_type) {
-                case 'daily':
-                    $j = 1;
-                    for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
-                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j);    //to support europe timezones                    
-                        $datetimezone = api_get_utc_datetime($i);
-                        $this->set_date_time($datetimezone);
-                        $res = $this->attendance_calendar_add($attendance_id);
-                        $j++;
-                    }
-                    break;
-                    exit;
-                case 'weekly':
-                    $j = 1;
-                    for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {                        
-                        $datetimezone = api_get_utc_datetime($i);
-                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j*7); //to support europe timezones
-                        $this->set_date_time($datetimezone);
-                        $res = $this->attendance_calendar_add($attendance_id);
-                        $j++;
-                    }
-                    break;
-                case 'monthlyByDate':
-                    $j = 1;
-                    //@todo fix bug with february
-                    for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {                        
-                        $datetimezone = api_get_utc_datetime($i);
-                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , $j); //to support europe timezones
-                        $this->set_date_time($datetimezone);
-                        $res = $this->attendance_calendar_add($attendance_id);
-                        $j++;
-                    }                
-                    break;
-            }
-        }
+    /**
+     * save repeated date inside attendance calendar table
+     * @param   int attendance id
+     * @param   int start date in tms
+     * @param   int end date in tms
+     * @param   string  repeat type  daily, weekly, monthlyByDate
 
-        /**
-         * Adds x months to a UNIX timestamp
-         * @param   int     The timestamp
-         * @param   int     The number of years to add
-         * @return  int     The new timestamp
-         */
-        private function add_month($timestamp, $num=1) {
-            $values = api_get_utc_datetime($timestamp);
-            $values = str_replace(array(':','-',' '), '/', $values);            
-            list($y, $m, $d, $h, $n, $s) = split('/',$values);            
-            if($m+$num>12) {
-                $y += floor($num/12);
-                $m += $num%12;
-            } else {
-                $m += $num;
-            }
-            //date_default_timezone_set('UTC');
-           // return mktime($h, $n, $s, $m, $d, $y);                
-            $result = api_strtotime($y.'-'.$m.'-'.$d.' '.$h.':'.$n.':'.$s, 'UTC');           
-            if (!empty($result)) {
-            	return $result;
-            }
-            return false;
+     */
+    public function attendance_repeat_calendar_add($attendance_id, $start_date, $end_date, $repeat_type) {
+        $attendance_id = intval($attendance_id);
+        // save start date
+        $datetimezone = api_get_utc_datetime($start_date);
+        $this->set_date_time($datetimezone);
+        $res = $this->attendance_calendar_add($attendance_id);
+
+        //86400 = 24 hours in seconds
+        //604800 = 1 week in seconds
+        // Saves repeated dates
+        switch($repeat_type) {
+            case 'daily':
+                $j = 1;
+                for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
+                    //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j);    //to support europe timezones                    
+                    $datetimezone = api_get_utc_datetime($i);
+                    $this->set_date_time($datetimezone);
+                    $res = $this->attendance_calendar_add($attendance_id);
+                    $j++;
+                }
+                break;
+                exit;
+            case 'weekly':
+                $j = 1;
+                for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {                        
+                    $datetimezone = api_get_utc_datetime($i);
+                    //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j*7); //to support europe timezones
+                    $this->set_date_time($datetimezone);
+                    $res = $this->attendance_calendar_add($attendance_id);
+                    $j++;
+                }
+                break;
+            case 'monthlyByDate':
+                $j = 1;
+                //@todo fix bug with february
+                for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {                        
+                    $datetimezone = api_get_utc_datetime($i);
+                    //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , $j); //to support europe timezones
+                    $this->set_date_time($datetimezone);
+                    $res = $this->attendance_calendar_add($attendance_id);
+                    $j++;
+                }                
+                break;
         }
+    }
+
+    /**
+     * Adds x months to a UNIX timestamp
+     * @param   int     The timestamp
+     * @param   int     The number of years to add
+     * @return  int     The new timestamp
+     */
+    private function add_month($timestamp, $num=1) {
+        $values = api_get_utc_datetime($timestamp);
+        $values = str_replace(array(':','-',' '), '/', $values);            
+        list($y, $m, $d, $h, $n, $s) = split('/',$values);            
+        if($m+$num>12) {
+            $y += floor($num/12);
+            $m += $num%12;
+        } else {
+            $m += $num;
+        }
+        //date_default_timezone_set('UTC');
+       // return mktime($h, $n, $s, $m, $d, $y);                
+        $result = api_strtotime($y.'-'.$m.'-'.$d.' '.$h.':'.$n.':'.$s, 'UTC');           
+        if (!empty($result)) {
+            return $result;
+        }
+        return false;
+    }
 
 	/**
 	 * edit a datetime inside attendance calendar table

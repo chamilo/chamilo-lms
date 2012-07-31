@@ -507,7 +507,7 @@ class Database {
      * Returns the database client library version.
      * @return strung		Returns a string that represents the client library version.
      */
-    public function get_client_info() {
+    public static function get_client_info() {
         return mysql_get_client_info();
     }
 

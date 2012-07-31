@@ -33,7 +33,7 @@ class scorm extends learnpath {
     public $zipname = ''; // Keeps the zipfile safe for the object's life so that we can use it if no title avail.
     public $lastzipnameindex = 0; // Keeps an index of the number of uses of the zipname so far.
     public $manifest_encoding = 'UTF-8';
-    public $debug = 5;
+    public $debug = false;
 
     /**
      * Class constructor. Based on the parent constructor.

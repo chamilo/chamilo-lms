@@ -66,7 +66,7 @@ DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 $course_info = api_get_course_info();
 
 if (empty($course_info)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $course_dir = $course_info['path'] . '/document';
@@ -994,11 +994,10 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = '<span style="display:none;">' . $size . '</span>' . $invisibility_span_open . $display_size . $invisibility_span_close;
 
         // Last edit date
-        $last_edit_date = $document_data['lastedit_date'];
-        $last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
-        //$display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        
+        $last_edit_date = api_get_local_time($document_data['lastedit_date']);        
         $display_date = date_to_str_ago($last_edit_date);
-        $row[] = $invisibility_span_open . $display_date . $invisibility_span_close;
+        $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
 
         if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {

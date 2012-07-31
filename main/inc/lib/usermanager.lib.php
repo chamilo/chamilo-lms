@@ -702,7 +702,7 @@ class UserManager {
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
 	 * @return string						The resulting purified username.
 	 */
-	public function purify_username($username, $strict = false, $encoding = null) {
+	public static function purify_username($username, $strict = false, $encoding = null) {
 		if ($strict) {
 			// 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
 			// 2. Applying the strict purifier.
@@ -741,7 +741,7 @@ class UserManager {
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
 	 * @return bool							Returns TRUE if the username is valid, FALSE otherwise.
 	 */
-	public function is_username_valid($username, $encoding = null) {
+	public static function is_username_valid($username, $encoding = null) {
 		return !empty($username) && $username == self::purify_username($username, true);
 	}
 
@@ -3472,7 +3472,7 @@ class UserManager {
         return false;
     }
     
-    function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false) {
+    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false) {
         $user_id = intval($user_id);
         
         // EXTRA FIELDS
@@ -3661,7 +3661,7 @@ EOF;
         return $return;
     }
     
-    function get_user_field_types() {
+    static function get_user_field_types() {
         $types = array();
         $types[self::USER_FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
         $types[self::USER_FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');

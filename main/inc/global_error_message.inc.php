@@ -57,7 +57,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_base_file         = $css_path.'base.css';
 	$css_base_chamilo_file = $css_path.'base_chamilo.css';
 
-    $css_list = array($css_base_file, $css_base_chamilo_file, $bootstrap_file, $css_file);
+    $css_list = array($bootstrap_file, $css_base_file, $css_base_chamilo_file, $css_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -187,12 +187,18 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                         </div>
                     </div>
 
-                    <div class="subnav">
-                        <ul class="nav nav-pills">
-                            <li id="current">
-                                <a target="_top" href="index.php">Homepage</a>
-                            </li>
-                        </ul>
+                    <div class="navbar subnav">
+                        <div class="navbar-inner">
+                            <div class="container">
+                                <div class="nav-collapse">
+                                    <ul class="nav nav-pills">
+                                        <li id="current" class="active">
+                                            <a target="_top" href="index.php">Homepage</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>                                
                     </div>
                     <ul class="breadcrumb">
                         <li><a href="#">{SECTION}</a></li>

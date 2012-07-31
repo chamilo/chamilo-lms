@@ -218,4 +218,60 @@ $ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadT
 $UpdateRequire = "Actualització obligatòria";
 $MoveElement = "Mou element";
 $CertificateName = "Nom del certificat";
+$HelpFolderLearningPaths = "INFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté els documents que es creen des de l'eina Lliçons. Aquí podeu editar els HTML que s'hagin creat en realitzar una importació des de l'eina Lliçons, per exemple des Chamilo Rapid. Es recomana mantenir invisible aquesta carpeta als alumnes.";
+$CopyToMyFiles = "Copia a la meva àrea personal d'arxius";
+$Export2PDF = "Exporta a format PDF";
+$ResourceShared = "Recurs compartit";
+$CopyAlreadyDone = "Hi ha un arxiu amb el mateix nom dins de la teva àrea privada d'arxius d'usuari. Vols reemplaçar-lo?";
+$CopyFailed = "Còpia fallida";
+$CopyMade = "Còpia realitzada";
+$OverwritenFile = "Arxiu substituït";
+$Draw = "Dibuixa";
+$FileExistsChangeToSave = "Aquest nom d'arxiu ja existeix, tria un altre per guardar la imatge";
+$FileSavedAs = "Arxiu desat com";
+$FileExportAs = "Arxiu exportat com";
+$UserFolder = "Carpeta de l'usuari";
+$HelpUsersFolder = "AQUESTA INFORMACIÓ NOMÉS ÉS VISIBLE PER AL PROFESSOR:\nLa carpeta d'usuaris conté una carpeta per cada usuari que l'ha accedit mitjançant l'eina de documents, o quan qualsevol arxiu s'envia al curs mitjançant l'editor en línia. Si no es dóna cap de les dues circumstàncies no es crearà cap carpeta d'usuari. En el cas dels grups, els arxius que s'envien mitjançant l'editor seràn afegits a la carpeta de cada grup, que és accesible només pels alumnes del grup.
+
+La carpeta d'usuaris i cadascuna de les carpetes incloses estaran ocultes per defecte per a tots els alumnes, però sí que poden veure els continguts de la seva pròpia carpeta mitjançant l'editor en línia. No obstant això, si un alumne sap l'adreça d'un arxiu o carpeta d'altre, pot ser que pugui accedir.
+
+Si la carpeta d'un alumne és visible, la resta d'alumnes pot veure el que conté. En aquest cas, l'alumne propietari de la carpeta també pot (des de l'eina de documents i només a la seva pròpia carpeta) crear i editar documents web, convertir un document en una plantilla per a ús personal, crear i editar dibuixos en format SVG o PNG, gravar arxius d'àudio en format WAV, crear arxius d'àudio en MP3 a partir d'un text, crear instantànies des de la càmera web, enviar documents, crear carpetes, traslladar carpetes i arxius, eliminar carpetes i arxius i descarregar còpies de seguretat de la seva pròpia carpeta.
+
+A més, l'eina de documents es sincronitza amb el gestor d'arxius de l'editor en línia, així que els canvis fets en qualsevol dels dos afectarà tots dos.
+
+Com a tal, la carpeta d'usuari no es només un espai per dipositar arxius, sinó que es converteix en un gestor complet dels documents dels alumnes durant el curs. A més a més, recorda que qualsevol usuari pot copiar un arxiu que és visible des de qualsevol carpeta de l'eina de documents (siga o no el propietari) al seu portafoli o a l'àrea personal de documents de la xarxa social, que tindrà disponible per usar en altres cursos.";
+$HelpFolderChat = "NFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté totes les sessions que s'han realitzat al xat. Encara que moltes vegades les sessions al xat poden ser trivials, en altres poden ser dignes de ser tractades com un document més de treball. Per aquest motiu, sense canviar la visibilitat d'aquesta carpeta, feu visible l'arxiu i enllaceu-lo a on considereu oportú. No es recomana fer visible aquesta carpeta.";
+$HelpFolderCertificates = "INFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté els diferents models de certificats que s'han creat per l'eina Avaluacions. No es recomana fer visible aquesta carpeta.";
+$DestinationDirectory = "Carpeta de destí";
+$CreateAudio = "Crea àudio";
+$InsertText2Audio = "Introduïu el text que desitgeu convertir a un arxiu d'àudio";
+$HelpText2Audio = "Transformeu el seu text en veu";
+$BuildMP3 = "Genera mp3";
+$Voice = "Veu";
+$Female = "Femenina";
+$Male = "Masculina";
+$GoogleAudio = "Utilitza els serveis d'àudio de Google";
+$vozMe = "Utilitza els serveis d'àudio de vozMe";
+$HelpGoogleAudio = "Admet un màxim de 100 caràcters, suportant una àmplia varietat d'idiomes. Els arxius es generaran i desaran automàticament en el directori de Chamilo en què actualment es troba.";
+$HelpvozMe = "Admet textos de diversos milers de caràcters, també podreu seleccionar el tipus de veu: masculina o femenina. No obstant això, treballa amb menys idiomes, la qualitat de l'àudio és inferior i haureu de descarregar els arxius manualment des d'un finestra nova.";
+$SaveMP3 = "Desa mp3";
+$Speed = "Velocitat";
+$GoFaster = "Més ràpid";
+$Fast = "Ràpid";
+$Normal = "Normal";
+$Slow = "Lent";
+$SlowDown = "Més lent";
+$Pediaphon = "Utilitza els serveis d'àudio de Pediaphon";
+$HelpPediaphon = "Admet textos amb diversos milers de caràcters, podent seleccionar diversos tipus de veu masculines i femenines (segons l'idioma). Els arxius d'àudio es generaran i desaran automàticament al directori de Chamilo en què actualment es troba.";
+$FirstSelectALanguage = "Primer seleccioneu un idioma";
+$RenameAndComment = "Canvia de nom i comenta";
+$YouAreCurrentlyUsingXOfYourX = "Esteu utilitzant %s MB (%s) del vostre total disponible de %s MB.";
+$UplUploadFailedSizeIsZero = "Hi ha hagut un problema en pujar el seu document: l'arxiu rebut presentar una mida de 0 bytes al servidor. Verifiqueu que el seu arxiu local no estigui danyat (tracteu d'obrir-lo amb el programari corresponent) i proveu altre cop.";
+$NewImage = "Imatge nova";
+$DirExists = "Operació impossible, ja existeix un directori amb el mateix nom.";
+$DocMv = "Document mogut";
+$NoSVGImagesInImagesGalleryPath = "No existeixen imatges SVG a la seva galeria d'imatges";
+$NoSVGImages = "No hi ha imatges SVG";
+$WamiNeedFilename = "Abans d'activar la gravació és necessari donar un nom a l'arxiu.";
+$SelectAnAudioFileFromDocuments = "Selecciona un arxiu d'àudio des dels documents";
 ?>

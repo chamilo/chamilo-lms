@@ -561,7 +561,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $lis.= Display::tag('li', $view_as_student_link, array('class' => 'pull-right'));
+            $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
         }
         
         if (!empty($lis)) {

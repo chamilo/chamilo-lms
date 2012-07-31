@@ -7,7 +7,17 @@
 /* Show 2 icons instead of one */
 @media (max-width: 320px) {    
     .navbar .brand {
-         font-size: 16px;
+         font-size: 14px;
+    }
+    
+    /* No view as link*/
+    #view_as_link {
+        display:none;
+    }
+    
+    /* Smaller brand */
+    .navbar .brand {
+         font-size: 14px;
     }
 }
 
@@ -20,6 +30,15 @@
     /* No topbar */
     #topbar {
         display:none;
+    }
+    
+    /* No view as link*/
+    #view_as_link {
+        display:none;
+    }
+    
+    .navbar .brand {
+         font-size: 14px;
     }
     
     .subnav .dropdown-toggle {

@@ -45,8 +45,8 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
 var online_button   = '{{ online_button }}';
 var offline_button  = '{{ offline_button }}';
-var connect_lang    = '{{"ChatConnected"|get_lang}}';
-var disconnect_lang = '{{"ChatDisconnected"|get_lang}}';
+var connect_lang    = '{{ "ChatConnected"|get_lang }}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 </script>
 
 {{ js_file_to_string}}
@@ -130,25 +130,26 @@ $(document).scroll(function() {
     }
 
     //Admin -> Settings toolbar
+    if ($('body').width() > 959) {
+        if ($('.new_actions').length) {
+            if (!$('.new_actions').attr('data-top')) {
+                // If already fixed, then do nothing
+                if ($('.new_actions').hasClass('new_actions-fixed')) return;
+                // Remember top position
+                var offset = $('.new_actions').offset();
 
-    if ($('.new_actions').length) {
-        if (!$('.new_actions').attr('data-top')) {
-            // If already fixed, then do nothing
-            if ($('.new_actions').hasClass('new_actions-fixed')) return;
-            // Remember top position
-            var offset = $('.new_actions').offset();
-
-            var more_top = 0;
-            if ($('.subnav').hasClass('new_actions-fixed')) {
-                more_top = 50;
+                var more_top = 0;
+                if ($('.subnav').hasClass('new_actions-fixed')) {
+                    more_top = 50;
+                }
+                $('.new_actions').attr('data-top', offset.top + more_top);
             }
-            $('.new_actions').attr('data-top', offset.top + more_top);
-        }
 
-        if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
-            $('.new_actions').addClass('new_actions-fixed');
-        } else {
-            $('.new_actions').removeClass('new_actions-fixed');
+            if ($('.new_actions').attr('data-top') - $('.new_actions').outerHeight() <= $(this).scrollTop()) {
+                $('.new_actions').addClass('new_actions-fixed');
+            } else {
+                $('.new_actions').removeClass('new_actions-fixed');
+            }
         }
     }
 

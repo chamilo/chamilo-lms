@@ -1024,7 +1024,7 @@ class MessageManager
          if (api_is_platform_admin()) {
             $delete_button =  Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), 'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id);
         }
-        $html .= Display::tag('h3', Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true));
+        $html .= Display::page_subheader(Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true));
         
         $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
@@ -1127,8 +1127,7 @@ class MessageManager
             if (!empty($array_html_items)) {
                 $html .= Display::return_sortable_grid('items_'.$topic['id'], array(), $array_html_items, $options, $query_vars, null, $visibility, false, $style_class);
             }
-        }                    
-        $html = Display::div($html, array('class'=>'', 'style'=>'width:638px'));
+        }        
         return $html;
     }	
 	

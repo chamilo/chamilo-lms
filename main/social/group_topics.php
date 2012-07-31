@@ -175,7 +175,11 @@ $interbreadcrumb[] = array ('url' =>'home.php',      'name' => get_lang('Social'
 $interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => '#',            'name' => get_lang('Thread'));
 
-$social_right_content = '<a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a> &raquo; <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>';
+$social_right_content = '<div class="breadcrumb">
+                           <a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a>
+                           <span class="divider">/</span>
+                           <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>
+                         </div> ';
 $social_left_content .= SocialManager::show_social_menu('member_list', $group_id);
          
 if (!empty($show_message)) {
@@ -183,6 +187,8 @@ if (!empty($show_message)) {
 }
 $social_right_content .= MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
 
+
+$social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');

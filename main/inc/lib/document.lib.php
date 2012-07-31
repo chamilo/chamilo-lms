@@ -2440,7 +2440,7 @@ class DocumentManager {
      *
      * @see enough_space() uses  documents_total_space() function
      */
-    function enough_space($file_size, $max_dir_space) {
+    static function enough_space($file_size, $max_dir_space) {
         if ($max_dir_space) {
             $already_filled_space = self::documents_total_space();
             if (($file_size + $already_filled_space) > $max_dir_space) {
@@ -2456,7 +2456,7 @@ class DocumentManager {
      * @return string
      */
     
-    function generate_jplayer_jquery($params = array()) {
+    static function generate_jplayer_jquery($params = array()) {
         $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';        
         
         $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({                                
@@ -2486,7 +2486,7 @@ class DocumentManager {
      * @param int
      * @return string	html content
      */
-    function generate_media_preview($i, $type = 'simple') {
+    static function generate_media_preview($i, $type = 'simple') {
         $i = intval($i);
         
         $extra_controls = $progress = '';
@@ -2519,7 +2519,7 @@ class DocumentManager {
         return $html;
     }
 
-    function generate_video_preview($document_data = array()) {
+    static function generate_video_preview($document_data = array()) {
         $html = '
         <div id="jp_container_1" class="jp-video">
 			<div class="jp-type-single">
@@ -3105,7 +3105,7 @@ class DocumentManager {
         return true;
     }
 
-    public function get_web_odf_extension_list(){
+    public static function get_web_odf_extension_list(){
         return array('ods', 'odt');
     }
 }

@@ -87,10 +87,11 @@ function get_tabs() {
 	}
 
 	// Reports
+    /*
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
         $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
         $navigation['reports']['title'] = get_lang('Reports');
-	}
+	}*/
 
 	// Custom tabs
 	for ($i = 1; $i<=3; $i++)

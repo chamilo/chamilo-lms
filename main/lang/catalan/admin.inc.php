@@ -1553,79 +1553,40 @@ $TeachersCanChangeScoreSettingsTitle = "Els professors poden canviar la configur
 $TeachersCanChangeScoreSettingsComment = "A l'editar la configuració de les Avaluacions";
 $GradebookEnableLockingTitle = "Activa el bloqueig d'Avaluacions pels professors";
 $GradebookEnableLockingComment = "Un cop activada, aquesta opció permetrà als professors bloquejar qualsevol avaluació dins del seu curs. Això prohibirà al professor qualsevol modificació posterior dels resultats dels seus alumnes en els recursos usats per a aquesta avaluació: exàmens, lliçons, tasques, etc. L'únic rol autoritzat a desbloquejar una avaluació és l'administrador. El professor estarà informat d'aquesta possibilitat en intentar desbloquejar l'avaluació. El bloqueig com el desbloqueig estaran desats en el registre d'activitats importants del sistema.";
-$LdapDescriptionComment = "Autenticació LDAP : 
-Veure I. Tot seguit per configurar LDAP 
-Veure II. Tot seguit per activar l'autenticació LDAP
-
-Actualitzar les atributs de l'usuari, amb dades LDAP, després de l'autenticació CAS (veure la configuració CAS):
-Veure I. Tot seguit per configurar LDAP
-Administració de l'autenticació d'usuari CAS, l'activació LDAP no és necessària.
-
-I. Configuració LDAP
-
-Edita l'arxiu main/auth/external_login/ldap.conf.php
-
--> Edita els valorsde l'array $extldap_config 
-
-Els paràmetres són:
-
-cadena base del domini (ex : 'base_dn' => 'DC=cblue,DC=be')
-nom complet d'administració (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
-contrasenya admin (ex : 'admin_password' => '123456')
-ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
-filtre (ex : 'filter' => '')
-port (ex : 'port' => 389)
-versió del protocol (2 or 3) (ex : 'protocol_version' => 3)
-user_search (ex : 'user_search' => 'sAMAccountName=%username%')
-encoding (ex : 'encoding' => 'UTF-8')
-update_userinfo (ex : 'update_userinfo' => true)
--> Per actualitzar correspondències entre usuari i els atributs LDAP, edita la matriu $extldap_user_correspondance 
-Els valors de la matriu són <chamilo_field> => >ldap_field> 
-L'estructura de la matriu és explicada a l'arxiu main/auth/external_login/ldap.conf.php
-
-
-II. Activar l'autenticació LDAP
-
-Edita l'arxiu main/inc/conf/configuration.php
-
--> Treure les línies
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
-
-A tenir en compte: els usuaris LDAP utilitzen els mateixos camps que els usuaris de la plataforma per autenticar-se.
- 
-A tenir en compte: l'activació LDAP afegeix un menú extern d'autenticació [LDAP] a les pàgines d'usuari \"afegeix o modifca\".";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Autenticació LDAP:<br />Veure I. tot seguit per configurar LDAP <br />Veure II. tot seguit per activar l'autenticació LDAP</li><br /><br /><li> Actualitze els atributs d'usuari com a dades LDAP després de l'autenticació CAS (veure <a href='settings.php?category=CAS'>configuració CAS</a>) : <br />Veure I. tot seguit per configurar LDAP <br />CAS administra l'autenticació d'usuari, l'activació de LDAP és doncs innecessària.</li><br /></ul></div><br /><h4>I. Configuració LDAP</h4><h5>Editar l'arxiu main/auth/external_login/ldap.conf.php </h5>-&gt; Editar valors de l'array <code>&#36;extldap_config</code> <br /><br />Els paràmetres són <br /><ul><li>cadena del domini base (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>nom distinguit d'administrador (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>contrasenya d'administrador (ex : 'admin_password' =&gt; '123456') </li><li>anfitrió LDAP (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filtre (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>versió de protocol (2 o 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>codificació (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Per actualitzar les correspondències entre usuari i atributs LDAP, edite l'array <code>&#36;extldap_user_correspondance</code> <br />Els valors de l'array són &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />L'estructura de l'array està explicada a l'arxiu main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activar autenticació LDAP </h4><h5>Edite l'arxiu main/inc/conf/configuration.php </h5>-&gt; Descomente les línies <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />A tindre en compte : Els usuaris LDAP usen els mateixos camps per identificar-se que els usuaris de la plataforma.<br />A tindre en compte : L'activació de LDAP afegeix un menú d'autenticació externa [LDAP] en \"afegir o modificar\" pàgines d'usuari.</div>";
 $ShibbolethMainActivateTitle = "Autenticació Shibboleth";
-$ShibbolethMainActivateComment = "En primer lloc, heu de configurar Shibboleth per al seu servidor.
+$ShibbolethMainActivateComment = "En primer lloc, heu de configurar Shibboleth per al seu servidor.<br />
 
 Per configurar-ho a Chamilo
 
-editeu l'arxiu main/auth/shibboleth/config/aai.class.php
+<h5>editeu l'arxiu main/auth/shibboleth/config/aai.class.php</h5>
 
 Modifiqueu els valors de $result amb el nom dels atributs de Shibboleth
 
-$result->unique_id = 'mail';
-$result->firstname = 'cn';
-$result->lastname = 'uid';
-$result->email = 'mail';
-$result->language = '-';
-$result->gender = '-';
-$result->address = '-';
-$result->staff_category = '-';
-$result->home_organization_type = '-';
-$result->home_organization = '-';
-$result->affiliation = '-';
-$result->persistent_id = '-';
-...
+<ul>
+<li>$result->unique_id = 'mail';
+<li>$result->firstname = 'cn';
+<li>$result->lastname = 'uid';
+<li>$result->email = 'mail';
+<li>$result->language = '-';
+<li>$result->gender = '-';
+<li>$result->address = '-';
+<li>$result->staff_category = '-';
+<li>$result->home_organization_type = '-';
+<li>$result->home_organization = '-';
+<li>$result->affiliation = '-';
+<li>$result->persistent_id = '-';
+<li>...
+</ul>
 
-Aneu al connector per afegir el botó d'autenticació Sibboleth per al seu campus Chamilo.";
+Aneu al connector per afegir el botó d'autenticació Shibboleth per al seu campus Chamilo.";
 $LdapDescriptionTitle = "Autenticació LDAP";
 $FacebookMainActivateTitle = "Autenticació amb Facebook";
-$FacebookMainActivateComment = "En primer lloc, heu de crear una aplicació de Facebook (veure https://developers.facebook.com/apps) amb un compte de Facebook. En els paràmetres d'aplicacions de Facebook, el valor de direcció URL del lloc ha de tenir \"una acció = fbconnect\" un paràmetre GET (http://mychamilo.com/?action=fbconnect, per exemple). 
+$FacebookMainActivateComment = "En primer lloc, heu de crear una aplicació de Facebook (veure <a href=\"https://developers.facebook.com/apps\">https://developers.facebook.com/apps</a>) amb un compte de Facebook. En els paràmetres d'aplicacions de Facebook, el valor de direcció URL del lloc ha de tenir \"una acció = fbconnect\" un paràmetre GET (http://mychamilo.com/?action=fbconnect, per exemple).<br /> 
 
 Llavors, 
 
-editeu el fitxer main/auth/external_login/facebook.conf.php i accediu a \"appId\" i \"secret\" els valors de $facebook_config. Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
+<h5>editeu el fitxer main/auth/external_login/facebook.conf.php</h5> i accediu a \"appId\" i \"secret\" els valors de $facebook_config.<br /> Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
 $LanguagePriority1Title = "Prioritat d'idioma 1";
 $LanguagePriority2Title = "Prioritat de l'idioma 2";
 $LanguagePriority3Title = "Prioritat d'idioma 3";

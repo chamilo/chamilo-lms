@@ -17,7 +17,7 @@ define('SOCIAL_RIGHT_PLUGIN',       3);
 
 define('CUT_GROUP_NAME', 50);
 
-//This require is necessary becas we use constants that need to be loaded before the SocialManager class
+//This require is necessary because we use constants that need to be loaded before the SocialManager class
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 /**
@@ -532,7 +532,8 @@ class SocialManager extends UserManager {
         $user_info = api_get_user_info($user_id, true);
         
         $current_user_id = api_get_user_id();
-        
+        $current_user_info = api_get_user_info($current_user_id, true);
+                
         if ($current_user_id == $user_id) {
             $user_friend_relation = null;
         } else {
@@ -665,11 +666,16 @@ class SocialManager extends UserManager {
             //@todo check if user is online and if it's a friend to show the chat link
             if (api_get_setting('allow_global_chat') == 'true' && $user_friend_relation == USER_RELATION_TYPE_FRIEND) {
                 if ($user_id != api_get_user_id()) {
-                    $user_name  = $user_info['complete_name'];        
-                    
-                    $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");
-                    $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
-                    $html .=   Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
+                    //Only show chat if I'm available to talk
+                    if ($current_user_info['user_is_online_in_chat'] == 1) {
+                        $user_name  = $user_info['complete_name'];
+
+                        $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");
+                        $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
+                        $html .=   Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
+                    } else {
+                       // Do something? 
+                    }
                 }
             }
             $html .= '</ul></div>';

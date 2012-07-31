@@ -69,8 +69,7 @@ function get_url_params(q, attribute) {
 }
 
 function check_brand() {
-    if ($('.subnav').length) {     
-        console.log($(window).width());
+    if ($('.subnav').length) {        
         if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
         } else {
@@ -207,8 +206,7 @@ $(function() {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
-                var name = $(this).attr('name');
-                console.log(name);
+                var name = $(this).attr('name');                
                 $(this).after(this.outerHTML).remove();
                 $('input[name=' + name + ']').val(text);
             });

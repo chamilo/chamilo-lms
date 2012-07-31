@@ -2338,7 +2338,7 @@ class DocumentManager {
      * @param  int $to_group_id (to calculate group document space)
      * @return int total size
      */
-    function documents_total_space($to_group_id = '0') {
+    static function documents_total_space($to_group_id = '0') {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT 	= Database::get_course_table(TABLE_DOCUMENT);
 		$course_id 			= api_get_course_int_id();
@@ -2365,7 +2365,7 @@ class DocumentManager {
     /**
      *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
      */
-    function display_quota($course_quota, $already_consumed_space) {
+    static function display_quota($course_quota, $already_consumed_space) {
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000);
 
@@ -2416,7 +2416,7 @@ class DocumentManager {
      *
      *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
      */
-    function display_simple_quota($course_quota, $already_consumed_space) {
+    static function display_simple_quota($course_quota, $already_consumed_space) {
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000, 2);
         $percentage = $already_consumed_space / $course_quota * 100;

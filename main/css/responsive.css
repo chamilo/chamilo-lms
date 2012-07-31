@@ -1,10 +1,7 @@
 /* media queries responsive */
 
-/* Responsive Docs */
-
 /* Phone */
 
-/* Show 2 icons instead of one */
 @media (max-width: 320px) {    
     .navbar .brand {
          font-size: 14px;
@@ -47,6 +44,7 @@
         display:none;
     }
     
+    /* Brand fix */
     .navbar .brand {
          font-size: 14px;
     }
@@ -97,6 +95,7 @@
         font-size: 16px;
     }   
         
+    /* No notifications */
     .notification-panel {
         display:none;
     }
@@ -112,8 +111,6 @@
         font-size: 14px;
     }
     
-   
-    
     .subbav .nav > li > a:hover,
     .subbav .dropdown-menu a:hover {
         background-color: #555;
@@ -121,14 +118,19 @@
 }
 
 @media (max-width: 767px) {
-    /* No chat in mobiles*/
-    #chatmain {
-        display:none;
-    }
-    
     /* No topbar */
     #topbar {
         display:none;
+    }
+    
+    /* Course- home - Show 2 icons instead of one */
+    #course_tools .row .span4 {
+        float: left;        
+        width: 220px;
+    }
+    
+    #course_tools .row .span4 h4 {
+        font-size: 14px;
     }
     
     .subnav .dropdown-toggle {

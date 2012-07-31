@@ -3,9 +3,23 @@
 /* Responsive Docs */
 
 /* Phone */
+
+/* Show 2 icons instead of one */
+@media (max-width: 320px) {
+    #course_tools .row .span4 {
+        /*float: left;        
+        width: 180px;*/
+    }
+}
+
 @media (max-width: 480px) {
     /* No chat in mobiles */
     #chatmain {
+        display:none;
+    }
+    
+    /* No topbar */
+    #topbar {
         display:none;
     }
     
@@ -46,10 +60,19 @@
         display:none;
     }
     
+    /* Show 2 icons instead of one */
     #course_tools .row .span4 {
         float: left;        
-        width: 212px;
+        height: 150px;
+        width: 133px;
     }
+    
+    #course_tools .row .span4 h4 {
+        font-size: 14px;
+    }
+    
+    
+     
     
     footer {
         border-top: 1px solid #CCCCCC;
@@ -69,6 +92,11 @@
         display:none;
     }
     
+    /* No topbar */
+    #topbar {
+        display:none;
+    }
+    
     .subnav .dropdown-toggle {
         display:none;
     }
@@ -82,7 +110,7 @@
     }    
     
     .subnav .nav > li > a, .navbar .dropdown-menu a {        
-        color: white;        
+        color: white;
     }
     
     footer .container .row {
@@ -174,6 +202,11 @@
 }
 
 @media (min-width: 768px) and (max-width: 978px) {
+    /* No topbar */
+    #topbar {
+        display:none;
+    }
+    
     /* fixes tabs */
     .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;

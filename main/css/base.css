@@ -52,6 +52,13 @@ legend {
     font-weight: bold;
 }
 
+.subnav .btn-navbar {
+    background: #efefef;
+}
+
+.subnav .btn-navbar .icon-bar {
+    background-color: #888;    
+}
 
 .subnav-fixed {
     position: fixed;

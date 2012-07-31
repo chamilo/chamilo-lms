@@ -3,7 +3,7 @@
 <div class="navbar subnav">
     <div class="navbar-inner">
         <div class="container">
-            <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">                
+            <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">              
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>

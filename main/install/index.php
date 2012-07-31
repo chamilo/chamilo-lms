@@ -735,10 +735,11 @@ if (@$_POST['step2']) {
     if ($installType == 'update') {
         $msg = get_lang('UpdateExecution');
     }
-    echo '<div class="RequirementHeading">'.
-         '	<h2>'.display_step_sequence() . $msg.'</h2>'.
-         '<div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>';
-         '</div>';
+    echo '<div class="RequirementHeading">
+          <h2>'.display_step_sequence().$msg.'</h2>
+          <div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>
+          </div>';
+    
          
     // Push the web server to send these strings before we start the real
     // installation process

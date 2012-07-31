@@ -379,7 +379,18 @@ a:active {
  *  HEADER 3: TABS OF THE HEADER			     	 *
  *****************************************************/
 .subnav .navbar-inner {    
-    background-image: url(images/fondoHeader3.jpg);	    
+    /* background-image: url(images/fondoHeader3.jpg);*/
+    
+    background-color: #2B4C75; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #2B4C75 0%, #1B334F 100%); /* FF3.6+ */  
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2B4C75), color-stop(100%,#1B334F)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #2B4C75 0%, #1B334F 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #2B4C75 0%,#1B334F 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #2B4C75 0%,#1B334F 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2B4C75', endColorstr='#1B334F',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #2B4C75 0%,#1B334F 100%); /* W3C */    
+    
 }
 
 .subnav .nav > li > a {

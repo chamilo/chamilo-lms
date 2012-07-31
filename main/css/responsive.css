@@ -5,10 +5,9 @@
 /* Phone */
 
 /* Show 2 icons instead of one */
-@media (max-width: 320px) {
-    #course_tools .row .span4 {
-        /*float: left;        
-        width: 180px;*/
+@media (max-width: 320px) {    
+    .navbar .brand {
+         font-size: 16px;
     }
 }
 
@@ -71,9 +70,6 @@
         font-size: 14px;
     }
     
-    
-     
-    
     footer {
         border-top: 1px solid #CCCCCC;
         background-color: #fff;
@@ -83,6 +79,11 @@
     
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
         color : #999;
+    }
+    
+    .subbav .nav > li > a:hover,
+    .subbav .dropdown-menu a:hover {
+        background-color: #555;
     }
 }
 
@@ -120,10 +121,6 @@
         display:none;
     }
     
-    #header2 .nav-pills {
-        display:none;
-    }
-
     /* Remove any padding from the body */
     body {
         padding-top: 0;
@@ -161,6 +158,10 @@
                 border-radius: 4px 4px 0 0;
     }
     
+    .subnav .navbar-inner li a:hover {
+        background-color: #666;
+        color: #fff;
+    }    
     
      /* .new_actions */
     .new_actions {           

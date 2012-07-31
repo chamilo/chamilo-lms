@@ -456,41 +456,6 @@ a.nobold:hover {
     padding-left:5px;
 }
 
-.data_table {    
-    border: 1px solid #DDDDDD;        
-}
-
-.data_table th {
-    border-bottom: 1px solid #DDDDDD;    
-    background-color: #F2F2F2;      
-}
-
-.data_table tr.row_odd {
-    background-color: #F9F9F9;
-}
-.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
-    background-color: #E5EDF9;
-}
-.data_table tr.row_even {
-    background-color: #fff;
-}
-.data_table td {
-    border-bottom: 1px solid #DDDDDD;
-    line-height: normal;
-    padding: 6px;
-    text-align: left;
-    vertical-align: middle;
-}
-
-.data_table_no_border td .highlight{
-    font-weight: bold;
-}
-
-.data_table_pagination {
-    width:100%;
-    margin-top: 8px;    
-}
-
 /* admin page tool list definitions */
 .tool_list dt {
     font-weight: bold;

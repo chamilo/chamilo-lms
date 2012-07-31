@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="{{ _p.web }}">{{ "Institution" | get_setting }}</a>
+            <a class="brand" href="{{ _p.web }}">{{ portal_name }}</a>
             <div class="nav-collapse">
                 <ul class="nav">
                     {{ menu }}

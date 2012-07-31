@@ -42,9 +42,9 @@ a:active {
 
 .subnav .nav > #current > a,
 .subnav .nav > #current > a:hover {  
-  color: #fff;
-  background-color: #028DC2;
-  border-right-color: #028DC2;  
+    color: #fff;
+    background-color: #028DC2;
+    border-right-color: #028DC2;  
 }
 
 .subnav li a {

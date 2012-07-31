@@ -610,6 +610,10 @@ class Template {
         }
         $this->assign('message_link', $message_link);
         
+        $institution = api_get_setting('Institution');
+        $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
+        
+        $this->assign('portal_name', $portal_name);
         //Menu
         $menu = return_menu();
         $this->assign('menu', $menu);

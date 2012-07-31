@@ -2761,19 +2761,26 @@ form .formw .freeze {
 
 /* header cell in data table in tools */
 .data_table {
-    margin-top: 8px;
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: 15px;
-    text-align: left;
+    margin-bottom: 18px;
     width: 100%;
+    border: 1px solid #DDDDDD;
 }
 
-.data_table th {
-    line-height: normal;
-    padding: 8px 10px;
-    vertical-align: middle;
+.data_table th, .data_table td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;    
+}
+
+.data_table th {    
+    padding: 8px 10px;    
     font-weight: bold;
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #DDDDDD;
+}
+.data_table td {    
 }
 
 .data_table_no_border {
@@ -2792,6 +2799,27 @@ form .formw .freeze {
     text-align: left;
     vertical-align: middle;
 }
+
+.data_table tr.row_odd {
+    background-color: #F9F9F9;
+}
+.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
+    background-color: #E5EDF9;
+}
+.data_table tr.row_even {
+    background-color: #fff;
+}
+
+
+.data_table_no_border td .highlight{
+    font-weight: bold;
+}
+
+.data_table_pagination {
+    width:100%;
+    margin-top: 8px;    
+}
+
 
 .form-stacked .label {
     display: block;

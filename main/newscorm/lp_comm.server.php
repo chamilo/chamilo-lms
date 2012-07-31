@@ -76,7 +76,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
-        $oLP =& unserialize($_SESSION['lpobject']);
+        $oLP = unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
             if ($debug > 2) { error_log(print_r($oLP, true), 0); }
             if ($debug > 2) { error_log('////Building new lp', 0); }
@@ -208,7 +208,7 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
-        $oLP =& unserialize($_SESSION['lpobject']);
+        $oLP = unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
             if ($debug > 2) { error_log(print_r($oLP, true), 0); }
             if ($debug > 2) { error_log('////Building new lp', 0); }
@@ -262,7 +262,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
-        $oLP =& unserialize($_SESSION['lpobject']);
+        $oLP = unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
             if ($debug > 1) { error_log(print_r($oLP, true), 0); }
             if ($debug > 2) { error_log('////Building new lp', 0); }

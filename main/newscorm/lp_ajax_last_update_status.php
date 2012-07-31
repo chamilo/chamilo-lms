@@ -52,7 +52,7 @@ function last_update_status($lp_id, $user_id, $view_id, $item_id) {
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
-        $oLP =& unserialize($_SESSION['lpobject']);
+        $oLP = unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
             if ($debug > 2) { error_log(print_r($oLP, true), 0); }
             if ($debug > 2) { error_log('////Building new lp', 0); }

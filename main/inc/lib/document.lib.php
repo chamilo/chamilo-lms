@@ -1820,7 +1820,7 @@ class DocumentManager {
      * @return   array   An associative array of attributes
      * @author 	 Based on a function from the HTML_Common2 PEAR module
      */
-    function parse_HTML_attributes($attrString, $wanted = array()) {
+    static function parse_HTML_attributes($attrString, $wanted = array()) {
         $attributes = array();
         $regs = array();
         $reduced = false;

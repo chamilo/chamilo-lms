@@ -666,4 +666,5 @@ $langNameOfLang['slovak'] = "Slowaaks";
 $langNameOfLang['swahili'] = "Swahili";
 $langNameOfLang['trad_chinese'] = "Chinees (Traditioneel)";
 $ChamiloInstallation = "Installatie van Chamilo";
+$AddedToALP = "Toegevoegd aan leerpad";
 ?>

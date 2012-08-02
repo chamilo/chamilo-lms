@@ -8268,6 +8268,7 @@ class learnpath {
                 // Dependency to other files - not yet supported.
                 $i = 1;
                 if ($debug) echo 'Looping docs';
+                
                 foreach ($inc_docs as $doc_info) {
                     if (count($doc_info) < 1 || empty($doc_info[0])) { continue; }
                     if ($debug) var_dump($doc_info);
@@ -8347,7 +8348,7 @@ class learnpath {
                                 if ($debug) { echo '$cur_path '; var_dump($cur_path); }
                                 
                                 // Check if the current document is in that path.                                
-                                if (strstr($file_path, $cur_path) !== false) {
+                                if (strstr($file_path, $cur_path) !== false) {                                    
                                     // The document is in that path, now get the relative path
                                     // to the containing document.
                                     $orig_file_path = dirname($cur_path.$my_file_path).'/';
@@ -8403,10 +8404,10 @@ class learnpath {
                                     
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
-                                } elseif (strstr($file_path,$main_path) !== false) {
+                                } elseif (strstr($file_path, $main_path) !== false) {                                    
                                     // The calculated real path is really inside Chamilo's root path.
                                     // Reduce file path to what's under the DocumentRoot.
-                                    $file_path = substr($file_path, strlen($root_path));
+                                    $file_path = substr($file_path, strlen($root_path));                                    
                                     //echo $file_path;echo '<br /><br />';
                                     //error_log('Reduced path: '.$file_path, 0);
                                     $zip_files_abs[] = $file_path;
@@ -8782,6 +8783,7 @@ class learnpath {
                 }
             }
         }
+        
 
         $organizations->appendChild($organization);
         $root->appendChild($organizations);
@@ -8804,7 +8806,7 @@ class learnpath {
             //if (!file_exists($file_path)) continue;            
             
             //Fixes chamilo scorm exports
-            if ($this->ref == 'chamilo_scorm_export') {        
+            if ($this->ref == 'chamilo_scorm_export') {   
                 $pos = strpos($file_path, 'document');
                 $replace = null;
                 if ($pos) {
@@ -8853,8 +8855,14 @@ class learnpath {
                     } elseif (substr($old_new['dest'], -3) == 'flv' && substr($old_new['dest'], 0, 6) == 'video/') {
                         $old_new['dest'] = str_replace('video/', '../../../../video/', $old_new['dest']);
                     }
-                    
-                    $new_dest = str_replace('document/', $mult.'document/', $old_new['dest']);                    
+                                        
+                    //Fix to avoid problems with default_course_document
+                    if (strpos("main/default_course_document", $old_new['dest'] === false)) {
+                        $new_dest = str_replace('document/', $mult.'document/', $old_new['dest']);
+                    } else {                    
+                        //$new_dest = str_replace('main/default_course_document', $mult.'document/main/default_course_document', $old_new['dest']);
+                        $new_dest = $old_new['dest'];
+                    }
                     
                     //$string = str_replace($old_new['orig'], $old_new['dest'], $string);
                     $string = str_replace($old_new['orig'], $new_dest, $string);
@@ -8869,13 +8877,15 @@ class learnpath {
                 file_put_contents($dest_file, $string);
             }
         }
-
+        
+        
         foreach ($zip_files_abs as $file_path) {
             if (empty($file_path)) { continue; }
             //error_log(__LINE__.'checking existence of '.$main_path.$file_path.'', 0);
             if (!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)) { continue; }
             //error_log(__LINE__.'getting document from '.$main_path.$file_path.' removing '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/', 0);
             $dest_file = $archive_path.$temp_dir_short.'/document/'.$file_path;
+            
             $this->create_path($dest_file);
             //error_log('Created path '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/document/'.$file_path, 0);
             //error_log('copy '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/'.$file_path.' to '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/'.$file_path, 0);
@@ -8885,7 +8895,7 @@ class learnpath {
             
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
-                $string = file_get_contents($dest_file);
+                $string = file_get_contents($dest_file);                
                 unlink($dest_file);
                 foreach ($link_updates[$file_path] as $old_new) {
                     //error_log('Replacing '.$old_new['orig'].' by '.$old_new['dest'].' in '.$file_path, 0);
@@ -8901,6 +8911,7 @@ class learnpath {
                 file_put_contents($dest_file, $string);
             }
         }
+        
 
         if (is_array($links_to_create)) {
             foreach ($links_to_create as $file => $link) {

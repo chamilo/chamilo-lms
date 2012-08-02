@@ -82,6 +82,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
     $filename = 'glossary_course_'.api_get_course_id();
 	Export::export_table_csv_utf8($list, $filename);
 }
+if (isset($_GET['action']) && $_GET['action'] == 'export_to_pdf') {	
+    GlossaryManager::export_to_pdf();
+}
 
 Display::display_header($tool_name);
 
@@ -218,7 +221,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 $data = Import::csv_reader($_FILES['file']['tmp_name']);
                 $good = 0;
                 $bad = 0;                    
-                foreach($data as $item) {                          
+                foreach ($data as $item) {                          
                     if (GlossaryManager::save_glossary(array('glossary_title' => $item['term'], 'glossary_comment' => $item['definition']), false)) 
                         $good++;
                     else
@@ -230,9 +233,9 @@ if (api_is_allowed_to_edit(null, true)) {
                 if ($bad)
                     Display::display_error_message (get_lang ("TermsNotImported") . ':' . $bad);
                 
-                GlossaryManager::display_glossary();                
+                GlossaryManager::display_glossary();
             }
-            break;        
+            break;
         default:
             GlossaryManager::display_glossary();
             break;        

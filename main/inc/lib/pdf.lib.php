@@ -199,7 +199,8 @@ class PDF {
      
     /**
      * Converts an html string to PDF
-     * @param   string  valid html 
+     * @param   string  valid html
+     * @param   string  CSS content of a CSS file
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
      * @return  string Web path

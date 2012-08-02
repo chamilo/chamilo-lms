@@ -24,36 +24,23 @@ img {
  *  HEADER STYLES                                    *
  *****************************************************/
 
-
 #my_courses {
 	background-color: #fff;
 	color: #009;
 }
-/*show the institution*/
-#header1 {
-	padding: 2px;
-	float: right;
-}
+
 #my_courses {
 	display: none;
 }
-#header2 {
-	display: none;
-}
+
 .subnav {
 	display: none;
 }
-/* show the way to the printed document (breadcrumbs)*/
-#header4 {
-	padding: 2px;
-	border-bottom: 1px solid #4171B5;
-}
-#header4 a {
-	color: #4171b5;
-}
+
 #toolshortcuts {
 	display:none;
 }
+
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -63,28 +50,8 @@ img {
 	background-color: #E5EDF9;
 	font-size: 12px;
 }
-#footer .copyright {
-	float: right;
-}
-/*****************************************************
- *  MAIN STYLES                                      *
- *****************************************************/
-#main {
-	position: relative; /* to avoid the IE peekabo bug*/
-	margin: 0px auto;
-	margin-top: 10px;
-	width: 98%;
-	padding: 0px 10px 10px 10px;
-	background-color: #fff;
-	min-height: 320px;
-}
-/* for content section in main index.php file */
-.maincontent {
-	float: left;
-	width: 78%;
-	padding: 4px;
-	background-color: #fff;
-}
+
+
 /* "menu" doesn't show in printed version*/
 .menu {
 	display: none;
@@ -198,234 +165,8 @@ content: ".";
 	background-color: #fff;
 	padding: 0 4px;
 }
-/***********************************/
 
-/* ===================================================
-					AGENDA STYLES
-===================================================*/
-
-/* ---------------------------------------------------
-	check if these are still used or not
------------------------------------------------------*/
-#agenda {
-	width: 100%;
-	margin: 0 auto;
-	border: 1px solid #4171B5;
-	border-collapse: collapse;
-}
-.agenda_month_divider {
-	background-color: #4171B5;
-	font-weight: bold;
-	font-size: 12px;
-	color: #fff;
-	text-align: center;
-}
-#agenda #title a {
-	color: #fff;
-}
-#agenda .agendaitem {
-	font-size: 12px;
-}
-#smallcalendar .title {
-	background-color: #4171B5;
-	font-weight: bold;
-	padding: 2px;
-	color: #fff;
-	text-align: center;
-	font-size: 11px;
-}
-#smallcalendar .title a {
-	color: #fff;
-}
-/*agenda select not visible on print*/
-#agenda_select {
-	display:none;
-}
-/* ---------------------------------------------------
-	styles for the agenda (day, week, month view)
------------------------------------------------------*/
-#agenda_list {
-	width: 100%;
-	margin: 0 auto;
-	border: 1px solid #fff;
-	border-collapse: collapse;
-}
-/*The caption of the calendar (displays the month and the << and >> links*/
-#agenda_list #title {
-	background-color: #4171B5;
-	font-weight: bold;
-	font-size: 12px;
-	color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	text-align: center;
-	border: 1px solid #264269;
-}
-#agenda_list #title a:link, #agenda_list #title a:visited {
-	background-color: #4171B5;
-	font-weight: bold;
-	font-size: 12px;
-	color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	text-align: center;
-}
-#agenda_list #title a:hover {
-	background-color: #4171B5;
-	font-weight: bold;
-	font-size: 12px;
-	color: #ff0000;
-	text-align: left;
-	padding: 2px 10px;
-	text-align: center;
-}
-/* The cells with the name of the days of the weeks (mon->sun)*/
-#agenda_list .weekdays {
-	background-color: #D3DFF1;
-	text-align: center;
-	font-weight: bold;
-	border: 1px solid #264269;
-	border-collapse: collapse;
-}
-/* The cells for the days (1->31) */
-#agenda_list .days_week {
-	height: 40px;
-	width: 12%;
-	text-align: left;
-	vertical-align: top;
-	border: 1px solid #264269;
-	border-collapse: collapse;
-	background-color: #f5f5f5;
-}
-#agenda_list .days_weekend {
-	height: 40px;
-	width: 12%;
-	text-align: left;
-	vertical-align: top;
-	border: 1px solid #264269;
-	border-collapse: collapse;
-	background-color: #e6e6e6;
-}
-#agenda_list .days_today {
-	height: 40px;
-	width: 12%;
-	text-align: left;
-	vertical-align: top;
-	border: 1px solid #264269;
-	border-collapse: collapse;
-	background-color: #FFCA8D;
-	color: #CC3300;
-	font-weight: bold;
-}
-/* text in the cells: display of agenda items (visible)*/
-#agenda_list .data {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: bold;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-#agenda_list .datanotbold {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-#agenda_list .text {
-	background-color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-/*text in the cells: display of agenda items (invisible)*/
-#agenda_list .data_hidden {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: bold;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-	color: #999999;
-}
-#agenda_list .datanotbold_hidden {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-	color: #999999;
-}
-#agenda_list .text_hidden {
-	background-color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-	color: #999999;
-}
-/*text in the cells: display of agenda items (highlighted)*/
-#agenda_list .datanow {
-	background-color: #FFCC00;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: bold;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-#agenda_list .datanotboldnow {
-	background-color: #FFCC00;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-#agenda_list .textnow {
-	background-color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #4171B5;
-	border-collapse: collapse;
-}
-/* ---------------------------------------------------
-	styles for the mini agenda
------------------------------------------------------*/
-/* mini agenda invisible in print */
-
-#smallcalendar {
-	display:none;
-}
-/*without this the small calendar's space isn't liberated, because the table width is hardcoded in the php*/
-#layoutHulp {
-	display:none;
-}
-/* ---------------------------------------------------
-	styles for the personal agenda
------------------------------------------------------*/
-.personal_agenda {
-	color: #008000;
-}
-.personal_agenda a:link, .personal_agenda a:visited {
-	color: #008000;
-}
-a.personal_agenda:link, a.personal_agenda:visited {
-	color: #008000;
-}
-.personal_agenda a:hover, .personal_agenda a:hover {
-	color: #666666;
-}
-a.personal_agenda:hover, a.personal_agenda:hover {
-	color: #666666;
-}
-/* normal and erro message-box */
+/* normal and error message-box */
 .normal-message, .error-message {
 	position: relative;
 	margin: 10px auto;

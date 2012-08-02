@@ -531,6 +531,7 @@ function makepost(select) {
 -->
 </script>';
 
+$social_right_content = Display::div($social_right_content, array('class' => 'span9'));
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');

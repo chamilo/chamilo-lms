@@ -33,7 +33,7 @@ if (!learnpath::is_lp_visible_for_student($obj->get_id(), api_get_user_id())) {
     api_not_allowed();
 }
 
-$doc_url = isset($_GET['url']) ? $_GET['url'] : null;
+$doc_url = isset($_GET['doc_url']) ? $_GET['doc_url'] : null;
 
 // Change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $doc_url = str_replace('///', '&', $doc_url);

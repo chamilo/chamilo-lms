@@ -43,11 +43,11 @@ class ScormQuestion extends Question
 		switch($this->type)
 		{
 			case MCUA :
-				$this->answer = new ScormAnswerMultipleChoice($this->id, false);
+				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case MCMA :
-				$this->answer = new ScormAnswerMultipleChoice($this->id, true);
+				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case TF :
@@ -71,7 +71,7 @@ class ScormQuestion extends Question
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case MULTIPLE_ANSWER_COMBINATION:
-				$this->answer = new ScormAnswerMultipleChoice($this->id, false);
+				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
             case HOT_SPOT_ORDER:

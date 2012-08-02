@@ -1426,9 +1426,12 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  * @version february 2006, dokeos 1.8
  */
 function get_threads($forum_id, $course_code = '') {
-
 	$course_info = api_get_course_info($course_code);
-	$course_id = $course_info['real_id'];
+    if (empty($course_info)) {
+        return array();
+    }
+    
+	$course_id   = $course_info['real_id'];
 
     $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -4188,8 +4191,7 @@ function get_all_post_from_user($user_id, $course_code) {
         if ($j <= 4) {
              $threads = get_threads($forum['forum_id'], $course_code);
 
-             if (is_array($threads)) {
-                 $my_course_code = CourseManager::get_course_id_by_database_name($course_code);
+             if (is_array($threads)) {                 
                  $i = 0;
                  $hand_forums = '';
                  $post_counter = 0;
@@ -4224,7 +4226,9 @@ function get_all_post_from_user($user_id, $course_code) {
                  $forum_results .='<div class="clear"></div><br />';
                  $forum_results .='<div id="social-forum-title">'.
                                      Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
-                                    '<div style="float:right;margin-top:-35px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&amp;gidReq=&amp;forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
+                                    '<div style="float:right;margin-top:-35px">
+                                        <a href="../forum/viewforum.php?cidReq='.$course_code.'&amp;gidReq=&amp;forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a>
+                                    </div></div>';
                  $forum_results .='<br / >';
                  if ($post_counter > 0 ) {
                     $forum_results .=$hand_forums;

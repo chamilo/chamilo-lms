@@ -47,6 +47,7 @@ class ScormQuestion extends Question
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case MCMA :
+            case GLOBAL_MULTIPLE_ANSWER:
 				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;

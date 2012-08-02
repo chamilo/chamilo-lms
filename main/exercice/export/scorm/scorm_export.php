@@ -31,11 +31,12 @@ class ScormAssessmentItem
      *
      * @param $question The Question object we want to export.
      */
-     function ScormAssessmentItem($question,$standalone=false)
+     function ScormAssessmentItem($question, $standalone=false)
      {
         $this->question = $question;
         //$this->answer = new Answer($question->id);
-        $this->answer = $this->question->setAnswer();
+        $this->question->setAnswer();
+        
         $this->questionIdent = "QST_" . $question->id ;
         $this->standalone = $standalone;
         //echo "<pre>".print_r($this,1)."</pre>";
@@ -82,8 +83,6 @@ class ScormAssessmentItem
 	function css() {
         $css = '';
 		if ($this->standalone) {
-            
-            
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
 			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
@@ -93,8 +92,7 @@ class ScormAssessmentItem
 			$css .= '/*<![CDATA[*/'."\n";
 			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
-			$css .= '</style>'."\n";			
-            
+			$css .= '</style>'."\n";            
 		}
 		return $css;
 	}
@@ -563,8 +561,7 @@ class ScormSection
     function export_questions() {
         $js = $html = "";
         $js_id = 0;
-        foreach ($this->exercise->selectQuestionList() as $q)
-        {
+        foreach ($this->exercise->selectQuestionList() as $q) {
         	list($jstmp,$htmltmp)= export_question($q, false, $js_id);
         	$js .= $jstmp."\n";
         	$html .= $htmltmp."\n";
@@ -600,11 +597,10 @@ function export_exercise($exerciseId, $standalone=true) {
  * @param bool standalone (ie including XML tag, DTD declaration, etc)
  * @param int  The JavaScript ID for this question. Due to the nature of interactions, we must have a natural sequence for questions in the generated JavaScript.
  */
-function export_question($questionId, $standalone=true, $js_id) {
+function export_question($questionId, $standalone = true, $js_id) {
     $question = new ScormQuestion();
     $qst = $question->read($questionId);
-    if( !$qst )
-    {
+    if( !$qst ) {
         return '';
     }
     $question->id = $qst->id;
@@ -615,7 +611,7 @@ function export_question($questionId, $standalone=true, $js_id) {
 	$question->weighting=$qst->weighting;
 	$question->position=$qst->position;
 	$question->picture=$qst->picture;
-    $assessmentItem = new ScormAssessmentItem($question,$standalone);
+    $assessmentItem = new ScormAssessmentItem($question, $standalone);
     //echo "<pre>".print_r($scorm,1)."</pre>";exit;
     return $assessmentItem->export();
 }

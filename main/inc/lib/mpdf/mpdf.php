@@ -13876,6 +13876,9 @@ function MergeCSS($inherit,$tag,$attr) {
 		//===============================================
 		// Save Cascading CSS e.g. "div.topic p" at this block level
 		// mPDF 4.0
+        if (!isset($attr['ID'])) {
+            $attr['ID'] = null;
+        }
 		$this->_mergeFullCSS($this->cascadeCSS, $this->blk[$this->blklvl]['cascadeCSS'], $tag, $classes, $attr['ID']);
 		//===============================================
 		// Cascading forward CSS

@@ -67,12 +67,12 @@ class Answer {
         } else {            
             $course_info = api_get_course_info();
         }
-        $this->course    = $course_info;
-        $this->course_id = $course_info['real_id'];
         
+        $this->course    = $course_info;
+        $this->course_id = $course_info['real_id'];        
 
 		// fills arrays
-		$objExercise = new Exercise($this->course['real_id']);
+		$objExercise = new Exercise($this->course_id);
 		$objExercise->read($_REQUEST['exerciseId']);		
 		if ($objExercise->random_answers=='1') {
 			$this->readOrderedBy('rand()', '');// randomize answers
@@ -105,12 +105,12 @@ class Answer {
 	 */
 	function read() {		
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$questionId=$this->questionId;
+		$questionId = $this->questionId;
         
 		$sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
 		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
 
-		$result=Database::query($sql);
+		$result = Database::query($sql);
 		$i=1;
 
 		// while a record is found

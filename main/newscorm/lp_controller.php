@@ -831,11 +831,7 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
         else {
             $_SESSION['oLP']->save_current();
-            $_SESSION['oLP']->save_last();
-            // Declare variables to be used in lp_stats.php.
-            $lp_id = $_SESSION['oLP']->get_id();
-            $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-            $user_id = api_get_user_id();
+            $_SESSION['oLP']->save_last();                   
             require 'lp_stats.php';
         }
         break;
@@ -926,11 +922,7 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
         else {
             $_SESSION['oLP']->save_current();
-            $_SESSION['oLP']->save_last();
-            // Declare variables to be used in lp_stats.php.
-            $lp_id  = $_SESSION['oLP']->get_id();
-            $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-            $user_id = api_get_user_id();
+            $_SESSION['oLP']->save_last();            
             header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
         }
         break;

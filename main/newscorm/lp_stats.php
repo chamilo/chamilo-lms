@@ -16,6 +16,10 @@ require_once 'resourcelinker.inc.php';
 require_once '../exercice/exercise.lib.php';
 
 $course_code = api_get_course_id();
+$user_id = api_get_user_id();
+// Declare variables to be used in lp_stats.php.
+$lp_id = $_SESSION['oLP']->get_id();
+$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -292,23 +296,35 @@ if (is_array($list) && count($list) > 0) {
 
                 $my_lesson_status = get_lang($mylanglist[$lesson_status]);
 
-                if ($row['item_type'] != 'dokeos_chapter') {
+                if ($row['item_type'] != 'dokeos_chapter') {                    
                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                         $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
-                    } else {
-                        //$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
-                        if ($row['item_type'] == 'sco') {
-                            if ($maxscore == 0 ) {
-                                $view_score = $score;
-                            } else {
+                    } else {                        
+                        switch ($row['item_type']) {
+                            case 'sco':
+                                if ($maxscore == 0 ) {
+                                    $view_score = $score;
+                                } else {
+                                    $view_score = show_score($score, $maxscore, false);
+                                }
+                                break;
+                            case 'document':
+                                $view_score = ($score == 0 ? '/' : show_score($score, $maxscore, false));
+                                break;
+                            default:
                                 $view_score = show_score($score, $maxscore, false);
-                            }
-                        } else {
-                            $view_score = show_score($score, $maxscore, false);
-                        }
+                                break;
+                        }                        
                     }
-                    $output .= "<tr class='$oddclass'>" . "<td></td>" . "<td>$extend_attempt_link</td>" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>"
-                     . '<td colspan="2">' . Display::label($my_lesson_status, $class_status) . "</td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
+                    $output .= '<tr class="'.$oddclass.'">
+                                <td></td>
+                                <td>'.$extend_attempt_link.'</td>
+                                <td colspan="3">'.get_lang('Attempt').' '.$row['iv_view_count'].'</td>
+                                <td colspan="2">'.Display::label($my_lesson_status, $class_status).'</td>
+                                <td colspan="2"><div class="mystatus" align="center">'.$view_score.'</div></td>
+                                <td colspan="2"><div class="mystatus">'.$time.'</div></td>
+                                <td></td>
+                                </tr>';
 
                     if (!empty($export_csv)) {
                         $temp = array ();

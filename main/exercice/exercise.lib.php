@@ -1166,7 +1166,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param   float   score
  * @param   float   weight
  * @param   bool    show porcentage or not
- * @param	bool	use or not the platform settings
+ * @param	 bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
 function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_success_message = false, $pass_percentage = null) {

@@ -36,20 +36,7 @@ a:visited {
 a:hover {
 	color: #f3840d;
 }
-a:active {
-}
-input, input[type=file], select, textarea {
-	border: 1px solid #000;
-	padding:1px 2px;
-}
-input[type=button], input[type=submit] {
-	border: 1px solid #000;
-	background:#F0F0F0;
-	padding-left:10px;
-	padding-right:10px;
-	font-weight:bold;
-	color:#000;
-}
+
 /* header 1 styles */
 #header1 {
 	padding: 4px;

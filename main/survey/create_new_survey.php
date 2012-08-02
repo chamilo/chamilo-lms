@@ -57,9 +57,7 @@ $table_gradebook_link 		= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
 	if (!api_is_course_coach() || (!empty($_GET['survey_id']) && !api_is_element_in_the_session(TOOL_SURVEY, intval($_GET['survey_id'])))) {
-		Display :: display_header();
-		Display :: display_error_message(get_lang('NotAllowed'), false);
-		Display :: display_footer();
+		api_not_allowed(true);
 		exit;
 	}
 }
@@ -260,6 +258,10 @@ $form->addRule(array('start_date', 'end_date'), get_lang('StartDateShouldBeBefor
 // Setting the default values
 $form->setDefaults($defaults);
 
+
+// Displaying the header
+Display::display_header($tool_name);
+
 // The validation or display
 if ($form->validate()) {
 	// Exporting the values
@@ -277,18 +279,12 @@ if ($form->validate()) {
 	}
 	*/
 	if ($return['type'] == 'error') {
-
-		// Displaying the header
-		Display::display_header($tool_name);
-
 		// Display the error
 		Display::display_error_message(get_lang($return['message']), false);
 
 		// Display the form
 		$form->display();
-
 	} else {
-
 		$gradebook_option = $values['survey_qualify_gradebook'] > 0;
 		if ($gradebook_option) {
 			$survey_id = intval($return['id']);
@@ -316,14 +312,10 @@ if ($form->validate()) {
    		Display::display_confirmation_message($return['message'], false);
 	} else {
    		// Redirecting to the survey page (whilst showing the return message)
-   		@header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
+   		header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
+        exit;
 	}
-} else {
-	// Displaying the header
-	Display::display_header($tool_name);
-	// Displaying the tool title
-	//api_display_tool_title($tool_name);
-	// Display the form
+} else {		
 	$form->display();
 }
 

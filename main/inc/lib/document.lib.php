@@ -2187,7 +2187,7 @@ class DocumentManager {
      * @param bool      print html messages
      * @return unknown_type
      */
-    public function upload_document($files, $path, $title ='', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
+    public static function upload_document($files, $path, $title ='', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
         $max_filled_space = self::get_course_quota();
@@ -2570,7 +2570,7 @@ class DocumentManager {
         return $html;
     }
 
-    static function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
+    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
     	if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
     		return '';
     	}

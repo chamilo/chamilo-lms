@@ -72,12 +72,21 @@ input[type=button], input[type=submit] {
 }
 
 /* header 3 styles */
-.subnav .navbar-inner {
-	background: #fff;
+.subnav .navbar-inner {	
 	color: #006;
 	border-bottom: 1px solid #aeaeae;	
-	background-image: url(images/fondoHeader3.jpg);
+    background-color: #7171B7; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #AAAAF2 0%, #7171B7 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7171B7), color-stop(100%,#7171B7)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #AAAAF2 0%,#7171B7 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -o-linear-gradient(top, #AAAAF2 0%,#7171B7 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#AAAAF2', endColorstr='#7171B7',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #AAAAF2 0%,#7171B7 100%); /* W3C */
+    border: 1px solid #e5e5e5;    
+	background-image: -ms-linear-gradient(top, #AAAAF2 0%,#7171B7 100%); /* IE10+ */
 }
+
 .subnav .nav > li > a {
     color: #fff;
 }
@@ -621,13 +630,6 @@ div.admin_section h4 {
 	list-style-type: none;
 	margin: 0px;
 	padding: 5px;
-}
-/* Report section */
-div.report_section {
-	width: 40%;
-	float: left;
-	margin: 10px 20px;
-	border: 1px solid #EE4C03;
 }
 div.report_section h4 {
 	background-color: #FDDEAA;

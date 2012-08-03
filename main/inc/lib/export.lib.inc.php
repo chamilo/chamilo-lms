@@ -185,8 +185,13 @@ class Export {
         $column = 0;
         foreach ($headers as $header) {
             $table->setHeaderContents($row, $column, $header);
-            $attributes = $header_attributes[$column];            
-            $table->updateCellAttributes($row, $column, $attributes);
+            $attributes = array();
+            if (isset($header_attributes) && isset($header_attributes[$column])) {
+                $attributes = $header_attributes[$column];            
+            }
+            if (!empty($attributes)) {
+                $table->updateCellAttributes($row, $column, $attributes);
+            }
             $column++;
         }
         $row++;

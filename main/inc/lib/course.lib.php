@@ -1283,9 +1283,7 @@ class CourseManager {
         }
 
         // We get the session coach.
-        $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-                ' WHERE id="'.$session_id.'"');
-        $user_info = array();
+        $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id="'.$session_id.'"');        
         $session_id_coach = Database::result($rs, 0, 'id_coach');
         $user_info = Database::get_user_info_from_id($session_id_coach);
         $user_info['status'] = $user['status'];
@@ -1293,7 +1291,6 @@ class CourseManager {
         $user_info['tutor_id'] = $user['tutor_id'];
         $user_info['email'] = $user['email'];
         $users[$session_id_coach] = $user_info;
-
         return $users;
     }
 

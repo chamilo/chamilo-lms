@@ -130,7 +130,7 @@ if (api_is_allowed_to_edit(null, true)) {
 								
 				// users subscribed to the course through a session
 				
-                if (api_get_session_id()) {						
+                if (api_get_session_id()) {			
                     $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                     $sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  $select_email_condition phone, user.official_code, active $legal
                                   FROM $table_session_course_user as session_course_user, $table_users as user ";
@@ -242,27 +242,50 @@ if (api_is_allowed_to_edit(null, true)) {
 						Export::export_table_xls($a_users);
 						exit;
 					case 'pdf' :
-					   $header = get_lang('StudentList');
-					   $description = '<table class="data_table_no_border">';  
-                       if (api_get_session_id()) {                     
-					       $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';
-                       }
-					   $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
+                        $header = get_lang('StudentList');
+                        $description = '<table class="data_table_no_border">';  
+                        if (api_get_session_id()) {                     
+                            $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';
+                        }
+                        $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
                        
-                       $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
-                       $coaches  = CourseManager::get_coach_list_from_course_code_to_string($course_info['code'], $session_id);            
-                       
-                       if (!empty($teachers)) {
-					       $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.' </td>';                           
-                       }
-                       if (!empty($coaches)) {
-                            $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.' </td>';
-                       }
-					   $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
-                       $description .= '</table>';   
-                       $params = array();                       
-                       Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params);
-                       exit;
+                        $teachers = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+                        
+                        //If I'm a teacher in this course show just my name
+                        if (isset($teachers[$user_id])) {    
+                            if (!empty($teachers)) {
+                                $teacher_info = $teachers[$user_id];
+                                $description .= '<tr><td>'.get_lang('Teacher').': </td><td class="highlight">'.api_get_person_name($teacher_info['firstname'], $teacher_info['lastname']).'</td>';                           
+                            }
+                        } else {
+                            //If not show all teachers
+                            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);    
+                            if (!empty($teachers)) {
+                                $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.'</td>';                           
+                            }
+                        }
+                        
+                        if (!empty($session_id)) {
+                            //If I'm a coach
+                            $coaches  = CourseManager::get_coach_list_from_course_code($course_info['code'], $session_id);
+                            
+                            if (isset($coaches) && isset($coaches[$user_id])) {  
+                                $user_info = api_get_user_info($user_id);                                
+                                $description .= '<tr><td>'.get_lang('Coach').': </td><td class="highlight">'.$user_info['complete_name'].'</td>';                                                      
+                            } else {
+                               //If not show everything
+                               $teachers = CourseManager::get_coach_list_from_course_code_to_string($course_info['code'], $session_id);    
+                               if (!empty($teachers)) {
+                                   $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.'</td>';                           
+                               }
+                           }
+                        }          
+
+                        $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
+                        $description .= '</table>';   
+                        $params = array();                       
+                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params);
+                        exit;
 				}
 		}
 	}

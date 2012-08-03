@@ -71,7 +71,7 @@ class learnpathItem {
 	 * @param	integer	User ID
 	 * @return	boolean	True on success, false on failure
 	 */
-	public function __construct($id, $user_id = null, $course_id = null) {
+	public function __construct($id, $user_id = null, $course_id = null, $item_content = null) {
 		// Get items table.
 		if (!isset($user_id)) { $user_id = api_get_user_id(); }
 		if (self::debug > 0) { error_log('New LP - In learnpathItem constructor: '.$id.','.$user_id, 0); }
@@ -85,15 +85,21 @@ class learnpathItem {
 		$items_table = Database::get_course_table(TABLE_LP_ITEM);
 		$this->course_id = api_get_course_int_id();
 		$id = (int) $id;
-		$sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
-		//error_log('New LP - Creating item object from DB: '.$sql, 0);
-		$res = Database::query($sql);
-		if (Database::num_rows($res) < 1) {
-			$this->error = 'Could not find given learnpath item in learnpath_item table';
-			//error_log('New LP - '.$this->error, 0);
-			return false;
-		}
-		$row = Database::fetch_array($res);
+        
+        if (empty($item_content)) {
+            $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
+            //error_log('New LP - Creating item object from DB: '.$sql, 0);
+            $res = Database::query($sql);
+            if (Database::num_rows($res) < 1) {
+                $this->error = 'Could not find given learnpath item in learnpath_item table';
+                //error_log('New LP - '.$this->error, 0);
+                return false;
+            }
+            $row = Database::fetch_array($res);
+        } else {
+            $row = $item_content;
+        }
+        
 		$this->lp_id	 = $row['lp_id'];
 		$this->max_score = $row['max_score'];
 		$this->min_score = $row['min_score'];

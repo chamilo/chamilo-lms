@@ -260,8 +260,7 @@ class learnpath {
                     break;
                 case 1:
                 default:
-                    require_once 'learnpathItem.class.php';
-                    $oItem = new learnpathItem($row['id'], $user_id, $course_id);
+                    $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
@@ -297,7 +296,7 @@ class learnpath {
             // Get last viewing vars.
             $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
             // This query should only return one or zero result.
-            $sql = "SELECT * FROM $lp_item_view_table
+            $sql = "SELECT status FROM $lp_item_view_table
                     WHERE c_id = $course_id AND lp_view_id = ".$this->lp_view_id." AND lp_item_id = ".$row['id']."
                     ORDER BY view_count DESC ";
             if ($this->debug > 2) {
@@ -2677,7 +2676,7 @@ class learnpath {
             return false;
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent ORDER BY display_order";
+        $sql = "SELECT id FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent ORDER BY display_order";
         $res = Database::query($sql);
         while ($row = Database :: fetch_array($res)) {
             $sublist = learnpath :: get_flat_ordered_items_list($lp, $row['id'], $course_id);

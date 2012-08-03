@@ -169,7 +169,7 @@ class Export {
         return $string;
     }
 
-    public static function export_table_pdf($data, $file_name = 'export', $header, $description, $params = array()) {
+    public static function export_table_pdf($data, $file_name = 'export', $header = null, $description = null, $params = array(), $header_attributes = array()) {
         $headers = $data[0];
         unset($data[0]);
         $html = '';
@@ -185,6 +185,8 @@ class Export {
         $column = 0;
         foreach ($headers as $header) {
             $table->setHeaderContents($row, $column, $header);
+            $attributes = $header_attributes[$column];            
+            $table->updateCellAttributes($row, $column, $attributes);
             $column++;
         }
         $row++;
@@ -193,7 +195,7 @@ class Export {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {
                 $table->setCellContents($row, $column, $printable_data_cell);
-                //$table->updateCellAttributes($row, $column);
+                //$table->updateCellAttributes($row, $column, $atributes);
                 $column++;
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
@@ -201,15 +203,14 @@ class Export {
         }
        
         $html .= $table->toHtml();        
-        $html  = api_utf8_encode($html);        
-        
+        $html  = api_utf8_encode($html);
+                
         $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
-        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';        
+        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
         
         $pdf = new PDF('A4', 'P', $params); 
         $pdf->set_custom_header($headers_in_pdf);       
         $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
         exit;
     }
-
 }

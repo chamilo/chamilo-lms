@@ -487,6 +487,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	text-align:left;
 	padding-left:5px;
 }   /* header cell in data table in tools */
+
 .data_table {
 	border-collapse: collapse;
 	width: 100%;
@@ -517,7 +518,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	border-left: 1px dotted #e1e1e1;
 	text-align: left;
 }
-
 
 .data_table_no_border {
     border-collapse: collapse;

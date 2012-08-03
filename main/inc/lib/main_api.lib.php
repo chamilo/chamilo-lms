@@ -1031,24 +1031,28 @@ function _api_format_user($user, $add_password = false) {
 
     //Getting user avatar
 
-	$picture_filename   = trim($user['picture_uri']);
+	$picture_filename   = trim($user['picture_uri']);    
 	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
 	$avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
+    $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
 	$dir                = 'upload/users/'.$user_id.'/';
 
-	if (!empty($picture_filename) && api_is_anonymous() ) {
+	//if (!empty($picture_filename) && api_is_anonymous() ) {  //Why you have to be anonymous?
+    if (!empty($picture_filename)) {
 		if (api_get_setting('split_users_upload_directory') === 'true') {
 			$dir = 'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
 		}
 	}
-
 	$image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
+    
 	if (file_exists($image_sys_path) && !is_dir($image_sys_path)) {
 		$avatar = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
 		$avatar_small = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
+        $avatar_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
 	}
 
     $result['avatar'] = $avatar;
+    $result['avatar_sys_path'] = $avatar_sys_path;
     $result['avatar_small'] = $avatar_small;
 
 	if (isset($user['user_is_online'])) {
@@ -1057,7 +1061,6 @@ function _api_format_user($user, $add_password = false) {
     if (isset($user['user_is_online_in_chat'])) {
 		$result['user_is_online_in_chat'] = intval($user['user_is_online_in_chat']);
 	}
-
 
     if ($add_password) {
         $result['password'] = $user['password'];

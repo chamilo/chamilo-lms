@@ -23,7 +23,7 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = array('registration', 'admin', 'userInfo');
+$language_file = array('registration', 'admin', 'userInfo', 'registration');
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
@@ -77,6 +77,8 @@ if (api_is_allowed_to_edit(null, true)) {
 	}
 }
 
+$user_image_pdf_size = 80;
+
 if (api_is_allowed_to_edit(null, true)) {
 	if (isset($_GET['action'])) {
 		switch ($_GET['action']) {
@@ -120,9 +122,9 @@ if (api_is_allowed_to_edit(null, true)) {
                 
                 if ($_GET['type'] == 'pdf') {
                     if ($is_western_name_order) {                        
-                        $a_users[0] = array('#', get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'));
+                        $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('FirstName').', '.get_lang('LastName'));
                     } else {
-                        $a_users[0] = array('#', get_lang('OfficialCode'), get_lang('LastName').', '.get_lang('FirstName'));
+                        $a_users[0] = array('#', get_lang('UserPicture'), get_lang('OfficialCode'), get_lang('LastName').', '.get_lang('FirstName'));
                     }
                 }
                 
@@ -168,10 +170,12 @@ if (api_is_allowed_to_edit(null, true)) {
                         }							
                         $data[] = $user;			
                         if ($_GET['type'] == 'pdf') {
+                            $user_info = api_get_user_info($user['user_id']);
+                            $user_image = Display::img($user_info['avatar'], null, array('width' => $user_image_pdf_size.'px'));                            
                             if ($is_western_name_order) {
-                                $user_pdf = array($counter, $user['official_code'], $user['firstname'].', '.$user['lastname'] );
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'] );
                             } else {
-                                $user_pdf = array($counter, $user['official_code'], $user['lastname'].', '.$user['firstname'] );
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'] );
                             }
                             $a_users[] = $user_pdf;
                         } else {				
@@ -179,9 +183,8 @@ if (api_is_allowed_to_edit(null, true)) {
                         }
                         $counter++;
                     }
-                }
-				
-
+                }				
+                
 				if ($session_id == 0) {
 				    
 					// users directly subscribed to the course
@@ -220,11 +223,14 @@ if (api_is_allowed_to_edit(null, true)) {
 							}
 						}						
                         if ($_GET['type'] == 'pdf') {
+                            $user_info = api_get_user_info($user['user_id']);
+                            $user_image = Display::img($user_info['avatar'], null, array('width' => $user_image_pdf_size.'px'));
+                            
                             if ($is_western_name_order) {
-                                $user_pdf = array($counter, $user['official_code'], $user['firstname'].', '.$user['lastname'] );
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['firstname'].', '.$user['lastname'] );
                             } else {
-                                $user_pdf = array($counter, $user['official_code'], $user['lastname'].', '.$user['firstname'] );
-                            }
+                                $user_pdf = array($counter, $user_image, $user['official_code'], $user['lastname'].', '.$user['firstname'] );
+                            }                            
                             $a_users[] = $user_pdf;
                         } else {                
                             $a_users[] = $user;
@@ -268,7 +274,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         if (!empty($session_id)) {
                             //If I'm a coach
                             $coaches  = CourseManager::get_coach_list_from_course_code($course_info['code'], $session_id);
-                            
+
                             if (isset($coaches) && isset($coaches[$user_id])) {  
                                 $user_info = api_get_user_info($user_id);                                
                                 $description .= '<tr><td>'.get_lang('Coach').': </td><td class="highlight">'.$user_info['complete_name'].'</td>';                                                      
@@ -284,7 +290,13 @@ if (api_is_allowed_to_edit(null, true)) {
                         $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
                         $description .= '</table>';   
                         $params = array();                       
-                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params);
+                        $header_attributes = array(
+                            array('style' => 'width:10px'),
+                            array('style' => 'width:30px'),
+                            array('style' => 'width:50px'),
+                            array('style' => 'width:500px'),
+                        );
+                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params, $header_attributes);
                         exit;
 				}
 		}

@@ -728,8 +728,11 @@ class Tracking {
 
 							if ($get_only_latest_attempt_results) {								
 								//Getting lp_items done by the user
-								$sql  = "SELECT DISTINCT lp_item_id FROM $lp_item_view_table 
-										WHERE c_id = $course_id AND lp_view_id = $lp_view_id ORDER BY lp_item_id";
+								$sql = "SELECT DISTINCT lp_item_id 
+                                        FROM $lp_item_view_table
+										WHERE   c_id = $course_id AND 
+                                                lp_view_id = $lp_view_id 
+                                        ORDER BY lp_item_id";
 								$res_lp_item = Database::query($sql);
 
 								while ($row_lp_item = Database::fetch_array($res_lp_item,'ASSOC')) {
@@ -825,18 +828,22 @@ class Tracking {
 
 										// Within the last attempt number tracking, get the sum of
 										// the max_scores of all questions that it was
-										// made of (we need to make this call dynamic
-										// because of random questions selection)
+										// made of (we need to make this call dynamic because of random questions selection)
 										$sql = "SELECT SUM(t.ponderation) as maxscore FROM
-                                                ( SELECT distinct question_id, marks, ponderation FROM $tbl_stats_attempts AS at INNER JOIN  $tbl_quiz_questions AS q ON (q.id = at.question_id) 
-                                                  WHERE exe_id ='$id_last_attempt' ) AS t";
+                                                ( 
+                                                    SELECT distinct question_id, marks, ponderation 
+                                                    FROM $tbl_stats_attempts AS at INNER JOIN $tbl_quiz_questions AS q ON (q.id = at.question_id) 
+                                                    WHERE exe_id ='$id_last_attempt' AND q.c_id = $course_id
+                                                )
+                                                AS t";
+                                        if ($debug) echo '$sql: '.$sql.' <br />';
 										$res_max_score_bis = Database::query($sql);
 										$row_max_score_bis = Database :: fetch_array($res_max_score_bis);
 										if (!empty($row_max_score_bis['maxscore'])) {
 											$max_score = $row_max_score_bis['maxscore'];
 										}
 										if (!empty($max_score)) {
-											$lp_partial_total            += $score/$max_score;
+											$lp_partial_total += $score/$max_score;
 										}
 										if ($debug) echo '$lp_partial_total, $score, $max_score <b>'.$lp_partial_total.' '.$score.' '.$max_score.'</b><br />';
 									}
@@ -870,7 +877,8 @@ class Tracking {
 					if ($debug) var_dump($lp_list);
 					foreach ($lp_list as $lp_id) {
 						//Check if LP have a score we asume that all SCO have an score
-						$sql = "SELECT count(id) as count FROM $lp_item_table WHERE c_id = $course_id AND  (item_type = 'quiz' OR item_type = 'sco') AND lp_id = ".$lp_id;
+						$sql = "SELECT count(id) as count FROM $lp_item_table 
+                                WHERE c_id = $course_id AND  (item_type = 'quiz' OR item_type = 'sco') AND lp_id = ".$lp_id;
 						if ($debug) echo $sql;
 						$result_have_quiz = Database::query($sql);
 

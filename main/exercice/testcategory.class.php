@@ -134,7 +134,7 @@ class Testcategory {
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public function getCategoryListInfo($in_field="", $in_courseid="") {
+	public static function getCategoryListInfo($in_field="", $in_courseid="") {
 		if (empty($in_courseid) || $in_courseid=="") {
 			$in_courseid = api_get_course_int_id();
 		}		
@@ -313,7 +313,7 @@ class Testcategory {
 	 * tabresult[0] = get_lang('NoCategory');
 	 *
 	 */
-	function getCategoriesIdAndName($in_courseid="") {
+	static function getCategoriesIdAndName($in_courseid="") {
 		if (empty($in_courseid) || $in_courseid=="") {
 			$in_courseid = api_get_course_int_id();
 		}		

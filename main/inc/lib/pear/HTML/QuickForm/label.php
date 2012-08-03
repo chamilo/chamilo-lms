@@ -44,7 +44,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function accept(&$renderer) {
+    function accept(&$renderer, $required=false, $error=null) {
         $renderer->renderHtml($this);
     }
     

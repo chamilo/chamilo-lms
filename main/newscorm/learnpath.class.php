@@ -6667,9 +6667,12 @@ class learnpath {
         // POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                //this is the same!
+                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id']) {
                     $s_selected_position = $arrLP[$i]['id'];
-                elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
+                } elseif ($action == 'add') { 
+                    $s_selected_position = $arrLP[$i]['id'];
+                }
 
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
             }

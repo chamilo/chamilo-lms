@@ -34,10 +34,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         $this->HTML_QuickForm_static(null, null, $text);
         $this->_type = 'html';
     }
-
-    // }}}
-    // {{{ accept()
-
+    
    /**
     * Accepts a renderer
     *
@@ -45,7 +42,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function accept(&$renderer)
+    function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderHtml($this);
     } // end func accept
@@ -61,8 +58,4 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
                                         
                 ';
     } //end func toHtml
-
-    
-
-    // }}}
 } //end class HTML_QuickForm_html

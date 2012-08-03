@@ -2445,7 +2445,7 @@ class learnpath {
      * @param   integer course id
      * @return	integer	Number of interactions
      */
-    public function get_interactions_count_from_db($lp_iv_id, $course_id) {
+    public static function get_interactions_count_from_db($lp_iv_id, $course_id) {
         $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
         $lp_iv_id = intval($lp_iv_id);
         $course_id = intval($course_id);
@@ -2467,7 +2467,7 @@ class learnpath {
      * @return	array
      * @todo 	Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
      */
-    public function get_iv_interactions_array($lp_iv_id = 0) {
+    public static function get_iv_interactions_array($lp_iv_id = 0) {
         $course_id = api_get_course_int_id();
         $list = array ();
         $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
@@ -2508,11 +2508,12 @@ class learnpath {
      * @param	integer	Item View ID
      * @return	integer	Number of objectives
      */
-    public function get_objectives_count_from_db($lp_iv_id, $course_id) {
+    public static function get_objectives_count_from_db($lp_iv_id, $course_id) {
         $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
         $course_id = intval($course_id);
         $lp_iv_id = intval($lp_iv_id);
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
+        //@todo seems that this always returns 0
         $res = Database::query($sql);
         $res = 0;
         if (Database::num_rows($res)) {

@@ -1552,48 +1552,7 @@ $TeachersCanChangeScoreSettingsTitle = "Os profesores poden cambiar o modelo de 
 $TeachersCanChangeScoreSettingsComment = "Cando se edita unha avaliación";
 $GradebookEnableLockingTitle = "Activar bloqueo de Avaliacións para os profesores";
 $GradebookEnableLockingComment = "Unha vez activada, esta opción permitirá aos profesores bloquear calquera avaliación dentro do seu curso. Isto prohibirá ao profesor calquera modificación posterior dos resultados dos seus alumnos nos recursos usados para esta avaliación: exames, leccións, tarefas, etc. O único rol autorizado a desbloquear unha avaliación é o administrador. O profesor estará informado desta posibilidade ao intentar desbloquear a avaliación. Tanto o bloqueo como o desbloqueo estarán gardados no rexistro de actividades importantes do sistema.";
-$LdapDescriptionComment = "LDAP authentication : 
-See I. below to configure LDAP 
-See II. below to activate LDAP authentication
-
-
-Update user attributes, with LDAP data, after CAS authentication(see CAS configuration ) : 
-See I. below to configure LDAP 
-CAS manage user authentication, LDAP activation isn't required.
-
-
-I. LDAP configuration
-
-Edit file main/auth/external_login/ldap.conf.php
-
--> Edit values of array $extldap_config 
-
-Parameters are 
-base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
-admin distinguished name (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
-admin password (ex : 'admin_password' => '123456')
-ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
-filter (ex : 'filter' => '')
-port (ex : 'port' => 389)
-protocol version (2 or 3) (ex : 'protocol_version' => 3)
-user_search (ex : 'user_search' => 'sAMAccountName=%username%')
-encoding (ex : 'encoding' => 'UTF-8')
-update_userinfo (ex : 'update_userinfo' => true)
--> To update correspondences between user and LDAP attributes, edit array $extldap_user_correspondance 
-Array values are <chamilo_field> => >ldap_field> 
-Array structure is explained in file main/auth/external_login/ldap.conf.php
-
-
-II. Activate LDAP authentication
-
-Edit file main/inc/conf/configuration.php
-
--> Uncomment lines 
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
-
-N.B. : LDAP users use same fields than platform users to login. 
-N.B. : LDAP activation adds a menu External authentication [LDAP] in \"add or modify\" user pages.";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Autentificación LDAP : <br />Ver I. embaixo para configurar LDAP <br />Ver II. embaixo para activar a autentificación LDAP </li><br /><br /><li> Actualizar atributos de usuario, con datos LDAP, despois de autentificación CAS (ver <a href='settings.php?category=CAS'>CAS configuration </a>) : <br />Ver I. embaixo para configurar LDAP <br />Para autentificación con manexo de usuarios CAS, a activación de LDAP non é requerida. </li><br /></ul></div><br /><h4>I. Configuración LDAP</h4><h5>Editar arquivo main/auth/external_login/ldap.conf.php </h5>-&gt; Editar valores do array <code>&#36;extldap_config</code> <br /><br />Os parámetros son <br /><ul><li>cadea do dominio base (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>nome distinguido do admin (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>contrasinal de aministrador (ex : 'admin_password' =&gt; '123456') </li><li>host ldap (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filtro (ex : 'filter' =&gt; '') </li><li>porto (ex : 'port' =&gt; 389) </li><li>versión do protocolo (2 ou 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>codificación (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Para actualizar as correspondencias entre usuario e atributos LDAP, editar o array <code>&#36;extldap_user_correspondance</code> <br />Os valores do array son &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />A estrutura do array está explciada no arquivo main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activar autenticación LDAP </h4><h5>Editar arquivo main/inc/conf/configuration.php </h5>-&gt; Descomentar as liñas <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />N.B. : Os usuarios LDAP empregan os mesmos campos ca os usuarios da plataforma para facer login. <br />N.B. : A activación LDAP engade un menú Autentificación externa [LDAP] nas páxinas de usuario &quot;engadir ou modificar&quot;.";
 $ShibbolethMainActivateTitle = "Autenticación Shibboleth";
 $ShibbolethMainActivateComment = "En primeiro lugar, ten que configurar Shibboleth para o seu servidor web. Para configuralo en Chamilo: editar o arquivo main/auth/shibboleth/config/aai.class.php Modificar valores de \$result co nome dos atributos de Shibboleth \$result->unique_id = 'mail'; \$result->firstname = 'cn'; \$result->lastname = 'uid'; \$result->email = 'mail'; \$result->language = '-'; \$result->gender = '-'; \$result->address = '-'; \$result->staff_category = '-'; \$result->home_organization_type = '-'; \$result->home_organization = '-'; \$result->affiliation = '-'; \$result->persistent_id = '-'; ... Ir a Plug-in para engadir o botón 'Shibboleth Login' no seu campus de Chamilo.";
 $LdapDescriptionTitle = "Autenticación LDAP";

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 * This tool allows platform admins to add users by uploading a CSV or XML file
 * @todo Add some langvars to DLTT

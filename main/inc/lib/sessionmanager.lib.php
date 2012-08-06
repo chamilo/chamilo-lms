@@ -562,7 +562,7 @@ class SessionManager {
 	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
 	  * @return	void		Nothing, or false on error
 	  **/
-	public static function suscribe_users_to_session($id_session, $user_list, $session_visibility = SESSION_VISIBLE_READ_ONLY, $empty_users=true, $send_email=false) {
+	public static function suscribe_users_to_session($id_session, $user_list, $session_visibility = SESSION_VISIBLE_READ_ONLY, $empty_users = true, $send_email=false) {
 
 	  	if ($id_session!= strval(intval($id_session))) return false;
 	   	foreach($user_list as $intUser){
@@ -588,8 +588,7 @@ class SessionManager {
 	   	    }
 	   	}
 
-        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' ";
-        
+        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' ";        
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)) {
@@ -600,32 +599,29 @@ class SessionManager {
 		$course_list = array();
 
 		while($row = Database::fetch_array($result)) {
-			$course_list[]=$row['course_code'];
+			$course_list[] = $row['course_code'];
 		}
+        
         
 		if ($send_email) {
 		    //global $_configuration;
 			//sending emails only
 			if (is_array($user_list) && count($user_list)>0) {
-				foreach($user_list as $enreg_user) {
-				    if (!in_array($enreg_user,$existingUsers )) {
-					    //send email
-					    $emailbody 	= '';
-					    $emailheaders = '';
-
-					    $user_info 	= UserManager::get_user_info_by_id($enreg_user);
-					    $firstname 	= $user_info['firstname'];
-					    $lastname 	= $user_info['lastname'];
-					    $email 		= $user_info['email'];
-
-					    $emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
-					    $emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
-					    $emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
+				foreach ($user_list as $user_id) {                    
+				    if (!in_array($user_id, $existingUsers)) {
+                        
+                        $subject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
+                        $user_info = api_get_user_info($user_id);
+                        $content	= get_lang('Dear')." ".stripslashes($user_info['complete_name']).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+                        
+                        MessageManager::send_message($user_id, $subject, $content, array(), array(), null, null, null, null, null);                        
+                        					    
+					    /*$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 					    $emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
 		
 					    $emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
 			
-					    @api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+					    @api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);*/
 
 					}
 				}

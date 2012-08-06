@@ -20,8 +20,8 @@ SessionManager::protect_session_edit($id_session);
 
 $tool_name = get_lang('SessionOverview');
 
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -34,8 +34,6 @@ $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-
 
 $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
@@ -117,17 +115,13 @@ if (!empty($message)) {
 }
 
 echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
+
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_edit.php?page=resume_session.php&id=$id_session");
+echo Display::page_subheader(get_lang('GeneralProperties').$url);
+
 ?>
 <!-- General properties -->
-<table class="data_table" width="100%">
-<tr>
-  <th align="center" colspan="2">
-      <?php echo get_lang('GeneralProperties'); ?>
-      <a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>">
-          <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
-      </a>
-  </th>
-</tr>
+<table class="data_table">
 <tr>
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
 	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
@@ -205,16 +199,16 @@ if ($multiple_url_is_on) {
 ?>
 </table>
 <br />
+
+<?php
+
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_courses_to_session.php?page=resume_session.php&id_session=$id_session");
+echo Display::page_subheader(get_lang('CourseList').$url);
+
+?>
+
 <!--List of courses -->
-<table class="data_table" width="100%">
-<tr>
-  <th align="center" colspan="4">
-      <?php echo get_lang('CourseList'); ?>
-        <a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
-            <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
-        </a>  
-  </th>
-</tr>
+<table class="data_table">
 <tr>
   <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
   <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
@@ -276,6 +270,7 @@ if ($session['nbr_courses'] == 0){
 			<td>
                 <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>   
                 <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$id_session.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>   
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;                
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
@@ -286,16 +281,26 @@ if ($session['nbr_courses'] == 0){
 ?>
 </table>
 <br />
-<!--List of courses -->
-<table class="data_table" width="100%">
-<tr>
-  <th align="center" colspan="4">
-      <?php echo get_lang('UserList'); ?>
-        <a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>">
-            <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
-        </a>
-  </th>
-</tr>
+
+<?php
+
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?page=resume_session.php&id_session=$id_session");
+$url .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL), "session_user_import.php?id_session=$id_session");
+echo Display::page_subheader(get_lang('UserList').$url);
+
+?>
+
+<!--List of users -->
+
+<table class="data_table">
+    <tr>
+        <th>
+            <?php echo get_lang('User'); ?>
+        </th>
+        <th>
+            <?php echo get_lang('Actions'); ?>
+        </th>
+    </tr>
 <?php
 
 if ($session['nbr_users']==0) {
@@ -341,7 +346,7 @@ if ($session['nbr_users']==0) {
         }
 		echo '<tr>
                 <td width="90%">
-                    <b>'.$user_link.'</b>
+                    '.$user_link.'
                 </td>
                 <td>               
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;

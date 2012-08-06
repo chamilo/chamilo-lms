@@ -221,6 +221,7 @@ class MessageManager
         $parent_id          = intval($parent_id);
         $edit_message_id    = intval($edit_message_id);
         $topic_id   		= intval($topic_id);
+        
         if (empty($sender_id)) {        
             $user_sender_id     = api_get_user_id();
         } else {

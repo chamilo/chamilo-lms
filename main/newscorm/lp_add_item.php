@@ -31,7 +31,7 @@ var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUER
 
 function FCKeditor_OnComplete( editorInstance ) {
     editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title) ;
-    document.getElementById(\'frmModel\').innerHTML = "<iframe id=\'frame_template\' name=\'my_frame_template\' height=890px width=220px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+    //document.getElementById(\'frmModel\').innerHTML = "<iframe id=\'frame_template\' name=\'my_frame_template\' height=890px width=220px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
     loaded = true;
 }
 

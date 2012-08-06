@@ -125,11 +125,12 @@ class learnpathItem {
         $this->seriousgame_mode = $this->get_seriousgame_mode();
 
 		// Get search_did.
-		if (api_get_setting('search_enabled')=='true') {
+		if (api_get_setting('search_enabled') == 'true') {            
 			$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 			$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
 			// TODO: Verify if it's possible to assume the actual course instead of getting it from db.
 			$sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $this->lp_id, $id);
+            if (self::debug > 0) { error_log($sql); };
 			$res = Database::query($sql);
 			if (Database::num_rows($res) > 0) {
 				$se_ref = Database::fetch_array($res);

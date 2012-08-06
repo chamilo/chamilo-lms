@@ -39,11 +39,11 @@ class aiccItem extends learnpathItem {
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    public function aiccItem($type = 'config', $params, $course_db = '') {
+    public function aiccItem($type = 'config', $params = array(), $course_id = null) {
         if (isset($params)) {
             switch ($type) {
                 case 'db':
-                    parent::__construct($params,api_get_user_id(), $course_db);
+                    parent::__construct($params, api_get_user_id(), $course_id);
                     $this->aicc_contact = false;
                     //TODO: Implement this way of metadata object creation.
                     return false;

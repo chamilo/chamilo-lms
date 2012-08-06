@@ -35,14 +35,14 @@ class scormItem extends learnpathItem {
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    public function __construct($type = 'manifest', &$element, $course_db = '') {
+    public function __construct($type = 'manifest', &$element, $course_id = '') {
         if (isset($element)) {
 
             // Parsing using PHP5 DOMXML methods.
 
             switch ($type) {
                 case 'db':
-                    parent::__construct($element,api_get_user_id(), $course_db);
+                    parent::__construct($element,api_get_user_id(), $course_id);
                     $this->scorm_contact = false;
                     // TODO: Implement this way of metadata object creation.
                     return false;

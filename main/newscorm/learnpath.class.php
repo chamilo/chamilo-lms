@@ -220,9 +220,11 @@ class learnpath {
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";        
         $res = Database::query($sql);
+        
+        $lp_item_id_list = array();
         while ($row = Database::fetch_array($res)) {
             $oItem = '';
-            //$this->ordered_items[] = $row['id'];
+            $lp_item_id_list[] = $row['id'];
             switch ($this->type) {
                 case 3: //aicc
                     $oItem = new aiccItem('db', $row['id'], $course_id);
@@ -290,55 +292,55 @@ class learnpath {
                 }
             }
             
-            // Get last viewing vars.
-            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-            // This query should only return one or zero result.
-            $sql = "SELECT status FROM $lp_item_view_table
-                    WHERE c_id = $course_id AND lp_view_id = ".$this->lp_view_id." AND lp_item_id = ".$row['id']."
-                    ORDER BY view_count DESC ";
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
-            }
-            // Get the item status.
-            $res2 = Database::query($sql);
-            if (Database :: num_rows($res2) > 0) {
-                // If this learnpath has already been used by this user, get his last attempt count and
-                // the last item seen back into this object.
-                //$max = 0;
-                $row2 = Database :: fetch_array($res2);
-                if ($this->debug > 2) {
-                    error_log('New LP - learnpath::__construct() - Got item_view: ' . print_r($row2, true), 0);
-                }
-
-                if (is_object($this->items[$row['id']])) {
-                    $this->items[$row['id']]->set_status($row2['status']);
-                    if (empty ($row2['status'])) {
-                        $this->items[$row['id']]->set_status($this->default_status);
-                    }
-                }
-                //$this->attempt = $row['view_count'];
-                //$this->last_item = $row['id'];
-            } else { // No item has been found in lp_item_view for this view.
-                // The first attempt of this user. Set attempt to 1 and last_item to 0 (first item available).
-                // TODO: If the learnpath has not got attempts activated, always use attempt '1'.
-                //$this->attempt = 1;
-                //$this->last_item = 0;
-                if (is_object($this->items[$row['id']])) {
-                    $this->items[$row['id']]->set_status($this->default_status);
-                }
-                // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                            VALUES ($course_id, ".$row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
-                if ($this->debug > 2) {
-                    error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
-                }
-                $res_ins = Database::query($sql_ins);
-            }
             // Setting the view in the item object.
             if (is_object($this->items[$row['id']])) {
                 $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
             }
         }
+        
+        if (!empty($lp_item_id_list)) {            
+            $lp_item_id_list_to_string = implode("','", $lp_item_id_list);        
+        
+            // Get last viewing vars.
+            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+            // This query should only return one or zero result.
+            $sql = "SELECT lp_item_id, status FROM $lp_item_view_table
+                    WHERE c_id = $course_id AND lp_view_id = ".$this->lp_view_id." AND lp_item_id IN ('".$lp_item_id_list_to_string."')
+                    ORDER BY view_count DESC ";
+            
+            if ($this->debug > 2) {
+                error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
+            }
+            $status_list = array();            
+            $res = Database::query($sql);
+            while ($row = Database :: fetch_array($res) ) {
+                $status_list[$row['lp_item_id']] = $row['status'];
+            }
+                
+            foreach ($lp_item_id_list as $item_id) {
+                if (isset($status_list[$item_id])) {                    
+                    $status = $status_list[$item_id];
+                    if (is_object($this->items[$item_id])) {
+                        $this->items[$item_id]->set_status($status);
+                        if (empty ($status)) {
+                            $this->items[$item_id]->set_status($this->default_status);
+                        }
+                    }
+                } else {
+                    if (is_object($this->items[$item_id])) {
+                        $this->items[$item_id]->set_status($this->default_status);
+                    }
+                    // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                    $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
+                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ",1,'not attempted')";
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+                    }
+                    $res_ins = Database::query($sql_ins);
+                }
+            }            
+        }
+            
         
         $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0, $course_id);
         $this->max_ordered_items = 0;

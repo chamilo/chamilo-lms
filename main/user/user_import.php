@@ -17,8 +17,11 @@ $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
 $interbreadcrumb[] = array ("url" => "#", "name" => get_lang("ImportUsersToACourse"));
 
 $form = new FormValidator('user_import','post','user_import.php');
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+
+$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
+
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 
 $course_code = api_get_course_id();
@@ -37,6 +40,8 @@ $type = '';
 if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
         
+        $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
+                
         $users  = Import::csv_to_array($_FILES['import_file']['tmp_name']);
         
         $invalid_users  = array();
@@ -56,6 +61,17 @@ if ($form->validate()) {
             if (empty($invalid_users)) {
                 $type = 'confirmation';
                 $message = get_lang('ListOfUsersSubscribedToCourse');
+                
+                if ($unsubscribe_users) {
+                    $current_user_list = CourseManager::get_user_list_from_course_code($course_code, $session_id);
+                    if (!empty($current_user_list)) {
+                        $user_ids = array();
+                        foreach ($current_user_list as $user) {
+                            $user_ids[]= $user['user_id'];
+                        }
+                        CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
+                    }                    
+                }
                 
                 foreach ($users as $user) {                    
                     CourseManager :: subscribe_user($user['id'], $course_code, STUDENT, $session_id);

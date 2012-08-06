@@ -2568,7 +2568,7 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_toc()', 0);
         }
-        $toc = array ();
+        $toc = array();
         //echo "<pre>".print_r($this->items,true)."</pre>";
         foreach ($this->ordered_items as $item_id) {
             if ($this->debug > 2) {
@@ -2591,6 +2591,7 @@ class learnpath {
         }
         return $toc;
     }
+
 
     /**
      * Generate and return the table of contents for this learnpath. The JS
@@ -2742,7 +2743,7 @@ class learnpath {
         
         foreach ($list as $item) {
             if ($this->debug > 2) {
-                error_log('New LP - learnpath::get_html_toc(): using item ' . $item['id'], 0);
+                //error_log('New LP - learnpath::get_html_toc(): using item ' . $item['id'], 0);
             }
             // TODO: Complete this.
             $icon_name = array (
@@ -2794,7 +2795,7 @@ class learnpath {
             $title = Security::remove_XSS($title);
             if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
                 //$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
-                $url = $this->get_link('http', $item['id']);
+                $url = $this->get_link('http', $item['id'], $list);
                 //$html .= '<a href="'.$url.'" target="content_name" onClick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
                 //$html .= '<a href="" onClick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 
@@ -2806,7 +2807,7 @@ class learnpath {
                 $html .= stripslashes($title);
             }
 
-            $tbl_track_e_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            /*$tbl_track_e_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
             $user_id = api_get_user_id();
 
@@ -2818,7 +2819,7 @@ class learnpath {
                             path = exe_exo_id AND
                             status <> 'incomplete'";
             $result = Database::query($sql);
-            $count = Database :: num_rows($result);
+            $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14'  />";
@@ -2889,7 +2890,7 @@ class learnpath {
      * @param	integer	Learnpath item ID
      * @return	string	Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = null) {
+    public function get_link($type = 'http', $item_id = null, $provided_toc = false) {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_link(' . $type . ',' . $item_id . ')', 0);
@@ -2981,7 +2982,13 @@ class learnpath {
                             $lp_item_id = $this->get_current_item_id();
                             $lp_view_id = $this->get_view_id();
                             $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
-                            $list = $this->get_toc();
+                            
+                            if (empty($provided_toc)) {
+                                $list = $this->get_toc();
+                            } else {
+                                $list = $provided_toc;
+                            }
+                            
                             $type_quiz = false;
 
                             foreach ($list as $toc) {

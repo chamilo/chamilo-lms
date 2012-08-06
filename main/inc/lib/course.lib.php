@@ -400,7 +400,7 @@ class CourseManager {
         if (!empty($session_id)) {
             $session_id = intval($session_id);
         } else {
-            $session_id = intval($_SESSION['id_session']);
+            $session_id = api_get_session_id();
         }
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;

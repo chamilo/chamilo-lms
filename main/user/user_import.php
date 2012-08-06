@@ -23,13 +23,12 @@ $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="s
 
 $course_code = api_get_course_id();
 
-if (api_get_session_id()) {
-    api_not_allowed();
+if (empty($course_code)) {
+    api_not_allowed(true);
 }
 
-if (empty($course_code)) {
-    api_not_allowed();
-}
+
+$session_id = api_get_session_id();
 
 $message = '';
 $user_to_show = array();
@@ -57,12 +56,20 @@ if ($form->validate()) {
             if (empty($invalid_users)) {
                 $type = 'confirmation';
                 $message = get_lang('ListOfUsersSubscribedToCourse');
-                foreach ($users as $user) {                                     
-                    $result = CourseManager :: subscribe_user($user['id'], $course_code, STUDENT);                    
-                    //just to make sure
-                    if (CourseManager :: is_user_subscribed_in_course($user['id'], $course_code)) {
-                        $user_to_show[]= $clean_users[$user['id']]['complete_name'];
-                    }                    
+                
+                foreach ($users as $user) {                    
+                    CourseManager :: subscribe_user($user['id'], $course_code, STUDENT, $session_id);
+                    if (empty($session_id)) {
+                        //just to make sure
+                        if (CourseManager :: is_user_subscribed_in_course($user['id'], $course_code)) {
+                            $user_to_show[]= $clean_users[$user['id']]['complete_name'];
+                        }
+                    } else {
+                        //just to make sure
+                        if (CourseManager :: is_user_subscribed_in_course($user['id'], $course_code, true, $session_id)) {
+                            $user_to_show[]= $clean_users[$user['id']]['complete_name'];
+                        }
+                    }
                 }   
             } else {
                 $message = get_lang('CheckUsersWithId');
@@ -90,4 +97,14 @@ if (!empty($message)) {
 }
     
 $form->display();
+
+echo get_lang('CSVMustLookLike');
+echo '<blockquote>';
+echo '<pre>
+    "id";
+    "x";
+    "y";
+</pre>    
+';
+echo '</blockquote>';
 Display::display_footer();

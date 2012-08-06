@@ -397,11 +397,7 @@ if ( api_is_allowed_to_edit(null, true)) {
     }
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
-
-    if (!api_get_session_id()) {
-        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    }      
-
+    $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
 		
@@ -629,6 +625,13 @@ function modify_filter($user_id) {
 	if ($is_allowed_to_track) {
 		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
 	}
+    
+     
+    //if platform admin, show the login_as icon (this drastically shortens
+    // time taken by support to test things out)
+    if (api_is_platform_admin()) {
+        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+    }	
 
 	if (api_is_allowed_to_edit(null, true)) {
         // edit
@@ -636,9 +639,9 @@ function modify_filter($user_id) {
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id) {
-                $result .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('unsubscribe_course.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                $result .= '<a class="btn btn-small" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
             } else {
-                $result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                //$result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             }
         }
 	} else {
@@ -649,12 +652,7 @@ function modify_filter($user_id) {
             }
         }        
     }
-    
-    //if platform admin, show the login_as icon (this drastically shortens
-    // time taken by support to test things out)
-    if (api_is_platform_admin()) {
-        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
-    }	
+   
 	return $result;
 }
 

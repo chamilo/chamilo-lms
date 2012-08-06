@@ -41,7 +41,7 @@ class Import {
      * 
      * @deprecated use cvs_reader instead
 	 */
-	function csv_to_array($filename, $csv_order = 'vertical') {
+	static function csv_to_array($filename, $csv_order = 'vertical') {
 		$result = array();
 
 		// Encoding detection.

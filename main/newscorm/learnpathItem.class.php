@@ -69,6 +69,7 @@ class learnpathItem {
 	 * Setting an lp_view will finalise the item_view data collection
 	 * @param	integer	Learnpath item ID
 	 * @param	integer	User ID
+     * @param	integer	course int id
 	 * @return	boolean	True on success, false on failure
 	 */
 	public function __construct($id, $user_id = null, $course_id = null, $item_content = null) {
@@ -641,8 +642,8 @@ class learnpathItem {
 		if (self::debug > 2) { error_log('New LP - In learnpathItem::get_prevent_reinit()', 0); }
 		if (!isset($this->prevent_reinit)) {
 			if (!empty($this->lp_id)) {
-				$db = Database::get_course_table(TABLE_LP_MAIN);
-			   	$sql = "SELECT * FROM $db WHERE c_id = $course_id AND id = ".$this->lp_id;
+				$table = Database::get_course_table(TABLE_LP_MAIN);
+			   	$sql = "SELECT prevent_reinit FROM $table WHERE c_id = $course_id AND id = ".$this->lp_id;
 				$res = Database::query($sql);
 				if (Database::num_rows($res) < 1) {
 					$this->error = "Could not find parent learnpath in learnpath table";
@@ -998,7 +999,7 @@ class learnpathItem {
 	 * Gets the item status
 	 * @param	boolean	Do or don't check into the database for the latest value. Optional. Default is true
 	 * @param	boolean	Do or don't update the local attribute value with what's been found in DB
-	 * @return	string	Current status or 'Nnot attempted' if no status set yet
+	 * @return	string	Current status or 'Not attempted' if no status set yet
 	 */
 	public function get_status($check_db = true, $update_local = false) {
 	    $course_id = api_get_course_int_id();
@@ -1006,7 +1007,7 @@ class learnpathItem {
 		if ($check_db) {
 			if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status(): checking db', 0); }
 			$table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-			$sql = "SELECT * FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
+			$sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
 			if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql, 0); }
 
 			$res = Database::query($sql);

@@ -90,8 +90,6 @@ class learnpath {
         $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
         // Check params.
         // Check course code.
-        $course_db = '';
-
         $course_id = api_get_course_int_id();
 
         if ($this->debug > 0) {error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
@@ -108,7 +106,6 @@ class learnpath {
                 $this->cc 			= $course;
                 $row_course         = Database::fetch_array($res);
                 $course_id 	        = $row_course['id'];
-                $course_db          = $row_course['db_name'];
             } else {
                 $this->error = 'Course code does not exist in database ('.$sql.')';
                 return false;
@@ -228,7 +225,7 @@ class learnpath {
             //$this->ordered_items[] = $row['id'];
             switch ($this->type) {
                 case 3: //aicc
-                    $oItem = new aiccItem('db', $row['id'], $course_db);
+                    $oItem = new aiccItem('db', $row['id'], $course_id);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -244,7 +241,7 @@ class learnpath {
                 case 2:
                     require_once 'scorm.class.php';
                     require_once 'scormItem.class.php';
-                    $oItem = new scormItem('db', $row['id'], $course_db);
+                    $oItem = new scormItem('db', $row['id'], $course_id);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -339,9 +336,10 @@ class learnpath {
             }
             // Setting the view in the item object.
             if (is_object($this->items[$row['id']])) {
-              $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
+                $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
             }
         }
+        
         $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0, $course_id);
         $this->max_ordered_items = 0;
         foreach ($this->ordered_items as $index => $dummy) {
@@ -2917,16 +2915,16 @@ class learnpath {
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $item_id 			= Database::escape_string($item_id);
 
-        $sel = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams
+        $sql = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams
         		FROM $lp_table l, $lp_item_table li
         		WHERE 	l.c_id = $course_id AND
         				li.c_id = $course_id AND
         				li.id = $item_id AND
         				li.lp_id = l.id";
         if ($this->debug > 2) {
-            error_log('New LP - In learnpath::get_link() - selecting item ' . $sel, 0);
+            error_log('New LP - In learnpath::get_link() - selecting item ' . $sql, 0);
         }
-        $res = Database::query($sel);
+        $res = Database::query($sql);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $lp_type = $row['ltype'];
@@ -2949,7 +2947,6 @@ class learnpath {
             } else {
                 $course_path = $sys_course_path; //system path
             }
-
 
             // Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc), then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array($lp_item_type, array('quiz', 'document', 'link', 'forum', 'thread', 'student_publication'))) {

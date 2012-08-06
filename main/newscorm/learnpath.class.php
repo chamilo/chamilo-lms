@@ -314,10 +314,10 @@ class learnpath {
                 }
 
                 if (is_object($this->items[$row['id']])) {
-                  $this->items[$row['id']]->set_status($row2['status']);
-                  if (empty ($row2['status'])) {
-                      $this->items[$row['id']]->set_status($this->default_status);
-                  }
+                    $this->items[$row['id']]->set_status($row2['status']);
+                    if (empty ($row2['status'])) {
+                        $this->items[$row['id']]->set_status($this->default_status);
+                    }
                 }
                 //$this->attempt = $row['view_count'];
                 //$this->last_item = $row['id'];
@@ -327,11 +327,11 @@ class learnpath {
                 //$this->attempt = 1;
                 //$this->last_item = 0;
                 if (is_object($this->items[$row['id']])) {
-                  $this->items[$row['id']]->set_status($this->default_status);
+                    $this->items[$row['id']]->set_status($this->default_status);
                 }
                 // Add that row to the lp_item_view table so that we have something to show in the stats page.
                 $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                	VALUES ($course_id, ".$row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
+                            VALUES ($course_id, ".$row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
                 if ($this->debug > 2) {
                     error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
                 }

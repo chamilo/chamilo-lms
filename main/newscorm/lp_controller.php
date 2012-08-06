@@ -112,6 +112,7 @@ if (!empty($_SESSION['refresh']) && $_SESSION['refresh'] == 1) {
     $myrefresh = 1;
     if ($debug > 0) error_log('New LP - Refresh asked', 0);
 }
+
 if ($debug > 0) error_log('New LP - Passed refresh check', 0);
 
 if (!empty($_REQUEST['dialog_box'])) {
@@ -126,7 +127,7 @@ if (isset($_SESSION['lpobject'])) {
     $oLP = unserialize($_SESSION['lpobject']);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug > 0) error_log('New LP - oLP is object', 0);
-        if ($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id() OR $oLP->lp_view_session_id != $session_id) {
+        if ($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id() OR $oLP->lp_view_session_id != $session_id OR $oLP->scorm_debug == '1') {
             if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);
             if ($myrefresh == 1) { $myrefresh_id = $oLP->get_id(); }
             $oLP = null;

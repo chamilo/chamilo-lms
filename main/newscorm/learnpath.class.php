@@ -4529,70 +4529,69 @@ class learnpath {
         return -1;
     }
 
-  /**
-   * Determine the attempt_mode thanks to prevent_reinit and seriousgame_mode db flag
-   *
-   * @return string 'single', 'multi' or 'seriousgame'
-   * @author ndiechburg <noel@cblue.be>
-   **/
-  public function get_attempt_mode() {
-    if (!isset($this->seriousgame_mode)) { //Set default value for seriousgame_mode
-      $this->seriousgame_mode=0;
+    /**
+     * Determine the attempt_mode thanks to prevent_reinit and seriousgame_mode db flag
+     *
+     * @return string 'single', 'multi' or 'seriousgame'
+     * @author ndiechburg <noel@cblue.be>
+     **/
+    public function get_attempt_mode() {
+        if (!isset($this->seriousgame_mode)) { //Set default value for seriousgame_mode
+            $this->seriousgame_mode=0;
+        }
+        if (!isset($this->prevent_reinit)) { // Set default value for prevent_reinit
+            $this->prevent_reinit =1;
+        }
+        if ($this->seriousgame_mode == 1 && $this->prevent_reinit == 1) {
+            return 'seriousgame';
+        }
+        if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 1) {
+            return 'single';
+        }
+        if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 0) {
+            return 'multiple';
+        }
+        return 'single';
     }
-    if (!isset($this->prevent_reinit)) { // Set default value for prevent_reinit
-      $this->prevent_reinit =1;
-    }
-    if ($this->seriousgame_mode == 1 && $this->prevent_reinit == 1) {
-      return 'seriousgame';
-    }
-    if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 1) {
-      return 'single';
-    }
-    if ($this->seriousgame_mode == 0 && $this->prevent_reinit == 0) {
-      return 'multiple';
-    }
-    return 'single';
-  }
 
-  /**
-   * Register the attempt mode into db thanks to flags prevent_reinit and seriousgame_mode flags
-   *
-   * @param string 'seriousgame', 'single' or 'multiple'
-   * @return boolean
-   * @author ndiechburg <noel@cblue.be>
-   **/
-  public function set_attempt_mode($mode) {
+    /**
+     * Register the attempt mode into db thanks to flags prevent_reinit and seriousgame_mode flags
+     *
+     * @param string 'seriousgame', 'single' or 'multiple'
+     * @return boolean
+     * @author ndiechburg <noel@cblue.be>
+     **/
+    public function set_attempt_mode($mode) {
         $course_id = api_get_course_int_id();
         switch ($mode) {
-    case 'seriousgame' :
-      $sg_mode = 1;
-      $prevent_reinit = 1;
-      break;
-    case 'single' :
-      $sg_mode = 0;
-      $prevent_reinit = 1;
-      break;
-    case 'multiple' :
-      $sg_mode = 0;
-      $prevent_reinit = 0;
-      break;
-    default :
-      $sg_mode = 0;
-      $prevent_reinit = 0;
-      break;
+            case 'seriousgame' :
+              $sg_mode = 1;
+              $prevent_reinit = 1;
+              break;
+            case 'single' :
+              $sg_mode = 0;
+              $prevent_reinit = 1;
+              break;
+            case 'multiple' :
+              $sg_mode = 0;
+              $prevent_reinit = 0;
+              break;
+            default :
+              $sg_mode = 0;
+              $prevent_reinit = 0;
+              break;
+        }
+        $this->prevent_reinit = $prevent_reinit;
+        $this->seriousgame_mode = $sg_mode;
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $sql = "UPDATE $lp_table SET prevent_reinit = $prevent_reinit , seriousgame_mode = $sg_mode WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+        $res = Database::query($sql);
+        if ($res) {
+            return true;
+        } else {
+          return false;
+        }
     }
-    $this->prevent_reinit = $prevent_reinit;
-    $this->seriousgame_mode = $sg_mode;
-		$lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-    $sql = "UPDATE $lp_table SET prevent_reinit = $prevent_reinit , seriousgame_mode = $sg_mode WHERE c_id = ".$course_id." AND id = " . $this->get_id();
-    $res = Database::query($sql);
-    if ($res) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
 
   /**
    * switch between multiple attempt, single attempt or serious_game mode (only for scorm)
@@ -4606,18 +4605,18 @@ class learnpath {
         }
         $mode = $this->get_attempt_mode();
         switch ($mode) {
-        case 'single' :
-          $next_mode = 'multiple';
-          break;
-        case 'multiple' :
-          $next_mode = 'seriousgame';
-          break;
-        case 'seriousgame' :
-          $next_mode = 'single';
-          break;
-        default :
-          $next_mode = 'single';
-          break;
+            case 'single' :
+              $next_mode = 'multiple';
+              break;
+            case 'multiple' :
+              $next_mode = 'seriousgame';
+              break;
+            case 'seriousgame' :
+              $next_mode = 'single';
+              break;
+            default :
+              $next_mode = 'single';
+              break;
         }
         $this->set_attempt_mode($next_mode);
     }
@@ -4654,8 +4653,8 @@ class learnpath {
 			}
 		}
 		return -1;
-
-  }
+    }
+    
     /**
      * Updates the "scorm_debug" value that shows or hide the debug window
      * @return	boolean	True if scorm_debug has been set to 'on', false otherwise (or 1 or 0 in this case)

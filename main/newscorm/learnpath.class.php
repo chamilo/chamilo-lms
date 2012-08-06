@@ -100,7 +100,7 @@ class learnpath {
             return false;
         } else {
             $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $course = $this->escape_string($course);
+            $course = Database::escape_string($course);
             $sql = "SELECT * FROM $main_table WHERE code = '$course'";
             if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying course: '.$sql, 0); }
             $res = Database::query($sql);
@@ -377,14 +377,14 @@ class learnpath {
 
         $parent = intval($parent);
         $previous = intval($previous);
-        $type = $this->escape_string($type);
+        $type = Database::escape_string($type);
         $id = intval($id);
-        $max_time_allowed = $this->escape_string(htmlentities($max_time_allowed));
+        $max_time_allowed = Database::escape_string(htmlentities($max_time_allowed));
         if (empty ($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        $title       = $this->escape_string($title);
-        $description = $this->escape_string($description);
+        $title       = Database::escape_string($title);
+        $description = Database::escape_string($description);
         $sql_count = "	SELECT COUNT(id) AS num
                         FROM $tbl_lp_item
                         WHERE c_id = $course_id AND lp_id = " . $this->get_id() . " AND parent_item_id = " . $parent;
@@ -428,7 +428,7 @@ class learnpath {
         }
 
         $new_item_id = -1;
-        $id = $this->escape_string($id);
+        $id = Database::escape_string($id);
 
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
@@ -583,7 +583,7 @@ class learnpath {
             $file = $file_components[count($file_components) - 1];
 
             // Store the mp3 file in the lp_item table.
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '" . Database :: escape_string($file) . "' WHERE id = '" . Database :: escape_string($new_item_id) . "'";
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '" . Database::escape_string($file) . "' WHERE id = '" . Database::escape_string($new_item_id) . "'";
             Database::query($sql_insert_audio);
         }
         return $new_item_id;
@@ -1080,7 +1080,7 @@ class learnpath {
                 $path = handle_uploaded_document($c_det, $audio, $bp, '/audio', api_get_user_id(), 0, null, '', 0, 'rename', false, 0);
                 $path = substr($path, 7);
                 // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
-                $audio_update_sql = ", audio = '" . Database :: escape_string($path) . "' ";
+                $audio_update_sql = ", audio = '" . Database::escape_string($path) . "' ";
             }
         }
 
@@ -1091,11 +1091,11 @@ class learnpath {
         if ($same_parent && $same_previous) {
             // Only update title and description.
             $sql_update = " UPDATE " . $tbl_lp_item . "
-                            SET title = '" . $this->escape_string($title) . "',
+                            SET title = '" . Database::escape_string($title) . "',
                                 prerequisite = '" . $prerequisites . "',
-                                description = '" . $this->escape_string($description) . "'
+                                description = '" . Database::escape_string($description) . "'
                                 " . $audio_update_sql . ",
-                                max_time_allowed = '" . $this->escape_string($max_time_allowed) . "'
+                                max_time_allowed = '" . Database::escape_string($max_time_allowed) . "'
                             WHERE c_id = ".$course_id." AND id = " . $id;
             $res_update = Database::query($sql_update);
         } else {
@@ -1193,8 +1193,8 @@ class learnpath {
             // Update the current item with the new data.
             $sql_update = "UPDATE " . $tbl_lp_item . "
                             SET
-                                title = '" . $this->escape_string($title) . "',
-                                description = '" . $this->escape_string($description) . "',
+                                title = '" . Database::escape_string($title) . "',
+                                description = '" . Database::escape_string($description) . "',
                                 parent_item_id = " . $parent . ",
                                 previous_item_id = " . $previous . ",
                                 next_item_id = " . $new_next . ",
@@ -1274,7 +1274,7 @@ class learnpath {
             return false;
         }
 
-        $prerequisite_id = $this->escape_string($prerequisite_id);
+        $prerequisite_id = Database::escape_string($prerequisite_id);
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
@@ -1312,7 +1312,7 @@ class learnpath {
      */
     public function escape_string($string) {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::escape_string('.$string.')', 0); }
-        return Database :: escape_string($string);
+        return Database::escape_string($string);
     }
 
     /**
@@ -1604,7 +1604,7 @@ class learnpath {
         }
 
         $info = '';
-        $item_id = $this->escape_string($item_id);
+        $item_id = Database::escape_string($item_id);
 
         if (!empty($item_id) && is_object($this->items[$item_id])) {
             //if item is defined, return values from DB
@@ -2992,8 +2992,8 @@ class learnpath {
                             }
 
                             if ($type_quiz) {
-                                $lp_item_id = Database :: escape_string($lp_item_id);
-                                $lp_view_id = Database :: escape_string($lp_view_id);
+                                $lp_item_id = Database::escape_string($lp_item_id);
+                                $lp_view_id = Database::escape_string($lp_view_id);
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
                                         WHERE c_id = $course_id AND lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
                                 $result = Database::query($sql);
@@ -3739,7 +3739,7 @@ class learnpath {
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
         if (empty ($item_id)) {
-            $item_id = $this->escape_string($_REQUEST['id']);
+            $item_id = Database::escape_string($_REQUEST['id']);
         }
         if (empty ($item_id)) {
             $item_id = $this->get_current_item_id();
@@ -3812,7 +3812,7 @@ class learnpath {
                 error_log('New LP - New current item given is ' . $item_id . '...', 0);
             }
             if (is_numeric($item_id)) {
-                $item_id = $this->escape_string($item_id);
+                $item_id = Database::escape_string($item_id);
                 // TODO: Check in database here.
                 $this->last = $this->current;
                 $this->current = $item_id;
@@ -3921,7 +3921,7 @@ class learnpath {
         }
         if (empty ($name))
             return false;
-        $this->maker = $this->escape_string($name);
+        $this->maker = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $course_id = api_get_course_int_id();
         $lp_id = $this->get_id();
@@ -3945,7 +3945,7 @@ class learnpath {
         if (empty ($name))
             return false;
 
-        $this->name = $this->escape_string($name);
+        $this->name = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $course_id = api_get_course_int_id();
@@ -4055,7 +4055,7 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_theme()', 0);
         }
-        $this->theme = $this->escape_string($name);
+        $this->theme = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET theme = '" . $this->theme . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
@@ -4078,7 +4078,7 @@ class learnpath {
             error_log('New LP - In learnpath::set_preview_image()', 0);
         }
 
-        $this->preview_image = $this->escape_string($name);
+        $this->preview_image = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET preview_image = '" . $this->preview_image . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
@@ -4099,7 +4099,7 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_author()', 0);
         }
-        $this->author = $this->escape_string($name);
+        $this->author = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET author = '" . $this->author . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
@@ -4170,7 +4170,7 @@ class learnpath {
         if (empty ($name))
             return false;
 
-        $this->proximity = $this->escape_string($name);
+        $this->proximity = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET content_local = '" . $this->proximity . "'
@@ -4229,7 +4229,7 @@ class learnpath {
         }
 
         if (!empty($expired_on)) {
-            $this->expired_on = $this->escape_string(api_get_utc_datetime($expired_on));
+            $this->expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
         } else {
             $this->expired_on = '';
         }
@@ -4243,7 +4243,6 @@ class learnpath {
         return true;
     }
 
-
     /**
      * Sets and saves the publicated_on date
      * @param   string  Optional string giving the new author of this learnpath
@@ -4255,7 +4254,7 @@ class learnpath {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
         if (!empty($publicated_on)) {
-            $this->publicated_on = $this->escape_string(api_get_utc_datetime($publicated_on));
+            $this->publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
         } else {
             $this->publicated_on = '';
         }
@@ -5248,7 +5247,7 @@ class learnpath {
 
         $sql = " SELECT id, title, description, item_type, path, parent_item_id, previous_item_id, next_item_id, max_score, min_score, mastery_score, display_order
                  FROM $tbl_lp_item
-                 WHERE c_id = ".$course_id." AND lp_id = " . Database :: escape_string($this->lp_id);
+                 WHERE c_id = ".$course_id." AND lp_id = " . Database::escape_string($this->lp_id);
         $result = Database::query($sql);
         $arrLP = array ();
 
@@ -5421,7 +5420,7 @@ class learnpath {
                         if ($new_comment)
                             $ct .= ", comment='" . Database::escape_string($new_comment). "'";
                         if ($new_title)
-                            $ct .= ", title='" . Database :: escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
+                            $ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
 
                         $sql_update = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)." WHERE c_id = ".$course_id." AND id = " . $document_id;
                         Database::query($sql_update);
@@ -5502,7 +5501,7 @@ class learnpath {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
             $tbl_doc     = Database :: get_course_table(TABLE_DOCUMENT);
             $sql = "SELECT lp.* FROM " . $tbl_lp_item . " as lp
-                    WHERE c_id = ".$course_id." AND lp.id = " . Database :: escape_string($item_id);
+                    WHERE c_id = ".$course_id." AND lp.id = " . Database::escape_string($item_id);
             $result = Database::query($sql);
             while ($row = Database :: fetch_array($result,'ASSOC')) {
                 $_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
@@ -5530,7 +5529,7 @@ class learnpath {
                         break;
                     case TOOL_DOCUMENT:
                         $tbl_doc      = Database :: get_course_table(TABLE_DOCUMENT);
-                        $sql_doc      = "SELECT path FROM " . $tbl_doc . " WHERE c_id = ".$course_id." AND id = " . Database :: escape_string($row['path']);
+                        $sql_doc      = "SELECT path FROM " . $tbl_doc . " WHERE c_id = ".$course_id." AND id = " . Database::escape_string($row['path']);
                         $result       = Database::query($sql_doc);
                         $path_file    = Database::result($result, 0, 0);
                         $path_parts   = pathinfo($path_file);
@@ -5568,7 +5567,7 @@ class learnpath {
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = " . Database :: escape_string($item_id);
+            $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = " . Database::escape_string($item_id);
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
@@ -5591,7 +5590,7 @@ class learnpath {
                                     LEFT JOIN " . $tbl_doc . " as doc ON doc.id = lp.path
                                     WHERE 	lp.c_id = $course_id AND
                     						doc.c_id = $course_id AND
-                    						lp.id = " . Database :: escape_string($item_id);
+                    						lp.id = " . Database::escape_string($item_id);
                     $res_step = Database::query($sql_step);
                     $row_step = Database :: fetch_array($res_step);
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
@@ -5601,7 +5600,7 @@ class learnpath {
                     $link_id = (string) $row['path'];
                     if (ctype_digit($link_id)) {
                         $tbl_link = Database :: get_course_table(TABLE_LINK);
-                        $sql_select = 'SELECT url FROM ' . $tbl_link . ' WHERE c_id = '.$course_id.' AND id = ' . Database :: escape_string($link_id);
+                        $sql_select = 'SELECT url FROM ' . $tbl_link . ' WHERE c_id = '.$course_id.' AND id = ' . Database::escape_string($link_id);
                         $res_link = Database::query($sql_select);
                         $row_link = Database :: fetch_array($res_link);
                         if (is_array($row_link)) {
@@ -6773,7 +6772,7 @@ class learnpath {
         // We don't display the document form if it's not an editable document (html or txt file).
         if ($action == "add") {
             if (is_numeric($extra_info)) {
-                $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = ".$course_id." AND id = " . Database :: escape_string($extra_info);
+                $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = ".$course_id." AND id = " . Database::escape_string($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database :: result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -6792,7 +6791,7 @@ class learnpath {
             }
         } elseif (is_numeric($extra_info)) {
             $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
-                        WHERE c_id = ".$course_id." AND id = " . Database :: escape_string($extra_info);
+                        WHERE c_id = ".$course_id." AND id = " . Database::escape_string($extra_info);
 
             $result = Database::query($sql_doc);
             $row 	= Database::fetch_array($result);

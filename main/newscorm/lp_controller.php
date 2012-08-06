@@ -150,17 +150,16 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
     if (!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)) {
         if ($debug > 0) error_log('New LP - lp_id is defined', 0);
         // Select the lp in the database and check which type it is (scorm/dokeos/aicc) to generate the
-        // right object.
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        // right object.        
         if (!empty($_REQUEST['lp_id'])) {
-            $lp_id = $_REQUEST['lp_id'];
+            $lp_id = intval($_REQUEST['lp_id']);
         } else {
-            $lp_id = $myrefresh_id;
+            $lp_id = intval($myrefresh_id);
         }
+        
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (is_numeric($lp_id)) {
-            $lp_id = Database::escape_string($lp_id);
-            $sel = "SELECT * FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
-
+            $sel = "SELECT lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) error_log('New LP - querying '.$sel, 0);
             $res = Database::query($sel);
             if (Database::num_rows($res)) {
@@ -169,22 +168,22 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 if ($debug > 0) error_log('New LP - found row - type '.$type. ' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                 switch ($type) {
                     case 1:
-                if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-                        $oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
+                        if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                        $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
-                        break;
+                         break;
                     case 2:
-                if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-                        $oLP = new scorm(api_get_course_id(),$lp_id,api_get_user_id());
+                        if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                        $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
                         break;
                     case 3:
-                if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                        if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new aicc(api_get_course_id(),$lp_id,api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
                         break;
                     default:
-                if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                        if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
                         break;
@@ -193,8 +192,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         } else {
             if ($debug > 0) error_log('New LP - Request[lp_id] is not numeric', 0);
         }
-
-
     } else {
         if ($debug > 0) error_log('New LP - Request[lp_id] and refresh_id were empty', 0);
     }
@@ -203,7 +200,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
     }
 }
 if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
-
 
 /**
  * Actions switching
@@ -251,7 +247,6 @@ switch ($action) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
-
                     $_SESSION['post_time'] = $_POST['post_time'];
                     if ($_POST['type'] == TOOL_DOCUMENT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {

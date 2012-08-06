@@ -170,22 +170,22 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                     case 1:
                         if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
+                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                          break;
                     case 2:
                         if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
+                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
                     case 3:
                         if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new aicc(api_get_course_id(),$lp_id,api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
+                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
                     default:
                         if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
-                        if ($oLP !== false) { $lp_found = true; } else { eror_log($oLP->error, 0); }
+                        if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
                 }
             }

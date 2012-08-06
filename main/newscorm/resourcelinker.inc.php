@@ -1745,7 +1745,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
     $course_id = $_course['real_id'];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-    $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
+    $sql_item = "SELECT item_type, title, ref FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
 
     if (Database::num_rows($res_item) < 1) {

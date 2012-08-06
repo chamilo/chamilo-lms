@@ -282,6 +282,20 @@ class SkillRelUser extends Model {
 class Skill extends Model {
     var $columns  = array('id', 'name','description', 'access_url_id');
     var $required = array('name');
+    /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
+    var $colours = array(
+      0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
+      1 => array('#d5dda1', '#4a5072', '#8dae43', '#72659d'),
+      2 => array('#b28647', '#2e6093', '#393e64', '#1e8323'),
+      3 => array('#9f6652', '#9f6652', '#9f6652', '#9f6652'),
+      4 => array('#af643c', '#af643c', '#af643c', '#af643c'),
+      5 => array('#72659d', '#72659d', '#72659d', '#72659d'),
+      6 => array('#8a6e9e', '#8a6e9e', '#8a6e9e', '#8a6e9e'),
+      7 => array('#92538c', '#92538c', '#92538c', '#92538c'),
+      8 => array('#2e6093', '#2e6093', '#2e6093', '#2e6093'),
+      9 => array('#3a5988', '#3a5988', '#3a5988', '#3a5988'),
+     10 => array('#393e64', '#393e64', '#393e64', '#393e64'),
+    );
 
     public function __construct() {
         $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -578,5 +592,39 @@ class Skill extends Model {
         }
         unset($skills);
         return $skills_tree;
+    }
+    /**
+     * Get skills tree as a simplified JSON structure
+     * 
+     */
+    public function get_skills_tree_json($user_id = null, $return_flat_array = false) {
+        $tree = $this->get_skills_tree($user_id, $return_flat_array);
+        $simple_tree = array();
+        foreach ($tree['children'] as $element) {
+            $simple_tree[] = array('name' => $element['name'], 'children' => $this->get_skill_json($element['children']));
+        }
+        //$s = array('\/');
+        //return str_replace($s,'/',json_encode($simple_tree[0]['children']));
+        return json_encode($simple_tree[0]['children']);
+    }
+    /**
+     * Get JSON element
+     */
+    public function get_skill_json($subtree, $depth = 1) {
+        $simple_sub_tree = array();
+        if (is_array($subtree)) {
+            foreach ($subtree as $elem) {
+                $tmp = array();
+                $tmp['name'] = $elem['name'];//.'<a href="">'.$elem['id'].'</a>';
+                if (is_array($elem['children'])) {
+                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1);
+                } else {
+                    $tmp['colour'] = $this->colours[$depth][rand(0,3)];
+                }
+                $simple_sub_tree[] = $tmp;
+            }
+            return $simple_sub_tree;
+        }
+        return null;
     }
 }

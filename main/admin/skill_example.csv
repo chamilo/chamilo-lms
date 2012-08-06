@@ -1,0 +1,37 @@
+id;parent_id;name;description
+2;1;Reflection;
+3;1;Manage learning;
+4;1;Information literacy;
+5;1;Organization skills;
+6;1;Networking w/others;
+7;1;Researching;
+8;1;Communication skills;
+9;1;Creative skills;
+10;1;Collaboration skills;
+11;4;Identify info;
+12;4;Find information;
+13;5;Personal librarianship;
+14;5;Personal categorization;Personal categorization and taxonomies
+15;6;Shared knowledge;Knowing what your network of people knows
+16;6;Knowledge links;Knowing who might have additional knowledge and resources to help you
+17;7;Researching;
+18;7;Canvassing;
+19;7;Paying attention;
+20;7;Interviewing;
+21;7;Observational;Observational 'cultural anthropology' skills
+22;8;Perception;
+23;8;Intuition;
+24;8;Expression;
+25;8;Visualization;
+26;8;Interpretation;
+27;9;Imagination;
+28;9;Pattern recognition;
+29;9;Appreciation;
+30;9;Innovation;
+31;9;Inference;
+32;9;Understanding systems;Understanding of complex adaptive systems
+33;10;Coordination;
+34;10;Synchronization;
+35;10;Experimentation;
+36;10;Cooperation;
+37;10;Design;

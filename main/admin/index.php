@@ -250,17 +250,16 @@ if (api_is_platform_admin()) {
     */
     
     //Skills
-    
     if (api_get_setting('allow_skills_tool') == 'true') {
-    
         $blocks['skills']['icon']  = Display::return_icon('logo.gif', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
         $blocks['skills']['label'] = get_lang('Skills');
 
         $items = array();
         $items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
+        $items[] = array('url'=>'skills_wheel.php',     'label' => get_lang('SkillsWheel'));
+        $items[] = array('url'=>'skills_import.php',    'label' => get_lang('SkillsImport'));
         $items[] = array('url'=>'skills_profile.php',   'label' => get_lang('SkillsProfile'));
         $items[] = array('url'=>'skills_gradebook.php', 'label' => get_lang('SkillsAndGradebooks'));   
-
         $blocks['skills']['items'] = $items;
         $blocks['skills']['extra'] = null;
         $blocks['skills']['search_form'] = null;

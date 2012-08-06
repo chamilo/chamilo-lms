@@ -2940,9 +2940,6 @@ class CourseManager {
             $user_id = api_get_user_id();
         }
 
-        // Step 0: We display the course without a user category.
-        $html = self :: display_courses_in_category(0, $load_dirs);
-
         // Step 1: We get all the categories of the user
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
@@ -2954,6 +2951,10 @@ class CourseManager {
             $params['title'] = $row['title'];
             $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
         }
+        
+        // Step 2: We display the course without a user category.
+        $html .= self :: display_courses_in_category(0, $load_dirs);
+        
         return $html;
     }
 
@@ -2981,7 +2982,7 @@ class CourseManager {
         }
 
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-        $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
+        $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
                                         course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                                         FROM    $TABLECOURS      course,
                                                 $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url

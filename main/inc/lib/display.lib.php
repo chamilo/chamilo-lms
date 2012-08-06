@@ -1230,8 +1230,7 @@ class Display {
         $output = array();
         if (!$nosession) {
             $main_user_table        = Database :: get_main_table(TABLE_MAIN_USER);
-            $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
-            $tbl_session_category   = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+            $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);            
             $active = false;
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
@@ -1253,7 +1252,7 @@ class Display {
                 $active = true;
             } else {
                 $start = $stop = false;
-                $startt_buffer = $stop_buffer = '';
+                $start_buffer = $stop_buffer = '';
                 if ($session_info['date_start'] == '0000-00-00') {
                     $session_info['date_start'] = '';
                 } else {
@@ -1269,7 +1268,7 @@ class Display {
                     $session_info['date_end'] = get_lang('Until').' '.$session_info['date_end'];
                 }
                 if ($start && $stop) {
-                    $session['dates'] = Display::tag('i', sprintf(get_lang('FromDateXToDateY'),$start_buffer, $stop_buffer));
+                    $session['dates'] = Display::tag('i', sprintf(get_lang('FromDateXToDateY'), $start_buffer, $stop_buffer));
                 } else {
                     $session['dates'] = Display::tag('i', $session_info['date_start'].' '.$session_info['date_end']);
                 }

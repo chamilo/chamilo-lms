@@ -154,6 +154,7 @@ $user_id = api_get_user_id();
 
 // Main courses and session list
 $courses_and_sessions = $controller->return_courses_and_sessions($user_id);
+
 $controller->tpl->assign('content', $courses_and_sessions);
  
 if (api_get_setting('allow_browser_sniffer') == 'true') {

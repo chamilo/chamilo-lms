@@ -944,10 +944,10 @@ class CourseManager {
     }
 
     /**
-     *    Return an array of arrays, listing course info of all virtual course
-     *    linked to the real course ID $real_course_code
+     *  Return an array of arrays, listing course info of all virtual course
+     *  linked to the real course ID $real_course_code
      *
-     *    @param string The id of the real course which the virtual courses are linked to
+     *  @param string The id of the real course which the virtual courses are linked to
      *  @return array List of courses details
      *  @deprecated virtual courses doesn't exist anymore
      */
@@ -1244,8 +1244,7 @@ class CourseManager {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
-        $rs = Database::query($sql);
-        $users = array();
+        $rs = Database::query($sql);        
         $count = 0;
         if (Database::num_rows($rs)) {
             $user = Database::fetch_array($rs);
@@ -2721,7 +2720,6 @@ class CourseManager {
 
         }
         return $is_special;
-
     }
 
     /**
@@ -2738,8 +2736,7 @@ class CourseManager {
         $course_image         = $store_path.'/course-pic.png';                      // image name for courses
         $course_medium_image  = $store_path.'/course-pic85x85.png';
         //$extension            = strtolower(substr(strrchr($filename, '.'), 1));
-
-        $result = false;
+        
         if (file_exists($course_image)) {
             @unlink($course_image);
         }

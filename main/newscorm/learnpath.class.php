@@ -218,8 +218,12 @@ class learnpath {
 
         // Initialise items.
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";        
+        $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";                
         $res = Database::query($sql);
+        
+        if ($this->debug > 2) {
+            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - query lp items: ' . $sql, 0);
+        }
         
         $lp_item_id_list = array();
         while ($row = Database::fetch_array($res)) {

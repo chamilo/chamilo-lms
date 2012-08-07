@@ -669,28 +669,26 @@ class learnpathItem {
      * @author ndiechburg <noel@cblue.be>
      **/
     public function get_seriousgame_mode() {
-      if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}
-
+        if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}
         $course_id = api_get_course_int_id();
-        if(!isset($this->seriousgame_mode)){
-          if(!empty($this->lp_id)){
-            $db = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "SELECT * FROM $db WHERE c_id = $course_id AND id = ".$this->lp_id;
+        if (!isset($this->seriousgame_mode)) {
+            if (!empty($this->lp_id)) {
+            $table = Database::get_course_table(TABLE_LP_MAIN);
+            $sql = "SELECT seriousgame_mode FROM $table WHERE c_id = $course_id AND id = ".$this->lp_id;
             $res = @Database::query($sql);
-            if(Database::num_rows($res)<1)
-            {
-              $this->error = "Could not find parent learnpath in learnpath table";
-              if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returning false',0);}
-              return false;
-            }else{
-              $row = Database::fetch_array($res);
-              $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['seriousgame_mode'] : 0;
+            if (Database::num_rows($res)<1) {
+                $this->error = "Could not find parent learnpath in learnpath table";
+                if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returning false',0);}
+                return false;
+            } else {
+                $row = Database::fetch_array($res);
+                $this->seriousgame_mode = isset($row['seriousgame_mode'])? $row['seriousgame_mode'] : 0;
             }
-          }else{
-            $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
-          }
+            } else {
+                $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
+            }
         }
-      if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returned '.$this->seriousgame_mode,0);}
+        if(self::debug>2){error_log('New LP - End of learnpathItem::get_seriousgame_mode() - Returned '.$this->seriousgame_mode,0);}
         return $this->seriousgame_mode;
     }
 

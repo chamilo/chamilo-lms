@@ -132,7 +132,7 @@ if (api_is_allowed_to_edit(null, true)) {
 								
 				// users subscribed to the course through a session
 				
-                if (api_get_session_id()) {			
+                if (api_get_session_id()) {	
                     $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                     $sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  user.username, $select_email_condition phone, user.official_code, active $legal
                                   FROM $table_session_course_user as session_course_user, $table_users as user ";
@@ -189,7 +189,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				    
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-					$sql_query = "SELECT DISTINCT user.user_id, user.username, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  user.username, $select_email_condition phone, user.official_code, active $legal
+					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.username, $select_email_condition phone, user.official_code, active $legal
 								  FROM $table_course_user as course_user, $table_users as user ";
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
@@ -218,7 +218,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         
 						$extra_fields = UserManager::get_extra_user_data($user['user_id'], false, false, false, true);
 						if (!empty($extra_fields)) {						
-							foreach($extra_fields as $key => $extra_value) {
+							foreach ($extra_fields as $key => $extra_value) {
 								$user[$key] = $extra_value;
 							}
 						}						

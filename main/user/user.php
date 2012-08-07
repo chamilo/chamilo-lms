@@ -101,15 +101,15 @@ if (api_is_allowed_to_edit(null, true)) {
                 if (api_get_setting('show_email_addresses') == 'true') {
                     $select_email_condition = ' user.email, ';
                     if ($sort_by_first_name) {
-                        $a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+                        $a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Username'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
                     } else {
-                        $a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+                        $a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Username'), get_lang('Email'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
                     }
                 } else {
                     if ($sort_by_first_name) {
-                        $a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+                        $a_users[0] = array('id', get_lang('FirstName'), get_lang('LastName'), get_lang('Username'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
                     } else {
-                        $a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
+                        $a_users[0] = array('id', get_lang('LastName'), get_lang('FirstName'), get_lang('Username'), get_lang('Phone'), get_lang('OfficialCode'), get_lang('Active'));
                     }
                 }
                 
@@ -134,7 +134,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				
                 if (api_get_session_id()) {			
                     $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-                    $sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  $select_email_condition phone, user.official_code, active $legal
+                    $sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  user.username, $select_email_condition phone, user.official_code, active $legal
                                   FROM $table_session_course_user as session_course_user, $table_users as user ";
                     if ($_configuration['multiple_access_urls']) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
@@ -189,7 +189,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				    
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", $select_email_condition phone, user.official_code, active $legal
+					$sql_query = "SELECT DISTINCT user.user_id, user.username, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  user.username, $select_email_condition phone, user.official_code, active $legal
 								  FROM $table_course_user as course_user, $table_users as user ";
 					if ($_configuration['multiple_access_urls']) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';

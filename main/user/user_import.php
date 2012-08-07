@@ -46,18 +46,20 @@ if ($form->validate()) {
         
         $invalid_users  = array();
         $clean_users    = array();
-        $users_in_file  = array();
-        
-        if (!empty($users)) {            
-            foreach ($users as $user) {
-                $user_info = api_get_user_info($user['id']);
-                if (!empty($user_info)) {
-                    $clean_users[$user['id']] = $user_info;
-                    $users_in_file[$user['id']] = $user;
+                
+        if (!empty($users)) { 
+            
+            foreach ($users as $user_data) {
+                $username = $user_data['username'];
+                $user_id = UserManager::get_user_id_from_username($username);                
+                $user_info = api_get_user_info($user_id);
+                if ($user_id && !empty($user_info)) {
+                    $clean_users[$user_id] = $user_info;                    
                 } else {
-                    $invalid_users[] = $user['id'];
+                    $invalid_users[] = $user_id;
                 }
             }
+            
             if (empty($invalid_users)) {
                 $type = 'confirmation';
                 $message = get_lang('ListOfUsersSubscribedToCourse');
@@ -71,19 +73,19 @@ if ($form->validate()) {
                         }
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
                     }                    
-                }
-                
-                foreach ($users as $user) {                    
-                    CourseManager :: subscribe_user($user['id'], $course_code, STUDENT, $session_id);
+                }                
+                foreach ($clean_users as $user_info) {      
+                    $user_id = $user_info['user_id'];
+                    CourseManager :: subscribe_user($user_id, $course_code, STUDENT, $session_id);
                     if (empty($session_id)) {
                         //just to make sure
-                        if (CourseManager :: is_user_subscribed_in_course($user['id'], $course_code)) {
-                            $user_to_show[]= $clean_users[$user['id']]['complete_name'];
+                        if (CourseManager :: is_user_subscribed_in_course($user_id, $course_code)) {
+                            $user_to_show[]= $user_info['complete_name'];
                         }
                     } else {
                         //just to make sure
-                        if (CourseManager :: is_user_subscribed_in_course($user['id'], $course_code, true, $session_id)) {
-                            $user_to_show[]= $clean_users[$user['id']]['complete_name'];
+                        if (CourseManager :: is_user_subscribed_in_course($user_id, $course_code, true, $session_id)) {
+                            $user_to_show[]= $user_info['complete_name'];
                         }
                     }
                 }   
@@ -115,12 +117,11 @@ if (!empty($message)) {
 $form->display();
 
 echo get_lang('CSVMustLookLike');
-echo '<blockquote>';
-echo '<pre>
-    "id";
-    "x";
-    "y";
-</pre>    
-';
-echo '</blockquote>';
+echo '<blockquote><pre>
+    username;
+    jdoe;
+    jmontoya;
+</pre>  
+</blockquote>';
+
 Display::display_footer();

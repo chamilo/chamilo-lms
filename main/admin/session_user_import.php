@@ -43,8 +43,12 @@ if ($_POST['formSent']) {
         // CSV
         $users = Import::csv_to_array($_FILES['import_file']['tmp_name']);
         $user_list = array();
-        foreach ($users as $user) {
-            $user_list[] = $user['id'];
+        foreach ($users as $user_data) {
+            $username = $user_data['username'];
+            $user_id = UserManager::get_user_id_from_username($username);
+            if ($user_id) {
+                $user_list[] = $user_id;
+            }
         }
         
         if (!empty($user_list)) {            
@@ -98,9 +102,9 @@ $form->display();
 
 <blockquote>
 <pre>
-id;
-06;
-30;
+username;
+jdoe;
+jmontoya;
 </pre>
 </blockquote>
 

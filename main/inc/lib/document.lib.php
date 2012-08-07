@@ -1314,7 +1314,7 @@ class DocumentManager {
      * @param string The course id
      * @return int The default certificate id
      */
-    function get_default_certificate_id($course_id) {
+    static function get_default_certificate_id($course_id) {
         $tbl_category   = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id     = api_get_session_id();
         if ($session_id==0 || is_null($session_id)) {

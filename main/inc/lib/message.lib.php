@@ -275,7 +275,7 @@ class MessageManager
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
 					   " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".$now."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".$now."')";
-				$rs = Database::query($sql);
+				Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 
 				// save attachment file for outbox messages

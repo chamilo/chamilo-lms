@@ -223,6 +223,7 @@ class learnpath {
         
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - query lp items: ' . $sql, 0);
+            error_log('-- Start while--', 0);
         }
         
         $lp_item_id_list = array();
@@ -263,7 +264,13 @@ class learnpath {
                     break;
                 case 1:
                 default:
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
+                    }
                     $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
+                    if ($this->debug > 2) {
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
+                    }
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
@@ -300,6 +307,10 @@ class learnpath {
             if (is_object($this->items[$row['id']])) {
                 $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
             }
+        }
+        
+        if ($this->debug > 2) {
+            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' ----- end while ----', 0);
         }
         
         if (!empty($lp_item_id_list)) {            
@@ -2609,10 +2620,7 @@ class learnpath {
         }
         $toc = $varname.' = new Array();';
         //echo "<pre>".print_r($this->items,true)."</pre>";
-        foreach ($this->ordered_items as $item_id) {
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::get_items_details_as_js(): getting info for item ' . $item_id, 0);
-            }
+        foreach ($this->ordered_items as $item_id) {            
             $toc.= $varname."['i$item_id'] = '".$this->items[$item_id]->get_type()."';";
         }
         if ($this->debug > 2) {

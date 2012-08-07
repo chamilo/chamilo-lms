@@ -76,18 +76,15 @@ class learnpathItem {
 		// Get items table.
 		if (!isset($user_id)) { $user_id = api_get_user_id(); }
 		if (self::debug > 0) { error_log("New LP - In learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id item_content: $item_content", 0); }
-
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
-        } else {
-            $course_id = intval($course_id);
-        }
-
-		$items_table = Database::get_course_table(TABLE_LP_ITEM);
-		$this->course_id = api_get_course_int_id();
 		$id = intval($id);
         
         if (empty($item_content)) {
+            $items_table = Database::get_course_table(TABLE_LP_ITEM);
+            if (empty($course_id)) {
+                $course_id = api_get_course_int_id();
+            } else {
+                $course_id = intval($course_id);
+            }
             $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
             //error_log('New LP - Creating item object from DB: '.$sql, 0);
             $res = Database::query($sql);
@@ -1141,10 +1138,8 @@ class learnpathItem {
 	 * @return	string	The item type (can be doc, dir, sco, asset)
 	 */
 	public function get_type() {
-		$res = 'asset';
-		if (self::debug > 0) { error_log('New LP - In learnpathItem::get_type() on item '.$this->db_id, 0); }
-		if (!empty($this->type)) {
-			//error_log('In item::get_type() - returning '.$this->type, 0);
+		$res = 'asset';		
+		if (!empty($this->type)) {			
 			$res = $this->type;
 		}
 		if (self::debug > 2) { error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->db_id, 0); }

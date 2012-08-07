@@ -476,3 +476,7 @@ if (Database::num_rows($res_media) > 0) {
 <?php
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
+
+if ($debug) {
+    error_log(' ------- end lp_view.php ------');
+}

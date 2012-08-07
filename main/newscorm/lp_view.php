@@ -121,16 +121,30 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
  * Get a link to the corresponding document.
  */
 
+
+if ($debug) { 
+    error_log(" src: $src ");
+    error_log(" lp_type: $lp_type ");    
+}
+
+$get_toc_list = $_SESSION['oLP']->get_toc();
+$type_quiz = false;
+
+foreach ($get_toc_list as $toc) {
+    if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz')) {
+        $type_quiz = true;
+    }
+}
+
 if (!isset($src)) {
     $src = '';
-
     switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
+                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
 
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
@@ -150,7 +164,7 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+                $src = $_SESSION['oLP']->get_link('http',$lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -162,7 +176,7 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+                $src = $_SESSION['oLP']->get_link('http',$lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
@@ -173,23 +187,14 @@ if (!isset($src)) {
     }
 }
 
-$list = $_SESSION['oLP']->get_toc();
-$type_quiz = false;
-
-foreach($list as $toc) {
-    if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz')) {
-        $type_quiz = true;
-    }
-}
-
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
-    error_log('$_REQUEST[exeId]: '.$_REQUEST['exeId']);
+    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
-    error_log('$_GET[lp_item_id]: '.$_GET['lp_item_id']);
+    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
 }
 
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
@@ -374,7 +379,7 @@ if (Database::num_rows($res_media) > 0) {
         <!-- TOC layout -->
         <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
             <div id="learning_path_toc">
-                <?php echo $_SESSION['oLP']->get_html_toc(); ?>
+                <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
 
                 <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
                 <!-- log message layout -->

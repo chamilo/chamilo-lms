@@ -186,10 +186,10 @@ class GradebookTable extends SortableTable {
                 $main_categories[$item->get_id()]['name'] = $item->get_name();                
 			} else {
 				$row[] = $invisibility_span_open.$this->build_name_link($item) . $invisibility_span_close;
-                $main_categories[$item->get_id()] = $this->build_name_link($item);                
+                $main_categories[$item->get_id()]['name'] = $this->build_name_link($item);                
 			}
             
-            $main_categories[$item->get_id()]['weight'] = $item->get_weight();
+            $main_categories[$item->get_id()]['weight']= $item->get_weight();
             $total_categories_weight += $item->get_weight();
             
 			//Description

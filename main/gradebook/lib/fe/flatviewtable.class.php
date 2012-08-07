@@ -410,8 +410,7 @@ class FlatViewTable extends SortableTable
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data ($from = 1) {
-
+	function get_table_data ($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
 		$is_western_name_order = api_is_western_name_order();
 
 		// create page navigation if needed

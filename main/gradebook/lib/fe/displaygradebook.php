@@ -17,7 +17,7 @@ class DisplayGradebook
 	* @param $shownavbar 1=show navigation bar
 	* @param $forpdf only output for pdf file
 	*/
-	function display_header_result($evalobj, $selectcat, $page) {
+	static function display_header_result($evalobj, $selectcat, $page) {
 		if (api_is_allowed_to_edit(null, true)) {
 			$header = '<div class="actions">';			
 			if ($page != 'statistics') {
@@ -158,7 +158,7 @@ class DisplayGradebook
 	* @param $showeval
 	* @param $showlink
 	*/
-	function display_header_reduce_flatview($catobj, $showeval, $showlink,$simple_search_form) {
+	static function display_header_reduce_flatview($catobj, $showeval, $showlink,$simple_search_form) {
 		$header = '<div class="actions">';
         if ($catobj->get_parent_id() == 0) {
             $select_cat = $catobj->get_id();
@@ -356,7 +356,7 @@ class DisplayGradebook
      * @param boolean Whether to show or not the link to add a new item inside the qualification (we hide it in case of the course-embedded tool where we have only one calification per course or session)
      * @return void Everything is printed on screen upon closing
 	 */
-	function display_header_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
+	static function display_header_gradebook($catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 		//student
 		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$objcat = new Category();

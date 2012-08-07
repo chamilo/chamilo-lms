@@ -194,7 +194,7 @@ abstract class AbstractLink implements GradebookItem {
     private static function create_objects_from_sql_result($result) {
     	$links=array();
 		while ($data=Database::fetch_array($result)) {
-			$link = LinkFactory::create(intval($data['type']));
+			$link = LinkFactory::create($data['type']);
 			$link->set_id($data['id']);
 			$link->set_type($data['type']);
 			$link->set_ref_id($data['ref_id']);

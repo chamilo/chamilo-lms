@@ -324,18 +324,17 @@ if (!empty($flat_list)) {
             //}
 
             /* PUBLISH COMMAND */
+            //if ($current_session == $details['lp_session']) {
+            if ($details['lp_published'] == "i") {
+                $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
+                Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
 
-            if ($current_session == $details['lp_session']) {
-                if ($details['lp_published'] == "i") {
-                    $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-					Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
-
-                } else {
-                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
-                }
             } else {
-                $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL);
+                $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
             }
+            /*} else {
+                $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL);
+            }*/
 
       /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE
 

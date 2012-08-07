@@ -75,7 +75,7 @@ class learnpathItem {
 	public function __construct($id, $user_id = null, $course_id = null, $item_content = null) {
 		// Get items table.
 		if (!isset($user_id)) { $user_id = api_get_user_id(); }
-		if (self::debug > 0) { error_log('New LP - In learnpathItem constructor: '.$id.','.$user_id, 0); }
+		if (self::debug > 0) { error_log("New LP - In learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id item_content: $item_content", 0); }
 
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -85,7 +85,7 @@ class learnpathItem {
 
 		$items_table = Database::get_course_table(TABLE_LP_ITEM);
 		$this->course_id = api_get_course_int_id();
-		$id = (int) $id;
+		$id = intval($id);
         
         if (empty($item_content)) {
             $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
@@ -122,7 +122,8 @@ class learnpathItem {
 		}
 		$this->save_on_close = true;
 		$this->db_id = $id;
-        $this->seriousgame_mode = $this->get_seriousgame_mode();
+        //$this->seriousgame_mode = $this->get_seriousgame_mode();
+        $this->seriousgame_mode = 0;
 
 		// Get search_did.
 		if (api_get_setting('search_enabled') == 'true') {            
@@ -138,8 +139,7 @@ class learnpathItem {
 			}
 		}
 		$this->audio = $row['audio'];
-
-		//error_log('New LP - End of learnpathItem constructor for item '.$id, 0);
+		if (self::debug > 0) error_log('New LP - End of learnpathItem constructor for item '.$id, 0);
 		return true;
 	}
 
@@ -669,7 +669,7 @@ class learnpathItem {
      * @author ndiechburg <noel@cblue.be>
      **/
     public function get_seriousgame_mode() {
-        if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}
+        if(self::debug>2){error_log('New LP - In learnpathItem::get_seriousgame_mode()',0);}        
         $course_id = api_get_course_int_id();
         if (!isset($this->seriousgame_mode)) {
             if (!empty($this->lp_id)) {
@@ -2664,6 +2664,4 @@ class learnpathItem {
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";        
         Database::query($sql);
     }
-     
-     
 }

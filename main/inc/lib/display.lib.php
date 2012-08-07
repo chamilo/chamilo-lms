@@ -1242,10 +1242,9 @@ class Display {
             $session = array();
             $session['title'] = $session_info[2];
             $session['coach'] = '';
-
+            $session['dates'] =  '';
+            
             if ($session_info['date_end'] == '0000-00-00' && $session_info['date_start'] == '0000-00-00') {
-                //$session['dates'] =  Display::tag('i', get_lang('WithoutTimeLimits'));
-                $session['dates'] =  '';
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
                 }

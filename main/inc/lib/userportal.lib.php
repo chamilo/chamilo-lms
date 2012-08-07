@@ -933,13 +933,13 @@ class IndexManager {
                         }
 
                         if ($count_courses_session > 0) {
-                            $params = array();                            							
+                            $params = array();          							
 
                             $session_box = Display :: get_session_title_box($session_id);
 
                             $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
-
-                            $extra_info = (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];		
+                            $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                            $extra_info .= !empty($session_box['dates']) ? ' - '.$session_box['dates'] : null;
 
                             if (api_is_drh()) {
                                 $session_link = $session_box['title'];
@@ -949,7 +949,8 @@ class IndexManager {
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
-                            $params['title'] = $session_link.$extra_info;
+                            $params['title'] = $session_link;
+                            $params['subtitle'] = $extra_info;                            
 
                             $params['right_actions'] = '';
                             if (api_is_platform_admin()) {

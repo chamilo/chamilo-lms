@@ -1035,10 +1035,20 @@ class IndexManager {
                         if (api_is_platform_admin()) {
                             $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'];
                         }
-
-                        if ($session_category['session_category']['date_end'] != '0000-00-00') {
+                        
+                        $session_category_start_date = $session_category['session_category']['date_start'];
+                        $session_category_end_date = $session_category['session_category']['date_end'];
+                        
+                        if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00' ) {
                             $params['subtitle'] = sprintf(get_lang('FromDateXToDateY'), $session_category['session_category']['date_start'], $session_category['session_category']['date_end']);
-                        }
+                        } else {                            
+                            if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00') {
+                                 $params['subtitle'] = get_lang('From').' '.$session_category_start_date;
+                            }
+                            if (!empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
+                                $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
+                            }
+                        }                        
                         $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
                     }
 					

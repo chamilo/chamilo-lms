@@ -280,7 +280,7 @@ function who_is_online_count($valid = null, $friends = false) {
 							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
 			} else {
 				// all users online
-				$query = "SELECT count(login_id) as count FROM ".$track_online_table ." track
+				$query = "SELECT count(login_id) as count FROM $track_online_table track
 						  WHERE login_user_id <> 2 AND track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
 			}
 		}

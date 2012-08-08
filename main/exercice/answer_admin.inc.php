@@ -88,15 +88,13 @@ if ($modifyIn) {
         $weighting = unserialize($weighting);
         $hotspot_coordinates = unserialize($hotspot_coordinates);
         $hotspot_type = unserialize($hotspot_type);
-    }
-    //fill in blanks
-    else {
+    } else {
+        //fill in blanks
         $reponse = unserialize($reponse);
         $comment = unserialize($comment);
         $blanks = unserialize($blanks);
         $weighting = unserialize($weighting);
     }
-
     unset($buttonBack);
 }
 
@@ -277,7 +275,7 @@ if ($submitAnswers || $buttonBack) {
                  */
 
                 // blanks will be put into an array
-                $blanks = Array();
+                $blanks = array();
 
                 $i = 1;
 
@@ -527,15 +525,12 @@ if ($submitAnswers || $buttonBack) {
 }
 
 if ($modifyAnswers) {
-
-
     if ($debug > 0) {
         echo str_repeat('&nbsp;', 0) . '$modifyAnswers is set' . "<br />\n";
     }
 
     // construction of the Answer object
     $objAnswer = new Answer($questionId);
-
 
     Session::write('objAnswer', $objAnswer);
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
@@ -545,14 +540,14 @@ if ($modifyAnswers) {
         if (!$nbrAnswers) {
             $nbrAnswers = $objAnswer->selectNbrAnswers();
 
-            $reponse = Array();
-            $comment = Array();
-            $weighting = Array();
+            $reponse = array();
+            $comment = array();
+            $weighting = array();
 
 
             // initializing + Modification de la ligne suivante 
             if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-                $correct = Array();
+                $correct = array();
             } else {
                 $correct = 0;
             }
@@ -593,7 +588,7 @@ if ($modifyAnswers) {
 
                 $weighting = explode(',', $weighting);
 
-                $temp = Array();
+                $temp = array();
 
                 // keys of the array go from 1 to N and not from 0 to N-1
                 for ($i = 0; $i < sizeof($weighting); $i++) {
@@ -635,9 +630,9 @@ if ($modifyAnswers) {
             echo str_repeat('&nbsp;', 2) . '$answerType is MATCHING' . "<br />\n";
         }
         if (!$nbrOptions || !$nbrMatches) {
-            $option = Array();
-            $match = Array();
-            $sel = Array();
+            $option = array();
+            $match = array();
+            $sel = array();
 
             $nbrOptions = $nbrMatches = 0;
 
@@ -1117,7 +1112,7 @@ if ($modifyAnswers) {
                 <?php
             }
 
-            $listeOptions = Array();
+            $listeOptions = array();
 
             // creates an array with the option letters
             for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {

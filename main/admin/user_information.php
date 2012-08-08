@@ -218,7 +218,7 @@ if ($_configuration['multiple_access_urls']) {
         $data = array ();
         foreach ($url_list as $url) {
             $row = array();
-            $row[] = $url['url'];
+            $row[] = Display::url($url['url'], $url['url']);
             $data[] = $row;
         }
         echo '<p><b>'.get_lang('URLList').'</b></p>';        

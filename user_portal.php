@@ -155,6 +155,11 @@ $user_id = api_get_user_id();
 // Main courses and session list
 $courses_and_sessions = $controller->return_courses_and_sessions($user_id);
 
+//Show the chamilo mascot
+if (empty($courses_and_sessions)) {      
+    $controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
+}
+
 $controller->tpl->assign('content', $courses_and_sessions);
  
 if (api_get_setting('allow_browser_sniffer') == 'true') {

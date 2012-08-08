@@ -28,6 +28,13 @@
 		
         {% include "default/layout/page_body.tpl" %}
                 
+        {#  Welcome to course block  #}
+        {% if welcome_to_course_block %}      
+            <section id="welcome_to_course">
+            {{ welcome_to_course_block }}
+            </section>
+        {% endif %}
+                
         {% if content is not null %}
             <section id="main_content">
                 {{ content }}

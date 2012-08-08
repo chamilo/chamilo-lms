@@ -1055,9 +1055,25 @@ class IndexManager {
 				}
 			}
 		}        
-        
         return $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses;
 	}
+    
+    /** 
+     * Shows a welcome message when the user doesn't have any content in the course list 
+     */
+    function return_welcome_to_course_block() {
+        $tpl = $this->tpl->get_template('layout/welcome_to_course.tpl');
+        
+        $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+        $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
+                
+        $this->tpl->assign('course_catalog_url', $course_catalog_url);
+        $this->tpl->assign('course_list_url', $course_list_url);
+        $this->tpl->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
+        $this->tpl->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
+        
+        return $this->tpl->fetch($tpl);
+    }
 
 	function return_hot_courses() {
 		return CourseManager::return_hot_courses();		

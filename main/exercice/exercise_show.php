@@ -487,8 +487,8 @@ foreach ($questionList as $questionId) {
 	    }
 	}
 	
-    //if ($show_results) {
-    if (0) {
+    if ($show_results) {
+    //if (0) {
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
 		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {

@@ -25,6 +25,6 @@
 
 {% if show_user_info.show_message is not null and _u.logged == 1 %}
     <div class="well">
-        {{ "WelcomToChamiloUserX" | get_lang | format(show_user_info.user_info.complete_name) }}            
+        {{ "WelcomeToChamiloUserX" | get_lang | format(show_user_info.user_info.complete_name) }}            
     </div>
 {% endif %}

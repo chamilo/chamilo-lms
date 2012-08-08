@@ -97,7 +97,7 @@ To update the PHP configuration (either in php.ini or in your VirtualHost), use 
 php_value zlib.output_compression 1
 </pre>
 <br />
-Configuring your Apache server to use output compression is a bit trickier. You have to use <a href="http://php.net/manual/en/zlib.configuration.php">the mod_deflate module</a> to do it. Your configuration should look like something like this (please read the corresponding documentation before implementing in production).<br />
+Configuring your Apache server to use output compression is a bit trickier. You have to use <a href="http://httpd.apache.org/docs/2.2/mod/mod_deflate.html">the mod_deflate module</a> to do it. Your configuration should look like something like this (please read the corresponding documentation before implementing in production).<br />
 Easy mode:
 <pre>
 AddOutputFilterByType DEFLATE text/html text/plain text/xml

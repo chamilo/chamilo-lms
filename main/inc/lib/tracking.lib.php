@@ -2370,7 +2370,7 @@ class Tracking {
 						//All exercises in the course @todo change for a real count						
 						$exercises          = get_all_exercises($course_data, $my_session_id);
 						$count_exercises = 0;
-						if (!empty($exercises)) {
+						if (is_array($exercises) && !empty($exercises)) {
 							$count_exercises 	= count($exercises);
 						}
 						

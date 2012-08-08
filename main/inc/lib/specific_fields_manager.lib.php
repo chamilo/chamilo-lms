@@ -101,26 +101,37 @@ function get_specific_field_list($conditions = array(), $order_by = array()) {
  * @return array An array with all users of the platform.
  */
 function get_specific_field_values_list($conditions = array(), $order_by = array()) {
-  $table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-  $return_array = array();
-  $sql = "SELECT * FROM $table_sfv";
-  if (count($conditions) > 0) {
-    $sql .= ' WHERE ';
-    $conditions_string_array = array();
-    foreach ($conditions as $field => $value) {
-      $conditions_string_array[] = $field.' = '. $value;
+    $table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $return_array = array();
+    $sql = "SELECT * FROM $table_sfv";
+    if (count($conditions) > 0) {
+        $sql .= ' WHERE ';
+        
+        //Fixing course id
+        if (isset($conditions['c_id'])) {
+            $course_info = api_get_course_info_by_id($conditions['c_id']);
+            $conditions['course_code'] = " '".$course_info['code']."' ";
+            unset($conditions['c_id']);
+        }
+        //If any course_code is provided try to insert the current course code
+        if (!isset($conditions['course_code'])) {
+            $conditions['course_code'] = " '".api_get_course_id()."' ";
+        }
+        
+        $conditions_string_array = array();
+        foreach ($conditions as $field => $value) {            
+            $conditions_string_array[] = $field.' = '. $value;
+        }
+        $sql .= implode(' AND ', $conditions_string_array);
     }
-    $sql .= implode(' AND ', $conditions_string_array);
-  }
-  if (count($order_by) > 0) {
-    $sql .= ' ORDER BY '.implode(',',$order_by);
-  }
-  $sql_result = Database::query($sql);
-  while ($result = Database::fetch_array($sql_result)) {
-    $return_array[] = $result;
-  }
-
-  return $return_array;
+    if (count($order_by) > 0) {
+        $sql .= ' ORDER BY '.implode(',',$order_by);
+    }
+    $sql_result = Database::query($sql);
+    while ($result = Database::fetch_array($sql_result)) {
+        $return_array[] = $result;
+    }
+    return $return_array;
 }
 
 /**

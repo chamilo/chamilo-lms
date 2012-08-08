@@ -2296,11 +2296,6 @@ div.admin_section h4 {
     overflow:hidden;
 }
 
-
-.tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
-}
-
 /* chosen javascript checkbox select width fix */
 .chzn-select {
     min-width: 173px;
@@ -2500,6 +2495,7 @@ div.admin_section h4 {
     font-weight: bold;
     padding:10px 0px 10px 0px;
 }
+
 .question_title {
     font-size: 1.2em;
     font-weight: bold;
@@ -2527,6 +2523,131 @@ div.admin_section h4 {
     margin: -16px 0 0 23px;
     padding: 0 0 5px;
     width: 88%;
+}
+
+#question_description {
+    padding-left:5px;
+    padding-top:10px;
+}
+
+#question_score {    
+    padding-top:10px;
+    padding-bottom:10px;
+    font-weight:bold;
+    font-size:130%;
+}
+
+.question_row {
+    margin-bottom: 40px;    
+}
+
+.ribbon {
+    float:left;
+    width:100%;
+    margin-bottom: 20px;    
+    background: #fff;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);   
+    position: relative;
+}
+
+.ribbon .rib {
+    height: 30px;
+    width: 100px;
+    display: block;    
+    line-height: 1.3;
+    left: -2px;
+    top: 0px;
+    color: #cfcfcf;
+    margin: 0;
+    padding: 5px 10px;
+    position: relative;   
+    text-shadow: 0 1px 1px #111;
+    border-top: 1px solid #363636;
+    border-bottom: 1px solid #202020;
+    background: #333;
+    background: linear-gradient(top, #383838 0%, #262626 100%);
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.ribbon .rib-total {
+    width:350px;
+}
+
+
+.ribbon .rib-error{
+    background:red;
+    border-top: 1px solid #C20B1B;
+    border-bottom: 1px solid #FF3F4F;
+}
+
+.ribbon .rib-success{
+    background:green;
+    border-top: 1px solid #7AE155;
+    border-bottom: 1px solid #7AE155;
+}
+
+.ribbon h4 {
+    display: block;
+    left: 130px;
+    height: 30px;
+    line-height: 1.3;
+    width: 360px;
+    margin: 0;
+    padding: 5px 10px;
+    position: absolute;
+    
+    top: 8px;
+    color: #444;
+}
+
+.ribbon h5 {
+    display: block;
+    height: 30px;
+    line-height: 1.3;
+    width: 120px;
+    margin: 0;
+    padding: 15px 10px;
+    position: absolute;
+    right: 0px;
+    top: 0px;    
+}
+
+.ribbon .rib::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -11px;
+    z-index: -10;
+    border: 5px solid;
+    border-color: #242424 transparent transparent transparent;    
+}
+
+.ribbon .rib-error::before {
+    border-color: #9E1500 transparent transparent transparent;        
+}
+
+.ribbon .rib-success::before {
+    border-color: #82AC25 transparent transparent transparent; 
+}
+
+.ribbon .rib::before {left: 0;}
+.ribbon .rib::after {right: 0;}
+
+
+.ribbon .success {
+    
+}
+
+.ribbon .error {
+    color: red;
+}
+.ribbon .success {
+    color: green;
 }
 
 .exercise_save_now_button img {
@@ -2810,7 +2931,6 @@ form .formw .freeze {
     background-color: #fff;
 }
 
-
 .data_table_no_border td .highlight{
     font-weight: bold;
 }
@@ -2819,7 +2939,6 @@ form .formw .freeze {
     width:100%;
     margin-top: 8px;    
 }
-
 
 .form-stacked .label {
     display: block;
@@ -2853,7 +2972,14 @@ form .formw .freeze {
     font-size: 11px;
 }
 
+/* Stick table header */
 
+.tableWithFloatingHeader th {
+    padding: 5px 5px 0px 5px;
+}
+.tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
+    height:80px;    
+}
 
 /* jsPlumb */
 

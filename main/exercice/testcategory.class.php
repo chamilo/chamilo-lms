@@ -366,16 +366,23 @@ class Testcategory {
 	 * display the category
 	 */
 	public static function displayCategoryAndTitle($in_questionID, $in_display_category_name = 1) {
+        echo self::returnCategoryAndTitle($in_questionID, $in_display_category_name);
+	}
+    
+    
+    public static function returnCategoryAndTitle($in_questionID, $in_display_category_name = 1) {
         $is_student = !(api_is_allowed_to_edit(null,true) || api_is_session_admin());	
         $objExercise = $_SESSION['objExercise'];
         if (!empty($objExercise)) {
             $in_display_category_name = $objExercise->display_category_name;
         }
+        $content = null;
 		if (Testcategory::getCategoryNameForQuestion($in_questionID) != "" && ($in_display_category_name == 1 || !$is_student)) {
-            echo '<div id="question_title" class="sectiontitle">';            
-            echo get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID);            
-            echo "</div>";
+            $content .= '<div id="question_title" class="sectiontitle">';            
+            $content .= get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID);            
+            $content .= "</div>";
 		}
+        return $content;
 	}
 	
 	

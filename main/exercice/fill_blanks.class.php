@@ -191,11 +191,11 @@ class FillBlanks extends Question
         $objAnswer->save();
 	}
 	
-	function return_header($feedback_type = null, $counter = null) {
-	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" class="data_table_exercise_result_left">				
+	function return_header($feedback_type = null, $counter = null, $score = null) {
+	    $header = parent::return_header($feedback_type, $counter, $score);
+	    $header .= '<table class="'.$this->question_table_class .'">				
 			<tr>
-			<td><i>'.get_lang("Answer").'</i> </td>
+                <th>'.get_lang("Answer").'</th>
 			</tr>';
         return $header;	  
 	}

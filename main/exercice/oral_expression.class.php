@@ -52,24 +52,23 @@ class OralExpression extends Question {
 	 * @param the formvalidator instance
 	 */
 	function processAnswersCreation($form) {
-		$this -> weighting = $form -> getSubmitValue('weighting');
+		$this->weighting = $form -> getSubmitValue('weighting');
 		$this->save();
 	}
 	
-	function return_header($feedback_type = null, $counter = null) {
-	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
+	function return_header($feedback_type = null, $counter = null, $score = null) {
+	    $header = parent::return_header($feedback_type, $counter, $score);
+	    $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
-			<td>&nbsp;</td>
+                <th>&nbsp;</th>
 			</tr>
 			<tr>
-			<td><i>'.get_lang("Answer").'</i> </td>
+                <th>'.get_lang("Answer").'</th>
 			</tr>
 			<tr>
-			<td>&nbsp;</td>
+                <th>&nbsp;</th>
 			</tr>';				
         return $header;	  
-	}
-	
+	}	
 }
 endif;

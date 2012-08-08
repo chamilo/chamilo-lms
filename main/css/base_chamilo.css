@@ -1288,21 +1288,7 @@ span.radio {
     clear: left;
     float: left;
 }
-#question_title {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-#question_description {
-    padding-left:5px;
-    padding-top:10px;
-}
-#question_score {
-    padding-left:5px;
-    padding-top:10px;
-    padding-bottom:10px;
-    font-weight:bold;
-    font-size:130%;
-}
+
 
 #exercise_close_link {
     padding-left: 20px;
@@ -1310,11 +1296,6 @@ span.radio {
 #exercise_close_link:hover {
     padding-left: 20px;
 }
-
-/*****************************************************
- *  BUTTONS                                          *
- *****************************************************/
-
 
 .icon_image_content {
     width:70px;

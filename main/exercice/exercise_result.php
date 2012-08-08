@@ -85,18 +85,6 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-//Hide results
-$show_results     = false;
-$show_only_score  = false;
-
-if ($objExercise->results_disabled == 0) {
-    $show_results = true;
-}
-
-if ($objExercise->results_disabled == 2) {
-    $show_only_score = true;
-}
-
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -143,75 +131,10 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
-$user_info   = api_get_user_info(api_get_user_id());
-if ($show_results || $show_only_score) {
-    echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
-}
-
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
-// Display text when test is finished #4074
-// Don't display the text when finished message if we are from a LP #4227
-// but display it from page exercice_show.php
-$end_of_message = $objExercise->selectTextWhenFinished();
-if (!empty($end_of_message) && ($origin != 'learnpath')) {
-    Display::display_normal_message($end_of_message, false);
-    echo "<div class='clear'>&nbsp;</div>";
-}
+display_question_list_by_attempt($objExercise, $exe_id, true);
 
-$counter = 1;
-$total_score = $total_weight = 0;
-
-// Loop over all question to show results for each of them, one by one
-if (!empty($question_list)) {
-    if ($debug) { error_log('Looping question_list '.print_r($question_list,1));}
-	foreach ($question_list as $questionId) {
-	    // destruction of the Question object
-		unset($objQuestionTmp);
-
-		// gets the student choice for this question
-		$choice                = $exerciseResult[$questionId];
-
-		// creates a temporary Question object
-		$objQuestionTmp        = Question :: read($questionId);
-
-		//this variable commes from exercise_submit_modal.php
-
-		//$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId];
-
-		if ($show_results) {
-		    // show category
-		    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
-	    	// show titles
-	    	echo $objQuestionTmp->return_header($objExercise->feedback_type, $counter);
-	    	$counter++;
-		}
-
-	    // We're inside *one* question. Go through each possible answer for this question        
-	    $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
-
-	    $total_score     += $result['score'];
-	    $total_weight    += $result['weight'];
-	} // end foreach() block that loops over all questions
-}
-
-if ($origin != 'learnpath') {
-    if ($show_results || $show_only_score) {
-        echo '<div id="question_score">';
-        echo get_lang('YourTotalScore')." ";
-        if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
-    	    $total_score = 0;
-        }
-        echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
-        echo '</div>';
-    }
-}
-
-// Tracking of results
-
-if (api_is_allowed_to_session_edit()) {    
-	update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
-}
 
 //If is not valid
 $session_control_key = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);

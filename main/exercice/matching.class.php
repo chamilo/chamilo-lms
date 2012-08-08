@@ -232,17 +232,15 @@ class Matching extends Question {
 		$this->save();
 	}
 	
-	function return_header($feedback_type = null, $counter = null) {
-	    parent::return_header($feedback_type, $counter);
-        echo '<table width="100%" height="71" class="data_table_exercise_result_left">';            
-        echo '<tr>
-                <td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
-                <td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
+	function return_header($feedback_type = null, $counter = null, $score = null) {
+	    $header = parent::return_header($feedback_type, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class .'">';            
+        $header .= '<tr>
+                <th>'.get_lang('ElementList').'</th>
+                <th>'.get_lang('CorrespondsTo').'</th>
               </tr>';
+        return $header;
 	}
-
-
 }
-
 endif;
 ?>

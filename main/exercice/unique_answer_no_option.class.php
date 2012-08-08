@@ -399,17 +399,17 @@ class UniqueAnswerNoOption extends Question {
         $this -> save();
 	}
 	
-	function return_header($feedback_type = null, $counter = null) {
-	    parent::return_header($feedback_type, $counter);
-	    $header = '<table width="100%" class="data_table_exercise_result">			
+	function return_header($feedback_type = null, $counter = null, $score = null) {
+	    $header = parent::return_header($feedback_type, $counter, $score);
+	    $header .= '<table class="'.$this->question_table_class .'">			
 			<tr>
-				<td><i>'.get_lang("Choice").'</i> </td>
-				<td><i>'. get_lang("ExpectedChoice").'</i></td>
-				<td><i>'. get_lang("Answer").'</i></td>';
+				<th>'.get_lang("Choice").'</th>
+				<th>'. get_lang("ExpectedChoice").'</th>
+				<th>'. get_lang("Answer").'</th>';
 				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<td><i>'.get_lang("Comment").'</i></td>';
+    				$header .= '<th>'.get_lang("Comment").'</th>';
 				} else { 
-					$header .= '<td>&nbsp;</td>';
+					$header .= '<th>&nbsp;</th>';
 				}
         $header .= '</tr>';
         return $header;	

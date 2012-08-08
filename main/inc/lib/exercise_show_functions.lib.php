@@ -24,7 +24,6 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-
 	static function display_fill_in_blanks_answer($answer,$id,$questionId) {
         global $feedback_type;
         if (empty($id)) {
@@ -32,20 +31,19 @@ class ExerciseShowFunctions {
         } else {
 		?>
 			<tr>
-			<td>
-				<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-			</td>
+                <td>
+                    <?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
+                </td>
 
 			<?php
-			if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
+			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td>
-				<?php
-				$comm = get_comments($id,$questionId);
-				?>
+                    <?php
+                    $comm = get_comments($id,$questionId);
+                    ?>
 				</td>
 			<?php } ?>
-
-				</tr>
+            </tr>
 		<?php
         }
 	}
@@ -62,12 +60,12 @@ class ExerciseShowFunctions {
         if (empty($id)) {
         	if (!empty($answer)) {
         	    echo '<tr>';
-    	        echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
+    	        echo Display::tag('td', nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
 	            echo '</tr>';
         	}
             if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));
+                echo Display::tag('td', get_lang('notCorrectedYet'), array('width'=>'45%'));
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -202,22 +200,22 @@ class ExerciseShowFunctions {
 		global $feedback_type;
 		?>
 		<tr>
-		<td width="5%" align="center">
+		<td width="5%">
 			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
 			border="0" alt="" />
 		</td>
-		<td width="5%" align="center">
+		<td width="5%">
 			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
 			border="0" alt=" " />
 		</td>
-		<td width="40%" style="border-bottom: 1px solid #4171B5;">
+		<td width="40%">
 			<?php
 			echo $answer;
 			?>
 		</td>
 
 		<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-		<td width="20%" style="border-bottom: 1px solid #4171B5;">
+		<td width="20%">
 			<?php
 
             if ($studentChoice) {
@@ -268,7 +266,7 @@ class ExerciseShowFunctions {
         global $feedback_type;
         ?>
         <tr>
-        <td width="5%" align="center">
+        <td width="5%">
         <?php
 
         $question 	 = new MultipleAnswerTrueFalse();
@@ -283,7 +281,7 @@ class ExerciseShowFunctions {
         }
         ?>
         </td>
-        <td width="5%" align="center">
+        <td width="5%">
         <?php
 		//Expected choice
         if (isset($new_options[$answerCorrect])) {
@@ -293,12 +291,12 @@ class ExerciseShowFunctions {
         }
         ?>
         </td>
-        <td width="40%" style="border-bottom: 1px solid #4171B5;">
+        <td width="40%">
 			<?php echo $answer; ?>
         </td>
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-        <td width="20%" style="border-bottom: 1px solid #4171B5;">
+        <td width="20%">
             <?php            
             $color = "black";
             if (isset($new_options[$studentChoice])) {
@@ -338,7 +336,7 @@ class ExerciseShowFunctions {
         global $feedback_type;
         ?>
         <tr>
-        <td width="5%" align="center">
+        <td width="5%">
         <?php
 		//Your choice
         $question = new MultipleAnswerCombinationTrueFalse();
@@ -349,7 +347,7 @@ class ExerciseShowFunctions {
         }
         ?>
         </td>
-        <td width="5%" align="center">
+        <td width="5%">
         <?php
 		//Expected choice
         if (isset($question->options[$answerCorrect])) {
@@ -359,7 +357,7 @@ class ExerciseShowFunctions {
         }
         ?>
         </td>
-        <td width="40%" style="border-bottom: 1px solid #4171B5;">
+        <td width="40%">
             <?php
             //my answer
             echo $answer;
@@ -367,7 +365,7 @@ class ExerciseShowFunctions {
         </td>
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-        <td width="20%" style="border-bottom: 1px solid #4171B5;">
+        <td width="20%">
             <?php
             //@todo replace this harcoded value
             if ($studentChoice) {

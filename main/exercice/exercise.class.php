@@ -1869,8 +1869,7 @@ class Exercise {
 		$course_id              = api_get_course_int_id();
 		$objQuestionTmp         = Question::read($questionId, $course_id);
 		
-		$questionName 			= $objQuestionTmp->selectTitle();
-		$questionDescription 	= $objQuestionTmp->selectDescription();
+		$questionName 			= $objQuestionTmp->selectTitle();		
 		$questionWeighting 		= $objQuestionTmp->selectWeighting();
 		$answerType 			= $objQuestionTmp->selectType();
 		$quesId 				= $objQuestionTmp->selectId();
@@ -2233,7 +2232,7 @@ class Exercise {
 					}
 					$answer = '';
 					$real_correct_tags = $correct_tags;
-					$chosen_list = array ();
+					$chosen_list = array();
 
 					for ($i = 0; $i < count($real_correct_tags); $i++) {
 						if ($i == 0) {
@@ -2468,8 +2467,7 @@ class Exercise {
 					$_SESSION['hotspot_coord'][1]	= $delineation_cord;
 					$_SESSION['hotspot_dest'][1]	= $answer_delineation_destination;
 					break;
-			} // end switch Answertype
-            
+			} // end switch Answertype            
 
 			global $origin;
 
@@ -2710,16 +2708,11 @@ class Exercise {
 								ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId, "");
 							}
 							break;
-						case FILL_IN_BLANKS:
-							echo '<tr><td>';
-							ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$exeId,$questionId);
-							echo '</td></tr>';
+						case FILL_IN_BLANKS:							
+							ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$exeId,$questionId);							
 							break;
 						case FREE_ANSWER:
-							echo '<tr>
-                            <td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId).'</td>
-                            </tr>
-                            </table>';
+							echo ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId);                            
 							break;
 						case ORAL_EXPRESSION:
 							echo '<tr>
@@ -3097,16 +3090,17 @@ class Exercise {
 				}
 			}
 
-			if ($origin != 'learnpath') {				
+			if ($origin != 'learnpath') {	
 				if ($show_result) {
-					echo '</table>';					
-						echo '<div id="question_score">';
+					echo '</table>';		
+                }
+						/*echo '<div id="question_score">';
 						if ($propagate_neg == 0 && $questionScore < 0) {
 							$questionScore = 0;
 						}
 						echo get_lang('Score').": ".show_score($questionScore, $questionWeighting, false, false);
-						echo '</div>';
-				}
+						echo '</div>';*/
+				//}
 			}
 		}
 		unset ($objAnswerTmp);

@@ -1933,3 +1933,147 @@ function delete_chat_exercise_session($exe_id) {
         $_SESSION['current_exercises'][$exe_id] = false;
     }    
 }
+
+
+
+function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false) {
+    global $origin;
+    
+    $exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+    $question_list = array();
+    if (!empty($exercise_stat_info['data_tracking'])) {
+        $question_list		= explode(',', $exercise_stat_info['data_tracking']);
+    }
+    
+    $counter = 1;
+    $total_score = $total_weight = 0;
+    
+    $exercise_content = null;
+    
+    
+    //Hide results
+    $show_results     = false;
+    $show_only_score  = false;
+
+    if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_END) {
+        $show_results = true;
+    }
+
+    if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_EXAM) {
+        $show_only_score = true;
+    }
+
+    if ($show_results || $show_only_score) {
+        $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
+        //Shows exercise header
+        $objExercise->description = '';
+        echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
+    }
+
+    
+    if ($save_user_result) {
+    
+        // Display text when test is finished #4074
+        // Don't display the text when finished message if we are from a LP #4227
+        // but display it from page exercice_show.php
+        $end_of_message = $objExercise->selectTextWhenFinished();
+        if (!empty($end_of_message) && ($origin != 'learnpath')) {
+            Display::display_normal_message($end_of_message, false);
+            echo "<div class='clear'>&nbsp;</div>";
+        }
+    }
+
+
+    // Loop over all question to show results for each of them, one by one
+    if (!empty($question_list)) {
+        if ($debug) { error_log('Looping question_list '.print_r($question_list,1));}
+        foreach ($question_list as $questionId) {
+
+            // creates a temporary Question object
+            $objQuestionTmp = Question :: read($questionId);
+
+            //this variable commes from exercise_submit_modal.php
+
+            //$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId];
+            ob_start();
+            
+            // We're inside *one* question. Go through each possible answer for this question        
+            $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+   
+            $total_score     += $result['score'];
+            $total_weight    += $result['weight'];
+            
+            
+            $my_total_score  = $result['score'];
+            $my_total_weight = $result['weight'];   
+
+            if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
+                $my_total_score = 0;
+            }
+
+            $score = array();    
+            if ($show_results) {	    
+                $score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+                $score['pass'] = $my_total_score >= $my_total_weight ? true : false;		
+            }
+                        
+            if ($show_results) {
+                $comnt = get_comments($exe_id, $questionId);		
+                if (!empty($comnt)) {
+                    echo '<b>'.get_lang('Feedback').'</b>';
+                    echo '<div id="question_feedback">'.$comnt.'</div>';
+                }		
+            }
+            
+             $contents = ob_get_clean();
+    
+            $question_content = '<div class="question_row">';
+
+            if ($show_results) {
+                // display question category, if any
+                $question_content .= Testcategory::returnCategoryAndTitle($questionId);
+                //Shows question title an description
+                $question_content .= $objQuestionTmp->return_header("", $counter, $score);
+            }
+            $counter++;
+            $question_content .= $contents;
+            $question_content .= '</div>';   
+            $exercise_content .= $question_content;
+            
+        } // end foreach() block that loops over all questions
+    }
+    
+    if ($origin != 'learnpath') {
+        if ($show_results || $show_only_score) {
+                echo '<div class="question_row">
+                <div class="ribbon">
+                <div class="rib rib-total">';
+            echo '<h3>';
+            echo get_lang('YourTotalScore')." ";
+            if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
+                $total_score = 0;
+            }
+            echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
+            echo '</h3>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+    }
+    
+    echo $exercise_content;
+    
+    if ($save_user_result) {
+        
+        // Tracking of results
+        $learnpath_id           = $exercise_stat_info['orig_lp_id'];
+        $learnpath_item_id      = $exercise_stat_info['orig_lp_item_id'];
+        $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
+        if (api_is_allowed_to_session_edit()) {    
+            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
+        }
+    }
+    
+    
+    
+}

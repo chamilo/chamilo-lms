@@ -59,7 +59,7 @@ if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise
 if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
 if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 
-$id 	       = intval($_REQUEST['id']); //exe id
+$id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
 	api_not_allowed();
@@ -131,7 +131,7 @@ if ($origin != 'learnpath') {
 	Display::display_reduced_header();
 }
 ?>
-<script type="text/javascript">
+<script>
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
 	document.getElementById(marksid).style.display='block';
@@ -271,6 +271,8 @@ foreach ($questionList as $questionId) {
 }
 $counter = 1;
 
+$exercise_content = null;
+
 foreach ($questionList as $questionId) {
 	
 	$choice = $exerciseResult[$questionId];
@@ -282,13 +284,8 @@ foreach ($questionList as $questionId) {
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
 	$answerType			= $objQuestionTmp->selectType();
 	
-	        	
- 	if ($show_results) {
- 	    // display question category, if any
- 	    Testcategory::displayCategoryAndTitle($questionId);
-	    echo $objQuestionTmp->return_header("", $counter);
-	}
-	$counter++;
+	// Start buffer
+    ob_start();
 	
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
@@ -364,8 +361,7 @@ foreach ($questionList as $questionId) {
             
             $threadhold1      = $question_result['extra']['threadhold1'];            
             $threadhold2      = $question_result['extra']['threadhold2'];
-            $threadhold3      = $question_result['extra']['threadhold3'];
-            
+            $threadhold3      = $question_result['extra']['threadhold3'];            
 	   
 	        if ($show_results) {
 	    
@@ -384,8 +380,7 @@ foreach ($questionList as $questionId) {
         			$excess_color='green';
         	    } else {
         			$excess_color='red';
-        	    }
-        	    
+        	    }        	    
         	    
         	    if (!is_numeric($final_overlap)) {
             	    $final_overlap = 0;
@@ -492,17 +487,17 @@ foreach ($questionList as $questionId) {
 	    }
 	}
 	
-	if ($show_results) {		            
+    //if ($show_results) {
+    if (0) {
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
-		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {         
-        
+		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {
 			echo '<tr><td>';
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
 			?>
 			<br />
-			<a href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
+			<a class="btn" href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
 			<?php
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				echo get_lang('EditCommentsAndMarks');
@@ -580,37 +575,64 @@ foreach ($questionList as $questionId) {
 		</tr>
 		</table>';		
 	}
-	
-	$my_total_score  = $questionScore;
+    
+    $my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;   
+    $totalWeighting += $questionWeighting;
 	
     if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
         $my_total_score = 0;
-    }  
-    if ($show_results) {
-	    echo '<div id="question_score">';
-		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
-		echo '</div>';
     }
+    
+    $score = array();    
+    if ($show_results) {	    
+		$score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+        $score['pass'] = $my_total_score >= $my_total_weight ? true : false;		
+    }
+    
 	unset($objAnswerTmp);
 	$i++;
-
-	$totalWeighting += $questionWeighting;
     
+    $contents = ob_get_clean();
+    
+    $question_content = '<div class="question_row">';
+    
+ 	if ($show_results) {
+ 	    // display question category, if any
+ 	    $question_content .= Testcategory::returnCategoryAndTitle($questionId);
+        //Shows question title an description
+	    $question_content .= $objQuestionTmp->return_header("", $counter, $score);
+	}
+    
+	$counter++;    
+    $question_content .= $contents;
+    $question_content .= '</div>';   
+    $exercise_content .= $question_content;
 } // end of large foreach on questions
+
 
 //Total score
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-	if ($show_results || $show_only_total_score ) {        
-		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
+	if ($show_results || $show_only_total_score ) {
+        
+        echo '<div class="question_row">
+        <div class="ribbon">
+        <div class="rib rib-total">';
+        
+		echo '<h3>'.get_lang('YourTotalScore').": ";
         $my_total_score_temp = $totalScore; 
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }          
         echo show_score($my_total_score_temp, $totalWeighting, false);	        
-		echo '</div>';
+		echo '</h3>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
 	}
 }
+
+echo $exercise_content;
 
 if (is_array($arrid) && is_array($arrmarks)) {
 	$strids = implode(",",$arrid);
@@ -640,7 +662,7 @@ if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 }
 
 //Came from lpstats in a lp
-if ($origin =='student_progress') {?>
+if ($origin =='student_progress') { ?>
 	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back');?></button>
 <?php
 } else if($origin=='myprogress') {

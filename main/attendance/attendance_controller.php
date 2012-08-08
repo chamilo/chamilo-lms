@@ -76,7 +76,8 @@
 				if (isset($_SESSION['gradebook'])) {
 					$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 				}
-    			header('location:index.php?action=attendance_sheet_list&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
+    			//header('location:index.php?action=attendance_sheet_list&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
+                header('location:index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
     			exit;    			    							     							 
 			} else {
 				$data['error'] = true;
@@ -223,7 +224,8 @@
 		$data['attendance_id'] = $attendance_id;		
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 		
-		$filter_type = 'all';
+		$filter_type = 'today';
+        
 		if (!empty($_REQUEST['filter'])) {
 			$filter_type = $_REQUEST['filter'];
 		}		

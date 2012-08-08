@@ -47,39 +47,38 @@ if ($error_checkdate) {
 }
 
 if (isset($action) && $action == 'calendar_add') {
-	// calendar add form
-	
-	echo '<h4>'.get_lang('AddADateTime').'</h4>';
-		$form = new FormValidator('attendance_calendar_add','POST','index.php?action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'&'.api_get_cidreq(),'');
-		$form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_add'), 5);
-		$defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
+	// calendar add form		
+    $form = new FormValidator('attendance_calendar_add','POST','index.php?action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'&'.api_get_cidreq(),'');
+    $form->addElement('header', get_lang('AddADateTime'));
+    $form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_add'), 5);
+    $defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
 
-        $form->addElement('checkbox', 'repeat', null, get_lang('RepeatDate'),  array('onclick' => "javascript: if(this.checked){document.getElementById('repeat-date-attendance').style.display='block';}else{document.getElementById('repeat-date-attendance').style.display='none';}",
-        ));
-        
-        $defaults['repeat'] = $repeat;
-		
-        if ($repeat) {
-            $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
-        } else {
-            $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
-        }        
-        $a_repeat_type = array('daily'=>get_lang('RepeatDaily'), 'weekly'=>get_lang('RepeatWeekly'), 'monthlyByDate'=>get_lang('RepeatMonthlyByDate'));        
-        $form->addElement('select', 'repeat_type', get_lang('RepeatType') , $a_repeat_type);
-        $form->addElement('datepickerdate', 'end_date_time', get_lang('RepeatEnd'), array('form_name'=>'attendance_calendar_add'));
-        $defaults['end_date_time'] = date('Y-m-d 12:00:00');        
-        $form->addElement('html', '</div>');
-        
-        $defaults['repeat_type'] = 'weekly';
-		
-		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
-		$form->setDefaults($defaults);
-		$form->display();	
+    $form->addElement('checkbox', 'repeat', null, get_lang('RepeatDate'),  array('onclick' => "javascript: if(this.checked){document.getElementById('repeat-date-attendance').style.display='block';}else{document.getElementById('repeat-date-attendance').style.display='none';}",
+    ));
+
+    $defaults['repeat'] = $repeat;
+
+    if ($repeat) {
+        $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
+    } else {
+        $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
+    }        
+    $a_repeat_type = array('daily'=>get_lang('RepeatDaily'), 'weekly'=>get_lang('RepeatWeekly'), 'monthlyByDate'=>get_lang('RepeatMonthlyByDate'));        
+    $form->addElement('select', 'repeat_type', get_lang('RepeatType') , $a_repeat_type);
+    $form->addElement('datepickerdate', 'end_date_time', get_lang('RepeatEnd'), array('form_name'=>'attendance_calendar_add'));
+    $defaults['end_date_time'] = date('Y-m-d 12:00:00');        
+    $form->addElement('html', '</div>');
+
+    $defaults['repeat_type'] = 'weekly';
+
+    $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+    $form->setDefaults($defaults);
+    $form->display();	
 } else {
 	// calendar list
-	echo '<div class="attendance-calendar-list">';
-	echo '<h4>'.get_lang('CalendarList').'</h4>';
-	if (!empty($attendance_calendar)) {	
+    echo Display::page_subheader(get_lang('CalendarList'));
+	echo '<div class="attendance-calendar-list">';	
+	if (!empty($attendance_calendar)) {
 		foreach ($attendance_calendar as $calendar) {	
 			echo '<div class="attendance-calendar-row">';				
 				if ((isset($action) && $action == 'calendar_edit') && (isset($calendar_id) && $calendar_id == $calendar['id'])) {
@@ -105,7 +104,7 @@ if (isset($action) && $action == 'calendar_add') {
 			echo '</div>';
 		}
 	} else {
-		echo '<div style="padding:5px;">'.get_lang('ThereAreNoRegisteredDatetimeYet').'</div>';
+		echo Display::return_message(get_lang('ThereAreNoRegisteredDatetimeYet'), 'warning');
 	}
 	echo '</div>';			
 }

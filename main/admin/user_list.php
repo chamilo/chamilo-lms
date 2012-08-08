@@ -882,7 +882,7 @@ if ($table->get_total_number_of_items() ==0) {
         $user_list = UserManager::get_user_list($conditions, array(), false, ' OR ');        
         if (!empty($user_list)) {
             
-            $extra_search_options = '<h3>'.get_lang('UsersFoundInOtherPortals').'</h3>';
+            $extra_search_options = Display::page_subheader(get_lang('UsersFoundInOtherPortals'));
             
             $table = new HTML_Table(array('class' => 'data_table'));
             $column = 0;
@@ -912,7 +912,7 @@ if ($table->get_total_number_of_items() ==0) {
                     $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] =  $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];
-                    $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url);
+                    $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
                     	
                     foreach ($row_table as $cell) {
                         $table->setCellContents($row, $column, $cell);

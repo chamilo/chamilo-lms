@@ -1,0 +1,8 @@
+@import url('bootstrap.css');
+
+/* Adding default style for the chamilo_X themes */
+@import url('../base_chamilo.css');
+
+footer a:link, footer a:visited {
+    color: #4183C4;
+}

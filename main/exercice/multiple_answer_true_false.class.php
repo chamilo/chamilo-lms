@@ -58,8 +58,8 @@ class MultipleAnswerTrueFalse extends Question {
         }
         
         // 3 scores
-        $form->addElement('text', 'option[1]',get_lang('True'),      array('size'=>'5','value'=>'1'));
-        $form->addElement('text', 'option[2]',get_lang('False'),     array('size'=>'5','value'=>'-0.5'));        
+        $form->addElement('text', 'option[1]',get_lang('Correct'),   array('size'=>'5','value'=>'1'));
+        $form->addElement('text', 'option[2]',get_lang('Wrong'),     array('size'=>'5','value'=>'-0.5'));        
         $form->addElement('text', 'option[3]',get_lang('DoubtScore'),array('size'=>'5','value'=>'0'));  
                 
         $form -> addElement('hidden', 'options_count', 3);

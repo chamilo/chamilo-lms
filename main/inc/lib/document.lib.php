@@ -2343,11 +2343,9 @@ class DocumentManager {
         
         $group_condition = null;
         
-        if (isset($group_id)) {
-            if (!empty($group_id)) {
-                $group_id = intval($group_id);
-                $group_condition = " AND props.to_group_id='".$group_id."' ";
-            }
+        if (isset($group_id)) {            
+            $group_id = intval($group_id);
+            $group_condition = " AND props.to_group_id='".$group_id."' ";            
         }
         
         $session_condition = null;
@@ -2365,8 +2363,7 @@ class DocumentManager {
                         props.visibility <> 2
                         $group_condition         
                         $session_condition
-                ";
-        
+                ";        
         $result = Database::query($sql);
 
         if ($result && Database::num_rows($result) != 0) {

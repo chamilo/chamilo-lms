@@ -599,13 +599,15 @@ switch ($action) {
 				$id = Database::insert_id();				
 				if ($id) {				
 					api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
+                    /*
+                     * See task #5145
                     if($uploadvisibledisabled){
                         $sql = "UPDATE $work_table SET accepted = 0 WHERE c_id = $course_id AND id = $id";
                         Database::query($sql);
                         api_item_property_update($course_info, 'work', $id, 'invisible', api_get_user_id());
                     }else{
                         //api_item_property_update($course_info, 'work', $id, 'visible', api_get_user_id());
-                    }
+                    }*/
 					$succeed = true;
 				}														
 			} elseif ($newWorkUrl) {

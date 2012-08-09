@@ -3117,21 +3117,20 @@ function handle_mail_cue($content, $id) {
  */
 function send_mail($user_info = array(), $thread_information = array()) {
     global $_course;
-    global $_user;
-
-    $email_subject = get_lang('NewForumPost').' - '.$_course['official_code'];
-
+    $user_id = api_get_user_id();
+    $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
     if (isset($thread_information) && is_array($thread_information)) {
         $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;forum='.$thread_information['forum_id'].'&amp;thread='.$thread_information['thread_id'];
     }
-    $email_body = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
-    $email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br />\n";
+    $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";    
     $email_body .= get_lang('NewForumPost')."\n";
-    $email_body .= get_lang('YouWantedToStayInformed')."<br /><br />\n";
-    $email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
+    $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
+    $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
+    $email_body .= get_lang('ThreadCanBeFoundHere')." : <br /><a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
-    if ($user_info['user_id']<>$_user['user_id']) {
-        @api_mail_html(api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $user_info['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+    if ($user_info['user_id'] <> $user_id) {
+        MessageManager::send_message($user_info['user_id'], $subject, $email_body, null, null, null, null, null, null, $user_id);
+        //@api_mail_html(api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $user_info['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
     }
 }
 
@@ -3906,7 +3905,7 @@ function set_notification($content,$id, $add_only = false) {
  */
 function get_notifications($content,$id) {
     // Database table definition
-    $table_users		= Database :: get_main_table(TABLE_MAIN_USER);
+    $table_users		= Database::get_main_table(TABLE_MAIN_USER);
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 
     $course_id = api_get_course_int_id();
@@ -3951,10 +3950,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
 
     // The content of the mail
     $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;forum='.$forum_id.'&amp;thread='.$thread_id;
-    $my_link = isset($link) ? $link : '';
-    $my_message = isset($message) ? $message : '';
-    $my_message .= $my_link;
-
+    
     // Users who subscribed to the forum
     if ($forum_id != 0) {
         $users_to_be_notified_by_forum = get_notifications('forum', $forum_id);
@@ -3964,7 +3960,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
 
     $current_thread = get_thread_information($thread_id);
     $current_forum  = get_forum_information($current_thread['forum_id']);
-    $email_subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
+    $subject  = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
 
 
     // User who subscribed to the thread
@@ -3974,19 +3970,25 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0) {
 
     // Merging the two
     $users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
-
+    $sender_id = api_get_user_id();
+    
     if (is_array($users_to_be_notified)) {
-        foreach ($users_to_be_notified as $key => $value) {
+        foreach ($users_to_be_notified as $value) {
             if ($value['email'] != $_user['email']) {
-                $email_body = api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
-                $email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br />\n";
-                $email_body .= get_lang('NewForumPost').": ";
+                
+                $user_info = api_get_user_info($value['user_id']);
+                
+                $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
+                
+                $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
+                $email_body .= get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."]  <br />\n";
 
-                $email_body .= $current_forum['forum_title'].' - '.$current_thread['thread_title']."<br />\n";
-
-                $email_body .= get_lang('YouWantedToStayInformed')."<br /><br />\n";
-                $email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
-                @api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+                $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
+                $email_body .= get_lang('ThreadCanBeFoundHere').': <br /> <a href="'.$thread_link.'">'.$thread_link."</a>\n";
+                
+                MessageManager::send_message($value['user_id'], $subject, $email_body, null, null, null, null, null, null, $sender_id);
+                
+                //@api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
             }
         }
     }

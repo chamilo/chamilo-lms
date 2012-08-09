@@ -611,28 +611,32 @@ foreach ($questionList as $questionId) {
 } // end of large foreach on questions
 
 
+$total_score_text = null;
+
 //Total score
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	if ($show_results || $show_only_total_score ) {
         
-        echo '<div class="question_row">
+        $total_score_text .= '<div class="question_row">
         <div class="ribbon">
         <div class="rib rib-total">';
         
-		echo '<h3>'.get_lang('YourTotalScore').": ";
+		$total_score_text .= '<h3>'.get_lang('YourTotalScore').": ";
         $my_total_score_temp = $totalScore; 
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }          
-        echo show_score($my_total_score_temp, $totalWeighting, false);	        
-		echo '</h3>';
-        echo '</div>';
-        echo '</div>';
-        echo '</div>';
+        $total_score_text .= show_score($my_total_score_temp, $totalWeighting, false);	        
+		$total_score_text .= '</h3>';
+        $total_score_text .= '</div>';
+        $total_score_text .= '</div>';
+        $total_score_text .= '</div>';
 	}
 }
 
+echo $total_score_text;
 echo $exercise_content;
+echo $total_score_text;
 
 if (is_array($arrid) && is_array($arrmarks)) {
 	$strids = implode(",",$arrid);

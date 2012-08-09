@@ -55,7 +55,7 @@ class survey_manager {
 	 *
 	 * @todo this is the same function as in create_new_survey.php
 	 */
-	function get_survey($survey_id, $shared = 0, $course_code = '') {
+	static function get_survey($survey_id, $shared = 0, $course_code = '') {
 		global $_course;
 
 		// Table definition
@@ -115,7 +115,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function store_survey($values) {
+	static function store_survey($values) {
 		global $_user;
 
 		// Table defnitions
@@ -253,8 +253,6 @@ class survey_manager {
 				survey_manager::copy_survey($values['parent_id'],$survey_id);
 			}
 
-			//$return['message'] = get_lang('SurveyCreatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
-			//$return['message'] .= '<a href="survey.php?survey_id='.$survey_id.'">'.get_lang('ClickHere').'</a>';
 			$return['message'] = 'SurveyCreatedSuccesfully';
 			$return['type'] = 'confirmation';
 			$return['id'] = $survey_id;
@@ -311,21 +309,17 @@ class survey_manager {
 							template 		= '".Database::escape_string('template')."',
 							intro			= '".Database::escape_string($values['survey_introduction'])."',
 							surveythanks	= '".Database::escape_string($values['survey_thanks'])."',
-							anonymous	= '".Database::escape_string($values['anonymous'])."'".$additionalsets."
-					WHERE c_id = '.$course_id.' AND survey_id = '".Database::escape_string($values['survey_id'])."'";
+							anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets."
+					WHERE c_id = $course_id AND survey_id = '".Database::escape_string($values['survey_id'])."'";
 			$result = Database::query($sql);
 
 			// Update into item_property (update)
-			api_item_property_update(api_get_course_info(), TOOL_SURVEY, Database::escape_string($values['survey_id']), 'SurveyUpdated', api_get_user_id());
+			api_item_property_update(api_get_course_info(), TOOL_SURVEY, $values['survey_id'], 'SurveyUpdated', api_get_user_id());
 
-			//$return['message'] = get_lang('SurveyUpdatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
-			//$return['message'] .= '<a href="survey.php?survey_id='.$values['survey_id'].'">'.get_lang('Here').'</a>';
-			//$return['message'] .= get_lang('OrReturnToSurveyOverview').'<a href="survey_list.php">'.get_lang('Here').'</a>';
 			$return['message'] = 'SurveyUpdatedSuccesfully';
 			$return['type'] = 'confirmation';
 			$return['id']	= $values['survey_id'];
 		}
-
 		return $return;
 	}
 
@@ -4077,7 +4071,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function display_survey_list() {
+	static function display_survey_list() {
 		$parameters = array();
 		$parameters['cidReq'] = api_get_course_id();
 		if ($_GET['do_search']) {
@@ -4145,7 +4139,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function modify_filter($survey_id) {
+	static function modify_filter($survey_id) {
 
 		$survey_id = Security::remove_XSS($survey_id);
 		$return = '';
@@ -4166,7 +4160,7 @@ class SurveyUtil {
 		return $return;
 	}
 
-	function modify_filter_for_coach($survey_id) {
+	static function modify_filter_for_coach($survey_id) {
 
 		$survey_id = Security::remove_XSS($survey_id);
 		//$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -4185,7 +4179,7 @@ class SurveyUtil {
 	 * @param	integer	Whether anonymous or not
 	 * @return	string	"Yes" or "No" in the current language
 	 */
-	function anonymous_filter($anonymous) {
+	static function anonymous_filter($anonymous) {
 		if ($anonymous == 1) {
 			return get_lang('Yes');
 		} else {
@@ -4202,7 +4196,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function survey_search_restriction() {
+	static function survey_search_restriction() {
 		if (isset($_GET['do_search'])) {
 			if ($_GET['keyword_title'] != '') {
 				$search_term[] = 'title like "%" \''.Database::escape_string($_GET['keyword_title']).'\' "%"';
@@ -4229,7 +4223,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function get_number_of_surveys() {
+	static function get_number_of_surveys() {
 		global $table_survey;
         $course_id = api_get_course_int_id();
         
@@ -4245,7 +4239,7 @@ class SurveyUtil {
 		return $obj->total_number_of_items;
 	}
 
-	function get_number_of_surveys_for_coach() {
+	static function get_number_of_surveys_for_coach() {
 		/*global $table_survey;
 		$search_restriction = SurveyUtil::survey_search_restriction();
 		if ($search_restriction) {
@@ -4276,7 +4270,7 @@ class SurveyUtil {
 	 * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals 
 	 * @version January 2007
 	 */
-	function get_survey_data($from, $number_of_items, $column, $direction) {
+	static function get_survey_data($from, $number_of_items, $column, $direction) {
 		global $table_survey, $table_user, $table_survey_question;
 		global $_user;
 
@@ -4344,7 +4338,7 @@ class SurveyUtil {
 		return $surveys;
 	}
 
-	function get_survey_data_for_coach($from, $number_of_items, $column, $direction) {
+	static function get_survey_data_for_coach($from, $number_of_items, $column, $direction) {
 		require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 		$survey_tree = new SurveyTree();
 		$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
@@ -4497,7 +4491,7 @@ class SurveyUtil {
 	 * @return array[value_name][name]
 	 * 		   array[value_name][visibilty]
 	 */
-	function make_field_list() {
+	static function make_field_list() {
 
 		//	LAST NAME and FIRST NAME
 		$field_list_array = array();
@@ -4682,7 +4676,7 @@ class SurveyUtil {
 	 * @param int $user_id_answer - User in survey answer table (user id or anonymus)
 	 * @return boolean
 	 */
-	function show_link_available($user_id, $survey_code, $user_answer) {
+	static function show_link_available($user_id, $survey_code, $user_answer) {
 		$table_survey             = Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation  = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		$table_survey_answer      = Database :: get_course_table(TABLE_SURVEY_ANSWER);

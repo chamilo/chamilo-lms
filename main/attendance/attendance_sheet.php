@@ -65,7 +65,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $default_filter = $_REQUEST['filter'];
         }       
     } else {
-        $default_filter = 'all';      
+        $default_filter = 'today';      
     }   
     $form->setDefaults(array('filter'=>$default_filter));
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
@@ -170,18 +170,15 @@ if (api_is_allowed_to_edit(null, true)) {
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $data['username']), ENT_QUOTES);
                 ?>
                     <tr class="<?php echo $class ?>">
-                    <td><center><?php echo $i ?></center></td>
-                    <td><?php echo $data['photo'] ?></td>
-                    <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
-                    <td><?php echo $data['firstname'] ?></td>
-                    <td>
-                        <div style="height:28px">
-                        <center>
-                        <div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar'])?$data['result_color_bar']:'none') ?>">
-                        <?php echo $data['attendance_result'] ?></div>
-                        </center>
-                        </div>
-                    </td>
+                        <td><center><?php echo $i ?></center></td>
+                        <td><?php echo $data['photo'] ?></td>
+                        <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
+                        <td><?php echo $data['firstname'] ?></td>
+                        <td>
+                            <div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar'])?$data['result_color_bar']:'none') ?>">
+                                <?php echo $data['attendance_result'] ?>
+                            </div>                        
+                        </td>
                     </tr>
                 <?php
                     $i++;
@@ -201,7 +198,8 @@ if (api_is_allowed_to_edit(null, true)) {
                             $time = $calendar['time'];
                             $datetime = $date.'<br />'.$time;
                                                         
-                            $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));                                                    
+                            $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
+                            
                             if (!empty($calendar['done_attendance'])){
                                 $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
                             }
@@ -213,8 +211,8 @@ if (api_is_allowed_to_edit(null, true)) {
                                 $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
                             }                                   
                                                 
-                            $result .= '<th height="80px" width="800px">';
-                            $result .= '<center><div style="font-size:10px;width:80px;">'.$datetime.'&nbsp;';                            
+                            $result .= '<th width="800px">';
+                            $result .= '<center><div style="font-size:10px;width:100px;">'.$datetime.'&nbsp;';                            
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
                             
                             if ($is_locked_attendance == false) {
@@ -239,9 +237,12 @@ if (api_is_allowed_to_edit(null, true)) {
                 <?php 
                 $i = 0;
                 foreach ($users_in_course as $user) {
-                        $class = '';
-                        if ($i%2==0) {$class = 'row_even';}
-                        else {$class = 'row_odd';}
+                    $class = '';
+                    if ($i%2==0) {
+                        $class = 'row_even';                        
+                    } else {
+                        $class = 'row_odd';
+                    }
                 ?>          
                     <tr class="<?php echo $class ?>">
                     <?php 
@@ -266,6 +267,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                 }
                                 $disabled = 'disabled';
                                 $style_td = '';
+                                
                                 if ($next_attendance_calendar_id == $calendar['id']) {
                                 	if ($i%2==0)
                                     	$style_td = 'background-color:#eee;';
@@ -281,7 +283,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                         <input type="checkbox" name="check_presence[<?php echo $calendar['id'] ?>][]" value="<?php echo $user['user_id'] ?>"  <?php echo $disabled.' '.$checked ?> /><span class="<?php echo 'anchor_'.$calendar['id'] ?>"></span>
                                     <?php } else { 
                                                 echo $presence?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence'));
-                                        } ?>
+                                           } ?>
                                 </center>
                                 </div>
                             </td>

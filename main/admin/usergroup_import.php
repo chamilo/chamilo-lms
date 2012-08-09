@@ -111,10 +111,10 @@ $form->display();
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
-<blockquote>
-  <b>name;description</b>  <br />
-  User group 1;My user group description
-</blockquote>
+<pre>
+<b>name;description</b>
+"User group 1";"Description"
+</pre>
 <?php
 
 // Displaying the footer.

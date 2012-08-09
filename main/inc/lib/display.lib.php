@@ -699,7 +699,7 @@ class Display {
      * Displays an HTML select tag
      *
      */
-    public function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true, $blank_item_text = null) {
+    public static function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true, $blank_item_text = null) {
         $html = '';
         $extra = '';
         $default_id =  'id="'.$name.'" ';

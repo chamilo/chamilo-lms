@@ -180,7 +180,8 @@ $purification_option_for_usernames = false;
 set_time_limit(0);
 
 $form = new FormValidator('class_user_import');
-$form->addElement('file', 'import_file', get_lang('File'));
+$form->addElement('header', $tool_name);
+$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 //$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 //$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
@@ -194,7 +195,7 @@ if ($form->validate()) {
 }
 
 Display :: display_header($tool_name);
-echo Display::page_header($tool_name);
+
 if (isset($return) && $return) {
     echo $return;
 }

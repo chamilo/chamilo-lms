@@ -2331,19 +2331,42 @@ class DocumentManager {
      * @param  int $to_group_id (to calculate group document space)
      * @return int total size
      */
-    static function documents_total_space($to_group_id = '0') {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLE_DOCUMENT 	= Database::get_course_table(TABLE_DOCUMENT);
-		$course_id 			= api_get_course_int_id();
-
+    static function documents_total_space($course_id = null, $group_id = null, $session_id = null) {
+        $TABLE_ITEMPROPERTY     = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_DOCUMENT         = Database::get_course_table(TABLE_DOCUMENT);
+        
+        if (isset($course_id)) {            
+            $course_id = intval($course_id);
+        } else {
+            $course_id = api_get_course_int_id();
+        }
+        
+        $group_condition = null;
+        
+        if (isset($group_id)) {
+            if (!empty($group_id)) {
+                $group_id = intval($group_id);
+                $group_condition = " AND props.to_group_id='".$group_id."' ";
+            }
+        }
+        
+        $session_condition = null;
+        
+        if (isset($session_id)) {            
+            $session_id = intval($session_id);
+            $session_condition = " AND props.id_session='".$session_id."' ";            
+        }        
+        
         $sql = "SELECT SUM(size) FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
 		        WHERE 	props.c_id 	= $course_id AND
 		        		docs.c_id 	= $course_id AND
 		        		docs.id 	= props.ref AND
 		        		props.tool 	= '".TOOL_DOCUMENT."' AND
-		        		props.to_group_id='".$to_group_id."' AND
-        				props.visibility <> 2";
-
+                        props.visibility <> 2
+                        $group_condition         
+                        $session_condition
+                ";
+        
         $result = Database::query($sql);
 
         if ($result && Database::num_rows($result) != 0) {
@@ -2365,9 +2388,7 @@ class DocumentManager {
         $message = get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
         $message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';
 
-        $percentage = $already_consumed_space / $course_quota * 100;
-
-        $percentage = round($percentage, 1);
+        $percentage = round( ($already_consumed_space / $course_quota * 100), 1);
 
         $other_percentage = $percentage < 100 ? 100 - $percentage : 0;
 
@@ -2450,7 +2471,7 @@ class DocumentManager {
      */
     
     static function generate_jplayer_jquery($params = array()) {
-        $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';        
+        $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';        
         
         $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({                                
                             ready: function() {                    
@@ -2875,7 +2896,7 @@ class DocumentManager {
     	return $return;
     }
 
-    public function check_visibility_tree($doc_id, $course_code, $session_id, $user_id) {
+    public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id) {
     	$document_data = self::get_document_data_by_id($doc_id, $course_code);
 
         if (!empty($document_data)) {

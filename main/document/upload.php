@@ -227,7 +227,7 @@ $action = Uri::here($params, false);
 $form = new FormValidator('upload', 'POST', $action, '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
-$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).'M';
+$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space()/1000000)).'M';
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
 

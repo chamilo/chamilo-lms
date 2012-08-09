@@ -73,6 +73,7 @@ $course_dir = $course_info['path'] . '/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/document';
+
 $dbl_click_id = 0; // Used for avoiding double-click
 
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
@@ -96,9 +97,7 @@ if (api_get_session_id() != 0) {
 
 
 //Setting group variables 
-if (api_get_group_id()) {
-    // Needed for group related stuff
-    require_once $lib_path . 'groupmanager.lib.php';
+if (api_get_group_id()) {        
     // Get group info
     $group_properties = GroupManager::get_group_properties(api_get_group_id());
     $noPHP_SELF = true;
@@ -143,7 +142,6 @@ if (api_get_group_id()) {
 //Actions
 
 $document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $message = '';
 
@@ -355,8 +353,7 @@ if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] =
-    "<script type=\"text/javascript\">
+$htmlHeadXtra[] ="<script type=\"text/javascript\">
 function confirmation (name) {
     if (confirm(\" " . get_lang("AreYouSureToDelete") . " \"+ name + \" ?\"))
         {return true;}
@@ -908,6 +905,101 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
         <?php Display::display_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM); ?></a>
     <?php
 }
+
+
+$column_show = array();
+
+if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
+
+    // TODO:check enable more options for shared folders
+    /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
+
+    // Create new document
+    if (!$is_certificate_mode) {
+        ?>
+        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+            <?php Display::display_icon('new_document.png', get_lang('CreateDoc'), '', ICON_SIZE_MEDIUM); ?></a>
+        <?php
+        // Create new draw
+        if (api_get_setting('enabled_support_svg') == 'true') {
+            if (api_browser_support('svg')) {
+                ?>
+                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+                    <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>&nbsp;
+                <?php
+            } else {
+                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'), '', ICON_SIZE_MEDIUM);
+            }
+        }
+
+        // Create new paint
+        if (api_get_setting('enabled_support_pixlr') == 'true') {
+            ?>
+            <a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+                <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM); ?></a>
+            <?php
+        }
+
+		
+		// Record an image clip from my webcam
+		if (api_get_setting('enable_webcam_clip') == 'true') {
+		?>
+			<a href="webcam_clip.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
+		   	<?php Display::display_icon('webcam.png', get_lang('WebCamClip'),'',ICON_SIZE_MEDIUM); ?></a>
+		<?php
+		}	
+		
+		// Record audio (nanogong)
+        if (api_get_setting('enable_nanogong') == 'true') {
+            ?>
+            <a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+                <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
+            <?php
+        }
+
+		// Record  audio (wami record)
+        if (api_get_setting('enable_wami_record') == 'true') {
+            ?>
+            <a href="record_audio_wami.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+                <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
+            <?php
+        }
+
+        // Create new audio from text
+        if (api_get_setting('enabled_text2audio') == 'true') {
+            $dt2a = 'google';
+            $req_dt2a = '&amp;dt2a=' . $dt2a;
+            ?>
+            <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id . $req_gid . $req_dt2a; ?>">
+                <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM); ?></a>
+            <?php
+        }
+    }
+
+    // Create new certificate
+    if ($is_certificate_mode) {
+        ?>
+        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
+            <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM); ?></a>
+        <?php
+    }
+    // File upload link
+    if ($is_certificate_mode) {
+        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
+        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM) . '</a>';
+    } else {
+        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
+        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM) . '</a>';
+    }
+    // Create directory
+    if (!$is_certificate_mode) {
+        ?>
+        <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&createdir=1">
+            <?php Display::display_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM); ?></a>
+        <?php
+    }
+}
+
 $table_footer = '';
 $total_size = 0;
 
@@ -1025,99 +1117,6 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     $table_footer = get_lang('NoDocsInFolder');
 }
 
-$column_show = array();
-
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
-
-    // TODO:check enable more options for shared folders
-    /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
-
-    // Create new document
-    if (!$is_certificate_mode) {
-        ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
-            <?php Display::display_icon('new_document.png', get_lang('CreateDoc'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
-        // Create new draw
-        if (api_get_setting('enabled_support_svg') == 'true') {
-            if (api_browser_support('svg')) {
-                ?>
-                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
-                    <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>&nbsp;
-                <?php
-            } else {
-                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'), '', ICON_SIZE_MEDIUM);
-            }
-        }
-
-        // Create new paint
-        if (api_get_setting('enabled_support_pixlr') == 'true') {
-            ?>
-            <a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
-                <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
-        }
-
-		
-		// Record an image clip from my webcam
-		if (api_get_setting('enable_webcam_clip') == 'true') {
-		?>
-			<a href="webcam_clip.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
-		   	<?php Display::display_icon('webcam.png', get_lang('WebCamClip'),'',ICON_SIZE_MEDIUM); ?></a>
-		<?php
-		}	
-		
-		// Record audio (nanogong)
-        if (api_get_setting('enable_nanogong') == 'true') {
-            ?>
-            <a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
-                <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
-        }
-
-		// Record  audio (wami record)
-        if (api_get_setting('enable_wami_record') == 'true') {
-            ?>
-            <a href="record_audio_wami.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
-                <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
-        }
-
-        // Create new audio from text
-        if (api_get_setting('enabled_text2audio') == 'true') {
-            $dt2a = 'google';
-            $req_dt2a = '&amp;dt2a=' . $dt2a;
-            ?>
-            <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id . $req_gid . $req_dt2a; ?>">
-                <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
-        }
-    }
-
-    // Create new certificate
-    if ($is_certificate_mode) {
-        ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
-            <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
-    }
-    // File upload link
-    if ($is_certificate_mode) {
-        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
-        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM) . '</a>';
-    } else {
-        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
-        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM) . '</a>';
-    }
-    // Create directory
-    if (!$is_certificate_mode) {
-        ?>
-        <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&createdir=1">
-            <?php Display::display_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
-    }
-}
-
 if (!is_null($docs_and_folders)) {
 
     // Show download zipped folder icon
@@ -1136,6 +1135,9 @@ require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])) {
     echo '<a href="slideshow.php?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpathurl . '">' . Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM) . '</a>';
 }
+
+echo '<a href="document_quota.php?' . api_get_cidreq() . '">' . Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM) . '</a>';
+
 echo '</div>'; //end actions
 
 
@@ -1230,16 +1232,15 @@ if (count($docs_and_folders) > 1) {
         $course_quota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        $already_consumed_space = DocumentManager::documents_total_space($_course);
-
+        $already_consumed_space_course = DocumentManager::documents_total_space(api_get_course_int_id());
+        
         // Displaying the quota        
-        DocumentManager::display_simple_quota($course_quota, $already_consumed_space);
+        DocumentManager::display_simple_quota($course_quota, $already_consumed_space_course);        
     }
 }
 if (!empty($table_footer)) {
     Display::display_warning_message($table_footer);
 }
-
 
 // Footer
 Display::display_footer();

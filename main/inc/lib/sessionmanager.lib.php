@@ -1785,8 +1785,8 @@ class SessionManager {
             }
         }
     }
-    
-    function get_session_by_course($course_code) {
+        
+    static function get_session_by_course($course_code) {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $course_code = Database::escape_string($course_code);

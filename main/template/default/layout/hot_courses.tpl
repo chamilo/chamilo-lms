@@ -27,10 +27,12 @@ $(document).ready( function() {
             <div class="span9">
                 {% if _u.is_admin %}
                 <span class="pull-right">
-                    <a href="{{_p.web_main}}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"><img src="{{_p.web_img}}icons/32/visible.png" alt="{{ "Hide" | get_lang}}" title="{{ "Hide" | get_lang}}" /></a>
+                    <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
+                        <img src="{{ "visible.png"|icon(32) }}">
+                    </a>
                 </span>
                 {% endif %}
-                {{"HottestCourses"|display_page_header}}
+                {{ "HottestCourses"|display_page_header }}
             </div>
             {% for hot_course in hot_courses %}
                 
@@ -40,11 +42,9 @@ $(document).ready( function() {
                         <div class="row">
                             <div class="span2">
                                 <div class="thumbnail">
-                                    <img src="{{ hot_course.extra_info.course_image }}" />
-                                    {# html_image file=$hot_course.extra_info.course_image #}
+                                    <img src="{{ hot_course.extra_info.course_image }}" />                                    
                                 </div>
                             </div>
-
                             <div class="span6">
                                 <div class="categories-course-description">
                                     <h3>{{ hot_course.extra_info.title}}</h3>

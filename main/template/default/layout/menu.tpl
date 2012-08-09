@@ -20,7 +20,6 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>
                             {{ _u.complete_name }}
-
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
@@ -31,8 +30,8 @@
                         </ul>
 
                     <li>
-                        <a class="logout" title="{{ "Logout" | get_lang }}" href="{{ logout_link }}" >
-                            <img src="{{ "exit.png" | icon(22) }}">
+                        <a class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
+                            <img src="{{ "exit.png"|icon(22) }}">                            
                         </a>
                     </li>            
                 </ul>

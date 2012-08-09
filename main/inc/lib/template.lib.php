@@ -139,7 +139,7 @@ class Template {
     }    
     
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
-        return Display:: return_icon($image, '', array(), $size, $show_text = false, $return_only_path = true);
+        return Display:: return_icon($image, '', array(), $size, false, true);
     }
 
     public static function format_date($timestamp, $format = null) {

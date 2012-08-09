@@ -23,9 +23,9 @@
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{'Tracking'|get_lang }}<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ _p.web_main }}mySpace/">{{ "CoursesReporting" | get_lang }}</a></li>
+                                    <li><a href="{{ _p.web_main }}mySpace/">{{ "CoursesReporting"|get_lang }}</a></li>
                                     <li><a href="{{ _p.web_main }}mySpace/index.php?view=admin">{{ "AdminReports"|get_lang }}</a></li>
-                                    <li><a href="{{ _p.web_main }}tracking/exams.php">{{ "ExamsReporting" | get_lang }}</a></li>
+                                    <li><a href="{{ _p.web_main }}tracking/exams.php">{{ "ExamsReporting"|get_lang }}</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ _p.web_main }}dashboard/">{{ "Dashboard"|get_lang }}</a></li>
                                 </ul>
@@ -47,7 +47,7 @@
                             </li>
 
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Add' | get_lang }}<b class="caret"></b></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Add'|get_lang }}<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ _p.web_main }}admin/user_add.php">{{ "User"|get_lang }}</a></li>
                                     <li><a href="{{ _p.web_main }}admin/course_add.php">{{ "Course"|get_lang }}</a></li>
@@ -77,7 +77,7 @@
                                     <li><a href="{{ _p.web_main }}social/invitations.php">{{ "PendingInvitations"|get_lang }}</a></li> -->
                                 </ul>
                             </li>
-                            <li><a href="{{  _p.web }}index.php?logout=logout">{{ "Logout" | get_lang }}</a></li>
+                            <li><a href="{{  _p.web }}index.php?logout=logout">{{ "Logout"|get_lang }}</a></li>
                         </ul>
                     </div> <!-- /nav collapse -->
                 {% endif %}                 

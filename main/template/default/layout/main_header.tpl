@@ -7,13 +7,13 @@
 {% include "default/layout/head.tpl" %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }}">
-<noscript>{{ "NoJavascript" | get_lang }}</noscript>
+<noscript>{{ "NoJavascript"|get_lang }}</noscript>
 
 {% if show_header == true %}
     <div class="skip">
         <ul>
-            <li><a href="#menu">{{ "WCAGGoMenu" | get_lang }}</a></li>
-            <li><a href="#content" accesskey="2">{{ "WCAGGoContent" | get_lang }}</a></li>
+            <li><a href="#menu">{{ "WCAGGoMenu"|get_lang }}</a></li>
+            <li><a href="#content" accesskey="2">{{ "WCAGGoContent"|get_lang }}</a></li>
         </ul>
     </div>
     <div id="wrapper">

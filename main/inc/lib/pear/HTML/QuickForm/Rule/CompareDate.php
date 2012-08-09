@@ -71,12 +71,9 @@ class HTML_QuickForm_Rule_CompareDate extends HTML_QuickForm_Rule
         }
     }*/
 
-    function validate($values)
+    function validate($values, $options)
     {
         $compareFn = create_function('$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );');
         return $compareFn($values[0], $values[1]);
     }
-
-
 }
-?>

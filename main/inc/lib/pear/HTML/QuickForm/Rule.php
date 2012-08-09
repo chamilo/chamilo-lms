@@ -50,7 +50,7 @@ class HTML_QuickForm_Rule
     * @access public
     * @abstract
     */
-    function validate($value)
+    function validate($value, $options)
     {
         return true;
     }
@@ -79,4 +79,3 @@ class HTML_QuickForm_Rule
         return array('', '');
     }
 }
-?>

@@ -378,11 +378,18 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_survey($survey_id, $shared=false, $course_id = '') {
+	static function delete_survey($survey_id, $shared = false, $course_id = '') {
 		// Database table definitions
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
+        
+        $survey_id = intval($survey_id);
+        
+        if (empty($survey_id)) {
+            return false;
+        }
+        
 		$course_info = api_get_course_info_by_id($course_id);
 		$course_id   = $course_info['real_id']; 
 		
@@ -392,23 +399,22 @@ class survey_manager {
 		if ($shared) {
 			$table_survey = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY);
 			 // Deleting the survey
-            $sql = "DELETE FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
+            $sql = "DELETE FROM $table_survey WHERE survey_id='".$survey_id."'";
             $res = Database::query($sql);
 		} else {
-		    $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
+		    $sql = "DELETE FROM $table_survey WHERE c_id = $course_id AND survey_id='".$survey_id."'";
             $res = Database::query($sql);
 		}
 
 		// Deleting groups of this survey
-		$sql = "DELETE FROM $table_survey_question_group WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
+		$sql = "DELETE FROM $table_survey_question_group WHERE c_id = $course_id AND survey_id='".$survey_id."'";
 		$res = Database::query($sql);
 
 		// Deleting the questions of the survey
 		survey_manager::delete_all_survey_questions($survey_id, $shared);
 
-		// Update into item_property (delete)
-		api_item_property_update($course_info, TOOL_SURVEY, $survey_id, 'delete', api_get_user_id());
-
+		// Update into item_property (delete)        
+		api_item_property_update($course_info, TOOL_SURVEY, $survey_id, 'SurveyDeleted', api_get_user_id());
 		return true;
 	}
 
@@ -534,7 +540,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function get_complete_survey_structure($survey_id, $shared = 0) {
+	static function get_complete_survey_structure($survey_id, $shared = 0) {
 		$structure = survey_manager::get_survey($survey_id, $shared);
 		$structure['questions'] = survey_manager::get_questions($survey_id);
 	}
@@ -549,7 +555,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function icon_question($type) {
+	static function icon_question($type) {
 		// the possible question types
 		$possible_types = array('personality', 'yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
 
@@ -585,7 +591,7 @@ class survey_manager {
 	 *
 	 * @todo one sql call should do the trick
 	 */
-	function get_question($question_id, $shared = false) {
+	static function get_question($question_id, $shared = false) {
 		// Table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -877,7 +883,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function move_survey_question($direction, $survey_question_id, $survey_id) {
+	static function move_survey_question($direction, $survey_question_id, $survey_id) {
 		// Table definition
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		
@@ -924,7 +930,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_all_survey_questions($survey_id, $shared = false) {
+	static function delete_all_survey_questions($survey_id, $shared = false) {
 	    $course_id = api_get_course_int_id();
         
 		// Table definitions
@@ -960,7 +966,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version March 2007
 	 */
-	function delete_survey_question($survey_id, $question_id, $shared = false) {
+	static function delete_survey_question($survey_id, $question_id, $shared = false) {
         $course_id = api_get_course_int_id();
 		// Table definitions
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -987,7 +993,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version March 2007
 	 */
-	function delete_shared_survey_question($survey_id, $question_id) {
+	static function delete_shared_survey_question($survey_id, $question_id) {
 		// Table definitions
 		$table_survey_question 	      = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
 		$table_survey_question_option = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
@@ -1106,7 +1112,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function delete_all_survey_questions_options($survey_id, $shared = false) {
+	static function delete_all_survey_questions_options($survey_id, $shared = false) {
 	    
 		// Table definitions
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -1136,7 +1142,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version March 2007
 	 */
-	function delete_survey_question_option($survey_id, $question_id, $shared = false) {
+	static function delete_survey_question_option($survey_id, $question_id, $shared = false) {
 	    $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
         
@@ -1169,7 +1175,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007,december 2008
 	 */
-	function delete_all_survey_answers($survey_id) {
+	static function delete_all_survey_answers($survey_id) {
         $course_id = api_get_course_int_id();
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$survey_id = intval($survey_id);
@@ -1177,7 +1183,7 @@ class survey_manager {
 		return true;
 	}
 	
-	function is_user_filled_survey($user_id, $survey_id, $course_id) {		
+	static function is_user_filled_survey($user_id, $survey_id, $course_id) {		
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		
 		$user_id	= intval($user_id);
@@ -1311,16 +1317,13 @@ class survey_question {
 		$this->html .= '	</tr>';
 		*/
 
-		//$this->html .= '<table>';
-
-		//$this->html .='	<tr><td colspan="">&nbsp;</td></tr>';
 
 		if ($survey_data['survey_type'] == 1) {
 			$table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 			$sql = 'SELECT id,name FROM '.$table_survey_question_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
 			$rs = Database::query($sql);
 
-			while($row = Database::fetch_array($rs, 'NUM')) {
+			while ($row = Database::fetch_array($rs, 'NUM')) {
 				$glist .= '<option value="'.$row[0].'" >'.$row[1].'</option>';
 			}
 
@@ -1545,8 +1548,7 @@ class ch_yesno extends survey_question {
 		$this->html .= ' />'.get_lang('Vertical').'';
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';
-
-
+        
 		// The options
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<label class="control-label">';
@@ -1555,17 +1557,16 @@ class ch_yesno extends survey_question {
 		$this->html .= '		<div class="formw">';
 		$this->html .= '			<table>';
 		$this->html .= '	<tr>';
-		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
-		//$this->html .= '		<td><input type="text" name="answers[0]" id="answers[0]" value="'.$form_content['answers'][0].'" /></td>';
+		$this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';		
 
 		$this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-		$this->html .= '		<td><input type="image" src="../img/icons/22/down.png"  value="move_down[0]" name="move_down[0]"/></td>';
+		$this->html .= '		<td><input style="width:22px" src="../img/icons/22/down.png"  type="image" class="down" value="move_down[0]" name="move_down[0]"/></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '	<tr>';
 		$this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
 		//$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
 		$this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-		$this->html .= '		<td><input type="image" src="../img/icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
+		$this->html .= '		<td><input style="width:22px" type="image" src="../img/icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
 		$this->html .= '	</tr>';
 		$this->html .= '			</table>';
 		$this->html .= '		</div>';
@@ -1583,42 +1584,31 @@ class ch_yesno extends survey_question {
 	function render_question($form_content, $answers = array()) {
 
 		if (is_array($form_content['options'])) { // Check if data is correct
-			foreach ($form_content['options'] as $key => & $value) {
-				            
-                $this->html .= '<label class="radio">';
-                
+			foreach ($form_content['options'] as $key => & $value) {				            
+                $this->html .= '<label class="radio">';                
                 $value_to_show = $value;
                 
                 if (substr_count($value, '<p>') == 1) {					
                     $value_to_show = substr($value, 3, (strlen($value) - 7));					
-				}
-                
-                $this->html .= '<input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
-                
-                
+				}                
+                $this->html .= '<input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';                                
 				if (is_array($answers)) {
 					if (in_array($key,$answers)) {
 						$this->html .= 'checked="checked"';
 					}
 				}
-                $this->html .= '/>';
-                
-                $this->html .= $value_to_show.'</label>';
-                
+                $this->html .= '/>';                
+                $this->html .= $value_to_show.'</label>';                
                 if ($form_content['display'] == 'vertical') {
 						//$this->html .= '<br />';
-                }                    
-                
-                
+                }
 			}
-		}
-        
+		}        
 		echo '<div class="survey_question_wrapper">';
             echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';		
             echo $this->html;		
 		echo '</div>';
 	}
-
 }
 
 class ch_multiplechoice extends survey_question {
@@ -1667,13 +1657,13 @@ class ch_multiplechoice extends survey_question {
 				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 				$this->html .= '		<td>';
 				if ($key<$total_number_of_answers-1) {
-					$this->html .= '			<input type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+					$this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 				}
 				if ($key>0) {
-					$this->html .= '			<input type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+					$this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 				}
 				if ($total_number_of_answers> 2) {
-					$this->html .= '			<input type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+					$this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 				}
 				$this->html .= ' 		</td>';
 				$this->html .= '	</tr>';
@@ -1767,13 +1757,13 @@ class ch_personality extends survey_question {
 				}
 
 				if ($key < $total_number_of_answers - 1) {
-					$this->html .= '		<input type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+					$this->html .= '		<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 				}
 				if ($key > 0) {
-					$this->html .= '		<input type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+					$this->html .= '		<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 				}
 				if ($total_number_of_answers > 2) {
-					$this->html .= '			<input type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+					$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 				}
 				$this->html .= ' 		</td>';
 				$this->html .= '	</tr>';
@@ -1844,15 +1834,15 @@ class ch_multipleresponse extends survey_question {
 				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 				$this->html .= '		<td>';
 				if ($key<$total_number_of_answers - 1) {
-					$this->html .= '			<input type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+					$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 				}
 
 				if ($key > 0) {
-					$this->html .= '			<input type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+					$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 				}
 
 				if ($total_number_of_answers > 2) {
-					$this->html .= '			<input type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+					$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 				}
 				$this->html .= ' 		</td>';
 				$this->html .= '	</tr>';
@@ -1924,13 +1914,13 @@ class ch_dropdown extends survey_question {
 			$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.stripslashes($form_content['answers'][$key]).'" /></td>';
 			$this->html .= '		<td>';
 			if ($key < $total_number_of_answers - 1) {
-				$this->html .= '			<input type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
 			if ($key > 0) {
-				$this->html .= '			<input type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 			}
 			if ($total_number_of_answers> 2) {
-				$this->html .= '			<input type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 			}
 			$this->html .= ' 		</td>';
 			$this->html .= '	</tr>';
@@ -2121,13 +2111,13 @@ class ch_score extends survey_question {
 			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 			$this->html .= '		<td>';
 			if ($key<$total_number_of_answers - 1) {
-				$this->html .= '			<input type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 			}
 			if ($key > 0) {
-				$this->html .= '			<input type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 			}
 			if ($total_number_of_answers > 2) {
-				$this->html .= '			<input type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+				$this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 			}
 			$this->html .= ' 		</td>';
 			$this->html .= '	</tr>';
@@ -2190,7 +2180,7 @@ class SurveyUtil {
 	 * @param	boolean	Optional. Whether to continue the current process or exit when breaking condition found. Defaults to true (do not break).
 	 * @return	void
 	 */
-	function check_first_last_question($survey_id, $continue = true) {
+	static function check_first_last_question($survey_id, $continue = true) {
 		// Table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -2231,7 +2221,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function remove_answer($user, $survey_id, $question_id) {
+	static function remove_answer($user, $survey_id, $question_id) {
         $course_id = api_get_course_int_id();
 		// table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
@@ -2256,7 +2246,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data) {
+	static function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data) {
 		global $_course, $types;
 
 		// Table definition
@@ -2281,7 +2271,7 @@ class SurveyUtil {
 				'".Database::escape_string($option_id)."',
 				'".Database::escape_string($option_value)."'
 				)";
-		$result = Database::query($sql);
+		Database::query($sql);
 	}
 
 	/**
@@ -2291,7 +2281,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function check_parameters() {
+	static function check_parameters() {
 		$error = false;
 
 		// Getting the survey data
@@ -2354,7 +2344,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function handle_reporting_actions() {
+	static function handle_reporting_actions() {
 		// Getting the number of question
 		$temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
 
@@ -2804,7 +2794,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function display_complete_report() {
+	static function display_complete_report() {
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -3002,7 +2992,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	function display_complete_report_row($possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false) {
+	static function display_complete_report_row($possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false) {
 		global $survey_data;
         $user = Security::remove_XSS($user);		
 		echo '<tr>';
@@ -3072,7 +3062,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report($user_id = 0) {
+	static function export_complete_report($user_id = 0) {
 
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3201,7 +3191,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields = false) {
+	static function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields = false) {
 		global $survey_data;
 		$return = '';
 		if ($survey_data['anonymous'] == 0) {
@@ -3262,7 +3252,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function export_complete_report_xls($filename, $user_id = 0) {
+	static function export_complete_report_xls($filename, $user_id = 0) {
 
 		require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 		$workbook = new Spreadsheet_Excel_Writer();
@@ -3412,7 +3402,7 @@ class SurveyUtil {
 	 * @param	boolean	Whether to display user fields or not
 	 * @return	string	One line of the csv file
 	 */
-	function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields = false) {
+	static function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields = false) {
 
 		$return = array();
 		global $survey_data;
@@ -3478,7 +3468,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function display_comparative_report() {
+	static function display_comparative_report() {
 		// Allowed question types for comparative report
 		$allowed_question_types = array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown', 'percentage', 'score');
 
@@ -3641,7 +3631,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	function get_answers_of_question_by_user($survey_id, $question_id) {
+	static function get_answers_of_question_by_user($survey_id, $question_id) {
 	    $course_id = api_get_course_int_id();
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3675,7 +3665,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0) {
+	static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0) {
 		if ($value_x == 0) {
 			$check_x = $option_x;
 		} else {
@@ -3712,7 +3702,7 @@ class SurveyUtil {
 	 *
 	 * @todo use survey_id parameter instead of $_GET
 	 */
-	function get_survey_invitations_data() {
+	static function get_survey_invitations_data() {
 	    $course_id = api_get_course_int_id();
 		// Database table definition
 		$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -3743,7 +3733,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function get_number_of_survey_invitations() {
+	static function get_number_of_survey_invitations() {
 	    $course_id = api_get_course_int_id();
 	    
 		// Database table definition
@@ -3764,7 +3754,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function save_invite_mail($mailtext, $mail_subject, $reminder = 0) {
+	static function save_invite_mail($mailtext, $mail_subject, $reminder = 0) {
 	    $course_id = api_get_course_int_id();
 		// Database table definition
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -3794,7 +3784,7 @@ class SurveyUtil {
 	 * @version January 2007
 	 *
 	 */
-	function save_invitations($users_array, $invitation_title, $invitation_text, $reminder = 0, $sendmail = 0, $remindUnAnswered = 0) {
+	static function save_invitations($users_array, $invitation_title, $invitation_text, $reminder = 0, $sendmail = 0, $remindUnAnswered = 0) {
 
 		if (!is_array($users_array)) return 0; // Should not happen
 		// Getting the survey information
@@ -3861,7 +3851,7 @@ class SurveyUtil {
 	 * $param	   $invitation_code - the unique invitation code for the URL
 	 * @return	void
 	 */
-	function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text) {
+	static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text) {
 		global $_user, $_course, $_configuration;
 
 		$portal_url = api_get_path(WEB_PATH);
@@ -3919,7 +3909,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function update_count_invited($survey_code) {
+	static function update_count_invited($survey_code) {
 	    $course_id = api_get_course_int_id();
         
 		// Database table definition
@@ -3949,7 +3939,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function get_invited_users($survey_code, $course_code = '') {
+	static function get_invited_users($survey_code, $course_code = '') {
 	    if (!empty($course_code)) {
             $course_info = api_get_course_info($course_code);
             $course_id = $course_info['real_id'];
@@ -3995,7 +3985,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version September 2007
 	 */
-	function get_invitations($survey_code) {
+	static function get_invitations($survey_code) {
 	    $course_id = api_get_course_int_id();    
 		// Database table definition
 		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -4020,7 +4010,7 @@ class SurveyUtil {
 	 * @todo use quickforms
 	 * @todo consider moving this to surveymanager.inc.lib.php
 	 */
-	function display_survey_search_form() {
+	static function display_survey_search_form() {
 
 		echo '<form class="form-horizontal" method="get" action="survey_list.php?search=advanced">';
 		echo '<legend>'.get_lang('SearchASurvey').'</legend>';

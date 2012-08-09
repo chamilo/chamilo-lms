@@ -17,7 +17,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
      */
     function validate($html, $mode = NO_HTML)
     {
-        $allowed_tags = $this->get_allowed_tags ($mode, $fullpage);
+        $allowed_tags = self::get_allowed_tags ($mode, $fullpage);
         $cleaned_html = kses($html, $allowed_tags);
         return $html == $cleaned_html;
     }
@@ -29,7 +29,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
      * @param boolean $fullpage If true, the allowed tags for full-page editing
      * are returned.
      */
-    function get_allowed_tags($mode)
+    static function get_allowed_tags($mode)
     {
         // Include the allowed tags.
         //include(dirname(__FILE__).'/allowed_tags.inc.php');

@@ -20,10 +20,9 @@ class Html_Quickform_Rule_Date extends HTML_QuickForm_Rule
 	 * @param array $date An array with keys F (month), d (day) and Y (year)
 	 * @return boolean True if date is valid
 	 */
-	function validate($date)
+	function validate($date, $options)
 	{
 		$compareDate = create_function('$a', 'return checkdate($a[\'M\'],$a[\'d\'],$a[\'Y\']);');
         return $compareDate($date);
 	}
 }
-?>

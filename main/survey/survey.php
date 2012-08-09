@@ -3,8 +3,7 @@
 
 /**
  *	@package chamilo.survey
- * 	@author unknown
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * 	@version $Id: survey.php 22573 2009-08-03 03:38:13Z yannoo $
  *
  * 	@todo use quickforms for the forms

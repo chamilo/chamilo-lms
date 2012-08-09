@@ -57,7 +57,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 
 // Header
 Display :: display_header($tool_name, 'Survey');
-//api_display_tool_title($tool_name);
 
 // Tool introduction
 Display::display_introduction_section('survey', 'left');
@@ -67,7 +66,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	SurveyUtil::display_survey_search_form();
 }
 // Action handling: deleting a survey
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey_id']) && is_numeric($_GET['survey_id'])) {
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey_id'])) {
 	// Getting the information of the survey (used for when the survey is shared)
 	$survey_data = survey_manager::get_survey($_GET['survey_id']);
 	if (api_is_course_coach() && intval($_SESSION['id_session']) != $survey_data['session_id']) {
@@ -79,6 +78,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
 	if (is_numeric($survey_data['survey_share'])) {
 		survey_manager::delete_survey($survey_data['survey_share'], true);
 	}
+    
 	$return = survey_manager :: delete_survey($_GET['survey_id']);
 	if ($return) {
 		Display :: display_confirmation_message(get_lang('SurveyDeleted'), false);

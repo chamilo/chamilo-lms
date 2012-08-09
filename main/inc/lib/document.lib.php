@@ -1033,9 +1033,10 @@ class DocumentManager {
 
             $row['url'] 			= api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
             $row['document_url'] 	= api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;
-
             $row['absolute_path']   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
-
+            
+            $row['absolute_path_from_document']   = '/document'.$row['path'];
+           
             $pathinfo = pathinfo($row['path']);
 
             $row['absolute_parent_path']   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';

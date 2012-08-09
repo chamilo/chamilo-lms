@@ -5597,7 +5597,6 @@ class learnpath {
     public function display_edit_item($item_id) {
         global $_course; // It will disappear.
         $course_id = api_get_course_int_id();
-
         $return = '';
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -5657,7 +5656,7 @@ class learnpath {
                     $return .= $this->display_quiz_form('edit', $item_id, $row);
                     break;
                 case TOOL_HOTPOTATOES :
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
+                    $return .= $this->display_manipulate($item_id, $row['item_type']);                    
                     $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
                     break;
                 case TOOL_STUDENTPUBLICATION :
@@ -7503,6 +7502,8 @@ class learnpath {
      */
     public function display_manipulate($item_id, $item_type = TOOL_DOCUMENT) {
         $course_id = api_get_course_int_id();
+        $course_code = api_get_course_id();
+        
         global $charset, $_course;
         $return = '<div class="actions">';
 
@@ -7570,6 +7571,13 @@ class learnpath {
             $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
+        
+        
+        if ($item_type == TOOL_HOTPOTATOES ) {
+            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);            
+            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        }
+        
         $return .= '</div>';
         
         if (!empty($audio_player)) {

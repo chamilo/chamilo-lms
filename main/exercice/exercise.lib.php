@@ -1971,8 +1971,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
 
     
-    if ($save_user_result) {
-    
+    if ($save_user_result) {    
         // Display text when test is finished #4074
         // Don't display the text when finished message if we are from a LP #4227
         // but display it from page exercice_show.php
@@ -2043,25 +2042,33 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         } // end foreach() block that loops over all questions
     }
     
+    $total_score_text = null;
+    
     if ($origin != 'learnpath') {
         if ($show_results || $show_only_score) {
-                echo '<div class="question_row">
+                $total_score_text .= '<div class="question_row">
                 <div class="ribbon">
                 <div class="rib rib-total">';
-            echo '<h3>';
-            echo get_lang('YourTotalScore')." ";
+            $total_score_text .= '<h3>';
+            $total_score_text .= get_lang('YourTotalScore')." ";
             if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
                 $total_score = 0;
             }
-            echo show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
-            echo '</h3>';
-            echo '</div>';
-            echo '</div>';
-            echo '</div>';
+            $total_score_text .= show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
+            $total_score_text .= '</h3>';
+            $total_score_text .= '</div>';
+            $total_score_text .= '</div>';
+            $total_score_text .= '</div>';
         }
     }
     
+    echo $total_score_text;
+    
     echo $exercise_content;
+    
+    echo $total_score_text;
+    
+    
     
     if ($save_user_result) {
         

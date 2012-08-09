@@ -1244,49 +1244,9 @@ function api_get_course_info($course_code = null) {
                  WHERE course.code = '$course_code'";
         $result = Database::query($sql);
         $_course = array();
-        if (Database::num_rows($result) > 0) {
-            global $_configuration;
+        if (Database::num_rows($result) > 0) {            
             $course_data = Database::fetch_array($result);
-            $_course['id'           ]         = $course_data['code'           ];
-            $_course['code'         ]         = $course_data['code'           ];
-            $_course['name'         ]         = $course_data['title'          ];
-            $_course['title'         ]        = $course_data['title'          ];
-            $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
-            $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
-            $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
-            $_course['directory'    ]         = $course_data['directory'      ];
-
-            //@todo should be deprecated
-            $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
-            $_course['db_name'      ]         = $course_data['db_name'];         //
-            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
-
-            $_course['titular'      ]         = $course_data['tutor_name'     ];
-            $_course['language'     ]         = $course_data['course_language'];
-            $_course['extLink'      ]['url' ] = $course_data['department_url' ];
-            $_course['extLink'      ]['name'] = $course_data['department_name'];
-            $_course['categoryCode' ]         = $course_data['faCode'         ];
-            $_course['categoryName' ]         = $course_data['faName'         ];
-            $_course['visibility'   ]         = $course_data['visibility'     ];
-            $_course['subscribe_allowed']     = $course_data['subscribe'      ];
-            $_course['unsubscribe']    = $course_data['unsubscribe'    ];
-
-            $_course['department_name']       = $course_data['department_name'];
-            $_course['department_url']        = $course_data['department_url' ];
-            $_course['legal']                 = $course_data['legal' ];
-            $_course['show_score']            = $course_data['show_score']; //used in the work tool
-
-            // The real_id is an integer. It is mandatory for future implementations.
-            $_course['real_id'     ]          = $course_data['id'              ];
-            $_course['activate_legal']        = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;
-
-			//I know this is bad, but this reflects that it was a bad decistion to not add a flag in the DB if an image exists
-			if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
-				$url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
-			} else {
-				$url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
-			}
-			$_course['course_image'] = $url_image;
+            $_course = api_format_course_array($course_data);            
         }
         return $_course;
     }
@@ -1294,7 +1254,6 @@ function api_get_course_info($course_code = null) {
     if ($_course == '-1') $_course = array();
     return $_course;
 }
-
 
 /**
  * Returns the current course info array.
@@ -1314,51 +1273,9 @@ function api_get_course_info_by_id($id = null) {
                  WHERE course.id = $id";
         $result = Database::query($sql);
         $_course = array();
-        if (Database::num_rows($result) > 0) {
-            global $_configuration;
+        if (Database::num_rows($result) > 0) {            
             $course_data = Database::fetch_array($result);
-
-            $_course['id'           ]         = $course_data['code'           ];
-            // Added
-            $_course['code'         ]         = $course_data['code'           ];
-            $_course['name'         ]         = $course_data['title'          ];
-            $_course['title'         ]        = $course_data['title'          ];
-            $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
-            $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
-            $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
-            $_course['directory'    ]         = $course_data['directory'      ];
-
-            //@todo should be deprecated
-            $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
-            $_course['db_name'      ]         = $course_data['db_name'         ];
-            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
-
-            $_course['titular'      ]         = $course_data['tutor_name'     ];
-            $_course['language'     ]         = $course_data['course_language'];
-            $_course['extLink'      ]['url' ] = $course_data['department_url' ];
-            $_course['extLink'      ]['name'] = $course_data['department_name'];
-
-            $_course['categoryCode' ]         = $course_data['faCode'         ];
-            $_course['categoryName' ]         = $course_data['faName'         ];
-
-            $_course['visibility'   ]         = $course_data['visibility'      ];
-            $_course['subscribe_allowed']     = $course_data['subscribe'       ];
-            $_course['unsubscribe']           = $course_data['unsubscribe'     ];
-
-            $_course['real_id'      ]         = $course_data['id'              ];
-            $_course['title'        ]         = $course_data['title'           ];
-            $_course['course_language']       = $course_data['course_language'];
-            $_course['activate_legal']        = $course_data['activate_legal'];
-            $_course['legal']                 = $course_data['legal' ];
-            $_course['show_score']            = $course_data['show_score']; //used in the work tool
-
-			if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
-				$url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
-			} else {
-				$url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
-			}
-			$_course['course_image'] = $url_image;
-
+            $_course = api_format_course_array($course_data);
         }
         return $_course;
     }
@@ -1366,6 +1283,64 @@ function api_get_course_info_by_id($id = null) {
     global $_course;
     if ($_course == '-1') $_course = array();
     return $_course;
+}
+
+function api_format_course_array($course_data) {
+    global $_configuration;
+    
+    if (empty($course_data)) {
+        return array();
+    }
+    
+    $_course = array();
+    
+    $_course['id'           ]         = $course_data['code'           ];
+    $_course['real_id'      ]         = $course_data['id'              ];
+    
+    // Added
+    $_course['code'         ]         = $course_data['code'           ];
+    $_course['name'         ]         = $course_data['title'          ];
+    $_course['title'         ]        = $course_data['title'          ];
+    $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
+    $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
+    $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
+    $_course['directory'    ]         = $course_data['directory'      ];
+
+    //@todo should be deprecated
+    $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+    $_course['db_name'      ]         = $course_data['db_name'         ];
+    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+
+    $_course['titular'      ]         = $course_data['tutor_name'     ];
+    $_course['language'     ]         = $course_data['course_language'];
+    $_course['extLink'      ]['url' ] = $course_data['department_url' ];
+    $_course['extLink'      ]['name'] = $course_data['department_name'];
+
+    $_course['categoryCode' ]         = $course_data['faCode'         ];
+    $_course['categoryName' ]         = $course_data['faName'         ];
+
+    $_course['visibility'   ]         = $course_data['visibility'      ];
+    $_course['subscribe_allowed']     = $course_data['subscribe'       ];
+    $_course['unsubscribe']           = $course_data['unsubscribe'     ];
+  
+    $_course['course_language']       = $course_data['course_language'];
+    $_course['activate_legal']        = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
+    $_course['legal']                 = $course_data['legal' ];
+    $_course['show_score']            = $course_data['show_score']; //used in the work tool    
+    $_course['department_name']       = $course_data['department_name'];
+    $_course['department_url']        = $course_data['department_url' ];
+    
+    $_course['disk_quota']            = $course_data['disk_quota'];
+
+    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
+        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
+    } else {
+        $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
+    }
+    $_course['course_image'] = $url_image;
+    
+    return $_course;
+    
 }
 
 

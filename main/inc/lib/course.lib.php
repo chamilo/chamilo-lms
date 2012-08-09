@@ -3788,53 +3788,7 @@ class CourseManager {
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         return $row[0];
-    }
-    
-    /* 
-     * This code was originaly in local.inc.php
-     */
-    public static function get_course_info_with_category($course_code) {
-        global $_configuration;
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $course_code = Database::escape_string($course_code);
-        
-        $sql =  "SELECT course.*, course_category.code faCode, course_category.name faName FROM $course_table
-                LEFT JOIN $course_cat_table
-                ON course.category_code = course_category.code
-                WHERE course.code = '$course_code'";
-        $result = Database::query($sql);
-        
-        $_course = array();        
-        if (Database::num_rows($result) > 0) {
-            $course_data = Database::fetch_array($result);
-            //@TODO real_cid should be cid, for working with numeric course id            
-            $_course['real_id']             = $course_data['id'];
-            $_course['id']                  = $course_data['code']; //auto-assigned integer
-            $_course['code']                = $course_data['code'];
-            $_course['name']                = $course_data['title'];
-            $_course['title']               = $course_data['title'];
-            $_course['official_code']       = $course_data['visual_code']; // use in echo
-            $_course['sysCode']             = $course_data['code']; // use as key in db
-            $_course['path']                = $course_data['directory']; // use as key in path
-            $_course['dbName']              = $course_data['db_name']; // use as key in db list
-            $_course['db_name']             = $course_data['db_name']; // not needed in Chamilo 1.9
-            $_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
-            $_course['titular']             = $course_data['tutor_name'];// this should be deprecated and use the table course_rel_user
-            $_course['language']            = $course_data['course_language'];
-            $_course['extLink']['url' ]     = $course_data['department_url'];
-            $_course['extLink']['name']     = $course_data['department_name'];
-            $_course['categoryCode']        = $course_data['faCode'];
-            $_course['categoryName']        = $course_data['faName'];
-            $_course['visibility']          = $course_data['visibility'];
-            $_course['subscribe_allowed']   = $course_data['subscribe'];
-            $_course['unsubscribe']         = $course_data['unsubscribe'];
-            $_course['activate_legal']      = $course_data['activate_legal'];
-            $_course['legal']               = $course_data['legal' ];
-            $_course['show_score']          = $course_data['show_score']; //used in the work tool
-        }
-        return $_course;
-    }
+    }    
     
     /**
      * Return a link to go to the course, validating the visibility of the

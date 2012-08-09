@@ -23,20 +23,13 @@ class DocumentManager {
      */
     public static function get_course_quota() {
         $course_info = api_get_course_info();
+        
+        $course_quota   = null;
         if (empty($course_info)) {
             return DEFAULT_DOCUMENT_QUOTA;
+        } else {
+            $course_quota = $course_info['disk_quota'];
         }
-        $course_code  = Database::escape_string($course_info['code']);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-
-        $sql_query      = "SELECT disk_quota FROM $course_table WHERE code = '$course_code'";
-        $sql_result     = Database::query($sql_query);
-        $course_quota   = null;
-        if (Database::num_rows($sql_result)) {
-            $result         = Database::fetch_array($sql_result);
-            $course_quota   = $result['disk_quota'];
-        }
-
         if (is_null($course_quota) || empty($course_quota)) {
             // Course table entry for quota was null, then use default value
             $course_quota = DEFAULT_DOCUMENT_QUOTA;

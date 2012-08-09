@@ -661,7 +661,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 if (isset($cidReset) && $cidReset) {
     // Course session data refresh requested or empty data
     if ($cidReq) {    
-        $_course = CourseManager::get_course_info_with_category($cidReq);
+        $_course = api_get_course_info($cidReq);
         
         if (!empty($_course)) {                             
             
@@ -729,7 +729,7 @@ if (isset($cidReset) && $cidReset) {
     
     if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
         //Just in case $_course is empty we try to load if the c_id still exists
-        $_course = CourseManager::get_course_info_with_category($_SESSION['_cid']);
+        $_course = api_get_course_info($_SESSION['_cid']);
         if (!empty($_course)) {
             $_real_cid                      = $_course['real_id'];
             $_cid                           = $_course['code'];

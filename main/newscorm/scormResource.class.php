@@ -113,9 +113,8 @@ class scormResource {
      * @return	string	Path for this resource
      */
     public function get_path() {
-        if (!empty($this->href)) {
-            require_once 'learnpath.class.php';
-            return learnpath::escape_string($this->href);
+        if (!empty($this->href)) {            
+            return Database::escape_string($this->href);
         } else {
             return '';
         }
@@ -126,9 +125,8 @@ class scormResource {
      * @return	string	generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
      */
     public function get_scorm_type() {
-        if (!empty($this->scormtype)){
-            require_once 'learnpath.class.php';
-            return learnpath::escape_string($this->scormtype);
+        if (!empty($this->scormtype)) {            
+            return Database::escape_string($this->scormtype);
         } else {
             return '';
         }

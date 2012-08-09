@@ -91,10 +91,10 @@ if (!empty($_REQUEST['command'])) {
         case 'getparam':
             // Request for all available data to be printed out in the answer.
             if (!empty($_REQUEST['version'])) {
-                $hacp_version = learnpath::escape_string($_REQUEST['version']);
+                $hacp_version = Database::escape_string($_REQUEST['version']);
             }
             if (!empty($_REQUEST['session_id'])) {
-                $hacp_session_id = learnpath::escape_string($_REQUEST['session_id']);
+                $hacp_session_id = Database::escape_string($_REQUEST['session_id']);
             }
             $error_code = 0;
             $error_text = $errors[$error_code];

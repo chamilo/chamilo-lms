@@ -1324,6 +1324,7 @@ class learnpath {
      * Escapes a string with the available database escape function
      * @param	string	String to escape
      * @return	string	String escaped
+     * @deprecated use  Database::escape_string
      */
     public function escape_string($string) {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::escape_string('.$string.')', 0); }

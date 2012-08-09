@@ -433,8 +433,7 @@ class survey_manager {
 		if (Database::num_rows($res) === 0) {
 			return true;
 		}
-		$new_survey_id = intval($new_survey_id);
-		$course_id = api_get_course_int_id();
+		$new_survey_id = intval($new_survey_id);		
 		while($row = Database::fetch_array($res, 'ASSOC')){
 			$sql1 = 'INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) VALUES 
 					('.$course_id.', \''.Database::escape_string($row['name']).'\',\''.Database::escape_string($row['description']).'\',\''.$new_survey_id.'\')';
@@ -508,24 +507,22 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function update_survey_answered($survey_id, $user, $survey_code) {
-		global $_course;
-
+	function update_survey_answered($survey_id, $user, $survey_code) {		
 		// Database table definitions
 		$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
 		// Getting a list with all the people who have filled the survey
 		$people_filled = survey_manager::get_people_who_filled_survey($survey_id);
-		$number = count($people_filled);
+		$number = intval(count($people_filled));
         $course_id = api_get_course_int_id();
 
 		// Storing this value in the survey table
-		$sql = "UPDATE $table_survey SET answered = '".Database::escape_string($number)."' WHERE c_id = '.$course_id.' AND survey_id = '".Database::escape_string($survey_id)."'";
+		$sql = "UPDATE $table_survey SET answered = $number WHERE c_id = $course_id AND survey_id = ".Database::escape_string($survey_id);
 		$res = Database::query($sql);
 
 		// Storing that the user has finished the survey.
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE c_id = '.$course_id.' AND session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
+		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE c_id = $course_id AND session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
 		$res = Database::query($sql);
 	}
 
@@ -653,7 +650,7 @@ class survey_manager {
 	 *
 	 * @todo one sql call should do the trick
 	 */
-	function get_questions($survey_id) {
+	static function get_questions($survey_id) {
 		// Table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -730,10 +727,8 @@ class survey_manager {
             
             $course_id = api_get_course_int_id();
                
-			if (!$empty_answer) {
-				global $_course;
-				// Table definitions
-				$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+			if (!$empty_answer) {				
+				// Table definitions				
 				$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
 				// Getting all the information of the survey
@@ -778,13 +773,14 @@ class survey_manager {
 								'".Database::escape_string($form_content['maximum_score'])."'".
 								$additional['value']."
 								)";
-					$result = Database::query($sql);
+					Database::query($sql);
 					$question_id = Database::insert_id();
 					$form_content['question_id'] = $question_id;
 					$return_message = 'QuestionAdded';
-				}
-				// Updating an existing question
-				else {
+                    
+				} else {
+                    // Updating an existing question
+                    
 					$additionalsets = '';
 
 					if ($_POST['choose'] == 1) {
@@ -807,6 +803,12 @@ class survey_manager {
 					$result = Database::query($sql);
 					$return_message = 'QuestionUpdated';
 				}
+                
+                if (!empty($form_content['survey_id'])) {
+                    //Updating survey
+                    api_item_property_update(api_get_course_info(), TOOL_SURVEY, $form_content['survey_id'], 'SurveyUpdated', api_get_user_id());               
+                }
+                                
 				// Storing the options of the question
 				$message_options=survey_manager::save_question_options($form_content, $survey_data);
 			} else {
@@ -1211,13 +1213,11 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {
-		global $_course;
-		api_get_path(SYS_COURSE_PATH);
-
+	function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {		
+		
 		// Database table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
-		$table_user					= Database :: get_main_table('user');
+		$table_user					= Database :: get_main_table(TABLE_MAIN_USER);
 
 		// Variable initialisation
 		$return = array();

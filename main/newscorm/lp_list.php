@@ -30,7 +30,7 @@ require_once 'learnpathItem.class.php';
  */
 // Extra javascript functions for in html head:
 $htmlHeadXtra[] =
-"<script language='javascript' type='text/javascript'>
+"<script>
 function confirmation(name) {
     if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." \"+name+\"?\"))
         {return true;}
@@ -55,8 +55,6 @@ if (api_get_setting('search_enabled') == 'true') {
 Display::display_header($nameTools, 'Path');
 $current_session = api_get_session_id();
 
-//api_display_tool_title($nameTools);
-
 /* Introduction section (editable by course admins) */
 
 Display::display_introduction_section(TOOL_LEARNPATH, array(
@@ -69,7 +67,6 @@ Display::display_introduction_section(TOOL_LEARNPATH, array(
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 if ($is_allowed_to_edit) {
-
     /* DIALOG BOX SECTION */
 
     if (!empty($dialog_box)) {
@@ -104,8 +101,6 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
 
-
-
 /* DISPLAY SCORM LIST */
 $list       = new LearnpathList(api_get_user_id());
 $flat_list  = $list->get_flat_list();
@@ -113,7 +108,7 @@ $flat_list  = $list->get_flat_list();
 
 if (!empty($flat_list)) {
 
-    echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
+    echo '<table class="data_table">';
     $is_allowed_to_edit ? $colspan = 9 : $colspan = 3;
 
     if (!empty($curDirPath)) {
@@ -324,17 +319,17 @@ if (!empty($flat_list)) {
             //}
 
             /* PUBLISH COMMAND */
-            //if ($current_session == $details['lp_session']) {
-            if ($details['lp_published'] == "i") {
-                $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-                Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
+            if ($current_session == $details['lp_session']) {
+                if ($details['lp_published'] == "i") {
+                    $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
+                    Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
 
+                } else {
+                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
+                }
             } else {
-                $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
-            }
-            /*} else {
                 $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL);
-            }*/
+            }
 
       /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE
 

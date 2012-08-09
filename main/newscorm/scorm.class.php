@@ -862,9 +862,8 @@ class scorm extends learnpath {
         if ($this->debug > 0) { error_log('In scorm::reimport_manifest() method', 0); }
         global $_course;
         // RECOVERING PATH FROM DB
-        $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        //$course = Database::escape_string($course);
-        $course = $this->escape_string($course);
+        $main_table = Database::get_main_table(TABLE_MAIN_COURSE);        
+        $course = Datbase::escape_string($course);
         $sql = "SELECT * FROM $main_table WHERE code = '$course'";
         if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql, 0); }
         //$res = Database::query($sql);
@@ -880,9 +879,7 @@ class scorm extends learnpath {
         //$lp_table = Database::get_course_table(LEARNPATH_TABLE);
         $course_id = api_get_course_int_id();
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-
-        //$id = Database::escape_integer($id);
-        $lp_id = $this->escape_string($lp_id);
+        $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql, 0); }
         //$res = Database::query($sql);

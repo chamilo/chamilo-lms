@@ -621,7 +621,7 @@ class learnpath {
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
-        $name = learnpath :: escape_string($name);
+        $name = Database::escape_string($name);
 
         // Session id.
         $session_id = api_get_session_id();
@@ -7547,7 +7547,7 @@ class learnpath {
         $result = Database::query($sql);
 
         $row = Database::fetch_assoc($result);
-        $s_title = $row['title'];
+        
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($row['audio'])) {

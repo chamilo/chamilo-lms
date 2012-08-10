@@ -52,8 +52,15 @@ class Notification extends Model {
     
 	public function __construct() {
         $this->table       = Database::get_main_table(TABLE_NOTIFICATION);
-        $this->admin_name  = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS); //api_get_setting('siteName')        
-        $this->admin_email = api_get_setting('emailAdministrator');                            
+           
+        $this->admin_email  = api_get_setting('noreply_email_address');
+        $this->admin_name   = api_get_setting('siteName');
+        
+        // If no-reply  email doesn't exist use the admin email
+        if (empty($this->admin_email)) {            
+            $this->admin_email  = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $this->admin_name   = api_get_setting('emailAdministrator');
+        }
 	}  
 	  
     /**
@@ -62,11 +69,19 @@ class Notification extends Model {
      */	
     public function send($frec = NOTIFY_MESSAGE_DAILY) {
         $notifications = $this->find('all',array('where'=>array('sent_at IS NULL AND send_freq = ?'=>$frec)));
+     
+        
         if (!empty($notifications)) {
             foreach ($notifications as $item_to_send) {
                 
                 //Sending email
-                api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], Security::filter_terms($item_to_send['title']), Security::filter_terms($item_to_send['content']), $this->admin_name, $this->admin_email);                    
+                api_mail_html($item_to_send['dest_mail'], 
+                              $item_to_send['dest_mail'], 
+                              Security::filter_terms($item_to_send['title']), 
+                              Security::filter_terms($item_to_send['content']), 
+                              $this->admin_name, 
+                              $this->admin_email
+                            );
                 if ($this->debug) { error_log('Sending message to: '.$item_to_send['dest_mail']); }
                 
                 //Updating

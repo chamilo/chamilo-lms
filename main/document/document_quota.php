@@ -3,6 +3,9 @@
 $language_file = array('document');
 
 require_once '../inc/global.inc.php';
+
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 
@@ -15,34 +18,58 @@ $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pieRenderer.min.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
 
-$course_id = api_get_course_id();
-$session_id = api_get_session_id();
+$course_code    = api_get_course_id();
+$course_id      = api_get_course_int_id();
+$session_id     = api_get_session_id();
+$group_id   = api_get_group_id();
 
 $session = array();
-$session_list = SessionManager::get_session_by_course($course_id);
-$total_quota = DocumentManager::get_course_quota();
+$session_list = SessionManager::get_session_by_course($course_code);
 
-$only_base_quota = DocumentManager::documents_total_space(api_get_course_int_id(), 0, 0);
+$total_quota_bytes = DocumentManager::get_course_quota();
 
-$course_quota = round($only_base_quota/$total_quota, 2)*100;
-$session[] = array(get_lang('Course'), $course_quota);
+$quota_bytes = DocumentManager::documents_total_space($course_id, 0 , 0);
 
-$used_quota = $course_quota;
+$quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+
+$session[] = array(get_lang('Course').' ('.format_file_size($quota_bytes).')', $quota_percentage);
+
+$used_quota_bytes = $quota_bytes;
 if (!empty($session_list)) {
     foreach ($session_list as $session_data) {
-        $quota = intval(DocumentManager::documents_total_space(api_get_course_int_id(), null, $session_data['id']));
-        if (!empty($quota))  {
-            $quota = round($quota/$total_quota, 2)*100;
+        $quota_percentage = 0;
+        $quota_bytes = intval(DocumentManager::documents_total_space($course_id, null, $session_data['id']));
+        if (!empty($quota_bytes))  {
+            $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
         }
         if ($session_id == $session_data['id']) {
             $session_data['name'] = $session_data['name'] . ' * ';
         }
-        $used_quota += $quota;
-        $session[] = array(addslashes($session_data['name']), $quota);
+        $used_quota_bytes += $quota_bytes;        
+        $session[] = array(addslashes(get_lang('Session').': '.$session_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
     }
 }
 
-$session[] = array(addslashes(get_lang('ShowCourseQuotaUse')), 100 - $used_quota);
+$group_list = GroupManager::get_groups();
+
+if (!empty($group_list)) {
+    foreach ($group_list as $group_data) {
+        $quota_percentage = 0;
+        $my_group_id = $group_data['id'];
+        $quota_bytes = intval(DocumentManager::documents_total_space($course_id, $my_group_id, 0));        
+        if (!empty($quota_bytes))  {
+            $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+        }
+        if ($group_id == $my_group_id) {
+            $group_data['name'] = $group_data['name'] . ' * ';
+        }
+        $used_quota_bytes += $quota_bytes;        
+        $session[] = array(addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
+    }
+}
+$quota_percentage = round(($total_quota_bytes - $used_quota_bytes)/$total_quota_bytes, 2)*100;
+
+$session[] = array(addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size($total_quota_bytes - $used_quota_bytes).') ', $quota_percentage);
 
 $quota_data = json_encode($session);
 

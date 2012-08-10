@@ -43,30 +43,11 @@ class MultipleAnswerTrueFalse extends Question {
 
 		$obj_ex = $_SESSION['objExercise'];
                 
-        $form -> addElement ('html', '<table><tr>');  
         $renderer = & $form->defaultRenderer();
-        $defaults = array();
-        //Extra values True, false,  Dont known
-        if (!empty($this->extra)) {
-            $scores = explode(':',$this->extra);
-        
-            if (!empty($scores)) {
-                for ($i = 1; $i <=3; $i++) {
-                    $defaults['option['.$i.']']	= $scores[$i-1];                
-                }        
-            }        
-        }
-        
-        // 3 scores
-        $form->addElement('text', 'option[1]',get_lang('Correct'),   array('size'=>'5','value'=>'1'));
-        $form->addElement('text', 'option[2]',get_lang('Wrong'),     array('size'=>'5','value'=>'-0.5'));        
-        $form->addElement('text', 'option[3]',get_lang('DoubtScore'),array('size'=>'5','value'=>'0'));  
-                
-        $form -> addElement('hidden', 'options_count', 3);
-                    
-        $form -> addElement ('html', '</tr></table>');
                
-		$html.='<table class="data_table">
+        $defaults = array();
+               
+		$html = '<table class="data_table">
 					<tr style="text-align: center;">
 						<th>
 							'.get_lang('Number').'
@@ -80,15 +61,15 @@ class MultipleAnswerTrueFalse extends Question {
 						<th>
 							'.get_lang('Answer').'
 						</th>';
-        				// show column comment when feedback is enable
-        				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
-        				    $html .='<th>'.get_lang('Comment').'</th>';
-        				}
-				$html .= '</tr>';
+        // show column comment when feedback is enable
+        if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
+            $html .='<th>'.get_lang('Comment').'</th>';
+        }
+        $html .= '</tr>';
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 		
 		$correct = 0;
-		if (!empty($this -> id))	{
+		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer->read();			
 			if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
@@ -161,11 +142,32 @@ class MultipleAnswerTrueFalse extends Question {
 			}
 			$form->addElement ('html', '</tr>');
 		}
-		$form -> addElement ('html', '</table>');
-		$form -> addElement ('html', '<br />');
+        
+		$form->addElement('html', '</table>');
+		$form->addElement('html', '<br />');  
+        
+        $form->addElement('html', '<table><tr>');    
+        
+        //Extra values True, false,  Dont known
+        if (!empty($this->extra)) {
+            $scores = explode(':',$this->extra);        
+            if (!empty($scores)) {
+                for ($i = 1; $i <=3; $i++) {
+                    $defaults['option['.$i.']']	= $scores[$i-1];                
+                }        
+            }        
+        }
+        
+        // 3 scores
+        $form->addElement('text', 'option[1]', get_lang('Correct'),   array('size'=>'5','value'=>'1'));
+        $form->addElement('text', 'option[2]', get_lang('Wrong'),     array('size'=>'5','value'=>'-0.5'));        
+        $form->addElement('text', 'option[3]', get_lang('DoubtScore'),array('size'=>'5','value'=>'0'));
+                
+        $form -> addElement('hidden', 'options_count', 3);
+                    
+        $form -> addElement ('html', '</tr></table>');       
 
 		//$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
-
 
 		$navigator_info = api_get_navigator();
 
@@ -198,7 +200,6 @@ class MultipleAnswerTrueFalse extends Question {
 				$form -> setDefaults($defaults);
 			//}
 		}
-
 		$form->setConstants(array('nb_answers' => $nb_answers));
 	}
 

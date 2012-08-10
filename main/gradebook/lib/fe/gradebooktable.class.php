@@ -176,7 +176,8 @@ class GradebookTable extends SortableTable {
 			if (api_is_allowed_to_edit(null, true)) {
                 //id
 				$row[] = $this->build_id_column($item);
-			}		
+			}
+            
             //Type
 			$row[] = $this->build_type_column($item);
 			
@@ -230,7 +231,7 @@ class GradebookTable extends SortableTable {
 			} else {
 				//students get the results and certificates columns                
 				if (count($this->evals_links) > 0 && $status_user != 1) {                    
-					$value_data = isset($data[4]) ? $data[4] : null;
+					$value_data = isset($data[4]) ? $data[4] : null;                    
 					if (!is_null($value_data)) {                        
 						$row[] = Display::tag('h4', $value_data);
 					} else {                        
@@ -315,7 +316,7 @@ class GradebookTable extends SortableTable {
                     
                     $row[] = $invisibility_span_open.$weight.$extra.$invisibility_span_close;
 					
-					if (api_is_allowed_to_edit(null, true)) {						
+					if (api_is_allowed_to_edit(null, true)) {					
 						//$weight_total_links += intval($data[3]);
 					} else {
 						$cattotal   = Category :: load($_GET['selectcat']);
@@ -577,7 +578,7 @@ class GradebookTable extends SortableTable {
 		}
 	}
 	
-	private function build_edit_column($item) {
+	private function build_edit_column($item) {        
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :

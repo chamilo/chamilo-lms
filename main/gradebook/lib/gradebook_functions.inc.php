@@ -292,15 +292,22 @@ function build_edit_icons_link($link, $selectcat) {
 	$cat = new Category();
 	$message_link = $cat->show_message_resource_delete($link->get_course_code());    
     $is_locked = $link->is_locked();
-        
-	if ($message_link===false) {
-		$visibility_icon= ($link->is_visible() == 0) ? 'invisible' : 'visible';
-		$visibility_command= ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+    
+    $modify_icons = null;
+            
+    if (!api_is_allowed_to_edit(null, true)) {
+        return null;
+    }
+    
+	if ($message_link === false) {
+		$visibility_icon    = ($link->is_visible() == 0) ? 'invisible' : 'visible';
+		$visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
         
         if ($is_locked && !api_is_platform_admin()) {
             $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
-        } else {
-            $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
+        } else {            
+            $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.
+                                 Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';            
         }
 
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';

@@ -1112,19 +1112,19 @@ class CourseManager {
      *    Return user info array of all users registered in the specified real or virtual course
      *    This only returns the users that are registered in this actual course, not linked courses.
      *
-     * @param string $course_code the code of the course
-     * @param boolean $with_session determines if the course is used in a session or not
-     * @param integer $session_id the id of the session
-     * @param string $limit the LIMIT statement of the sql statement
-     * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     * @param int   0 or 2 (student, coach) if using the session id, STUDENT or COURSEMANAGER if using session_id = 0
+     * @param string    $course_code the code of the course
+     * @param boolean   $with_session determines if the course is used in a session or not
+     * @param integer   $session_id the id of the session
+     * @param string    $limit the LIMIT statement of the sql statement
+     * @param string    $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
+     * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER 
      * @return array
      */
     public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '', $filter_by_status = null) {
         // variable initialisation
         $session_id     = intval($session_id);
-        $course_code     = Database::escape_string($course_code);
-        $where             = array();
+        $course_code    = Database::escape_string($course_code);
+        $where          = array();
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {

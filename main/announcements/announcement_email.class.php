@@ -255,20 +255,15 @@ class AnnouncementEmail
      */
     public function send()
     {
-        $sender = $this->sender();
-        $sender_name = api_get_person_name($sender['firstName'], $sender['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = $sender['mail'];
-
+        $sender  = $this->sender();                
         $subject = $this->subject();
         $message = $this->message();
     
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
+        
         foreach ($users as $user) {
-            MessageManager::send_message($user['user_id'], $subject, $message, null, null, null, null, null, null, $sender['user_id']);
-            //$recipient_name = api_get_person_name($user['firstname'], $user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-            //$recipient_email = $user['email'];
-            //@api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, $sender_email, null, $attachement, true);
+            MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
         }
         $this->log_mail_sent();
     }

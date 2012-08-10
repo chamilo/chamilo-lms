@@ -1233,16 +1233,12 @@ function create_course_tables($course_db_name = null) {
         CREATE TABLE `".$TABLEINTROS . "` (
         $add_to_all_tables
         id varchar(50) NOT NULL,
-        intro_text text NOT NULL,
+        intro_text MEDIUMTEXT NOT NULL,
         session_id INT  NOT NULL DEFAULT 0,
         PRIMARY KEY (c_id, id, session_id)
         )" . $charset_clause);
 
-    /*
-    -----------------------------------------------------------
-        Dropbox tool
-    -----------------------------------------------------------
-    */
+    /* Dropbox tool */
 
     Database::query("
         CREATE TABLE `".$TABLETOOLDROPBOXFILE . "` (
@@ -1411,8 +1407,8 @@ function create_course_tables($course_db_name = null) {
     $sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
     Database::query($sql);
     
-    /*$sql = "ALTER TABLE $TABLELPITEM ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id)";
-    Database::query($sql);*/
+    $sql = "ALTER TABLE $TABLELPITEM ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id)";
+    Database::query($sql);
     
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEMVIEW` (
     	$add_to_all_tables
@@ -1440,8 +1436,8 @@ function create_course_tables($course_db_name = null) {
     $sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
     Database::query($sql);
     
-    /*$sql = "ALTER TABLE $TABLELPITEMVIEW ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id) ";
-    Database::query($sql);*/
+    $sql = "ALTER TABLE $TABLELPITEMVIEW ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id) ";
+    Database::query($sql);
     
     
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(

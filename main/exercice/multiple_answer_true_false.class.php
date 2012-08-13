@@ -40,6 +40,8 @@ class MultipleAnswerTrueFalse extends Question {
 
 		$nb_answers  = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
+        
+        $course_id = api_get_course_int_id();
 
 		$obj_ex = $_SESSION['objExercise'];
                 
@@ -85,8 +87,6 @@ class MultipleAnswerTrueFalse extends Question {
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 		}
 		
-        $course_id = api_get_course_int_id();
-        
         // Can be more options        
         $option_data = Question::readQuestionOption($this->id, $course_id);
           
@@ -146,7 +146,29 @@ class MultipleAnswerTrueFalse extends Question {
 		$form->addElement('html', '</table>');
 		$form->addElement('html', '<br />');  
         
-        $form->addElement('html', '<table><tr>');    
+        $form->addElement('html', '<table><tr><td></td><td>'.get_lang('Correct').'</td><td>'.get_lang('Wrong').'</td><td>'.get_lang('DoubtScore').'</td></tr>');
+               
+        $renderer->setElementTemplate('<tr><td><span class="form_required">*</span>'.get_lang('Score').'&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{element} &nbsp;&nbsp; <br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[1]');
+        $renderer->setElementTemplate('<td>{element} &nbsp;&nbsp;<br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[2]');
+        $renderer->setElementTemplate('<td>{element} &nbsp;&nbsp;<br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[3]');
+
+        // 3 scores
+        $form->addElement('text', 'option[1]', get_lang('Correct'),   array('class'=>'span1','value'=>'1'));
+        $form->addElement('text', 'option[2]', get_lang('Wrong'),     array('class'=>'span1','value'=>'-0.5'));        
+        $form->addElement('text', 'option[3]', get_lang('DoubtScore'),array('class'=>'span1','value'=>'0'));
+        
+        $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('option[3]', get_lang('ThisFieldIsRequired'), 'required');
+                
+        
+        $form -> addElement ('html', '</tr><table>');
+        
+
+        $form -> addElement('hidden', 'options_count', 3);
+                    
+        $form -> addElement ('html', '</table><br /><br />');
+        
         
         //Extra values True, false,  Dont known
         if (!empty($this->extra)) {
@@ -156,16 +178,7 @@ class MultipleAnswerTrueFalse extends Question {
                     $defaults['option['.$i.']']	= $scores[$i-1];                
                 }        
             }        
-        }
-        
-        // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'),   array('size'=>'5','value'=>'1'));
-        $form->addElement('text', 'option[2]', get_lang('Wrong'),     array('size'=>'5','value'=>'-0.5'));        
-        $form->addElement('text', 'option[3]', get_lang('DoubtScore'),array('size'=>'5','value'=>'0'));
-                
-        $form -> addElement('hidden', 'options_count', 3);
-                    
-        $form -> addElement ('html', '</tr></table>');       
+        }        
 
 		//$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 

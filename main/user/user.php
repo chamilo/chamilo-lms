@@ -447,8 +447,7 @@ function search_keyword($firstname, $lastname, $username, $official_code, $keywo
 function get_user_data($from, $number_of_items, $column, $direction) {
 	global $origin;
     global $course_info;
-	global $is_western_name_order;
-	global $sort_by_first_name;
+	global $is_western_name_order;	
     global $session_id;
     
 	$a_users = array();
@@ -461,37 +460,33 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	if (!in_array($direction, array('ASC', 'DESC'))) {
 		$direction = 'ASC';
 	}
-
-    if (api_is_allowed_to_edit()) {
-        $column--;
-    }
-
+    
 	switch ($column) {
-	    case 1:
+	    case 2: //official code
             $order_by = 'ORDER BY user.official_code '.$direction;
             break;
-		case 2:
-			if ($is_western_name_order) {
-				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
-			} else {
-				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
-			}
-			break;
 		case 3:
 			if ($is_western_name_order) {
-				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
-			} else {
 				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
+			} else {
+				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
 			}
 			break;
 		case 4:
-			$order_by = 'ORDER BY user.username '.$direction;
-			break;
-		default:
-			if ($sort_by_first_name) {
-				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
-			} else {
+			if ($is_western_name_order) {
 				$order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;
+			} else {
+				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
+			}
+			break;
+		case 5: //username
+			$order_by = 'ORDER BY user.username '.$direction;
+			break;        
+		default:
+			if ($is_western_name_order) {
+                $order_by = 'ORDER BY user.lastname '.$direction.', user.firstname '.$direction;				
+			} else {
+				$order_by = 'ORDER BY user.firstname '.$direction.', user.lastname '.$direction;
 			}
 			break;
 	}
@@ -507,16 +502,17 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$groups_name = GroupManager :: get_user_group_name($user_id);
 			$temp = array();
 			if (api_is_allowed_to_edit(null, true)) {
-				if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+				//if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
                 	$temp[] = $user_id;
-                }
+                //}
 				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 				$user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 				if (!api_is_anonymous()) {
-					$photo = '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a></center>';
+					$photo = '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a>';
 				} else {
-					$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
+					$photo = '<img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />';
 				}
+                
 				$temp[] = $photo;
 				$temp[] = $o_course_user['official_code'];
 				
@@ -651,29 +647,30 @@ function modify_filter($user_id) {
                 $result .= '<a class="btn" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
             }
         }        
-    }
-   
+    }   
 	return $result;
 }
 
-$default_column = ($is_western_name_order xor $sort_by_first_name) ? 3 : 2;
-$default_column = api_is_allowed_to_edit() ? 2 : 1;
+function hide_field() {
+    return null;    
+}
+
+$default_column = 3;
 
 $table = new SortableTable('user_list', 'get_number_of_users', 'get_user_data', $default_column);
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+// Create a sortable table with user-data
+$parameters['sec_token'] = Security::get_token();
+
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
 
-if (api_is_allowed_to_edit(null, true)) {
-    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_header($header_nr++, '', false);
-    }
-}
+$table->set_header($header_nr++, '', false);
 $table->set_header($header_nr++, get_lang('Photo'), false);
 $table->set_header($header_nr++, get_lang('OfficialCode'));
 
 if ($is_western_name_order) {
-	$table->set_header($header_nr++, get_lang('FirstName'));
+	$table->set_header($header_nr++, get_lang('FirstName'));    
 	$table->set_header($header_nr++, get_lang('LastName'));
 } else {
 	$table->set_header($header_nr++, get_lang('LastName'));
@@ -682,16 +679,20 @@ if ($is_western_name_order) {
 $table->set_header($header_nr++, get_lang('LoginName'));  // 
 $table->set_header($header_nr++, get_lang('Description'), false);
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
-        
-if (api_is_allowed_to_edit(null, true)) {
-	// deprecated feature
-	//$table->set_header($header_nr++, get_lang('Tutor'), false);
+
+if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+     
+} else {
+    $table->set_column_filter(0, 'hide_field');    
+}
+
+if (api_is_allowed_to_edit(null, true)) {		
 	$table->set_header($header_nr++, get_lang('Status'), false);
 	$table->set_header($header_nr++, get_lang('Active'), false);
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
         $table->set_column_filter(9, 'active_filter');
     } else {
-        $table->set_column_filter(8, 'active_filter');
+        $table->set_column_filter(9, 'active_filter');
     }
 	//actions column
 	$table->set_header($header_nr++, get_lang('Action'), false);

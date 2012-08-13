@@ -64,6 +64,17 @@ class GroupManager {
 	//GROUP FUNCTIONS
 	private function __construct() {		
 	}
+    
+    public static function get_groups() {
+        $table_group 		= Database :: get_course_table(TABLE_GROUP);
+        $course_id          = api_get_course_int_id();
+        
+        $sql = "SELECT * FROM $table_group WHERE c_id = $course_id ";
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');
+            
+    }
+    
 	/**
 	 * Get list of groups for current course.
 	 * @param int $category The id of the category from which the groups are
@@ -72,8 +83,7 @@ class GroupManager {
 	 * @return array An array with all information about the groups.
 	 */
 	public static function get_group_list ($category = null, $course_code = null) {		
-		$my_user_id = api_get_user_id();
-		$my_status_of_user_in_course = '';
+		$my_user_id = api_get_user_id();		
 		
 		/*
 		if ($course_code != null) {
@@ -1374,10 +1384,10 @@ class GroupManager {
 		}
 		if (!empty($groups)) {
 			 array_filter($groups);
-		}
-		
+		}		
 		return $groups;
 	}
+    
 	/*	
         Group functions - these take virtual/linked courses into account when necessary
 	*/

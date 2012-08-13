@@ -1,5 +1,5 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
-/* For licensing terms, see /chamilo_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 *	File containing the MultipleAnswer class.
 *	@package chamilo.exercise

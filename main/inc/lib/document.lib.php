@@ -18,8 +18,7 @@ class DocumentManager {
     }
 
     /**
-     * @return the document folder quota for the current course, in bytes, or the default quota
-     * @todo eliminate globals
+     * @return the document folder quota for the current course, in bytes, or the default quota     
      */
     public static function get_course_quota() {
         $course_info = api_get_course_info();
@@ -2432,8 +2431,7 @@ class DocumentManager {
         $course_quota_m = round($course_quota / 1000000);
         $already_consumed_space_m = round($already_consumed_space / 1000000, 2);
         $percentage = $already_consumed_space / $course_quota * 100;
-        $percentage = round($percentage, 1);
-        //$message = "You are currently using %s (%s) of your %s.";
+        $percentage = round($percentage, 1);        
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');
         $message = sprintf($message, $already_consumed_space_m, $percentage.'%',$course_quota_m.' ');
         echo Display::div($message, array('id'=>'document_quota'));

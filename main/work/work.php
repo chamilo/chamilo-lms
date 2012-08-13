@@ -680,88 +680,39 @@ switch ($action) {
             //Bad token or can't add works
             $error_message = get_lang('IsNotPosibleSaveTheDocument');
         }
-						
+                    
 		if (!empty($succeed) && !empty($id)) {
 			//last value is to check this is not "just" an edit
 			//YW Tis part serve to send a e-mail to the tutors when a new file is sent
 			$send = api_get_course_setting('email_alert_manager_on_new_doc');
-			
+            
 			if ($send > 0) {
-				// Lets predefine some variables. Be sure to change the from address!
-				
-				$emailto = array ();
+				// Lets predefine some variables. Be sure to change the from address!				
 				if (empty($id_session)) {
-					$sql_resp = 'SELECT u.email as myemail FROM ' . $table_course_user . ' cu, ' . $table_user . ' u 
-								 WHERE cu.course_code = ' . "'" . api_get_course_id() . "'" . ' AND cu.status = 1 AND u.user_id = cu.user_id';
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-                            $emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
+                    //Teachers
+                    $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), null, null, null, COURSEMANAGER);
 				} else {				
-					// coachs of the session
-					$sql_resp = 'SELECT user.email as myemail
-										FROM ' . $table_session . ' session INNER JOIN ' . $table_user . ' user
-										ON user.user_id = session.id_coach
-										WHERE session.id = ' . intval($id_session);
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-							$emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
-			
-					//coach of the course
-					$sql_resp = 'SELECT user.email as myemail
-								FROM ' . $table_session_course_user . ' scu
-                                INNER JOIN ' . $table_user . ' user
-                                    ON user.user_id = scu.id_user AND scu.status=2
-                                WHERE scu.id_session = ' . intval($id_session);
-					$res_resp = Database::query($sql_resp);
-					while ($row_email = Database :: fetch_array($res_resp)) {
-						if (!empty ($row_email['myemail'])) {
-							$emailto[$row_email['myemail']] = $row_email['myemail'];
-						}
-					}
+                    //Coaches
+                    $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);					
 				}
-			
-				if (count($emailto) > 0) {		
-					$emailto = implode(',', $emailto);				
-					$emailsubject = "[" . api_get_setting('siteName') . "] ";
-					$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
-					$email_admin = api_get_setting('emailAdministrator');
-							// The body can be as long as you wish, and any combination of text and variables
-				
-					$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-					$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-					$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+                
+                $emailsubject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
+                
+                foreach ($user_list as $user_data) {
+                    $user_id = $user_data;                    
+                    $emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+					//$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
+					$emailbody .= get_lang('UserName')." : ".api_get_person_name($user_data['firstname'], $user_data['lastname'])."\n";
 					$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-					$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
-					$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
+					$emailbody .= get_lang('WorkName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
+                    $url = api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;id=".$work_id;
+					$emailbody .= Display::url($url, $url)." \n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
                     
-				    // Here we are forming one large header line
-					// Every header must be followed by a \n except the last
-					@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-				
-					$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName .", \n\n";
-					$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-					$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-					$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-					$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
-				
-					//Mail to user
-                    //var_dump($currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
-                    
-					@api_mail('', $currentUserEmail, $emailsubject, $emailbody_user, $sender_name, $email_admin);
-				}
+                    MessageManager::send_message_simple($user_id, $emailsubject, $emailbody);                    
+                }			
 			}
-			$message = get_lang('DocAdd');
-			//stats
-			if (!$Id) {
-				$Id = $insertId;
-			}
-			event_upload($Id);			
+			$message = get_lang('DocAdd');			
+			event_upload($id);			
 			Display :: display_confirmation_message(get_lang('DocAdd'), false);
 		} else {
             if (!empty($error_message)) {

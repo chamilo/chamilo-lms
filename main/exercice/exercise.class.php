@@ -1137,8 +1137,8 @@ class Exercise {
 				if ($this->end_time != '0000-00-00 00:00:00')
                     $defaults['activate_end_date_check'] = 1;
 
-				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? $this->start_time : date('Y-m-d 12:00:00');
-				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? $this->end_time : date('Y-m-d 12:00:00',time()+84600);
+				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
+				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
 				//Get expired time
 				if($this->expired_time != '0') {					

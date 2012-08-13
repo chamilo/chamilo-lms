@@ -1662,8 +1662,7 @@ class Exercise {
                         send_form();
                     }
                 });                
-                $('#clock_warning').dialog('open');
-                
+                $('#clock_warning').dialog('open');                
 
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
@@ -1677,7 +1676,12 @@ class Exercise {
             
             function send_form() {
                 //console.log('send_form');
-                $('#exercise_form').submit();
+                if ($('#exercise_form').length) {                
+                    $('#exercise_form').submit();
+                } else {
+                    //In reminder
+                    final_submit();
+                }
             }
            
             function onExpiredTimeExercise() { 
@@ -3601,7 +3605,9 @@ class Exercise {
     }
     
     function return_time_left_div() {       
-        return '<div id="exercise_clock_warning" class="well count_down"></div>';
+        $html  = '<div id="clock_warning" style="display:none">'.Display::return_message(get_lang('ReachedTimeLimit'), 'warning').' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'), '<span id="counter_to_redirect" class="red_alert"></span>').'</div>';
+        $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
+        return $html;
     }
 }
 endif;

@@ -112,14 +112,14 @@ if ($time_control) {
 
 echo Display::div('', array('id'=>'message'));
 
-echo '<script>
-		
+echo '<script>		
 		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});    		
       
         function final_submit() {
         	//Normal inputs   
         	window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
-		}		
+		}
+        
 		function review_questions() {
 			var is_checked = 1;
 			$("input[type=checkbox]").each(function () {
@@ -207,7 +207,6 @@ foreach ($question_list as $questionId) {
 	$label_attributes['for'] = $check_id;	
     $label_attributes['class'] = "checkbox";
 	
-	
 	$checkbox          = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
 	$url               = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
 	
@@ -232,9 +231,7 @@ $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('on
 $exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn'));
 
 echo Display::div('', array('class'=>'clear'));
-
 echo Display::div($exercise_actions, array('class'=>'form-actions'));
-
 
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool

@@ -1196,9 +1196,9 @@ class Exercise {
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {
 			$start_time = $form->getSubmitValue('start_time');
-            $start_time['F'] = sprintf('%02d', $start_time['F'] + 1);            
-            $start_time['i'] = sprintf('%02d', $start_time['i'] + 1);
-            $start_time['d'] = sprintf('%02d', $start_time['d'] + 1);
+            $start_time['F'] = sprintf('%02d', $start_time['F']);
+            $start_time['i'] = sprintf('%02d', $start_time['i']);
+            $start_time['d'] = sprintf('%02d', $start_time['d']);
             
 			$this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
 		} else {
@@ -1207,9 +1207,9 @@ class Exercise {
 
 		if ($form->getSubmitValue('activate_end_date_check') == 1) {
 			$end_time = $form->getSubmitValue('end_time');
-            $end_time['F'] = sprintf('%02d', $end_time['F'] + 1);
-            $end_time['i'] = sprintf('%02d', $end_time['i'] + 1);
-            $end_time['d'] = sprintf('%02d', $end_time['d'] + 1);
+            $end_time['F'] = sprintf('%02d', $end_time['F']);
+            $end_time['i'] = sprintf('%02d', $end_time['i']);
+            $end_time['d'] = sprintf('%02d', $end_time['d']);
             
 			$this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
 		} else {

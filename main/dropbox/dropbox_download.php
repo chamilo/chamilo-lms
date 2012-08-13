@@ -83,11 +83,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 // Check if the user is allowed to download the file
 $allowed_to_download = false;
-
-// Check if the user has sent or received the file.
-$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id='".intval($_GET['id'])."' AND user_id='".api_get_user_id()."'";
-$result = Database::query($sql);
-if (Database::num_rows($result) > 0) {
+if (user_can_download_file($_GET['id'], api_get_user_id())) {
 	$allowed_to_download = true;
 }
 
@@ -109,8 +105,7 @@ if (!$allowed_to_download) {
     if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
     	exit;
     }
-	$file = $work->title;
-	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+	$file = $work->title;	
 	$mimetype = DocumentManager::file_get_mime_type(true);
 	$fileinfo = pathinfo($file);
 	$extension = $fileinfo['extension'];

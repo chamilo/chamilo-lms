@@ -2550,14 +2550,12 @@ div.admin_section h4 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);   
     position: relative;
     
-    background-image: -ms-linear-gradient(top, #992800, #C83F25);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#992800), to(#C83F25));
-    background-image: -webkit-linear-gradient(top, #992800, #C83F25);
-    background-image: -o-linear-gradient(top, #992800, #C83F25);
+    background-image: -ms-linear-gradient(top, #FDFDFD, #F3F5F7);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FDFDFD), to(#F3F5F7));
+    background-image: -webkit-linear-gradient(top, #FDFDFD, #F3F5F7);
+    background-image: -o-linear-gradient(top, #FDFDFD, #F3F5F7);
     background-image: -moz-linear-gradient(top, #FDFDFD, #F3F5F7);
-    background-image: linear-gradient(top, #992800, #C83F25);
-    
-    
+    background-image: linear-gradient(top, #FDFDFD, #F3F5F7);
 }
 
 .ribbon .rib {    
@@ -2604,8 +2602,7 @@ div.admin_section h4 {
     background-image: -webkit-linear-gradient(top, #992800, #C83F25);
     background-image: -o-linear-gradient(top, #992800, #C83F25);
     background-image: -moz-linear-gradient(top, #992800, #C83F25);
-    background-image: linear-gradient(top, #992800, #C83F25);
-    
+    background-image: linear-gradient(top, #992800, #C83F25);    
     
     border-top: 1px solid #C56E5B;
     border-bottom: 1px solid #7A290F;
@@ -4593,27 +4590,27 @@ data table
 /* Only for Firefox */
 @-moz-document url-prefix() {
     select#question_type_hidden option {
-    padding: 10px 0px 10px 40px;
-    background-repeat:no-repeat;
+        padding: 10px 0px 10px 40px;
+        background-repeat:no-repeat;
+    }
+    select#question_type_hidden option[value="1"] {background-image: url(../img/icons/32/mcua.gif);}
+    select#question_type_hidden option[value="2"] {background-image: url(../img/icons/32/mcma.gif);}
+    select#question_type_hidden option[value="3"] {background-image: url(../img/icons/32/fill_in_blanks.gif);}
+    select#question_type_hidden option[value="4"] {background-image: url(../img/icons/32/matching.gif);}
+    select#question_type_hidden option[value="5"] {background-image: url(../img/icons/32/open_answer.gif);}
+    select#question_type_hidden option[value="6"] {background-image: url(../img/icons/32/hotspot.gif);}
+
+    select#question_type_hidden option[value="7"] {background-image: url(../img/icons/32/mcma.gif);}
+    select#question_type_hidden option[value="8"] {background-image: url(../img/icons/32/mcma.gif);}
+
+    select#question_type_hidden option[value="9"] {background-image: url(../img/icons/32/mcmac.gif);}
+    select#question_type_hidden option[value="10"] {background-image: url(../img/icons/32/mcuao.gif);}
+    select#question_type_hidden option[value="11"] {background-image: url(../img/icons/32/mcmao.gif);}
+    select#question_type_hidden option[value="12"] {background-image: url(../img/icons/32/mcmaco.gif);}
+    select#question_type_hidden option[value="13"] {background-image: url(../img/icons/32/audio_question.png);}
+    select#question_type_hidden option[value="14"] {background-image: url(../img/icons/32/mcmagl.gif);}
 }
 
-select#question_type_hidden option[value="1"] {background-image: url(../img/icons/32/mcua.gif);}
-select#question_type_hidden option[value="2"] {background-image: url(../img/icons/32/mcma.gif);}
-select#question_type_hidden option[value="3"] {background-image: url(../img/icons/32/fill_in_blanks.gif);}
-select#question_type_hidden option[value="4"] {background-image: url(../img/icons/32/matching.gif);}
-select#question_type_hidden option[value="5"] {background-image: url(../img/icons/32/open_answer.gif);}
-select#question_type_hidden option[value="6"] {background-image: url(../img/icons/32/hotspot.gif);}
-
-select#question_type_hidden option[value="7"] {background-image: url(../img/icons/32/mcma.gif);}
-select#question_type_hidden option[value="8"] {background-image: url(../img/icons/32/mcma.gif);}
-
-select#question_type_hidden option[value="9"] {background-image: url(../img/icons/32/mcmac.gif);}
-select#question_type_hidden option[value="10"] {background-image: url(../img/icons/32/mcuao.gif);}
-select#question_type_hidden option[value="11"] {background-image: url(../img/icons/32/mcmao.gif);}
-select#question_type_hidden option[value="12"] {background-image: url(../img/icons/32/mcmaco.gif);}
-select#question_type_hidden option[value="13"] {background-image: url(../img/icons/32/audio_question.png);}
-select#question_type_hidden option[value="14"] {background-image: url(../img/icons/32/mcmagl.gif);}
-}
 
 .btn-success.btn-install{
     float: right;

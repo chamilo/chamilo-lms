@@ -646,7 +646,7 @@ class Exercise {
 		$sound                  = $this->sound;
 		$type                   = $this->type;
 		$attempts               = $this->attempts;
-		$feedback_type           = $this->feedback_type;
+		$feedback_type          = $this->feedback_type;
 		$random                 = $this->random;
 		$random_answers         = $this->random_answers;
 		$active                 = $this->active;
@@ -854,7 +854,7 @@ class Exercise {
 			$form_title = get_lang('NewEx');
 		}
         
-		$form->addElement('header', '', $form_title);
+		$form->addElement('header', $form_title);
         
 		// title
 		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
@@ -1008,7 +1008,7 @@ class Exercise {
 				
 			$var = Exercise::selectTimeLimit();
             
-			if (($this->start_time!='0000-00-00 00:00:00'))
+			if (($this->start_time != '0000-00-00 00:00:00'))
                 $form->addElement('html','<div id="start_date_div" style="display:block;">');
 			else
                 $form->addElement('html','<div id="start_date_div" style="display:none;">');
@@ -1019,7 +1019,7 @@ class Exercise {
 
 			$form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
             
-			if (($this->end_time!='0000-00-00 00:00:00'))
+			if (($this->end_time != '0000-00-00 00:00:00'))
                 $form->addElement('html','<div id="end_date_div" style="display:block;">');
 			else
                 $form->addElement('html','<div id="end_date_div" style="display:none;">');
@@ -1101,7 +1101,7 @@ class Exercise {
 
 		$form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
         
-		if ($type=='full') {
+		if ($type == 'full') {
 			// rules
 			$form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
 			$form->addRule('start_time', get_lang('InvalidDate'), 'date');
@@ -1132,9 +1132,9 @@ class Exercise {
                 $defaults['display_category_name']  = $this->selectDisplayCategoryName(); //                 
                 $defaults['pass_percentage']        = $this->selectPassPercentage();               
                 
-				if (($this->start_time!='0000-00-00 00:00:00'))
+				if (($this->start_time != '0000-00-00 00:00:00'))
                     $defaults['activate_start_date_check'] = 1;
-				if ($this->end_time!='0000-00-00 00:00:00')
+				if ($this->end_time != '0000-00-00 00:00:00')
                     $defaults['activate_end_date_check'] = 1;
 
 				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? $this->start_time : date('Y-m-d 12:00:00');

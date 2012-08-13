@@ -664,7 +664,7 @@ class SocialManager extends UserManager {
             }
 
             //@todo check if user is online and if it's a friend to show the chat link
-            if (api_get_setting('allow_global_chat') == 'true' && $user_friend_relation == USER_RELATION_TYPE_FRIEND) {
+            if (api_is_global_chat_enabled() && $user_friend_relation == USER_RELATION_TYPE_FRIEND) {
                 if ($user_id != api_get_user_id()) {
                     //Only show chat if I'm available to talk
                     if ($current_user_info['user_is_online_in_chat'] == 1) {

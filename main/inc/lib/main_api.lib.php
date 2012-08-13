@@ -6007,3 +6007,13 @@ function api_check_user_access_to_legal($course_visibility) {
     $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);    
     return in_array($course_visibility, $course_visibility_list) || api_is_drh();
 }
+
+/**
+ * Checks if the global chat is enabled or not
+ * 
+ * @return bool
+ */
+function api_is_global_chat_enabled(){
+    $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
+    return $global_chat_is_enabled;
+}

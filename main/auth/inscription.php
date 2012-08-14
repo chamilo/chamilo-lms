@@ -507,7 +507,7 @@ if ($form->validate()) {
     
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);    
     if (!empty($form_data['message'])) {
-        $form_register->addElement('html', $form_data['message'].'<br />');
+        $form_register->addElement('html', $form_data['message'].'<br /><br />');
     }    
     $form_register->addElement('html', $form_data['button']);    
     $display_text .= $form_register->return_form();  

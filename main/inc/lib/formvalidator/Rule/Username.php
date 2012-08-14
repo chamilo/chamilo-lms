@@ -34,10 +34,7 @@ class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule {
 	 * @return boolean True if username is of the correct format
 	 * @author Modified by Ivan Tcholakov, 15-SEP-2009. The validation rule is served by the UserManager class as of this moment.
 	 */
-	function validate($username) {
-		if (!class_exists('UserManager')) {
-			require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-		}
+	function validate($username, $options) {		
 		return UserManager::is_username_valid($username);
 	}
 }

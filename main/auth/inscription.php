@@ -480,8 +480,7 @@ if ($form->validate()) {
     }
     
     $course_code_redirect = Session::read('course_redirect');
-    var_dump($course_code_redirect);
-    
+        
     if (!empty($course_code_redirect)) {
         $course_info = api_get_course_info($course_code_redirect);        
         if (!empty($course_info)) {
@@ -506,16 +505,12 @@ if ($form->validate()) {
         }
     }
     
-    $form_register = new FormValidator('form_register', 'post', $form_data['action']);
-    
+    $form_register = new FormValidator('form_register', 'post', $form_data['action']);    
     if (!empty($form_data['message'])) {
         $form_register->addElement('html', $form_data['message'].'<br />');
-    }
-    
-    $form_register->addElement('html', $form_data['button']);
-    
-    $display_text .= $form_register->return_form();
-  
+    }    
+    $form_register->addElement('html', $form_data['button']);    
+    $display_text .= $form_register->return_form();  
     
     //Just in case
     Session::erase('course_redirect');

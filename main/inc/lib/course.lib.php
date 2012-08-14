@@ -86,7 +86,7 @@ class CourseManager {
      * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
      */
-    function create_course($params) {
+    static function create_course($params) {
         global $_configuration;
         // Check portal limits
         $access_url_id = 1;

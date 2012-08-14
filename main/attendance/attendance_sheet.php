@@ -212,7 +212,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             }                                   
                                                 
                             $result .= '<th width="800px">';
-                            $result .= '<center><div style="font-size:10px;width:100px;">'.$datetime.'&nbsp;';                            
+                            $result .= '<center><div style="font-size:10px;width:120px;">'.$datetime.'&nbsp;';                            
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
                             
                             if ($is_locked_attendance == false) {

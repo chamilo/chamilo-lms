@@ -33,7 +33,17 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = false;
 }
 
-if ($user_already_registered_show_terms == false) {
+//Direct Link Subscription feature #5299
+$course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQUEST['c'] : null;
+$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
+
+if (!empty($course_code_redirect)) {
+    Session::write('course_redirect',   $course_code_redirect);
+    Session::write('exercise_redirect', $exercise_redirect);
+}
+
+if ($user_already_registered_show_terms == false) {    
+            
     if (api_is_western_name_order()) {
         //	FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -83,6 +93,7 @@ if ($user_already_registered_show_terms == false) {
         $form->addRule('username', get_lang('UsernameWrong'), 'username');
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
+    
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
     $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20, 'autocomplete' => 'off'));
@@ -240,8 +251,7 @@ if (!CustomPages::enabled()) {
     if (api_get_setting('allow_registration') == 'false') {
         api_not_allowed();
     }*/
-
-    //api_display_tool_title($tool_name);
+    
     if (api_get_setting('allow_registration') == 'approval') {
         Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
     }
@@ -284,7 +294,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addElement('button', 'submit', get_lang('RegisterUser'));
+$form->addElement('button', 'submit', get_lang('RegisterUser'), array('class' => 'btn btn-primary btn-large'));
 
 if ($form->validate()) {
     
@@ -434,35 +444,83 @@ if ($form->validate()) {
 
     Session::write('user_last_login_datetime', $user_last_login_datetime);
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
-    $display_text =  '<p>'.get_lang('Dear',null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
+    
+    $display_text = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";
 
-    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
-        $button_text = get_lang('Next',null,$_user['language']);
-        $action_url = api_get_path(WEB_PATH).'user_portal.php';
-
+    $form_data = array( 'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
+                        'message' => null,
+                        'action' => api_get_path(WEB_PATH).'user_portal.php');
+    
+    if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {        
+        $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
     } else {
+        
         if (!empty ($values['email'])) {
             $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
         }
-        $button_text = '';
-
+        
         if ($is_allowedCreateCourse) {
-            $display_text .= '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). ".</p>";
-            $action_url = '../create_course/add_course.php';
-            $button_text = api_get_setting('course_validation') == 'true'
-                ? get_lang('CreateCourseRequest', null, $_user['language'])
-                : get_lang('CourseCreate', null, $_user['language']);
+            $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). "</p>";            
+            $form_data['action']  = '../create_course/add_course.php';
+            
+            if (api_get_setting('course_validation') == 'true') {                
+                $form_data['button'] = Display::button('next', get_lang('CreateCourseRequest', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+            } else {
+                $form_data['button'] = Display::button('next', get_lang('CourseCreate', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));                          
+            }
         } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true')
-                $action_url = 'courses.php?action=subscribe';
-            else
-                $action_url = api_get_path(WEB_PATH).'user_portal.php';
-            $display_text.='<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>";
-            $button_text = get_lang('Next',null,$_user['language']);
+            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+                $form_data['action']    = 'courses.php?action=subscribe';
+                $form_data['message']   = '<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>";
+            } else {
+                $form_data['action']  = api_get_path(WEB_PATH).'user_portal.php';                
+            }     
+            $form_data['button'] = Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
         }
     }
-    $display_text .= '<form action="'. $action_url. '"  method="post">
-                    <button type="submit" class="next" name="next" value="'. get_lang('Next', null, $_user['language']). '" validationmsg=" '. get_lang('Next',null,$_user['language']). ' ">'. $button_text. '</button>'. "\n". '</form><br />'. "\n";
+    
+    $course_code_redirect = Session::read('course_redirect');
+    var_dump($course_code_redirect);
+    
+    if (!empty($course_code_redirect)) {
+        $course_info = api_get_course_info($course_code_redirect);        
+        if (!empty($course_info)) {
+            
+            if (in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
+                $user_id = api_get_user_id();
+                if (CourseManager::subscribe_user($user_id, $course_info['code'])) {
+                                    
+                    $form_data['action'] = $course_info['course_public_url'];            
+                    $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
+                    $form_data['button'] = Display::button('next', get_lang('GoToCourse', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));                    
+                    
+                    $exercise_redirect = intval(Session::read('exercise_redirect'));
+                    
+                    if (!empty($exercise_redirect)) {
+                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?id='.intval($exercise_redirect).'&cidReq='.$course_info['code'];
+                        $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
+                        $form_data['button'] = Display::button('next', get_lang('Go', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                    }
+                }
+            }
+        }
+    }
+    
+    $form_register = new FormValidator('form_register', 'post', $form_data['action']);
+    
+    if (!empty($form_data['message'])) {
+        $form_register->addElement('html', $form_data['message'].'<br />');
+    }
+    
+    $form_register->addElement('html', $form_data['button']);
+    
+    $display_text .= $form_register->return_form();
+  
+    
+    //Just in case
+    Session::erase('course_redirect');
+    Session::erase('exercise_redirect');
+    
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
     }

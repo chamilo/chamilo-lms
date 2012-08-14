@@ -1331,7 +1331,9 @@ function api_format_course_array($course_data) {
     $_course['department_url']        = $course_data['department_url' ];
     
     $_course['disk_quota']            = $course_data['disk_quota'];
-
+    
+    $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {

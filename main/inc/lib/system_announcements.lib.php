@@ -610,7 +610,12 @@ class SystemAnnouncementManager {
         
         if (isset($id) && !empty($id)) {
             $id = intval($id);
-            $sql .= " AND id = $id ";            
+            $sql .= " AND id = $id ";
+        }
+        
+        if (api_is_multiple_url_enabled()) {
+            $current_url_id = api_get_current_access_url_id();
+            $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
         
 		$sql .= " ORDER BY date_start DESC";            	    

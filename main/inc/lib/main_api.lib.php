@@ -5778,6 +5778,10 @@ function api_get_multiple_access_url() {
     return false;
 }
 
+function api_is_multiple_url_enabled() {
+    return api_get_multiple_access_url();
+}
+
 /**
  * Returns a md5 unique id
  * @todo add more parameters

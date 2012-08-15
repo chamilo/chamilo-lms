@@ -34,7 +34,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
 
     $_configuration['db_glue'] = get_config_param('dbGlu');
-
+    
     if ($singleDbForm) {
         $_configuration['table_prefix'] 	= get_config_param('courseTablePrefix');
         $_configuration['main_database'] 	= get_config_param('mainDbName');
@@ -305,6 +305,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     if ($singleDbForm) {
         $prefix =  get_config_param('table_prefix');
     }
+    
+    Log::notice("Database prefix: '$prefix'");
 
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');

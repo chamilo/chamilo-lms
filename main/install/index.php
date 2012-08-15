@@ -777,7 +777,9 @@ if (@$_POST['step2']) {
         } else {
             $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;            
         }
-
+        
+        Log::notice("singledbForm: '$singleDbForm'");
+        
 		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {

@@ -593,6 +593,7 @@ class Skill extends Model {
         unset($skills);
         return $skills_tree;
     }
+    
     /**
      * Get skills tree as a simplified JSON structure
      * 
@@ -600,8 +601,10 @@ class Skill extends Model {
     public function get_skills_tree_json($user_id = null, $return_flat_array = false) {
         $tree = $this->get_skills_tree($user_id, $return_flat_array);
         $simple_tree = array();
-        foreach ($tree['children'] as $element) {
-            $simple_tree[] = array('name' => $element['name'], 'children' => $this->get_skill_json($element['children']));
+        if (!empty($tree['children'])) {
+            foreach ($tree['children'] as $element) {
+                $simple_tree[] = array('name' => $element['name'], 'children' => $this->get_skill_json($element['children']));
+            }
         }
         //$s = array('\/');
         //return str_replace($s,'/',json_encode($simple_tree[0]['children']));

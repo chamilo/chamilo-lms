@@ -14,7 +14,6 @@ $cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 function validate_data($skills) {
@@ -282,16 +281,13 @@ if ($count_fields > 0) {
 		$i++;
 	}
 }
-
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
-<blockquote>
 <pre>
-<b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b><br />
-<b>n</b>;<b>m</b>;<b>xxx</b>;xxx<br />
+    <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>
+    <b>2</b>;<b>0</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
-</blockquote>
 
 <!--p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

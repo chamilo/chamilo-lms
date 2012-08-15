@@ -21,7 +21,7 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once ('HTML/QuickForm/Rule.php');
+require_once 'HTML/QuickForm/Rule.php';
 /**
  * QuickForm rule to check if a username is available
  */
@@ -34,12 +34,13 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 	 * @param string $current_username
 	 * @return boolean True if username is available
 	 */
-	function validate($username,$current_username = null)
-	{
+	function validate($username, $current_username = null) {
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $username = Database::escape_string($username);        
+        $current_username = Database::escape_string($current_username);
+        
 		$sql = "SELECT * FROM $user_table WHERE username = '$username'";
-		if(!is_null($current_username))
-		{
+		if (!is_null($current_username)) {
 			$sql .= " AND username != '$current_username'";
 		}
 		$res = Database::query($sql);
@@ -47,4 +48,3 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 		return $number == 0;
 	}
 }
-?>

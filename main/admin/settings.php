@@ -93,18 +93,18 @@ $settings = null;
 
 function get_settings($category = null) {
     $url_id = api_get_current_access_url_id();
+    $settings_by_access_list = array();
     
     if ($url_id == 1) {    
         $settings = api_get_settings($category, 'group', $url_id);        
     } else {
-        $url_info = api_get_access_url($url_id);
+        $url_info = api_get_access_url($url_id);    
         if ($url_info['active'] == 1) {
             // The default settings of Chamilo
             $settings = api_get_settings($category, 'group', 1, 0);
             // The settings that are changeable from a particular site.
-            $settings_by_access = api_get_settings($category, 'group', $url_id, 1);
+            $settings_by_access = api_get_settings($category, 'group', $url_id, 1);                        
             
-            $settings_by_access_list = array();
             foreach ($settings_by_access as $row) {
                 if (empty($row['variable']))
                     $row['variable'] = 0;
@@ -120,22 +120,21 @@ function get_settings($category = null) {
                     $settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]  = array();
             }
         }
-    }
-    
+    }    
     if (isset($category) && $category== 'search_setting') {  
         if (!empty($_REQUEST['search_field'])) {
             $settings = search_setting($_REQUEST['search_field']);                               
         }
     }
-    return $settings;
+    return array('settings' => $settings, 'settings_by_access_list' => $settings_by_access_list);
 }
-
 
 // Build the form.
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
     $my_category = isset($_GET['category']) ? $_GET['category'] : null;
-    $settings = get_settings($my_category);
-    
+    $settings_array = get_settings($my_category);
+    $settings = $settings_array['settings'];
+    $settings_by_access_list = $settings_array['settings_by_access_list'];    
     $form = generate_settings_form($settings, $settings_by_access_list);
         
     $message = array();
@@ -146,7 +145,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $mark_all = false;
         $un_mark_all = false;
         
-        if ( $_configuration['multiple_access_urls']) {        
+        if ($_configuration['multiple_access_urls']) {        
             if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['mark_all'])) {
                 $mark_all = true;
             }
@@ -179,7 +178,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     }
                 }
                 //Reload settings
-                $settings = get_settings($my_category);
+                $settings_array = get_settings($my_category);
+                $settings = $settings_array['settings'];
+                $settings_by_access_list = $settings_array['settings_by_access_list'];
                 $form = generate_settings_form($settings, $settings_by_access_list);
             }
         }                
@@ -379,9 +380,6 @@ $action_images['templates']     = 'template.png';
 $action_images['plugins']       = 'plugins.png';
 $action_images['shibboleth']    = 'shibboleth.png';
 $action_images['facebook']      = 'facebook.png';
-
-// Grabbing the categories.
-//$resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
 
 $action_array = array();
 $resultcategories = array();

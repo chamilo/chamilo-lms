@@ -9,8 +9,8 @@
  * @todo Move $canBeEmpty from course_info.conf.php to config-settings
  * @todo Take those config settings into account in this script
  * @author Patrick Cool <patrick.cool@UGent.be>
- * @author Roan Embrechts, refactoring
- * and improved course visibility|subscribe|unsubscribe options
+ * @author Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
+ * @author Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
  * @package chamilo.course_info
  */
 
@@ -38,7 +38,7 @@ define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 
-$course_code 				= $_course['sysCode'];
+$course_code 				= api_get_course_id();
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
@@ -188,6 +188,10 @@ $group[]= $form->createElement('radio', 'visibility', null, get_lang('OpenToTheP
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
 $form->addGroup($group, '', array(get_lang("CourseAccess"), get_lang("CourseAccessConfigTip")), '');
+
+$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=".get_lang('there');
+$url = Display::url($url, $url);
+$form->addElement('label', get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url));
 
 $group = array();
 $group[]=$form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
@@ -350,7 +354,6 @@ $app_plugin->add_course_settings_form($form);
 
 // Get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
-
 
 // Set the default values of the form
 $values = array();

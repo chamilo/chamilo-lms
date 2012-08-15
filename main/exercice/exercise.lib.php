@@ -1934,8 +1934,6 @@ function delete_chat_exercise_session($exe_id) {
     }    
 }
 
-
-
 function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false) {
     global $origin;
     
@@ -1948,8 +1946,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     $counter = 1;
     $total_score = $total_weight = 0;
     
-    $exercise_content = null;
-    
+    $exercise_content = null;    
     
     //Hide results
     $show_results     = false;
@@ -1981,7 +1978,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             echo "<div class='clear'>&nbsp;</div>";
         }
     }
-
+    
+    $question_list_answers = array();
 
     // Loop over all question to show results for each of them, one by one
     if (!empty($question_list)) {
@@ -2002,6 +2000,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];
             
+            $question_list_answers[]   = array('question' => $result['open_question'], 'answer' => $result['open_answer']);            
             
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];   
@@ -2068,19 +2067,20 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     echo $total_score_text;
     
-    
-    
     if ($save_user_result) {
         
         // Tracking of results
         $learnpath_id           = $exercise_stat_info['orig_lp_id'];
         $learnpath_item_id      = $exercise_stat_info['orig_lp_item_id'];
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
+        
         if (api_is_allowed_to_session_edit()) {    
             update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
         }
+        
+        // Send notification ..
+        if (!api_is_allowed_to_edit(null,true)) {
+            $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
+        }
     }
-    
-    
-    
 }

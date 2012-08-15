@@ -56,8 +56,6 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 api_protect_course_script();
 
 /*	Libraries */
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 // including the library for the sortable table
 //require_once api_get_path(LIBRARY_PATH).'tablesort.lib.php';moved to autoload

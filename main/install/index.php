@@ -770,7 +770,16 @@ if (@$_POST['step2']) {
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
 		}
-
+        
+        //Setting the single db form
+        if (in_array($_POST['old_version'], $update_from_version_6)) {            
+            $singleDbForm   	= get_config_param('singleDbEnabled');            
+        } else {
+            $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;            
+        }
+        
+        Log::notice("singledbForm: '$singleDbForm'");
+        
 		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {

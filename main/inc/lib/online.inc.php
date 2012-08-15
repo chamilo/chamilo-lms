@@ -62,7 +62,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     }
     
     //Changing global chat status to offline
-    if (api_get_setting('allow_global_chat') == 'true') {
+    if (api_is_global_chat_enabled()) {
         $chat = new Chat();
         $chat->set_user_status(0);
     }

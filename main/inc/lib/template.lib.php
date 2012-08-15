@@ -459,14 +459,13 @@ class Template {
             'email_links.lib.js.php',
             'bootstrap/bootstrap.js',
         );
-
-        if (api_get_setting('allow_global_chat') == 'true') {
-            if (!api_is_anonymous()) {
-                //Do not include the global chat in LP
-                if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
-                    $js_files[] = 'chat/js/chat.js';
-                }
-            }
+        
+        
+        if (api_is_global_chat_enabled()) {            
+            //Do not include the global chat in LP
+            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+                $js_files[] = 'chat/js/chat.js';
+            }            
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
@@ -487,8 +486,7 @@ class Template {
 
         $css_files = array(
             api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css',
-            api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css',
-            //api_get_path(WEB_LIBRARY_PATH) . 'javascript/dtree/dtree.css', not used anymore
+            api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css'
         );
 
         if ($this->show_learnpath) {
@@ -496,7 +494,7 @@ class Template {
             $css_files[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
         }
 
-        if (api_get_setting('allow_global_chat') == 'true') {
+        if (api_is_global_chat_enabled()) {
             $css_files[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
 
@@ -596,7 +594,7 @@ class Template {
         $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());        
         
         //Profile link
-        if (api_get_setting('allow_social_tool')=='true') {
+        if (api_get_setting('allow_social_tool') == 'true') {
             $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
         } else {
             $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';

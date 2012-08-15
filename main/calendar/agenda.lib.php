@@ -610,8 +610,8 @@ class Agenda {
                 
                 //Event Sent to a group?
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
-                    if (!empty($group_to_array)) {
-                        $sent_to = array();
+                    $sent_to = array();
+                    if (!empty($group_to_array)) {                        
                         foreach($group_to_array as $group_item) {
                             $sent_to[] = $group_name_list[$group_item];        
                         }
@@ -625,9 +625,8 @@ class Agenda {
                 //Event sent to a user?
                 //var_dump($row);
                 if (isset($row['to_user_id'])) {
-                    
-                    if (!empty($user_to_array)) {
-                        $sent_to = array();
+                    $sent_to = array();
+                    if (!empty($user_to_array)) {                        
                         foreach($user_to_array as $item) {
                             $user_info = api_get_user_info($item);   
                             // add username as tooltip for $event['sent_to'] - ref #4226

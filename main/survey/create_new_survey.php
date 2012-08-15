@@ -258,10 +258,6 @@ $form->addRule(array('start_date', 'end_date'), get_lang('StartDateShouldBeBefor
 // Setting the default values
 $form->setDefaults($defaults);
 
-
-// Displaying the header
-Display::display_header($tool_name);
-
 // The validation or display
 if ($form->validate()) {
 	// Exporting the values
@@ -281,6 +277,9 @@ if ($form->validate()) {
 	if ($return['type'] == 'error') {
 		// Display the error
 		Display::display_error_message(get_lang($return['message']), false);
+        
+        // Displaying the header
+        Display::display_header($tool_name);
 
 		// Display the form
 		$form->display();
@@ -307,6 +306,7 @@ if ($form->validate()) {
 			}
 		}
 	}
+    
 	if ($config['survey']['debug']) {
 		// Displaying a feedback message
    		Display::display_confirmation_message($return['message'], false);
@@ -315,7 +315,10 @@ if ($form->validate()) {
    		header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
         exit;
 	}
-} else {		
+} else {
+    // Displaying the header
+    Display::display_header($tool_name);
+
 	$form->display();
 }
 

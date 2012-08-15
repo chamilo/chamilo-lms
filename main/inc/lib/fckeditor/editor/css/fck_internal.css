@@ -33,6 +33,7 @@
 html
 {
     min-height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 table.FCK__ShowTableBorders, table.FCK__ShowTableBorders td, table.FCK__ShowTableBorders th

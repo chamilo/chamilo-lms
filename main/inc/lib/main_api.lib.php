@@ -1331,7 +1331,9 @@ function api_format_course_array($course_data) {
     $_course['department_url']        = $course_data['department_url' ];
     
     $_course['disk_quota']            = $course_data['disk_quota'];
-
+    
+    $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {
@@ -5776,6 +5778,10 @@ function api_get_multiple_access_url() {
     return false;
 }
 
+function api_is_multiple_url_enabled() {
+    return api_get_multiple_access_url();
+}
+
 /**
  * Returns a md5 unique id
  * @todo add more parameters
@@ -6006,4 +6012,14 @@ function api_check_ip_in_range($ip,$range) {
 function api_check_user_access_to_legal($course_visibility) {
     $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);    
     return in_array($course_visibility, $course_visibility_list) || api_is_drh();
+}
+
+/**
+ * Checks if the global chat is enabled or not
+ * 
+ * @return bool
+ */
+function api_is_global_chat_enabled(){
+    $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
+    return $global_chat_is_enabled;
 }

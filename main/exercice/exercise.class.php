@@ -646,7 +646,7 @@ class Exercise {
 		$sound                  = $this->sound;
 		$type                   = $this->type;
 		$attempts               = $this->attempts;
-		$feedback_type           = $this->feedback_type;
+		$feedback_type          = $this->feedback_type;
 		$random                 = $this->random;
 		$random_answers         = $this->random_answers;
 		$active                 = $this->active;
@@ -854,7 +854,7 @@ class Exercise {
 			$form_title = get_lang('NewEx');
 		}
         
-		$form->addElement('header', '', $form_title);
+		$form->addElement('header', $form_title);
         
 		// title
 		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
@@ -1008,7 +1008,7 @@ class Exercise {
 				
 			$var = Exercise::selectTimeLimit();
             
-			if (($this->start_time!='0000-00-00 00:00:00'))
+			if (($this->start_time != '0000-00-00 00:00:00'))
                 $form->addElement('html','<div id="start_date_div" style="display:block;">');
 			else
                 $form->addElement('html','<div id="start_date_div" style="display:none;">');
@@ -1019,7 +1019,7 @@ class Exercise {
 
 			$form->addElement('checkbox', 'activate_end_date_check', null , get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
             
-			if (($this->end_time!='0000-00-00 00:00:00'))
+			if (($this->end_time != '0000-00-00 00:00:00'))
                 $form->addElement('html','<div id="end_date_div" style="display:block;">');
 			else
                 $form->addElement('html','<div id="end_date_div" style="display:none;">');
@@ -1101,7 +1101,7 @@ class Exercise {
 
 		$form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
         
-		if ($type=='full') {
+		if ($type == 'full') {
 			// rules
 			$form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
 			$form->addRule('start_time', get_lang('InvalidDate'), 'date');
@@ -1132,13 +1132,13 @@ class Exercise {
                 $defaults['display_category_name']  = $this->selectDisplayCategoryName(); //                 
                 $defaults['pass_percentage']        = $this->selectPassPercentage();               
                 
-				if (($this->start_time!='0000-00-00 00:00:00'))
+				if (($this->start_time != '0000-00-00 00:00:00'))
                     $defaults['activate_start_date_check'] = 1;
-				if ($this->end_time!='0000-00-00 00:00:00')
+				if ($this->end_time != '0000-00-00 00:00:00')
                     $defaults['activate_end_date_check'] = 1;
 
-				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? $this->start_time : date('Y-m-d 12:00:00');
-				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? $this->end_time : date('Y-m-d 12:00:00',time()+84600);
+				$defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
+				$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
 				//Get expired time
 				if($this->expired_time != '0') {					
@@ -1196,6 +1196,10 @@ class Exercise {
 
 		if ($form->getSubmitValue('activate_start_date_check') == 1) {
 			$start_time = $form->getSubmitValue('start_time');
+            $start_time['F'] = sprintf('%02d', $start_time['F']);
+            $start_time['i'] = sprintf('%02d', $start_time['i']);
+            $start_time['d'] = sprintf('%02d', $start_time['d']);
+            
 			$this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
 		} else {
 			$this->start_time = '0000-00-00 00:00:00';
@@ -1203,6 +1207,10 @@ class Exercise {
 
 		if ($form->getSubmitValue('activate_end_date_check') == 1) {
 			$end_time = $form->getSubmitValue('end_time');
+            $end_time['F'] = sprintf('%02d', $end_time['F']);
+            $end_time['i'] = sprintf('%02d', $end_time['i']);
+            $end_time['d'] = sprintf('%02d', $end_time['d']);
+            
 			$this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
 		} else {
 			$this->end_time   = '0000-00-00 00:00:00';
@@ -1662,8 +1670,7 @@ class Exercise {
                         send_form();
                     }
                 });                
-                $('#clock_warning').dialog('open');
-                
+                $('#clock_warning').dialog('open');                
 
                 $('#counter_to_redirect').epiclock({
                     mode: $.epiclock.modes.countdown,
@@ -1677,7 +1684,12 @@ class Exercise {
             
             function send_form() {
                 //console.log('send_form');
-                $('#exercise_form').submit();
+                if ($('#exercise_form').length) {                
+                    $('#exercise_form').submit();
+                } else {
+                    //In reminder
+                    final_submit();
+                }
             }
            
             function onExpiredTimeExercise() { 
@@ -1858,7 +1870,9 @@ class Exercise {
         if ($debug) error_log('manage_answer $learnpath_id: '.$learnpath_id);        
         if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
         			
-		$extra_data = array();        
+		$extra_data = array();    
+        $arrques = null;
+        $arrans  = null;
 				 
 		$questionId   = intval($questionId);
 		$exeId        = intval($exeId);
@@ -2300,8 +2314,8 @@ class Exercise {
 						} else {
 							$totalScore+=$questionScore;
 						}
-						$arrques[] = $questionName;
-						$arrans[]  = $choice;
+						$arrques = $questionName;
+						$arrans  = $choice;
 					} else {
 						$studentChoice = $choice;
 						if ($studentChoice) {
@@ -2324,8 +2338,8 @@ class Exercise {
 						} else {
 							$totalScore+=$questionScore;
 						}
-						$arrques[] = $questionName;
-						$arrans[]  = $choice;
+						$arrques = $questionName;
+						$arrans  = $choice;
 					} else {
 						$studentChoice = $choice;
 						if ($studentChoice) {
@@ -2495,18 +2509,13 @@ class Exercise {
 							if ($origin!='learnpath') {
 								ExerciseShowFunctions::display_fill_in_blanks_answer($answer,0,0);
 							}
-						} elseif($answerType == FREE_ANSWER) {
-							// to store the details of open questions in an array to be used in mail
-							$arrques[] = $questionName;
-							$arrans[]  = $choice;
+						} elseif($answerType == FREE_ANSWER) {						
 							if($origin != 'learnpath') {
 								ExerciseShowFunctions::display_free_answer($choice,0,0);
 							}
 						} elseif($answerType == ORAL_EXPRESSION) {
-							// to store the details of open questions in an array to be used in mail
-							$arrques[] = $questionName;
-							$arrans[]  = $choice;
-							if($origin != 'learnpath') {								
+							// to store the details of open questions in an array to be used in mail							
+							if ($origin != 'learnpath') {								
 								ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
 							}
 						} elseif($answerType == HOT_SPOT) {
@@ -2744,8 +2753,7 @@ class Exercise {
 								$max_coord 			= poly_get_max($poly_user,$poly_answer);
 								$poly_user_compiled = poly_compile($poly_user,$max_coord);
 								$poly_answer_compiled = poly_compile($poly_answer,$max_coord);
-								$poly_results 		= poly_result($poly_answer_compiled,$poly_user_compiled,$max_coord);
-								 
+								$poly_results 		= poly_result($poly_answer_compiled,$poly_user_compiled,$max_coord);								 
 								 
 								$overlap = $poly_results['both'];
 								$poly_answer_area = $poly_results['s1'];
@@ -3187,7 +3195,13 @@ class Exercise {
 			if ($debug) error_log($sql_update);	
 			Database::query($sql_update);
 		}
-		$return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting,'extra'=>$extra_data);
+        
+		$return_array = array(  'score'         => $questionScore, 
+                                'weight'        => $questionWeighting, 
+                                'extra'         => $extra_data, 
+                                'open_question' => $arrques, 
+                                'open_answer'   => $arrans
+        );        
 		return $return_array;
 	} //End function
 	
@@ -3195,148 +3209,88 @@ class Exercise {
 	 * Sends a notification when a user ends an examn
 	 * 
 	 */
-	function send_notification($arrques, $arrans, $origin) {		
+	function send_notification_for_open_questions($question_list_answers, $origin, $exe_id) {
 		
 		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-			return '';
-		}
-
+			return null;
+		}     
 		// Email configuration settings
 		$coursecode     = api_get_course_id();
 		$course_info    = api_get_course_info(api_get_course_id());
-		$to = '';
-		$teachers = array();
-		if (api_get_session_id()) {
-			$teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
-		} else {
-			$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
-		}
-		$num = count($teachers);
-		if ($num > 1) {
-			$to = array();
-			foreach($teachers as $teacher) {
-				$to[] = $teacher['email'];
-			}
-		} elseif ($num>0){
-			foreach($teachers as $teacher) {
-				$to = $teacher['email'];
-			}
-		} else {
-			//this is a problem (it means that there is no admin for this course)
-		}
-
-		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$this->id;
+	
+		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
 		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
-		$mycharset = api_get_system_encoding();
-		$msg = '<html><head>
-                <link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-                <meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
-
-		if (count($arrques) > 0) {
-			$msg .= '<body>
-            <p>'.get_lang('OpenQuestionsAttempted').' :
-            </p>
-            <p>'.get_lang('AttemptDetails').' : <br />
-            </p>
-            <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-                                                    <tr>
-                <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-                <td width="469" valign="top"><h2>#course#</h2></td>
-              </tr>
-              <tr>
-                <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-                <td width="469" valign="top" class="outerframe">#exercise#</td>
-              </tr>
-              <tr>
-                <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-                <td valign="top" >#firstName# #lastName#</td>
-              </tr>
-              <tr>
-                <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-                <td valign="top"> #mail#</td>
-            </tr></table>
-            <p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-             <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-
-			for($i=0;$i<sizeof($arrques);$i++) {
-				$msg.='
+		$msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
+                    <p>'.get_lang('AttemptDetails').' : </p>                     
+                    <table class="data_table">
                         <tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-                            <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
+                            <td><h3>'.get_lang('CourseName').'</h3></td>
+                            <td><h3>#course#</h3></td>
                         </tr>
                         <tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-                            <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-                        </tr>';
-
-				$msg1   = str_replace("#exercise#",    $this->exercise, $msg);
-				$msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
-				$msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
-				$msg    = str_replace("#mail#",        $user_info['email'],$msg1);
-				$msg1   = str_replace("#questionName#",$arrques[$i],$msg);
-				$msg    = str_replace("#answer#",      $arrans[$i],$msg1);
-				$msg1   = str_replace("#i#",           $i,$msg);
-				$msg    = str_replace("#course#",      $course_info['name'],$msg1);
+                            <td>'.get_lang('TestAttempted').'</span></td>
+                            <td>#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>#mail#</td>
+                        </tr>
+                    </table>';
+            $open_question_list = null;
+			foreach ($question_list_answers as $item) {
+                $question   = $item['question'];
+                $answer     = $item['answer'];
+                
+                if (!empty($question) && !empty($answer)) {                
+                    $open_question_list.='<tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                        </tr>
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                        </tr>';				
+                }
 			}
+            
+            
+            if (!empty($open_question_list)) {
+                $msg .=  '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>                        
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+                $msg .= $open_question_list;
+                $msg.='</table><br />';
+            
+            
+                $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+                $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
+                $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
+                $msg    = str_replace("#mail#",        $user_info['email'],$msg1);            			
+                $msg    = str_replace("#course#",      $course_info['name'],$msg1);
 
-			$msg.='</table><br />';
-			if ($origin != 'learnpath') {
-				$msg.= '<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-                	            <a href="#url#">#url#</a></span>';
-			}
-			$msg.= '</body></html>';
+                if ($origin != 'learnpath') {
+                    $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                            <a href="#url#">#url#</a>';
+                }			
+                $msg1 = str_replace("#url#", $url_email, $msg);
+                $mail_content = $msg1;
+                $subject = get_lang('OpenQuestionsAttempted');
 
-			$msg1 = str_replace("#url#", $url_email, $msg);
-			$mail_content = $msg1;
+                $teachers = array();
+                if (api_get_session_id()) {
+                    $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                } else {
+                    $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                }
 
-			$subject = get_lang('OpenQuestionsAttempted');
-
-			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			$email_admin = api_get_setting('emailAdministrator');
-			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-		} else {
-			$msg .= '<body>
-            <p>'.get_lang('ExerciseAttempted').'</p>
-            <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-                <tr>
-                <td width="229" valign="top"><h2>'.get_lang('CourseName').'</h2></td>
-                <td width="469" valign="top"><h2>#course#</h2></td>
-              </tr>
-              <tr>
-                <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-                <td width="469" valign="top" class="outerframe">#exercise#</td>
-              </tr>
-              <tr>
-                <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-                '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-              </tr>
-              <tr>
-                <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-                <td valign="top"> #mail#</td>
-            </tr></table>';
-
-			$msg= str_replace("#exercise#",  $this->exercise,$msg);
-			$msg= str_replace("#firstName#", $user_info['firstname'],    $msg);
-			$msg= str_replace("#lastName#",  $user_info['lastname'],     $msg);
-			$msg= str_replace("#mail#",      $user_info['email'],        $msg);
-			$msg= str_replace("#course#",    $course_info['name'],                $msg);
-
-			if ($origin != 'learnpath') {
-
-				$msg.='<br />
-                        <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-                        <a href="#url#">#url#</a></span>';                
-			}
-			$msg .= '</body></html>';
-
-			$msg = str_replace("#url#", $url_email, $msg);
-			$mail_content = $msg;
-			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			$email_admin = api_get_setting('emailAdministrator');
-			$subject = get_lang('ExerciseAttempted');
-			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-		}		
+                foreach ($teachers as $user_id => $teacher_data) {
+                    MessageManager::send_message_simple($user_id, $subject, $mail_content);    
+                }
+            }
 	}
 
 	function show_exercise_result_header($user_data, $date = null) {
@@ -3659,7 +3613,9 @@ class Exercise {
     }
     
     function return_time_left_div() {       
-        return '<div id="exercise_clock_warning" class="well count_down"></div>';
+        $html  = '<div id="clock_warning" style="display:none">'.Display::return_message(get_lang('ReachedTimeLimit'), 'warning').' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'), '<span id="counter_to_redirect" class="red_alert"></span>').'</div>';
+        $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
+        return $html;
     }
 }
 endif;

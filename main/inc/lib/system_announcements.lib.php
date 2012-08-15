@@ -141,17 +141,16 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+        
 	    if (count($groups) > 0 and $ann_group_db_ok ) {
-	      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
-	        ." WHERE group_id in $groups_string) ";
+            $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group 
+                              WHERE group_id in $groups_string) ";
 	    }
-		
-		global $_configuration;
-		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
+		        
+		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
+            $sql .= " AND access_url_id IN ('1', '$current_access_url_id')";
 		}
-		$sql .= " AND access_url_id = '$current_access_url_id' ";		
 
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			$sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
@@ -538,15 +537,15 @@ class SystemAnnouncementManager {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		
 		if ($teacher <> 0 AND $student == 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE status = '1' ";
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '1' ";
 		}
         
 		if ($teacher == 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table u $url_condition WHERE status = '5' ";
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '5' ";
 		}
         
 		if ($teacher<> 0 AND $student <> 0) {
-			$sql = "SELECT firstname, lastname, email FROM $user_table u $url_condition WHERE 1=1 ";
+			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE 1 = 1 ";
 		}
         
 		if (!empty($language)) { //special condition because language was already treated for SQL insert before
@@ -571,13 +570,14 @@ class SystemAnnouncementManager {
         
         $title      = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
         $content    = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
-        $admin_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                
+        
+        $message_sent = false;
+        
 		while ($row = Database::fetch_array($result,'ASSOC')) {
-            $name = api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);            
-			$res =  @api_mail_html($name, $row['email'], $title, $content, $admin_name, api_get_setting('emailAdministrator'));            
+            MessageManager::send_message_simple($row['user_id'], $title, $content);
+            $message_sent = true;
 		}
-		return $res; //true if at least one e-mail was sent
+		return $message_sent; //true if at least one e-mail was sent
 	}
 	
 	
@@ -610,7 +610,12 @@ class SystemAnnouncementManager {
         
         if (isset($id) && !empty($id)) {
             $id = intval($id);
-            $sql .= " AND id = $id ";            
+            $sql .= " AND id = $id ";
+        }
+        
+        if (api_is_multiple_url_enabled()) {
+            $current_url_id = api_get_current_access_url_id();
+            $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
         
 		$sql .= " ORDER BY date_start DESC";            	    

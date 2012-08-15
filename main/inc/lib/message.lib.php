@@ -318,6 +318,13 @@ class MessageManager
         return false;
 	}
 
+    /**
+     * A handy way to send message
+     */
+    public static function send_message_simple($receiver_user_id, $subject, $message, $sender_id = null) {
+        return MessageManager::send_message($receiver_user_id, $subject, $message, null, null, null, null, null, null, $sender_id);
+    }
+    
 	/**
 	 * Update parent ids for other receiver user from current message in groups
 	 * @author Christian Fasanando Flores

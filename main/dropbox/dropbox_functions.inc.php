@@ -968,18 +968,9 @@ function format_feedback($feedback) {
 * @version march 2006
 */
 function feedback_form() {
-    $course_id = api_get_course_int_id();
-
-	global $dropbox_cnf;
-
-	$return = get_lang('AddNewFeedback').'<br />';
-
-	// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
-	// add feedback since the other users will never get to see the feedback.
-	$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id = ".intval($_GET['id']);
-	$result = Database::query($sql);
-	$number_users_who_see_file = Database::num_rows($result);
-	if ($number_users_who_see_file > 1) {
+	$return = get_lang('AddNewFeedback').'<br />';	
+	$number_users_who_see_file = check_if_file_exist($_GET['id']);
+	if ($number_users_who_see_file) {
 		$token = Security::get_token();
 		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
 		$return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';
@@ -990,6 +981,40 @@ function feedback_form() {
 	}
 	return $return;
 }
+
+function user_can_download_file($id, $user_id) {
+    global $dropbox_cnf;
+    $course_id = api_get_course_int_id();
+    $id = intval($id);
+    $user_id = intval($user_id);
+    
+    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;    
+	$result = Database::query($sql);
+	$number_users_who_see_file = Database::num_rows($result);
+    
+    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."  WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
+    $result = Database::query($sql);
+	$count = Database::num_rows($result);    
+    return $number_users_who_see_file > 0 || $count > 0;
+}
+
+// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
+	// add feedback since the other users will never get to see the feedback.
+function check_if_file_exist($id) {
+    global $dropbox_cnf;
+    $id = intval($id);
+    $course_id = api_get_course_int_id();
+    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id = ".$id;    
+	$result = Database::query($sql);
+	$number_users_who_see_file = Database::num_rows($result);
+    
+    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."  WHERE c_id = $course_id AND file_id = ".$id;
+    $result = Database::query($sql);
+	$count = Database::num_rows($result);    
+    return $number_users_who_see_file > 0 || $count > 0;
+}
+
+
 
 /**
 * @return a language string (depending on the success or failure.

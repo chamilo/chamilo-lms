@@ -196,19 +196,18 @@ if (!$inATest) {
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
 
                 // Question name
-
-				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.cut($title, 60).'</a>', array('style'=>$styleQuestion));
+				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.cut($title, 42).'</a>', array('style'=>$styleQuestion));
 
 				// Question type
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
-				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array('style'=>$styleType));
+				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style'=>$styleType));
 
 				// Question category
 				$txtQuestionCat = Security::remove_XSS(Testcategory::getCategoryNameForQuestion($objQuestionTmp->id));
 				if (empty($txtQuestionCat)) {
 					$txtQuestionCat = "-";
 				}
-				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 55).'</a>', array('style'=>$styleCat));
+				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 42).'</a>', array('style'=>$styleCat));
 
 				// Question level
 				$txtQuestionLevel = $objQuestionTmp->level;

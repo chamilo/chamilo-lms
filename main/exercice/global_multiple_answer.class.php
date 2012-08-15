@@ -110,7 +110,7 @@ if (!class_exists('GlobalMultipleAnswer')):
                 $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
                 $answer_number->freeze();
 
-                $form->addElement('checkbox', 'correct[' . $i . ']', null, null, 'class="checkbox" style="margin-left: 2em;"');
+                $form->addElement('checkbox', 'correct[' . $i . ']', null, null, 'class="checkbox"');
                 $boxes_names[] = 'correct[' . $i . ']';
 
                 $form->addElement('html_editor', 'answer[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));

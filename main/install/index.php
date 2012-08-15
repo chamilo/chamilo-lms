@@ -770,6 +770,13 @@ if (@$_POST['step2']) {
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
 		}
+        
+        //Setting the single db form
+        if (in_array($_POST['old_version'], $update_from_version_6)) {            
+            $singleDbForm   	= get_config_param('singleDbEnabled');            
+        } else {
+            $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;            
+        }
 
 		Database::query("SET storage_engine = MYISAM;");
 

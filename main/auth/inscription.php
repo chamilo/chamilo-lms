@@ -185,6 +185,8 @@ if (is_array($extra_data)) {
 
 $form->setDefaults($defaults);
 
+$content = null;
+
 if (!CustomPages::enabled()) {
     // Load terms & conditions from the current lang
     if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -220,9 +222,6 @@ if (!CustomPages::enabled()) {
         $tool_name = get_lang('TermsAndConditions');
     }
 
-    Display :: display_header($tool_name);
-    echo Display::page_header($tool_name);
-
     $home = api_get_path(SYS_PATH).'home/';
     if ($_configuration['multiple_access_urls']) {
         $access_url_id = api_get_current_access_url_id();
@@ -242,23 +241,22 @@ if (!CustomPages::enabled()) {
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         if (!empty($open)) {
-            echo '<div class="well_border">'.$open.'</div>';
+            $content =  '<div class="well_border">'.$open.'</div>';
         }
     }
-
-    // Forbidden to self-register
-    /*
-    if (api_get_setting('allow_registration') == 'false') {
-        api_not_allowed();
+    
+    // Forbidden to self-register    
+    /*if (api_get_setting('allow_registration') == 'false') {
+        api_not_allowed(true);
     }*/
     
     if (api_get_setting('allow_registration') == 'approval') {
-        Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
+        $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
     }
     
     //if openid was not found
     if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-        Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+        $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
     }
 }
 
@@ -391,7 +389,7 @@ if ($form->validate()) {
                 }
                 $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
                 $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
-                $url_edit       = Display::url(api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id, api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id);
+                $url_edit        = Display::url(api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id, api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id);
                 $emailbody		.= get_lang('ManageUser',null,$values['language']).": $url_edit";
 
                 $admins = UserManager::get_all_administrators();
@@ -401,11 +399,11 @@ if ($form->validate()) {
                 
                 // 3. exit the page
                 unset($user_id);
-
-                if (!CustomPages::enabled()) {
-                    Display :: display_footer();
-                }
-                exit;
+                
+                Display :: display_header($tool_name);
+                echo Display::page_header($tool_name);    
+                echo $content;
+                Display::display_footer();
             }
         }
     }
@@ -426,6 +424,7 @@ if ($form->validate()) {
     }
 
     /* SESSION REGISTERING */
+    /* @todo move this in a function */
     $_user['firstName'] = stripslashes($values['firstname']);
     $_user['lastName'] 	= stripslashes($values['lastname']);
     $_user['mail'] 		= $values['email'];
@@ -441,11 +440,10 @@ if ($form->validate()) {
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
-
     Session::write('user_last_login_datetime', $user_last_login_datetime);
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
     
-    $display_text = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";
+    $text_after_registration = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";
 
     $form_data = array( 'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
                         'message' => null,
@@ -456,7 +454,7 @@ if ($form->validate()) {
     } else {
         
         if (!empty ($values['email'])) {
-            $display_text.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
+            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
         }
         
         if ($is_allowedCreateCourse) {
@@ -496,9 +494,14 @@ if ($form->validate()) {
                     $exercise_redirect = intval(Session::read('exercise_redirect'));
                     
                     if (!empty($exercise_redirect)) {
-                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?id='.intval($exercise_redirect).'&cidReq='.$course_info['code'];
+                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.intval($exercise_redirect).'&cidReq='.$course_info['code'];                                                
                         $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
                         $form_data['button'] = Display::button('next', get_lang('Go', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                    }
+                    
+                    if (!empty($form_data['action'])) {
+                        header('Location: '.$form_data['action']);
+                        exit;
                     }
                 }
             }
@@ -510,18 +513,29 @@ if ($form->validate()) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');
     }    
     $form_register->addElement('html', $form_data['button']);    
-    $display_text .= $form_register->return_form();  
+    $text_after_registration .= $form_register->return_form();  
     
     //Just in case
     Session::erase('course_redirect');
     Session::erase('exercise_redirect');
     
+    Display :: display_header($tool_name);
+    echo Display::page_header($tool_name);
+    
+    echo $content;    
+    echo $text_after_registration;
+    
     if (CustomPages::enabled()) {
-        CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $display_text));
-    }
-    echo $display_text;
+        CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $text_after_registration));
+    }    
 } else {
-  // Custom pages
+    
+    Display :: display_header($tool_name);
+    echo Display::page_header($tool_name);
+    
+    echo $content;    
+    
+    // Custom pages
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
     } else {

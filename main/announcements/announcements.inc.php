@@ -440,26 +440,7 @@ class AnnouncementManager  {
 	/*
 			MAIL FUNCTIONS
 	*/
-
-	/**
-	* Sends an announcement by email to a list of users.
-	* Emails are sent one by one to try to avoid antispam.
-	* @todo seems not used in Chamilo 1.8.7 RC2
-	*/
-	public static function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content) {
-		global $_user;
-		foreach ($user_list as $this_user) {
-			$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
-			$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
-			$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
-			$mail_body .= api_get_person_name($_user['firstname'], $_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
-			$mail_body .= '<'.$_user['mail'].">\n";
-			$mail_body .= $_course['official_code'].' '.$_course['name'];
-
-			@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstname'], $_SESSION['_user']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
-		}
-	}
-
+    
 	public static function update_mail_sent($insert_id) {
 		$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 		if ($insert_id != strval(intval($insert_id))) { return false; }

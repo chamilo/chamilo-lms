@@ -404,6 +404,7 @@ if ($form->validate()) {
                 echo Display::page_header($tool_name);    
                 echo $content;
                 Display::display_footer();
+                exit;
             }
         }
     }
@@ -477,6 +478,14 @@ if ($form->validate()) {
         }
     }
     
+    /* 
+     * Direct course link see #5299
+     * 
+     * You can send to your students an URL like this 
+     * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
+     * Where "c" is the course code and "e" is the exercise Id, after a succesfull registration the user will be sent to the course or exercise
+     * 
+     */
     $course_code_redirect = Session::read('course_redirect');
         
     if (!empty($course_code_redirect)) {

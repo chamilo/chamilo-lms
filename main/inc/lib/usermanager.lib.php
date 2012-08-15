@@ -2821,7 +2821,7 @@ class UserManager {
 	 * @author jmontoya
 	 * @return array
 	 */
-	 public function get_all_administrators() {
+	 public static function get_all_administrators() {
 	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);        
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);

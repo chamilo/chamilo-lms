@@ -7578,6 +7578,22 @@ class learnpath {
             $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
         }
         
+        if ($item_type == TOOL_DOCUMENT ) {
+            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);            
+            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        }
+        
+        if ($item_type == TOOL_QUIZ ) {
+            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);            
+            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        }
+        
+        if ($item_type == TOOL_LINK ) {
+            $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);            
+            $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
+        }
+                
+                
         $return .= '</div>';
         
         if (!empty($audio_player)) {

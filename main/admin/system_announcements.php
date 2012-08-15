@@ -19,10 +19,9 @@ require_once '../inc/global.inc.php';
 
 // Including additional libraries.
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // Setting the section (for the tabs).
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
 
 // Access restrictions

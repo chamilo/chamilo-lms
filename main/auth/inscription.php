@@ -246,9 +246,9 @@ if (!CustomPages::enabled()) {
     }
     
     // Forbidden to self-register    
-    /*if (api_get_setting('allow_registration') == 'false') {
+    if (api_get_setting('allow_registration') == 'false') {
         api_not_allowed(true);
-    }*/
+    }
     
     if (api_get_setting('allow_registration') == 'approval') {
         $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));

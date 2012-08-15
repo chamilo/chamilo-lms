@@ -141,17 +141,16 @@ class SystemAnnouncementManager {
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+        
 	    if (count($groups) > 0 and $ann_group_db_ok ) {
-	      $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
-	        ." WHERE group_id in $groups_string) ";
+            $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group 
+                              WHERE group_id in $groups_string) ";
 	    }
-		
-		global $_configuration;
-		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
+		        
+		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
+            $sql .= " AND access_url_id IN ('1', '$current_access_url_id')";
 		}
-		$sql .= " AND access_url_id = '$current_access_url_id' ";		
 
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			$sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";

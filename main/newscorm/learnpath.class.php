@@ -614,7 +614,7 @@ class learnpath {
      * @param	string	Zip file containing the learnpath or directory containing the learnpath
      * @return	integer	The new learnpath ID on success, 0 on failure
      */
-    public function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
+    public static function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
         global $charset;
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -649,7 +649,6 @@ class learnpath {
             $expired_on   = Database::escape_string(api_get_utc_datetime($expired_on));
         }
 
-
         while (Database :: num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
             $i++;
@@ -660,7 +659,7 @@ class learnpath {
         }
         // New name does not exist yet; keep it.
         // Escape description.
-        $description = learnpath :: escape_string(api_htmlentities($description, ENT_QUOTES, $charset)); // Kevin: added htmlentities().
+        $description = Database::escape_string(api_htmlentities($description, ENT_QUOTES, $charset)); // Kevin: added htmlentities().
         $type = 1;
         switch ($learnpath) {
             case 'guess':

@@ -595,8 +595,10 @@ if ($form->validate()) {
         //normal behaviour
         if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
-        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
-            $sql .= " email = '".Database::escape_string($changeemail)."',";
+        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {            
+            if (!empty($changeemail)) {
+                $sql .= " email = '".Database::escape_string($changeemail)."',";
+            }
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } elseif (isset($password) && in_array('password', $available_values_to_modify)) {
@@ -607,8 +609,6 @@ if ($form->validate()) {
             $sql = rtrim($sql, ',');
         }        
     }
-	
-
 	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);
     

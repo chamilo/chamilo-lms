@@ -11,6 +11,7 @@
     <img src="">
 </div>
 
+
 <!--div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>
     <form class="form-horizontal" id="add_item" name="form">

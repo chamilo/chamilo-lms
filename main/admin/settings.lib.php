@@ -1075,6 +1075,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
     
     $default_values = array();    
     
+    $url_info = api_get_access_url($url_id);
+    
     $i = 0;
     foreach ($settings as $row) {      
     	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; } 
@@ -1105,12 +1107,13 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
         $hideme = array();
         $hide_element = false;
+        
         if ($_configuration['access_url'] != 1) {
             if ($row['access_url_changeable'] == 0) {
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
                 $hideme = array('disabled');
-            } elseif ($url_info['active'] == 1) {
+            } elseif ($url_info['active'] == 1) {                
                 // We show the elements.
                 if (empty($row['variable']))
                     $row['variable'] = 0;
@@ -1118,7 +1121,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     $row['subkey'] = 0;
                 if (empty($row['category']))
                     $row['category'] = 0;
-
+                
                 if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')

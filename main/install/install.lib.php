@@ -1767,10 +1767,15 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     }
     ?>
     <tr>
+        <td></td>
         <td>
-            <button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" >
+            <button type="submit" class="btn" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" >
                 <?php echo get_lang('CheckDatabaseConnection'); ?></button>
         </td>
+    </tr>    
+    <tr>
+        <td>
+        
         <?php
         
         $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        

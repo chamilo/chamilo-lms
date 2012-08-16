@@ -10,12 +10,14 @@ $(document).ready(function() {
     /** x/y positionning of the center of the wheel */
     x = d3.scale.linear().range([0, 2 * Math.PI]),
     y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
-    /** Padding in pixels before th string starts */
+    /** Padding in pixels before the string starts */
     p = 3,
     /** Duration of click animations */
     duration = 1000,
     /** Levels to show */
     levels_to_show = 3;
+    
+    reduce_top = 1.5;
        
     /* Locate the #div id element */
     var div = d3.select("#vis");
@@ -29,7 +31,7 @@ $(document).ready(function() {
     .attr("width", w + p * 2)
     .attr("height", h + p * 2)
     .append("g")
-    .attr("transform", "translate(" + (r + p) + "," + (r/1.5 + p) + ")"); 
+    .attr("transform", "translate(" + (r + p) + "," + (r/reduce_top + p) + ")"); 
         
     /* ...update translate variables to change coordinates of wheel's center */
     /* Add a small label to help the user */
@@ -44,7 +46,9 @@ $(document).ready(function() {
             depending on the level of depth they're at. Changing it makes
             elements pass over the limits of others... */
     .value(function(d) {
-        return 5.8 - d.depth;
+        //return 5.8 - d.depth;
+        //When having more than 4 children seems that the code above doesn't work
+        return 1;
     });
         
     /* Generate an arc which will define the whole wheel context */

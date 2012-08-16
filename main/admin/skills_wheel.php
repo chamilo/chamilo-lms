@@ -10,7 +10,6 @@ $language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -21,24 +20,25 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 }
 
 //Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_js('d3.v2.min.js');
-$htmlHeadXtra[] = api_get_js('coffeewheel/wheel.js');
-
-$skill  = new Skill();
-$type   = 'edit'; //edit
-//$tree   = $skill->get_skills_tree_json(null, true);
-
-//$html = $skill_visualizer->return_html();
-//$html = $skill_visualizer->return_html();
-//$url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
-
-
+$htmlHeadXtra[] = api_get_js('d3/d3.v2.min.js');
+$htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');
+//$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/d3/colorbrewer.css');
 
 $tpl = new Template(null, false, false);
 
-//$tpl->assign('url', $url);
-//$tpl->assign('html', $html);
-//$tpl->assign('js', $skill_visualizer->return_js());
+$load_user = 0;
+if (isset($_GET['load_user'])) {
+    $load_user = 1;
+}
+
+$skill_id = null;
+if (isset($_GET['skill_id'])) {
+    $skill_id = intval($_GET['skill_id']);
+}
+
+$url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user&skill_id=$skill_id";
+
+$tpl->assign('wheel_url', $url);
 
 $content = $tpl->fetch('default/skill/skill_wheel.tpl');
 $tpl->assign('content', $content);

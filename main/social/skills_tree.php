@@ -29,7 +29,7 @@ $htmlHeadXtra[] = api_get_js('skills.js');
 $skill  = new Skill();
 $type   = 'read'; //edit
 
-$tree   = $skill->get_skills_tree(api_get_user_id(), true);
+$tree   = $skill->get_skills_tree(api_get_user_id(), null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl = new Template(null, false, false);

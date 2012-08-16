@@ -8,11 +8,6 @@
 /**
  * Code
  */
-
- /**
- * @package chamilo.library
- */
-
 define ('SKILL_TYPE_REQUIREMENT',   'required');
 define ('SKILL_TYPE_ACQUIRED',      'acquired');
 define ('SKILL_TYPE_BOTH',          'both');
@@ -329,19 +324,19 @@ class Skill extends Model {
 
     function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null) {
         $id_condition = '';
-        if (isset($id)) {
+        
+        if (isset($id) && !empty($id)) {
             $id = intval($id);
             $id_condition = " WHERE s.id = $id";
         }
 
-        if (isset($parent_id)) {
+        if (isset($parent_id) && !empty($parent_id)) {
             $parent_id = intval($parent_id);
             if (empty($id_condition)) {
                 $id_condition = "WHERE ss.parent_id = $parent_id";
             } else {
                 $id_condition = " AND ss.parent_id = $parent_id";
             }
-
         }
 
         $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type".
@@ -546,29 +541,47 @@ class Skill extends Model {
         return $clean_skill;
     }
 
-    public function get_skills_tree($user_id = null, $return_flat_array = false) {
+    public function get_skills_tree($user_id = null, $skill_id = null, $return_flat_array = false, $add_root = false) {
         if (isset($user_id) && !empty($user_id)) {
-            $skills = $this->get_all(true, $user_id);
+            $skills = $this->get_all(true, $user_id, null, $skill_id);
         } else {
-            $skills = $this->get_all();
+            $skills = $this->get_all(false, false, null, $skill_id);
         }
-
+        
+        //Show 1 item
+        if ($add_root) {
+            if (!empty($skill_id)) {
+                $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
+                $skill_info = $this->get_skill_info($skill_id);
+                $skills[$skill_id] = $skill_info;
+                $skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+            }
+        }
+                
         $refs = array();
         $skills_tree = null;
 
         // Create references for all nodes
         $flat_array = array();
+        
+        $css_attributes = array('fill' => 'red');
+        //var_dump($skills);
         if (!empty($skills)) {
-            foreach($skills as &$skill) {
+            foreach ($skills as &$skill) {
                 if ($skill['parent_id'] == 0) {
                     $skill['parent_id'] = 'root';
                 }
 
                 $skill['data'] = array('parent_id' => $skill['parent_id']); // because except main keys (id, name, children) others keys are not saved while in the space tree
-
+                
+                $skill['data']['achieved'] = 'no';
                 if ($user_id) {
-                    $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);
+                    $css_attributes = array('fill' => 'green');
+                    $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);                    
                 }
+                
+                $skill['data']['css_attributes'] = $css_attributes;
+                
                 $refs[$skill['id']] = &$skill;
                 $flat_array[$skill['id']] =  &$skill;
             }
@@ -578,7 +591,7 @@ class Skill extends Model {
                 $refs[$skill['parent_id']]['children'][] = &$skill;
                 $flat_array[$skillInd] =  $skill;
             }
-
+            
             $skills_tree = array(
                 'name'      => get_lang('SkillRootName'),
                 'id'        => 'root',
@@ -586,6 +599,8 @@ class Skill extends Model {
                 'data'      => array()
             );
         }
+        
+        
         //var_dump($flat_array);exit;
         if ($return_flat_array) {
             return $flat_array;
@@ -598,18 +613,20 @@ class Skill extends Model {
      * Get skills tree as a simplified JSON structure
      * 
      */
-    public function get_skills_tree_json($user_id = null, $return_flat_array = false) {
-        $tree = $this->get_skills_tree($user_id, $return_flat_array);
+    public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false) {        
+        $tree = $this->get_skills_tree($user_id, $skill_id, $return_flat_array, true);        
+        
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
-                $simple_tree[] = array('name' => $element['name'], 'children' => $this->get_skill_json($element['children']));
+                $simple_tree[] = array( 'name'      => $element['name'], 
+                                        'children'  => $this->get_skill_json($element['children']),                                        
+                                        );
             }
-        }
-        //$s = array('\/');
-        //return str_replace($s,'/',json_encode($simple_tree[0]['children']));
+        }        
         return json_encode($simple_tree[0]['children']);
     }
+    
     /**
      * Get JSON element
      */
@@ -618,12 +635,22 @@ class Skill extends Model {
         if (is_array($subtree)) {
             foreach ($subtree as $elem) {
                 $tmp = array();
-                $tmp['name'] = $elem['name'];//.'<a href="">'.$elem['id'].'</a>';
+                $tmp['name'] = $elem['name'];
+                $tmp['id'] = $elem['id'];
+
                 if (is_array($elem['children'])) {
                     $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1);
                 } else {
                     $tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
+                
+                $tmp['depth'] = $depth;
+                
+                if (isset($elem['data']) && is_array($elem['data'])) {
+                    foreach ($elem['data'] as $key => $item) {
+                        $tmp[$key] = $item;
+                    }
+                }                
                 $simple_sub_tree[] = $tmp;
             }
             return $simple_sub_tree;

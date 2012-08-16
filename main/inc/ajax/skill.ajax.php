@@ -133,6 +133,13 @@ switch ($action) {
             echo 0;
         }
         break;   
+    case 'get_skills_tree_json':        
+        $user_id = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
+        $skill_id = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
+        
+        $all = $skill->get_skills_tree_json($user_id, $skill_id);
+        echo $all;
+        break;
     default:
         echo '';
 }

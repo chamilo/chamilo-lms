@@ -27,7 +27,7 @@ $htmlHeadXtra[] = api_get_js('skills.js');
 
 $skill  = new Skill();
 $type   = 'edit'; //edit
-$tree   = $skill->get_skills_tree(null, true);
+$tree   = $skill->get_skills_tree(null, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 $html = $skill_visualizer->return_html();

@@ -1169,12 +1169,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param	 bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_success_message = false, $pass_percentage = null) {
+function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
     if (is_null($score) && is_null($weight)) {
         return '-';
     }
-    $html  = '';
-    $score_rounded = $score;     
+    
     $max_note =  api_get_setting('exercise_max_score');
     $min_note =  api_get_setting('exercise_min_score');
     
@@ -1192,21 +1191,36 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     $weight = float_format($weight, 1);    
     
     $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
+    
+    $html  = '';
     if ($show_percentage) {        
         $parent = '(' . $score_rounded . ' / ' . $weight . ')';
         $html = $percentage." %  $parent";	
     } else {    
     	$html = $score_rounded . ' / ' . $weight;
-    }    
-    
-    if ($show_success_message && isset($pass_percentage) && !empty($pass_percentage)) {
+    }  
+    $html  = Display::span($html, array('class' => 'score_exercise'));
+    return $html;	
+}
+
+function show_success_message($score, $weight, $pass_percentage) {
+    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
+    $html = '';
+    $icon = '';
+    if (isset($pass_percentage) && !empty($pass_percentage)) {
         if ($percentage >= $pass_percentage) {
-            $html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+            //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+            $html .= get_lang('CongratulationsYouPassedTheTest');
+            $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
         } else {
-            $html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
+            //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
+            $html .= get_lang('YouDidNotReachTheMinimumScore');
+            $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
         }
     }
-    return $html;	
+    $html = Display::tag('h4', $html);
+    $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
+    return $html;
 }
 
 /**
@@ -1934,10 +1948,17 @@ function delete_chat_exercise_session($exe_id) {
     }    
 }
 
+/**
+ * Display the exercise results
+ * @param obj   exercise obj
+ * @param int   attempt id (exe_id)
+ * @param bool  save users results (true) or just show the results (false)
+ */
 function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false) {
-    global $origin;
+    global $origin, $debug;    
     
-    $exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+    //Getting attempt info
+    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
     $question_list = array();
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list		= explode(',', $exercise_stat_info['data_tracking']);
@@ -1966,7 +1987,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $objExercise->description = '';
         echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
     }
-
     
     if ($save_user_result) {    
         // Display text when test is finished #4074
@@ -2023,7 +2043,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 }		
             }
             
-             $contents = ob_get_clean();
+            $contents = ob_get_clean();
     
             $question_content = '<div class="question_row">';
 
@@ -2034,8 +2054,10 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 $question_content .= $objQuestionTmp->return_header("", $counter, $score);
             }
             $counter++;
+            
             $question_content .= $contents;
-            $question_content .= '</div>';   
+            $question_content .= '</div>';
+            
             $exercise_content .= $question_content;
             
         } // end foreach() block that loops over all questions
@@ -2046,16 +2068,18 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     if ($origin != 'learnpath') {
         if ($show_results || $show_only_score) {
                 $total_score_text .= '<div class="question_row">
-                <div class="ribbon">
+                <div class="ribbon ribbon-total">
                 <div class="rib rib-total">';
             $total_score_text .= '<h3>';
-            $total_score_text .= get_lang('YourTotalScore')." ";
+            $total_score_text .= get_lang('YourTotalScore')."&nbsp;";
             if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
                 $total_score = 0;
             }
-            $total_score_text .= show_score($total_score, $total_weight, false, true, true, $objExercise->selectPassPercentage());
-            $total_score_text .= '</h3>';
+            $total_score_text .= show_score($total_score, $total_weight, false, true);
+            $total_score_text .= '</h3>';            
             $total_score_text .= '</div>';
+            $total_score_text .= show_success_message($total_score, $total_weight, $objExercise->selectPassPercentage());
+            
             $total_score_text .= '</div>';
             $total_score_text .= '</div>';
         }

@@ -651,8 +651,7 @@ if ($limit_time_exists) {
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
-            exit;
+            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));            
         }
     }
 }

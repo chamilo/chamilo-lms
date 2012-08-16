@@ -3102,13 +3102,6 @@ class Exercise {
 				if ($show_result) {
 					echo '</table>';		
                 }
-						/*echo '<div id="question_score">';
-						if ($propagate_neg == 0 && $questionScore < 0) {
-							$questionScore = 0;
-						}
-						echo get_lang('Score').": ".show_score($questionScore, $questionWeighting, false, false);
-						echo '</div>';*/
-				//}
 			}
 		}
 		unset ($objAnswerTmp);

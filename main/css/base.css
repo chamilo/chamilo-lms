@@ -4628,3 +4628,10 @@ data table
 i.size-32.icon-new-work{
     background-image:  url('../img/icons/32/new_work.png');
 }
+
+
+.skill_partition {
+    cursor: pointer;
+    stroke: #000000;
+    stroke-width: 1.5;
+}

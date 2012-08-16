@@ -4,7 +4,7 @@
 $(document).ready(function() {
     /** Define constants and size of the wheel */
     /** Total width of the wheel (also counts for the height) */
-    var w = 800,
+    var w = 940,
     h = w,
     r = w / 2,
     /** x/y positionning of the center of the wheel */
@@ -15,7 +15,7 @@ $(document).ready(function() {
     /** Duration of click animations */
     duration = 1000,
     /** Levels to show */
-    l = 3;
+    levels_to_show = 3;
        
     /* Locate the #div id element */
     var div = d3.select("#vis");
@@ -66,22 +66,51 @@ $(document).ready(function() {
     /* Exexute the calculation based on a JSON file provided */
     /*d3.json("wheel.json", function(json) {*/
     /** Get the JSON list of skills and work on it */
+  
+    var my_domain = [1,2,3,4,5,6,7,8,9];
     
-    //var achieved_fill = d3.scale.category10().domain(["yes","no"]);
-    var normal_fill = d3.scale.category20c();
+    var col = 9;
+    var color_patterns = [];
     
-    /*var colorScale = d3.scale.quantize()
-    .domain([1.0, 5.0])
-    .range(colorbrewer.YlGnBu[5]);
-*/
-
-    var z = d3.scale.ordinal().domain(["1", "2", "3"]).range(colorbrewer.RdBu[9]);
+    color_patterns[1] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[col]);      
+    color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Purples[col]);
+    //color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[6]);
+    color_patterns[3] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);    
+    color_patterns[4] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Reds[col]);
+    color_patterns[5] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Oranges[col]);
+    color_patterns[6] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrBr[col]);
     
-    function set_skill_style(d, attribute) {
-        return_fill = normal_fill;
-        return_fill = z(d.depth);
-        return_background = 'blue';
-            
+    color_patterns[7] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlGn[col]);    
+    color_patterns[8] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlGnBu[col]);
+    color_patterns[9] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.GnBu[col]);
+    color_patterns[10] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.BuGn[col]);
+    color_patterns[11] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuBuGn[col]);
+    color_patterns[12] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuBu[col]);
+    color_patterns[13] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.BuPu[col]);
+    color_patterns[14] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.RdPu[col]);
+    color_patterns[15] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuRd[col]);
+    color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
+    color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
+    color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
+   
+    //var normal_fill = d3.scale.category10().domain(my_domain);   
+    
+    function get_color(d) {
+        depth = d.depth;
+        if (d.family_id) {
+            //console.log(d.family_id);
+            var p = color_patterns[d.family_id];
+            color = p(depth -1 + d.counter);
+            d.color = color;
+            return color;
+        }
+        return '#fefefe'; //missing colors
+    }
+    
+    function set_skill_style(d, attribute) {        
+        
+        return_fill = get_color(d);
+        return_background = 'blue';            
         if (d.achieved) {
             //return_fill = 'green';
             return_background = 'blue';
@@ -98,8 +127,7 @@ $(document).ready(function() {
                 return return_background;
                 break;
         }
-    }
-    
+    }    
     
     d3.json("{{ wheel_url }}", function(json) {
         /** Define the list of nodes based on the JSON */
@@ -114,15 +142,15 @@ $(document).ready(function() {
         .attr("id", function(d, i) {            
             return "path-" + i;
         })
-        .attr("class", function(d) { return "q" +  "1-9"; })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
-        //.style("fill", colour)
+        .attr("class", "skill_partition")
+//        .style("fill", colour)
         .style("fill", function(d) { 
             return set_skill_style(d, 'fill');
         })
         .style("background", function(d) {
-            return set_skill_style(d, 'background');
+            //return set_skill_style(d, 'background');
         })
         .on("click", click);
         
@@ -133,8 +161,10 @@ $(document).ready(function() {
         var textEnter = text.enter().append("text")
         .style("fill-opacity", 1)
         .style("fill", function(d) {
-            return brightness(d3.rgb(colour(d))) < 125 ? "#eee" : "#000";
-        })
+            console.log(d.color);
+            return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";
+            //return "#444";
+        })  
         .attr("text-anchor", function(d) {
             return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
         })
@@ -206,20 +236,16 @@ $(document).ready(function() {
 
     /* Generated random colour */
     function colour(d) {
+        
         if (d.children) {
             // There is a maximum of two children!
             var colours = d.children.map(colour),
             a = d3.hsl(colours[0]),
             b = d3.hsl(colours[1]);
             // L*a*b* might be better here...
-            return d3.hsl((a.h + b.h) / 2, a.s * 1.2, a.l / 1.2);
+            return d3.hsl((a.h + b.h) / 2, a.s * 1.2, a.levels_to_show / 1.2);
         }        
         return d.colour || "#fff";
-    }
-    
-    function set_attributes(d) {
-        console.log(d);
-        return d.style('fill', 'green');
     }
 
     /* Interpolate the scales! */

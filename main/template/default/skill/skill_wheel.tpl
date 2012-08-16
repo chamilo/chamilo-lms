@@ -112,7 +112,7 @@ $(document).ready(function() {
         return_fill = get_color(d);
         return_background = 'blue';            
         if (d.achieved) {
-            //return_fill = 'green';
+            return_fill = 'green';
             return_background = 'blue';
         } else {
             //return_fill = colorScale;
@@ -144,7 +144,7 @@ $(document).ready(function() {
         })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
-        .attr("class", "skill_partition")
+        .attr("class", "skill_partition skill_background")
 //        .style("fill", colour)
         .style("fill", function(d) { 
             return set_skill_style(d, 'fill');

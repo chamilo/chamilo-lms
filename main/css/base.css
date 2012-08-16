@@ -4635,3 +4635,7 @@ i.size-32.icon-new-work{
     stroke: #000000;
     stroke-width: 1.5;
 }
+
+.skill_background {
+  background-image: -moz-linear-gradient(45deg, #555555 25%, transparent 25%, transparent), -moz-linear-gradient(-45deg, #555555 25%, transparent 25%, transparent), -moz-linear-gradient(45deg, transparent 75%, #555555 75%), -moz-linear-gradient(-45deg, transparent 75%, #555555 75%);
+}

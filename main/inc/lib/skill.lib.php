@@ -618,8 +618,7 @@ class Skill extends Model {
                         $new_family_array[$item['skill_id']] = $family_id;
                     }
                 }
-                $new_family_array[$main_family_id] = $family_id;
-                
+                $new_family_array[$main_family_id] = $family_id;                
                 $family_id++;
             }
                         
@@ -649,14 +648,14 @@ class Skill extends Model {
      * Get skills tree as a simplified JSON structure
      * 
      */
-    public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false) {        
+    public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2) {        
         $tree = $this->get_skills_tree($user_id, $skill_id, $return_flat_array, true);        
         
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
                 $simple_tree[] = array( 'name'      => $element['name'], 
-                                        'children'  => $this->get_skill_json($element['children']),                                        
+                                        'children'  => $this->get_skill_json($element['children'], 1, $main_depth),                                        
                                         );
             }
         }        
@@ -666,7 +665,7 @@ class Skill extends Model {
     /**
      * Get JSON element
      */
-    public function get_skill_json($subtree, $depth = 1) {
+    public function get_skill_json($subtree, $depth = 1, $max_depth = 2) {
         $simple_sub_tree = array();
         if (is_array($subtree)) {
             $counter = 1;            
@@ -676,9 +675,12 @@ class Skill extends Model {
                 $tmp['id'] = $elem['id'];
 
                 if (is_array($elem['children'])) {
-                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1);                                        
+                    $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1, $max_depth);                                        
                 } else {
                     $tmp['colour'] = $this->colours[$depth][rand(0,3)];
+                }
+                if ($depth > $max_depth) {
+                    continue;
                 }
                                 
                 $tmp['depth'] = $depth;

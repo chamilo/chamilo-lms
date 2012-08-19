@@ -1,70 +1,7 @@
 <script>
 /* For licensing terms, see /license.txt */
 
-$(document).ready(function() {
-    /** Define constants and size of the wheel */
-    /** Total width of the wheel (also counts for the height) */
-    var w = 940,
-    h = w,
-    r = w / 2,
-    /** x/y positionning of the center of the wheel */
-    x = d3.scale.linear().range([0, 2 * Math.PI]),
-    y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
-    /** Padding in pixels before the string starts */
-    p = 3,
-    /** Duration of click animations */
-    duration = 1000,
-    /** Levels to show */
-    levels_to_show = 3;
-    
-    reduce_top = 1.5;
-       
-    /* Locate the #div id element */
-    var div = d3.select("#vis");
-    
-    /* Remove the image (make way for the dynamic stuff */
-    div.select("img").remove();
-    
-    /* Append an element "svg" to the #vis section */
-    var vis = div.append("svg")
-    //.attr("class", "Blues")
-    .attr("width", w + p * 2)
-    .attr("height", h + p * 2)
-    .append("g")
-    .attr("transform", "translate(" + (r + p) + "," + (r/reduce_top + p) + ")"); 
-        
-    /* ...update translate variables to change coordinates of wheel's center */
-    /* Add a small label to help the user */
-    div.append("p")
-    .attr("id", "intro")
-    .text("Click to zoom!");
-        
-    /* Generate the partition layout */
-    var partition = d3.layout.partition()
-    .sort(null)
-    /** Value here seems to be a calculation of the size of the elements
-            depending on the level of depth they're at. Changing it makes
-            elements pass over the limits of others... */
-    .value(function(d) {
-        //return 5.8 - d.depth;
-        //When having more than 4 children seems that the code above doesn't work
-        return 1;
-    });
-        
-    /* Generate an arc which will define the whole wheel context */
-    var arc = d3.svg.arc()
-    .startAngle(function(d) {
-        return Math.max(0, Math.min(2 * Math.PI, x(d.x)));
-    })
-    .endAngle(function(d) {
-        return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx)));
-    })
-    .innerRadius(function(d) {
-        return Math.max(0, d.y ? y(d.y) : d.y);
-    })
-    .outerRadius(function(d) {
-        return Math.max(0, y(d.y + d.dy));
-    });
+$(document).ready(function() {    
         
     /* ...adding "+1" to "y" function's params is really funny */
     /* Exexute the calculation based on a JSON file provided */
@@ -96,136 +33,246 @@ $(document).ready(function() {
     color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
     color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
     color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
+    
+    
+
+        
+    //var normal_fill = d3.scale.category10().domain(my_domain);
    
-    //var normal_fill = d3.scale.category10().domain(my_domain);   
+    var main_depth = 1000;
+        
+    load_nodes(main_depth);
+    
+    function load_nodes(main_depth) {
+        
+        /** Define constants and size of the wheel */
+        /** Total width of the wheel (also counts for the height) */
+        var w = 900,
+        h = w,
+        r = w / 2,
+        /** x/y positionning of the center of the wheel */
+        x = d3.scale.linear().range([0, 2 * Math.PI]),
+        y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
+        /** Padding in pixels before the string starts */
+        p = 3,
+        /** Duration of click animations */
+        duration = 1000,
+        /** Levels to show */
+        levels_to_show = 3;
+
+        reduce_top = 1;
+        
+        /* Locate the #div id element */
+        /*$("#vis").remove();
+        $("body").append('<div id="vis"></div>');*/
+        var div = d3.select("#vis");
+
+        /* Remove the image (make way for the dynamic stuff */
+        div.select("img").remove();
+
+        /* Append an element "svg" to the #vis section */
+        var vis = div.append("svg")
+        //.attr("class", "Blues")
+        .attr("width", w + p * 2)
+        .attr("height", h + p * 2)
+        .append("g")
+        .attr("transform", "translate(" + (r + p) + "," + (r/reduce_top + p) + ")"); 
+
+        /* ...update translate variables to change coordinates of wheel's center */
+        /* Add a small label to help the user */
+        div.append("p")
+        .attr("id", "intro")
+        .text("Click to zoom!");
+
+        /* Generate the partition layout */
+        var partition = d3.layout.partition()
+        .sort(null)
+        /** Value here seems to be a calculation of the size of the elements
+                depending on the level of depth they're at. Changing it makes
+                elements pass over the limits of others... */
+        .size([1, 2])    
+        .value(function(d) {
+            //return 5.8 - d.depth;
+            //When having more than 4 children seems that the code above doesn't work
+            return 1;
+        });
+
+        /* Generate an arc which will define the whole wheel context */
+        var arc = d3.svg.arc()
+        .startAngle(function(d) {
+            return Math.max(0, Math.min(2 * Math.PI, x(d.x)));
+        })
+        .endAngle(function(d) {
+            return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx)));
+        })
+        .innerRadius(function(d) {
+            return Math.max(0, d.y ? y(d.y) : d.y);
+        })
+        .outerRadius(function(d) {
+            return Math.max(0, y(d.y + d.dy));
+        });
+                
+        d3.json("{{ wheel_url }}&main_depth="+main_depth, function(json) {
+            
+            /** Define the list of nodes based on the JSON */
+            var nodes = partition.nodes({
+                children: json                
+            });
+
+            /* Setting all skills */
+            var path = vis.selectAll("path").data(nodes);
+
+            /* Setting all texts */
+            var text = vis.selectAll("text").data(nodes);        
+
+            path.enter().append("path")
+            .attr("id", function(d, i) {            
+                return "path-" + i;
+            })
+            .attr("d", arc)
+            .attr("fill-rule", "evenodd")
+            .attr("class", "skill_partition skill_background")
+    //        .style("fill", colour)
+            .style("fill", function(d) { 
+                return set_skill_style(d, 'fill');
+            })
+            .style("stroke", function(d) {
+                return set_skill_style(d, 'stroke');
+            })
+            .on("click", function(d){
+                click_partition(d, path, text, arc, x, y, r, p);
+            });
+
+            /* End setting skills */        
+
+            var textEnter = text.enter().append("text")
+            .style("fill-opacity", 1)
+            .style("fill", function(d) {                
+                return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";                
+            })  
+            .attr("text-anchor", function(d) {
+                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+            })
+            .attr("dy", ".2em")
+            .attr("transform", function(d) {
+                /** Get the text details and define the rotation and general position */
+                var multiline = (d.name || "").split(" ").length > 1,
+                angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                rotate = angle + (multiline ? -.5 : 0);
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+            })
+            .on("click", function(d){
+                click_partition(d, path, text, arc, x, y, r, p);
+            });
+
+            /** Managing text - always maximum two words */
+            textEnter.append("tspan")
+            .attr("x", 0)
+            .text(function(d) {
+                return d.depth ? d.name.split(" ")[0] : "";
+            });
+            textEnter.append("tspan")
+            .attr("x", 0)
+            .attr("dy", "1em")
+            .text(function(d) {
+                return d.depth ? d.name.split(" ")[1] || "" : "";
+            });
+        });
+    }
+    
+    var colors1 = $.xcolor.analogous('#da0'); //8 colors
+    var colors = colors1;
+    
+    // Generating array of colors
+    color_loops = 4;
+    for (i= 0; i < color_loops; i++) {
+        last_color = colors[colors.length-1].getHex();        
+        glue_color = $.xcolor.complementary(last_color);
+        //colors.push(glue_color.getHex());        
+        colors2 = $.xcolor.analogous(glue_color);
+        colors = $.merge(colors, colors2);
+    }
     
     function get_color(d) {
         depth = d.depth;
-        if (d.family_id) {
-            //console.log(d.family_id);
-            var p = color_patterns[d.family_id];
+        if (d.family_id) {            
+            /*var p = color_patterns[d.family_id];            
             color = p(depth -1 + d.counter);
-            d.color = color;
+            d.color = color;*/                  
+            if (depth > 1) {              
+                family1 = colors[d.family_id];
+                family2 = colors[d.family_id + 2];                
+                position = d.depth*d.counter;                
+                //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
+                part_color = $.xcolor.lighten(family1, position, 15);                
+                color = part_color.getHex();
+                console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
+            } else {
+                color = colors[d.family_id];                
+            }
+            d.color = color;            
             return color;
         }
-        return '#fefefe'; //missing colors
+        color = '#fefefe';
+        d.color = color;
+        return color; //missing colors
     }
-    
-    function set_skill_style(d, attribute) {        
         
+    function set_skill_style(d, attribute) {
         return_fill = get_color(d);
-        return_background = 'blue';            
+        return_stroke = 'black';
+        
         if (d.achieved) {
-            return_fill = 'green';
-            return_background = 'blue';
-        } else {
-            //return_fill = colorScale;
-            return_background = '1px border #fff';
+            return_fill = '#1E91F5';
+            return_stroke = '#FCD23A';            
         }
         
         switch (attribute) {
             case 'fill':
                 return return_fill;
                 break;
-            case 'background':
-                return return_background;
+            case 'stroke':
+                return return_stroke;
                 break;
         }
-    }    
+    }
     
-    d3.json("{{ wheel_url }}", function(json) {
-        /** Define the list of nodes based on the JSON */
-        var nodes = partition.nodes({
-            children: json
-        });
-
-        /* Setting all skills */
-        var path = vis.selectAll("path").data(nodes);
-                
-        path.enter().append("path")
-        .attr("id", function(d, i) {            
-            return "path-" + i;
-        })
-        .attr("d", arc)
-        .attr("fill-rule", "evenodd")
-        .attr("class", "skill_partition skill_background")
-//        .style("fill", colour)
-        .style("fill", function(d) { 
-            return set_skill_style(d, 'fill');
-        })
-        .style("background", function(d) {
-            //return set_skill_style(d, 'background');
-        })
-        .on("click", click);
-        
-        /* End setting skills */
-
-        var text = vis.selectAll("text").data(nodes);
-        
-        var textEnter = text.enter().append("text")
-        .style("fill-opacity", 1)
-        .style("fill", function(d) {
-            console.log(d.color);
-            return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";
-            //return "#444";
-        })  
-        .attr("text-anchor", function(d) {
-            return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
-        })
-        .attr("dy", ".2em")
-        .attr("transform", function(d) {
-            /** Get the text details and define the rotation and general position */
-            var multiline = (d.name || "").split(" ").length > 1,
-            angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
-            rotate = angle + (multiline ? -.5 : 0);
-            return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
-        })
-        .on("click", click);
-          
-        /** Managing text - always maximum two words */
-        textEnter.append("tspan")
-        .attr("x", 0)
-        .text(function(d) {
-            return d.depth ? d.name.split(" ")[0] : "";
-        });
-        textEnter.append("tspan")
-        .attr("x", 0)
-        .attr("dy", "1em")
-        .text(function(d) {
-            return d.depth ? d.name.split(" ")[1] || "" : "";
-        });
-        
-        function click(d) {
-            path.transition()
-            .duration(duration)
-            .attrTween("d", arcTween(d));
-
-            // Somewhat of a hack as we rely on arcTween updating the scales.
-            text.style("visibility", function(e) {
-                return isParentOf(d, e) ? null : d3.select(this).style("visibility");
-            })
-            .transition().duration(duration)
-            .attrTween("text-anchor", function(d) {
-                return function() {
-                    return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
-                };
-            })
-            .attrTween("transform", function(d) {
-                var multiline = (d.name || "").split(" ").length > 1;
-                return function() {
-                    var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
-                    rotate = angle + (multiline ? -.5 : 0);
-                    return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
-                };
-            })
-            .style("fill-opacity", function(e) {
-                return isParentOf(d, e) ? 1 : 1e-6;
-            })
-            .each("end", function(e) {
-                d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
-            });
+    function click_partition(d, path, text, arc, x, y, r, p) {
+        if (d.depth == 2) {
+            /*main_depth +=1;
+            load_nodes(main_depth);*/
         }
-    });
+        var duration = 1000;
+        
+        path.transition()
+        .duration(duration)
+        .attrTween("d", arcTween(d, arc, x, y, r));
+
+        // Somewhat of a hack as we rely on arcTween updating the scales.
+        text.style("visibility", function(e) {
+            return isParentOf(d, e) ? null : d3.select(this).style("visibility");
+        })
+        .transition().duration(duration)
+        .attrTween("text-anchor", function(d) {
+            return function() {
+                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+            };
+        })
+        .attrTween("transform", function(d) {
+            var multiline = (d.name || "").split(" ").length > 1;
+            return function() {
+                var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                rotate = angle + (multiline ? -.5 : 0);
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+            };
+        })
+        .style("fill-opacity", function(e) {
+            return isParentOf(d, e) ? 1 : 1e-6;
+        })
+        .each("end", function(e) {
+            d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
+        });
+    }
 
     /* Returns whether p is parent of c */
     function isParentOf(p, c) {
@@ -253,7 +300,7 @@ $(document).ready(function() {
     }
 
     /* Interpolate the scales! */
-    function arcTween(d) {
+    function arcTween(d, arc, x, y, r) {
         var my = maxY(d),
         xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
         yd = d3.interpolate(y.domain(), [d.y, my]),

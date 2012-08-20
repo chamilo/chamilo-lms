@@ -2593,7 +2593,7 @@ div.admin_section h4 {
     width: 260px;
 }
 
-.ribbon .rib-error {
+.ribbon .rib-error, .ribbon .ribbon-total-error {
     background:#C83F25;
     
     background-image: -ms-linear-gradient(top, #992800, #C83F25);
@@ -2607,7 +2607,7 @@ div.admin_section h4 {
     border-bottom: 1px solid #7A290F;
 }
 
-.ribbon .rib-success {    
+.ribbon .rib-success, .ribbon .ribbon-total-success{    
     background-color: #768E00;    
     background-image: -ms-linear-gradient(top, #9CB80A, #768E00);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9CB80A), to(#768E00));

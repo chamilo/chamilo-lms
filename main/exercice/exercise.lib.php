@@ -1203,21 +1203,29 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     return $html;	
 }
 
-function show_success_message($score, $weight, $pass_percentage) {
-    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
-    $html = '';
-    $icon = '';
+function is_success_exercise_result($score, $weight, $pass_percentage) {
+    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);    
     if (isset($pass_percentage) && !empty($pass_percentage)) {
         if ($percentage >= $pass_percentage) {
-            //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
-            $html .= get_lang('CongratulationsYouPassedTheTest');
-            $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
-        } else {
-            //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
-            $html .= get_lang('YouDidNotReachTheMinimumScore');
-            $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
+            return true;
         }
     }
+    return false;        
+}
+
+function show_success_message($score, $weight, $pass_percentage) {
+    $is_success = is_success_exercise_result($score, $weight, $pass_percentage);
+    
+    $icon = '';
+    if ($is_success) {        
+        //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+        $html = get_lang('CongratulationsYouPassedTheTest');
+        $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
+    } else {
+        //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
+        $html = get_lang('YouDidNotReachTheMinimumScore');
+        $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
+    }    
     $html = Display::tag('h4', $html);
     $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
     return $html;
@@ -2068,9 +2076,20 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     if ($origin != 'learnpath') {
         if ($show_results || $show_only_score) {
-                $total_score_text .= '<div class="question_row">
-                <div class="ribbon ribbon-total">
-                <div class="rib rib-total">';
+            
+            $is_success = is_success_exercise_result($total_score, $total_weight, $objExercise->selectPassPercentage());
+            $total_score_text .= '<div class="question_row">';
+            
+            if ($is_success) {
+                $total_score_text .= '
+                <div class="ribbon ribbon-total ">
+                <div class="rib rib-total ribbon-total-success">';
+            } else {
+                $total_score_text .= '
+                <div class="ribbon ribbon-total ">
+                <div class="rib rib-total ribbon-total-error">';
+            }
+            
             $total_score_text .= '<h3>';
             $total_score_text .= get_lang('YourTotalScore')."&nbsp;";
             if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {

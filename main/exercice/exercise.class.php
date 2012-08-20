@@ -1051,11 +1051,15 @@ class Exercise {
             
             
             //Pass percentage
-            $options = array('' => '-');
+            /*$options = array('' => '-');
             for ($i = 0; $i <= 20 ; $i++) {
                 $options[$i*5] = $i*5;
-            }
+            }            
             $form->addElement('select', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'), $options, array('id' => 'pass_percentage', 'class' => 'chzn-select'));
+            */
+            
+            $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));
+            $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
             
 			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
 						

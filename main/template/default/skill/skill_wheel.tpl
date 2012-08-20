@@ -72,7 +72,7 @@ function check_skills_sidebar() {
                         });
                         
                         skill_info = get_skill_info(skill_id);                       
-                        $("#skill_holder").append('<li><label><input id="checkbox_'+skill_id+'" class="skill_to_select" type="checkbox" value=""> '+skill_info.name+'</label></li>');                        
+                        $("#skill_holder").append('<li><input id="checkbox_'+skill_id+'" class="skill_to_select" type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_info.name+'</a></li>');
                     }
                 },            
             });                
@@ -184,10 +184,17 @@ function delete_gradebook_from_skill(skill_id, gradebook_id) {
 
 
 $(document).ready(function() {
+
     $("#gradebook_holder").on("click", "a.closebutton", function() {
         gradebook_id = $(this).attr('rel');
         skill_id = $('#id').attr('value');         
         delete_gradebook_from_skill(skill_id, gradebook_id);        
+    });
+    
+    
+    $("#skill_holder").on("click", "a.load_wheel", function() {
+        skill_id = $(this).attr('rel');
+        load_nodes(skill_id, main_depth);
     });
     
     $("#skill_id").fcbkcomplete({
@@ -214,8 +221,7 @@ $(document).ready(function() {
         onselect:"check_skills_edit_form",
         filter_selected: true,
         newel: true
-    });
-    
+    });    
     
     $("#gradebook_id").fcbkcomplete({
         json_url: "{{ url }}&a=find_gradebooks",
@@ -273,9 +279,9 @@ $(document).ready(function() {
    
     var main_depth = 1000;
         
-    load_nodes(main_depth);
+    load_nodes(0, main_depth);
     
-    function load_nodes(main_depth) {
+    function load_nodes(load_skill_id, main_depth) {
         
         /** Define constants and size of the wheel */
         /** Total width of the wheel (also counts for the height) */
@@ -295,8 +301,10 @@ $(document).ready(function() {
         reduce_top = 1;
         
         /* Locate the #div id element */
-        /*$("#vis").remove();
-        $("body").append('<div id="vis"></div>');*/
+        $("#skill_wheel").remove();
+        
+        $("#wheel_container").append('<div id="skill_wheel"></div>');
+        
         var div = d3.select("#skill_wheel");
 
         /* Remove the image (make way for the dynamic stuff */
@@ -308,7 +316,7 @@ $(document).ready(function() {
         .attr("width", w + padding * 2)
         .attr("height", h + padding * 2)
         .append("g")
-        .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")"); 
+        .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")");
 
         /* ...update translate variables to change coordinates of wheel's center */
         /* Add a small label to help the user */
@@ -322,7 +330,7 @@ $(document).ready(function() {
         /** Value here seems to be a calculation of the size of the elements
                 depending on the level of depth they're at. Changing it makes
                 elements pass over the limits of others... */
-        .size([1, 2])    
+        //.size([1, 2])
         .value(function(d) {
             //return 5.8 - d.depth;
             //When having more than 4 children seems that the code above doesn't work
@@ -343,8 +351,13 @@ $(document).ready(function() {
         .outerRadius(function(d) {
             return Math.max(0, y(d.y + d.dy));
         });
+        
+        load_skill_condition = '';
+        if (load_skill_id != 0) { 
+            load_skill_condition = 'skill_id=' + load_skill_id;            
+        }
                 
-        d3.json("{{ wheel_url }}&main_depth="+main_depth, function(json) {
+        d3.json("{{ wheel_url }}&main_depth="+main_depth+"&"+load_skill_condition, function(json) {
             
             /** Define the list of nodes based on the JSON */
             var nodes = partition.nodes({
@@ -466,7 +479,7 @@ $(document).ready(function() {
             .attr("x", 0)
             .attr("display", 'none')            
             .text(function(d) {
-                return "Click";
+                //return "Click";
             });
         });
     }
@@ -686,9 +699,6 @@ $(document).ready(function() {
         .each("end", function(e) {
             //d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
         });
-        
-        
-        
     }
 
     /* Returns whether p is parent of c */
@@ -781,7 +791,7 @@ $(document).ready(function() {
                 
         </div>
             
-        <div class="span10">
+        <div id="wheel_container" class="span10">
             <div id="skill_wheel">
                 <img src="">
             </div>

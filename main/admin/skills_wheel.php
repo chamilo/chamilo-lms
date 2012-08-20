@@ -37,12 +37,12 @@ if (isset($_GET['load_user'])) {
     $load_user = 1;
 }
 
-$skill_id = null;
+$skill_condition = '';
 if (isset($_GET['skill_id'])) {
-    $skill_id = intval($_GET['skill_id']);
+    $skill_condition = 'skill_id='.intval($_GET['skill_id']);
 }
 
-$url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user&skill_id=$skill_id";
+$url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user&$skill_condition";
 $tpl->assign('wheel_url', $url);
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';

@@ -378,8 +378,8 @@ class Testcategory {
         }
         $content = null;
 		if (Testcategory::getCategoryNameForQuestion($in_questionID) != "" && ($in_display_category_name == 1 || !$is_student)) {
-            $content .= '<div id="question_title" class="sectiontitle">';            
-            $content .= get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID);            
+            $content .= '<div class="page-header">';            
+            $content .= '<h4>'.get_lang('Category').": ".Testcategory::getCategoryNameForQuestion($in_questionID).'</h4>';
             $content .= "</div>";
 		}
         return $content;

@@ -4629,13 +4629,13 @@ i.size-32.icon-new-work{
     background-image:  url('../img/icons/32/new_work.png');
 }
 
-
 .skill_partition {
     cursor: pointer;
     stroke: #000000;
     stroke-width: 1.5;
 }
 
-.skill_background {
-  background-image: -moz-linear-gradient(45deg, #555555 25%, transparent 25%, transparent), -moz-linear-gradient(-45deg, #555555 25%, transparent 25%, transparent), -moz-linear-gradient(45deg, transparent 75%, #555555 75%), -moz-linear-gradient(-45deg, transparent 75%, #555555 75%);
+#filepaths input{
+    margin-bottom:5px;
+    
 }

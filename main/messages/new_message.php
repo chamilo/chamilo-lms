@@ -109,7 +109,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" class=\"span4\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\" />&nbsp; <br />'.get_lang('Description').'&nbsp;&nbsp;<input type=\"text\" name=\"legend[]\"  /><br /><br />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -205,13 +205,14 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);		
 		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
 	}
-	if (empty($group_id)) {
-
-        
+    
+	if (empty($group_id)) {        
         $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
-				<div id="filepath_1">
-				<input type="file" name="attach_1" class="span4"/>
-				<input type="text" name="legend[]" size="20" /></div></span>');
+                    <div id="filepath_1">                    
+                        <input type="file" name="attach_1"/><br />
+                        '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
+                    </div>
+                </span>');
 		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 

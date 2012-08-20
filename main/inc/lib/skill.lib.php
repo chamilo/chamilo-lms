@@ -582,7 +582,6 @@ class Skill extends Model {
         $flat_array = array();
         
         $css_attributes = array('fill' => 'red');
-        //var_dump($skills);
         
         $family = array();
         if (!empty($skills)) {
@@ -599,9 +598,16 @@ class Skill extends Model {
                 $skill['data'] = array('parent_id' => $skill['parent_id']); // because except main keys (id, name, children) others keys are not saved while in the space tree
                 
                 $skill['data']['achieved'] = false;
+                
                 if ($user_id) {
                     $css_attributes = array('fill' => 'green');
                     $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);                    
+                }
+                
+                $skill['data']['skill_has_gradebook'] = false;
+                
+                if (isset($skill['gradebooks']) && !empty($skill['gradebooks'])) {
+                    $skill['data']['skill_has_gradebook'] = true;
                 }
                 
                 $skill['data']['css_attributes'] = $css_attributes;
@@ -627,7 +633,7 @@ class Skill extends Model {
                 $skill['data']['family_id'] = $new_family_array[$skill['id']];
                 $refs[$skill['parent_id']]['children'][] = &$skill;
                 $flat_array[$skillInd] =  $skill;
-            }           
+            }
             
             $skills_tree = array(
                 'name'      => get_lang('SkillRootName'),

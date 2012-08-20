@@ -2,6 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 $(document).ready(function() {    
+    
+     //Open dialog
+    $("#dialog-form").dialog({
+        autoOpen: false,
+        modal   : true, 
+        width   : 550, 
+        height  : 480
+    });
         
     /* ...adding "+1" to "y" function's params is really funny */
     /* Exexute the calculation based on a JSON file provided */
@@ -33,9 +41,6 @@ $(document).ready(function() {
     color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
     color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
     color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
-    
-    
-
         
     //var normal_fill = d3.scale.category10().domain(my_domain);
    
@@ -54,7 +59,7 @@ $(document).ready(function() {
         x = d3.scale.linear().range([0, 2 * Math.PI]),
         y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
         /** Padding in pixels before the string starts */
-        p = 3,
+        padding = 3,
         /** Duration of click animations */
         duration = 1000,
         /** Levels to show */
@@ -73,16 +78,16 @@ $(document).ready(function() {
         /* Append an element "svg" to the #vis section */
         var vis = div.append("svg")
         //.attr("class", "Blues")
-        .attr("width", w + p * 2)
-        .attr("height", h + p * 2)
+        .attr("width", w + padding * 2)
+        .attr("height", h + padding * 2)
         .append("g")
-        .attr("transform", "translate(" + (r + p) + "," + (r/reduce_top + p) + ")"); 
+        .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")"); 
 
         /* ...update translate variables to change coordinates of wheel's center */
         /* Add a small label to help the user */
         div.append("p")
         .attr("id", "intro")
-        .text("Click to zoom!");
+        .text("{{ "ClickToZoom"|get_lang }}");
 
         /* Generate the partition layout */
         var partition = d3.layout.partition()
@@ -118,12 +123,18 @@ $(document).ready(function() {
             var nodes = partition.nodes({
                 children: json                
             });
-
+            
             /* Setting all skills */
             var path = vis.selectAll("path").data(nodes);
 
             /* Setting all texts */
-            var text = vis.selectAll("text").data(nodes);        
+            var text = vis.selectAll("text").data(nodes);    
+            
+            /* Setting icons */
+            var icon = vis.selectAll("icon").data(nodes);
+                  
+            
+            /* Path settings */            
 
             path.enter().append("path")
             .attr("id", function(d, i) {            
@@ -139,12 +150,21 @@ $(document).ready(function() {
             .style("stroke", function(d) {
                 return set_skill_style(d, 'stroke');
             })
+            .on("mouseover", function(d, i) {                    
+                $("#icon-" + i).show();                         
+            })
+            .on("mouseout", function(d, i) {
+                $("#icon-" + i).hide();                
+            })            
             .on("click", function(d){
-                click_partition(d, path, text, arc, x, y, r, p);
+                click_partition(d, path, text, icon, arc, x, y, r, padding);
             });
 
-            /* End setting skills */        
-
+            /* End setting skills */  
+            
+            
+            /* Text settings */
+         
             var textEnter = text.enter().append("text")
             .style("fill-opacity", 1)
             .style("fill", function(d) {                
@@ -159,13 +179,20 @@ $(document).ready(function() {
                 var multiline = (d.name || "").split(" ").length > 1,
                 angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
                 rotate = angle + (multiline ? -.5 : 0);
-                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
             })
+            .on("mouseover", function(d, i) {                    
+                $("#icon-" + i).show();                         
+            })
+            .on("mouseout", function(d, i) {
+                $("#icon-" + i).hide();                
+            })  
             .on("click", function(d){
-                click_partition(d, path, text, arc, x, y, r, p);
+                click_partition(d, path, text, icon, arc, x, y, r, padding);
             });
 
             /** Managing text - always maximum two words */
+            
             textEnter.append("tspan")
             .attr("x", 0)
             .text(function(d) {
@@ -177,7 +204,56 @@ $(document).ready(function() {
             .text(function(d) {
                 return d.depth ? d.name.split(" ")[1] || "" : "";
             });
+            
+            
+                 
+            /* Icon settings */
+                
+            var icon_click = icon.enter().append("text")
+            .style("fill-opacity", 1)
+            .style("fill", function(d) {                
+                return "#000";
+            })  
+            .attr("text-anchor", function(d) {
+                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+            })
+            .attr("dy", ".2em")            
+            .attr("transform", function(d) {
+                /** Get the text details and define the rotation and general position */                
+                angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                rotate = angle;
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+            })
+            .on("click", function(d){
+                open_popup(d);
+            });
+           
+            icon_click.append("tspan")
+            .attr("id", function(d, i) {            
+                return "icon-" + i;
+            })
+            .attr("x", 0)
+            .attr("display", 'none')            
+            .text(function(d) {
+                return "Click";
+            });
         });
+    }
+    
+    function open_popup(d) {
+        $( "#name" ).attr('value', d.name);
+        //description = $( "#description" );        
+        $("#dialog-form").dialog({
+            buttons: {
+                 "{{ "DoSomething"|get_lang }}" : function() {
+                  },
+            },
+            close: function() {     
+                $("#name").attr('value', '');
+                $("#description").attr('value', '');                
+            }
+        });
+        $("#dialog-form").dialog("open");
     }
     
     var colors1 = $.xcolor.analogous('#da0'); //8 colors
@@ -206,7 +282,7 @@ $(document).ready(function() {
                 //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
                 part_color = $.xcolor.lighten(family1, position, 15);                
                 color = part_color.getHex();
-                console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
+                //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
             } else {
                 color = colors[d.family_id];                
             }
@@ -218,13 +294,43 @@ $(document).ready(function() {
         return color; //missing colors
     }
         
+    /*   
+            
+    gray tones for all skills that have no particular property ("Basic skills wheel" view)
+    yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
+    bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
+    dark blue tones for skills already acquired by a series of students, when looking at the will in the "Owned skills" view.
+    bright green for skills looked for by a HR director ("Profile search" view)
+    dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
+    bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
+    */
+        
     function set_skill_style(d, attribute) {
+        //Nice rainbow colors
         return_fill = get_color(d);
+        
+        
+        /*var p = color_patterns[18];
+        color = p(depth -1 + d.counter);
+        return_fill = d.color = color;*/
+         
+        
+        //return_fill = 'grey';
+        
         return_stroke = 'black';
         
+        //If user achieved that skill
         if (d.achieved) {
-            return_fill = '#1E91F5';
-            return_stroke = '#FCD23A';            
+            return_fill = 'cornflowerblue';
+            //return_stroke = '#FCD23A';           
+        }
+        
+        //darkblue
+        
+        //If the skill has a gradebook attached
+        if (d.skill_has_gradebook) {
+            return_fill = 'yellow';
+            //return_stroke = 'grey';
         }
         
         switch (attribute) {
@@ -237,7 +343,7 @@ $(document).ready(function() {
         }
     }
     
-    function click_partition(d, path, text, arc, x, y, r, p) {
+    function click_partition(d, path, text, icon, arc, x, y, r, p) {
         if (d.depth == 2) {
             /*main_depth +=1;
             load_nodes(main_depth);*/
@@ -248,6 +354,8 @@ $(document).ready(function() {
         .duration(duration)
         .attrTween("d", arcTween(d, arc, x, y, r));
 
+        /* Updating text position */
+        
         // Somewhat of a hack as we rely on arcTween updating the scales.
         text.style("visibility", function(e) {
             return isParentOf(d, e) ? null : d3.select(this).style("visibility");
@@ -272,6 +380,34 @@ $(document).ready(function() {
         .each("end", function(e) {
             d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
         });
+        
+        
+        
+        /* Updating icon position */
+        
+        
+        icon.transition().duration(duration)
+        .attrTween("text-anchor", function(d) {
+            return function() {
+                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+            };
+        })
+        .attrTween("transform", function(d) {            
+            return function() {
+                var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                rotate = angle;
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+            };
+        })
+        .style("fill-opacity", function(e) {
+            //return isParentOf(d, e) ? 1 : 1e-6;
+        })
+        .each("end", function(e) {
+            //d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
+        });
+        
+        
+        
     }
 
     /* Returns whether p is parent of c */
@@ -343,40 +479,24 @@ $(document).ready(function() {
 </div>
 
 
-<!--div id="dialog-form" style="display:none; z-index:9001;">    
+<div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>
     <form class="form-horizontal" id="add_item" name="form">
         <fieldset>
             <input type="hidden" name="id" id="id"/>
             <div class="control-group">            
-                <label class="control-label" for="name">{{'Name'|get_lang}}</label>            
+                <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>            
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />             
                 </div>
-            </div>        
-            <div class="control-group">            
-                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>            
-                <div class="controls">
-                    <select id="parent_id" name="parent_id" />
-                    </select>                  
-                </div>
-            </div>                
-            <div class="control-group">            
-                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>            
-                <div class="controls">
-                    <select id="gradebook_id" name="gradebook_id[]" multiple="multiple"/>
-                    </select>             
-                    <span class="help-block">
-                    {{'WithCertificate'|get_lang}}
-                    </span>           
-                </div>
             </div>
             <div class="control-group">            
-                <label class="control-label" for="name">{{'Description'|get_lang}}</label>            
+                <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>            
                 <div class="controls">
                     <textarea name="description" id="description" class="span3" rows="7"></textarea>
                 </div>
             </div>  
         </fieldset>
-    </form>    
-</div-->
+        </form>
+     
+</div>

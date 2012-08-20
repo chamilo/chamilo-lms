@@ -25,6 +25,7 @@ $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function () {
+
     $("#skills").fcbkcomplete({
         json_url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=find_skills",
         cache: false,

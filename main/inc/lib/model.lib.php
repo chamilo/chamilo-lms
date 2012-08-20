@@ -156,7 +156,7 @@ class Model {
      *
      */
     public function update($params) {
-        $params = $this->clean_parameters($params);
+        $params = $this->clean_parameters($params);        
            
         if ($this->is_course_model) {            
             if (!isset($params['c_id']) || empty($params['c_id'])) {

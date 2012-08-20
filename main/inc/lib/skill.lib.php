@@ -15,7 +15,7 @@ define ('SKILL_TYPE_BOTH',          'both');
 require_once api_get_path(LIBRARY_PATH).'model.lib.php';
 
 class SkillProfile extends Model {
-    var $columns = array('id', 'name','description');
+    var $columns = array('id', 'name', 'description');
     public function __construct() {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
         $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
@@ -276,7 +276,7 @@ class SkillRelUser extends Model {
 
 
 class Skill extends Model {
-    var $columns  = array('id', 'name','description', 'access_url_id');
+    var $columns  = array('id', 'name','description', 'access_url_id', 'short_code');
     var $required = array('name');
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     var $colours = array(
@@ -465,27 +465,37 @@ class Skill extends Model {
         return null;
     }
 
-    public function edit($params) {
+    public function edit($params) {        
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
         $skill_rel_skill     = new SkillRelSkill();
         $skill_rel_gradebook = new SkillRelGradebook();
 
-        //Saving name, description
-
+        //Saving name, description        
         $this->update($params);
+        
         $skill_id = $params['id'];
 
         if ($skill_id) {
             //Saving skill_rel_skill (parent_id, relation_type)
-            $attributes = array(
-                            'skill_id'      => $skill_id,
-                            'parent_id'     => $params['parent_id'],
-                            'relation_type' => $params['relation_type'],
-                            //'level'         => $params['level'],
-            );
-            $skill_rel_skill->update_by_skill($attributes);
+            
+            if (!is_array($params['parent_id'])) {
+                $params['parent_id'] = array($params['parent_id']);
+            }
+            
+            foreach ($params['parent_id'] as $parent_id) {   
+                $relation_exists = $skill_rel_skill->relation_exists($skill_id, $parent_id);                
+                if (!$relation_exists) {
+                    $attributes = array(
+                                    'skill_id'      => $skill_id,
+                                    'parent_id'     => $parent_id,
+                                    'relation_type' => $params['relation_type'],
+                                    //'level'         => $params['level'],
+                    );
+                    $skill_rel_skill->update_by_skill($attributes);
+                }
+            }
 
             $skill_rel_gradebook->update_gradebooks_by_skill($skill_id, $params['gradebook_id']);
             return $skill_id;

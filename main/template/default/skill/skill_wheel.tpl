@@ -1,21 +1,248 @@
 <script>
 /* For licensing terms, see /license.txt */
 
-$(document).ready(function() {    
+var url = '{{ url }}';
+
+function get_skill_info(my_id) {
+    var skill = false;
+    $.ajax({
+        url: url+'&a=get_skill_info&id='+my_id,
+        async: false,        
+        success: function(json) {
+            skill = jQuery.parseJSON(json);
+            return skill;
+        }
+    });    
+    return skill;
+}
+
+function get_gradebook_info(id) {
+    var item = false;
+    $.ajax({
+        url: url+'&a=get_gradebook_info&id='+id,
+        async: false,        
+        success: function(json) {
+            item = jQuery.parseJSON(json);
+            return item;
+        }
+    });    
+    return item;
+}
+
+function add_skill(params) {
+    $.ajax({
+        async: false,
+        url: url+'&a=add&'+params,
+        success:function(my_id) {
+            //Close dialog
+            $("#dialog-form").dialog("close");                                      
+        }                           
+    });
+}
     
-     //Open dialog
+function check_skills_sidebar() {
+    //selecting only selected users
+    $("#skill_id option:selected").each(function() {
+        var skill_id = $(this).val();                
+        if (skill_id != "" ) {
+            $.ajax({
+                url: "{{ url }}&a=skill_exists", 
+                data: "skill_id="+skill_id,
+//                async: false, 
+                success: function(return_value) {                   
+                    if (return_value == 0 ) {
+                        alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
+                        //Deleting select option tag
+                        $("#skill_id option[value="+skill_id+"]").remove();                    
+                       
+                        //Deleting holder
+                        $("#skill_search .holder li").each(function () {
+                            if ($(this).attr("rel") == skill_id) {
+                                $(this).remove();
+                            }
+                        });                        
+                    } else {
+                        $("#skill_id option[value="+skill_id+"]").remove();
+                          
+                        //Deleting holder
+                        $("#skill_search .holder li").each(function () {
+                            if ($(this).attr("rel") == skill_id) {
+                                $(this).remove();
+                            }
+                        });
+                        
+                        skill_info = get_skill_info(skill_id);                       
+                        $("#skill_holder").append('<li><label><input id="checkbox_'+skill_id+'" class="skill_to_select" type="checkbox" value=""> '+skill_info.name+'</label></li>');                        
+                    }
+                },            
+            });                
+        }
+    });
+}
+
+   
+function check_skills_edit_form() {
+    //selecting only selected users
+    $("#parent_id option:selected").each(function() {
+        var skill_id = $(this).val();
+        
+        if (skill_id != "" ) {
+            $.ajax({ 
+                async: false,
+                url: "{{ url }}&a=skill_exists", 
+                data: "skill_id="+skill_id,
+                success: function(return_value) {                  
+                    if (return_value == 0 ) {
+                        alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
+                        //Deleting select option tag
+                        $("#parent_id").find('option').remove();
+                        //Deleting holder
+                        $("#skill_row .holder li").each(function () {
+                            if ($(this).attr("rel") == skill_id) {
+                                $(this).remove();
+                            }
+                        });                        
+                    } else {
+                        $("#parent_id").empty();                        
+                        $("#skill_edit_holder").find('li').remove();
+                        
+                        //Deleting holder
+                        $("#skill_row .holder li").each(function () {
+                            if ($(this).attr("rel") == skill_id) {
+                                $(this).remove();
+                            }
+                        });
+                        
+                        skill = get_skill_info(skill_id);                        
+                                                                         
+                        $("#skill_edit_holder").append('<li class="bit-box" id="skill_option_'+skill_id+'"> '+skill.name+'</li>');
+                        $("#parent_id").append('<option class="selected" selected="selected" value="'+skill_id+'"></option>');
+                    }
+                },            
+            });                
+        }
+    });
+}
+
+function check_gradebook() {
+    //selecting only selected users
+    $("#gradebook_id option:selected").each(function() {
+        var gradebook_id = $(this).val();
+        
+        if (gradebook_id != "" ) {
+            $.ajax({ 
+                url: "{{ url }}&a=gradebook_exists", 
+                data: "gradebook_id="+gradebook_id,
+                success: function(return_value) {                    
+                    if (return_value == 0 ) {
+                        alert("{{ 'GradebookDoesNotExist'|get_lang }}");                                                
+                        //Deleting select option tag
+                        $("#gradebook_id option[value="+gradebook_id+"]").remove();                        
+                        //Deleting holder
+                        $("#gradebook_row .holder li").each(function () {
+                            if ($(this).attr("rel") == gradebook_id) {
+                                $(this).remove();
+                            }
+                        });                        
+                    } else {                        
+                        //Deleting holder                        
+                        $("#gradebook_row .holder li").each(function () {
+                            if ($(this).attr("rel") == gradebook_id) {
+                                $(this).remove();
+                            }
+                        });
+                        
+                        if ($('#gradebook_item_'+gradebook_id).length == 0) {
+                            gradebook = get_gradebook_info(gradebook_id);                            
+                            if (gradebook) {
+                                $("#gradebook_holder").append('<li id="gradebook_item_'+gradebook_id+'" class="bit-box"> '+gradebook.name+' <a rel="'+gradebook_id+'" class="closebutton" href="#"></a></li>');
+                            }                            
+                        }
+                    }
+                },            
+            });                
+        }
+    });
+}
+
+function delete_gradebook_from_skill(skill_id, gradebook_id) {
+    $.ajax({
+        url: url+'&a=delete_gradebook_from_skill&skill_id='+skill_id+'&gradebook_id='+gradebook_id,
+        async: false,        
+        success: function(result) {
+            //if (result == 1) {
+                $('#gradebook_item_'+gradebook_id).remove();
+                 $("#gradebook_id option").each(function () {
+                    if ($(this).attr("value") == gradebook_id) {
+                        $(this).remove();
+                    }
+                });
+            //}
+        }
+    });
+}
+
+
+$(document).ready(function() {
+    $("#gradebook_holder").on("click", "a.closebutton", function() {
+        gradebook_id = $(this).attr('rel');
+        skill_id = $('#id').attr('value');         
+        delete_gradebook_from_skill(skill_id, gradebook_id);        
+    });
+    
+    $("#skill_id").fcbkcomplete({
+        json_url: "{{ url }}&a=find_skills",
+        cache: false,
+        filter_case: false,
+        filter_hide: true,
+        complete_text:"{{ 'StartToType' | get_lang }}",
+        firstselected: true,
+        //onremove: "testme",
+        onselect:"check_skills_sidebar",
+        filter_selected: true,
+        newel: true
+    });    
+    
+    $("#parent_id").fcbkcomplete({
+        json_url: "{{ url }}&a=find_skills",
+        cache: false,
+        filter_case: false,
+        filter_hide: true,
+        complete_text:"{{ 'StartToType' | get_lang }}",
+        firstselected: true,
+        //onremove: "testme",
+        onselect:"check_skills_edit_form",
+        filter_selected: true,
+        newel: true
+    });
+    
+    
+    $("#gradebook_id").fcbkcomplete({
+        json_url: "{{ url }}&a=find_gradebooks",
+        cache: false,
+        filter_case: false,
+        filter_hide: true,
+        complete_text:"{{ 'StartToType' | get_lang }}",
+        firstselected: true,
+        //onremove: "testme",
+        onselect:"check_gradebook",
+        filter_selected: true,
+        newel: true
+    });
+
+    //Open dialog
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true, 
-        width   : 550, 
-        height  : 480
+        width   : 600, 
+        height  : 550
     });
         
     /* ...adding "+1" to "y" function's params is really funny */
     /* Exexute the calculation based on a JSON file provided */
     /*d3.json("wheel.json", function(json) {*/
     /** Get the JSON list of skills and work on it */
-  
+      
     var my_domain = [1,2,3,4,5,6,7,8,9];
     
     var col = 9;
@@ -70,11 +297,11 @@ $(document).ready(function() {
         /* Locate the #div id element */
         /*$("#vis").remove();
         $("body").append('<div id="vis"></div>');*/
-        var div = d3.select("#vis");
+        var div = d3.select("#skill_wheel");
 
         /* Remove the image (make way for the dynamic stuff */
         div.select("img").remove();
-
+        
         /* Append an element "svg" to the #vis section */
         var vis = div.append("svg")
         //.attr("class", "Blues")
@@ -88,7 +315,7 @@ $(document).ready(function() {
         div.append("p")
         .attr("id", "intro")
         .text("{{ "ClickToZoom"|get_lang }}");
-
+        
         /* Generate the partition layout */
         var partition = d3.layout.partition()
         .sort(null)
@@ -131,11 +358,9 @@ $(document).ready(function() {
             var text = vis.selectAll("text").data(nodes);    
             
             /* Setting icons */
-            var icon = vis.selectAll("icon").data(nodes);
-                  
+            var icon = vis.selectAll("icon").data(nodes);                  
             
-            /* Path settings */            
-
+            /* Path settings */
             path.enter().append("path")
             .attr("id", function(d, i) {            
                 return "path-" + i;
@@ -154,10 +379,14 @@ $(document).ready(function() {
                 $("#icon-" + i).show();                         
             })
             .on("mouseout", function(d, i) {
-                $("#icon-" + i).hide();                
+                $("#icon-" + i).hide();
+            })
+            .on("mousedown", function(d, i) {
+                //Handles 2 mouse clicks
+                handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding);  
             })            
             .on("click", function(d){
-                click_partition(d, path, text, icon, arc, x, y, r, padding);
+                //click_partition(d, path, text, icon, arc, x, y, r, padding);
             });
 
             /* End setting skills */  
@@ -187,8 +416,12 @@ $(document).ready(function() {
             .on("mouseout", function(d, i) {
                 $("#icon-" + i).hide();                
             })  
+            .on("mousedown", function(d, i) {
+                //Handles 2 mouse clicks
+                handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding);  
+            })            
             .on("click", function(d){
-                click_partition(d, path, text, icon, arc, x, y, r, padding);
+                //click_partition(d, path, text, icon, arc, x, y, r, padding);
             });
 
             /** Managing text - always maximum two words */
@@ -204,9 +437,7 @@ $(document).ready(function() {
             .text(function(d) {
                 return d.depth ? d.name.split(" ")[1] || "" : "";
             });
-            
-            
-                 
+                             
             /* Icon settings */
                 
             var icon_click = icon.enter().append("text")
@@ -222,7 +453,7 @@ $(document).ready(function() {
                 /** Get the text details and define the rotation and general position */                
                 angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
                 rotate = angle;
-                return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+                return "rotate(" + rotate + ")translate(" + (y(d.y) + padding +80) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
             })
             .on("click", function(d){
                 open_popup(d);
@@ -240,12 +471,64 @@ $(document).ready(function() {
         });
     }
     
+    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {                
+        switch (d3.event.which) {
+            case 1:
+                //alert('Left mouse button pressed');
+                click_partition(d, path, text, icon, arc, x, y, r, padding);
+                break;
+            case 2:
+                //alert('Middle mouse button pressed');
+                break;                        
+            case 3:                        
+                open_popup(d);                        
+                //alert('Right mouse button pressed');
+                break;
+            default:
+                //alert('You have a strange mouse');
+        }
+    }
+    
     function open_popup(d) {
         $( "#name" ).attr('value', d.name);
+                
+        //Cleaning selected        
+        $("#gradebook_id").find('option').remove();        
+        $("#parent_id").find('option').remove();
+        
+        $("#gradebook_holder").find('li').remove();
+        $("#skill_edit_holder").find('li').remove();
+                
+        var skill = get_skill_info(d.id);       
+        
+        if (skill) {
+            var parent_info = get_skill_info(skill.extra.parent_id);
+            
+            $("#name").attr('value', skill.name);
+            $("#id").attr('value',   skill.id);                       
+            $("#description").attr('value', skill.description);                
+            
+            //Filling parent_id                        
+            $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
+            
+            $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
+            
+            //Filling the gradebook_id
+            jQuery.each(skill.gradebooks, function(index, data) {                    
+                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+            });
+        }        
+        
         //description = $( "#description" );        
         $("#dialog-form").dialog({
             buttons: {
-                 "{{ "DoSomething"|get_lang }}" : function() {
+                 "{{ "Edit"|get_lang }}" : function() {
+                     var params = $("#add_item").find(':input').serialize();
+                     add_skill(params);
+                     console.log(params);
+                  },                  
+                  "{{ "Delete"|get_lang }}" : function() {
                   },
             },
             close: function() {     
@@ -294,8 +577,7 @@ $(document).ready(function() {
         return color; //missing colors
     }
         
-    /*   
-            
+    /*      
     gray tones for all skills that have no particular property ("Basic skills wheel" view)
     yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
     bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
@@ -383,8 +665,7 @@ $(document).ready(function() {
         
         
         
-        /* Updating icon position */
-        
+        /* Updating icon position */        
         
         icon.transition().duration(duration)
         .attrTween("text-anchor", function(d) {
@@ -463,25 +744,53 @@ $(document).ready(function() {
     }
 
 });
-
 </script>
-<div id="menu" class="well" style="top:20px; left:20px; width:380px; z-index: 9000; opacity: 0.9;">
-    <h3>{{ 'Skills'|get_lang }}</h3>
-    <div class="btn-group">
-        <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{{ 'AddSkill'|get_lang }}</a>
-        <a style="z-index: 1000" class="btn" id="return_to_root" href="#">{{ 'Root'|get_lang }}</a>
-        <a style="z-index: 1000" class="btn" id="return_to_admin" href="{{ _p.web_main }}admin">{{ 'BackToAdmin'|get_lang }}</a>        
-    </div>
-</div>
-           
-<div id="vis">
-    <img src="">
-</div>
 
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div class="well">
+                <h3>{{ 'Skills'|get_lang }}</h3>
+                
+                <form id="skill_search" class="form-search">
+                    <select id="skill_id" name="skill_id" />
+                    </select>
+                    <br />
+                    <ul id="skill_holder" class="holder holder_simple">
+                    </ul>
+                </form>
+                
+                <h3>{{ 'ProfileSearch'|get_lang }}</h3>
+                
+                {{ 'WhatSkillsAreYouLookinFor'|get_lang }}
+                
+                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}
+                
+                
+                <form class="form-search">
+                    <input class="btn" type="button" value="{{ "SearchProfileMatches"|get_lang }}">
+                </form>                
+                
+                <h3>{{ 'MySkills'|get_lang }}</h3>
+                <h3>{{ 'GetNewSkills'|get_lang }}</h3>
+                <h3>{{ 'SkillInfo'|get_lang }}</h3>
+                
+                
+            </div>
+                
+        </div>
+            
+        <div class="span10">
+            <div id="skill_wheel">
+                <img src="">
+            </div>
+        </div>
+</div>
 
 <div id="dialog-form" style="display:none; z-index:9001;">    
     <p class="validateTips"></p>
-    <form class="form-horizontal" id="add_item" name="form">
+    <form id="add_item" class="form-horizontal"  name="form">
         <fieldset>
             <input type="hidden" name="id" id="id"/>
             <div class="control-group">            
@@ -490,6 +799,39 @@ $(document).ready(function() {
                     <input type="text" name="name" id="name" size="40" />             
                 </div>
             </div>
+            
+            <div class="control-group">            
+                <label class="control-label">{{ 'ShortCode' | get_lang }}</label>            
+                <div class="controls">
+                    <input type="text" name="short_code" id="short_code" size="40" />             
+                </div>
+            </div>
+
+             <div id="skill_row" class="control-group">            
+                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>            
+                <div class="controls">
+                    <select id="parent_id" name="parent_id" />
+                    </select>
+                    <ul id="skill_edit_holder" class="holder holder_simple">
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="gradebook_row" class="control-group">            
+                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>            
+                <div class="controls">
+                    <select id="gradebook_id" name="gradebook_id" multiple="multiple"/>
+                    </select>             
+                        
+                    <ul id="gradebook_holder" class="holder holder_simple">
+                    </ul>
+                        
+                    <span class="help-block">
+                    {{ 'WithCertificate'|get_lang }}
+                    </span>           
+                </div>
+            </div>
+            
             <div class="control-group">            
                 <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>            
                 <div class="controls">
@@ -497,6 +839,5 @@ $(document).ready(function() {
                 </div>
             </div>  
         </fieldset>
-        </form>
-     
+    </form>     
 </div>

@@ -289,7 +289,12 @@ class IndexManager {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content = '<ul class="nav nav-list">';      
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_tree.php'));
+            
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php&load_user='.$this->user_id));
+            
+            if (api_get_setting('allow_hr_skills_management') == 'true' || api_is_platform_admin()) {
+                $content .= Display::tag('li', Display::url(get_lang('ManageSkills'), api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'));
+            }
             $content .= '</ul>';        
             $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
         }

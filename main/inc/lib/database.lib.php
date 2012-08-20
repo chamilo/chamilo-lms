@@ -1347,6 +1347,9 @@ class Database {
             //Cleaning attributes
             $count = 1;
             foreach ($attributes as $key=>$value) {
+                
+                if (!is_array($value))
+                    
                 $value = self::escape_string($value);
                 $update_sql .= "$key = '$value' ";
                 if ($count < count($attributes)) {

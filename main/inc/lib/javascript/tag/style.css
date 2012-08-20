@@ -33,7 +33,7 @@ ul.holder input[type="text"]:focus, ul.holder input-text input[type="password"]:
 
 
 
-form ul.holder { width: 500px; }
+/*form ul.holder { width: 500px; } */
 form ul { margin: 0 !important }
 ul.holder li.bit-box, #apple-list ul.holder li.bit-box { padding-right: 15px; position: relative; z-index:1000;}
 #apple-list ul.holder li.bit-input { margin: 0; }

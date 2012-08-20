@@ -24,6 +24,10 @@ $htmlHeadXtra[] = api_get_js('d3/d3.v2.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
+
 //$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/d3/colorbrewer.css');
 
 $tpl = new Template(null, false, false);
@@ -39,8 +43,10 @@ if (isset($_GET['skill_id'])) {
 }
 
 $url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user&skill_id=$skill_id";
-
 $tpl->assign('wheel_url', $url);
+
+$url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$tpl->assign('url', $url);
 
 $content = $tpl->fetch('default/skill/skill_wheel.tpl');
 $tpl->assign('content', $content);

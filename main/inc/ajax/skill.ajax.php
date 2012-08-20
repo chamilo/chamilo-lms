@@ -27,7 +27,7 @@ switch ($action) {
     case 'find_skills':        
         $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
         $return_skills = array();    
-        foreach($skills as $skill) {
+        foreach ($skills as $skill) {
             $skill['caption'] = $skill['name'];
             $skill['value'] =  $skill['id'];
             $return_skills[] = $skill;
@@ -35,7 +35,8 @@ switch ($action) {
         echo json_encode($return_skills);
         break;
     case 'get_gradebooks':        
-        $gradebooks = $gradebook_list = $gradebook->get_all();        
+        $gradebooks = $gradebook_list = $gradebook->get_all();
+        
         $gradebook_list = array();
         //Only course gradebook with certificate
         if (!empty($gradebooks)) {
@@ -52,7 +53,26 @@ switch ($action) {
             }
         }
         echo json_encode($gradebook_list);
-        break;    
+        break;
+    case 'find_gradebooks':        
+        $gradebooks = $gradebook->find('all', array('where' => array('name LIKE %?% ' => $_REQUEST['tag'])));
+        
+        $return = array();    
+        foreach ($gradebooks as $item) {
+            $item['caption'] = $item['name'];
+            $item['value'] =  $item['id'];
+            $return[] = $item;
+        }        
+        echo json_encode($return);        
+        break;          
+    case 'gradebook_exists':
+        $data = $gradebook->get($_REQUEST['gradebook_id']);        
+        if (!empty($data)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+        break;        
     case 'get_skills':
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         //$parent_id = intval($_REQUEST['parent_id']);
@@ -64,7 +84,12 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $skill_info = $skill->get_skill_info($id);                    
         echo json_encode($skill_info);
-        break;        
+        break;     
+    case 'get_gradebook_info':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $info = $gradebook->get($id);                    
+        echo json_encode($info);
+        break;  
     case 'load_children':
         $id             = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
@@ -102,14 +127,17 @@ switch ($action) {
                                                 );
         }
         echo json_encode($return);        
-        break;
+        break;        
+    case 'delete_gradebook_from_skill':
     case 'remove_skill':
         if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {            
-            $skill_item = $skill_gradebook->get_skill_info($_REQUEST['skill_id'], $_REQUEST['gradebook_id']);
+            $skill_item = $skill_gradebook->get_skill_info($_REQUEST['skill_id'], $_REQUEST['gradebook_id']);            
             if (!empty($skill_item)) {
                 $skill_gradebook->delete($skill_item['id']);
                 echo 1;
-            }  
+            } else {
+                echo 0;    
+            }
         } else {
             echo 0;
         }

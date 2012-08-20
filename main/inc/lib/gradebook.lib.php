@@ -53,6 +53,7 @@ class Gradebook extends Model {
             if (empty($gradebook['name'])) {
                 $gradebook['name'] = $gradebook['course_code'];
             }
+            //$gradebook['name'] = $gradebook['course_code'] .' > '.$gradebook['name'];
         }
         return $gradebooks;        
     }

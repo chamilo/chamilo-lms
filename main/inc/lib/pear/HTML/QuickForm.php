@@ -327,6 +327,7 @@ class HTML_QuickForm extends HTML_Common
             unset($this->_submitValues['_qf__' . $formName]);
             $this->addElement('hidden', '_qf__' . $formName, null);
         }
+        
         if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
             // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
             switch (strtoupper($matches['2'])) {
@@ -342,7 +343,16 @@ class HTML_QuickForm extends HTML_Common
                 default:
                     $this->_maxFileSize = $matches['1'];
             }
-        }     
+        }
+        
+        $course_id = api_get_course_int_id();
+        //If I'm in a course replace the default max filesize with the course limits
+        if (!empty($course_id)) {            
+            $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
+            if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
+                $this->_maxFileSize = intval($free_course_quota);
+            }
+        }
     } // end constructor
 
     // }}}

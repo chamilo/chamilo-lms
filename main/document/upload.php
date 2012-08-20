@@ -66,16 +66,19 @@ function advanced_parameters() {
 	document.getElementById(\'options\').style.display = \'block\';
 	document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 	} else {
-			document.getElementById(\'options\').style.display = \'none\';
-			document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-	}
+        document.getElementById(\'options\').style.display = \'none\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+    }
+}
+
 function setFocus(){
 	$("#title_file").focus();
-	}
-	$(document).ready(function () {
- 	 setFocus();
-	});	
+}
+
+$(document).ready(function () {
+        setFocus();
+});	
+
 </script>';
 
 $htmlHeadXtra[] = "
@@ -109,7 +112,6 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
-
 
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
@@ -157,9 +159,6 @@ array_shift($is_certificate_array);
 if ($is_certificate_array[0] == 'certificates') {
 	$is_certificate_mode = true;
 }
-
-// Variables
-//$max_filled_space = DocumentManager::get_course_quota();
 
 // Title of the tool
 if ($to_group_id != 0) { // Add group name after for group documents
@@ -223,11 +222,15 @@ if (!$is_certificate_mode) {
 
 $params = Uri::course_params();
 $params['id'] = Request::get('id');
-$action = Uri::here($params, false);    
-$form = new FormValidator('upload', 'POST', $action, '', 'enctype="multipart/form-data"');
+$action = Uri::here($params, false);
+
+$form = new FormValidator('upload', 'POST', $action.'#tabs-2', '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
-$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space()/1000000)).'M';
+
+$course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
+
+$label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'id="user_upload" size="45"');
 

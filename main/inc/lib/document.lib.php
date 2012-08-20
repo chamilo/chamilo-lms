@@ -2191,11 +2191,11 @@ class DocumentManager {
 
         if (isset($files['file'])) {
             $upload_ok = process_uploaded_file($files['file'], $show_output);
-
+            
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
-
+	
                 if ($new_path) {
                     $docid = DocumentManager::get_document_id($course_info, $new_path);
 

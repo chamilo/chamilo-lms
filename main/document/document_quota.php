@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/
 $course_code    = api_get_course_id();
 $course_id      = api_get_course_int_id();
 $session_id     = api_get_session_id();
-$group_id   = api_get_group_id();
+$group_id       = api_get_group_id();
 
 $session = array();
 $session_list = SessionManager::get_session_by_course($course_code);

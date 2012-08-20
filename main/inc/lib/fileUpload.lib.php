@@ -89,6 +89,7 @@ function get_document_title($name) {
  */
 function process_uploaded_file($uploaded_file, $show_output = true) {
 	// Checking the error code sent with the file upload.
+    
 	switch ($uploaded_file['error']) {
 		case 1:
 			// The uploaded file exceeds the upload_max_filesize directive in php.ini.
@@ -100,7 +101,7 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
 			// Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
 			$max_file_size = intval($_POST['MAX_FILE_SIZE']);
 			if ($show_output) {
-                Display::display_error_message(get_lang('UplExceedMaxPostSize'). round($max_file_size/1024) .' KB');
+                Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
 			}
 			return false;
 		case 3:
@@ -123,7 +124,8 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
             Display::display_error_message(get_lang('UplUploadFailed'));
 	    }
         return false;
-	}	
+    }
+    
     if (file_exists($uploaded_file['tmp_name'])) {
         $filesize = filesize($uploaded_file['tmp_name']);
         if (empty($filesize)) {

@@ -86,11 +86,15 @@ function check_skills_sidebar() {
     });
 }
 
-function fill_skill_search_li(skill_id, skill_name) {
-    return '<li><input id="skill_to_select_id_'+skill_id+'" rel="'+skill_id+'" name="'+skill_name+'" class="skill_to_select" type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
+function fill_skill_search_li(skill_id, skill_name, checked) {
+    checked_condition = '';
+    if (checked == 1) {
+        checked_condition = 'checked=checked';
+    }
+    
+    return '<li><input id="skill_to_select_id_'+skill_id+'" rel="'+skill_id+'" name="'+skill_name+'" class="skill_to_select" '+checked_condition+' type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
-
-  
+ 
 function check_skills_edit_form() {
     //selecting only selected users
     $("#parent_id option:selected").each(function() {
@@ -192,8 +196,7 @@ function delete_gradebook_from_skill(skill_id, gradebook_id) {
     });
 }
 
-function submit_profile_search_form() {
-    $("#skill_wheel").remove();
+function return_skill_list_from_profile_search() {
     var skill_list = {};
 
     if ($("#profile_search li").length != 0) {            
@@ -204,6 +207,13 @@ function submit_profile_search_form() {
             }
         }); 
     }
+    return skill_list;
+}
+
+function submit_profile_search_form() {
+    $("#skill_wheel").remove();
+    
+    var skill_list = return_skill_list_from_profile_search();
 
     if (skill_list.length != 0) {
         skill_list = { 'skill_id' : skill_list };
@@ -223,6 +233,14 @@ function submit_profile_search_form() {
 }
 
 
+function add_skill_in_profile_list(skill_id, skill_name) {
+    if ($('#profile_match_item_'+skill_id).length == 0 ) {
+        $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        
+    } else {            
+        $('#profile_match_item_'+skill_id).remove();
+    }
+}
+
 $(document).ready(function() {
     /* Skill search */ 
     
@@ -230,11 +248,7 @@ $(document).ready(function() {
     $("#skill_holder").on("click", "input.skill_to_select", function() {
         skill_id = $(this).attr('rel');
         skill_name = $(this).attr('name');
-        if ($('#profile_match_item_'+skill_id).length == 0 ) {
-            $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        
-        } else {            
-            $('#profile_match_item_'+skill_id).remove();
-        }
+        add_skill_in_profile_list(skill_id, skill_name);
     });
     
      /* URL link when searching skills */
@@ -246,21 +260,51 @@ $(document).ready(function() {
     
     
     /* Profile matcher */
-    
-        
+            
     /* Submit button */
     $("#search_profile_form").submit(function() {
         submit_profile_search_form();
+        return false;
+    });
+    
+    $("#save_profile_form_button").submit(function() {         
+        open_save_profile_popup();
+        return false;
     });
     
     /* Close button in profile matcher items */
     $("#profile_search").on("click", "a.closebutton", function() {
-        skill_id = $(this).attr('rel');        
+        skill_id = $(this).attr('rel');     
         $('input[id=skill_to_select_id_'+skill_id+']').attr('checked', false);
         $('#profile_match_item_'+skill_id).remove();
         submit_profile_search_form();
-    });    
-           
+    });
+    
+    //Fill saved profiles list
+    update_my_saved_profiles();
+    
+    /* Click in profile */
+    $("#saved_profiles").on("click", "a.load_profile", function() {
+        profile_id = $(this).attr('rel');        
+        $.ajax({
+           url: '{{ url }}&a=get_skills_by_profile&profile_id='+profile_id,
+           success:function(json) {
+               skill_list = jQuery.parseJSON(json);               
+               $('#skill_holder').empty();               
+               jQuery.each(skill_list, function(index, skill_id) {                    
+                    skill_info = get_skill_info(skill_id);                        
+                    li = fill_skill_search_li(skill_id, skill_info.name, 1);
+                    $("#skill_holder").append(li);
+                    add_skill_in_profile_list(skill_id, skill_info.name);
+               });
+               
+               submit_profile_search_form();
+               
+               
+            }                           
+        });        
+    });
+    
     
     /* Wheel skill popup form */
     
@@ -317,6 +361,15 @@ $(document).ready(function() {
         width   : 600, 
         height  : 550
     });
+    
+    //Save search profile dialog
+    $("#dialog-form-profile").dialog({
+        autoOpen: false,
+        modal   : true, 
+        width   : 500, 
+        height  : 400
+    });
+    
         
     /* ...adding "+1" to "y" function's params is really funny */
     /* Exexute the calculation based on a JSON file provided */
@@ -583,6 +636,50 @@ $(document).ready(function() {
         }
     }
     
+    function open_save_profile_popup() {
+        $("#dialog-form-profile").dialog({
+            buttons: {
+                "{{ "Save"|get_lang }}" : function() {
+                    var params = $("#save_profile_form").serialize();
+                    var skill_list = return_skill_list_from_profile_search();                    
+                    skill_list = { 'skill_id' : skill_list };
+                    skill_params = $.param(skill_list);
+        
+                    $.ajax({
+                        url: '{{ url }}&a=save_profile&'+params+'&'+skill_params,
+                        success:function(data) {
+                            if (data == 1 ) {
+                                update_my_saved_profiles();
+                                alert("{{"Saved"|get_lang}}");
+                            } else {
+                                alert("{{ "Error"|get_lang }}");
+                            }
+                            
+                            $("#dialog-form-profile").dialog("close");                            
+                            $("#name").attr('value', '');
+                            $("#description").attr('value', '');
+                             
+                         }                           
+                     });
+                  }
+            },
+            close: function() {     
+                $("#name").attr('value', '');
+                $("#description").attr('value', '');                
+            }
+        });
+        $("#dialog-form-profile").dialog("open");
+    }
+    
+    function update_my_saved_profiles() {
+        $.ajax({
+           url: '{{ url }}&a=get_saved_profiles',
+           success:function(data) {
+               $("#saved_profiles").html(data);
+            }                           
+        });
+    }
+    
     function open_popup(d) {
         //Cleaning selected        
         $("#gradebook_id").find('option').remove();        
@@ -610,26 +707,27 @@ $(document).ready(function() {
             jQuery.each(skill.gradebooks, function(index, data) {                    
                 $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
                 $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+            });            
+            
+            $("#dialog-form").dialog({
+                buttons: {
+                     "{{ "Edit"|get_lang }}" : function() {
+                         var params = $("#add_item").find(':input').serialize();
+                         add_skill(params);                     
+                      },                                    
+                      "{{ "Delete"|get_lang }}" : function() {
+                      },
+                      "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
+                          add_skill_in_profile_list(skill.id, skill.name);
+                      }
+                },
+                close: function() {     
+                    $("#name").attr('value', '');
+                    $("#description").attr('value', '');                
+                }
             });
+            $("#dialog-form").dialog("open");            
         }        
-        
-        //description = $( "#description" );        
-        $("#dialog-form").dialog({
-            buttons: {
-                 "{{ "Edit"|get_lang }}" : function() {
-                     var params = $("#add_item").find(':input').serialize();
-                     add_skill(params);
-                     console.log(params);
-                  },                  
-                  "{{ "Delete"|get_lang }}" : function() {
-                  },
-            },
-            close: function() {     
-                $("#name").attr('value', '');
-                $("#description").attr('value', '');                
-            }
-        });
-        $("#dialog-form").dialog("open");
     }
     
     var colors1 = $.xcolor.analogous('#da0'); //8 colors
@@ -862,11 +960,20 @@ $(document).ready(function() {
                 <ul id="profile_search" class="holder holder_simple">
                 </ul>
 
-                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}               
+                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}
                 
                 <form id="search_profile_form" class="form-search">
                     <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
-                </form>                
+                </form>
+                
+                
+                {{ 'IsThisWhatYouWereLookingFor'|get_lang }}
+                <form id="save_profile_form_button" class="form-search">
+                    <input class="btn" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
+                </form>
+               
+                <div id="saved_profiles">
+                </div>
                 
                 <h3>{{ 'MySkills'|get_lang }}</h3>
                 <hr>
@@ -888,7 +995,7 @@ $(document).ready(function() {
         </div>
 </div>
 
-<div id="dialog-form" style="display:none; z-index:9001;">    
+<div id="dialog-form" style="display:none; z-index:9001;">
     <p class="validateTips"></p>
     <form id="add_item" class="form-horizontal"  name="form">
         <fieldset>
@@ -941,3 +1048,24 @@ $(document).ready(function() {
         </fieldset>
     </form>     
 </div>
+        
+        
+<div id="dialog-form-profile" style="display:none;">    
+    <form id="save_profile_form" class="form-horizontal" name="form">       
+        <fieldset>
+            <div class="control-group">            
+                <label class="control-label" for="name">{{"Name"|get_lang}}</label>            
+                <div class="controls">
+                    <input type="text" name="name" id="name" size="40" />             
+                </div>
+            </div>        
+            <div class="control-group">            
+                <label class="control-label" for="name">{{"Description"|get_lang}}</label>            
+                <div class="controls">
+                    <textarea name="description" id="description" class="span2"  rows="7"></textarea>
+                </div>
+            </div>  
+        </fieldset>
+    </form>    
+</div>
+

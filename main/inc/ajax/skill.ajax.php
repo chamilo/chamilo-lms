@@ -75,9 +75,7 @@ switch ($action) {
             }
         }
         
-        
-        Display::display_no_header();
-        
+        Display::display_no_header();        
         Display::$global_template->assign('order_user_list', $ordered_user_list);
         Display::$global_template->assign('total_search_skills', $count_skills);
         
@@ -132,7 +130,22 @@ switch ($action) {
         } else {
             echo 0;
         }
-        break;        
+        break;
+    case 'get_skills_by_profile':
+        $skill_rel_profile   = new SkillRelProfile();       
+        $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
+        $skills = $skill_rel_profile->get_skills_by_profile($profile_id);
+        echo json_encode($skills);
+        break;
+    case 'get_saved_profiles':
+        $skill_profile   = new SkillProfile();
+        $profiles = $skill_profile->get_all();
+        
+        Display::display_no_header();        
+        Display::$global_template->assign('profiles', $profiles);
+        echo Display::$global_template->fetch('default/skill/profile_item.tpl');            
+        
+        break;
     case 'get_skills':
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         //$parent_id = intval($_REQUEST['parent_id']);
@@ -201,11 +214,12 @@ switch ($action) {
         } else {
             echo 0;
         }
-        break; 
+        break;             
     case 'save_profile':
         $skill_profile = new SkillProfile();
         $params = $_REQUEST;
-        $params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
+        //$params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
+        $params['skills'] = $params['skill_id'];
         $skill_data = $skill_profile->save($params);        
         if (!empty($skill_data)) {
             echo 1;

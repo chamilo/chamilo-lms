@@ -1363,7 +1363,7 @@ class DocumentManager {
     /**
      * return all content to replace and all content to be replace
      */
-    function get_all_info_to_certificate($user_id, $course_id, $is_preview = false) {
+    static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false) {
         $info_list	= array();
         $user_id	= intval($user_id);
 

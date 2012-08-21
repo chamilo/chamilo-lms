@@ -3227,7 +3227,7 @@ class UserManager {
 	 * @param string The course id
 	 * @return int The user id
 	 */
-	 public function get_user_id_of_course_admin_or_session_admin ($course_id) {
+	 public static function get_user_id_of_course_admin_or_session_admin ($course_id) {
 	 	$session=api_get_session_id();
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3263,7 +3263,7 @@ class UserManager {
    * @param int The user id
    * @return boolean
    */
-	public function is_user_certified($cat_id,$user_id) {
+	public static function is_user_certified($cat_id,$user_id) {
 		$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 		$sql  = 'SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
 		$rs   = Database::query($sql);
@@ -3281,7 +3281,7 @@ class UserManager {
    * @param int The user id
    * @return array  if there is not information return false
    */
-	public function get_info_gradebook_certificate($course_code, $user_id) {
+	public static function get_info_gradebook_certificate($course_code, $user_id) {
 	  	$tbl_grade_certificate 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 	  	$tbl_grade_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 	  	$session_id             = api_get_session_id();

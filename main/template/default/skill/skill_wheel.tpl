@@ -3,6 +3,8 @@
 
 var url = '{{ url }}';
 
+var skill_to_load_from_get = '{{ skill_id_to_load }}';
+
 function get_skill_info(my_id) {
     var skill = false;
     $.ajax({
@@ -40,8 +42,9 @@ function add_skill(params) {
     });
 }
     
+/* Skill search input in the left menu */
 function check_skills_sidebar() {
-    //selecting only selected users
+    //Selecting only selected skills
     $("#skill_id option:selected").each(function() {
         var skill_id = $(this).val();                
         if (skill_id != "" ) {
@@ -71,8 +74,11 @@ function check_skills_sidebar() {
                             }
                         });
                         
-                        skill_info = get_skill_info(skill_id);                       
-                        $("#skill_holder").append('<li><input id="checkbox_'+skill_id+'" class="skill_to_select" type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_info.name+'</a></li>');
+                        if ($('#skill_to_select_id_'+skill_id).length == 0) {
+                            skill_info = get_skill_info(skill_id);                        
+                            li = fill_skill_search_li(skill_id, skill_info.name);
+                            $("#skill_holder").append(li); 
+                        }
                     }
                 },            
             });                
@@ -80,7 +86,11 @@ function check_skills_sidebar() {
     });
 }
 
-   
+function fill_skill_search_li(skill_id, skill_name) {
+    return '<li><input id="skill_to_select_id_'+skill_id+'" rel="'+skill_id+'" name="'+skill_name+'" class="skill_to_select" type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
+}
+
+  
 function check_skills_edit_form() {
     //selecting only selected users
     $("#parent_id option:selected").each(function() {
@@ -172,7 +182,7 @@ function delete_gradebook_from_skill(skill_id, gradebook_id) {
         success: function(result) {
             //if (result == 1) {
                 $('#gradebook_item_'+gradebook_id).remove();
-                 $("#gradebook_id option").each(function () {
+                $("#gradebook_id option").each(function() {
                     if ($(this).attr("value") == gradebook_id) {
                         $(this).remove();
                     }
@@ -185,15 +195,64 @@ function delete_gradebook_from_skill(skill_id, gradebook_id) {
 
 $(document).ready(function() {
 
+    $("#search_profile_form").submit(function() {
+        $("#skill_wheel").remove();
+        var skill_list=[];
+        $("#profile_search li").each(function() {
+            id = $(this).attr("id");            
+            if (id) {
+                console.log(id);
+                skill_list.push(id);
+            }
+        }); 
+        
+        skill_list = { 'skill_id': skill_list};
+        
+        skill_params = $.param(skill_list);
+        console.log(skill_params);
+        
+        $.ajax({
+            url: url+'&a=profile_matches&skills='+skill_params,
+            async: false,        
+            success: function(json) {
+                skill = jQuery.parseJSON(json);
+                return skill;
+            }
+        });    
+        return skill;
+        
+    });
+
+     $("#skill_holder").on("click", "input.skill_to_select", function() {
+        skill_id = $(this).attr('rel');
+        skill_name = $(this).attr('name');
+        if ($('#profile_match_item_'+skill_id).length == 0 ) {
+            $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        
+        } else {
+            
+            $('#profile_match_item_'+skill_id).remove();
+        }
+    });    
+    
+    /* Close button in gradebook select */
     $("#gradebook_holder").on("click", "a.closebutton", function() {
         gradebook_id = $(this).attr('rel');
         skill_id = $('#id').attr('value');         
         delete_gradebook_from_skill(skill_id, gradebook_id);        
-    });
+    });    
     
     
+    /* Close button in profile matcher */
+    $("#profile_search").on("click", "a.closebutton", function() {
+        skill_id = $(this).attr('rel');        
+        $('input[id=skill_to_select_id_'+skill_id+']').attr('checked', false);
+        $('#profile_match_item_'+skill_id).remove();
+    }); 
+    
+    /* URL link when searching skills in the sidebar*/
     $("#skill_holder").on("click", "a.load_wheel", function() {
         skill_id = $(this).attr('rel');
+        skill_to_load_from_get = 0;
         load_nodes(skill_id, main_depth);
     });
     
@@ -301,8 +360,7 @@ $(document).ready(function() {
         reduce_top = 1;
         
         /* Locate the #div id element */
-        $("#skill_wheel").remove();
-        
+        $("#skill_wheel").remove();        
         $("#wheel_container").append('<div id="skill_wheel"></div>');
         
         var div = d3.select("#skill_wheel");
@@ -353,6 +411,13 @@ $(document).ready(function() {
         });
         
         load_skill_condition = '';
+        
+        //First the $_GET value
+        if (skill_to_load_from_get != 0) {
+            load_skill_condition = 'skill_id=' + skill_to_load_from_get;
+        }
+        
+        //The JS load
         if (load_skill_id != 0) { 
             load_skill_condition = 'skill_id=' + load_skill_id;            
         }
@@ -759,39 +824,49 @@ $(document).ready(function() {
 
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span2">
+        
+        <div class="span3">
             <div class="well">
                 <h3>{{ 'Skills'|get_lang }}</h3>
+                <hr>
                 
                 <form id="skill_search" class="form-search">
                     <select id="skill_id" name="skill_id" />
                     </select>
-                    <br />
+                    <br /><br />
+                    
                     <ul id="skill_holder" class="holder holder_simple">
+                        <li><a class="load_wheel" rel="1" href="#">Root</a></li>
                     </ul>
                 </form>
                 
                 <h3>{{ 'ProfileSearch'|get_lang }}</h3>
-                
+                <hr>
                 {{ 'WhatSkillsAreYouLookinFor'|get_lang }}
                 
-                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}
+                <ul id="profile_search" class="holder holder_simple">
+                </ul>
+
+                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}               
                 
-                
-                <form class="form-search">
-                    <input class="btn" type="button" value="{{ "SearchProfileMatches"|get_lang }}">
+                <form id="search_profile_form" class="form-search">
+                    <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
                 </form>                
                 
                 <h3>{{ 'MySkills'|get_lang }}</h3>
+                <hr>
+                
                 <h3>{{ 'GetNewSkills'|get_lang }}</h3>
+                <hr>
+                
                 <h3>{{ 'SkillInfo'|get_lang }}</h3>
+                <hr>
                 
                 
-            </div>
-                
+            </div>                
         </div>
             
-        <div id="wheel_container" class="span10">
+        <div id="wheel_container" class="span9">
             <div id="skill_wheel">
                 <img src="">
             </div>

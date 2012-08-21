@@ -4635,7 +4635,12 @@ i.size-32.icon-new-work{
     stroke-width: 1.5;
 }
 
-#filepaths input{
-    margin-bottom:5px;
-    
+#skill_holder li {
+    float:left;
+    width: 120px;
 }
+
+#filepaths input{
+    margin-bottom:5px;    
+}
+

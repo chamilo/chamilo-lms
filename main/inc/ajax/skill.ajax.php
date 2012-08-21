@@ -34,6 +34,43 @@ switch ($action) {
         }            
         echo json_encode($return_skills);
         break;
+    case 'profile_matches':        
+        $skill_rel_user  = new SkillRelUser();
+        $skills = $_REQUEST['skills'];
+        $users  = $skill_rel_user->get_user_by_skills($skills);
+        
+        $total_skills_to_search = array();
+        
+        if (!empty($users)) {
+            foreach ($users as $user) {            
+                $user_info = api_get_user_info($user['user_id']);
+                $user_list[$user['user_id']]['user'] = $user_info;
+                $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
+                $user_skills = array();
+                $found_counts = 0 ;
+                foreach($my_user_skills as $my_skill) {
+
+                    $found = false;
+                    if (in_array($my_skill['skill_id'], $skills)) {
+                        $found = true;
+                        $found_counts++;
+                    }
+                    $user_skills[] = array('skill_id' => $my_skill['skill_id'], 'found' => $found);
+                    $total_skills_to_search[$my_skill['skill_id']] = $my_skill['skill_id']; 
+                }
+                $user_list[$user['user_id']]['skills'] = $user_skills;
+                $user_list[$user['user_id']]['total_found_skills'] = $found_counts;
+            }
+            $ordered_user_list = array();
+            foreach($user_list as $user_id => $user_data) {
+                $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
+            }
+            if (!empty($ordered_user_list)) {
+                asort($ordered_user_list);
+            }
+        }
+        
+        break;
     case 'get_gradebooks':        
         $gradebooks = $gradebook_list = $gradebook->get_all();
         
@@ -162,9 +199,9 @@ switch ($action) {
         }
         break;   
     case 'get_skills_tree_json':        
-        $user_id = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
-        $skill_id = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
-        $depth = isset($_REQUEST['main_depth']) ? $_REQUEST['main_depth'] : 2;        
+        $user_id    = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
+        $skill_id   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
+        $depth      = isset($_REQUEST['main_depth']) ? $_REQUEST['main_depth'] : 2;        
         $all = $skill->get_skills_tree_json($user_id, $skill_id, false, $depth);
         echo $all;
         break;

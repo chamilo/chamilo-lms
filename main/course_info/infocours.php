@@ -189,7 +189,7 @@ $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'),
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
 $form->addGroup($group, '', array(get_lang("CourseAccess"), get_lang("CourseAccessConfigTip")), '');
 
-$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=".get_lang('there');
+$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
 $url = Display::url($url, $url);
 $form->addElement('label', get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url));
 

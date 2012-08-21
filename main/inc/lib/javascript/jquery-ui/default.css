@@ -109,7 +109,7 @@
 
 /* Fixes btn class when using bootstrap */
 .ui-widget-content a, .ui-widget-content a:hover {
-    color:inherit;
+    /* color:inherit; */
 }
 
 

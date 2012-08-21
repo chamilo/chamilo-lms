@@ -477,10 +477,13 @@ class Template {
         }
 
         $js_file_to_string = '';
-
+        
+        
+        
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
+        
 
         //Extra CSS files
 
@@ -498,10 +501,12 @@ class Template {
             $css_files[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
 
+        
         $css_file_to_string = '';
         foreach ($css_files as $css_file) {
             $css_file_to_string .= api_get_css($css_file);
         }
+        
 
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
@@ -532,22 +537,26 @@ class Template {
         //@todo minify CSS and JS 
 
         $this->assign('prefetch', $prefetch);
-        $this->assign('css_file_to_string', $css_file_to_string);
-        $this->assign('js_file_to_string', $js_file_to_string);
-
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-' . $this_section);
+        
+        global $disable_js_and_css_files;
+        
+        if (!$disable_js_and_css_files) {
+            $this->assign('css_file_to_string', $css_file_to_string);
+            $this->assign('js_file_to_string', $js_file_to_string);
+            
+            //Adding jquery ui by default
+            $extra_headers = api_get_jquery_ui_js();
 
-        //Adding jquery ui by default
-        $extra_headers = api_get_jquery_ui_js();
-
-        //$extra_headers = '';		
-        if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-            foreach ($htmlHeadXtra as & $this_html_head) {
-                $extra_headers .= $this_html_head . "\n";
+            //$extra_headers = '';		
+            if (isset($htmlHeadXtra) && $htmlHeadXtra) {
+                foreach ($htmlHeadXtra as & $this_html_head) {
+                    $extra_headers .= $this_html_head . "\n";
+                }
             }
+            $this->assign('extra_headers', $extra_headers);
         }
-        $this->assign('extra_headers', $extra_headers);
 
         $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
 

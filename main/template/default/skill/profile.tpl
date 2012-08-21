@@ -1,7 +1,7 @@
-<script type="text/javascript">
+<script>
 $(document).ready( function() {     
     
-    $("#skills").fcbkcomplete({
+    /*$("#skills").fcbkcomplete({
         json_url: "{{url}}?a=find_skills",
         cache: false,
         filter_case: false,
@@ -12,11 +12,11 @@ $(document).ready( function() {
         onselect:"check_skills",
         filter_selected: true,
         newel: true
-    });
+    });*/
     
     
     //Open dialog
-    $("#dialog-form").dialog({
+    /*$("#dialog-form").dialog({
         autoOpen: false,
         modal   : true, 
         width   : 550, 
@@ -48,7 +48,7 @@ $(document).ready( function() {
             $("#name").attr('value', '');
             $("#description").attr('value', '');                
         }
-    });
+    });*/
 
     $("#add_profile").click(function() {
         $("#name").attr('value', '');
@@ -95,7 +95,9 @@ function checkLength( o, n, min, max ) {
     }
 }    
 </script>
-{{form}}
+{{ form }}
+
+
 
 {% if search_skill_list is not null %}    
     <div class="skills-skills">
@@ -127,34 +129,54 @@ function checkLength( o, n, min, max ) {
 {% endif %}
 
 {% if order_user_list is not null %}
-    <div class="skills-users">
     {% for count, user_list in order_user_list %}
-        <h2> {{"Matches"|get_lang}} {{count}}/{{total_search_skills}} </h2>
+        <div class="row-fluid">
+            <div class="span12">  
+            <div class="page-header">
+                <h2>
+                {% if count == total_search_skills %}
+                    {{ "CompleteMatch"|get_lang }}
+                {% else %}
+                    {% if count == 1 %}
+                        {{ "MissingOneStepToMatch"|get_lang }}</h2>
+                    {% else %}
+                        {{ "MissingXStepsToMatch"|get_lang | format(total_search_skills - count)}}                        
+                    {% endif %}        
+                {% endif %}
+                </h2>
+                    
+            </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
         {% for user in user_list %}
-            <div class="ui-widget" style="width:400px">
-                <div class="ui-widget-header">                    
-                    <h3>
-                        <img src="{{user.user.avatar_small}}" /> {{user['user'].complete_name}} ({{user['user'].username}})
-                    </h3>
-                </div>
-                <div class="ui-widget-content ">
-                    <h4>{{"Skills"|get_lang}} {{user.total_found_skills}} / {{total_search_skills}}</h4>
-                    <ul>                
-                        {% for skill_data in user.skills %}                 
-                            <li>
-                                {% if skill_list[skill_data.skill_id].name is not null %}                                    
-                                    <span class="label_tag skill">{{skill_list[skill_data.skill_id].name}}</span>
-                                {% else %} 
-                                    {{"SkillNotFound"|get_lang}}
-                                {% endif %}
-                                {# if $skill_data.found 
-                                     IHaveThisSkill"|get_lang
-                                #}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>    
-            </div>  
+            <div class="span4">
+                <div class="well">
+                    <div class="ui-widget-header">                    
+                        <h3>
+                            <img src="{{user.user.avatar_small}}" /> {{user['user'].complete_name}} ({{user['user'].username}})
+                        </h3>
+                    </div>
+                    <div class="ui-widget-content ">
+                        <h4>{{ "Skills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</h4>
+                        <ul>                
+                            {% for skill_data in user.skills %}                 
+                                <li>
+                                    {% if skill_list[skill_data.skill_id].name is not null %}                                    
+                                        <span class="label_tag skill">{{skill_list[skill_data.skill_id].name}}</span>
+                                    {% else %} 
+                                        {{ "SkillNotFound"|get_lang }}
+                                    {% endif %}
+                                    {# if $skill_data.found 
+                                         IHaveThisSkill"|get_lang
+                                    #}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>    
+                </div> 
+            </div>
         {% endfor %}
     {% endfor %}
     </div>

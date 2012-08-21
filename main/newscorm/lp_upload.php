@@ -133,12 +133,17 @@ if( Request::is_post() && $is_error){
     require_once 'learnpath.class.php';
 
     $type = learnpath::get_package_type($s, basename($s));
+    $post_max = ini_get('post_max_size');
+    $upl_max = ini_get('upload_max_filesize');
+    if (filesize($s)>$post_max || filesize($s)>$upl_max ){
+         return api_failure::set_failure('upload_file_too_big');
+    }
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_local_package($s, $current_dir);
-            if ($manifest === false ) { //if api_set_failure
+            if ($manifest === false ) { //if ap i_set_failure
                 return api_failure::set_failure(api_failure::get_last_failure());
             }
             if (!empty($manifest)) {
@@ -172,6 +177,10 @@ if( Request::is_post() && $is_error){
             break;
         case '':
         default:
+        
+            if (filesize($s)>$post_max || filesize($s)>$upl_max ){
+                return api_failure::set_failure('upload_file_too_big');
+            }
             return api_failure::set_failure('not_a_learning_path');
     }
 }

@@ -36,10 +36,15 @@ switch ($action) {
         break;
     case 'profile_matches':        
         $skill_rel_user  = new SkillRelUser();
-        $skills = $_REQUEST['skills'];
+        $skills = $_REQUEST['skill_id'];  
+        
+        $total_skills_to_search = $skills;
+                
         $users  = $skill_rel_user->get_user_by_skills($skills);
         
-        $total_skills_to_search = array();
+        $user_list = array();
+        
+        $count_skills = count($skills);
         
         if (!empty($users)) {
             foreach ($users as $user) {            
@@ -62,7 +67,7 @@ switch ($action) {
                 $user_list[$user['user_id']]['total_found_skills'] = $found_counts;
             }
             $ordered_user_list = array();
-            foreach($user_list as $user_id => $user_data) {
+            foreach ($user_list as $user_id => $user_data) {
                 $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
             }
             if (!empty($ordered_user_list)) {
@@ -70,6 +75,24 @@ switch ($action) {
             }
         }
         
+        
+        Display::display_no_header();
+        
+        Display::$global_template->assign('order_user_list', $ordered_user_list);
+        Display::$global_template->assign('total_search_skills', $count_skills);
+        
+        $skill_list = array();
+        
+        if (!empty($total_skills_to_search)) {
+            $total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
+
+            foreach ($total_skills_to_search as $skill_info) {                        
+                $skill_list[$skill_info['id']] = $skill_info;        
+            }
+        }
+
+        Display::$global_template->assign('skill_list', $skill_list);
+        echo Display::$global_template->fetch('default/skill/profile.tpl');        
         break;
     case 'get_gradebooks':        
         $gradebooks = $gradebook_list = $gradebook->get_all();

@@ -192,47 +192,77 @@ function delete_gradebook_from_skill(skill_id, gradebook_id) {
     });
 }
 
+function submit_profile_search_form() {
+    $("#skill_wheel").remove();
+    var skill_list = {};
 
-$(document).ready(function() {
-
-    $("#search_profile_form").submit(function() {
-        $("#skill_wheel").remove();
-        var skill_list=[];
-        $("#profile_search li").each(function() {
-            id = $(this).attr("id");            
-            if (id) {
-                console.log(id);
-                skill_list.push(id);
+    if ($("#profile_search li").length != 0) {            
+        $("#profile_search li").each(function(index) {
+            id = $(this).attr("id").split('_')[3];            
+            if (id) {                         
+                skill_list[index] = id;
             }
         }); 
-        
-        skill_list = { 'skill_id': skill_list};
-        
-        skill_params = $.param(skill_list);
-        console.log(skill_params);
-        
-        $.ajax({
-            url: url+'&a=profile_matches&skills='+skill_params,
-            async: false,        
-            success: function(json) {
-                skill = jQuery.parseJSON(json);
-                return skill;
-            }
-        });    
-        return skill;
-        
-    });
+    }
 
-     $("#skill_holder").on("click", "input.skill_to_select", function() {
+    if (skill_list.length != 0) {
+        skill_list = { 'skill_id' : skill_list };
+        skill_params = $.param(skill_list);        
+
+        $.ajax({
+            url: url+'&a=profile_matches&'+skill_params,
+            async: false,        
+            success: function (html) {
+                //users = jQuery.parseJSON(users);
+                $('#wheel_container').html(html);
+
+            }
+        });
+    }
+    //return skill;
+}
+
+
+$(document).ready(function() {
+    /* Skill search */ 
+    
+    /* Skill item list onclick  */
+    $("#skill_holder").on("click", "input.skill_to_select", function() {
         skill_id = $(this).attr('rel');
         skill_name = $(this).attr('name');
         if ($('#profile_match_item_'+skill_id).length == 0 ) {
             $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        
-        } else {
-            
+        } else {            
             $('#profile_match_item_'+skill_id).remove();
         }
+    });
+    
+     /* URL link when searching skills */
+    $("#skill_holder").on("click", "a.load_wheel", function() {
+        skill_id = $(this).attr('rel');
+        skill_to_load_from_get = 0;
+        load_nodes(skill_id, main_depth);
+    });
+    
+    
+    /* Profile matcher */
+    
+        
+    /* Submit button */
+    $("#search_profile_form").submit(function() {
+        submit_profile_search_form();
+    });
+    
+    /* Close button in profile matcher items */
+    $("#profile_search").on("click", "a.closebutton", function() {
+        skill_id = $(this).attr('rel');        
+        $('input[id=skill_to_select_id_'+skill_id+']').attr('checked', false);
+        $('#profile_match_item_'+skill_id).remove();
+        submit_profile_search_form();
     });    
+           
+    
+    /* Wheel skill popup form */
     
     /* Close button in gradebook select */
     $("#gradebook_holder").on("click", "a.closebutton", function() {
@@ -240,22 +270,7 @@ $(document).ready(function() {
         skill_id = $('#id').attr('value');         
         delete_gradebook_from_skill(skill_id, gradebook_id);        
     });    
-    
-    
-    /* Close button in profile matcher */
-    $("#profile_search").on("click", "a.closebutton", function() {
-        skill_id = $(this).attr('rel');        
-        $('input[id=skill_to_select_id_'+skill_id+']').attr('checked', false);
-        $('#profile_match_item_'+skill_id).remove();
-    }); 
-    
-    /* URL link when searching skills in the sidebar*/
-    $("#skill_holder").on("click", "a.load_wheel", function() {
-        skill_id = $(this).attr('rel');
-        skill_to_load_from_get = 0;
-        load_nodes(skill_id, main_depth);
-    });
-    
+
     $("#skill_id").fcbkcomplete({
         json_url: "{{ url }}&a=find_skills",
         cache: false,
@@ -360,7 +375,8 @@ $(document).ready(function() {
         reduce_top = 1;
         
         /* Locate the #div id element */
-        $("#skill_wheel").remove();        
+        $("#skill_wheel").remove();
+        $("#wheel_container").html('');
         $("#wheel_container").append('<div id="skill_wheel"></div>');
         
         var div = d3.select("#skill_wheel");
@@ -568,8 +584,6 @@ $(document).ready(function() {
     }
     
     function open_popup(d) {
-        $( "#name" ).attr('value', d.name);
-                
         //Cleaning selected        
         $("#gradebook_id").find('option').remove();        
         $("#parent_id").find('option').remove();
@@ -582,8 +596,9 @@ $(document).ready(function() {
         if (skill) {
             var parent_info = get_skill_info(skill.extra.parent_id);
             
+            $("#id").attr('value',   skill.id);
             $("#name").attr('value', skill.name);
-            $("#id").attr('value',   skill.id);                       
+            $("#short_code").attr('value', skill.short_code);                        
             $("#description").attr('value', skill.description);                
             
             //Filling parent_id                        

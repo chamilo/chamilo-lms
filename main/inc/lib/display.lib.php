@@ -72,6 +72,12 @@ class Display {
         echo self::$global_template ->show_header_template();        
     }
     
+    public static function display_no_header() {        
+        $disable_js_and_css_files = true;
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
+        //echo self::$global_template->show_header_template();        
+    }
+    
     /**
      * Displays the reduced page header (without banner)
      */

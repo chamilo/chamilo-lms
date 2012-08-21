@@ -131,4 +131,6 @@ $ActivateLegal = "Enable legal terms";
 $ShowALegalNoticeWhenEnteringTheCourse = "Show a legal notice when entering the course";
 $CourseLegalAgreement = "Legal agreement for this course";
 $AcceptLegal = "Accept legal terms";
+$CourseSettingsRegisterDirectLink = "If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing 1 by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the url when clicking on an exercise to open it.<br/>%s";
+$DirectLink = "Direct link";
 ?>

@@ -78,7 +78,8 @@ function check_skills_sidebar() {
                             skill_info = get_skill_info(skill_id);                        
                             li = fill_skill_search_li(skill_id, skill_info.name);
                             $("#skill_holder").append(li); 
-                        }
+                        }                        
+
                     }
                 },            
             });                
@@ -87,6 +88,7 @@ function check_skills_sidebar() {
 }
 
 function fill_skill_search_li(skill_id, skill_name, checked) {
+
     checked_condition = '';
     if (checked == 1) {
         checked_condition = 'checked=checked';
@@ -235,9 +237,16 @@ function submit_profile_search_form() {
 
 function add_skill_in_profile_list(skill_id, skill_name) {
     if ($('#profile_match_item_'+skill_id).length == 0 ) {
+        
         $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        
     } else {            
         $('#profile_match_item_'+skill_id).remove();
+    }
+    //Hiding showing the save this search
+    if ($('#profile_search li').length == 0) {
+        $('#profile-options-container').hide();    
+    } else {
+        $('#profile-options-container').show();
     }
 }
 
@@ -257,6 +266,17 @@ $(document).ready(function() {
         skill_to_load_from_get = 0;
         load_nodes(skill_id, main_depth);
     });
+    
+     /* URL link when searching skills */
+    $("#skill_search").on("click", "a.load_root", function() {
+        skill_id = $(this).attr('rel');
+        skill_to_load_from_get = 0;
+        load_nodes(skill_id, main_depth);
+    });
+    
+    /*$("#skill_search").on("click", "a#clear_selection", function() {
+        
+    });*/
     
     
     /* Profile matcher */
@@ -289,7 +309,9 @@ $(document).ready(function() {
         $.ajax({
            url: '{{ url }}&a=get_skills_by_profile&profile_id='+profile_id,
            success:function(json) {
-               skill_list = jQuery.parseJSON(json);               
+               skill_list = jQuery.parseJSON(json); 
+               
+               $('#profile_search').empty();
                $('#skill_holder').empty();               
                jQuery.each(skill_list, function(index, skill_id) {                    
                     skill_info = get_skill_info(skill_id);                        
@@ -630,7 +652,7 @@ $(document).ready(function() {
                 //alert('Middle mouse button pressed');
                 break;                        
             case 3:                        
-                open_popup(d);                        
+                open_popup(d.id);                        
                 //alert('Right mouse button pressed');
                 break;
             default:
@@ -682,7 +704,7 @@ $(document).ready(function() {
         });
     }
     
-    function open_popup(d) {
+    function open_popup(skill_id, parent_id) {
         //Cleaning selected        
         $("#gradebook_id").find('option').remove();        
         $("#parent_id").find('option').remove();
@@ -690,7 +712,15 @@ $(document).ready(function() {
         $("#gradebook_holder").find('li').remove();
         $("#skill_edit_holder").find('li').remove();
                 
-        var skill = get_skill_info(d.id);       
+        var skill = false;
+        if (skill_id) {
+            skill = get_skill_info(skill_id);
+        }        
+        
+        var parent = false;
+        if (parent_id) {
+            parent = get_skill_info(parent_id);
+        }
         
         if (skill) {
             var parent_info = get_skill_info(skill.extra.parent_id);
@@ -717,19 +747,61 @@ $(document).ready(function() {
                          var params = $("#add_item").find(':input').serialize();
                          add_skill(params);                     
                       },                                    
-                      "{{ "Delete"|get_lang }}" : function() {
+                      /*"{{ "Delete"|get_lang }}" : function() {
+                      },*/
+                      "{{ "CreateChildSkill"|get_lang }}" : function() {                          
+                          open_popup(0, skill.id);
+
                       },
                       "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
                           add_skill_in_profile_list(skill.id, skill.name);
                       }
                 },
                 close: function() {     
-                    $("#name").attr('value', '');
-                    $("#description").attr('value', '');                
+                    $("#name").attr('value','');
+                    $("#description").attr('value', '');
+                    //Redirect to the main root
+                    load_nodes(0, main_depth);
+                                 
                 }
             });
+            
             $("#dialog-form").dialog("open");            
-        }        
+        }  
+        
+        if (parent) {
+            $("#id").attr('value','');
+            $("#name").attr('value', '');
+            $("#short_code").attr('value', '');
+            $("#description").attr('value', '');
+            
+            //Filling parent_id                        
+            $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
+            
+            $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
+            
+            //Filling the gradebook_id
+            jQuery.each(parent.gradebooks, function(index, data) {                    
+                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+            });            
+            
+            $("#dialog-form").dialog({
+                buttons: {
+                     "{{ "Save"|get_lang }}" : function() {
+                         var params = $("#add_item").find(':input').serialize();
+                         add_skill(params);                     
+                      }
+           
+                },
+                close: function() {     
+                    $("#name").attr('value', '');
+                    $("#description").attr('value', '');
+ 	                   load_nodes(0, main_depth);              
+                }
+            });
+            $("#dialog-form").dialog("open");        
+        }
     }
     
     var colors1 = $.xcolor.analogous('#da0'); //8 colors
@@ -947,9 +1019,11 @@ $(document).ready(function() {
                     <select id="skill_id" name="skill_id" />
                     </select>
                     <br /><br />
-                    
+                    <div class="btn-group">
+                        <a class="btn load_root" rel="1" href="#">{{ "Root"|get_lang }}</a>
+                        <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
+                    </div>
                     <ul id="skill_holder" class="holder holder_simple">
-                        <li><a class="load_wheel" rel="1" href="#">Root</a></li>
                     </ul>
                 </form>
                 
@@ -966,14 +1040,18 @@ $(document).ready(function() {
                     <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
                 </form>
                 
+                <div id="profile-options-container" style="display:none">
                 
-                {{ 'IsThisWhatYouWereLookingFor'|get_lang }}
-                <form id="save_profile_form_button" class="form-search">
-                    <input class="btn" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
-                </form>
-               
+                    {{ 'IsThisWhatYouWereLookingFor'|get_lang }}
+                    <form id="save_profile_form_button" class="form-search">
+                        <input class="btn" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
+                    </form>                  
+                </div>
+                
+                 
                 <div id="saved_profiles">
                 </div>
+                
                 
                 <h3>{{ 'MySkills'|get_lang }}</h3>
                 <hr>

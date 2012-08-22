@@ -20,8 +20,9 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
+	
 
-if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines'))) {
+if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
 	api_protect_admin_script(true);
 }
 
@@ -97,6 +98,10 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+	case 'get_user_skill_ranking':
+    	$skill = new Skill();
+	    $count = $skill->get_user_list_skill_ranking_count();
+	    break;
     case 'get_work_user_list':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
@@ -179,10 +184,32 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 //5. Querying the DB for the elements
 $columns = array();
 
-switch ($action) {    
+switch ($action) { 
+	case 'get_user_skill_ranking':	
+        $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
+	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
+        $result = msort($result, 'skills_acquired', 'asc');
+	    
+	    if (!empty($result)) {
+    	    $counter = 1;
+	        foreach ($result as &$item) {
+                $user_info = api_get_user_info($item['user_id']);
+                $personal_course_list = UserManager::get_personal_session_course_list($item['user_id']);
+                $count_skill_by_course = array();
+                foreach ($personal_course_list  as $course_item) {
+                    $$count_skill_by_course[$course_item['code']]= $skill->get_count_skills_by_course($course_item['code']);                
+                }                
+	            $item['photo'] = Display::img($user_info['avatar_small']);
+	            $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
+                $item['rank'] = $counter;
+                $counter++;
+	        }
+	    }
+
+    	break;
     case 'get_work_user_list':        
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
-            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');	
+            $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions');
         } else {
             $columns = array('type', 'firstname', 'lastname',  'username', 'title', 'sent_date', 'actions');	
         }
@@ -351,13 +378,23 @@ switch ($action) {
 }
 //var_dump($result);
 
-$allowed_actions = array('get_careers', 'get_promotions', 'get_usergroups', 'get_gradebooks', 
-                         'get_sessions', 'get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_grade_models', 'get_event_email_template');
+$allowed_actions = array('get_careers', 
+                         'get_promotions', 
+                         'get_usergroups', 
+                         'get_gradebooks', 
+                         'get_sessions', 
+                         'get_exercise_results', 
+                         'get_work_user_list', 
+                         'get_timelines', 
+                         'get_grade_models', 
+                         'get_event_email_template',
+                         'get_user_skill_ranking');
+                         	
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
     $response           = new stdClass();           
     $response->page     = $page; 
-    $response->total    = $total_pages; 
+    $response->total    = $total_pages;
     $response->records  = $count; 
     $i=0;
     if (!empty($result)) {
@@ -377,6 +414,7 @@ if (in_array($action, $allowed_actions)) {
             $i++; 
         }
     }    
+
     echo json_encode($response);
 }
 exit;

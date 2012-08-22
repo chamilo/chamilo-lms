@@ -1,104 +1,3 @@
-<script>
-$(document).ready( function() {     
-    
-    /*$("#skills").fcbkcomplete({
-        json_url: "{{url}}?a=find_skills",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"{{'StartToType'|get_lang}}",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_skills",
-        filter_selected: true,
-        newel: true
-    });*/
-    
-    
-    //Open dialog
-    /*$("#dialog-form").dialog({
-        autoOpen: false,
-        modal   : true, 
-        width   : 550, 
-        height  : 350,
-    });
-    
-    var name = $( "#name" ),
-    description = $( "#description" ),  
-    allFields = $( [] ).add( name ).add( description ), tips = $(".validateTips");    
-        
-    
-    $("#dialog-form").dialog({              
-        buttons: {
-            "Add" : function() {                
-                var bValid = true;
-                bValid = bValid && checkLength( name, "name", 1, 255 );
-                var params = $("#save_profile_form").serialize();          
-                      
-                $.ajax({
-                    url: '{{url}}?a=save_profile&'+params,
-                    success:function(data) {    
-                        $("#dialog-form").dialog("close");
-                        alert("{{"Saved"|get_lang}}");
-                    }                           
-                });
-            },            
-        },              
-        close: function() {     
-            $("#name").attr('value', '');
-            $("#description").attr('value', '');                
-        }
-    });*/
-
-    $("#add_profile").click(function() {
-        $("#name").attr('value', '');
-        $("#description").attr('value', '');            
-        $("#dialog-form").dialog("open");
-    });
-});
-
-function check_skills() {
-    //selecting only selected users
-    $("#skills option:selected").each(function() {
-        var skill_id = $(this).val();        
-        if (skill_id != "" ) {            
-            $.ajax({ 
-                url: "{{url}}?a=skill_exists", 
-                data: "skill_id="+skill_id,
-                success: function(return_value) {                    
-                if (return_value == 0 ) {
-                        alert("{{'SkillDoesNotExist'|get_lang}}");                                                
-                        //Deleting select option tag
-                        $("#skills option[value="+skill_id+"]").remove();                        
-                        //Deleting holder
-                        $(".holder li").each(function () {
-                            if ($(this).attr("rel") == skill_id) {
-                                $(this).remove();
-                            }
-                        });                        
-                    }                    
-                },            
-            });                
-        }        
-    });
-}
-
-
-function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        updateTips( "Length of " + n + " must be between " +
-            min + " and " + max + "." );
-        return false;
-    } else {
-        return true;
-    }
-}    
-</script>
-{{ form }}
-
-
-
 {% if search_skill_list is not null %}    
     <div class="skills-skills">
         <h3>{{"Skills"|get_lang}}</h3>
@@ -137,7 +36,7 @@ function checkLength( o, n, min, max ) {
                 {% if count == total_search_skills %}
                     {{ "CompleteMatch"|get_lang }}
                 {% else %}
-                    {% if count == 1 %}
+                    {% if (total_search_skills - count) == 1 %}
                         {{ "MissingOneStepToMatch"|get_lang }}</h2>
                     {% else %}
                         {{ "MissingXStepsToMatch"|get_lang | format(total_search_skills - count)}}                        

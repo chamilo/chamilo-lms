@@ -10,7 +10,17 @@
  */
    
 class Gradebook extends Model {    
+
+    public $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
+
     
+    public function __construct() {
+        $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
+        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK); 
+    }
+    
+        
     /**
      * Returns true if the gradebook is active and visible in a course, false
      * otherwise.
@@ -37,14 +47,6 @@ class Gradebook extends Model {
             return true;
         }        
         return $item['visibility'] == '1';
-    }
-    
-    var $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
-    
-    public function __construct() {
-        $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
-        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK); 
     }
     
     public function get_all($options = array()) {

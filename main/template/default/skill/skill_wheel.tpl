@@ -516,7 +516,7 @@ $(document).ready(function() {
             .attr("fill-rule", "evenodd")
             .attr("class", "skill_partition skill_background")
     //        .style("fill", colour)
-            .style("fill", function(d) { 
+            .style("fill", function(d) {                 
                 return set_skill_style(d, 'fill');
             })
             .style("stroke", function(d) {
@@ -586,18 +586,20 @@ $(document).ready(function() {
             });
                              
             /* Icon settings */
-                
+            
+            
+            /*
             var icon_click = icon.enter().append("text")
             .style("fill-opacity", 1)
             .style("fill", function(d) {                
-                return "#000";
+                //return "#000";
             })  
             .attr("text-anchor", function(d) {
                 return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
             })
             .attr("dy", ".2em")            
             .attr("transform", function(d) {
-                /** Get the text details and define the rotation and general position */                
+                ///Get the text details and define the rotation and general position
                 angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
                 rotate = angle;
                 return "rotate(" + rotate + ")translate(" + (y(d.y) + padding +80) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
@@ -614,7 +616,7 @@ $(document).ready(function() {
             .attr("display", 'none')            
             .text(function(d) {
                 //return "Click";
-            });
+            });*/
         });
     }
     
@@ -759,12 +761,10 @@ $(document).ready(function() {
                 //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
             } else {
                 color = colors[d.family_id];                
-            }
-            d.color = color;            
+            }                  
             return color;
         }
-        color = '#fefefe';
-        d.color = color;
+        color = '#fefefe';        
         return color; //missing colors
     }
         
@@ -780,8 +780,7 @@ $(document).ready(function() {
         
     function set_skill_style(d, attribute) {
         //Nice rainbow colors
-        return_fill = get_color(d);
-        
+        return_fill = get_color(d);        
         
         /*var p = color_patterns[18];
         color = p(depth -1 + d.counter);
@@ -798,16 +797,17 @@ $(document).ready(function() {
             //return_stroke = '#FCD23A';           
         }
         
-        //darkblue
-        
+        //darkblue        
         //If the skill has a gradebook attached
-        if (d.skill_has_gradebook) {
-            return_fill = 'yellow';
+        if (d.skill_has_gradebook) {            
+            return_fill = '#FEF664';            
             //return_stroke = 'grey';
         }
         
         switch (attribute) {
             case 'fill':
+                //In order to the text could identify the background
+                d.color = return_fill;
                 return return_fill;
                 break;
             case 'stroke':
@@ -977,6 +977,9 @@ $(document).ready(function() {
                 
                 <h3>{{ 'MySkills'|get_lang }}</h3>
                 <hr>
+                
+                <div id="my_skills">                    
+                </div>
                 
                 <h3>{{ 'GetNewSkills'|get_lang }}</h3>
                 <hr>

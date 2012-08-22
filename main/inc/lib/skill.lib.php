@@ -587,58 +587,70 @@ class Skill extends Model {
         }
         
         $original_skill = $skills;
-        
+
         //var_dump($skills);
    
         //Show 1 item
-        if ($add_root) {
-            if (!empty($skill_id)) {
-                $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
-                $skill_info = $this->get_skill_info($skill_id);
-                $skills[$skill_id] = $skill_info;
-                $skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+        if (!empty($skill_id)) {
+            if ($add_root) {
+                if (!empty($skill_id)) {
+                    $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
+                    $skill_info = $this->get_skill_info($skill_id);
+                    $skills[$skill_id] = $skill_info;
+                    $skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+                }
             }
         }
+        
+        //var_dump($skills);
        
         $refs = array();
         $skills_tree = null;
 
         // Create references for all nodes
-        $flat_array = array();        
-        $css_attributes = array('fill' => 'red');        
+        $flat_array = array();      
         $family = array();
         
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
                 
-                if ($skill['parent_id'] == 0) {
-                    $skill['parent_id'] = 'root';
+                if (!empty($skill_id)) {
+                    if ($skill['id'] == $skill_id) {
+                        $skill['parent_id'] = 'root';                    
+                    }
+                } else {
+                    if ($skill['parent_id'] == 0) {
+                        $skill['parent_id'] = 'root';
+                    }
                 }
                 
+                //In order to paint all members of a family with the same color
                 if ($skill['parent_id'] == 1) {
                     $family[$skill['id']] = $this->get_all_children($skill['id']);        
                 }
                 
-                $skill['data'] = array('parent_id' => $skill['parent_id']); // because except main keys (id, name, children) others keys are not saved while in the space tree
+                // because except main keys (id, name, children) others keys are not saved while in the space tree
+                $skill['data'] = array('parent_id' => $skill['parent_id']);
                 
-                $skill['data']['achieved'] = false;
-                
+                //User achieved the skill (depends in the gradebook with certification)
+                $skill['data']['achieved'] = false;                
                 if ($user_id) {
-                    $css_attributes = array('fill' => 'green');
                     $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);                    
                 }
                 
-                $skill['data']['skill_has_gradebook'] = false;
-                
+                //Check if the skill has related gradebooks
+                $skill['data']['skill_has_gradebook'] = false;                
                 if (isset($skill['gradebooks']) && !empty($skill['gradebooks'])) {
                     $skill['data']['skill_has_gradebook'] = true;
-                }
-                
-                $skill['data']['css_attributes'] = $css_attributes;
+                }                
+
                 
                 $refs[$skill['id']] = &$skill;
                 $flat_array[$skill['id']] =  &$skill;
             }
+//            var_dump($skills);
+            
+            //Checking family value
             
             $family_id = 1;
             $new_family_array = array();
@@ -650,21 +662,24 @@ class Skill extends Model {
                 }
                 $new_family_array[$main_family_id] = $family_id;                
                 $family_id++;
-            }            
+            }  
                         
             if (empty($original_skill)) {
                 $refs['root']['children'][0] = $skills[1];
                 $refs['root']['children'][0]['children'][0] = $skills[$skill_id];
                 $flat_array[$skill_id] =  $skills[$skill_id];                
             } else {
+            
+
+                
                 // Moving node to the children index of their parents
                 foreach ($skills as $my_skill_id => &$skill) {                
                     $skill['data']['family_id'] = $new_family_array[$skill['id']];
                     $refs[$skill['parent_id']]['children'][] = &$skill;
                     $flat_array[$my_skill_id] =  $skill;
                 }
+                
             }
-            
             $skills_tree = array(
                 'name'      => get_lang('SkillRootName'),
                 'id'        => 'root',

@@ -63,7 +63,8 @@ $social_left_content = SocialManager::show_social_menu('home');
 
 $social_right_content .= '<div class="span5">';
 
-$social_right_content .= '<div class="social-groups-home-title">'.get_lang('ContactInformation').'</div>';
+$social_right_content .= '<div class="well_border">';
+$social_right_content .= '<h3>'.get_lang('ContactInformation').'</h3>';
 
 $list = array(
                 array('title' => get_lang('Name'), 'content' => api_get_person_name($user_info['firstname'], $user_info['lastname'])),
@@ -76,13 +77,19 @@ $social_right_content .= '
     <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
         '.get_lang('EditProfile').'
     </a>
-    </div>';
+    </div></div>';
     
     if (api_get_setting('allow_skills_tool') == 'true') {
+        $social_right_content .= '<div class="well_border">';
+        $skill = new Skill();
+        $skill_ranking =  $skill->get_user_skill_ranking(api_get_user_id());
+        $url = api_get_path(WEB_CODE_PATH).'social/skills_ranking.php'; 
+        $social_right_content .= Display::url(sprintf(get_lang('YourSkillRanking'), $ranking), $url);
+        
         $skill = new Skill();
         $skills =  $skill->get_user_skills(api_get_user_id(), true);            
 
-        $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Skills').'</div>';
+        $social_right_content .= '<h3>'.get_lang('Skills').'</h3>';
         $lis = '';
         if (!empty($skills)) {
             foreach($skills as $skill) {
@@ -90,8 +97,9 @@ $social_right_content .= '
             }                
             $social_right_content .= Display::tag('ul', $lis);
         }
-        $url = api_get_path(WEB_CODE_PATH).'social/skills_tree.php';            
-        $social_right_content .= Display::url(get_lang('ViewSkillsTree'), $url);
+        $url = api_get_path(WEB_CODE_PATH).'social/skills_wheel.php';            
+        $social_right_content .= Display::url(get_lang('ViewSkillsWheel'), $url);
+            $social_right_content .= '</div>';
     }
     
     $social_right_content .= '</div>';

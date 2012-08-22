@@ -100,8 +100,20 @@ switch ($action) {
         break;
     case 'get_skill_info':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $skill_info = $skill->get_skill_info($id);                    
+        $skill_info = $skill->get_skill_info($id);
         echo json_encode($skill_info);
+        break;
+    case 'get_skill_course_info':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $courses = $skill->get_courses_by_skill($id);
+        
+        $html = null;
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                $html .= $course['title'].'<br />';
+            }
+        }
+        echo $html;    
         break;
     case 'get_skills_tree_json':        
         $user_id    = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;

@@ -837,6 +837,15 @@ class Skill extends Model {
             return $result[0];
         }
         return 0;
-        
+    }
+    
+    function get_courses_by_skill($skill_id) {
+        $skill_id = intval($skill_id);
+        $sql = "SELECT c.title, c.code FROM {$this->table_gradebook} g INNER JOIN {$this->table_skill_rel_gradebook} sg ON g.id = sg.gradebook_id
+                 INNER JOIN {$this->table_course} c ON c.code = g.course_code
+                 WHERE sg.skill_id = $skill_id";
+        $result = Database::query($sql);        
+        return Database::store_result($result, 'ASSOC');        
+                 
     }
 }

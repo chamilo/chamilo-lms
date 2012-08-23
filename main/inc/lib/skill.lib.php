@@ -801,28 +801,33 @@ class Skill extends Model {
     function get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition) {
         $start = intval($start);
         $limit = intval($limit);
-        
-        $sql = "SELECT u.user_id, firstname, lastname, count(username) skills_acquired
-                    FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)
-                    INNER JOIN {$this->table_user} u ON u.user_id = su.user_id
-                    WHERE 1=1 $where_condition
-                    GROUP BY username
-                    ORDER BY $sidx $sord 
-                    LIMIT  $start , $limit ";
-                    
+        /*  ORDER BY $sidx $sord */
+        $sql = "SELECT *, @rownum:=@rownum+1 rank FROM (
+                        SELECT u.user_id, firstname, lastname, count(username) skills_acquired 
+                        FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)
+                        INNER JOIN {$this->table_user} u ON u.user_id = su.user_id, (SELECT @rownum:=0) r
+                        WHERE 1=1 $where_condition
+                        GROUP BY username
+                        ORDER BY skills_acquired desc                   
+                        LIMIT $start , $limit)  AS T1, (SELECT @rownum:=0) r";        
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {
             return Database::store_result($result, 'ASSOC');
         }
-        return array();
-
+        return array();       
     }
     
     function get_user_list_skill_ranking_count() {
-        $sql = "SELECT count(skill_id) count FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)";
+        $sql = "SELECT count(*) FROM (
+                        SELECT count(distinct 1)
+                        FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id) 
+                        INNER JOIN {$this->table_user} u ON u.user_id = su.user_id
+                        GROUP BY username
+                     ) as T1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_row($result);
+        
             return $result[0];
         }
         return 0;
@@ -831,9 +836,10 @@ class Skill extends Model {
     function get_count_skills_by_course($course_code) {
         $sql = "SELECT count(skill_id) as count FROM {$this->table_gradebook} g INNER JOIN {$this->table_skill_rel_gradebook} sg ON g.id = sg.gradebook_id
                 WHERE course_code = '$course_code'";
+        
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $result = Database::fetch_row($result);
+            $result = Database::fetch_row($result);            
             return $result[0];
         }
         return 0;
@@ -845,7 +851,6 @@ class Skill extends Model {
                  INNER JOIN {$this->table_course} c ON c.code = g.course_code
                  WHERE sg.skill_id = $skill_id";
         $result = Database::query($sql);        
-        return Database::store_result($result, 'ASSOC');        
-                 
+        return Database::store_result($result, 'ASSOC');                 
     }
 }

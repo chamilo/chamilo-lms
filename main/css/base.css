@@ -3813,7 +3813,6 @@ a.forum_group_link {
     text-align: center;
 }
 
-
 .new_actions {
     background-color: #EEEEEE;
     background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
@@ -4470,8 +4469,8 @@ i.size-32.icon-new-note{
 .notebook.note{
     display:inline-block;
     width:49%;
-    margin-left:0;
-    margin-right:1;
+    margin-left:0px;
+    margin-right:1px;
     padding:0;
 }
 
@@ -4621,7 +4620,6 @@ data table
     float: right;
 }
 
-
 /*
  * work
  */
@@ -4637,7 +4635,7 @@ i.size-32.icon-new-work{
 
 #skill_holder li {
     float:left;
-    width: 120px;
+    /*width: 120px;*/
 }
 
 #filepaths input{

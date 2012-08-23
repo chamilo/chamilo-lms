@@ -177,7 +177,6 @@ switch ($action) {
         $user_list = array();
         
         $count_skills = count($skills);
-
         
         if (!empty($users)) {
             foreach ($users as $user) {            
@@ -201,8 +200,6 @@ switch ($action) {
                         $user_skills[$skill_id] = array('skill_id' => $skill_id, 'found' => $found);                        
                     }
                 }
-
-
                 
                 foreach ($my_user_skills as $my_skill) {                    
                     if (!isset($user_skills[$my_skill['skill_id']])) {

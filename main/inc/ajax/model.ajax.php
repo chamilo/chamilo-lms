@@ -190,22 +190,25 @@ switch ($action) {
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
         $result = msort($result, 'skills_acquired', 'asc');
 	    
+        $skills_in_course = array();        
 	    if (!empty($result)) {
-    	    $counter = 1;
+    	    //$counter = 1;
 	        foreach ($result as &$item) {
                 $user_info = api_get_user_info($item['user_id']);
                 $personal_course_list = UserManager::get_personal_session_course_list($item['user_id']);
                 $count_skill_by_course = array();
                 foreach ($personal_course_list  as $course_item) {
-                    $$count_skill_by_course[$course_item['code']]= $skill->get_count_skills_by_course($course_item['code']);                
+                    if (!isset($skills_in_course[$course_item['code']])) {                    
+                        $count_skill_by_course[$course_item['code']] = $skill->get_count_skills_by_course($course_item['code']);
+                        $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];                    
+                    } else {
+                        $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
+                    }
                 }                
 	            $item['photo'] = Display::img($user_info['avatar_small']);
-	            $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
-                $item['rank'] = $counter;
-                $counter++;
+	            $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;                
 	        }
 	    }
-
     	break;
     case 'get_work_user_list':        
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {

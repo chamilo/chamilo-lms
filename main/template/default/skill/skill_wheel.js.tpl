@@ -226,10 +226,108 @@ bright red for missing skills, in the "Required skills" view for a student when 
         });
     }
     
-    
-    
-    
-    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {                
+    function open_popup(skill_id, parent_id) {
+        //Cleaning selected        
+        $("#gradebook_id").find('option').remove();        
+        $("#parent_id").find('option').remove();
+        
+        $("#gradebook_holder").find('li').remove();
+        $("#skill_edit_holder").find('li').remove();
+                
+        var skill = false;
+        if (skill_id) {
+            skill = get_skill_info(skill_id);
+        }        
+        
+        var parent = false;
+        if (parent_id) {
+            parent = get_skill_info(parent_id);
+        }
+        
+        if (skill) {
+            var parent_info = get_skill_info(skill.extra.parent_id);
+            
+            $("#id").attr('value',   skill.id);
+            $("#name").attr('value', skill.name);
+            $("#short_code").attr('value', skill.short_code);                        
+            $("#description").attr('value', skill.description);                
+            
+            //Filling parent_id                        
+            $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
+            
+            $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
+            
+            //Filling the gradebook_id
+            jQuery.each(skill.gradebooks, function(index, data) {                    
+                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+            });            
+            
+            $("#dialog-form").dialog({
+                buttons: {
+                     "{{ "Edit"|get_lang }}" : function() {
+                         var params = $("#add_item").find(':input').serialize();
+                         add_skill(params);                     
+                      },                                    
+                      /*"{{ "Delete"|get_lang }}" : function() {
+                      },*/
+                      "{{ "CreateChildSkill"|get_lang }}" : function() {                          
+                          open_popup(0, skill.id);
+
+                      },
+                      "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
+                          add_skill_in_profile_list(skill.id, skill.name);
+                      }
+                },
+                close: function() {     
+                    $("#name").attr('value','');
+                    $("#description").attr('value', '');
+                    //Redirect to the main root
+                    load_nodes(0, main_depth);
+                                 
+                }
+            });
+            
+            $("#dialog-form").dialog("open");            
+        }  
+        
+        if (parent) {
+            $("#id").attr('value','');
+            $("#name").attr('value', '');
+            $("#short_code").attr('value', '');
+            $("#description").attr('value', '');
+            
+            //Filling parent_id                        
+            $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
+            
+            $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
+            
+            //Filling the gradebook_id
+            jQuery.each(parent.gradebooks, function(index, data) {                    
+                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+            });            
+            
+            $("#dialog-form").dialog({
+                buttons: {
+                     "{{ "Save"|get_lang }}" : function() {
+                         var params = $("#add_item").find(':input').serialize();
+                         add_skill(params);                     
+                      }
+           
+                },
+                close: function() {     
+                    $("#name").attr('value', '');
+                    $("#description").attr('value', '');
+ 	                   load_nodes(0, main_depth);              
+                }
+            });
+            $("#dialog-form").dialog("open");        
+        }
+    }
+        
+    /* Handles mouse clicks */
+    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {
         switch (d3.event.which) {
             case 1:
                 //alert('Left mouse button pressed');
@@ -245,8 +343,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
             default:
                 //alert('You have a strange mouse');
         }
-    }
-    
+    }    
 
 function load_nodes(load_skill_id, main_depth) {
 

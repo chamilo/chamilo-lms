@@ -69,8 +69,6 @@ switch ($action) {
         $course_info = api_get_course_info($_REQUEST['code']);        
         $courses = CourseManager::process_hot_course_item(array($course_info));
         Display::display_no_header();        
-        Display::$global_template->assign('span_size', 9);
-        Display::$global_template->assign('show_ranking', false);
         Display::$global_template->assign('hot_courses', $courses);
         echo Display::$global_template->fetch('default/layout/hot_course_item_popup.tpl');
         break;
@@ -97,8 +95,7 @@ switch ($action) {
         echo Display::$global_template->fetch('default/skill/profile_item.tpl');
         break;    
     case 'get_skills':
-        $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
-        //$parent_id = intval($_REQUEST['parent_id']);
+        $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;        
         $id = intval($_REQUEST['id']);
         $skills = $skill->get_all($load_user_data, false, $id);                    
         echo json_encode($skills);

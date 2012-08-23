@@ -55,7 +55,6 @@ function fill_skill_search_li(skill_id, skill_name, checked) {
     return '<li><a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
 
-
 function load_skill_info(skill_id) {
     $.ajax({
         url: url+'&a=get_skill_course_info&id='+skill_id,
@@ -93,7 +92,7 @@ $(document).ready(function() {
         load_nodes(skill_id, main_depth);
     });
     
-        
+    /* When clicking in a course title */
     $("#skill_info").on("click", "a.course_description_popup", function() {
         course_code = $(this).attr('rel');        
         $.ajax({
@@ -241,41 +240,7 @@ $(document).ready(function() {
             });
             
             $("#dialog-form").dialog("open");            
-        }  
-        
-        if (parent) {
-            $("#id").attr('value','');
-            $("#name").attr('value', '');
-            $("#short_code").attr('value', '');
-            $("#description").attr('value', '');
-            
-            //Filling parent_id                        
-            $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
-            
-            $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
-            
-            //Filling the gradebook_id
-            jQuery.each(parent.gradebooks, function(index, data) {                    
-                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-            });            
-            
-            $("#dialog-form").dialog({
-                buttons: {
-                     "{{ "Save"|get_lang }}" : function() {
-                         var params = $("#add_item").find(':input').serialize();
-                         add_skill(params);                     
-                      }
-           
-                },
-                close: function() {     
-                    $("#name").attr('value', '');
-                    $("#description").attr('value', '');
- 	                   load_nodes(0, main_depth);              
-                }
-            });
-            $("#dialog-form").dialog("open");        
-        }
+        }       
     }
 });
 </script>

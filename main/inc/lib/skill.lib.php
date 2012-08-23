@@ -280,7 +280,7 @@ class Skill extends Model {
     var $required = array('name');
     
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
-    var $colours = array(
+    /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
       1 => array('#d5dda1', '#4a5072', '#8dae43', '#72659d'),
       2 => array('#b28647', '#2e6093', '#393e64', '#1e8323'),
@@ -292,7 +292,7 @@ class Skill extends Model {
       8 => array('#2e6093', '#2e6093', '#2e6093', '#2e6093'),
       9 => array('#3a5988', '#3a5988', '#3a5988', '#3a5988'),
      10 => array('#393e64', '#393e64', '#393e64', '#393e64'),
-    );
+    );*/
 
     public function __construct() {
         $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -326,8 +326,7 @@ class Skill extends Model {
     }
 
     function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null) {
-        $id_condition = '';
-        
+        $id_condition = '';        
         if (isset($id) && !empty($id)) {
             $id = intval($id);
             $id_condition = " WHERE s.id = $id";
@@ -345,7 +344,7 @@ class Skill extends Model {
         $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type 
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
-        
+                        
         $result = Database::query($sql);
         $skills = array();
 
@@ -358,22 +357,23 @@ class Skill extends Model {
                 $skills[$row['id']] = $row;
             }
         }
-
+        
+        /*
         if ($load_user_data && $user_id) {
-            $passed_skills = $this->get_user_skills($user_id);
+            $passed_skills = $this->get_user_skills($user_id);            
             foreach ($skills as &$skill) {
                 $skill['done_by_user'] = 0;
                 if (in_array($skill['id'], $passed_skills)) {
                     $skill['done_by_user'] = 1;
-
                 }
             }
-        }
-         
+        }*/
+  
+            
         //Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {           
             foreach ($skills as $skill) {
-                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);                
+                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);               
                  if (!empty($children)) {
                     //$skills = array_merge($skills, $children);
                     $skills = $skills + $children;
@@ -615,7 +615,7 @@ class Skill extends Model {
         } else {
             $skills = $this->get_all(false, false, null, $skill_id);
         }
-        
+                
         $original_skill = $skills;
 
         //var_dump($skills);
@@ -678,9 +678,7 @@ class Skill extends Model {
                 $skill['data']['skill_has_gradebook'] = false;                
                 if (isset($skill['gradebooks']) && !empty($skill['gradebooks'])) {
                     $skill['data']['skill_has_gradebook'] = true;
-                }                
-
-                
+                }
                 $refs[$skill['id']] = &$skill;
                 $flat_array[$skill['id']] =  &$skill;
             }
@@ -705,17 +703,15 @@ class Skill extends Model {
                 $skills[$skill_id]['data']['family_id'] = 1;
                 $refs['root']['children'][0]['children'][0] = $skills[$skill_id];
                 $flat_array[$skill_id] =  $skills[$skill_id];                
-            } else {            
-
-                
+            } else {
                 // Moving node to the children index of their parents
                 foreach ($skills as $my_skill_id => &$skill) {                
                     $skill['data']['family_id'] = $new_family_array[$skill['id']];
                     $refs[$skill['parent_id']]['children'][] = &$skill;
                     $flat_array[$my_skill_id] =  $skill;
-                }
-                
+                }                
             }
+            
             $skills_tree = array(
                 'name'      => get_lang('SkillRootName'),
                 'id'        => 'root',
@@ -764,7 +760,7 @@ class Skill extends Model {
                 if (is_array($elem['children'])) {
                     $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1, $max_depth);                                        
                 } else {
-                    $tmp['colour'] = $this->colours[$depth][rand(0,3)];
+                    //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
                 if ($depth > $max_depth) {
                     continue;

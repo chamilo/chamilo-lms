@@ -125,7 +125,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
 */
   
 
-    function set_skill_style(d, attribute) {
+    function set_skill_style(d, attribute, searched_skill_id) {
         //Nice rainbow colors
         return_fill = get_color(d);        
         
@@ -149,6 +149,12 @@ bright red for missing skills, in the "Required skills" view for a student when 
         if (d.skill_has_gradebook) {      
             return_fill = '#F89406';            
             //return_stroke = 'grey';
+        }
+        //console.log(d.id +' - ' + searched_skill_id);
+        if (searched_skill_id) {
+            if (d.id ==  searched_skill_id) {
+          //      return_fill = '#B94A48';
+            }
         }
         
         switch (attribute) {
@@ -454,7 +460,7 @@ function load_nodes(load_skill_id, main_depth) {
         .attr("class", "skill_partition skill_background")
     //        .style("fill", colour)
         .style("fill", function(d) {                 
-            return set_skill_style(d, 'fill');
+            return set_skill_style(d, 'fill', load_skill_id);
         })
         .style("stroke", function(d) {
             return set_skill_style(d, 'stroke');

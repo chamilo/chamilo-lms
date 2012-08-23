@@ -422,11 +422,8 @@ $(document).ready(function() {
         }        
         return d.colour || "#fff";
     }*/
-
-
 });
 </script>
-
 
 <div class="container-fluid">
     <div class="row-fluid">

@@ -13,7 +13,6 @@
     </div>
 {% endif %}
 
-
 {% if profiles is not null %}    
     <div class="skills-profiles">
         <h3>{{"SkillProfiles"|get_lang}}</h3>

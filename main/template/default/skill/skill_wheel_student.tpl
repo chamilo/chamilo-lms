@@ -51,8 +51,7 @@ function fill_skill_search_li(skill_id, skill_name, checked) {
     checked_condition = '';
     if (checked == 1) {
         checked_condition = 'checked=checked';
-    }
-    
+    }    
     return '<li><a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
 
@@ -61,7 +60,7 @@ function load_skill_info(skill_id) {
     $.ajax({
         url: url+'&a=get_skill_course_info&id='+skill_id,
         async: false,        
-        success: function(data) {
+        success: function(data) {            
             $('#skill_info').html(data);
             return data;
         }
@@ -77,6 +76,7 @@ $(document).ready(function() {
         skill_name = $(this).attr('name');
         add_skill_in_profile_list(skill_id, skill_name);
     });
+   
     
      /* URL link when searching skills */
     $("#skill_holder").on("click", "a.load_wheel", function() {
@@ -93,10 +93,23 @@ $(document).ready(function() {
         load_nodes(skill_id, main_depth);
     });
     
-    /*$("#skill_search").on("click", "a#clear_selection", function() {
         
-    });*/
-    
+    $("#skill_info").on("click", "a.course_description_popup", function() {
+        course_code = $(this).attr('rel');        
+        $.ajax({
+            url: url+'&a=get_course_info_popup&code='+course_code,
+            async: false,        
+            success: function(data) {                
+                $('#course_info').html(data);
+                $("#dialog-course-info").dialog({
+                     close: function() {     
+                        $('#course_info').html('');                
+                    }
+                });
+                $("#dialog-course-info").dialog("open");
+            }
+        });
+    });
         
     
     /* Wheel skill popup form */
@@ -155,17 +168,15 @@ $(document).ready(function() {
         height  : 550
     });
     
-    //Save search profile dialog
-    $("#dialog-form-profile").dialog({
+    //Open dialog
+    $("#dialog-course-info").dialog({
         autoOpen: false,
         modal   : true, 
-        width   : 500, 
-        height  : 400
-    });
-    
+        width   : 550, 
+        height  : 250
+    });    
         
-    load_nodes(0, main_depth);
-    
+    load_nodes(0, main_depth);    
     
     function open_popup(skill_id, parent_id) {
         //Cleaning selected        
@@ -289,7 +300,7 @@ $(document).ready(function() {
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="1" href="#">{{ "Root"|get_lang }}</a>
+                        <a class="btn load_root" rel="1" href="#">{{ "SkillRoot"|get_lang }}</a>
                         <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">
@@ -298,10 +309,15 @@ $(document).ready(function() {
                 
                 
                 <h3>{{ 'SkillInfo'|get_lang }}</h3>
-                <hr>
-                
+                <hr>                
                 <div id="skill_info">
                 </div>
+                
+                <br />
+                <h3>{{ "Legend"|get_lang }}</h3>                
+                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
+                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
+                <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
                 
                 
             </div>                
@@ -312,4 +328,10 @@ $(document).ready(function() {
                 <img src="">
             </div>
         </div>
+</div>
+
+        
+<div id="dialog-course-info" style="display:none;">        
+    <div id="course_info">
+    </div>    
 </div>

@@ -215,8 +215,7 @@ function add_skill_in_profile_list(skill_id, skill_name) {
 }
 
 function toogle_save_profile_form() {
-    //Hiding showing the save this search
-    
+    //Hiding showing the save this search    
     if ($('#profile_search li').length == 0) {
         $('#profile-options-container').hide();    
     } else {
@@ -380,15 +379,14 @@ $(document).ready(function() {
                         success:function(data) {
                             if (data == 1 ) {
                                 update_my_saved_profiles();
-                                alert("{{"Saved"|get_lang}}");
+                                alert("{{ "Saved"|get_lang }}");
                             } else {
                                 alert("{{ "Error"|get_lang }}");
                             }
                             
                             $("#dialog-form-profile").dialog("close");                            
                             $("#name").attr('value', '');
-                            $("#description").attr('value', '');
-                             
+                            $("#description").attr('value', '');                             
                          }                           
                      });
                   }
@@ -443,7 +441,7 @@ $(document).ready(function() {
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="1" href="#">{{ "Root"|get_lang }}</a>
+                        <a class="btn load_root" rel="1" href="#">{{ "SkillRoot"|get_lang }}</a>
                         <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">
@@ -461,17 +459,20 @@ $(document).ready(function() {
                     <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
                 </form>
                 
-                <div id="profile-options-container" style="display:none">
-                
+                <div id="profile-options-container" style="display:none">                
                     {{ 'IsThisWhatYouWereLookingFor'|get_lang }}
                     <form id="save_profile_form_button" class="form-search">
                         <input class="btn" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
                     </form>                  
-                </div>
-                
+                </div>                
                  
                 <div id="saved_profiles">
                 </div>
+                
+                <br />                
+                <h3>{{ "Legend"|get_lang }}</h3>                
+                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
+                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
             </div>                
         </div>
             
@@ -555,4 +556,3 @@ $(document).ready(function() {
         </fieldset>
     </form>    
 </div>
-

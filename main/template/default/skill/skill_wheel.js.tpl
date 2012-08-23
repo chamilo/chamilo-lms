@@ -140,14 +140,14 @@ bright red for missing skills, in the "Required skills" view for a student when 
         
         //If user achieved that skill
         if (d.achieved) {
-            return_fill = 'cornflowerblue';
-            //return_stroke = '#FCD23A';           
+            return_fill = '#3A87AD';
+            //return_stroke = '#FCD23A';
         }
         
         //darkblue        
         //If the skill has a gradebook attached
-        if (d.skill_has_gradebook) {            
-            return_fill = '#FEF664';            
+        if (d.skill_has_gradebook) {      
+            return_fill = '#F89406';            
             //return_stroke = 'grey';
         }
         

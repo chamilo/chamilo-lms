@@ -432,7 +432,7 @@ class Auth
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 
 
-        // get course list auto-register
+        // Get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 

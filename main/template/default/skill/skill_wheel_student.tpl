@@ -265,7 +265,7 @@ $(document).ready(function() {
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="1" href="#">{{ "SkillRoot"|get_lang }}</a>
+                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>
                         <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">
@@ -280,11 +280,9 @@ $(document).ready(function() {
                 
                 <br />
                 <h3>{{ "Legend"|get_lang }}</h3>                
-                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
-                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
                 <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
-                
-                
+                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
+                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />
             </div>                
         </div>
             
@@ -293,9 +291,7 @@ $(document).ready(function() {
                 <img src="">
             </div>
         </div>
-</div>
-
-        
+</div>        
 <div id="dialog-course-info" style="display:none;">        
     <div id="course_info">
     </div>    

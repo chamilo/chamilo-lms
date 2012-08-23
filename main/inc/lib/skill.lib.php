@@ -340,7 +340,7 @@ class Skill extends Model {
                 $id_condition = " AND ss.parent_id = $parent_id";
             }
         }
-
+        
         $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type 
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
@@ -615,7 +615,7 @@ class Skill extends Model {
         } else {
             $skills = $this->get_all(false, false, null, $skill_id);
         }
-                
+   
         $original_skill = $skills;
 
         //var_dump($skills);
@@ -627,7 +627,9 @@ class Skill extends Model {
                     $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
                     $skill_info = $this->get_skill_info($skill_id);
                     $skills[$skill_id] = $skill_info;
-                    $skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+                    //Uncomment code below to hide the searched skill
+                    //$skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+                    $skills[$skill_id]['parent_id'] =  1;
                 }
             }
         }
@@ -642,8 +644,11 @@ class Skill extends Model {
         $family = array();
         
         if (!empty($skills)) {
-            foreach ($skills as &$skill) {
-                
+            foreach ($skills as &$skill) {                
+                if ($skill['parent_id'] == 0) {
+                    $skill['parent_id'] = 'root';
+                }
+/*
                 if (empty($skill_id)) {
                     if ($skill['parent_id'] == 0) {
                         $skill['parent_id'] = 'root';
@@ -653,7 +658,7 @@ class Skill extends Model {
                         $skill['parent_id'] = 'root';                    
                     }
                 }
-                
+  */              
                 //In order to paint all members of a family with the same color
                 if (empty($skill_id)) {
                     if ($skill['parent_id'] == 1) {
@@ -682,7 +687,8 @@ class Skill extends Model {
                 $refs[$skill['id']] = &$skill;
                 $flat_array[$skill['id']] =  &$skill;
             }
-//            var_dump($skills);
+            //var_dump($skills);
+            //var_dump($refs);
             
             //Checking family value
             

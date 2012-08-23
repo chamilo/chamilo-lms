@@ -438,7 +438,7 @@ $(document).ready(function() {
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="1" href="#">{{ "SkillRoot"|get_lang }}</a>
+                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>
                         <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">

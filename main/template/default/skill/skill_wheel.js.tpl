@@ -1,6 +1,6 @@
 <script>
 
-/* Skill wheel settings 	*/
+/* Skill wheel settings */
 
 var url = '{{ url }}';
 var skill_to_load_from_get = '{{ skill_id_to_load }}';	
@@ -29,6 +29,7 @@ color_patterns[14] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.RdPu
 color_patterns[15] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuRd[col]);
 color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
 color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
+col = 3;
 color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
     
 //var normal_fill = d3.scale.category10().domain(my_domain);
@@ -48,7 +49,6 @@ for (i= 0; i < color_loops; i++) {
     colors2 = $.xcolor.analogous(glue_color);
     colors = $.merge(colors, colors2);
 }
-
 
 /* Interpolate the scales! */
     function arcTween(d, arc, x, y, r) {
@@ -126,17 +126,17 @@ bright red for missing skills, in the "Required skills" view for a student when 
   
 
     function set_skill_style(d, attribute, searched_skill_id) {
+        //Default stroke
+        return_stroke = 'black';
+        
         //Nice rainbow colors
         return_fill = get_color(d);        
         
-        /*var p = color_patterns[18];
+        //Grey colors using colorbrewer
+        var p = color_patterns[18];
         color = p(depth -1 + d.counter);
-        return_fill = d.color = color;*/
-         
-        
-        //return_fill = 'grey';
-        
-        return_stroke = 'black';
+        return_fill = d.color = color;                
+        //return_fill = 'grey';        
         
         //If user achieved that skill
         if (d.achieved) {
@@ -153,7 +153,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
         //console.log(d.id +' - ' + searched_skill_id);
         if (searched_skill_id) {
             if (d.id ==  searched_skill_id) {
-          //      return_fill = '#B94A48';
+                return_fill = '#B94A48';
             }
         }
         
@@ -206,9 +206,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
         .each("end", function(e) {
             d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
         });
-        
-        
-        
+                        
         /* Updating icon position */        
         
         icon.transition().duration(duration)
@@ -352,7 +350,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
     }    
 
 function load_nodes(load_skill_id, main_depth) {
-
+    
     /** Define constants and size of the wheel */
     /** Total width of the wheel (also counts for the height) */
     var w = 900,

@@ -16,7 +16,8 @@ function check_skills_sidebar() {
                     if (return_value == 0 ) {
                         alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
                         //Deleting select option tag
-                        $("#skill_id option[value="+skill_id+"]").remove();                    
+                        //$("#skill_id option[value="+skill_id+"]").remove();                    
+                        $("#skill_id").empty();
                        
                         //Deleting holder
                         $("#skill_search .holder li").each(function () {

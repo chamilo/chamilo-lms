@@ -5,8 +5,8 @@
 var url = '{{ url }}';
 var skill_to_load_from_get = '{{ skill_id_to_load }}';	
   
+/* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];
-
 var col = 9;
 var color_patterns = [];
 
@@ -29,28 +29,36 @@ color_patterns[14] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.RdPu
 color_patterns[15] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuRd[col]);
 color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
 color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
+
+//Too make the gray tones lighter
 col = 3;
 color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
-    
+
+//If you want to use the category10()
 //var normal_fill = d3.scale.category10().domain(my_domain);
 
+//Just in case we want to use it
 var main_depth = 1000;
-    
-var colors1 = $.xcolor.analogous('#da0'); //8 colors
-var colors = colors1;
 
-// Generating array of colors
-color_loops = 4;
+//First 8 colors
+var colors = $.xcolor.analogous('#da0'); //8 colors
 
+//How long will be the array of colors?
+var color_loops = 4;
+
+// Generating array of colors thanks to the "$.xcolor.analogous" function we can create a rainbow style!
 for (i= 0; i < color_loops; i++) {
-    last_color = colors[colors.length-1].getHex();        
+    //Getting the latest color hex of the 8 colors loaded 
+    last_color = colors[colors.length-1].getHex();
+    //Getting the complementary
     glue_color = $.xcolor.complementary(last_color);
-    //colors.push(glue_color.getHex());        
-    colors2 = $.xcolor.analogous(glue_color);
-    colors = $.merge(colors, colors2);
+    //Generating 8 more colors
+    temp_color_array = $.xcolor.analogous(glue_color);
+    //Adding the color to the main array
+    colors = $.merge(colors, temp_color_array);
 }
 
-/* Interpolate the scales! */
+    /* Interpolate the scales! */
     function arcTween(d, arc, x, y, r) {
         var my = maxY(d),
         xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
@@ -65,7 +73,7 @@ for (i= 0; i < color_loops; i++) {
         };
     }
 
-    /*  */
+    /*  Calculate maxY */
     function maxY(d) {
         return d.children ? Math.max.apply(Math, d.children.map(maxY)) : d.y + d.dy;
     }
@@ -77,7 +85,7 @@ for (i= 0; i < color_loops; i++) {
         return rgb.r * .299 + rgb.g * .587 + rgb.b * .114;
     }
     
-      /* Returns whether p is parent of c */
+    /* Returns whether p is parent of c */
     
     function isParentOf(p, c) {
         if (p === c) return true;
@@ -112,19 +120,17 @@ for (i= 0; i < color_loops; i++) {
         return color; //missing colors
     }
 
-
-
-/*      
-gray tones for all skills that have no particular property ("Basic skills wheel" view)
-yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
-bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
-dark blue tones for skills already acquired by a series of students, when looking at the will in the "Owned skills" view.
-bright green for skills looked for by a HR director ("Profile search" view)
-dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
-bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
-*/
-  
-
+    /*      
+    gray tones for all skills that have no particular property ("Basic skills wheel" view)
+    yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
+    bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
+    dark blue tones for skills already acquired by a series of students, when looking at the will in the "Owned skills" view.
+    bright green for skills looked for by a HR director ("Profile search" view)
+    dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
+    bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
+    */
+   
+    /* Manage the partition colors */
     function set_skill_style(d, attribute, searched_skill_id) {
         //Default stroke
         return_stroke = 'black';
@@ -136,21 +142,21 @@ bright red for missing skills, in the "Required skills" view for a student when 
         var p = color_patterns[18];
         color = p(depth -1 + d.counter);
         return_fill = d.color = color;                
-        //return_fill = 'grey';        
+                
         
-        //If user achieved that skill
+        //blue - if user achieved that skill
         if (d.achieved) {
             return_fill = '#3A87AD';
             //return_stroke = '#FCD23A';
         }
         
-        //darkblue        
-        //If the skill has a gradebook attached
+        //yellow - If the skill has a gradebook attached
         if (d.skill_has_gradebook) {      
             return_fill = '#F89406';            
             //return_stroke = 'grey';
         }
-        //console.log(d.id +' - ' + searched_skill_id);
+        
+        //red - if to show the searched skill
         if (searched_skill_id) {
             if (d.id ==  searched_skill_id) {
                 return_fill = '#B94A48';
@@ -159,7 +165,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
         
         switch (attribute) {
             case 'fill':
-                //In order to the text could identify the background
+                //In order to identify the color of the text (white, black) used in other function
                 d.color = return_fill;
                 return return_fill;
                 break;
@@ -169,11 +175,19 @@ bright red for missing skills, in the "Required skills" view for a student when 
         }
     }
     
+    /* When you click a skill partition */
     function click_partition(d, path, text, icon, arc, x, y, r, p) {
         if (d.depth == 2) {
             /*main_depth +=1;
             load_nodes(main_depth);*/
         }
+        
+        /* "No id" means that we reach the center of the wheel go to the root*/
+        if (!d.id) {
+            load_nodes(0, main_depth);
+        } 
+        
+        //Duration of the transition
         var duration = 1000;
         
         path.transition()
@@ -207,8 +221,9 @@ bright red for missing skills, in the "Required skills" view for a student when 
             d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
         });
                         
-        /* Updating icon position */        
-        
+        //Add an icon in the partition
+        /* Updating icon position */
+        /*
         icon.transition().duration(duration)
         .attrTween("text-anchor", function(d) {
             return function() {
@@ -227,21 +242,24 @@ bright red for missing skills, in the "Required skills" view for a student when 
         })
         .each("end", function(e) {
             //d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
-        });
+        });*/
     }
     
+    /* 
+        Open a popup in order to modify the skill 
+     */
     function open_popup(skill_id, parent_id) {
-        //Cleaning selected        
+        //Cleaning selects
         $("#gradebook_id").find('option').remove();        
         $("#parent_id").find('option').remove();
-        
+        //Cleaning lists
         $("#gradebook_holder").find('li').remove();
         $("#skill_edit_holder").find('li').remove();
                 
         var skill = false;
         if (skill_id) {
             skill = get_skill_info(skill_id);
-        }        
+        }
         
         var parent = false;
         if (parent_id) {
@@ -290,8 +308,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
                     load_nodes(0, main_depth);
                                  
                 }
-            });
-            
+            });            
             $("#dialog-form").dialog("open");            
         }  
         
@@ -331,24 +348,27 @@ bright red for missing skills, in the "Required skills" view for a student when 
     }
         
     /* Handles mouse clicks */
-    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {
+    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {        
         switch (d3.event.which) {
-            case 1:
+            case 1:                
                 //alert('Left mouse button pressed');
                 click_partition(d, path, text, icon, arc, x, y, r, padding);
                 break;
             case 2:
                 //alert('Middle mouse button pressed');
                 break;                        
-            case 3:                        
+            case 3:                 
                 open_popup(d.id);                        
                 //alert('Right mouse button pressed');
                 break;
             default:
-                //alert('You have a strange mouse');
+                //alert('You have a strange mouse :D '); //
         }
     }    
 
+/* 
+    Loads the skills partitions thanks to a json call
+ */
 function load_nodes(load_skill_id, main_depth) {
     
     /** Define constants and size of the wheel */
@@ -360,12 +380,9 @@ function load_nodes(load_skill_id, main_depth) {
     x = d3.scale.linear().range([0, 2 * Math.PI]),
     y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
     /** Padding in pixels before the string starts */
-    padding = 3,
-    /** Duration of click animations */
-    duration = 1000,
+    padding = 3,    
     /** Levels to show */
     levels_to_show = 3;
-
     reduce_top = 1;
 
     /* Locate the #div id element */
@@ -446,42 +463,40 @@ function load_nodes(load_skill_id, main_depth) {
         var text = vis.selectAll("text").data(nodes);    
         
         /* Setting icons */
-        var icon = vis.selectAll("icon").data(nodes);                  
+        var icon = vis.selectAll("icon").data(nodes);
         
         /* Path settings */
         path.enter().append("path")
-        .attr("id", function(d, i) {            
+        .attr("id", function(d, i) {
             return "path-" + i;
         })
         .attr("d", arc)
         .attr("fill-rule", "evenodd")
         .attr("class", "skill_partition skill_background")
     //        .style("fill", colour)
-        .style("fill", function(d) {                 
+        .style("fill", function(d) {
             return set_skill_style(d, 'fill', load_skill_id);
         })
         .style("stroke", function(d) {
             return set_skill_style(d, 'stroke');
         })
-        .on("mouseover", function(d, i) {                    
-            $("#icon-" + i).show();                         
+        .on("mouseover", function(d, i) {
+            //$("#icon-" + i).show();                         
         })
         .on("mouseout", function(d, i) {
-            $("#icon-" + i).hide();
+            //$("#icon-" + i).hide();
         })
         .on("mousedown", function(d, i) {
-            //Handles 2 mouse clicks
+            //Handles mouse clicks
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding);  
         })            
         .on("click", function(d){
-            //click_partition(d, path, text, icon, arc, x, y, r, padding);
+           //click_partition(d, path, text, icon, arc, x, y, r, padding);
         });
 
-        /* End setting skills */  
+        /* End setting skills */        
         
-        
-        /* Text settings */
-     
+        /* Text settings */     
         var textEnter = text.enter().append("text")
         .style("fill-opacity", 1)
         .style("fill", function(d) {                
@@ -562,9 +577,7 @@ function load_nodes(load_skill_id, main_depth) {
 }
 
 
-/* Skill ajax calls */
-
-
+/* Skill AJAX calls */
 
 function get_skill_info(my_id) {
     var skill = false;
@@ -578,7 +591,6 @@ function get_skill_info(my_id) {
     });
     return skill;
 }
-
 
 function get_gradebook_info(id) {
     var item = false;

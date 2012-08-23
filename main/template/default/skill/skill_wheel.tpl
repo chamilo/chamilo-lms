@@ -25,9 +25,11 @@ function check_skills_sidebar() {
 //                async: false, 
                 success: function(return_value) {                   
                     if (return_value == 0 ) {
-                        alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
+                        alert("{{ 'SkillDoesNotExist'|get_lang }}");
+                        
                         //Deleting select option tag
-                        $("#skill_id option[value="+skill_id+"]").remove();                    
+                        //$("#skill_id option[value="+skill_id+"]").remove();                    
+                        $("#skill_id").empty();
                        
                         //Deleting holder
                         $("#skill_search .holder li").each(function () {
@@ -62,24 +64,23 @@ function fill_skill_search_li(skill_id, skill_name, checked) {
     checked_condition = '';
     if (checked == 1) {
         checked_condition = 'checked=checked';
-    }
-    
+    }    
     return '<li><input id="skill_to_select_id_'+skill_id+'" rel="'+skill_id+'" name="'+skill_name+'" class="skill_to_select" '+checked_condition+' type="checkbox" value=""> <a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
  
 function check_skills_edit_form() {
-    //selecting only selected users
+    //selecting only selected parents
     $("#parent_id option:selected").each(function() {
-        var skill_id = $(this).val();
-        
+        var skill_id = $(this).val();        
         if (skill_id != "" ) {
             $.ajax({ 
                 async: false,
                 url: "{{ url }}&a=skill_exists", 
                 data: "skill_id="+skill_id,
-                success: function(return_value) {                  
-                    if (return_value == 0 ) {
-                        alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
+                success: function(return_value) {                    
+                    if (return_value == 0 ) {                        
+                        alert("{{ 'SkillDoesNotExist'|get_lang }}");
+                        
                         //Deleting select option tag
                         $("#parent_id").find('option').remove();
                         //Deleting holder

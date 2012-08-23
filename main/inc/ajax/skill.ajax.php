@@ -55,8 +55,7 @@ switch ($action) {
         echo json_encode($gradebook_list);
         break;
     case 'find_gradebooks':        
-        $gradebooks = $gradebook->find('all', array('where' => array('name LIKE %?% ' => $_REQUEST['tag'])));
-        
+        $gradebooks = $gradebook->find('all', array('where' => array('name LIKE %?% ' => $_REQUEST['tag'])));        
         $return = array();    
         foreach ($gradebooks as $item) {
             $item['caption'] = $item['name'];

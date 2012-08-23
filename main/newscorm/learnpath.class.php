@@ -9267,6 +9267,19 @@ EOD;
         $course_restorer->set_tool_copy_settings(array('learnpaths' => array('reset_dates' => true)));
         $course_restorer->restore(api_get_course_id(), api_get_session_id(), false, false);
     }
+    
+    function verify_document_size($s) {
+        $post_max = ini_get('post_max_size');
+        $upl_max = ini_get('upload_max_filesize');
+        $documents_total_space = DocumentManager::documents_total_space();
+        $course_max_space = DocumentManager::get_course_quota();
+        $total_size = filesize($s) + $documents_total_space;
+        if (filesize($s)>$post_max || filesize($s)>$upl_max  || $total_size>$course_max_space ){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
 
 if (!function_exists('trim_value')) {

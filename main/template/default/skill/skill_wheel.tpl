@@ -456,8 +456,6 @@ $(document).ready(function() {
                 
                 <ul id="profile_search" class="holder holder_simple">
                 </ul>
-
-                {{ 'RightClickOnSkillsInTheWheelToAddThemToThisProfileSearchBox'|get_lang }}
                 
                 <form id="search_profile_form" class="form-search">
                     <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">

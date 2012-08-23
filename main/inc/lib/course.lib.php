@@ -3691,7 +3691,7 @@ class CourseManager {
 
         //$table_course_access table uses the now() and interval ...
 
-       $sql = "SELECT COUNT(course_access_id) course_count, a.code, visibility ".
+       $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
               "FROM $table_course c INNER JOIN $table_course_access a ".
               "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ". 
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
@@ -3715,7 +3715,7 @@ class CourseManager {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
         
         foreach ($courses as &$my_course) {
-            $course_info = api_get_course_info($my_course['code']);            
+            $course_info = api_get_course_info($my_course['course_code']);            
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
             $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);

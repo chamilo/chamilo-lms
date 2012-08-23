@@ -3,7 +3,10 @@
 /* Skill wheel settings */
 
 var url = '{{ url }}';
-var skill_to_load_from_get = '{{ skill_id_to_load }}';	
+var skill_to_load_from_get = '{{ skill_id_to_load }}';
+
+//Just in case we want to use it
+var main_depth = 4;
   
 /* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];
@@ -36,9 +39,6 @@ color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Grey
 
 //If you want to use the category10()
 //var normal_fill = d3.scale.category10().domain(my_domain);
-
-//Just in case we want to use it
-var main_depth = 1000;
 
 //First 8 colors
 var colors = $.xcolor.analogous('#da0'); //8 colors
@@ -177,9 +177,10 @@ for (i= 0; i < color_loops; i++) {
     
     /* When you click a skill partition */
     function click_partition(d, path, text, icon, arc, x, y, r, p) {
-        if (d.depth == 2) {
-            /*main_depth +=1;
-            load_nodes(main_depth);*/
+        //console.log(d.depth);
+        if (d.depth >= main_depth) {            
+            //main_depth += main_depth;
+            load_nodes(d.id, main_depth);
         }
         
         /* "No id" means that we reach the center of the wheel go to the root*/

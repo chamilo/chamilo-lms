@@ -1218,7 +1218,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
-        $r = mkdir($course_dir, $perm);        
+        $r = @mkdir($course_dir, $perm);        
         if ($r === true) { 
             $dir_perm_verified = $perm;
             $course_test_was_created = true;

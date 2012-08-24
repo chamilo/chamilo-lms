@@ -198,16 +198,13 @@ for (i= 0; i < color_loops; i++) {
             console.log('real parent_id: '+d.real_parent_id + ' parent_id: ' +d.parent_id);
             console.log('depth ' + d.depth);
             console.log('main_depth ' + main_depth);
+            console.log('main_parent_id: ' + main_parent_id);
         }
         
         
-        
-        console.log('main_parent_id: ' + main_parent_id);
-        
         if (d.depth >= main_depth) {            
             //main_depth += main_depth;
-            if (main_parent_id) {
-                
+            if (main_parent_id) {                
                 load_nodes(main_parent_id, main_depth);      
             } else {
                 load_nodes(d.id, main_depth);      
@@ -419,11 +416,12 @@ for (i= 0; i < color_loops; i++) {
  */
 function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     if (debug) {
-        console.log('Load nodes');
+        console.log('Load nodes ----->');
         console.log('Loading skill id: '+load_skill_id+' with depth ' + main_depth);
-        console.log('main_parent_id ' + main_parent_id);
+        console.log('main_parent_id before: ' + main_parent_id);
     }
     
+    //"Root partition" on click switch 
     if (main_parent_id && load_skill_id) {    
         skill_info = get_skill_info(load_skill_id);    
         if (skill_info && skill_info.extra) {
@@ -431,9 +429,12 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         } else {
             main_parent_id = 0;
         }
-        console.log('main_parent_id 2' + main_parent_id);        
+        console.log('main_parent_id after: ' + main_parent_id);        
     }
     
+    if (load_skill_id && load_skill_id == 1)  {
+        main_parent_id = 0;
+    }    
     
     
     /** Define constants and size of the wheel */
@@ -659,6 +660,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             //return "Click";
         });*/
     });
+    
+    if (debug) {
+        console.log('<------ End load nodes ----->');
+    }
 }
 
 

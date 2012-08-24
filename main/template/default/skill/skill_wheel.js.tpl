@@ -393,7 +393,7 @@ for (i= 0; i < color_loops; i++) {
     }
         
     /* Handles mouse clicks */
-    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {        
+    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {
         switch (d3.event.which) {
             case 1:                
                 //alert('Left mouse button pressed');                
@@ -408,7 +408,7 @@ for (i= 0; i < color_loops; i++) {
                 break;
             default:
                 //alert('You have a strange mouse :D '); //
-        }
+        }        
     }    
 
 /* 
@@ -530,7 +530,6 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         
         /* Setting icons */
         var icon = vis.selectAll("icon").data(nodes);
-      
         
         /* Path settings */
         path.enter().append("path")
@@ -553,12 +552,18 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         .on("mouseout", function(d, i) {
             //$("#icon-" + i).hide();
         })
-        .on("mousedown", function(d, i) {
+        .on("contextmenu", function(d, i) {
             //Handles mouse clicks
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);            
+            //Blocks "right click menu"
+            d3.event.preventDefault();       
+            return false;
+        })
+        .on("mousedown", function(d, i) {                                    
+        })        
+        .on("click", function(d) {
+            //Simple click
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
-        })            
-        .on("click", function(d){
-           
         });
         
         /*//Redefine the root
@@ -593,13 +598,15 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         })
         .on("mouseout", function(d, i) {
             $("#icon-" + i).hide();                
-        })  
-        .on("mousedown", function(d, i) {
-            //Handles 2 mouse clicks
+        })
+        .on("contextmenu", function(d, i) {            
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);  
-        })            
-        .on("click", function(d){
-            
+            d3.event.preventDefault();
+        })
+        .on("mousedown", function(d, i) {
+        })  
+        .on("click", function(d) {
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);              
         });
 
         /** Managing text - maximum two words */        

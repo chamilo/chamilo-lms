@@ -348,12 +348,12 @@ $(document).ready(function() {
         newel: true
     });
 
-    //Open dialog
+    //Skill popup (edit, create child... )
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true, 
         width   : 600, 
-        height  : 550
+        height  : 580
     });
     
     //Save search profile dialog
@@ -469,7 +469,7 @@ $(document).ready(function() {
                 
                 <br />                
                 <h3>{{ "Legend"|get_lang }}</h3>                
-                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
+                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br /><br />
                 <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
             </div>                
         </div>
@@ -489,14 +489,14 @@ $(document).ready(function() {
             <div class="control-group">            
                 <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>            
                 <div class="controls">
-                    <input type="text" name="name" id="name" size="40" />             
+                    <input type="text" name="name" id="name" class="span4" />             
                 </div>
             </div>
             
             <div class="control-group">            
                 <label class="control-label">{{ 'ShortCode' | get_lang }}</label>            
                 <div class="controls">
-                    <input type="text" name="short_code" id="short_code" size="40" />             
+                    <input type="text" name="short_code" id="short_code" class="span2" />             
                 </div>
             </div>
 
@@ -528,7 +528,7 @@ $(document).ready(function() {
             <div class="control-group">            
                 <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>            
                 <div class="controls">
-                    <textarea name="description" id="description" class="span3" rows="7"></textarea>
+                    <textarea name="description" id="description" class="span4" rows="7"></textarea>
                 </div>
             </div>  
         </fieldset>

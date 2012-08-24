@@ -205,7 +205,6 @@ function submit_profile_search_form() {
     //return skill;
 }
 
-
 function add_skill_in_profile_list(skill_id, skill_name) {
     if ($('#profile_match_item_'+skill_id).length == 0 ) {        
         $('#profile_search').append('<li class="bit-box" id="profile_match_item_'+skill_id+'">'+skill_name+'  <a rel="'+skill_id+'" class="closebutton" href="#"></a> </li>');        

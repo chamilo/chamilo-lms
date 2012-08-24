@@ -1,3 +1,5 @@
+{# topbar #}
+{% include "default/layout/topbar.tpl" %}
 <script>
 
 /* Skill wheel settings */
@@ -17,9 +19,13 @@ var my_domain = [1,2,3,4,5,6,7,8,9];
 var col = 9;
 var color_patterns = [];
 
+/*
+
+See colorbrewer documentation
+    
 color_patterns[1] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[col]);      
 color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Purples[col]);
-//color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[6]);
+color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[6]);
 color_patterns[3] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);    
 color_patterns[4] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Reds[col]);
 color_patterns[5] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Oranges[col]);
@@ -35,7 +41,7 @@ color_patterns[13] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.BuPu
 color_patterns[14] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.RdPu[col]);
 color_patterns[15] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.PuRd[col]);
 color_patterns[16] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.OrRd[col]);
-color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);
+color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrRd[col]);*/
 
 //Too make the gray tones lighter
 col = 3;
@@ -62,354 +68,354 @@ for (i= 0; i < color_loops; i++) {
     colors = $.merge(colors, temp_color_array);
 }
 
-    function is_multiline(word) {
-        if (word) {
-            if (word.length > max_size_text_length) {
-                return (word).split(" ").length > 1;
-            }
+/* The partiton name will have 1 or 2 lines? */
+function is_multiline(word) {
+    if (word) {
+        if (word.length > max_size_text_length) {
+            return (word).split(" ").length > 1;
         }
-        return false;
     }
-           
+    return false;
+}
 
-    /* Interpolate the scales! */
-    function arcTween(d, arc, x, y, r) {
-        var my = maxY(d),
-        xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
-        yd = d3.interpolate(y.domain(), [d.y, my]),
-        yr = d3.interpolate(y.range(), [d.y ? 20 : 0, r]);
-        return function(d) {
-            return function(t) {
-                x.domain(xd(t));
-                y.domain(yd(t)).range(yr(t));
-                return arc(d);
-            };
+
+/* Interpolate the scales! */
+function arcTween(d, arc, x, y, r) {
+    var my = maxY(d),
+    xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+    yd = d3.interpolate(y.domain(), [d.y, my]),
+    yr = d3.interpolate(y.range(), [d.y ? 20 : 0, r]);
+    return function(d) {
+        return function(t) {
+            x.domain(xd(t));
+            y.domain(yd(t)).range(yr(t));
+            return arc(d);
         };
-    }
+    };
+}
 
-    /*  Calculate maxY */
-    function maxY(d) {
-        return d.children ? Math.max.apply(Math, d.children.map(maxY)) : d.y + d.dy;
-    }
+/*  Calculate maxY */
+function maxY(d) {
+    return d.children ? Math.max.apply(Math, d.children.map(maxY)) : d.y + d.dy;
+}
 
-    /* Use a formula for contrasting colour
-       http://www.w3.org/WAI/ER/WD-AERT/#color-contrast
-    */
-    function brightness(rgb) {
-        return rgb.r * .299 + rgb.g * .587 + rgb.b * .114;
-    }
-    
-    /* Returns whether p is parent of c */
-    
-    function isParentOf(p, c) {
-        if (p === c) return true;
-        if (p.children) {
-            return p.children.some(function(d) {
-                return isParentOf(d, c);
-            });
-        }
-        return false;
-    }	
-    
-    function get_color(d) {
-        depth = d.depth;
-        if (d.family_id) {            
-            /*var p = color_patterns[d.family_id];            
-            color = p(depth -1 + d.counter);
-            d.color = color;*/                  
-            if (depth > 1) {              
-                family1 = colors[d.family_id];
-                family2 = colors[d.family_id + 2];                
-                position = d.depth*d.counter;                
-                //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
-                part_color = $.xcolor.lighten(family1, position, 15);                
-                color = part_color.getHex();
-                //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
-            } else {
-                color = colors[d.family_id];                
-            }                  
-            return color;
-        }
-        color = '#fefefe';        
-        return color; //missing colors
-    }
+/* Use a formula for contrasting colour
+   http://www.w3.org/WAI/ER/WD-AERT/#color-contrast
+*/
+function brightness(rgb) {
+    return rgb.r * .299 + rgb.g * .587 + rgb.b * .114;
+}
 
-    /*      
-    gray tones for all skills that have no particular property ("Basic skills wheel" view)
-    yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
-    bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
-    dark blue tones for skills already acquired by a series of students, when looking at the will in the "Owned skills" view.
-    bright green for skills looked for by a HR director ("Profile search" view)
-    dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
-    bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
-    */
-   
-    /* Manage the partition colors */
-    function set_skill_style(d, attribute, searched_skill_id) {
-        //Default stroke
-        return_stroke = 'black';
-        
-        //Nice rainbow colors
-        return_fill = get_color(d);        
-        
-        //Grey colors using colorbrewer
-        var p = color_patterns[18];
-        color = p(depth -1 + d.counter);
-        return_fill = d.color = color;                
-                
-        
-        //blue - if user achieved that skill
-        if (d.achieved) {
-            return_fill = '#3A87AD';
-            //return_stroke = '#FCD23A';
-        }
-        
-        //yellow - If the skill has a gradebook attached
-        if (d.skill_has_gradebook) {      
-            return_fill = '#F89406';            
-            //return_stroke = 'grey';
-        }
-        
-        //red - if to show the searched skill
-        if (searched_skill_id) {
-            if (d.id ==  searched_skill_id) {
-                return_fill = '#B94A48';
-            }
-        }
-        
-        switch (attribute) {
-            case 'fill':
-                //In order to identify the color of the text (white, black) used in other function
-                d.color = return_fill;
-                return return_fill;
-                break;
-            case 'stroke':
-                return return_stroke;
-                break;
-        }
-    }
-    
-    /* When you click a skill partition */
-    function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
-        //console.log(d.depth); 
-        if (debug) {
-            console.log('Clicking a partition skill id: '+d.id);
-            console.log(d);
-            console.log('real parent_id: '+d.real_parent_id + ' parent_id: ' +d.parent_id);
-            console.log('depth ' + d.depth);
-            console.log('main_depth ' + main_depth);
-            console.log('main_parent_id: ' + main_parent_id);
-        }
-        
-        
-        if (d.depth >= main_depth) {            
-            //main_depth += main_depth;
-            if (main_parent_id) {                
-                load_nodes(main_parent_id, main_depth);      
-            } else {
-                load_nodes(d.id, main_depth);      
-            }
-        }
-        
-        
-        if (d.id) {            
-            console.log('Getting skill info');
-            skill_info = get_skill_info(d.parent_id);            
-            console.log(skill_info);
-            main_parent_id  = skill_info.extra.parent_id; 
-            main_parent_id  = d.parent_id;   
-            console.log('Setting main_parent_id: ' + main_parent_id);
-        }
-        
-        //console.log(main_parent_id);
-        
-        /* "No id" means that we reach the center of the wheel go to the root*/        
-        if (!d.id) {
-            load_nodes(main_parent_id, main_depth);
-        }
-        
-        console.log('Continue to click_partition');
-        
-        //console.log(main_parent_id);
-        
-        //Duration of the transition
-        var duration = 1000;
-        
-        path.transition()
-        .duration(duration)
-        .attrTween("d", arcTween(d, arc, x, y, r));
+/* Returns whether p is parent of c */
 
-        /* Updating text position */
-        
-        // Somewhat of a hack as we rely on arcTween updating the scales.
-        text.style("visibility", function(e) {
-            return isParentOf(d, e) ? null : d3.select(this).style("visibility");
-        })
-        .transition().duration(duration)
-        .attrTween("text-anchor", function(d) {
-            return function() {
-                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
-            };
-        })
-        .attrTween("transform", function(d) {
-            var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1;
-            return function() {
-                var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
-                rotate = angle + (multiline ? -.5 : 0);
-                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
-            };
-        })
-        .style("fill-opacity", function(e) {
-            return isParentOf(d, e) ? 1 : 1e-6;
-        })
-        .each("end", function(e) {
-            d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
+function isParentOf(p, c) {
+    if (p === c) return true;
+    if (p.children) {
+        return p.children.some(function(d) {
+            return isParentOf(d, c);
         });
-                        
-        //Add an icon in the partition
-        /* Updating icon position */
-        /*
-        icon.transition().duration(duration)
-        .attrTween("text-anchor", function(d) {
-            return function() {
-                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
-            };
-        })
-        .attrTween("transform", function(d) {            
-            return function() {
-                var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
-                rotate = angle;
-                return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
-            };
-        })
-        .style("fill-opacity", function(e) {
-            //return isParentOf(d, e) ? 1 : 1e-6;
-        })
-        .each("end", function(e) {
-            //d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
-        });*/
     }
-    
-    /* 
-        Open a popup in order to modify the skill 
-     */
-    function open_popup(skill_id, parent_id) {
-        //Cleaning selects
-        $("#gradebook_id").find('option').remove();        
-        $("#parent_id").find('option').remove();
-        //Cleaning lists
-        $("#gradebook_holder").find('li').remove();
-        $("#skill_edit_holder").find('li').remove();
-                
-        var skill = false;
-        if (skill_id) {
-            skill = get_skill_info(skill_id);
-        }
-        
-        var parent = false;
-        if (parent_id) {
-            parent = get_skill_info(parent_id);
-        }
-        
-        if (skill) {
-            var parent_info = get_skill_info(skill.extra.parent_id);
-            
-            $("#id").attr('value',   skill.id);
-            $("#name").attr('value', skill.name);
-            $("#short_code").attr('value', skill.short_code);                        
-            $("#description").attr('value', skill.description);                
-            
-            //Filling parent_id                        
-            $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
-            
-            $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
-            
-            //Filling the gradebook_id
-            jQuery.each(skill.gradebooks, function(index, data) {                    
-                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-            });            
-            
-            $("#dialog-form").dialog({
-                buttons: {
-                     "{{ "Edit"|get_lang }}" : function() {
-                         var params = $("#add_item").find(':input').serialize();
-                         add_skill(params);                     
-                      },                                    
-                      /*"{{ "Delete"|get_lang }}" : function() {
-                      },*/
-                      "{{ "CreateChildSkill"|get_lang }}" : function() {                          
-                          open_popup(0, skill.id);
+    return false;
+}	
 
-                      },
-                      "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
-                          add_skill_in_profile_list(skill.id, skill.name);
-                      }
-                },
-                close: function() {     
-                    $("#name").attr('value','');
-                    $("#description").attr('value', '');
-                    //Redirect to the main root
-                    load_nodes(0, main_depth);
-                                 
-                }
-            });            
-            $("#dialog-form").dialog("open");            
-        }  
-        
-        if (parent) {
-            $("#id").attr('value','');
-            $("#name").attr('value', '');
-            $("#short_code").attr('value', '');
-            $("#description").attr('value', '');
-            
-            //Filling parent_id                        
-            $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
-            
-            $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
-            
-            //Filling the gradebook_id
-            jQuery.each(parent.gradebooks, function(index, data) {                    
-                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-            });            
-            
-            $("#dialog-form").dialog({
-                buttons: {
-                     "{{ "Save"|get_lang }}" : function() {
-                         var params = $("#add_item").find(':input').serialize();
-                         add_skill(params);                     
-                      }
-           
-                },
-                close: function() {     
-                    $("#name").attr('value', '');
-                    $("#description").attr('value', '');
- 	                   load_nodes(0, main_depth);              
-                }
-            });
-            $("#dialog-form").dialog("open");        
+function get_color(d) {
+    depth = d.depth;
+    if (d.family_id) {            
+        /*var p = color_patterns[d.family_id];            
+        color = p(depth -1 + d.counter);
+        d.color = color;*/                  
+        if (depth > 1) {              
+            family1 = colors[d.family_id];
+            family2 = colors[d.family_id + 2];                
+            position = d.depth*d.counter;                
+            //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
+            part_color = $.xcolor.lighten(family1, position, 15);                
+            color = part_color.getHex();
+            //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
+        } else {
+            color = colors[d.family_id];                
+        }                  
+        return color;
+    }
+    color = '#fefefe';        
+    return color; //missing colors
+}
+
+/*      
+gray tones for all skills that have no particular property ("Basic skills wheel" view)
+yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
+bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
+dark blue tones for skills already acquired by a series of students, when looking at the will in the "Owned skills" view.
+bright green for skills looked for by a HR director ("Profile search" view)
+dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
+bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
+*/
+
+/* Manage the partition colors */
+function set_skill_style(d, attribute, searched_skill_id) {
+    //Default stroke
+    return_stroke = 'black';
+
+    //Nice rainbow colors
+    return_fill = get_color(d);        
+
+    //Grey colors using colorbrewer
+    var p = color_patterns[18];
+    color = p(depth -1 + d.counter);
+    return_fill = d.color = color;                
+
+
+    //blue - if user achieved that skill
+    if (d.achieved) {
+        return_fill = '#3A87AD';
+        //return_stroke = '#FCD23A';
+    }
+
+    //yellow - If the skill has a gradebook attached
+    if (d.skill_has_gradebook) {      
+        return_fill = '#F89406';            
+        //return_stroke = 'grey';
+    }
+
+    //red - if to show the searched skill
+    if (searched_skill_id) {
+        if (d.id ==  searched_skill_id) {
+            return_fill = '#B94A48';
         }
     }
-        
-    /* Handles mouse clicks */
-    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {
-        switch (d3.event.which) {
-            case 1:                
-                //alert('Left mouse button pressed');                
-                click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
-                break;
-            case 2:
-                //alert('Middle mouse button pressed');
-                break;                        
-            case 3:                 
-                open_popup(d.id);                        
-                //alert('Right mouse button pressed');
-                break;
-            default:
-                //alert('You have a strange mouse :D '); //
-        }        
-    }    
+
+    switch (attribute) {
+        case 'fill':
+            //In order to identify the color of the text (white, black) used in other function
+            d.color = return_fill;
+            return return_fill;
+            break;
+        case 'stroke':
+            return return_stroke;
+            break;
+    }
+}
+
+/* When you click a skill partition */
+function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
+    //console.log(d.depth); 
+    if (debug) {
+        console.log('Clicking a partition skill id: '+d.id);
+        console.log(d);
+        console.log('real parent_id: '+d.real_parent_id + ' parent_id: ' +d.parent_id);
+        console.log('depth ' + d.depth);
+        console.log('main_depth ' + main_depth);
+        console.log('main_parent_id: ' + main_parent_id);
+    }
+
+
+    if (d.depth >= main_depth) {            
+        //main_depth += main_depth;
+        if (main_parent_id) {                
+            load_nodes(main_parent_id, main_depth);      
+        } else {
+            load_nodes(d.id, main_depth);      
+        }
+    }
+
+
+    if (d.id) {            
+        console.log('Getting skill info');
+        skill_info = get_skill_info(d.parent_id);            
+        console.log(skill_info);
+        main_parent_id  = skill_info.extra.parent_id; 
+        main_parent_id  = d.parent_id;   
+        console.log('Setting main_parent_id: ' + main_parent_id);
+    }
+
+    //console.log(main_parent_id);
+
+    /* "No id" means that we reach the center of the wheel go to the root*/        
+    if (!d.id) {
+        load_nodes(main_parent_id, main_depth);
+    }
+
+    console.log('Continue to click_partition');
+
+    //console.log(main_parent_id);
+
+    //Duration of the transition
+    var duration = 1000;
+
+    path.transition()
+    .duration(duration)
+    .attrTween("d", arcTween(d, arc, x, y, r));
+
+    /* Updating text position */
+
+    // Somewhat of a hack as we rely on arcTween updating the scales.
+    text.style("visibility", function(e) {
+        return isParentOf(d, e) ? null : d3.select(this).style("visibility");
+    })
+    .transition().duration(duration)
+    .attrTween("text-anchor", function(d) {
+        return function() {
+            return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+        };
+    })
+    .attrTween("transform", function(d) {
+        var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1;
+        return function() {
+            var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+            rotate = angle + (multiline ? -.5 : 0);
+            return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+        };
+    })
+    .style("fill-opacity", function(e) {
+        return isParentOf(d, e) ? 1 : 1e-6;
+    })
+    .each("end", function(e) {
+        d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
+    });
+
+    //Add an icon in the partition
+    /* Updating icon position */
+    /*
+    icon.transition().duration(duration)
+    .attrTween("text-anchor", function(d) {
+        return function() {
+            return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+        };
+    })
+    .attrTween("transform", function(d) {            
+        return function() {
+            var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+            rotate = angle;
+            return "rotate(" + rotate + ")translate(" + (y(d.y) + p) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
+        };
+    })
+    .style("fill-opacity", function(e) {
+        //return isParentOf(d, e) ? 1 : 1e-6;
+    })
+    .each("end", function(e) {
+        //d3.select(this).style("visibility", isParentOf(d, e) ? null : "hidden");
+    });*/
+}
+
+/* 
+    Open a popup in order to modify the skill 
+ */
+function open_popup(skill_id, parent_id) {
+    //Cleaning selects
+    $("#gradebook_id").find('option').remove();        
+    $("#parent_id").find('option').remove();
+    //Cleaning lists
+    $("#gradebook_holder").find('li').remove();
+    $("#skill_edit_holder").find('li').remove();
+
+    var skill = false;
+    if (skill_id) {
+        skill = get_skill_info(skill_id);
+    }
+
+    var parent = false;
+    if (parent_id) {
+        parent = get_skill_info(parent_id);
+    }
+
+    if (skill) {
+        var parent_info = get_skill_info(skill.extra.parent_id);
+
+        $("#id").attr('value',   skill.id);
+        $("#name").attr('value', skill.name);
+        $("#short_code").attr('value', skill.short_code);                        
+        $("#description").attr('value', skill.description);                
+
+        //Filling parent_id                        
+        $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
+
+        $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
+
+        //Filling the gradebook_id
+        jQuery.each(skill.gradebooks, function(index, data) {                    
+            $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+        });            
+
+        $("#dialog-form").dialog({
+            buttons: {
+                 "{{ "Edit"|get_lang }}" : function() {
+                     var params = $("#add_item").find(':input').serialize();
+                     add_skill(params);                     
+                  },                                    
+                  /*"{{ "Delete"|get_lang }}" : function() {
+                  },*/
+                  "{{ "CreateChildSkill"|get_lang }}" : function() {                          
+                      open_popup(0, skill.id);
+                  },
+                  "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
+                      add_skill_in_profile_list(skill.id, skill.name);
+                  }
+            },
+            close: function() {     
+                $("#name").attr('value','');
+                $("#description").attr('value', '');
+                //Redirect to the main root
+                load_nodes(0, main_depth);
+
+            }
+        });            
+        $("#dialog-form").dialog("open");            
+    }  
+
+    if (parent) {
+        $("#id").attr('value','');
+        $("#name").attr('value', '');
+        $("#short_code").attr('value', '');
+        $("#description").attr('value', '');
+
+        //Filling parent_id                        
+        $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
+
+        $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
+
+        //Filling the gradebook_id
+        jQuery.each(parent.gradebooks, function(index, data) {                    
+            $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
+            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
+        });            
+
+        $("#dialog-form").dialog({
+            buttons: {
+                 "{{ "Save"|get_lang }}" : function() {
+                     var params = $("#add_item").find(':input').serialize();
+                     add_skill(params);                     
+                  }
+
+            },
+            close: function() {     
+                $("#name").attr('value', '');
+                $("#description").attr('value', '');
+                   load_nodes(0, main_depth);              
+            }
+        });
+        $("#dialog-form").dialog("open");        
+    }
+}
+
+/* Handles mouse clicks */
+function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {
+    switch (d3.event.which) {
+        case 1:                
+            //alert('Left mouse button pressed');                
+            click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
+            break;
+        case 2:
+            //alert('Middle mouse button pressed');
+            break;                        
+        case 3:                 
+            open_popup(d.id);                        
+            //alert('Right mouse button pressed');
+            break;
+        default:
+            //alert('You have a strange mouse :D '); //
+    }        
+    }
 
 /* 
     Loads the skills partitions thanks to a json call
@@ -420,7 +426,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         console.log('Loading skill id: '+load_skill_id+' with depth ' + main_depth);
         console.log('main_parent_id before: ' + main_parent_id);
     }
-    
+
     //"Root partition" on click switch 
     if (main_parent_id && load_skill_id) {    
         skill_info = get_skill_info(load_skill_id);    
@@ -431,12 +437,12 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         }
         console.log('main_parent_id after: ' + main_parent_id);        
     }
-    
+
     if (load_skill_id && load_skill_id == 1)  {
         main_parent_id = 0;
     }    
-    
-    
+
+
     /** Define constants and size of the wheel */
     /** Total width of the wheel (also counts for the height) */
     var w = 900,
@@ -514,23 +520,23 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     if (load_skill_id != 0) { 
         load_skill_condition = 'skill_id=' + load_skill_id;            
     }
-            
+
     d3.json("{{ wheel_url }}&main_depth="+main_depth+"&"+load_skill_condition, function(json) {
-        
+
         /** Define the list of nodes based on the JSON */
         var nodes = partition.nodes({
             children: json                
         });
-        
+
         /* Setting all skills */
         var path = vis.selectAll("path").data(nodes);
 
         /* Setting all texts */
         var text = vis.selectAll("text").data(nodes);    
-        
+
         /* Setting icons */
         var icon = vis.selectAll("icon").data(nodes);
-        
+
         /* Path settings */
         path.enter().append("path")
         .attr("id", function(d, i) {
@@ -565,17 +571,17 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             //Simple click
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
         });
-        
+
         /*//Redefine the root
         path_zero = vis.selectAll("#path-0").on("mousedown", function(d){
-                
+
                d = get_skill_info(extra_parent_id);
                d.parent_id = d.extra.parent_id;
                click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
         });*/
 
         /* End setting skills */        
-        
+
         /* Text settings */     
         var textEnter = text.enter().append("text")
         .style("fill-opacity", 1)
@@ -611,7 +617,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
 
         /** Managing text - maximum two words */        
         var insert_two_words = false;
-        
+
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
@@ -623,7 +629,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return d.depth ? d.name : "";
             }            
         });
-        
+
         if (insert_two_words) {
             textEnter.append("tspan")
             .attr("x", 0)
@@ -632,11 +638,11 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return d.depth && d.name.length > max_size_text_length ? d.name.split(" ")[1] || "" : "";
             });
         }
-      
-                         
+
+
         /* Icon settings */
-        
-        
+
+
         /*
         var icon_click = icon.enter().append("text")
         .style("fill-opacity", 1)
@@ -656,7 +662,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         .on("click", function(d){
             open_popup(d);
         });
-       
+
         icon_click.append("tspan")
         .attr("id", function(d, i) {            
             return "icon-" + i;
@@ -667,7 +673,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             //return "Click";
         });*/
     });
-    
+
     if (debug) {
         console.log('<------ End load nodes ----->');
     }

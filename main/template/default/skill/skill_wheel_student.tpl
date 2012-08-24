@@ -53,7 +53,7 @@ function fill_skill_search_li(skill_id, skill_name, checked) {
     if (checked == 1) {
         checked_condition = 'checked=checked';
     }    
-    return '<li><a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
+    return '<li><a id="skill_to_select_id_'+skill_id+'" href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
 
 function load_skill_info(skill_id) {

@@ -7,6 +7,10 @@ var skill_to_load_from_get = '{{ skill_id_to_load }}';
 
 //Just in case we want to use it
 var main_depth = 4;
+var main_parent_id = false;
+
+// Used to split in two word or not
+var max_size_text_length = 14; 
   
 /* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];
@@ -57,6 +61,16 @@ for (i= 0; i < color_loops; i++) {
     //Adding the color to the main array
     colors = $.merge(colors, temp_color_array);
 }
+
+    function is_multiline(word) {
+        if (word) {
+            if (word.length > max_size_text_length) {
+                return (word).split(" ").length > 1;
+            }
+        }
+        return false;
+    }
+           
 
     /* Interpolate the scales! */
     function arcTween(d, arc, x, y, r) {
@@ -178,15 +192,28 @@ for (i= 0; i < color_loops; i++) {
     /* When you click a skill partition */
     function click_partition(d, path, text, icon, arc, x, y, r, p) {
         //console.log(d.depth);
-        if (d.depth >= main_depth) {            
-            //main_depth += main_depth;
-            load_nodes(d.id, main_depth);
+        
+        console.log(d);
+        if (d.id) {
+            console.log(d.real_parent_id + ' ' +d.parent_id);
+            main_parent_id  = d.real_parent_id;
         }
         
-        /* "No id" means that we reach the center of the wheel go to the root*/
+        if (d.depth >= main_depth) {            
+            //main_depth += main_depth;
+            load_nodes(d.id, main_depth);            
+        }
+       
+     
+        
+        //console.log(main_parent_id);
+        
+        /* "No id" means that we reach the center of the wheel go to the root*/        
         if (!d.id) {
-            load_nodes(0, main_depth);
-        } 
+            load_nodes(main_parent_id, main_depth);
+        }        
+        
+        //console.log(main_parent_id);
         
         //Duration of the transition
         var duration = 1000;
@@ -208,7 +235,7 @@ for (i= 0; i < color_loops; i++) {
             };
         })
         .attrTween("transform", function(d) {
-            var multiline = (d.name || "").split(" ").length > 1;
+            var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1;
             return function() {
                 var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
                 rotate = angle + (multiline ? -.5 : 0);
@@ -509,7 +536,7 @@ function load_nodes(load_skill_id, main_depth) {
         .attr("dy", ".2em")
         .attr("transform", function(d) {
             /** Get the text details and define the rotation and general position */
-            var multiline = (d.name || "").split(" ").length > 1,
+            var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1,
             angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
             rotate = angle + (multiline ? -.5 : 0);
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
@@ -528,19 +555,31 @@ function load_nodes(load_skill_id, main_depth) {
             //click_partition(d, path, text, icon, arc, x, y, r, padding);
         });
 
-        /** Managing text - always maximum two words */
+        /** Managing text - maximum two words */        
+        var insert_two_words = false;
         
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
-            return d.depth ? d.name.split(" ")[0] : "";
+            if (d.depth && d.name.length > max_size_text_length) {
+                insert_two_words = true;
+                return d.depth ? d.name.split(" ")[0] : "";
+            } else {
+                insert_two_words = false;
+                return d.depth ? d.name : "";
+            }
+            
         });
-        textEnter.append("tspan")
-        .attr("x", 0)
-        .attr("dy", "1em")
-        .text(function(d) {
-            return d.depth ? d.name.split(" ")[1] || "" : "";
-        });
+        
+        if (insert_two_words) {
+            textEnter.append("tspan")
+            .attr("x", 0)
+            .attr("dy", "1em")
+            .text(function(d) {
+                return d.depth ? d.name.split(" ")[1] || "" : "";
+            });
+        }
+      
                          
         /* Icon settings */
         

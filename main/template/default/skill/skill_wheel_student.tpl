@@ -39,8 +39,7 @@ function check_skills_sidebar() {
                             skill_info = get_skill_info(skill_id);                        
                             li = fill_skill_search_li(skill_id, skill_info.name);
                             $("#skill_holder").append(li); 
-                        }                        
-
+                        }
                     }
                 },            
             });                
@@ -66,6 +65,17 @@ function load_skill_info(skill_id) {
         }
     });
 }
+
+function load_my_skills() {
+    $.ajax({
+        url: url+'&a=get_user_skills&user_id='+{{ _u.user_id}},
+        //async: false,        
+        success: function(data) {            
+            $('#my_skills').html(data);                
+        }
+    });        
+}
+
 
 $(document).ready(function() {
     /* Skill search */ 
@@ -175,8 +185,10 @@ $(document).ready(function() {
         height  : 250
     });    
         
-    load_nodes(0, main_depth);    
+    load_nodes(0, main_depth);
     
+    load_my_skills();
+
     function open_popup(skill_id, parent_id) {
         //Cleaning selected        
         $("#gradebook_id").find('option').remove();        
@@ -249,15 +261,19 @@ $(document).ready(function() {
     <div class="row-fluid">
         
         <div class="span3">
-            <div class="well">
-                <h3>{{ 'MySkills'|get_lang }}</h3>
-                <hr>
+            <div class="well sidebar-nav-skill-wheel ">
                 
-                <div id="my_skills">                    
+                <div class="page-header">
+                    <h3>{{ 'MySkills'|get_lang }}</h3>                
                 </div>
                 
-                <h3>{{ 'GetNewSkills'|get_lang }}</h3>
-                <hr>
+                <div id="my_skills">
+                </div>
+                
+                
+                <div class="page-header">
+                    <h3>{{ 'GetNewSkills'|get_lang }}</h3>
+                </div>
                 
                 <form id="skill_search" class="form-search">
                     <select id="skill_id" name="skill_id" />
@@ -270,14 +286,15 @@ $(document).ready(function() {
                     </ul>
                 </form>
                 
-                
-                <h3>{{ 'SkillInfo'|get_lang }}</h3>
-                <hr>                
+                <div class="page-header">
+                    <h3>{{ 'SkillInfo'|get_lang }}</h3>
+                </div>                
                 <div id="skill_info">
                 </div>
                 
-                <br />
-                <h3>{{ "Legend"|get_lang }}</h3>                
+                <div class="page-header">
+                <h3>{{ "Legend"|get_lang }}</h3>
+                </div>
                 <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
                 <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
                 <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />

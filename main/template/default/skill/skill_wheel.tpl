@@ -429,9 +429,10 @@ $(document).ready(function() {
     <div class="row-fluid">
         
         <div class="span3">
-            <div class="well">
-                <h3>{{ 'Skills'|get_lang }}</h3>
-                <hr>
+            <div class="well sidebar-nav-skill-wheel">
+                <div class="page-header">
+                    <h3>{{ 'Skills'|get_lang }}</h3>
+                </div>
                 
                 <form id="skill_search" class="form-search">
                     <select id="skill_id" name="skill_id" />
@@ -445,8 +446,9 @@ $(document).ready(function() {
                     </ul>
                 </form>
                 
-                <h3>{{ 'ProfileSearch'|get_lang }}</h3>
-                <hr>
+                <div class="page-header">
+                    <h3>{{ 'ProfileSearch'|get_lang }}</h3>
+                </div>
                 {{ 'WhatSkillsAreYouLookingFor'|get_lang }}
                 
                 <ul id="profile_search" class="holder holder_simple">
@@ -466,8 +468,9 @@ $(document).ready(function() {
                 <div id="saved_profiles">
                 </div>
                 
-                <br />                
-                <h3>{{ "Legend"|get_lang }}</h3>                
+                <div class="page-header">            
+                    <h3>{{ "Legend"|get_lang }}</h3>                
+                </div>
                 <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br /><br />
                 <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
             </div>                

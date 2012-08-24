@@ -126,7 +126,13 @@ switch ($action) {
         $depth      = isset($_REQUEST['main_depth']) ? $_REQUEST['main_depth'] : 2;        
         $all = $skill->get_skills_tree_json($user_id, $skill_id, false, $depth);
         echo $all;
-        break;             
+        break;
+    case 'get_user_skills':
+        $skills = $skill->get_user_skills($user_id, true);        
+        Display::display_no_header();        
+        Display::$global_template->assign('skills', $skills);
+        echo Display::$global_template->fetch('default/skill/user_skills.tpl');
+        break;
     case 'get_gradebook_info':
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $info = $gradebook->get($id);                    

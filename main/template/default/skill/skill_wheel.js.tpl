@@ -1,13 +1,13 @@
 <script>
 
 /* Skill wheel settings */
-
+var debug = true;
 var url = '{{ url }}';
 var skill_to_load_from_get = '{{ skill_id_to_load }}';
 
 //Just in case we want to use it
 var main_depth = 4;
-var main_parent_id = false;
+var main_parent_id = 0;
 
 // Used to split in two word or not
 var max_size_text_length = 14; 
@@ -190,28 +190,48 @@ for (i= 0; i < color_loops; i++) {
     }
     
     /* When you click a skill partition */
-    function click_partition(d, path, text, icon, arc, x, y, r, p) {
-        //console.log(d.depth);
-        
-        console.log(d);
-        if (d.id) {
-            console.log(d.real_parent_id + ' ' +d.parent_id);
-            main_parent_id  = d.real_parent_id;
+    function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
+        //console.log(d.depth); 
+        if (debug) {
+            console.log('Clicking a partition skill id: '+d.id);
+            console.log(d);
+            console.log('real parent_id: '+d.real_parent_id + ' parent_id: ' +d.parent_id);
+            console.log('depth ' + d.depth);
+            console.log('main_depth ' + main_depth);
         }
+        
+        
+        
+        console.log('main_parent_id: ' + main_parent_id);
         
         if (d.depth >= main_depth) {            
             //main_depth += main_depth;
-            load_nodes(d.id, main_depth);            
+            if (main_parent_id) {
+                
+                load_nodes(main_parent_id, main_depth);      
+            } else {
+                load_nodes(d.id, main_depth);      
+            }
         }
-       
-     
+        
+        
+        if (d.id) {            
+            console.log('Getting skill info');
+            skill_info = get_skill_info(d.parent_id);            
+            console.log(skill_info);
+            main_parent_id  = skill_info.extra.parent_id; 
+            main_parent_id  = d.parent_id;   
+            console.log('Setting main_parent_id: ' + main_parent_id);
+        }
         
         //console.log(main_parent_id);
         
         /* "No id" means that we reach the center of the wheel go to the root*/        
         if (!d.id) {
             load_nodes(main_parent_id, main_depth);
-        }        
+        }
+        
+        console.log('Continue to click_partition');
         
         //console.log(main_parent_id);
         
@@ -376,11 +396,11 @@ for (i= 0; i < color_loops; i++) {
     }
         
     /* Handles mouse clicks */
-    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding) {        
+    function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {        
         switch (d3.event.which) {
             case 1:                
-                //alert('Left mouse button pressed');
-                click_partition(d, path, text, icon, arc, x, y, r, padding);
+                //alert('Left mouse button pressed');                
+                click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
                 break;
             case 2:
                 //alert('Middle mouse button pressed');
@@ -397,7 +417,24 @@ for (i= 0; i < color_loops; i++) {
 /* 
     Loads the skills partitions thanks to a json call
  */
-function load_nodes(load_skill_id, main_depth) {
+function load_nodes(load_skill_id, main_depth, extra_parent_id) {
+    if (debug) {
+        console.log('Load nodes');
+        console.log('Loading skill id: '+load_skill_id+' with depth ' + main_depth);
+        console.log('main_parent_id ' + main_parent_id);
+    }
+    
+    if (main_parent_id && load_skill_id) {    
+        skill_info = get_skill_info(load_skill_id);    
+        if (skill_info && skill_info.extra) {
+            main_parent_id = skill_info.extra.parent_id;
+        } else {
+            main_parent_id = 0;
+        }
+        console.log('main_parent_id 2' + main_parent_id);        
+    }
+    
+    
     
     /** Define constants and size of the wheel */
     /** Total width of the wheel (also counts for the height) */
@@ -492,6 +529,7 @@ function load_nodes(load_skill_id, main_depth) {
         
         /* Setting icons */
         var icon = vis.selectAll("icon").data(nodes);
+      
         
         /* Path settings */
         path.enter().append("path")
@@ -516,11 +554,19 @@ function load_nodes(load_skill_id, main_depth) {
         })
         .on("mousedown", function(d, i) {
             //Handles mouse clicks
-            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding);  
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
         })            
         .on("click", function(d){
-           //click_partition(d, path, text, icon, arc, x, y, r, padding);
+           
         });
+        
+        /*//Redefine the root
+        path_zero = vis.selectAll("#path-0").on("mousedown", function(d){
+                
+               d = get_skill_info(extra_parent_id);
+               d.parent_id = d.extra.parent_id;
+               click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
+        });*/
 
         /* End setting skills */        
         
@@ -549,10 +595,10 @@ function load_nodes(load_skill_id, main_depth) {
         })  
         .on("mousedown", function(d, i) {
             //Handles 2 mouse clicks
-            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding);  
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);  
         })            
         .on("click", function(d){
-            //click_partition(d, path, text, icon, arc, x, y, r, padding);
+            
         });
 
         /** Managing text - maximum two words */        
@@ -567,8 +613,7 @@ function load_nodes(load_skill_id, main_depth) {
             } else {
                 insert_two_words = false;
                 return d.depth ? d.name : "";
-            }
-            
+            }            
         });
         
         if (insert_two_words) {
@@ -576,7 +621,7 @@ function load_nodes(load_skill_id, main_depth) {
             .attr("x", 0)
             .attr("dy", "1em")
             .text(function(d) {
-                return d.depth ? d.name.split(" ")[1] || "" : "";
+                return d.depth && d.name.length > max_size_text_length ? d.name.split(" ")[1] || "" : "";
             });
         }
       
@@ -644,7 +689,6 @@ function get_gradebook_info(id) {
     });    
     return item;
 }
-
 
 $(document).ready(function() {
 

@@ -75,8 +75,7 @@ $(document).ready(function() {
         skill_id = $(this).attr('rel');
         skill_name = $(this).attr('name');
         add_skill_in_profile_list(skill_id, skill_name);
-    });
-   
+    });   
     
      /* URL link when searching skills */
     $("#skill_holder").on("click", "a.load_wheel", function() {
@@ -246,7 +245,6 @@ $(document).ready(function() {
 });
 </script>
 
-
 <div class="container-fluid">
     <div class="row-fluid">
         
@@ -266,8 +264,7 @@ $(document).ready(function() {
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>
-                        <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
+                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>                        
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">
                     </ul>
@@ -292,7 +289,7 @@ $(document).ready(function() {
                 <img src="">
             </div>
         </div>
-</div>        
+</div>   
 <div id="dialog-course-info" style="display:none;">        
     <div id="course_info">
     </div>    

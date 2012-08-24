@@ -392,7 +392,8 @@ class Skill extends Model {
         $result = Database::store_result($result,'ASSOC');
         return $result;
     }
-
+    
+    /* Get one level childrens */
     function get_children($skill_id, $load_user_data = false) {
         $skill_rel_skill = new SkillRelSkill();
         if ($load_user_data) {
@@ -404,11 +405,10 @@ class Skill extends Model {
         return $skills;
     }
     
+    /* Get all children of the current node (recursive)*/
     function get_all_children($skill_id) {
-        $skill_rel_skill = new SkillRelSkill();
-        
-        $children = $skill_rel_skill->get_children($skill_id);
-       
+        $skill_rel_skill = new SkillRelSkill();        
+        $children = $skill_rel_skill->get_children($skill_id);       
         foreach ($children as $child) {             
             $sub_children = $this->get_all_children($child['skill_id']);            
         }
@@ -420,7 +420,7 @@ class Skill extends Model {
     
 
     /**
-     * All parents from root to n
+     * Gets all parents from from the wanted skill
      */
     function get_parents($skill_id) {
         $skill_rel_skill = new SkillRelSkill();
@@ -444,7 +444,10 @@ class Skill extends Model {
         }
         return $skills;
     }
-
+    
+    /* 
+     * Adds a new skill 
+     */
     public function add($params) {
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
@@ -489,6 +492,26 @@ class Skill extends Model {
         return null;
     }
     
+    public function add_skill_to_user($user_id, $gradebook_id) {
+        $skill_gradebook = new SkillRelGradebook();
+        $skill_rel_user  = new SkillRelUser();
+
+        $skill_gradebooks = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
+        if (!empty($skill_gradebooks)) {
+            foreach ($skill_gradebooks as $skill_gradebook) {
+                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
+                if (!$user_has_skill) {
+                    $params = array(    'user_id'   => $user_id,
+                                        'skill_id'  => $skill_gradebook['skill_id'],
+                                        'acquired_skill_at'  => api_get_utc_datetime(),
+                                   );
+                    $skill_rel_user->save($params);
+                }
+            }
+        }
+    }
+    
+    /* Deletes a skill */
     public function delete($skill_id) {
         /*$params = array('skill_id' => $skill_id);
         
@@ -544,43 +567,6 @@ class Skill extends Model {
         return null;
     }
 
-    /**
-    * Return true if the user has the skill
-    *
-    * @param int $userId User's id
-    * @param int $skillId Skill's id
-    * @param int $checkInParents if true, function will search also in parents of the given skill id
-    *
-    * @return bool
-    */
-    public function user_has_skill($user_id, $skill_id) {
-        $skills = $this->get_user_skills($user_id);
-        foreach($skills as $my_skill_id) {
-            if ($my_skill_id == $skill_id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function add_skill_to_user($user_id, $gradebook_id) {
-        $skill_gradebook = new SkillRelGradebook();
-        $skill_rel_user  = new SkillRelUser();
-
-        $skill_gradebooks = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
-        if (!empty($skill_gradebooks)) {
-            foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
-                if (!$user_has_skill) {
-                    $params = array(    'user_id'   => $user_id,
-                                        'skill_id'  => $skill_gradebook['skill_id'],
-                                        'acquired_skill_at'  => api_get_utc_datetime(),
-                                   );
-                    $skill_rel_user->save($params);
-                }
-            }
-        }
-    }
 
     /**
     * Get user's skills
@@ -610,6 +596,9 @@ class Skill extends Model {
     }    
 
     public function get_skills_tree($user_id = null, $skill_id = null, $return_flat_array = false, $add_root = false) {
+        if ($skill_id == 1 ) {
+            $skill_id = 0;
+        }
         if (isset($user_id) && !empty($user_id)) {
             $skills = $this->get_all(true, $user_id, null, $skill_id);
         } else {
@@ -624,18 +613,20 @@ class Skill extends Model {
         if (!empty($skill_id)) {
             if ($add_root) {
                 if (!empty($skill_id)) {
+                    //Default root node
                     $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
                     $skill_info = $this->get_skill_info($skill_id);
+                    
+                    //2nd node
                     $skills[$skill_id] = $skill_info;
                     //Uncomment code below to hide the searched skill
-                    //$skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['parent_id'];                    
                     $skills[$skill_id]['parent_id'] =  1;
+                    
                 }
             }
         }
-        
-        //var_dump($skills);
-       
+                
         $refs = array();
         $skills_tree = null;
 
@@ -644,37 +635,36 @@ class Skill extends Model {
         $family = array();
         
         if (!empty($skills)) {
-            foreach ($skills as &$skill) {                
+            foreach ($skills as &$skill) {
                 if ($skill['parent_id'] == 0) {
                     $skill['parent_id'] = 'root';
                 }
-/*
-                if (empty($skill_id)) {
-                    if ($skill['parent_id'] == 0) {
-                        $skill['parent_id'] = 'root';
-                    }
-                } else {
-                    if ($skill['id'] == $skill_id) {
-                        $skill['parent_id'] = 'root';                    
-                    }
-                }
-  */              
+                                
+                // because except main keys (id, name, children) others keys are not saved while in the space tree
+                $skill['data'] = array('parent_id' => $skill['parent_id']);
+                  
                 //In order to paint all members of a family with the same color
-                if (empty($skill_id)) {
+                if (empty($skill_id)) {                    
                     if ($skill['parent_id'] == 1) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);        
                     }
-                } else {
+                } else {                    
                     if ($skill['parent_id'] == $skill_id) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);        
                     }
+                    
+                    /*if ($skill_id == $skill['id']) {
+                        $skill['parent_id'] = 1;   
+                    }*/
                 }
                 
-                // because except main keys (id, name, children) others keys are not saved while in the space tree
-                $skill['data'] = array('parent_id' => $skill['parent_id']);
+                
+                if (!isset($skill['data']['real_parent_id'])) {
+                    $skill['data']['real_parent_id'] = $skill['parent_id'];
+                }
                 
                 //User achieved the skill (depends in the gradebook with certification)
-                $skill['data']['achieved'] = false;                
+                $skill['data']['achieved'] = false;             
                 if ($user_id) {
                     $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);                    
                 }
@@ -724,8 +714,7 @@ class Skill extends Model {
                 'children'  => $refs['root']['children'],
                 'data'      => array()
             );            
-        }
-        
+        }                
         if ($return_flat_array) {
             return $flat_array;
         }
@@ -739,7 +728,6 @@ class Skill extends Model {
      */
     public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2) {        
         $tree = $this->get_skills_tree($user_id, $skill_id, $return_flat_array, true);
-        
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
@@ -747,7 +735,8 @@ class Skill extends Model {
                                         'children'  => $this->get_skill_json($element['children'], 1, $main_depth),                                        
                                         );
             }
-        }        
+        }
+        //var_dump($simple_tree[0]['children']);
         return json_encode($simple_tree[0]['children']);
     }
     
@@ -854,5 +843,25 @@ class Skill extends Model {
                  WHERE sg.skill_id = $skill_id";
         $result = Database::query($sql);        
         return Database::store_result($result, 'ASSOC');                 
+    }
+    
+    
+    /**
+    * Return true if the user has the skill
+    *
+    * @param int $userId User's id
+    * @param int $skillId Skill's id
+    * @param int $checkInParents if true, function will search also in parents of the given skill id
+    *
+    * @return bool
+    */
+    public function user_has_skill($user_id, $skill_id) {
+        $skills = $this->get_user_skills($user_id);
+        foreach($skills as $my_skill_id) {
+            if ($my_skill_id == $skill_id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

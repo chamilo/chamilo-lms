@@ -48,7 +48,7 @@
     color: #3757F7;
     cursor: pointer;    
 }
-.ui-widget-content .btn, .ui-widget-content .btn:hover {
+.ui-widget-content .btn-primary, .ui-widget-content .btn-primary:hover {
     color: white;
 }
 

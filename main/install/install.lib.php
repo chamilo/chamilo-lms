@@ -1218,7 +1218,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
-        $r = mkdir($course_dir, $perm);        
+        $r = @mkdir($course_dir, $perm);        
         if ($r === true) { 
             $dir_perm_verified = $perm;
             $course_test_was_created = true;
@@ -1790,9 +1790,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
             } else {
                  //Try to create the database
                 $user_can_create_databases = false;            
-                $multipleDbCheck = @Database::query("CREATE DATABASE test_chamilo_connection");            
+                $multipleDbCheck = @Database::query("CREATE DATABASE ".mysql_real_escape_string($dbNameForm));
                 if ($multipleDbCheck !== false) {
-                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS test_chamilo_connection");                
+                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".mysql_real_escape_string($dbNameForm));                
                     $user_can_create_databases = true;
                 }             
 

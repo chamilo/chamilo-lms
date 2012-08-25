@@ -48,6 +48,10 @@
     color: #3757F7;
     cursor: pointer;    
 }
+.ui-widget-content .btn-primary, .ui-widget-content .btn-primary:hover {
+    color: white;
+}
+
 .ui-widget-content a:hover{
     color: #3757F7;
     cursor: pointer;

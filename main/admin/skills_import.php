@@ -286,7 +286,7 @@ if ($count_fields > 0) {
 
 <pre>
     <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>
-    <b>2</b>;<b>0</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
+    <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
 
 <!--p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>

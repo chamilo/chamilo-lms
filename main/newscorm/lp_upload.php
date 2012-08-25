@@ -131,13 +131,14 @@ if( Request::is_post() && $is_error){
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
 
     require_once 'learnpath.class.php';
-
-    $type = learnpath::get_package_type($s, basename($s));
-    $post_max = ini_get('post_max_size');
-    $upl_max = ini_get('upload_max_filesize');
-    if (filesize($s)>$post_max || filesize($s)>$upl_max ){
-         return api_failure::set_failure('upload_file_too_big');
+    
+    $result = learnpath::verify_document_size($s);
+    if ($result == true) {
+        return api_failure::set_failure('upload_file_too_big');
+         
     }
+    $type = learnpath::get_package_type($s, basename($s));
+    
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
@@ -177,10 +178,6 @@ if( Request::is_post() && $is_error){
             break;
         case '':
         default:
-        
-            if (filesize($s)>$post_max || filesize($s)>$upl_max ){
-                return api_failure::set_failure('upload_file_too_big');
-            }
             return api_failure::set_failure('not_a_learning_path');
     }
 }

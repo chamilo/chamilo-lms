@@ -175,6 +175,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 }
 
+$group = array();
+$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
+$form->addGroup($group, '', array(get_lang("Stylesheets")), '');
+
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
@@ -302,9 +306,6 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
 
-    $group = array();
-    $group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
-    $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 }
 
 if (is_settings_editable()) {

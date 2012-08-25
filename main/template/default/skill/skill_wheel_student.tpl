@@ -16,7 +16,8 @@ function check_skills_sidebar() {
                     if (return_value == 0 ) {
                         alert("{{ 'SkillDoesNotExist'|get_lang }}");                                                
                         //Deleting select option tag
-                        $("#skill_id option[value="+skill_id+"]").remove();                    
+                        //$("#skill_id option[value="+skill_id+"]").remove();                    
+                        $("#skill_id").empty();
                        
                         //Deleting holder
                         $("#skill_search .holder li").each(function () {
@@ -38,8 +39,7 @@ function check_skills_sidebar() {
                             skill_info = get_skill_info(skill_id);                        
                             li = fill_skill_search_li(skill_id, skill_info.name);
                             $("#skill_holder").append(li); 
-                        }                        
-
+                        }
                     }
                 },            
             });                
@@ -51,22 +51,31 @@ function fill_skill_search_li(skill_id, skill_name, checked) {
     checked_condition = '';
     if (checked == 1) {
         checked_condition = 'checked=checked';
-    }
-    
-    return '<li><a href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
+    }    
+    return '<li><a id="skill_to_select_id_'+skill_id+'" href="#" class="load_wheel" rel="'+skill_id+'">'+skill_name+'</a></li>';
 }
-
 
 function load_skill_info(skill_id) {
     $.ajax({
         url: url+'&a=get_skill_course_info&id='+skill_id,
         async: false,        
-        success: function(data) {
+        success: function(data) {            
             $('#skill_info').html(data);
             return data;
         }
     });
 }
+
+function load_my_skills() {
+    $.ajax({
+        url: url+'&a=get_user_skills&user_id='+{{ _u.user_id}},
+        //async: false,        
+        success: function(data) {            
+            $('#my_skills').html(data);                
+        }
+    });        
+}
+
 
 $(document).ready(function() {
     /* Skill search */ 
@@ -76,7 +85,7 @@ $(document).ready(function() {
         skill_id = $(this).attr('rel');
         skill_name = $(this).attr('name');
         add_skill_in_profile_list(skill_id, skill_name);
-    });
+    });   
     
      /* URL link when searching skills */
     $("#skill_holder").on("click", "a.load_wheel", function() {
@@ -93,10 +102,23 @@ $(document).ready(function() {
         load_nodes(skill_id, main_depth);
     });
     
-    /*$("#skill_search").on("click", "a#clear_selection", function() {
-        
-    });*/
-    
+    /* When clicking in a course title */
+    $("#skill_info").on("click", "a.course_description_popup", function() {
+        course_code = $(this).attr('rel');        
+        $.ajax({
+            url: url+'&a=get_course_info_popup&code='+course_code,
+            async: false,        
+            success: function(data) {                
+                $('#course_info').html(data);
+                $("#dialog-course-info").dialog({
+                     close: function() {     
+                        $('#course_info').html('');                
+                    }
+                });
+                $("#dialog-course-info").dialog("open");
+            }
+        });
+    });
         
     
     /* Wheel skill popup form */
@@ -155,18 +177,18 @@ $(document).ready(function() {
         height  : 550
     });
     
-    //Save search profile dialog
-    $("#dialog-form-profile").dialog({
+    //Open dialog
+    $("#dialog-course-info").dialog({
         autoOpen: false,
         modal   : true, 
-        width   : 500, 
-        height  : 400
-    });
-    
+        width   : 550, 
+        height  : 250
+    });    
         
     load_nodes(0, main_depth);
     
-    
+    load_my_skills();
+
     function open_popup(skill_id, parent_id) {
         //Cleaning selected        
         $("#gradebook_id").find('option').remove();        
@@ -230,80 +252,52 @@ $(document).ready(function() {
             });
             
             $("#dialog-form").dialog("open");            
-        }  
-        
-        if (parent) {
-            $("#id").attr('value','');
-            $("#name").attr('value', '');
-            $("#short_code").attr('value', '');
-            $("#description").attr('value', '');
-            
-            //Filling parent_id                        
-            $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
-            
-            $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
-            
-            //Filling the gradebook_id
-            jQuery.each(parent.gradebooks, function(index, data) {                    
-                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-            });            
-            
-            $("#dialog-form").dialog({
-                buttons: {
-                     "{{ "Save"|get_lang }}" : function() {
-                         var params = $("#add_item").find(':input').serialize();
-                         add_skill(params);                     
-                      }
-           
-                },
-                close: function() {     
-                    $("#name").attr('value', '');
-                    $("#description").attr('value', '');
- 	                   load_nodes(0, main_depth);              
-                }
-            });
-            $("#dialog-form").dialog("open");        
-        }
+        }       
     }
 });
 </script>
-
 
 <div class="container-fluid">
     <div class="row-fluid">
         
         <div class="span3">
-            <div class="well">
-                <h3>{{ 'MySkills'|get_lang }}</h3>
-                <hr>
+            <div class="well sidebar-nav-skill-wheel ">
                 
-                <div id="my_skills">                    
+                <div class="page-header">
+                    <h3>{{ 'MySkills'|get_lang }}</h3>                
                 </div>
                 
-                <h3>{{ 'GetNewSkills'|get_lang }}</h3>
-                <hr>
+                <div id="my_skills">
+                </div>
+                
+                
+                <div class="page-header">
+                    <h3>{{ 'GetNewSkills'|get_lang }}</h3>
+                </div>
                 
                 <form id="skill_search" class="form-search">
                     <select id="skill_id" name="skill_id" />
                     </select>
                     <br /><br />
                     <div class="btn-group">
-                        <a class="btn load_root" rel="1" href="#">{{ "Root"|get_lang }}</a>
-                        <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
+                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>                        
                     </div>
                     <ul id="skill_holder" class="holder holder_simple">
                     </ul>
                 </form>
                 
-                
-                <h3>{{ 'SkillInfo'|get_lang }}</h3>
-                <hr>
-                
+                <div class="page-header">
+                    <h3>{{ 'SkillInfo'|get_lang }}</h3>
+                </div>                
                 <div id="skill_info">
                 </div>
                 
-                
+                <div class="page-header">
+                <h3>{{ "Legend"|get_lang }}</h3>
+                </div>
+                <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
+                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
+                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />
             </div>                
         </div>
             
@@ -312,4 +306,8 @@ $(document).ready(function() {
                 <img src="">
             </div>
         </div>
+</div>   
+<div id="dialog-course-info" style="display:none;">        
+    <div id="course_info">
+    </div>    
 </div>

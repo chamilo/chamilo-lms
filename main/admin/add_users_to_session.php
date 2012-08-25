@@ -31,14 +31,9 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session
 
 // Database Table Definitions
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_class				= Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user						= Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToSession');

@@ -184,7 +184,6 @@ if (isset($_POST['unsubscribe'])) {
             //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
 	}
 }
-
 switch ($action) {
     case 'createcoursecategory':
         $courses_controller->categories_list($action);

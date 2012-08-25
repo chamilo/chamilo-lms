@@ -290,7 +290,7 @@ class IndexManager {
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content = '<ul class="nav nav-list">';      
             
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php&load_user='.$this->user_id));
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
             
             if (api_get_setting('allow_hr_skills_management') == 'true' || api_is_platform_admin()) {
                 $content .= Display::tag('li', Display::url(get_lang('ManageSkills'), api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'));
@@ -649,7 +649,7 @@ class IndexManager {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
         // 'placeholder'=>get_lang('UserName')
         //'autocomplete'=>"off",        
-		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2', 'autofocus' => 'autofocus', 'autocapitalize'=> 'off'));
+		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));		
 		$html = $form->return_form();

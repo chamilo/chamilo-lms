@@ -2411,7 +2411,7 @@ class learnpathItem {
 				 			" lesson_location = '".$this->lesson_location."' " .
 				 			"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
 				 			"AND lp_view_id = ".$this->view_id." " .
-				 			"AND view_count = ".$this->attempt_id;
+				 			"AND view_count = ".$this->get_attempt_id();
 		 		} else {
 		 			// For all other content types...
 		 			if ($this->type == 'quiz') {
@@ -2440,10 +2440,8 @@ class learnpathItem {
                           $total_time =" total_time = total_time +".$this->get_total_time().", ";
                           $my_status = " status = '".$this->get_status(false)."' ,";
                         } elseif ($this->get_prevent_reinit()==1) {
-                              // process of status verified into data base
-
                               // Process of status verified into data base.
-                              $sql_verified = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+                              $sql_verified = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ;';
                               $rs_verified = Database::query($sql_verified);
                               $row_verified = Database::fetch_array($rs_verified);
 
@@ -2487,7 +2485,7 @@ class learnpathItem {
                             // This code line fixes the problem of wrong status.
                             if ($my_type_lp == 2) {
                                 // Verify current status in multiples attempts.
-                                $sql_status = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ';
+                                $sql_status = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ';
                                 $rs_status = Database::query($sql_status);
                                 $current_status = Database::result($rs_status, 0, 'status');
                                 if (in_array($current_status, $case_completed)) {
@@ -2511,8 +2509,8 @@ class learnpathItem {
                                 " lesson_location = '".$this->lesson_location."' " .
                                 "WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
                                 "AND lp_view_id = ".$this->view_id." " .
-                                "AND view_count = ".$this->attempt_id;
-                    } else {
+                                "AND view_count = ".$this->get_attempt_id();
+                    } else {                       
                         $sql = "UPDATE $item_view_table " .
                                 "SET " .$total_time.
                                 " start_time = ".$this->get_current_start_time().", " .
@@ -2524,7 +2522,7 @@ class learnpathItem {
                                 " lesson_location = '".$this->lesson_location."' " .
                                 "WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
                                 "AND lp_view_id = ".$this->view_id." " .
-                                "AND view_count = ".$this->attempt_id;
+                                "AND view_count = ".$this->get_attempt_id();
                     }
                     $this->current_start_time = time();
                 }
@@ -2538,7 +2536,7 @@ class learnpathItem {
 		 		$sql = "SELECT id FROM $tbl " .
 		 				"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
 		 				"AND   lp_view_id = ".$this->view_id." " .
-		 				"AND   view_count = ".$this->attempt_id;
+		 				"AND   view_count = ".$this->get_attempt_id();
 		 		$res = Database::query($sql);
 		 		if (Database::num_rows($res) > 0) {
 		 			$row = Database::fetch_array($res);

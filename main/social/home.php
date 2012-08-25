@@ -82,11 +82,10 @@ $social_right_content .= '
     if (api_get_setting('allow_skills_tool') == 'true') {
         $social_right_content .= '<div class="well_border">';
         $skill = new Skill();
-        $skill_ranking =  $skill->get_user_skill_ranking(api_get_user_id());
+        $ranking =  $skill->get_user_skill_ranking(api_get_user_id());
         $url = api_get_path(WEB_CODE_PATH).'social/skills_ranking.php'; 
-        $social_right_content .= Display::url(sprintf(get_lang('YourSkillRanking'), $ranking), $url);
+        $ranking_url = Display::url(sprintf(get_lang('YourSkillRankingX'), $ranking), $url, array('class' => 'btn'));
         
-        $skill = new Skill();
         $skills =  $skill->get_user_skills(api_get_user_id(), true);            
 
         $social_right_content .= '<h3>'.get_lang('Skills').'</h3>';
@@ -97,9 +96,10 @@ $social_right_content .= '
             }                
             $social_right_content .= Display::tag('ul', $lis);
         }
-        $url = api_get_path(WEB_CODE_PATH).'social/skills_wheel.php';            
-        $social_right_content .= Display::url(get_lang('ViewSkillsWheel'), $url);
-            $social_right_content .= '</div>';
+        $url = api_get_path(WEB_CODE_PATH).'social/skills_wheel.php';        
+        $skill_wheel_url = Display::url(get_lang('ViewSkillsWheel'), $url, array('class' => 'btn'));
+        $social_right_content .= '<div class="btn-group">'.$skill_wheel_url.$ranking_url.'</div>';
+        $social_right_content .= '</div>';
     }
     
     $social_right_content .= '</div>';

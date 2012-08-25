@@ -280,7 +280,7 @@ class Skill extends Model {
     var $required = array('name');
     
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
-    var $colours = array(
+    /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
       1 => array('#d5dda1', '#4a5072', '#8dae43', '#72659d'),
       2 => array('#b28647', '#2e6093', '#393e64', '#1e8323'),
@@ -292,7 +292,7 @@ class Skill extends Model {
       8 => array('#2e6093', '#2e6093', '#2e6093', '#2e6093'),
       9 => array('#3a5988', '#3a5988', '#3a5988', '#3a5988'),
      10 => array('#393e64', '#393e64', '#393e64', '#393e64'),
-    );
+    );*/
 
     public function __construct() {
         $this->table                      = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -326,8 +326,7 @@ class Skill extends Model {
     }
 
     function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null) {
-        $id_condition = '';
-        
+        $id_condition = '';        
         if (isset($id) && !empty($id)) {
             $id = intval($id);
             $id_condition = " WHERE s.id = $id";
@@ -341,11 +340,11 @@ class Skill extends Model {
                 $id_condition = " AND ss.parent_id = $parent_id";
             }
         }
-
+        
         $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type 
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
-        
+                        
         $result = Database::query($sql);
         $skills = array();
 
@@ -358,22 +357,23 @@ class Skill extends Model {
                 $skills[$row['id']] = $row;
             }
         }
-
+        
+        /*
         if ($load_user_data && $user_id) {
-            $passed_skills = $this->get_user_skills($user_id);
+            $passed_skills = $this->get_user_skills($user_id);            
             foreach ($skills as &$skill) {
                 $skill['done_by_user'] = 0;
                 if (in_array($skill['id'], $passed_skills)) {
                     $skill['done_by_user'] = 1;
-
                 }
             }
-        }
-         
+        }*/
+  
+            
         //Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {           
             foreach ($skills as $skill) {
-                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);                
+                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);               
                  if (!empty($children)) {
                     //$skills = array_merge($skills, $children);
                     $skills = $skills + $children;
@@ -392,7 +392,8 @@ class Skill extends Model {
         $result = Database::store_result($result,'ASSOC');
         return $result;
     }
-
+    
+    /* Get one level childrens */
     function get_children($skill_id, $load_user_data = false) {
         $skill_rel_skill = new SkillRelSkill();
         if ($load_user_data) {
@@ -404,11 +405,10 @@ class Skill extends Model {
         return $skills;
     }
     
+    /* Get all children of the current node (recursive)*/
     function get_all_children($skill_id) {
-        $skill_rel_skill = new SkillRelSkill();
-        
-        $children = $skill_rel_skill->get_children($skill_id);
-       
+        $skill_rel_skill = new SkillRelSkill();        
+        $children = $skill_rel_skill->get_children($skill_id);       
         foreach ($children as $child) {             
             $sub_children = $this->get_all_children($child['skill_id']);            
         }
@@ -420,7 +420,7 @@ class Skill extends Model {
     
 
     /**
-     * All parents from root to n
+     * Gets all parents from from the wanted skill
      */
     function get_parents($skill_id) {
         $skill_rel_skill = new SkillRelSkill();
@@ -444,7 +444,10 @@ class Skill extends Model {
         }
         return $skills;
     }
-
+    
+    /* 
+     * Adds a new skill 
+     */
     public function add($params) {
         if (!isset($params['parent_id'])) {
             $params['parent_id'] = 1;
@@ -489,6 +492,26 @@ class Skill extends Model {
         return null;
     }
     
+    public function add_skill_to_user($user_id, $gradebook_id) {
+        $skill_gradebook = new SkillRelGradebook();
+        $skill_rel_user  = new SkillRelUser();
+
+        $skill_gradebooks = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
+        if (!empty($skill_gradebooks)) {
+            foreach ($skill_gradebooks as $skill_gradebook) {
+                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
+                if (!$user_has_skill) {
+                    $params = array(    'user_id'   => $user_id,
+                                        'skill_id'  => $skill_gradebook['skill_id'],
+                                        'acquired_skill_at'  => api_get_utc_datetime(),
+                                   );
+                    $skill_rel_user->save($params);
+                }
+            }
+        }
+    }
+    
+    /* Deletes a skill */
     public function delete($skill_id) {
         /*$params = array('skill_id' => $skill_id);
         
@@ -544,43 +567,6 @@ class Skill extends Model {
         return null;
     }
 
-    /**
-    * Return true if the user has the skill
-    *
-    * @param int $userId User's id
-    * @param int $skillId Skill's id
-    * @param int $checkInParents if true, function will search also in parents of the given skill id
-    *
-    * @return bool
-    */
-    public function user_has_skill($user_id, $skill_id) {
-        $skills = $this->get_user_skills($user_id);
-        foreach($skills as $my_skill_id) {
-            if ($my_skill_id == $skill_id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function add_skill_to_user($user_id, $gradebook_id) {
-        $skill_gradebook = new SkillRelGradebook();
-        $skill_rel_user  = new SkillRelUser();
-
-        $skill_gradebooks = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
-        if (!empty($skill_gradebooks)) {
-            foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
-                if (!$user_has_skill) {
-                    $params = array(    'user_id'   => $user_id,
-                                        'skill_id'  => $skill_gradebook['skill_id'],
-                                        'acquired_skill_at'  => api_get_utc_datetime(),
-                                   );
-                    $skill_rel_user->save($params);
-                }
-            }
-        }
-    }
 
     /**
     * Get user's skills
@@ -610,12 +596,15 @@ class Skill extends Model {
     }    
 
     public function get_skills_tree($user_id = null, $skill_id = null, $return_flat_array = false, $add_root = false) {
+        if ($skill_id == 1 ) {
+            $skill_id = 0;
+        }
         if (isset($user_id) && !empty($user_id)) {
             $skills = $this->get_all(true, $user_id, null, $skill_id);
         } else {
             $skills = $this->get_all(false, false, null, $skill_id);
         }
-        
+   
         $original_skill = $skills;
 
         //var_dump($skills);
@@ -624,16 +613,20 @@ class Skill extends Model {
         if (!empty($skill_id)) {
             if ($add_root) {
                 if (!empty($skill_id)) {
+                    //Default root node
                     $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
                     $skill_info = $this->get_skill_info($skill_id);
+                    
+                    //2nd node
                     $skills[$skill_id] = $skill_info;
-                    $skills[$skill_id]['parent_id'] =  $skill_info['extra']['parent_id'];
+                    //Uncomment code below to hide the searched skill
+                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['parent_id'];                    
+                    $skills[$skill_id]['parent_id'] =  1;
+                    
                 }
             }
         }
-        
-        //var_dump($skills);
-       
+                
         $refs = array();
         $skills_tree = null;
 
@@ -643,33 +636,35 @@ class Skill extends Model {
         
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
-                
-                if (empty($skill_id)) {
-                    if ($skill['parent_id'] == 0) {
-                        $skill['parent_id'] = 'root';
-                    }
-                } else {
-                    if ($skill['id'] == $skill_id) {
-                        $skill['parent_id'] = 'root';                    
-                    }
+                if ($skill['parent_id'] == 0) {
+                    $skill['parent_id'] = 'root';
                 }
-                
+                                
+                // because except main keys (id, name, children) others keys are not saved while in the space tree
+                $skill['data'] = array('parent_id' => $skill['parent_id']);
+                  
                 //In order to paint all members of a family with the same color
-                if (empty($skill_id)) {
+                if (empty($skill_id)) {                    
                     if ($skill['parent_id'] == 1) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);        
                     }
-                } else {
+                } else {                    
                     if ($skill['parent_id'] == $skill_id) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);        
                     }
+                    
+                    /*if ($skill_id == $skill['id']) {
+                        $skill['parent_id'] = 1;   
+                    }*/
                 }
                 
-                // because except main keys (id, name, children) others keys are not saved while in the space tree
-                $skill['data'] = array('parent_id' => $skill['parent_id']);
+                
+                if (!isset($skill['data']['real_parent_id'])) {
+                    $skill['data']['real_parent_id'] = $skill['parent_id'];
+                }
                 
                 //User achieved the skill (depends in the gradebook with certification)
-                $skill['data']['achieved'] = false;                
+                $skill['data']['achieved'] = false;             
                 if ($user_id) {
                     $skill['data']['achieved'] = $this->user_has_skill($user_id, $skill['id']);                    
                 }
@@ -678,13 +673,12 @@ class Skill extends Model {
                 $skill['data']['skill_has_gradebook'] = false;                
                 if (isset($skill['gradebooks']) && !empty($skill['gradebooks'])) {
                     $skill['data']['skill_has_gradebook'] = true;
-                }                
-
-                
+                }
                 $refs[$skill['id']] = &$skill;
                 $flat_array[$skill['id']] =  &$skill;
             }
-//            var_dump($skills);
+            //var_dump($skills);
+            //var_dump($refs);
             
             //Checking family value
             
@@ -705,25 +699,22 @@ class Skill extends Model {
                 $skills[$skill_id]['data']['family_id'] = 1;
                 $refs['root']['children'][0]['children'][0] = $skills[$skill_id];
                 $flat_array[$skill_id] =  $skills[$skill_id];                
-            } else {            
-
-                
+            } else {
                 // Moving node to the children index of their parents
                 foreach ($skills as $my_skill_id => &$skill) {                
                     $skill['data']['family_id'] = $new_family_array[$skill['id']];
                     $refs[$skill['parent_id']]['children'][] = &$skill;
                     $flat_array[$my_skill_id] =  $skill;
-                }
-                
+                }                
             }
+            
             $skills_tree = array(
                 'name'      => get_lang('SkillRootName'),
                 'id'        => 'root',
                 'children'  => $refs['root']['children'],
                 'data'      => array()
             );            
-        }
-        
+        }                
         if ($return_flat_array) {
             return $flat_array;
         }
@@ -737,7 +728,6 @@ class Skill extends Model {
      */
     public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2) {        
         $tree = $this->get_skills_tree($user_id, $skill_id, $return_flat_array, true);
-        
         $simple_tree = array();
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
@@ -745,7 +735,8 @@ class Skill extends Model {
                                         'children'  => $this->get_skill_json($element['children'], 1, $main_depth),                                        
                                         );
             }
-        }        
+        }
+        //var_dump($simple_tree[0]['children']);
         return json_encode($simple_tree[0]['children']);
     }
     
@@ -764,7 +755,7 @@ class Skill extends Model {
                 if (is_array($elem['children'])) {
                     $tmp['children'] = $this->get_skill_json($elem['children'], $depth+1, $max_depth);                                        
                 } else {
-                    $tmp['colour'] = $this->colours[$depth][rand(0,3)];
+                    //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
                 if ($depth > $max_depth) {
                     continue;
@@ -801,28 +792,33 @@ class Skill extends Model {
     function get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition) {
         $start = intval($start);
         $limit = intval($limit);
-        
-        $sql = "SELECT u.user_id, firstname, lastname, count(username) skills_acquired
-                    FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)
-                    INNER JOIN {$this->table_user} u ON u.user_id = su.user_id
-                    WHERE 1=1 $where_condition
-                    GROUP BY username
-                    ORDER BY $sidx $sord 
-                    LIMIT  $start , $limit ";
-                    
+        /*  ORDER BY $sidx $sord */
+        $sql = "SELECT *, @rownum:=@rownum+1 rank FROM (
+                        SELECT u.user_id, firstname, lastname, count(username) skills_acquired 
+                        FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)
+                        INNER JOIN {$this->table_user} u ON u.user_id = su.user_id, (SELECT @rownum:=0) r
+                        WHERE 1=1 $where_condition
+                        GROUP BY username
+                        ORDER BY skills_acquired desc                   
+                        LIMIT $start , $limit)  AS T1, (SELECT @rownum:=0) r";        
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {
             return Database::store_result($result, 'ASSOC');
         }
-        return array();
-
+        return array();       
     }
     
     function get_user_list_skill_ranking_count() {
-        $sql = "SELECT count(skill_id) count FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)";
+        $sql = "SELECT count(*) FROM (
+                        SELECT count(distinct 1)
+                        FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id) 
+                        INNER JOIN {$this->table_user} u ON u.user_id = su.user_id
+                        GROUP BY username
+                     ) as T1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_row($result);
+        
             return $result[0];
         }
         return 0;
@@ -831,9 +827,10 @@ class Skill extends Model {
     function get_count_skills_by_course($course_code) {
         $sql = "SELECT count(skill_id) as count FROM {$this->table_gradebook} g INNER JOIN {$this->table_skill_rel_gradebook} sg ON g.id = sg.gradebook_id
                 WHERE course_code = '$course_code'";
+        
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $result = Database::fetch_row($result);
+            $result = Database::fetch_row($result);            
             return $result[0];
         }
         return 0;
@@ -845,7 +842,26 @@ class Skill extends Model {
                  INNER JOIN {$this->table_course} c ON c.code = g.course_code
                  WHERE sg.skill_id = $skill_id";
         $result = Database::query($sql);        
-        return Database::store_result($result, 'ASSOC');        
-                 
+        return Database::store_result($result, 'ASSOC');                 
+    }
+    
+    
+    /**
+    * Return true if the user has the skill
+    *
+    * @param int $userId User's id
+    * @param int $skillId Skill's id
+    * @param int $checkInParents if true, function will search also in parents of the given skill id
+    *
+    * @return bool
+    */
+    public function user_has_skill($user_id, $skill_id) {
+        $skills = $this->get_user_skills($user_id);
+        foreach($skills as $my_skill_id) {
+            if ($my_skill_id == $skill_id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -3579,7 +3579,7 @@ class CourseManager {
      *
      */
 
-    public function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
+    public static function add_course_vote($user_id, $vote, $course_id, $session_id = null, $url_id = null) {
         $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
         $course_id  = empty($course_id) ? api_get_course_int_id() : intval($course_id);
 
@@ -3705,38 +3705,43 @@ class CourseManager {
         $result = Database::query($sql);
         $courses = array();
         if (Database::num_rows($result)) {
-            $courses = Database::store_result($result, 'ASSOC');
-            $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-            
-            foreach ($courses as &$my_course) {
-                $course_info = api_get_course_info($my_course['course_code']);
-                $my_course['extra_info'] = $course_info;
-                $my_course['extra_info']['go_to_course_button'] = '';
-                $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);
-                
-                //Course visibility 
-                if (0 === strcmp($access_link,'register')) {
-                    $stok = Security::get_token();
-                    $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
-                } elseif (0 === strcmp($access_link,'enter')) {
-                    $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
-                }
-                
-                //Description
-                $my_course['extra_info']['description_button'] = '';
-                if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
-                    $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'], array('class' => 'ajax btn'));                        
-                }
-                
-                $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
-                $point_info = self::get_course_ranking($course_info['real_id'], 0);
-                $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&amp;course_id='.$course_info['real_id'], $point_info);
+            $courses = Database::store_result($result, 'ASSOC');            
+            $courses = self::process_hot_course_item($courses, $my_course_code_list);            
+        }
+        return $courses;
+    }
+    
+    public static function process_hot_course_item($courses, $my_course_code_list = array()) {
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+        
+        foreach ($courses as &$my_course) {
+            $course_info = api_get_course_info($my_course['course_code']);            
+            $my_course['extra_info'] = $course_info;
+            $my_course['extra_info']['go_to_course_button'] = '';
+            $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);
+
+            //Course visibility 
+            if (0 === strcmp($access_link,'register')) {
+                $stok = Security::get_token();
+                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
+            } elseif (0 === strcmp($access_link,'enter')) {
+                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
             }
+
+            //Description
+            $my_course['extra_info']['description_button'] = '';
+            if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
+                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'], array('class' => 'ajax btn'));                        
+            }
+
+            $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
+            $point_info = self::get_course_ranking($course_info['real_id'], 0);
+            $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_'.$course_info['real_id'], $ajax_url.'&amp;course_id='.$course_info['real_id'], $point_info);
         }
         return $courses;
     }
 
-    public function return_most_accessed_courses($limit = 5) {
+    public static function return_most_accessed_courses($limit = 5) {
         $table_course_ranking    = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
         $params['url_id']        = api_get_current_access_url_id();
 

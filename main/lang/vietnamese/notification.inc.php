@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "Thêm mới";
-$lang_title_notification = "Từ lần ghé thăm trước";
+$TitleNotification = "Từ lần ghé thăm trước";
 $lang_update_agenda = "Cập nhập lịch";
 $lang_new_agenda = "Thêm lịch làm việc";
 $lang_update_announcements = "Cập nhật thông báo";

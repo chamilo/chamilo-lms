@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Recursos engadido. Vostede agora pode volver ó itinerario ou engadir máis recursos.";
-$LearningPath = "Itinerario de aprendizaxe";
+$LearningPath = "Leccións";
 $LevelUp = "nivel superior";
 $AddIt = "Engadir";
 $MainCategory = "categoría principal";

@@ -10,4 +10,5 @@ $langCouldNotSendPage = "Το αρχείο δεν είναι σε μορφή HTM
 $langSendPage = "Όνομα αρχείου της σελίδας";
 $langPageTitleModified = "Ο τίτλος της σελίδας άλλαξε";
 $langPageAdded = "Η σελίδα προστέθηκε";
+$Choose = "Επιλέξτε";
 ?>

@@ -2,23 +2,20 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$lang_height = "Alto";
-$lang_resizing_comment = "Redimensionar temporalmente la presentación al siguiente tamaño (en pixeles)";
-$lang_width = "Ancho";
-$lang_resizing = "Presentación redimensionada";
-$lang_no_resizing_comment = "Mostrar todas las imágenes de la presentación en su tamaño original. Las barras de desplazamiento aparecerán automáticamente si la imagen es mayor que el tamaño de su monitor.";
-$lang_show_thumbnails = "Mostrar miniaturas";
-$lang_click_thumbnails = "Clic en una de las miniaturas";
-$lang_set_slideshow_options = "Opciones de la presentación";
-$lang_slideshow_options = "Opciones de la presentación";
-$lang_no_resizing = "Presentación en su tamaño original";
-$lang_exit_slideshow = "Salir de la presentación";
+$Height = "Alto";
+$ResizingComment = "Redimensionar temporalmente la presentación al siguiente tamaño (en pixeles)";
+$Width = "Ancho";
+$Resizing = "Presentación redimensionada";
+$NoResizingComment = "Mostrar todas las imágenes de la presentación en su tamaño original. Las barras de desplazamiento aparecerán automáticamente si la imagen es mayor que el tamaño de su monitor.";
+$ShowThumbnails = "Mostrar miniaturas";
+$SetSlideshowOptions = "Opciones de la presentación";
+$SlideshowOptions = "Opciones de la presentación";
+$NoResizing = "Presentación en su tamaño original";
+$ExitSlideshow = "Salir de la presentación";
 $SlideShow = "Presentación";
-$lang_previous_slide = "Diapositiva anterior";
-$lang_next_slide = "Diapositiva siguiente";
-$lang_image = "Imagen";
-$lang_of = "de";
-$lang_view_slideshow = "Ver presentación";
+$PreviousSlide = "Diapositiva anterior";
+$NextSlide = "Diapositiva siguiente";
+$ViewSlideshow = "Ver presentación";
 $FirstSlide = "Primera diapositiva";
 $LastSlide = "Última diapositiva";
 $ResizingAuto = "Presentación redimensionada automáticamente";

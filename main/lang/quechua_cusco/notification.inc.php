@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "musuq ruway yapakusqa";
-$lang_title_notification = "Qepa watukusqaykimanta";
+$TitleNotification = "Qepa watukusqaykimanta";
 $lang_update_agenda = "ruway ima ruwaynamanta kunanyachikun";
 $lang_new_agenda = "musuq ruway yapakun ima ruwanaman";
 $lang_update_announcements = "willay kunanyachisqa";

@@ -2,7 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$lang_already_enrolled = "Ήδη εγγεγραμμένος";
+$AlreadyRegisteredToCourse = "Έχει ήδη εγγραφεί στη σειρά μαθημάτων";
+$lang_already_enrolled = "Έχει ήδη εγγραφεί";
 $lang_my_personnal_course_list = "Η προσωπική μου λίστα μαθημάτων";
 $lang_course_enrollment = "Μαθήματα χρήστη";
 $lang_course_not_available = "Αυτό το μάθημα δεν είναι διαθέσιμο ή δεν υπάρχει";
@@ -15,7 +16,7 @@ $lang_search = "Αναζήτηση";
 $lang_select_course_among_categories = "Επέλεξε μάθημα από τις κατηγορίες";
 $lang_select_course_in = "Επέλεξε μάθημα από";
 $lang_select_course_in_search_results = "Επέλεξε μάθημα από τα αποτελέσματα της αναζήτησης";
-$lang_unsubscribe = "Διαγραφείτε";
+$Unsubscribe = "Διαγραφείτε";
 $lang_back_to_my_home_page = "Πίσω στην αρχική μου σελίδα";
 $lang_back_to_my_personnal_course_list = "Επιστροφή στην προσωπική μου λίστα μαθημάτων";
 $langTitular = "Επικεφαλής";
@@ -28,7 +29,11 @@ $langCatList = "Κατηγορίες";
 $langCourseList = "Λίστα μαθημάτων";
 $Subscribe = "Εγγραφή";
 $AlreadySubscribed = "Ήδη εγγεγραμμένος";
+$CodeMandatory = "Είναι υποχρεωτικός ο κωδικός";
+$CourseCategoryMandatory = "Είναι υποχρεωτική η κατηγορία της σειράς μαθημάτων";
+$TeacherMandatory = "Υποχρεωτικός ο δάσκαλος";
 $CourseCategoryStored = "Η κατηγορία του μαθήματος δημιουργήθηκε";
+$langWithoutTimeLimits = "Χωρίς χρονικά όρια";
 $lang_back_to_main_category_list = "Επιστροφή στη λίστα βασικών κατηγοριών";
 $langAdded = "Προστέθηκε";
 $langDeleted = "Διαγράφηκε";
@@ -62,7 +67,20 @@ $CourseSortingDone = "Έγινε ταξινόμηση μαθημάτων";
 $ExistingCourseCategories = "Υπάρχουσες Κατηγορίες Μαθημάτων";
 $YouAreNowUnsubscribed = "Διαγραφήκατε από το μάθημα";
 $ViewOpenCourses = "Προβολή ελεύθερων μαθημάτων";
+$ErrorContactPlatformAdmin = "Συνέβη ένα άγνωστο σφάλμα. Παρακαλώ επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $CourseRegistrationCodeIncorrect = "Ο κωδικός του μαθήματος είναι λανθασμένος";
 $CourseRequiresPassword = "Απαιτείται κωδικός για το μάθημα";
+$SubmitRegistrationCode = "Υποβολή του κωδικού εγγραφής";
 $CourseCategoryDeleted = "Η κατηγορία έχει διαγραφεί";
+$CategorySortingDone = "Έγινε η κατάταξη των κατηγοριών";
+$CourseCategoryEditStored = "Η κατηγορία ενημερώθηκε";
+$buttonCreateCourseCategory = "Αποθήκευση αυτής της κατηγορίας σειράς μαθημάτων";
+$buttonSaveCategory = "Αποθήκευση της κατηγορίας";
+$buttonChangeCategory = "Αλλαγή κατηγορίας";
+$SessionName = "Όνομα συνεδρίας";
+$SessionCategory = "Κατηγορίες συνεδριών";
+$Expand = "Επέκταση";
+$CourseDetails = "Περιγραφή σειράς μαθημάτων";
+$Compose = "Σύνθεση";
+$ThereAreNoCoursesInThisCategory = "Δεν υπάρχει σειρά μαθημάτων σε αυτή την κατηγορία";
 ?>

@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "&#1605;&#1608;&#1585;&#158";
-$lang_title_notification = "از\nزمان آخرین\nبازدید شما";
+$TitleNotification = "از\nزمان آخرین\nبازدید شما";
 $lang_update_agenda = "موارد جدید به روز گردید";
 $lang_new_agenda = "مورد\nجدید در تقویم\nافزوده شد";
 $lang_update_announcements = "اطلاعیه\nهای موجود به\nروز گردید";

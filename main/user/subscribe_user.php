@@ -95,7 +95,7 @@ if (isset ($_REQUEST['register'])) {
 		for ($j=0; $j<$counter;$j++) {
 			if 	($user_id_temp[$j]==$_GET['user_id']) {
 				if ($result_simple_sub)	{
-					Display::display_confirmation_message($_SESSION['session_user_name'][$j].' '.get_lang('langAddedToCourse'));
+					Display::display_confirmation_message($_SESSION['session_user_name'][$j].' '.get_lang('AddedToCourse'));
 				} else {
 					Display::display_error_message($_SESSION['session_user_name'][$j].' '.get_lang('NotAddedToCourse'));
 
@@ -156,7 +156,7 @@ if (isset ($_POST['action'])) {
 
 			if (!empty($list_register_user)) {
 				if ($is_suscribe_counter==1) {
-					$register_user_message=$temp_unique_user.' '.get_lang('langAddedToCourse');
+					$register_user_message=$temp_unique_user.' '.get_lang('AddedToCourse');
 					Display::display_confirmation_message($register_user_message,false);
 				} else {
 					$register_user_message='<br />'.get_lang('UsersRegistered').'<br/><br />'.$list_register_user;

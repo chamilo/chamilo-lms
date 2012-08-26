@@ -154,7 +154,7 @@ echo '</div>';
         }
 		?> >
         <br />
-        <?php echo get_lang('_height');?>:
+        <?php echo get_lang('Height');?>:
         &nbsp;&nbsp;&nbsp;&nbsp;<input name="height" type="text" id="height" <?php
 		if ($image_resizing == 'resizing') {
 			echo ' value="'.$height.'"';

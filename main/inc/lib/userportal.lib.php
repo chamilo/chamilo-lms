@@ -581,8 +581,6 @@ class IndexManager {
 	            } //end else
 	        } // end foreach
 	        $courses_list_string .= "</ul>";
-        } else {
-        //$result .=  '<blockquote>', get_lang('_No_course_publicly_available'), "</blockquote>\n";
         }
         if ($courses_shown > 0) {
             // Only display the list of courses and categories if there was more than

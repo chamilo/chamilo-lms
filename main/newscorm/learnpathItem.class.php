@@ -1266,7 +1266,7 @@ class learnpathItem {
 		if ($prereqs_string == '_true_') { return true; }
 		if ($prereqs_string == '_false_') {
 			if (empty($this->prereq_alert)) {
-				$this->prereq_alert = get_lang('_prereq_not_complete');
+				$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 			}
 			return false;
 		}
@@ -1301,7 +1301,7 @@ class learnpathItem {
 						}
 					}
 					if (empty($this->prereq_alert) && !$andstatus) {
-						$this->prereq_alert = get_lang('_prereq_not_complete');
+						$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 					}
 					return $andstatus;
 				} else {
@@ -1309,11 +1309,11 @@ class learnpathItem {
 						$status = $items[$refs_list[$list[0]]]->get_status(true);
 						$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 						if (empty($this->prereq_alert) && !$returnstatus) {
-							$this->prereq_alert = get_lang('_prereq_not_complete');
+							$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 						}
 						return $returnstatus;
 					}
-					$this->prereq_alert = get_lang('_prereq_not_complete');
+					$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 					return false;
 				}
 			} else {
@@ -1330,11 +1330,11 @@ class learnpathItem {
 							$status = $items[$refs_list[$params[0]]]->get_status(true);
 							$returnstatus = ($status == $params[1]);
 							if (empty($this->prereq_alert) && !$returnstatus) {
-								$this->prereq_alert = get_lang('_prereq_not_complete');
+								$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 							}
 							return $returnstatus;
 						}
-						$this->prereq_alert = get_lang('_prereq_not_complete');
+						$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 						return false;
 					}
 				} else {
@@ -1352,11 +1352,11 @@ class learnpathItem {
 								$status = $items[$refs_list[$params[0]]]->get_status(true);
 								$returnstatus = ($status != $params[1]);
 								if (empty($this->prereq_alert) && !$returnstatus) {
-									$this->prereq_alert = get_lang('_prereq_not_complete');
+									$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 								}
 								return $returnstatus;
 							}
-							$this->prereq_alert = get_lang('_prereq_not_complete');
+							$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 							return false;
 						}
 					} else {
@@ -1373,7 +1373,7 @@ class learnpathItem {
 							if ($myres) {
 								$returnstatus = !$this->parse_prereq($list[1], $items, $refs_list, $user_id);
 								if (empty($this->prereq_alert) && !$returnstatus) {
-									$this->prereq_alert = get_lang('_prereq_not_complete');
+									$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 								}
 								return $returnstatus;
 							} else {
@@ -1440,7 +1440,7 @@ class learnpathItem {
 										}
 									}
 									if (!$mycond && empty($this->prereq_alert)) {
-										$this->prereq_alert = get_lang('_prereq_not_complete');
+										$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 									}
 									return $mycond;
 								}
@@ -1484,11 +1484,11 @@ class learnpathItem {
 													if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
 														$returnstatus = true;
 													} else {
-														$this->prereq_alert = get_lang('_prereq_not_complete');
+														$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 														$returnstatus = false;
 													}
 												} else {
-													$this->prereq_alert = get_lang('_prereq_not_complete');
+													$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 													$returnstatus = false;
 												}
 											}
@@ -1510,12 +1510,12 @@ class learnpathItem {
 														$returnstatus = true;
 														break;
 													} else {
-														$this->prereq_alert = get_lang('_prereq_not_complete');
+														$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 														$returnstatus = false;
 													}
 												}
 											} else {
-												$this->prereq_alert = get_lang('_prereq_not_complete');
+												$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 												$returnstatus = false;
 											}
 
@@ -1552,7 +1552,7 @@ class learnpathItem {
 
 											$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 											if (!$returnstatus && empty($this->prereq_alert)){
-												$this->prereq_alert = get_lang('_prereq_not_complete');
+												$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 											}
 											if (!$returnstatus) {
 												if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' not complete', 0); }
@@ -1567,11 +1567,11 @@ class learnpathItem {
 											if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
 												$returnstatus = true;
 											} else {
-												$this->prereq_alert = get_lang('_prereq_not_complete');
+												$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 												$returnstatus = false;
 											}
 										} else {
-											$this->prereq_alert = get_lang('_prereq_not_complete');
+											$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 											$returnstatus = false;
 										}*/
 
@@ -1582,7 +1582,7 @@ class learnpathItem {
 
 										$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 										if (!$returnstatus && empty($this->prereq_alert)) {
-											$this->prereq_alert = get_lang('_prereq_not_complete');
+											$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 										}
 										if(!$returnstatus){
 											if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' not complete', 0); }
@@ -1617,7 +1617,7 @@ class learnpathItem {
 					}
 				}
 				if (!$orstatus && empty($this->prereq_alert)) {
-					$this->prereq_alert = get_lang('_prereq_not_complete');
+					$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 				}
 				return $orstatus;
 			} else {
@@ -1626,14 +1626,14 @@ class learnpathItem {
 					$status = $items[$refs_list[$list[0]]]->get_status(true);
 					$returnstatus = (($status == 'completed') OR ($status == 'passed'));
 					if (!$returnstatus && empty($this->prereq_alert)) {
-						$this->prereq_alert = get_lang('_prereq_not_complete');
+						$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 					}
 					return $returnstatus;
 				}
 			}
 		}
 		if(empty($this->prereq_alert)){
-			$this->prereq_alert = get_lang('_prereq_not_complete');
+			$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 		}
 		if (self::debug > 1) { error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert, 0); }
 		return false;

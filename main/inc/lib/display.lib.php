@@ -1137,8 +1137,7 @@ class Display {
             } else {
                 $my_course['id_session'] = $course_info['id_session'];
             }
-            //$label = get_lang(ucfirst($notification['tool'])).' '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate)";
-            $label = get_lang('_title_notification').": ".get_lang($type)." ($lastDate)";
+            $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
             $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
                             Display::return_icon($notification['image'], $label).'</a>&nbsp;';
         }

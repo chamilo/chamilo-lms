@@ -36,6 +36,6 @@ Display::display_header(null, 'Doc');
 echo '<div align="center">';
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 echo "<h1>";
-echo '<a href="'.$file_url_web.'" target="blank">'.get_lang('_cut_paste_link').'</a></div>';
+echo '<a href="'.$file_url_web.'" target="blank">'.get_lang('CutPasteLink').'</a></div>';
 
 echo "</h1>";

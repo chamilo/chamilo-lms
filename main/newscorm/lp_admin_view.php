@@ -211,14 +211,14 @@ function confirmation(name) {
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('_learnpath_item_edited'));
+            Display::display_confirmation_message(get_lang('LearnpathItemEdited'));
         } else {
             echo $_SESSION['oLP']->display_edit_item($_GET['id']);
         }
         break;
     case 'delete_item':
         if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('_learnpath_item_deleted'));
+            Display::display_confirmation_message(get_lang('LearnpathItemDeleted'));
         }
         break;
 }

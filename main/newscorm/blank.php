@@ -23,7 +23,7 @@ if (isset($_GET['error'])) {
             break;
         case 'prerequisites':
             echo '<br /><br />';
-            Display::display_warning_message(get_lang('_prereq_not_complete'));
+            Display::display_warning_message(get_lang('LearnpathPrereqNotCompleted'));
             break;
         case 'document_not_found':
             echo '<br /><br />';

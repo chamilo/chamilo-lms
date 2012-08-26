@@ -84,7 +84,7 @@ $form = new FormValidator('form1', 'post', 'lp_controller.php');
 $form->addElement('header', null, get_lang('EditLPSettings'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('_title')), array('size' => 43));
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('size' => 43));
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 

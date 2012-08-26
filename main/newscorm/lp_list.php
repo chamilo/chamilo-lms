@@ -90,7 +90,7 @@ if ($is_allowed_to_edit) {
     }
 
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('_add_learnpath'),'',ICON_SIZE_MEDIUM).'</a>' .
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('LearnpathAddLearnpath'),'',ICON_SIZE_MEDIUM).'</a>' .
         str_repeat('&nbsp;', 3).
         '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'),'',ICON_SIZE_MEDIUM).'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
@@ -253,9 +253,9 @@ if (!empty($flat_list)) {
 
             /*
               if ($current_session == $details['lp_session']) {
-                    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
+                    $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('LearnpathEditLearnpath').'"></a></td>'."\n";
             } else {
-                $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'"></td>'."	";
+                $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<img src="../img/edit_na.gif" border="0" title="'.get_lang('LearnpathEditLearnpath').'"></td>'."	";
             }
             */
 
@@ -297,12 +297,12 @@ if (!empty($flat_list)) {
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('_edit_learnpath'),'',ICON_SIZE_SMALL).'</a>';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL).'</a>';
                 } else {
-                    $dsp_build = Display::return_icon('edit_na.png', get_lang('_edit_learnpath'),'',ICON_SIZE_SMALL);
+                    $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL);
                 }
             } else {
-                $dsp_build = Display::return_icon('edit_na.png', get_lang('_edit_learnpath'),'',ICON_SIZE_SMALL);
+                $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL);
             }
 
             /* VISIBILITY COMMAND */
@@ -322,13 +322,13 @@ if (!empty($flat_list)) {
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_published'] == "i") {
                     $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-                    Display::return_icon('lp_publish_na.png', get_lang('_publish'),'',ICON_SIZE_SMALL)."</a>";
+                    Display::return_icon('lp_publish_na.png', get_lang('LearnpathPublish'),'',ICON_SIZE_SMALL)."</a>";
 
                 } else {
-                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL)."</a>";
+                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('LearnpathDoNotPublish'),'',ICON_SIZE_SMALL)."</a>";
                 }
             } else {
-                $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'',ICON_SIZE_SMALL);
+                $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('LearnpathDoNotPublish'),'',ICON_SIZE_SMALL);
             }
 
       /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE
@@ -443,9 +443,9 @@ if (!empty($flat_list)) {
             if ($current_session == $details['lp_session']) {
                 $dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
                 "onclick=\"javascript: return confirmation('".addslashes($name)."');\">" .
-				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'',ICON_SIZE_SMALL).'</a>';
+				Display::return_icon('delete.png', get_lang('LearnpathDeleteLearnpath'),'',ICON_SIZE_SMALL).'</a>';
             } else {
-                $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'',ICON_SIZE_SMALL);
+                $dsp_delete = Display::return_icon('delete_na.png', get_lang('LearnpathDeleteLearnpath'),'',ICON_SIZE_SMALL);
             }
 
 
@@ -495,7 +495,7 @@ if (!empty($flat_list)) {
         echo '<h2>'.get_lang('LearningPaths').'</h2>';
         echo Display::return_icon('scorms.png', '', array(), 64);
         echo '<div class="controls">';
-        echo Display::url(get_lang('_add_learnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'btn'));
+        echo Display::url(get_lang('LearnpathAddLearnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp' , array('class' => 'btn'));
         echo '</div>';
         echo '</div>';
     }

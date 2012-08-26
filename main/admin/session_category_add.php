@@ -49,7 +49,7 @@ if ($_POST['formSent']) {
 $thisYear=date('Y');
 $thisMonth=date('m');
 $thisDay=date('d');
-$tool_name = get_lang('langAddACategory');
+$tool_name = get_lang('AddACategory');
 
 //display the header
 Display::display_header($tool_name);
@@ -214,7 +214,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><button class="save" type="submit" value="<?php echo get_lang('langAddACategory') ?>"><?php echo get_lang('langAddACategory') ?></button>
+  <td><button class="save" type="submit" value="<?php echo get_lang('AddACategory') ?>"><?php echo get_lang('AddACategory') ?></button>
  </td>
 </tr>
 

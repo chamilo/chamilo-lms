@@ -111,7 +111,7 @@ $_api_is_translated_call = false;
  * @author Ivan Tcholakov, 2009-2010 (caching functionality, additional parameter $language, other adaptations).
  *
  * Notes:
- * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('langYes') == get_lang('Yes').
+ * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('Yes') == get_lang('Yes').
  * 2. Untranslated variables might be indicated by special opening and closing tags  -  [=  =]
  * The special tags do not show up in these two cases:
  * - when the system has been switched to "production server mode";

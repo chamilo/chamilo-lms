@@ -42,7 +42,7 @@ class UserGroup extends Model {
         echo '<div class="actions">';
        	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 	   
-        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('langAddClasses'),'','32').'</a>';
+        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('AddClasses'),'','32').'</a>';
         
         echo Display::url(Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM), 'usergroup_import.php');
         echo Display::url(Display::return_icon('export_csv.png', get_lang('Export'), array(), ICON_SIZE_MEDIUM), 'usergroup_export.php');

@@ -106,10 +106,10 @@ echo '</div>';
 		echo ' checked';
 	}
 			?>>
-		<?php echo get_lang('_no_resizing');?>
+		<?php echo get_lang('NoResizing');?>
             
 		</div>
-		<div><?php echo get_lang('_no_resizing_comment');?>
+		<div><?php echo get_lang('NoResizingComment');?>
 		</div>
 	</div>
     
@@ -140,10 +140,10 @@ echo '</div>';
 		$height = $_SESSION['image_resizing_height'];
 	}
 			?>>
-        <?php echo get_lang('_resizing'); ?>
+        <?php echo get_lang('Resizing'); ?>
 		</div>
 		<div>
-		<?php echo get_lang('_resizing_comment'); ?><br />
+		<?php echo get_lang('ResizingComment'); ?><br />
         <?php echo get_lang('_width'); ?>:
 	    &nbsp;<input name="width" type="text" id="width" <?php
 		if ($image_resizing == 'resizing') {

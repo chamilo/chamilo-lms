@@ -136,12 +136,12 @@ echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Dis
 
 // Show thumbnails
 if ($slide_id != 'all') {
-	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'">'.Display::return_icon('thumbnails.png',get_lang('_show_thumbnails'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'">'.Display::return_icon('thumbnails.png',get_lang('ShowThumbnails'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo Display::return_icon('thumbnails_na.png',get_lang('_show_thumbnails'),'',ICON_SIZE_MEDIUM);
+	echo Display::return_icon('thumbnails_na.png',get_lang('ShowThumbnails'),'',ICON_SIZE_MEDIUM);
 }
 // Slideshow options
-echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.Display::return_icon('settings.png',get_lang('_set_slideshow_options'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.Display::return_icon('settings.png',get_lang('SetSlideshowOptions'),'',ICON_SIZE_MEDIUM).'</a>';
 
 ?>
 </div>
@@ -515,16 +515,16 @@ if ($slide_id != 'all') {
 			echo '<tr>';
 			echo '<td align="center">';
 			if ($_SESSION['image_resizing'] == 'resizing') {
-				$resize_info = get_lang('_resizing').'<br />';
+				$resize_info = get_lang('Resizing').'<br />';
 				$resize_widht = $_SESSION["image_resizing_width"].' x ';
 				$resize_height = $_SESSION['image_resizing_height'];
 			}
 			elseif($_SESSION['image_resizing'] != 'noresizing'){
-				$resize_info = get_lang('_resizing').'<br />';
+				$resize_info = get_lang('Resizing').'<br />';
 				$resize_widht = get_lang('Auto').' x ';
 				$resize_height = get_lang('Auto');
 			} else {
-				$resize_info = get_lang('_no_resizing').'<br />';
+				$resize_info = get_lang('NoResizing').'<br />';
 			}
 			echo $resize_info;
 			echo $resize_widht;

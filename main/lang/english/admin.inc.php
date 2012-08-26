@@ -1243,6 +1243,7 @@ $AllowUserCourseSubscriptionByCourseAdminTitle = "Allow User Course Subscription
 $AllowUserCourseSubscriptionByCourseAdminComment = "Activate this option will allow course administrator to subscribe users inside a course";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
+$UserHasNoCourse = "This user is not subscribed to any course";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "The XML import lets you add more info and create resources (courses, users). The CSV import will only create sessions and let you assign existing resources to them.";
 $ShowLinkBugNotificationTitle = "Show link to report bug";
 $ShowLinkBugNotificationComment = "Show a link in the header to report a bug inside of our support platform (http://support.chamilo.org). When clicking on the link, the user is sent to the support platform, on a wiki page that describes the bug reporting process.";

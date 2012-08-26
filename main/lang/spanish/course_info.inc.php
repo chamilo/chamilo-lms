@@ -117,6 +117,9 @@ $AllowUserViewUserList = "Permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListActivate = "Activar para permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListDeactivate = "Desactivar permitir al usuario ver la lista de usuarios";
 $DoNotDisplayAnyAdvance = "No mostrar ningún avance";
+$CourseSettingsRegisterDirectLink = "Si su curso es público o abierto, puede usar el enlace directo abajo para invitar a nuevos usuarios, de tal manera que estén enviados directamente en este curso al finalizar el formulario de registro al portal. Si desea, puede añadir el parámetro e=1 a este enlace, remplazando \"1\" por el ID del ejercicio, para mandar los usuarios directamente a un ejercicio o examen. El ID del ejercicio se puede obtener en la URL del ejercicio cuando le de clic para entrar al mismo.<br />
+%s";
+$DirectLink = "Enlace directo";
 $NewHomeworkEmailAlert = "Avisar a los estudiantes con un correo eletrónico, la creación de una nueva tarea";
 $NewHomeworkEmailAlertEnable = "Activar el aviso de la creación de una nueva tarea";
 $NewHomeworkEmailAlertDisable = "Deasactivar el aviso de la creación de una nueva tarea";

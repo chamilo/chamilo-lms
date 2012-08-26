@@ -177,6 +177,7 @@ $EnterEmailUserAndWellSendYouPassword = "Entrez votre nom d'utilisateur ou l'adr
 $NoUserAccountWithThisEmailAddress = "Désolé, nous n'avons trouvé aucune trace d'un compte avec ce nom d'utilisateur et/ou cette adresse e-mail.";
 $CouldNotResetPassword = "Impossible de modifier le mot de passe";
 $WithTheFollowingSettings = "avec les paramètres suivants:";
+$UnsubscribeUsersAlreadyAddedInCourse = "Désinscrire les utilisateurs actuellement inscrits";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Votre demande d'ouverture de compte sur %s a été validée par un des administrateurs.";
 $HaveFun = "Amusez-vous,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Vous pouvez vous connecter sur %s en utilisant l'identifiant et le mot de passe qui vous ont été fournis.";

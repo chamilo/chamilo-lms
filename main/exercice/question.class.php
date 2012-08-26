@@ -1178,7 +1178,7 @@ abstract class Question
 		');
 
 		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
-		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false, false, $editor_config);
+		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
 
 		// Advanced parameters
@@ -1200,12 +1200,12 @@ abstract class Question
         
         if (!isset($_GET['fromExercise'])) {            
             switch($answerType) {
-                case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
-                case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
-                case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
-                case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
-                case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
-                case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+                case 1:	$this->question = get_lang('DefaultUniqueQuestion'); break;
+                case 2:	$this->question = get_lang('DefaultMultipleQuestion'); break;
+                case 3:	$this->question = get_lang('DefaultFillBlankQuestion'); break;
+                case 4:	$this->question = get_lang('DefaultMathingQuestion'); break;
+                case 5:	$this->question = get_lang('DefaultOpenQuestion');	break;
+                case 9:	$this->question = get_lang('DefaultMultipleQuestion'); break;
             }
         }
         

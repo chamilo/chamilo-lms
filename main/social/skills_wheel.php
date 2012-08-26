@@ -17,6 +17,8 @@ if (api_get_setting('allow_skills_tool') != 'true') {
     api_not_allowed();
 }
 
+api_block_anonymous_users();
+
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('d3/d3.v2.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');

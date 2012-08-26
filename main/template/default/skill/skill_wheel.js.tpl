@@ -151,37 +151,38 @@ dark green for skills most searched for, summed up from the different saved sear
 bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
 */
 
-/* Manage the partition colors */
+/**
+    Manage the partition background colors    
+**/
 function set_skill_style(d, attribute, searched_skill_id) {
-    //Default stroke
+    //Default border color (stroke)
     return_stroke = 'black';
 
-    //Nice rainbow colors
-    return_fill = get_color(d);        
-
-    //Grey colors using colorbrewer
+    //0. Nice rainbow colors (Comment 1.0 to see the rainbow!)
+    return_fill = get_color(d);
+    
+    //1. Grey colors using colorbrewer
     var p = color_patterns[18];
     color = p(depth -1 + d.counter);
-    return_fill = d.color = color;                
+    return_fill = color;          
 
-
-    //blue - if user achieved that skill
-    if (d.achieved) {
-        return_fill = '#3A87AD';
-        //return_stroke = '#FCD23A';
-    }
-
-    //yellow - If the skill has a gradebook attached
+    //2. Yellow - If the skill has a gradebook attached
     if (d.skill_has_gradebook) {      
         return_fill = '#F89406';            
         //return_stroke = 'grey';
     }
 
-    //red - if to show the searched skill
+    //3. Red - if you search that skill
     if (searched_skill_id) {
         if (d.id ==  searched_skill_id) {
             return_fill = '#B94A48';
         }
+    }
+    
+    //4. Blue - if user achieved that skill
+    if (d.achieved) {        
+        return_fill = '#3A87AD';        
+        //return_stroke = '#FCD23A';
     }
 
     switch (attribute) {
@@ -208,7 +209,6 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
         console.log('main_parent_id: ' + main_parent_id);
     }
 
-
     if (d.depth >= main_depth) {            
         //main_depth += main_depth;
         if (main_parent_id) {                
@@ -217,7 +217,6 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
             load_nodes(d.id, main_depth);      
         }
     }
-
 
     if (d.id) {            
         console.log('Getting skill info');
@@ -235,7 +234,7 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
         load_nodes(main_parent_id, main_depth);
     }
 
-    console.log('Continue to click_partition');
+    if (debug) console.log('Continue to click_partition');
 
     //console.log(main_parent_id);
 
@@ -585,7 +584,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         /* Text settings */     
         var textEnter = text.enter().append("text")
         .style("fill-opacity", 1)
-        .style("fill", function(d) {                
+        .style("fill", function(d) {            
             return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";                
         })  
         .attr("text-anchor", function(d) {

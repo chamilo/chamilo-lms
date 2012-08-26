@@ -11,20 +11,30 @@ require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
+if (api_get_setting('allow_skills_tool') != 'true') {
+    exit;
+}
+
+api_block_anonymous_users();
+
 $skill           = new Skill();
 $gradebook       = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
 
 switch ($action) {
-    case 'add':  
-        if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {            
-            $skill_id = $skill->edit($_REQUEST);    
-        } else {
-            $skill_id = $skill->add($_REQUEST);    
-        }        
+    case 'add':
+        if (api_is_platform_admin() || api_is_drh()) {
+            if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {            
+                $skill_id = $skill->edit($_REQUEST);    
+            } else {
+                $skill_id = $skill->add($_REQUEST);    
+            }
+        }
         echo $skill_id;
     case 'delete_skill':
-        echo $skill->delete($_REQUEST['skill_id']);
+        if (api_is_platform_admin() || api_is_drh()) {
+            echo $skill->delete($_REQUEST['skill_id']);
+        }
         break;      
     case 'find_skills':        
         $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['tag'])));
@@ -178,8 +188,7 @@ switch ($action) {
         break;
     case 'profile_matches':        
         $skill_rel_user  = new SkillRelUser();
-        $skills = $_REQUEST['skill_id'];  
-
+        $skills = $_REQUEST['skill_id'];
         
         $total_skills_to_search = $skills;
                 
@@ -251,28 +260,32 @@ switch ($action) {
         break;                
     case 'delete_gradebook_from_skill':
     case 'remove_skill':
-        if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {            
-            $skill_item = $skill_gradebook->get_skill_info($_REQUEST['skill_id'], $_REQUEST['gradebook_id']);            
-            if (!empty($skill_item)) {
-                $skill_gradebook->delete($skill_item['id']);
-                echo 1;
+        if (api_is_platform_admin() || api_is_drh()) {
+            if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {            
+                $skill_item = $skill_gradebook->get_skill_info($_REQUEST['skill_id'], $_REQUEST['gradebook_id']);            
+                if (!empty($skill_item)) {
+                    $skill_gradebook->delete($skill_item['id']);
+                    echo 1;
+                } else {
+                    echo 0;    
+                }
             } else {
-                echo 0;    
+                echo 0;
             }
-        } else {
-            echo 0;
         }
         break;             
     case 'save_profile':
-        $skill_profile = new SkillProfile();
-        $params = $_REQUEST;
-        //$params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
-        $params['skills'] = $params['skill_id'];
-        $skill_data = $skill_profile->save($params);        
-        if (!empty($skill_data)) {
-            echo 1;
-        } else {
-            echo 0;
+        if (api_is_platform_admin() || api_is_drh()) {
+            $skill_profile = new SkillProfile();
+            $params = $_REQUEST;
+            //$params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
+            $params['skills'] = $params['skill_id'];
+            $skill_data = $skill_profile->save($params);        
+            if (!empty($skill_data)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
         }
         break;        
     case 'skill_exists':

@@ -1,28 +1,23 @@
-<?php
+<script>
 /* For licensing terms, see /license.txt */
-/**
- * Pseudo JavaScript library to deal with event handlers.
+/*
+ * JS library to deal with event handlers.
  * This script needs to be included from a script where the global include file has already been loaded.
  * @package chamilo.inc.lib.javascript
- * @author Yannick Warnier <ywarnier@beeznest.org>
+ * @author Yannick Warnier
+ * @author Julio Montoya - Adding twig support
  */
-/**
- * If the user is not logged in, don't define anything, so the normal
- * handling of mailto link can proceed
- */
-if(!empty($_user['user_id']) AND string_2_boolean(api_get_setting('allow_email_editor'))){
-?>
-<script type="text/javascript">
-/**
+
+/*
  * Assigns any event handler to any element
  * @param	object	Element on which the event is added
  * @param	string	Name of event
  * @param	string	Function to trigger on event
  * @param	boolean	Capture the event and prevent
  */
-function addEvent(elm, evType, fn, useCapture)
-{ //by Scott Andrew
-	if(elm.addEventListener){
+
+function addEvent(elm, evType, fn, useCapture) {
+    if (elm.addEventListener){
 		elm.addEventListener(evType, fn, useCapture);
 		return true;
 	} else if(elm.attachEvent) {
@@ -32,47 +27,46 @@ function addEvent(elm, evType, fn, useCapture)
 		elm['on' + evType] = fn;
 	}
 }
-/**
+
+/*
  * Adds the event listener
  */
 function addListeners(e) {
-	var my_links = document.getElementsById('clickable_email_link');
-	for(var i=0;i < my_links.length;i++)
-	{
+	var my_links = $('.clickable_email_link');
+    console.log(my_links);
+	for(var i=0;i < my_links.length;i++) {
 		addEvent(my_links[i],'click',loadEmailEditor,false);
 	}
 }
-/**
+
+/*
  * Loads a specific page on event triggering
  */
-function loadEmailEditor(e)
-{
+function loadEmailEditor(e) {
 	var el;
-	if(window.event && window.event.srcElement)
-	{
+	if(window.event && window.event.srcElement) {
 		el = window.event.srcElement;
 	}
-	if (e && e.target)
-	{
+	if (e && e.target) {
 		el = e.target;
 	}
-	if(!el)
-	{
+	if(!el) {
 		return;
 	}
 	//el is now my link object, so I can get el.href here to load the new window
 	var link = el.href.replace('mailto:','');
-	document.location = "<?php echo api_get_path(WEB_CODE_PATH);?>inc/email_editor.php?dest=" + link;
+	document.location = "{{ _p.web_main }}inc/email_editor.php?dest=" + link;
 	//cancel default link action
-	if(window.event && window.event.returnValue){
+	if (window.event && window.event.returnValue){
 		window.event.returnValue = false;
 	}
 	if(e && e.preventDefault){
 		e.preventDefault();
 	}
 }
-addEvent(window,'load',addListeners,false);
+
+$(document).ready(function() {
+    addEvent(window,'load',addListeners,false);
+});
+
 </script>
-<?php
-}
-?>

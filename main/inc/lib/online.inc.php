@@ -258,6 +258,8 @@ function who_is_online_count($time_limit = null, $friends = false) {
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);	
 	$query = '';
     
+    $current_date		= date('Y-m-d H:i:s', time());
+    
 	if ($friends) {
 		// 	who friends from social network is online
 		$query = "SELECT DISTINCT count(login_user_id) as count

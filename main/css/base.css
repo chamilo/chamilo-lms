@@ -4605,10 +4605,8 @@ data table
     select#question_type_hidden option[value="4"] {background-image: url(../img/icons/32/matching.gif);}
     select#question_type_hidden option[value="5"] {background-image: url(../img/icons/32/open_answer.gif);}
     select#question_type_hidden option[value="6"] {background-image: url(../img/icons/32/hotspot.gif);}
-
     select#question_type_hidden option[value="7"] {background-image: url(../img/icons/32/mcma.gif);}
     select#question_type_hidden option[value="8"] {background-image: url(../img/icons/32/mcma.gif);}
-
     select#question_type_hidden option[value="9"] {background-image: url(../img/icons/32/mcmac.gif);}
     select#question_type_hidden option[value="10"] {background-image: url(../img/icons/32/mcuao.gif);}
     select#question_type_hidden option[value="11"] {background-image: url(../img/icons/32/mcmao.gif);}
@@ -4629,6 +4627,7 @@ i.size-32.icon-new-work{
     background-image:  url('../img/icons/32/new_work.png');
 }
 
+/* Default skill partition colors */
 .skill_partition {
     cursor: pointer;
     stroke: #000000;

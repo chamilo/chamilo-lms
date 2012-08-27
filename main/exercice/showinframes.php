@@ -30,9 +30,10 @@ $time               = $_REQUEST['time'];
 /**
  * Read content
  */
+$user_id = api_get_user_id();
 $full_file_path = $document_path.$doc_url;
-my_delete($full_file_path.$_user['user_id'].'.t.html');
-$content = ReadFileCont($full_file_path.$_user['user_id'].'.t.html');
+my_delete($full_file_path.$user_id.'.t.html');
+$content = ReadFileCont($full_file_path.$user_id.'.t.html');
 
 if ($content == '') {
 
@@ -47,12 +48,12 @@ if ($content == '') {
 				"			SaveScoreVariable = 1;\n".
 				"			if (C.ie)\n".
 				"			{\n".
-				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
+				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score=\"+Score;\n".
 				"				//window.alert(Score);\n".
 				"			}\n".
 				"			else\n".
 				"			{\n".
-				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
+				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score=\"+Score;\n".
 				"			}\n".
 				"		}\n".
 				"}\n".
@@ -66,16 +67,16 @@ if ($content == '') {
 	$newcontent = str_replace($prehref, $posthref, $newcontent);
 
 
-	if (CheckSubFolder($full_file_path.$_user['user_id'].'.t.html') == 0) {
+	if (CheckSubFolder($full_file_path.$user_id.'.t.html') == 0) {
 		$newcontent = ReplaceImgTag($newcontent);
 	}
 
 } else {
-	//my_delete($full_file_path.$_user['user_id'].'.t.html');
+	//my_delete($full_file_path.$user_id.'.t.html');
 	$newcontent = $content;
 }
 
-WriteFileCont($full_file_path.$_user['user_id'].'.t.html', $newcontent);
+WriteFileCont($full_file_path.$user_id.'.t.html', $newcontent);
 
 /*	$prehref="javascript:void(0);";
 	$posthref=$_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
@@ -87,7 +88,7 @@ WriteFileCont($full_file_path.$_user['user_id'].'.t.html', $newcontent);
 */
 
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
-//	echo $document_web_path.$doc_url.$_user['user_id'].'.t.html';
+//	echo $document_web_path.$doc_url.$user_id.'.t.html';
 //	exit;
 
 // Adjustung the header's height according to the current visual theme.
@@ -138,7 +139,7 @@ if ($origin!='learnpath') {
 	?>
 	<frameset rows="<?php echo $header_height; ?>,*" border="0" frameborder="no">
 		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo Security::remove_XSS(str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']))); ?>">
-		<frame name="main" src="<?php echo $document_web_path.$doc_url.$_user['user_id'].'.t.html?time='.Security::remove_XSS($time); ?>">
+		<frame name="main" src="<?php echo $document_web_path.$doc_url.$user_id.'.t.html?time='.Security::remove_XSS($time); ?>">
 	<noframes>
 	<body>
 		<p>This page uses frames, but your browser doesn't support them.
@@ -151,7 +152,7 @@ if ($origin!='learnpath') {
 } else {
 	?>
 	<script type='text/javascript'>
-		s='<?php echo $document_web_path.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
+		s='<?php echo $document_web_path.$doc_url.$user_id; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
 		//document.write(s);
 		window.location=s;
 	</script>

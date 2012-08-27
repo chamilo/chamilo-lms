@@ -18,7 +18,7 @@ function clean_user_select() {
         .end();
 }
 
-var region_value = '{{region_value}}';
+var region_value = '{{ region_value }}';
 $(document).ready(function() {
 
     /*$("body").delegate(".datetime", "focusin", function(){
@@ -97,18 +97,18 @@ $(document).ready(function() {
 		},	        
         {% if use_google_calendar == 1 %}
             eventSources: [
-                '{{google_calendar_url}}',  //if you want to add more just add URL in this array
+                '{{ google_calendar_url }}',  //if you want to add more just add URL in this array
                 {
                     className: 'gcal-event',           // an option!                    
                 }
             ],
         {% endif %}
         
-		buttonText: 	{{button_text}}, 
-		monthNames: 	{{month_names}},
-		monthNamesShort:{{month_names_short}},
-		dayNames: 		{{day_names}},
-		dayNamesShort: 	{{day_names_short}},        
+		buttonText: 	{{ button_text }}, 
+		monthNames: 	{{ month_names }},
+		monthNamesShort:{{ month_names_short }},
+		dayNames: 		{{ day_names }},
+		dayNamesShort: 	{{ day_names_short }},        
         firstHour: 8,
         firstDay: 1, 
 		selectable	: true,
@@ -141,11 +141,11 @@ $(document).ready(function() {
 			//Update chz-select
 			$("#users_to_send_id").trigger("liszt:updated");
 			
-			if ({{can_add_events}} == 1) {							
-				var url = '{{web_agenda_ajax_url}}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
+			if ({{ can_add_events }} == 1) {							
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
                 
-                var start_date_value = $.datepicker.formatDate('{{js_format_date}}', start);
-                var end_date_value  = $.datepicker.formatDate('{{js_format_date}}', end);
+                var start_date_value = $.datepicker.formatDate('{{ js_format_date }}', start);
+                var end_date_value  = $.datepicker.formatDate('{{ js_format_date }}', end);
 				
 				$('#start_date').html(start_date_value + " " +  start.toTimeString().substr(0, 8));
                 
@@ -160,7 +160,7 @@ $(document).ready(function() {
 					$('#start_date').html(start_date_value);
 					$('#end_date').html(' ');					
 				}
-				$('#color_calendar').html('{{type_label}}');
+				$('#color_calendar').html('{{ type_label }}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');				
 				$('#color_calendar').addClass('{{ type_event_class }}');
@@ -171,7 +171,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						{{"Add"|get_lang}}: function() {
+						{{ "Add"|get_lang }}: function() {
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
 							//bValid = bValid && checkLength( content, "content", 1, 255 );

@@ -2900,7 +2900,7 @@ class CourseManager {
                     }
 
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                        $course_title .= $course_info['visual_code'];
+                        $course_title .= ' ('.$course_info['visual_code'].') ';
                     }
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {
                         $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
@@ -3061,7 +3061,7 @@ class CourseManager {
 
             // Start displaying the course block itself
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-                $course_title .= $course_info['visual_code'];
+                $course_title .= ' ('.$course_info['visual_code'].') ';
             }
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
                 $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);

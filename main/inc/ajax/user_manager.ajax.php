@@ -19,9 +19,13 @@ switch ($action) {
             echo '<img src="'.$user_info['avatar'].'" /> ';
             echo '</div>';
             echo '</div>';
-            echo '<div class="span2">';
-            
-            echo '<h3>'.$user_info['complete_name'].'</h3> '.$user_info['mail'].' '.$user_info['official_code'];
+            echo '<div class="span3">';            
+            if (api_get_setting('show_email_addresses') == 'false') {
+                $user_info['mail'] = ' ';
+            } else {
+                $user_info['mail'] = ' '.$user_info['mail'].' ';
+            }
+            echo '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
             echo '<br/><br/><a class="btn" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">'.get_lang('ViewSharedProfile').'</a>';
             echo '</div>';
             echo '</div>';

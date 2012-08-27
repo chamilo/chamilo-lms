@@ -1364,7 +1364,7 @@ class CourseManager {
             foreach($teacher_list as $teacher) {
                 $teacher_name = api_get_person_name($teacher['firstname'], $teacher['lastname']);
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=350&user_id='.$teacher['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$teacher['user_id'];
                     $teacher_name = Display::url($teacher_name, $url, array('class' => 'ajax'));
                 }
                  $list[]= $teacher_name;
@@ -1423,7 +1423,7 @@ class CourseManager {
             foreach ($coachs_course as $coach_course) {
                 $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=350&user_id='.$coach_course['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$coach_course['user_id'];
                     $coach_name = Display::url($coach_name, $url, array('class' => 'ajax'));
                 }
                 $course_coachs[] = $coach_name;

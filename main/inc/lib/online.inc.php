@@ -355,9 +355,10 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
 	$time_limit = Database::escape_string($time_limit);
 
     $online_time 		= time() - $time_limit*60;
-	$current_date		= date('Y-m-d H:i:s',$online_time);	
+	$current_date		= date('Y-m-d H:i:s', $online_time);	
+    
 	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." 
-              WHERE login_user_id <> 2 AND course='".$coursecode."' AND login_date >= $current_date ";	
+              WHERE login_user_id <> 2 AND course='".$coursecode."' AND login_date >= '$current_date' ";	
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
 		$row = Database::fetch_array($result);

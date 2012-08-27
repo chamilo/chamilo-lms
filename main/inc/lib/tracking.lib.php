@@ -831,18 +831,19 @@ class Tracking {
 										// made of (we need to make this call dynamic because of random questions selection)
 										$sql = "SELECT SUM(t.ponderation) as maxscore FROM
                                                 ( 
-                                                    SELECT distinct question_id, marks, ponderation 
+                                                    SELECT DISTINCT question_id, marks, ponderation 
                                                     FROM $tbl_stats_attempts AS at INNER JOIN $tbl_quiz_questions AS q ON (q.id = at.question_id) 
                                                     WHERE exe_id ='$id_last_attempt' AND q.c_id = $course_id
                                                 )
                                                 AS t";
                                         if ($debug) echo '$sql: '.$sql.' <br />';
 										$res_max_score_bis = Database::query($sql);
-										$row_max_score_bis = Database :: fetch_array($res_max_score_bis);
+										$row_max_score_bis = Database::fetch_array($res_max_score_bis);
+                                        
 										if (!empty($row_max_score_bis['maxscore'])) {
 											$max_score = $row_max_score_bis['maxscore'];
 										}
-										if (!empty($max_score)) {
+										if (!empty($max_score) && floatval($max_score) > 0) {
 											$lp_partial_total += $score/$max_score;
 										}
 										if ($debug) echo '$lp_partial_total, $score, $max_score <b>'.$lp_partial_total.' '.$score.' '.$max_score.'</b><br />';

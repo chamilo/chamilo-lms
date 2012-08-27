@@ -85,8 +85,10 @@ $table_title = ($session_name? Display::return_icon('session.png', get_lang('Ses
                 Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
 echo Display::page_header($table_title);
 echo Display::page_subheader('<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>');
-    
+ 
+//Needed in newscorm/lp_stats.php
 $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);
+
 $origin = 'tracking';
 if ($export_csv) {
 	require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
@@ -95,7 +97,8 @@ if ($export_csv) {
 	ob_start();
 	require_once  api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
 	$tracking_content = ob_get_contents();
-	ob_end_clean();
+	ob_end_clean();    
 	echo api_utf8_decode($tracking_content, $charset);
+    
 }
 Display :: display_footer();

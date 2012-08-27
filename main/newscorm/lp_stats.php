@@ -17,9 +17,20 @@ require_once '../exercice/exercise.lib.php';
 
 $course_code = api_get_course_id();
 $user_id = api_get_user_id();
-// Declare variables to be used in lp_stats.php.
-$lp_id = $_SESSION['oLP']->get_id();
-$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+
+// Declare variables to be used in lp_stats.php
+
+//When checking the reporting myspace/lp_tracking.php
+if (isset($_GET['lp_id']) && isset($lp_id) && !empty($lp_id)) {
+    $lp_id = intval($lp_id);    
+} else {
+    if (isset($_SESSION['oLP'])) {
+        $lp_id  = $_SESSION['oLP']->get_id();
+        $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+    }    
+}
+
+
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -92,9 +103,6 @@ $tbl_quiz_questions     = Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_QUIZ               = Database :: get_course_table(TABLE_QUIZ_TEST);
 $tbl_stats_exercices    = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-//It cames from myspace/lp_tracking.php
-$lp_id = intval($lp_id);
 
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE c_id = $course_id AND lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);

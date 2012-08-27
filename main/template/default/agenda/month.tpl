@@ -28,11 +28,10 @@ $(document).ready(function() {
             timeFormat: 'hh:mm:ss'            
         });
     });*/
-
 	
 	var date = new Date();
 	var d = date.getDate();
-	var m = date.getMonth();
+	var m = date.getMonth()+1;
 	var y = date.getFullYear();
 	
 	$("#dialog-form").dialog({
@@ -256,10 +255,13 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('group_event');				
                 $('#color_calendar').addClass(calEvent.type+'_event');	
                 
-                $('#start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
+                my_start_month = calEvent.start.getMonth() +1;
+                
+                $('#start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
 
                 if (end_date != '') {
-                    $('#end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear());
+                    my_end_month = calEvent.end.getMonth() +1;
+                    $('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
                 }
 
                 $("#title").attr('value', calEvent.title);
@@ -331,12 +333,13 @@ $(document).ready(function() {
 					}
 				});
 			} else { //simple form    
-            
-                $('#simple_start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear());
+                my_start_month = calEvent.start.getMonth() +1;
+                $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
 
                 if (end_date != '') {
-                    $('#simple_start_date').html(calEvent.start.getDate() +"/"+ calEvent.start.getMonth() +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
-                    $('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ calEvent.end.getMonth() +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
+                    my_end_month = calEvent.end.getMonth() +1;
+                    $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
+                    $('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
                 }
                 
                 $("#simple_title").html(calEvent.title);

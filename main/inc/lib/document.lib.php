@@ -20,8 +20,12 @@ class DocumentManager {
     /**
      * @return the document folder quota for the current course, in bytes, or the default quota     
      */
-    public static function get_course_quota() {
-        $course_info = api_get_course_info();
+    public static function get_course_quota($course_code = null) {
+        if (empty($course_code)) {
+            $course_info = api_get_course_info();
+        } else {
+            $course_info = api_get_course_info($course_code);
+        }
         
         $course_quota   = null;
         if (empty($course_info)) {

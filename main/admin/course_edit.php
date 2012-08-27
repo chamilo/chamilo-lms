@@ -186,11 +186,12 @@ foreach ($list_course_extra_field as $extra_field) {
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values
-$course_db_name = $course['db_name'];
-$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
+//$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
+$course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 
 $form->setDefaults($course);
+
 // Validate form
 if ($form->validate()) {
 	$course = $form->getSubmitValues();

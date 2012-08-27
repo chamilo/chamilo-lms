@@ -28,8 +28,8 @@ function LoginCheck($uid) {
         if(!empty($_SERVER['REMOTE_ADDR'])) {
 		  $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
         }
-		$reallyNow = time();
-		$login_date = date("Y-m-d H:i:s",$reallyNow);
+
+		$login_date = api_get_utc_datetime();
 		$access_url_id = 1;
 		if (api_get_multiple_access_url() && api_get_current_access_url_id()!=-1) {
 			$access_url_id = api_get_current_access_url_id();
@@ -75,7 +75,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     }
 
     if (!isset($_SESSION['login_as'])) {
-        $current_date=date('Y-m-d H:i:s',time());
+        $current_date = api_get_utc_datetime();
         $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
@@ -126,7 +126,7 @@ function user_is_online($user_id) {
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);	
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	
-	$current_date		= date('Y-m-d H:i:s',time());	
+	$current_date		= api_get_utc_datetime();	
 	$access_url_id		= api_get_current_access_url_id();	
 	$time_limit			= api_get_setting('time_limit_whosonline');
 	//$time_limit = 1; changing this value there is no time limit 
@@ -176,7 +176,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
     }
     
     $online_time 		= time() - $time_limit*60;
-	$current_date		= date('Y-m-d H:i:s',$online_time);	
+	$current_date		= api_get_utc_datetime($online_time);	
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
@@ -258,7 +258,7 @@ function who_is_online_count($time_limit = null, $friends = false) {
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);	
 	$query = '';
     
-    $current_date		= date('Y-m-d H:i:s', time());
+    $current_date		= api_get_utc_datetime();
     
 	if ($friends) {
 		// 	who friends from social network is online
@@ -320,7 +320,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     }
     
     $online_time 		= time() - $time_limit*60;
-    $current_date		= date('Y-m-d H:i:s',$online_time);	
+    $current_date		= api_get_utc_datetime($online_time);	
     $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $course_code         = Database::escape_string($course_code);
     
@@ -357,7 +357,7 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
 	$time_limit = Database::escape_string($time_limit);
 
     $online_time 		= time() - $time_limit*60;
-	$current_date		= date('Y-m-d H:i:s', $online_time);	
+	$current_date		= api_get_utc_datetime($online_time);	
     
 	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." 
               WHERE login_user_id <> 2 AND course='".$coursecode."' AND login_date >= '$current_date' ";	
@@ -416,8 +416,7 @@ function chatcall() {
 	$year = substr($login_date,0,4);
 	$calltime = mktime($hour,$minute,$secund,$month,$day,$year);
 
-	$time = time();
-	$time = date("Y-m-d H:i:s", $time);
+	$time = api_get_utc_datetime($time);
 	$minute_passed=5;  //within this limit, the chat call request is valid
 	$limittime = mktime(date("H"),date("i")-$minute_passed,date("s"),date("m"),date("d"),date("Y"));
 
@@ -438,5 +437,4 @@ function chatcall() {
 	} else {
 		return false;
 	}
-
 }

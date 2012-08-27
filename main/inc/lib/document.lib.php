@@ -1162,7 +1162,8 @@ class DocumentManager {
         //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
         //so we remove that string in order to find correctly the origin file
         if (strpos($doc_path, 'HotPotatoes_files')) {
-            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
+            // $doc_path = substr($doc_path, 0, strlen($doc_path) - 8); // issue #5359
+            $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
 
         if (!in_array($file_type, array('file','folder'))) {

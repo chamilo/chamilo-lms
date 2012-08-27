@@ -30,9 +30,9 @@ if (empty($_SESSION['origin_url'])) {
 $form = new FormValidator('email_editor', 'post');
 $form->addElement('hidden', 'dest');
 $form->addElement('text', 'email_address', get_lang('EmailDestination'));
-$form->addElement('text', 'email_title', get_lang('EmailTitle'));
+$form->addElement('text', 'email_title', get_lang('EmailTitle'), array('class' => 'span5'));
 $form->freeze('email_address');
-$form->addElement('textarea', 'email_text', get_lang('EmailText'));
+$form->addElement('textarea', 'email_text', get_lang('EmailText'), array('class' => 'span5', 'rows' => '6'));
 
 $form->addRule('email_address', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_title', get_lang('ThisFieldIsRequired'), 'required');

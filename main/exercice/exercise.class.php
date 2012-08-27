@@ -874,7 +874,7 @@ class Exercise {
 		}
 
 		$form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
-		$form->add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
+		$form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
 		$form->addElement ('html','</div>');
 
 		$form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >

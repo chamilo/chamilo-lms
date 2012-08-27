@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "naujas įrašas įdėtas";
-$lang_title_notification = "Nuo Jūsų paskutinio vizito";
+$TitleNotification = "Nuo Jūsų paskutinio vizito";
 $lang_update_agenda = "esamas darbotvarkės įrašas atnaujintas";
 $lang_new_agenda = "esamas darbotvarkės įrašas įdėtas";
 $lang_update_announcements = "esamas skelbimas atnaujintas";

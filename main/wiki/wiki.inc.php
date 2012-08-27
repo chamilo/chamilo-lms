@@ -736,7 +736,7 @@ return true;
        </select> %';
     echo '<br/><br/>';
     echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
-    echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('langSave').'</button>';//for button icon. Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
+    echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('Save').'</button>';//for button icon. Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
     echo '</div>';
     echo '</form>';
 }

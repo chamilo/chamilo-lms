@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "nova stavka je dodata";
-$lang_title_notification = "Od vaše poslednje posete";
+$TitleNotification = "Od vaše poslednje posete";
 $lang_update_agenda = "postojeća stavka agende je ažurirana";
 $lang_new_agenda = "nova stavka je dodata";
 $lang_update_announcements = "postojeće obaveštenje je ažurirano";

@@ -280,7 +280,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 
 if (!$is_nanogong_available) {
     if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a>';    
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';    
     } else {    
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';     
     }

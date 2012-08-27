@@ -472,7 +472,7 @@
 
         $head_table = array( 
                                 array(get_lang('#'),5),
-//                              array(get_lang('langOfficialCode'),15),
+//                              array(get_lang('OfficialCode'),15),
                                 array(get_lang('Name'), 40),
                             );
         foreach ($data_array['attendant_calendar'] as $class_day) {

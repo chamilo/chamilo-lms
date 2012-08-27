@@ -47,7 +47,7 @@ $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
 // Because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
 $url = 'slideshowoptions.php?curdirpath='.$pathurl;
-$originaltoolname = '<b>'.get_lang('_slideshow_options').'</b>';
+$originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
 $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname );
 
 Display::display_header($originalToolName, 'Doc');
@@ -98,7 +98,7 @@ echo '</div>';
 ?>
 
 <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
-	<legend><?php echo get_lang('_slideshow_options') ?></legend>
+	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
 	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
@@ -106,10 +106,10 @@ echo '</div>';
 		echo ' checked';
 	}
 			?>>
-		<?php echo get_lang('_no_resizing');?>
+		<?php echo get_lang('NoResizing');?>
             
 		</div>
-		<div><?php echo get_lang('_no_resizing_comment');?>
+		<div><?php echo get_lang('NoResizingComment');?>
 		</div>
 	</div>
     
@@ -140,11 +140,11 @@ echo '</div>';
 		$height = $_SESSION['image_resizing_height'];
 	}
 			?>>
-        <?php echo get_lang('_resizing'); ?>
+        <?php echo get_lang('Resizing'); ?>
 		</div>
 		<div>
-		<?php echo get_lang('_resizing_comment'); ?><br />
-        <?php echo get_lang('_width'); ?>:
+		<?php echo get_lang('ResizingComment'); ?><br />
+        <?php echo get_lang('Width'); ?>:
 	    &nbsp;<input name="width" type="text" id="width" <?php
 		if ($image_resizing == 'resizing') {
 			echo ' value="'.$width.'"';
@@ -154,7 +154,7 @@ echo '</div>';
         }
 		?> >
         <br />
-        <?php echo get_lang('_height');?>:
+        <?php echo get_lang('Height');?>:
         &nbsp;&nbsp;&nbsp;&nbsp;<input name="height" type="text" id="height" <?php
 		if ($image_resizing == 'resizing') {
 			echo ' value="'.$height.'"';

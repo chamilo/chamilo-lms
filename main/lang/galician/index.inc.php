@@ -85,5 +85,6 @@ Sempre pode atopar máis información acerca deste software no noso website: htt
 
 Disfrute, e non dubide en unirse á comunidade e proporcionarnos feedback a través do foro.";
 $Username = "Nome de usuario";
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Como podes ver, a túa lista de cursos está baleira. Iso é porque non tes rexistrado ningún curso ainda.";
 $Profile = "Perfil";
 ?>

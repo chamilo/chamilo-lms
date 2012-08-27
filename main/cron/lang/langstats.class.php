@@ -17,32 +17,50 @@ class langstats {
 
   public $db; //database connector
   public $error; //errores almacenados
+  public $db_type = 'sqlite';
   
   public function __construct($file='') {
-    if (!class_exists('SQLite3')) {
-      $this->error = 'SQLiteNotAvailable';
-      return false; //cannot use if sqlite not installed
-    }
-    if (empty($file)) {
-      $file = api_get_path(SYS_ARCHIVE_PATH).'/langstasdb';
-    }
-    if (is_file($file) && is_writeable($file)) {
-      $this->db = new SQLite3($file,SQLITE3_OPEN_READWRITE);
-    } else {
-      try {
-        $this->db = new SQLite3($file);
-      } catch (Exception $e) {
-        $this->error = 'DatabaseCreateError';
-        error_log('Exception: '. $e->getMessage());
-        return false;
-      }
-      $err = $this->db->exec('CREATE TABLE lang_freq ('
-        .' id integer PRIMARY KEY AUTOINCREMENT, '
-        .' term_name text, term_file text, term_count integer default 0)');
-      if ($err === false) { $this->error = 'CouldNotCreateTable'; return false;}
-      $err = $this->db->exec('CREATE INDEX lang_freq_terms_idx ON lang_freq(term_name, term_file)');
-      if ($err === false) { $this->error = 'CouldNotCreateIndex'; return false; }
-      // Table and index created, move on.
+    switch ($this->db_type) {
+      case 'sqlite':
+        if (!class_exists('SQLite3')) {
+          $this->error = 'SQLiteNotAvailable';
+          return false; //cannot use if sqlite not installed
+        }
+        if (empty($file)) {
+          $file = api_get_path(SYS_ARCHIVE_PATH).'/langstasdb';
+        }
+        if (is_file($file) && is_writeable($file)) {
+          $this->db = new SQLite3($file,SQLITE3_OPEN_READWRITE);
+        } else {
+          try {
+            $this->db = new SQLite3($file);
+          } catch (Exception $e) {
+            $this->error = 'DatabaseCreateError';
+            error_log('Exception: '. $e->getMessage());
+            return false;
+          }
+          $err = $this->db->exec('CREATE TABLE lang_freq ('
+            .' id integer PRIMARY KEY AUTOINCREMENT, '
+            .' term_name text, term_file text, term_count integer default 0)');
+          if ($err === false) { $this->error = 'CouldNotCreateTable'; return false;}
+          $err = $this->db->exec('CREATE INDEX lang_freq_terms_idx ON lang_freq(term_name, term_file)');
+          if ($err === false) { $this->error = 'CouldNotCreateIndex'; return false; }
+          // Table and index created, move on.
+        }
+        break;
+      case 'mysql': //implementation not finished
+        if (!function_exists('mysql_connect')) {
+          $this->error = 'SQLiteNotAvailable';
+          return false; //cannot use if sqlite not installed
+        }
+        $err = Database::query('SELECT * FROM lang_freq');
+        if ($err === false) { //the database probably does not exist, create it
+          $err = Database::query('CREATE TABLE lang_freq ('
+            .' id int PRIMARY KEY AUTO_INCREMENT, '
+            .' term_name text, term_file text default \'\', term_count int default 0)');
+          if ($err === false) { $this->error = 'CouldNotCreateTable'; return false;}
+        } // if no error, we assume the table exists
+        break; 
     }
     return $this->db;
   }
@@ -107,5 +125,34 @@ class langstats {
   public function clear_all() {
     $res = sqlite_query($this->db, 'DELETE FROM lang_freq WHERE 1=1');
     return $list;
+  }
+  /**
+   * Returns an array of all the language variables with their corresponding
+   * file of origin. This function tolerates a certain rate of error due to
+   * the duplication of variables in language files.
+   * @return array variable => origin file
+   */
+  public function get_variables_origin() {
+    require_once '../../admin/sub_language.class.php';
+    $path = api_get_path(SYS_LANG_PATH).'english/';
+    $vars = array();
+    $priority = array('trad4all', 'notification', 'accessibility');
+    foreach ($priority as $file) {
+      $list = SubLanguageManager::get_all_language_variable_in_file($path.$file.'.inc.php', true);
+      foreach ($list as $var => $trad) {
+        $vars[$var] = $file.'.inc.php';
+      }
+    }
+    $files = scandir($path);
+    foreach ($files as $file) {
+      if (substr($file,0,1) == '.' or in_array($file,$priority)) {
+        continue;
+      }
+      $list = SubLanguageManager::get_all_language_variable_in_file($path.$file, true);
+      foreach ($list as $var => $trad) {
+        $vars[$var] = $file;
+      }
+    }
+    return $vars;
   }
 } 

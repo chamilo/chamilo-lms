@@ -581,8 +581,6 @@ class IndexManager {
 	            } //end else
 	        } // end foreach
 	        $courses_list_string .= "</ul>";
-        } else {
-        //$result .=  '<blockquote>', get_lang('_No_course_publicly_available'), "</blockquote>\n";
         }
         if ($courses_shown > 0) {
             // Only display the list of courses and categories if there was more than
@@ -649,7 +647,7 @@ class IndexManager {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
         // 'placeholder'=>get_lang('UserName')
         //'autocomplete'=>"off",        
-		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2', 'autofocus' => 'autofocus', 'autocapitalize'=> 'off'));
+		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));		
 		$html = $form->return_form();

@@ -382,7 +382,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
 	echo '</a>';
 	echo '<a href="question_pool.php">';
-	echo Display::return_icon('database.png', get_lang('langQuestionPool'), array('style'=>'width:32px'));
+	echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style'=>'width:32px'));
 	echo '</a>';
 	// end question category
 	echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'',ICON_SIZE_MEDIUM).'</a>';

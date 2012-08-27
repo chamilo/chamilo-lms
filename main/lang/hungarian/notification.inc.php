@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "új elem hozzáadva";
-$lang_title_notification = "Legutóbbi látogatása óta";
+$TitleNotification = "Legutóbbi látogatása óta";
 $lang_update_agenda = "létező naptár bejegyzés frissítve";
 $lang_new_agenda = "új naptár bejegyzés hozzáadva";
 $lang_update_announcements = "létező hirdetmény frissítve";

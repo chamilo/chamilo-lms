@@ -581,7 +581,7 @@ if ($fromExercise <= 0) { // NOT IN A TEST - IN THE COURSE
 		$questionTagA = 1;	// we are in the course, question title can be a link to the question edit page
 	}
 	else { // NOT IN A TEST - NOT IN THE COURSE
-		$actionLabel = get_lang('langReuse');
+		$actionLabel = get_lang('Reuse');
 		$actionIcon1 = get_lang('MustBeInATest');
 		$actionIcon2 = "";
 		$questionTagA = 0;	// we are not in this course, to messy if we link to the question in another course
@@ -589,13 +589,13 @@ if ($fromExercise <= 0) { // NOT IN A TEST - IN THE COURSE
 }
 else { // IN A TEST - IN THE COURSE
 	if ($selected_course == api_get_course_int_id()) {
-		$actionLabel = get_lang('langReuse');
+		$actionLabel = get_lang('Reuse');
 		$actionIcon1 = "add";
 		$actionIcon2 = "";
 		$questionTagA = 1;
 	}
 	else { // IN A TEST - NOT IN THE COURSE
-		$actionLabel = get_lang('langReuse');
+		$actionLabel = get_lang('Reuse');
 		$actionIcon1 = "clone";
 		$actionIcon2 = "";
 		$questionTagA = 0;

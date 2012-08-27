@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "přidaná nová položka";
-$lang_title_notification = "Od Vaší poslední návštěvy";
+$TitleNotification = "Od Vaší poslední návštěvy";
 $lang_update_agenda = "aktualizovaná položka agendy";
 $lang_new_agenda = "přidaná nová položka agendy";
 $lang_update_announcements = "existující oznámení bylo aktualizováno";

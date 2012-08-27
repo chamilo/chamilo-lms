@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$UsersRegisteredInAnyGroup = "Χρήστες εγγεγραμμένοι σε οποιαδήποτε ομάδα";
 $AdminBy = "Διαχείριση από";
 $AdministrationTools = "Εργαλεία Διαχείρισης";
 $State = "Κατάσταση συστήματος";
@@ -121,7 +122,7 @@ $langAdminGroups = "Ομάδες χρηστών";
 $langAdminCourses = "Μαθήματα";
 $langAdminCategories = "Κατηγορίες μαθημάτων";
 $langSubscribeUserGroupToCourse = "Εγγραφή χρήστη / ομάδας σε μάθημα";
-$langAddACategory = "Προσθήκη Κατηγορίας";
+$AddACategory = "Προσθήκη Κατηγορίας";
 $langInto = "μέσα σε";
 $langNoCategories = "Δεν υπάρχουν κατηγορίες εδώ";
 $langAllowCoursesInCategory = "Επιτρέπεται η προσθήκη μαθημάτων σε αυτή την κατηγορία;";

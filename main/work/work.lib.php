@@ -133,16 +133,16 @@ function display_default_visibility_form($uploadvisibledisabled) {
 	?>
 	<div class="control-group">
 		<label class="control-label">
-		<?php echo get_lang('_default_upload'); ?>
+		<?php echo get_lang('DefaultUpload'); ?>
 		</label>
 		<div class="controls">
             <label class="radio" for="uploadvisibledisabled_1">
                 <input id="uploadvisibledisabled_1" class="checkbox" type="radio" name="uploadvisibledisabled" value="0"   <?php if ($uploadvisibledisabled == 0) echo 'checked'; ?> />
-				<?php echo get_lang('_new_visible'); ?>
+				<?php echo get_lang('NewVisible'); ?>
             </label>
         <label class="radio" for="uploadvisibledisabled_2">
             <input id="uploadvisibledisabled_2" class="checkbox" type="radio" name="uploadvisibledisabled" value="1" <?php if ($uploadvisibledisabled == 1) echo 'checked'; ?> />
-            <?php echo get_lang('_new_unvisible'); ?>
+            <?php echo get_lang('NewUnvisible'); ?>
         </label>
 		</div>
 	</div>

@@ -112,18 +112,18 @@ $courses_without_category = $courses_in_category[0];
                             <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())) ?>')) return false;">
 	                            <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
 	                            <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-	                            <button class="btn" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
-	                            	<?php echo get_lang('_unsubscribe'); ?>
+	                            <button class="btn" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
+	                            	<?php echo get_lang('Unsubscribe'); ?>
 	                            </button>
                             </form>
                             </div>
                   <?php } else {
                             //echo get_lang('UnsubscribeNotAllowed');
-                            //echo Display::url(get_lang('_unsubscribe'), '#', array('class'=>'a_button white small '));
+                            //echo Display::url(get_lang('Unsubscribe'), '#', array('class'=>'a_button white small '));
                         }
                     } else {
                         //echo get_lang('CourseAdminUnsubscribeNotAllowed');
-                        //echo Display::url(get_lang('_unsubscribe'), '#', array('class'=>'a_button white small '));
+                        //echo Display::url(get_lang('Unsubscribe'), '#', array('class'=>'a_button white small '));
                     }
                   ?>              
               
@@ -271,18 +271,18 @@ $courses_without_category = $courses_in_category[0];
 									<form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding()))?>')) return false">
                                     	<input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                                     	<input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />                                    	
-                                    	 <button class="btn" value="<?php echo get_lang('_unsubscribe'); ?>" name="unsub">
-	                            	<?php echo get_lang('_unsubscribe'); ?>
+                                    	 <button class="btn" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
+	                            	<?php echo get_lang('Unsubscribe'); ?>
 	                            </button>
                                     	</form>
                                     	</div>
 	                              <?php } else {
 	                                    	//echo get_lang('UnsubscribeNotAllowed');
-	                                    	//echo Display::url(get_lang('_unsubscribe'), '#', array('class'=>'a_button white small '));
+	                                    	//echo Display::url(get_lang('Unsubscribe'), '#', array('class'=>'a_button white small '));
 	                                    }
 	                            } else {
 	                            	//echo get_lang('CourseAdminUnsubscribeNotAllowed');
-	                            	//echo Display::url(get_lang('_unsubscribe'), '#', array('class'=>'a_button white small '));
+	                            	//echo Display::url(get_lang('Unsubscribe'), '#', array('class'=>'a_button white small '));
 	                            }
 	                            $key++;
 	                    	}

@@ -3656,12 +3656,12 @@ class learnpath {
         $row = Database :: fetch_array($result);
         $name = domesticate($row['name']);
         if ($set_visibility == 'i') {
-            $s = $name . " " . get_lang('_no_published');
+            $s = $name . " " . get_lang('LearnpathNotPublished');
             $dialogBox = $s;
             $v = 0;
         }
         if ($set_visibility == 'v') {
-            $s = $name . " " . get_lang('_published');
+            $s = $name . " " . get_lang('LearnpathPublished');
             $dialogBox = $s;
             $v = 1;
         }
@@ -5095,17 +5095,17 @@ class learnpath {
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
                     if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
                         $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
                     } else {
                         $edit_icon .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('_edit_learnpath_module'), array(), ICON_SIZE_TINY);
+                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
                     }
                 }
 
                 $delete_icon .= ' <a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
-                $delete_icon .= Display::return_icon('delete.png', get_lang('_delete_learnpath_module'), array(), ICON_SIZE_TINY);
+                $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
                 $delete_icon .= '</a>';
 
                 $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;

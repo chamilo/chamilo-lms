@@ -94,13 +94,13 @@ class MultipleAnswer extends Question {
 				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
 				$defaults['correct['.$i.']'] = $answer -> correct[$i];
 			} else {
-				$defaults['answer[1]']  = get_lang('langDefaultMultipleAnswer2');
-				$defaults['comment[1]'] = get_lang('langDefaultMultipleComment2');
+				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
+				$defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
 				$defaults['correct[1]'] = true;
 				$defaults['weighting[1]'] = 10;
 
-				$defaults['answer[2]']  = get_lang('langDefaultMultipleAnswer1');
-				$defaults['comment[2]'] = get_lang('langDefaultMultipleComment1');
+				$defaults['answer[2]']  = get_lang('DefaultMultipleAnswer1');
+				$defaults['comment[2]'] = get_lang('DefaultMultipleComment1');
 				$defaults['correct[2]'] = false;
 				$defaults['weighting[2]'] = -5;
 			}

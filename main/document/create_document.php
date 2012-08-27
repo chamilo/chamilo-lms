@@ -452,7 +452,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 if ($is_certificate_mode)
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
 else
-	$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
+	$form->addElement('style_submit_button', 'submit', get_lang('CreateDoc'), 'class="save"');
 
 $form->setDefaults($defaults);
 

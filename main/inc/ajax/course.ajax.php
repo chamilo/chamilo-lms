@@ -35,7 +35,7 @@ switch ($action) {
                     echo $course_info['title'].'<br />';
                 }
             } else {            
-                echo get_lang('HaveNoCourse');
+                echo get_lang('UserHasNoCourse');
             } 
         }
         break;

@@ -177,6 +177,7 @@ $EnterEmailUserAndWellSendYouPassword = "Escriba el nombre de usuario o la direc
 $NoUserAccountWithThisEmailAddress = "No existe una cuenta con este usuario y/o dirección de correo electrónico";
 $CouldNotResetPassword = "No se puede reiniciar la contraseña";
 $WithTheFollowingSettings = "con los siguientes parámetros:";
+$UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos los alumnos ya inscritos";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Su cuenta en %s ha sido aprobada por nuestra administración";
 $HaveFun = "Diviértase,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ahora puede identificarse en %s usando el nombre de usuario y contraseña que le han sido facilitados";

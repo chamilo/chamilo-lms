@@ -134,7 +134,7 @@ if (!empty($course_list)) {
 
             if (strtotime($last_date) < strtotime($lp_date_original)) {
                 if (empty($icons)) {
-                    $icons .= ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date_original).' ';                    
+                    $icons .= ' '.Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date_original).' ';                    
                 }
             }           
         }        

@@ -160,7 +160,7 @@ switch ($action) {
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);                    
                 }
                 
                 if (!empty($lp_item['publicated_on'])) {
@@ -282,7 +282,7 @@ switch ($action) {
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);                    
                 }
                 
                 if (!empty($lp_item['publicated_on'])) {
@@ -407,7 +407,7 @@ switch ($action) {
                     $label      = get_lang('LearnpathUpdated');
                 }
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
+                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);                    
                 }
                 if (!empty($lp_item['publicated_on'])) {
                     $date = substr($lp_item['publicated_on'], 0, 10);

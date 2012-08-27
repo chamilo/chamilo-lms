@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "item baru ditambahkan";
-$lang_title_notification = "Sejak kunjungan terakhir anda";
+$TitleNotification = "Sejak kunjungan terakhir anda";
 $lang_update_agenda = "item agenda yang ada diupdate";
 $lang_new_agenda = "item agenda baru ditambahkan";
 $lang_update_announcements = "pengumuman yang ada diupdate";

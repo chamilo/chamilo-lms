@@ -77,4 +77,6 @@ $IsNotiCalFormatFile = "Tiedosto ei ole iCal formaatissa";
 $RepeatEvent = "Toista tapahtuma";
 $RepeatDate = "Toistuva päivä";
 $EndDateMustBeMoreThanStartDate = "Päättymispäivän pitää olla myöhemmin kun alkamispäivän.";
+$SelectACourse = "Valitse kurssi";
+$AllEvents = "Kaikki tapahtumat";
 ?>

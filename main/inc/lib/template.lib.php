@@ -332,7 +332,7 @@ class Template {
     private function set_system_parameters() {
         global $_configuration;
 
-        //Setting app paths		
+        //Setting app paths/URLs
         $_p = array('web' => api_get_path(WEB_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
@@ -449,18 +449,16 @@ class Template {
         $this->set_theme();
 
         //Extra JS files
-
+        
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
-            'thickbox.js',
-            //'dtree/dtree.js',
-            'email_links.lib.js.php',
+            'thickbox.js',            
             'bootstrap/bootstrap.js',
         );
         
-        
+      
         if (api_is_global_chat_enabled()) {            
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
@@ -475,18 +473,19 @@ class Template {
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $js_files[] = 'asciimath/ASCIIMathML.js';
         }
-
+        
         $js_file_to_string = '';
-        
-        
         
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
         
-
+        //Loading email_editor js
+        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
+            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');            
+        }
+        
         //Extra CSS files
-
         $css_files = array(
             api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css',
             api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css'
@@ -500,13 +499,11 @@ class Template {
         if (api_is_global_chat_enabled()) {
             $css_files[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
-
         
         $css_file_to_string = '';
         foreach ($css_files as $css_file) {
             $css_file_to_string .= api_get_css($css_file);
-        }
-        
+        }        
 
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {

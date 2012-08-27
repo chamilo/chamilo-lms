@@ -3494,6 +3494,8 @@ class UserManager {
                         //$options[$option_details[1]] = $option_details[2];
                         if ($get_lang_variables) {
                             $options[$option_details[1]] = get_lang($option_details[2]);
+                        } else {
+                          $options[$option_details[1]] = $option_details[2];  
                         }
                     }
                     if ($get_lang_variables) {

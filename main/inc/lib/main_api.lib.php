@@ -1302,6 +1302,7 @@ function api_format_course_array($course_data) {
     $_course['name'         ]         = $course_data['title'          ];
     $_course['title'         ]        = $course_data['title'          ];
     $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
+    $_course['visual_code']           = $course_data['visual_code'    ];
     $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
     $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
     $_course['directory'    ]         = $course_data['directory'      ];

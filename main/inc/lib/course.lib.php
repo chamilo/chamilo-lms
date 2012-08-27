@@ -3211,7 +3211,7 @@ class CourseManager {
         }
 
         if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-            $session_title .= $course_info['official_code'];
+            $session_title .= ' ('.$course_info['visual_code'].') ';
         }
 
         if (api_get_setting('display_teacher_in_courselist') == 'true') {

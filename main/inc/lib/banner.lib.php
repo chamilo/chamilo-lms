@@ -379,7 +379,8 @@ function return_menu() {
                 $navigation[SECTION_CAMPUS]  = null;
             }
         } else {
-            $lis .= Display::tag('li', $open);
+            //$lis .= Display::tag('li', $open);
+            $lis .= $open;
         }        
     }
 

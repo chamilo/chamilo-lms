@@ -323,7 +323,19 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
     if (isset($_GET['set_preview'])) {
         // Generate document HTML        
         $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), api_get_course_id(), true);
-
+        
+        $filename = 'certificate_preview/'.api_get_unique_id().'.png';
+        $qr_code_filename = api_get_path(SYS_ARCHIVE_PATH).$filename;
+        
+        $temp_folder = api_get_path(SYS_ARCHIVE_PATH).'certificate_preview';
+        if (!is_dir($temp_folder)) mkdir($temp_folder, api_get_permissions_for_new_directories());
+                    
+        $qr_code_web_filename = api_get_path(WEB_ARCHIVE_PATH).$filename;
+                
+        $certificate = new Certificate();
+        $text = $certificate->parse_certificate_variables($content_html['variables']);                                        
+        $result = $certificate->generate_qr($text, $qr_code_filename);
+                                
         $new_content_html = $content_html['content'];
         $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/images/gallery';
         $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
@@ -331,9 +343,14 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         $path_image_in_default_course = api_get_path(WEB_CODE_PATH) . 'default_course_document';
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
         $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+        
         Display::display_reduced_header();
+        
         echo '<style>body {background:none;}</style><style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
-        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="'.get_lang('Print').'"/>'.get_lang('Print').'</a>';
+        if (is_file($qr_code_filename) && is_readable($qr_code_filename)) {
+            $new_content_html = str_replace('((certificate_barcode))', Display::img($qr_code_web_filename), $new_content_html);
+        }
         print_r($new_content_html);
         exit;
     }

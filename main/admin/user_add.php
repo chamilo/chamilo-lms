@@ -22,8 +22,10 @@ api_protect_admin_script(true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 <!--
 function enable_expiration_date() { //v2.0
 	document.user_add.radio_expiration_date[0].checked=false;
@@ -59,7 +61,6 @@ function display_drh_list(){
             document.getElementById("id_platform_admin").style.display="none";
 	}
 }
-
 //-->
 </script>';
 
@@ -145,14 +146,14 @@ if (count($extAuthSource) > 0) {
 		}
 	}
 	if ($nb_ext_auth_source_added > 0) {
-    	$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
-    	$group[] =& HTML_QuickForm::createElement('select', 'auth_source', null, $auth_sources);
-    	$group[] =& HTML_QuickForm::createElement('static', '', '', '<br />');
+    	$group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+    	$group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
+    	$group[] = $form->createElement('static', '', '', '<br />');
     }
 }
-$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
-$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] =& HTML_QuickForm::createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
+$group[] = $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
 $form->addGroup($group, 'password', get_lang('Password'), '');
 
 // Status
@@ -181,8 +182,8 @@ $form->addElement('html', '</div>');
 if (api_is_platform_admin()) {
     // Platform admin
     $group = array();
-    $group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
-    $group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
+    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
     $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
@@ -191,21 +192,30 @@ if (api_is_platform_admin()) {
 
 // Send email
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
-$group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 $extra_data = UserManager::get_extra_user_data(0, true);
-UserManager::set_extra_fields_in_form($form, $extra_data, 'user_add');
+
+$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_add');
+$jquery_ready_content = $return_params['jquery_ready_content'];
+
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$htmlHeadXtra[] ='<script>
+$(document).ready(function(){
+	'.$jquery_ready_content.'
+});
+</script>';
 
 // Set default values
 $defaults['admin']['platform_admin'] = 0;
@@ -224,8 +234,8 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
+$html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 $form->addGroup($html_results_enabled);
 
 // Validate form
@@ -283,7 +293,7 @@ if( $form->validate()) {
 				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
 			}
-			$extras = array();
+			           
 			foreach ($user as $key => $value) {
 				if (substr($key, 0, 6) == 'extra_') { //an extra field
 					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);

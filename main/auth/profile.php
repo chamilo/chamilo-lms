@@ -12,8 +12,6 @@
  * Code
  */
 
-/*  Init section  */
-
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
@@ -34,7 +32,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function confirmation(name) {
 	if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
 			document.forms["profile"].submit();
@@ -100,7 +98,6 @@ require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 // Libraries
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -283,11 +280,11 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
 
 // EXTRA FIELDS
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'profile');
+$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'profile', api_get_user_id());
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
-$htmlHeadXtra[] ='<script type="text/javascript">
+$htmlHeadXtra[] ='<script>
 $(document).ready(function(){
 	'.$jquery_ready_content.'
 });
@@ -615,7 +612,8 @@ if ($form->validate()) {
 
 	// User tag process
 	//1. Deleting all user tags
-	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(USER_FIELD_TYPE_TAG);
+	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(UserManager::USER_FIELD_TYPE_TAG);
+    
 	if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
 		foreach ($list_extra_field_type_tag as $id) {
 			UserManager::delete_user_tags(api_get_user_id(), $id);
@@ -623,20 +621,21 @@ if ($form->validate()) {
 	}
 
 	//2. Update the extra fields and user tags if available
+    
 	if (is_array($extras) && count($extras)> 0) {
 		foreach ($extras as $key => $value) {
 			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-			$myres = UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
+			UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
 		}
 	}
-
-	// re-init the system to take new settings into account
-  $_SESSION['_user']['uidReset'] = true;
-  $_SESSION['noredirection'] = true;
-  $_SESSION['profile_update'] = 'success';
-  $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
-  header("Location: ".$url);
-  exit;
+    
+    // re-init the system to take new settings into account
+    $_SESSION['_user']['uidReset'] = true;
+    $_SESSION['noredirection'] = true;
+    $_SESSION['profile_update'] = 'success';
+    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
+    header("Location: ".$url);
+    exit;
 }
 
 
@@ -678,7 +677,6 @@ if (!empty($file_deleted)) {
 	if ($upload_production_success) {
 		$message.='<br />'.get_lang('ProductionUploaded');
 	}
-
 	Display :: display_confirmation_message($message, false);
 }
 
@@ -722,8 +720,7 @@ $url_big_image      = $big_image.'?rnd='.time();
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
-if (api_get_setting('allow_social_tool') == 'true') {
-    
+if (api_get_setting('allow_social_tool') == 'true') {    
 	echo '<div class="row-fluid">';
 		echo '<div class="span3">';
 		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);

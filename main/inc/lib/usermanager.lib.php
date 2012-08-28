@@ -1236,6 +1236,7 @@ class UserManager {
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 		$fvalues = '';
+        
 		//echo '<pre>'; print_r($fvalue);
 		if (is_array($fvalue)) {
 			foreach($fvalue as $val) {
@@ -1255,10 +1256,10 @@ class UserManager {
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
 				case self::USER_FIELD_TYPE_TAG :
-					//4. Tags are process here comes from main/auth/profile.php
+					//4. Tags are process here comes from main/auth/profile.php                    
 					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
 					return true;
-				break;
+                    break;
 				case self::USER_FIELD_TYPE_RADIO:
 				case self::USER_FIELD_TYPE_SELECT:
 				case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -1681,8 +1682,6 @@ class UserManager {
                 $sql .= " WHERE field_filter = $field_filter ";
             }
         }
-        
-
 		$sql .= " ORDER BY f.field_order";
 		
 		$res = Database::query($sql);
@@ -1690,6 +1689,7 @@ class UserManager {
 			while ($row = Database::fetch_array($res)) {
 				if ($row['type'] == self::USER_FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
+                    
 					$extra_data['extra_'.$row['fvar']] = $tags;
 				} else {
 					$sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
@@ -1812,7 +1812,7 @@ class UserManager {
 
 	public static function get_all_extra_field_by_type($field_type) {
 		// database table definition
-		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 
 		// all the information of the field
 		$sql = "SELECT * FROM $table_field WHERE field_type='".Database::escape_string($field_type)."'";
@@ -2561,13 +2561,12 @@ class UserManager {
 	public static function get_tags($tag, $field_id, $return_format='json',$limit=10) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
-		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id	= intval($field_id);
 		$limit		= intval($limit);
 		$tag 		= trim(Database::escape_string($tag));
 
 		// all the information of the field
-		$sql = "SELECT id, tag from $table_user_tag
+		$sql = "SELECT DISTINCT id, tag from $table_user_tag
 				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
 		$result = Database::query($sql);
 		$return = array();
@@ -2645,7 +2644,8 @@ class UserManager {
 		// all the information of the field
 		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
 				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
-		$result = Database::query($sql);
+		
+        $result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2676,12 +2676,12 @@ class UserManager {
 	 * @param int field_id
 	 * @return int returns 0 if fails otherwise the tag id
 	 */
-	public function get_tag_id($tag, $field_id) {
+	public static function get_tag_id($tag, $field_id) {
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$tag = Database::escape_string($tag);
 		$field_id = intval($field_id);
 		//with COLLATE latin1_bin to select query in a case sensitive mode
-		$sql = "SELECT id FROM $table_user_tag WHERE tag COLLATE latin1_bin  LIKE '$tag' AND field_id = $field_id";
+		$sql = "SELECT id FROM $table_user_tag WHERE tag LIKE '$tag' AND field_id = $field_id";
 		$result = Database::query($sql);
 		if (Database::num_rows($result)>0) {
 			$row = Database::fetch_array($result,'ASSOC');
@@ -2697,7 +2697,7 @@ class UserManager {
 	 * @param int field_id
 	 * @return int 0 if fails otherwise the tag id
 	 */
-	public function get_tag_id_from_id($tag_id, $field_id) {
+	public static function get_tag_id_from_id($tag_id, $field_id) {
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$tag_id = intval($tag_id);
 		$field_id = intval($field_id);
@@ -2719,7 +2719,7 @@ class UserManager {
 	 * @param int field id of the tag
 	 * @return bool
 	 */
-	public function add_tag($tag, $user_id, $field_id) {
+	public static function add_tag($tag, $user_id, $field_id) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -2729,6 +2729,7 @@ class UserManager {
 		$field_id = intval($field_id);
 
 		$tag_id = UserManager::get_tag_id($tag,$field_id);
+        
 		/* IMPORTANT
 		 *  @todo we don't create tags with numbers
 		 *
@@ -2746,19 +2747,21 @@ class UserManager {
 				$last_insert_id = Database::get_last_insert_id();
 			}*/
 		} else {
-			//this is a new tag
-			if ($tag_id == 0) {
-				//the tag doesn't exist
-				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-				$result = Database::query($sql);
-				$last_insert_id = Database::get_last_insert_id();
-			} else {
-				//the tag exists we update it
-				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-				$result = Database::query($sql);
-				$last_insert_id = $tag_id;
-			}
+			
 		}
+        
+        //this is a new tag
+        if ($tag_id == 0) {
+            //the tag doesn't exist
+            $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
+            $result = Database::query($sql);
+            $last_insert_id = Database::get_last_insert_id();
+        } else {
+            //the tag exists we update it
+            $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
+            $result = Database::query($sql);
+            $last_insert_id = $tag_id;
+        }
 
 		if (!empty($last_insert_id) && ($last_insert_id!=0)) {
 			//we insert the relationship user-tag
@@ -2778,7 +2781,7 @@ class UserManager {
 	 * @param int field id
 	 *
 	 */
-	public function delete_user_tags($user_id, $field_id) {
+	public static function delete_user_tags($user_id, $field_id) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -2804,8 +2807,8 @@ class UserManager {
 	 * @param int field id
 	 * @return bool
 	 */
-	public function process_tags($tags, $user_id, $field_id) {
-		//We loop the tags and add it to the DB
+	public static function process_tags($tags, $user_id, $field_id) {
+		//We loop the tags and add it to the DB        
 		if (is_array($tags)) {
 			foreach($tags as $tag) {
 				UserManager::add_tag($tag, $user_id, $field_id);
@@ -3321,7 +3324,7 @@ class UserManager {
 	  * @param int The user id
 	  * @return array  containing path_certificate and cat_id
 	  */
-	public function get_user_path_certificate($user_id) {
+	public static function get_user_path_certificate($user_id) {
 	 	$my_certificate = array();
 		$table_certificate 			= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 		$table_gradebook_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -3354,7 +3357,7 @@ class UserManager {
 	  * @return bool    True if the user is a coach
 	  *
 	  */
-	public function is_session_course_coach($user_id, $course_code, $session_id) {
+	public static function is_session_course_coach($user_id, $course_code, $session_id) {
 		$tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	    // Protect data
 		$user_id = intval($user_id);
@@ -3377,7 +3380,7 @@ class UserManager {
 	 * @param	string	Optional second URL of website where to look for favicon.ico
 	 * @return	string	Path of icon to load
 	 */
-	public function get_favicon_from_url($url1, $url2 = null) {
+	public static function get_favicon_from_url($url1, $url2 = null) {
 		$icon_link = '';
 		$url = $url1;
 		if (empty($url1)) {
@@ -3439,7 +3442,7 @@ class UserManager {
         return false;
     }
     
-    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false) {
+    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false, $user_id = null) {        
         $user_id = intval($user_id);
         
         // EXTRA FIELDS
@@ -3576,7 +3579,7 @@ class UserManager {
                     break;
                 case self::USER_FIELD_TYPE_TAG:
                     //the magic should be here
-                    $user_tags = UserManager::get_user_tags(api_get_user_id(),$field_details[0]);
+                    $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);                    
 
                     $tag_list = '';
                     if (is_array($user_tags) && count($user_tags)> 0) {
@@ -3647,7 +3650,7 @@ EOF;
         return $types;
     }
 
-    function add_user_as_admin($user_id) {
+    static function add_user_as_admin($user_id) {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $user_id = intval($user_id);
 
@@ -3657,7 +3660,7 @@ EOF;
          }
     }
 
-    function remove_user_admin($user_id) {
+    static function remove_user_admin($user_id) {
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $user_id = intval($user_id);
         if (self::is_admin($user_id)) {

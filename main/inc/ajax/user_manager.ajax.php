@@ -46,9 +46,9 @@ switch ($action) {
         if (api_is_anonymous()) {
 			echo '';	
 		} else {		
-			$field_id = intval($_GET['field_id']);
-			$tag = $_GET['tag'];
-			echo UserManager::get_tags($tag, $field_id,'json','10');
+			if (isset($_GET['tag']) && isset($_GET['field_id'])) {
+                echo UserManager::get_tags($_GET['tag'], $_GET['field_id'],'json','10');
+            }
 		}
         break;
 	case 'generate_api_key':

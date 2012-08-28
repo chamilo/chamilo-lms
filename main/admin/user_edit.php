@@ -18,8 +18,11 @@ api_protect_admin_script(true);
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 
 api_protect_super_admin($user_id, null, true);
+
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
 <script>
 
@@ -183,16 +186,16 @@ if (count($extAuthSource) > 0) {
 	}
 	if ($nb_ext_auth_source_added > 0) {
 	    // @todo check the radio button for external authentification and select the external authentification in the menu
-	    $group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
-	    $group[] =& HTML_QuickForm::createElement('select', 'auth_source', null, $auth_sources);
-	    $group[] =& HTML_QuickForm::createElement('static', '', '', '<br />');
+	    $group[] =$form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
+	    $group[] =$form->createElement('select', 'auth_source', null, $auth_sources);
+	    $group[] =$form->createElement('static', '', '', '<br />');
 	    $form->addGroup($group, 'password', null, '', false);
 	}
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, null, 2);
-$group[] =& HTML_QuickForm::createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] =$form->createElement('radio', 'reset_password', null, null, 2);
+$group[] =$form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
 $form->addGroup($group, 'password', null, '', false);
 
 // Status
@@ -229,8 +232,8 @@ $form->addElement('html', '</div>');
 // Platform admin
 if (api_is_platform_admin()) {
 	$group = array();
-	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
+	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
+	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
 
 	$user_data['status'] == 1 ? $display = 'block':$display = 'none';
 
@@ -241,8 +244,8 @@ if (api_is_platform_admin()) {
 
 // Send email
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] =$form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] =$form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
 // Registration Date
@@ -263,8 +266,16 @@ if (!$user_data['platform_admin']) {
 
 
 // EXTRA FIELDS
+$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
+$jquery_ready_content = $return_params['jquery_ready_content'];
 
-UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true);
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$htmlHeadXtra[] ='<script>
+$(document).ready(function(){
+	'.$jquery_ready_content.'
+});
+</script>';
+
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
@@ -292,7 +303,7 @@ $error_drh = false;
 // Validate form
 if ( $form->validate()) {
 
-	$user = $form->exportValues();
+	$user = $form->getSubmitValues();
 	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
@@ -350,9 +361,9 @@ if ( $form->validate()) {
                 UserManager::remove_user_admin($user_id);
 			}
 		}
-
+        
 		foreach ($user as $key => $value) {
-			if(substr($key, 0, 6) == 'extra_') { //an extra field
+			if (substr($key, 0, 6) == 'extra_') { //an extra field
 				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 			}
 		}

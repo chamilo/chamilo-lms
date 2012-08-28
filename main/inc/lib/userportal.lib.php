@@ -867,7 +867,7 @@ class IndexManager {
             //Load sessions in category
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
 		}             
-                
+
         $html = '';
         
         //Showing history title
@@ -885,9 +885,9 @@ class IndexManager {
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             //Display special courses
-            $special_courses = CourseManager :: display_special_courses($user_id, $this->load_directories_preview);                        
+            $special_courses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);                        
             //Display courses
-            $courses_html .= CourseManager :: display_courses($user_id, $this->load_directories_preview);
+            $courses_html .= CourseManager::display_courses($user_id, $this->load_directories_preview);
         }
         
         $sessions_with_category = '';
@@ -942,7 +942,7 @@ class IndexManager {
 
                             $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $extra_info .= !empty($session_box['dates']) ? ' - '.$session_box['dates'] : null;
+                            $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
 
                             if (api_is_drh()) {
                                 $session_link = $session_box['title'];
@@ -967,7 +967,7 @@ class IndexManager {
                             $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                         }
                     }                    
-				} else {                    
+				} else {              
 					// All sessions included in					
                     $count_courses_session = 0;
                     $html_sessions = '';                        
@@ -987,6 +987,7 @@ class IndexManager {
 
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
+                            
                             if ($is_coach_course) {
                                 $allowed_time = api_strtotime($date_session_start) - $days_access_before_beginning;
                             } else {

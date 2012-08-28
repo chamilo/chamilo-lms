@@ -47,8 +47,8 @@ $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
 
 $user_course_list = array();
-foreach($new_session_list as $session_item) {
-    $user_course_list[] = $session_item['k'];
+foreach ($new_session_list as $session_item) {
+    $user_course_list[] = $session_item['code'];
 }
 
 $my_session_list = array();
@@ -95,7 +95,7 @@ if (!empty($new_session_list)) {
     }
 }
 
-if (!empty($course_list)) {
+if (!empty($course_list)) {    
     foreach ($course_list as $course_data) {
         if (in_array($course_data['code'], $user_course_list)) {
             $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));            
@@ -113,8 +113,7 @@ if (!empty($course_list)) {
         
         $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(), $course_data['code'], $session_id, false);
         $icons = '';
-        foreach($lp_list as $item) {
-        
+        foreach ($lp_list as $item) {        
             if ($item['modified_on'] == '0000-00-00 00:00:00' || empty($item['modified_on'])) {        
                 $lp_date_original = $item['created_on'];
                 $image = 'new.gif';
@@ -129,27 +128,27 @@ if (!empty($course_list)) {
             
             if (api_strtotime($mutation_date) > api_strtotime($max_mutation_date)) {
                 $max_mutation_date = $mutation_date;
-            }
-            
+            }            
 
             if (strtotime($last_date) < strtotime($lp_date_original)) {
                 if (empty($icons)) {
                     $icons .= ' '.Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date_original).' ';                    
                 }
             }           
-        }        
-        $new_course_list[] = array( 'title'=> $course_data['title'].$icons,
-      //                                 'recent_lps' => $icons,
-                                       //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
-                                       'exercise_count' => $exercise_count,
-                                       'lp_count'       => $lp_count); 
+        }
+        
+        $new_course_list[] = array('title'=> $course_data['title'].$icons,
+      //                           'recent_lps' => $icons,
+                                   //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
+                                   'exercise_count' => $exercise_count,
+                                   'lp_count'       => $lp_count);
     }
 }
 
 //If the requested session does not exist in my list we stop the script
 if (!api_is_platform_admin()) {
 	if (!in_array($session_id, $my_session_list)) {       
-		api_not_allowed();
+		api_not_allowed(true);
 	}
 }
 
@@ -416,8 +415,7 @@ $(function() {
     });
    
          
-<?php 
-
+<?php
      //Displays js code to use a jqgrid
      echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
      echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');

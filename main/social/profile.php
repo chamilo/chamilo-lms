@@ -316,7 +316,7 @@ if (is_array($personal_course_list)) {
     foreach ($personal_course_list as $my_course) {
         if ($i<=10) {
             $list[] = SocialManager::get_logged_user_course_html($my_course, $i);            
-            $course_list_code[] = array('code'=>$my_course['code']);
+            $course_list_code[] = array('code'=> $my_course['code']);
         } else {
             break;
         }

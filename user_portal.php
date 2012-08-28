@@ -51,7 +51,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     $count_of_courses_no_sessions = 0;
     $count_of_courses_with_sessions = 0;
     
-    foreach($personal_course_list as $course) {       
+    foreach ($personal_course_list as $course) {       
         if (!empty($course['id_session'])) {
             $my_session_list[$course['id_session']] = true;
             $count_of_courses_with_sessions++;
@@ -65,7 +65,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
      
         $key              = array_keys($personal_course_list);
         $course_info      = $personal_course_list[$key[0]];
-        $course_directory = $course_info['d'];
+        $course_directory = $course_info['course_info']['path'];
         $id_session       = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
 
         $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session; 

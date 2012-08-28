@@ -87,7 +87,7 @@ if (empty ($exerciseResultCoordinates)) {
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? $_REQUEST['choice2'] : null;
 
-$questionNum				= isset($_REQUEST['questionNum']) ? intval($_REQUEST['questionNum']) : null;
+//From submit modal
 $current_question			= isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 
 //Error message

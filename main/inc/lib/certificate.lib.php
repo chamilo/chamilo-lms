@@ -23,8 +23,9 @@ class Certificate extends Model {
     var $user_id;
     
     //If true every time we enter to the certificate URL we would generate a new certificate
-    // (good thing because we can edit the certificate and all users will have the latest certificate bad because we load everytime)
+    // (good thing because we can edit the certificate and all users will have the latest certificate bad because we load the certificate everytime)
     var $force_certificate_generation = true;  //default true
+    
     /**
      * Constructor
      * @param	int	ID of the certificate. If no ID given, take user_id and try to generate one
@@ -35,7 +36,7 @@ class Certificate extends Model {
         
         if (isset($certificate_id)) {
             $this->certificate_data = $this->get($certificate_id);
-            $this->user_id             = $this->certificate_data['user_id'];
+            $this->user_id          = $this->certificate_data['user_id'];
         } else {
             //Try with the current user
             $this->user_id = api_get_user_id();
@@ -98,7 +99,7 @@ class Certificate extends Model {
      * the teacher from the gradebook tool to re-generate the certificate because
      * the original version wa flawed.
      */
-    public function delete() {
+    public function delete($id = null) {
         
         if (!empty($this->certificate_data)) {
                          
@@ -148,10 +149,7 @@ class Certificate extends Model {
             $scorecourse  = $my_category[0]->calc_score($this->user_id);
     
             $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
-            //$cattotal = Category :: load($this->certificate_data['cat_id']);
-            //$scoretotal= $cattotal[0]->calc_score($this->user_id);
-            //$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-    
+                
             //Prepare all necessary variables:
             $organization_name     = api_get_setting('Institution');
             //$portal_name         = api_get_setting('siteName');
@@ -161,8 +159,6 @@ class Certificate extends Model {
             //@todo this code is not needed
             $certif_text         = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'), $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(), $scorecourse_display);
             $certif_text         = str_replace("\\n","\n", $certif_text);
-            
-            //$date = date('d/m/Y', time());
             
             //If the gradebook is related to skills we added the skills to the user
                                 
@@ -188,11 +184,8 @@ class Certificate extends Model {
                             //Getting QR filename
                             $file_info = pathinfo($path_certificate);
                             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';                            
-                 
-                            $new_content_html['content'] = str_replace('((certificate_barcode))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
                             
-                            $my_new_content_html = $new_content_html['content'];
-                        
+                            $my_new_content_html = str_replace('((certificate_barcode))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
                             $my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
                             
                             $result = @file_put_contents($my_path_certificate, $my_new_content_html);
@@ -202,7 +195,7 @@ class Certificate extends Model {
                                 $this->certificate_data['path_certificate'] = $path_certificate;
                                 
                                 if ($this->html_file_is_generated()) {
-                                    if (!empty($file_info)) {                                        
+                                    if (!empty($file_info)) {                             
                                         $text = $this->parse_certificate_variables($new_content_html['variables']);                                        
                                         $this->generate_qr($text, $qr_code_filename);
                                     }
@@ -229,7 +222,7 @@ class Certificate extends Model {
         if (!UserManager::is_user_certified($cat_id,$user_id)) {
             $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
                  WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-            $rs = Database::query($sql);
+            Database::query($sql);
         }
     }
 
@@ -260,8 +253,9 @@ class Certificate extends Model {
         if (!empty($text) && !empty($path)) {
             require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
             //L low, M - Medium, L large error correction
-            $return = QRcode::png($text, $path, 'M', 2, 2);
+            return QRcode::png($text, $path, 'M', 2, 2);
         }
+        return false;
     }
     
     /**
@@ -270,16 +264,15 @@ class Certificate extends Model {
      * @param array Contains two array entris: first are the headers, second is an array of contents
      * @return string The translated string
      */
-    private function parse_certificate_variables($array) {
+    public function parse_certificate_variables($array) {
         $text = '';        
         $headers = $array[0];
         $content = $array[1];
         $final_content = array();
         
         if (!empty($content)) {
-            foreach($content as $key => $value) {
-                $my_header = $headers[$key];
-                $my_header = str_replace(array('((', '))') , '', $my_header);
+            foreach($content as $key => $value) {                
+                $my_header = str_replace(array('((', '))') , '', $headers[$key]);
                 $final_content[$my_header] = $value;
             }
         }

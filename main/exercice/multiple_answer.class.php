@@ -28,7 +28,7 @@ class MultipleAnswer extends Question {
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswer(){
+	function MultipleAnswer() {
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER;
 		$this -> isContent = $this-> getIsContent();
@@ -105,8 +105,7 @@ class MultipleAnswer extends Question {
 				$defaults['weighting[2]'] = -5;
 			}
 			$renderer = & $form->defaultRenderer();
-			
-            
+			            
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  

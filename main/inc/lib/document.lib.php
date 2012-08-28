@@ -1328,7 +1328,7 @@ class DocumentManager {
         if ($num == 0) {
             return null;
         }
-        $row    = Database::fetch_array($rs);
+        $row = Database::fetch_array($rs);
         return $row['document_id'];
     }
 
@@ -1337,7 +1337,7 @@ class DocumentManager {
      * @param string The course code
      * @return string The html content of the certificate
      */
-    function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
+    static function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
         $user_id 		= intval($user_id);
         $course_info 	= api_get_course_info($course_code);
         $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
@@ -1350,7 +1350,7 @@ class DocumentManager {
             $new_content = '';
             $all_user_info = array();
             if (Database::num_rows($rs)) {
-                $row=Database::fetch_array($rs);
+                $row = Database::fetch_array($rs);
                 $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
@@ -1406,7 +1406,9 @@ class DocumentManager {
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/?id='.$info_grade_certificate['id'];
+        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+
+        
         //replace content
         $info_to_replace_in_content_html     = array($first_name,
                                                      $last_name,
@@ -1423,6 +1425,7 @@ class DocumentManager {
                                                      '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
                                                      '((certificate_barcode))',
                                                     );
+        
         $info_to_be_replaced_in_content_html = array('((user_firstname))',
         											 '((user_lastname))',
         											 '((gradebook_institution))',
@@ -1445,6 +1448,7 @@ class DocumentManager {
                 $info_to_replace_in_content_html[]=$value_extra;
             }
         }
+            
         $info_list[]=$info_to_be_replaced_in_content_html;
         $info_list[]=$info_to_replace_in_content_html;
         return $info_list;

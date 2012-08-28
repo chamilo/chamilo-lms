@@ -628,8 +628,6 @@ class HTML_QuickForm extends HTML_Common
                 $args[$i] = null;
             }
         }
-        
-        
         $err = $elementObject->onQuickFormEvent($event, $args, $this);
         if ($err !== true) {
             return $err;
@@ -784,7 +782,7 @@ class HTML_QuickForm extends HTML_Common
             $name       = 'qf_group_' . $anonGroups++;
             $appendName = false;
         }
-        $group =& $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
+        $group = & $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
         return $group;
     } // end func addGroup
 

@@ -19,12 +19,10 @@ require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_data_generator.class.php';
 
-require_once api_get_path(LIBRARY_PATH).'certificate.lib.php';
-
 
 //extra javascript functions for in html head:
 $htmlHeadXtra[] =
-"<script language='javascript' type='text/javascript'>
+"<script>
 function confirmation() {
 	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
 		{return true;}
@@ -52,10 +50,10 @@ if ($_GET['action'] == 'delete') {
 	}
 }
 
-echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
+echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
 ?>
 
-<table  class="data_table" border="0" width="100%" >
+<table  class="data_table">
 	<?php
 	$cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
 
@@ -114,7 +112,7 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 		</tr>
 	<tr>
 	<td>
-	<table class="data_table" width="100%" >
+	<table class="data_table">
 		<?php
 		$list_certificate = get_list_gradebook_certificates_by_user_id ($value['user_id'], $cat_id);		
 		foreach ($list_certificate as $value_certificate) {
@@ -125,8 +123,8 @@ echo Display::tag('h3', get_lang('GradebookListOfStudentsCertificates'));
 			<td width="20%">
 			<?php			
                 //$url = "index.php?export_certificate=yes&cat_id=".$cat_id."&user=".$value['user_id'];
-                $url = api_get_path(WEB_PATH).'certificates/?id='.$value_certificate['id'];
-    			$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), ICON_SIZE_SMALL), $url, array('target'=>'_blank'));
+                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$value_certificate['id'];
+    			$certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn'));
     			echo $certificates;
             ?>
 			 <a onclick="return confirmation();" href="gradebook_display_certificate.php?action=delete&cat_id=<?php echo $cat_id; ?>&certificate_id=<?php echo $value_certificate['id'] ?>">

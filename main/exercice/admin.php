@@ -135,7 +135,7 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath = $documentPath.'/images';
 
 // audio path
-$audioPath=$documentPath.'/audio';
+$audioPath = $documentPath.'/audio';
 
 // the 5 types of answers
 $aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
@@ -151,8 +151,7 @@ $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once 'export/qti2/qti2_export.php';
 	$export = export_question($_GET['questionId'],true);
-	$qid = (int)$_GET['questionId'];
-	require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+	$qid = (int)$_GET['questionId'];	
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path."/".$temp_dir_short;
@@ -216,8 +215,6 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 		$questionId = $objQuestion->selectId();
 	}
 }
-
-
 
 // if cancelling an exercise
 if ($cancelExercise) {

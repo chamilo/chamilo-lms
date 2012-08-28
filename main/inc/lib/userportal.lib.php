@@ -3,7 +3,6 @@
 
 use \ChamiloSession as Session;
 
-
 class IndexManager {
 	var $tpl 	= false; //An instance of the template engine
 	var $name 	= '';
@@ -647,7 +646,8 @@ class IndexManager {
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
         // 'placeholder'=>get_lang('UserName')
         //'autocomplete'=>"off",        
-		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2', 'autofocus' => 'autofocus'));
+        
+		$form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
 		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));		
 		$html = $form->return_form();

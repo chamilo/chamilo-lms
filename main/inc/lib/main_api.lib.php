@@ -2813,7 +2813,7 @@ function api_not_allowed($print_headers = false, $message = null) {
 
         //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
         
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3')); //new
+        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
 
         //$form->addElement('password', 'password', get_lang('Password'), array('size' => 17)); //old
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new

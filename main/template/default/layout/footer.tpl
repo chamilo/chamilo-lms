@@ -75,6 +75,8 @@ $(document).ready( function() {
         }    
     });
     
+    $('.autocapitalize_off').attr('autocapitalize', 'off');
+    
     //Tool tip (in exercises)
     var tip_options = {
         placement : 'right'

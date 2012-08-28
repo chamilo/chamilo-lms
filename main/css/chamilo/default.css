@@ -118,14 +118,6 @@ footer {
     background:transparent url('images/textologo.jpg') no-repeat;
 }
 
-#exercise_close_link {
-    background: url(images/close.gif) no-repeat;
-}
-
-#exercise_close_link:hover {
-    background: url(images/close_highlight.gif) no-repeat;
-}
-
 /*including "login" image*/
 button.login {
     background-image:url(images/bg-button.gif);

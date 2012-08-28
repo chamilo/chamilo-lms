@@ -60,10 +60,10 @@ if (is_object($objQuestion)) {
 	$form->addElement('header', $text.': '.$form_title_extra);
     
 	// question form elements
-	$objQuestion->createForm ($form);
+	$objQuestion->createForm($form);
 
 	// answer form elements
-	$objQuestion->createAnswersForm ($form);
+	$objQuestion->createAnswersForm($form);
 
 	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
 	if (!$show_quiz_edition) {
@@ -77,13 +77,13 @@ if (is_object($objQuestion)) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 	
 	// FORM VALIDATION
-	if (isset($_POST['submitQuestion']) && $form->validate()) { 
+	if (isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question
-	    $objQuestion->processCreation($form,$objExercise);
-	    // answers
+	    $objQuestion->processCreation($form, $objExercise);
         
-	    $objQuestion->processAnswersCreation($form,$nb_answers);
+	    // answers        
+	    $objQuestion->processAnswersCreation($form, $nb_answers);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 

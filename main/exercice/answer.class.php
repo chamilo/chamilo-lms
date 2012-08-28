@@ -420,7 +420,7 @@ class Answer {
 	 * @param coordinates 	Coordinates for hotspot exercises (optional)
 	 * @param integer		Type for hotspot exercises (optional)
 	 */
-	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL,$destination='') {
+	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = null, $new_hotspot_type = null, $destination='') {
 		$this->new_nbrAnswers++;
 		$id=$this->new_nbrAnswers;
 		$this->new_answer[$id]=$answer;
@@ -430,7 +430,7 @@ class Answer {
 		$this->new_position[$id]=$position;
 		$this->new_hotspot_coordinates[$id]=$new_hotspot_coordinates;
 		$this->new_hotspot_type[$id]=$new_hotspot_type;
-		$this->new_destination[$id]=$destination;
+		$this->new_destination[$id] = $destination;
 	}
 
 	/**
@@ -446,14 +446,14 @@ class Answer {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
-		$sql = "UPDATE $TBL_REPONSES SET " .
-				"answer = '".Database::escape_string($answer)."', " .
-				"comment = '".Database::escape_string($comment)."', " .
-				"ponderation = '".Database::escape_string($weighting)."', " .
-				"position = '".Database::escape_string($position)."', " .
-				"destination = '".Database::escape_string($destination)."' " .
-				"WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."' " .
-				"AND question_id = '".Database::escape_string($questionId)."'";
+		$sql = "UPDATE $TBL_REPONSES SET 
+                answer = '".Database::escape_string($answer)."',
+				comment = '".Database::escape_string($comment)."', 
+				ponderation = '".Database::escape_string($weighting)."', 
+				position = '".Database::escape_string($position)."', 
+				destination = '".Database::escape_string($destination)."'
+				WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."'
+				AND question_id = '".Database::escape_string($questionId)."'";
 		Database::query($sql);
 	}
 
@@ -469,9 +469,10 @@ class Answer {
 		// removes old answers before inserting of new ones
 		$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
 		Database::query($sql);
+        
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
-		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES ";
+		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
 		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
 			$answer					= Database::escape_string($this->new_answer[$i]);
 			$correct				= Database::escape_string($this->new_correct[$i]);
@@ -484,8 +485,7 @@ class Answer {
 
 			$sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
-		$sql = api_substr($sql,0,-1);
-        
+		$sql = api_substr($sql,0,-1);        
 		Database::query($sql);
 
 		// moves $new_* arrays

@@ -687,21 +687,7 @@ div.lp_resource_elements {
 .exercice_form {
 	width: 300px;
 }
-#validationButton {
-	text-decoration: none;
-	margin: 5px;
-	border:1px solid #999999;
-	background:#F0F0F0;
-	padding: 3px;
-	padding-left:10px;
-	padding-right:10px;
-	font-weight:bold;
-	color:#666;
-}
-.exercise_scenario_label {
-}
-.exercise_scenario_element {
-}
+
 span.checkbox {
 	width: 19px;
 	height: 25px;
@@ -1257,21 +1243,6 @@ ul#navigation .help a{
  **********************************************/
 .exercice_form {
 	width: 300px;
-}
-#validationButton {
-	text-decoration: none;
-	margin: 5px;
-	/*border:1px solid #999999;*/
-	/*background:#F0F0F0;  */
-	padding: 3px;
-	padding-left:10px;
-	padding-right:10px;
-	font-weight:bold;
-	color:#666;
-}
-.exercise_scenario_label {
-}
-.exercise_scenario_element {
 }
 span.checkbox {
 	width: 19px;

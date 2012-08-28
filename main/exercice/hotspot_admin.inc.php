@@ -583,8 +583,8 @@ $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_g
 							} else {
 								$option_lp = '<option value="0" selected="selected" >'.get_lang('SelectTargetLP').'</option>'.$option_lp;
 							}
-							//Feedback SELECT
-							
+                            
+							//Feedback SELECT							
 							$question_list=$objExercise->selectQuestionList();						
 							$option_feed='';						
 							$option_feed.='<option value="0">'.get_lang('SelectTargetQuestion').'</option>';

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-// $Id: testcategory.class.php 2010-12-06 hubert.borderiou 
+/** @author hubert.borderiou  **/
 
-if(!class_exists('Testcategory')):
+if (!class_exists('Testcategory')):
 
 class Testcategory {
 	public $id;

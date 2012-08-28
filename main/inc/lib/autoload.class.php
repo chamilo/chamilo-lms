@@ -584,6 +584,7 @@ class Autoload
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
+        $result['Testcategory'] = '/main/exercice/testcategory.class.php';        
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
         $result['FileManager'] = '/main/inc/lib/fileManage.lib.php';

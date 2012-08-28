@@ -181,7 +181,7 @@ class UniqueAnswer extends Question {
             }
             $defaults['scenario'] = $temp_scenario;
 
-            $renderer = & $form->defaultRenderer();
+            $renderer = $form->defaultRenderer();
             
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
@@ -203,23 +203,16 @@ class UniqueAnswer extends Question {
             } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
                 // Direct feedback
-                
+          
                 //Adding extra feedback fields
                 $group = array();
-                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, get_lang('TryAgain').': ' , get_lang('TryAgain'));
+                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null , get_lang('TryAgain'));
                 $group['lp'.$i]  = $form->createElement('select', 'lp'.$i, get_lang('SeeTheory').': ', $select_lp_id);
                 $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' , $select_question);
                 $group['url'.$i] = $form->createElement('text', 'url'.$i, get_lang('Other').': ', array('class'=>'span2', 'placeholder' => get_lang('Other')));
-               
-                /*$renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'url'.$i.'');
-                $renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'lp'.$i.'');
-                $renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'try'.$i.'');*/
+                $form->addGroup($group, 'scenario');                
                 
-                $renderer->setGroupElementTemplate('<div>{label} {element}</div>', 'scenario');               
-                $group_result = $form->addGroup($group, 'scenario');
-                
-                $renderer->setGroupTemplate('<td>'.$group_result->toHtml().'</td>', 'scenario');
-                //$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>', 'scenario');
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');            
                 
             }
             $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
@@ -250,7 +243,7 @@ class UniqueAnswer extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
         
-        $form -> addElement ('html', '</div></div>');
+        $form->addElement('html', '</div></div>');
 
 		//We check the first radio button to be sure a radio button will be check
 		if ($correct==0) {
@@ -279,21 +272,20 @@ class UniqueAnswer extends Question {
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$correct = $form -> getSubmitValue('correct');
 		$objAnswer = new Answer($this->id);
-		$nb_answers = $form -> getSubmitValue('nb_answers');
+		$nb_answers = $form->getSubmitValue('nb_answers');
 
 		for ($i=1 ; $i <= $nb_answers ; $i++) {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment = trim($form -> getSubmitValue('comment['.$i.']'));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
 
-            $scenario= $form -> getSubmitValue('scenario');
-
-            echo '<pre>';
+            $scenario = $form -> getSubmitValue('scenario');
+            
            	//$list_destination = $form -> getSubmitValue('destination'.$i);
            	//$destination_str = $form -> getSubmitValue('destination'.$i);
 
- 		    $try = $scenario['try'.$i];
-            $lp= $scenario['lp'.$i];
+ 		    $try = $scenario['try'.$i];            
+            $lp = $scenario['lp'.$i];
  			$destination = $scenario['destination'.$i];
  			$url = trim($scenario['url'.$i]);
 
@@ -301,7 +293,7 @@ class UniqueAnswer extends Question {
  			How we are going to parse the destination value
 
 			here we parse the destination value which is a string
-		 	1@@3@@2;4;4;@@http://www.dokeos.com
+		 	1@@3@@2;4;4;@@http://www.chamilo.org
 
 		 	where: try_again@@lp_id@@selected_questions@@url
 
@@ -309,31 +301,29 @@ class UniqueAnswer extends Question {
 			lp_id = id of a learning path (0 if dont select)
 			selected_questions= ids of questions
 			url= an url
-			*/
-			/*
+	
  			$destination_str='';
  			foreach ($list_destination as $destination_id)
  			{
  				$destination_str.=$destination_id.';';
  			}*/
 
-        	$goodAnswer= ($correct == $i) ? true : false;
+        	$goodAnswer = ($correct == $i) ? true : false;
 
-        	if($goodAnswer) {
+        	if ($goodAnswer) {
         		$nbrGoodAnswers++;
         		$weighting = abs($weighting);
-        		if($weighting > 0)
-                {
+        		if($weighting > 0) {
                     $questionWeighting += $weighting;
                 }
         	}
 
- 			if (empty($try))
- 				$try=0;
+ 			if (empty($try)) {
+ 				$try = 0;
+            }
 
- 			if (empty($lp))
- 			{
- 				$lp=0;
+ 			if (empty($lp)) {
+ 				$lp = 0;
  			}
 
  			if (empty($destination)) {
@@ -344,17 +334,17 @@ class UniqueAnswer extends Question {
  				$url=0;
  			}
 
- 			//1@@1;2;@@2;4;4;@@http://www.dokeos.com
-			$dest= $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
-        	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i,NULL,NULL,$dest);
+ 			//1@@1;2;@@2;4;4;@@http://www.chamilo.org
+			$dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;            
+        	$objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i, null, null, $dest);
         }
         
     	// saves the answers into the data base
-        $objAnswer -> save();
+        $objAnswer->save();
 
         // sets the total weighting of the question
-        $this -> updateWeighting($questionWeighting);
-        $this -> save();
+        $this->updateWeighting($questionWeighting);
+        $this->save();
 	}
 	
 	function return_header($feedback_type = null, $counter = null, $score = null) {

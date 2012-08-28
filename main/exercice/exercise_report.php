@@ -238,7 +238,6 @@ if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'd
         Database::query($sql);
         header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
         exit;
-
     }
 }
 

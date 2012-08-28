@@ -223,7 +223,7 @@ switch ($action) {
         //used inside get_exam_results_data()
 		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		if ($is_allowedToEdit) {
-			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score','status','actions');
+			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		} else {
 			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}       

@@ -1094,18 +1094,18 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                             $actions .="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
                             $actions .='&nbsp;';
                         }
-                        $actions .="</a>";                     
-                        if ($is_allowedToEdit) {
-                            if ($filter==2){
-                                $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
-                            }
+                        $actions .="</a>";
+                                                
+                        if ($filter == 2) {
+                            $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                        }                        
+                        
+                        //Admin can always delete the attempt
+                        if ($locked == false || api_is_platform_admin()) {
+                            $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
+                            $actions .='&nbsp;';
                         }
-                        if (api_is_platform_admin()) {     
-                            if ($locked == false) {
-                                $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
-                                $actions .='&nbsp;';
-                            }
-                        }
+                        
                     } else {
                     	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
                     	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));                    	

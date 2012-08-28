@@ -31,7 +31,7 @@ class UniqueAnswer extends Question {
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswer(){
+	function UniqueAnswer() {
 		//this is highly important
 		parent::question();
 		$this -> type = UNIQUE_ANSWER;
@@ -63,9 +63,10 @@ class UniqueAnswer extends Question {
 		$feedback_title='';
 		$comment_title='';
 
-		if ($obj_ex->selectFeedbackType()==0) {
-			$comment_title = '<th>'.get_lang('Comment').'</th>';
-		} elseif ($obj_ex->selectFeedbackType()==1) {
+		if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+			$comment_title = '<th>'.get_lang('Comment').'</th>';            
+		} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            //Scenario
 			$editor_config['Width'] = '250';
 			$editor_config['Height'] = '110';
 			$comment_title = '<th width="500px" >'.get_lang('Comment').'</th>';
@@ -104,9 +105,9 @@ class UniqueAnswer extends Question {
 		$form -> addElement('hidden', 'nb_answers');
 
 		//Feedback SELECT
-		$question_list=$obj_ex->selectQuestionList();
+		$question_list = $obj_ex->selectQuestionList();
 		$select_question=array();
-		$select_question[0]=get_lang('SelectTargetQuestion');
+		$select_question[0] = get_lang('SelectTargetQuestion');
 
 		require_once '../newscorm/learnpathList.class.php';        
 		if (is_array($question_list)) {
@@ -119,7 +120,7 @@ class UniqueAnswer extends Question {
 				$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);
 			}
 		}
-		$select_question[-1]=get_lang('ExitTest');
+		$select_question[-1] = get_lang('ExitTest');
 
 		$list = new LearnpathList(api_get_user_id());
 		$flat_list = $list->get_flat_list();
@@ -135,8 +136,7 @@ class UniqueAnswer extends Question {
         if ($nb_answers < 1) {
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-        }
-                        
+        }                        
 
         for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             $form -> addElement ('html', '<tr>');                
@@ -144,9 +144,9 @@ class UniqueAnswer extends Question {
                 if ($answer -> correct[$i]) {
                     $correct = $i;
                 }
-                $defaults['answer['.$i.']']    = $answer -> answer[$i];
-                $defaults['comment['.$i.']']   = $answer -> comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
+                $defaults['answer['.$i.']']    = $answer->answer[$i];
+                $defaults['comment['.$i.']']   = $answer->comment[$i];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
 
                 $item_list=explode('@@',$answer -> destination[$i]);
 
@@ -155,15 +155,16 @@ class UniqueAnswer extends Question {
                 $list_dest = $item_list[2];
                 $url       = $item_list[3];
 
-                if ($try==0)
-                    $try_result=0;
-                else
-                    $try_result=1;
-
-                if ($url==0)
+                if ($try==0) {
+                    $try_result = 0;
+                } else {
+                    $try_result = 1;
+                }
+                if ($url==0) {
                     $url_result='';
-                else
-                    $url_result=$url;
+                } else {
+                    $url_result = $url;
+                }
 
                 $temp_scenario['url'.$i]        = $url_result;
                 $temp_scenario['try'.$i]        = $try_result;
@@ -199,19 +200,19 @@ class UniqueAnswer extends Question {
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
                 // feedback
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
+            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 // direct feedback
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
                 //Adding extra feedback fields
                 $group = array();
-                $group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-                $group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-                $group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-                $group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
+                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
+                $group['lp'.$i] = $form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
+                $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
+                $group['url'.$i] = $form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
                 
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'url'.$i);    
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'lp'.$i);
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'try'.$i);
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'url'.$i.'');
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'lp'.$i.'');
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'try'.$i.'');
                 
                 $form -> addGroup($group, 'scenario', 'scenario');
                 $renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');

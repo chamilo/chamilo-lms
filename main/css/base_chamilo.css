@@ -8,6 +8,10 @@
     border:1px solid #E1E1E0;
 }
 
+.subnav .brand {
+    color:white;
+}
+
 /*
     Side-Menu Slider (JQuery) see banner.inc.php
 */

@@ -75,6 +75,12 @@ $(document).ready( function() {
         }    
     });
     
+    /* For non HTML5 browsers */
+    if ($("#formLogin".length > 1)) {
+        $("input[name=login]").focus();
+    }
+    
+    /* For IOS users */
     $('.autocapitalize_off').attr('autocapitalize', 'off');
     
     //Tool tip (in exercises)

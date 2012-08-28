@@ -181,12 +181,12 @@ class UniqueAnswer extends Question {
             }
             $defaults['scenario'] = $temp_scenario;
 
-            $renderer =& $form->defaultRenderer();
+            $renderer = & $form->defaultRenderer();
             
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
             
             $answer_number = $form->addElement('text', 'counter['.$i.']',null,' value = "'.$i.'"');
@@ -200,22 +200,27 @@ class UniqueAnswer extends Question {
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
                 // feedback
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                // direct feedback
+            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+                // Direct feedback
+                
                 //Adding extra feedback fields
                 $group = array();
-                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-                $group['lp'.$i] = $form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-                $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-                $group['url'.$i] = $form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
+                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, get_lang('TryAgain').': ' , get_lang('TryAgain'));
+                $group['lp'.$i]  = $form->createElement('select', 'lp'.$i, get_lang('SeeTheory').': ', $select_lp_id);
+                $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' , $select_question);
+                $group['url'.$i] = $form->createElement('text', 'url'.$i, get_lang('Other').': ', array('class'=>'span2', 'placeholder' => get_lang('Other')));
+               
+                /*$renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'url'.$i.'');
+                $renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'lp'.$i.'');
+                $renderer->setElementTemplate('<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'try'.$i.'');*/
                 
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'url'.$i.'');
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'lp'.$i.'');
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'try'.$i.'');
+                $renderer->setGroupElementTemplate('<div>{label} {element}</div>', 'scenario');               
+                $group_result = $form->addGroup($group, 'scenario');
                 
-                $form -> addGroup($group, 'scenario', 'scenario');
-                $renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
+                $renderer->setGroupTemplate('<td>'.$group_result->toHtml().'</td>', 'scenario');
+                //$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>', 'scenario');
+                
             }
             $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
             $form->addElement ('html', '</tr>');                
@@ -227,6 +232,7 @@ class UniqueAnswer extends Question {
 		$navigator_info = api_get_navigator();
 
 		global $text, $class, $show_quiz_edition;
+        
 		//ie6 fix
 		if ($show_quiz_edition) {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                

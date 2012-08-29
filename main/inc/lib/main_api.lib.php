@@ -838,6 +838,16 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			break;
     	}
     }
+        
+    //Check session visibility
+    $session_id = api_get_session_id();
+    
+    if (!empty($session_id)) {
+        //$is_allowed_in_course was set in local.inc.php
+        if (!$is_allowed_in_course) {
+            $is_visible = false;
+        }
+    }
 
     if (!$is_visible) {
         api_not_allowed($print_headers);

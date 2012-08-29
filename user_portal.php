@@ -156,7 +156,7 @@ $user_id = api_get_user_id();
 $courses_and_sessions = $controller->return_courses_and_sessions($user_id);
 
 //Show the chamilo mascot
-if (empty($courses_and_sessions)) {      
+if (empty($courses_and_sessions) && !isset($_GET['history'])) {
     $controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
 

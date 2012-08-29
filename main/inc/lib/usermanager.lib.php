@@ -390,14 +390,11 @@ class UserManager {
      * @return boolean 
      * @author Laurent Opprecht
      */
-    static function deactivate_users($ids = array())
-    {
+    static function deactivate_users($ids = array()) {
         if (empty($ids)) {
             return false;
         }
-
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
         $ids = is_array($ids) ? $ids : func_get_args();
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
@@ -1929,36 +1926,41 @@ class UserManager {
 	public static function get_sessions_by_category($user_id, $is_time_over = false) {
 		// Database Table Definitions		
 		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);        
+		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);      
+        $tbl_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_category       = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         
 		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
         
+        $now = api_get_utc_datetime();
+        
 		// Get the list of sessions per user
-
 		$condition_date_end = "";
+        
 		if ($is_time_over) {
-			$condition_date_end = " AND (session.date_end < CURDATE() AND session.date_end != '0000-00-00')  ";
+			$condition_date_end = " AND ( (session.date_end < '$now' AND session.date_end != '0000-00-00') OR moved_to <> 0) ";
 		} else {
-			$condition_date_end = " AND (session.date_end >= CURDATE() OR session.date_end = '0000-00-00') ";
+			$condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') AND moved_to = 0 ";
 		}
-        		
-        //ORDER BY session_category_id, date_start, date_end 
+
         $sql = "SELECT DISTINCT session.id, session.name, session.date_start, session.date_end, session_category_id, 
                                 session_category.name as session_category_name,
                                 session_category.date_start session_category_date_start,
                                 session_category.date_end session_category_date_end,
-                                nb_days_access_before_beginning
+                                nb_days_access_before_beginning,
+                                moved_to,
+                                moved_status
                                 
-                              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
-                                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)                             
-                              WHERE (
-                                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
-                                    )  $condition_date_end
-                              ORDER BY session_category_name, name";
-        
+                FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
+                      INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
+                      INNER JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
+                WHERE (
+                         scu.id_user = $user_id OR session.id_coach = $user_id
+                      )  $condition_date_end
+                ORDER BY session_category_name, name";
+        //var_dump($sql);
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
@@ -1973,6 +1975,9 @@ class UserManager {
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end']        = $row['date_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning']     = $row['nb_days_access_before_beginning'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']         = UserManager::get_courses_list_by_session($user_id, $row['id']);
+                
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_to']         = $row['moved_to'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_status']     = $row['moved_status'];
                 
             }
         }
@@ -2012,10 +2017,10 @@ class UserManager {
 
 		$personal_course_list_sql = "SELECT course.code, course_rel_user.status course_rel_status, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat		                                      
 			                         FROM ".$tbl_course_user." course_rel_user
-				                     LEFT JOIN ".$tbl_course." course
-					                 ON course.code = course_rel_user.course_code
-				                     LEFT JOIN ".$tbl_user_course_category." user_course_category
-					                 ON course_rel_user.user_course_cat = user_course_category.id
+                                            LEFT JOIN ".$tbl_course." course
+                                            ON course.code = course_rel_user.course_code
+                                            LEFT JOIN ".$tbl_user_course_category." user_course_category
+                                            ON course_rel_user.user_course_cat = user_course_category.id
 				                     $join_access_url
 			                         WHERE  course_rel_user.user_id = '".$user_id."' AND 
 			                                course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."  $where_access_url

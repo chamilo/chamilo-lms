@@ -161,9 +161,7 @@ if ($_GET['action'] == 'subscribe') {
 }
 
 /*	Is the user allowed here? */
-if (!$is_allowed_in_course) {
-	api_not_allowed(true);
-}
+api_protect_course_script(true);
 
 /*  STATISTICS */
 

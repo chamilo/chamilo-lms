@@ -810,9 +810,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_drh()) {
         return true;
     }
+    
     if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
+    
     $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
@@ -837,6 +839,16 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			$is_visible = true;
     			break;
     	}
+    }
+    
+    //Check session visibility
+    $session_id = api_get_session_id();
+    
+    if (!empty($session_id)) {
+        //$is_allowed_in_course was set in local.inc.php
+        if (!$is_allowed_in_course) {
+            $is_visible = false;
+        }
     }
 
     if (!$is_visible) {

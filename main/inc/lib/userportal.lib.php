@@ -954,7 +954,10 @@ class IndexManager {
 
                             $params['title'] = $session_link;
                             
-                            $params['subtitle'] = $extra_info.SessionManager::get_session_change_user_reason($session['moved_status']);
+                            $moved_status = SessionManager::get_session_change_user_reason($session['moved_status']);
+                            $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
+                            
+                            $params['subtitle'] = $extra_info.$moved_status;
 
                             $params['right_actions'] = '';
                             if (api_is_platform_admin()) {

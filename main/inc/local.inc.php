@@ -1017,7 +1017,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             if (!$is_platformAdmin) {
                 // admin is not affected to the invisible session mode
                 $session_visibility = api_get_session_visibility($session_id);
-
+                
                 switch ($session_visibility) {
                     case SESSION_INVISIBLE:
                         $is_allowed_in_course = false;
@@ -1105,4 +1105,3 @@ if (isset($_cid)) {
 }
 
 Redirect::session_request_uri($logging_in, $user_id);
-

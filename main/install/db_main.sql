@@ -2826,6 +2826,7 @@ CREATE TABLE IF NOT EXISTS notification (
 	dest_user_id INT NOT NULL,
  	dest_mail 	CHAR(255),
  	title 		CHAR(255),
+    sender_id   INT NOT NULL DEFAULT 0,
  	content 	CHAR(255),
  	send_freq 	SMALLINT DEFAULT 1,
  	created_at 	DATETIME NOT NULL,

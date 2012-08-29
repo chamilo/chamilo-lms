@@ -28,6 +28,11 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_i
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE notification ADD COLUMN sender_id INT NOT NULL DEFAULT 0;
 
+ALTER TABLE session_rel_user ADD COLUMN moved_to INT NOT NULL DEFAULT 0;
+ALTER TABLE session_rel_user ADD COLUMN moved_status INT NOT NULL DEFAULT 0;
+ALTER TABLE session_rel_user ADD COLUMN moved_at datetime NOT NULL default '0000-00-00 00:00:00';
+
+
 -- Normal tables
 
 UPDATE settings_current SET selected_value = '1.10.xx' WHERE variable = 'chamilo_database_version';

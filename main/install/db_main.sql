@@ -514,8 +514,11 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
 DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
-  id_user mediumint unsigned NOT NULL default '0',
+  id_user int unsigned NOT NULL default '0',
   relation_type int default 0,
+  moved_to int default 0,
+  moved_status int default 0,
+  moved_at datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 

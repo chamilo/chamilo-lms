@@ -96,8 +96,6 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     // Moved this down here as the upload handling functions give output.
     if ($form->validate()) {
 
-        $max_filled_space = DocumentManager::get_course_quota();
-
         //initialise $finish
         if (!isset($finish)) { $finish = 0; }
 
@@ -128,7 +126,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 
             /*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path, $uploadPath."/".$fld, $max_filled_space, $unzip))*/
             $allow_output_on_success = false;
-            if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, api_get_user_id(), null, null, $max_filled_space, $unzip, '', $allow_output_on_success)) {
+            if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, api_get_user_id(), null, null, $unzip, '', $allow_output_on_success)) {
 
                 if ($finish == 2) {
                     $imgparams = $_POST['imgparams'];

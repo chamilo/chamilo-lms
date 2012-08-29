@@ -144,8 +144,10 @@ if ($action == 'add') {
 if (isset($_POST['submitWork'])) {
 	$check = Security::check_token();
 	if ($check) {
-		Display :: display_confirmation_message(store_add_dropbox());
-		//require_once 'dropbox_submit.php';
+        $message = store_add_dropbox();
+        if (!empty($message)) {        
+            Display :: display_confirmation_message($message);
+        }		
 	}
 }
 

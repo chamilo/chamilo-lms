@@ -58,7 +58,7 @@ if(isset($_FILES['user_upload'])) {
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
 	if($upload_ok) {
 		//file got on the server without problems, now process it
-		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
+		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$_POST['unzip'],$_POST['if_exists']);
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 

@@ -17,7 +17,7 @@
 /*	   INIT SECTION */
 
 // Language files that need to be included
-$language_file = array('create_course', 'course_info', 'admin', 'gradebook');
+$language_file = array('create_course', 'course_info', 'admin', 'gradebook', 'document');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
@@ -27,6 +27,7 @@ $nameTools = get_lang('ModifInfo');
 /*	Libraries */
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 api_protect_course_script(true);
 api_block_anonymous_users();
@@ -178,6 +179,8 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 $group = array();
 $group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
 $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
+
+$form->addElement('label', get_lang('DocumentQuota'),  format_file_size(DocumentManager::get_course_quota()));
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');

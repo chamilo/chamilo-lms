@@ -591,7 +591,7 @@ class learnpath {
 
             // Upload the file in the documents tool.
             include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-            $file_path = handle_uploaded_document($_course, $_FILES['mp3'], api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document', '/audio', api_get_user_id(), '', '', '', '', '', false);
+            $file_path = handle_uploaded_document($_course, $_FILES['mp3'], api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document', '/audio', api_get_user_id(), '', '', '', '', false);
 
             // Getting the filename only.
             $file_components = explode('/', $file_path);
@@ -1091,7 +1091,7 @@ class learnpath {
             if ($pi['extension'] == 'mp3') {
                 $c_det = api_get_course_info($this->cc);
                 $bp = api_get_path(SYS_COURSE_PATH) . $c_det['path'] . '/document';
-                $path = handle_uploaded_document($c_det, $audio, $bp, '/audio', api_get_user_id(), 0, null, '', 0, 'rename', false, 0);
+                $path = handle_uploaded_document($c_det, $audio, $bp, '/audio', api_get_user_id(), 0, null, 0, 'rename', false, 0);
                 $path = substr($path, 7);
                 // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
                 $audio_update_sql = ", audio = '" . Database::escape_string($path) . "' ";

@@ -755,13 +755,6 @@ function store_add_dropbox() {
 
 	// Validating the form data
 
-	// the author is
-	/*
-    if (!isset($_POST['authors'])) {
-        return get_lang('AuthorFieldCannotBeEmpty');
-    }
-    */
-
     // there are no recipients selected
 	if (!isset($_POST['recipients']) || count( $_POST['recipients']) <= 0) {
         return get_lang('YouMustSelectAtLeastOneDestinee');
@@ -807,7 +800,6 @@ function store_add_dropbox() {
 		$dropbox_overwrite = true;
 	}
 
-
 	// doing the upload
 
 	$dropbox_filename = $_FILES['file']['name'];
@@ -824,6 +816,12 @@ function store_add_dropbox() {
 	if (!is_uploaded_file($dropbox_filetmpname)) { // check user fraud : no clean error msg.
 		return get_lang('TheFileIsNotUploaded');
 	}
+    
+    $upload_ok = process_uploaded_file($_FILES['file'], true);
+        
+    if (!$upload_ok) {
+        return null;
+    }
 
 	// Try to add an extension to the file if it hasn't got one
 	$dropbox_filename = add_ext_on_mime($dropbox_filename, $dropbox_filetype);
@@ -831,6 +829,7 @@ function store_add_dropbox() {
 	$dropbox_filename = replace_dangerous_char($dropbox_filename);
 	// Transform any .php file in .phps fo security
 	$dropbox_filename = php2phps($dropbox_filename);
+    
 	//filter extension
     if (!filter_extension($dropbox_filename)) {
     	return get_lang('UplUnableToSaveFileFilteredExtension');

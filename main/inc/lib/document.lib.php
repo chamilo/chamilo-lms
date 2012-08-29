@@ -2192,7 +2192,6 @@ class DocumentManager {
     public static function upload_document($files, $path, $title ='', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-        $max_filled_space = self::get_course_quota();
         $course_info      = api_get_course_info();
         $course_dir       = $course_info['path'].'/document';
         $sys_course_path  = api_get_path(SYS_COURSE_PATH);
@@ -2203,7 +2202,7 @@ class DocumentManager {
             
             if ($upload_ok) {
                 // File got on the server without problems, now process it
-                $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
+                $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $unzip, $if_exists, $show_output);
 	
                 if ($new_path) {
                     $docid = DocumentManager::get_document_id($course_info, $new_path);

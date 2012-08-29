@@ -47,7 +47,7 @@ require_once 'document.inc.php';
 
 // Adding extra javascript to the form
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 function check_unzip() {
 	if(document.upload.unzip.checked){
@@ -74,16 +74,12 @@ function advanced_parameters() {
 function setFocus(){
 	$("#title_file").focus();
 }
-
-$(document).ready(function () {
-        setFocus();
-});	
-
 </script>';
 
 $htmlHeadXtra[] = "
-<script type=\"text/javascript\">
+<script>
 $(function () {
+    setFocus();
     $('#file_upload').fileUploadUI({
         uploadTable:   $('.files'),
         downloadTable: $('.files'),

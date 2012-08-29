@@ -117,7 +117,7 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
 		    }
 			return false;
 	}
-		
+    
 	if (!file_exists($uploaded_file['tmp_name'])) {
 	    // No file was uploaded.
 	    if ($show_output) {
@@ -135,7 +135,21 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
             }
             return false;
         }        
-    }    
+    }
+    
+    $course_id = api_get_course_id();
+    //Checking course quota if we are in a course
+    
+    if (!empty($course_id)) {
+        $max_filled_space = DocumentManager::get_course_quota();
+        // Check if there is enough space to save the file
+        if (!DocumentManager::enough_space($uploaded_file['size'], $max_filled_space)) {
+            if ($show_output) {	        
+                Display::display_error_message(get_lang('UplNotEnoughSpace'));
+            }
+            return false;
+        }    
+    }
 	
 	// case 0: default: We assume there is no error, the file uploaded with success.
 	return true;
@@ -154,14 +168,13 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
  * @param string $upload_path
  * @param int $user_id
  * @param int $to_group_id, 0 for everybody
- * @param int $to_user_id, NULL for everybody
- * @param int $maxFilledSpace
+ * @param int $to_user_id, NULL for everybody 
  * @param int $unzip 1/0
  * @param string $what_if_file_exists overwrite, rename or warn if exists (default)
  * @param boolean Optional output parameter. So far only use for unzip_uploaded_document function. If no output wanted on success, set to false.
  * @return path of the saved file
  */
-function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upload_path, $user_id, $to_group_id = 0, $to_user_id = null, $maxFilledSpace = '', $unzip = 0, $what_if_file_exists = '', $output = true) {
+function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upload_path, $user_id, $to_group_id = 0, $to_user_id = null, $unzip = 0, $what_if_file_exists = '', $output = true) {
 	if (!$user_id) die('Not a valid user.');
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
@@ -169,17 +182,16 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']); 
 	$current_session_id    = api_get_session_id();
     
-    if (empty($maxFilledSpace)) {
-        $maxFilledSpace = DocumentManager::get_course_quota();
-    }    
-	
+    //Just in case process_uploaded_file is not called
+    $max_filled_space = DocumentManager::get_course_quota();
+    
 	// Check if there is enough space to save the file
-	if (!DocumentManager::enough_space($uploaded_file['size'], $maxFilledSpace)) {
+	if (!DocumentManager::enough_space($uploaded_file['size'], $max_filled_space)) {
 	    if ($output) {	        
             Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		}
 		return false;
-	}    
+	}
 
 	// If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {

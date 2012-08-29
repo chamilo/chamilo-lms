@@ -224,8 +224,7 @@ class TestFileUpload extends UnitTestCase {
 			$upload_path='';
 			$user_id=1;
 			$to_group_id=0;
-			$to_user_id=NULL;
-			$maxFilledSpace='';
+			$to_user_id=NULL;			
 			$unzip=0;
 			$what_if_file_exists='';
 			$output=true;
@@ -236,7 +235,7 @@ class TestFileUpload extends UnitTestCase {
 			$clean_name = disable_dangerous_file($clean_name);
 			$file_path = $upload_path.$clean_name;
 			ob_start();
-			$res= handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload_path,$user_id,$to_group_id=0,$to_user_id=NULL,$maxFilledSpace='',$unzip=0,$what_if_file_exists='',$output=true);
+			$res= handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload_path,$user_id,$to_group_id=0,$to_user_id=NULL, $unzip=0,$what_if_file_exists='',$output=true);
 			$this->assertTrue(is_null($res));
 			ob_end_clean();
 			//var_dump($res);

@@ -30,8 +30,7 @@
 
 use \ChamiloSession as Session;
 
-
-$language_file = 'dropbox';
+$language_file = array('dropbox', 'document');
 
 // This var disables the link in the breadcrumbs on top of the page
 //$noPHP_SELF = true;

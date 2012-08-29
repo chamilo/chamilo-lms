@@ -75,13 +75,27 @@ if (!$content) {
 	exit();
 }
 
+
+//make a temporal file for get the file size
+	$tmpfname = tempnam("/tmp", "CTF");
+	$handle = fopen($tmpfname, "w");
+	fwrite($handle, $content);
+	fclose($handle);
+	
+	// Check if there is enough space in the course to save the file
+	if (!DocumentManager::enough_space(filesize($tmpfname), DocumentManager::get_course_quota())) {
+		unlink($tmpfname);
+		die(get_lang('UplNotEnoughSpace'));
+	}
+	
+	//erase temporal file
+	unlink($tmpfname);
+
 //add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
 fclose($fh);
 
-
-//
 //add document to database
 	$doc_id = add_document($_course, $webcamdir.'/'.$webcamname_to_save, 'file', filesize($documentPath), $title_to_save);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);

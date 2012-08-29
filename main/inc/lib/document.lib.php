@@ -1494,7 +1494,7 @@ class DocumentManager {
             
             if (!is_dir($base_work_dir_test)) {
                 $created_dir = create_unexisting_directory($course_info, api_get_user_id(), api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);                
-                $update_id = DocumentManager::get_document_id_of_directory_certificate();                
+                $update_id = self::get_document_id_of_directory_certificate();                
                 api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
             }
         }
@@ -1505,7 +1505,7 @@ class DocumentManager {
      * @param string The course id
      * @return int The document id of the directory certificate
      */
-    function get_document_id_of_directory_certificate () {
+    static function get_document_id_of_directory_certificate () {
         $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $sql = "SELECT id FROM $tbl_document WHERE c_id = $course_id AND path='/certificates' ";

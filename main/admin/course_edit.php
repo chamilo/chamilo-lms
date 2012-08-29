@@ -89,11 +89,11 @@ $form = new FormValidator('update_course');
 $form->addElement('hidden','code',$course_code);
 
 //title
-$form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
+$form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
 $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
 // code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')), true, array('class' => 'span4'));
 
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
@@ -106,8 +106,8 @@ $form->applyFilter('visual_code','html_filter');
 //$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size="4" style="width: 150px;"');
 
 $group=array();
-$group[] = FormValidator::createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
-$group[] = FormValidator::createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
+$group[] = $form->createElement('select', 'platform_teachers', '', $teachers,        ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"');
+$group[] = $form->createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"');
 
 $element_template = <<<EOT
 	<div class="control-group">

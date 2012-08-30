@@ -20,7 +20,6 @@ if (api_is_platform_admin()) {
     $sessions = SessionManager::get_sessions_by_coach(api_get_session_id());
 }
 
-
 $message = null;
 $session_to_select = array();
 foreach ($sessions as $session) {
@@ -32,6 +31,12 @@ foreach ($sessions as $session) {
 $session_name = api_get_session_name($session_id);
 $user_info = api_get_user_info($user_id);
 
+//Check if user was already moved
+$user_status = SessionManager::get_user_status_in_session($session_id, $user_id);
+if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0 || $user_status['moved_status'] == SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
+    api_not_allowed(true);
+}
+
 $form = new FormValidator('change_user_session', 'post', api_get_self());
 $form->addElement('hidden', 'user_id', $user_id);
 $form->addElement('hidden', 'id_session', $session_id);
@@ -39,10 +44,9 @@ $form->addElement('header', get_lang('ChangeUserSession'));
 $form->addElement('label', get_lang('User'), '<b>'.$user_info['complete_name'].'</b>');
 $form->addElement('label', get_lang('CurrentSession'), $session_name);
 
-$form->addElement('select', 'reason_id', get_lang('Action'), SessionManager::get_session_change_user_reasons());
-$form->addElement('select', 'new_session_id', get_lang('SessionDestination'), $session_to_select);
+$form->addElement('select', 'reason_id', get_lang('Action'), SessionManager::get_session_change_user_reasons(), array('id' => 'reason_id'));
+$form->addElement('select', 'new_session_id', get_lang('SessionDestination'), $session_to_select, array('id' => 'new_session_id'));
 
-$form->addRule('new_session_id', get_lang('Required'), 'required');
 $form->addElement('button', 'submit', get_lang('Change'));
 
 $content = $form->return_form();
@@ -61,6 +65,21 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => 'resume_session.php?id_session='.$session_id,'name' => get_lang('SessionOverview'));
 $interbreadcrumb[] = array('url' => '#','name' => get_lang('ChangeUserSession'));
+
+$htmlHeadXtra[] = '<script>
+
+$(document).ready(function() {
+    $("#reason_id").change(function() {
+        value = $(this).val();
+        if (value == "'.SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.'") {
+            $("#new_session_id").parent().parent().hide();
+        } else {
+            $("#new_session_id").parent().parent().show();
+        }
+    });
+});
+
+</script>';
 
 $tpl = new Template();
 

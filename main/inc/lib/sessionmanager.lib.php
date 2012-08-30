@@ -675,6 +675,7 @@ class SessionManager {
 	                $enreg_user = Database::escape_string($enreg_user);
 					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session, course_code, id_user, visibility, status) VALUES('$id_session','$enreg_course','$enreg_user','$session_visibility', '0')";
 					Database::query($insert_sql);
+                    
 					if(Database::affected_rows()) {
 						$nbr_users++;
 					}
@@ -697,10 +698,14 @@ class SessionManager {
 		// Insert missing users into session
 		$nbr_users = 0;		
 		foreach ($user_list as $enreg_user) {
-	        $enreg_user = Database::escape_string($enreg_user);
-			$nbr_users++;
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user) VALUES ('$id_session','$enreg_user')";
-			Database::query($insert_sql);
+	        $enreg_user = Database::escape_string($enreg_user);			
+			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user) VALUES ('$id_session','$enreg_user')";			
+            Database::query($insert_sql);
+            
+            //Reset moved_to just in case
+            $update_sql = "UPDATE $tbl_session_rel_user SET moved_to = 0 , moved_status = 0, moved_at ='0000-00-00 00:00:00' WHERE  id_session = $id_session AND id_user = $enreg_user";                        
+            Database::query($update_sql);
+            $nbr_users++;
 		}
 
 		// update number of users in the session
@@ -713,6 +718,8 @@ class SessionManager {
             $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
+
+
 	}
     
     function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
@@ -1642,7 +1649,7 @@ class SessionManager {
      * @param $session_id
      * @return unknown_type
      */
-    public static function get_user_status_in_session($user_id, $course_code, $session_id) {
+    public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
         $sql = "SELECT session_rcru.status
@@ -1658,6 +1665,17 @@ class SessionManager {
             $status = $status['0'];
         }
         return $status;
+    }
+            
+    static function get_user_status_in_session($session_id, $user_id) {
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $sql = "SELECT * FROM $tbl_session_rel_user WHERE id_user = $user_id AND id_session = $session_id";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($result, 'ASSOC');
+            return $result[0];
+        }
+        return array();
     }
     
     function get_all_sessions_by_promotion($id) {
@@ -1846,6 +1864,9 @@ class SessionManager {
     static function protect_session_edit($id) {
         api_protect_admin_script(true);
         $session_info = self::fetch($id);
+        if (empty($session_info)) {
+            api_not_allowed(true);
+        }
         if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
             if ($session_info['session_admin_id'] != api_get_user_id()) {
                 api_not_allowed(true);
@@ -1863,22 +1884,30 @@ class SessionManager {
         return Database::store_result($result);
     }
     
-    /* Add those changes in a table */
+    /**
+     *  @todo Add constatns in a DB table
+     */
     static function get_session_change_user_reasons() {
         return array (
-            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChange'),
-            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChange'),
-            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChange'),
+            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
+            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
+            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
             self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
         );
     }
     
+    /** 
+     * Gets the reason name 
+     * @param int reason id
+     */
     static function get_session_change_user_reason($id) {
         $reasons = self::get_session_change_user_reasons();
-        return isset($reasons[$id]) ? $reasons[$id] : null;
-        
+        return isset($reasons[$id]) ? $reasons[$id] : null;        
     }
     
+    /**
+     * Changes the user from one session to another due a reason
+     */
     static function change_user_session($user_id, $old_session_id, $new_session_id, $reason_id) {
         if (!empty($user_id) && !empty($old_session_id) && !empty($new_session_id)) {
             $user_id = intval($user_id);
@@ -1916,29 +1945,35 @@ class SessionManager {
             switch ($reason_id) {
                 case self::SESSION_CHANGE_USER_REASON_SCHEDULE:
                 case self::SESSION_CHANGE_USER_REASON_CLASSROOM:
-                case self::SESSION_CHANGE_USER_REASON_LOCATION:
-                    break;                    
+                case self::SESSION_CHANGE_USER_REASON_LOCATION:                       
+                    //Adding to the new session
+                    self::suscribe_users_to_session($new_session_id, array($user_id), null, false);
+                    
+                    //Setting move_to if session was provided
+                    $sql = "UPDATE $tbl_session_rel_user SET moved_to = '$new_session_id'
+                            WHERE id_session = '$old_session_id' AND id_user ='$user_id'";
+                    Database::query($sql);
+                    break;               
                 case self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION:
                     UserManager::deactivate_users(array($user_id));
                     break;
             }
             
-            //Adding to the new session
-            self::suscribe_users_to_session($new_session_id, array($user_id), null, false);
-            $now = api_get_utc_datetime();
-            $sql = "UPDATE $tbl_session_rel_user SET moved_to = '$new_session_id', moved_at = '$now'
-                    WHERE id_session = '$old_session_id' AND id_user ='$user_id'";
-            Database::query($sql);
-            
-            $sql = "UPDATE $tbl_session_rel_user SET moved_status = $reason_id
+            $now = api_get_utc_datetime();            
+            //Setting the moved_status
+            $sql = "UPDATE $tbl_session_rel_user SET moved_status = $reason_id, moved_at = '$now'
                     WHERE id_session = '$old_session_id' AND id_user ='$user_id'";            
-            Database::query($sql);            
+            Database::query($sql);
             
             return true;            
         }
         return;
     }
+
     
+    /**
+     * Get users inside a course session
+     */    
     static function get_users_in_course_session($course_code, $id_session, $sort, $direction, $from = null, $limit = null) {
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1954,9 +1989,9 @@ class SessionManager {
         //Select the number of users
 		$sql = " SELECT DISTINCT u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed 
                  FROM $tbl_session_rel_user sru INNER JOIN $tbl_user u ON (u.user_id=sru.id_user) 
-                        LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id = scru.id_user AND  scru.course_code = '".$course_code."' )
-                 WHERE sru.id_session = '$id_session' AND
-                        sru.moved_to = 0 AND                    
+                      LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id = scru.id_user AND  scru.course_code = '".$course_code."' )
+                 WHERE  sru.id_session = '$id_session' AND
+                        sru.moved_to = 0 AND sru.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." AND
                         sru.relation_type<>".SESSION_RELATION_TYPE_RRHH;
         $sql .= " ORDER BY $sort $direction ";
         
@@ -1981,7 +2016,7 @@ class SessionManager {
                         srcru.id_session = sru.id_session AND 
                         srcru.course_code = '".Database::escape_string($course_code)."' AND 
                         srcru.id_session = '".intval($id_session)."'  AND
-                        sru.moved_to = 0 AND                        
+                        (sru.moved_to = 0 AND sru.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.") AND
                         sru.relation_type<>".SESSION_RELATION_TYPE_RRHH;
 
 		$result = Database::query($sql);
@@ -1991,6 +2026,12 @@ class SessionManager {
         return 0;        
     }
     
+    /** 
+     * Get the list of coaches (only user ids)
+     * @param string course_code
+     * @param in session_id
+     * @return array
+     */
     static function get_session_course_coaches($course_code, $session_id) {
         $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2002,9 +2043,9 @@ class SessionManager {
                         session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
                         session_rcru.status=2";
 		$result = Database::query($sql);
-        return Database::store_result($result);
-        
+        return Database::store_result($result);        
     }
+    
     static function get_session_course_coaches_to_string($course_code, $session_id) {
         $coaches = self::get_session_course_coaches($course_code, $session_id);
         if (!empty($coaches)) {
@@ -2030,10 +2071,10 @@ class SessionManager {
         
         if (!empty($id_session) && !empty($course_code)) {
 
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($course_code)");
+            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code = '$course_code'");
             $nbr_affected_rows=Database::affected_rows();
 
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($course_code)");
+            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code = '$course_code'");
             Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
     }    

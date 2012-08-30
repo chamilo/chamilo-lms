@@ -20,6 +20,7 @@ if (empty($id_session)) {
 }
 
 $course_info = api_get_course_info($_GET['course_code']);
+
 if (empty($course_info)) {
     api_not_allowed(true);
 }
@@ -27,7 +28,7 @@ if (empty($course_info)) {
 $course_code    = $course_info['code'];
 $page           = intval($_GET['page']);
 $action         = $_REQUEST['action'];
-$default_sort = api_sort_by_first_name() ? 'firstname':'lastname';
+$default_sort   = api_sort_by_first_name() ? 'firstname':'lastname';
 $sort           = in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
 $idChecked      = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 
@@ -68,7 +69,7 @@ $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
 
 $Users = SessionManager::get_users_in_course_session($course_code, $id_session, $sort, $direction, $from, $limit);
-
+        
 /*
 
 $sql = "SELECT DISTINCT u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
@@ -109,7 +110,7 @@ if($page) {
 ?>
 |
 <?php
-if($nbr_results > $limit) {
+if ($nbr_results > $limit) {
 ?>
 <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>"><?php echo get_lang('Next');?></a>
 <?php

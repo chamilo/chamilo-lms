@@ -99,7 +99,7 @@ function search_users($needle, $type) {
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
                         WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
-                            OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.''.
+                            OR lastname LIKE "'.$needle.'%") AND user.status <> 6 AND user.status<>'.DRH.' '.$cond_user_id.' '.
                             $order_clause.
                             ' LIMIT 11';
                 break;
@@ -163,7 +163,6 @@ function search_users($needle, $type) {
 	            	$return .= '...<br />';
 	            }
 			}
-
 			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
 		} else {
 			global $nosessionUsersList;
@@ -271,7 +270,8 @@ if ($ajax_search) {
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
                 WHERE u.status<>".DRH." AND 
                     u.status<>6 AND
-                    $tbl_session_rel_user.moved_to = 0
+                    $tbl_session_rel_user.moved_to = 0 AND
+                    $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."                        
                 $order_clause";
 
     if ($_configuration['multiple_access_urls']) {
@@ -287,7 +287,8 @@ if ($ajax_search) {
                 WHERE   access_url_id = $access_url_id AND 
                         u.status<>".DRH." AND 
                         u.status<>6 AND 
-                        $tbl_session_rel_user.moved_to = 0
+                        $tbl_session_rel_user.moved_to = 0 AND
+                        $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."
                 $order_clause";
         }
     }
@@ -407,7 +408,8 @@ if ($ajax_search) {
                 $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
           WHERE u.status <> ".DRH." AND 
                 u.status <> 6 AND 
-                $tbl_session_rel_user.moved_to = 0
+                $tbl_session_rel_user.moved_to = 0 AND
+                $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." 
           $order_clause";
 
     if ($_configuration['multiple_access_urls']) {
@@ -422,7 +424,9 @@ if ($ajax_search) {
                 WHERE   access_url_id = $access_url_id AND 
                         u.status<>".DRH." AND 
                         u.status<>6 AND 
-                        $tbl_session_rel_user.moved_to = 0
+                        $tbl_session_rel_user.moved_to = 0 AND
+                        $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." 
+                                                
                 $order_clause";
         }
     }

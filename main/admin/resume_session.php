@@ -125,7 +125,19 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
 	</td>
 	<td>
-		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
+		<?php        
+        if (isset($session['date_end']) && $session['date_end'] != '00-00-0000') {
+            if ($session['visibility'] == 1) 
+                echo get_lang('ReadOnly'); 
+             elseif($session['visibility'] == 2) 
+                 echo get_lang('Visible');
+             elseif($session['visibility'] == 3) 
+                echo api_ucfirst(get_lang('Invisible'))  ;
+        } else {
+            //By default course sessions can be access normally see function api_get_session_visibility() when no date_end is proposed            
+            echo get_lang('Visible'); 
+        }
+        ?>
 	</td>
 </tr>
 
@@ -253,7 +265,7 @@ if ($session['nbr_users'] == 0) {
 	$users  = Database::store_result($result);*/
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
     
-    $users = SessionManager::get_users_by_session($id_session, 0);
+    $users = SessionManager::get_users_by_session($id_session, 0);    
     $reasons = SessionManager::get_session_change_user_reasons();
     
     if (!empty($users))
@@ -268,14 +280,21 @@ if ($session['nbr_users'] == 0) {
         $row_class = null;
         $moved_date = '-';
         
-        if (isset($user['moved_to']) && !empty($user['moved_to'])) {
+        $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
+        
+        if (isset($user['moved_to']) && !empty($user['moved_to']) || $user['moved_status'] == SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
             $information = $reasons[$user['moved_status']];
-            $session_info = SessionManager::fetch($user['moved_to']);
-            $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';            
             
-            $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
-            $origin_destination = Display::url($session_info['name'], $url);
+            $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';                        
+            $session_info = SessionManager::fetch($user['moved_to']);
+            
+            if ($session_info) {
+                $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
+                $origin_destination = Display::url($session_info['name'], $url);
+            }
             $row_class = 'row_odd';
+            
+            $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
         }
         
         $link_to_add_user_in_url = '';
@@ -297,7 +316,7 @@ if ($session['nbr_users'] == 0) {
                 <td>
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
-                    <a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('user.png', get_lang('ChangeUserSession')).'</a>&nbsp;
+                    '.$moved_link.'
                     <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
                     '.$link_to_add_user_in_url.'
                 </td>

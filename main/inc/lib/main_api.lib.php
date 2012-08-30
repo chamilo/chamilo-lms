@@ -1838,7 +1838,7 @@ function api_get_session_visibility($session_id) {
 
         if (Database::num_rows($result) > 0 ) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $row['visibility'];
+            $visibility = $original_visibility = $row['visibility'];
 
             //I don't care the field visibility
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
@@ -1910,7 +1910,14 @@ function api_get_session_visibility($session_id) {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
+            } else {
+                //Student - check the moved_to variable
+                $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
+                if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
+                    return $original_visibility;
+                }
             }
+            
         } else {
             $visibility = SESSION_INVISIBLE;
         }
@@ -2614,10 +2621,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             // Get the session visibility
             $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
             
-            //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
-            //echo api_get_user_id();
-            //echo api_get_course_id();
-
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1
                     return false;
@@ -2625,7 +2628,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
                     return true;
                 case SESSION_INVISIBLE:         // 3
                     return false;
-                case SESSION_AVAILABLE:         //5
+                case SESSION_AVAILABLE:         //4
                     return true;
             }
 

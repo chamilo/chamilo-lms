@@ -43,34 +43,7 @@ class MessageManager
 		}
 		return $online_user_list;
 	}
-
-	/**
-	* Displays info stating that the message is sent successfully.
-	*/
-	public static function display_success_message($uid) {
-			global $charset;
-		if ($_SESSION['social_exist']===true) {
-			$redirect="#remote-tab-2";
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}
-		} else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-		}
-		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-	}
-
+    
 	/**
 	* Displays the wysiwyg html editor.
 	*/
@@ -207,7 +180,7 @@ class MessageManager
      * @param int    sender id (optional) the default value is the current user_id
 	 * @return bool
 	 */
-	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $topic_id = 0, $sender_id = null) {        
+	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $topic_id = 0, $sender_id = null) {
 		$table_message      = Database::get_main_table(TABLE_MESSAGE);
         $group_id           = intval($group_id);
         $receiver_user_id   = intval($receiver_user_id);
@@ -215,6 +188,10 @@ class MessageManager
         $edit_message_id    = intval($edit_message_id);
         $topic_id   		= intval($topic_id);
         
+        //Capturing the original sender id 
+        $original_sender_id = $user_sender_id;
+        
+        //Saving the user id for the chamilo inbox, if the sender is null we asume that the current user is the one that sent the message
         if (empty($sender_id)) {        
             $user_sender_id     = api_get_user_id();
         } else {
@@ -292,9 +269,14 @@ class MessageManager
 						
 			//Load user settings			
 			$notification = new Notification();
-			$sender_info = api_get_user_info($user_sender_id);
-			
-		    if (empty($group_id)) {	    	
+            
+		    if (empty($group_id)) {
+                
+                $sender_info = array();
+                if (!empty($original_sender_id)) {
+                    $sender_info = api_get_user_info($original_sender_id);
+                }
+
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);                
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);
@@ -310,7 +292,7 @@ class MessageManager
                 foreach($user_list as $user_data) {
                     $new_user_list[] = $user_data['user_id'];
                 }
-                $group_info = array('group_info'=>$group_info, 'user_info' => $sender_info);
+                $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
                 $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);                     		
 		    }
 			return $inbox_last_id;

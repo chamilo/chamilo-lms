@@ -287,6 +287,7 @@ ALTER TABLE track_e_access ADD INDEX (access_session_id);
 
 ALTER TABLE track_e_online ADD INDEX (course);
 ALTER TABLE track_e_online ADD INDEX (session_id);
+ALTER TABLE track_e_online ADD INDEX idx_trackonline_uat (login_user_id, access_url_id, login_date);
 
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
 ALTER TABLE track_e_downloads ADD INDEX (down_session_id);  

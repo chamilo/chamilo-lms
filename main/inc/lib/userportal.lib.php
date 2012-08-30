@@ -857,7 +857,7 @@ class IndexManager {
 	 *  
 	 * */
 	function return_courses_and_sessions($user_id) {		       
-        $session_categories = array();        
+        $session_categories = array();     
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		
 		if ($load_history) {
@@ -954,7 +954,11 @@ class IndexManager {
                             }
 
                             $params['title'] = $session_link;
-                            $params['subtitle'] = $extra_info;                            
+                            
+                            $moved_status = SessionManager::get_session_change_user_reason($session['moved_status']);
+                            $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
+                            
+                            $params['subtitle'] = $extra_info.$moved_status;
 
                             $params['right_actions'] = '';
                             if (api_is_platform_admin()) {

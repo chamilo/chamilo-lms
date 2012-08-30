@@ -1937,16 +1937,21 @@ class UserManager {
 		$categories = array();
         
 		// Get the list of sessions per user
-
+        $now = api_get_utc_datetime();
+        
 		$condition_date_end = "";
 		if ($is_time_over) {
-			$condition_date_end = " AND (session.date_end < CURDATE() AND session.date_end != '0000-00-00')  ";
+			$condition_date_end = " AND (session.date_end < '$now' AND session.date_end != '0000-00-00')  ";
 		} else {
-			$condition_date_end = " AND (session.date_end >= CURDATE() OR session.date_end = '0000-00-00') ";
+			$condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
 		}
         		
         //ORDER BY session_category_id, date_start, date_end 
-        $sql = "SELECT DISTINCT session.id, session.name, session.date_start, session.date_end, session_category_id, 
+        $sql = "SELECT DISTINCT session.id, 
+                                session.name, 
+                                session.date_start, 
+                                session.date_end, 
+                                session_category_id, 
                                 session_category.name as session_category_name,
                                 session_category.date_start session_category_date_start,
                                 session_category.date_end session_category_date_end,
@@ -2133,14 +2138,13 @@ class UserManager {
 				$where_access_url=" AND access_url_id = $access_url_id AND url_rel_session.session_id = $session_id ";
 			}
 		}
-
-		// variable initialisation
-		$personal_course_list_sql = '';
+		
 		$personal_course_list = array();
 		$courses = array();
 
 		// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-		$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu $join_access_url
+		$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code 
+                                    FROM $tbl_session_course_user as scu $join_access_url
 									WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
 									ORDER BY code";
         
@@ -2157,7 +2161,8 @@ class UserManager {
 		}
 
 		if (api_is_allowed_to_create_course()) {
-			$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
+			$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code 
+                                        FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
 										WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
 										$where_access_url
 										ORDER BY code";						            

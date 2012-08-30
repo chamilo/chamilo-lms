@@ -172,11 +172,12 @@ $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
+$now = api_get_utc_datetime();
 
-//session list
+//Session list
 if (api_is_session_admin()) {
 	$where = 'WHERE session_admin_id='.intval(api_get_user_id());
-	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
+	$where .= ' AND ( (session.date_start <= "'.$now.'" AND session.date_end >= "'.$now.'") OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 	$sql="SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session $where ORDER BY name";
 	$result = Database::query($sql);

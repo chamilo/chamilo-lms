@@ -1511,7 +1511,7 @@ class SessionManager {
     
     /**
      * Get users by session
-     * @param  int sesssion id
+     * @param  int session id
      * @param	int	filter by status  
      * @return  array a list with an user list
      */
@@ -1789,5 +1789,20 @@ class SessionManager {
                 WHERE sc.course_code = '$course_code' ";
         $result = Database::query($sql);
         return Database::store_result($result);
+    }
+    
+    static function get_sessions_by_user($user_id) {
+       $session_categories = UserManager::get_sessions_by_category($user_id);
+       $session_array = array();
+       if (!empty($session_categories)) {
+           foreach ($session_categories as $category) {
+               if (isset($category['sessions'])) {
+                   foreach ($category['sessions'] as $session) {                       
+                       $session_array[] = $session;
+                   }
+               }
+           }
+       }
+       return $session_array;
     }
 }

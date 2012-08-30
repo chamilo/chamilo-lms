@@ -19,7 +19,7 @@ if (!isset($_GET['user_id'])) {
     api_not_allowed();
 }
 $user = api_get_user_info($_GET['user_id']);
-$tool_name = api_get_person_name($user['firstName'], $user['lastName']).(empty($user['official_code'])?'':' ('.$user['official_code'].')');
+$tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
 Display::display_header($tool_name);
 
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -69,9 +69,6 @@ echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>'
 
 echo Display::page_subheader(get_lang('SessionList'));
 
-$main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
-$main_course_table          = Database :: get_main_table(TABLE_MAIN_COURSE);
-$main_course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -80,64 +77,39 @@ $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
 
 $user_id = $user['user_id'];
 
-$result = Database::query("SELECT DISTINCT id, name, date_start, date_end ".
-    " FROM session_rel_user, session ".
-    " WHERE id_session=id AND id_user=$user_id ".
-    " AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00') ".
-    " ORDER BY date_start, date_end, name");
-
-$sessions = Database::store_result($result);
+$sessions = SessionManager::get_sessions_by_user($user_id);
 
 $personal_course_list = array();
-if (count($sessions)>0) {
+if (count($sessions) > 0) {
     $header[] = array (get_lang('Code'), true);
     $header[] = array (get_lang('Title'), true);
     $header[] = array (get_lang('Status'), true);
     $header[] = array ('', false);
 
-    foreach ($sessions as $enreg) {
-
+    foreach ($sessions as $session_item) {
+        
         $data = array ();
         $personal_course_list = array();
-
-        $id_session = $enreg['id'];
-        $personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, " .
-                "course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5') ".
-            " FROM $tbl_session_course_user as session_course_user INNER JOIN $tbl_course AS course ".
-            " ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session ".
-            " INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id ".
-            " INNER JOIN $tbl_session_course as session_course ".
-            " LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user AND session_course_user.status = 2 ".
-            " WHERE session_course_user.id_user = $user_id  ORDER BY i";
-        $course_list_sql_result = Database::query($personal_course_list_sql);
-
-        while ($result_row = Database::fetch_array($course_list_sql_result)) {
-            $key = $result_row['id_session'].' - '.$result_row['k'];
-            $result_row['s'] = $result_row['14'];
-
-            if (!isset($personal_course_list[$key])) {
-                $personal_course_list[$key] = $result_row;
-            }
-        }
-        foreach ($personal_course_list as $my_course) {
+        $id_session = $session_item['session_id'];
+                
+        foreach ($session_item['courses'] as $my_course) {
+            $course_info = api_get_course_info($my_course['code']);
             $row = array ();
-            $row[] = $my_course['k'];
-            $row[] = $my_course['i'];
-            $row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            $row[] = $my_course['code'];
+            $row[] = $course_info['title'];
+            $row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
             
-            $tools = '<a href="course_information.php?code='.$my_course['k'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                    '<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
+            $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+                    '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
-            if( $my_course->status == STUDENT ){
-                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-
+            if ($my_course['status'] == STUDENT) {
+                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
             $row[] = $tools;
             $data[] = $row;
         }
-        echo Display::tag('h4',$enreg['name']);
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));        
-
+        echo Display::page_subheader($session_item['session_name']);
+        Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }
 } else {
     echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
@@ -167,7 +139,7 @@ if (Database::num_rows($res) > 0) {
                 '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
                 '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ( $course->status == STUDENT ) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
 
         }
         $row[] = $tools;

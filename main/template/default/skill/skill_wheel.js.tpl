@@ -12,7 +12,7 @@ var main_depth = 4;
 var main_parent_id = 0;
 
 // Used to split in two word or not
-var max_size_text_length = 14; 
+var max_size_text_length = 13; 
   
 /* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];
@@ -385,7 +385,6 @@ function open_popup(skill_id, parent_id) {
                      var params = $("#add_item").find(':input').serialize();
                      add_skill(params);                     
                   }
-
             },
             close: function() {     
                 $("#name").attr('value', '');
@@ -414,8 +413,9 @@ function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis)
             break;
         default:
             //alert('You have a strange mouse :D '); //
-    }        
     }
+}
+    
 
 /* 
     Loads the skills partitions thanks to a json call
@@ -591,6 +591,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         .attr("text-anchor", function(d) {
             return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
         })
+        .attr("rel", "tooltip_skill")
+        .attr("title", function(d) {
+            return d.name;
+        })
         .attr("dy", ".2em")
         .attr("transform", function(d) {
             /** Get the text details and define the rotation and general position */
@@ -600,10 +604,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
         })
         .on("mouseover", function(d, i) {                    
-            $("#icon-" + i).show();                         
+            //$("#icon-" + i).show();                
         })
         .on("mouseout", function(d, i) {
-            $("#icon-" + i).hide();                
+            //$("#icon-" + i).hide();                
         })
         .on("contextmenu", function(d, i) {            
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);  
@@ -622,14 +626,24 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         .attr("x", 0)
         .text(function(d) {
             if (d.depth && d.name.length > max_size_text_length) {
-                insert_two_words = true;
-                return d.depth ? d.name.split(" ")[0] : "";
+                if (d.depth) {                    
+                    first_part = d.name.split(" ")[0];
+                    second_part = d.name.split(" ")[1];                    
+                    if (first_part.length >= max_size_text_length) {
+                        insert_two_words = false;
+                        return first_part.substring(0, max_size_text_length -3)  + ' ... ';
+                    } else {
+                        return first_part;
+                    }                
+                } else {
+                    return "";
+                }
             } else {
                 insert_two_words = false;
                 return d.depth ? d.name : "";
             }            
         });
-
+        
         if (insert_two_words) {
             textEnter.append("tspan")
             .attr("x", 0)

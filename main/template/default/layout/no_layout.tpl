@@ -10,7 +10,7 @@
 {% block name%}
 {% endblock %}
 {% block body %}
-    {{content}}
+    {{ content }}
 {% endblock %}
 </body>
 </html>

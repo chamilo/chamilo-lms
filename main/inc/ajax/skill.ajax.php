@@ -98,8 +98,7 @@ switch ($action) {
         break;
     case 'get_saved_profiles':
         $skill_profile   = new SkillProfile();
-        $profiles = $skill_profile->get_all();
-        
+        $profiles = $skill_profile->get_all();        
         Display::display_no_header();        
         Display::$global_template->assign('profiles', $profiles);
         echo Display::$global_template->fetch('default/skill/profile_item.tpl');

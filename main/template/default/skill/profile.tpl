@@ -50,19 +50,24 @@
         <div class="row-fluid">
         {% for user in user_list %}
             <div class="span4">
-                <div class="well">
-                    <div class="ui-widget-header">                    
-                        <h3>
-                            <img src="{{user.user.avatar_small}}" /> {{user['user'].complete_name}} ({{user['user'].username}})
-                        </h3>
-                    </div>
+                <div class="well_border">                                 
+                    <h3>
+                        <img src="{{user.user.avatar_small}}" /> 
+                        <a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}">{{ user['user'].complete_name }} ({{user['user'].username}}) </a>
+                    </h3>
+                    <hr >
                     <div class="ui-widget-content ">
                         <h4>{{ "Skills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</h4>
                         <ul>                
-                            {% for skill_data in user.skills %}                 
+                            {% for skill_data in user.skills %}                                     
                                 <li>
-                                    {% if skill_list[skill_data.skill_id].name is not null %}                                    
-                                        <span class="label_tag skill">{{skill_list[skill_data.skill_id].name}}</span>
+                                    {% if skill_list[skill_data.skill_id].name is not null %}                       
+                                        {% if skill_data.found %}                                        
+                                            <span class="label label-important">{{ skill_list[skill_data.skill_id].name }}</span>
+                                        {% else %} 
+                                            <span class="label_tag skill">{{ skill_list[skill_data.skill_id].name }}</span>
+                                        {% endif %}        
+                                        
                                     {% else %} 
                                         {{ "SkillNotFound"|get_lang }}
                                     {% endif %}

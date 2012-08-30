@@ -226,6 +226,12 @@ function toogle_save_profile_form() {
 $(document).ready(function() {
     /* Skill search */ 
     
+        //Tool tip (in exercises)
+    var tip_options = {
+        placement : 'right'
+    }
+    $('.tooltip_skill').tooltip(tip_options);
+    
     /* Skill item list onclick  */
     $("#skill_holder").on("click", "input.skill_to_select", function() {
         skill_id = $(this).attr('rel');
@@ -352,7 +358,7 @@ $(document).ready(function() {
         autoOpen: false,
         modal   : true, 
         width   : 600, 
-        height  : 580
+        height  : 630
     });
     
     //Save search profile dialog
@@ -483,7 +489,7 @@ $(document).ready(function() {
         </div>
 </div>
 
-<div id="dialog-form" style="display:none; z-index:9001;">
+<div id="dialog-form" style="">
     <p class="validateTips"></p>
     <form id="add_item" class="form-horizontal"  name="form">
         <fieldset>

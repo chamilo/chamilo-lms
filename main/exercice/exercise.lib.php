@@ -1214,21 +1214,37 @@ function is_success_exercise_result($score, $weight, $pass_percentage) {
 }
 
 function show_success_message($score, $weight, $pass_percentage) {
-    $is_success = is_success_exercise_result($score, $weight, $pass_percentage);
-    
-    $icon = '';
-    if ($is_success) {        
-        //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
-        $html = get_lang('CongratulationsYouPassedTheTest');
-        $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
-    } else {
-        //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
-        $html = get_lang('YouDidNotReachTheMinimumScore');
-        $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
-    }    
-    $html = Display::tag('h4', $html);
-    $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
-    return $html;
+    $res = "";
+    if (is_pass_pourcentage_enabled($pass_percentage)) {
+        $is_success = is_success_exercise_result($score, $weight, $pass_percentage);
+        
+        $icon = '';
+        if ($is_success) {        
+            //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+            $html = get_lang('CongratulationsYouPassedTheTest');
+            $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
+        } else {
+            //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
+            $html = get_lang('YouDidNotReachTheMinimumScore');
+            $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
+        }    
+        $html = Display::tag('h4', $html);
+        $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
+        $res = $html;
+    }
+    return $res;
+}
+
+/**
+ * Return true if pass_pourcentage activated (we use the pass pourcentage feature
+ * return false if pass_percentage = 0 (we don't use the pass pourcentage feature
+ * @param $in_pass_pourcentage
+ * @return boolean
+ * In this version, pass_percentage and show_success_message are disabled if
+ * pass_percentage is set to 0
+ */
+function is_pass_pourcentage_enabled($in_pass_pourcentage) {
+    return $in_pass_pourcentage > 0;
 }
 
 /**
@@ -2079,16 +2095,18 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             
             $is_success = is_success_exercise_result($total_score, $total_weight, $objExercise->selectPassPercentage());
             $total_score_text .= '<div class="question_row">';
+            $total_score_text .= '<div class="ribbon ribbon-total ">';
             
-            if ($is_success) {
-                $total_score_text .= '
-                <div class="ribbon ribbon-total ">
-                <div class="rib rib-total ribbon-total-success">';
-            } else {
-                $total_score_text .= '
-                <div class="ribbon ribbon-total ">
-                <div class="rib rib-total ribbon-total-error">';
+            // Color the final test score if pass_percentage activated
+            $ribbon_total_success_or_error = "";
+            if (is_pass_pourcentage_enabled($objExercise->selectPassPercentage())) {
+                if ($is_success) {
+                    $ribbon_total_success_or_error = ' ribbon-total-success';
+                } else {
+                    $ribbon_total_success_or_error = ' ribbon-total-error';
+                }
             }
+            $total_score_text .= '<div class="rib rib-total $ribbon_total_success_or_error">';
             
             $total_score_text .= '<h3>';
             $total_score_text .= get_lang('YourTotalScore')."&nbsp;";

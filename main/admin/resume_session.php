@@ -275,8 +275,8 @@ if ($session['nbr_users'] == 0) {
             $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
         }
         $information = null;
-        $origin_destination = null;
-        
+        $origin = null;
+        $destination = null;
         $row_class = null;
         $moved_date = '-';
         
@@ -288,13 +288,35 @@ if ($session['nbr_users'] == 0) {
             $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';                        
             $session_info = SessionManager::fetch($user['moved_to']);
             
+            if ($user['moved_status'] != SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
+                $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
+                $origin = Display::url($session['name'], $url);                
+
+                if ($session_info) {
+                    $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
+                    $destination = Display::url($session_info['name'], $url);
+                    $destination = ' / '.$destination;
+                }            
+            }
+            $row_class = 'row_odd';            
+            $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
+        } else {          
+            $session_origin_info = SessionManager::get_session_rel_user_by_moved_to($id_session, $user['user_id']);
+            
+            if (!empty($session_origin_info)) {
+               $moved_date = api_get_local_time($session_origin_info['moved_at']);
+            }            
+            $session_info = SessionManager::fetch($session_origin_info['id_session']);
+            $information = $reasons[$session_origin_info['moved_status']];
+            
             if ($session_info) {
                 $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
-                $origin_destination = Display::url($session_info['name'], $url);
+                $origin = Display::url($session_info['name'], $url);
+                
+                $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
+                $destination = Display::url($session['name'], $url);
+                $destination = ' / '.$destination;
             }
-            $row_class = 'row_odd';
-            
-            $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
         }
         
         $link_to_add_user_in_url = '';
@@ -312,7 +334,7 @@ if ($session['nbr_users'] == 0) {
                 </td>
                 <td>'.$information.'</td>
                 <td>'.$moved_date.'</td>                    
-                <td>'.$origin_destination.'</td>
+                <td>'.$origin.' '.$destination.'</td>
                 <td>
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;

@@ -2092,6 +2092,12 @@ class SessionManager {
        }
        return $session_array;
     }
-
-  
+    
+    static function get_session_rel_user_by_moved_to($session_id, $user_id) {
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);       
+        $sql = "SELECT id_session, moved_status, moved_at FROM $tbl_session_rel_user WHERE id_user = $user_id AND moved_to = $session_id LIMIT 1";        
+        $result = Database::query($sql);
+        $result = Database::store_result($result,'ASSOC');
+        return $result[0];
+    }  
 }

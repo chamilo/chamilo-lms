@@ -207,9 +207,6 @@ $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 
-//Language
-$form->addElement('select_language', 'language', get_lang('Language'));
-
 $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
 
 /*
@@ -241,6 +238,9 @@ if (api_is_platform_admin()) {
 	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
 	$form->addElement('html', '</div>');
 }
+
+//Language
+$form->addElement('select_language', 'language', get_lang('Language'));
 
 // Send email
 $group = array();

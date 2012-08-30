@@ -2950,8 +2950,7 @@ class CourseManager {
         }
         
         // Step 2: We display the course without a user category.
-        $html .= self :: display_courses_in_category(0, $load_dirs);
-        
+        $html .= self :: display_courses_in_category(0, $load_dirs);        
         return $html;
     }
 

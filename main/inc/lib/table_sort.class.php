@@ -26,7 +26,7 @@ class TableSort {
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
-	public function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR) {
+	public static function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR) {
 		if (!is_array($data) || empty($data)) {
 			return array();
 		}

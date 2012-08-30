@@ -164,10 +164,9 @@ $status[DRH] = get_lang('Drh');
 $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'class'=>'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
-$form->addElement('select_language', 'language', get_lang('Language'), null);
+
 //drh list (display only if student)
 $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
-
 
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
 
@@ -177,7 +176,6 @@ if (is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
-
 
 if (api_is_platform_admin()) {
     // Platform admin
@@ -189,6 +187,8 @@ if (api_is_platform_admin()) {
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
     $form->addElement('html', '</div>');
 }
+
+$form->addElement('select_language', 'language', get_lang('Language'), null);
 
 // Send email
 $group = array();

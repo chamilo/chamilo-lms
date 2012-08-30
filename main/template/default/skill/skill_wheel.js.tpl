@@ -395,6 +395,7 @@ function open_popup(skill_id, parent_id) {
         });
         $("#dialog-form").dialog("open");        
     }
+    return false;
 }
 
 /* Handles mouse clicks */

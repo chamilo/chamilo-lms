@@ -43,34 +43,7 @@ class MessageManager
 		}
 		return $online_user_list;
 	}
-
-	/**
-	* Displays info stating that the message is sent successfully.
-	*/
-	public static function display_success_message($uid) {
-			global $charset;
-		if ($_SESSION['social_exist']===true) {
-			$redirect="#remote-tab-2";
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}
-		} else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-		}
-		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-	}
-
+    
 	/**
 	* Displays the wysiwyg html editor.
 	*/

@@ -915,6 +915,7 @@ class IndexManager {
                         $session_now = time();
                         $html_courses_session = '';
                         $count_courses_session = 0;
+                        
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;

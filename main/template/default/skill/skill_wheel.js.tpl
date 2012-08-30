@@ -12,7 +12,7 @@ var main_depth = 4;
 var main_parent_id = 0;
 
 // Used to split in two word or not
-var max_size_text_length = 13; 
+var max_size_text_length = 11; 
   
 /* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];

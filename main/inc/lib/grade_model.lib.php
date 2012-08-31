@@ -107,9 +107,12 @@ class GradeModel extends Model {
             $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
             
             $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class' => 'span2'));
-            $form->addElement('text', 'components['.$i.'][exclusions]',      null, array('class' => 'span2'));
+            
             $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);
             $form->addElement('select', 'components['.$i.'][count_elements]', null, $options);
+            
+            $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);            
+            $form->addElement('select', 'components['.$i.'][exclusions]',      null, $options);
             
             $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2'));
             

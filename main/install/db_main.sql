@@ -3003,10 +3003,10 @@ CREATE TABLE grade_components (
     percentage VARCHAR(255)  NOT NULL,
     title VARCHAR(255) NOT NULL,
     acronym VARCHAR(255) NOT NULL,
-    grade_model_id INTEGER NOT NULL,
-    exclusions VARCHAR(255) DEFAULT NULL,
+    grade_model_id INTEGER NOT NULL,    
     prefix VARCHAR(255) DEFAULT NULL,
     count_elements INT DEFAULT 0,
+    exclusions INT DEFAULT 0,
     grade_model_id INT NOT NULL,
     PRIMARY KEY (id)
 );

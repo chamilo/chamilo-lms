@@ -1307,8 +1307,7 @@ class Tracking {
 		 */
 		public static function get_sessions_coached_by_user($coach_id) {
 			// table definition
-			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);			
 			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 			// protect datas

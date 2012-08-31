@@ -1859,7 +1859,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
 
                 //if access_end_date is set
                 if (!empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {                    
-                    //only if date_start said that it was ok
+                    //only if access_end_date said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
 

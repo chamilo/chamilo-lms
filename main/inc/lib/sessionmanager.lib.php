@@ -132,6 +132,7 @@ class SessionManager {
       * @todo use an array to replace all this parameters or use the model.lib.php ...
 	  * @return mixed       Session ID on success, error message otherwise
       **/
+    /*
 	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
 		global $_configuration;
         
@@ -228,16 +229,7 @@ class SessionManager {
 				$session_id = Database::insert_id();
                 
                 if (!empty($session_id)) {
-                    /*
-                    Sends a message to the user_id = 1
-                                        
-                    $user_info = api_get_user_info(1);
-                    $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
-                    $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');                    
-                    $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;                                        
-                    api_mail_html($complete_name, $user_info['email'], $subject, $message);
-                    * 
-                    */                    
+                        
     				//Adding to the correct URL                    
                     $access_url_id = api_get_current_access_url_id();
                     UrlManager::add_session_to_url($session_id,$access_url_id);            
@@ -251,6 +243,7 @@ class SessionManager {
 		}
 	}
 	
+    */
 	function session_name_exists($session_name) {
 	    $session_name = Database::escape_string($session_name);
         $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
@@ -455,6 +448,7 @@ class SessionManager {
 	 * @return $id;
 	 * The parameter id is a primary key
 	**/
+    /*
 	public static function edit_session ($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility, $start_limit = true, $end_limit = true) {
 		global $_user;
 		$name=trim(stripslashes($name));
@@ -537,6 +531,7 @@ class SessionManager {
 			}
 		}
 	}
+    */
 	/**
 	 * Delete session
 	 * @author Carlos Vargas  from existing code
@@ -1354,14 +1349,14 @@ class SessionManager {
 		  
         $return_array = array();
 
-		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname, sc.name as category_name, s.promotion_id
+		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.access_start_date, s.access_end_date, u.firstname, u.lastname, sc.name as category_name, s.promotion_id
 				FROM $session_table s
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
 				WHERE ar.access_url_id = $access_url_id ";
         
-		if (count($conditions)>0) {
+		if (count($conditions) > 0) {
 			$sql_query .= ' AND ';
 			foreach ($conditions as $field=>$value) {
                 $field = Database::escape_string($field);
@@ -1784,29 +1779,10 @@ class SessionManager {
      */
     public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
         $id = intval($id);
-        $s = self::fetch($id);
-        $s['year_start']    = substr($s['date_start'],0,4);
-        $s['month_start']   = substr($s['date_start'],5,2);
-        $s['day_start']     = substr($s['date_start'],8,2);
-        $s['year_end']      = substr($s['date_end'],0,4);
-        $s['month_end']     = substr($s['date_end'],5,2);
-        $s['day_end']       = substr($s['date_end'],8,2);        
-        $consider_start = true;
-        if ($s['year_start'].'-'.$s['month_start'].'-'.$s['day_start'] == '0000-00-00') {
-            $consider_start = false;
-        }
-        $consider_end = true;
-        if ($s['year_end'].'-'.$s['month_end'].'-'.$s['day_end'] == '0000-00-00') {
-            $consider_end = false;
-        }
+        $params = self::fetch($id);
         
-        $sid = self::create_session($s['name'].' '.get_lang('Copy'),
-             $s['year_start'], $s['month_start'], $s['day_start'],
-             $s['year_end'],$s['month_end'],$s['day_end'],
-             $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
-             false,(int)$s['id_coach'], $s['session_category_id'],
-             (int)$s['visibility'],$consider_start, $consider_end, true);
-        
+        $params['name'] = $params['name'].' '.get_lang('Copy');
+        $sid = self::add($params);
         if (!is_numeric($sid) || empty($sid)) {
         	return false;
         }

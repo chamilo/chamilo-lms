@@ -112,7 +112,7 @@ $coach_info = api_get_user_info($session['id_coach']);
 	</td>
 	<td>
 		<?php        
-        if (isset($session['date_end']) && $session['date_end'] != '00-00-0000') {
+        if (isset($session['access_end_date']) && $session['access_end_date'] != '0000-00-00 00:00:00') {            
             if ($session['visibility'] == 1) 
                 echo get_lang('ReadOnly'); 
              elseif($session['visibility'] == 2) 

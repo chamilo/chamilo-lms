@@ -32,9 +32,9 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/dat
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
 
 $isocode = api_get_language_isocode();
-//$isocode = 'es';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
-
+if ($isocode != 'en') {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+}
 
 $id = null;
 $url_action = api_get_self();
@@ -93,6 +93,22 @@ function check() {
 
 $(function() {
 
+    $("#coach_id").fcbkcomplete({
+        json_url: "'.$url.'&a=find_coaches",
+        maxitems: 1,
+        addontab: false,
+        input_min_size: 1,
+        cache: false,
+        complete_text:"'.get_lang('StartToType').'",
+        firstselected: false,        
+        onselect: check,
+        filter_selected: true,
+        newel: true           
+    });
+    
+    '.$add_coach.'
+        
+
     $("#display_end_date").datetimepicker({
         dateFormat: "yy-mm-dd"
     });
@@ -111,12 +127,33 @@ $(function() {
         hour: 9,
         onSelect: function(selectedDateTime) {
             var start = $(this).datetimepicker("getDate");        
-            $("#access_end_date").val(selectedDateTime);
+            $("#access_end_date").val(selectedDateTime);                    
         }
     });
     
+    access_start_date_content = $("#access_end_date").val();
+    
+    if (access_start_date_content.length > 0) {
+        $("#visibility_container").show();
+    } else {
+        $("#visibility_container").hide();
+    }
+    
     $("#access_end_date").datetimepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "yy-mm-dd",
+        onSelect: function(selectedDateTime) {            
+            $("#visibility_container").show();
+        }
+    });
+    
+    $("#access_end_date").on("change", function() {        
+        content = $(this).val();
+        if (content.length > 0) {
+            $("#visibility_container").show();
+        } else {
+            $("#visibility_container").hide();
+        }
+        
     });
     
     $("#coach_access_start_date").datetimepicker({
@@ -132,21 +169,7 @@ $(function() {
         dateFormat: "yy-mm-dd"
     });   
     
-    $("#coach_id").fcbkcomplete({
-        json_url: "'.$url.'&a=find_coaches",
-        maxitems: 1,
-        addontab: false,
-        input_min_size: 0,
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"'.get_lang('StartToType').'",
-        firstselected: true,        
-        onselect: check,
-        filter_selected: true,
-        newel: true           
-    });    
-    '.$add_coach.'
+
         
 
     var value = 1;
@@ -202,19 +225,22 @@ $form->addElement('html','<div id="options" style="display:none">');
 //Dates
 $form->addElement('text', 'display_start_date', array(get_lang('SessionDisplayStartDate'), get_lang('SessionDisplayStartDateComment')), array('id' => 'display_start_date'));
 $form->addElement('text', 'display_end_date', array(get_lang('SessionDisplayEndDate'), get_lang('SessionDisplayEndDateComment')), array('id' => 'display_end_date'));
-$form->addRule(array('display_start_date', 'display_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '<');
+$form->addRule(array('display_start_date', 'display_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
      
 $form->addElement('text', 'access_start_date', array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')), array('id' => 'access_start_date'));
 $form->addElement('text', 'access_end_date', array(get_lang('SessionEndDate'), get_lang('SessionEndDate')), array('id' => 'access_end_date'));
-$form->addRule(array('access_start_date', 'access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '<');
-
-$form->addElement('text', 'coach_access_start_date', array(get_lang('SessionCoachStartDate'), get_lang('SessionCoachStartDateComment')), array('id' => 'coach_access_start_date'));
-$form->addElement('text', 'coach_access_end_date', array(get_lang('SessionCoachEndDate'), get_lang('SessionCoachEndDateComment')), array('id' => 'coach_access_end_date'));
-$form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '<');
+$form->addRule(array('access_start_date', 'access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
 
 //Visibility
 $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+
+$form->addElement('html','<div id="visibility_container">');
 $form->addElement('select', 'visibility', get_lang('SessionVisibility'), $visibility_list, array('id' => 'visibility'));
+$form->addElement('html','</div>');
+
+$form->addElement('text', 'coach_access_start_date', array(get_lang('SessionCoachStartDate'), get_lang('SessionCoachStartDateComment')), array('id' => 'coach_access_start_date'));
+$form->addElement('text', 'coach_access_end_date', array(get_lang('SessionCoachEndDate'), get_lang('SessionCoachEndDateComment')), array('id' => 'coach_access_end_date'));
+$form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
 
 $form->addElement('html','</div>');
       

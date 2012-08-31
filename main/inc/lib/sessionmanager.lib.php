@@ -17,7 +17,9 @@ class SessionManager {
     CONST SESSION_CHANGE_USER_REASON_SCHEDULE = 1;
     CONST SESSION_CHANGE_USER_REASON_CLASSROOM = 2;
     CONST SESSION_CHANGE_USER_REASON_LOCATION = 3;
-    CONST SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;    
+    CONST SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
+    
+    CONST DEFAULT_VISIBILITY = 4;  //SESSION_AVAILABLE
 
 	private function __construct() {        
 	}
@@ -25,7 +27,7 @@ class SessionManager {
     /**
      * Fetches a session from the database
      * @param   int     Session ID
-     * @return  array   Session details (id, id_coach, name, nbr_courses, nbr_users, nbr_classes, date_start, date_end, nb_days_access_before_beginning,nb_days_access_after_end, session_admin_id)
+     * @return  array   Session details
      */
     public static function fetch($id) {
     	$t = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -49,10 +51,13 @@ class SessionManager {
             if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
                 return get_lang('PortalSessionsLimitReached');
             }
-        }
-        
+        }        
         $params = self::clean_parameters($params);
-        $session_id = Database::insert(Database::get_main_table(TABLE_MAIN_SESSION), $params);        
+        $my_session_result = SessionManager::get_session_by_name($params['name']);
+        
+        if (empty($my_session_result)) {            
+            $session_id = Database::insert(Database::get_main_table(TABLE_MAIN_SESSION), $params);
+        }        
                         
         if (!empty($session_id)) {
             /*
@@ -87,7 +92,7 @@ class SessionManager {
         return $affected;
     }
     
-    public function clean_parameters($params) {
+    public static function clean_parameters($params) {
          
         //Convert dates          
         $params['display_start_date']       = api_get_utc_datetime($params['display_start_date'], true);
@@ -97,6 +102,10 @@ class SessionManager {
         $params['coach_access_start_date']  = api_get_utc_datetime($params['coach_access_start_date'], true);
         $params['coach_access_end_date']    = api_get_utc_datetime($params['coach_access_end_date'], true);
         $params['id_coach']                 = is_array($params['id_coach']) ? $params['id_coach'][0] : $params['id_coach'];
+               
+        if (empty($params['access_end_date'])) {
+            $params['visibility'] = SessionManager::DEFAULT_VISIBILITY;
+        }
         
         unset($params['submit']);        
         return $params;        
@@ -310,18 +319,16 @@ class SessionManager {
 		}        
 
 		$today = api_get_utc_datetime();
-		$today = api_strtotime($today, 'UTC');
-		$today = date('Y-m-d', $today);
 
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
-					(s.date_start <= '$today' AND '$today' < s.date_end) OR 
-					(s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+					(s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR 
+					(s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR
+					(s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR
+					('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date)
 				, 1, 0) 
 				as session_active, 
-				s.name, nbr_courses, nbr_users, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
+				s.name, nbr_courses, nbr_users, s.access_start_date, s.access_end_date, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
 
 		$query = "$select FROM $tbl_session s 
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
@@ -360,28 +367,20 @@ class SessionManager {
 
 				$session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
 
-				if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {
-				//    $session['session_active'] = 1;
-				}
-
 				if ($session['session_active'] == 1) {
 					$session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
 				} else {
 					$session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
 				}
-
-				if ($session['date_start'] == '0000-00-00') {
-					$session['date_start'] = '';
-				}
-				if ($session['date_end'] == '0000-00-00') {
-					$session['date_end'] = '';
-				}
+                
+                $session = self::convert_dates_to_local($session);
                 
 				switch ($session['visibility']) {
 					case SESSION_VISIBLE_READ_ONLY: //1
 						$session['visibility'] =  get_lang('ReadOnly');
 					break;
 					case SESSION_VISIBLE:           //2
+                    case SESSION_AVAILABLE:         //4
 						$session['visibility'] =  get_lang('Visible');
 					break;
 					case SESSION_INVISIBLE:         //3
@@ -390,10 +389,21 @@ class SessionManager {
                 }
                 $formatted_sessions[] = $session;
 			}
-		}
-		
+		}		
 		return $formatted_sessions;
 	}    
+    
+    static function convert_dates_to_local($params) {
+        $params['display_start_date'] = api_get_local_time($params['display_start_date'], null, null, true);
+        $params['display_end_date'] = api_get_local_time($params['display_end_date'], null, null, true);
+        
+        $params['access_start_date'] = api_get_local_time($params['access_start_date'], null, null, true);
+        $params['access_end_date'] = api_get_local_time($params['access_end_date'], null, null, true);
+        
+        $params['coach_access_start_date'] = api_get_local_time($params['coach_access_start_date'], null, null, true);
+        $params['coach_access_end_date'] = api_get_local_time($params['coach_access_end_date'], null, null, true);
+        return $params;
+    }
     	
     /**
      * Creates a new course code based in given code
@@ -2179,5 +2189,22 @@ class SessionManager {
         $sql .= $where_condition.$order_clause;        
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
+    }
+    
+    static function parse_session_dates($session_info) {    
+        $session_info['access_start_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
+        $session_info['access_end_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
+        
+        if (!empty($session_info['access_start_date']) && !empty($session_info['access_end_date'])) {
+            $msg_date = get_lang('From').' '.$session_info['access_start_date'].' '.get_lang('To').' '.$session_info['access_end_date'];
+        } else {
+            if (!empty($session_info['access_start_date'])) {
+                $msg_date = get_lang('From').' '.$session_info['access_start_date'];
+            }            
+            if (!empty($session_info['access_start_date'])) {
+                $msg_date = get_lang('From').' '.$session_info['access_start_date'];
+            }
+        }
+        return $msg_date;
     }
 }

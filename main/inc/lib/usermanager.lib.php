@@ -1940,18 +1940,27 @@ class UserManager {
 		$condition_date_end = "";
         
 		if ($is_time_over) {
-			$condition_date_end = " AND ( (session.date_end < '$now' AND session.date_end != '0000-00-00') OR moved_to <> 0) ";
+			$condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
 		} else {
-			$condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') AND moved_to = 0 ";
+			$condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
 		}
 
-        $sql = "SELECT DISTINCT session.id, session.name, session.date_start, session.date_end, session_category_id, 
+        $sql = "SELECT DISTINCT session.id, 
+                                session.name, 
+                                
+                                access_start_date, 
+                                access_end_date, 
+                                coach_access_start_date,
+                                coach_access_end_date,
+                                
+                                session_category_id, 
                                 session_category.name as session_category_name,
                                 session_category.date_start session_category_date_start,
                                 session_category.date_end session_category_date_end,
-                                nb_days_access_before_beginning,
+                                
                                 moved_to,
-                                moved_status
+                                moved_status,
+                                id_coach
                                 
                 FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
                       INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
@@ -1960,27 +1969,67 @@ class UserManager {
                          scu.id_user = $user_id OR session.id_coach = $user_id
                       )  $condition_date_end
                 ORDER BY session_category_name, name";
-        //var_dump($sql);
+        
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $categories[$row['session_category_id']]['session_category']['id']                  = $row['session_category_id'];
-                $categories[$row['session_category_id']]['session_category']['name']                = $row['session_category_name'];
-                $categories[$row['session_category_id']]['session_category']['date_start']          = $row['session_category_date_start'];
-                $categories[$row['session_category_id']]['session_category']['date_end']            = $row['session_category_date_end'];                                
+                $categories[$row['session_category_id']]['session_category']['id']                          = $row['session_category_id'];
+                $categories[$row['session_category_id']]['session_category']['name']                        = $row['session_category_name'];
+                $categories[$row['session_category_id']]['session_category']['date_start']                  = $row['session_category_date_start'];
+                $categories[$row['session_category_id']]['session_category']['date_end']                    = $row['session_category_date_end'];                                
                 
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name']    = $row['name'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id']      = $row['id'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_start']      = $row['date_start'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end']        = $row['date_end'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning']     = $row['nb_days_access_before_beginning'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']         = UserManager::get_courses_list_by_session($user_id, $row['id']);
+                $session_id = $row['id'];
                 
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_to']         = $row['moved_to'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_status']     = $row['moved_status'];
+                $visibility = api_get_session_visibility($session_id, null, false);                
                 
-            }
-        }
+                switch ($visibility) {
+                    case SESSION_VISIBLE_READ_ONLY:
+                    case SESSION_VISIBLE:                    
+                    case SESSION_AVAILABLE:
+                        break;
+                    case SESSION_INVISIBLE:
+                        continue(2);
+                }
+                
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name']            = $row['name'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id']              = $row['id'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['id_coach']                = $row['id_coach'];
+                
+                if (isset($row['id_coach']) && !empty($row['id_coach'])) {
+                    $user_info = api_get_user_info($row['id_coach']);
+                    $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_info']          = $user_info;
+                }                
+                
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['access_start_date']       = $row['access_start_date'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['access_end_date']         = $row['access_end_date'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_access_start_date'] = $row['coach_access_start_date'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_access_end_date']   = $row['coach_access_end_date'];
+                
+                $date_message = SessionManager::parse_session_dates($row);
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_message']   = $date_message;                
+                
+                $date_message = SessionManager::parse_session_dates($row);
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['dates_message']   = $date_message;
+                
+                $courses = UserManager::get_courses_list_by_session($user_id, $row['id']);
+                $course_list = array();
+                foreach ($courses as $course) {
+                    $visibility = api_get_session_visibility($session_id, $course['code']);
+                    if ($visibility == SESSION_INVISIBLE) {
+                        continue;
+                    }
+                    
+                    
+                    $user_status_in_course = CourseManager::get_user_in_course_status($user_id, $course['code']);
+                    $course['user_status_in_course'] = $user_status_in_course;
+                    
+                    $course_list[] = $course;
+                }                
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']                 = $course_list;                
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_to']                = $row['moved_to'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_status']            = $row['moved_status'];                
+            }            
+        }        
 		return $categories;
 	}
 
@@ -2138,9 +2187,7 @@ class UserManager {
 				$where_access_url=" AND access_url_id = $access_url_id AND url_rel_session.session_id = $session_id ";
 			}
 		}
-
-		// variable initialisation
-		$personal_course_list_sql = '';
+		
 		$personal_course_list = array();
 		$courses = array();
 

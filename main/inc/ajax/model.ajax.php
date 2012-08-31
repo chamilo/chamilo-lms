@@ -230,7 +230,8 @@ switch ($action) {
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
+        //'nbr_courses', 'nbr_users', 
+        $columns = array('name', 'category_name', 'access_start_date','access_end_date', 'coach_name', 'session_active', 'visibility');            
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
@@ -357,7 +358,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses','sessions','actions');
+        $columns = array('name', 'users', 'courses', 'sessions','actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {

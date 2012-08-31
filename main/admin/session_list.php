@@ -47,19 +47,21 @@ if (isset($_REQUEST['keyword'])) {
 }
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'), 
+/*$columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'), 
+                        get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));*/
+$columns        = array(get_lang('Name'), get_lang('SessionCategoryName'), 
                         get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
 
 //$activeurl = '?sidx=session_active';
 //Column config
 $column_model   = array(
                         array('name'=>'name',           'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true'),                        
-                        array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
+//                        array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
+//                        array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'date_start',     'index'=>'date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'date_end',       'index'=>'date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),                        
+                        array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true'),
+                        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false'),                        
                         array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
                                  
                               //for the bottom bar
@@ -72,7 +74,7 @@ $column_model   = array(
                                           
                                    
                         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
-                        array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+                        array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';

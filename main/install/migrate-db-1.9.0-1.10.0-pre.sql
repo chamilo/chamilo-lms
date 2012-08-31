@@ -34,13 +34,16 @@ ALTER TABLE session_rel_user ADD COLUMN moved_to INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_status INT NOT NULL DEFAULT 0;
 ALTER TABLE session_rel_user ADD COLUMN moved_at datetime NOT NULL default '0000-00-00 00:00:00';
 
-
 ALTER TABLE session ADD COLUMN display_start_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE session ADD COLUMN display_end_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE session ADD COLUMN access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE session ADD COLUMN access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE session ADD COLUMN coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE session ADD COLUMN coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00';
+
+ALTER TABLE grade_components ADD COLUMN prefix VARCHAR(255) DEFAULT NULL;
+ALTER TABLE grade_components ADD COLUMN exclusions VARCHAR(255) DEFAULT NULL;
+ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0,;
 
 -- ALTER TABLE session DROP COLUMN date_start;
 -- ALTER TABLE session DROP COLUMN date_end;

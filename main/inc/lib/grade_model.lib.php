@@ -8,10 +8,12 @@
 /**
  * Code
  */
-
 /**
  * @package chamilo.library
  */
+
+require_once 'fckeditor/fckeditor.php';
+
 class GradeModel extends Model {
     
     var $table;
@@ -103,10 +105,16 @@ class GradeModel extends Model {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
             $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
-            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span3'));        
-            $form->addElement('hidden', 'components['.$i.'][id]',       null, array('class' => 'span3'));
             
-             $template_percentage =
+            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class' => 'span2'));
+            $form->addElement('text', 'components['.$i.'][exclusions]',      null, array('class' => 'span2'));
+            $form->addElement('text', 'components['.$i.'][count_elements]',      null, array('class' => 'span2'));
+            
+            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2'));
+            
+            $form->addElement('hidden', 'components['.$i.'][id]');
+            
+            $template_percentage =
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">                
                 <p>
                 <label class="control-label">{label}</label>
@@ -131,6 +139,10 @@ class GradeModel extends Model {
             $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
+            
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][prefix]');
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][exclusions]');
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][count_elements]');
             
             if ($i == 0) {
                 $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
@@ -253,12 +265,11 @@ class GradeModel extends Model {
 
 class GradeModelComponents extends Model {
     var $table;
-    var $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id');
+    var $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id', 'prefix', 'exclusions', 'count_elements');
     
 	public function __construct() {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
 	}    
-    
     public function save($params, $show_query = false) {        
 	    $id = parent::save($params, $show_query);  
         return $id;

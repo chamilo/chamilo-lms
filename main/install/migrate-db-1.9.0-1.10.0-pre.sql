@@ -43,7 +43,7 @@ ALTER TABLE session ADD COLUMN coach_access_end_date datetime NOT NULL default '
 
 ALTER TABLE grade_components ADD COLUMN prefix VARCHAR(255) DEFAULT NULL;
 ALTER TABLE grade_components ADD COLUMN exclusions VARCHAR(255) DEFAULT NULL;
-ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0,;
+ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 
 -- ALTER TABLE session DROP COLUMN date_start;
 -- ALTER TABLE session DROP COLUMN date_end;

@@ -1165,7 +1165,7 @@ class CourseManager {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
-            $where[] = ' course_rel_user.course_code IS NOT NULL ';
+            $where[] = ' AND course_rel_user.course_code IS NOT NULL ';
             
             if (isset($filter_by_status) && $filter_by_status != '') {
                 $filter_by_status = intval($filter_by_status);

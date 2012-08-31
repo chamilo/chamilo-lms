@@ -12,6 +12,9 @@
 /**
  * @package chamilo.library
  */
+
+require_once 'fckeditor/fckeditor.php';
+
 class GradeModel extends Model {
     
     var $table;

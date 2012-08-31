@@ -104,10 +104,9 @@ class GradeModel extends Model {
         for ($i = 0; $i <= $max;  $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
-            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));            
-            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2', 'placeholder' => get_lang('Title')));
-            
-            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class' => 'span1', 'placeholder' => get_lang('Prefix')));
+            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1', 'placeholder' => get_lang('Acronym')));
+            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2', 'placeholder' => get_lang('Title')));            
+            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class'=> 'span1', 'placeholder' => get_lang('Prefix')));
             
             $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);
             $form->addElement('select', 'components['.$i.'][count_elements]', null, $options);

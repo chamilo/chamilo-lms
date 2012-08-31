@@ -23,7 +23,7 @@ $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
-$session = SessionManager::get_session_info($id_session);
+$session = api_get_session_info($id_session);
 $session_cat_info = SessionManager::get_session_category($session['session_category_id']);
 $session_category = null;
 if (!empty($session_cat_info)) {
@@ -64,15 +64,17 @@ if (!empty($message)) {
 
 echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_edit.php?page=resume_session.php&id=$id_session");
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_add.php?page=resume_session.php&id=$id_session");
 echo Display::page_subheader(get_lang('GeneralProperties').$url);
+
+$coach_info = api_get_user_info($session['id_coach']);
 
 ?>
 <!-- General properties -->
 <table class="data_table">
 <tr>
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
-	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
+	<td><?php echo $coach_info['complete_name'].' ('.$coach_info['username'].')' ?></td>
 </tr>
 <?php if(!empty($session_category)) { ?>
 <tr>
@@ -81,44 +83,28 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 <?php } ?>
 <tr>
-	<td><?php echo get_lang('Date'); ?> :</td>
-	<td>
-	<?php
-		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
-			echo get_lang('NoTimeLimits');
-		else {
-            if ($session['date_start'] != '00-00-0000') {
-            	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
-                $session['date_start'] =  get_lang('From').' '.$session['date_start'];
-            } else {
-            	$session['date_start'] = '';
-            }
-            if ($session['date_end'] == '00-00-0000') {
-                $session['date_end'] ='';
-            } else {
-            	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
-            }
-			echo $session['date_start'].' '.$session['date_end'];
-        }
-        ?>
-	</td>
-</tr>
-<!-- show nb_days_before and nb_days_after only if they are different from 0 -->
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysBefore')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_before_beginning']) ?>
-	</td>
+	<td><?php echo get_lang('SessionDisplayStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['display_start_date'], null, null, true); ?></td>    
 </tr>
 <tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysAfter')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_after_end']) ?>
-	</td>
+    <td><?php echo get_lang('SessionDisplayEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['display_end_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['access_start_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['access_end_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionCoachStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['coach_access_start_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionCoachEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['coach_access_end_date'], null, null, true); ?></td>
 </tr>
 <tr>
 	<td>

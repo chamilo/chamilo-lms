@@ -22,24 +22,6 @@ class SessionManager {
 	private function __construct() {        
 	}
     
-    public static function get_session_info($session_id) {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_user    = Database::get_main_table(TABLE_MAIN_USER);
-        
-        $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, 
-                DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, 
-                DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, 
-                nb_days_access_before_beginning, 
-                nb_days_access_after_end, 
-                session_category_id, 
-                visibility
-                FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
-                WHERE '.$tbl_session.'.id='.$session_id;
-        $rs      = Database::query($sql);
-        $session = Database::store_result($rs);
-        return $session[0];
-    }
-    
     /**
      * Fetches a session from the database
      * @param   int     Session ID
@@ -52,6 +34,72 @@ class SessionManager {
         $r = Database::query($s);
         if (Database::num_rows($r) != 1) { return array(); }
         return Database::fetch_array($r,'ASSOC');
+    }
+    
+    public static function add($params) {
+        global $_configuration;
+        
+        //Check portal limits
+        $access_url_id = 1;
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+        }
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
+            $num = self::count_sessions();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
+                return get_lang('PortalSessionsLimitReached');
+            }
+        }
+        
+        $params = self::clean_parameters($params);
+        $session_id = Database::insert(Database::get_main_table(TABLE_MAIN_SESSION), $params);        
+                        
+        if (!empty($session_id)) {
+            /*
+            Sends a message to the user_id = 1
+
+            $user_info = api_get_user_info(1);
+            $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
+            $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');                    
+            $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;                                        
+            api_mail_html($complete_name, $user_info['email'], $subject, $message);
+            * 
+            */                    
+            //Adding to the correct URL                    
+            $access_url_id = api_get_current_access_url_id();
+            UrlManager::add_session_to_url($session_id, $access_url_id);            
+
+            // add event to system log				
+            $user_id = api_get_user_id();
+            event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
+        }
+        return $session_id;        
+    }
+    
+    public static function update($params) {
+        $id = $params['id'];
+        if (empty($id)) {
+            return false;
+        }
+        unset($params['id']);      
+        $params = self::clean_parameters($params);         
+        $affected = Database::update(Database::get_main_table(TABLE_MAIN_SESSION), $params, array('id = ?'=>$id));        
+        return $affected;
+    }
+    
+    public function clean_parameters($params) {
+         
+        //Convert dates          
+        $params['display_start_date']       = api_get_utc_datetime($params['display_start_date'], true);
+        $params['display_end_date']         = api_get_utc_datetime($params['display_end_date'], true);
+        $params['access_start_date']        = api_get_utc_datetime($params['access_start_date'], true);
+        $params['access_end_date']          = api_get_utc_datetime($params['access_end_date'], true);
+        $params['coach_access_start_date']  = api_get_utc_datetime($params['coach_access_start_date'], true);
+        $params['coach_access_end_date']    = api_get_utc_datetime($params['coach_access_end_date'], true);
+        $params['id_coach']                 = is_array($params['id_coach']) ? $params['id_coach'][0] : $params['id_coach'];
+        
+        unset($params['submit']);        
+        return $params;        
     }
     
 	 /**
@@ -822,8 +870,6 @@ class SessionManager {
             Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$session_id' AND course_code='".$course_code."'");
         }        
     }
-    
-    
 
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
 	 * @author Carlos Vargas from existing code
@@ -2099,5 +2145,39 @@ class SessionManager {
         $result = Database::query($sql);
         $result = Database::store_result($result,'ASSOC');
         return $result[0];
-    }  
+    }
+    
+    static function get_coaches_by_keyword($tag) {
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        
+        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+        
+        $select ="SELECT user.user_id, lastname, firstname, username ";        
+        $sql = " $select FROM $tbl_user user WHERE status='1'";
+        
+        $tag = Database::escape_string($tag);
+        
+        $where_condition = array();
+        if (!empty($tag)) {
+            $condition = ' LIKE "%'.$tag.'%"';
+            $where_condition = array( "firstname $condition", 
+                                      "lastname $condition", 
+                                      "username $condition"
+            );
+            $where_condition = ' AND  ('.implode(' OR ',  $where_condition).') ';
+        }        
+        
+        if (api_is_multiple_url_enabled()) {
+            $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1){
+                $sql = $select.' FROM '.$tbl_user.' user
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                        WHERE access_url_id = '.$access_url_id.'  AND status = 1';
+            }
+        }        
+        $sql .= $where_condition.$order_clause;        
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');
+    }
 }

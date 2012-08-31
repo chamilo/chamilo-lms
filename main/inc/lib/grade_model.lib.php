@@ -104,9 +104,10 @@ class GradeModel extends Model {
         for ($i = 0; $i <= $max;  $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
-            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
+            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));            
+            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2', 'placeholder' => get_lang('Title')));
             
-            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class' => 'span2'));
+            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class' => 'span1', 'placeholder' => get_lang('Prefix')));
             
             $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);
             $form->addElement('select', 'components['.$i.'][count_elements]', null, $options);
@@ -114,7 +115,7 @@ class GradeModel extends Model {
             $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);            
             $form->addElement('select', 'components['.$i.'][exclusions]',      null, $options);
             
-            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2'));
+            
             
             $form->addElement('hidden', 'components['.$i.'][id]');
             
@@ -122,12 +123,11 @@ class GradeModel extends Model {
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">                
                 <p>
                 <label class="control-label">{label}</label>
-                <div class="controls">
-                    <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+                <div class="controls">                    
                     {element} <!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --> % = ';
             
             $template_acronym = '
-            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
+            <!-- BEGIN required -->      
             {element} {label} <!-- BEGIN error --><span class="form_error">{error}</span> <!-- END error -->';
 
             $template_title =
@@ -140,12 +140,12 @@ class GradeModel extends Model {
             </a>            
             </div></p></div>';
             
-            $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
+            $renderer->setElementTemplate($template_acronym, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
             
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][prefix]');
-            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][exclusions]');
+            $renderer->setElementTemplate($template_title , 'components['.$i.'][exclusions]');
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][count_elements]');
             
             if ($i == 0) {

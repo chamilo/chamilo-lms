@@ -86,6 +86,7 @@ CREATE TABLE track_e_default (
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
   c_id int unsigned default NULL,
+  session_id int unsigned default 0,
   PRIMARY KEY  (default_id)
 );
 

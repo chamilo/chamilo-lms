@@ -16,6 +16,8 @@
 
 -- Optimize tracking query very often queried on busy campuses
 ALTER TABLE track_e_online ADD INDEX idx_trackonline_uat (login_user_id, access_url_id, login_date);
+ALTER TABLE track_e_default ADD COLUMN session_id INT NOT NULL DEFAULT 0;
+
 
 -- Do not move this query
 

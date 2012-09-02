@@ -20,7 +20,6 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
-	
 
 if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
 	api_protect_admin_script(true);
@@ -109,8 +108,7 @@ switch ($action) {
         break;
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
-        $exercise_id = $_REQUEST['exerciseId'];
-        
+        $exercise_id = $_REQUEST['exerciseId'];        
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
             $filter_user = intval($_GET['filter_by_user']);
             if ($where_condition == "") {
@@ -123,6 +121,10 @@ switch ($action) {
 		break;
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
+        break;
+    case 'get_session_fields':
+        $obj = new SessionField();
+        $count = $obj->get_count();
         break;
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
@@ -358,7 +360,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses', 'sessions','actions');
+        $columns = array('name', 'users', 'courses', 'sessions', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {
@@ -376,7 +378,12 @@ switch ($action) {
         }
         //Multidimensional sort
         msort($result, $sidx);
-        break;      
+        break;        
+    case 'get_session_fields':
+        $obj = new SessionField();
+        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');
+        $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        break;
     default:    
         exit;            
 }
@@ -392,7 +399,9 @@ $allowed_actions = array('get_careers',
                          'get_timelines', 
                          'get_grade_models', 
                          'get_event_email_template',
-                         'get_user_skill_ranking');
+                         'get_user_skill_ranking',
+                         'get_session_fields'
+);
                          	
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
@@ -417,8 +426,7 @@ if (in_array($action, $allowed_actions)) {
             $response->rows[$i]['cell']=$array;
             $i++; 
         }
-    }    
-
+    }
     echo json_encode($response);
 }
 exit;

@@ -804,6 +804,8 @@ class Autoload
         $result['Security'] = '/main/inc/lib/security.lib.php';
         $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
+        $result['SessionField'] = '/main/inc/lib/session_field.lib.php';
+        $result['SessionFieldValue'] = '/main/inc/lib/session_field_value.lib.php';
         $result['Shibboleth\Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\Model'] = '/main/auth/shibboleth/lib/model.class.php';

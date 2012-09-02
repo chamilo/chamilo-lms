@@ -1009,11 +1009,20 @@ class SessionManager {
   */
 	public static function create_session_extra_field ($fieldvarname, $fieldtype, $fieldtitle) {
 		// database table definition
+        $params = array('field_variable' => $fieldvarname,
+                        'field_type' => $fieldtype, 
+                        'field_display_text' => $fieldtitle                        
+        );
+        $session_field = new SessionField();
+        $field_id = $session_field->save($params);
+        return $field_id;/*
+        
 		$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 		$fieldvarname 	= Database::escape_string($fieldvarname);
 		$fieldtitle 	= Database::escape_string($fieldtitle);
 		$fieldtype = (int)$fieldtype;
-		$time = time();
+		$time = api_get_utc_datetime();
+        
 		$sql_field = "SELECT id FROM $t_sf WHERE field_variable = '$fieldvarname'";
 		$res_field = Database::query($sql_field);
 
@@ -1033,16 +1042,15 @@ class SessionManager {
 			}
 
 			$sql = "INSERT INTO $t_sf
-						                SET field_type = '$fieldtype',
-						                field_variable = '$fieldvarname',
-						                field_display_text = '$fieldtitle',
-						                field_order = '$order',
-						                tms = FROM_UNIXTIME($time)";
-			$result = Database::query($sql);
-
-			$field_id=Database::insert_id();
+                    SET field_type = '$fieldtype',
+                    field_variable = '$fieldvarname',
+                    field_display_text = '$fieldtitle',
+                    field_order = '$order',
+                    tms = '$time'";
+			Database::query($sql);
+			$field_id = Database::insert_id();
 		}
-		return $field_id;
+		return $field_id;*/
 	}
 
 /**
@@ -1052,54 +1060,50 @@ class SessionManager {
  * @param	string	Field value
  * @return	boolean	true if field updated, false otherwise
  */
-	public static function update_session_extra_field_value ($session_id,$fname,$fvalue='') {
+	public static function update_session_extra_field_value ($session_id, $fname, $fvalue = null) {
+        
+        $session_field_value = new SessionFieldValue();
+        $session_field_value->update($params);
 
-		$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-		$t_sfv 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-		$fname = Database::escape_string($fname);
+		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+		$fname      = Database::escape_string($fname);
 		$session_id = (int)$session_id;
+        $tms        = api_get_utc_datetime();
+        
 		$fvalues = '';
-		if(is_array($fvalue))
-		{
-			foreach($fvalue as $val)
-			{
+		if (is_array($fvalue)) {
+			foreach($fvalue as $val) {
 				$fvalues .= Database::escape_string($val).';';
 			}
-			if(!empty($fvalues))
-			{
+			if(!empty($fvalues)) {
 				$fvalues = substr($fvalues,0,-1);
 			}
-		}
-		else
-		{
+		} else {
 			$fvalues = Database::escape_string($fvalue);
 		}
 
 		$sqlsf = "SELECT * FROM $t_sf WHERE field_variable='$fname'";
 		$ressf = Database::query($sqlsf);
-		if(Database::num_rows($ressf)==1)
-		{ //ok, the field exists
+		if (Database::num_rows($ressf)==1) { 
+            // ok, the field exists
 			//	Check if enumerated field, if the option is available
 			$rowsf = Database::fetch_array($ressf);
-
-			$tms = time();
+			
 			$sqlsfv = "SELECT * FROM $t_sfv WHERE session_id = '$session_id' AND field_id = '".$rowsf['id']."' ORDER BY id";
 			$ressfv = Database::query($sqlsfv);
 			$n = Database::num_rows($ressfv);
 			if ($n>1) {
 				//problem, we already have to values for this field and user combination - keep last one
-				while($rowsfv = Database::fetch_array($ressfv))
-				{
-					if($n > 1)
-					{
+				while($rowsfv = Database::fetch_array($ressfv)) {
+					if($n > 1) {
 						$sqld = "DELETE FROM $t_sfv WHERE id = ".$rowsfv['id'];
 						$resd = Database::query($sqld);
 						$n--;
 					}
 					$rowsfv = Database::fetch_array($ressfv);
-					if($rowsfv['field_value'] != $fvalues)
-					{
-						$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowsfv['id'];
+					if ($rowsfv['field_value'] != $fvalues) {
+						$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowsfv['id'];
 						$resu = Database::query($sqlu);
 						return($resu?true:false);
 					}
@@ -1108,9 +1112,8 @@ class SessionManager {
 			} else if ($n==1) {
 				//we need to update the current record
 				$rowsfv = Database::fetch_array($ressfv);
-				if($rowsfv['field_value'] != $fvalues)
-				{
-					$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowsfv['id'];
+				if($rowsfv['field_value'] != $fvalues) {
+					$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowsfv['id'];
 					//error_log('UM::update_extra_field_value: '.$sqlu);
 					$resu = Database::query($sqlu);
 					return($resu?true:false);
@@ -1118,7 +1121,7 @@ class SessionManager {
 				return true;
 			} else {
 				$sqli = "INSERT INTO $t_sfv (session_id,field_id,field_value,tms) " .
-					"VALUES ('$session_id',".$rowsf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
+					"VALUES ('$session_id',".$rowsf['id'].",'$fvalues', '$tms')";
 				//error_log('UM::update_extra_field_value: '.$sqli);
 				$resi = Database::query($sqli);
 				return($resi?true:false);

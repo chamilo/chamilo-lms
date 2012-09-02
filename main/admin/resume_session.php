@@ -127,7 +127,24 @@ $coach_info = api_get_user_info($session['id_coach']);
 	</td>
 </tr>
 
-<?php 
+<?php
+
+$session_field = new SessionField();
+$session_fields = $session_field->get_all();
+foreach ($session_fields as $session_field) {
+    $obj = new SessionFieldValue();
+    $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id']);
+    
+    $session_value = null;
+    if ($result) {
+        $session_value = $result[0]['field_value'];
+    }    
+    echo "<tr>";
+    echo "<td> {$session_field['field_display_text']} </td>";
+    echo "<td> $session_value </td>";
+    echo "</tr>";    
+}
+
 
 $multiple_url_is_on = api_is_multiple_url_enabled();
 

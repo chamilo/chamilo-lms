@@ -825,6 +825,13 @@ class SessionManager {
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        
+        $user_status = SessionManager::get_user_status_in_session($session_id, $user_id);
+        
+        if ($user_status['moved_to'] != 0) {
+            //You can't subscribe a user that was moved
+            return false;
+        }
 
 		$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user ='$user_id' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		Database::query($delete_sql);
@@ -1669,9 +1676,54 @@ class SessionManager {
         return $return_array;
     }
     
-    public static function get_sessions_by_coach($user_id) {
+    public static function get_sessions_by_general_coach($user_id) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));    	
+        $user_id = intval($user_id);
+        
+        // session where we are general coach
+        $sql = 'SELECT DISTINCT id, name, date_start, date_end
+                    FROM ' . $session_table . '
+                    WHERE id_coach=' . $user_id;
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $sql = 'SELECT DISTINCT id, name, date_start, date_end
+                    FROM ' . $session_table . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                    ON (session.id = session_rel_url.session_id)
+                    WHERE id_coach=' . $user_id.' AND access_url_id = '.$access_url_id;
+            }
+        }        
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');        
+    }    
+    
+    function get_sessions_by_coach($user_id) {
+        // table definition
+        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);			
+        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    	$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                FROM ' . $tbl_session . ' as session
+                INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
+                    ON session.id = session_course_user.id_session
+                    AND session_course_user.id_user=' . $user_id.' AND session_course_user.status=2';
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1){
+                $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                    FROM ' . $tbl_session . ' as session
+                    INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
+                        ON session.id = session_course_user.id_session AND session_course_user.id_user = '.$user_id.' AND session_course_user.status=2
+                    INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                    ON (session.id = session_rel_url.session_id)
+                    WHERE access_url_id = '.$access_url_id;
+            }
+        }
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');        
     }
     
     /*
@@ -2077,6 +2129,21 @@ class SessionManager {
         return Database::store_result($result);        
     }
     
+    static function get_session_course_coaches_by_user($course_code, $session_id, $user_id) {
+        $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        
+        // Get coachs of the courses in session
+		$sql = "SELECT user.user_id FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+				WHERE   session_rcru.id_user = user.user_id AND 
+                        session_rcru.id_session = '".intval($session_id)."' AND 
+                        session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
+                        session_rcru.status=2";
+		$result = Database::query($sql);
+        return Database::store_result($result);        
+    }
+    
+    
     static function get_session_course_coaches_to_string($course_code, $session_id) {
         $coaches = self::get_session_course_coaches($course_code, $session_id);
         if (!empty($coaches)) {
@@ -2167,6 +2234,11 @@ class SessionManager {
         return Database::store_result($result, 'ASSOC');
     }
     
+    /**
+     * Returns a human readable string 
+     * @params array An array with all the session dates
+     * @return string 
+     */
     static function parse_session_dates($session_info) {    
         $session_info['access_start_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
         $session_info['access_end_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);

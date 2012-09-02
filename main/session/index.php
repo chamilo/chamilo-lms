@@ -40,7 +40,7 @@ if (isset ($_SESSION['objExercise'])) {
 }
 
 $session_info   = SessionManager::fetch($session_id);
-$session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_list   = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 
 //Getting all sessions where I'm subscribed

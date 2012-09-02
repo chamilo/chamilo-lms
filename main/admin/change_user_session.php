@@ -17,7 +17,7 @@ SessionManager::protect_session_edit($session_id);
 if (api_is_platform_admin()) {
     $sessions = SessionManager::get_sessions_admin();
 } else {
-    $sessions = SessionManager::get_sessions_by_coach(api_get_session_id());
+    $sessions = SessionManager::get_sessions_by_general_coach(api_get_session_id());
 }
 
 $message = null;

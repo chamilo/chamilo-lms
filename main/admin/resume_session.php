@@ -266,8 +266,10 @@ if ($session['nbr_users'] == 0) {
         $row_class = null;
         $moved_date = '-';
         
+        
         $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
         
+        //User in this session is subscribed but was moved to another session
         if (isset($user['moved_to']) && !empty($user['moved_to']) || $user['moved_status'] == SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
             $information = $reasons[$user['moved_status']];
             
@@ -286,6 +288,7 @@ if ($session['nbr_users'] == 0) {
             }
             $row_class = 'row_odd';            
             $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
+            $delete_link = Display::return_icon('delete_na.png', get_lang('Delete')).'&nbsp;';
         } else {          
             $session_origin_info = SessionManager::get_session_rel_user_by_moved_to($id_session, $user['user_id']);
             
@@ -303,6 +306,9 @@ if ($session['nbr_users'] == 0) {
                 $destination = Display::url($session['name'], $url);
                 $destination = ' / '.$destination;
             }
+            
+            $delete_link = '<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+            
         }
         
         $link_to_add_user_in_url = '';
@@ -314,8 +320,9 @@ if ($session['nbr_users'] == 0) {
                 $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
             }                
         }
+        
 		echo '<tr class="'.$row_class.'">
-                <td width="50%">
+                <td width="30%">
                     '.$user_link.'
                 </td>
                 <td>'.$information.'</td>
@@ -325,7 +332,7 @@ if ($session['nbr_users'] == 0) {
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
                     '.$moved_link.'
-                    <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+                    '.$delete_link.'
                     '.$link_to_add_user_in_url.'
                 </td>
                 </tr>';

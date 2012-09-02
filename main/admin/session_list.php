@@ -11,6 +11,7 @@ api_protect_admin_script(true);
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 
 $action = $_REQUEST['action'];
 $idChecked = $_REQUEST['idChecked'];
@@ -156,6 +157,26 @@ $(function() {
     jQuery("#sessions").jqGrid('filterToolbar',options);    
     var sgrid = $("#sessions")[0];
     sgrid.triggerToolbar();
+    
+    
+    $("#start_date_start").datetimepicker({
+        dateFormat: "yy-mm-dd",
+        hour: 9,        
+        onSelect: function(selectedDateTime) {            
+        }
+    });
+    
+    $("#start_date_end").datetimepicker({
+    });
+    
+    $("#end_date_start").datetimepicker({
+    });
+    
+    $("#end_date_end").datetimepicker({
+    });
+    
+    
+    
 });
 </script>
 <div class="actions">
@@ -164,5 +185,41 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
+
+$form = new FormValidator('search');
+
+$form->addElement('header', get_lang('Filter'));
+
+$form->addElement('text', 'start_date_start', get_lang('Between'), array('id' =>'start_date_start'));
+$form->addElement('text', 'start_date_end', get_lang('And'), array('id' =>'start_date_end'));
+$renderer = $form->defaultRenderer();
+
+$renderer->setElementTemplate(get_lang('StartDate').' {label} {element}', 'start_date_start');  
+$renderer->setElementTemplate('{label} {element}', 'start_date_end');  
+
+$form->addElement('html', '<div class="clear"></div>');
+
+$form->addElement('text', 'end_date_start', get_lang('Between'), array('id' =>'end_date_start'));
+$form->addElement('text', 'end_date_end', get_lang('And'), array('id' =>'end_date_end'));
+
+$renderer->setElementTemplate(get_lang('EndDate').' {label} {element}', 'end_date_start');  
+$renderer->setElementTemplate('{label} {element}', 'end_date_end');  
+           
+$options = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+$form->addElement('select', 'course', get_lang('Course'), $options);
+
+$obj = new SessionField();
+
+$session_fields = $obj->get_all();
+
+foreach ($session_fields as $field) {
+    //var_dump($field);
+}
+
+
+$form->addElement('button', 'submit', get_lang('Search'));
+
+$form->display();
+
 echo Display::grid_html('sessions');
 Display::display_footer();

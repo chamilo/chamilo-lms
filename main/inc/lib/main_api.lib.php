@@ -6031,3 +6031,16 @@ function api_is_global_chat_enabled(){
     $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
     return $global_chat_is_enabled;
 }
+
+
+
+function api_get_datetime_picker_js($htmlHeadXtra) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+
+    $isocode = api_get_language_isocode();
+    if ($isocode != 'en') {
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+    }
+    return $htmlHeadXtra;
+}

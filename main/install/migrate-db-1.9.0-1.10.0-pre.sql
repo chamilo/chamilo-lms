@@ -28,6 +28,8 @@ ALTER TABLE track_e_default ADD COLUMN session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id(c_id, lp_view_id, lp_item_id);
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
+
+
 ALTER TABLE notification ADD COLUMN sender_id INT NOT NULL DEFAULT 0;
 
 ALTER TABLE session_rel_user ADD COLUMN moved_to INT NOT NULL DEFAULT 0;
@@ -48,6 +50,7 @@ ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 -- ALTER TABLE session DROP COLUMN date_start;
 -- ALTER TABLE session DROP COLUMN date_end;
 
+CREATE TABLE IF NOT EXISTS session_field_options (id	int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(64), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
 -- Normal tables
 

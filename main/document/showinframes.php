@@ -150,9 +150,11 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                        //  $("<div>I am a div courses</div>").prependTo("body");
                                       }, "top.mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+                                                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+                                                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},   
+                                                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
                                       }
                                       );
@@ -164,9 +166,11 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 
                                       }, "top.mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+                                                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+                                                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},                                                    
+                                                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
                                            ]
                                       }
                                       );
@@ -231,9 +235,6 @@ if ($show_web_odf) {
     $execute_iframe = false;
 }
 
-
-
-
 $is_freemind_available = $pathinfo['extension']=='mm' && api_get_setting('enable_freemind') == 'true';
 if ($is_freemind_available){
     $execute_iframe = false;
@@ -270,9 +271,7 @@ if (!$jplayer_supported && $execute_iframe) {
     </script>';
 }
 
-
 Display::display_header('');
-
 
 echo '<div align="center">';
 
@@ -299,31 +298,24 @@ if ($jplayer_supported) {
     echo '</div>';     
 }
 
-
 if ($is_freemind_available) { 
-
-	?>
-	
+	?>	
 	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
 	<style type="text/css">
 		#flashcontent {
 			height: 500px;
 			padding-top:10px;
 		}
-	</style>
-	<script type="text/javascript">
-	function giveFocus() 
-		{ 
-		  document.visorFreeMind.focus();  
-		}
-	</script>
-	
+	</style>		
 	<div id="flashcontent" onmouseover="giveFocus();">
 		 Flash plugin or Javascript are turned off.
 		 Activate both  and reload to view the mindmap
-	</div>
-		
-	<script type="text/javascript">
+	</div>		
+	<script>
+        function giveFocus() { 
+		  document.visorFreeMind.focus();  
+		}
+        
 		document.onload=giveFocus;
 		// <![CDATA[
 		// for allowing using http://.....?mindmap.mm mode
@@ -367,10 +359,8 @@ if ($is_freemind_available) {
 		
 		fo.write("flashcontent");
 		// ]]>
-	</script>
-	
+	</script>	
 	<?php
-
 }
 
 

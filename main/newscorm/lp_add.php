@@ -32,7 +32,7 @@ $language_file = 'learnpath';
 /* Header and action code */
 
 $currentstyle = api_get_setting('stylesheets');
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#learnpath_title").focus();
 }
@@ -40,7 +40,6 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-
 
 function advanced_parameters() {
     if(document.getElementById(\'options\').style.display == \'none\') {
@@ -51,7 +50,6 @@ function advanced_parameters() {
         document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
     }
 }
-
 
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
@@ -67,8 +65,7 @@ function activate_end_date() {
     } else {
         document.getElementById(\'end_date_div\').style.display = \'none\';
     }
-}
-     
+}     
 </script>';
 
 /* Constants and variables */
@@ -86,7 +83,7 @@ if ($action == 'add' && $type == 'learnpathitem') {
 }
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add.php');
+    //error_log('New LP - User not authorized in lp_add.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
@@ -120,7 +117,6 @@ if ($_POST AND empty($_REQUEST['lp_name'])) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
-
 $form = new FormValidator('lp_add', 'post', 'lp_controller.php');
 
 // Form title
@@ -149,7 +145,6 @@ $form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableE
 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
 $form->addElement('html','</div>');
-
 
 $form->addElement('html','</div>');
 

@@ -1810,73 +1810,103 @@ function attach_glossary_into_scorm(type) {
                         }
 
                       var complex_array = new Array();
+                      
+                        //$("iframe").contents().find("body .glossary-ajax").on("click", ".glossary-ajax", function() {
+                        $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
+                                   
+                        div_show_id="div_show_id";
+                        div_content_id="div_content_id";
 
-                      //mouse over event
-                        $("iframe").contents().find("body .glossary-ajax").mouseover(function(){
-                          random_id=Math.round(Math.random()*100);
-                        div_show_id="div_show_id"+random_id;
-                        div_content_id="div_content_id"+random_id;
-                         $(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
-                         $("iframe").contents().find("div#"+div_show_id).attr("style","display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
-                         $("iframe").contents().find("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
+                        $("iframe").contents().find("body").append('<div id="div_show_id"><div id="div_content_id">&nbsp;</div></div>');
+
+                        show_dialog = $("iframe").contents().find("div#"+div_show_id);
+                        show_description = $("iframe").contents().find("div#"+div_content_id);
+                    
+                        var $target = $(this);
+
+                        if ($("#learning_path_left_zone").is(':visible') ) {                
+                            var extra_left = $("#learning_path_left_zone").width() + 20;
+                        } else {
+                            var extra_left = 0;
+                        }                
+
+                        //$("#"+div_show_id).dialog("destroy");
+                        show_dialog.dialog({
+                            autoOpen: false,
+                            width: 600,
+                            height: 200,
+                            position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
+                            close: function(){
+                                 show_dialog.remove();
+                                 show_description.remove();
+                            }
+                        });       
                             notebook_id=$(this).attr("name");
                             data_notebook=notebook_id.split("link");
 
                             my_glossary_id=data_notebook[1];
                             $.ajax({
                                 contentType: "application/x-www-form-urlencoded",
-                                beforeSend: function(content_object) {
-                                $("iframe").contents().find("div#"+div_content_id).html("<img src='<?php echo api_get_path(WEB_PATH); ?>main/inc/lib/javascript/indicator.gif' />"); },
                                 type: "POST",
-                                url: "<?php echo api_get_path(WEB_PATH); ?>/main/glossary/glossary_ajax_request.php",
+                                url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
                                 data: "glossary_id="+my_glossary_id,
                                 success: function(data) {
-                                    $("iframe").contents().find("div#"+div_content_id).html(data);
+                                        show_description.html(data);
+                                        show_dialog.dialog("open");   
                                 }
-                            });
+                            });                            
                       });
-
-                      //mouse out event
-                      $("iframe").contents().find("body .glossary-ajax").mouseout(function(){
-                            var current_element,
-                            current_element=$(this);
-                            div_show_id=current_element.find("div").attr("id");
-                            $("iframe").contents().find("div#"+div_show_id).remove();
-                      });
-
-                        }
+                }
             });
     } else {
          if ('manual') {
-
-			$("iframe").contents().find("body .glossary").mouseover(function(){
+			//$("iframe").contents().find("body .glossary").mouseover(function(){
+            
+            $("iframe").contents().find("body").on("click", ".glossary", function() {
 				is_glossary_name = $(this).html();
-				random_id = Math.round(Math.random()*100);
-                div_show_id="div_show_id"+random_id;
-                div_content_id="div_content_id"+random_id;
-                //Fixes bug "No result found" message #3620
-				//$(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
-				$("iframe").contents().find("div#"+div_show_id).attr("style","display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
-				$("iframe").contents().find("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
+                                
+                div_show_id="div_show_id";
+                div_content_id="div_content_id";
+                
+                $("iframe").contents().find("body").append('<div id="div_show_id"><div id="div_content_id">&nbsp;</div></div>');
+                
+                show_dialog = $("iframe").contents().find("div#"+div_show_id);
+                show_description = $("iframe").contents().find("div#"+div_content_id);
+                            
+                var $target = $(this);
+                                
+                if ($("#learning_path_left_zone").is(':visible') ) {                
+                    var extra_left = $("#learning_path_left_zone").width() + 20;
+                } else {
+                    var extra_left = 0;
+                }                
+                
+                //$("#"+div_show_id).dialog("destroy");
+                show_dialog.dialog({
+                    autoOpen: false,
+                    width: 600,
+                    height: 200,
+                    position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
+                    close: function(){
+                         show_dialog.remove();
+                         show_description.remove();
+                    }
+                });                         
+                
+				//$("iframe").contents().find("div#"+div_show_id).attr("style","display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
+				//$("iframe").contents().find("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
 
                 $.ajax({
-                    contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function(objeto) {
-                     $("iframe").contents().find("<img src='<?php echo api_get_path(WEB_PATH); ?>main/inc/lib/javascript/indicator.gif' />"); },
+                    contentType: "application/x-www-form-urlencoded",         
                     type: "POST",
-                    url: "<?php echo api_get_path(WEB_PATH); ?>/main/glossary/glossary_ajax_request.php",
+                    url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
                     data: "glossary_name="+is_glossary_name,
-                    success: function(data) {
-                         $("iframe").contents().find("div#"+div_content_id).html(data);
+                    success: function(data) {                                            
+                         show_description.html(data);
+                         show_dialog.dialog("open");                       
                     }
-                	});
-				});
-				$("iframe").contents().find("body .glossary").mouseout(function(){
-                    current_element=$(this);
-                    div_show_id=current_element.find("div").attr("id");
-    				$("iframe").contents().find("div#"+div_show_id).remove();
-				});
+                });                
+            });           
         }
     }
 }
-

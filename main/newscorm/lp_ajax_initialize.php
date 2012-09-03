@@ -57,7 +57,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
             $mylp = new learnpath($code,$lp_id,$user_id);
         } else {
             if ($debug > 1) { error_log('////Reusing session lp', 0); }
-            $mylp = & $oLP;
+            $mylp = $oLP;
         }
     }
     $mylp->set_current_item($next_item);
@@ -108,18 +108,23 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
         $myistring = substr($myistring, 1);
     }
 	// Obtention des donnees d'objectifs
-	$phpobjectives = array();
+	
 	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
 	$mylp_iv_id = $mylpi->db_item_view_id;
-	$sql = "SELECT objective_id, status, score_raw, score_max, score_min
-		FROM ".$mycoursedb."
-		WHERE lp_iv_id = ".$mylp_iv_id." AND c_id = $course_id
-		ORDER BY id ASC;";
-	$res = Database::query($sql);
-	while ($row = Database::fetch_row($res)) {
-		$phpobjectives[] = $row;	
-	}
+    
+    $phpobjectives = array();
+    
+    if (!empty($mylp_iv_id)) {
+        $sql = "SELECT objective_id, status, score_raw, score_max, score_min
+            FROM ".$mycoursedb."
+            WHERE lp_iv_id = ".$mylp_iv_id." AND c_id = $course_id
+            ORDER BY id ASC;";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_row($res)) {
+            $phpobjectives[] = $row;	
+        }
+    }
 	$myobjectives = json_encode($phpobjectives);
     $return .=
             "olms.score=".$myscore.";" .

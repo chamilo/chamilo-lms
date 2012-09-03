@@ -105,10 +105,11 @@
                     url: "../../../../../../../main/glossary/glossary_ajax_request.php",
                     data: "glossary_id="+my_glossary_id,
                     success: function(datas) {
-                        $("div#"+div_content_id).html(datas);                        
+                        $("div#"+div_content_id).html(datas);
+                        $("#"+div_show_id).dialog("open");
                     }
-                });                
-                $("#"+div_show_id).dialog("open");
+                });
+                
             });
 
             //mouse out event

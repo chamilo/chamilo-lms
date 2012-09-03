@@ -78,11 +78,7 @@
                 //$("div#"+div_show_id).attr("style","z-index:99;display:inline;float:left;position:absolute;background-color:#F2F2F2;border-bottom: 1px solid #2E2E2E;border-right: 1px solid #2E2E2E;border-left: 1px solid #2E2E2E;border-top: 1px solid #2E2E2E;color:#305582;margin-left:5px;margin-right:5px;");
                 //$("div#"+div_content_id).attr("style","z-index:99;background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
                 
-                //my_position = $(this).position();
-                
-                var $target = $(this);
-                
-                //alert(my_position.left +' + '+ my_position.top +' +' + $(this).offset().left);
+                var $target = $(this);                
                 
                 $("#"+div_show_id).dialog("destroy");
                 $("#"+div_show_id).dialog({

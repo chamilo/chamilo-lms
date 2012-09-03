@@ -2004,6 +2004,9 @@ function browse_folders($path, $files, $media) {
     if ($media == 'video') {
         $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
     }
+    if ($media == 'certificates') {
+        $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
+    }
     if (is_dir($path)) {
         $handle = opendir($path);
         while (false !== ($file = readdir($handle))) {
@@ -2052,11 +2055,13 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
+        $cert_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
         
         $course_documents_folder_images = $sys_course_path.$course_repository.'/document/images/gallery/';
         $course_documents_folder_audio = $sys_course_path.$course_repository.'/document/audio/';
         $course_documents_folder_flash = $sys_course_path.$course_repository.'/document/flash/';
         $course_documents_folder_video = $sys_course_path.$course_repository.'/document/video/';
+        $course_documents_folder_cert = $sys_course_path.$course_repository.'/document/certificates/';
 
         /* Images */
         $files = array();
@@ -2176,6 +2181,28 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
 
         }
         $default_document_array['video'] = $video_array;
+
+        /* Certificates */
+        $files = browse_folders($cert_code_path, $files, 'certificates');
+        $cert_array = sort_pictures($files, 'dir'); //only one file so far
+        $cert_array = array_merge($cert_array, sort_pictures($files, 'file'));
+        if (!is_dir($course_documents_folder_cert)) {
+            mkdir($course_documents_folder_cert, $perm);
+        }
+        $handle = opendir($cert_code_path);
+        foreach ($cert_array as $key => $value) {
+
+            if ($value['dir'] != '') {
+                @mkdir($course_documents_folder_cert.$value['dir'], $perm);
+            }
+            if ($value['file'] != '') {
+                copy($cert_code_path.$value['file'], $course_documents_folder_cert.$value['file']);
+                chmod($course_documents_folder_cert.$value['file'], $perm_file);
+            }
+
+        }
+        $default_document_array['cert'] = $cert_array;
+        
     }
     return $default_document_array;
 }
@@ -2229,6 +2256,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
     $TABLEGRADEBOOK 		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+    $TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 
     include api_get_path(SYS_CODE_PATH).'lang/english/create_course.inc.php';
     $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$language.'/create_course.inc.php';
@@ -2366,6 +2394,10 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         $example_doc_id = Database :: insert_id();    
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
+        Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/certificates','".get_lang('Certificates')."','folder','0')");
+        $example_doc_id = Database :: insert_id();
+        Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+
         // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
             
         $folders_to_copy_from_default_course =  array(
@@ -2373,6 +2405,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
             'audio',
             'flash',
             'video',
+            'certificates',
         );
         
         $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
@@ -2391,6 +2424,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         //Light protection (adding index.html in every document folder)
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n <head>\n <meta charset=\"utf-8\">\n <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
         
+        $example_cert_id = 0;
         if (is_array($default_document_array) && count($default_document_array) > 0) {
             foreach ($default_document_array as $media_type => $array_media) {
                 $path_documents = "/$media_type/";
@@ -2473,6 +2507,9 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
                                 //Inserting file in the DB
                                 Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
                                 $image_id = Database :: insert_id();
+                                if ($path_documents.$value['file'] == '/certificates/default.html') {
+                                  $example_cert_id = $image_id;
+                                }
                                 Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)");
                             }
                         }
@@ -2578,9 +2615,9 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         $course = api_get_course_info_by_id($course_id);
         $course_code = $course['code'];
         // father gradebook
-        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,NULL,NULL,NULL)");
+        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,NULL,NULL,$example_cert_id)");
         $gbid = Database :: insert_id();
-        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,NULL)");
+        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)");
         $gbid = Database :: insert_id();
         Database::query("INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked) VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)");
     }

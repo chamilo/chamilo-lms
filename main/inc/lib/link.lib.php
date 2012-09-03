@@ -116,6 +116,10 @@ function addlinkcategory($type) {
 			$catlinkstatus = get_lang('LinkAdded');
 			Database :: query($sql);
 			$link_id = Database :: insert_id();
+            
+            if ($link_id) {
+                api_set_default_visibility($link_id, TOOL_LINK);           
+            }
 
 			if ((api_get_setting('search_enabled') == 'true') && $link_id && extension_loaded('xapian')) {
 				require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';

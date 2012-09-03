@@ -324,12 +324,23 @@ class Category implements GradebookItem
             
             if (isset($this->grade_model_id)) {
                 $sql .= ', grade_model_id ';
-            }
+            }            
+            
+            /*
+            $setting = api_get_setting('tool_visible_by_default_at_creation');     
+            $visible = 1;
+            if (isset($setting['gradebook'])) {
+                if ($setting['gradebook'] == 'false') {
+                    $visible = 0;
+                }
+            }*/
+            
+            $visible = intval($this->is_visible());
 
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
 					.','.Database::escape_string($this->get_weight())
-					.','.intval($this->is_visible());
+					.','.$visible;
 			if (isset($this->description)) {
 				$sql .= ",'".Database::escape_string($this->get_description())."'";
 			}
@@ -350,7 +361,8 @@ class Category implements GradebookItem
 			$id = Database::insert_id();
 			$this->set_id($id);
             
-            if (!empty($id)) {            
+            if (!empty($id)) {
+                
                 $parent_id = $this->get_parent_id();
                 $grade_model_id = $this->get_grade_model_id();
                 if ($parent_id == 0) {        

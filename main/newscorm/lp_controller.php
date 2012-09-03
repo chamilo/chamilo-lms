@@ -52,7 +52,6 @@ $(window).load(function () {
 });
 </script>
 <style>
-
 form .label {
     padding: 1px 3px 2px;
     font-size: 100%;
@@ -95,10 +94,6 @@ if ($debug > 0) error_log('New LP - Included back_compat', 0);
 $session_id = api_get_session_id();
 
 api_protect_course_script(true);
-
-/*if (!$is_allowed_in_course) {
-    api_not_allowed(true);
-}*/
 
 require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 $lpfound = false;

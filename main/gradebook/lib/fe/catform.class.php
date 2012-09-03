@@ -240,8 +240,15 @@ class CatForm extends FormValidator {
 			//$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
 			$this->addRule(array ('weight', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		//}
-		
+            
+        $setting = api_get_setting('tool_visible_by_default_at_creation');   
+        $visibility_default = 1;
+        if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {            
+            $visibility_default = 0;
+        }            
+		$this->setDefaults(array('visible' => $visibility_default));
    	}
+    
 	/**
 	 * This function builds an 'select course' form in the add category process,
 	 * if parent id is 0, it will only show courses

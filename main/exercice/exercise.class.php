@@ -743,7 +743,8 @@ class Exercise {
 			$this->id = Database::insert_id();
             
 			// insert into the item_property table
-			api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
+			api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());            
+            api_set_default_visibility($this->id, TOOL_QUIZ);
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this->search_engine_save();
 			}
@@ -3392,6 +3393,13 @@ class Exercise {
             if (api_is_platform_admin() || api_is_course_admin()) {
                 return array('value' => true, 'message' => '');            
             }
+        }
+        
+        //Checking visibility in the item_property table
+        $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id()); 
+        
+        if ($visibility == 0) {        
+            $this->active = 0;
         }
 		
 		//2. If the exercise is not active 

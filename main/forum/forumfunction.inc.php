@@ -185,7 +185,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
         $form_title = get_lang('AddForum');
     }
     $session_header = isset($_SESSION['session_name']) ? ' ('.$_SESSION['session_name'].') ' : '';
-    $form->addElement('header', '', $form_title.$session_header);
+    $form->addElement('header', $form_title.$session_header);
 
     // We have a hidden field if we are editing.
     if (!empty($inputvalues) && is_array($inputvalues)) {
@@ -218,8 +218,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
         //$form->addElement('radio', 'allow_anonymous', '', get_lang('No'), 0);
         // This is for horizontal
         $group = '';
-        $group[] =& HTML_QuickForm::createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
-        $group[] =& HTML_QuickForm::createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
+        $group[] =$form->createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
+        $group[] =$form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
         $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), '&nbsp;');
     }
 
@@ -240,8 +240,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     $form->addElement('html', '<div id="options" style="display:none">');
 
     $group = '';
-    $group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
-    $group[] =& HTML_QuickForm::createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
+    $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
     $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), '&nbsp;');
 
     // This is for vertical.
@@ -249,8 +249,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     //$form->addElement('radio', 'approval_direct', '', get_lang('Direct'), 0);
     // This is for horizontal.
     $group = '';
-    $group[] =& HTML_QuickForm::createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
-    $group[] =& HTML_QuickForm::createElement('radio', 'approval_direct', null, get_lang('Direct'), 0);
+    $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
+    $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Direct'), 0);
     //$form->addGroup($group, 'approval_direct_group', get_lang('ApprovalDirect'), '&nbsp;');
 
     // This is for vertical.
@@ -258,8 +258,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     //$form->addElement('radio', 'allow_attachments', '', get_lang('No'), 0);
     // This is for horizontal.
     $group = '';
-    $group[] =& HTML_QuickForm::createElement('radio', 'allow_attachments', null, get_lang('Yes'), 1);
-    $group[] =& HTML_QuickForm::createElement('radio', 'allow_attachments', null, get_lang('No'), 0);
+    $group[] = $form->createElement('radio', 'allow_attachments', null, get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'allow_attachments', null, get_lang('No'), 0);
     //$form->addGroup($group, 'allow_attachments_group', get_lang('AllowAttachments'), '&nbsp;');
 
     // This is for vertical.
@@ -267,14 +267,14 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     //$form->addElement('radio', 'allow_new_threads', '', 0, get_lang('No'));
     // This is for horizontal.
     $group = '';
-    $group[] =& HTML_QuickForm::createElement('radio', 'allow_new_threads', null, get_lang('Yes'),1 );
-    $group[] =& HTML_QuickForm::createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
+    $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('Yes'),1 );
+    $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
     $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), '&nbsp;');
 
     $group = '';
-    $group[] =& HTML_QuickForm::createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
-    $group[] =& HTML_QuickForm::createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
-    $group[] =& HTML_QuickForm::createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
+    $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
+    $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
+    $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
     $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), '&nbsp;');
 
     //$form->addElement('static','Group', '<br /><strong>'.get_lang('GroupSettings').'</strong>');
@@ -289,8 +289,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
 
     // Public or private group forum
     $group='';
-    $group[] =& HTML_QuickForm::createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
-    $group[] =& HTML_QuickForm::createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
+    $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
+    $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
     $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
 
     // Forum image
@@ -490,6 +490,7 @@ function store_forumcategory($values) {
         $last_id = Database::insert_id();
         if ($last_id > 0) {
             api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $last_id, 'ForumCategoryAdded', api_get_user_id());
+            api_set_default_visibility($last_id, TOOL_FORUM_CATEGORY);
         }
         $return_message = get_lang('ForumCategoryAdded');
     }
@@ -626,6 +627,7 @@ function store_forum($values) {
         $last_id = Database::insert_id();
         if ($last_id > 0) {
             api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());
+            api_set_default_visibility($last_id, TOOL_FORUM);
         }
         $return_message = get_lang('ForumAdded');
     }
@@ -1924,16 +1926,22 @@ function store_thread($values) {
             add_resource_to_course_gradebook($values['category_id'], $coursecode, $resourcetype, $resourceid, $resourcename, $weigthqualify, $maxqualify, $resourcedescription, 0, api_get_session_id());
         }
 
-        api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'ForumThreadAdded', api_get_user_id());
-        // If the forum properties tell that the posts have to be approved we have to put the whole thread invisible,
-        // because otherwise the students will see the thread and not the post in the thread.
-        // We also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have
-        // to make the thread visible AND the post.
+        if ($last_thread_id) {
+            api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'ForumThreadAdded', api_get_user_id());
+            // If the forum properties tell that the posts have to be approved we have to put the whole thread invisible,
+            // because otherwise the students will see the thread and not the post in the thread.
+            // We also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have
+            // to make the thread visible AND the post.
 
-        if ($visible == 0) {
-            api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'invisible', api_get_user_id());
-            $visible = 1;
-        }
+            //Default behaviour
+            api_set_default_visibility($last_thread_id, TOOL_FORUM_THREAD);
+                        
+            if ($visible == 0) {
+                api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'invisible', api_get_user_id());
+                $visible = 1;
+            }            
+        }       
+        
         // We now store the content in the table_post table.
         $sql = "INSERT INTO $table_posts (c_id, post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
                 VALUES (

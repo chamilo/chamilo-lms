@@ -545,8 +545,8 @@ if ($form->validate()) {
 			$certificate_condition = '';
 			if ($is_certificate_mode) {
 				$df = DocumentManager::get_default_certificate_id($_course['code']);
-                                if (!isset($df)) {
-                                    DocumentManager::attach_gradebook_certificate ($_course['code'],$document_id);
+                if (!isset($df)) {
+                    DocumentManager::attach_gradebook_certificate ($_course['code'],$document_id);
 				}
 				$certificate_condition = '&certificate=true';
 			}

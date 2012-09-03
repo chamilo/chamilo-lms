@@ -834,7 +834,7 @@ function filter_extension(&$filename) {
  * @param string $title
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0) {
+function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true) {
 	$session_id    = api_get_session_id();
 	$readonly      = intval($readonly);
 	$comment       = Database::escape_string($comment);
@@ -850,10 +850,14 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	        VALUES ($c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 	
 	if (Database::query($sql)) {
-		//display_message("Added to database (id ".Database::insert_id().")!");
-		return Database::insert_id();
-	} else {
-		//display_error("The uploaded file could not be added to the database (".Database::error().")!");
+		$document_id = Database::insert_id();
+        if ($document_id) {
+            if ($save_visibility) {
+                api_set_default_visibility($document_id, TOOL_DOCUMENT);                
+            }
+        }        
+		return $document_id;
+	} else {		
 		return false;
 	}
 }

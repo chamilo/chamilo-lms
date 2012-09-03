@@ -2914,7 +2914,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
     				(id_session = $session OR id_session = 0)
     		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }
+    if ($res === false || Database::num_rows($res) == 0) { return -1; }    
     $row = Database::fetch_array($res);
     return $row['visibility'];
 }
@@ -2932,7 +2932,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
  * @param $to_group_id : id of the intended group ( 0 = for everybody), only relevant for $type (1)
  * @param $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
- * @param unknown_type $end_visible 0000-00-00 00:00:00 format
+ * @param string $end_visible 0000-00-00 00:00:00 format
  * @return boolean False if update fails.
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>, Ghent University
  * @version January 2005
@@ -6033,4 +6033,53 @@ function api_check_user_access_to_legal($course_visibility) {
 function api_is_global_chat_enabled(){
     $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
     return $global_chat_is_enabled;
+}
+
+/** 
+ * @todo Fix tool_visible_by_default_at_creation labels 
+ */
+function api_set_default_visibility($item_id, $tool_id) {
+    $original_tool_id = $tool_id;
+    
+    switch ($tool_id) {
+        case TOOL_LINK:
+            $tool_id = 'links';
+            break;
+        case TOOL_DOCUMENT:
+            $tool_id = 'documents';
+            break;
+        case TOOL_LEARNPATH:
+            $tool_id = 'learning';
+            break;
+        case TOOL_ANNOUNCEMENT:
+            $tool_id = 'announcements';
+            break;
+        case TOOL_FORUM:
+        case TOOL_FORUM_CATEGORY:
+        case TOOL_FORUM_THREAD:
+            $tool_id = 'forums';      
+            break;
+        case TOOL_QUIZ:
+            $tool_id = 'quiz';
+            break;
+        /*case TOOL_GRADEBOOK:        
+            $tool_id = 'gradebook';            */
+            break;
+    }
+    $setting = api_get_setting('tool_visible_by_default_at_creation'); 
+    
+    if (isset($setting[$tool_id])) {
+        //$visibility_boolean = false;
+        $visibility = 'invisible';        
+        if ($setting[$tool_id] == 'true') {
+            $visibility = 'visible';
+            //$visibility_boolean = true;
+        }
+        //Hack for gradebook because we don't use the item property table
+        /*
+        if ($tool_id == TOOL_GRADEBOOK) {
+            return $visibility_boolean;
+        }*/
+        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());            
+    }
 }

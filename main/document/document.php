@@ -231,9 +231,7 @@ switch ($action) {
                 if (!copy($file, $copyfile)) {
                     $message = Display::return_message(get_lang('CopyFailed'), 'error');
                 } else {
-                    $message = Display::return_message(get_lang('CopyMade') . ' ' . $file_link, 'confirmation', false);
-                    /* $doc_id = add_document($_course, $copyfile , 'file', filesize($copyfile), $document_info['title']);                    
-                      api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $session_id); */
+                    $message = Display::return_message(get_lang('CopyMade') . ' ' . $file_link, 'confirmation', false);                    
                 }
             }
         }

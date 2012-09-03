@@ -172,6 +172,15 @@ class LinkAddEditForm extends FormValidator
 		} else {
 			$this->addElement('style_submit_button', 'submit', get_lang('LinkMod'),'class="save"');
 		}
+        
+        if ($form_type == self :: TYPE_ADD) {
+            $setting = api_get_setting('tool_visible_by_default_at_creation');   
+            $visibility_default = 1;
+            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {            
+                $visibility_default = 0;
+            }            
+            $defaults['visible']  = $visibility_default;
+        }
 
 		// set default values
 		$this->setDefaults($defaults);

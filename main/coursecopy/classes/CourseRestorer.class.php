@@ -337,7 +337,7 @@ class CourseRestorer
                                 $title      = str_replace('/', '', $new);
 
                                 // This code fixes the possibility for a file without a directory entry to be
-                                $document_id = add_document($course_info, $new, 'folder', 0, $title);
+                                $document_id = add_document($course_info, $new, 'folder', 0, $title, null, null, false);
                                 api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'FolderCreated', $document->item_properties[0]['insert_user_id'], $document->item_properties[0]['to_group_id'], $document->item_properties[0]['to_user_id'], null, null, $my_session_id);
                             }
                         } else {

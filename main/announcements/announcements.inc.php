@@ -254,9 +254,7 @@ class AnnouncementManager  {
 	 */
 	public static function add_announcement($emailTitle, $newContent, $order, $to, $file = array(), $file_comment='') {
 		global $_course;
-
-		$tbl_announcement  = Database::get_course_table(TABLE_ANNOUNCEMENT);
-		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$tbl_announcement  = Database::get_course_table(TABLE_ANNOUNCEMENT);		
 
 		// filter data
 		$emailTitle = Database::escape_string($emailTitle);
@@ -279,7 +277,7 @@ class AnnouncementManager  {
 			//Store the attach file
 			$last_id = Database::insert_id();
 			if (!empty($file)) {
-				$save_attachment = self::add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
+				self::add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
 			}
 
 			// store in item_property (first the groups, then the users

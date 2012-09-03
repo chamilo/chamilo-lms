@@ -31,7 +31,7 @@ $language_file = 'forum';
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     $(document).ready(function(){ $(\'.hide-me\').slideUp() });
     function hidecontent(content){ $(content).slideToggle(\'normal\'); }
     </script>';
@@ -45,7 +45,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                     document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
             }
         }
-    </script>';
+</script>';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -61,10 +61,6 @@ $nameTools = get_lang('Forums');
 // Including necessary files.
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
-
-/* MAIN DISPLAY SECTION */
-
-/* Header */
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
     $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);

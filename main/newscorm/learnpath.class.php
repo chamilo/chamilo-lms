@@ -671,6 +671,7 @@ class learnpath {
             case 'aicc':
                 break;
         }
+        
         switch ($origin) {
             case 'zip':
                 // Check zipname string. If empty, we are currently creating a new Chamilo learnpath.
@@ -689,11 +690,13 @@ class learnpath {
                 $sql_insert = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
                               "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
 
-                $res_insert = Database::query($sql_insert);
+                Database::query($sql_insert);
                 $id = Database :: insert_id();
                 if ($id > 0) {
+                    $course_info = api_get_course_info();
                     // Insert into item_property.
-                    api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
+                    api_item_property_update($course_info, TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
+                    api_set_default_visibility($id, TOOL_LEARNPATH);                    
                     return $id;
                 }
                 break;

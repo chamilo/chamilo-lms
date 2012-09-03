@@ -75,7 +75,6 @@ abstract class EvalLink extends AbstractLink
 		return true;
 	}
 
-
 	public function add_linked_data() {
 		if ($this->is_valid_link()) {
 			$this->evaluation->add();
@@ -95,7 +94,6 @@ abstract class EvalLink extends AbstractLink
 		}
 	}
 
-
 	public function set_name ($name) {
 		if ($this->is_valid_link()) {
 			$this->evaluation->set_name($name);
@@ -113,7 +111,8 @@ abstract class EvalLink extends AbstractLink
 			$this->evaluation->set_max($max);
 		}
 	}
-// Functions overriding non-trivial implementations from AbstractLink
+    
+    // Functions overriding non-trivial implementations from AbstractLink
 	public function set_date ($date) {
 		$this->created_at = $date;
 		if ($this->is_valid_link()) {
@@ -135,10 +134,6 @@ abstract class EvalLink extends AbstractLink
 		}
 	}
 
-
-
-// INTERNAL FUNCTIONS
-
 	/**
 	 * Lazy load function to get the linked evaluation
 	 */
@@ -158,7 +153,6 @@ abstract class EvalLink extends AbstractLink
 				$eval->set_course_code($this->get_course_code());
 				$this->evaluation = $eval;
 				$this->set_ref_id($eval->get_id());
-
 			}
 		}
 		return $this->evaluation;

@@ -515,6 +515,14 @@ class EvalForm extends FormValidator
 		$this->addRule(array('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 		$this->addRule(array('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
+        
+        $setting = api_get_setting('tool_visible_by_default_at_creation');   
+        $visibility_default = 1;
+        if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {            
+            $visibility_default = 0;
+        }            
+		$this->setDefaults(array('visible' => $visibility_default));
+        
 	}
 
 	function display() {

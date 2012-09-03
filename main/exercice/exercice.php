@@ -170,7 +170,6 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 }
 
 $htmlHeadXtra[] = '<script>
-
     $(document).ready(function() {
         //this makes google chrome to crash ...
        /* $(".link_tooltip").each(function(){
@@ -234,14 +233,14 @@ if ($is_allowedToEdit) {
 					case 'enable' : // enables an exercise
 						$objExerciseTmp->enable();
 						$objExerciseTmp->save();
-                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'visible', api_get_user_id());
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'visible', api_get_user_id());
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 						break;
 					case 'disable' : // disables an exercise
 						$objExerciseTmp->disable();
 						$objExerciseTmp->save();
-                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id,'invisible', api_get_user_id());
+                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', api_get_user_id());
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 						break;
 					case 'disable_results' : //disable the results for the learners
@@ -328,6 +327,7 @@ $from = $page * $limit;
 HotPotGCt($documentPath, 1, api_get_user_id());
 
 //condition for the session
+$course_code        = api_get_course_id();
 $session_id         = api_get_session_id();
 $condition_session  = api_get_session_condition($session_id,true,true);
 
@@ -343,6 +343,7 @@ if ($is_allowedToEdit) {
             WHERE c_id = $course_id AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from."," .$limit;
+    
 }
 
 $result = Database::query($sql);
@@ -368,7 +369,7 @@ if ($is_allowedToEdit) {
                     d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND
                     ip.visibility ='1' AND
                     d.c_id      = ".$course_id." AND
-                    ip.c_id     = ".$course_id;
+                    ip.c_id     = ".$course_id;    
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 }
@@ -425,9 +426,9 @@ while ($row = Database :: fetch_array($result,'ASSOC')) {
 }
 
 echo '<table class="'.Display::return_default_table_class().'">';
-if (!empty($exercise_list)) {
-    /*  Listing exercises  */
 
+/*  Listing exercises  */
+if (!empty($exercise_list)) {
     if ($origin != 'learnpath') {
         //avoid sending empty parameters
         $myorigin     = (empty ($origin)              ? '' : '&origin=' . $origin);
@@ -543,9 +544,11 @@ if (!empty($exercise_list)) {
                 if ($session_id == $row['session_id']) {
                     //Settings
                     //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
-                }
+                }                
+                
+                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
-                if ($row['active'] == 0) {
+                if ($row['active'] == 0 || $visibility == 0) {
                     $title = Display::tag('font', $cut_title, array('style'=>'color:grey'));
                 } else {
                     $title = $cut_title;
@@ -568,7 +571,6 @@ if (!empty($exercise_list)) {
 
                 $item =  Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
-
                 //count number exercice - teacher
                 $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
                 $sqlresult  = Database::query($sqlquery);
@@ -583,6 +585,7 @@ if (!empty($exercise_list)) {
 
                     //Export
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
+                    
                     //Clean exercise
                     if ($locked == false) {
                         $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'),'',ICON_SIZE_SMALL),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));
@@ -595,10 +598,10 @@ if (!empty($exercise_list)) {
                     if ($added_to_lp) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'),'',ICON_SIZE_SMALL);
                     } else {
-                        if ($row['active']) {
-                            $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'),'',ICON_SIZE_SMALL) , 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
+                        if ($row['active'] == 0 || $visibility == 0) {
+                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'),'',ICON_SIZE_SMALL) , 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                            
                         } else { // else if not active
-                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'),'',ICON_SIZE_SMALL) , 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
+                            $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'),'',ICON_SIZE_SMALL) , 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         }
                     }
                     // Export qti ...
@@ -646,7 +649,7 @@ if (!empty($exercise_list)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
-
+                
                 //Attempts
                 //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
 
@@ -654,7 +657,13 @@ if (!empty($exercise_list)) {
                 $item .=  Display::tag('td', $number_of_questions);
 
             } else {
-                // --- Student only
+                // Student only
+                
+                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+                                
+                if ($visibility == 0) {
+                    continue;
+                }
 
                 // if time is actived show link to exercise
 

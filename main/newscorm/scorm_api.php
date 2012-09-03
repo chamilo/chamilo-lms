@@ -1819,28 +1819,28 @@ function attach_glossary_into_scorm(type) {
 
                         $("iframe").contents().find("body").append('<div id="div_show_id"><div id="div_content_id">&nbsp;</div></div>');
 
-                        show_dialog = $("iframe").contents().find("div#"+div_show_id);
-                        show_description = $("iframe").contents().find("div#"+div_content_id);
-                    
-                        var $target = $(this);
+                            show_dialog = $("iframe").contents().find("div#"+div_show_id);
+                            show_description = $("iframe").contents().find("div#"+div_content_id);
 
-                        if ($("#learning_path_left_zone").is(':visible') ) {                
-                            var extra_left = $("#learning_path_left_zone").width() + 20;
-                        } else {
-                            var extra_left = 0;
-                        }                
+                            var $target = $(this);
 
-                        //$("#"+div_show_id).dialog("destroy");
-                        show_dialog.dialog({
-                            autoOpen: false,
-                            width: 600,
-                            height: 200,
-                            position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
-                            close: function(){
-                                 show_dialog.remove();
-                                 show_description.remove();
-                            }
-                        });       
+                            if ($("#learning_path_left_zone").is(':visible') ) {                
+                                var extra_left = $("#learning_path_left_zone").width() + 20;
+                            } else {
+                                var extra_left = 0;
+                            }                
+
+                            //$("#"+div_show_id).dialog("destroy");
+                            show_dialog.dialog({
+                                autoOpen: false,
+                                width: 600,
+                                height: 200,
+                                position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
+                                close: function(){
+                                     show_dialog.remove();
+                                     show_description.remove();
+                                }
+                            });       
                             notebook_id=$(this).attr("name");
                             data_notebook=notebook_id.split("link");
 
@@ -1859,8 +1859,7 @@ function attach_glossary_into_scorm(type) {
                 }
             });
     } else {
-         if ('manual') {
-			//$("iframe").contents().find("body .glossary").mouseover(function(){
+         if ('manual') {			
             
             $("iframe").contents().find("body").on("click", ".glossary", function() {
 				is_glossary_name = $(this).html();
@@ -1905,8 +1904,9 @@ function attach_glossary_into_scorm(type) {
                          show_description.html(data);
                          show_dialog.dialog("open");                       
                     }
-                });                
-            });           
+                });
+                
+            });          
         }
     }
 }

@@ -2039,14 +2039,14 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
         $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
     }
 
-    $sys_course_path = api_get_path(SYS_COURSE_PATH);
-
-    $perm = api_get_permissions_for_new_directories();
-    $perm_file = api_get_permissions_for_new_files();
-
     $default_document_array = array();
 
     if ($fill_with_exemplary_content) {
+
+        $sys_course_path = api_get_path(SYS_COURSE_PATH);
+
+        $perm = api_get_permissions_for_new_directories();
+        $perm_file = api_get_permissions_for_new_files();
 
         $img_code_path   = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';

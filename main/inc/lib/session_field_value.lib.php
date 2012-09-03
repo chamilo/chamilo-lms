@@ -25,8 +25,8 @@ class SessionFieldValue extends Model {
         $field_id = intval($field_id);
         $session_id = intval($session_id);
     
-        $sqlsfv = "SELECT * FROM {$this->table} WHERE session_id = '$session_id' AND field_id = '".$field_id."' ORDER BY id";
-        $result = Database::query($sqlsfv);        
+        $sql = "SELECT * FROM {$this->table} WHERE session_id = '$session_id' AND field_id = '".$field_id."' ORDER BY id";
+        $result = Database::query($sql);        
         if (Database::num_rows($result)) {
             return Database::store_result($result, 'ASSOC');                        
         } else {

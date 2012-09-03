@@ -161,10 +161,7 @@ $(function() {
     
     $("#coach_access_end_date").datetimepicker({
         dateFormat: "yy-mm-dd"
-    });   
-    
-
-        
+    });
 
     var value = 1;
     $("#advanced_parameters").on("click", function() {    
@@ -206,7 +203,7 @@ if (!empty($categories)) {
 }
 
 //Categories
-$form->addElement('select', 'session_category_id', get_lang('SessionCategory'), $select_categories, array('class' => 'chzn-select'));
+$form->addElement('select', 'session_category_id', get_lang('SessionCategory'), $select_categories, array('id' => 'session_category_id', 'class' => 'chzn-select'));
 
 //Coaches
 //$coaches = SessionManager::get_user_list();
@@ -235,6 +232,10 @@ $form->addElement('html','</div>');
 $form->addElement('text', 'coach_access_start_date', array(get_lang('SessionCoachStartDate'), get_lang('SessionCoachStartDateComment')), array('id' => 'coach_access_start_date'));
 $form->addElement('text', 'coach_access_end_date', array(get_lang('SessionCoachEndDate'), get_lang('SessionCoachEndDateComment')), array('id' => 'coach_access_end_date'));
 $form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
+
+
+$session_field = new SessionField();
+$session_field->add_elements($form);
 
 $form->addElement('html','</div>');
       

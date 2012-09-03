@@ -383,6 +383,20 @@ switch ($action) {
         $obj = new SessionField();
         $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');
         $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {            
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']   = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']   = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                
+                
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }  
+        
         break;
     default:    
         exit;            

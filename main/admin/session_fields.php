@@ -38,9 +38,6 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('SessionFields'));
 }
 
-// The header.
-Display::display_header($tool_name);
-
 //jqgrid will use this URL to do the selects
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_fields';
 
@@ -49,12 +46,12 @@ $columns        = array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Typ
 
 //Column config
 $column_model   = array(
-                        array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'100',   'align'=>'left'),
+                        array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'180',   'align'=>'left'),
                         array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'',  'align'=>'left','sortable'=>'false'),    
+                        array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'false'),    
+                        array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'false'),    
+                        array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'false'),    
                         array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
                        );            
 //Autowidth             
@@ -68,16 +65,70 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                          '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
                          '\'; 
                  }';
-?>
+$htmlHeadXtra[]='
 <script>
 $(function() {
-<?php 
     // grid definition see the $obj->display() function
-    echo Display::grid_js('session_fields',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);       
-?> 
+    '.Display::grid_js('session_fields',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).'
+            
+    $("#field_type").on("change", function() {      
+        id = $(this).val();        
+        switch(id) {
+            case "1":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_text.png')).'"); 
+                break;
+            case "2":        
+                $("#example").html("'.addslashes(Display::return_icon('userfield_text_area.png')).'"); 
+                break;
+            case "3":     
+                $("#example").html("'.addslashes(Display::return_icon('add_user_field_howto.png')).'");            
+                break;
+            case "4":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_drop_down.png')).'");
+                    break;
+            case "5":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_multidropdown.png')).'");
+                break;
+            case "6":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");
+                break;
+            case "7":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_date_time.png')).'");
+                break;
+            case "8":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_doubleselect.png')).'");
+                break;
+            case "9":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_divider.png')).'");
+                break;
+            case "10":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_user_tag.png')).'");
+                break;
+            case "11":
+                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");                                            
+                break;
+        }
+
+    });
+
+    var value = 1;
+    $("#advanced_parameters").on("click", function() {
+        $("#options").toggle(function() {        
+            if (value == 1) {
+                $("#advanced_parameters").addClass("btn-hide");        
+                value = 0;
+            } else {
+                $("#advanced_parameters").removeClass("btn-hide");      
+                value = 1;
+            }
+        });
+    });
 });
-</script>
-<?php
+</script>';
+
+// The header.
+Display::display_header($tool_name);
+
 $obj = new SessionField();
 
 // Action handling: Add
@@ -85,8 +136,7 @@ switch ($action) {
     case 'add':
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
-        }
-        
+        }        
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $obj->return_form($url, 'add');
 

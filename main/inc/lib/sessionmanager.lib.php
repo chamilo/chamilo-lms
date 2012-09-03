@@ -70,6 +70,10 @@ class SessionManager {
             api_mail_html($complete_name, $user_info['email'], $subject, $message);
             * 
             */                    
+            
+            //Saving extra fields
+            
+            
             //Adding to the correct URL                    
             $access_url_id = api_get_current_access_url_id();
             UrlManager::add_session_to_url($session_id, $access_url_id);            
@@ -87,7 +91,7 @@ class SessionManager {
             return false;
         }
         unset($params['id']);      
-        $params = self::clean_parameters($params);         
+        $params = self::clean_parameters($params);       
         $affected = Database::update(Database::get_main_table(TABLE_MAIN_SESSION), $params, array('id = ?'=>$id));        
         return $affected;
     }

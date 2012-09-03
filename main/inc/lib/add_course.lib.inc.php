@@ -2029,8 +2029,7 @@ function sort_pictures($files, $type) {
 }
 
 /**
- * Fills the course repository with some
- * example content.
+ * Fills the course repository with some example content.
  * @version	 1.2
  * @deprecated this function has been merged into the fill_db_course
  */
@@ -2208,6 +2207,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     if (empty($course_id)) {
     	return false;
     }
+    $now = api_get_utc_datetime(time());
 
     $tbl_course_homepage 	= Database::get_course_table(TABLE_TOOL_LIST);
     $TABLEINTROS 			= Database::get_course_table(TABLE_TOOL_INTRO);
@@ -2227,6 +2227,8 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     $TABLEFORUMS 			= Database::get_course_table(TABLE_FORUM);
     $TABLEFORUMTHREADS 		= Database::get_course_table(TABLE_FORUM_THREAD);
     $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
+    $TABLEGRADEBOOK 		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+    $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
     include api_get_path(SYS_CODE_PATH).'lang/english/create_course.inc.php';
     $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$language.'/create_course.inc.php';
@@ -2542,8 +2544,11 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         
         $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
-        Database::query('INSERT INTO '.$TABLEQUIZ . ' (c_id, title, description, type, random, random_answers, active, results_disabled )
-        				VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")');
+        Database::query('INSERT INTO '.$TABLEQUIZ . 
+          ' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
+          ' VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '",' .
+          ' "'.$html.'", "1", "0", "0", "1", "0")');
+        $exercise_id = Database :: insert_id();
         Database::query("INSERT INTO $TABLEQUIZQUESTIONLIST  (c_id, id, question, description, ponderation, position, type, picture, level)
         				VALUES ( '.$course_id.', '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
         Database::query("INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ('.$course_id.', 1,1,1)");
@@ -2568,6 +2573,16 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         				VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)");
 
         Database::query("INSERT INTO $TABLEFORUMPOSTS VALUES ($course_id, 1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
+
+        /* Gradebook tool */
+        $course = api_get_course_info_by_id($course_id);
+        $course_code = $course['code'];
+        // father gradebook
+        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,NULL,NULL,NULL)");
+        $gbid = Database :: insert_id();
+        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,NULL)");
+        $gbid = Database :: insert_id();
+        Database::query("INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked) VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)");
     }
 
     //Installing plugins in course
@@ -2576,7 +2591,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
 
     $language_interface = $language_interface_original;
     return true;
-};
+}
 
 /**
  * function string2binary converts the string "true" or "false" to the boolean true false (0 or 1)

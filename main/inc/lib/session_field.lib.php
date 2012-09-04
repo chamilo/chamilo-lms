@@ -41,9 +41,9 @@ class SessionField extends Model {
         return $order;
     }
     
-    public function get_session_field_info_by_field_variable($field) {
-        $field = Database::escape_string($field);
-        $sql_field = "SELECT * FROM {$this->table} WHERE field_variable = '$field'";
+    public function get_session_field_info_by_field_variable($field_variable) {
+        $field_variable = Database::escape_string($field_variable);
+        $sql_field = "SELECT * FROM {$this->table} WHERE field_variable = '$field_variable'";
 		$result = Database::query($sql_field);
         if (Database::num_rows($result)) {
             $r_field = Database::fetch_array($result, 'ASSOC');

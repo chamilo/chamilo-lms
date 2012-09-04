@@ -114,7 +114,7 @@ if (!empty($fields)) {
         
         $column_model[] = array(
             'name' => $field['field_variable'],
-            'index' => $field['field_variable'],
+            'index' => 'extra_'.$field['field_variable'],
             'width' => '100',
             'hidden' => 'true',
             'search' => 'true',
@@ -122,8 +122,9 @@ if (!empty($fields)) {
             'searchoptions' => $search_options
         );        
         $columns[] = $field['field_display_text'];
-        $rules[] = array('field' => $field['field_variable'], 'op' => 'eq', 'data' => '');        
+        $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'eq', 'data' => '');        
     }
+    
     $groups = array(
         'groupOp'=> 'OR', 
         'rules' => $rules
@@ -139,8 +140,6 @@ $extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
 
 $extra_params['rowList'] = array(10, 20 ,30);
-
-
 
 $extra_params['postData'] =array (
                     'filters' => array(                                        

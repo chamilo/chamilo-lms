@@ -18,7 +18,7 @@ class SessionFieldOption extends Model {
         $new_options = array();        
         if (!empty($options)) {
             foreach ($options as $option) {
-                $new_options[] = $option['id'].':'.$option['option_value'];
+                $new_options[] = $option['option_value'].':'.$option['option_value'];
             }
             $string = implode(';', $new_options);
             return $string;

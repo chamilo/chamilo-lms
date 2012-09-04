@@ -321,6 +321,8 @@ class SessionManager {
                 display_end_date,
                 s.visibility,
                 u.user_id, 
+                fv.field_id,
+                fv.field_value,
                 s.id";
 
 		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
@@ -351,6 +353,8 @@ class SessionManager {
         if (!empty($options['order']) && !empty($options['limit'])) {
             $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
         }
+        
+        //var_dump($query);
         
 		$result = Database::query($query);
 		$formatted_sessions = array();

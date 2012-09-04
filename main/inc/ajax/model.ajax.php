@@ -66,29 +66,46 @@ $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] 
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';
-    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+    $extra_conditions = '';
+    
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);    
         
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
     }    
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    
+    $session_field = new SessionField();
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';
+        $where_condition .= ' AND ( ';  
+        
+        $rules = array();
+        $extra_rules = array();
         $counter = 0;
-        foreach ($filters->rules as $key => $rule) {
-            $where_condition .= get_where_clause($rule->field, $rule->op, $rule->data);            
-            if ($counter < count($filters->rules) -1) {     
+        
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, 'extra_') === false) {
+                $field = $rule->field;
+                $where_condition .= get_where_clause($field, $rule->op, $rule->data);
+            } else {
+                $original_field = str_replace('extra_', '', $rule->field);                
+                $session_field_option = $session_field->get_session_field_info_by_field_variable($original_field);                
+                //var_dump($session_field_option);
+                $field = 'field_value';
+                $where_condition .= ' ('.get_where_clause('field_id', 'eq', $session_field_option['id']);
+                $where_condition .= ' AND ';
+                $where_condition .= get_where_clause($field, $rule->op, $rule->data).') ';
+            }
+            
+            if ($counter < count($filters->rules) -1) {
                 $where_condition .= $filters->groupOp;
             }
-            $counter++;
-        }
-        $where_condition .= ' ) ';
+            $counter++;            
+            
+        }        
+        $where_condition .= ' ) ';        
     }
 }
-if (isset($_REQUEST['search_form'])) {
-    
-}
-
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 

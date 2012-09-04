@@ -148,14 +148,19 @@ class AnnouncementEmail
         
         if ($users) {
             $users = UserManager::get_user_list_by_ids($users, true);
-        } else {
-            $users = self::all_users();
-        }        
+        }       
 
         if (!empty($groups)) {
             $group_users = GroupManager::get_groups_users($groups);
             $group_users = UserManager::get_user_list_by_ids($group_users, true);
-            $users = array_merge($users, $group_users);            
+            
+            if (!empty($group_users)) {
+                $users = array_merge($users, $group_users);            
+            }
+        }        
+              
+        if (empty($users)) {
+            $users = self::all_users();
         }
         
         //Clean users just in case
@@ -164,7 +169,7 @@ class AnnouncementEmail
             foreach ($users as $user) {
                 $new_list_users[$user['user_id']] = array('user_id' => $user['user_id']);
             }
-        }        
+        }
         return $new_list_users;
     }
 

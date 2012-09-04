@@ -544,8 +544,8 @@ DROP TABLE IF EXISTS session_field_options;
 CREATE TABLE IF NOT EXISTS session_field_options (
     id	int NOT NULL auto_increment,
     field_id int NOT NULL,
-    option_value	text,
-    option_display_text varchar(64),
+    option_value text,
+    option_display_text varchar(255),
     option_order int,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)

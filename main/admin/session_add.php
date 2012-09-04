@@ -53,7 +53,6 @@ if ($id) {
     $button = get_lang('Add');
 }
 
-
 $url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php?1=1';
 
 $htmlHeadXtra[] ='

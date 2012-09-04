@@ -70,24 +70,25 @@ if ($_REQUEST['_search'] == 'true') {
         
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
-    }
-    
+    }    
     $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
     if (!empty($filters)) {
         $where_condition .= ' AND ( ';
         $counter = 0;
-        foreach ($filters->rules as $key=>$rule) {
-            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
-            
+        foreach ($filters->rules as $key => $rule) {
+            $where_condition .= get_where_clause($rule->field, $rule->op, $rule->data);            
             if ($counter < count($filters->rules) -1) {     
                 $where_condition .= $filters->groupOp;
             }
             $counter++;
         }
         $where_condition .= ' ) ';
-    }        
+    }
 }
-//var_dump($where_condition);
+if (isset($_REQUEST['search_form'])) {
+    
+}
+
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 

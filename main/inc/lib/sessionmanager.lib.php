@@ -283,8 +283,10 @@ class SessionManager {
 	public static function get_sessions_admin($options = array()) {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
-		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);        
+		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);      
 
+        $tbl_session_field_values            = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        
 		$where = 'WHERE 1 = 1 ';
 		$user_id = api_get_user_id();
         
@@ -308,12 +310,23 @@ class SessionManager {
 					('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date)
 				, 1, 0) 
 				as session_active, 
-				s.name, nbr_courses, nbr_users, s.access_start_date, s.access_end_date, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
+				s.name, 
+                nbr_courses, 
+                nbr_users, 
+                s.access_start_date, 
+                s.access_end_date,
+                $coach_name, 
+                sc.name as category_name, 
+                display_start_date,
+                display_end_date,
+                s.visibility,
+                u.user_id, 
+                s.id";
 
-		$query = "$select FROM $tbl_session s 
-				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
+		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 				INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
-			 $where;
+                $where;
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
 			$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -327,7 +340,8 @@ class SessionManager {
 					INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				 $where";
 			}
-		}  
+		}
+        
 		$query .= ") AS session_table";   
 
 		if (!empty($options['where'])) {

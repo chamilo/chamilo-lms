@@ -13,6 +13,18 @@ class SessionFieldOption extends Model {
         return $row['count'];
     }    
     
+    public function get_field_options_to_string($field_id) {
+        $options = self::get_field_options_by_field($field_id);
+        $new_options = array();        
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                $new_options[] = $option['id'].':'.$option['option_value'];
+            }
+            $string = implode(';', $new_options);
+            return $string;
+        }
+    }
+    
     public function save($params, $show_query = false) {
         $field_id = intval($params['field_id']);
         

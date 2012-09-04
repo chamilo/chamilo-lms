@@ -448,7 +448,7 @@ class learnpathItem {
 			$sql = "SELECT id FROM $tbl " .
 					"WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." " .
 					"AND   lp_view_id = ".$this->view_id." " .
-					"AND   view_count = ".$this->attempt_id;
+					"AND   view_count = ".$this->get_attempt_id();
 			$res = Database::query($sql);
 			if (Database::num_rows($res) > 0) {
 				$row = Database::fetch_array($res);

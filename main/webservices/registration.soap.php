@@ -3106,14 +3106,15 @@ function WSCreateSession($params) {
     foreach ($sessions_params as $session_param) {
 
         $name = trim($session_param['name']);
+        /*
         $year_start = intval($session_param['year_start']);
         $month_start = intval($session_param['month_start']);
         $day_start = intval($session_param['day_start']);
         $year_end = intval($session_param['year_end']);
         $month_end = intval($session_param['month_end']);
-        $day_end = intval($session_param['day_end']);
-        $nb_days_acess_before = intval($session_param['nb_days_access_before']);
-        $nb_days_acess_after = intval($session_param['nb_days_access_after']);
+        $day_end = intval($session_param['day_end']);*/
+        //$nb_days_acess_before = intval($session_param['nb_days_access_before']);
+        //$nb_days_acess_after = intval($session_param['nb_days_access_after']);
         $id_coach = $session_param['user_id'];
         $nolimit = $session_param['nolimit'];
         $original_session_id_name = $session_param['original_session_id_name'];
@@ -3155,8 +3156,17 @@ function WSCreateSession($params) {
                 $results[] = 0;
                 continue;
             } else {
-            Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
-                $id_session = Database::insert_id();
+                $params = array(
+                    'name' =>  $name,
+                    'id_coach'=> $id_coach,
+                    'session_admin_id' => $_user['user_id'] ,
+                    
+                );
+                $id_session = SessionManager::add($params);
+            
+            //Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
+            
+                //$id_session = Database::insert_id();
 
                 // Save new fieldlabel into course_field table.
                 $field_id = SessionManager::create_session_extra_field($original_session_id_name, 1, $original_session_id_name);

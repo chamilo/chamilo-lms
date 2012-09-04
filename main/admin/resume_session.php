@@ -132,12 +132,15 @@ $coach_info = api_get_user_info($session['id_coach']);
 $session_field = new SessionField();
 $session_fields = $session_field->get_all();
 foreach ($session_fields as $session_field) {
+    if ($session_field['field_visible'] != '1') {
+        continue;        
+    }
     $obj = new SessionFieldValue();
     $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id']);
     
     $session_value = null;
     if ($result) {
-        $session_value = $result[0]['field_value'];
+        $session_value = $result['field_value'];
     }    
     echo "<tr>";
     echo "<td> {$session_field['field_display_text']} </td>";

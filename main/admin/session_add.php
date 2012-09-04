@@ -100,8 +100,7 @@ $(function() {
         newel: true           
     });
     
-    '.$add_coach.'
-        
+    '.$add_coach.'        
 
     $("#display_end_date").datetimepicker({
         dateFormat: "yy-mm-dd"
@@ -235,7 +234,7 @@ $form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_la
 
 
 $session_field = new SessionField();
-$session_field->add_elements($form);
+$session_field->add_elements($form, $id);
 
 $form->addElement('html','</div>');
       
@@ -254,14 +253,14 @@ if (!empty($session_info)) {
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     if (isset($params['id'])) {
-        $result = SessionManager::update($params);
+        SessionManager::update($params);
         header('Location: resume_session.php?id_session='.$params['id']);
 		exit;
     } else {
-        $result = SessionManager::add($params);
-        if ($result) {
+        $session_id = SessionManager::add($params);        
+        if ($session_id) {
             // integer => no error on session creation
-            header('Location: add_courses_to_session.php?id_session='.$result.'&add=true&msg=');
+            header('Location: add_courses_to_session.php?id_session='.$session_id.'&add=true&msg=');
             exit;
         }
     }

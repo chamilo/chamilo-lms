@@ -21,8 +21,6 @@ class SessionManager {
     
     CONST DEFAULT_VISIBILITY = 4;  //SESSION_AVAILABLE
 
-	private function __construct() {        
-	}
     
     /**
      * Fetches a session from the database
@@ -39,10 +37,11 @@ class SessionManager {
     }
     
     public static function add($params) {
-        global $_configuration;
+        global $_configuration;        
         
         //Check portal limits
         $access_url_id = 1;
+        
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
@@ -51,12 +50,12 @@ class SessionManager {
             if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
                 return get_lang('PortalSessionsLimitReached');
             }
-        }        
-        $params = self::clean_parameters($params);
+        }
         $my_session_result = SessionManager::get_session_by_name($params['name']);
         
-        if (empty($my_session_result)) {            
-            $session_id = Database::insert(Database::get_main_table(TABLE_MAIN_SESSION), $params);
+        if (empty($my_session_result)) {
+            $session_model = new SessionModel();
+            $session_id = $session_model->save($params);            
         }        
                         
         if (!empty($session_id)) {
@@ -72,7 +71,9 @@ class SessionManager {
             */                    
             
             //Saving extra fields
-            
+            $session_field_value = new SessionFieldValue();
+            $params['session_id'] = $session_id;            
+            $session_field_value->save_session_field_values($params);
             
             //Adding to the correct URL                    
             $access_url_id = api_get_current_access_url_id();
@@ -82,37 +83,19 @@ class SessionManager {
             $user_id = api_get_user_id();
             event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
         }
-        return $session_id;        
+        return $session_id;   
     }
     
     public static function update($params) {
-        $id = $params['id'];
-        if (empty($id)) {
-            return false;
-        }
-        unset($params['id']);      
-        $params = self::clean_parameters($params);       
-        $affected = Database::update(Database::get_main_table(TABLE_MAIN_SESSION), $params, array('id = ?'=>$id));        
-        return $affected;
-    }
-    
-    public static function clean_parameters($params) {
-         
-        //Convert dates          
-        $params['display_start_date']       = api_get_utc_datetime($params['display_start_date'], true);
-        $params['display_end_date']         = api_get_utc_datetime($params['display_end_date'], true);
-        $params['access_start_date']        = api_get_utc_datetime($params['access_start_date'], true);
-        $params['access_end_date']          = api_get_utc_datetime($params['access_end_date'], true);
-        $params['coach_access_start_date']  = api_get_utc_datetime($params['coach_access_start_date'], true);
-        $params['coach_access_end_date']    = api_get_utc_datetime($params['coach_access_end_date'], true);
-        $params['id_coach']                 = is_array($params['id_coach']) ? $params['id_coach'][0] : $params['id_coach'];
-               
-        if (empty($params['access_end_date'])) {
-            $params['visibility'] = SessionManager::DEFAULT_VISIBILITY;
-        }
+        $session_model = new SessionModel();        
+        $session_model->update($params);
         
-        unset($params['submit']);        
-        return $params;        
+        if (!empty($params['id'])) {
+            $session_field_value = new SessionFieldValue();
+            $params['session_id'] = $params['id'];
+            unset($params['id']);
+            $session_field_value->save_session_field_values($params);               
+        }         
     }
     
 	 /**

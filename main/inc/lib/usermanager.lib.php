@@ -1283,7 +1283,7 @@ class UserManager {
 				default:
 					break;
 			}
-			$tms = time();
+			$tms = api_get_utc_datetime();
 			$sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
 			$resufv = Database::query($sqlufv);
 			$n = Database::num_rows($resufv);
@@ -1297,7 +1297,7 @@ class UserManager {
 					}
 					$rowufv = Database::fetch_array($resufv);
 					if ($rowufv['field_value'] != $fvalues) {
-						$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+						$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowufv['id'];
 						$resu = Database::query($sqlu);
 						return($resu ? true : false);
 					}
@@ -1312,7 +1312,7 @@ class UserManager {
 						$sql_query = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'].";";
 					} else {
 						// Otherwise update it
-						$sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+						$sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowufv['id'];
 					}
 
 					$resu = Database::query($sql_query);
@@ -1320,8 +1320,8 @@ class UserManager {
 				}
 				return true;
 			} else {
-				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) " .
-					"VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
+				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) 
+                         VALUES ($user_id,".$rowuf['id'].",'$fvalues', '$tms')";
 				//error_log('UM::update_extra_field_value: '.$sqli);
 				$resi = Database::query($sqli);
 				return($resi ? true : false);
@@ -3538,14 +3538,12 @@ class UserManager {
         
         $jquery_ready_content = null;
         
-        foreach ($extra as $field_details) {
-             
+        foreach ($extra as $field_details) {             
             if (!$admin_permissions) {
                 if ($field_details['field_visible'] == 0) {
                     continue;
                 }
-            }
-           
+            }           
             switch ($field_details['field_type']) {
                 case self::USER_FIELD_TYPE_TEXT:
                     $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('class' => 'span4'));

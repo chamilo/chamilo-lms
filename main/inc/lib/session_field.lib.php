@@ -12,14 +12,16 @@ class SessionField extends Model {
     public function add_elements($form, $session_id = null) {
         if (empty($form)) {
             return false;
-        }
-        
+        }        
         $extra_data = array();
         if (!empty($session_id)) {
-            $extra_data = array();  
+            $extra_data = self::get_session_extra_data($session_id);
+            if ($form) {
+                $form->setDefaults($extra_data);
+            }
         }        
         $extra_fields = self::get_all();        
-        UserManager::set_extra_fields_in_form($form, $extra_data, 'session_field', false, false, $extra_fields);        
+        UserManager::set_extra_fields_in_form($form, null, 'session_field', false, false, $extra_fields);        
     }
      
     public function get_count() {
@@ -41,10 +43,10 @@ class SessionField extends Model {
     
     public function get_session_field_info_by_field_variable($field) {
         $field = Database::escape_string($field);
-        $sql_field = "SELECT id FROM {$this->table} WHERE field_variable = '$field'";
+        $sql_field = "SELECT * FROM {$this->table} WHERE field_variable = '$field'";
 		$result = Database::query($sql_field);
         if (Database::num_rows($result)) {
-            $r_field = Database::fetch_row($result);
+            $r_field = Database::fetch_array($result, 'ASSOC');
             return $r_field;
         } else {
             return false;
@@ -60,6 +62,40 @@ class SessionField extends Model {
             }
         }        
         return $options;
+    }
+    
+    public function get_session_extra_data($session_id) {
+        if (empty($session_id)) {
+            return array();
+        }
+		$extra_data = array();		
+        $session_fields = self::get_all();        
+        $session_field_values = new SessionFieldValue();		
+		
+		if (!empty($session_fields) > 0) {
+			foreach ($session_fields as $session_field) {
+				//if ($session_field['field_type'] == self::USER_FIELD_TYPE_TAG) {
+					//$tags = self::get_user_tags_to_string($user_id,$row['id'],false);                    
+					//$extra_data['extra_'.$row['fvar']] = $tags;
+				//} else {
+                    $field_value = $session_field_values->get_values_by_session_and_field_id($session_id, $session_field['id']);
+                    if ($field_value) {
+                        $field_value = $field_value['field_value'];
+                        switch ($session_field['field_type']) {
+                            case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
+                                $field_value = split(';', $field_value);                                
+                            case UserManager::USER_FIELD_TYPE_RADIO:
+                                $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $field_value;
+                                break;
+                            default:
+                                $extra_data['extra_'.$session_field['field_variable']] = $field_value;
+                                break;
+                        }
+                    }                   
+				//}
+			}
+		}        
+		return $extra_data;
     }
     
     public function get_field_types() {
@@ -100,10 +136,8 @@ class SessionField extends Model {
     }
         
     public function save($params, $show_query = false) {
-        $session_field_info = self::get_session_field_info_by_field_variable($params['field_variable']);
-        
-        $params = self::clean_parameters($params);
-            
+        $session_field_info = self::get_session_field_info_by_field_variable($params['field_variable']);        
+        $params = self::clean_parameters($params);            
         if ($session_field_info) {
             return $session_field_info['id'];
         } else {    

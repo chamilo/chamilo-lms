@@ -156,14 +156,15 @@ if ($action == 'thematic_list') {
 				foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 					
 					$thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
-					$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
+					$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);                    
 					echo '<tr>'; 
 					echo '<td width="90%" class="thematic_advance_content" id="thematic_advance_content_id_'.$thematic_advance['id'].'">';
 					
 					$edit_link = '';
 					if (api_is_allowed_to_edit(null, true)) {
 						$edit_link   = '<a class="thickbox" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),ICON_SIZE_SMALL).'</a>';
-						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a></center>';
+						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.
+                                        Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a></center>';
 						
 						//Links
 						$edit_link = Display::div(Display::div($edit_link , array('id'=>'thematic_advance_tools_'.$thematic_advance['id'], 'class'=>'thematic_advance_actions')), array('style'=>'height:20px;'));

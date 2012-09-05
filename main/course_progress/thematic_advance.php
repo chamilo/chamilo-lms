@@ -37,8 +37,8 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	}
 		
 	$radios = array();
-	$radios[] = FormValidator::createElement('radio', 'start_date_type', null, get_lang('StartDateFromAnAttendance'),'1',array('onclick' => 'check_per_attendance(this)', 'id'=>'from_attendance'));
-	$radios[] = FormValidator::createElement('radio', 'start_date_type', null, get_lang('StartDateCustom'),'2',array('onclick' => 'check_per_custom_date(this)', 'id'=>'custom_date'));
+	$radios[] = $form->createElement('radio', 'start_date_type', null, get_lang('StartDateFromAnAttendance'),'1',array('onclick' => 'check_per_attendance(this)', 'id'=>'from_attendance'));
+	$radios[] = $form->createElement('radio', 'start_date_type', null, get_lang('StartDateCustom'),'2',array('onclick' => 'check_per_custom_date(this)', 'id'=>'custom_date'));
 	$form->addGroup($radios, null, get_lang('StartDateOptions'));
 
 	if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {

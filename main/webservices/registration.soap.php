@@ -3106,6 +3106,10 @@ function WSCreateSession($params) {
     foreach ($sessions_params as $session_param) {
 
         $name = trim($session_param['name']);
+        
+        $access_start_date = $session_param['access_start_date'];
+        $access_end_date = $session_param['access_end_date'];
+        
         /*
         $year_start = intval($session_param['year_start']);
         $month_start = intval($session_param['month_start']);
@@ -3129,19 +3133,11 @@ function WSCreateSession($params) {
             $results[] = 0;
             continue;
         }
-
-        if (empty($nolimit)){
-            $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-            $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-        } else {
-            $date_start="000-00-00";
-            $date_end="000-00-00";
-        }
-
-        if(empty($name)) {
+    
+        if (empty($name)) {
             $results[] = 0;
             continue;
-        } elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+        /*} elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
             $results[] = 0;
             continue;
         } elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
@@ -3149,9 +3145,9 @@ function WSCreateSession($params) {
             continue;
         } elseif (empty($nolimit) && $date_start >= $date_end) {
             $results[] = 0;
-            continue;
+            continue;*/
         } else {
-            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
+            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".Datanbase::escape_string($name)."'");
             if (Database::num_rows($rs)) {
                 $results[] = 0;
                 continue;
@@ -3159,12 +3155,13 @@ function WSCreateSession($params) {
                 $params = array(
                     'name' =>  $name,
                     'id_coach'=> $id_coach,
-                    'session_admin_id' => $_user['user_id'] ,
-                    
+                    'session_admin_id' => $_user['user_id'],
+                    'access_start_date' => $access_start_date,
+                    'access_end_date' => $access_end_date,
                 );
                 $id_session = SessionManager::add($params);
             
-            //Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
+                //Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
             
                 //$id_session = Database::insert_id();
 

@@ -316,7 +316,6 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     } else {
         $time_limit = intval($time_limit);
     }
-    
     $online_time 		= time() - $time_limit*60;
     $current_date		= api_get_utc_datetime($online_time);	
     $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);

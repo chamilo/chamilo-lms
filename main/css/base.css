@@ -31,6 +31,9 @@ legend {
     padding:40px 0px 0px 0px;
 }
 
+header #logo {
+    padding: 0px 0px 15px 0px;
+}
 .subnav .brand {
     display:none;
 }
@@ -48,8 +51,8 @@ legend {
 }
 
 .subnav {
-    font-size: 11px;
-    font-weight: bold;
+    /*font-size: 11px;
+    font-weight: bold;*/
 }
 
 .subnav .btn-navbar {
@@ -375,7 +378,7 @@ footer .container .row {
     border:1px solid #ccc;
     margin-bottom: 11px;
     height:32px;
-    padding: 2px 2px 2px 14px;
+    padding: 2px 2px 2px 8px;
     vertical-align:middle;    
 }
 
@@ -1967,7 +1970,7 @@ div.image-social-content center.friend {
     margin-right:4px;
 }
 
-
+/*
 textarea {
     border:1px solid #CCCCCC;
     padding:5px;
@@ -1976,7 +1979,8 @@ textarea {
     border-radius:5px;
     color:#666666;
 }
-
+*/
+/*
 select {
     color:#555;
     border: 1px solid #CCC;
@@ -1987,7 +1991,7 @@ select {
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
-}
+}*/
 
 /* Fixes the FB input*/
 input.maininput:focus {

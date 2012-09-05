@@ -30,11 +30,13 @@ function confirmation() {
 		{return false;} 
 }
 </script>";
+
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
+
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
 $interbreadcrumb[] = array ('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
 $this_section = SECTION_COURSES;

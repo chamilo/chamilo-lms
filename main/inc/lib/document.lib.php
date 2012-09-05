@@ -22,7 +22,7 @@ class DocumentManager {
      */
     public static function get_course_quota($course_code = null) {
         if (empty($course_code)) {
-            $course_info = api_get_course_info();
+        $course_info = api_get_course_info();
         } else {
             $course_info = api_get_course_info($course_code);
         }
@@ -1166,7 +1166,7 @@ class DocumentManager {
         //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
         //so we remove that string in order to find correctly the origin file
         if (strpos($doc_path, 'HotPotatoes_files')) {
-//            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
+            // $doc_path = substr($doc_path, 0, strlen($doc_path) - 8); // issue #5359
             $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
 
@@ -1328,7 +1328,7 @@ class DocumentManager {
         if ($num == 0) {
             return null;
         }
-        $row = Database::fetch_array($rs);
+        $row    = Database::fetch_array($rs);
         return $row['document_id'];
     }
 
@@ -1337,7 +1337,7 @@ class DocumentManager {
      * @param string The course code
      * @return string The html content of the certificate
      */
-    static function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
+    function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
         $user_id 		= intval($user_id);
         $course_info 	= api_get_course_info($course_code);
         $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
@@ -1350,7 +1350,7 @@ class DocumentManager {
             $new_content = '';
             $all_user_info = array();
             if (Database::num_rows($rs)) {
-                $row = Database::fetch_array($rs);
+                $row=Database::fetch_array($rs);
                 $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
@@ -1406,9 +1406,7 @@ class DocumentManager {
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
-
-        
+        $url = api_get_path(WEB_PATH).'certificates/?id='.$info_grade_certificate['id'];
         //replace content
         $info_to_replace_in_content_html     = array($first_name,
                                                      $last_name,
@@ -1425,7 +1423,6 @@ class DocumentManager {
                                                      '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
                                                      '((certificate_barcode))',
                                                     );
-        
         $info_to_be_replaced_in_content_html = array('((user_firstname))',
         											 '((user_lastname))',
         											 '((gradebook_institution))',
@@ -1448,7 +1445,6 @@ class DocumentManager {
                 $info_to_replace_in_content_html[]=$value_extra;
             }
         }
-            
         $info_list[]=$info_to_be_replaced_in_content_html;
         $info_list[]=$info_to_replace_in_content_html;
         return $info_list;
@@ -1498,7 +1494,7 @@ class DocumentManager {
             
             if (!is_dir($base_work_dir_test)) {
                 $created_dir = create_unexisting_directory($course_info, api_get_user_id(), api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);                
-                $update_id = DocumentManager::get_document_id_of_directory_certificate();                
+                $update_id = self::get_document_id_of_directory_certificate();                
                 api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
             }
         }
@@ -1509,7 +1505,7 @@ class DocumentManager {
      * @param string The course id
      * @return int The document id of the directory certificate
      */
-    function get_document_id_of_directory_certificate () {
+    static function get_document_id_of_directory_certificate () {
         $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $sql = "SELECT id FROM $tbl_document WHERE c_id = $course_id AND path='/certificates' ";

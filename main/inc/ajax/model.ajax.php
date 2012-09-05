@@ -250,7 +250,7 @@ switch ($action) {
 		break;
     case 'get_sessions':
         //'nbr_courses', 'nbr_users', 
-        $columns = array('name', 'display_start_date','display_end_date', 'category_name', 'coach_name',  'session_active', 'course_code', 'course_title', 'visibility');            
+        $columns = array('name', 'display_start_date','display_end_date', 'category_name', 'coach_name',  'session_active', 'course_title', 'visibility');            
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 

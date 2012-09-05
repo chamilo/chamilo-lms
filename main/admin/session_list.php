@@ -61,7 +61,7 @@ $columns = array(
     //get_lang('EndDate'), 
     get_lang('Coach'),
     get_lang('Status'), 
-    get_lang('CourseCode'),
+    //get_lang('CourseCode'),
     get_lang('CourseTitle'),
     get_lang('Visibility'),    
     get_lang('Actions'));
@@ -72,10 +72,10 @@ $operators = array('cn', 'nc');
 $date_operators = array('gt', 'ge', 'lt', 'le');
 
 $column_model = array (
-                array('name'=>'name',           'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true'),    
+                array('name'=>'name',                'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true'),    
                 array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
-                array('name'=>'display_end_date',  'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
-                array('name'=>'category_name',  'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
+                array('name'=>'display_end_date',    'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
+                array('name'=>'category_name',       'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
                 //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
                 //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
                 array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),                        
@@ -89,7 +89,7 @@ $column_model = array (
                       //for the top bar                              
                       //'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
                 ),   
-                array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
+                //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                 array('name'=>'course_title',    'index'=>'course_title',   'width'=>'40',  'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                 array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
                 array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
@@ -111,7 +111,7 @@ $one_month = $now->format('Y-m-d h:m:s');
 
 $rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
 $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
-$rules[] = array( "field" => "course_code", "op" => "cn", "data" => '');
+//$rules[] = array( "field" => "course_code", "op" => "cn", "data" => '');
 $rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
 
 if (!empty($fields)) {    
@@ -126,7 +126,7 @@ if (!empty($fields)) {
             $search_options['sopt'] = array('cn', 'nc');//contains not contains
         }
         
-        $search_options['searchhidden'] = true;
+        $search_options['searchhidden'] = 'true';
         $search_options['defaultValue'] = $search_options['field_default_value'];
         $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);
         //$search_options['dataInit'] = 'datePick';
@@ -235,7 +235,8 @@ $(function() {
                 filters = jQuery.parseJSON(postdata.filters);
                 $.each(filters, function(key, value){  
                     if (key == 'rules') {
-                        $.each(value, function(key, value){                            
+                        $.each(value, function(key, value){  
+                            console.log(value.field);
                             grid.showCol(value.field);
                         });
                     }                    

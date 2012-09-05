@@ -925,6 +925,13 @@ class Display {
             //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
         }
+        
+        //Fixes datainit datepick
+        $json_encode = str_replace('"dataInit"','dataInit', $json_encode);
+        $json_encode = str_replace('"date_pick"','date_pick', $json_encode);
+        $json_encode = str_replace('"date_pick_today"','date_pick_today', $json_encode);
+        $json_encode = str_replace('"date_pick_one_month"','date_pick_one_month', $json_encode);
+        
 
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);

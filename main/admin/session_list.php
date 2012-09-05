@@ -12,6 +12,7 @@ api_protect_admin_script(true);
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = api_get_js('json-js/json2.js');
+$htmlHeadXtra[] = api_get_js('date/date.js');
 
 $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 
@@ -53,11 +54,11 @@ if (isset($_REQUEST['keyword'])) {
 
 $columns = array(
     get_lang('Name'),     
-    get_lang('display_start_date'),
-    get_lang('display_end_date'),
+    get_lang('SessionDisplayStartDate'),
+    get_lang('SessionDisplayEndDate'),
     get_lang('SessionCategoryName'),
-    get_lang('StartDate'), 
-    get_lang('EndDate'), 
+    //get_lang('StartDate'), 
+    //get_lang('EndDate'), 
     get_lang('Coach'),  
     get_lang('Status'), 
     get_lang('Visibility'), 
@@ -65,53 +66,63 @@ $columns = array(
 
 //$activeurl = '?sidx=session_active';
 //Column config
+$operators = array('cn', 'nc');
+$date_operators = array('gt', 'ge', 'lt', 'le');
+
 $column_model = array (
-                    array('name'=>'name',           'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true'),                        
-    //                        array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
-    //                        array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
-                    array('name'=>'display_start_date',  'index'=>'display_start_date', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
-                    array('name'=>'display_end_date',  'index'=>'display_end_date', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
+                array('name'=>'name',           'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true'),    
+                array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
+                array('name'=>'display_end_date',  'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
+                array('name'=>'category_name',  'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
+                //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
+                //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
+                array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),                        
+                array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
 
-                    array('name'=>'category_name',  'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
-                    array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array()),
-                    array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true'),
-                    array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false'),                        
-                    array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+                      //for the bottom bar
+                      'searchoptions' => array(                                            
+                                        'defaultValue'  => '1', 
+                                        'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
 
-                          //for the bottom bar
-                          'searchoptions' => array(                                                
-                                            'defaultValue'  => '1', 
-                                            'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
-
-                          //for the top bar                              
-                         // 'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
-                    ),         
-                    array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
-                    array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+                      //for the top bar                              
+                     // 'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
+                ),         
+                array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
+                array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 ); 
 
 //Inject extra session fields
 $session_field = new SessionField();
 $session_field_option = new SessionFieldOption();
 $fields = $session_field->get_all(); 
+
 $rules = array();
+$now = new DateTime();
+$now->add(new DateInterval('P30D'));
+$one_month = $now->format('Y-m-d h:m:s');
 
-$rules[] =  array( "field" => "display_start_date", "op" => "eq", "data" => "");
-$rules[] =  array( "field" => "display_end_date", "op" => "eq", "data" => "");
+//$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
+//$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
+$rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
+$rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
 
-
-if (!empty($fields)) {
-    
+if (!empty($fields)) {    
     foreach ($fields as $field) {        
+        $search_options = array();
+        
         $type = 'text';
         if ($field['field_type'] == UserManager::USER_FIELD_TYPE_SELECT) {
             $type = 'select';
+            $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+        } else {
+            $search_options['sopt'] = array('cn', 'nc');//contains not contains
         }
-        $search_options = array();
+        
         $search_options['searchhidden'] = true;
         $search_options['defaultValue'] = $search_options['field_default_value'];
         $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);
-        
+        //$search_options['dataInit'] = 'datePick';
+              
         $column_model[] = array(
             'name' => $field['field_variable'],
             'index' => 'extra_'.$field['field_variable'],
@@ -122,13 +133,13 @@ if (!empty($fields)) {
             'searchoptions' => $search_options
         );        
         $columns[] = $field['field_display_text'];
-        $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'eq', 'data' => '');        
+        $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'eq');        
     }
     
-    $groups = array(
+    /*$groups = array(
         'groupOp'=> 'OR', 
         'rules' => $rules
-    );
+    );*/
 }
 
                        
@@ -143,7 +154,7 @@ $extra_params['rowList'] = array(10, 20 ,30);
 
 $extra_params['postData'] =array (
                     'filters' => array(                                        
-                                        "groupOp" => "AND",                                         
+                                        "groupOp" => "OR",                                         
                                         "rules" => $rules, 
                                         /*array(
                                             array( "field" => "display_start_date", "op" => "gt", "data" => ""),
@@ -170,6 +181,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                          '\'; 
                  }';
 ?>
+
 <script>
 
 function setSearchSelect(columnName) {    
@@ -185,16 +197,25 @@ function setSearchSelect(columnName) {
     });
 }
 
-
 $(function() {
+    date_pick_today = function(elem) {
+        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+        $(elem).datetimepicker('setDate', (new Date()));
+    }
+    date_pick_one_month = function(elem) {
+        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+        next_month = Date.today().next().month();
+        $(elem).datetimepicker('setDate', next_month);
+    }
+
     <?php 
         echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links,true);      
-    ?>
-    
+    ?>   
+
     setSearchSelect("status");
     
     var grid = $("#sessions"),
-    prmSearch = {multipleSearch:true, overlay:false, width:600};
+    prmSearch = { multipleSearch:true, overlay:false, width:600};
     
     grid.jqGrid('navGrid','#sessions_pager', 
         {edit:false,add:false,del:false},
@@ -202,12 +223,10 @@ $(function() {
         {height:280,reloadAfterSubmit:false}, // add options 
         {reloadAfterSubmit:false},// del options 
         prmSearch
-       // {multipleSearch:true, overlay:false, width:500} // search options
     );
         
     // create the searching dialog
     grid.searchGrid(prmSearch);
-    
 
     //var searchDialog = $("#fbox_"+grid[0].id);
     var searchDialog = $("#searchmodfbox_"+grid[0].id);    
@@ -243,31 +262,15 @@ $(function() {
         'autosearch' : true,
         'searchOnEnter':false        
     }
-    
+    /*
     grid.jqGrid('filterToolbar', options);    
     var sgrid = $("#sessions")[0];
-    sgrid.triggerToolbar();    
+    sgrid.triggerToolbar();*/
     
-    $("#start_date_start").datetimepicker({
-        dateFormat: "yy-mm-dd",
-        hour: 9,        
-        onSelect: function(selectedDateTime) {            
-        }
-    });
-    
-    $("#start_date_end").datetimepicker({
-    });
-    
-    $("#end_date_start").datetimepicker({
-    });
-    
-    $("#end_date_end").datetimepicker({
-    });
-    
+    /*
     $('form').submit(function() {
        var start = $("#start_date_start").datetimepicker("getDate");
-       //var params = $(this).serialize();
-       
+       //var params = $(this).serialize();      
     
         var filter = {
             "groupOp":"OR"
@@ -291,7 +294,7 @@ $(function() {
        
        console.log(start);
        return false;       
-    });
+    });*/
     
     
     

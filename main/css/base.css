@@ -1970,7 +1970,7 @@ div.image-social-content center.friend {
     margin-right:4px;
 }
 
-
+/*
 textarea {
     border:1px solid #CCCCCC;
     padding:5px;
@@ -1979,7 +1979,8 @@ textarea {
     border-radius:5px;
     color:#666666;
 }
-
+*/
+/*
 select {
     color:#555;
     border: 1px solid #CCC;
@@ -1990,7 +1991,7 @@ select {
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
-}
+}*/
 
 /* Fixes the FB input*/
 input.maininput:focus {

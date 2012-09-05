@@ -65,15 +65,14 @@ $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 if ($_REQUEST['_search'] == 'true') {
-    $where_condition = ' 1 = 1 ';
-    $extra_conditions = '';
-    
+    $where_condition = ' 1 = 1 ';    
     $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);    
         
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
     }    
     $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //var_dump($filters);
     
     $session_field = new SessionField();
     if (!empty($filters)) {
@@ -251,7 +250,7 @@ switch ($action) {
 		break;
     case 'get_sessions':
         //'nbr_courses', 'nbr_users', 
-        $columns = array('name', 'category_name', 'access_start_date','access_end_date', 'coach_name', 'session_active', 'visibility');            
+        $columns = array('name', 'display_start_date','display_end_date', 'category_name', 'coach_name', 'session_active', 'visibility');            
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 

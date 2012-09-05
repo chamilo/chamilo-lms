@@ -867,7 +867,7 @@ class IndexManager {
             //Load sessions in category
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
 		}             
-
+        
         $html = '';        
         //Showing history title		
 		if ($load_history) {
@@ -910,10 +910,10 @@ class IndexManager {
                         $html_courses_session = '';
                         $count_courses_session = 0;
                         
-                        foreach ($session['courses'] as $course) {                        
+                        foreach ($session['courses'] as $course) {                                   
                             //read only and accesible
                             if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);									                                
+                                $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id, $this->load_directories_preview);									                                
                             }
                             $count_courses_session++;
                         }
@@ -964,7 +964,7 @@ class IndexManager {
                         $html_courses_session = '';
                         $count = 0;
                         foreach ($session['courses'] as $course) {                          
-                            $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item');                            
+                            $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id);                            
                             $count_courses_session++;
                             $count++;                          
                         }

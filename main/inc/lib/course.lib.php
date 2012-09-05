@@ -3176,32 +3176,30 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    public static function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {        
-        $course_info = api_get_course_info($course['code']);        
+    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false) {        
+        $course_info = api_get_course_info($course['code']);                
         $course_info['id_session'] = $session_id;
 
         // Display course entry.
         // Show a link to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $session_title = '';
-
-        if ($session_accessible) {
-            if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {                       
-                if ($course_info['user_status_in_course'] == COURSEMANAGER) {
-                    $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
-                    $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
-                }               
-            } else {
-                $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
-            }
+        $session_title = $course_info['name'];        
+                 
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {                       
+            //if ($course_info['user_status_in_course'] == COURSEMANAGER) {
+                $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
+                $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
+            //}            
         } else {
-            $session_title = $course_info['name'];
+            $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }
+
 
         $params = array();
         $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
+        
 
         $params['right_actions'] = '';
         

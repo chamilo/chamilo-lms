@@ -59,9 +59,11 @@ $columns = array(
     get_lang('SessionCategoryName'),
     //get_lang('StartDate'), 
     //get_lang('EndDate'), 
-    get_lang('Coach'),  
+    get_lang('Coach'),
     get_lang('Status'), 
-    get_lang('Visibility'), 
+    get_lang('CourseCode'),
+    get_lang('CourseTitle'),
+    get_lang('Visibility'),    
     get_lang('Actions'));
 
 //$activeurl = '?sidx=session_active';
@@ -85,8 +87,10 @@ $column_model = array (
                                         'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
 
                       //for the top bar                              
-                     // 'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
-                ),         
+                      //'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
+                ),   
+                array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
+                array('name'=>'course_title',    'index'=>'course_title',   'width'=>'40',  'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                 array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),                        
                 array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 ); 
@@ -103,8 +107,12 @@ $one_month = $now->format('Y-m-d h:m:s');
 
 //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
 //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
+
+
 $rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
 $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
+$rules[] = array( "field" => "course_code", "op" => "cn", "data" => '');
+$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
 
 if (!empty($fields)) {    
     foreach ($fields as $field) {        
@@ -181,23 +189,25 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                          '\'; 
                  }';
 ?>
-
 <script>
 
 function setSearchSelect(columnName) {    
     $("#sessions").jqGrid('setColProp', columnName, {                   
-       searchoptions:{
+       /*searchoptions:{
             dataInit:function(el){                            
                 $("option[value='1']",el).attr("selected", "selected");
                 setTimeout(function(){
                     $(el).trigger('change');
                 }, 1000);
             }
-        }
+        }*/
     });
 }
 
 $(function() {
+    
+    
+    
     date_pick_today = function(elem) {
         $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
         $(elem).datetimepicker('setDate', (new Date()));
@@ -211,11 +221,30 @@ $(function() {
     <?php 
         echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links,true);      
     ?>   
-
+    
     setSearchSelect("status");
     
     var grid = $("#sessions"),
-    prmSearch = { multipleSearch:true, overlay:false, width:600};
+    prmSearch = { 
+        multipleSearch : true, 
+        overlay : false, 
+        width:600,
+        onSearch : function(){
+            var postdata = grid.jqGrid('getGridParam', 'postData');            
+            if (postdata && postdata.filters) {
+                filters = jQuery.parseJSON(postdata.filters);
+                $.each(filters, function(key, value){  
+                    if (key == 'rules') {
+                        $.each(value, function(key, value){                            
+                            grid.showCol(value.field);
+                        });
+                    }                    
+                });
+            }
+       },
+       onReset: function() {            
+       }
+    };
     
     grid.jqGrid('navGrid','#sessions_pager', 
         {edit:false,add:false,del:false},
@@ -224,7 +253,7 @@ $(function() {
         {reloadAfterSubmit:false},// del options 
         prmSearch
     );
-        
+                  
     // create the searching dialog
     grid.searchGrid(prmSearch);
 
@@ -235,6 +264,8 @@ $(function() {
     var gbox = $("#gbox_"+grid[0].id);
     gbox.before(searchDialog);
     gbox.css({clear:"left"});
+    
+    
 
     /*
     // add custom button to export the data to excel

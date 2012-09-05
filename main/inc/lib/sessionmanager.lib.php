@@ -284,6 +284,10 @@ class SessionManager {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
 		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);      
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        
 
         $tbl_session_field_values            = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         
@@ -311,8 +315,8 @@ class SessionManager {
 				, 1, 0) 
 				as session_active, 
 				s.name, 
-                nbr_courses, 
-                nbr_users, 
+                s.nbr_courses, 
+                s.nbr_users, 
                    sc.name as category_name, 
                 s.display_start_date, 
                 s.display_end_date,
@@ -323,9 +327,15 @@ class SessionManager {
                 u.user_id, 
                 fv.field_id,
                 fv.field_value,
+                course_code,
+                c.title as course_title,
+                
+                
                 s.id";
 
 		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
+                LEFT JOIN $tbl_course c ON (src.course_code = c.code)
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 				INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
                 $where;
@@ -336,7 +346,7 @@ class SessionManager {
 			if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
 				$query = "$select
-				 FROM $tbl_session s
+				 FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
 					LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 					INNER JOIN $tbl_user u ON s.id_coach = u.user_id
 					INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id

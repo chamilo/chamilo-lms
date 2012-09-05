@@ -108,11 +108,11 @@ $one_month = $now->format('Y-m-d h:m:s');
 //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
 //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
 
-
+$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
 $rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
 $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
 //$rules[] = array( "field" => "course_code", "op" => "cn", "data" => '');
-$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
+
 
 if (!empty($fields)) {    
     foreach ($fields as $field) {        
@@ -205,9 +205,6 @@ function setSearchSelect(columnName) {
 }
 
 $(function() {
-    
-    
-    
     date_pick_today = function(elem) {
         $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
         $(elem).datetimepicker('setDate', (new Date()));
@@ -228,7 +225,9 @@ $(function() {
     prmSearch = { 
         multipleSearch : true, 
         overlay : false, 
-        width:600,
+        width: 600,
+        caption: '<?php echo addslashes(get_lang('Search')); ?>',
+        formclass:'data_table',
         onSearch : function(){
             var postdata = grid.jqGrid('getGridParam', 'postData');            
             if (postdata && postdata.filters) {
@@ -236,14 +235,15 @@ $(function() {
                 $.each(filters, function(key, value){  
                     if (key == 'rules') {
                         $.each(value, function(key, value){  
-                            console.log(value.field);
+                            //console.log(value.field);
                             grid.showCol(value.field);
                         });
                     }                    
                 });
             }
        },
-       onReset: function() {            
+       onReset: function() {      
+            grid.hideCol('course_title');
        }
     };
     
@@ -257,8 +257,11 @@ $(function() {
                   
     // create the searching dialog
     grid.searchGrid(prmSearch);
-
-    //var searchDialog = $("#fbox_"+grid[0].id);
+    
+    //Fixes search table
+    var searchDialogAll = $("#fbox_"+grid[0].id);
+    searchDialogAll.addClass("table");
+    
     var searchDialog = $("#searchmodfbox_"+grid[0].id);    
     searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
     searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})    

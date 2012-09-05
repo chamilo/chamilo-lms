@@ -579,24 +579,33 @@ switch ($action) {
 					$title = get_lang('Untitled');
 				}
 				
-				$active = '1';
-				$sql_add_publication = "INSERT INTO " . $work_table . " SET
-										   c_id 		= $course_id ,
-									       url         	= '" . $url . "',
-									       title       	= '" . Database::escape_string($title) . "',
-						                   description	= '" . Database::escape_string($description) . "',
-						                   author      	= '" . Database::escape_string($authors) . "',
-						                   contains_file = '".$contains_file."',  
-										   active		= '" . $active . "',                                           
-										   accepted		= '1',
-										   post_group_id = '".$group_id."',
-										   sent_date	=  '".api_get_utc_datetime()."',
-										   parent_id 	=  '".$work_id."' ,
-                                           session_id	= '".intval($id_session)."' ,                                               
-                                           user_id 		= '".$user_id."'";
-				//var_dump($sql_add_publication);exit;
-				Database::query($sql_add_publication);
-				$id = Database::insert_id();				
+                $documents_total_space = DocumentManager::documents_total_space();
+                $course_max_space = DocumentManager::get_course_quota();
+                $total_size = $filesize + $documents_total_space;
+                if ($total_size > $course_max_space) {
+			       $error_message = get_lang('IsNotPosibleSaveTheDocument');             
+                } else {
+                    
+                    $active = '1';
+			        $sql_add_publication = "INSERT INTO " . $work_table . " SET
+									   c_id 		= $course_id ,
+								       url         	= '" . $url . "',
+								       title       	= '" . Database::escape_string($title) . "',
+					                   description	= '" . Database::escape_string($description) . "',
+					                   author      	= '" . Database::escape_string($authors) . "',
+					                   contains_file = '".$contains_file."',  
+									   active		= '" . $active . "',                                           
+									   accepted		= '1',
+									   post_group_id = '".$group_id."',
+									   sent_date	=  '".api_get_utc_datetime()."',
+									   parent_id 	=  '".$work_id."' ,
+                                       session_id	= '".intval($id_session)."' ,                                               
+                                       user_id 		= '".$user_id."'";
+    				//var_dump($sql_add_publication);exit;
+    				Database::query($sql_add_publication);
+    				$id = Database::insert_id();	
+                }	
+				
 				if ($id) {				
 					api_item_property_update($course_info, 'work', $id, 'DocumentAdded', $user_id, api_get_group_id());
                     /*
